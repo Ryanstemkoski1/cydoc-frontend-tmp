@@ -1,9 +1,14 @@
-import React, { Fragment } from 'react';
+import React, {Component, Fragment} from 'react';
 import LoginForm from "../components/LoginForm";
 
-const Login = () => (
-    <Fragment>
-        <LoginForm/>
-    </Fragment>
-);
+class Login extends Component {
+    render() {
+        return (
+            <Fragment>
+                <LoginForm/>
+            </Fragment>
+        );
+    }
+}
+
 export default Login;
