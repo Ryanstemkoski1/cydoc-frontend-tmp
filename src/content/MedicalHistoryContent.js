@@ -1,16 +1,16 @@
 import {Form, Grid, TextArea} from "semantic-ui-react";
-import ToggleButton from "./ToggleButton";
+import ToggleButton from "../ToggleButton";
 import React from 'react';
 
 export default () => (
-    <Grid columns={4}>
+    <Grid columns={4} verticalAlign='middle' >
         <Grid.Row>
             <Grid.Column>
                 Myocardial Infarction
             </Grid.Column>
             <Grid.Column>
-                <ToggleButton />
-                <ToggleButton />
+                <ToggleButton title="Yes"/>
+                <ToggleButton title="No"/>
             </Grid.Column>
             <Grid.Column>
                 <Form>

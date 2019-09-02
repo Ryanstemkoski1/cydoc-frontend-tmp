@@ -5,8 +5,10 @@ import Menu from "../components/Menu";
 
 const CreateNote = () => (
     <Fragment>
+        <div style={{backgroundColor: "white"}}>
         <Menu />
         <MenuTabs />
+        </div>
         <NotePage />
     </Fragment>
 );
