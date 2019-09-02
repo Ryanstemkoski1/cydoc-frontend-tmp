@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
 import MenuTabs from "../components/MenuTabs";
 import NotePage from "../components/NotePage";
-import Menu from "../components/Menu";
+import NavMenu from "../components/NavMenu";
 
 const CreateNote = () => (
     <Fragment>
-        <div style={{backgroundColor: "white"}}>
-        <Menu />
-        <MenuTabs />
+        <div style={{backgroundColor: "white", position: "sticky", top: "0px"}}>
+                <NavMenu />
+                <MenuTabs />
         </div>
         <NotePage />
     </Fragment>

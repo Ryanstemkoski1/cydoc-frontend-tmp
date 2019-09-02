@@ -1,3 +1,15 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+/* Active */
+@activeBackgroundColor: #C0C1C2;
+@activeBackgroundImage: none;
+@activeColor: @selectedTextColor;
+@activeBoxShadow: @borderBoxShadow;
+
+/* Active + Hovered */
+@activeHoverBackgroundColor: @activeBackgroundColor;
+@activeHoverBackgroundImage: none;
+@activeHoverColor: @activeColor;
+@activeHoverBoxShadow: @activeBoxShadow;

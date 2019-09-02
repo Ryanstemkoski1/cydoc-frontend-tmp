@@ -9,12 +9,14 @@ import { BrowserRouter } from 'react-router-dom';
 import CreateNote from "./pages/CreateNote";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard"
 
 ReactDOM.render(
     <BrowserRouter >
         <Route path="/home" component={HomePage}/>
         <Route path="/login" component={Login}/>
         <Route path="/createnote" component={CreateNote}/>
+        <Route path="/dashboard" component={Dashboard}/>
     </BrowserRouter>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

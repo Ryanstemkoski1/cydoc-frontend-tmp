@@ -1,27 +1,19 @@
-import {Form, Grid, TextArea} from "semantic-ui-react";
-import ToggleButton from "../ToggleButton";
-import React from 'react';
+import { Grid } from "semantic-ui-react";
+import NoteRow from "../components/NoteRow";
+import React, { Component } from 'react';
 
-export default () => (
-    <Grid columns={4} verticalAlign='middle' >
-        <Grid.Row>
-            <Grid.Column>
-                Myocardial Infarction
-            </Grid.Column>
-            <Grid.Column>
-                <ToggleButton title="Yes"/>
-                <ToggleButton title="No"/>
-            </Grid.Column>
-            <Grid.Column>
-                <Form>
-                    <TextArea placeholder='Onset' />
-                </Form>
-            </Grid.Column>
-            <Grid.Column>
-                <Form>
-                    <TextArea placeholder='Comments' />
-                </Form>
-            </Grid.Column>
-        </Grid.Row>
-    </Grid>
-);
+const conditions = ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV", "Cancer"];
+const listItems = conditions.map((condition) =>
+    <NoteRow condition={condition} />);
+
+export default class MedicalHistoryContent extends Component {
+
+    render(){
+        return(
+            <Grid columns={4} verticalAlign='middle' >
+                {listItems}
+            </Grid>
+        );
+    }
+}
+

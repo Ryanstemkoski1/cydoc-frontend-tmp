@@ -1,5 +1,7 @@
 ## Installation
-I followed this tutorial to install Semantic UI. You will not need to install it again as the files are here. 
+I followed this tutorial to install Semantic UI. When you clone this repo and run `npm install` it will take you through 
+an interactive installer. Make sure you install in src/semantic when it asks you (both for semantic and dist). 
+
 You will need to run `npm install` to install the dependencies for React and Semantic UI and then 
 you can run `npm start` and the app will build and run. 
 

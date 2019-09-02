@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Menu, Container} from 'semantic-ui-react'
 
-export default class MenuExampleTabular extends Component {
+export default class MenuTabs extends Component {
     state = { activeItem: 'Medical History' };
 
     handleItemClick = (e, { name }) => this.setState({ activeItem: name })
