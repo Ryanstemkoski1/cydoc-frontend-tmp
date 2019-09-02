@@ -1,22 +1,22 @@
 import React from 'react';
-import { Container, Image, Menu, Button } from 'semantic-ui-react';
+import { Container, Menu, Button } from 'semantic-ui-react';
 export default () => (
-    <Menu borderless>   
+    <Menu secondary borderless>
         <Container>
-            <Menu.Item header>
+            <Menu.Item header href="/home">
                 cydoc
             </Menu.Item>
             <Menu.Menu position="right">
                 <Menu.Item  name="create_note">
-                    <Button primary>Create Note</Button>
+                    <Button primary href='/createnote'>Create Note</Button>
                 </Menu.Item>
                 <Menu.Item name="about">
                     About
                 </Menu.Item>
-                <Menu.Item name="login">
+                <Menu.Item name="login" href="/login">
                     Login
                 </Menu.Item>
-                <Menu.Item name="register">
+                <Menu.Item name="register" href="/login">
                     Register
                 </Menu.Item>
             </Menu.Menu>
