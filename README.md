@@ -1,3 +1,13 @@
+## Installation
+I followed this tutorial to install Semantic UI. You will not need to install it again as the files are here. 
+You will need to run `npm install` to install the dependencies for React and Semantic UI and then 
+you can run `npm start` and the app will build and run. 
+
+http://nephewapps.com/2018/02/25/theming-semantic-ui-with-create-react-app/
+
+https://jsramblings.com/2018/03/04/how-to-use-semantic-ui-with-a-custom-theme-in-your-CRA-app.html
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
