@@ -4,14 +4,26 @@ import NotePage from "../components/NotePage";
 import NavMenu from "../components/NavMenu";
 
 class CreateNote extends Component {
-        render() {
+    constructor(props) {
+        super(props);
+        this.state = {
+            activeItem: 'Medical History'
+        }
+    }
+
+    onTabChange = (name) => this.setState({ activeItem: name });
+
+    render() {
                 return (
                     <Fragment>
                             <div style={{backgroundColor: "white", position: "sticky", top: "0px"}}>
                                     <NavMenu/>
-                                    <MenuTabs/>
+                                    <MenuTabs
+                                        activeItem={this.state.activeItem}
+                                        onTabChange={this.onTabChange}
+                                    />
                             </div>
-                            <NotePage/>
+                            <NotePage activeItem={this.state.activeItem}/>
                     </Fragment>
                 );
         }

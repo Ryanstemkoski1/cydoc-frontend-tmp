@@ -2,12 +2,20 @@ import React, { Component } from 'react'
 import { Menu, Container} from 'semantic-ui-react'
 
 export default class MenuTabs extends Component {
-    state = { activeItem: 'Medical History' };
+    constructor(props) {
+        super(props);
+        this.handleItemClick =  this.handleItemClick.bind(this)
+    }
 
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+    // state = { activeItem: 'Medical History' };
+
+    // handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+    handleItemClick = (e, { name }) => this.props.onTabChange(name);
 
     render() {
-        const { activeItem } = this.state;
+        // const { activeItem } = this.props.activeItem;
+
+        const activeItem = this.props.activeItem;
         const tabNames = ["HPI", "Medical History", "Surgical History", "Medications", "Allergies", "Family History",
             "Social History", "Review of Systems", "Physical Exam"];
 
@@ -15,11 +23,13 @@ export default class MenuTabs extends Component {
             <Menu.Item
             name={name}
             active={activeItem === name}
-            onClick={this.handleItemClick}/>);
+            onClick={this.handleItemClick}
+            style={{borderColor: "white"}}/>
+            );
 
         return (
-            <Menu tabular>
-                <Container>
+            <Menu tabular style={{borderColor: "white"}}>
+                <Container >
                     {tabMenuItems}
                 </Container>
             </Menu>

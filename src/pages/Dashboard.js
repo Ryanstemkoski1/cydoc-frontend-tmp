@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import NavMenu from '../components/Menu';
+import NavMenu from '../components/NavMenu';
 import HomePageContent from "../content/HomePageContent";
 import {Grid, Header} from "semantic-ui-react";
 import VerticalMenu from "../components/VerticalMenu"

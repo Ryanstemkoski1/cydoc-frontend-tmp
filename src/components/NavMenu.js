@@ -4,14 +4,14 @@ import { Container, Menu, Button } from 'semantic-ui-react';
 export default class NavMenu extends Component {
     render() {
         return (
-            <Menu secondary borderless>
+            <Menu secondary borderless style={{height: "10vh"}}>
                 <Container>
-                    <Menu.Item header href="/home">
+                    <Menu.Item href="/home">
                         cydoc
                     </Menu.Item>
                     <Menu.Menu position="right">
-                        <Menu.Item name="create_note">
-                            <Button primary href='/createnote'>Create Note</Button>
+                        <Menu.Item name="create_note" href="/createnote">
+                            Create Note
                         </Menu.Item>
                         <Menu.Item name="about">
                             About
