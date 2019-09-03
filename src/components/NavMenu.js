@@ -15,7 +15,7 @@ export default class NavMenu extends Component {
                         <Menu.Item name="create_note" href="/createnote">
                             Create Note
                         </Menu.Item>
-                        <Menu.Item name="about" href="/home">
+                        <Menu.Item name="about" href="/about">
                             About
                         </Menu.Item>
                         <Menu.Item name="login" href="/login">

@@ -6,14 +6,14 @@ export default class LoginForm extends Component {
         return (
             <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' centered>
                 <Grid.Column style={{maxWidth: 450}}>
-                    <Header as='h1' color='grey' textAlign='center'>
+                    <Header color='grey' textAlign='center' style={{fontSize: "60px", letterSpacing: "4.8px"}}>
                         cydoc
                     </Header>
                     <Header as='h4' color='grey' textAlign='center'>
-                        login or sign up
+                        log in or sign up
                     </Header>
                     <Form size='mini'>
-                        <Segment clearing>
+                        <Segment clearing raised style={{borderColor: "white"}}>
                             <Form.Input
                                 fluid
                                 label='username'

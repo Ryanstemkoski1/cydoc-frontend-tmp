@@ -50,3 +50,16 @@
 @h3 : unit((18 / 14), rem);
 @h4 : unit((15 / 14), rem);
 @h5 : unit((14 / 14), rem);
+
+
+/*-------------------
+    Border Radius
+--------------------*/
+
+/* See Power-user section below
+   for explanation of @px variables
+*/
+@relativeBorderRadius: @relative7px;
+@absoluteBorderRadius: @7px;
+
+@defaultBorderRadius: @absoluteBorderRadius;
