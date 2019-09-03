@@ -160,7 +160,7 @@
   padding: 0em 1.14285714rem;
   color: rgba(0, 0, 0, 0.85);
   font-size: 0.78571429em;
-  font-weight: bold;
+  font-weight: normal;
   text-transform: uppercase;
 }
 .ui.dropdown .menu > .divider {
@@ -739,7 +739,7 @@ select.ui.dropdown {
   vertical-align: baseline;
 }
 .ui.inline.dropdown > .text {
-  font-weight: bold;
+  font-weight: normal;
 }
 .ui.inline.dropdown .menu {
   cursor: auto;
@@ -761,7 +761,7 @@ select.ui.dropdown {
 /* Menu Item Active */
 .ui.dropdown .menu .active.item {
   background: transparent;
-  font-weight: bold;
+  font-weight: normal;
   color: rgba(0, 0, 0, 0.95);
   -webkit-box-shadow: none;
           box-shadow: none;

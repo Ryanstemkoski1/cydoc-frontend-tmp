@@ -41,7 +41,7 @@
   font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1.14285714em;
   line-height: 1.2;
-  font-weight: bold;
+  font-weight: normal;
 }
 .ui.popup > .header + .content {
   padding-top: 0.5em;

@@ -28,7 +28,7 @@ export default class MenuTabs extends Component {
             );
 
         return (
-            <Menu tabular style={{borderColor: "white"}}>
+            <Menu tabular style={{borderColor: "white"}} attached={this.props.attached}>
                 <Container >
                     {tabMenuItems}
                 </Container>

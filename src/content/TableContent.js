@@ -60,7 +60,7 @@ export default class TableContent extends Component {
                     </Table.Body>
                 </Table>
                 <div>
-                    <Button circular icon="plus" onClick={this.addRow}/>
+                    <Button basic circular icon="plus" onClick={this.addRow}/>
                     add row
                 </div>
             </div>

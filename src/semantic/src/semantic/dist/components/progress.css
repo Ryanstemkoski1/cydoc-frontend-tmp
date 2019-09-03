@@ -64,7 +64,7 @@
   color: rgba(255, 255, 255, 0.7);
   text-shadow: none;
   margin-top: -0.5em;
-  font-weight: bold;
+  font-weight: normal;
   text-align: left;
 }
 
@@ -78,7 +78,7 @@
   left: 0%;
   bottom: auto;
   color: #707070;
-  font-weight: bold;
+  font-weight: normal;
   text-shadow: none;
   margin-top: 0.2em;
   text-align: center;

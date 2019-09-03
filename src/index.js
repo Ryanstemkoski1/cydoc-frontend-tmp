@@ -8,7 +8,7 @@ import { Route, BrowserRouter } from 'react-router-dom';
 import CreateNote from "./pages/CreateNote";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard"
+import DashboardPage from "./pages/DashboardPage";
 
 ReactDOM.render(
     <div style={{letterSpacing: "1.8px"}}>
@@ -16,7 +16,7 @@ ReactDOM.render(
             <Route path="/home" component={HomePage}/>
             <Route path="/login" component={Login}/>
             <Route path="/createnote" component={CreateNote}/>
-            <Route path="/dashboard" component={Dashboard}/>
+            <Route path="/dashboard" component={DashboardPage}/>
         </BrowserRouter>
     </div>, document.getElementById('root'));
 

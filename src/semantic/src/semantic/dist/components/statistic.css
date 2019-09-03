@@ -116,7 +116,7 @@
 .ui.statistic > .label {
   font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
-  font-weight: bold;
+  font-weight: normal;
   color: #707070;
   text-transform: uppercase;
   text-align: center;
@@ -159,7 +159,7 @@
 .ui.statistic > .text.value {
   line-height: 1em;
   min-height: 2em;
-  font-weight: bold;
+  font-weight: normal;
   text-align: center;
 }
 .ui.statistics .statistic > .text.value + .label,

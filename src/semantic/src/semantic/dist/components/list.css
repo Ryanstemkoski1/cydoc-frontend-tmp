@@ -162,7 +162,7 @@ ol.ui.list ol li,
   display: block;
   margin: 0em;
   font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-weight: bold;
+  font-weight: normal;
   color: #707070;
 }
 

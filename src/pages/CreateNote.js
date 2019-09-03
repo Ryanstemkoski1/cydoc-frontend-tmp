@@ -16,13 +16,12 @@ class CreateNote extends Component {
     render() {
                 return (
                     <Fragment>
-                            <div style={{backgroundColor: "white", position: "sticky", top: "0px"}}>
-                                    <NavMenu/>
+                                    <NavMenu attached="top"/>
                                     <MenuTabs
                                         activeItem={this.state.activeItem}
                                         onTabChange={this.onTabChange}
+                                        attached="top"
                                     />
-                            </div>
                             <NotePage activeItem={this.state.activeItem}/>
                     </Fragment>
                 );
