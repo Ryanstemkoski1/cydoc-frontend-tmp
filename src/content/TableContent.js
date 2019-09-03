@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Input, Table} from "semantic-ui-react";
+import {Button, Header, Input, Table} from "semantic-ui-react";
 
 
 export default class TableContent extends Component {
@@ -11,6 +11,7 @@ export default class TableContent extends Component {
         TableContent.makeHeader = TableContent.makeHeader.bind(this);
         this.headerRows = TableContent.makeHeader(this.props.tableHeaders);
         this.tableBodyRow = TableContent.makeTableBodyRow(this.props.tableBodyPlaceholders);
+        this.contentLabel = this.props.contentLabel;
         this.state = {
             rows: [this.tableBodyRow, this.tableBodyRow, this.tableBodyRow]
         }
@@ -43,6 +44,10 @@ export default class TableContent extends Component {
     render(){
         return (
             <div>
+                <Header as="h3" textAlign="center">
+                    {this.contentLabel}
+                </Header>
+                <br />
                 <Table celled>
                     <Table.Header>
                         <Table.Row>

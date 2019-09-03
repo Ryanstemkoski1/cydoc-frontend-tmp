@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import TableContent from "../TableContent";
 
-const fields = ['Procedure', 'Date', 'Comments'];
-const contentLabel = 'surgical history';
+const fields = ['Inciting Agent', 'Reaction', 'Comments'];
+const contentLabel = ['allergies'];
 
-export default class SurgicalHistoryContent extends Component {
+export default class AllergiesContent extends Component {
     render(){
         return (
             <TableContent tableHeaders={fields} tableBodyPlaceholders={fields} contentLabel={contentLabel}/>
