@@ -9,7 +9,7 @@ import CreateNote from "./pages/CreateNote";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import DashboardPage from "./pages/DashboardPage";
-import ThemingLayout from "./Theming";
+import ThemingLayout from "./pages/Theming";
 
 ReactDOM.render(
     <div style={{letterSpacing: "1.8px"}}>

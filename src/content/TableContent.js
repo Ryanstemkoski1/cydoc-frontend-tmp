@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Button, Header, Input, Table} from "semantic-ui-react";
+import React, {Component, Fragment} from 'react';
+import {Button, Input, Table} from "semantic-ui-react";
 
 
 export default class TableContent extends Component {
@@ -43,10 +43,7 @@ export default class TableContent extends Component {
 
     render(){
         return (
-            <div>
-                <Header as="h3" textAlign="center">
-                    {this.contentLabel}
-                </Header>
+            <Fragment>
                 <br />
                 <Table celled>
                     <Table.Header>
@@ -63,7 +60,7 @@ export default class TableContent extends Component {
                     <Button basic circular icon="plus" onClick={this.addRow}/>
                     add row
                 </div>
-            </div>
+            </Fragment>
         );
     }
 }

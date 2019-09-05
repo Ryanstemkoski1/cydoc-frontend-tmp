@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Segment, Container} from 'semantic-ui-react';
+import {Segment, Container, Header} from 'semantic-ui-react';
 import MedicalHistoryContent from "../content/medicalhistory/MedicalHistoryContent";
 import SurgicalHistoryContent from "../content/surgicalhistory/SurgicalHistoryContent";
 import MedicationsContent from "../content/medications/MedicationsContent";
@@ -30,6 +30,9 @@ export default class NotePage extends Component {
             <Container>
                 <br/>
                 <Segment style={{borderColor: "white"}}>
+                    <Header as="h3" textAlign="center">
+                        {this.props.activeItem.toLowerCase()}
+                    </Header>
                     {tabToDisplay}
                 </Segment>
                 <br />
