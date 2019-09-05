@@ -1,17 +1,15 @@
 import React, {Component, Fragment} from 'react';
 import {Button, Input, Table} from "semantic-ui-react";
+import PropTypes from 'prop-types';
 
 
 export default class TableContent extends Component {
-    tableHeaders = [];
-    tableBodyPlaceholders = [];
     constructor(props) {
         super(props);
         this.addRow = this.addRow.bind(this);
         TableContent.makeHeader = TableContent.makeHeader.bind(this);
         this.headerRows = TableContent.makeHeader(this.props.tableHeaders);
         this.tableBodyRow = TableContent.makeTableBodyRow(this.props.tableBodyPlaceholders);
-        this.contentLabel = this.props.contentLabel;
         this.state = {
             rows: [this.tableBodyRow, this.tableBodyRow, this.tableBodyRow]
         }
@@ -64,3 +62,8 @@ export default class TableContent extends Component {
         );
     }
 }
+
+TableContent.propTypes = {
+    tableHeaders: PropTypes.array.isRequired,
+    tableBodyPlaceholders: PropTypes.array.isRequired,
+};

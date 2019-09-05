@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Header, Icon} from 'semantic-ui-react'
+import { Card, Header, Icon } from 'semantic-ui-react'
 
 export default class NoteDashboardContent extends Component {
     render() {

@@ -1,14 +1,13 @@
 import {Form, Grid, TextArea} from "semantic-ui-react";
-import ToggleButton from "../components/ToggleButton";
+import ToggleButton from "../../components/ToggleButton";
 import React, { Component } from 'react'
 
-export default class NoteRow extends Component {
+export default class MedicalHistoryNoteRow extends Component {
 
     render(){
-        const condition = this.props.condition;
         return (<Grid.Row >
                 <Grid.Column>
-                    {condition}
+                    {this.props.condition}
                 </Grid.Column>
                 <Grid.Column>
                     <ToggleButton title="Yes"/>

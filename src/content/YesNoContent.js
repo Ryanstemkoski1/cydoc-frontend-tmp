@@ -1,7 +1,26 @@
-import {Divider, Grid, Header} from "semantic-ui-react";
+import {Button, Divider, Grid} from "semantic-ui-react";
 import React, {Component, Fragment} from 'react';
+import PropTypes from 'prop-types';
 
 export default class YesNoContent extends Component {
+    constructor(props) {
+        super(props);
+        this.customNoteRow = this.props.customNoteRow;
+        this.defaultRows = this.props.listItems;
+        this.addRow = this.addRow.bind(this);
+        this.state = {
+            rows: this.defaultRows
+        }
+
+    }
+
+
+    addRow() {
+        let nextState = this.state;
+        nextState.rows.push(this.props.customNoteRow);
+        this.setState(nextState);
+    }
+
     render(){
         return(
             <Fragment>
@@ -9,11 +28,21 @@ export default class YesNoContent extends Component {
                 {this.props.contentHeader}
                 <Divider/>
                 <Grid columns={this.props.numColumns} verticalAlign='middle' >
-                    {this.props.listItems}
-                    {this.props.customNoteRow}
+                    {this.state.rows.map(row => row)}
                 </Grid>
+                <div>
+                    <Button basic circular icon="plus" onClick={this.addRow}/>
+                    add row
+                </div>
             </Fragment>
         );
     }
 }
+
+YesNoContent.propTypes = {
+    contentHeader: PropTypes.any.isRequired,
+    numColumns: PropTypes.number,
+    listItems: PropTypes.array,
+    customNoteRow: PropTypes.any.isRequired,
+};
 
