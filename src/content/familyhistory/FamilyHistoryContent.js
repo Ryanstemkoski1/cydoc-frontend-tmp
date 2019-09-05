@@ -5,6 +5,8 @@ import {Input} from "semantic-ui-react";
 import FamilyHistoryNoteRow from "./FamilyHistoryNoteRow";
 
 
+//TODO: finish the styling for this page
+
 export default class FamilyHistoryContent extends Component {
     render(){
         const conditions = ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV", ];

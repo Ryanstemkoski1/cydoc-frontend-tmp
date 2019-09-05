@@ -1,6 +1,7 @@
 import {Button, Divider, Grid} from "semantic-ui-react";
 import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
+import AddRowButton from "../components/AddRowButton";
 
 export default class YesNoContent extends Component {
     constructor(props) {
@@ -30,10 +31,7 @@ export default class YesNoContent extends Component {
                 <Grid columns={this.props.numColumns} verticalAlign='middle' >
                     {this.state.rows.map(row => row)}
                 </Grid>
-                <div>
-                    <Button basic circular icon="plus" onClick={this.addRow}/>
-                    add row
-                </div>
+                <AddRowButton onClick={this.addRow}/>
             </Fragment>
         );
     }

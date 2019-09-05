@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react';
-import {Button, Input, Table} from "semantic-ui-react";
+import { Input, Table} from "semantic-ui-react";
+import AddRowButton from "../components/AddRowButton"
 import PropTypes from 'prop-types';
-
 
 export default class TableContent extends Component {
     constructor(props) {
@@ -42,7 +42,7 @@ export default class TableContent extends Component {
     render(){
         return (
             <Fragment>
-                <br />
+                <br/>
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
@@ -54,10 +54,7 @@ export default class TableContent extends Component {
                         {this.state.rows.map(row => row)}
                     </Table.Body>
                 </Table>
-                <div>
-                    <Button basic circular icon="plus" onClick={this.addRow}/>
-                    add row
-                </div>
+                <AddRowButton onClick={this.addRow}/>
             </Fragment>
         );
     }
