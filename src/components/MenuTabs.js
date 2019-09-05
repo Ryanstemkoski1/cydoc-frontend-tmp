@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Menu, Container} from 'semantic-ui-react'
+import PropTypes from 'prop-types'
 
 export default class MenuTabs extends Component {
     constructor(props) {
@@ -36,3 +37,9 @@ export default class MenuTabs extends Component {
         )
     }
 }
+
+MenuTabs.propTypes = {
+  activeItem: PropTypes.string,
+  attached: PropTypes.string,
+  onTabChange: PropTypes.func
+};

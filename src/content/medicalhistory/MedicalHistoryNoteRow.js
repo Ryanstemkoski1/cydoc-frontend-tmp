@@ -1,6 +1,7 @@
 import {Form, Grid, TextArea} from "semantic-ui-react";
 import ToggleButton from "../../components/ToggleButton";
 import React from 'react'
+import PropTypes from 'prop-types';
 
 export default function MedicalHistoryNoteRow(props) {
     return (<Grid.Row>
@@ -24,4 +25,6 @@ export default function MedicalHistoryNoteRow(props) {
     </Grid.Row>)
 }
 
-
+MedicalHistoryNoteRow.propTypes = {
+  condition: PropTypes.string
+}

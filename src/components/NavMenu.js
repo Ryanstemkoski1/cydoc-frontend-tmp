@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { Container, Menu, Header } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
 export default class NavMenu extends Component {
     render() {
@@ -29,4 +30,8 @@ export default class NavMenu extends Component {
             </Menu>
         );
     }
+};
+
+NavMenu.propTypes = {
+  attached: PropTypes.string
 };

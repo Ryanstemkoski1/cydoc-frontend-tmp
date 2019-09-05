@@ -5,6 +5,7 @@ import SurgicalHistoryContent from "../content/surgicalhistory/SurgicalHistoryCo
 import MedicationsContent from "../content/medications/MedicationsContent";
 import AllergiesContent from "../content/allergies/AllergiesContent";
 import FamilyHistoryContent from "../content/familyhistory/FamilyHistoryContent";
+import PropTypes from 'prop-types';
 
 export default class NotePage extends Component {
     render() {
@@ -45,3 +46,6 @@ export default class NotePage extends Component {
     }
 };
 
+NotePage.propTypes = {
+  activeItem: PropTypes.string
+};

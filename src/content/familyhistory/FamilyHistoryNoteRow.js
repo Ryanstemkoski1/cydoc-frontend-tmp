@@ -1,6 +1,7 @@
 import {Checkbox, Form, Grid, TextArea} from "semantic-ui-react";
 import ToggleButton from "../../components/ToggleButton";
 import React from "react";
+import PropTypes from 'prop-types';
 
 export default function FamilyHistoryNoteRow(props) {
     return (
@@ -28,3 +29,7 @@ export default function FamilyHistoryNoteRow(props) {
         </Grid.Row>
     )
 }
+
+FamilyHistoryNoteRow.propTypes = {
+  condition: PropTypes.string
+};

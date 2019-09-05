@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Button } from 'semantic-ui-react'
+import PropTypes from 'prop-types';
 
 export default class ToggleButton extends Component {
     state = {};
@@ -16,3 +17,7 @@ export default class ToggleButton extends Component {
         )
     }
 }
+
+ToggleButton.propTypes = {
+  title: PropTypes.string
+};
