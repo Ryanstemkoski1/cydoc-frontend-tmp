@@ -8,7 +8,7 @@ export default class DashboardPage extends Component {
     render(){
         return (
             <Fragment>
-                <div style={{position: "relative", top:"70px"}}>
+                <div style={{position: "relative", top:"70px", boxShadow: "0 3px 4px -6px gray"}}>
                     <Grid columns={2} fluid>
                         <Grid.Column width={4}>
                             <VerticalMenu />
