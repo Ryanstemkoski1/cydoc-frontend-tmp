@@ -6,6 +6,8 @@ import MedicationsContent from "../content/medications/MedicationsContent";
 import AllergiesContent from "../content/allergies/AllergiesContent";
 import FamilyHistoryContent from "../content/familyhistory/FamilyHistoryContent";
 import PropTypes from 'prop-types';
+import SocialHistoryContent from "../content/socialhistory/SocialHistoryContent";
+import PhysicalExamContent from "../content/physicalexam/PhysicalExamContent";
 
 export default class NotePage extends Component {
     render() {
@@ -25,6 +27,12 @@ export default class NotePage extends Component {
                 break;
             case "Family History":
                 tabToDisplay = (<FamilyHistoryContent/>);
+                break;
+            case "Social History":
+                tabToDisplay = (<SocialHistoryContent />);
+                break;
+            case "Physical Exam":
+                tabToDisplay = (<PhysicalExamContent />);
                 break;
             default:
                 tabToDisplay = (<MedicalHistoryContent/>);

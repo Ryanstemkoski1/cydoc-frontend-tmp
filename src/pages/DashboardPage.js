@@ -8,17 +8,21 @@ export default class DashboardPage extends Component {
     render(){
         return (
             <Fragment>
-                <NavMenu/>
-                <Grid columns={2} fluid>
-                    <Grid.Column width={4}>
-                        <VerticalMenu />
-                    </Grid.Column>
-                    <Grid.Column width={9}>
-                        <Segment basic padded>
-                            <NoteDashboardContent />
-                        </Segment>
-                    </Grid.Column>
-                </Grid>
+                <div style={{position: "relative", top:"70px"}}>
+                    <Grid columns={2} fluid>
+                        <Grid.Column width={4}>
+                            <VerticalMenu />
+                        </Grid.Column>
+                        <Grid.Column width={9}>
+                            <Segment basic padded>
+                                <NoteDashboardContent />
+                            </Segment>
+                        </Grid.Column>
+                    </Grid>
+                </div>
+                <div style={{position: "fixed", top: "0", right: "0", left: "0"}}>
+                    <NavMenu />
+                </div>
             </Fragment>
         )
     }

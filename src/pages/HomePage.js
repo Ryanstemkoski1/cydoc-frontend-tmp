@@ -7,8 +7,13 @@ class HomePage extends Component {
     render() {
         return (
             <Fragment>
-                <NavMenu/>
-                <HomePageContent/>
+                <div style={{position: "relative", top:"70px"}}>
+                    <HomePageContent/>
+                </div>
+                <div style={{position: "fixed", top: "0", right: "0", left: "0"}}>
+                    <NavMenu/>
+                </div>
+
             </Fragment>
         );
     }
