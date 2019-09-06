@@ -42,7 +42,7 @@ export default class NotePage extends Component {
         return (
             <Container>
                 <br/>
-                <Segment style={{borderColor: "white"}}>
+                <Segment style={{borderColor: "white"}} padded={"very"}>
                     <Header as="h3" textAlign="center">
                         {this.props.activeItem.toLowerCase()}
                     </Header>

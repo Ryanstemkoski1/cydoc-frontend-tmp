@@ -25,7 +25,8 @@ export default class MenuTabs extends Component {
             name={name}
             active={activeItem === name}
             onClick={this.handleItemClick}
-            style={{borderColor: "white"}}/>
+            style={{borderColor: "white"}}
+            href={"#"+ encodeURI(name)}/>
             );
 
         return (

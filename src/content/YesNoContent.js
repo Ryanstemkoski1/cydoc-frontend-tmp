@@ -8,6 +8,7 @@ export default class YesNoContent extends Component {
         super(props);
         this.customNoteRow = this.props.customNoteRow;
         this.defaultRows = this.props.listItems;
+        this.onChange = this.props.onChange
         this.addRow = this.addRow.bind(this);
         this.state = {
             rows: this.defaultRows
@@ -39,8 +40,8 @@ export default class YesNoContent extends Component {
 
 YesNoContent.propTypes = {
     contentHeader: PropTypes.any.isRequired,
-    numColumns: PropTypes.number,
-    listItems: PropTypes.array,
+    numColumns: PropTypes.number.isRequired,
+    listItems: PropTypes.array.isRequired,
     customNoteRow: PropTypes.any.isRequired,
 };
 

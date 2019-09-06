@@ -16,7 +16,8 @@ export default class ToggleButton extends Component {
                 active={active}
                 onClick={this.handleClick}
                 basic={!active}
-                size={this.props.size}>
+                size={this.props.size}
+                compact={this.props.compact}>
                 {this.props.title}
             </Button>
         )
@@ -24,5 +25,7 @@ export default class ToggleButton extends Component {
 }
 
 ToggleButton.propTypes = {
-  title: PropTypes.string
+    title: PropTypes.string,
+    size: PropTypes.string,
+    compact: PropTypes.bool
 };

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Form, Grid} from "semantic-ui-react";
+import {Form, Grid, Input} from "semantic-ui-react";
 import PropTypes from "prop-types";
 
 export default class SecondarySocialHistoryNoteRow extends Component {
@@ -11,7 +11,7 @@ export default class SecondarySocialHistoryNoteRow extends Component {
             <Grid.Column>
                 <Form>
                     <Form.Field>
-                        <input/>
+                        <Input onChange={this.props.onChange} field={this.props.label}/>
                     </Form.Field>
                 </Form>
             </Grid.Column>
