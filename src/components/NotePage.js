@@ -8,14 +8,23 @@ import FamilyHistoryContent from "../content/familyhistory/FamilyHistoryContent"
 import PropTypes from 'prop-types';
 import SocialHistoryContent from "../content/socialhistory/SocialHistoryContent";
 import PhysicalExamContent from "../content/physicalexam/PhysicalExamContent";
+import constants from '../constants';
 
 export default class NotePage extends Component {
     constructor(props) {
         super(props);
         this.newOnChange = this.newOnChange.bind(this);
+        this.handleChangeGeneral = this.handleChangeGeneral.bind(this);
         this.state = {
             value: "Hello",
+            "Medical History": {}
         }
+    }
+
+    handleChangeGeneral(data, name){
+        let newState = this.state;
+        newState[name] = data;
+        this.setState(newState);
     }
 
 

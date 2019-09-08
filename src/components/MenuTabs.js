@@ -8,25 +8,21 @@ export default class MenuTabs extends Component {
         this.handleItemClick =  this.handleItemClick.bind(this)
     }
 
-    // state = { activeItem: 'Medical History' };
-
-    // handleItemClick = (e, { name }) => this.setState({ activeItem: name });
     handleItemClick = (e, { name }) => this.props.onTabChange(name);
 
     render() {
-        // const { activeItem } = this.props.activeItem;
-
         const activeItem = this.props.activeItem;
         const tabNames = ["HPI", "Medical History", "Surgical History", "Medications", "Allergies", "Family History",
             "Social History", "Review of Systems", "Physical Exam"];
 
-        const tabMenuItems = tabNames.map((name) =>
+        const tabMenuItems = tabNames.map((name, index) =>
             <Menu.Item
-            name={name}
-            active={activeItem === name}
-            onClick={this.handleItemClick}
-            style={{borderColor: "white"}}
-            href={"#"+ encodeURI(name)}/>
+                key={index}
+                name={name}
+                active={activeItem === name}
+                onClick={this.handleItemClick}
+                style={{borderColor: "white"}}
+                href={"#"+ encodeURI(name)}/>
             );
 
         return (
@@ -41,6 +37,9 @@ export default class MenuTabs extends Component {
 
 MenuTabs.propTypes = {
   activeItem: PropTypes.string,
-  attached: PropTypes.string,
+  attached: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.bool
+  ]),
   onTabChange: PropTypes.func
 };

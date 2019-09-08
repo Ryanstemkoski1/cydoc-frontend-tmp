@@ -4,6 +4,13 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 
 export default class SocialHistoryNoteRow extends Component {
+    constructor(props) {
+        super(props);
+        // this.state = {
+        //     value: this.props.value
+        // }
+    }
+
     render() {
         return (<Grid.Row>
             <Grid.Column width={2}>
@@ -21,7 +28,11 @@ export default class SocialHistoryNoteRow extends Component {
                         <Input
                             onChange={this.props.onChange}
                             field={this.props.firstField}
-                            condition={this.props.condition}/>
+                            condition={this.props.condition}
+                            value={this.props.value}
+                        >
+                            {/*{this.props.value}*/}
+                        </Input>
                     </Form.Field>
                 </Form>
             </Grid.Column>
