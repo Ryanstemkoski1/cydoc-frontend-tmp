@@ -6,9 +6,8 @@ import AddRowButton from "../components/AddRowButton";
 export default class YesNoContent extends Component {
     constructor(props) {
         super(props);
-        this.customNoteRow = this.props.customNoteRow;
         this.defaultRows = this.props.listItems;
-        this.onChange = this.props.onChange
+        this.onChange = this.props.onChange;
         this.addRow = this.addRow.bind(this);
         this.state = {
             rows: this.defaultRows
@@ -30,7 +29,7 @@ export default class YesNoContent extends Component {
                 {this.props.contentHeader}
                 <Divider/>
                 <Grid columns={this.props.numColumns} verticalAlign='middle' >
-                    {this.state.rows.map(row => row)}
+                    {this.props.listItems}
                 </Grid>
                 <AddRowButton onClick={this.addRow}/>
             </Fragment>

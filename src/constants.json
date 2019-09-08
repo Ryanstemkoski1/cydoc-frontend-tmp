@@ -1,0 +1,28 @@
+{
+  "medicalhistory": {
+    "conditions": ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV"]
+  },
+
+  "socialhistory": {
+    "substanceUseContentHeader": "Substance Use",
+    "secondaryFields": ["living situation", "employment", "diet", "exercise"],
+    "substanceAbuseFields" : {
+      "tobacco": {
+        "condition": "tobacco",
+        "firstField": "Packs/Day",
+        "secondField": "Number of Years"
+      },
+      "alcohol": {
+        "condition": "alcohol",
+        "firstField": "Drinks/Week",
+        "secondField": "What kind of drinks?"
+      },
+      "substanceAbuse": {
+        "condition": "substance abuse",
+        "firstField": "Drug Name",
+        "secondField": "Mode of Delivery"
+      }
+    }
+  }
+
+}
