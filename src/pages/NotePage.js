@@ -11,13 +11,16 @@ import PhysicalExamContent from "../content/physicalexam/PhysicalExamContent";
 import constants from '../constants';
 import {allergies, medications, surgicalHistory} from '../StateShapes'
 
+//Class that manages the content when a tab in CreateNote is clicked.
+
 export default class NotePage extends Component {
     constructor(props) {
         super(props);
+        //bind methods
         this.handleMedicalHistoryChange = this.handleMedicalHistoryChange.bind(this);
         this.handleSocialHistoryChange = this.handleSocialHistoryChange.bind(this);
         this.handleAllergiesChange = this.handleAllergiesChange.bind(this);
-        console.log(constants.medicalhistory.state);
+        //initialize state
         this.state = {
             "Medical History": constants.medicalhistory.state,
             "Social History": constants.socialhistory.state,
@@ -28,10 +31,13 @@ export default class NotePage extends Component {
     }
 
     updateState(name, values){
+        //sets the state given a tab name and an object that represents the new state of that tab
         let newState = this.state;
         newState[name] = values;
         this.setState(newState);
     }
+
+    //individual handlers for each tab
     handleSurgicalHistoryChange = (data, values) => this.updateState("Surgical History", values);
 
     handleMedicationsChange = (data, values) => this.updateState("Medications", values);
@@ -43,9 +49,12 @@ export default class NotePage extends Component {
     handleSocialHistoryChange = (data, values) => this.updateState("Social History", values);
 
     render() {
+        //get content based on which tab is active
         const tabToDisplay = this.getTabToDisplay(this.props.activeItem);
 
         return (
+            //Renders a white page that contains the tab name as the header and the
+            //corresponding content to the active tab
             <Container>
                 <br/>
                 <Segment style={{borderColor: "white"}} padded={"very"}>
@@ -60,6 +69,8 @@ export default class NotePage extends Component {
     }
 
     getTabToDisplay(activeItem) {
+        //Instantiates and returns the correct content component based on the active tab
+        //passes in the corresponding handler and values prop
         let tabToDisplay;
         switch (activeItem) {
             case "Medical History":

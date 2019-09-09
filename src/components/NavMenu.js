@@ -1,37 +1,71 @@
-import React, {Component} from 'react';
-import { Container, Menu, Header } from 'semantic-ui-react';
+import React, {Component, Fragment} from 'react';
+import {Container, Header, Icon, Menu} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 export default class NavMenu extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoggedIn: true
+        }
+    }
+
     render() {
+        const user = "Isabella";
         return (
             <Menu secondary borderless style={{height: "10vh", borderColor: "white"}} attached={this.props.attached}>
                 <Container>
                     <Menu.Item href="/home">
                         <Header as="h2">
-                        cydoc
+                            cydoc
                         </Header>
                     </Menu.Item>
                     <Menu.Menu position="right">
-                        <Menu.Item name="create_note" href="/createnote">
-                            Create Note
-                        </Menu.Item>
-                        <Menu.Item name="about" href="/about">
-                            About
-                        </Menu.Item>
-                        <Menu.Item name="login" href="/login">
-                            Login
-                        </Menu.Item>
-                        <Menu.Item name="register" href="/login">
-                            Register
-                        </Menu.Item>
+                        {/* Menu will have different options depending on whether the user is logged in or not */}
+                        {this.state.isLoggedIn ? <LoggedInMenuItems user={user}/> : <DefaultMenuItems/>}
                     </Menu.Menu>
                 </Container>
             </Menu>
         );
     }
-};
+    };
 
 NavMenu.propTypes = {
-  attached: PropTypes.string
+    // optional prop for stacking another menu above/below
+    attached: PropTypes.string
 };
+
+function DefaultMenuItems() {
+    return <Fragment>
+        <Menu.Item name="create_note" href="/createnote">
+            Create Note
+        </Menu.Item>
+        <Menu.Item name="about" href="/about">
+            About
+        </Menu.Item>
+        <Menu.Item name="login" href="/login">
+            Login
+        </Menu.Item>
+        <Menu.Item name="register" href="/login">
+            Register
+        </Menu.Item>
+    </Fragment>;
+}
+
+function LoggedInMenuItems(props) {
+    return <Fragment>
+        < Menu.Item name="create_note" href="/createnote">
+            Create Note
+        </Menu.Item>
+        <Menu.Item name="about" href="/dashboard">
+            Create Template
+        </Menu.Item>
+        <Menu.Item name="login" href="/dashboard">
+            Load Note
+        </Menu.Item>
+        <Menu.Item name="register" href="/dashboard">
+            Welcome, {props.user}
+            <Icon name="user" style={{marginLeft: "7px"}}/>
+        </Menu.Item>
+    </Fragment>;
+}
