@@ -1,13 +1,22 @@
 import React, { Component } from "react";
-import TableContent from "../TableContent";
-
-const fields = ['Drug Name', 'Start Date', 'Schedule', 'Dose', 'Reason for Taking', 'Comments'];
-const contentLabel = 'medications and supplements';
+import TableContent from "../../components/TableContent";
+import PropTypes from 'prop-types';
+import { medications } from "../../StateShapes";
 
 export default class MedicationsContent extends Component {
     render() {
         return(
-            <TableContent  tableHeaders={fields} tableBodyPlaceholders={fields} contentLabel={contentLabel}/>
+            <TableContent
+                tableHeaders={medications.fields}
+                tableBodyPlaceholders={medications.fields}
+                values={this.props.values}
+                onTableBodyChange={this.props.onMedicationsChange}
+            />
         );
     }
 }
+
+MedicationsContent.propTypes = {
+  onMedicationsChange: PropTypes.func.isRequired,
+  values: PropTypes.any.isRequired
+};

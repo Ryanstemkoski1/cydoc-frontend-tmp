@@ -2,7 +2,7 @@ import React, {Fragment} from "react";
 import {Divider, Grid} from "semantic-ui-react";
 import SocialHistoryNoteRow from "./SocialHistoryNoteRow";
 import SecondarySocialHistoryNoteRow from "./SecondarySocialHistoryNoteRow";
-import GridContent from "../GridContent";
+import GridContent from "../../components/GridContent";
 import constants from "../../constants"
 
 export default class SocialHistoryContent extends React.Component {

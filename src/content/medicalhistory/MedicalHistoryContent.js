@@ -2,7 +2,7 @@ import {Input} from "semantic-ui-react";
 import MedicalHistoryNoteRow from "./MedicalHistoryNoteRow";
 import React, {Component} from 'react';
 import MedicalHistoryContentHeader from "./MedicalHistoryContentHeader";
-import GridContent from "../GridContent";
+import GridContent from "../../components/GridContent";
 import constants from '../../constants'
 
 

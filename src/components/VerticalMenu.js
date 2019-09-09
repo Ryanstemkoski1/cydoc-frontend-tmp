@@ -4,13 +4,15 @@ import {Icon, Menu} from 'semantic-ui-react'
 export default class VerticalMenu extends Component {
     constructor(props) {
         super(props);
+        this.handleItemClick = this.handleItemClick.bind(this);
         this.state = {
             activeItem: "Notes"
         }
     }
 
-
-    handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+    handleItemClick(event, { name }){
+        this.setState({ activeItem: name });
+    }
 
     render() {
         const activeItem = this.state.activeItem;
@@ -21,8 +23,7 @@ export default class VerticalMenu extends Component {
                     header
                     name='Notes'
                     active={activeItem === 'Notes'}
-                    onClick={this.handleItemClick}
-                >
+                    onClick={this.handleItemClick}>
                     <Icon name="plus" />
                     <Icon name="search" />
                     Notes

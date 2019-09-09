@@ -1,17 +1,20 @@
 import React, {Component, Fragment} from 'react';
 import MenuTabs from "../components/MenuTabs";
-import NotePage from "../components/NotePage";
+import NotePage from "./NotePage";
 import NavMenu from "../components/NavMenu";
 
 class CreateNote extends Component {
     constructor(props) {
         super(props);
+        this.onTabChange = this.onTabChange.bind(this);
         this.state = {
             activeItem: 'Medical History'
         }
     }
 
-    onTabChange = (name) => this.setState({ activeItem: name });
+    onTabChange(name){
+        this.setState({ activeItem: name })
+    }
 
     render() {
                 return (
@@ -27,8 +30,6 @@ class CreateNote extends Component {
                                 attached
                             />
                         </div>
-
-
                     </Fragment>
                 );
         }

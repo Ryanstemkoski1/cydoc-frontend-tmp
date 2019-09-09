@@ -1,7 +1,7 @@
 import React from 'react';
 import {Grid, Header} from "semantic-ui-react";
 
-export default function MedicalHistoryContentHeader(props) {
+export default function MedicalHistoryContentHeader() {
     return (
         <Grid columns={4} centered>
             <Grid.Row>

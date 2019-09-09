@@ -1,7 +1,7 @@
 import { Divider, Grid} from "semantic-ui-react";
 import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
-import AddRowButton from "../components/AddRowButton";
+import AddRowButton from "./AddRowButton";
 
 export default class GridContent extends Component {
     constructor(props) {

@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import GridContent from "../GridContent";
+import GridContent from "../../components/GridContent";
 import FamilyHistoryContentHeader from "./FamilyHistoryContentHeader";
 import {Input} from "semantic-ui-react";
 import FamilyHistoryNoteRow from "./FamilyHistoryNoteRow";

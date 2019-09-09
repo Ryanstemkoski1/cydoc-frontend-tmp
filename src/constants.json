@@ -87,6 +87,10 @@
         "Comments": ""
       }
     }
+  },
+  "allergies": {
+    "fields": ["Inciting Agent", "Reaction", "Comments"],
+    "state": {"Inciting Agent":  "", "Reaction":  "", "Comments":  ""}
   }
 
 }
