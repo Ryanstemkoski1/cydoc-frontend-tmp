@@ -207,7 +207,7 @@
 
 
 /* Secondary */
-@secondaryBackground: @white;
+@secondaryBackground: none;
 @secondaryMargin: 0em -@secondaryItemSpacing;
 @secondaryItemBackground: none;
 @secondaryItemSpacing: @relative5px;
@@ -308,7 +308,7 @@
 /* Tabular */
 @tabularBorderColor: @solidBorderColor;
 @tabularBackgroundColor: transparent;
-@tabularBackground: @white;
+@tabularBackground: none @tabularBackgroundColor;
 @tabularBorderWidth: 1px;
 @tabularOppositeBorderWidth: @tabularBorderWidth + 1px;
 @tabularVerticalPadding: @itemVerticalPadding;
@@ -323,7 +323,7 @@
 @tabularFluidOffset: 1px;
 @tabularFluidWidth: calc(100% + (@tabularFluidOffset * 2));
 
-@tabularActiveBackground: @pageBackground;
+@tabularActiveBackground: none @white;
 @tabularActiveColor: @selectedTextColor;
 @tabularActiveBoxShadow: none;
 @tabularActiveWeight: @bold;

@@ -9,6 +9,7 @@ http://nephewapps.com/2018/02/25/theming-semantic-ui-with-create-react-app/
 
 https://jsramblings.com/2018/03/04/how-to-use-semantic-ui-with-a-custom-theme-in-your-CRA-app.html
 
+You will need to navigate to localhost:3000/home to see the app (or whichever port you are using).
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
