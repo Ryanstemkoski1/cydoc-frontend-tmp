@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import NavMenu from "../components/NavMenu";
 import VerticalMenu from "../components/VerticalMenu";
 import {Grid, Segment} from "semantic-ui-react";
-import NoteDashboardContent from "../content/NoteDashboardContent";
+import NoteDashboardContent from "../content/dashboard/NoteDashboardContent";
 
 //Component that manages the layout of the dashboard page
 export default class DashboardPage extends Component {

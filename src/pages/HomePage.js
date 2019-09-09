@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import NavMenu from '../components/NavMenu';
-import HomePageContent from "../content/HomePageContent";
+import HomePageContent from "../content/home/HomePageContent";
 
 //Component that manages the layout of the landing page
 class HomePage extends Component {
