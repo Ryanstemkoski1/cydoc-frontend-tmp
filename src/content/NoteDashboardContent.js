@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Card, Header, Icon } from 'semantic-ui-react'
 
+//Component that manages the content for the Dashboard page
+//TODO: clean this up!
 export default class NoteDashboardContent extends Component {
     render() {
         const extra = (

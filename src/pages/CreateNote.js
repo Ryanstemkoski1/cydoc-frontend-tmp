@@ -3,6 +3,8 @@ import MenuTabs from "../components/MenuTabs";
 import NotePage from "./NotePage";
 import NavMenu from "../components/NavMenu";
 
+//Component that manages the active state of the create note editor
+//and defines the layout of the editor
 class CreateNote extends Component {
     constructor(props) {
         super(props);

@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react';
-import PropTypes from 'prop-types';
 import {Divider, Header} from "semantic-ui-react";
 
+//Component that manages content for the Physical Exam tab
 export default class PhysicalExamContent extends React.Component {
     render() {
         return(

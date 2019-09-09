@@ -3,6 +3,7 @@ import ToggleButton from "../../components/ToggleButton";
 import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 
+//Component that defines the layout for the Substance Use portion
 export default class SocialHistoryNoteRow extends Component {
     render() {
         const values = this.props.values;

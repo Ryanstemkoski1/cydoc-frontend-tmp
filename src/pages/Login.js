@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Form, Grid, Header, Segment} from "semantic-ui-react";
 
+//Component that manages the layout of the login page
 class Login extends Component {
     render() {
         return (

@@ -2,6 +2,7 @@
 import React from 'react'
 import { Button, Container, Divider, Grid, Header, Image, Menu, Segment } from 'semantic-ui-react'
 
+// Component to show the theme
 const ThemingLayout = () => (
     <Container style={{ marginTop: '3em' }}>
         <Header as='h1'>Theming Examples</Header>

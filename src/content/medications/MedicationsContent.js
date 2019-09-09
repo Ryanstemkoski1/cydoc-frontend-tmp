@@ -3,6 +3,7 @@ import TableContent from "../../components/TableContent";
 import PropTypes from 'prop-types';
 import { medications } from "../../States";
 
+//Component that manages content for the Medications page
 export default class MedicationsContent extends Component {
     render() {
         return(

@@ -1,9 +1,9 @@
 {
-  "tabNames": ["HPI", "Medical History", "Surgical History", "Medications", "Allergies", "Family History",
+  "TAB_NAMES": ["HPI", "Medical History", "Surgical History", "Medications", "Allergies", "Family History",
     "Social History", "Review of Systems", "Physical Exam"],
   "CONDITIONS": ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV"],
-  "medicalhistory": {
-    "state": {
+  "MEDICAL_HISTORY": {
+    "STATE": {
       "Type II Diabetes": {
         "Yes": false,
         "No": false,
@@ -43,10 +43,10 @@
     }
   },
 
-  "socialhistory": {
-    "substanceUseContentHeader": "Substance Use",
-    "secondaryFields": ["living situation", "employment", "diet", "exercise"],
-    "substanceAbuseFields" : {
+  "SOCIAL_HISTORY": {
+    "SUBSTANCE_USE_CONTENT_HEADER": "Substance Use",
+    "SECONDARY_FIELDS": ["living situation", "employment", "diet", "exercise"],
+    "SUBSTANCE_USE_FIELDS": {
       "tobacco": {
         "condition": "tobacco",
         "firstField": "Packs/Day",
@@ -63,7 +63,7 @@
         "secondField": "Mode of Delivery"
       }
     },
-    "state": {
+    "STATE": {
       "alcohol": {
         "Yes": false,
         "In the Past": false,
@@ -90,9 +90,9 @@
       }
     }
   },
-  "allergies": {
+  "ALLERGIES": {
     "fields": ["Inciting Agent", "Reaction", "Comments"],
-    "state": {"Inciting Agent":  "", "Reaction":  "", "Comments":  ""}
+    "STATE": {"Inciting Agent":  "", "Reaction":  "", "Comments":  ""}
   }
 
 }

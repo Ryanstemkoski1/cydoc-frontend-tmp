@@ -11,7 +11,8 @@ import PhysicalExamContent from "../content/physicalexam/PhysicalExamContent";
 import constants from '../constants';
 import {allergies, medications, surgicalHistory} from '../States'
 
-//Class that manages the content when a tab in CreateNote is clicked.
+//Component that manages the content displayed based on the activeItem prop
+// and records the information the user enters as state
 
 export default class NotePage extends Component {
     constructor(props) {
@@ -22,8 +23,8 @@ export default class NotePage extends Component {
         this.handleAllergiesChange = this.handleAllergiesChange.bind(this);
         //initialize state
         this.state = {
-            "Medical History": constants.medicalhistory.state,
-            "Social History": constants.socialhistory.state,
+            "Medical History": constants.MEDICAL_HISTORY.state,
+            "Social History": constants.SOCIAL_HISTORY.STATE,
             "Allergies": allergies.state,
             "Medications": medications.state,
             "Surgical History": surgicalHistory.state

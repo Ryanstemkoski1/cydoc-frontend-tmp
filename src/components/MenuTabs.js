@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Menu, Container} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
-import {tabNames} from '../constants'
+import {TAB_NAMES} from '../constants'
 
 //Component for the tabs that toggle the different sections of the Create Note editor
 export default class MenuTabs extends Component {
@@ -16,7 +16,7 @@ export default class MenuTabs extends Component {
     render() {
         const {activeItem} = this.props;
 
-        const tabMenuItems = tabNames.map((name, index) =>
+        const tabMenuItems = TAB_NAMES.map((name, index) =>
             <Menu.Item
                 key={index}
                 name={name}

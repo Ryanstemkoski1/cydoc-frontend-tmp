@@ -3,7 +3,8 @@ import {Divider, Grid} from "semantic-ui-react";
 import SocialHistoryNoteRow from "./SocialHistoryNoteRow";
 import SecondarySocialHistoryNoteRow from "./SecondarySocialHistoryNoteRow";
 import GridContent from "../../components/GridContent";
-import constants from "../../constants"
+import {SOCIAL_HISTORY} from "../../constants"
+
 
 export default class SocialHistoryContent extends React.Component {
     constructor(props) {
@@ -12,11 +13,12 @@ export default class SocialHistoryContent extends React.Component {
         this.handleSocialHistoryChange = this.handleSocialHistoryChange.bind(this);
         this.generateSecondaryFieldRows = this.generateSecondaryFieldRows.bind(this);
         this.generateSubstanceUseRows = this.generateSubstanceUseRows.bind(this);
-        this.substanceUseContentHeader = constants.socialhistory.substanceUseContentHeader;
-;       this.secondaryFields = constants.socialhistory.secondaryFields;
-        this.substanceAbuseFields = constants.socialhistory.substanceAbuseFields;
+        this.substanceUseContentHeader = SOCIAL_HISTORY.SUBSTANCE_USE_CONTENT_HEADER;
+        this.secondaryFields = SOCIAL_HISTORY.SECONDARY_FIELDS;
+        this.substanceUseFields = SOCIAL_HISTORY.SUBSTANCE_USE_FIELDS;
     }
 
+    //handles changes in substance use portion
     handleSocialHistoryChange(event, data){
         console.log(data);
         const values = this.props.values;
@@ -25,6 +27,7 @@ export default class SocialHistoryContent extends React.Component {
         this.props.onSocialHistoryChange(data, values);
     }
 
+    //handles button in substance use portion
     handleToggleButtonClick(event, data){
         const values = this.props.values;
         const prevState = values[data.condition][data.title];
@@ -32,7 +35,7 @@ export default class SocialHistoryContent extends React.Component {
         this.props.onSocialHistoryChange(data, values);
     }
 
-
+    //generates a collection for the living situation, diet, exercise portion
     generateSecondaryFieldRows() {
         return this.secondaryFields.map(
             (label, index) => <SecondarySocialHistoryNoteRow
@@ -42,30 +45,38 @@ export default class SocialHistoryContent extends React.Component {
         );
     }
 
-    generateSubstanceUseRows(props) {
-        return Object.keys(this.substanceAbuseFields).map(
+    //Generates a collection of Grid.Row for the substance use portion
+    generateSubstanceUseRows() {
+        return Object.keys(this.substanceUseFields).map(
             (label, index) => <SocialHistoryNoteRow onChange={this.handleSocialHistoryChange}
                                                     key={index}
                                                     onToggleButtonClick={this.handleToggleButtonClick}
-                                                    condition={this.substanceAbuseFields[label].condition}
-                                                    firstField={this.substanceAbuseFields[label].firstField}
-                                                    secondField={this.substanceAbuseFields[label].secondField}
-                                                    values={props.values}/>
+                                                    condition={this.substanceUseFields[label].condition}
+                                                    firstField={this.substanceUseFields[label].firstField}
+                                                    secondField={this.substanceUseFields[label].secondField}
+                                                    values={this.props.values}/>
         );
     }
 
     render() {
+
+        //a blank row to allow addition of drugs
+        //TODO: make add row button aligned with the firstField
         const rowToAdd = (<SocialHistoryNoteRow
             onChange={this.handleSubstanceUseChange}
             condition=""
-            firstField={this.substanceAbuseFields.substanceAbuse.firstField}
-            secondField={this.substanceAbuseFields.substanceAbuse.secondField}/>);
+            firstField={this.substanceUseFields.substanceAbuse.firstField}
+            secondField={this.substanceUseFields.substanceAbuse.secondField}/>);
 
-        const substanceUseRows = this.generateSubstanceUseRows(this.props);
+        const substanceUseRows = this.generateSubstanceUseRows();
         const secondaryFieldRows = this.generateSecondaryFieldRows();
         return(
             <Fragment>
-                <GridContent value={this.props.value} contentHeader={this.substanceUseContentHeader} customNoteRow={rowToAdd} rows={substanceUseRows} numColumns={5}/>
+                <GridContent value={this.props.value}
+                             contentHeader={this.substanceUseContentHeader}
+                             customNoteRow={rowToAdd}
+                             rows={substanceUseRows}
+                             numColumns={5}/>
                 <Divider/>
                 <br/>
                 <Grid columns={2}>
