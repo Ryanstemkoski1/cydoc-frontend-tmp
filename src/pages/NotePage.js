@@ -23,7 +23,7 @@ export default class NotePage extends Component {
         this.handleAllergiesChange = this.handleAllergiesChange.bind(this);
         //initialize state
         this.state = {
-            "Medical History": constants.MEDICAL_HISTORY.state,
+            "Medical History": constants.MEDICAL_HISTORY.STATE,
             "Social History": constants.SOCIAL_HISTORY.STATE,
             "Allergies": allergies.state,
             "Medications": medications.state,
