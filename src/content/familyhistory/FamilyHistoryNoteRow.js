@@ -3,6 +3,7 @@ import ToggleButton from "../../components/ToggleButton";
 import React from "react";
 import PropTypes from 'prop-types';
 
+//Component for a row in the Family History GridContent
 export default function FamilyHistoryNoteRow(props) {
     return (
         <Grid.Row>

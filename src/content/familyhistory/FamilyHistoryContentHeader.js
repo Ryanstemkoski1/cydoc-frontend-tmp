@@ -1,6 +1,7 @@
 import React from 'react';
 import {Grid, Header} from "semantic-ui-react";
 
+//functional component for the heading above the divider for Family History
 export default function FamilyHistoryContentHeader() {
     return (
         <Grid columns={5} centered>

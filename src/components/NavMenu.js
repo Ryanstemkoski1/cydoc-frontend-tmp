@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import {Container, Header, Icon, Menu} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
+//Navigation Bar component that will go at the top of most pages
 export default class NavMenu extends Component {
     constructor(props) {
         super(props);
@@ -35,6 +36,7 @@ NavMenu.propTypes = {
     attached: PropTypes.string
 };
 
+//Functional component for menu items that show when user is not logged in
 function DefaultMenuItems() {
     return <Fragment>
         <Menu.Item name="create_note" href="/createnote">
@@ -52,6 +54,7 @@ function DefaultMenuItems() {
     </Fragment>;
 }
 
+//Functional component for menu items that show when user is logged in
 function LoggedInMenuItems(props) {
     return <Fragment>
         < Menu.Item name="create_note" href="/createnote">

@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import SocialHistoryContent from "../content/socialhistory/SocialHistoryContent";
 import PhysicalExamContent from "../content/physicalexam/PhysicalExamContent";
 import constants from '../constants';
-import {allergies, medications, surgicalHistory} from '../StateShapes'
+import {allergies, medications, surgicalHistory} from '../States'
 
 //Class that manages the content when a tab in CreateNote is clicked.
 

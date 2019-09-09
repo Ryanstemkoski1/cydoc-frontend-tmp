@@ -3,9 +3,9 @@ import MedicalHistoryNoteRow from "./MedicalHistoryNoteRow";
 import React, {Component} from 'react';
 import MedicalHistoryContentHeader from "./MedicalHistoryContentHeader";
 import GridContent from "../../components/GridContent";
-import constants from '../../constants'
+import {CONDITIONS} from '../../constants'
 
-
+//Component that manages the layout of the medical history tab content
 export default class MedicalHistoryContent extends Component {
     constructor(props) {
         super(props);
@@ -14,6 +14,7 @@ export default class MedicalHistoryContent extends Component {
         this.generateListItems = this.generateListItems.bind(this);
     }
 
+    //handles input field events
     handleChange(event, data){
         console.log(event);
         const values = this.props.values;
@@ -21,6 +22,7 @@ export default class MedicalHistoryContent extends Component {
         this.props.onMedicalHistoryChange(data, values);
     }
 
+    //handles toggle button events
     handleToggleButtonClick(event, data){
         const values = this.props.values;
         const prevState = values[data.condition][data.title];
@@ -29,8 +31,7 @@ export default class MedicalHistoryContent extends Component {
     }
 
     render(){
-        const conditions = constants.conditions;
-        const rows = this.generateListItems(conditions);
+        const rows = this.generateListItems(CONDITIONS);
         const inputField = (<Input placeholder="Condition"/>);
         const customNoteRow = (<MedicalHistoryNoteRow condition={inputField}/>);
 

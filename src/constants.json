@@ -1,5 +1,7 @@
 {
-  "conditions": ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV"],
+  "tabNames": ["HPI", "Medical History", "Surgical History", "Medications", "Allergies", "Family History",
+    "Social History", "Review of Systems", "Physical Exam"],
+  "CONDITIONS": ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV"],
   "medicalhistory": {
     "state": {
       "Type II Diabetes": {

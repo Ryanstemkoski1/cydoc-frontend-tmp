@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TableContent from "../../components/TableContent";
-import { surgicalHistory} from "../../StateShapes";
+import { surgicalHistory} from "../../States";
 import PropTypes from 'prop-types';
 export default class SurgicalHistoryContent extends Component {
     render(){

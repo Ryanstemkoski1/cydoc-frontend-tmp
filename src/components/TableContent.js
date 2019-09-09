@@ -4,6 +4,7 @@ import AddRowButton from "./AddRowButton"
 import PropTypes from 'prop-types';
 import {TableBodyRow} from "./TableBodyRow";
 
+//Component for a table layout
 export default class TableContent extends Component {
     constructor(props) {
         super(props);
@@ -13,6 +14,8 @@ export default class TableContent extends Component {
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
     }
 
+    //modify the current values in the table to reflect changes
+    // and call the handler prop
     handleTableBodyChange(event, data){
         console.log(data);
         let newState = this.props.values;
@@ -21,6 +24,7 @@ export default class TableContent extends Component {
         this.props.onTableBodyChange(data, newState);
     }
 
+    //method to generate an collection of the three default rows
     makeTableBodyRows(){
         const nums = [0,1,2];
         return nums.map((rowindex, index) => <TableBodyRow
@@ -32,6 +36,7 @@ export default class TableContent extends Component {
         />)
     }
 
+    //Method to generate the table header row
     makeHeader(){
         return(
             <Table.Row>

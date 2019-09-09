@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import TableContent from "../../components/TableContent";
 import PropTypes from 'prop-types';
-import { medications } from "../../StateShapes";
+import { medications } from "../../States";
 
 export default class MedicationsContent extends Component {
     render() {

@@ -3,18 +3,17 @@ import GridContent from "../../components/GridContent";
 import FamilyHistoryContentHeader from "./FamilyHistoryContentHeader";
 import {Input} from "semantic-ui-react";
 import FamilyHistoryNoteRow from "./FamilyHistoryNoteRow";
-
+import {CONDITIONS} from '../../constants'
 
 //TODO: finish the styling for this page
-
+//Component that manages the layout for the Family History page.
 export default class FamilyHistoryContent extends Component {
     render(){
-        const conditions = ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV", ];
-        const listItems = conditions.map((condition) =>
-            <FamilyHistoryNoteRow condition={condition} />);
+        //Create collection of rows
+        const listItems = CONDITIONS.map((condition) => <FamilyHistoryNoteRow condition={condition} />);
+        //Create the row to be added with addRow button
         const inputField = (<Input placeholder="Condition"/>);
         const customNoteRow = (<FamilyHistoryNoteRow condition={inputField}/>);
-
 
         return(
             <Fragment>

@@ -1,19 +1,20 @@
 import React, { Component } from 'react'
 import { Menu, Container} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
+import {tabNames} from '../constants'
 
+//Component for the tabs that toggle the different sections of the Create Note editor
 export default class MenuTabs extends Component {
     constructor(props) {
         super(props);
         this.handleItemClick =  this.handleItemClick.bind(this)
     }
 
+    //onClick event is handled by parent
     handleItemClick = (e, { name }) => this.props.onTabChange(name);
 
     render() {
-        const activeItem = this.props.activeItem;
-        const tabNames = ["HPI", "Medical History", "Surgical History", "Medications", "Allergies", "Family History",
-            "Social History", "Review of Systems", "Physical Exam"];
+        const {activeItem} = this.props;
 
         const tabMenuItems = tabNames.map((name, index) =>
             <Menu.Item

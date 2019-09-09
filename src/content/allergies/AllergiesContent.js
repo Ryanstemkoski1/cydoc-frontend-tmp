@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import TableContent from "../../components/TableContent";
-import constants from "../../constants"
+import {allergies} from "../../constants"
 import PropTypes from 'prop-types';
 
+//Component that manages the layout for the allergies page
 export default class AllergiesContent extends Component {
     render(){
-        const fields = constants.allergies.fields;
+        //get the allergies fields from the constants file
+        const {fields} = allergies;
         return (
             <TableContent
                 tableHeaders={fields}

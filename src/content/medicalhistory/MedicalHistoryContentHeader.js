@@ -1,6 +1,7 @@
 import React from 'react';
 import {Grid, Header} from "semantic-ui-react";
 
+//functional component for the Medical History header above the divider
 export default function MedicalHistoryContentHeader() {
     return (
         <Grid columns={4} centered>

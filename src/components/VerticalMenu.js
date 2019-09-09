@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import {Icon, Menu} from 'semantic-ui-react'
 
+
+//Component for the vertical menu that appears on the dashboard page
 export default class VerticalMenu extends Component {
     constructor(props) {
         super(props);
@@ -10,12 +12,13 @@ export default class VerticalMenu extends Component {
         }
     }
 
+    //sets the corresponding menu item to active on click
     handleItemClick(event, { name }){
         this.setState({ activeItem: name });
     }
 
     render() {
-        const activeItem = this.state.activeItem;
+        const activeItem = this.state;
 
         return (
             <Menu vertical size="massive" secondary style={{ height: '100vh'}}>
@@ -23,7 +26,8 @@ export default class VerticalMenu extends Component {
                     header
                     name='Notes'
                     active={activeItem === 'Notes'}
-                    onClick={this.handleItemClick}>
+                    onClick={this.handleItemClick}
+                >
                     <Icon name="plus" />
                     <Icon name="search" />
                     Notes
