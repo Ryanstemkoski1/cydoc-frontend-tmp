@@ -60,6 +60,32 @@
         "firstField": "Drug Name",
         "secondField": "Mode of Delivery"
       }
+    },
+    "state": {
+      "alcohol": {
+        "Yes": false,
+        "In the Past": false,
+        "Never Used": false,
+        "Drinks/Week": "",
+        "What kind of drinks?": "",
+        "Comments": ""
+      },
+      "tobacco" : {
+        "Yes": false,
+        "In the Past": false,
+        "Never Used": false,
+        "Packs/Day": "7",
+        "Number of Years": "",
+        "Comments": ""
+      },
+      "substance abuse" : {
+        "Yes": false,
+        "In the Past": false,
+        "Never Used": false,
+        "Name": "",
+        "Mode of Delivery": "",
+        "Comments": ""
+      }
     }
   }
 

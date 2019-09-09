@@ -4,14 +4,11 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 
 export default class SocialHistoryNoteRow extends Component {
-    constructor(props) {
-        super(props);
-        // this.state = {
-        //     value: this.props.value
-        // }
-    }
-
     render() {
+        const values = this.props.values;
+        const condition = this.props.condition;
+        const firstField = this.props.firstField;
+        const secondField = this.props.secondField;
         return (<Grid.Row>
             <Grid.Column width={2}>
                 {this.props.condition}
@@ -29,7 +26,7 @@ export default class SocialHistoryNoteRow extends Component {
                             onChange={this.props.onChange}
                             field={this.props.firstField}
                             condition={this.props.condition}
-                            value={this.props.value}
+                            value={values[condition][firstField]}
                         >
                             {/*{this.props.value}*/}
                         </Input>
@@ -43,7 +40,9 @@ export default class SocialHistoryNoteRow extends Component {
                         <Input
                             onChange={this.props.onChange}
                             field={this.props.secondField}
-                            condition={this.props.condition}/>
+                            condition={this.props.condition}
+                            value={values[condition][secondField]}
+                        />
                     </Form.Field>
                 </Form>
             </Grid.Column>
@@ -54,7 +53,9 @@ export default class SocialHistoryNoteRow extends Component {
                         <TextArea
                             onChange={this.props.onChange}
                             field={"Comments"}
-                            condition={this.props.condition}/>
+                            condition={this.props.condition}
+                            value={values[condition]["Comments"]}
+                        />
                     </Form.Field>
                 </Form>
             </Grid.Column>

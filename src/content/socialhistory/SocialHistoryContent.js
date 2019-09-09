@@ -8,28 +8,22 @@ import constants from "../../constants"
 export default class SocialHistoryContent extends React.Component {
     constructor(props) {
         super(props);
-        // this.handleSubstanceUseChange = this.handleSubstanceUseChange.bind(this);
-        this.handleSecondaryFieldsChange = this.handleSecondaryFieldsChange.bind(this);
+        this.handleSocialHistoryChange = this.handleSocialHistoryChange.bind(this);
         this.generateSecondaryFieldRows = this.generateSecondaryFieldRows.bind(this);
         this.generateSubstanceUseRows = this.generateSubstanceUseRows.bind(this);
         this.substanceUseContentHeader = constants.socialhistory.substanceUseContentHeader;
-;        this.secondaryFields = constants.socialhistory.secondaryFields;
+;       this.secondaryFields = constants.socialhistory.secondaryFields;
         this.substanceAbuseFields = constants.socialhistory.substanceAbuseFields;
-        // this.state = {
-        //     tobacco: {},
-        //     alcohol: {},
-        //     recreationalDrugs: {},
-        //     value: this.props.value
-        // }
     }
 
-
-    handleSecondaryFieldsChange(event, data) {
-        // console.log(data);
-        let newState = this.state;
-        newState[data.field] = data.value;
-        this.setState(newState);
+    handleSocialHistoryChange(event, data){
+        console.log(data);
+        const values = this.props.values;
+        values[data.condition][data.field] = data.value;
+        console.log(values);
+        this.props.onSocialHistoryChange(data, values);
     }
+
 
     generateSecondaryFieldRows() {
         return this.secondaryFields.map(
@@ -42,12 +36,12 @@ export default class SocialHistoryContent extends React.Component {
 
     generateSubstanceUseRows(props) {
         return Object.keys(this.substanceAbuseFields).map(
-            (label, index) => <SocialHistoryNoteRow onChange={props.onChange}
+            (label, index) => <SocialHistoryNoteRow onChange={this.handleSocialHistoryChange}
                                                     key={index}
                                                     condition={this.substanceAbuseFields[label].condition}
                                                     firstField={this.substanceAbuseFields[label].firstField}
                                                     secondField={this.substanceAbuseFields[label].secondField}
-                                                    value={props.value}/>
+                                                    values={props.values}/>
         );
     }
 

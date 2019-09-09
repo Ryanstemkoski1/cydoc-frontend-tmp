@@ -14,27 +14,43 @@ export default class NotePage extends Component {
     constructor(props) {
         super(props);
         this.handleMedicalHistoryChange = this.handleMedicalHistoryChange.bind(this);
-        this.handleChangeGeneral = this.handleChangeGeneral.bind(this);
+        this.handleSocialHistoryChange = this.handleSocialHistoryChange.bind(this);
         console.log(constants.medicalhistory.state);
         this.state = {
-            "Medical History": constants.medicalhistory.state
+            "Medical History": constants.medicalhistory.state,
+            "Social History": constants.socialhistory.state
         }
     }
 
-    handleChangeGeneral(data, name){
+    handleMedicalHistoryChange(data, values){
         let newState = this.state;
-        newState[name] = data;
+        newState["Medical History"] = values;
+        this.setState(newState);
+        console.log(data);
+    }
+
+    handleSocialHistoryChange(data, values){
+        console.log(values);
+        let newState = this.state;
+        newState["Social History"] = values;
         this.setState(newState);
     }
 
+    render() {
+        const tabToDisplay = this.getTabToDisplay(this.props.activeItem);
 
-    handleMedicalHistoryChange(data, stuff){
-        let newState = this.state;
-        // newState[pageName] = data;
-        newState.value = data.value;
-        newState["Medical History"] = stuff;
-        this.setState(newState);
-        console.log(data);
+        return (
+            <Container>
+                <br/>
+                <Segment style={{borderColor: "white"}} padded={"very"}>
+                    <Header as="h3" textAlign="center">
+                        {this.props.activeItem.toLowerCase()}
+                    </Header>
+                    {tabToDisplay}
+                </Segment>
+                <br />
+            </Container>
+        );
     }
 
     getTabToDisplay(activeItem) {
@@ -58,7 +74,10 @@ export default class NotePage extends Component {
                 tabToDisplay = (<FamilyHistoryContent/>);
                 break;
             case "Social History":
-                tabToDisplay = (<SocialHistoryContent/>);
+                tabToDisplay = (<SocialHistoryContent
+                    onSocialHistoryChange={this.handleSocialHistoryChange}
+                    values={this.state["Social History"]}
+                />);
                 break;
             case "Physical Exam":
                 tabToDisplay = (<PhysicalExamContent/>);
@@ -69,22 +88,6 @@ export default class NotePage extends Component {
         return tabToDisplay;
     }
 
-    render() {
-        const tabToDisplay = this.getTabToDisplay(this.props.activeItem);
-
-        return (
-            <Container>
-                <br/>
-                <Segment style={{borderColor: "white"}} padded={"very"}>
-                    <Header as="h3" textAlign="center">
-                        {this.props.activeItem.toLowerCase()}
-                    </Header>
-                    {tabToDisplay}
-                </Segment>
-                <br />
-            </Container>
-        );
-    }
 };
 
 NotePage.propTypes = {

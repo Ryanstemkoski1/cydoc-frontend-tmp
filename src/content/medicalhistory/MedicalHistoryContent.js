@@ -9,13 +9,23 @@ export default class MedicalHistoryContent extends Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
+        this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
     }
 
     handleChange(event, data){
+        console.log(event);
         const values = this.props.values;
         values[data.condition][data.placeholder] = data.value;
         this.props.onMedicalHistoryChange(data, values);
     }
+
+    handleToggleButtonClick(event, data){
+        const values = this.props.values;
+        const prevState = values[data.condition][data.title];
+        values[data.condition][data.title] = ! prevState;
+        this.props.onMedicalHistoryChange(data, values);
+    }
+
 
 
     render(){
@@ -25,7 +35,11 @@ export default class MedicalHistoryContent extends Component {
                                    condition={condition}
                                    onset={this.props.values[condition]["Onset"]}
                                    comments={this.props.values[condition]["Comments"]}
-                                   onChange={this.handleChange}/>);
+                                   onChange={this.handleChange}
+                                   onToggleButtonClick={this.handleToggleButtonClick}
+                                   yesActive={this.props.values[condition]["Yes"]}
+                                   noActive={this.props.values[condition]["No"]}
+            />);
 
         const inputField = (<Input placeholder="Condition"/>);
         const customNoteRow = (<MedicalHistoryNoteRow condition={inputField}/>);
