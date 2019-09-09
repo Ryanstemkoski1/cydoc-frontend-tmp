@@ -1,8 +1,9 @@
-import { Input } from "semantic-ui-react";
+import {Input} from "semantic-ui-react";
 import MedicalHistoryNoteRow from "./MedicalHistoryNoteRow";
 import React, {Component} from 'react';
 import MedicalHistoryContentHeader from "./MedicalHistoryContentHeader";
-import YesNoContent from "../YesNoContent";
+import GridContent from "../GridContent";
+import constants from '../../constants'
 
 
 export default class MedicalHistoryContent extends Component {
@@ -10,6 +11,7 @@ export default class MedicalHistoryContent extends Component {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
+        this.generateListItems = this.generateListItems.bind(this);
     }
 
     handleChange(event, data){
@@ -26,11 +28,24 @@ export default class MedicalHistoryContent extends Component {
         this.props.onMedicalHistoryChange(data, values);
     }
 
-
-
     render(){
-        const conditions = ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV"];
-        const listItems = conditions.map((condition, index) =>
+        const conditions = constants.conditions;
+        const rows = this.generateListItems(conditions);
+        const inputField = (<Input placeholder="Condition"/>);
+        const customNoteRow = (<MedicalHistoryNoteRow condition={inputField}/>);
+
+        return(
+            <GridContent
+                numColumns={4}
+                contentHeader={<MedicalHistoryContentHeader />}
+                rows={rows}
+                customNoteRow={customNoteRow}
+            />
+        );
+    }
+
+    generateListItems(conditions) {
+        return conditions.map((condition, index) =>
             <MedicalHistoryNoteRow key={index}
                                    condition={condition}
                                    onset={this.props.values[condition]["Onset"]}
@@ -40,18 +55,6 @@ export default class MedicalHistoryContent extends Component {
                                    yesActive={this.props.values[condition]["Yes"]}
                                    noActive={this.props.values[condition]["No"]}
             />);
-
-        const inputField = (<Input placeholder="Condition"/>);
-        const customNoteRow = (<MedicalHistoryNoteRow condition={inputField}/>);
-
-        return(
-            <YesNoContent
-                numColumns={4}
-                contentHeader={<MedicalHistoryContentHeader />}
-                listItems={listItems}
-                customNoteRow={customNoteRow}
-            />
-        );
     }
 }
 

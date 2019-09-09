@@ -3,23 +3,16 @@ import { Button } from 'semantic-ui-react'
 import PropTypes from 'prop-types';
 
 export default class ToggleButton extends Component {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
 
-    handleClick(event, data){
-        this.props.onToggleButtonClick(event, data);
-    }
     render() {
-        const { active, size, title, compact, condition } = this.props;
+        const { active, size, title, compact, condition, onToggleButtonClick } = this.props;
 
         return (
             <Button
                 condition={condition}
                 color={active ? 'violet' : null}
                 active={active}
-                onClick={this.handleClick}
+                onClick={onToggleButtonClick}
                 basic={!active}
                 size={size}
                 compact={compact}

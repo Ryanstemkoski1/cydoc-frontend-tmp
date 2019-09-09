@@ -2,7 +2,7 @@ import React, {Fragment} from "react";
 import {Divider, Grid} from "semantic-ui-react";
 import SocialHistoryNoteRow from "./SocialHistoryNoteRow";
 import SecondarySocialHistoryNoteRow from "./SecondarySocialHistoryNoteRow";
-import YesNoContent from "../YesNoContent";
+import GridContent from "../GridContent";
 import constants from "../../constants"
 
 export default class SocialHistoryContent extends React.Component {
@@ -65,7 +65,7 @@ export default class SocialHistoryContent extends React.Component {
         const secondaryFieldRows = this.generateSecondaryFieldRows();
         return(
             <Fragment>
-                <YesNoContent value={this.props.value} contentHeader={this.substanceUseContentHeader} customNoteRow={rowToAdd} listItems={substanceUseRows} numColumns={5}/>
+                <GridContent value={this.props.value} contentHeader={this.substanceUseContentHeader} customNoteRow={rowToAdd} rows={substanceUseRows} numColumns={5}/>
                 <Divider/>
                 <br/>
                 <Grid columns={2}>

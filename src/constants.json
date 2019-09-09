@@ -1,6 +1,6 @@
 {
+  "conditions": ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV"],
   "medicalhistory": {
-    "conditions": ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV"],
     "state": {
       "Type II Diabetes": {
         "Yes": false,

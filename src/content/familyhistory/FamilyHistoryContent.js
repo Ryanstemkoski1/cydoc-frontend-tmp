@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import YesNoContent from "../YesNoContent";
+import GridContent from "../GridContent";
 import FamilyHistoryContentHeader from "./FamilyHistoryContentHeader";
 import {Input} from "semantic-ui-react";
 import FamilyHistoryNoteRow from "./FamilyHistoryNoteRow";
@@ -18,10 +18,10 @@ export default class FamilyHistoryContent extends Component {
 
         return(
             <Fragment>
-                <YesNoContent
+                <GridContent
                     numColumns={5}
                     contentHeader={<FamilyHistoryContentHeader />}
-                    listItems={listItems}
+                    rows={listItems}
                     customNoteRow={customNoteRow} />
             </Fragment>
         )
