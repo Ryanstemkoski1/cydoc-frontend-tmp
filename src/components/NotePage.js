@@ -13,11 +13,11 @@ import constants from '../constants';
 export default class NotePage extends Component {
     constructor(props) {
         super(props);
-        this.newOnChange = this.newOnChange.bind(this);
+        this.handleMedicalHistoryChange = this.handleMedicalHistoryChange.bind(this);
         this.handleChangeGeneral = this.handleChangeGeneral.bind(this);
+        console.log(constants.medicalhistory.state);
         this.state = {
-            value: "Hello",
-            "Medical History": {}
+            "Medical History": constants.medicalhistory.state
         }
     }
 
@@ -28,12 +28,13 @@ export default class NotePage extends Component {
     }
 
 
-    newOnChange(event, data){
+    handleMedicalHistoryChange(data, stuff){
         let newState = this.state;
         // newState[pageName] = data;
         newState.value = data.value;
+        newState["Medical History"] = stuff;
         this.setState(newState);
-        console.log(this.state.value);
+        console.log(data);
     }
 
     getTabToDisplay(activeItem) {
@@ -41,8 +42,8 @@ export default class NotePage extends Component {
         switch (activeItem) {
             case "Medical History":
                 tabToDisplay = (<MedicalHistoryContent
-                    onChange={this.newOnChange}
-                    value={this.state.value}/>);
+                    onMedicalHistoryChange={this.handleMedicalHistoryChange}
+                    values={this.state["Medical History"]}/>);
                 break;
             case "Surgical History":
                 tabToDisplay = (<SurgicalHistoryContent/>);

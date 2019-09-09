@@ -1,6 +1,44 @@
 {
   "medicalhistory": {
-    "conditions": ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV"]
+    "conditions": ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV"],
+    "state": {
+      "Type II Diabetes": {
+        "Yes": false,
+        "No": false,
+        "Onset": "",
+        "Comments": ""
+      },
+      "Myocardial Infarction": {
+        "Yes": false,
+        "No": false,
+        "Onset": "",
+        "Comments": ""
+      },
+      "Hypertension": {
+        "Yes": false,
+        "No": false,
+        "Onset": "",
+        "Comments": ""
+      },
+      "Hypercholesteremia": {
+        "Yes": false,
+        "No": false,
+        "Onset": "",
+        "Comments": ""
+      },
+      "Depression" : {
+        "Yes": false,
+        "No": false,
+        "Onset": "",
+        "Comments": ""
+      },
+      "HIV": {
+        "Yes": false,
+        "No": false,
+        "Onset": "",
+        "Comments": ""
+      }
+    }
   },
 
   "socialhistory": {

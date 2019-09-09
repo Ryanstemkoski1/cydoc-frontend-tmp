@@ -14,12 +14,12 @@ export default function MedicalHistoryNoteRow(props) {
         </Grid.Column>
         <Grid.Column>
             <Form>
-                <TextArea placeholder='Onset' value={props.value} onChange={props.onChange}/>
+                <TextArea condition={props.condition} placeholder='Onset' value={props.onset} onChange={props.onChange}/>
             </Form>
         </Grid.Column>
         <Grid.Column>
             <Form>
-                <TextArea placeholder='Comments'/>
+                <TextArea condition={props.condition} value={props.comments} onChange={props.onChange} placeholder='Comments'/>
             </Form>
         </Grid.Column>
     </Grid.Row>)
