@@ -14,9 +14,30 @@ export default class SocialHistoryNoteRow extends Component {
                 {this.props.condition}
             </Grid.Column>
             <Grid.Column width={4}>
-                <ToggleButton title="Yes" size={"small"} compact={true}/>
-                <ToggleButton title="In the Past" size={"small"} compact={true}/>
-                <ToggleButton title="Never Used" size={"small"} compact={true}/>
+                <ToggleButton
+                    onToggleButtonClick={this.props.onToggleButtonClick}
+                    condition={condition}
+                    title="Yes"
+                    size={"small"}
+                    compact={true}
+                    active={values[condition]["Yes"]}
+                />
+                <ToggleButton
+                    onToggleButtonClick={this.props.onToggleButtonClick}
+                    condition={condition}
+                    title="In the Past"
+                    size={"small"}
+                    compact={true}
+                    active={values[condition]["In the Past"]}
+                />
+                <ToggleButton
+                    onToggleButtonClick={this.props.onToggleButtonClick}
+                    condition={condition}
+                    title="Never Used"
+                    size={"small"}
+                    compact={true}
+                    active={values[condition]["Never Used"]}
+                />
             </Grid.Column>
             <Grid.Column width={2}>
                 <Form >

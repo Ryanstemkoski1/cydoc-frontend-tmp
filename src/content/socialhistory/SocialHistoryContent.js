@@ -8,6 +8,7 @@ import constants from "../../constants"
 export default class SocialHistoryContent extends React.Component {
     constructor(props) {
         super(props);
+        this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
         this.handleSocialHistoryChange = this.handleSocialHistoryChange.bind(this);
         this.generateSecondaryFieldRows = this.generateSecondaryFieldRows.bind(this);
         this.generateSubstanceUseRows = this.generateSubstanceUseRows.bind(this);
@@ -21,6 +22,13 @@ export default class SocialHistoryContent extends React.Component {
         const values = this.props.values;
         values[data.condition][data.field] = data.value;
         console.log(values);
+        this.props.onSocialHistoryChange(data, values);
+    }
+
+    handleToggleButtonClick(event, data){
+        const values = this.props.values;
+        const prevState = values[data.condition][data.title];
+        values[data.condition][data.title] = ! prevState;
         this.props.onSocialHistoryChange(data, values);
     }
 
@@ -38,6 +46,7 @@ export default class SocialHistoryContent extends React.Component {
         return Object.keys(this.substanceAbuseFields).map(
             (label, index) => <SocialHistoryNoteRow onChange={this.handleSocialHistoryChange}
                                                     key={index}
+                                                    onToggleButtonClick={this.handleToggleButtonClick}
                                                     condition={this.substanceAbuseFields[label].condition}
                                                     firstField={this.substanceAbuseFields[label].firstField}
                                                     secondField={this.substanceAbuseFields[label].secondField}
