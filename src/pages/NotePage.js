@@ -10,6 +10,8 @@ import SocialHistoryContent from "../content/socialhistory/SocialHistoryContent"
 import PhysicalExamContent from "../content/physicalexam/PhysicalExamContent";
 import constants from '../constants';
 import {allergies, medications, surgicalHistory} from '../States'
+import ReviewOfSystemsContent from "../content/reviewofsystems/ReviewOfSystemsContent";
+import HPIContent from "../content/hpi/HPIContent";
 
 //Component that manages the content displayed based on the activeItem prop
 // and records the information the user enters as state
@@ -74,6 +76,9 @@ export default class NotePage extends Component {
         //passes in the corresponding handler and values prop
         let tabToDisplay;
         switch (activeItem) {
+            case "HPI":
+                tabToDisplay = (<HPIContent />);
+                break;
             case "Medical History":
                 tabToDisplay = (<MedicalHistoryContent
                     onMedicalHistoryChange={this.handleMedicalHistoryChange}
@@ -108,6 +113,9 @@ export default class NotePage extends Component {
                 break;
             case "Physical Exam":
                 tabToDisplay = (<PhysicalExamContent/>);
+                break;
+            case "Review of Systems":
+                tabToDisplay = (<ReviewOfSystemsContent />);
                 break;
             default:
                 tabToDisplay = (<MedicalHistoryContent
