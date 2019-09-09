@@ -83,7 +83,9 @@ export default class NotePage extends Component {
                 tabToDisplay = (<PhysicalExamContent/>);
                 break;
             default:
-                tabToDisplay = (<MedicalHistoryContent/>);
+                tabToDisplay = (<MedicalHistoryContent
+                    onMedicalHistoryChange={this.handleMedicalHistoryChange}
+                    values={this.state["Medical History"]}/>);
         }
         return tabToDisplay;
     }

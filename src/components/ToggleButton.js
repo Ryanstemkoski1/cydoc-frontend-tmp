@@ -3,10 +3,6 @@ import { Button } from 'semantic-ui-react'
 import PropTypes from 'prop-types';
 
 export default class ToggleButton extends Component {
-    // state = {};
-    // handleClick = () =>
-    //     this.setState((prevState) => ({ active: !prevState.active }));
-        // this.props.recordClick()
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
@@ -16,26 +12,29 @@ export default class ToggleButton extends Component {
         this.props.onToggleButtonClick(event, data);
     }
     render() {
-        const { active } = this.props;
+        const { active, size, title, compact, condition } = this.props;
 
         return (
             <Button
-                condition={this.props.condition}
+                condition={condition}
                 color={active ? 'violet' : null}
                 active={active}
                 onClick={this.handleClick}
                 basic={!active}
-                size={this.props.size}
-                compact={this.props.compact}
-                title={this.props.title}>
-                {this.props.title}
+                size={size}
+                compact={compact}
+                title={title}>
+                {title}
             </Button>
         )
     }
 }
 
 ToggleButton.propTypes = {
-    title: PropTypes.string,
-    size: PropTypes.string,
-    compact: PropTypes.bool
+  active: PropTypes.bool,
+  compact: PropTypes.bool,
+  condition: PropTypes.string,
+  onToggleButtonClick: PropTypes.func.isRequired,
+  size: PropTypes.string,
+  title: PropTypes.string
 };
