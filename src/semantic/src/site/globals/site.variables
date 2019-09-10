@@ -1,0 +1,65 @@
+/*******************************
+     User Global Variables
+/*-------------------
+       Fonts
+--------------------*/
+
+@headerFont        : 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@pageFont          : 'Helvetica Neue', Arial, Helvetica, sans-serif;
+
+@normal            : normal;
+@bold              : @normal;
+
+
+@primaryColor   : @violet;
+@secondaryColor : @grey;
+@red            : #B03060;
+@orange         : #FE9A76;
+@yellow         : #FFD700;
+@olive          : #32CD32;
+@green          : #016936;
+@teal           : #008080;
+@blue           : #0E6EB8;
+@violet         : #424874;
+@purple         : #B413EC;
+@pink           : #FF1493;
+@brown          : #A52A2A;
+@grey           : #707070;
+@black          : #000000;
+@teal1          : #ECF3F5;
+@lightgrey      : #E0E1E2;
+/*-------------------
+        Page
+--------------------*/
+
+@pageBackground      : @teal1;
+@pageOverflowX       : hidden;
+
+@lineHeight          : 1.4285em;
+@textColor           : @grey;
+
+/*--------------
+  Page Heading
+---------------*/
+
+@headerFontWeight : @normal;
+@headerLineHeight : unit((18 / 14), em);
+
+@h1 : unit((28 / 14), rem);
+@h2 : unit((24 / 14), rem);
+@h3 : unit((18 / 14), rem);
+@h4 : unit((15 / 14), rem);
+@h5 : unit((14 / 14), rem);
+
+
+/*-------------------
+    Border Radius
+--------------------*/
+
+/* See Power-user section below
+   for explanation of @px variables
+*/
+@relativeBorderRadius: @relative7px;
+@absoluteBorderRadius: @7px;
+
+@defaultBorderRadius: @absoluteBorderRadius;

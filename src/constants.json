@@ -1,0 +1,98 @@
+{
+  "TAB_NAMES": ["HPI", "Medical History", "Surgical History", "Medications", "Allergies", "Family History",
+    "Social History", "Review of Systems", "Physical Exam"],
+  "CONDITIONS": ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV"],
+  "MEDICAL_HISTORY": {
+    "STATE": {
+      "Type II Diabetes": {
+        "Yes": false,
+        "No": false,
+        "Onset": "",
+        "Comments": ""
+      },
+      "Myocardial Infarction": {
+        "Yes": false,
+        "No": false,
+        "Onset": "",
+        "Comments": ""
+      },
+      "Hypertension": {
+        "Yes": false,
+        "No": false,
+        "Onset": "",
+        "Comments": ""
+      },
+      "Hypercholesteremia": {
+        "Yes": false,
+        "No": false,
+        "Onset": "",
+        "Comments": ""
+      },
+      "Depression" : {
+        "Yes": false,
+        "No": false,
+        "Onset": "",
+        "Comments": ""
+      },
+      "HIV": {
+        "Yes": false,
+        "No": false,
+        "Onset": "",
+        "Comments": ""
+      }
+    }
+  },
+
+  "SOCIAL_HISTORY": {
+    "SUBSTANCE_USE_CONTENT_HEADER": "Substance Use",
+    "SECONDARY_FIELDS": ["living situation", "employment", "diet", "exercise"],
+    "SUBSTANCE_USE_FIELDS": {
+      "tobacco": {
+        "condition": "tobacco",
+        "firstField": "Packs/Day",
+        "secondField": "Number of Years"
+      },
+      "alcohol": {
+        "condition": "alcohol",
+        "firstField": "Drinks/Week",
+        "secondField": "What kind of drinks?"
+      },
+      "substanceAbuse": {
+        "condition": "substance abuse",
+        "firstField": "Drug Name",
+        "secondField": "Mode of Delivery"
+      }
+    },
+    "STATE": {
+      "alcohol": {
+        "Yes": false,
+        "In the Past": false,
+        "Never Used": false,
+        "Drinks/Week": "",
+        "What kind of drinks?": "",
+        "Comments": ""
+      },
+      "tobacco" : {
+        "Yes": false,
+        "In the Past": false,
+        "Never Used": false,
+        "Packs/Day": "",
+        "Number of Years": "",
+        "Comments": ""
+      },
+      "substance abuse" : {
+        "Yes": false,
+        "In the Past": false,
+        "Never Used": false,
+        "Name": "",
+        "Mode of Delivery": "",
+        "Comments": ""
+      }
+    }
+  },
+  "ALLERGIES": {
+    "fields": ["Inciting Agent", "Reaction", "Comments"],
+    "STATE": {"Inciting Agent":  "", "Reaction":  "", "Comments":  ""}
+  }
+
+}
