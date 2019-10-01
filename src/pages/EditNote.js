@@ -5,12 +5,12 @@ import NavMenu from "../components/NavMenu";
 
 //Component that manages the active state of the create note editor
 //and defines the layout of the editor
-class CreateNote extends Component {
+class EditNote extends Component {
     constructor(props) {
         super(props);
         this.onTabChange = this.onTabChange.bind(this);
         this.state = {
-            activeItem: 'Medical History'
+            activeItem: 'HPI'
         }
     }
 
@@ -37,4 +37,4 @@ class CreateNote extends Component {
         }
 }
 
-export default CreateNote;
+export default EditNote;

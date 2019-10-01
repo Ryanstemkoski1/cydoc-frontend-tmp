@@ -1,20 +1,38 @@
 // src/js/reducers/index.js
-import { ADD_ARTICLE } from "../constants/action-types";
+import {ADD_NOTE, DATA_LOADED, LOGIN_REQUEST, LOGOUT} from "../constants/action-types";
+
 const initialState = {
-    articles: [],
-    remoteArticles: []
+    notes: [],
+    remoteRecords: [],
+    user: {}
 };
+
+let user = JSON.parse(localStorage.getItem('user'));
+const initialUserState = user ? { loggedIn: true, user } : {};
+initialState[user] = initialUserState
+
 function rootReducer(state = initialState, action) {
-    if (action.type === ADD_ARTICLE) {
+    if (action.type === ADD_NOTE) {
         return Object.assign({}, state, {
-            articles: state.articles.concat(action.payload)
+            notes: state.notes.concat(action.payload)
         });
     }
-    if (action.type === "DATA_LOADED") {
+    if (action.type === DATA_LOADED) {
         return Object.assign({}, state, {
-            remoteArticles: state.remoteArticles.concat(action.payload)
+            remoteRecords: state.remoteRecords.concat(action.payload)
         });
     }
+
+    if(action.type === LOGIN_REQUEST) {
+        return Object.assign({}, state, {
+            user: state.user.concat(action.payload)
+        })
+    }
+
+    if(action.type === LOGOUT) {
+        return {};
+    }
+
     return state;
 }
 export default rootReducer;

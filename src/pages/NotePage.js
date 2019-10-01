@@ -118,9 +118,8 @@ export default class NotePage extends Component {
                 tabToDisplay = (<ReviewOfSystemsContent />);
                 break;
             default:
-                tabToDisplay = (<MedicalHistoryContent
-                    onMedicalHistoryChange={this.handleMedicalHistoryChange}
-                    values={this.state["Medical History"]}/>);
+                tabToDisplay = (<HPIContent />);
+                break;
         }
         return tabToDisplay;
     }

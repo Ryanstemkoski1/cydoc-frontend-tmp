@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import NavMenu from "../components/NavMenu";
 import VerticalMenu from "../components/VerticalMenu";
 import {Grid, Segment} from "semantic-ui-react";
-import NoteDashboardContent from "../content/dashboard/NoteDashboardContent";
+import Post from "../js/components/Posts";
 
 //Component that manages the layout of the dashboard page
 export default class DashboardPage extends Component {
@@ -16,7 +16,7 @@ export default class DashboardPage extends Component {
                         </Grid.Column>
                         <Grid.Column width={9}>
                             <Segment basic padded>
-                                <NoteDashboardContent />
+                                <Post/>
                             </Segment>
                         </Grid.Column>
                     </Grid>

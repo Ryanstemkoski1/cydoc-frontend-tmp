@@ -1,18 +1,30 @@
 import React, {Component} from 'react';
-import {Button, Form, Grid, Header, Segment} from "semantic-ui-react";
-import axios from 'axios';
+import { Form, Grid, Header, Segment} from "semantic-ui-react";
+import {connect} from "react-redux";
+import {loginRequest} from "../js/actions";
+import {Redirect} from "react-router";
+
+function mapDispatchToProps(dispatch) {
+    return {
+        loginRequest: user => dispatch(loginRequest(user))
+    };
+}
 
 //Component that manages the layout of the login page
-class Login extends Component {
+class LoginPage extends Component {
     constructor(props) {
         super(props);
-        this.state = { username: '', password: '', submittedUsername: '', submittedPassword: '' };
+        this.state = {
+            username: '',
+            password: '',
+            submittedUsername: '',
+            submittedPassword: '',
+            redirect: false
+        };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-
-    // handleChange = (e, { name, value }) => this.setState({ [name]: value });
     handleChange(e, {name, value}){
         console.log(name + ": " + value);
         let newState = this.state;
@@ -26,21 +38,20 @@ class Login extends Component {
     handleSubmit = () => {
         const { username, password } = this.state;
         this.setState({ submittedUsername: username, submittedPassword: password });
-        // e.preventDefault();
 
         const user = {
             username: this.state.username,
             password: this.state.password
         };
-
-        axios.post("http://127.0.0.1:5000/login", user)
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-            });
+        this.props.loginRequest(user);
+        this.setState( { redirect : true } )
     };
 
     render() {
+        if(this.state.redirect){
+            return <Redirect push to= "/home" />;
+        }
+
         const { username, password } = this.state;
         return (
             //renders a one-column grid centered in the middle of the screen with login form
@@ -83,5 +94,6 @@ class Login extends Component {
         );
     }
 }
+const Login = connect(null, mapDispatchToProps)(LoginPage);
 
 export default Login;

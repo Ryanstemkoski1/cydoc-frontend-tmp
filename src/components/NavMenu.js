@@ -1,14 +1,27 @@
 import React, {Component, Fragment} from 'react';
 import {Container, Header, Icon, Menu} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import {logout} from "../js/actions";
+import {connect} from "react-redux";
+
+function mapDispatchToProps(dispatch) {
+    return {
+        logout: () => dispatch(logout())
+    };
+}
 
 //Navigation Bar component that will go at the top of most pages
-export default class NavMenu extends Component {
+class ConnectedNavMenu extends Component {
     constructor(props) {
         super(props);
+        this.handleLogout = this.handleLogout.bind(this);
         this.state = {
             isLoggedIn: true
         }
+    }
+
+    handleLogout(){
+        this.props.logout();
     }
 
     render() {
@@ -23,13 +36,16 @@ export default class NavMenu extends Component {
                     </Menu.Item>
                     <Menu.Menu position="right">
                         {/* Menu will have different options depending on whether the user is logged in or not */}
-                        {this.state.isLoggedIn ? <LoggedInMenuItems user={user}/> : <DefaultMenuItems/>}
+                        {localStorage.getItem('user') ? <LoggedInMenuItems handleLogout={this.handleLogout} user={user}/> : <DefaultMenuItems/>}
                     </Menu.Menu>
                 </Container>
             </Menu>
         );
     }
     };
+
+const NavMenu = connect(null, mapDispatchToProps)(ConnectedNavMenu);
+export default NavMenu;
 
 NavMenu.propTypes = {
     // optional prop for stacking another menu above/below
@@ -57,7 +73,7 @@ function DefaultMenuItems() {
 //Functional component for menu items that show when user is logged in
 function LoggedInMenuItems(props) {
     return <Fragment>
-        < Menu.Item name="create_note" href="/createnote">
+        <Menu.Item name="create_note" href="/createnote">
             Create Note
         </Menu.Item>
         <Menu.Item name="about" href="/dashboard">
@@ -69,6 +85,9 @@ function LoggedInMenuItems(props) {
         <Menu.Item name="register" href="/dashboard">
             Welcome, {props.user}
             <Icon name="user" style={{marginLeft: "7px"}}/>
+        </Menu.Item>
+        <Menu.Item name={"logout"} href={'/login'} onClick={props.handleLogout}>
+            Logout
         </Menu.Item>
     </Fragment>;
 }

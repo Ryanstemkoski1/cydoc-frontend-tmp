@@ -1,31 +1,34 @@
-import React, { Component } from "react";
+import React, {Component, Fragment} from "react";
 import { connect } from "react-redux";
 import { getData } from "../actions/index";
-export class Post extends Component {
-
+import {Header, Segment} from "semantic-ui-react";
+class Posts extends Component {
     componentDidMount() {
         this.props.getData();
     }
     render() {
         return (
-            <ul className="list-group list-group-flush">
+            <Fragment>
                 {this.props.articles.map(el => (
-                    <li className="list-group-item" key={el.id}>
-                        {el.title}
-                    </li>
+                    <Segment>
+                        <Header key={el.id}>
+                            {el.title}
+                        </Header>
+                    </Segment>
+
                 ))}
-            </ul>
+            </Fragment>
         );
     }
 }
-
 function mapStateToProps(state) {
-    console.log(state);
     return {
-        articles: state.remoteArticles.slice(0, 10)
+        articles: state.remoteRecords.slice(0, 10)
     };
 }
-export default connect(
+const Post = connect(
     mapStateToProps,
     { getData }
-)(Post);
+)(Posts);
+
+export default Post;
