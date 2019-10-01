@@ -2,7 +2,7 @@ import React, {Component, Fragment} from "react";
 import { connect } from "react-redux";
 import { getAllRecords } from "../actions/index";
 import {Header, Segment} from "semantic-ui-react";
-class Posts extends Component {
+class ConnectedRecords extends Component {
     componentDidMount() {
         this.props.getData();
     }
@@ -29,9 +29,9 @@ function mapStateToProps(state) {
         articles: state.remoteRecords.slice(0, 10)
     };
 }
-const Post = connect(
+const Records = connect(
     mapStateToProps,
     { getData: getAllRecords }
-)(Posts);
+)(ConnectedRecords);
 
-export default Post;
+export default Records;

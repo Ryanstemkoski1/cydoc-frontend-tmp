@@ -1,4 +1,4 @@
-// src/js/components/Form.jsx
+// src/js/components/NewNoteForm.js
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import uuidv1 from "uuid";
@@ -11,7 +11,7 @@ function mapDispatchToProps(dispatch) {
         addNote: note => dispatch(addNote(note))
     };
 }
-class ConnectedForm extends Component {
+class ConnectedCreateNoteForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -59,5 +59,5 @@ class ConnectedForm extends Component {
         );
     }
 }
-const AddNoteForm = connect(null, mapDispatchToProps)(ConnectedForm);
-export default AddNoteForm;
+const NewNoteForm = connect(null, mapDispatchToProps)(ConnectedCreateNoteForm);
+export default NewNoteForm;

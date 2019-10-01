@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react'
 import NavMenu from "../components/NavMenu";
-import AddNoteForm from "../js/components/Form";
+import NewNoteForm from "../js/components/NewNoteForm";
 
 export default class NewNote extends React.Component {
 
@@ -8,7 +8,7 @@ export default class NewNote extends React.Component {
         return (
             <Fragment>
                 <div style={{position: "relative", top: "100px"}}>
-                    <AddNoteForm />
+                    <NewNoteForm />
                 </div>
                 <div style={{position: "fixed", top: "0", right: "0", left: "0", boxShadow: "0 3px 4px -6px gray"}}>
                     <NavMenu attached="top"/>
