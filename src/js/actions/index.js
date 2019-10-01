@@ -6,12 +6,12 @@ export function addNote(payload) {
     return { type: ADD_NOTE, payload };
 }
 
-export function getData() {
+export function getAllRecords() {
     return function(dispatch) {
-        return fetch("https://jsonplaceholder.typicode.com/posts")
-            .then(response => response.json())
-            .then(json => {
-                dispatch({ type: DATA_LOADED, payload: json });
+        return axios.get(api.records.dev)
+            .then(response => response.data)
+            .then(data => {
+                dispatch({ type: DATA_LOADED, payload: data });
             });
     };
 }

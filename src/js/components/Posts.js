@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from "react";
 import { connect } from "react-redux";
-import { getData } from "../actions/index";
+import { getAllRecords } from "../actions/index";
 import {Header, Segment} from "semantic-ui-react";
 class Posts extends Component {
     componentDidMount() {
@@ -9,10 +9,13 @@ class Posts extends Component {
     render() {
         return (
             <Fragment>
-                {this.props.articles.map(el => (
+                {this.props.articles.map(record => (
                     <Segment>
-                        <Header key={el.id}>
-                            {el.title}
+                        <Header key={record._id}>
+                            {record.noteName}
+                        </Header>
+                        <Header as={"h3"}>
+                            <pre>{JSON.stringify(record.body, null, 2) }</pre>
                         </Header>
                     </Segment>
 
@@ -28,7 +31,7 @@ function mapStateToProps(state) {
 }
 const Post = connect(
     mapStateToProps,
-    { getData }
+    { getData: getAllRecords }
 )(Posts);
 
 export default Post;

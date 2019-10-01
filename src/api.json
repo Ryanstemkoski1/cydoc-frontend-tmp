@@ -2,5 +2,9 @@
   "login": {
     "dev": "http://127.0.0.1:5000/login",
     "prod": ""
+  },
+  "records": {
+    "dev": "http://127.0.0.1:5000/records",
+    "prod": ""
   }
 }

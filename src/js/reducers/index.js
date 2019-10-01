@@ -9,7 +9,7 @@ const initialState = {
 
 let user = JSON.parse(localStorage.getItem('user'));
 const initialUserState = user ? { loggedIn: true, user } : {};
-initialState[user] = initialUserState
+initialState[user] = initialUserState;
 
 function rootReducer(state = initialState, action) {
     if (action.type === ADD_NOTE) {
@@ -25,8 +25,8 @@ function rootReducer(state = initialState, action) {
 
     if(action.type === LOGIN_REQUEST) {
         return Object.assign({}, state, {
-            user: state.user.concat(action.payload)
-        })
+            user: action.payload.user
+        });
     }
 
     if(action.type === LOGOUT) {

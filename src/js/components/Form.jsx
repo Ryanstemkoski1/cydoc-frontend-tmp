@@ -2,19 +2,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import uuidv1 from "uuid";
-import { addArticle } from "../actions/index";
-import {Container, Form, Header, Label, Segment} from "semantic-ui-react";
+import { addNote } from "../actions/index";
+import {Container, Form, Header, Segment} from "semantic-ui-react";
+import {Redirect} from "react-router-dom"
 
 function mapDispatchToProps(dispatch) {
     return {
-        addArticle: article => dispatch(addArticle(article))
+        addNote: note => dispatch(addNote(note))
     };
 }
 class ConnectedForm extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            title: ""
+            noteName: "",
+            redirect: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -24,23 +26,27 @@ class ConnectedForm extends Component {
     }
     handleSubmit(event) {
         event.preventDefault();
-        const { title } = this.state;
+        const { noteName } = this.state;
         const id = uuidv1();
-        this.props.addArticle({ title, id });
-        this.setState({ title: "" });
+        this.props.addNote({ noteName, id });
+        this.setState({ noteName: "" , redirect: true});
     }
     render() {
-        const { title } = this.state;
+        if(this.state.redirect){
+            return <Redirect push to= "/editnote" />;
+        }
+
+        const { noteName } = this.state;
         return (
-            <Container >
+            <Container>
                 <Segment>
                     <Form size={'large'} onSubmit={this.handleSubmit}>
                         <Header as={"h2"} textAlign={"center"}>new note</Header>
                         <Form.Input
                             placeholder={"Please enter a short title or description"}
                             type="text"
-                            id="title"
-                            value={title}
+                            id="noteName"
+                            value={noteName}
                             onChange={this.handleChange}
                         />
 
