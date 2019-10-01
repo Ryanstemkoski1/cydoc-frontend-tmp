@@ -10,14 +10,16 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
+const mapStateToProps = state => {
+    return { isLoggedIn: state.isLoggedIn };
+};
+
+
 //Navigation Bar component that will go at the top of most pages
 class ConnectedNavMenu extends Component {
     constructor(props) {
         super(props);
         this.handleLogout = this.handleLogout.bind(this);
-        this.state = {
-            isLoggedIn: true
-        }
     }
 
     handleLogout(){
@@ -36,7 +38,7 @@ class ConnectedNavMenu extends Component {
                     </Menu.Item>
                     <Menu.Menu position="right">
                         {/* Menu will have different options depending on whether the user is logged in or not */}
-                        {localStorage.getItem('user') ? <LoggedInMenuItems handleLogout={this.handleLogout} user={user}/> : <DefaultMenuItems/>}
+                        {this.props.isLoggedIn ? <LoggedInMenuItems handleLogout={this.handleLogout} user={user}/> : <DefaultMenuItems/>}
                     </Menu.Menu>
                 </Container>
             </Menu>
@@ -44,7 +46,7 @@ class ConnectedNavMenu extends Component {
     }
     };
 
-const NavMenu = connect(null, mapDispatchToProps)(ConnectedNavMenu);
+const NavMenu = connect(mapStateToProps, mapDispatchToProps)(ConnectedNavMenu);
 export default NavMenu;
 
 NavMenu.propTypes = {

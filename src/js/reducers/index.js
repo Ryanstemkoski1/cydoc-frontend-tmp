@@ -4,7 +4,8 @@ import {ADD_NOTE, DATA_LOADED, LOGIN_REQUEST, LOGOUT} from "../constants/action-
 const initialState = {
     notes: [],
     remoteRecords: [],
-    user: {}
+    user: {},
+    isLoggedIn: false
 };
 
 let user = JSON.parse(localStorage.getItem('user'));
@@ -25,12 +26,13 @@ function rootReducer(state = initialState, action) {
 
     if(action.type === LOGIN_REQUEST) {
         return Object.assign({}, state, {
-            user: action.payload.user
+            user: action.payload.user,
+            isLoggedIn: true
         });
     }
 
     if(action.type === LOGOUT) {
-        return {};
+        return {isLoggedIn: false};
     }
 
     return state;
