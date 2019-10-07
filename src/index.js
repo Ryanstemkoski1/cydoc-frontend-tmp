@@ -12,6 +12,8 @@ import DashboardPage from "./js/pages/DashboardPage";
 import ThemingLayout from "./js/pages/Theming";
 import NewNote from "./js/pages/NewNote";
 import {PrivateRoute} from "./js/components/PrivateRoute";
+import CreateGraph from "./js/pages/CreateGraph";
+import EditGraph from './js/pages/EditGraph'
 
 
 ReactDOM.render(
@@ -23,6 +25,8 @@ ReactDOM.render(
                 <PrivateRoute path="/createnote" component={NewNote}/>
                 <PrivateRoute path="/editnote" component={EditNote}/>
                 <PrivateRoute path="/dashboard" component={DashboardPage}/>
+                <PrivateRoute path={"/creategraph"} component={CreateGraph} />
+                <PrivateRoute path={"/editgraph"} component={EditGraph} />
                 <Route path="/about" component={ThemingLayout}/>
             </BrowserRouter>
         </div>

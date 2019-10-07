@@ -1,8 +1,9 @@
 // src/js/reducers/index.js
-import {ADD_NOTE, DATA_LOADED, LOGIN_REQUEST, LOGOUT, SAVE_NOTE} from "../constants/action-types";
+import {ADD_NOTE, ADD_TEMPLATE, DATA_LOADED, LOGIN_REQUEST, LOGOUT} from "../constants/action-types";
 
 const initialState = {
     notes: [],
+    templates: [],
     remoteRecords: [],
     user: JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).user : {},
     isLoggedIn: !!JSON.parse(localStorage.getItem('user'))
@@ -34,6 +35,13 @@ function rootReducer(state = initialState, action) {
 
     if(action.type === LOGOUT) {
         return initialState;
+    }
+
+    if(action.type === ADD_TEMPLATE) {
+        return Object.assign({}, state, {
+            templates: state.notes.concat(action.payload),
+            currentTemplate: action.payload.noteName
+        });
     }
 
     return state;

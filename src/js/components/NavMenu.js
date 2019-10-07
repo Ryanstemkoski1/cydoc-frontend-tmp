@@ -83,7 +83,7 @@ function LoggedInMenuItems(props) {
             <Link to={"/createnote"}>Create Note</Link>
         </Menu.Item>
         <Menu.Item name="about">
-            <Link to={"/dashboard"}>Create Template</Link>
+            <Link to={"/creategraph"}>Create Template</Link>
         </Menu.Item>
         <Menu.Item name="login">
             <Link to={"/dashboard"}>Load Note</Link>

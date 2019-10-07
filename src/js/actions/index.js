@@ -1,9 +1,13 @@
-import { ADD_NOTE, DATA_LOADED, LOGIN_REQUEST, LOGOUT, SAVE_NOTE } from "../constants/action-types";
+import {ADD_NOTE, ADD_TEMPLATE, DATA_LOADED, LOGIN_REQUEST, LOGOUT, SAVE_NOTE} from "../constants/action-types";
 import axios from 'axios'
 import api from "../constants/api";
 
 export function addNote(payload) {
     return { type: ADD_NOTE, payload };
+}
+
+export function addTemplate(payload) {
+    return { type: ADD_TEMPLATE, payload: payload}
 }
 
 export function getAllRecords() {
