@@ -63,3 +63,6 @@
 @absoluteBorderRadius: @7px;
 
 @defaultBorderRadius: @absoluteBorderRadius;
+
+
+@linkColor           : @textColor;

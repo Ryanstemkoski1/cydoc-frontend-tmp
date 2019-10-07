@@ -5,13 +5,13 @@ import './semantic/src/semantic/dist/semantic.min.css';
 import ReactDOM from 'react-dom';
 import './semantic/src/semantic/dist/semantic.min.css';
 import { Route, BrowserRouter } from 'react-router-dom';
-import EditNote from "./pages/EditNote";
-import HomePage from "./pages/HomePage";
-import Login from "./pages/Login";
-import DashboardPage from "./pages/DashboardPage";
-import ThemingLayout from "./pages/Theming";
-import NewNote from "./pages/NewNote";
-import {PrivateRoute} from "./components/PrivateRoute";
+import EditNote from "./js/pages/EditNote";
+import HomePage from "./js/pages/HomePage";
+import Login from "./js/pages/Login";
+import DashboardPage from "./js/pages/DashboardPage";
+import ThemingLayout from "./js/pages/Theming";
+import NewNote from "./js/pages/NewNote";
+import {PrivateRoute} from "./js/components/PrivateRoute";
 
 
 ReactDOM.render(

@@ -1,6 +1,6 @@
-import { ADD_NOTE, DATA_LOADED, LOGIN_REQUEST, LOGOUT } from "../constants/action-types";
+import { ADD_NOTE, DATA_LOADED, LOGIN_REQUEST, LOGOUT, SAVE_NOTE } from "../constants/action-types";
 import axios from 'axios'
-import api from "../../api";
+import api from "../constants/api";
 
 export function addNote(payload) {
     return { type: ADD_NOTE, payload };
@@ -33,4 +33,21 @@ export function loginRequest(payload){
 export function logout(){
         localStorage.removeItem('user');
         return { type: LOGOUT };
+}
+
+export  function saveNote(payload){
+    return function (dispatch) {
+        const headers = {
+            'Content-Type': 'application/json',
+
+        };
+        return axios.post(api.newRecord.dev,
+            { headers: {
+                'Content-Type': 'application/json'}},
+            payload)
+            .then(res => res.data)
+            .then(data => {
+                dispatch({type: SAVE_NOTE, payload: data})
+            })
+    }
 }

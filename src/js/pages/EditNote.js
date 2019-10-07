@@ -21,7 +21,7 @@ class EditNote extends Component {
     render() {
                 return (
                     <Fragment>
-                        <div style={{position: "relative", top: "100px"}}>
+                        <div style={{position: "relative", top: "140px"}}>
                             <NotePage activeItem={this.state.activeItem}/>
                         </div>
                         <div style={{position: "fixed", top: "0", right: "0", left: "0", boxShadow: "0 3px 4px -6px gray"}}>

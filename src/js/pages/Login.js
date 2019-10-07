@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Form, Grid, Header, Segment} from "semantic-ui-react";
 import {connect} from "react-redux";
-import {loginRequest} from "../js/actions";
+import {loginRequest} from "../actions";
 import {Redirect} from "react-router";
 
 function mapDispatchToProps(dispatch) {

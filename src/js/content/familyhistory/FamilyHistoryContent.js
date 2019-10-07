@@ -3,7 +3,7 @@ import GridContent from "../../components/GridContent";
 import FamilyHistoryContentHeader from "./FamilyHistoryContentHeader";
 import {Input} from "semantic-ui-react";
 import FamilyHistoryNoteRow from "./FamilyHistoryNoteRow";
-import {CONDITIONS} from '../../constants'
+import {CONDITIONS} from '../../constants/constants'
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.

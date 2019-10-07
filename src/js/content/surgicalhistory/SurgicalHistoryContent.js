@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TableContent from "../../components/TableContent";
-import { surgicalHistory} from "../../States";
+import { surgicalHistory} from "../../constants/States";
 import PropTypes from 'prop-types';
 
 //Component that manages the content for the  Surgical History tab

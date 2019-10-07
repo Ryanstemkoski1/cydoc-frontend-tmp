@@ -8,8 +8,8 @@ import FamilyHistoryContent from "../content/familyhistory/FamilyHistoryContent"
 import PropTypes from 'prop-types';
 import SocialHistoryContent from "../content/socialhistory/SocialHistoryContent";
 import PhysicalExamContent from "../content/physicalexam/PhysicalExamContent";
-import constants from '../constants';
-import {allergies, medications, surgicalHistory} from '../States'
+import constants from '../constants/constants';
+import {allergies, medications, surgicalHistory} from '../constants/States'
 import ReviewOfSystemsContent from "../content/reviewofsystems/ReviewOfSystemsContent";
 import HPIContent from "../content/hpi/HPIContent";
 

@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react'
 import NavMenu from "../components/NavMenu";
-import NewNoteForm from "../js/components/NewNoteForm";
+import NewNoteForm from "../components/NewNoteForm";
 
 export default class NewNote extends React.Component {
 

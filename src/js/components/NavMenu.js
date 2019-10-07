@@ -1,8 +1,9 @@
 import React, {Component, Fragment} from 'react';
 import {Container, Header, Icon, Menu} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import {logout} from "../js/actions";
+import {logout} from "../actions";
 import {connect} from "react-redux";
+import {Link} from "react-router-dom";
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -11,7 +12,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = state => {
-    return { isLoggedIn: state.isLoggedIn };
+    return {
+        isLoggedIn: state.isLoggedIn,
+        user: state.user
+    };
 };
 
 
@@ -27,7 +31,7 @@ class ConnectedNavMenu extends Component {
     }
 
     render() {
-        const user = "Isabella";
+
         return (
             <Menu secondary borderless style={{height: "10vh", borderColor: "white"}} attached={this.props.attached}>
                 <Container>
@@ -38,7 +42,7 @@ class ConnectedNavMenu extends Component {
                     </Menu.Item>
                     <Menu.Menu position="right">
                         {/* Menu will have different options depending on whether the user is logged in or not */}
-                        {this.props.isLoggedIn ? <LoggedInMenuItems handleLogout={this.handleLogout} user={user}/> : <DefaultMenuItems/>}
+                        {this.props.isLoggedIn ? <LoggedInMenuItems handleLogout={this.handleLogout} name={this.props.user.firstName}/> : <DefaultMenuItems/>}
                     </Menu.Menu>
                 </Container>
             </Menu>
@@ -57,17 +61,17 @@ NavMenu.propTypes = {
 //Functional component for menu items that show when user is not logged in
 function DefaultMenuItems() {
     return <Fragment>
-        <Menu.Item name="create_note" href="/createnote">
-            Create Note
+        <Menu.Item name="create_note">
+            <Link to={"/createnote"}>Create Note</Link>
         </Menu.Item>
-        <Menu.Item name="about" href="/about">
-            About
+        <Menu.Item name="about">
+            <Link to={"/about"}>About</Link>
         </Menu.Item>
-        <Menu.Item name="login" href="/login">
-            Login
+        <Menu.Item name="login">
+            <Link to={"/login"}>Login</Link>
         </Menu.Item>
-        <Menu.Item name="register" href="/login">
-            Register
+        <Menu.Item name="register">
+            <Link to={"/login"}>Register</Link>
         </Menu.Item>
     </Fragment>;
 }
@@ -75,21 +79,21 @@ function DefaultMenuItems() {
 //Functional component for menu items that show when user is logged in
 function LoggedInMenuItems(props) {
     return <Fragment>
-        <Menu.Item name="create_note" href="/createnote">
-            Create Note
+        <Menu.Item name="create_note">
+            <Link to={"/createnote"}>Create Note</Link>
         </Menu.Item>
-        <Menu.Item name="about" href="/dashboard">
-            Create Template
+        <Menu.Item name="about">
+            <Link to={"/dashboard"}>Create Template</Link>
         </Menu.Item>
-        <Menu.Item name="login" href="/dashboard">
-            Load Note
+        <Menu.Item name="login">
+            <Link to={"/dashboard"}>Load Note</Link>
         </Menu.Item>
-        <Menu.Item name="register" href="/dashboard">
-            Welcome, {props.user}
+        <Menu.Item name="register">
+            <Link to={"/dashboard"}>Welcome, {props.name}</Link>
             <Icon name="user" style={{marginLeft: "7px"}}/>
         </Menu.Item>
-        <Menu.Item name={"logout"} href={'/login'} onClick={props.handleLogout}>
-            Logout
+        <Menu.Item name={"logout"} onClick={props.handleLogout}>
+            <Link to={"/login"}>Logout</Link>
         </Menu.Item>
     </Fragment>;
 }

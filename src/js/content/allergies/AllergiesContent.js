@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import TableContent from "../../components/TableContent";
-import {ALLERGIES} from "../../constants"
+import {ALLERGIES} from "../../constants/constants"
 import PropTypes from 'prop-types';
 
 //Component that manages the layout for the allergies page

@@ -3,7 +3,7 @@ import MedicalHistoryNoteRow from "./MedicalHistoryNoteRow";
 import React, {Component} from 'react';
 import MedicalHistoryContentHeader from "./MedicalHistoryContentHeader";
 import GridContent from "../../components/GridContent";
-import {CONDITIONS} from '../../constants'
+import {CONDITIONS} from '../../constants/constants'
 
 //Component that manages the layout of the medical history tab content
 export default class MedicalHistoryContent extends Component {
