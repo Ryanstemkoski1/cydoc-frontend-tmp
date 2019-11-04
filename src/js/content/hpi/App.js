@@ -4,32 +4,17 @@ import ButtonItem from "./knowledgegraph/src/ButtonItem.js"
 import diseaseData from "./knowledgegraph/src/Diseases";
 import PositiveDiseases from "./knowledgegraph/src/PositiveDiseases";
 import DiseaseForm from "./knowledgegraph/src/DiseaseForm";
-import DiseasesNames from "./knowledgegraph/src/DiseasesNames";
-import axios from "axios";
 
-class HPIContent extends Component {
+class App extends Component {
     constructor() {
         super()
         this.state = {
             diseaseArray: diseaseData,
-            graphData: [],
             diseases_positive: [],
-            step: 1,
-            isLoaded: false,
-            diseasesNames: DiseasesNames,
-            response: {}
+            step: 1
         }
         this.handler = this.handler.bind(this)
         this.tabHandler = this.tabHandler.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        this.handleResponse = this.handleResponse.bind(this)
-    }
-
-    componentDidMount() {
-        axios.get('https://cydocgraph.herokuapp.com/graph')
-            .then(res =>
-                this.setState({isLoaded: true,
-                    graphData: res.data}))
     }
 
     handler(value, id) {
@@ -76,27 +61,13 @@ class HPIContent extends Component {
             tab_list[i].className = tab_list[i].className.replace(" active", "");
           }
         evt.currentTarget.className += " active"
+        console.log(tab_list)
     }
 
     // Handle fields change
 
     handleChange = input => e => {
         this.setState({[input]: e.target.value})
-    }
-
-    // receive the response dictionary and update dictionary
-    handleResponse(dict, category) {
-        var newDict = this.state.response
-        if (!(category in newDict)) {
-            newDict[category] = {}
-        }
-        for (var uid in dict) {
-            newDict[category][uid] = {
-                question: dict[uid]['question'],
-                response: dict[uid]['response']
-            }
-        }
-        this.setState({response: newDict})
     }
 
     render() {
@@ -124,45 +95,25 @@ class HPIContent extends Component {
                 {disease}
             </button>
         );
-        const {step, graphData, isLoaded} = this.state;
+        const { step } = this.state;
+
         switch(step) {
             case 1:
                 return (
                     <div className="App">
                         {positiveDiseases}
                         <div className="diseaseComponents"> {diseaseComponents} </div>
-                        <button onClick={this.continue} style={{float:'right'}} className='NextButton'> &raquo; </button>
+                        <button onClick={this.continue} style={{float:'right', marginBottom: 20}}
+                                className='NextButton'> &raquo; </button>
                     </div>
                     )
             case this.state.diseases_positive.length+2:
-                const {response} = this.state
-                var array = []
-                for (var key in response) {
-                    var qa_array = []
-                    for (var uid in response[key]) {
-                        qa_array.push(response[key][uid]['question'])
-                        for (var ans_index in response[key][uid]['response']) {
-                            qa_array.push(response[key][uid]['response'][ans_index])
-                        }
-                    }
-                    array.push(
-                        <div>
-                            <h2> {key} </h2>
-                            <div> {qa_array.map((item)=> <div> {item} </div>)} </div>
-                        </div>
-                    )
-                }
                 return (
                     <div>
-                        <h1> Summary: </h1>
-                        <div> {array} </div>
+                        <h1> Success </h1>
                         <button onClick={this.back} className='NextButton'> &laquo; </button>
                     </div>)
             default:
-                if (isLoaded) {
-                    let graph = graphData['graph']
-                    let nodes = graphData['nodes']
-                    let edges = graphData['edges']
                 return (
                     <DiseaseForm
                         key={step-2}
@@ -171,15 +122,10 @@ class HPIContent extends Component {
                         handleChange = {this.handleChange}
                         category = {this.state.diseases_positive[step-2]}
                         diseaseTabs = {diseaseTabs}
-                        graph={graph}
-                        nodes={nodes}
-                        edges={edges}
-                        handleResponse={this.handleResponse}
                     />
-                    )}
-                else {return <h1> Loading... </h1>}
+                    )
         }
     }
 }
 
-export default HPIContent;
+export default App;
