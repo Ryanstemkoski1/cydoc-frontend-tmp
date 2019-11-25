@@ -1,6 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import {Grid, Button, Checkbox} from 'semantic-ui-react'
 
+import ReviewOfSystemsCategory from './ReviewOfSystemsCategory'
+
 //Component that manages the content for the Review of Systems section of the note
 export default class ReviewOfSystemsContent extends Component{
 
@@ -31,20 +33,7 @@ export default class ReviewOfSystemsContent extends Component{
         return Object.keys(systemsCategories).map(
             (label) => 
                 <Grid.Column>
-                    <h3>{label}</h3>
-                    <Grid>
-                        <Grid.Row>
-                            <Grid.Column>Y</Grid.Column>
-                            <Grid.Column>N</Grid.Column>
-                        </Grid.Row>
-                        {systemsCategories[label].map(
-                        value => <Grid.Row>
-                            <Grid.Column><Checkbox/></Grid.Column>
-                            <Grid.Column><Checkbox/></Grid.Column>
-                            <Grid.Column width={9}>{value}</Grid.Column>
-                        </Grid.Row>
-                        )}
-                    </Grid>
+                    <ReviewOfSystemsCategory category={label} options={systemsCategories[label]}/>
                 </Grid.Column>
             
         )
@@ -53,7 +42,7 @@ export default class ReviewOfSystemsContent extends Component{
     render() {
         return (
             <Fragment>
-                <Grid columns={3}>
+                <Grid columns={3} padded>
                     {this.generateList(this.state.test)}
                 </Grid>
             </Fragment>

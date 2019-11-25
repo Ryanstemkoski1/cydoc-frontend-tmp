@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {Grid, Button, Checkbox} from 'semantic-ui-react'
+import {Grid, Form, Checkbox} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 
 //Sub-Component that represents the individual categories for the Review of Systems section of the note
@@ -9,29 +9,29 @@ export default class ReviewOfSystemsCategory extends Component{
         super(props)
 
         this.category = this.props.category
-        this.
-        this.state = {
-            
-        }
+        this.options = this.props.options
+        this.state = {}
+    }
+
+    handleChange = (option, value) => {
+        this.setState({[option]: value})
     }
 
     render() {
         return (
             <Grid.Column>
-                <h3>{label}</h3>
-                <Grid>
-                    <Grid.Row>
-                        <Grid.Column>Y</Grid.Column>
-                        <Grid.Column>N</Grid.Column>
-                    </Grid.Row>
-                    {systemsCategories[label].map(
-                    value => <Grid.Row>
-                        <Grid.Column><Checkbox/></Grid.Column>
-                        <Grid.Column><Checkbox/></Grid.Column>
-                        <Grid.Column width={9}>{value}</Grid.Column>
-                    </Grid.Row>
+                <h3>{this.category}</h3>
+                <Form>
+                    <label>Y N</label>
+                    {this.options.map(
+                    option => 
+                        <Form.Group inline>
+                            <Checkbox radio value='y' checked={this.state[option] === 'y'} onChange={(e, {value}) => this.handleChange(option, value)}/>
+                            <Checkbox radio value='n' checked={this.state[option] === 'n'} onChange={(e, {value}) => this.handleChange(option, value)}/>
+                            <label style={{paddingLeft: "10px"}}>{option}</label>
+                        </Form.Group>
                     )}
-                </Grid>
+                </Form>
             </Grid.Column>
         );
     }
