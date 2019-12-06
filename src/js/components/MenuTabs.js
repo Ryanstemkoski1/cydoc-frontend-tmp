@@ -46,7 +46,7 @@ class ConnectedMenuTabs extends Component {
                 name={name}
                 active={activeItem === name}
                 onClick={this.handleItemClick}
-                style={{borderColor: "white"}}
+                style={{borderColor: "white", fontSize: '13px'}}
                 href={"#"+ encodeURI(name)}/>
             );
 

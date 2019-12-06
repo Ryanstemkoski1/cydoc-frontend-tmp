@@ -91,7 +91,7 @@ export default class PhysicalExamContent extends React.Component {
                     <Grid columns="equal">
                         <Grid.Row>
                             <Grid.Column>
-                                <Button toggle active={false} onClick={this.handleClick} style={{width: "190px"}}>Normocephalic</Button>
+                                <Button toggle active={false} onClick={this.handleClick}>Normocephalic</Button>
                             </Grid.Column>
                         
                         </Grid.Row>
