@@ -21,7 +21,7 @@ export default class TableContent extends Component {
         let newState = this.props.values;
         newState[data.rowindex][data.placeholder] = data.value;
         console.log(newState);
-        this.props.onTableBodyChange(data, newState);
+        this.props.onTableBodyChange(newState);
     }
 
     //method to generate an collection of the three default rows
