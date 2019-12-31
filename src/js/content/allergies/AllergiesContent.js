@@ -1,20 +1,27 @@
 import React, { Component } from 'react';
 import TableContent from "../../components/TableContent";
-import {ALLERGIES} from "../../constants/constants"
+import { allergies } from "../../constants/States";
 import PropTypes from 'prop-types';
+import HPIContext from "../../contexts/HPIContext"
 
 //Component that manages the layout for the allergies page
 export default class AllergiesContent extends Component {
     render(){
-        //get the allergies fields from the constants file
-        const {fields} = ALLERGIES;
         return (
-            <TableContent
-                tableHeaders={fields}
-                tableBodyPlaceholders={fields}
-                onTableBodyChange={this.props.onAllergiesChange}
-                values={this.props.values}
-            />
+             <HPIContext.Consumer>
+            {(context) => {
+                console.log(context["Allergies"])
+                console.log(context.onContextChange.bind(context, "Allergies"))
+                return (
+                <TableContent
+                    tableHeaders={allergies.fields}
+                    tableBodyPlaceholders={allergies.fields}
+                    values={context["Allergies"]}
+                    onTableBodyChange={context.onContextChange.bind(context, "Allergies")}
+                />
+                )
+            }}
+            </HPIContext.Consumer>
         );
     }
 }

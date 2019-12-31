@@ -43,6 +43,53 @@
     }
   },
 
+  "FAMILY_HISTORY": {
+    "STATE": {
+      "Type II Diabetes": {
+        "Yes": false,
+        "No": false,
+        "Family Member": "",
+        "Cause of Death": false,
+        "Comments": ""
+      },
+      "Myocardial Infarction": {
+        "Yes": false,
+        "No": false,
+        "Family Member": "",
+        "Cause of Death": false,
+        "Comments": ""
+      },
+      "Hypertension": {
+        "Yes": false,
+        "No": false,
+        "Family Member": "",
+        "Cause of Death": false,
+        "Comments": ""
+      },
+      "Hypercholesteremia": {
+        "Yes": false,
+        "No": false,
+        "Family Member": "",
+        "Cause of Death": false,
+        "Comments": ""
+      },
+      "Depression" : {
+        "Yes": false,
+        "No": false,
+        "Family Member": "",
+        "Cause of Death": false,
+        "Comments": ""
+      },
+      "HIV": {
+        "Yes": false,
+        "No": false,
+        "Family Member": "",
+        "Cause of Death": false,
+        "Comments": ""
+      }
+    }
+  },
+
   "SOCIAL_HISTORY": {
     "SUBSTANCE_USE_CONTENT_HEADER": "Substance Use",
     "SECONDARY_FIELDS": ["living situation", "employment", "diet", "exercise"],

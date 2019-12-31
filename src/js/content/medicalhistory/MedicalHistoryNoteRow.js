@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 //Component for a row the Medical History GridContent
 export default class MedicalHistoryNoteRow extends Component {
-    render() {
+    render = () => {
         const { yesActive, condition, onToggleButtonClick, noActive, onset, onChange, comments} = this.props;
         return (<Grid.Row>
             <Grid.Column>
