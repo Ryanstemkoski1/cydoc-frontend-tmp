@@ -11,7 +11,7 @@ export default function SecondarySocialHistoryNoteRow(props) {
         <Grid.Column>
             <Form>
                 <Form.Field>
-                    <Input onChange={props.onChange} field={props.label}/>
+                    <Input onChange={props.onChange} value={props.values[props.label]} field={props.label}/>
                 </Form.Field>
             </Form>
         </Grid.Column>

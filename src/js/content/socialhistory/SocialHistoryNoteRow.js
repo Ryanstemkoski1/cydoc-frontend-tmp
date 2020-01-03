@@ -49,9 +49,7 @@ export default class SocialHistoryNoteRow extends Component {
                             field={this.props.firstField}
                             condition={this.props.condition}
                             value={values[condition][firstField]}
-                        >
-                            {/*{this.props.value}*/}
-                        </Input>
+                        />
                     </Form.Field>
                 </Form>
             </Grid.Column>

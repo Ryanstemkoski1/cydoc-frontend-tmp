@@ -26,8 +26,3 @@ export default class MedicationsContent extends Component {
         );
     }
 }
-
-MedicationsContent.propTypes = {
-  onMedicationsChange: PropTypes.func.isRequired,
-  values: PropTypes.any.isRequired
-};

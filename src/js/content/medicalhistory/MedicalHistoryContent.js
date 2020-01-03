@@ -1,13 +1,13 @@
 import {Input} from "semantic-ui-react";
 import MedicalHistoryNoteRow from "./MedicalHistoryNoteRow";
-import React, {Component} from 'react';
+import React from 'react';
 import MedicalHistoryContentHeader from "./MedicalHistoryContentHeader";
 import GridContent from "../../components/GridContent";
 import {CONDITIONS} from '../../constants/constants'
 import HPIContext from "../../contexts/HPIContext"
 
 //Component that manages the layout of the medical history tab content
-export default class MedicalHistoryContent extends Component {
+export default class MedicalHistoryContent extends React.Component {
 
     static contextType = HPIContext
 
@@ -21,14 +21,14 @@ export default class MedicalHistoryContent extends Component {
     //handles input field events
     handleChange(event, data){
         //console.log(event);
-        const values = this.props.values;
+        const values = this.context["Medical History"];
         values[data.condition][data.placeholder] = data.value;
         this.context.onContextChange("Medical History", values);
     }
 
     //handles toggle button events
     handleToggleButtonClick(event, data){
-        const values = this.props.values;
+        const values = this.context["Medical History"]
         const prevState = values[data.condition][data.title];
         values[data.condition][data.title] = ! prevState;
         this.context.onContextChange("Medical History", values);

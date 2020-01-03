@@ -25,7 +25,3 @@ export default class AllergiesContent extends Component {
         );
     }
 }
-
-AllergiesContent.propTypes = {
-  onAllergiesChange: PropTypes.func
-};

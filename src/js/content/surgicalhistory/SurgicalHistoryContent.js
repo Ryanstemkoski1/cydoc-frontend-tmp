@@ -25,8 +25,3 @@ export default class SurgicalHistoryContent extends Component {
         );
     }
 }
-
-SurgicalHistoryContent.propTypes = {
-  onSurgicalHistoryChange: PropTypes.func.isRequired,
-  values: PropTypes.any.isRequired
-};

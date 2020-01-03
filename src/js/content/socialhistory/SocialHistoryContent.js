@@ -4,13 +4,18 @@ import SocialHistoryNoteRow from "./SocialHistoryNoteRow";
 import SecondarySocialHistoryNoteRow from "./SecondarySocialHistoryNoteRow";
 import GridContent from "../../components/GridContent";
 import {SOCIAL_HISTORY} from "../../constants/constants"
+import HPIContext from "../../contexts/HPIContext"
 
 
 export default class SocialHistoryContent extends React.Component {
+
+    static contextType = HPIContext
+
     constructor(props) {
         super(props);
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
         this.handleSocialHistoryChange = this.handleSocialHistoryChange.bind(this);
+        this.handleSecondaryFieldsChange = this.handleSecondaryFieldsChange.bind(this);
         this.generateSecondaryFieldRows = this.generateSecondaryFieldRows.bind(this);
         this.generateSubstanceUseRows = this.generateSubstanceUseRows.bind(this);
         this.substanceUseContentHeader = SOCIAL_HISTORY.SUBSTANCE_USE_CONTENT_HEADER;
@@ -19,20 +24,25 @@ export default class SocialHistoryContent extends React.Component {
     }
 
     //handles changes in substance use portion
-    handleSocialHistoryChange(event, data){
-        console.log(data);
-        const values = this.props.values;
+    handleSocialHistoryChange(event, data) {
+        const values = this.context["Social History"];
         values[data.condition][data.field] = data.value;
-        console.log(values);
-        this.props.onSocialHistoryChange(data, values);
+        this.context.onContextChange("Social History", values);
+    }
+
+    //handles changes in secondary fields (living situation, diet, exercise)
+    handleSecondaryFieldsChange(event, data) {
+        const values = this.context["Social History"];
+        values[data.field] = data.value;
+        this.context.onContextChange("Social History", values);
     }
 
     //handles button in substance use portion
     handleToggleButtonClick(event, data){
-        const values = this.props.values;
+        const values = this.context["Social History"];
         const prevState = values[data.condition][data.title];
         values[data.condition][data.title] = ! prevState;
-        this.props.onSocialHistoryChange(data, values);
+        this.context.onContextChange("Social History", values);
     }
 
     //generates a collection for the living situation, diet, exercise portion
@@ -41,6 +51,7 @@ export default class SocialHistoryContent extends React.Component {
             (label, index) => <SecondarySocialHistoryNoteRow
                 key={index}
                 onChange={this.handleSecondaryFieldsChange}
+                values={this.context["Social History"]}
                 label={label}/>
         );
     }
@@ -54,7 +65,7 @@ export default class SocialHistoryContent extends React.Component {
                                                     condition={this.substanceUseFields[label].condition}
                                                     firstField={this.substanceUseFields[label].firstField}
                                                     secondField={this.substanceUseFields[label].secondField}
-                                                    values={this.props.values}/>
+                                                    values={this.context["Social History"]}/>
         );
     }
 
@@ -65,8 +76,8 @@ export default class SocialHistoryContent extends React.Component {
         const rowToAdd = (<SocialHistoryNoteRow
             onChange={this.handleSubstanceUseChange}
             condition=""
-            firstField={this.substanceUseFields.substanceAbuse.firstField}
-            secondField={this.substanceUseFields.substanceAbuse.secondField}/>);
+            firstField={this.substanceUseFields["Substance Abuse"].firstField}
+            secondField={this.substanceUseFields["Substance Abuse"].secondField}/>);
 
         const substanceUseRows = this.generateSubstanceUseRows();
         const secondaryFieldRows = this.generateSecondaryFieldRows();

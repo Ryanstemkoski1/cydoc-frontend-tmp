@@ -1,7 +1,23 @@
 {
-  "TAB_NAMES": ["HPI", "Medical History", "Surgical History", "Medications", "Allergies", "Family History",
-    "Social History", "Review of Systems", "Physical Exam"],
-  "CONDITIONS": ["Type II Diabetes", "Myocardial Infarction", "Hypertension",  "Hypercholesteremia", "Depression", "HIV"],
+  "TAB_NAMES": [
+    "HPI",
+    "Medical History",
+    "Surgical History",
+    "Medications",
+    "Allergies",
+    "Family History",
+    "Social History",
+    "Review of Systems",
+    "Physical Exam"
+  ],
+  "CONDITIONS": [
+    "Type II Diabetes",
+    "Myocardial Infarction",
+    "Hypertension",
+    "Hypercholesteremia",
+    "Depression",
+    "HIV"
+  ],
   "MEDICAL_HISTORY": {
     "STATE": {
       "Type II Diabetes": {
@@ -28,7 +44,7 @@
         "Onset": "",
         "Comments": ""
       },
-      "Depression" : {
+      "Depression": {
         "Yes": false,
         "No": false,
         "Onset": "",
@@ -42,7 +58,6 @@
       }
     }
   },
-
   "FAMILY_HISTORY": {
     "STATE": {
       "Type II Diabetes": {
@@ -73,7 +88,7 @@
         "Cause of Death": false,
         "Comments": ""
       },
-      "Depression" : {
+      "Depression": {
         "Yes": false,
         "No": false,
         "Family Member": "",
@@ -89,29 +104,33 @@
       }
     }
   },
-
   "SOCIAL_HISTORY": {
     "SUBSTANCE_USE_CONTENT_HEADER": "Substance Use",
-    "SECONDARY_FIELDS": ["living situation", "employment", "diet", "exercise"],
+    "SECONDARY_FIELDS": [
+      "Living Situation",
+      "Employment",
+      "Diet",
+      "Exercise"
+    ],
     "SUBSTANCE_USE_FIELDS": {
-      "tobacco": {
-        "condition": "tobacco",
+      "Tobacco": {
+        "condition": "Tobacco",
         "firstField": "Packs/Day",
         "secondField": "Number of Years"
       },
-      "alcohol": {
-        "condition": "alcohol",
+      "Alcohol": {
+        "condition": "Alcohol",
         "firstField": "Drinks/Week",
         "secondField": "What kind of drinks?"
       },
-      "substanceAbuse": {
-        "condition": "substance abuse",
+      "Substance Abuse": {
+        "condition": "Substance Abuse",
         "firstField": "Drug Name",
         "secondField": "Mode of Delivery"
       }
     },
     "STATE": {
-      "alcohol": {
+      "Alcohol": {
         "Yes": false,
         "In the Past": false,
         "Never Used": false,
@@ -119,7 +138,7 @@
         "What kind of drinks?": "",
         "Comments": ""
       },
-      "tobacco" : {
+      "Tobacco": {
         "Yes": false,
         "In the Past": false,
         "Never Used": false,
@@ -127,19 +146,30 @@
         "Number of Years": "",
         "Comments": ""
       },
-      "substance abuse" : {
+      "Substance Abuse": {
         "Yes": false,
         "In the Past": false,
         "Never Used": false,
-        "Name": "",
+        "Drug Name": "",
         "Mode of Delivery": "",
         "Comments": ""
-      }
+      },
+      "Living Situation": "",
+      "Employment": "",
+      "Diet": "",
+      "Exercise": ""
     }
   },
   "ALLERGIES": {
-    "fields": ["Inciting Agent", "Reaction", "Comments"],
-    "STATE": {"Inciting Agent":  "", "Reaction":  "", "Comments":  ""}
+    "fields": [
+      "Inciting Agent",
+      "Reaction",
+      "Comments"
+    ],
+    "STATE": {
+      "Inciting Agent": "",
+      "Reaction": "",
+      "Comments": ""
+    }
   }
-
 }
