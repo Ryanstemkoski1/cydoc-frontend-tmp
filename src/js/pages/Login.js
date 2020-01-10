@@ -3,6 +3,7 @@ import { Form, Grid, Header, Segment} from "semantic-ui-react";
 import {connect} from "react-redux";
 import {loginRequest} from "../actions";
 import {Redirect} from "react-router";
+import {AuthContext} from "../contexts/AuthContext";
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -43,8 +44,10 @@ class LoginPage extends Component {
             username: this.state.username,
             password: this.state.password
         };
-        this.props.loginRequest(user);
-        this.setState( { redirect : true } )
+        if (this.props.loginRequest(user)) {
+            this.setState( { redirect : true } )
+        }
+        
     };
 
     render() {

@@ -87,21 +87,37 @@ export default class PhysicalExamContent extends React.Component {
                 <Header as={"h4"}>Head</Header>
                 <Divider/>
 
-                <PhysicalExamGroup content={
+                <PhysicalExamGroup>
                     <Grid columns="equal">
                         <Grid.Row>
                             <Grid.Column>
-                                <Button toggle active={false} onClick={this.handleClick}>Normocephalic</Button>
+                                <Button toggle active={true} onClick={this.handleClick}>Normocephalic</Button>
+                                <Button toggle active={true} onClick={this.handleClick}>Atraumatic</Button>
                             </Grid.Column>
                         
                         </Grid.Row>
                     </Grid>
-                    
-                    
-                }/>
+                </PhysicalExamGroup>   
 
                 <Header as={"h4"}>Eyes</Header>
                 <Divider/>
+
+                <PhysicalExamGroup>
+                    <Grid columns="equal">
+                        <Grid.Row>
+                            <Grid.Column>
+                                <Button toggle active={true} onClick={this.handleClick}>PERRLA</Button>
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column>
+                                <Button toggle active={true} onClick={this.handleClick}>*</Button>
+                                <Button toggle active={true} onClick={this.handleClick}>Sclera Anicteric</Button>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                </PhysicalExamGroup>  
+
                 <Header as={"h4"}>Ears</Header>
                 <Divider/>
                 <Header as={"h4"}>Nose/Throat</Header>

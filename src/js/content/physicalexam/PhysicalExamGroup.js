@@ -7,8 +7,6 @@ export default class PhysicalExamGroup extends Component{
 
     constructor(props) {
         super(props)
-
-        this.content = this.props.content
         this.state = {}
     }
 
@@ -19,7 +17,7 @@ export default class PhysicalExamGroup extends Component{
                 <Grid columns="equal">
                 <Grid.Row>
                     <Grid.Column>
-                        {this.content}
+                        {this.props.children}
                     </Grid.Column>
                     <Grid.Column floated="right" width={5}>
                         <Form.Field>
