@@ -49,7 +49,7 @@ export default class MedicalHistoryContent extends React.Component {
     }
 
     render(){
-        var list_values = this.props.response_choice || CONDITIONS
+        var list_values = this.props.response_choice || Object.keys(this.context["Medical History"]) || CONDITIONS
         const rows = this.generateListItems(list_values);
         const inputField = (<Input placeholder="Condition"/>);
         const customNoteRow = (<MedicalHistoryNoteRow condition={inputField}/>);

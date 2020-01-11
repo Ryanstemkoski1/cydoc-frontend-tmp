@@ -98,9 +98,11 @@ class QuestionAnswer extends React.Component {
                 response_choice={this.props.response_choice}
                 handler={this.handler}
             />)
-            console.log(this.context["Family History"])
-            // this.context["Family History"]['diabetes']["Family Member"] = "Yes"
-            // console.log(this.context["Family History"]['diabetes']["Family Member"])
+            // test: able to edit context from this component
+            // if (this.context["Family History"].hasOwnProperty('diabetes')) {
+            //     this.context["Family History"]['diabetes']["Family Member"] = "Yes"
+            //     console.log(this.context["Family History"]['diabetes'])
+            // }
         }
         else if (responseType === "PMH-POP") {
             button_map.push(<MedicalHistoryContent

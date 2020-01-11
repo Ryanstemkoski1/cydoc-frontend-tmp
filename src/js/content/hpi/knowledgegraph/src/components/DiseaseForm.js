@@ -77,51 +77,6 @@ export class DiseaseForm extends React.Component {
             let current_node = edges[num_key]['from']
             // let current_node_category = nodes[current_node]['category']
             let children = false
-            // check if the current question being asked is a child question from another category.
-            // if (current_node_category !== tab_category) {
-            //     questionMap[current_node] = {
-            //         'question': <DiseaseFormQuestions
-            //             key={nodes[current_node]['uid']}
-            //             question={nodes[current_node]['text']}
-            //             responseType={nodes[current_node]['responseType']}
-            //             handler={this.handler}
-            //             category={category}
-            //             uid={nodes[current_node]['uid']}
-            //             notLast={true}
-            //             children={true}
-            //             current_node={current_node}
-            //             category_code = {current_node_category}
-            //         />,
-            //         'display_children': false,
-            //         'children': {}
-            //     }
-            //     const other_parent_values = graph[current_node]
-            //     for (var new_index in other_parent_values) {
-            //         let new_key = other_parent_values[new_index].toString()
-            //         let new_node = edges[new_key]['from']
-            //         questionMap[current_node]['children'][new_node] = {
-            //             'question': <DiseaseFormQuestions
-            //                 key={nodes[new_node]['uid']}
-            //                 question={nodes[new_node]['text']}
-            //                 responseType={nodes[new_node]['responseType']}
-            //                 handler={this.handler}
-            //                 category={category}
-            //                 uid={nodes[new_node]['uid']}
-            //                 notLast={true}
-            //                 current_node={current_node}
-            //                 accordion={true}
-            //                 category_code = {tab_category}
-            //             />
-            //         } }
-            //     let current_category = Object.keys(this.state.diseasesNames).find(
-            //         key => this.state.diseasesNames[key] === current_node)
-            //     questionMap[current_node]['children'] = <Accordian
-            //         key={current_node_category}
-            //         category={current_category}
-            //         current_children={questionMap[current_node]['children']}
-            //     />
-            // }
-            // else {
                 let current_node_values = graph[current_node]
                 if (current_node_values.length > 0) children = true
                 questionMap[current_node] = {

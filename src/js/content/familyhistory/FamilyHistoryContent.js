@@ -51,7 +51,8 @@ export default class FamilyHistoryContent extends Component {
 
     render(){
         //Create collection of rows
-        var list_values = this.props.response_choice || CONDITIONS
+        // Use second OR statement so that the information may be auto-populated in the Family History tab
+        var list_values = this.props.response_choice || Object.keys(this.context["Family History"]) || CONDITIONS
         const listItems = list_values.map((condition, index) =>
             <FamilyHistoryNoteRow   key={index}
                                     condition={condition}
