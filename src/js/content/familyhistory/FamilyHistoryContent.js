@@ -12,10 +12,25 @@ export default class FamilyHistoryContent extends Component {
 
     static contextType = HPIContext
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
         this.handleChange = this.handleChange.bind(this);
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
+        const {response_choice} = this.props
+        const values = this.context["Family History"]
+        for (var response_index in response_choice) {
+            var response = response_choice[response_index]
+            if (!values.hasOwnProperty(response)) {
+                values[response] = {
+                    "Yes": false,
+                    "No": false,
+                    "Family Member": "",
+                    "Cause of Death": false,
+                    "Comments": ""
+                }
+            }
+        }
+        this.context.onContextChange("Family History", values)
     }
 
     //handles input field events
@@ -36,7 +51,8 @@ export default class FamilyHistoryContent extends Component {
 
     render(){
         //Create collection of rows
-        const listItems = CONDITIONS.map((condition, index) => 
+        var list_values = this.props.response_choice || CONDITIONS
+        const listItems = list_values.map((condition, index) =>
             <FamilyHistoryNoteRow   key={index}
                                     condition={condition}
                                     familyMember={this.context["Family History"][condition]["Family Member"]}

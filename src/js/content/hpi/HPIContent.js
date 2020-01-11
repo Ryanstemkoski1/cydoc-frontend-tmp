@@ -5,7 +5,6 @@ import diseaseData from "./knowledgegraph/src/components/data/Diseases";
 import PositiveDiseases from "./knowledgegraph/src/components/PositiveDiseases";
 import DiseaseForm from "./knowledgegraph/src/components/DiseaseForm";
 import DiseasesNames from "./knowledgegraph/src/components/data/DiseasesNames";
-import axios from "axios";
 import Summary from "./knowledgegraph/src/Summary";
 import API from "./knowledgegraph/src/API.js"
 

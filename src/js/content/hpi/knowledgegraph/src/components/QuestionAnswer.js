@@ -8,8 +8,11 @@ import TimeInput from "./TimeInput";
 import FamilyHistoryContent from "../../../../familyhistory/FamilyHistoryContent";
 import MedicalHistoryContent from "../../../../medicalhistory/MedicalHistoryContent";
 import MedicationsContent from "../../../../medications/MedicationsContent";
+import SurgicalHistoryContent from "../../../../surgicalhistory/SurgicalHistoryContent";
+import HPIContext from "../../../../../contexts/HPIContext";
 
 class QuestionAnswer extends React.Component {
+    static contextType = HPIContext
     constructor() {
         super()
         this.state = {
@@ -19,10 +22,15 @@ class QuestionAnswer extends React.Component {
             input: ""
         }
         this.handler = this.handler.bind(this)
+        this.handlePop = this.handlePop.bind(this)
     }
 
     handler(value, id, child) {
         return this.props.handler(value, id, child)
+    }
+
+    handlePop(value, id) {
+        return this.props.handler(value, id)
     }
 
     onChange = date => this.setState({ date })
@@ -90,6 +98,9 @@ class QuestionAnswer extends React.Component {
                 response_choice={this.props.response_choice}
                 handler={this.handler}
             />)
+            console.log(this.context["Family History"])
+            // this.context["Family History"]['diabetes']["Family Member"] = "Yes"
+            // console.log(this.context["Family History"]['diabetes']["Family Member"])
         }
         else if (responseType === "PMH-POP") {
             button_map.push(<MedicalHistoryContent
@@ -99,10 +110,34 @@ class QuestionAnswer extends React.Component {
             />)
         }
         else if (responseType === "MEDS-POP") {
+            button_map = this.props.response_choice.map(item =>
+                <ButtonTag
+                    key={item}
+                    name={item}
+                    handler={this.handler}
+                    answers={this.props.answers}
+                />
+            )
             button_map.push(<MedicationsContent
                 key={this.props.question}
                 response_choice={this.props.response_choice}
                 handler={this.handler}
+                answers={this.props.answers}
+            />)
+        }
+        else if (responseType === "MEDS-BLANK") {
+            button_map.push(<MedicationsContent
+                key={this.props.question}
+                response_choice={this.props.response_choice}
+                handler={this.handler}
+                answers={this.props.answers}
+            />)
+        }
+        else if (responseType === "PSH-BLANK") {
+            button_map.push(<SurgicalHistoryContent
+                key={this.props.question}
+                response_choice={this.props.response_choice}
+                handler={this.handlePop}
                 answers={this.props.answers}
             />)
         }

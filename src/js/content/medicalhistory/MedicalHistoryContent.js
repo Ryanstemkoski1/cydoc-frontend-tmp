@@ -11,11 +11,25 @@ export default class MedicalHistoryContent extends React.Component {
 
     static contextType = HPIContext
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
         this.handleChange = this.handleChange.bind(this);
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
         this.generateListItems = this.generateListItems.bind(this);
+        const {response_choice} = this.props
+        const values = this.context["Medical History"]
+        for (var response_index in response_choice) {
+            var response = response_choice[response_index]
+            if (!values.hasOwnProperty(response)) {
+                values[response] = {
+                    "Yes": false,
+                    "No": false,
+                    "Onset": "",
+                    "Comments": ""
+                }
+            }
+        }
+        this.context.onContextChange("Medical History", values)
     }
 
     //handles input field events
@@ -35,7 +49,8 @@ export default class MedicalHistoryContent extends React.Component {
     }
 
     render(){
-        const rows = this.generateListItems(CONDITIONS);
+        var list_values = this.props.response_choice || CONDITIONS
+        const rows = this.generateListItems(list_values);
         const inputField = (<Input placeholder="Condition"/>);
         const customNoteRow = (<MedicalHistoryNoteRow condition={inputField}/>);
 
