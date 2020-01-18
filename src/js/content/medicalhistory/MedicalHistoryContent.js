@@ -16,6 +16,8 @@ export default class MedicalHistoryContent extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
         this.generateListItems = this.generateListItems.bind(this);
+
+        //Checks if all response choices exist and adds new ones
         const {response_choice} = this.props
         const values = this.context["Medical History"]
         for (var response_index in response_choice) {
@@ -49,7 +51,7 @@ export default class MedicalHistoryContent extends React.Component {
     }
 
     render(){
-        var list_values = this.props.response_choice || Object.keys(this.context["Medical History"]) || CONDITIONS
+        let list_values = this.props.response_choice || Object.keys(this.context["Medical History"]) || CONDITIONS
         const rows = this.generateListItems(list_values);
         const inputField = (<Input placeholder="Condition"/>);
         const customNoteRow = (<MedicalHistoryNoteRow condition={inputField}/>);
