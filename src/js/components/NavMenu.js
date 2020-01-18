@@ -42,7 +42,7 @@ class ConnectedNavMenu extends Component {
                     </Menu.Item>
                     <Menu.Menu position="right">
                         {/* Menu will have different options depending on whether the user is logged in or not */}
-                        {this.props.isLoggedIn || true ? <LoggedInMenuItems handleLogout={this.handleLogout} name={this.props.user.firstName}/> : <DefaultMenuItems/>}
+                        {this.props.isLoggedIn ? <LoggedInMenuItems handleLogout={this.handleLogout} name={this.props.user.firstName}/> : <DefaultMenuItems/>}
                     </Menu.Menu>
                 </Container>
             </Menu>

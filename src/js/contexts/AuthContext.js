@@ -12,26 +12,13 @@ export class AuthStore extends React.Component {
         user: ""
      }
 
-    loginRequest = async (request) => {
-        axios.post(api.login.dev, request)
-            .then(res => {
-                const data = res.data;
-                console.log(JSON.stringify(data))
-                localStorage.setItem('user', JSON.stringify(data));
-                let {token, user} = data;
-                this.setState({token: token, user: user});
-                return true
-            })
-            .catch(err => {
-                console.log(err.response)
-                return false
-            })
-        
+    storeLoginInfo = (user, token) => {
+        this.setState({user: user, token: token})
     }
 
     render = () => {
         return(
-            <Context.Provider value = {{...this.state, loginRequest: this.loginRequest}}>
+            <Context.Provider value = {{...this.state, storeLoginInfo: this.storeLoginInfo}}>
                 {this.props.children}
             </Context.Provider>
         )

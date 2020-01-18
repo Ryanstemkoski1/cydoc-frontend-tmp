@@ -5,7 +5,7 @@ const initialState = {
     notes: [],
     templates: [],
     remoteRecords: [],
-    user: JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')).user : {},
+    user: JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : {},
     isLoggedIn: !!JSON.parse(localStorage.getItem('user'))
 };
 

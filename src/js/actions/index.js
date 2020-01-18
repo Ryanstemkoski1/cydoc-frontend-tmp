@@ -24,16 +24,17 @@ export function loginRequest(payload){
     return function(dispatch) {
         return axios.post(api.login.dev, payload)
             .then(res => {
-                const user = res.data;
-                console.log(JSON.stringify(user))
+                const user = res;
+                console.log(user)
                 localStorage.setItem('user', JSON.stringify(user));
                 return user;
             })
             .then((user)=> {
-                dispatch({type: LOGIN_REQUEST, payload: user})
+                dispatch({type: LOGIN_REQUEST, payload: user.data})
+                return user;
             })
             .catch(err => {
-                console.log(err.response)
+                return err.response;
             })
     }
 }

@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
-import { Form, Grid, Header, Segment} from "semantic-ui-react";
+import { Form, Grid, Header, Segment, Button} from "semantic-ui-react";
 import {connect} from "react-redux";
 import {loginRequest} from "../actions";
 import {Redirect} from "react-router";
-import {AuthContext} from "../contexts/AuthContext";
+import AuthContext from "../contexts/AuthContext";
+import axios from 'axios'
+import api from "../constants/api";
+
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -13,6 +16,9 @@ function mapDispatchToProps(dispatch) {
 
 //Component that manages the layout of the login page
 class LoginPage extends Component {
+
+    static contextType = AuthContext
+
     constructor(props) {
         super(props);
         this.state = {
@@ -36,7 +42,7 @@ class LoginPage extends Component {
     }
 
 
-    handleSubmit = () => {
+    handleSubmit = async () => {
         const { username, password } = this.state;
         this.setState({ submittedUsername: username, submittedPassword: password });
 
@@ -44,11 +50,45 @@ class LoginPage extends Component {
             username: this.state.username,
             password: this.state.password
         };
-        if (this.props.loginRequest(user)) {
+
+        const response = await this.props.loginRequest(user)
+        console.log(response)
+        if (response.status === 200) {
+            console.log(this)
+            this.context.storeLoginInfo(response.data.user, response.data.jwt.accessToken)
             this.setState( { redirect : true } )
+        } else {
+            alert(response.data.Message)
         }
         
     };
+
+    //TODO: Make an actual registration page
+    handleRegister = () => {
+        const user = {
+            username: "yasab",
+            password: "basay",
+            email: "yasa@b.aig",
+            phoneNumber: "123456789",
+            firstName: "Yasab",
+            lastName: "Aig",
+            workplace: "Duck",
+            inPatient: "No?",
+            institutionType: "Yasa",
+            address: "Yasa",
+            backupEmail: "yasab27@gmail.com",
+            role: "The Boss"
+        };
+
+        axios.post(api.register.prod, user)
+            .then(res => {
+                const user = res.data;
+                console.log(JSON.stringify(user))
+            })
+            .catch(err => {
+                console.log(err.response)
+            })
+    }
 
     render() {
         if(this.state.redirect){
@@ -87,10 +127,11 @@ class LoginPage extends Component {
                                 <Form.Button color='violet' size='small' floated='left'>
                                     Log in
                                 </Form.Button>
-                                <Form.Button color='grey' size='small' floated='right' >
-                                    Sign up
-                                </Form.Button>
+                                
                         </Form>
+                        <Button color='grey' size='small' floated='right' onClick={this.handleRegister}>
+                                    Sign up
+                        </Button>
                     </Segment>
                 </Grid.Column>
             </Grid>
