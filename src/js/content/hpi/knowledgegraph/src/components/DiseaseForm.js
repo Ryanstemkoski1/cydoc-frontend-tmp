@@ -44,10 +44,10 @@ export class DiseaseForm extends React.Component {
         else if (id===-1) {
             newDict[uid]['response'].splice(newDict[uid]['response'].indexOf(value), 1)
         }
-        else if (id===2) {
+        else if (id===2) {  // input-text
             newDict[uid]['response'] = [value]
         }
-        else if (id===3) {
+        else if (id===3) {  // date-time
             newDict[uid]['response'] = ['date-time', value]
         }
         this.setState({responseDict: newDict})
@@ -145,7 +145,10 @@ export class DiseaseForm extends React.Component {
                 <h1 style={{marginLeft: 50}}> {this.props.category} </h1>
                 {newMap}
                 <button onClick={this.back} style={{marginTop: 35, marginBottom: 35}} className='NextButton'> &laquo; </button>
-                <button onClick={this.continue} style={{float:'right', marginTop: 35, marginBottom: 35}} className='NextButton'> &raquo; </button>
+                {this.props.last ? "" :
+                    <button onClick={this.continue}
+                            style={{float:'right', marginTop: 35, marginBottom: 35}}
+                            className='NextButton'> &raquo; </button>}
             </div>
         )
     }

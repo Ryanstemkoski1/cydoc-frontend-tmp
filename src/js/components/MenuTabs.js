@@ -60,8 +60,8 @@ class ConnectedMenuTabs extends Component {
                         </Menu.Item>
                     </Container>
                 </Menu>
-                <Menu tabular style={{borderColor: "white"}} attached={this.props.attached}>
-                    <Container >
+                <Menu tabular attached={this.props.attached}>
+                    <Container style={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
                         {tabMenuItems}
                     </Container>
                 </Menu>

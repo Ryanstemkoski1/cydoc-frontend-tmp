@@ -5,7 +5,6 @@ import diseaseData from "./knowledgegraph/src/components/data/Diseases";
 import PositiveDiseases from "./knowledgegraph/src/components/PositiveDiseases";
 import DiseaseForm from "./knowledgegraph/src/components/DiseaseForm";
 import DiseasesNames from "./knowledgegraph/src/components/data/DiseasesNames";
-import Summary from "./knowledgegraph/src/Summary";
 import API from "./knowledgegraph/src/API.js"
 
 class HPIContent extends Component {
@@ -116,7 +115,6 @@ class HPIContent extends Component {
                 {disease}
             </button>
         );
-        // let categoryDict = {}
         const {step, graphData, isLoaded, diseasesNames} = this.state;
         switch(step) {
             case 1:
@@ -127,12 +125,24 @@ class HPIContent extends Component {
                         <button onClick={this.continue} style={{float:'right'}} className='NextButton'> &raquo; </button>
                     </div>
                     )
-            case this.state.diseases_positive.length+2:
+            case this.state.diseases_positive.length+1:
+                let category = this.state.diseases_positive[this.state.diseases_positive.length-1]
+                let parent_code = diseasesNames[category]
+                    let category_code = graphData['nodes'][parent_code]['category']
                 return (
-                    <Summary
-                        key={this.state.diseases_positive.length}
-                        hpi={this.state.hpi}
-                        back={this.back}
+                    <DiseaseForm
+                        key={step-2}
+                        graphData={this.state.graphData}
+                        nextStep = {this.nextStep}
+                        prevStep = {this.prevStep}
+                        handleChange = {this.handleChange}
+                        category = {category}
+                        diseaseTabs = {diseaseTabs}
+                        handleResponse={this.handleResponse}
+                        parent_code = {parent_code}
+                        tab_category = {category_code}
+                        newDict = {this.state.hpi[category_code]}
+                        last = {true}
                     />
                     )
             default:
