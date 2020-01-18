@@ -21,10 +21,11 @@ class DiseaseFormQuestions extends React.Component {
         const {responseType} = this.props
         if (responseType === "CLICK-BOXES" || responseType.slice(-3,responseType.length) === 'POP') {
             let click = question.search("CLICK")
+            // if CLICK exists
             if (click > 0) {
-                response_choice = question.slice(click + 6, -1)
-                question = question.slice(0, click)
-            } else {
+                response_choice = question.slice(click + 6, -1)  // slice off the click options
+                question = question.slice(0, click)     // slice off the question
+            } else { // if it's a CLICK-BOX without CLICK indicated on the question
                 let select = question.search('\\[')
                 if (select > 0) {
                     response_choice = question.slice(select + 1, -1)
@@ -32,6 +33,9 @@ class DiseaseFormQuestions extends React.Component {
                 }
             }
             response_choice = response_choice.split(",")
+            for (let response_index in response_choice) {
+                response_choice[response_index] = response_choice[response_index].trim()
+            }
         } else if (responseType === "YES-NO") {
             response_choice = ["Yes", "No"]
         } else response_choice = []
