@@ -29,10 +29,9 @@ class ButtonItem extends React.Component {
     render() {
         return (
             <div className="button-item" align="left">
-            <header className="rectangle_text"> {this.props.name} </header>
-            <button
-                className="button" onClick={this.handleClick}> &#8250; </button>
-            {this.state.disease_array}
+            {/*<header className="rectangle_text"> {this.props.name} </header>*/}
+            <button className="button" onClick={this.handleClick}> {this.props.name} 	&#8964; </button>
+            <div> {this.state.disease_array} </div>
             <h1> {this.state.diseases_positive} </h1>
         </div>
         )

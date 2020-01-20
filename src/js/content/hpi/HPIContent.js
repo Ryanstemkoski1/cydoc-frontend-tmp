@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import './knowledgegraph/src/css/App.css';
 import ButtonItem from "./knowledgegraph/src/components/ButtonItem.js"
 import diseaseData from "./knowledgegraph/src/components/data/Diseases";
@@ -6,6 +6,7 @@ import PositiveDiseases from "./knowledgegraph/src/components/PositiveDiseases";
 import DiseaseForm from "./knowledgegraph/src/components/DiseaseForm";
 import DiseasesNames from "./knowledgegraph/src/components/data/DiseasesNames";
 import API from "./knowledgegraph/src/API.js"
+import {Grid} from "semantic-ui-react";
 
 class HPIContent extends Component {
     constructor() {
@@ -93,13 +94,15 @@ class HPIContent extends Component {
     render() {
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         const diseaseComponents = this.state.diseaseArray.map(item =>
+            <Grid.Column>
             <ButtonItem
                 key={item.id}
                 disease_id={item.id}
                 name={item.name}
                 diseases_list={item.diseases}
                 handler = {this.handler}
-            />)
+            />
+            </Grid.Column>)
         const positiveDiseases = this.state.diseases_positive.map(disease =>
             <PositiveDiseases
                 key={disease}
@@ -121,8 +124,9 @@ class HPIContent extends Component {
                 return (
                     <div className="App">
                         {positiveDiseases}
-                        <div className="diseaseComponents"> {diseaseComponents} </div>
-                        <button onClick={this.continue} style={{float:'right'}} className='NextButton'> &raquo; </button>
+                        <Grid columns={2} padded className="ui stackable grid"> {diseaseComponents} </Grid>
+                        {/*<div className="diseaseComponents"> {diseaseComponents} </div>*/}
+                        {this.state.diseases_positive.length > 0 ? <button onClick={this.continue} style={{float:'right'}} className='NextButton'> &raquo; </button>: ""}
                     </div>
                     )
             case this.state.diseases_positive.length+1:

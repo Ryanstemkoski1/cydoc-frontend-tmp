@@ -12,7 +12,7 @@ function PositiveDiseases(props) {
         <button
             className="tag_text"
             style={{
-                backgroundColor: "lightslategrey"
+                backgroundColor: "#E6F1F6"
             }}
 
         >
