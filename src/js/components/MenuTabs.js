@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import {TAB_NAMES} from '../constants/constants'
 import {connect} from "react-redux";
 import {saveNote} from "../actions";
+import "../content/hpi/knowledgegraph/src/css/App.css";
 
 const mapStateToProps = state => {
     return {
@@ -24,6 +25,17 @@ class ConnectedMenuTabs extends Component {
         this.handleSave = this.handleSave.bind(this)
     }
 
+     myFunction() {
+      var x = document.getElementById("myTopnav");
+      if (x.className === "topnav") {
+          x.className = "ui vertical text menu"
+          x.style.cssText = "margin-left: 60px;"
+      } else {
+        x.className = "topnav";
+        x.style.cssText = "margin-left: 0px;"
+      }
+    }
+
     //onClick event is handled by parent
     handleItemClick = (e, { name }) => this.props.onTabChange(name);
     handleSave(){
@@ -41,13 +53,14 @@ class ConnectedMenuTabs extends Component {
         const {activeItem} = this.props;
 
         const tabMenuItems = TAB_NAMES.map((name, index) =>
+            <a>
             <Menu.Item
                 key={index}
                 name={name}
                 active={activeItem === name}
                 onClick={this.handleItemClick}
                 style={{borderColor: "white", fontSize: '13px'}}
-                href={"#"+ encodeURI(name)}/>
+                href={"#"+ encodeURI(name)}/> </a>
             );
 
         return (
@@ -61,9 +74,15 @@ class ConnectedMenuTabs extends Component {
                     </Container>
                 </Menu>
                 <Menu tabular attached={this.props.attached}>
+                    <div className="topnav" id='myTopnav'>
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
                     <Container style={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
-                        {tabMenuItems}
+                         {tabMenuItems}
                     </Container>
+                        <a href="javascript:void(0);" className="icon" onClick={this.myFunction}>
+                            <i className="fa fa-bars"></i>
+                        </a>
+                    </div>
                 </Menu>
             </Fragment>
 
