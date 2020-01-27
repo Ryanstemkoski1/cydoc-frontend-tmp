@@ -34,7 +34,7 @@ class HPIContent extends Component {
 
     handler(value, id) {
         var new_array = this.state.diseases_positive
-        if (id === 1) {
+        if (id === 1 && new_array.indexOf(value) === -1) {
             new_array = new_array.concat(value)
         }
         else if (id===-1) {
@@ -107,6 +107,7 @@ class HPIContent extends Component {
             <PositiveDiseases
                 key={disease}
                 name={disease}
+                handler={this.handler}
             />
         );
         let diseaseTabs = this.state.diseases_positive.map((disease, index) =>
@@ -118,6 +119,7 @@ class HPIContent extends Component {
                 {disease}
             </button>
         );
+        console.log(this.state.diseases_positive)
         const {step, graphData, isLoaded, diseasesNames} = this.state;
         switch(step) {
             case 1:
