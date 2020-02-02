@@ -6,8 +6,9 @@ class HandleInput extends React.Component {
     static contextType = HPIContext 
     constructor(props, context) {
         super(props, context)
+        const answers = this.context["hpi"][this.props.category_code][this.props.uid]["response"]
         this.state = {
-            textInput: this.props.answers !== null ? this.props.answers[0]: ''
+            textInput: answers !== null ? answers[0]: ''
         }
         this.handleInputChange = this.handleInputChange.bind(this);
     }

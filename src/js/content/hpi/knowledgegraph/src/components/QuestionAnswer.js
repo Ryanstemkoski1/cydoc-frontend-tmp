@@ -77,7 +77,7 @@ class QuestionAnswer extends React.Component {
                                           />)
         }
 
-        else if (responseType === 'CLICK-BOXES') {
+        else if (responseType === 'CLICK-BOXES'|| responseType === 'MEDS-POP') {
             button_map = this.props.response_choice.map(item =>
                 <ButtonTag
                     key={item}
@@ -126,20 +126,20 @@ class QuestionAnswer extends React.Component {
                 response_choice={this.props.response_choice}
             />)
         }
-        else if (responseType === "MEDS-POP") {
-            button_map = this.props.response_choice.map(item =>
-                <ButtonTag
-                    key={item}
-                    name={item}
-                    answers={this.props.answers}
-                />
-            )
-            button_map.push(<MedicationsContent
-                key={this.props.question}
-                response_choice={this.props.response_choice}
-                answers={this.props.answers}
-            />)
-        }
+        // else if (responseType === "MEDS-POP") {
+        //     button_map = this.props.response_choice.map(item =>
+        //         <ButtonTag
+        //             key={item}
+        //             name={item}
+        //             answers={this.props.answers}
+        //         />
+        //     )
+        //     button_map.push(<MedicationsContent
+        //         key={this.props.question}
+        //         response_choice={this.props.response_choice}
+        //         answers={this.props.answers}
+        //     />)
+        // }
         else if (responseType === "MEDS-BLANK") {
             button_map.push(<MedicationsContent
                 key={this.props.question}

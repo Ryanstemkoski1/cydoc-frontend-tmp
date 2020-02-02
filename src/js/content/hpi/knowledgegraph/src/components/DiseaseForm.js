@@ -13,7 +13,7 @@ export class DiseaseForm extends React.Component {
         this.state = {
             diseasesNames: DiseasesNames,
             functionLoad: false,
-            responseDict: this.props.newDict === undefined ? {} : this.props.newDict,
+            // responseDict: this.props.newDict === undefined ? {} : this.props.newDict,
             questionMap: {}
         }
         // this.handler = this.handler.bind(this)
@@ -95,7 +95,7 @@ export class DiseaseForm extends React.Component {
                         children={children}
                         current_node={current_node}
                         category_code = {tab_category}
-                        responseDict={this.state.responseDict}
+                        // responseDict={this.state.responseDict}
                     />
                 }
                 let values = this.context['hpi']
@@ -128,7 +128,7 @@ export class DiseaseForm extends React.Component {
                                     notLast={true}
                                     current_node={current_node}
                                     category_code = {tab_category}
-                                    responseDict={this.state.responseDict}
+                                    // responseDict={this.state.responseDict}
                         />
                         // }
                     }
@@ -144,7 +144,7 @@ export class DiseaseForm extends React.Component {
                     this.context.onContextChange("hpi", values) 
                  } } }
         this.setState({questionMap: questionMap, functionLoad: true})
-        this.props.handleResponse(this.state.responseDict, tab_category)
+        // this.props.handleResponse(this.state.responseDict, tab_category)
     }
 
     render() {

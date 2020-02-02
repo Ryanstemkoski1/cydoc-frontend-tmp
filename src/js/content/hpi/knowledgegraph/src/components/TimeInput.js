@@ -6,8 +6,9 @@ class TimeInput extends React.Component {
     static contextType = HPIContext 
     constructor(props, context) {
         super(props, context)
+        const answers = this.context["hpi"][this.props.category_code][this.props.uid]["response"]
         this.state = {
-            timeInput: this.props.answers !== null ? this.props.answers[1]: null
+            timeInput: answers !== null ? answers[1]: null
         }
         this.handleInputChange = this.handleInputChange.bind(this)
     }

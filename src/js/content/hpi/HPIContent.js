@@ -137,7 +137,7 @@ class HPIContent extends Component {
                         // handleResponse={this.handleResponse}
                         parent_code = {parent_code}
                         tab_category = {category_code}
-                        newDict = {this.state.hpi[category_code]}
+                        // newDict = {this.state.hpi[category_code]}
                         last = {true}
                     />
                     )
@@ -157,7 +157,7 @@ class HPIContent extends Component {
                         // handleResponse={this.handleResponse}
                         parent_code = {parent_code}
                         tab_category = {category_code}
-                        newDict = {this.state.hpi[category_code]}
+                        // newDict = {this.state.hpi[category_code]}
                     />
                     )}
                 else {return <h1> Loading... </h1>}

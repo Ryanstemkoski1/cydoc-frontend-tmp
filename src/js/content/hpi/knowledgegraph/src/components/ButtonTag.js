@@ -5,9 +5,10 @@ class ButtonTag extends React.Component {
     static contextType = HPIContext
     constructor(props, context) {
         super(props, context)
+        const answers = this.context["hpi"][this.props.category_code][this.props.uid]["response"]
         this.state = {
-            id: (this.props.answers !== null && this.props.answers.includes(this.props.name)) ? -1 :  1,
-            buttonColor: (this.props.answers !== null && this.props.answers.includes(this.props.name)) ? "lightslategrey": "whitesmoke"
+            id: (answers !== null && answers.includes(this.props.name)) ? -1 :  1,
+            buttonColor: (answers !== null && answers.includes(this.props.name)) ? "lightslategrey": "whitesmoke"
         }
         this.handleClick = this.handleClick.bind(this)
     }

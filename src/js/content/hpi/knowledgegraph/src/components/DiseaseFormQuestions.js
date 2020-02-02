@@ -50,8 +50,8 @@ class DiseaseFormQuestions extends React.Component {
                     notLast={this.props.notLast}
                     children={this.props.children}
                     accordion={this.props.accordion}
-                    answers={this.props.responseDict[this.props.uid] !== undefined ?
-                        this.props.responseDict[this.props.uid]['response'] : null }
+                    // answers={this.props.responseDict[this.props.uid] !== undefined ?
+                    //     this.props.responseDict[this.props.uid]['response'] : null }
                     category_code = {this.props.category_code}
                     uid = {this.props.uid}
                 />

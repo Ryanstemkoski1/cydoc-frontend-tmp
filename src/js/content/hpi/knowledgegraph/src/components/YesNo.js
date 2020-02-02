@@ -5,11 +5,12 @@ class YesNo extends React.Component {
     static contextType = HPIContext
     constructor(props, context) {
         super(props, context)
+        const answers = this.context["hpi"][this.props.category_code][this.props.uid]["response"]
         this.state = {
             yes_id: 0,
             no_id: 0,
-            yes_color: (this.props.answers !== null && this.props.answers[0] === "Yes") ? "lightslategrey": "whitesmoke",
-            no_color: (this.props.answers !== null && this.props.answers[0] === "No") ? "lightslategrey": "whitesmoke",
+            yes_color: (answers !== null && answers[0] === "Yes") ? "lightslategrey": "whitesmoke",
+            no_color: (answers !== null && answers[0] === "No") ? "lightslategrey": "whitesmoke",
             children: false
         }
         this.handleYesClick = this.handleYesClick.bind(this)
