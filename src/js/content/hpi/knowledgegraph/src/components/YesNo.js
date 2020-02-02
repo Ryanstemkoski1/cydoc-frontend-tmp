@@ -1,8 +1,10 @@
 import React from 'react'
+import HPIContext from "../../../../../contexts/HPIContext";
 
 class YesNo extends React.Component {
-    constructor(props) {
-        super(props)
+    static contextType = HPIContext
+    constructor(props, context) {
+        super(props, context)
         this.state = {
             yes_id: 0,
             no_id: 0,
@@ -16,14 +18,22 @@ class YesNo extends React.Component {
 
     handleYesClick() {
         this.setState({yes_color: "lightslategrey", yes_id: 1, no_id: -1, no_color: "whitesmoke"})
-        this.props.handler("No", -1)
-        this.props.handler("Yes", 1, !!this.props.children)
+        // this.props.handler("No", -1)
+        // this.props.handler("Yes", 1, !!this.props.children)
+        const values = this.context["hpi"]
+        values[this.props.category_code][this.props.uid]["response"] = "Yes"
+        values[this.props.category_code][this.props.uid]["display_children"] = this.props.children 
+        this.context.onContextChange("hpi", values)
     }
 
     handleNoClick() {
         this.setState({yes_color: "whitesmoke", yes_id: -1, no_id: 1, no_color: "lightslategrey"})
-        this.props.handler("Yes",-1)
-        this.props.handler("No", 1)
+        // this.props.handler("Yes",-1)
+        // this.props.handler("No", 1)
+        const values = this.context["hpi"]
+        values[this.props.category_code][this.props.uid]["display_children"] = false
+        values[this.props.category_code][this.props.uid]["response"] = "No"
+        this.context.onContextChange("hpi", values)
     }
 
     render() {

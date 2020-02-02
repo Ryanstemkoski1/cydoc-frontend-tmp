@@ -1,17 +1,23 @@
 import React from 'react'
 import {Input, Form} from "semantic-ui-react";
+import HPIContext from "../../../../../contexts/HPIContext";
 
 class HandleInput extends React.Component {
-    constructor(props) {
-        super(props)
+    static contextType = HPIContext 
+    constructor(props, context) {
+        super(props, context)
         this.state = {
             textInput: this.props.answers !== null ? this.props.answers[0]: ''
         }
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
     handleInputChange = (event) => {
         this.setState({textInput: event.target.value})
-        this.props.handler(event.target.value, 2)
+        // this.props.handler(event.target.value, 2)
+        const values = this.context["hpi"]
+        values[this.props.category_code][this.props.uid]["response"] = event.target.value
+        this.context.onContextChange("hpi", values)
     }
 
     render() {

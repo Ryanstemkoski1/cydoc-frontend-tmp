@@ -5,12 +5,12 @@ class PositiveDiseases extends Component {
     // If you wrap <div> around the button, you can get the buttons to line up under each other.
     constructor(props) {
         super(props)
-        // this.handleClick = this.handleClick.bind(this)
+        this.handleClick = this.handleClick.bind(this)
     }
 
-    // handleClick(value) {
-    //     return this.props.handler(value, 2)
-    // }
+    handleClick() {
+        return this.props.handler(this.props.name, -1)
+    }
 
     render() {
         return (
@@ -19,7 +19,7 @@ class PositiveDiseases extends Component {
                 style={{
                     backgroundColor: "#E6F1F6"
                 }}
-                // onClick={this.handleClick(this.props.name)}
+                onClick={this.handleClick}
             >
                 {this.props.name}
             </button>

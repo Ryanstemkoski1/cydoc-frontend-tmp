@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import './knowledgegraph/src/css/App.css';
 import ButtonItem from "./knowledgegraph/src/components/ButtonItem.js"
 import diseaseData from "./knowledgegraph/src/components/data/Diseases";
@@ -18,13 +18,12 @@ class HPIContent extends Component {
             step: 1,
             isLoaded: false,
             diseasesNames: DiseasesNames,
-            hpi: {},
+            // hpi: {},
             children: []
         }
         this.handler = this.handler.bind(this)
         this.tabHandler = this.tabHandler.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        this.handleResponse = this.handleResponse.bind(this)
+        // this.handleResponse = this.handleResponse.bind(this)
     }
 
     componentDidMount() {
@@ -78,18 +77,12 @@ class HPIContent extends Component {
         evt.currentTarget.className += " active"
     }
 
-    // Handle fields change
-
-    handleChange = input => e => {
-        this.setState({[input]: e.target.value})
-    }
-
     // receive the hpi dictionary and update dictionary
-    handleResponse(dict, category) {
-        var newDict = this.state.hpi
-        newDict[category] = dict
-        this.setState({hpi: newDict})
-    }
+    // handleResponse(dict, category) {
+    //     var newDict = this.state.hpi
+    //     newDict[category] = dict
+    //     this.setState({hpi: newDict})
+    // }
 
     render() {
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
@@ -105,7 +98,7 @@ class HPIContent extends Component {
             </Grid.Column>)
         const positiveDiseases = this.state.diseases_positive.map(disease =>
             <PositiveDiseases
-                key={disease}
+                key={disease} 
                 name={disease}
                 handler={this.handler}
             />
@@ -118,16 +111,14 @@ class HPIContent extends Component {
             >
                 {disease}
             </button>
-        );
-        console.log(this.state.diseases_positive)
+        ); 
         const {step, graphData, isLoaded, diseasesNames} = this.state;
         switch(step) {
             case 1:
                 return (
-                    <div className="App">
+                    <div className="App"> 
                         {positiveDiseases}
-                        <Grid columns={2} padded className="ui stackable grid"> {diseaseComponents} </Grid>
-                        {/*<div className="diseaseComponents"> {diseaseComponents} </div>*/}
+                        <Grid columns={2} padded className="ui stackable grid"> {diseaseComponents} </Grid> 
                         {this.state.diseases_positive.length > 0 ? <button onClick={this.continue} style={{float:'right'}} className='NextButton'> &raquo; </button>: ""}
                     </div>
                     )
@@ -141,10 +132,9 @@ class HPIContent extends Component {
                         graphData={this.state.graphData}
                         nextStep = {this.nextStep}
                         prevStep = {this.prevStep}
-                        handleChange = {this.handleChange}
                         category = {category}
                         diseaseTabs = {diseaseTabs}
-                        handleResponse={this.handleResponse}
+                        // handleResponse={this.handleResponse}
                         parent_code = {parent_code}
                         tab_category = {category_code}
                         newDict = {this.state.hpi[category_code]}
@@ -162,10 +152,9 @@ class HPIContent extends Component {
                         graphData={this.state.graphData}
                         nextStep = {this.nextStep}
                         prevStep = {this.prevStep}
-                        handleChange = {this.handleChange}
                         category = {category}
                         diseaseTabs = {diseaseTabs}
-                        handleResponse={this.handleResponse}
+                        // handleResponse={this.handleResponse}
                         parent_code = {parent_code}
                         tab_category = {category_code}
                         newDict = {this.state.hpi[category_code]}

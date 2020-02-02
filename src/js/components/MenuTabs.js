@@ -1,10 +1,11 @@
 import React, {Component, Fragment} from 'react'
-import {Menu, Container, Button} from 'semantic-ui-react'
+import {Menu, Container} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import {TAB_NAMES} from '../constants/constants'
 import {connect} from "react-redux";
 import {saveNote} from "../actions";
 import "../content/hpi/knowledgegraph/src/css/App.css";
+import {Input} from "semantic-ui-react";
 
 const mapStateToProps = state => {
     return {
@@ -21,6 +22,9 @@ function mapDispatchToProps(dispatch){
 class ConnectedMenuTabs extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            textInput: "Untitled"
+        }
         this.handleItemClick =  this.handleItemClick.bind(this)
         this.handleSave = this.handleSave.bind(this)
     }
@@ -49,6 +53,9 @@ class ConnectedMenuTabs extends Component {
             doctorID:"5d696a7dbf476c61064fd58d"
         });
     }
+    handleInputChange = (event) => {
+        this.setState({textInput: event.target.value}) 
+    }
     render() {
         const {activeItem} = this.props;
 
@@ -68,8 +75,15 @@ class ConnectedMenuTabs extends Component {
                 <Menu secondary attached borderless style={{border: "white"}}>
                     <Container>
                         <Menu.Item>{this.props.currentNote}</Menu.Item>
-                        <Menu.Item>
-                            <Button basic onClick={this.handleSave}>Save</Button>
+                        <Menu.Item style={{width: '100%'}}>
+                                <Input
+                                className="ui input transparent"
+                                type='text'
+                                placeholder="Untitled"
+                                style={{fontSize: 16, marginBottom: 5, outline: 'none'}}
+                                onChange={this.handleInputChange}
+                                value={this.state.textInput} 
+                                />
                         </Menu.Item>
                     </Container>
                 </Menu>
