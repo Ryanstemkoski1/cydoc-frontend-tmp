@@ -7,21 +7,23 @@ import DiseaseForm from "./knowledgegraph/src/components/DiseaseForm";
 import DiseasesNames from "./knowledgegraph/src/components/data/DiseasesNames";
 import API from "./knowledgegraph/src/API.js"
 import {Grid} from "semantic-ui-react";
+import HPIContext from "../../contexts/HPIContext";
 
 class HPIContent extends Component {
-    constructor() {
-        super()
+    static contextType = HPIContext
+    constructor(context) {
+        super(context)
         this.state = {
             diseaseArray: diseaseData,
             graphData: {},
-            diseases_positive: [],
+            // diseases_positive: [],
             step: 1,
             isLoaded: false,
             diseasesNames: DiseasesNames,
             // hpi: {},
             children: []
         }
-        this.handler = this.handler.bind(this)
+        // this.handler = this.handler.bind(this)
         this.tabHandler = this.tabHandler.bind(this)
         // this.handleResponse = this.handleResponse.bind(this)
     }
@@ -31,16 +33,16 @@ class HPIContent extends Component {
         data.then(res => this.setState({isLoaded: true, graphData: res.data}))
     }
 
-    handler(value, id) {
-        var new_array = this.state.diseases_positive
-        if (id === 1 && new_array.indexOf(value) === -1) {
-            new_array = new_array.concat(value)
-        }
-        else if (id===-1) {
-            new_array.splice(new_array.indexOf(value), 1)
-        }
-        this.setState({diseases_positive: new_array})
-    }
+    // handler(value, id) {
+    //     var new_array = this.state.diseases_positive
+    //     if (id === 1 && new_array.indexOf(value) === -1) {
+    //         new_array = new_array.concat(value)
+    //     }
+    //     else if (id===-1) {
+    //         new_array.splice(new_array.indexOf(value), 1)
+    //     }
+    //     this.setState({diseases_positive: new_array})
+    // }
 
     // Proceed to next step
     nextStep = () => {
@@ -93,17 +95,25 @@ class HPIContent extends Component {
                 disease_id={item.id}
                 name={item.name}
                 diseases_list={item.diseases}
-                handler = {this.handler}
+                // handler = {this.handler}
             />
             </Grid.Column>)
-        const positiveDiseases = this.state.diseases_positive.map(disease =>
-            <PositiveDiseases
-                key={disease} 
-                name={disease}
-                handler={this.handler}
-            />
-        );
-        let diseaseTabs = this.state.diseases_positive.map((disease, index) =>
+            console.log(this.context["positivediseases"])
+            const positiveDiseases = this.context["positivediseases"].map(disease =>
+                <PositiveDiseases
+                    key={disease} 
+                    name={disease}
+                    handler={this.handler}
+                />
+            );
+        // const positiveDiseases = this.state.diseases_positive.map(disease =>
+        //     <PositiveDiseases
+        //         key={disease} 
+        //         name={disease}
+        //         handler={this.handler}
+        //     />
+        // );
+        let diseaseTabs = this.context['positivediseases'].map((disease, index) =>
             <button
                 key={index}
                 className="tab"
@@ -113,17 +123,18 @@ class HPIContent extends Component {
             </button>
         ); 
         const {step, graphData, isLoaded, diseasesNames} = this.state;
+        const positive_length = this.context['positivediseases'].length
         switch(step) {
             case 1:
                 return (
                     <div className="App"> 
                         {positiveDiseases}
                         <Grid columns={2} padded className="ui stackable grid"> {diseaseComponents} </Grid> 
-                        {this.state.diseases_positive.length > 0 ? <button onClick={this.continue} style={{float:'right'}} className='NextButton'> &raquo; </button>: ""}
+                        {positive_length > 0 ? <button onClick={this.continue} style={{float:'right'}} className='NextButton'> &raquo; </button>: ""}
                     </div>
                     )
-            case this.state.diseases_positive.length+1:
-                let category = this.state.diseases_positive[this.state.diseases_positive.length-1]
+            case positive_length+1:
+                let category = this.context['positivediseases'][positive_length-1]
                 let parent_code = diseasesNames[category]
                     let category_code = graphData['nodes'][parent_code]['category']
                 return (
@@ -143,7 +154,7 @@ class HPIContent extends Component {
                     )
             default:
                 if (isLoaded) {
-                    let category = this.state.diseases_positive[step-2]
+                    let category = this.context['positivediseases'][step-2]
                     let parent_code = diseasesNames[category]
                     let category_code = graphData['nodes'][parent_code]['category']
                 return (

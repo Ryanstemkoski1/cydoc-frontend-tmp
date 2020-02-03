@@ -1,35 +1,33 @@
 import React from "react"
 import "./ButtonItem"
+import HPIContext from "../../../../../contexts/HPIContext";
 
 class DiseaseTag extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            tag_color: "white",
-            id: 1
-        }
+    static contextType = HPIContext
+    constructor(props, context) {
+        super(props, context)
         this.handleClick = this.handleClick.bind(this)
     }
 
     handleClick() {
-        let new_color
-        if (this.state.id === 1) {
-            new_color = "#E6F1F6"
+        let values = this.context['positivediseases']
+        let name_index = values.indexOf(this.props.name)
+        if (name_index > -1) {
+            values.splice(name_index, 1)
         }
-        else {
-            new_color = "white"
-        }
-        this.setState({id: this.state.id*-1, tag_color: new_color})
-        return this.props.handler(this.props.name, this.state.id)
+        else {values = values.concat(this.props.name)}
+        this.context.onContextChange("positivediseases", values)
+        // return this.props.handler(this.props.name, this.state.id)
     }
 
     render() {
+        let color = this.context['positivediseases'].indexOf(this.props.name) > -1 ? "#E6F1F6" : "white"
         return (
             <button
                 className="tag_text"
                 style={{
                     display: !this.props.name && "none",
-                    backgroundColor: this.state.tag_color
+                    backgroundColor: color 
                 }}
                 onClick={this.handleClick}
             >
