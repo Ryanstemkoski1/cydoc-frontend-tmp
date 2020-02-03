@@ -1,9 +1,12 @@
 import React, {Component, Fragment} from 'react'
 import {Grid, Form, Checkbox, Button} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
+import HPIContext from '../../contexts/HPIContext'
 
 //Sub-Component that represents the individual categories for the Review of Systems section of the note
 export default class ReviewOfSystemsCategory extends Component{
+
+    static contextType = HPIContext
 
     constructor(props) {
         super(props)
@@ -15,6 +18,7 @@ export default class ReviewOfSystemsCategory extends Component{
 
     handleChange = (option, value) => {
         this.setState({[option]: value})
+        this.context["Review of Systems"][this.category][option] = value
     }
 
     render() {

@@ -84,7 +84,7 @@ function DefaultMenuItems() {
 function LoggedInMenuItems(props) {
     return <Fragment>
         <a> <Menu.Item name="create_note">
-            <Link to={"/createnote"}>Create Note</Link>
+            <Link to={"/editnote"}>Create Note</Link>
         </Menu.Item> </a>
         <a> <Menu.Item name="about">
             <Link to={"/creategraph"}>Create Template</Link>
