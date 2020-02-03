@@ -6,6 +6,7 @@ const Context = React.createContext('yasa')
 
 export class HPIStore extends React.Component {
     state = {
+        "title": "",
         "Allergies": allergies.state,
         "Medications": medications.state,
         "Surgical History": surgicalHistory.state,

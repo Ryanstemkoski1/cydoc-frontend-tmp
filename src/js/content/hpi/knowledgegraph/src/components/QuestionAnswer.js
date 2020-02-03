@@ -77,7 +77,7 @@ class QuestionAnswer extends React.Component {
                                           />)
         }
 
-        else if (responseType === 'CLICK-BOXES'|| responseType === 'MEDS-POP') {
+        else if (responseType === 'CLICK-BOXES'|| responseType === 'MEDS-POP' || responseType === 'nan') {
             button_map = this.props.response_choice.map(item =>
                 <ButtonTag
                     key={item}
