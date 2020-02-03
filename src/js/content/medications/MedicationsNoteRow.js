@@ -34,12 +34,12 @@ export default class MedicalHistoryNoteRow extends Component {
                 <Form.Group>
                     <Form.Field>
                             <label>Reason for Taking</label>
-                            <Input index={index} value={reason}
+                            <TextArea index={index} value={reason}
                                     onChange={onChange} placeholder='Reason for Taking'/>
                     </Form.Field>
                     <Form.Field>
                             <label>Side Effects</label>
-                            <Input index={index} value={sideEffects}
+                            <TextArea index={index} value={sideEffects}
                                     onChange={onChange} placeholder='Side Effects'/>
                     </Form.Field>
                 </Form.Group>
