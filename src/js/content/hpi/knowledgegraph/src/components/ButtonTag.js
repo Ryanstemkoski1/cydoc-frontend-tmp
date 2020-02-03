@@ -1,19 +1,17 @@
 import React from 'react'
-import responseContext from "../contexts/responseContext";
-import DiseaseForm from "../delete/originalDiseaseForm";
+import HPIContext from "../../../../../contexts/HPIContext";
 
 class ButtonTag extends React.Component {
-    constructor(props) {
-        super(props)
+    static contextType = HPIContext
+    constructor(props, context) {
+        super(props, context)
+        const answers = this.context["hpi"][this.props.category_code][this.props.uid]["response"]
         this.state = {
-            id: (this.props.answers !== null && this.props.answers.includes(this.props.name)) ? -1 :  1,
-            buttonColor: (this.props.answers !== null && this.props.answers.includes(this.props.name)) ? "lightslategrey": "whitesmoke"
+            id: (answers !== null && answers.includes(this.props.name)) ? -1 :  1,
+            buttonColor: (answers !== null && answers.includes(this.props.name)) ? "lightslategrey": "whitesmoke"
         }
         this.handleClick = this.handleClick.bind(this)
     }
-
-    // Link contextType to class component ButtonTag
-    // static contextType = responseContext
 
     handleClick() {
         let new_color
@@ -24,8 +22,11 @@ class ButtonTag extends React.Component {
             new_color = "whitesmoke"
         }
         this.setState({id: this.state.id*-1, buttonColor: new_color})
-
-        return this.props.handler(this.props.name, this.state.id, !!this.props.children)
+        const values = this.context["hpi"] 
+        values[this.props.category_code][this.props.uid]["response"] = values[this.props.category_code][this.props.uid]["response"].concat(this.props.name)
+        values[this.props.category_code][this.props.uid]["display_children"] = this.props.children 
+        this.context.onContextChange("hpi", values)
+        // return this.props.handler(this.props.name, this.state.id, !!this.props.children)
     }
 
     render() {

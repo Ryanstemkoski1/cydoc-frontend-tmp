@@ -13,25 +13,25 @@ import HPIContext from "../../../../../contexts/HPIContext";
 
 class QuestionAnswer extends React.Component {
     static contextType = HPIContext
-    constructor() {
-        super()
+    constructor(props, context) {
+        super(props, context)
         this.state = {
             response_array: [],
             startDate: new Date(),
             scale: 0,
             input: ""
         }
-        this.handler = this.handler.bind(this)
-        this.handlePop = this.handlePop.bind(this)
+        // this.handler = this.handler.bind(this)
+        // this.handlePop = this.handlePop.bind(this)
+        const values = this.context["hpi"]
+        values[this.props.category_code][this.props.uid]["response"] = (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') ? [] : ""
+        values[this.props.category_code][this.props.uid]["response_type"] = this.props.responseType
+        this.context.onContextChange("hpi", values)
     }
 
-    handler(value, id, child) {
-        return this.props.handler(value, id, child)
-    }
-
-    handlePop(value, id) {
-        return this.props.handler(value, id)
-    }
+    // handler(value, id, child) {
+    //     return this.props.handler(value, id, child)
+    // }
 
     onChange = date => this.setState({ date })
 
@@ -42,38 +42,51 @@ class QuestionAnswer extends React.Component {
             button_map.push(
                 <YesNo
                     key={this.props.question}
-                    handler={this.handler}
+                    // handler={this.handler}
                     children={this.props.children}
                     answers={this.props.answers}
+                    uid={this.props.uid}
+                    category_code = {this.props.category_code}
                 />
             )
         }
         else if (responseType === "SHORT-TEXT") {
             button_map.push(<HandleInput key={this.props.question}
-                                         handler={this.handler}
+                                        //  handler={this.handler}
                                          type={this.props.responseType}
-                                         answers={this.props.answers} />)
+                                         answers={this.props.answers}
+                                         uid={this.props.uid}
+                                         category_code = {this.props.category_code}
+                                          />)
         }
         else if (responseType === 'TIME') {
             button_map.push(<TimeInput key={this.props.question}
-                                       handler={this.handler}
-                                       answers={this.props.answers} />)
+                                    //    handler={this.handler}
+                                       answers={this.props.answers}
+                                       uid={this.props.uid}
+                                       category_code = {this.props.category_code}
+                                        />)
         }
         else if (responseType === 'LIST-TEXT') {
             button_map.push(<HandleInput key={this.props.question}
-                                         handler={this.handler}
+                                        //  handler={this.handler}
                                          type={this.props.responseType}
-                                         answers={this.props.answers} />)
+                                         answers={this.props.answers}
+                                         uid={this.props.uid}
+                                         category_code = {this.props.category_code}
+                                          />)
         }
 
-        else if (responseType === 'CLICK-BOXES') {
+        else if (responseType === 'CLICK-BOXES'|| responseType === 'MEDS-POP') {
             button_map = this.props.response_choice.map(item =>
                 <ButtonTag
                     key={item}
                     name={item}
-                    handler={this.handler}
+                    // handler={this.handler}
                     children={this.props.children}
                     answers={this.props.answers}
+                    uid={this.props.uid}
+                    category_code = {this.props.category_code}
                 />
             )
         }
@@ -81,22 +94,25 @@ class QuestionAnswer extends React.Component {
             button_map.push( <HandleNumericInput
                 key={this.props.question}
                 answers={this.props.answers}
-                handler={this.handler}
+                // handler={this.handler}
                 max={120}
+                uid={this.props.uid}
+                category_code = {this.props.category_code}
             /> )}
         else if (responseType === "NUMBER") {
             button_map.push(<HandleNumericInput
                 key={this.props.question}
                 answers={this.props.answers}
-                handler={this.handler}
+                // handler={this.handler}
                 max={10}
+                uid={this.props.uid}
+                category_code = {this.props.category_code}
             />)
         }
         else if (responseType === "FH-POP") {
             button_map.push(<FamilyHistoryContent
                 key={this.props.question}
                 response_choice={this.props.response_choice}
-                handler={this.handler}
             />)
             // test: able to edit context from this component
             // if (this.context["Family History"].hasOwnProperty('diabetes')) {
@@ -108,30 +124,26 @@ class QuestionAnswer extends React.Component {
             button_map.push(<MedicalHistoryContent
                 key={this.props.question}
                 response_choice={this.props.response_choice}
-                handler={this.handler}
             />)
         }
-        else if (responseType === "MEDS-POP") {
-            button_map = this.props.response_choice.map(item =>
-                <ButtonTag
-                    key={item}
-                    name={item}
-                    handler={this.handler}
-                    answers={this.props.answers}
-                />
-            )
-            button_map.push(<MedicationsContent
-                key={this.props.question}
-                response_choice={this.props.response_choice}
-                handler={this.handler}
-                answers={this.props.answers}
-            />)
-        }
+        // else if (responseType === "MEDS-POP") {
+        //     button_map = this.props.response_choice.map(item =>
+        //         <ButtonTag
+        //             key={item}
+        //             name={item}
+        //             answers={this.props.answers}
+        //         />
+        //     )
+        //     button_map.push(<MedicationsContent
+        //         key={this.props.question}
+        //         response_choice={this.props.response_choice}
+        //         answers={this.props.answers}
+        //     />)
+        // }
         else if (responseType === "MEDS-BLANK") {
             button_map.push(<MedicationsContent
                 key={this.props.question}
                 response_choice={this.props.response_choice}
-                handler={this.handler}
                 answers={this.props.answers}
             />)
         }
@@ -139,7 +151,6 @@ class QuestionAnswer extends React.Component {
             button_map.push(<SurgicalHistoryContent
                 key={this.props.question}
                 response_choice={this.props.response_choice}
-                handler={this.handlePop}
                 answers={this.props.answers}
             />)
         }
@@ -152,7 +163,7 @@ class QuestionAnswer extends React.Component {
         }
         return (
             <div style={{marginBottom: 20}}>
-                <svg style={{position: 'absolute'}}
+                {/* <svg style={{position: 'absolute'}}
                              width="153.9000380516052" height="200" pointerEvents="none"
                              position="absolute" version="1.1" xmlns="http://www.w3.org/1999/xhtml">
                     <path d="M 60 11 L 100 11 "
@@ -166,15 +177,9 @@ class QuestionAnswer extends React.Component {
                         d="M 60 11"
                         pointerEvents="all" version="1.1" xmlns="http://www.w3.org/1999/xhtml" style={{}}
                         fill="none" stroke="#005583" strokeWidth="1"> </path>
-                    {/*{this.props.notLast ? (<path*/}
-                    {/*    d="M 60 11 L 60 200 "*/}
-                    {/*    pointerEvents="all" version="1.1" xmlns="http://www.w3.org/1999/xhtml" style={{}}*/}
-                    {/*    fill="none" stroke="#005583" strokeWidth="1"> </path>) : (<path*/}
-                    {/*    d="M 60 11 L 60 100"*/}
-                    {/*    pointerEvents="all" version="1.1" xmlns="http://www.w3.org/1999/xhtml" style={{}}*/}
-                    {/*    fill="none" stroke="white" strokeWidth="2"> </path>)}*/}
-                        </svg>
-                <div style={{marginLeft: 123}}> {this.props.question} <div style={{marginTop: 7}}>{button_map}</div> </div>
+                        </svg> */}
+                {/* <div style={{marginLeft: 123}}> */}
+                <div> {this.props.question} <div style={{marginTop: 7}}>{button_map}</div> </div>
                 </div>
         )
     }

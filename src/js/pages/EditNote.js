@@ -24,7 +24,8 @@ class EditNote extends Component {
                         <div style={{position: "relative", top: "140px"}}>
                             <NotePage activeItem={this.state.activeItem}/>
                         </div>
-                        <div style={{position: "fixed", top: "0", right: "0", left: "0", boxShadow: "0 3px 4px -6px gray"}}>
+                        {/*absolute positioning so that the menu is not sticky*/}
+                        <div style={{position: "absolute", top: "0", right: "0", left: "0", boxShadow: "0 3px 4px -6px gray"}}>
                             <NavMenu attached="top"/>
                             <MenuTabs
                                 activeItem={this.state.activeItem}

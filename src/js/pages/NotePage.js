@@ -12,6 +12,7 @@ import constants from '../constants/constants';
 import {allergies, medications, surgicalHistory} from '../constants/States'
 import ReviewOfSystemsContent from "../content/reviewofsystems/ReviewOfSystemsContent";
 import HPIContent from "../content/hpi/HPIContent";
+import PatientHistoryContent from "../content/patienthistory/PatientHistoryContent";
 
 //Component that manages the content displayed based on the activeItem prop
 // and records the information the user enters as state
@@ -116,6 +117,9 @@ export default class NotePage extends Component {
                 break;
             case "Review of Systems":
                 tabToDisplay = (<ReviewOfSystemsContent />);
+                break;
+            case "Patient History":
+                tabToDisplay = (<PatientHistoryContent />);
                 break;
             default:
                 tabToDisplay = (<HPIContent />);

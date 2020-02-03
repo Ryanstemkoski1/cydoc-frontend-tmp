@@ -5,7 +5,7 @@ class DiseaseTag extends React.Component {
     constructor() {
         super()
         this.state = {
-            tag_color: "rgba(190, 190, 190, 0.85)",
+            tag_color: "white",
             id: 1
         }
         this.handleClick = this.handleClick.bind(this)
@@ -14,10 +14,10 @@ class DiseaseTag extends React.Component {
     handleClick() {
         let new_color
         if (this.state.id === 1) {
-            new_color = "lightslategrey"
+            new_color = "#E6F1F6"
         }
         else {
-            new_color = "rgba(190, 190, 190, 0.85)"
+            new_color = "white"
         }
         this.setState({id: this.state.id*-1, tag_color: new_color})
         return this.props.handler(this.props.name, this.state.id)
@@ -40,27 +40,3 @@ class DiseaseTag extends React.Component {
 }
 
 export default DiseaseTag
-
-// function DiseaseTag(props) {
-//     return(
-//         <button
-//             className="tag_text"
-//             style={{display: !props.name && "none"}}
-//         >
-//             {props.name}
-//         </button>
-//     )
-// }
-
-
-// var colors = ["lightslategrey","rgba(190, 190, 190, 0.85)"];
-// var i = 1;
-// var selectedColor;
-// function button_click() {
-//     if (i<0) {
-//         selectedColor = colors[i];
-//     }
-//     else { selectedColor = colors[0] }
-//     document.getElementById("box").style.backgroundColor = selectedColor;
-//     i*=-1;
-// }

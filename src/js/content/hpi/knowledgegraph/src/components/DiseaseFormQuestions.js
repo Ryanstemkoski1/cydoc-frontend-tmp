@@ -7,13 +7,13 @@ class DiseaseFormQuestions extends React.Component {
         this.state = {
             parent: ''
         }
-        this.handler = this.handler.bind(this)
+        // this.handler = this.handler.bind(this)
     }
 
-    handler(value, id, child) {
-        return this.props.handler(value, id, this.props.category_code, this.props.uid, this.props.question,
-            this.props.current_node, child, this.props.category, this.props.responseType)
-    }
+    // handler(value, id, child) {
+    //     return this.props.handler(value, id, this.props.category_code, this.props.uid, this.props.question,
+    //         this.props.current_node, child, this.props.category, this.props.responseType)
+    // }
 
     render() {
         let question = this.props.question
@@ -50,8 +50,10 @@ class DiseaseFormQuestions extends React.Component {
                     notLast={this.props.notLast}
                     children={this.props.children}
                     accordion={this.props.accordion}
-                    answers={this.props.responseDict[this.props.uid] !== undefined ?
-                        this.props.responseDict[this.props.uid]['response'] : null }
+                    // answers={this.props.responseDict[this.props.uid] !== undefined ?
+                    //     this.props.responseDict[this.props.uid]['response'] : null }
+                    category_code = {this.props.category_code}
+                    uid = {this.props.uid}
                 />
             </div>
         )

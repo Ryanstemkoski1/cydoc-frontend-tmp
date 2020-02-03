@@ -5,8 +5,8 @@ import diseaseData from "./knowledgegraph/src/components/data/Diseases";
 import PositiveDiseases from "./knowledgegraph/src/components/PositiveDiseases";
 import DiseaseForm from "./knowledgegraph/src/components/DiseaseForm";
 import DiseasesNames from "./knowledgegraph/src/components/data/DiseasesNames";
-import Summary from "./knowledgegraph/src/Summary";
 import API from "./knowledgegraph/src/API.js"
+import {Grid} from "semantic-ui-react";
 
 class HPIContent extends Component {
     constructor() {
@@ -18,13 +18,12 @@ class HPIContent extends Component {
             step: 1,
             isLoaded: false,
             diseasesNames: DiseasesNames,
-            hpi: {},
+            // hpi: {},
             children: []
         }
         this.handler = this.handler.bind(this)
         this.tabHandler = this.tabHandler.bind(this)
-        this.handleChange = this.handleChange.bind(this)
-        this.handleResponse = this.handleResponse.bind(this)
+        // this.handleResponse = this.handleResponse.bind(this)
     }
 
     componentDidMount() {
@@ -34,7 +33,7 @@ class HPIContent extends Component {
 
     handler(value, id) {
         var new_array = this.state.diseases_positive
-        if (id === 1) {
+        if (id === 1 && new_array.indexOf(value) === -1) {
             new_array = new_array.concat(value)
         }
         else if (id===-1) {
@@ -78,33 +77,30 @@ class HPIContent extends Component {
         evt.currentTarget.className += " active"
     }
 
-    // Handle fields change
-
-    handleChange = input => e => {
-        this.setState({[input]: e.target.value})
-    }
-
     // receive the hpi dictionary and update dictionary
-    handleResponse(dict, category) {
-        var newDict = this.state.hpi
-        newDict[category] = dict
-        this.setState({hpi: newDict})
-    }
+    // handleResponse(dict, category) {
+    //     var newDict = this.state.hpi
+    //     newDict[category] = dict
+    //     this.setState({hpi: newDict})
+    // }
 
     render() {
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         const diseaseComponents = this.state.diseaseArray.map(item =>
+            <Grid.Column>
             <ButtonItem
                 key={item.id}
                 disease_id={item.id}
                 name={item.name}
                 diseases_list={item.diseases}
                 handler = {this.handler}
-            />)
+            />
+            </Grid.Column>)
         const positiveDiseases = this.state.diseases_positive.map(disease =>
             <PositiveDiseases
-                key={disease}
+                key={disease} 
                 name={disease}
+                handler={this.handler}
             />
         );
         let diseaseTabs = this.state.diseases_positive.map((disease, index) =>
@@ -115,24 +111,34 @@ class HPIContent extends Component {
             >
                 {disease}
             </button>
-        );
-        // let categoryDict = {}
+        ); 
         const {step, graphData, isLoaded, diseasesNames} = this.state;
         switch(step) {
             case 1:
                 return (
-                    <div className="App">
+                    <div className="App"> 
                         {positiveDiseases}
-                        <div className="diseaseComponents"> {diseaseComponents} </div>
-                        <button onClick={this.continue} style={{float:'right'}} className='NextButton'> &raquo; </button>
+                        <Grid columns={2} padded className="ui stackable grid"> {diseaseComponents} </Grid> 
+                        {this.state.diseases_positive.length > 0 ? <button onClick={this.continue} style={{float:'right'}} className='NextButton'> &raquo; </button>: ""}
                     </div>
                     )
-            case this.state.diseases_positive.length+2:
+            case this.state.diseases_positive.length+1:
+                let category = this.state.diseases_positive[this.state.diseases_positive.length-1]
+                let parent_code = diseasesNames[category]
+                    let category_code = graphData['nodes'][parent_code]['category']
                 return (
-                    <Summary
-                        key={this.state.diseases_positive.length}
-                        hpi={this.state.hpi}
-                        back={this.back}
+                    <DiseaseForm
+                        key={step-2}
+                        graphData={this.state.graphData}
+                        nextStep = {this.nextStep}
+                        prevStep = {this.prevStep}
+                        category = {category}
+                        diseaseTabs = {diseaseTabs}
+                        // handleResponse={this.handleResponse}
+                        parent_code = {parent_code}
+                        tab_category = {category_code}
+                        // newDict = {this.state.hpi[category_code]}
+                        last = {true}
                     />
                     )
             default:
@@ -146,13 +152,12 @@ class HPIContent extends Component {
                         graphData={this.state.graphData}
                         nextStep = {this.nextStep}
                         prevStep = {this.prevStep}
-                        handleChange = {this.handleChange}
                         category = {category}
                         diseaseTabs = {diseaseTabs}
-                        handleResponse={this.handleResponse}
+                        // handleResponse={this.handleResponse}
                         parent_code = {parent_code}
                         tab_category = {category_code}
-                        newDict = {this.state.hpi[category_code]}
+                        // newDict = {this.state.hpi[category_code]}
                     />
                     )}
                 else {return <h1> Loading... </h1>}

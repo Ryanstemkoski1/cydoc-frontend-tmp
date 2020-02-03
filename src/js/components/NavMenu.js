@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {logout} from "../actions";
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
+import "../content/hpi/knowledgegraph/src/css/App.css";
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -42,7 +43,10 @@ class ConnectedNavMenu extends Component {
                     </Menu.Item>
                     <Menu.Menu position="right">
                         {/* Menu will have different options depending on whether the user is logged in or not */}
-                        {this.props.isLoggedIn ? <LoggedInMenuItems handleLogout={this.handleLogout} name={this.props.user.firstName}/> : <DefaultMenuItems/>}
+                        {this.props.isLoggedIn || true ?
+                            <LoggedInMenuItems handleLogout={this.handleLogout}
+                                               name={this.props.user.firstName}/> :
+                            <DefaultMenuItems/>}
                     </Menu.Menu>
                 </Container>
             </Menu>
@@ -61,39 +65,39 @@ NavMenu.propTypes = {
 //Functional component for menu items that show when user is not logged in
 function DefaultMenuItems() {
     return <Fragment>
-        <Menu.Item name="create_note">
+        <a> <Menu.Item name="create_note">
             <Link to={"/createnote"}>Create Note</Link>
-        </Menu.Item>
-        <Menu.Item name="about">
+        </Menu.Item> </a>
+        <a> <Menu.Item name="about">
             <Link to={"/about"}>About</Link>
-        </Menu.Item>
-        <Menu.Item name="login">
+        </Menu.Item> </a>
+        <a> <Menu.Item name="login">
             <Link to={"/login"}>Login</Link>
-        </Menu.Item>
-        <Menu.Item name="register">
+        </Menu.Item></a>
+        <a> <Menu.Item name="register">
             <Link to={"/login"}>Register</Link>
-        </Menu.Item>
+        </Menu.Item></a>
     </Fragment>;
 }
 
 //Functional component for menu items that show when user is logged in
 function LoggedInMenuItems(props) {
     return <Fragment>
-        <Menu.Item name="create_note">
+        <a> <Menu.Item name="create_note">
             <Link to={"/createnote"}>Create Note</Link>
-        </Menu.Item>
-        <Menu.Item name="about">
+        </Menu.Item> </a>
+        <a> <Menu.Item name="about">
             <Link to={"/creategraph"}>Create Template</Link>
-        </Menu.Item>
-        <Menu.Item name="login">
+        </Menu.Item> </a>
+        <a> <Menu.Item name="login">
             <Link to={"/dashboard"}>Load Note</Link>
-        </Menu.Item>
-        <Menu.Item name="register">
+        </Menu.Item></a>
+        <a><Menu.Item name="register">
             <Link to={"/dashboard"}>Welcome, {props.name}</Link>
             <Icon name="user" style={{marginLeft: "7px"}}/>
-        </Menu.Item>
-        <Menu.Item name={"logout"} onClick={props.handleLogout}>
+        </Menu.Item></a>
+        <a> <Menu.Item name={"logout"} onClick={props.handleLogout}>
             <Link to={"/login"}>Logout</Link>
-        </Menu.Item>
+        </Menu.Item></a>
     </Fragment>;
 }

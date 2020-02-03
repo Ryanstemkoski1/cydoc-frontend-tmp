@@ -1,12 +1,8 @@
 {
   "TAB_NAMES": [
     "HPI",
-    "Medical History",
-    "Surgical History",
-    "Medications",
-    "Allergies",
+    "Patient History",
     "Family History",
-    "Social History",
     "Review of Systems",
     "Physical Exam"
   ],

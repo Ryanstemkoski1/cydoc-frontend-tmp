@@ -1,9 +1,11 @@
 import React, {Component, Fragment} from 'react'
-import {Menu, Container, Button} from 'semantic-ui-react'
+import {Menu, Container} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import {TAB_NAMES} from '../constants/constants'
 import {connect} from "react-redux";
 import {saveNote} from "../actions";
+import "../content/hpi/knowledgegraph/src/css/App.css";
+import {Input} from "semantic-ui-react";
 
 const mapStateToProps = state => {
     return {
@@ -20,8 +22,22 @@ function mapDispatchToProps(dispatch){
 class ConnectedMenuTabs extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            textInput: "Untitled"
+        }
         this.handleItemClick =  this.handleItemClick.bind(this)
         this.handleSave = this.handleSave.bind(this)
+    }
+
+     myFunction() {
+      var x = document.getElementById("myTopnav");
+      if (x.className === "topnav") {
+          x.className = "ui vertical text menu"
+          x.style.cssText = "margin-left: 60px;"
+      } else {
+        x.className = "topnav";
+        x.style.cssText = "margin-left: 0px;"
+      }
     }
 
     //onClick event is handled by parent
@@ -37,17 +53,21 @@ class ConnectedMenuTabs extends Component {
             doctorID:"5d696a7dbf476c61064fd58d"
         });
     }
+    handleInputChange = (event) => {
+        this.setState({textInput: event.target.value}) 
+    }
     render() {
         const {activeItem} = this.props;
 
         const tabMenuItems = TAB_NAMES.map((name, index) =>
+            <a>
             <Menu.Item
                 key={index}
                 name={name}
                 active={activeItem === name}
                 onClick={this.handleItemClick}
                 style={{borderColor: "white", fontSize: '13px'}}
-                href={"#"+ encodeURI(name)}/>
+                href={"#"+ encodeURI(name)}/> </a>
             );
 
         return (
@@ -55,15 +75,28 @@ class ConnectedMenuTabs extends Component {
                 <Menu secondary attached borderless style={{border: "white"}}>
                     <Container>
                         <Menu.Item>{this.props.currentNote}</Menu.Item>
-                        <Menu.Item>
-                            <Button basic onClick={this.handleSave}>Save</Button>
+                        <Menu.Item style={{width: '100%'}}>
+                                <Input
+                                className="ui input transparent"
+                                type='text'
+                                placeholder="Untitled"
+                                style={{fontSize: 16, marginBottom: 5, outline: 'none'}}
+                                onChange={this.handleInputChange}
+                                value={this.state.textInput} 
+                                />
                         </Menu.Item>
                     </Container>
                 </Menu>
-                <Menu tabular style={{borderColor: "white"}} attached={this.props.attached}>
-                    <Container >
-                        {tabMenuItems}
+                <Menu tabular attached={this.props.attached}>
+                    <div className="topnav" id='myTopnav'>
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+                    <Container style={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+                         {tabMenuItems}
                     </Container>
+                        <a href="javascript:void(0);" className="icon" onClick={this.myFunction}>
+                            <i className="fa fa-bars"></i>
+                        </a>
+                    </div>
                 </Menu>
             </Fragment>
 
