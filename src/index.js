@@ -15,24 +15,27 @@ import {PrivateRoute} from "./js/components/PrivateRoute";
 import CreateGraph from "./js/pages/CreateGraph";
 import EditGraph from './js/pages/EditGraph'
 import {HPIStore} from "./js/contexts/HPIContext";
+import {AuthStore} from "./js/contexts/AuthContext";
 
 
 ReactDOM.render(
     <Provider store={store}>
-        <HPIStore>
-            <div style={{letterSpacing: "1.8px"}}>
-                <BrowserRouter >
-                    <Route path="/home" component={HomePage}/>
-                    <Route path="/login" component={Login}/>
-                    <PrivateRoute path="/createnote" component={NewNote}/>
-                    <PrivateRoute path="/editnote" component={EditNote}/>
-                    <PrivateRoute path="/dashboard" component={DashboardPage}/>
-                    <PrivateRoute path={"/creategraph"} component={CreateGraph} />
-                    <PrivateRoute path={"/editgraph"} component={EditGraph} />
-                    <Route path="/about" component={ThemingLayout}/>
-                </BrowserRouter>
-            </div>
-        </HPIStore>
+        <AuthStore>
+            <HPIStore>
+                <div style={{letterSpacing: "1.8px"}}>
+                    <BrowserRouter >
+                        <Route path="/home" component={HomePage}/>
+                        <Route path="/login" component={Login}/>
+                        <PrivateRoute path="/createnote" component={NewNote}/>
+                        <PrivateRoute path="/editnote" component={EditNote}/>
+                        <PrivateRoute path="/dashboard" component={DashboardPage}/>
+                        <PrivateRoute path={"/creategraph"} component={CreateGraph} />
+                        <PrivateRoute path={"/editgraph"} component={EditGraph} />
+                        <Route path="/about" component={ThemingLayout}/>
+                    </BrowserRouter>
+                </div>
+            </HPIStore>
+        </AuthStore>
         
     </Provider>, document.getElementById('root'));
 

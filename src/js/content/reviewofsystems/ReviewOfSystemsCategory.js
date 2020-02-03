@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {Grid, Form, Checkbox} from 'semantic-ui-react'
+import {Grid, Form, Checkbox, Button} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 
 //Sub-Component that represents the individual categories for the Review of Systems section of the note
@@ -21,17 +21,22 @@ export default class ReviewOfSystemsCategory extends Component{
         return (
             <Grid.Column>
                 <h3>{this.category}</h3>
-                <Form>
-                    <label>Y N</label>
+                <Grid centered columns={3}>
                     {this.options.map(
                     option => 
-                        <Form.Group inline>
-                            <Checkbox radio value='y' checked={this.state[option] === 'y'} onChange={(e, {value}) => this.handleChange(option, value)}/>
-                            <Checkbox radio value='n' checked={this.state[option] === 'n'} onChange={(e, {value}) => this.handleChange(option, value)}/>
-                            <label style={{paddingLeft: "10px"}}>{option}</label>
-                        </Form.Group>
+                        <Grid.Row>
+                            <Grid.Column>
+                                <Button floated='left' color={this.state[option] === 'y' ? 'green' : null} radio value='y' active={this.state[option] === 'y'} onClick={(e, {value}) => this.handleChange(option, value)}>YES</Button>
+                            </Grid.Column>
+                            <Grid.Column verticalAlign='middle'>
+                                {option}
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Button floated='right' color={this.state[option] === 'n' ? 'red' : null} radio value='n' active={this.state[option] === 'n'} onClick={(e, {value}) => this.handleChange(option, value)}>NO</Button>
+                            </Grid.Column>
+                        </Grid.Row>
                     )}
-                </Form>
+                </Grid>
             </Grid.Column>
         );
     }

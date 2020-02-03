@@ -1,7 +1,11 @@
 {
   "login": {
     "dev": "http://127.0.0.1:5000/login",
-    "prod": ""
+    "prod": "https://cydocgraph.herokuapp.com/login"
+  },
+  "register": {
+    "dev": "http://127.0.0.1:5000/user/new",
+    "prod": "https://cydocgraph.herokuapp.com/user/new"
   },
   "records": {
     "dev": "http://127.0.0.1:5000/records",

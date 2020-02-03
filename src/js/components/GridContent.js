@@ -29,7 +29,7 @@ export default class GridContent extends Component {
                 <br/>
                 {this.props.contentHeader}
                 <Divider/>
-                <Grid columns={this.props.numColumns} verticalAlign='middle' >
+                <Grid columns={this.props.numColumns} verticalAlign='middle'>
                     {this.props.rows}
                 </Grid>
                 <AddRowButton onClick={this.addRow}/>
