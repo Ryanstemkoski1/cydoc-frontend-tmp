@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {saveNote} from "../actions";
 import "../content/hpi/knowledgegraph/src/css/App.css";
 import {Input} from "semantic-ui-react";
+import HPIContext from '../contexts/HPIContext'
 
 const mapStateToProps = state => {
     return {
@@ -20,8 +21,9 @@ function mapDispatchToProps(dispatch){
 }
 //Component for the tabs that toggle the different sections of the Create Note editor
 class ConnectedMenuTabs extends Component {
-    constructor(props) {
-        super(props);
+    static contextType = HPIContext
+    constructor(props, context) {
+        super(props, context);
         this.state = {
             textInput: "Untitled"
         }
@@ -55,6 +57,7 @@ class ConnectedMenuTabs extends Component {
     }
     handleInputChange = (event) => {
         this.setState({textInput: event.target.value}) 
+        this.context.onContextChange("title", event.target.value)
     }
     render() {
         const {activeItem} = this.props;
