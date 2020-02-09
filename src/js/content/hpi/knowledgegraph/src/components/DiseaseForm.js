@@ -14,10 +14,8 @@ export class DiseaseForm extends React.Component {
         this.state = {
             diseasesNames: DiseasesNames,
             functionLoad: false,
-            // responseDict: this.props.newDict === undefined ? {} : this.props.newDict,
             questionMap: {}
         }
-        // this.handler = this.handler.bind(this)
         let values = this.context['hpi']
         if (!(this.props.tab_category in values)) {
             values[this.props.tab_category] = {}
@@ -28,37 +26,6 @@ export class DiseaseForm extends React.Component {
     componentDidMount() {
         this.function()
     }
-
-    // handler(value, id, category_code, uid, question, child, category_name, response_type) {
-    //     // if (child) {
-    //     //     let new_map = this.state.questionMap
-    //     //     new_map[uid]['display_children'] = true
-    //     //     this.setState({questionMap: new_map})
-    //     // }
-    //     let newDict = this.state.responseDict
-    //     if (!(uid in newDict)) {
-    //             newDict[uid] = {
-    //                 response: [],
-    //                 category: category_code,
-    //                 category_name: category_name,
-    //                 question: question,
-    //                 response_type: response_type
-    //             }}
-    //     if (id === 1) {
-    //         newDict[uid]['response'] = newDict[uid]['response'].concat(value)
-    //         }
-    //     else if (id===-1) {
-    //         newDict[uid]['response'].splice(newDict[uid]['response'].indexOf(value), 1)
-    //     }
-    //     else if (id===2) {  // input-text
-    //         newDict[uid]['response'] = [value]
-    //     }
-    //     else if (id===3) {  // date-time
-    //         newDict[uid]['response'] = ['date-time', value]
-    //     }
-    //     this.setState({responseDict: newDict})
-    //     this.props.handleResponse(this.state.responseDict, category_code)
-    // }
 
     continue = e => {
         e.preventDefault();
@@ -77,12 +44,10 @@ export class DiseaseForm extends React.Component {
         let edges = graphData['edges']
         var questionMap = {}
         const parent_values = graph[parent_code]
-        // let tab_category = nodes[parent_code]['category']
         for (var index in parent_values) {
             let num_key = parent_values[index].toString()
             let current_node = edges[num_key]['from']
             let uid = nodes[current_node]['uid']
-            // let current_node_category = nodes[current_node]['category']
             let children = false
                 let current_node_values = graph[current_node]
                 if (current_node_values.length > 0) children = true
@@ -91,14 +56,12 @@ export class DiseaseForm extends React.Component {
                         key={uid}
                         question={nodes[current_node]['text']}
                         responseType={nodes[current_node]['responseType']}
-                        // handler={this.handler}
                         category={category}
                         uid={uid}
                         notLast={true}
                         children={children}
                         current_node={current_node}
                         category_code = {tab_category}
-                        // responseDict={this.state.responseDict}
                     />
                 }
                 let values = this.context['hpi']
@@ -127,15 +90,12 @@ export class DiseaseForm extends React.Component {
                                     key={nodes[new_current_node][uid]}
                                     question={nodes[new_current_node]['text']}
                                     responseType={nodes[new_current_node]['responseType']}
-                                    // handler={this.handler}
                                     category={category}
                                     uid={nodes[new_current_node][uid]}
                                     notLast={true}
                                     current_node={current_node}
                                     category_code = {tab_category}
-                                    // responseDict={this.state.responseDict}
                         />
-                        // }
                     }
                     let values = this.context['hpi']
                     if (!([nodes[new_current_node][uid]] in values[tab_category])) {
@@ -150,7 +110,6 @@ export class DiseaseForm extends React.Component {
                             this.context.onContextChange("hpi", values) 
                     } } } }
         this.setState({questionMap: questionMap, functionLoad: true})
-        // this.props.handleResponse(this.state.responseDict, tab_category)
     }
 
     render() {
@@ -168,15 +127,9 @@ export class DiseaseForm extends React.Component {
                                 newMap.push(current_value['children'][child_node]['question']) }
                          } }
                 }
-                // if ('display_children' in current_value) {
-                //     if (current_value['display_children']) {
-                //          } } 
                         }
         return (
             <div>
-                {/* <div className="tab">
-                    {this.props.diseaseTabs}
-                </div> */}
                 <Menu tabular attached={this.props.attached}>
                     <Container style={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
                          {this.props.diseaseTabs}

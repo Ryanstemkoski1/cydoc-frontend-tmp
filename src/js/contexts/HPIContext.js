@@ -14,6 +14,7 @@ export class HPIStore extends React.Component {
         "Family History": constants.FAMILY_HISTORY.STATE,
         "Social History": constants.SOCIAL_HISTORY.STATE,
         "positivediseases": [],
+        "positivecategories": [],
         hpi: {},
         "plan": {},
         step: 1,

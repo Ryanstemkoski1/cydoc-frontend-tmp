@@ -17,23 +17,23 @@ class HPIContent extends Component {
         this.state = {
             diseaseArray: diseaseData,
             graphData: {},
-            // diseases_positive: [],
-            // step: 1,
             isLoaded: false, 
             diseasesNames: DiseasesNames,
-            // hpi: {},
             children: [],
-            activeItem: ""
+            activeItem: "",
+            categories: ""
         }
-        // this.handler = this.handler.bind(this)
-        // this.tabHandler = this.tabHandler.bind(this)
         this.handleItemClick = this.handleItemClick.bind(this)
     }
 
     componentDidMount() {
         const data = API
-        data.then(res => this.setState({isLoaded: true, graphData: res.data}))
-    }
+        data.then(res => {
+            var categories = new Set()
+            var nodes = res.data['nodes'] 
+            for (var node in nodes) categories.add(nodes[node]["category"])
+            this.setState({isLoaded: true, graphData: res.data, categories: categories})
+        })}
 
     // handler(value, id) {
     //     var new_array = this.state.diseases_positive
@@ -74,26 +74,10 @@ class HPIContent extends Component {
         this.prevStep();
     }
 
-    // tabHandler(evt, index) {
-    //     this.context.onContextChange("step", index+2)
-    //     let tab_list = document.getElementsByClassName("tablinks")
-    //     for (var i=0; i<tab_list.length; i++) {
-    //         tab_list[i].className = tab_list[i].className.replace(" active", "")
-    //     }
-    //     evt.currentTarget.className += " active"
-    // }
-
     handleItemClick = (e, {name}) => {
         this.context.onContextChange("step", this.context['positivediseases'].indexOf(name)+2)
         this.setState({ activeItem: name });
     }
-
-    // receive the hpi dictionary and update dictionary
-    // handleResponse(dict, category) {
-    //     var newDict = this.state.hpi
-    //     newDict[category] = dict
-    //     this.setState({hpi: newDict})
-    // }
 
     render() {
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
@@ -104,7 +88,6 @@ class HPIContent extends Component {
                 disease_id={item.id}
                 name={item.name}
                 diseases_list={item.diseases}
-                // handler = {this.handler}
             />
             </Grid.Column>)
             const positiveDiseases = this.context["positivediseases"].map(disease =>
@@ -114,16 +97,6 @@ class HPIContent extends Component {
                     handler={this.handler}
                 />
             );
-        
-        // let diseaseTabs = this.context['positivediseases'].map((disease, index) =>
-        //     <button
-        //         key={index}
-        //         className="tablinks"
-        //         onClick={(evt) => this.tabHandler(evt, index)}
-        //     >
-        //         {disease}
-        //     </button>
-        // ); 
 
         const diseaseTabs = this.context['positivediseases'].map((name, index) => 
         <Menu.Item
@@ -140,6 +113,7 @@ class HPIContent extends Component {
         const positive_length = this.context['positivediseases'].length
         switch(step) {
             case 1:
+                // if (isLoaded) console.log(this.state.categories)
                 return (
                     <div className="App"> 
                         {positiveDiseases}
@@ -154,15 +128,13 @@ class HPIContent extends Component {
                 return (
                     <DiseaseForm
                         key={step-2}
-                        graphData={this.state.graphData}
+                        graphData={graphData}
                         nextStep = {this.nextStep}
                         prevStep = {this.prevStep}
                         category = {category}
                         diseaseTabs = {diseaseTabs}
-                        // handleResponse={this.handleResponse}
                         parent_code = {parent_code}
                         tab_category = {category_code}
-                        // newDict = {this.state.hpi[category_code]}
                         last = {true}
                     />
                     )
@@ -179,10 +151,8 @@ class HPIContent extends Component {
                         prevStep = {this.prevStep}
                         category = {category}
                         diseaseTabs = {diseaseTabs}
-                        // handleResponse={this.handleResponse}
                         parent_code = {parent_code}
                         tab_category = {category_code}
-                        // newDict = {this.state.hpi[category_code]}
                     />
                     )}
                 else {return <h1> Loading... </h1>}
