@@ -48,13 +48,14 @@
   margin-bottom: 20px;
 }
 
-.tabBar {
+/* .tab {
   overflow: hidden;
-  border: 1px solid #ffffff;
-  background-color: #f1f1f1;
-}
+  border: 1px solid #ccc;
+  background-color: #f1f1f1; 
+} */
 
-.tab {
+
+/* .tab button {
   background-color: inherit;
   float: left;
   border: none;
@@ -65,14 +66,14 @@
   font-weight: normal;
 }
 
-.tab:hover {
+.tab button:hover {
   background-color: #ddd;
 }
 
-.tab.active {
+.tab button.active {
   font-weight: bold;
   border-bottom: 3px solid mediumblue;
-}
+} */
 
 .topnav .icon {
   margin-left: 60px;

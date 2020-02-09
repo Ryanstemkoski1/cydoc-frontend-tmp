@@ -8,7 +8,7 @@ class HandleNumericInput extends React.Component {
         super(props, context)
         const answers = this.context["hpi"][this.props.category_code][this.props.uid]["response"]
         this.state = {
-            numericValue: answers !== null ? answers[0]: null
+            numericValue: answers !== null ? answers: null
         }
         this.handleChange = this.handleChange.bind(this)
     }

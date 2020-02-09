@@ -24,9 +24,13 @@ class QuestionAnswer extends React.Component {
         // this.handler = this.handler.bind(this)
         // this.handlePop = this.handlePop.bind(this)
         const values = this.context["hpi"]
-        values[this.props.category_code][this.props.uid]["response"] = (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') ? [] : ""
-        values[this.props.category_code][this.props.uid]["response_type"] = this.props.responseType
-        this.context.onContextChange("hpi", values)
+        if (values[this.props.category_code][this.props.uid]["response"] === "") {
+            values[this.props.category_code][this.props.uid]["response_type"] = this.props.responseType
+            if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
+                values[this.props.category_code][this.props.uid]["response"] = []
+            }
+            this.context.onContextChange("hpi", values)
+        }
     }
 
     // handler(value, id, child) {
@@ -44,7 +48,7 @@ class QuestionAnswer extends React.Component {
                     key={this.props.question}
                     // handler={this.handler}
                     children={this.props.children}
-                    answers={this.props.answers}
+                    // answers={this.props.answers}
                     uid={this.props.uid}
                     category_code = {this.props.category_code}
                 />
@@ -77,7 +81,7 @@ class QuestionAnswer extends React.Component {
                                           />)
         }
 
-        else if (responseType === 'CLICK-BOXES'|| responseType === 'MEDS-POP' || responseType === 'nan') {
+        else if (responseType === 'CLICK-BOXES'|| responseType === 'MEDS-POP') {
             button_map = this.props.response_choice.map(item =>
                 <ButtonTag
                     key={item}

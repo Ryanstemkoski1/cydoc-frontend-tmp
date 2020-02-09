@@ -9,8 +9,8 @@ class YesNo extends React.Component {
         this.state = {
             yes_id: 0,
             no_id: 0,
-            yes_color: (answers !== null && answers[0] === "Yes") ? "lightslategrey": "whitesmoke",
-            no_color: (answers !== null && answers[0] === "No") ? "lightslategrey": "whitesmoke",
+            yes_color: (answers !== null && answers === "Yes") ? "lightslategrey": "whitesmoke",
+            no_color: (answers !== null && answers === "No") ? "lightslategrey": "whitesmoke",
             children: false
         }
         this.handleYesClick = this.handleYesClick.bind(this)

@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import NumericInput from "react-numeric-input";
 import HPIContext from "../../contexts/HPIContext"
 
-class DiscussionPlan extends Component {
+class plan extends Component {
     static contextType = HPIContext
     constructor(context) {
         super(context)
@@ -20,23 +20,23 @@ class DiscussionPlan extends Component {
 
     handleInputChange = (title, event) => {
         // this.setState({textInput: event.target.value})
-        const values = this.context["discussionplan"]
+        const values = this.context["plan"]
         values[title] = typeof event === 'object' ? event.target.value : event
-        this.context.onContextChange("discussionplan", values)
+        this.context.onContextChange("plan", values)
     }
 
     handleYesClick() {
         this.setState({yes_color: "lightslategrey", yes_id: 1, no_id: -1, no_color: "whitesmoke"})
-        const values = this.context["discussionplan"]
+        const values = this.context["plan"]
         values["Admitting Patient"] = "Yes"
-        this.context.onContextChange("discussionplan", values)
+        this.context.onContextChange("plan", values)
     }
 
     handleNoClick() {
         this.setState({yes_color: "whitesmoke", yes_id: -1, no_id: 1, no_color: "lightslategrey"})
-        const values = this.context["discussionplan"]
+        const values = this.context["plan"]
         values["Admitting Patient"] = "No"
-        this.context.onContextChange("discussionplan", values)
+        this.context.onContextChange("plan", values)
     }
 
     render() {
@@ -62,4 +62,4 @@ class DiscussionPlan extends Component {
     }
 }
 
-export default DiscussionPlan
+export default plan

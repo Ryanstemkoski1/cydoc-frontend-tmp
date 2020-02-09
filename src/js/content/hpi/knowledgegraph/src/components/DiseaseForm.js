@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import {Menu, Container} from 'semantic-ui-react'
 import DiseaseFormQuestions from "./DiseaseFormQuestions";
 import '../css/App.css';
 import DiseasesNames from './data/DiseasesNames';
@@ -18,8 +19,10 @@ export class DiseaseForm extends React.Component {
         }
         // this.handler = this.handler.bind(this)
         let values = this.context['hpi']
-        values[this.props.tab_category] = {}
-        this.context.onContextChange("hpi", values)
+        if (!(this.props.tab_category in values)) {
+            values[this.props.tab_category] = {}
+            this.context.onContextChange("hpi", values)
+        }
     }
 
     componentDidMount() {
@@ -99,15 +102,17 @@ export class DiseaseForm extends React.Component {
                     />
                 }
                 let values = this.context['hpi']
-                values[tab_category][uid] = {
-                    'category': tab_category,
-                    'category_name': category,
-                    'question': nodes[current_node]['text'],
-                    'response': "",
-                    'response_type': "",
-                    'display_children': false,
+                if (!(uid in values[tab_category])){
+                    values[tab_category][uid] = {
+                        'category': tab_category,
+                        'category_name': category,
+                        'question': nodes[current_node]['text'],
+                        'response': "",
+                        'response_type': "",
+                        'display_children': false,
+                    }
+                    this.context.onContextChange("hpi", values)
                 }
-                this.context.onContextChange("hpi", values)
                 // check if the current node in the graph has children that we need to look for
                 if (children) {
                     questionMap[uid]['display_children'] = false
@@ -119,12 +124,12 @@ export class DiseaseForm extends React.Component {
                         let new_current_node = edges[new_edge_index]['from']
                         questionMap[uid]['children'][new_current_node] = {
                         'question': <DiseaseFormQuestions
-                                    key={nodes[new_current_node]['uid']}
+                                    key={nodes[new_current_node][uid]}
                                     question={nodes[new_current_node]['text']}
                                     responseType={nodes[new_current_node]['responseType']}
                                     // handler={this.handler}
                                     category={category}
-                                    uid={nodes[new_current_node]['uid']}
+                                    uid={nodes[new_current_node][uid]}
                                     notLast={true}
                                     current_node={current_node}
                                     category_code = {tab_category}
@@ -133,16 +138,17 @@ export class DiseaseForm extends React.Component {
                         // }
                     }
                     let values = this.context['hpi']
-                    values[tab_category][nodes[new_current_node]['uid']] = {
-                    'category': tab_category,
-                    'category_name': category,
-                    'question': nodes[new_current_node]['text'],
-                    'response': "",
-                    'response_type': "",
-                    'display_children': false
-                    }
-                    this.context.onContextChange("hpi", values) 
-                 } } }
+                    if (!([nodes[new_current_node][uid]] in values[tab_category])) {
+                        values[tab_category][nodes[new_current_node][uid]] = {
+                            'category': tab_category,
+                            'category_name': category,
+                            'question': nodes[new_current_node]['text'],
+                            'response': "",
+                            'response_type': "",
+                            'display_children': false
+                            }
+                            this.context.onContextChange("hpi", values) 
+                    } } } }
         this.setState({questionMap: questionMap, functionLoad: true})
         // this.props.handleResponse(this.state.responseDict, tab_category)
     }
@@ -168,9 +174,15 @@ export class DiseaseForm extends React.Component {
                         }
         return (
             <div>
-                <div className="tabBar">
+                {/* <div className="tab">
                     {this.props.diseaseTabs}
-                </div>
+                </div> */}
+                <Menu tabular attached={this.props.attached}>
+                    <Container style={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+                         {this.props.diseaseTabs}
+                    </Container>
+                </Menu>
+                
                 <h1 style={{marginLeft: 30}}> {this.props.category} </h1>
                 <div style={{marginLeft: 30}}>{newMap} </div>
                 <button onClick={this.back} style={{marginTop: 35, marginBottom: 35}} className='NextButton'> &laquo; </button>
