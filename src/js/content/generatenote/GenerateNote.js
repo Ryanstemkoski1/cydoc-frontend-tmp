@@ -45,6 +45,38 @@ export default class GenerateNote extends Component {
         }
     }
 
+    review_of_systems() {
+        // var ros = this.context["Review of Systems"]
+        // var t_chart = "<table style='width:100%'> <tr> <th> Positive </th> <th> Negative </th> </tr>"
+        // for (var key in ros) {
+        //     if (ros[key] === 'y') {
+        //         t_chart += ("<tr> <td>" + key + "</td> </tr>")
+        //     }
+        //     else if (ros[key] === 'n') {
+        //         t_chart += ("<tr> <td>''</td> <td>" + key + "</td> </tr>")
+        //     }
+        // }
+        // t_chart += "</table>"
+        // console.log(t_chart)
+        // if (document.getElementById("Review of Systems") !== null) {
+        //     document.getElementById("Review of Systems").innerHTML = t_chart 
+        // }
+        var ros = this.context["Review of Systems"]
+        var positives = "<div> Positive for: "
+        var negatives = "<div> Negative for: "
+        for (var key in ros) {
+            if (ros[key] === 'y') positives += (key + ", ")
+            else if (ros[key] === 'n') negatives += (key + ", ")
+        }
+        positives = positives.slice(0, positives.length-2)
+        negatives = negatives.slice(0, negatives.length-2)
+        positives += "</div>"
+        negatives += "</div>" 
+        if (document.getElementById("Review of Systems") !== null) {
+            document.getElementById("Review of Systems").innerHTML = (positives+negatives) 
+        }
+    }
+
     render() {
         return (
             <div>
@@ -64,6 +96,8 @@ export default class GenerateNote extends Component {
                 <h5 id="Social History"> {this.generate_grid('Social History')} </h5>
                 <h3> hpi: </h3>
                 <h6> {JSON.stringify(this.context['hpi'])} </h6>
+                <h3> Review of Systems: </h3>
+                <h5 id="Review of Systems"> {this.review_of_systems()} </h5>
             </div>
         )
     }

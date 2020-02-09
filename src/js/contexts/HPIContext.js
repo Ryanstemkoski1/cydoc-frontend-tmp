@@ -16,7 +16,8 @@ export class HPIStore extends React.Component {
         "positivediseases": [],
         hpi: {},
         "plan": {},
-        step: 1
+        step: 1,
+        "Review of Systems": {}
      }
 
     onContextChange = (name, values) => { 
