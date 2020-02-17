@@ -39,3 +39,22 @@ export const reviewOfSystems = {
         "Psych": {"Anxiety": "", "Depression": "", "Suicide attempts": ""}
     }
 }
+
+export const physicalExam = {
+    "state": {
+        "Vitals": {"Systolic Blood Pressure": 0, "Diastolic Blood Pressure": 0, "Heart Rate": 0, "RR": 0, "Temperature": 0, "Oxygen Saturation": 0},
+        "General": {"Height": 0, "Weight": 0},
+        "Head": {"Normocephalic": false, "Atraumatic": false, "Abnormal Findings": ""},
+        "Eyes": {"PERRLA": false, "Sclera aniteric": false, "No redness": false, "No discharge": false, "EOMI": false, "Visual acuity intact": false, "Visual fields normal": false, "Fundoscopy": "", "Abnormal Findings": ""},
+        "Ears": {"Normal auditory acuity": false, "Normal Rinne": false, "Normal Weber": false, "Otoscopy": "", "Abnormal Findings": ""},
+        "Nose/Throat": {"Oropharynx Clear": false, "MMM": false, "Tongue pink and moist": false, "Tongue protrudes midline": false, "Symmetric palate elevation": false, "Normal swallowing": false, "Normal phonation": false, "Internal/External Nose": "", "Abnormal Findings": ""},
+        "Neck": {"Supple": false, "No Thyromegaly": false, "No Lymphadenopathy": false, "Abnormal Findings": ""},
+        "Pulmonary": {"CTAB": false, "No wheezes, rales, or rhonchi": false, "Normal percussion": false, "No scars or skin lesion on back": false, "No CVAT": false, "Abnormal Findings": ""},
+        "Cardiac": {"RRR": false, "Normal S1, S2": false, "No murmurs": false, "No rubs": false, "No gallops": false, "Normal PMI": false, "No bruits": false, "Normal JVP": false, "Abnormal Findings": ""},
+        "Pulses": {"Normal brachial": false, "Normal radial": false, "Normal ulnar": false, "Normal dorsalis pedis": false, "Abnormal Findings": ""},
+        "Gastrointestinal": {"Normal bowel sounds": false, "No bruits": false, "No hepatomegaly": false, "No splenomegaly": false, "Soft": false, "Nontender": false, "Nondistended": false, "No rebounding": false, "No guarding": false, "No masses": false, "Abnormal Findings": ""},
+        "Tendon Reflexes": {"No dubbing": false, "No cyanosis": false, "No nail changes": false, "No edema": false, "Abnormal Findings": ""},
+        "Extremities": {"Normal biceps": false, "Normal brachioradials": false, "Normal triceps": false, "Normal patellar": false, "Normal ankle jerk": false, "Normal plantar": false, "Abnormal Findings": ""},
+        "Skin": {"Warm and dry": false, "No visible lesions": false, "No tenting": false, "Normal turgor": false, "Abnormal Findings": ""}
+    }
+}
