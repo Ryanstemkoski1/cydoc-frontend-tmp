@@ -74,8 +74,14 @@ const diseaseData = [
         ]
     },
 
-    {
+    { 
         id: 9,
+        name: "Pain",
+        diseases: [ "Pain" ]
+    },
+
+    {
+        id: 10,
         name: "My Templates",
         diseases: [
 

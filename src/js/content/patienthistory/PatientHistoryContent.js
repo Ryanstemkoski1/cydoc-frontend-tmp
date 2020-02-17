@@ -5,6 +5,7 @@ import SurgicalHistoryContent from "../surgicalhistory/SurgicalHistoryContent";
 import MedicationsContent from "../medications/MedicationsContent";
 import AllergiesContent from "../allergies/AllergiesContent";
 import SocialHistoryContent from "../socialhistory/SocialHistoryContent";
+import '../hpi/knowledgegraph/src/css/App.css'
 
 export default class PatientHistoryContent extends Component {
     constructor() {
@@ -23,21 +24,40 @@ export default class PatientHistoryContent extends Component {
         document.getElementById(name).style.display = "block";
         this.setState({ activeItem: name });
     }
+
+    myFunction() {
+        var x = document.getElementById("patientnav");
+        if (x.className === "topnav") {
+            x.className = "ui vertical text menu"
+            x.style.cssText = "margin-left: 60px;"
+        } else {
+          x.className = "topnav";
+          x.style.cssText = "margin-left: 0px;"
+        }
+      }
+
     render() {
         const tabs = this.state.patient_history.map((name, index) => 
+        <a>
         <Menu.Item 
             key={index} 
             name={name} 
             active={this.state.activeItem === name} 
             onClick={this.handleItemClick} 
             style={{borderColor: "white", fontSize: '13px'}} 
-            />)
+            /> </a>
+            )
         return (
             <div>
                 <Menu tabular> 
-                <Container style={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
-                         {tabs}
-                    </Container>
+                    <div className="topnav" id='patientnav'> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+                        <Container style={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+                            {tabs}
+                        </Container> 
+                        <a href="javascript:void(0);" className="icon" onClick={this.myFunction}>
+                            <i className="fa fa-bars"></i>
+                        </a>
+                    </div>
                 </Menu>
                 <div id="medical history" className="tabcontent" style={{marginTop: 25, display: "block"}}><MedicalHistoryContent /> </div>
                 <div id="surgical history" className="tabcontent" style={{marginTop: 25, display: "none"}}><SurgicalHistoryContent /> </div>

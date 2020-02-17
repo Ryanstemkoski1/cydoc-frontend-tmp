@@ -16,6 +16,7 @@ export class HPIStore extends React.Component {
         "Review of Systems": reviewOfSystems.state,
         "Physical Exam": physicalExam.state,
         "positivediseases": [],
+        "activeHPI": "",
         "positivecategories": [],
         hpi: {},
         "plan": {},

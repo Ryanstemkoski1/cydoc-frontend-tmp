@@ -1,9 +1,8 @@
 import React from 'react'
 import {Input, Form} from "semantic-ui-react";
 import HPIContext from "../../../../../contexts/HPIContext";
-import listText from "./listText"
 
-class HandleInput extends React.Component {
+class listInput extends React.Component {
     static contextType = HPIContext 
     constructor(props, context) {
         super(props, context)
@@ -22,30 +21,15 @@ class HandleInput extends React.Component {
     }
 
     render() {
-        if (this.props.type === 'SHORT-TEXT') {
-            return (
-                <Form>
-                    <textarea
-                        type='text'
-                        onChange={this.handleInputChange}
-                        rows='4'
-                        value={this.state.textInput}
-                    />
-                </Form>
-            ) }
-        else if (this.props.type === 'LIST-TEXT') {
-            return (
-                <Form>
-                <textarea 
+        return (
+            <Form>
+                <Input 
                     type='text'
                     onChange={this.handleInputChange}
-                    rows='4'
                     value={this.state.textInput}
                 /> 
-                </Form>
-            
+            </Form>
             )}
     }
-}
 
-export default HandleInput
+export default listInput

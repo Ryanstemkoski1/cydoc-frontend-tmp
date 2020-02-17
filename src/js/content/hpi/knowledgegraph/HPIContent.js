@@ -13,7 +13,7 @@ import HPIContext from "../../../contexts/HPIContext";
 class HPIContent extends Component {
     static contextType = HPIContext
     constructor(context) {
-        super(context)
+        super(context) 
         this.state = {
             diseaseArray: diseaseData,
             graphData: {},
@@ -21,7 +21,7 @@ class HPIContent extends Component {
             diseasesNames: DiseasesNames,
             children: [],
             activeItem: "",
-            categories: ""
+            categories: {}
         }
         this.handleItemClick = this.handleItemClick.bind(this)
     }
@@ -35,33 +35,16 @@ class HPIContent extends Component {
             this.setState({isLoaded: true, graphData: res.data, categories: categories})
         })}
 
-    // handler(value, id) {
-    //     var new_array = this.state.diseases_positive
-    //     if (id === 1 && new_array.indexOf(value) === -1) {
-    //         new_array = new_array.concat(value)
-    //     }
-    //     else if (id===-1) {
-    //         new_array.splice(new_array.indexOf(value), 1)
-    //     }
-    //     this.setState({diseases_positive: new_array})
-    // }
-
     // Proceed to next step
     nextStep = () => {
-        const { step } = this.state; //destructuring
-        // this.setState( {
-        //     step: step + 1
-        // })
         this.context.onContextChange("step", this.context['step'] + 1)
+        this.context.onContextChange("activeHPI", this.context['positivediseases'][this.context['step']-1])
     }
 
     // Go back to previous step
     prevStep = () => {
-        const { step } = this.state;
-        // this.setState( {
-        //     step: step - 1
-        // })
         this.context.onContextChange("step", this.context['step'] - 1)
+        this.context.onContextChange("activeHPI", this.context['positivediseases'][this.context['step']-1])
     }
 
     continue = e => {
@@ -74,10 +57,11 @@ class HPIContent extends Component {
         this.prevStep();
     }
 
-    handleItemClick = (e, {name}) => {
-        this.context.onContextChange("step", this.context['positivediseases'].indexOf(name)+2)
-        this.setState({ activeItem: name });
+    handleItemClick = (e, {name}) => { 
+        this.context.onContextChange("step", this.context['positivediseases'].indexOf(name)+2) 
+        this.context.onContextChange("activeHPI", name)
     }
+    
 
     render() {
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
@@ -94,18 +78,18 @@ class HPIContent extends Component {
                 <PositiveDiseases
                     key={disease} 
                     name={disease}
-                    handler={this.handler}
                 />
             );
 
         const diseaseTabs = this.context['positivediseases'].map((name, index) => 
+        <a>
         <Menu.Item
                 key={index}
                 name={name}
-                active={this.state.activeItem === name}
+                active={this.context['activeHPI'] === name}
                 onClick={this.handleItemClick}
                 style={{borderColor: "white", fontSize: '13px'}}
-                />
+                /></a>
         )
 
         const {graphData, isLoaded, diseasesNames} = this.state;
@@ -113,7 +97,6 @@ class HPIContent extends Component {
         const positive_length = this.context['positivediseases'].length
         switch(step) {
             case 1:
-                // if (isLoaded) console.log(this.state.categories)
                 return (
                     <div className="App"> 
                         {positiveDiseases}
@@ -121,9 +104,10 @@ class HPIContent extends Component {
                         {positive_length > 0 ? <button onClick={this.continue} style={{float:'right'}} className='NextButton'> &raquo; </button>: ""}
                     </div>
                     )
-            case positive_length+1:
-                let category = this.context['positivediseases'][positive_length-1]
-                let parent_code = diseasesNames[category]
+            default:
+                if (isLoaded) {
+                    let category = this.context['positivediseases'][step-2]
+                    let parent_code = diseasesNames[category]
                     let category_code = graphData['nodes'][parent_code]['category']
                 return (
                     <DiseaseForm
@@ -135,24 +119,7 @@ class HPIContent extends Component {
                         diseaseTabs = {diseaseTabs}
                         parent_code = {parent_code}
                         tab_category = {category_code}
-                        last = {true}
-                    />
-                    )
-            default:
-                if (isLoaded) {
-                    let category = this.context['positivediseases'][step-2]
-                    let parent_code = diseasesNames[category]
-                    let category_code = graphData['nodes'][parent_code]['category']
-                return (
-                    <DiseaseForm
-                        key={step-2}
-                        graphData={this.state.graphData}
-                        nextStep = {this.nextStep}
-                        prevStep = {this.prevStep}
-                        category = {category}
-                        diseaseTabs = {diseaseTabs}
-                        parent_code = {parent_code}
-                        tab_category = {category_code}
+                        last = {true ? step === positive_length+1 : false}
                     />
                     )}
                 else {return <h1> Loading... </h1>}

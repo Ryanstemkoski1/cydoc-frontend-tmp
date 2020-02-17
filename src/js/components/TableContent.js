@@ -58,7 +58,7 @@ export default class TableContent extends Component {
         return (
             <Fragment>
                 <br/>
-                <div style={{width:800, height:300, overflowX: 'scroll'}}> 
+                <div style={{width: "100%", height: "100%", overflowX: 'auto'}}> 
                 <Table celled>
                     <Table.Header>
                         {headerRow}

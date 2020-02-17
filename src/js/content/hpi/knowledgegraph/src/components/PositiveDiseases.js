@@ -15,7 +15,7 @@ class PositiveDiseases extends Component {
         if (values.indexOf(this.props.name) > -1) {
             values.splice(values.indexOf(this.props.name), 1)
         }
-        this.context.onContextChange("positivediseases", values) 
+        this.context.onContextChange("positivediseases", values)
     }
 
     render() {
