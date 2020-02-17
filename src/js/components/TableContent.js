@@ -58,6 +58,7 @@ export default class TableContent extends Component {
         return (
             <Fragment>
                 <br/>
+                <div style={{width:800, height:300, overflowX: 'scroll'}}> 
                 <Table celled>
                     <Table.Header>
                         {headerRow}
@@ -66,6 +67,7 @@ export default class TableContent extends Component {
                         {rows}
                     </Table.Body>
                 </Table>
+                </div>
                 <AddRowButton onClick={this.addRow}/>
             </Fragment>
         );

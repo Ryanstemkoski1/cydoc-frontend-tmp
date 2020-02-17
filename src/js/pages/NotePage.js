@@ -11,8 +11,10 @@ import PhysicalExamContent from "../content/physicalexam/PhysicalExamContent";
 import constants from '../constants/constants';
 import {allergies, medications, surgicalHistory} from '../constants/States'
 import ReviewOfSystemsContent from "../content/reviewofsystems/ReviewOfSystemsContent";
-import HPIContent from "../content/hpi/HPIContent";
+import HPIContent from "../content/hpi/knowledgegraph/HPIContent";
 import PatientHistoryContent from "../content/patienthistory/PatientHistoryContent";
+import GenerateNote from '../content/generatenote/GenerateNote';
+import DiscussionPlan from '../content/discussionplan/DiscussionPlan';
 
 //Component that manages the content displayed based on the activeItem prop
 // and records the information the user enters as state
@@ -120,6 +122,12 @@ export default class NotePage extends Component {
                 break;
             case "Patient History":
                 tabToDisplay = (<PatientHistoryContent />);
+                break;
+            case "Generate Note":
+                tabToDisplay = (<GenerateNote />);
+                break;
+            case "Plan":
+                tabToDisplay = (<DiscussionPlan />)
                 break;
             default:
                 tabToDisplay = (<HPIContent />);

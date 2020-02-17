@@ -8,7 +8,7 @@ class TimeInput extends React.Component {
         super(props, context)
         const answers = this.context["hpi"][this.props.category_code][this.props.uid]["response"]
         this.state = {
-            timeInput: answers !== null ? answers[1]: null
+            timeInput: answers !== null ? answers: null
         }
         this.handleInputChange = this.handleInputChange.bind(this)
     }

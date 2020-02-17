@@ -8,7 +8,7 @@ class HandleInput extends React.Component {
         super(props, context)
         const answers = this.context["hpi"][this.props.category_code][this.props.uid]["response"]
         this.state = {
-            textInput: answers !== null ? answers[0]: ''
+            textInput: answers !== null ? answers: ''
         }
         this.handleInputChange = this.handleInputChange.bind(this);
     }
