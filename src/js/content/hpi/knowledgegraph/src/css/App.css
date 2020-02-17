@@ -48,40 +48,13 @@
   margin-bottom: 20px;
 }
 
-/* .tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1; 
-} */
-
-
-/* .tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-weight: normal;
-}
-
-.tab button:hover {
-  background-color: #ddd;
-}
-
-.tab button.active {
-  font-weight: bold;
-  border-bottom: 3px solid mediumblue;
-} */
-
 .topnav .icon {
   margin-left: 60px;
   margin-top: 5px;
   display: none;
 }
 
-/* When the screen is less than 750 pixels wide, hide all links.
+/* When the screen is less than 650 pixels wide, hide all links.
 Show the link that contains should open and close the topnav (.icon) */
 @media screen and (max-width: 650px) {
   .topnav a {display: none;}
@@ -89,4 +62,3 @@ Show the link that contains should open and close the topnav (.icon) */
     display: block;
   }
 }
-

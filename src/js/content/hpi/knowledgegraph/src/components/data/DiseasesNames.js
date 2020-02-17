@@ -21,7 +21,8 @@ const DiseasesNames = {
         "Sleep": 'SLP0001',
         "Travel History": 'TRV0001',
         "Pediatrics": 'PED0001',
-        "Pregnancy": 'PRG0001'
+        "Pregnancy": 'PRG0001',
+        "Pain": "PAIN001"
 }
 
 export default DiseasesNames

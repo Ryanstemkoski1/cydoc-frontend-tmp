@@ -17,7 +17,7 @@ class DiseaseTag extends React.Component {
         }
         else {values = values.concat(this.props.name)}
         this.context.onContextChange("positivediseases", values)
-        // return this.props.handler(this.props.name, this.state.id)
+        this.context.onContextChange("activeHPI", values[0])
     }
 
     render() {

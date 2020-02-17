@@ -4,7 +4,8 @@ import HPIContext from "../../contexts/HPIContext"
 export default class GenerateNote extends Component { 
     static contextType = HPIContext
     generate_table(item) {
-        var table = "<table style='width:100%'> <tr>"
+        var none = true 
+        var table = "<h3>" + item + ": </h3><table style='width:100%'> <tr>"
         var headers = Object.keys(this.context[item][0])
         for (var header_index in headers) {
             var header = headers[header_index]
@@ -14,34 +15,51 @@ export default class GenerateNote extends Component {
         for (var index in this.context[item]) {
             var values = Object.values(this.context[item][index])
             for (var value_index in values) {
+                if (values[value_index] !== "") none = false 
                 table += (" <td> " + values[value_index] + "</td> ")
             }
             table += " </tr> <tr> "
         }
         table += "</tr> </table>"
         if (document.getElementById(item) !== null) {
-            document.getElementById(item).innerHTML = table 
+            if (none) document.getElementById(item).innerHTML = ""
+            else document.getElementById(item).innerHTML = table 
         }
     }
     generate_grid(item) {
-        var grid = "<table style='width:100%'> <tr> <th> Condition </th>"
+        var grid = "<h3>" + item + ":</h3><table style='width:100%'> <tr> <th> Condition </th>"
         var headers = Object.keys(Object.values(this.context[item])[0])
         for (var header_index in headers) {
             var header = headers[header_index]
-            grid += (" <th> " + header + "</th> ")
+            if (header !== "Yes" && header !== "No") grid += (" <th> " + header + "</th> ")
         }
         grid += " </tr> <tr> "
+        var negatives = []
+        var none = []
         for (var key in this.context[item]) {
-            grid += (" <td> " + key + "</td> ")
-            var values = this.context[item][key]
-            for (var value in values) {
-                grid += (" <td> " + values[value] + "</td> ")
+            var yes = this.context[item][key]["Yes"] 
+            var no = this.context[item][key]["No"] 
+            if (yes) {
+                grid += (" <td> " + key + "</td> ")
+                var values = this.context[item][key]
+                for (var header_index in headers) {
+                    var header = headers[header_index]
+                    if (header !== "Yes" && header !== "No") grid += (" <td> " + values[header] + "</td> ")}
+                grid += " </tr> <tr>"
             }
-            grid += " </tr> <tr>"
+            else if (no) negatives.push(key)
+            else none.push(key)
         }
         grid += "</tr> </table>"
+        if (negatives.length > 0) {
+            grid += "<div> Negative for: " 
+            for (var negative in negatives) grid += negatives[negative] + ", " 
+            grid = grid.slice(0, grid.length-2)
+            grid += "</div>"
+        } 
         if (document.getElementById(item) !== null) {
-            document.getElementById(item).innerHTML = grid 
+            if (none.length === Object.keys(this.context[item]).length) document.getElementById(item).innerHTML = ""
+            else document.getElementById(item).innerHTML = grid 
         }
     }
 
@@ -62,19 +80,30 @@ export default class GenerateNote extends Component {
         //     document.getElementById("Review of Systems").innerHTML = t_chart 
         // }
         var ros = this.context["Review of Systems"]
+        var none = true 
         var positives = "<div> Positive for: "
         var negatives = "<div> Negative for: "
         for (var key in ros) {
-            if (ros[key] === 'y') positives += (key + ", ")
-            else if (ros[key] === 'n') negatives += (key + ", ")
-        }
+            var answer = ros[key]
+            if (answer === 'y' || answer === 'n') { 
+                none = false 
+                if (ros[key] === 'y') positives += (key + ", ")
+                else if (ros[key] === 'n') negatives += (key + ", ") }}
         positives = positives.slice(0, positives.length-2)
         negatives = negatives.slice(0, negatives.length-2)
         positives += "</div>"
         negatives += "</div>" 
         if (document.getElementById("Review of Systems") !== null) {
-            document.getElementById("Review of Systems").innerHTML = (positives+negatives) 
+            if (none) document.getElementById("Review of Systems").innerHTML = ""
+            else document.getElementById("Review of Systems").innerHTML = ("<h3> Review of Systems: </h3>" + positives+negatives) 
         }
+    }
+
+    hpi() { 
+        if (document.getElementById("hpi") !== null) {
+            if (JSON.stringify(this.context['hpi']) === "{}") document.getElementById("hpi").innerHTML = ""
+            else document.getElementById("hpi").innerHTML = JSON.stringify(this.context['hpi'])
+        } 
     }
 
     render() {
@@ -82,21 +111,13 @@ export default class GenerateNote extends Component {
             <div>
                 <div></div>
                 <h3> Note Title: {this.context['title'] || 'Untitled'} </h3>
-                <h3> Allergies: </h3>
                 <h5 id="Allergies"> {this.generate_table('Allergies')} </h5>
-                <h3> Medications: </h3>
                 <h5 id="Medications"> {this.generate_table('Medications')} </h5>
-                <h3> Surgical History: </h3>
                 <h5 id="Surgical History"> {this.generate_table('Surgical History')} </h5>
-                <h3> Medical History: </h3>
                 <h5 id="Medical History"> {this.generate_grid('Medical History')} </h5>
-                <h3> Family History: </h3>
                 <h5 id="Family History"> {this.generate_grid('Family History')} </h5>
-                <h3> Social History: </h3>
                 <h5 id="Social History"> {this.generate_grid('Social History')} </h5>
-                <h3> hpi: </h3>
-                <h6> {JSON.stringify(this.context['hpi'])} </h6>
-                <h3> Review of Systems: </h3>
+                <h5 id="hpi"> {this.hpi()} </h5>
                 <h5 id="Review of Systems"> {this.review_of_systems()} </h5>
             </div>
         )

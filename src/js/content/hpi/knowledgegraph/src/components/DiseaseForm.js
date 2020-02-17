@@ -112,6 +112,17 @@ export class DiseaseForm extends React.Component {
         this.setState({questionMap: questionMap, functionLoad: true})
     }
 
+    myFunction() {
+        var x = document.getElementById("hpinav");
+        if (x.className === "topnav") {
+            x.className = "ui vertical text menu"
+            x.style.cssText = "margin-left: 60px;"
+        } else {
+          x.className = "topnav";
+          x.style.cssText = "margin-left: 0px;"
+        }
+      }
+
     render() {
         const {functionLoad, questionMap} = this.state
         let newMap = []
@@ -130,10 +141,15 @@ export class DiseaseForm extends React.Component {
                         }
         return (
             <div>
-                <Menu tabular attached={this.props.attached}>
-                    <Container style={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
-                         {this.props.diseaseTabs}
-                    </Container>
+                <Menu tabular>
+                    <div className="topnav" id='hpinav'> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+                        <Container style={{alignItems: 'center', justifyContent: 'center', display: 'flex', width: "100%", height: "100%", overflowX: 'auto'}}>
+                            {this.props.diseaseTabs}
+                        </Container>
+                        <a href="javascript:void(0);" className="icon" onClick={this.myFunction}>
+                            <i className="fa fa-bars"></i>
+                        </a>
+                    </div>
                 </Menu>
                 
                 <h1 style={{marginLeft: 30}}> {this.props.category} </h1>
