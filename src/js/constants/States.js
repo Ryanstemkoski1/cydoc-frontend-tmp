@@ -45,7 +45,7 @@ export const physicalExam = {
         "Vitals": {"Systolic Blood Pressure": 0, "Diastolic Blood Pressure": 0, "Heart Rate": 0, "RR": 0, "Temperature": 0, "Oxygen Saturation": 0},
         "General": {"Height": 0, "Weight": 0},
         "Head": {"Normocephalic": false, "Atraumatic": false, "Abnormal Findings": ""},
-        "Eyes": {"PERRLA": false, "Sclera aniteric": false, "No redness": false, "No discharge": false, "EOMI": false, "Visual acuity intact": false, "Visual fields normal": false, "Fundoscopy": "", "Abnormal Findings": ""},
+        "Eyes": {"PERRLA": false, "Sclera anicteric": false, "No redness": false, "No discharge": false, "EOMI": false, "Visual acuity intact": false, "Visual fields normal": false, "Fundoscopy": "", "Abnormal Findings": ""},
         "Ears": {"Normal auditory acuity": false, "Normal Rinne": false, "Normal Weber": false, "Otoscopy": "", "Abnormal Findings": ""},
         "Nose/Throat": {"Oropharynx Clear": false, "MMM": false, "Tongue pink and moist": false, "Tongue protrudes midline": false, "Symmetric palate elevation": false, "Normal swallowing": false, "Normal phonation": false, "Internal/External Nose": "", "Abnormal Findings": ""},
         "Neck": {"Supple": false, "No Thyromegaly": false, "No Lymphadenopathy": false, "Abnormal Findings": ""},
