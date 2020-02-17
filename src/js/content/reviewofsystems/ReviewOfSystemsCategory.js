@@ -17,8 +17,9 @@ export default class ReviewOfSystemsCategory extends Component{
     }
 
     handleChange = (option, value) => {
-        this.setState({[option]: value})
-        this.context["Review of Systems"][this.category][option] = value
+        const values = this.context["Review of Systems"]
+        values[this.category][option] = value
+        this.context.onContextChange("Review of Systems", values)
     }
 
     render() {
@@ -30,13 +31,13 @@ export default class ReviewOfSystemsCategory extends Component{
                     option => 
                         <Grid.Row>
                             <Grid.Column>
-                                <Button floated='left' color={this.state[option] === 'y' ? 'green' : null} radio value='y' active={this.state[option] === 'y'} onClick={(e, {value}) => this.handleChange(option, value)}>YES</Button>
+                                <Button floated='left' color={this.context["Review of Systems"][this.category][option] === 'y' ? 'green' : null} radio value='y' active={this.context["Review of Systems"][this.category][option] === 'y'} onClick={(e, {value}) => this.handleChange(option, value)}>YES</Button>
                             </Grid.Column>
                             <Grid.Column verticalAlign='middle'>
                                 {option}
                             </Grid.Column>
                             <Grid.Column>
-                                <Button floated='right' color={this.state[option] === 'n' ? 'red' : null} radio value='n' active={this.state[option] === 'n'} onClick={(e, {value}) => this.handleChange(option, value)}>NO</Button>
+                                <Button floated='right' color={this.context["Review of Systems"][this.category][option] === 'n' ? 'red' : null} radio value='n' active={this.context["Review of Systems"][this.category][option] === 'n'} onClick={(e, {value}) => this.handleChange(option, value)}>NO</Button>
                             </Grid.Column>
                         </Grid.Row>
                     )}

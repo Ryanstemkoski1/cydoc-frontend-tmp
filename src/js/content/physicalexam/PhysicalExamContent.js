@@ -36,7 +36,7 @@ export default class PhysicalExamContent extends React.Component {
                                                 <label>systolic</label>
                                             </Form.Field>
                                             <Form.Field inline>
-                                                <Input style={{ width: "100px" }} />
+                                                <Input min={0} style={{ width: "100px" }} name="Diastolic Blood Pressure" onChange={(e, {name, value}) => this.handleChange(category,name,value)}/>
                                                 <label>diastolic</label>
                                             </Form.Field>
                                         </Grid.Column>

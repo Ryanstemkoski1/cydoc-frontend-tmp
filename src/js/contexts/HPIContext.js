@@ -1,6 +1,6 @@
 import React from 'react'
 import constants from '../constants/constants';
-import {allergies, medications, surgicalHistory, reviewOfSystems} from '../constants/States'
+import {allergies, medications, surgicalHistory, reviewOfSystems, physicalExam} from '../constants/States'
 
 const Context = React.createContext('yasa')
 
@@ -14,6 +14,7 @@ export class HPIStore extends React.Component {
         "Family History": constants.FAMILY_HISTORY.STATE,
         "Social History": constants.SOCIAL_HISTORY.STATE,
         "Review of Systems": reviewOfSystems.state,
+        "Physical Exam": physicalExam.state,
         hpi: {}
      }
 
