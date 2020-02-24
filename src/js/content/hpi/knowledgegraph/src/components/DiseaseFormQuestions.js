@@ -6,17 +6,15 @@ class DiseaseFormQuestions extends React.Component {
         super()
         this.state = {
             parent: ''
-        }
-        // this.handler = this.handler.bind(this)
-    }
-
-    // handler(value, id, child) {
-    //     return this.props.handler(value, id, this.props.category_code, this.props.uid, this.props.question,
-    //         this.props.current_node, child, this.props.category, this.props.responseType)
-    // }
+        } 
+    } 
 
     render() {
         let question = this.props.question
+        let symptom = question.search("SYMPTOM")
+        if (symptom > -1) {
+            question = question.substring(0,symptom) + this.props.category.toLowerCase() + question.substring(symptom+7)
+        }
         let response_choice = ''
         const {responseType} = this.props
         if (responseType === "CLICK-BOXES" || responseType.slice(-3,responseType.length) === 'POP') {
@@ -49,9 +47,7 @@ class DiseaseFormQuestions extends React.Component {
                     handler={this.handler}
                     notLast={this.props.notLast}
                     children={this.props.children}
-                    accordion={this.props.accordion}
-                    // answers={this.props.responseDict[this.props.uid] !== undefined ?
-                    //     this.props.responseDict[this.props.uid]['response'] : null }
+                    accordion={this.props.accordion} 
                     category_code = {this.props.category_code}
                     uid = {this.props.uid}
                 />
