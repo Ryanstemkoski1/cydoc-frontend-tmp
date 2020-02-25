@@ -172,7 +172,7 @@ export default class PhysicalExamContent extends React.Component {
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Grid.Column>
-                                        <SelectAllButton>
+                                        <SelectAllButton handleClick={this.handleClick}>
                                             {this.generateButton(category, "EOMI")}
                                             {this.generateButton(category, "Visual acuity intact")}
                                             {this.generateButton(category, "Visual fields normal")}
@@ -224,7 +224,7 @@ export default class PhysicalExamContent extends React.Component {
                             <Grid columns="equal">
                                 <Grid.Row>
                                     <Grid.Column>
-                                        <SelectAllButton>
+                                        <SelectAllButton handleClick={this.handleClick}>
                                             {this.generateButton(category, "Oropharynx Clear")}
                                             {this.generateButton(category, "MMM")}
                                             {this.generateButton(category, "Tongue pink and moist")}
@@ -243,8 +243,10 @@ export default class PhysicalExamContent extends React.Component {
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "Normal swallowing")}
-                                        {this.generateButton(category, "Normal phonation")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "Normal swallowing")}
+                                            {this.generateButton(category, "Normal phonation")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
@@ -263,9 +265,11 @@ export default class PhysicalExamContent extends React.Component {
                             <Grid columns="equal">
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "Supple")}
-                                        {this.generateButton(category, "No Thyromegaly")}
-                                        {this.generateButton(category, "No lymphadenopathy")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "Supple")}
+                                            {this.generateButton(category, "No Thyromegaly")}
+                                            {this.generateButton(category, "No lymphadenopathy")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
@@ -279,8 +283,10 @@ export default class PhysicalExamContent extends React.Component {
                             <Grid columns="equal">
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "CTAB")}
-                                        {this.generateButton(category, "No wheezes, rales, or rhonchi")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "CTAB")}
+                                            {this.generateButton(category, "No wheezes, rales, or rhonchi")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
@@ -309,18 +315,22 @@ export default class PhysicalExamContent extends React.Component {
                             <Grid columns="equal">
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "RRR")}
-                                        {this.generateButton(category, "Normal S1, S2")}
-                                        {this.generateButton(category, "No murmurs")}
-                                        {this.generateButton(category, "No rubs")}
-                                        {this.generateButton(category, "No gallops")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "RRR")}
+                                            {this.generateButton(category, "Normal S1, S2")}
+                                            {this.generateButton(category, "No murmurs")}
+                                            {this.generateButton(category, "No rubs")}
+                                            {this.generateButton(category, "No gallops")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "Normal PMI")}
-                                        {this.generateButton(category, "No bruits")}
-                                        {this.generateButton(category, "Normal JVP")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "Normal PMI")}
+                                            {this.generateButton(category, "No bruits")}
+                                            {this.generateButton(category, "Normal JVP")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
@@ -334,9 +344,11 @@ export default class PhysicalExamContent extends React.Component {
                             <Grid columns="equal">
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "Normal brachial")}
-                                        {this.generateButton(category, "Normal radial")}
-                                        {this.generateButton(category, "Normal ulnar")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "Normal brachial")}
+                                            {this.generateButton(category, "Normal radial")}
+                                            {this.generateButton(category, "Normal ulnar")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
@@ -355,28 +367,36 @@ export default class PhysicalExamContent extends React.Component {
                             <Grid columns="equal">
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "Normal bowel sounds")}
-                                        {this.generateButton(category, "No bruits")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "Normal bowel sounds")}
+                                            {this.generateButton(category, "No bruits")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "No hepatomegaly")}
-                                        {this.generateButton(category, "No splenomegaly")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "No hepatomegaly")}
+                                            {this.generateButton(category, "No splenomegaly")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "Soft")}
-                                        {this.generateButton(category, "Nontender")}
-                                        {this.generateButton(category, "Nondistended")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "Soft")}
+                                            {this.generateButton(category, "Nontender")}
+                                            {this.generateButton(category, "Nondistended")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "No rebounding")}
-                                        {this.generateButton(category, "No guarding")}
-                                        {this.generateButton(category, "No masses")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "No rebounding")}
+                                            {this.generateButton(category, "No guarding")}
+                                            {this.generateButton(category, "No masses")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
@@ -390,9 +410,11 @@ export default class PhysicalExamContent extends React.Component {
                             <Grid columns="equal">
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "No dubbing")}
-                                        {this.generateButton(category, "No cyanosis")}
-                                        {this.generateButton(category, "No nail changes")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "No dubbing")}
+                                            {this.generateButton(category, "No cyanosis")}
+                                            {this.generateButton(category, "No nail changes")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
@@ -411,16 +433,20 @@ export default class PhysicalExamContent extends React.Component {
                             <Grid columns="equal">
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "Normal biceps")}
-                                        {this.generateButton(category, "Normal brachioradials")}
-                                        {this.generateButton(category, "Normal triceps")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "Normal biceps")}
+                                            {this.generateButton(category, "Normal brachioradials")}
+                                            {this.generateButton(category, "Normal triceps")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "Normal patellar")}
-                                        {this.generateButton(category, "Normal ankle jerk")}
-                                        {this.generateButton(category, "Normal plantar")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "Normal patellar")}
+                                            {this.generateButton(category, "Normal ankle jerk")}
+                                            {this.generateButton(category, "Normal plantar")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
@@ -434,22 +460,27 @@ export default class PhysicalExamContent extends React.Component {
                             <Grid columns="equal">
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "Warm and dry")}
-                                        {this.generateButton(category, "No visible lesions")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "Normal patellar")}
+                                            {this.generateButton(category, "Normal ankle jerk")}
+                                            {this.generateButton(category, "Normal plantar")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "No tenting")}
-                                        {this.generateButton(category, "Normal turgor")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "No tenting")}
+                                            {this.generateButton(category, "Normal turgor")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                             </Grid>
                         }
                     </MyContext.Consumer>
                 </PhysicalExamGroup>
-            </Fragment >
+            </Fragment>
         )
     }
-        
+
 }
