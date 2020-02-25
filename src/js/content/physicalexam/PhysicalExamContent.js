@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Divider, Header, Form, Grid, Input, Button } from "semantic-ui-react";
 import PhysicalExamGroup from './PhysicalExamGroup';
 import { MyContext } from './PhysicalExamGroup';
+import SelectAllButton from './SelectAllButton'
 import HPIContext from '../../contexts/HPIContext';
 //import NumericInput from 'react-numeric-input';
 
@@ -9,6 +10,12 @@ import HPIContext from '../../contexts/HPIContext';
 export default class PhysicalExamContent extends React.Component {
 
     static contextType = HPIContext
+
+    constructor(props) {
+        super(props)
+        this.handleChange = this.handleChange.bind(this)
+        this.handleClick = this.handleClick.bind(this)
+    }
 
     handleClick = (category, name, value) => {
         const values = this.context["Physical Exam"]
@@ -50,8 +57,10 @@ export default class PhysicalExamContent extends React.Component {
         return (
             <Button
                 toggle
+                ref={React.createRef()}
                 content={name}
                 name={name}
+                category={category}
                 active={this.context["Physical Exam"][category][name]}
                 onClick={(e, { name, active }) => this.handleChange(category, name, !active)} />
         )
@@ -154,16 +163,20 @@ export default class PhysicalExamContent extends React.Component {
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "Sclera anicteric")}
-                                        {this.generateButton(category, "No redness")}
-                                        {this.generateButton(category, "No discharge")}
+                                        <SelectAllButton handleClick={this.handleClick}>
+                                            {this.generateButton(category, "Sclera anicteric")}
+                                            {this.generateButton(category, "No redness")}
+                                            {this.generateButton(category, "No discharge")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "EOMI")}
-                                        {this.generateButton(category, "Visual acuity intact")}
-                                        {this.generateButton(category, "Visual fields normal")}
+                                        <SelectAllButton>
+                                            {this.generateButton(category, "EOMI")}
+                                            {this.generateButton(category, "Visual acuity intact")}
+                                            {this.generateButton(category, "Visual fields normal")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
@@ -211,9 +224,11 @@ export default class PhysicalExamContent extends React.Component {
                             <Grid columns="equal">
                                 <Grid.Row>
                                     <Grid.Column>
-                                        {this.generateButton(category, "Oropharynx Clear")}
-                                        {this.generateButton(category, "MMM")}
-                                        {this.generateButton(category, "Tongue pink and moist")}
+                                        <SelectAllButton>
+                                            {this.generateButton(category, "Oropharynx Clear")}
+                                            {this.generateButton(category, "MMM")}
+                                            {this.generateButton(category, "Tongue pink and moist")}
+                                        </SelectAllButton>
                                     </Grid.Column>
                                 </Grid.Row>
                                 <Grid.Row>
