@@ -1,6 +1,6 @@
 import React from 'react'
 import constants from '../constants/constants';
-import {allergies, medications, surgicalHistory} from '../constants/States'
+import {allergies, medications, surgicalHistory, reviewOfSystems, physicalExam} from '../constants/States'
 
 const Context = React.createContext('yasa')
 
@@ -13,14 +13,15 @@ export class HPIStore extends React.Component {
         "Medical History": constants.MEDICAL_HISTORY.STATE,
         "Family History": constants.FAMILY_HISTORY.STATE,
         "Social History": constants.SOCIAL_HISTORY.STATE,
+        "Review of Systems": reviewOfSystems.state,
+        "Physical Exam": physicalExam.state,
         "positivediseases": [],
         "activeHPI": "",
         "positivecategories": [],
         hpi: {},
         "plan": {},
-        step: 1,
-        "Review of Systems": {}
-     }
+        step: 1
+    }
 
     onContextChange = (name, values) => { 
         this.setState({[name]: values});

@@ -25,7 +25,8 @@ class ConnectedMenuTabs extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            textInput: "Untitled"
+            textInput: "Untitled",
+            isTitleFocused: true
         }
         this.handleItemClick =  this.handleItemClick.bind(this)
         this.handleSave = this.handleSave.bind(this)
@@ -77,15 +78,26 @@ class ConnectedMenuTabs extends Component {
             <Fragment>
                 <Menu secondary attached borderless style={{border: "white"}}>
                     <Container>
-                        <Menu.Item>{this.props.currentNote}</Menu.Item>
-                        <Menu.Item style={{width: '100%'}}>
+                        <Menu.Item >
                                 <Input
-                                className="ui input transparent"
+                                className={this.state.isTitleFocused === true ? "ui input focus" : "ui input transparent"}
                                 type='text'
-                                placeholder="Untitled"
+                                placeholder="Untitled Note"
                                 style={{fontSize: 16, marginBottom: 5, outline: 'none'}}
                                 onChange={this.handleInputChange}
-                                value={this.state.textInput} 
+                                onFocus={()=>{
+                                    this.setState({isTitleFocused: true})
+                                    if (this.context['title'] == "Untitled Note") {
+                                        this.context.onContextChange("title", "")
+                                    }
+                                }}
+                                onBlur={()=>{
+                                    this.setState({isTitleFocused: false})
+                                    if (this.context['title'] == '') {
+                                        this.context.onContextChange("title", "Untitled Note")
+                                    }
+                                }}
+                                value={this.context['title']} 
                                 />
                         </Menu.Item>
                     </Container>
