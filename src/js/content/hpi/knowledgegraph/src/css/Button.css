@@ -32,6 +32,10 @@
     margin-right: 8px;
 }
 
+.button_yesno:hover { 
+    background-color: lightslategrey !important;
+}
+
 .button_question {
     border-radius: 25px;
     background-color: whitesmoke;
@@ -45,14 +49,14 @@
 }
 
 .button_question:hover {
-    background-color: #E6F1F6;
+    background-color: lightslategrey !important;
 }
 
 .tag_text {
     border-radius: 25px;
-    background-color: white;
-    border: solid 0.5px rgb(182, 181, 181);
-    color: #8b8b8b;
+    background-color: whitesmoke;
+    border: none;
+    /* color: #8b8b8b; */
     font-size: 14px;
     padding: 3px 9px;
     margin-right: 5px;
@@ -63,7 +67,7 @@
 }
 
 .tag_text:hover {
-    background-color: rgb(240, 247, 250) !important;
+    background-color: lightslategrey !important;
 }
 
 .field {

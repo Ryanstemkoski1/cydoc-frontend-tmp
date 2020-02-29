@@ -4,6 +4,7 @@ import DiseaseFormQuestions from "./DiseaseFormQuestions";
 import '../css/App.css';
 import DiseasesNames from './data/DiseasesNames';
 import HPIContext from "../../../../../contexts/HPIContext";
+import Accordian from "./accordian"
 
 //The order goes DiseaseForm -> DiseaseFormQuestions -> QuestionAnswer -> ButtonTag
 
@@ -59,7 +60,7 @@ export class DiseaseForm extends React.Component {
                         category={category}
                         uid={uid}
                         notLast={true}
-                        children={children}
+                        has_children={children}
                         current_node={current_node}
                         category_code = {tab_category}
                     />
@@ -71,8 +72,7 @@ export class DiseaseForm extends React.Component {
                         'category_name': category,
                         'question': nodes[current_node]['text'],
                         'response': "",
-                        'response_type': "",
-                        'display_children': false,
+                        'response_type': ''
                     }
                     this.context.onContextChange("hpi", values)
                 }
@@ -80,6 +80,10 @@ export class DiseaseForm extends React.Component {
                 if (children) {
                     questionMap[uid]['display_children'] = false
                     questionMap[uid]['children'] = {}
+                    values[tab_category][uid]['display_children'] = false
+                    values[tab_category][uid]['children'] = {}
+                    let first_node = (edges[current_node_values[0]]['from']).substring(0,3) + "0001"
+                    questionMap[uid]['children_category'] = nodes[first_node]['category']
                     for (var new_index in current_node_values) {
                         // the first edge index from the first child
                         let new_edge_index = current_node_values[new_index].toString()
@@ -91,24 +95,24 @@ export class DiseaseForm extends React.Component {
                                     question={nodes[new_current_node]['text']}
                                     responseType={nodes[new_current_node]['responseType']}
                                     category={category}
-                                    uid={nodes[new_current_node][uid]}
+                                    uid={uid}
+                                    child_uid={nodes[new_current_node]['uid']}
                                     notLast={true}
                                     current_node={current_node}
                                     category_code = {tab_category}
+                                    am_child={true}
                         />
-                    }
+                    } 
                     let values = this.context['hpi']
-                    if (!([nodes[new_current_node][uid]] in values[tab_category])) {
-                        values[tab_category][nodes[new_current_node][uid]] = {
-                            'category': tab_category,
-                            'category_name': category,
-                            'question': nodes[new_current_node]['text'],
-                            'response': "",
-                            'response_type': "",
-                            'display_children': false
-                            }
-                            this.context.onContextChange("hpi", values) 
-                    } } } }
+                    values[tab_category][uid]['children'][nodes[new_current_node]['uid']] = {
+                        'category': tab_category,
+                        'category_name': category,
+                        'question': nodes[new_current_node]['text'],
+                        'response': "",
+                        'response_type': ""
+                        }
+                        this.context.onContextChange("hpi", values) 
+                    } } }
         this.setState({questionMap: questionMap, functionLoad: true})
     }
 
@@ -125,6 +129,7 @@ export class DiseaseForm extends React.Component {
 
     render() {
         const {functionLoad, questionMap} = this.state
+        const {tab_category} = this.props
         let newMap = []
         if (functionLoad) {
             for (const uid in questionMap) {
@@ -132,11 +137,19 @@ export class DiseaseForm extends React.Component {
                 let question = current_value['question']
                 newMap.push(question)
                 if (this.context["hpi"][this.props.tab_category][uid]['display_children']) {
-                    if (current_value['children']['type']) newMap.push(current_value['children'])
-                        else {
-                            for (const child_node in current_value['children']) {
-                                newMap.push(current_value['children'][child_node]['question']) }
-                         } }
+                    if (current_value['children']['type']) {
+                        newMap.push(current_value['children'])
+                }
+                    if (tab_category !== current_value['children_category']) {
+                        newMap.push(
+                        <Accordian 
+                            current_children={current_value['children']} 
+                            category={current_value['children_category']}
+                        />)
+                    }
+                    else {
+                        for (const child_node in current_value['children']) {
+                            newMap.push(current_value['children'][child_node]['question']) }} }
                 }
                         }
         return (

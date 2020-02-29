@@ -22,14 +22,22 @@ class QuestionAnswer extends React.Component {
             input: ""
         } 
         const values = this.context["hpi"]
-        if (values[this.props.category_code][this.props.uid]["response"] === "") {
-            values[this.props.category_code][this.props.uid]["response_type"] = this.props.responseType
-            if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
-                values[this.props.category_code][this.props.uid]["response"] = []
-            }
-            this.context.onContextChange("hpi", values)
-        }
-    } 
+        // Specifies whether the response type will be '' or [] form
+        if (this.props.am_child) {
+            if (values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] === "") {
+                values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response_type'] = this.props.responseType 
+                if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
+                    values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = []
+                } this.context.onContextChange("hpi", values) } }
+        else {
+            if (values[this.props.category_code][this.props.uid]["response"]=== "") {
+                values[this.props.category_code][this.props.uid]["response_type"] = this.props.responseType
+                if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
+                    values[this.props.category_code][this.props.uid]["response"] = []
+                }
+                this.context.onContextChange("hpi", values)
+            } 
+    } }
 
     onChange = date => this.setState({ date })
 
@@ -39,12 +47,15 @@ class QuestionAnswer extends React.Component {
         if (responseType === "YES-NO") {
             button_map.push(
                 <YesNo
-                    key={this.props.question} 
-                    children={this.props.children} 
+                    key={this.props.question}
                     uid={this.props.uid}
                     category_code = {this.props.category_code}
+                    has_children = {this.props.has_children}
+                    am_child={this.props.am_child}
+                    child_uid={this.props.child_uid}
                 />
             )
+            console.log(this.context['hpi'])
         }
         else if (responseType === "SHORT-TEXT") {
             button_map.push(<HandleInput key={this.props.question} 
@@ -52,6 +63,8 @@ class QuestionAnswer extends React.Component {
                                          answers={this.props.answers}
                                          uid={this.props.uid}
                                          category_code = {this.props.category_code}
+                                         am_child={this.props.am_child}
+                                         child_uid={this.props.child_uid}
                                           />)
         }
         else if (responseType === 'TIME') {
@@ -59,6 +72,8 @@ class QuestionAnswer extends React.Component {
                                        answers={this.props.answers}
                                        uid={this.props.uid}
                                        category_code = {this.props.category_code}
+                                       am_child={this.props.am_child}
+                                       child_uid={this.props.child_uid}
                                         />)
         }
         else if (responseType === 'LIST-TEXT') {
@@ -67,6 +82,8 @@ class QuestionAnswer extends React.Component {
                                          answers={this.props.answers}
                                          uid={this.props.uid}
                                          category_code = {this.props.category_code}
+                                         am_child={this.props.am_child}
+                                         child_uid={this.props.child_uid}
                                           />
                                           )
         }
@@ -76,10 +93,11 @@ class QuestionAnswer extends React.Component {
                 <ButtonTag
                     key={item}
                     name={item} 
-                    children={this.props.children}
                     answers={this.props.answers}
                     uid={this.props.uid}
                     category_code = {this.props.category_code}
+                    am_child={this.props.am_child}
+                    child_uid={this.props.child_uid}
                 />
             )
         }
@@ -90,6 +108,8 @@ class QuestionAnswer extends React.Component {
                 max={120}
                 uid={this.props.uid}
                 category_code = {this.props.category_code}
+                am_child={this.props.am_child}
+                child_uid={this.props.child_uid}
             /> )}
         else if (responseType === "NUMBER") {
             button_map.push(<HandleNumericInput
@@ -98,6 +118,8 @@ class QuestionAnswer extends React.Component {
                 max={10}
                 uid={this.props.uid}
                 category_code = {this.props.category_code}
+                am_child={this.props.am_child}
+                child_uid={this.props.child_uid}
             />)
         }
         else if (responseType === "FH-POP") {
@@ -128,9 +150,7 @@ class QuestionAnswer extends React.Component {
         }
         if (this.props.accordion) {
             return (
-                <div>
-                <div style={{marginLeft: 135}}> {this.props.question} <div style={{marginTop: 7}}>{button_map}</div> </div>
-                </div>
+                <div>{this.props.question} <div style={{marginTop: 7}}>{button_map}</div> </div>
             )
         }
         return (

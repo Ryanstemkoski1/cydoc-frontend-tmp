@@ -23,7 +23,8 @@ class PositiveDiseases extends Component {
             <button
                 className="tag_text"
                 style={{
-                    backgroundColor: "#E6F1F6"
+                    backgroundColor: "lightslategrey",
+                    color: "white"
                 }}
                 onClick={this.handleClick}
             >
