@@ -156,7 +156,7 @@ export class DiseaseForm extends React.Component {
             <div>
                 <Menu tabular>
                     <div className="topnav" id='hpinav'> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-                        <Container style={{alignItems: 'center', justifyContent: 'center', display: 'flex', width: "100%", height: "100%", overflowX: 'auto'}}>
+                        <Container style={{alignItems: 'center', display: 'flex', height: "100%", overflowX: 'auto'}}>
                             {this.props.diseaseTabs}
                         </Container>
                         <a href="javascript:void(0);" className="icon" onClick={this.myFunction}>
