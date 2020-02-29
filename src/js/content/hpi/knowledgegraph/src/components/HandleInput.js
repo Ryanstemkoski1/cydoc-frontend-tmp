@@ -1,13 +1,13 @@
 import React from 'react'
 import {Input, Form} from "semantic-ui-react";
 import HPIContext from "../../../../../contexts/HPIContext";
-import listText from "./listText"
 
 class HandleInput extends React.Component {
     static contextType = HPIContext 
     constructor(props, context) {
         super(props, context)
-        const answers = this.context["hpi"][this.props.category_code][this.props.uid]["response"]
+        const values = this.context["hpi"][this.props.category_code][this.props.uid]
+        const answers = this.props.am_child ? values['children'][this.props.child_uid]['response'] : values["response"]
         this.state = {
             textInput: answers !== null ? answers: ''
         }
@@ -17,7 +17,8 @@ class HandleInput extends React.Component {
     handleInputChange = (event) => { 
         this.setState({textInput: event.target.value})
         const values = this.context["hpi"]
-        values[this.props.category_code][this.props.uid]["response"] = event.target.value
+        if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = event.target.value 
+        else values[this.props.category_code][this.props.uid]["response"] = event.target.value
         this.context.onContextChange("hpi", values)
     }
 

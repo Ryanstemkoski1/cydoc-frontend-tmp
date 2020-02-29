@@ -2,11 +2,8 @@ import React from 'react'
 import QuestionAnswer from "./QuestionAnswer";
 
 class DiseaseFormQuestions extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            parent: ''
-        } 
+    constructor(props) {
+        super(props)
     } 
 
     render() {
@@ -37,19 +34,19 @@ class DiseaseFormQuestions extends React.Component {
         } else if (responseType === "YES-NO") {
             response_choice = ["Yes", "No"]
         } else response_choice = []
-
         return (
-            <div style={{marginTop: 30, marginLeft: this.props.accordion ? 23:0}}>
+            <div style={{marginTop: 30, marginLeft: this.props.am_child ? 23:0}}>
                 <QuestionAnswer
                     question={question}
                     responseType={this.props.responseType}
                     response_choice={response_choice}
                     handler={this.handler}
                     notLast={this.props.notLast}
-                    children={this.props.children}
-                    accordion={this.props.accordion} 
+                    has_children={this.props.has_children} 
                     category_code = {this.props.category_code}
                     uid = {this.props.uid}
+                    child_uid = {this.props.child_uid}
+                    am_child={this.props.am_child}
                 />
             </div>
         )

@@ -21,13 +21,15 @@ class DiseaseTag extends React.Component {
     }
 
     render() {
-        let color = this.context['positivediseases'].indexOf(this.props.name) > -1 ? "#E6F1F6" : "white"
+        let color = this.context['positivediseases'].indexOf(this.props.name) > -1 ? "lightslategrey" : "whitesmoke"
+        let font_color = this.context['positivediseases'].indexOf(this.props.name) > -1 ? "white" : "black"
         return (
             <button
                 className="tag_text"
                 style={{
                     display: !this.props.name && "none",
-                    backgroundColor: color 
+                    backgroundColor: color,
+                    color: font_color
                 }}
                 onClick={this.handleClick}
             >
