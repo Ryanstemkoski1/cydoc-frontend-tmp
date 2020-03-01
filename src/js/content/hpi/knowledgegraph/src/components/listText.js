@@ -2,7 +2,7 @@ import React from 'react'
 import {Input, Form} from "semantic-ui-react";
 import HPIContext from "../../../../../contexts/HPIContext";
 
-class listInput extends React.Component {
+class listText extends React.Component {
     static contextType = HPIContext 
     constructor(props, context) {
         super(props, context)
@@ -22,14 +22,10 @@ class listInput extends React.Component {
 
     render() {
         return (
-            <Form>
-                <Input 
-                    type='text'
-                    onChange={this.handleInputChange}
-                    value={this.state.textInput}
-                /> 
-            </Form>
+            <div> 
+                <h3 id="List Text"> Hello </h3>
+            </div>
             )}
     }
 
-export default listInput
+export default listText

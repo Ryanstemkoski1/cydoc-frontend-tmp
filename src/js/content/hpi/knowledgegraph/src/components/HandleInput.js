@@ -14,7 +14,7 @@ class HandleInput extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-    handleInputChange = (event) => { 
+    handleInputChange = (event) => {
         this.setState({textInput: event.target.value})
         const values = this.context["hpi"]
         if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = event.target.value 
