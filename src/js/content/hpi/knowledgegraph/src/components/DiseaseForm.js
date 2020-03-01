@@ -80,7 +80,6 @@ export class DiseaseForm extends React.Component {
                 if (children) {
                     questionMap[uid]['display_children'] = false
                     questionMap[uid]['children'] = {}
-                    values[tab_category][uid]['display_children'] = false
                     values[tab_category][uid]['children'] = {}
                     let first_node = (edges[current_node_values[0]]['from']).substring(0,3) + "0001"
                     questionMap[uid]['children_category'] = nodes[first_node]['category']

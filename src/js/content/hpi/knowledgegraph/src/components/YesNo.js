@@ -25,7 +25,7 @@ class YesNo extends React.Component {
         if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = "Yes"
         else {
             values[this.props.category_code][this.props.uid]["response"] = "Yes"
-            values[this.props.category_code][this.props.uid]["display_children"] = this.props.has_children 
+            if (this.props.has_children) values[this.props.category_code][this.props.uid]["display_children"] = true
         }
         this.context.onContextChange("hpi", values)
     }

@@ -28,22 +28,19 @@ class QuestionAnswer extends React.Component {
                 values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response_type'] = this.props.responseType 
                 if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
                     values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = []
-                } this.context.onContextChange("hpi", values) } }
-        else {
+                } } }
+        else { 
             if (values[this.props.category_code][this.props.uid]["response"]=== "") {
                 values[this.props.category_code][this.props.uid]["response_type"] = this.props.responseType
                 if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
                     values[this.props.category_code][this.props.uid]["response"] = []
-                }
-                this.context.onContextChange("hpi", values)
-            } } }
-
-    onChange = date => this.setState({ date })
+                } } }
+            this.context.onContextChange("hpi", values) } 
 
     render() {
         let button_map = []
         const {responseType} = this.props
-        if (responseType === "YES-NO") {
+        if (responseType === "YES-NO" || responseType === "NO-YES") {
             button_map.push(
                 <YesNo
                     key={this.props.question}

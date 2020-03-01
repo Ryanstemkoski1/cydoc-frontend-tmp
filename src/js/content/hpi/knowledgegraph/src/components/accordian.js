@@ -1,5 +1,6 @@
 import React, {Component} from "react"
 import { Accordion, Icon } from 'semantic-ui-react'
+import DiseaseFormQuestions from "./DiseaseFormQuestions";
 
 export default class Accordian extends Component {
     // accordion is collapsed by default
@@ -20,7 +21,7 @@ export default class Accordian extends Component {
       for (var child_node in current_children) {
           let child_question = current_children[child_node]['question']
           child_questions.push(child_question)
-      }
+        } 
     return (
         <Accordion style={{marginBottom: 35}}>
             <Accordion.Title 

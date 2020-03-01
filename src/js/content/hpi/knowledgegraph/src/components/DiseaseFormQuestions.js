@@ -31,7 +31,7 @@ class DiseaseFormQuestions extends React.Component {
             for (let response_index in response_choice) {
                 response_choice[response_index] = response_choice[response_index].trim()
             }
-        } else if (responseType === "YES-NO") {
+        } else if (responseType === "YES-NO" || responseType==="NO-YES") {
             response_choice = ["Yes", "No"]
         } else response_choice = []
         return (
