@@ -18,6 +18,7 @@ export default class MedicationsContent extends Component {
                     tableBodyPlaceholders={medications.fields}
                     values={context["Medications"]}
                     onTableBodyChange={context.onContextChange.bind(context, "Medications")}
+                    pop={true}
                 />
                 )
             }}

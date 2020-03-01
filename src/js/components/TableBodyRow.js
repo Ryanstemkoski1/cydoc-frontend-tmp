@@ -6,7 +6,6 @@ import PropTypes from "prop-types";
 export class TableBodyRow extends Component {
     render() {
         const {values, rowindex, onTableBodyChange} = this.props;
-
         //returns a Table.Row with a cell for each item in tableBodyPlaceholders
         return (
             <Table.Row>

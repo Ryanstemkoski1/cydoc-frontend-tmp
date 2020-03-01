@@ -4,7 +4,7 @@ import HPIContext from "../../contexts/HPIContext"
 export default class GenerateNote extends Component { 
     static contextType = HPIContext
     generate_table(item) {
-        var none = true 
+        var none = true
         var table = "<h3>" + item + ": </h3><table style='width:100%'> <tr>"
         var headers = Object.keys(this.context[item][0])
         for (var header_index in headers) {
@@ -15,7 +15,7 @@ export default class GenerateNote extends Component {
         for (var index in this.context[item]) {
             var values = Object.values(this.context[item][index])
             for (var value_index in values) {
-                if (values[value_index] !== "") none = false 
+                if (values[value_index].trim() !== "") none = false 
                 table += (" <td> " + values[value_index] + "</td> ")
             }
             table += " </tr> <tr> "

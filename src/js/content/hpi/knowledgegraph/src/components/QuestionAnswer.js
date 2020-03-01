@@ -133,15 +133,13 @@ class QuestionAnswer extends React.Component {
         else if (responseType === "MEDS-BLANK") {
             button_map.push(<MedicationsContent
                 key={this.props.question}
-                response_choice={this.props.response_choice}
-                answers={this.props.answers}
+                pop={true}
             />)
         }
         else if (responseType === "PSH-BLANK") {
             button_map.push(<SurgicalHistoryContent
                 key={this.props.question}
-                response_choice={this.props.response_choice}
-                answers={this.props.answers}
+                pop={true}
             />)
         }
         if (this.props.accordion) {
