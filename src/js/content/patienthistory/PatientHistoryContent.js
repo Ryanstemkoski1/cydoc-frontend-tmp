@@ -51,7 +51,7 @@ export default class PatientHistoryContent extends Component {
             <div>
                 <Menu tabular> 
                     <div className="topnav" id='patientnav'> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-                        <Container style={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+                        <Container style={{alignItems: 'center', display: 'flex'}}>
                             {tabs}
                         </Container> 
                         <a href="javascript:void(0);" className="icon" onClick={this.myFunction}>

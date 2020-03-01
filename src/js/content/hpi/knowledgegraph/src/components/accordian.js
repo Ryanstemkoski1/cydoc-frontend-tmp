@@ -23,7 +23,7 @@ export default class Accordian extends Component {
       }
     return (
         <Accordion style={{marginBottom: 35}}>
-            <Accordion.Title style={{marginLeft: 123}}
+            <Accordion.Title 
               active={activeIndex === 0}
               index={0}
               onClick={this.handleClick}

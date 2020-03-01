@@ -4,7 +4,7 @@ import HPIContext from "../../contexts/HPIContext"
 export default class GenerateNote extends Component { 
     static contextType = HPIContext
     generate_table(item) {
-        var none = true 
+        var none = true
         var table = "<h3>" + item + ": </h3><table style='width:100%'> <tr>"
         var headers = Object.keys(this.context[item][0])
         for (var header_index in headers) {
@@ -15,7 +15,7 @@ export default class GenerateNote extends Component {
         for (var index in this.context[item]) {
             var values = Object.values(this.context[item][index])
             for (var value_index in values) {
-                if (values[value_index] !== "") none = false 
+                if (values[value_index].trim() !== "") none = false 
                 table += (" <td> " + values[value_index] + "</td> ")
             }
             table += " </tr> <tr> "
@@ -106,6 +106,29 @@ export default class GenerateNote extends Component {
         } 
     }
 
+    physical_exam() {
+        var none = true 
+        var physical_exam = ""
+        for (var item in this.context["Physical Exam"]) {
+            var display = false 
+            var display_string = ("<div>" + item + ": ")
+            for (var value in this.context["Physical Exam"][item]) {
+                if (this.context["Physical Exam"][item][value] && this.context["Physical Exam"][item][value] !== 0 && this.context["Physical Exam"][item][value] !== '0') {
+                    if (this.context["Physical Exam"][item][value] === true) display_string += (value + ", ")
+                    else display_string += (value + ": " + this.context["Physical Exam"][item][value] + ", ")
+                    none = false 
+                    display = true 
+                }
+            }
+            display_string = display_string.slice(0, display_string.length-2)
+            if (display) physical_exam += display_string + "</div>"
+        }
+        if (document.getElementById("Physical Exam") != null) {
+            if (none) document.getElementById("Physical Exam").innerHTML = ""
+            else document.getElementById("Physical Exam").innerHTML = ("<h5> Physical Exam: </h5>" + "<h5>" + physical_exam + "</h5>")
+        }
+    }
+
     render() {
         return (
             <div>
@@ -119,6 +142,7 @@ export default class GenerateNote extends Component {
                 <h5 id="Social History"> {this.generate_grid('Social History')} </h5>
                 <h5 id="hpi"> {this.hpi()} </h5>
                 <h5 id="Review of Systems"> {this.review_of_systems()} </h5>
+                <h5 id="Physical Exam"> {this.physical_exam()} </h5>
             </div>
         )
     }

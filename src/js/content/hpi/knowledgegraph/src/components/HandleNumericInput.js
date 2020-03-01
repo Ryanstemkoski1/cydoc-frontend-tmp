@@ -6,7 +6,8 @@ class HandleNumericInput extends React.Component {
     static contextType = HPIContext 
     constructor(props, context) {
         super(props, context)
-        const answers = this.context["hpi"][this.props.category_code][this.props.uid]["response"]
+        const values = this.context["hpi"][this.props.category_code][this.props.uid]
+        const answers = this.props.am_child ? values['children'][this.props.child_uid]['response'] : values["response"]
         this.state = {
             numericValue: answers !== null ? answers: null
         }
@@ -16,7 +17,8 @@ class HandleNumericInput extends React.Component {
     handleChange = (event) => {
         this.setState({numericValue: event})
         const values = this.context["hpi"]
-        values[this.props.category_code][this.props.uid]["response"] = event
+        if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = event 
+        else values[this.props.category_code][this.props.uid]["response"] = event
         this.context.onContextChange("hpi", values)
     }
 
