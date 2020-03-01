@@ -17,18 +17,20 @@ export default class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: "yasab",
-            password: "basay",
-            email: "yasa@b.aig",
-            phoneNumber: "123456789",
-            firstName: "Yasab",
-            lastName: "Aig",
-            workplace: "Duck",
-            inPatient: false,
-            institutionType: "Yasa",
-            address: "Yasa",
-            backupEmail: "yasab27@gmail.com",
-            role: "The Boss",
+            formInfo: {
+                username: "",
+                password: "",
+                email: "",
+                phoneNumber: "",
+                firstName: "",
+                lastName: "",
+                workplace: "",
+                inPatient: null,
+                institutionType: "",
+                address: "",
+                backupEmail: "",
+                role: ""
+            },
             redirect: false
         };
         this.handleChange = this.handleChange.bind(this);
@@ -36,36 +38,22 @@ export default class Register extends Component {
     }
 
     handleChange(e, {name, value}){
-        console.log(name + ": " + value);
         let newState = this.state;
-        newState[name] = value;
-        console.log(newState);
+        newState.formInfo[name] = value;
         this.setState(newState);
-        console.log(this.state);
     }
 
 
     //TODO: Make an actual registration page
     handleSubmit = () => {
-        const user = {
-            username: "yasab",
-            password: "basay",
-            email: "yasa@b.aig",
-            phoneNumber: "123456789",
-            firstName: "Yasab",
-            lastName: "Aig",
-            workplace: "Duck",
-            inPatient: false,
-            institutionType: "Yasa",
-            address: "Yasa",
-            backupEmail: "yasab27@gmail.com",
-            role: "The Boss"
-        };
 
-        client.post("", user)
+        let user = this.state.formInfo
+
+        client.post("/user/new", user)
             .then(res => {
                 const user = res.data;
                 console.log(JSON.stringify(user))
+                this.setState({redirect: true})
             })
             .catch(err => {
                 console.log(err.response)
@@ -74,7 +62,7 @@ export default class Register extends Component {
 
     render() {
         if(this.state.redirect){
-            return(<Redirect push to= "/home" />)
+            return(<Redirect push to= "/login" />)
         }
 
         const { username, password } = this.state;
@@ -95,7 +83,7 @@ export default class Register extends Component {
                                     label='username'
                                     placeholder='username'
                                     name='username'
-                                    value={this.state.username}
+                                    value={this.state.formInfo.username}
                                     onChange={this.handleChange}
                                 />
                                 <Form.Input
@@ -103,7 +91,7 @@ export default class Register extends Component {
                                     type={"password"}
                                     label='password'
                                     name='password'
-                                    value={this.state.password}
+                                    value={this.state.formInfo.password}
                                     onChange={this.handleChange}
                                 />
                                 <Form.Group>
@@ -111,18 +99,85 @@ export default class Register extends Component {
                                         fluid
                                         label='first name'
                                         name='firstName'
-                                        value={this.state.firstName}
+                                        value={this.state.formInfo.firstName}
                                         onChange={this.handleChange}
                                     />
                                     <Form.Input
                                         fluid
                                         label='last name'
                                         name='lastName'
-                                        value={this.state.lastName}
+                                        value={this.state.formInfo.lastName}
                                         onChange={this.handleChange}
                                     />
                                 </Form.Group>
-                                
+                                <Form.Group>
+                                    <Form.Input
+                                        fluid
+                                        type='email'
+                                        label='email'
+                                        name='email'
+                                        value={this.state.formInfo.email}
+                                        onChange={this.handleChange}
+                                    />
+                                    <Form.Input
+                                        fluid
+                                        type='email'
+                                        label='backup email'
+                                        name='backupEmail'
+                                        value={this.state.formInfo.backupEmail}
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Input
+                                        fluid
+                                        label='address'
+                                        name='address'
+                                        value={this.state.formInfo.address}
+                                        onChange={this.handleChange}
+                                    />
+                                    <Form.Input
+                                        fluid
+                                        width={6}
+                                        type='tel'
+                                        label='phone number'
+                                        name='phoneNumber'
+                                        value={this.state.formInfo.phoneNumber}
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Input
+                                    fluid
+                                    label='workplace'
+                                    name='workplace'
+                                    value={this.state.formInfo.workplace}
+                                    onChange={this.handleChange}
+                                />
+                                <Form.Group>
+                                    <Form.Input
+                                        fluid
+                                        label='intstitution type'
+                                        name='institutionType'
+                                        value={this.state.formInfo.institutionType}
+                                        onChange={this.handleChange}
+                                    />
+                                    <Form.Select
+                                        fluid
+                                        width={6}
+                                        options={[{key: "y", value: true, text: "yes"}, {key: "n", value: false, text: "no"}]}
+                                        label='inpatient?'
+                                        name='inPatient'
+                                        value={this.state.formInfo.inPatient}
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Input
+                                    fluid
+                                    label='role'
+                                    name='role'
+                                    value={this.state.formInfo.role}
+                                    onChange={this.handleChange}
+                                />
                                 <Form.Button color='violet' size='small' floated='left'>
                                     Sign Up
                                 </Form.Button>
