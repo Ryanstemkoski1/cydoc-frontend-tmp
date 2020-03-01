@@ -8,6 +8,7 @@ import { Route, BrowserRouter } from 'react-router-dom';
 import EditNote from "./js/pages/EditNote";
 import HomePage from "./js/pages/HomePage";
 import Login from "./js/pages/Login";
+import Register from "./js/pages/Register"
 import DashboardPage from "./js/pages/DashboardPage";
 import ThemingLayout from "./js/pages/Theming";
 import NewNote from "./js/pages/NewNote";
@@ -28,6 +29,7 @@ ReactDOM.render(
                         <BrowserRouter >
                             <Route path="/home" component={HomePage}/>
                             <Route path="/login" component={Login}/>
+                            <Route path="/register" component={Register}/>
                             <PrivateRoute path="/createnote" component={NewNote}/>
                             <PrivateRoute path="/editnote" component={EditNote}/>
                             <PrivateRoute path="/dashboard" component={DashboardPage}/>

@@ -3,7 +3,6 @@ import { Form, Grid, Header, Segment, Button} from "semantic-ui-react";
 import {connect} from "react-redux";
 import {loginRequest} from "../actions";
 import {Redirect} from "react-router";
-import {Link} from "react-router-dom";
 import AuthContext from "../contexts/AuthContext";
 import NotesContext from "../contexts/NotesContext";
 
@@ -11,17 +10,25 @@ import {client} from "../constants/api.js"
 
 
 //Component that manages the layout of the login page
-class LoginPage extends Component {
+export default class Register extends Component {
 
     static contextType = AuthContext
 
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '',
-            submittedUsername: '',
-            submittedPassword: '',
+            username: "yasab",
+            password: "basay",
+            email: "yasa@b.aig",
+            phoneNumber: "123456789",
+            firstName: "Yasab",
+            lastName: "Aig",
+            workplace: "Duck",
+            inPatient: false,
+            institutionType: "Yasa",
+            address: "Yasa",
+            backupEmail: "yasab27@gmail.com",
+            role: "The Boss",
             redirect: false
         };
         this.handleChange = this.handleChange.bind(this);
@@ -38,47 +45,8 @@ class LoginPage extends Component {
     }
 
 
-    handleSubmit = async () => {
-        const { username, password } = this.state;
-        this.setState({ submittedUsername: username, submittedPassword: password });
-
-        const payload = {
-            username: this.state.username,
-            password: this.state.password
-        };
-
-        const response = await client.post("/login", payload)
-        .then(res => {
-            const user = res;
-            console.log(user)
-            localStorage.setItem('user', JSON.stringify(user));
-            return user;
-        })
-        .then((user)=> {
-            //dispatch({type: LOGIN_REQUEST, payload: user.data})
-            return user;
-        })
-        .catch(err => {
-            return err.response;
-        })
-        
-        if (response == null) {
-            alert("null response")
-            return
-        }
-        if (response.status === 200) {
-            console.log(this)
-            this.context.storeLoginInfo(response.data.user, response.data.jwt.accessToken)
-
-            this.setState( { redirect : true } )
-        } else {
-            alert(response.data.Message)
-        }
-        
-    };
-
     //TODO: Make an actual registration page
-    handleRegister = () => {
+    handleSubmit = () => {
         const user = {
             username: "yasab",
             password: "basay",
@@ -106,14 +74,7 @@ class LoginPage extends Component {
 
     render() {
         if(this.state.redirect){
-            return (
-                <NotesContext.Consumer>
-                    {(context) => {
-                        context.loadNotes(this.context.user._id)
-                        return(<Redirect push to= "/home" />)
-                    }}
-                </NotesContext.Consumer>
-            );
+            return(<Redirect push to= "/home" />)
         }
 
         const { username, password } = this.state;
@@ -125,7 +86,7 @@ class LoginPage extends Component {
                         cydoc
                     </Header>
                     <Header as='h4' color='grey' textAlign='center'>
-                        log in or sign up
+                        sign up
                     </Header>
                     <Segment clearing raised style={{borderColor: "white"}}>
                         <Form size='mini' onSubmit={this.handleSubmit}>
@@ -134,7 +95,7 @@ class LoginPage extends Component {
                                     label='username'
                                     placeholder='username'
                                     name='username'
-                                    value={username}
+                                    value={this.state.username}
                                     onChange={this.handleChange}
                                 />
                                 <Form.Input
@@ -142,27 +103,34 @@ class LoginPage extends Component {
                                     type={"password"}
                                     label='password'
                                     name='password'
-                                    value={password}
+                                    value={this.state.password}
                                     onChange={this.handleChange}
                                 />
+                                <Form.Group>
+                                    <Form.Input
+                                        fluid
+                                        label='first name'
+                                        name='firstName'
+                                        value={this.state.firstName}
+                                        onChange={this.handleChange}
+                                    />
+                                    <Form.Input
+                                        fluid
+                                        label='last name'
+                                        name='lastName'
+                                        value={this.state.lastName}
+                                        onChange={this.handleChange}
+                                    />
+                                </Form.Group>
+                                
                                 <Form.Button color='violet' size='small' floated='left'>
-                                    Log in
+                                    Sign Up
                                 </Form.Button>
                                 
                         </Form>
-                        <Link to={"/register"}>
-                            <Button color='grey' size='small' floated='right'>
-                                Sign up
-                            </Button>
-                        </Link>
-                        
                     </Segment>
                 </Grid.Column>
             </Grid>
         );
     }
 }
-
-const Login = LoginPage;
-
-export default Login;
