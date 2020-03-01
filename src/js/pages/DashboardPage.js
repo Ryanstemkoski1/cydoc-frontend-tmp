@@ -4,9 +4,12 @@ import NavMenu from "../components/NavMenu";
 import VerticalMenu from "../components/VerticalMenu";
 import {Grid, Segment} from "semantic-ui-react";
 import Records from "../components/Records";
+import NotesContext from "../contexts/NotesContext"
 
 //Component that manages the layout of the dashboard page
 export default class DashboardPage extends Component {
+
+    static contextType = NotesContext
 
     constructor(props) {
         super(props);
@@ -17,6 +20,10 @@ export default class DashboardPage extends Component {
 
     setActive = (note) => {
         this.setState({activeNote: note})
+    }
+
+    componentDidMount = () => {
+        this.context.loadNotes()
     }
 
     render(){

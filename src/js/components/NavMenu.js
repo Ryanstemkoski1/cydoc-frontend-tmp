@@ -2,7 +2,6 @@ import React, {Component, Fragment} from 'react';
 import {Container, Header, Icon, Menu} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import {logout} from "../actions";
-import {connect} from "react-redux";
 import {Link} from "react-router-dom";
 import "../content/hpi/knowledgegraph/src/css/App.css";
 import AuthContext from "../contexts/AuthContext";
@@ -28,11 +27,6 @@ class ConnectedNavMenu extends Component {
 
     constructor(props) {
         super(props);
-        this.handleLogout = this.handleLogout.bind(this);
-    }
-
-    handleLogout(){
-        this.props.logout();
     }
 
     render() {
@@ -48,7 +42,7 @@ class ConnectedNavMenu extends Component {
                     <Menu.Menu position="right">
                         {/* Menu will have different options depending on whether the user is logged in or not */}
                         {this.context.token ?
-                            <LoggedInMenuItems handleLogout={this.handleLogout}
+                            <LoggedInMenuItems handleLogout={this.context.logOut}
                                                name={this.context.user.firstName}/> :
                             <DefaultMenuItems/>}
                     </Menu.Menu>
@@ -58,7 +52,7 @@ class ConnectedNavMenu extends Component {
     }
     };
 
-const NavMenu = connect(mapStateToProps, mapDispatchToProps)(ConnectedNavMenu);
+const NavMenu = ConnectedNavMenu;
 export default NavMenu;
 
 NavMenu.propTypes = {

@@ -12,7 +12,8 @@ export class NotesStore extends React.Component {
         notes: []
     }
 
-    loadNotes = async(id) => { 
+    loadNotes = async(id = this.context.user._id) => {
+
         let response = await client.get("/records")
 
         if (response == null) {
