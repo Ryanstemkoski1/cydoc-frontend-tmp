@@ -1,64 +1,47 @@
 import React, {Component, Fragment} from "react";
-import { connect } from "react-redux";
-import { getAllRecords } from "../actions/index";
-import {Accordion, Header, Icon, Segment} from "semantic-ui-react";
+import { Redirect } from "react-router"
+import {Grid, Segment, Button} from "semantic-ui-react";
+
+import HPIContext from '../contexts/HPIContext'
 
 class ConnectedRecords extends Component {
+
+    static contextType = HPIContext
+
     constructor(props) {
         super(props);
         this.state = {
-            activeId: ''
+            redirect: false
         }
     }
 
-    handleClick = (e, titleProps) => {
-        console.log(titleProps)
-        const { id: id } = titleProps;
-        const { activeId: activeId } = this.state;
-        const newIndex = activeId === id ? "" : id;
-
-        this.setState({ activeId: newIndex })
-    };
-
-    componentDidMount() {
-        this.props.getData();
+    handleClick = (e, f) => {
+        if (this.props.activeNote) {
+            this.context.loadNote(this.props.activeNote)
+            this.setState({redirect: true})
+        }
     }
+
     render() {
-        const { activeId } = this.state;
+
+        if (this.state.redirect === true) {
+            return (
+                <Redirect push to= "/editnote" />
+            )
+        }
+
         return (
             <Fragment>
-                {this.props.articles.map(record => (
-                    <Segment key={record._id}>
-                        <Accordion>
-                            <Accordion.Title
-                                active={activeId === record._id}
-                                id={record._id}
-                                onClick={this.handleClick}
-                            >
-                                {record.noteName}
-                                <Icon name='dropdown' />
-                            </Accordion.Title>
-                            <Accordion.Content active={activeId === record._id}>
-                                <Header as={"h3"}>
-                                     <pre>{JSON.stringify(record.body, null, 2) }</pre>
-                                </Header>
-                            </Accordion.Content>
-                        </Accordion>
-                    </Segment>
-
-                ))}
+                <Segment style={{overflow: 'auto', maxHeight: "50vh" }}>
+                    <pre>{this.props.activeNote ? JSON.stringify(this.props.activeNote, null, 2) : "Select a Note!"}</pre>
+                </Segment>
+                <Button disabled={!this.props.activeNote} onClick={this.handleClick} floated>
+                    Load
+                </Button>
             </Fragment>
         );
     }
 }
-function mapStateToProps(state) {
-    return {
-        articles: state.remoteRecords.slice(0, 10)
-    };
-}
-const Records = connect(
-    mapStateToProps,
-    { getData: getAllRecords }
-)(ConnectedRecords);
 
+const Records = ConnectedRecords
 export default Records;

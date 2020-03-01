@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import {Icon, Menu} from 'semantic-ui-react'
+import NotesContext from '../contexts/NotesContext'
 
 
 //Component for the vertical menu that appears on the dashboard page
 export default class VerticalMenu extends Component {
+
+    static contextType = NotesContext
+
     constructor(props) {
         super(props);
         this.handleItemClick = this.handleItemClick.bind(this);
@@ -13,8 +17,24 @@ export default class VerticalMenu extends Component {
     }
 
     //sets the corresponding menu item to active on click
-    handleItemClick(event, { name }){
-        this.setState({ activeItem: name });
+    handleItemClick(event, { id, note }){
+        this.setState({activeItem: id});
+        this.props.setActive(note)
+    }
+
+    displayNotes = () => {
+        return (
+            this.context.notes.map( (note) => 
+                <Menu.Item
+                name={note.noteName}
+                key={note._id}
+                id={note._id}
+                note={note}
+                active={this.state.activeItem === note._id}
+                onClick={this.handleItemClick}
+                />
+            )
+        )
     }
 
     render() {
@@ -33,17 +53,7 @@ export default class VerticalMenu extends Component {
                     Notes
                 </Menu.Item>
                 <Menu.Menu>
-                    <Menu.Item header>Recent</Menu.Item>
-                    <Menu.Item
-                        name='note 1'
-                        active={activeItem === 'note 1'}
-                        onClick={this.handleItemClick}
-                    />
-                    <Menu.Item
-                        name='new note 2'
-                        active={activeItem === 'new note 2'}
-                        onClick={this.handleItemClick}
-                    />
+                    {this.displayNotes()}
                 </Menu.Menu>
                 <Menu.Item
                     header

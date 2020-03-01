@@ -5,6 +5,7 @@ import {logout} from "../actions";
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
 import "../content/hpi/knowledgegraph/src/css/App.css";
+import AuthContext from "../contexts/AuthContext";
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -22,6 +23,9 @@ const mapStateToProps = state => {
 
 //Navigation Bar component that will go at the top of most pages
 class ConnectedNavMenu extends Component {
+
+    static contextType = AuthContext;
+
     constructor(props) {
         super(props);
         this.handleLogout = this.handleLogout.bind(this);
@@ -43,7 +47,7 @@ class ConnectedNavMenu extends Component {
                     </Menu.Item>
                     <Menu.Menu position="right">
                         {/* Menu will have different options depending on whether the user is logged in or not */}
-                        {this.props.isLoggedIn || true ?
+                        {this.context.token ?
                             <LoggedInMenuItems handleLogout={this.handleLogout}
                                                name={this.props.user.firstName}/> :
                             <DefaultMenuItems/>}
@@ -66,7 +70,7 @@ NavMenu.propTypes = {
 function DefaultMenuItems() {
     return <Fragment>
         <a> <Menu.Item name="create_note">
-            <Link to={"/createnote"}>Create Note</Link>
+            <Link to={"/login"}>Create Note</Link>
         </Menu.Item> </a>
         <a> <Menu.Item name="about">
             <Link to={"/about"}>About</Link>

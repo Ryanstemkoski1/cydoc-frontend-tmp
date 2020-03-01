@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {Menu, Container} from 'semantic-ui-react'
+import {Menu, Container, Button} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import {TAB_NAMES} from '../constants/constants'
 import {connect} from "react-redux";
@@ -26,7 +26,7 @@ class ConnectedMenuTabs extends Component {
         super(props, context);
         this.state = {
             textInput: "Untitled",
-            isTitleFocused: true
+            isTitleFocused: false
         }
         this.handleItemClick =  this.handleItemClick.bind(this)
         this.handleSave = this.handleSave.bind(this)
@@ -45,7 +45,8 @@ class ConnectedMenuTabs extends Component {
 
     //onClick event is handled by parent
     handleItemClick = (e, { name }) => this.props.onTabChange(name);
-    handleSave(){
+
+    handleSave = () => {
         this.props.saveNote({
             noteName:"note",
             body:
@@ -56,10 +57,12 @@ class ConnectedMenuTabs extends Component {
             doctorID:"5d696a7dbf476c61064fd58d"
         });
     }
+
     handleInputChange = (event) => {
         this.setState({textInput: event.target.value}) 
         this.context.onContextChange("title", event.target.value)
     }
+
     render() {
         const {activeItem} = this.props;
 
@@ -87,18 +90,21 @@ class ConnectedMenuTabs extends Component {
                                 onChange={this.handleInputChange}
                                 onFocus={()=>{
                                     this.setState({isTitleFocused: true})
-                                    if (this.context['title'] == "Untitled Note") {
+                                    if (this.context.title == "Untitled Note") {
                                         this.context.onContextChange("title", "")
                                     }
                                 }}
                                 onBlur={()=>{
                                     this.setState({isTitleFocused: false})
-                                    if (this.context['title'] == '') {
+                                    if (this.context.title == '') {
                                         this.context.onContextChange("title", "Untitled Note")
                                     }
                                 }}
-                                value={this.context['title']} 
+                                value={this.context.title} 
                                 />
+                                <Button onClick={this.context.saveNote} style={{marginBottom: "10px", marginLeft: "20px"}}>
+                                    Save
+                                </Button>
                         </Menu.Item>
                     </Container>
                 </Menu>
