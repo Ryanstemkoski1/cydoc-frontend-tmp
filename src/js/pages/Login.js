@@ -4,15 +4,10 @@ import {connect} from "react-redux";
 import {loginRequest} from "../actions";
 import {Redirect} from "react-router";
 import AuthContext from "../contexts/AuthContext";
-import axios from 'axios'
-import api from "../constants/api";
+import NotesContext from "../contexts/NotesContext";
 
+import {client} from "../constants/api.js"
 
-function mapDispatchToProps(dispatch) {
-    return {
-        loginRequest: user => dispatch(loginRequest(user))
-    };
-}
 
 //Component that manages the layout of the login page
 class LoginPage extends Component {
@@ -46,16 +41,34 @@ class LoginPage extends Component {
         const { username, password } = this.state;
         this.setState({ submittedUsername: username, submittedPassword: password });
 
-        const user = {
+        const payload = {
             username: this.state.username,
             password: this.state.password
         };
 
-        const response = await this.props.loginRequest(user)
-        console.log(response)
+        const response = await client.post("/login", payload)
+        .then(res => {
+            const user = res;
+            console.log(user)
+            localStorage.setItem('user', JSON.stringify(user));
+            return user;
+        })
+        .then((user)=> {
+            //dispatch({type: LOGIN_REQUEST, payload: user.data})
+            return user;
+        })
+        .catch(err => {
+            return err.response;
+        })
+        
+        if (response == null) {
+            alert("null response")
+            return
+        }
         if (response.status === 200) {
             console.log(this)
             this.context.storeLoginInfo(response.data.user, response.data.jwt.accessToken)
+
             this.setState( { redirect : true } )
         } else {
             alert(response.data.Message)
@@ -73,14 +86,14 @@ class LoginPage extends Component {
             firstName: "Yasab",
             lastName: "Aig",
             workplace: "Duck",
-            inPatient: "No?",
+            inPatient: false,
             institutionType: "Yasa",
             address: "Yasa",
             backupEmail: "yasab27@gmail.com",
             role: "The Boss"
         };
 
-        axios.post(api.register.prod, user)
+        client.post("", user)
             .then(res => {
                 const user = res.data;
                 console.log(JSON.stringify(user))
@@ -92,7 +105,14 @@ class LoginPage extends Component {
 
     render() {
         if(this.state.redirect){
-            return <Redirect push to= "/home" />;
+            return (
+                <NotesContext.Consumer>
+                    {(context) => {
+                        context.loadNotes(this.context.user._id)
+                        return(<Redirect push to= "/home" />)
+                    }}
+                </NotesContext.Consumer>
+            );
         }
 
         const { username, password } = this.state;
@@ -138,6 +158,7 @@ class LoginPage extends Component {
         );
     }
 }
-const Login = connect(null, mapDispatchToProps)(LoginPage);
+
+const Login = LoginPage;
 
 export default Login;

@@ -22,7 +22,7 @@ export function getAllRecords() {
 
 export function loginRequest(payload){
     return function(dispatch) {
-        return axios.post(api.login.dev, payload)
+        return axios.post(api.login.prod, payload)
             .then(res => {
                 const user = res;
                 console.log(user)

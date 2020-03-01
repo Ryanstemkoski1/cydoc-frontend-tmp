@@ -1,0 +1,65 @@
+import React from 'react'
+import AuthContext from './AuthContext'
+import {client} from  '../constants/api'
+
+const Context = React.createContext('yasa')
+
+export class NotesStore extends React.Component {
+
+    static contextType = AuthContext
+
+    state = {
+        notes: []
+    }
+
+    loadNotes = async(id) => { 
+        let response = await client.get("/records")
+
+        if (response == null) {
+            alert("null response")
+            return
+        }
+
+        let notes = []
+        response.data.forEach((note) => {
+            if (note.doctorID === this.context.user._id) {
+                notes.push(note)
+            }
+        })
+        
+        this.setState({notes: notes});
+    }
+
+    addNote = async(note) => {
+
+        note.doctorID = this.context.user._id
+        note.clinicID =  this.context.user.workplace
+
+        this.setState({notes: [...this.state.notes, note]})
+        let response = await client.post("/record/new", note)
+
+        if (response == null) {
+            alert("null response")
+            return
+        }
+
+        console.log(response)
+
+        if (response.status - 200 < 100) {
+            alert("Save Success")
+        } else {
+            alert(response.data.Message)
+        }
+    }
+
+    render = () => {
+        return(
+            <Context.Provider value = {{...this.state, loadNotes: this.loadNotes, addNote: this.addNote}}>
+                {this.props.children}
+            </Context.Provider>
+        )
+    }
+    
+}
+
+export default Context;

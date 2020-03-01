@@ -8,9 +8,25 @@ const Context = React.createContext('yasa')
 
 export class AuthStore extends React.Component {
     state = {
-        token: "",
-        user: ""
-     }
+
+    }
+
+    /*
+    const user = {
+            username: "yasab",
+            password: "basay",
+            email: "yasa@b.aig",
+            phoneNumber: "123456789",
+            firstName: "Yasab",
+            lastName: "Aig",
+            workplace: "Duck",
+            inPatient: false,
+            institutionType: "Yasa",
+            address: "Yasa",
+            backupEmail: "yasab27@gmail.com",
+            role: "The Boss"
+        };
+    */
 
     storeLoginInfo = (user, token) => {
         this.setState({user: user, token: token})
