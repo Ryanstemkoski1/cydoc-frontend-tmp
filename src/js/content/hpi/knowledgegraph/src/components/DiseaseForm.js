@@ -58,15 +58,14 @@ export class DiseaseForm extends React.Component {
                         question={nodes[current_node]['text']}
                         responseType={nodes[current_node]['responseType']}
                         category={category}
-                        uid={uid}
-                        notLast={true}
+                        uid={uid} 
                         has_children={children}
                         current_node={current_node}
                         category_code = {tab_category}
                     />
                 }
                 let values = this.context['hpi']
-                if (!(uid in values[tab_category])){
+                if (!(uid in values[tab_category])){ 
                     values[tab_category][uid] = {
                         'category': tab_category,
                         'category_name': category,
@@ -77,17 +76,18 @@ export class DiseaseForm extends React.Component {
                     this.context.onContextChange("hpi", values)
                 }
                 // check if the current node in the graph has children that we need to look for
-                if (children) {
-                    questionMap[uid]['display_children'] = false
+                if (children) { 
                     questionMap[uid]['children'] = {}
-                    values[tab_category][uid]['children'] = {}
                     let first_node = (edges[current_node_values[0]]['from']).substring(0,3) + "0001"
                     questionMap[uid]['children_category'] = nodes[first_node]['category']
+                    // if statement so that we don't reset the children key every time we generate the child disease form
+                    if (!('children' in values[tab_category][uid])) values[tab_category][uid]['children'] = {}
                     for (var new_index in current_node_values) {
                         // the first edge index from the first child
                         let new_edge_index = current_node_values[new_index].toString()
                         // the child's node
                         let new_current_node = edges[new_edge_index]['from']
+                        let child_uid = nodes[new_current_node]['uid']
                         questionMap[uid]['children'][new_current_node] = {
                         'question': <DiseaseFormQuestions
                                     key={nodes[new_current_node][uid]}
@@ -95,23 +95,23 @@ export class DiseaseForm extends React.Component {
                                     responseType={nodes[new_current_node]['responseType']}
                                     category={category}
                                     uid={uid}
-                                    child_uid={nodes[new_current_node]['uid']}
-                                    notLast={true}
+                                    child_uid={child_uid} 
                                     current_node={current_node}
                                     category_code = {tab_category}
                                     am_child={true}
                         />
-                    } 
-                    let values = this.context['hpi']
-                    values[tab_category][uid]['children'][nodes[new_current_node]['uid']] = {
+                    }
+                if (!(child_uid in values[tab_category][uid]['children'])) {  
+                    values[tab_category][uid]['children'][child_uid] = {
                         'category': tab_category,
                         'category_name': category,
                         'question': nodes[new_current_node]['text'],
                         'response': "",
                         'response_type': ""
-                        }
-                        this.context.onContextChange("hpi", values) 
-                    } } }
+                        } } }
+            this.context.onContextChange("hpi", values) 
+                } } 
+                    
         this.setState({questionMap: questionMap, functionLoad: true})
     }
 

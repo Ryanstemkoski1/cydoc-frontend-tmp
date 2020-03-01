@@ -6,7 +6,7 @@ class YesNo extends React.Component {
     constructor(props, context) {
         super(props, context)
         const values = this.context["hpi"][this.props.category_code][this.props.uid]
-        const answers = this.props.am_child ? values['children'][this.props.child_uid]['response'] : values["response"]
+        const answers = this.props.am_child ? values['children'][this.props.child_uid]['response'] : values["response"] 
         this.state = {
             yes_id: 0,
             no_id: 0,

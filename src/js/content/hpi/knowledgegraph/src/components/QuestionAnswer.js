@@ -22,20 +22,19 @@ class QuestionAnswer extends React.Component {
             input: ""
         } 
         const values = this.context["hpi"]
-        // Specifies whether the response type will be '' or [] form
-        if (this.props.am_child) {
+        // Specifies whether the response type will be '' or [] form 
+        if (this.props.am_child) { 
             if (values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] === "") {
                 values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response_type'] = this.props.responseType 
                 if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
                     values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = []
                 } } }
-        else { 
-            if (values[this.props.category_code][this.props.uid]["response"]=== "") {
-                values[this.props.category_code][this.props.uid]["response_type"] = this.props.responseType
-                if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
-                    values[this.props.category_code][this.props.uid]["response"] = []
-                } } }
-            this.context.onContextChange("hpi", values) } 
+        else if (values[this.props.category_code][this.props.uid]["response"]=== "") {
+            values[this.props.category_code][this.props.uid]["response_type"] = this.props.responseType
+            if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
+                values[this.props.category_code][this.props.uid]["response"] = []
+            } }
+        this.context.onContextChange("hpi", values) } 
 
     render() {
         let button_map = []

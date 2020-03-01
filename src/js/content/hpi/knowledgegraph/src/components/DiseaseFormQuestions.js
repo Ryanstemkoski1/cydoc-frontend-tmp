@@ -41,7 +41,6 @@ class DiseaseFormQuestions extends React.Component {
                     responseType={this.props.responseType}
                     response_choice={response_choice}
                     handler={this.handler}
-                    notLast={this.props.notLast}
                     has_children={this.props.has_children} 
                     category_code = {this.props.category_code}
                     uid = {this.props.uid}

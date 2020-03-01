@@ -106,6 +106,7 @@ class HPIContent extends Component {
                     )
             default:
                 if (isLoaded) {
+                    console.log(this.context['hpi'])
                     let category = this.context['positivediseases'][step-2]
                     let parent_code = diseasesNames[category]
                     let category_code = graphData['nodes'][parent_code]['category']
