@@ -1,6 +1,6 @@
 import {ADD_NOTE, ADD_TEMPLATE, DATA_LOADED, LOGIN_REQUEST, LOGOUT, SAVE_NOTE} from "../constants/action-types";
 import axios from 'axios'
-import api from "../constants/api";
+import api from "../constants/api.json";
 
 export function addNote(payload) {
     return { type: ADD_NOTE, payload };
