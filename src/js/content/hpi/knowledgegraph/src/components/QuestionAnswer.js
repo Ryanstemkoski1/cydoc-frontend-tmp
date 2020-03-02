@@ -3,6 +3,7 @@ import "../css/Button.css"
 import ButtonTag from "./ButtonTag";
 import YesNo from "./YesNo";
 import HandleInput from "./HandleInput"
+import ListText from "./ListText"
 import HandleNumericInput from "./HandleNumericInput";
 import TimeInput from "./TimeInput";
 import FamilyHistoryContent from "../../../../familyhistory/FamilyHistoryContent";
@@ -28,12 +29,16 @@ class QuestionAnswer extends React.Component {
                 values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response_type'] = this.props.responseType 
                 if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
                     values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = []
-                } } }
+                }
+                else if (this.props.responseType === 'LIST-TEXT') values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = ["", "", ""]
+             } }
         else if (values[this.props.category_code][this.props.uid]["response"]=== "") {
             values[this.props.category_code][this.props.uid]["response_type"] = this.props.responseType
             if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
                 values[this.props.category_code][this.props.uid]["response"] = []
-            } }
+            }
+            else if (this.props.responseType === 'LIST-TEXT') values[this.props.category_code][this.props.uid]["response"] = ["", "", ""]
+        }
         this.context.onContextChange("hpi", values) } 
 
     render() {
@@ -69,17 +74,15 @@ class QuestionAnswer extends React.Component {
                                         />)
         }
         else if (responseType === 'LIST-TEXT') {
-            button_map.push(<HandleInput key={this.props.question}
-                                         type={this.props.responseType}
-                                         answers={this.props.answers}
-                                         uid={this.props.uid}
-                                         category_code = {this.props.category_code}
-                                         am_child={this.props.am_child}
-                                         child_uid={this.props.child_uid}
-                                          />
-                                          )
+            button_map.push(<ListText
+                key={this.props.uid}
+                type={this.props.responseType} 
+                uid={this.props.uid}
+                category_code = {this.props.category_code}
+                am_child={this.props.am_child}
+                child_uid={this.props.child_uid}
+                 />)
         }
-
         else if (responseType === 'CLICK-BOXES'|| responseType === 'MEDS-POP') {
             button_map = this.props.response_choice.map(item =>
                 <ButtonTag

@@ -148,9 +148,7 @@ export class DiseaseForm extends React.Component {
                     }
                     else {
                         for (const child_node in current_value['children']) {
-                            newMap.push(current_value['children'][child_node]['question']) }} }
-                }
-                        }
+                            newMap.push(current_value['children'][child_node]['question']) }}}}}
         return (
             <div>
                 <Menu tabular>

@@ -1,31 +1,43 @@
 import React from 'react'
-import {Input, Form} from "semantic-ui-react";
 import HPIContext from "../../../../../contexts/HPIContext";
+import HandleInput from './HandleInput';
 
-class listText extends React.Component {
+export default class ListText extends React.Component {
     static contextType = HPIContext 
     constructor(props, context) {
         super(props, context)
-        const answers = this.context["hpi"][this.props.category_code][this.props.uid]["response"]
+        let input_res = this.context['hpi'][this.props.category_code][this.props.uid]
         this.state = {
-            textInput: answers !== null ? answers: ''
+            res: this.props.am_child ? input_res['children'][this.props.child_uid] : input_res['response']
         }
-        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
-    handleInputChange = (event) => { 
-        this.setState({textInput: event.target.value})
-        const values = this.context["hpi"]
-        values[this.props.category_code][this.props.uid]["response"] = event.target.value
+    handleClick() {
+        var values = this.context['hpi']
+        if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'].push("")
+        else values[this.props.category_code][this.props.uid]["response"].push("")
         this.context.onContextChange("hpi", values)
     }
 
     render() {
+        var button_map = []
+        let input_res = this.context['hpi'][this.props.category_code][this.props.uid]
+        let res = this.props.am_child ? input_res['children'][this.props.child_uid] : input_res['response']
+        for (var res_index in res) {
+            button_map.push(<HandleInput 
+                key = {res_index}
+                type = {this.props.type}
+                uid = {this.props.uid}
+                category_code = {this.props.category_code}
+                am_child={this.props.am_child}
+                child_uid={this.props.child_uid}
+                input_id={res_index}
+            />)
+        }
         return (
-            <div> 
-                <h3 id="List Text"> Hello </h3>
-            </div>
-            )}
-    }
-
-export default listText
+        <div> 
+            <div> {button_map}</div>
+            <div> <button onClick={this.handleClick} style={{borderRadius: '50%'}}> + </button> </div>
+        </div>)
+        }}
