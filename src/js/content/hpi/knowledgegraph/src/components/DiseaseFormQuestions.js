@@ -31,7 +31,7 @@ class DiseaseFormQuestions extends React.Component {
             for (let response_index in response_choice) {
                 response_choice[response_index] = response_choice[response_index].trim()
             }
-        } else if (responseType === "YES-NO") {
+        } else if (responseType === "YES-NO" || responseType==="NO-YES") {
             response_choice = ["Yes", "No"]
         } else response_choice = []
         return (
@@ -41,7 +41,6 @@ class DiseaseFormQuestions extends React.Component {
                     responseType={this.props.responseType}
                     response_choice={response_choice}
                     handler={this.handler}
-                    notLast={this.props.notLast}
                     has_children={this.props.has_children} 
                     category_code = {this.props.category_code}
                     uid = {this.props.uid}

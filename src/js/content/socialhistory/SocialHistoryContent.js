@@ -40,8 +40,13 @@ export default class SocialHistoryContent extends React.Component {
     //handles button in substance use portion
     handleToggleButtonClick(event, data){
         const values = this.context["Social History"];
+        const responses = ['Yes', 'In the Past', 'Never Used']
         const prevState = values[data.condition][data.title];
         values[data.condition][data.title] = ! prevState;
+        for (var response_index in responses) {
+            var response = responses[response_index]
+            if (data.title !== response) values[data.condition][response] = false
+        }
         this.context.onContextChange("Social History", values);
     }
 

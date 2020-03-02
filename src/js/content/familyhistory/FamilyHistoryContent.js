@@ -44,8 +44,13 @@ export default class FamilyHistoryContent extends Component {
     //handles toggle button events
     handleToggleButtonClick(event, data){
         const values = this.context["Family History"];
+        const responses = ["Yes", "No"]
         const prevState = values[data.condition][data.title];
         values[data.condition][data.title] = ! prevState;
+        for (var response_index in responses) {
+            var response = responses[response_index]
+            if (data.title !== response) values[data.condition][response] = false
+        }
         this.context.onContextChange("Family History", values);
     }
 

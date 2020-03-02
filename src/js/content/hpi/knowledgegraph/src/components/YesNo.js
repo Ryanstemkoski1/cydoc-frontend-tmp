@@ -6,7 +6,7 @@ class YesNo extends React.Component {
     constructor(props, context) {
         super(props, context)
         const values = this.context["hpi"][this.props.category_code][this.props.uid]
-        const answers = this.props.am_child ? values['children'][this.props.child_uid]['response'] : values["response"]
+        const answers = this.props.am_child ? values['children'][this.props.child_uid]['response'] : values["response"] 
         this.state = {
             yes_id: 0,
             no_id: 0,
@@ -25,7 +25,7 @@ class YesNo extends React.Component {
         if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = "Yes"
         else {
             values[this.props.category_code][this.props.uid]["response"] = "Yes"
-            values[this.props.category_code][this.props.uid]["display_children"] = this.props.has_children 
+            if (this.props.has_children) values[this.props.category_code][this.props.uid]["display_children"] = true
         }
         this.context.onContextChange("hpi", values)
     }
