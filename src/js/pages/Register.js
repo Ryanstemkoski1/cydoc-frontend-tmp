@@ -85,6 +85,8 @@ export default class Register extends Component {
                                     name='username'
                                     value={this.state.formInfo.username}
                                     onChange={this.handleChange}
+                                    required
+                                    minLength={3}
                                 />
                                 <Form.Input
                                     fluid
@@ -93,6 +95,7 @@ export default class Register extends Component {
                                     name='password'
                                     value={this.state.formInfo.password}
                                     onChange={this.handleChange}
+                                    required
                                 />
                                 <Form.Group>
                                     <Form.Input
@@ -101,6 +104,7 @@ export default class Register extends Component {
                                         name='firstName'
                                         value={this.state.formInfo.firstName}
                                         onChange={this.handleChange}
+                                        required
                                     />
                                     <Form.Input
                                         fluid
@@ -108,6 +112,7 @@ export default class Register extends Component {
                                         name='lastName'
                                         value={this.state.formInfo.lastName}
                                         onChange={this.handleChange}
+                                        required
                                     />
                                 </Form.Group>
                                 <Form.Group>
@@ -118,6 +123,7 @@ export default class Register extends Component {
                                         name='email'
                                         value={this.state.formInfo.email}
                                         onChange={this.handleChange}
+                                        required
                                     />
                                     <Form.Input
                                         fluid
@@ -126,6 +132,7 @@ export default class Register extends Component {
                                         name='backupEmail'
                                         value={this.state.formInfo.backupEmail}
                                         onChange={this.handleChange}
+                                        required
                                     />
                                 </Form.Group>
                                 <Form.Group>
@@ -135,6 +142,7 @@ export default class Register extends Component {
                                         name='address'
                                         value={this.state.formInfo.address}
                                         onChange={this.handleChange}
+                                        required
                                     />
                                     <Form.Input
                                         fluid
@@ -144,6 +152,7 @@ export default class Register extends Component {
                                         name='phoneNumber'
                                         value={this.state.formInfo.phoneNumber}
                                         onChange={this.handleChange}
+                                        required
                                     />
                                 </Form.Group>
                                 <Form.Input
@@ -152,6 +161,7 @@ export default class Register extends Component {
                                     name='workplace'
                                     value={this.state.formInfo.workplace}
                                     onChange={this.handleChange}
+                                    required
                                 />
                                 <Form.Group>
                                     <Form.Input
@@ -160,6 +170,7 @@ export default class Register extends Component {
                                         name='institutionType'
                                         value={this.state.formInfo.institutionType}
                                         onChange={this.handleChange}
+                                        required
                                     />
                                     <Form.Select
                                         fluid
@@ -169,6 +180,7 @@ export default class Register extends Component {
                                         name='inPatient'
                                         value={this.state.formInfo.inPatient}
                                         onChange={this.handleChange}
+                                        required
                                     />
                                 </Form.Group>
                                 <Form.Input
@@ -177,6 +189,7 @@ export default class Register extends Component {
                                     name='role'
                                     value={this.state.formInfo.role}
                                     onChange={this.handleChange}
+                                    required
                                 />
                                 <Form.Button color='violet' size='small' floated='left'>
                                     Sign Up

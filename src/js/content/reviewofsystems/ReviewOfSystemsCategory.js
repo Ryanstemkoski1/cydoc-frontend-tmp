@@ -31,13 +31,13 @@ export default class ReviewOfSystemsCategory extends Component{
                     option => 
                         <Grid.Row>
                             <Grid.Column>
-                                <Button floated='left' color={this.context["Review of Systems"][this.category][option] === 'y' ? 'green' : null} radio value='y' active={this.context["Review of Systems"][this.category][option] === 'y'} onClick={(e, {value}) => this.handleChange(option, value)}>YES</Button>
+                                <Button floated='right' color={this.context["Review of Systems"][this.category][option] === 'n' ? 'green' : null} radio value='n' active={this.context["Review of Systems"][this.category][option] === 'n'} onClick={(e, {value}) => this.handleChange(option, value)}>NO</Button>
                             </Grid.Column>
-                            <Grid.Column verticalAlign='middle'>
+                            <Grid.Column width={4} verticalAlign='middle'>
                                 {option}
                             </Grid.Column>
                             <Grid.Column>
-                                <Button floated='right' color={this.context["Review of Systems"][this.category][option] === 'n' ? 'red' : null} radio value='n' active={this.context["Review of Systems"][this.category][option] === 'n'} onClick={(e, {value}) => this.handleChange(option, value)}>NO</Button>
+                                <Button floated='left' color={this.context["Review of Systems"][this.category][option] === 'y' ? 'red' : null} radio value='y' active={this.context["Review of Systems"][this.category][option] === 'y'} onClick={(e, {value}) => this.handleChange(option, value)}>YES</Button>
                             </Grid.Column>
                         </Grid.Row>
                     )}
