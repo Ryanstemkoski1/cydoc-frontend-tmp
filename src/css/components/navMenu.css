@@ -1,0 +1,15 @@
+.nav-menu-container {
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 3px 4px -6px gray;
+}
+
+.nav-menu {
+  height: 10vh;
+  width: 101%;
+  padding: 1rem;
+}
+
+.user-icon {
+  padding-left: 10px;
+}

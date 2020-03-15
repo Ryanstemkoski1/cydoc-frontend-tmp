@@ -1,0 +1,17 @@
+.save-button {
+  margin-bottom: 10px !important;
+  margin-left: 20px !important;
+}
+
+.collapsed-menu-tabs {
+  padding-left: 2rem;
+}
+
+.expanded-menu-tabs {
+  display: flex;
+  justify-content: center;
+}
+
+.menu-tab {
+  font-size: 13px;
+}

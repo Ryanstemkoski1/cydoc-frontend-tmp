@@ -1,0 +1,4 @@
+export const DEFAULT_NAV_MENU_MOBILE_BP = 550;
+export const LOGGEDIN_NAV_MENU_MOBILE_BP = 1000;
+
+export const MENU_TABS_MOBILE_BP = 850;

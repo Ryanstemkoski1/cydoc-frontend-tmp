@@ -47,18 +47,3 @@
   margin-left: 30px;
   margin-bottom: 20px;
 }
-
-.topnav .icon {
-  margin-left: 60px;
-  margin-top: 5px;
-  display: none;
-}
-
-/* When the screen is less than 650 pixels wide, hide all links.
-Show the link that contains should open and close the topnav (.icon) */
-@media screen and (max-width: 650px) {
-  .topnav a {display: none;}
-  .topnav a.icon {
-    display: block;
-  }
-}
