@@ -101,13 +101,13 @@ class ConnectedMenuTabs extends Component {
                             onChange={this.handleInputChange}
                             onFocus={()=>{
                                 this.setState({isTitleFocused: true})
-                                if (this.context.title == "Untitled Note") {
+                                if (this.context.title === "Untitled Note") {
                                     this.context.onContextChange("title", "")
                                 }
                             }}
                             onBlur={()=>{
                                 this.setState({isTitleFocused: false})
-                                if (this.context.title == '') {
+                                if (this.context.title === '') {
                                     this.context.onContextChange("title", "Untitled Note")
                                 }
                             }}

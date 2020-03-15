@@ -24,13 +24,24 @@ export default class GridContent extends Component {
     }
 
     render(){
-        return(
+        const {numColumns, contentHeader, rows, mobile} = this.props;
+
+        return mobile ?
+            (<Fragment>
+                <br/>
+                <Grid columns={1} verticalAlign='middle' divided='vertically'>
+                    {rows}
+                </Grid>
+                <Divider />
+                <AddRowButton onClick={this.addRow}/>
+            </Fragment>
+            ) : (
             <Fragment>
                 <br/>
-                {this.props.contentHeader}
+                {contentHeader}
                 <Divider/>
-                <Grid columns={this.props.numColumns} verticalAlign='middle'>
-                    {this.props.rows}
+                <Grid columns={numColumns} verticalAlign='middle'>
+                    {rows}
                 </Grid>
                 <AddRowButton onClick={this.addRow}/>
             </Fragment>
