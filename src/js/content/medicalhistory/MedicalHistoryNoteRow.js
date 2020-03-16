@@ -9,7 +9,7 @@ export default class MedicalHistoryNoteRow extends Component {
         const { yesActive, condition, onToggleButtonClick, noActive, onset, onChange, comments} = this.props;
         return (<Grid.Row>
             <Grid.Column>
-                {this.props.condition}
+                {condition}
             </Grid.Column>
             <Grid.Column>
                 <ToggleButton active={yesActive}

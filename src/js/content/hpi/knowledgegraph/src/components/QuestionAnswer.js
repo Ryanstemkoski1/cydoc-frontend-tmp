@@ -10,7 +10,7 @@ import MedicalHistoryContent from "../../../../medicalhistory/MedicalHistoryCont
 import MedicationsContent from "../../../../medications/MedicationsContent";
 import SurgicalHistoryContent from "../../../../surgicalhistory/SurgicalHistoryContent";
 import HPIContext from "../../../../../contexts/HPIContext";
-import listText from "./listText" 
+import ListText from "./listText" 
 
 class QuestionAnswer extends React.Component {
     static contextType = HPIContext
@@ -74,7 +74,7 @@ class QuestionAnswer extends React.Component {
                                         />)
         }
         else if (responseType === 'LIST-TEXT') {
-            button_map.push(<listText
+            button_map.push(<ListText
                 key={this.props.uid}
                 type={this.props.responseType} 
                 uid={this.props.uid}

@@ -18,37 +18,43 @@
   ],
   "MEDICAL_HISTORY": {
     "STATE": {
-      "Type II Diabetes": {
+      "0": {
+        "Condition": "Type II Diabetes",
         "Yes": false,
         "No": false,
         "Onset": "",
         "Comments": ""
       },
-      "Myocardial Infarction": {
+      "1": {
+        "Condition": "Myocardial Infarction",
         "Yes": false,
         "No": false,
         "Onset": "",
         "Comments": ""
       },
-      "Hypertension": {
+      "2": {
+        "Condition": "Hypertension",
         "Yes": false,
         "No": false,
         "Onset": "",
         "Comments": ""
       },
-      "Hypercholesteremia": {
+      "3": {
+        "Condition": "Hypercholesteremia",
         "Yes": false,
         "No": false,
         "Onset": "",
         "Comments": ""
       },
-      "Depression": {
+      "4": {
+        "Condition": "Depression",
         "Yes": false,
         "No": false,
         "Onset": "",
         "Comments": ""
       },
-      "HIV": {
+      "5": {
+        "Condition": "HIV",
         "Yes": false,
         "No": false,
         "Onset": "",

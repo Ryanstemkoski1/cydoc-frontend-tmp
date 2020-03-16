@@ -113,9 +113,10 @@ export default class GenerateNote extends Component {
             var display = false 
             var display_string = ("<div>" + item + ": ")
             for (var value in this.context["Physical Exam"][item]) {
+                if (item === 'Vitals') display_string += "</div> <div>"
                 if (this.context["Physical Exam"][item][value] && this.context["Physical Exam"][item][value] !== 0 && this.context["Physical Exam"][item][value] !== '0') {
-                    if (this.context["Physical Exam"][item][value] === true) display_string += (value + ", ")
-                    else display_string += (value + ": " + this.context["Physical Exam"][item][value] + ", ")
+                    if (this.context["Physical Exam"][item][value] === true) display_string += (value + ", ") 
+                    else display_string += (value + ": " + this.context["Physical Exam"][item][value] + ((value === 'Temperature') ? "&#176;" + "C" : "") + ((item === 'Vitals') ? "  " : ", "))
                     none = false 
                     display = true 
                 }
