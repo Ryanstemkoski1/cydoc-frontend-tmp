@@ -34,17 +34,14 @@ export default class ReviewOfSystemsContent extends Component {
     generateList = (systemsCategories) => {
         return Object.keys(systemsCategories).map(
             (label) =>
-                <Grid.Column>
                     <ReviewOfSystemsCategory category={label} options={systemsCategories[label]} />
-                </Grid.Column>
-
         )
     }
 
     render() {
         return (
             <Fragment>
-                <Grid columns={3} padded>
+                <Grid columns={3} className="ui stackable grid" padded>
                     {this.generateList(this.state.test)}
                 </Grid>
             </Fragment>

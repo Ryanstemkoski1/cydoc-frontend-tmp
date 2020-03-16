@@ -54,7 +54,7 @@ export class HPIStore extends React.Component {
             }
         }
 
-        this.context.addNote(note)
+        this.context.updateNote(note)
     }
 
     loadNote = (note) => {
@@ -63,12 +63,19 @@ export class HPIStore extends React.Component {
             _id: note._id,
             ...note.body
         })
-        
+    }
+
+    deleteNote = (note) => {
+        this.context.deleteNote(note)
     }
 
     render = () => {
         return(
-            <Context.Provider value = {{...this.state, onContextChange: this.onContextChange, saveNote: this.saveNote, loadNote: this.loadNote}}>
+            <Context.Provider value = {{...this.state, 
+                                        onContextChange: this.onContextChange, 
+                                        saveNote: this.saveNote, 
+                                        loadNote: this.loadNote,
+                                        deleteNote: this.deleteNote}}>
                 {this.props.children}
             </Context.Provider>
         )

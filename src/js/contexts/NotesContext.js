@@ -31,13 +31,57 @@ export class NotesStore extends React.Component {
         this.setState({notes: notes});
     }
 
-    addNote = async(note) => {
+    addNote = async() => {
+
+        let note = {noteName: "Untitled Note", doctorID: this.context.user._id, clinicID: this.context.user.workplace, body: null}
+
+        //note.doctorID = this.context.user._id
+        //note.clinicID = this.context.user.workplace
+
+        let response = await client.post("/record/new", note)
+
+        if (response == null) {
+            alert("null response")
+            return
+        }
+
+        if (response.status - 200 < 100) {
+            this.setState({notes: [...this.state.notes, response.data]})
+            alert("Create Success")
+        } else {
+            alert(response.data.Message)
+        }
+    }
+
+    deleteNote = async(note) => {
 
         note.doctorID = this.context.user._id
         note.clinicID =  this.context.user.workplace
 
-        this.setState({notes: [...this.state.notes, note]})
-        let response = await client.post("/record/new", note)
+        this.setState({notes: this.state.notes.filter((prevNote) => prevNote._id !== note._id)})
+        let response = await client.delete(`/record/${note._id}`, note)
+
+        if (response == null) {
+            alert("null response")
+            return
+        }
+
+        console.log(response)
+
+        if (response.status - 200 < 100) {
+            alert("Delete Success")
+        } else {
+            alert(response.data.Message)
+        }
+    }
+
+    updateNote = async(note) => {
+
+        note.doctorID = this.context.user._id
+        note.clinicID =  this.context.user.workplace
+
+        this.setState({notes: this.state.notes.map((prevNote) => prevNote._id === note._id ? note : prevNote)})
+        let response = await client.put(`/record/${note._id}`, note)
 
         if (response == null) {
             alert("null response")
@@ -55,7 +99,11 @@ export class NotesStore extends React.Component {
 
     render = () => {
         return(
-            <Context.Provider value = {{...this.state, loadNotes: this.loadNotes, addNote: this.addNote}}>
+            <Context.Provider value = {{...this.state, 
+                                        loadNotes: this.loadNotes, 
+                                        addNote: this.addNote, 
+                                        deleteNote: this.deleteNote,
+                                        updateNote: this.updateNote}}>
                 {this.props.children}
             </Context.Provider>
         )

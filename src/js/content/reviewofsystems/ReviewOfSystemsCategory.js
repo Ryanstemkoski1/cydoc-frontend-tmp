@@ -24,7 +24,7 @@ export default class ReviewOfSystemsCategory extends Component{
 
     render() {
         return (
-            <Grid.Column>
+            <Grid.Row>
                 <h3>{this.category}</h3>
                 <Grid centered columns={3}>
                     {this.options.map(
@@ -42,7 +42,7 @@ export default class ReviewOfSystemsCategory extends Component{
                         </Grid.Row>
                     )}
                 </Grid>
-            </Grid.Column>
+            </Grid.Row>
         );
     }
 

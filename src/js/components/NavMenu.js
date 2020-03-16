@@ -58,7 +58,7 @@ function DefaultMenuItems() {
             <Link to={"/login"}>Login</Link>
         </Menu.Item></a>
         <a> <Menu.Item name="register">
-            <Link to={"/login"}>Register</Link>
+            <Link to={"/register"}>Register</Link>
         </Menu.Item></a>
     </Fragment>;
 }
@@ -67,13 +67,13 @@ function DefaultMenuItems() {
 function LoggedInMenuItems(props) {
     return <Fragment>
         <a> <Menu.Item name="create_note">
-            <Link to={"/editnote"}>Create Note</Link>
+            <Link to={"/editnote"}>Edit Note</Link>
         </Menu.Item> </a>
         <a> <Menu.Item name="about">
             <Link to={"/creategraph"}>Create Template</Link>
         </Menu.Item> </a>
         <a> <Menu.Item name="login">
-            <Link to={"/dashboard"}>Load Note</Link>
+            <Link to={"/dashboard"}>My Notes</Link>
         </Menu.Item></a>
         <a><Menu.Item name="register">
             <Link to={"/dashboard"}>Welcome, {props.name}</Link>

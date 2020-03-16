@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Icon, Menu} from 'semantic-ui-react'
+import {Icon, Menu, Button} from 'semantic-ui-react'
 import NotesContext from '../contexts/NotesContext'
 
 
@@ -46,9 +46,8 @@ export default class VerticalMenu extends Component {
                     header
                     name='Notes'
                     active={activeItem === 'Notes'}
-                    onClick={this.handleItemClick}
                 >
-                    <Icon name="plus" />
+                    <Icon name="plus" link onClick={this.context.addNote}/>
                     <Icon name="search" />
                     Notes
                 </Menu.Item>
@@ -59,7 +58,6 @@ export default class VerticalMenu extends Component {
                     header
                     name='Knowledge Graphs'
                     active={activeItem === 'Knowledge Graphs'}
-                    onClick={this.handleItemClick}
                 >
                     <Icon name="plus" />
                     <Icon name="search" />
