@@ -23,7 +23,7 @@ class HandleInput extends React.Component {
     handleClick() {
         var values = this.context['hpi']
         if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'].splice(this.props.input_id, 1)
-        else values[this.props.category_code][this.props.uid]['response'].splice(this.props.input_id, 1) 
+        else delete values[this.props.category_code][this.props.uid]['response'][this.props.input_id]
         this.context.onContextChange("hpi", values)
     }
 

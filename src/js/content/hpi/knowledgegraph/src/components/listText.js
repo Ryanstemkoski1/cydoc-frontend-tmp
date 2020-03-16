@@ -10,13 +10,15 @@ export default class ListText extends React.Component {
         this.state = {
             res: this.props.am_child ? input_res['children'][this.props.child_uid] : input_res['response']
         }
-        this.handleClick = this.handleClick.bind(this);
-    }
+        this.handlePlusClick = this.handlePlusClick.bind(this); 
+    } 
 
-    handleClick() {
+    handlePlusClick() {
         var values = this.context['hpi']
-        if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'].push("")
-        else values[this.props.category_code][this.props.uid]["response"].push("")
+        var list_keys = Object.keys(values[this.props.category_code][this.props.uid]['response'])
+        var last_index = list_keys[list_keys.length - 1] + 1
+        if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'][last_index] = ""
+        else values[this.props.category_code][this.props.uid]["response"][last_index] = ""
         this.context.onContextChange("hpi", values)
     }
 
@@ -24,7 +26,7 @@ export default class ListText extends React.Component {
         var button_map = []
         let input_res = this.context['hpi'][this.props.category_code][this.props.uid]
         let res = this.props.am_child ? input_res['children'][this.props.child_uid] : input_res['response']
-        for (var res_index in res) {
+        for (var res_index in res) { 
             button_map.push(<HandleInput 
                 key = {res_index}
                 type = {this.props.type}
@@ -32,12 +34,12 @@ export default class ListText extends React.Component {
                 category_code = {this.props.category_code}
                 am_child={this.props.am_child}
                 child_uid={this.props.child_uid}
-                input_id={res_index}
+                input_id={res_index} 
             />)
         }
         return (
         <div> 
             <div> {button_map}</div>
-            <div> <button onClick={this.handleClick} style={{borderRadius: '50%'}}> + </button> </div>
+            <div> <button onClick={this.handlePlusClick} style={{borderRadius: '50%'}}> + </button> </div>
         </div>)
         }}
