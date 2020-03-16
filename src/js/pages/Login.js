@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import { Form, Grid, Header, Segment, Button} from "semantic-ui-react";
 import {connect} from "react-redux";
-import {loginRequest} from "../actions";
 import {Redirect} from "react-router";
 import {Link} from "react-router-dom";
 import AuthContext from "../contexts/AuthContext";
 import NotesContext from "../contexts/NotesContext";
-
 import {client} from "../constants/api.js"
 
 

@@ -1,24 +1,9 @@
 import React, {Component, Fragment} from 'react';
 import {Container, Header, Icon, Menu} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import {logout} from "../actions";
 import {Link} from "react-router-dom";
 import "../content/hpi/knowledgegraph/src/css/App.css";
 import AuthContext from "../contexts/AuthContext";
-
-function mapDispatchToProps(dispatch) {
-    return {
-        logout: () => dispatch(logout())
-    };
-}
-
-const mapStateToProps = state => {
-    return {
-        isLoggedIn: state.isLoggedIn,
-        user: state.user
-    };
-};
-
 
 //Navigation Bar component that will go at the top of most pages
 class ConnectedNavMenu extends Component {
