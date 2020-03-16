@@ -1,12 +1,12 @@
 import React from 'react'
 import {Input, Form} from "semantic-ui-react";
-import HPIContext from "../../contexts/HPIContext";
+import HPIContext from "../contexts/HPIContext"
 
-class MedicalHistoryInput extends React.Component {
+class ConditionInput extends React.Component {
     static contextType = HPIContext 
     constructor(props, context) {
         super(props, context)
-        var condition = this.context["Medical History"][this.props.index]['Condition']
+        var condition = this.context[this.props.category][this.props.index]['Condition']
         var answer = condition.length === 0 ? "" : condition
         this.state = {
             textInput: answer,
@@ -17,9 +17,9 @@ class MedicalHistoryInput extends React.Component {
 
     handleInputChange = (event) => { 
         this.setState({textInput: event.target.value})
-        const values = this.context["Medical History"]
+        const values = this.context[this.props.category]
         values[this.props.index]["Condition"] = event.target.value
-        this.context.onContextChange("Medical History", values)
+        this.context.onContextChange(this.props.category, values)
     }
 
     render() {
@@ -28,7 +28,7 @@ class MedicalHistoryInput extends React.Component {
                 className={this.state.isTitleFocused === true ? "ui input focus" : "ui input transparent"}
                 type='text'
                 placeholder="Condition"
-                style={{fontSize: 14, marginBottom: 5, outline: 'none'}}
+                style={{fontSize: 15, marginBottom: 5, outline: 'none'}}
                 onChange={this.handleInputChange}
                 onFocus={()=>{this.setState({isTitleFocused: true})}}
                 onBlur={()=>{this.setState({isTitleFocused: false})}}
@@ -38,4 +38,4 @@ class MedicalHistoryInput extends React.Component {
         }
     }
 
-export default MedicalHistoryInput
+export default ConditionInput

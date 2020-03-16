@@ -64,42 +64,48 @@
   },
   "FAMILY_HISTORY": {
     "STATE": {
-      "Type II Diabetes": {
+      "0": {
+        "Condition": "Type II Diabetes",
         "Yes": false,
         "No": false,
         "Family Member": "",
         "Cause of Death": false,
         "Comments": ""
       },
-      "Myocardial Infarction": {
+      "1": {
+        "Condition": "Myocardial Infarction",
         "Yes": false,
         "No": false,
         "Family Member": "",
         "Cause of Death": false,
         "Comments": ""
       },
-      "Hypertension": {
+      "2": {
+        "Condition": "Hypertension",
         "Yes": false,
         "No": false,
         "Family Member": "",
         "Cause of Death": false,
         "Comments": ""
       },
-      "Hypercholesteremia": {
+      "3": {
+        "Condition": "Hypercholesteremia",
         "Yes": false,
         "No": false,
         "Family Member": "",
         "Cause of Death": false,
         "Comments": ""
       },
-      "Depression": {
+      "4": {
+        "Condition": "Depression",
         "Yes": false,
         "No": false,
         "Family Member": "",
         "Cause of Death": false,
         "Comments": ""
       },
-      "HIV": {
+      "5": {
+        "Condition": "HIV",
         "Yes": false,
         "No": false,
         "Family Member": "",

@@ -3,30 +3,29 @@ import {Table} from "semantic-ui-react";
 import AddRowButton from "./AddRowButton"
 import PropTypes from 'prop-types';
 import {TableBodyRow} from "./TableBodyRow";
+import HPIContext from "../contexts/HPIContext"
 
 //Component for a table layout
 export default class TableContent extends Component {
-    constructor(props) {
-        super(props);
+    static contextType = HPIContext
+    constructor(props, context) {
+        super(props, context);
         // TODO: add back addRow functionality
-        // this.addRow = this.addRow.bind(this);
+        this.addRow = this.addRow.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
     }
 
     //modify the current values in the table to reflect changes
     // and call the handler prop
-    handleTableBodyChange(event, data){
-        console.log(data);
+    handleTableBodyChange(event, data){ 
         let newState = this.props.values;
         newState[data.rowindex][data.placeholder] = data.value;
-        console.log(newState);
         this.props.onTableBodyChange(newState);
     }
 
-    //method to generate an collection of the three default rows
-    makeTableBodyRows(){
-        const nums = [0,1,2];
+    //method to generate an collection of rows
+    makeTableBodyRows(nums){
         return nums.map((rowindex, index) => <TableBodyRow
             key={index}
             rowindex={rowindex}
@@ -46,15 +45,17 @@ export default class TableContent extends Component {
         );
     }
 
-    // addRow() {
-    //     let nextState = this.state;
-    //     nextState.rows.push(this.tableBodyRow);
-    //     this.setState(nextState);
-    // }
+    addRow() {
+        let values = this.context[this.props.category]
+        var last_index = values.length.toString()
+        values[last_index] = {Procedure: "", Date: "", Comments: ""}
+        this.context.onContextChange(this.props.category, values);
+    }
 
     render(){
+        var nums = Object.keys(this.props.values)
         const headerRow = this.makeHeader();
-        const rows = this.makeTableBodyRows();
+        var rows = this.makeTableBodyRows(nums);
         return (
             <Fragment>
                 <br/>

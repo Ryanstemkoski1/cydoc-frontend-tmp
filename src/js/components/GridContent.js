@@ -49,6 +49,5 @@ GridContent.propTypes = {
     contentHeader: PropTypes.any.isRequired, //Heading that goes over the divider
     numColumns: PropTypes.number.isRequired, //Number of columns in the grid
     rows: PropTypes.array.isRequired, //The rows that will comprise the body of the note. Array of Grid.Row Components.
-    customNoteRow: PropTypes.any.isRequired, //The row that is added to the note when the add row button is clicked
 };
 
