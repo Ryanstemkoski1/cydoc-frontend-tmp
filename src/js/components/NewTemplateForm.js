@@ -2,15 +2,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import uuidv1 from "uuid";
-import { addTemplate } from "../actions/index";
 import {Container, Form, Header, Segment} from "semantic-ui-react";
 import {Redirect} from "react-router-dom"
 
-function mapDispatchToProps(dispatch) {
-    return {
-        addTemplate: note => dispatch(addTemplate(note))
-    };
-}
+
 class ConnectedCreateTemplateForm extends Component {
     constructor(props) {
         super(props);
@@ -59,5 +54,5 @@ class ConnectedCreateTemplateForm extends Component {
         );
     }
 }
-const NewTemplateForm = connect(null, mapDispatchToProps)(ConnectedCreateTemplateForm);
+const NewTemplateForm = ConnectedCreateTemplateForm;
 export default NewTemplateForm;

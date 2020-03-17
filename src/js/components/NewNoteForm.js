@@ -2,15 +2,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import uuidv1 from "uuid";
-import { addNote } from "../actions/index";
 import {Container, Form, Header, Segment} from "semantic-ui-react";
 import {Redirect} from "react-router-dom"
 
-function mapDispatchToProps(dispatch) {
-    return {
-        addNote: note => dispatch(addNote(note))
-    };
-}
+
 class ConnectedCreateNoteForm extends Component {
     constructor(props) {
         super(props);
@@ -59,5 +54,5 @@ class ConnectedCreateNoteForm extends Component {
         );
     }
 }
-const NewNoteForm = connect(null, mapDispatchToProps)(ConnectedCreateNoteForm);
+const NewNoteForm = ConnectedCreateNoteForm;
 export default NewNoteForm;

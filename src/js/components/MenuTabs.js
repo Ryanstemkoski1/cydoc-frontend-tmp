@@ -3,24 +3,12 @@ import {Menu, Container, Button, Dropdown} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import {TAB_NAMES} from '../constants/constants'
 import {connect} from "react-redux";
-import {saveNote} from "../actions";
 import "../content/hpi/knowledgegraph/src/css/App.css";
 import {Input} from "semantic-ui-react";
 import HPIContext from '../contexts/HPIContext';
 import {MENU_TABS_MOBILE_BP} from "../constants/breakpoints.js";
 import "../../css/components/menuTabs.css";
 
-const mapStateToProps = state => {
-    return {
-        currentNote: state.currentNote
-    };
-};
-
-function mapDispatchToProps(dispatch){
-    return {
-        saveNote: note => dispatch(saveNote(note))
-    };
-}
 //Component for the tabs that toggle the different sections of the Create Note editor
 class ConnectedMenuTabs extends Component {
     static contextType = HPIContext
@@ -165,5 +153,5 @@ ConnectedMenuTabs.propTypes = {
   onTabChange: PropTypes.func
 };
 
-const MenuTabs = connect(mapStateToProps, mapDispatchToProps)(ConnectedMenuTabs);
+const MenuTabs = ConnectedMenuTabs;
 export default MenuTabs;

@@ -15,10 +15,17 @@ class ConnectedRecords extends Component {
         }
     }
 
-    handleClick = (e, f) => {
+    handleLoad = (e, f) => {
         if (this.props.activeNote) {
             this.context.loadNote(this.props.activeNote)
             this.setState({redirect: true})
+        }
+    }
+
+    handleDelete = (e, f) => {
+        if (this.props.activeNote) {
+            this.context.deleteNote(this.props.activeNote)
+            this.props.setActive(null)
         }
     }
 
@@ -35,8 +42,11 @@ class ConnectedRecords extends Component {
                 <Segment style={{overflow: 'auto', maxHeight: "50vh" }}>
                     <pre>{this.props.activeNote ? JSON.stringify(this.props.activeNote, null, 2) : "Select a Note!"}</pre>
                 </Segment>
-                <Button disabled={!this.props.activeNote} onClick={this.handleClick} floated>
+                <Button disabled={!this.props.activeNote} onClick={this.handleLoad} floated>
                     Load
+                </Button>
+                <Button disabled={!this.props.activeNote} onClick={this.handleDelete} floated>
+                    Delete
                 </Button>
             </Fragment>
         );

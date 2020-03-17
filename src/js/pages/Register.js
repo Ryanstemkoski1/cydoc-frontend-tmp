@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { Form, Grid, Header, Segment, Button} from "semantic-ui-react";
 import {connect} from "react-redux";
-import {loginRequest} from "../actions";
 import {Redirect} from "react-router";
 import AuthContext from "../contexts/AuthContext";
 import NotesContext from "../contexts/NotesContext";

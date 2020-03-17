@@ -137,8 +137,7 @@ export default class FamilyHistoryContent extends Component {
                     contentHeader={<FamilyHistoryContentHeader />}
                     rows={listItems}
                     question_type = {(this.props.response_choice ? "hpi" : "add_row")}
-                    value_type = "Family History"
-                    customNoteRow={customNoteRow}
+                    value_type = "Family History" 
                     conditions={list_values}
                     mobile={mobile}
                 />

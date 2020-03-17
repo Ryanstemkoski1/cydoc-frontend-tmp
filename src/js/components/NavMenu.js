@@ -1,25 +1,15 @@
 import React, {Component, Fragment} from 'react';
 import {Dropdown, Header, Icon, Menu} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
 import {logout} from "../actions";
+=======
+import {Link} from "react-router-dom";
+>>>>>>> bowen
 import "../content/hpi/knowledgegraph/src/css/App.css";
 import AuthContext from "../contexts/AuthContext";
 import {DEFAULT_NAV_MENU_MOBILE_BP, LOGGEDIN_NAV_MENU_MOBILE_BP} from "../constants/breakpoints.js";
 import "../../css/components/navMenu.css";
-
-function mapDispatchToProps(dispatch) {
-    return {
-        logout: () => dispatch(logout())
-    };
-}
-
-const mapStateToProps = state => {
-    return {
-        isLoggedIn: state.isLoggedIn,
-        user: state.user
-    };
-};
-
 
 //Navigation Bar component that will go at the top of most pages
 class ConnectedNavMenu extends Component {
@@ -86,6 +76,7 @@ NavMenu.propTypes = {
 };
 
 //Functional component for menu items that show when user is not logged in
+<<<<<<< HEAD
 function DefaultMenuItems(props) {
     return props.collapseNav ? 
         (<Menu.Item>
@@ -106,10 +97,28 @@ function DefaultMenuItems(props) {
                 <Menu.Item name="register" href="/register" text="Register" />
             </Fragment>
         );
+=======
+function DefaultMenuItems() {
+    return <Fragment>
+        <a> <Menu.Item name="create_note">
+            <Link to={"/login"}>Create Note</Link>
+        </Menu.Item> </a>
+        <a> <Menu.Item name="about">
+            <Link to={"/about"}>About</Link>
+        </Menu.Item> </a>
+        <a> <Menu.Item name="login">
+            <Link to={"/login"}>Login</Link>
+        </Menu.Item></a>
+        <a> <Menu.Item name="register">
+            <Link to={"/register"}>Register</Link>
+        </Menu.Item></a>
+    </Fragment>;
+>>>>>>> bowen
 }
 
 //Functional component for menu items that show when user is logged in
 function LoggedInMenuItems(props) {
+<<<<<<< HEAD
     return props.collapseNav ?
         (<Menu.Item>
             <Dropdown icon="large bars">
@@ -137,4 +146,24 @@ function LoggedInMenuItems(props) {
                 <Menu.Item name="logout" href="/login" text="Logout" onClick={props.handleLogout} />
             </Fragment>
         );
+=======
+    return <Fragment>
+        <a> <Menu.Item name="create_note">
+            <Link to={"/editnote"}>Edit Note</Link>
+        </Menu.Item> </a>
+        <a> <Menu.Item name="about">
+            <Link to={"/creategraph"}>Create Template</Link>
+        </Menu.Item> </a>
+        <a> <Menu.Item name="login">
+            <Link to={"/dashboard"}>My Notes</Link>
+        </Menu.Item></a>
+        <a><Menu.Item name="register">
+            <Link to={"/dashboard"}>Welcome, {props.name}</Link>
+            <Icon name="user" style={{marginLeft: "7px"}}/>
+        </Menu.Item></a>
+        <a> <Menu.Item name={"logout"} onClick={props.handleLogout}>
+            <Link to={"/login"}>Logout</Link>
+        </Menu.Item></a>
+    </Fragment>;
+>>>>>>> bowen
 }
