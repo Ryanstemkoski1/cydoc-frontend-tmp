@@ -84,14 +84,14 @@ export default class FamilyHistoryContent extends Component {
             }}
         const listItems = list_values.map((condition, index) =>
             <FamilyHistoryNoteRow   key={condition}
-                                    condition={<ConditionInput key={condition} index={index_dict ? index_dict[condition] : index} category={"Family History"}/>}
-                                    familyMember={this.context["Family History"][index_dict ? index_dict[condition] : index]["Family Member"]}
-                                    comments={this.context["Family History"][index_dict ? index_dict[condition] : index]["Comments"]}
+                                    condition={<ConditionInput key={condition} index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index} category={"Family History"}/>}
+                                    familyMember={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Family Member"]}
+                                    comments={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Comments"]}
                                     onChange={this.handleChange}
                                     onToggleButtonClick={this.handleToggleButtonClick}
-                                    yesActive={this.context["Family History"][index_dict ? index_dict[condition] : index]["Yes"]}
-                                    noActive={this.context["Family History"][index_dict ? index_dict[condition] : index]["No"]}
-                                    CODActive={this.context["Family History"][index_dict ? index_dict[condition] : index]["Cause of Death"]}
+                                    yesActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Yes"]}
+                                    noActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["No"]}
+                                    CODActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Cause of Death"]}
             />)
 
         return(

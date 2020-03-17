@@ -15,7 +15,7 @@ export default class ListText extends React.Component {
 
     handlePlusClick() {
         var values = this.context['hpi']
-        var list_keys = Object.keys(values[this.props.category_code][this.props.uid]['response'])
+        var list_keys = this.props.am_child ? Object.keys(values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response']) : Object.keys(values[this.props.category_code][this.props.uid]['response'])
         var last_index = list_keys[list_keys.length - 1] + 1
         if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'][last_index] = ""
         else values[this.props.category_code][this.props.uid]["response"][last_index] = ""
