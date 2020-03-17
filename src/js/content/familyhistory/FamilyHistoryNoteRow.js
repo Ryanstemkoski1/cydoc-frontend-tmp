@@ -8,11 +8,11 @@ import { render } from "react-dom";
 export default class FamilyHistoryNoteRow extends Component {
 
     render = () => {
-        const { yesActive, condition, onToggleButtonClick, noActive, CODActive, familyMember, onChange, comments} = this.props;
+        const { yesActive, condition, onToggleButtonClick, noActive, CODActive, familyMember, onChange, comments } = this.props;
         return (
             <Grid.Row>
                 <Grid.Column>
-                    {this.props.condition}
+                    {condition}
                 </Grid.Column>
                 <Grid.Column>
                     <ToggleButton active={yesActive}

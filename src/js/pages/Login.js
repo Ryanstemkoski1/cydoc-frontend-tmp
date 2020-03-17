@@ -3,6 +3,7 @@ import { Form, Grid, Header, Segment, Button} from "semantic-ui-react";
 import {connect} from "react-redux";
 import {loginRequest} from "../actions";
 import {Redirect} from "react-router";
+import {Link} from "react-router-dom";
 import AuthContext from "../contexts/AuthContext";
 import NotesContext from "../contexts/NotesContext";
 
@@ -149,9 +150,12 @@ class LoginPage extends Component {
                                 </Form.Button>
                                 
                         </Form>
-                        <Button color='grey' size='small' floated='right' onClick={this.handleRegister}>
-                                    Sign up
-                        </Button>
+                        <Link to={"/register"}>
+                            <Button color='grey' size='small' floated='right'>
+                                Sign up
+                            </Button>
+                        </Link>
+                        
                     </Segment>
                 </Grid.Column>
             </Grid>

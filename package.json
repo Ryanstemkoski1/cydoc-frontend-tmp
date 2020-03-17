@@ -6,6 +6,7 @@
     "axios": "^0.19.0",
     "gulp-chmod": "^3.0.0",
     "history": "^1.17.0",
+    "node": "^11.15.0",
     "prop-types": "^15.7.2",
     "react": "^16.9.0",
     "react-cookie": "^4.0.3",
@@ -14,7 +15,7 @@
     "react-numeric-input": "^2.2.3",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.1.1"
+    "react-scripts": "^3.1.1"
   },
   "scripts": {
     "build-semantic": "cd src/semantic && gulp build-css build-assets",

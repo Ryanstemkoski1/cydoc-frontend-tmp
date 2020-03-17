@@ -2,9 +2,11 @@ import React, {Component, Fragment} from 'react';
 import GridContent from "../../components/GridContent";
 import FamilyHistoryContentHeader from "./FamilyHistoryContentHeader";
 import FamilyHistoryNoteRow from "./FamilyHistoryNoteRow";
+import FamilyHistoryNoteItem from "./FamilyHistoryNoteItem";
 import {CONDITIONS} from '../../constants/constants'
 import HPIContext from "../../contexts/HPIContext"
 import ConditionInput from "../../components/ConditionInput"
+import {FAMILY_HISTORY_MOBILE_BP} from "../../constants/breakpoints.js";
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.
@@ -14,6 +16,11 @@ export default class FamilyHistoryContent extends Component {
 
     constructor(props, context) {
         super(props, context);
+        this.state = {
+            windowWidth: 0,
+            windowHeight: 0,
+        };
+        this.updateDimensions = this.updateDimensions.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
 
@@ -46,6 +53,22 @@ export default class FamilyHistoryContent extends Component {
         this.context.onContextChange("Family History", values)
     }
 
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions);
+    }
+ 
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions);
+    }
+
+    updateDimensions() {
+        let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+        let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+ 
+        this.setState({ windowWidth, windowHeight });
+    }
+
     //handles input field events
     handleChange(event, data){
         let conditions_array = Object.keys(this.context["Family History"]).map((value) => this.context['Family History'][value]['Condition'])
@@ -70,6 +93,8 @@ export default class FamilyHistoryContent extends Component {
     }
 
     render(){
+        const { windowWidth } = this.state;
+        const mobile = windowWidth < FAMILY_HISTORY_MOBILE_BP;
         //Create collection of rows
         // Use second OR statement so that the information may be auto-populated in the Family History tab
         var list_values = this.props.response_choice || Object.keys(this.context["Family History"])
@@ -80,7 +105,20 @@ export default class FamilyHistoryContent extends Component {
                 var condition = list_values[condition_index]
                 index_dict[condition] = conditions.indexOf(condition) 
             }}
-        const listItems = list_values.map((condition, index) =>
+        const listItems = mobile ? 
+        list_values.map((condition, index) => 
+        <FamilyHistoryNoteItem   key={condition}
+                                    condition={<ConditionInput key={condition} index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index} category={"Family History"}/>}
+                                    familyMember={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Family Member"]}
+                                    comments={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Comments"]}
+                                    onChange={this.handleChange}
+                                    onToggleButtonClick={this.handleToggleButtonClick}
+                                    yesActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Yes"]}
+                                    noActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["No"]}
+                                    CODActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Cause of Death"]}
+            />
+        ) :
+        list_values.map((condition, index) =>
             <FamilyHistoryNoteRow   key={condition}
                                     condition={<ConditionInput key={condition} index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index} category={"Family History"}/>}
                                     familyMember={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Family Member"]}
@@ -100,8 +138,11 @@ export default class FamilyHistoryContent extends Component {
                     rows={listItems}
                     question_type = {(this.props.response_choice ? "hpi" : "add_row")}
                     value_type = "Family History"
-                     />
+                    customNoteRow={customNoteRow}
+                    conditions={list_values}
+                    mobile={mobile}
+                />
             </Fragment>
-        )
+        );
     }
 }

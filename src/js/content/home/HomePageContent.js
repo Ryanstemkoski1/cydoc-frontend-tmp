@@ -6,7 +6,7 @@ import {Grid, Header} from "semantic-ui-react";
 export default class HomePageContent extends React.Component{
     render() {
         return (
-            <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' centered>
+            <Grid textAlign='center' verticalAlign='middle' centered>
                 <Grid.Column>
                     <Header as="h1" textAlign="center">
                         meet cydoc.
