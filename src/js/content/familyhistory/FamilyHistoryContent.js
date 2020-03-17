@@ -1,7 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import GridContent from "../../components/GridContent";
 import FamilyHistoryContentHeader from "./FamilyHistoryContentHeader";
-import {Input} from "semantic-ui-react";
 import FamilyHistoryNoteRow from "./FamilyHistoryNoteRow";
 import {CONDITIONS} from '../../constants/constants'
 import HPIContext from "../../contexts/HPIContext"
@@ -24,13 +23,13 @@ export default class FamilyHistoryContent extends Component {
         var conditions = []
         // Creates list of conditions present in Family History
         for (var value in values) {
-            conditions.push(values[value]['Condition'])
+            conditions.push(values[value]['Condition'].toLowerCase())
         }
         console.log(values)
         console.log(response_choice)
         for (var response_index in response_choice) {
             var response = response_choice[response_index]
-            var condition_index = conditions.indexOf(response)
+            var condition_index = conditions.indexOf(response.toLowerCase())
             if (condition_index === -1) {
                 var index = (Object.keys(values).length).toString()
                 values[index] = {
@@ -58,8 +57,7 @@ export default class FamilyHistoryContent extends Component {
 
     //handles toggle button events
     handleToggleButtonClick(event, data){
-        let conditions_array = Object.keys(this.context["Family History"]).map((value) => this.context['Family History'][value]['Condition'])
-        let index = conditions_array.indexOf(data.condition)
+        let index = data.condition.props.index
         const values = this.context["Family History"];
         const responses = ["Yes", "No"]
         const prevState = values[index][data.title];

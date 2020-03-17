@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import {Menu, Container} from 'semantic-ui-react'
 import DiseaseFormQuestions from "./DiseaseFormQuestions";
 import '../css/App.css';
-import DiseasesNames from './data/DiseasesNames';
 import HPIContext from "../../../../../contexts/HPIContext";
 import Accordian from "./accordian"
 
@@ -13,7 +12,7 @@ export class DiseaseForm extends React.Component {
     constructor(props, context) {
         super(props, context)
         this.state = {
-            diseasesNames: DiseasesNames,
+            diseasesNames: this.props.categories,
             functionLoad: false,
             questionMap: {}
         }

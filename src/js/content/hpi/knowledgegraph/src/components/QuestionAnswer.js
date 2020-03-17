@@ -54,7 +54,7 @@ class QuestionAnswer extends React.Component {
                     am_child={this.props.am_child}
                     child_uid={this.props.child_uid}
                 /> )}
-        else if (responseType === "SHORT-TEXT") {
+        else if (responseType === "SHORT-TEXT" || responseType === "LONG-TEXT") {
             button_map.push(<HandleInput key={this.props.question} 
                                          type={this.props.responseType}
                                          answers={this.props.answers}
@@ -83,7 +83,7 @@ class QuestionAnswer extends React.Component {
                 child_uid={this.props.child_uid}
                  />)
         }
-        else if (responseType === 'CLICK-BOXES'|| responseType === 'MEDS-POP') {
+        else if (responseType === 'CLICK-BOXES'|| responseType === 'MEDS-POP' || responseType === 'nan') {
             button_map = this.props.response_choice.map(item =>
                 <ButtonTag
                     key={item}

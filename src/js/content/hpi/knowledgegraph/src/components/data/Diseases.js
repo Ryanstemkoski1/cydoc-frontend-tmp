@@ -3,10 +3,10 @@ const diseaseData = [
         id: 1,
         name: "Cardiovascular & Respiratory",
         diseases: [
-            "Aortic aneurysm",
+            "Aortic Aneurysm",
             "Chest Pain",
             "Cough",
-            "Pacemaker issue",
+            "Pacemaker Issue",
             "Pneumothorax",
             "Pulmonary Embolism",
             "Shortness of Breath"

@@ -1,4 +1,3 @@
-import {Input} from "semantic-ui-react";
 import MedicalHistoryNoteRow from "./MedicalHistoryNoteRow";
 import React from 'react';
 import MedicalHistoryContentHeader from "./MedicalHistoryContentHeader";
@@ -24,11 +23,11 @@ export default class MedicalHistoryContent extends React.Component {
         var conditions = []
         // Creates list of conditions present in Medical History context 
         for (var value in values) {
-            conditions.push(values[value]['Condition'])
+            conditions.push(values[value]['Condition'].toLowerCase())
         }
         for (var response_index in response_choice) {
             var response = response_choice[response_index]
-            var condition_index = conditions.indexOf(response)
+            var condition_index = conditions.indexOf(response.toLowerCase())
             if (condition_index === -1) {
                 var index = (Object.keys(values).length).toString()
                 values[index] = {
@@ -54,8 +53,7 @@ export default class MedicalHistoryContent extends React.Component {
 
     //handles toggle button events
     handleToggleButtonClick(event, data){
-        let conditions_array = Object.keys(this.context['Medical History']).map((value) => this.context['Medical History'][value]["Condition"])
-        let index = conditions_array.indexOf(data.condition)
+        let index = data.condition.props.index
         const values = this.context["Medical History"]
         const responses = ["Yes", "No"]
         const prevState = values[index][data.title];

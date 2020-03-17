@@ -5,7 +5,6 @@ import ButtonItem from "./src/components/ButtonItem.js"
 import diseaseData from "./src/components/data/Diseases";
 import PositiveDiseases from "./src/components/PositiveDiseases";
 import DiseaseForm from "./src/components/DiseaseForm";
-import DiseasesNames from "./src/components/data/DiseasesNames";
 import API from "./src/API.js"
 import {Grid} from "semantic-ui-react";
 import HPIContext from "../../../contexts/HPIContext";
@@ -18,7 +17,6 @@ class HPIContent extends Component {
             diseaseArray: diseaseData,
             graphData: {},
             isLoaded: false, 
-            diseasesNames: DiseasesNames,
             children: [],
             activeItem: "",
             categories: {}
@@ -29,9 +27,16 @@ class HPIContent extends Component {
     componentDidMount() {
         const data = API
         data.then(res => {
-            var categories = new Set()
+            var categories = {}
             var nodes = res.data['nodes'] 
-            for (var node in nodes) categories.add(nodes[node]["category"])
+            for (var node in nodes) {
+                var key = (((nodes[node]["category"].split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase()); 
+                categories[key] = node.substring(0, 3) + "0001"
+            }
+            categories["Shortness of Breath"] = categories["Shortbreath"]
+            categories["Nausea/Vomiting"] = categories["Nausea-vomiting"]
+            delete categories["Shortbreath"]
+            delete categories["Nausea-vomiting"]
             this.setState({isLoaded: true, graphData: res.data, categories: categories})
         })}
 
@@ -91,8 +96,7 @@ class HPIContent extends Component {
                 style={{borderColor: "white", fontSize: '13px'}}
                 /></a>
         )
-
-        const {graphData, isLoaded, diseasesNames} = this.state;
+        const {graphData, isLoaded, categories} = this.state;
         var step = this.context['step']
         const positive_length = this.context['positivediseases'].length
         switch(step) {
@@ -107,7 +111,7 @@ class HPIContent extends Component {
             default:
                 if (isLoaded) { 
                     let category = this.context['positivediseases'][step-2]
-                    let parent_code = diseasesNames[category]
+                    let parent_code = categories[category]
                     let category_code = graphData['nodes'][parent_code]['category']
                 return (
                     <DiseaseForm
@@ -116,6 +120,7 @@ class HPIContent extends Component {
                         nextStep = {this.nextStep}
                         prevStep = {this.prevStep}
                         category = {category}
+                        categories = {this.state.categories}
                         diseaseTabs = {diseaseTabs}
                         parent_code = {parent_code}
                         tab_category = {category_code}

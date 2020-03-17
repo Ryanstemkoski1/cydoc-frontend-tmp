@@ -18,7 +18,7 @@ class DiseaseFormQuestions extends React.Component {
         }
         let response_choice = ''
         const {responseType} = this.props
-        if (responseType === "CLICK-BOXES" || responseType.slice(-3,responseType.length) === 'POP') {
+        if (responseType === "CLICK-BOXES" || responseType.slice(-3,responseType.length) === 'POP' || responseType === 'nan') {
             let click = question.search("CLICK")
             // if CLICK exists
             if (click > 0) {
