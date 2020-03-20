@@ -1,23 +1,44 @@
 import React, { Component } from 'react'
-import {Menu, Container} from 'semantic-ui-react'
+import {Menu, Dropdown } from 'semantic-ui-react'
 import MedicalHistoryContent from "../medicalhistory/MedicalHistoryContent";
 import SurgicalHistoryContent from "../surgicalhistory/SurgicalHistoryContent";
 import MedicationsContent from "../medications/MedicationsContent";
 import AllergiesContent from "../allergies/AllergiesContent";
 import SocialHistoryContent from "../socialhistory/SocialHistoryContent";
-import '../hpi/knowledgegraph/src/css/App.css'
+import '../../../css/content/patientHistory.css';
+import {PATIENT_HISTORY_MOBILE_BP} from "../../constants/breakpoints.js";
 
 export default class PatientHistoryContent extends Component {
     constructor() {
         super()
         this.state = {
+            windowWidth: 0,
+            windowHeight: 0,
             patient_history: ["medical history", "surgical history", "medications", "allergies", "social history"],
             activeItem: "medical history"
         }
+        this.updateDimensions = this.updateDimensions.bind(this);
         this.handleItemClick = this.handleItemClick.bind(this)
     }
+
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions);
+    }
+ 
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions);
+    }
+
+    updateDimensions() {
+        let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+        let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+ 
+        this.setState({ windowWidth, windowHeight });
+    }
+
     handleItemClick = (e, {name}) => {
-        var tabcontent = document.getElementsByClassName("tabcontent");
+        var tabcontent = document.getElementsByClassName("tab-content");
         for (var i = 0; i < tabcontent.length; i++) {
             tabcontent[i].style.display = "none";
         }
@@ -25,47 +46,56 @@ export default class PatientHistoryContent extends Component {
         this.setState({ activeItem: name });
     }
 
-    myFunction() {
-        var x = document.getElementById("patientnav");
-        if (x.className === "topnav") {
-            x.className = "ui vertical text menu"
-            x.style.cssText = "margin-left: 60px;"
-        } else {
-          x.className = "topnav";
-          x.style.cssText = "margin-left: 0px;"
-        }
-      }
-
     render() {
-        const tabs = this.state.patient_history.map((name, index) => 
-        <a>
-        <Menu.Item 
-            key={index} 
-            name={name} 
-            active={this.state.activeItem === name} 
-            onClick={this.handleItemClick} 
-            style={{borderColor: "white", fontSize: '13px'}} 
-            /> </a>
-            )
+        const { windowWidth, activeItem } = this.state;
+
+        const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
+
+        const expandedTabs = this.state.patient_history.map((name, index) => 
+            <Menu.Item 
+                key={index} 
+                name={name} 
+                active={this.state.activeItem === name} 
+                onClick={this.handleItemClick}
+                className="patient-history-tab" 
+            />
+        );
+
+        const dropdownTabs = [];
+        for (let i = 0; i < this.state.patient_history.length; i++) {
+            dropdownTabs.push({
+                key: i,
+                name: this.state.patient_history[i],
+                text: this.state.patient_history[i],
+                value: this.state.patient_history[i],
+                active: this.state.activeItem === this.state.patient_history[i],
+                onClick: this.handleItemClick,
+                className: "patient-history-tab",
+            });
+        }
+
         return (
-            <div>
-                <Menu tabular> 
-                    <div className="topnav" id='patientnav'> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-                        <Container style={{alignItems: 'center', display: 'flex'}}>
-                            {tabs}
-                        </Container> 
-                        <a href="javascript:void(0);" className="icon" onClick={this.myFunction}>
-                            <i className="fa fa-bars"></i>
-                        </a>
-                    </div>
-                </Menu>
-                <div id="medical history" className="tabcontent" style={{marginTop: 25, display: "block"}}><MedicalHistoryContent /> </div>
-                <div id="surgical history" className="tabcontent" style={{marginTop: 25, display: "none"}}><SurgicalHistoryContent /> </div>
-                <div id="medications" className="tabcontent" style={{marginTop: 25, display: "none"}}> 
-                <h5 style={{textAlign: 'right', marginRight: 50, display: "none"}}> scroll &rarr; </h5>
-                <MedicationsContent /> </div>
-                <div id="allergies" className="tabcontent" style={{marginTop: 25, display: "none"}}>  <AllergiesContent /> </div>
-                <div id="social history" className="tabcontent" style={{marginTop: 25, display: "none"}}> <SocialHistoryContent /> </div>
+            <div> 
+                {collapseTabs ? 
+                    <Dropdown text={activeItem} options={dropdownTabs} selection fluid scrolling={false} />
+                    : <Menu tabular items={expandedTabs}/>
+                } 
+
+                <div id="medical history" className="tab-content initial">
+                    <MedicalHistoryContent collapseTabs={collapseTabs} />
+                </div>
+                <div id="surgical history" className="tab-content">
+                    <SurgicalHistoryContent />
+                </div>
+                <div id="medications" className="tab-content"> 
+                    <MedicationsContent />
+                </div>
+                <div id="allergies" className="tab-content">
+                    <AllergiesContent />
+                </div>
+                <div id="social history" className="tab-content">
+                    <SocialHistoryContent />
+                </div>
             </div>
         )
     }

@@ -13,23 +13,23 @@ export default class MedicalHistoryNoteRow extends Component {
             </Grid.Column>
             <Grid.Column>
                 <ToggleButton active={yesActive}
-                              condition={condition}
+                              condition={condition.props.condition}
                               title="Yes"
                               onToggleButtonClick={onToggleButtonClick}/>
                 <ToggleButton active={noActive}
-                              condition={condition}
+                              condition={condition.props.condition}
                               title="No"
                               onToggleButtonClick={onToggleButtonClick}/>
             </Grid.Column>
             <Grid.Column>
                 <Form>
-                    <TextArea condition={condition} placeholder='Onset' value={onset}
+                    <TextArea condition={condition.props.condition} placeholder='Onset' value={onset}
                               onChange={onChange}/>
                 </Form>
             </Grid.Column>
             <Grid.Column>
                 <Form>
-                    <TextArea condition={condition} value={comments}
+                    <TextArea condition={condition.props.condition} value={comments}
                               onChange={onChange} placeholder='Comments'/>
                 </Form>
             </Grid.Column>

@@ -1,4 +1,5 @@
 import MedicalHistoryNoteRow from "./MedicalHistoryNoteRow";
+import MedicalHistoryNoteItem from "./MedicalHistoryNoteItem";
 import React from 'react';
 import MedicalHistoryContentHeader from "./MedicalHistoryContentHeader";
 import GridContent from "../../components/GridContent";
@@ -44,8 +45,8 @@ export default class MedicalHistoryContent extends React.Component {
 
     //handles input field events
     handleChange(event, data){
-        let conditions_array = Object.keys(this.context['Medical History']).map((value) => this.context['Medical History'][value]["Condition"])
-        let index = conditions_array.indexOf(data.condition)
+        let conditions_array = Object.keys(this.context['Medical History']).map((value) => this.context['Medical History'][value]["Condition"]);
+        let index = conditions_array.indexOf(data.condition);
         const values = this.context["Medical History"];
         values[index][data.placeholder] = data.value;
         this.context.onContextChange("Medical History", values);
@@ -53,7 +54,8 @@ export default class MedicalHistoryContent extends React.Component {
 
     //handles toggle button events
     handleToggleButtonClick(event, data){
-        let index = data.condition.props.index
+        let conditions_array = Object.keys(this.context['Medical History']).map((value) => this.context['Medical History'][value]["Condition"]);
+        let index = conditions_array.indexOf(data.condition);
         const values = this.context["Medical History"]
         const responses = ["Yes", "No"]
         const prevState = values[index][data.title];
@@ -63,12 +65,19 @@ export default class MedicalHistoryContent extends React.Component {
             if (data.title !== response) values[index][response] = false
         }
         this.context.onContextChange("Medical History", values);
+
+        let textAreas = document.getElementsByClassName(`text-area-${index}`);
+        for (let i = 0; i < textAreas.length; i++) {
+            data.title === responses[0] ? textAreas[i].style.display = "block" : textAreas[i].style.display = "none"; 
+        }
     }
 
     render(){ 
+        const collapseTabs = this.props.collapseTabs;
+
         // The second OR statement gets the list of Conditions in the "Medical History" context
         let list_values = this.props.response_choice || (Object.keys(this.context['Medical History'])).map((value) => this.context['Medical History'][value]["Condition"]) || CONDITIONS
-        const rows = this.generateListItems(list_values); 
+        const rows = this.generateListItems(list_values, collapseTabs); 
 
         return(
             <GridContent
@@ -77,20 +86,34 @@ export default class MedicalHistoryContent extends React.Component {
                 rows={rows}
                 question_type = {(this.props.response_choice ? "hpi" : "add_row")}
                 value_type = "Medical History"
+                mobile={collapseTabs}
             />
         );
     }
 
-    generateListItems(conditions) {
-        return conditions.map((condition, index) =>
-            <MedicalHistoryNoteRow key={index}
-                                   condition={<ConditionInput key={index} index={index} category={"Medical History"}/>}
-                                   onset={this.context["Medical History"][index]["Onset"]}
-                                   comments={this.context["Medical History"][index]["Comments"]}
-                                   onChange={this.handleChange}
-                                   onToggleButtonClick={this.handleToggleButtonClick}
-                                   yesActive={this.context["Medical History"][index]["Yes"]}
-                                   noActive={this.context["Medical History"][index]["No"]}
+    generateListItems(conditions, mobile) {
+        return mobile ?
+            conditions.map((condition, index) =>
+            <MedicalHistoryNoteItem
+                key={index}
+                condition={<ConditionInput key={index} index={index}  category={"Medical History"} condition={condition}/>}
+                onset={this.context["Medical History"][index]["Onset"]}
+                comments={this.context["Medical History"][index]["Comments"]}
+                onChange={this.handleChange}
+                onToggleButtonClick={this.handleToggleButtonClick}
+                yesActive={this.context["Medical History"][index]["Yes"]}
+                noActive={this.context["Medical History"][index]["No"]}
+            />) :
+            conditions.map((condition, index) =>
+            <MedicalHistoryNoteRow
+                key={index}
+                condition={<ConditionInput key={index} index={index} category={"Medical History"} condition={condition}/>}
+                onset={this.context["Medical History"][index]["Onset"]}
+                comments={this.context["Medical History"][index]["Comments"]}
+                onChange={this.handleChange}
+                onToggleButtonClick={this.handleToggleButtonClick}
+                yesActive={this.context["Medical History"][index]["Yes"]}
+                noActive={this.context["Medical History"][index]["No"]}
             />);
     }
 }

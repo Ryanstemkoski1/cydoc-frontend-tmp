@@ -1,4 +1,4 @@
-import { Divider, Grid, Input } from "semantic-ui-react";
+import { Divider, Grid } from "semantic-ui-react";
 import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import AddRowButton from "./AddRowButton";
@@ -40,7 +40,7 @@ export default class GridContent extends Component {
                     {rows}
                 </Grid>
                 <Divider />
-                <AddRowButton onClick={this.addRow}/>
+                {this.props.question_type === "add_row" ? <AddRowButton onClick={this.addRow}/> : ""}
             </Fragment>
             ) : (
             <Fragment>

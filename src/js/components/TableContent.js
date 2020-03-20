@@ -28,7 +28,7 @@ export default class TableContent extends Component {
     makeTableBodyRows(nums){
         return nums.map((rowindex, index) => <TableBodyRow
             key={index}
-            rowindex={rowindex}
+            rowindex={parseInt(rowindex)}
             tableBodyPlaceholders={this.props.tableBodyPlaceholders}
             onTableBodyChange={this.handleTableBodyChange}
             values={this.props.values}

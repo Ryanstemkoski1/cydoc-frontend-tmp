@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Menu, Container} from 'semantic-ui-react'
+import {Menu} from 'semantic-ui-react'
 import './src/css/App.css';
 import ButtonItem from "./src/components/ButtonItem.js"
 import diseaseData from "./src/components/data/Diseases";
