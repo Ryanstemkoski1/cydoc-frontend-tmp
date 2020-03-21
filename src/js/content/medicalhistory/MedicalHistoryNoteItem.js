@@ -33,7 +33,6 @@ export default class MedicalHistoryNoteItem extends Component {
                     <Form.TextArea
                         label="Onset"
                         className={`text-area text-area-${condition.props.index}`}
-                        // style={{display: `${condition.props.}`}}
                         condition={condition.props.condition}
                         placeholder="Onset"
                         value={onset}

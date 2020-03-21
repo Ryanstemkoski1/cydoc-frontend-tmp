@@ -85,13 +85,13 @@ export default class PatientHistoryContent extends Component {
                     <MedicalHistoryContent collapseTabs={collapseTabs} />
                 </div>
                 <div id="surgical history" className="tab-content">
-                    <SurgicalHistoryContent />
+                    <SurgicalHistoryContent mobile={collapseTabs} />
                 </div>
                 <div id="medications" className="tab-content"> 
-                    <MedicationsContent />
+                    <MedicationsContent mobile={collapseTabs} />
                 </div>
                 <div id="allergies" className="tab-content">
-                    <AllergiesContent />
+                    <AllergiesContent mobile={collapseTabs}/>
                 </div>
                 <div id="social history" className="tab-content">
                     <SocialHistoryContent />

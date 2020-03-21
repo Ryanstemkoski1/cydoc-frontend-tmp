@@ -24,6 +24,7 @@ export default class MedicationsContent extends Component {
                         values={context["Medications"]}
                         onTableBodyChange={context.onContextChange.bind(context, "Medications")}
                         pop={true}
+                        mobile={this.props.mobile}
                     />
                 </div>
                 )

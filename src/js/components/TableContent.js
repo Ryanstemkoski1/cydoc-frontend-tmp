@@ -1,9 +1,10 @@
 import React, {Component, Fragment} from 'react';
-import {Table} from "semantic-ui-react";
+import {Table, Card, Input} from "semantic-ui-react";
 import AddRowButton from "./AddRowButton"
 import PropTypes from 'prop-types';
 import {TableBodyRow} from "./TableBodyRow";
-import HPIContext from "../contexts/HPIContext"
+import HPIContext from "../contexts/HPIContext";
+import "../../css/components/tableComponent.css";
 
 //Component for a table layout
 export default class TableContent extends Component {
@@ -14,6 +15,7 @@ export default class TableContent extends Component {
         this.addRow = this.addRow.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
+        this.makeTableItems = this.makeTableItems.bind(this);
     }
 
     //modify the current values in the table to reflect changes
@@ -52,12 +54,38 @@ export default class TableContent extends Component {
         this.context.onContextChange(this.props.category, values);
     }
 
+    makeTableItems(nums) {
+        const { values, tableBodyPlaceholders } = this.props;
+        let content = ['header', 'meta', 'description'];
+        let items = []
+        for (let i = 0; i < nums.length; i++) {
+            items.push({});
+            for (let j = 0; j < tableBodyPlaceholders.length; j++) {
+                items[i][content[j]] = <Input
+                    transparent
+                    type = {tableBodyPlaceholders[j] === "Date" ? "date" : "text"} 
+                    placeholder={tableBodyPlaceholders[j]}
+                    onChange={this.handleTableBodyChange}
+                    rowindex={i}
+                    value={values[i][tableBodyPlaceholders[j]]}
+                />
+            }
+        }
+        return items;
+    }
+
     render(){
         var nums = Object.keys(this.props.values)
         const headerRow = this.makeHeader();
         var rows = this.makeTableBodyRows(nums);
-        return (
+        const mobileRows = this.makeTableItems(nums);
+
+        return ( this.props.mobile ? 
             <Fragment>
+                <Card.Group items={mobileRows} />
+                <AddRowButton onClick={this.addRow}/>
+            </Fragment>
+            : <Fragment>
                 <br/>
                 <div style={{width: "100%", height: "100%", overflowX: 'auto'}}> 
                 <Table celled>
