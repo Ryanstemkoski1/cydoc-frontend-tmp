@@ -17,7 +17,6 @@ export default class FamilyHistoryCauseofDeath extends Component {
         const values = this.context["Family History"];
         values[index]["Cause of Death"][this.props.family_index] = data.title === "Yes" ? true : false 
         this.context.onContextChange("Family History", values);
-        console.log(this.context["Family History"][index])
     }
 
     render() {
