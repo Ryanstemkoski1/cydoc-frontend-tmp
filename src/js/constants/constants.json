@@ -68,48 +68,48 @@
         "Condition": "Type II Diabetes",
         "Yes": false,
         "No": false,
-        "Family Member": "",
-        "Cause of Death": false,
+        "Family Member": [],
+        "Cause of Death": [],
         "Comments": ""
       },
       "1": {
         "Condition": "Myocardial Infarction",
         "Yes": false,
         "No": false,
-        "Family Member": "",
-        "Cause of Death": false,
+        "Family Member": [],
+        "Cause of Death": [],
         "Comments": ""
       },
       "2": {
         "Condition": "Hypertension",
         "Yes": false,
         "No": false,
-        "Family Member": "",
-        "Cause of Death": false,
+        "Family Member": [],
+        "Cause of Death": [],
         "Comments": ""
       },
       "3": {
         "Condition": "Hypercholesteremia",
         "Yes": false,
         "No": false,
-        "Family Member": "",
-        "Cause of Death": false,
+        "Family Member": [],
+        "Cause of Death": [],
         "Comments": ""
       },
       "4": {
         "Condition": "Depression",
         "Yes": false,
         "No": false,
-        "Family Member": "",
-        "Cause of Death": false,
+        "Family Member": [],
+        "Cause of Death": [],
         "Comments": ""
       },
       "5": {
         "Condition": "HIV",
         "Yes": false,
         "No": false,
-        "Family Member": "",
-        "Cause of Death": false,
+        "Family Member": [],
+        "Cause of Death": [],
         "Comments": ""
       }
     }
