@@ -32,8 +32,6 @@ export default class FamilyHistoryContent extends Component {
         for (var value in values) {
             conditions.push(values[value]['Condition'].toLowerCase())
         }
-        console.log(values)
-        console.log(response_choice)
         for (var response_index in response_choice) {
             var response = response_choice[response_index]
             var condition_index = conditions.indexOf(response.toLowerCase())
@@ -49,7 +47,6 @@ export default class FamilyHistoryContent extends Component {
                 }
             }
         }
-        console.log(values)
         this.context.onContextChange("Family History", values)
     }
 
@@ -71,8 +68,7 @@ export default class FamilyHistoryContent extends Component {
 
     //handles input field events
     handleChange(event, data){
-        let conditions_array = Object.keys(this.context["Family History"]).map((value) => this.context['Family History'][value]['Condition'])
-        let index = conditions_array.indexOf(data.condition)
+        let index = data.condition.props.index
         const values = this.context["Family History"];
         values[index][data.placeholder] = data.value;
         this.context.onContextChange("Family History", values);
@@ -120,6 +116,7 @@ export default class FamilyHistoryContent extends Component {
         ) :
         list_values.map((condition, index) =>
             <FamilyHistoryNoteRow   key={condition}
+                                    index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index}
                                     condition={<ConditionInput key={condition} index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index} category={"Family History"}/>}
                                     familyMember={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Family Member"]}
                                     comments={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Comments"]}

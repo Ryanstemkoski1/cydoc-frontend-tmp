@@ -40,7 +40,7 @@ export default class GridContent extends Component {
                     {rows}
                 </Grid>
                 <Divider />
-                <AddRowButton onClick={this.addRow}/>
+                <AddRowButton onClick={this.addRow} />
             </Fragment>
             ) : (
             <Fragment>
