@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import {Checkbox, Form, Grid, TextArea, Button} from "semantic-ui-react";
+=======
+import {Checkbox, Form, Grid, TextArea, Button, Dropdown} from "semantic-ui-react";
+>>>>>>> 891c0a3f5a4908be1de14473b77fa2faa50782a8
 =======
 import {Checkbox, Form, Grid, TextArea, Button, Dropdown} from "semantic-ui-react";
 >>>>>>> 891c0a3f5a4908be1de14473b77fa2faa50782a8
@@ -8,6 +12,10 @@ import React, {Component, Fragment} from "react";
 import PropTypes from 'prop-types';
 import { render } from "react-dom";
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+import AddRowButton from "../../components/AddRowButton";
+>>>>>>> 891c0a3f5a4908be1de14473b77fa2faa50782a8
 =======
 import AddRowButton from "../../components/AddRowButton";
 >>>>>>> 891c0a3f5a4908be1de14473b77fa2faa50782a8
