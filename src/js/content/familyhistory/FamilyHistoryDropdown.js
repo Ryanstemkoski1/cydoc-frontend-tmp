@@ -1,6 +1,9 @@
-import { Dropdown } from "semantic-ui-react"
+import { Dropdown, Container } from "semantic-ui-react"
 import React, {Component} from "react";
 import HPIContext from "../../contexts/HPIContext"
+import ToggleButton from "../../components/ToggleButton";
+import FamilyHistoryCauseofDeath from "../discussionplan/FamilyHistoryCauseofDeath";
+
 
 export default class FamilyHistoryDropdown extends Component { 
 
@@ -23,8 +26,8 @@ export default class FamilyHistoryDropdown extends Component {
     }
 
     render() {
-        return ( 
-            <Dropdown 
+        return (
+                <Dropdown 
                     value={this.state.value}
                     button
                     selection

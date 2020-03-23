@@ -1,4 +1,3 @@
-import { Dropdown } from "semantic-ui-react"
 import React, {Component} from "react";
 import ToggleButton from "../../components/ToggleButton";
 import HPIContext from "../../contexts/HPIContext"
@@ -22,7 +21,7 @@ export default class FamilyHistoryCauseofDeath extends Component {
     render() {
         var cause_of_death = this.context["Family History"][this.props.index]["Cause of Death"][this.props.family_index]
         return ( 
-            <div>
+            <div style={{marginTop: '12px'}}>
                 <ToggleButton active={cause_of_death}
                                 condition={this.props.condition}
                                 title="Yes"

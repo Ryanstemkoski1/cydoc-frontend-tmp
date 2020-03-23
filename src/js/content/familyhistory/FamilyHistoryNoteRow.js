@@ -43,6 +43,7 @@ export default class FamilyHistoryNoteRow extends Component {
         for (let step = 0; step < range; step ++) {
             dropdown_list.push(
                 <FamilyHistoryDropdown
+                    condition = {condition}
                     index = {index}
                     family_index = {step}
                 /> )
@@ -69,7 +70,9 @@ export default class FamilyHistoryNoteRow extends Component {
                                   onToggleButtonClick={onToggleButtonClick}/>
                 </Grid.Column>
                 <Grid.Column>
-                {dropdown_list}
+                    <div style={{marginTop: '40px'}}> 
+                    {dropdown_list}
+                    </div>
                 <Fragment>
                     <Button
                         basic
@@ -80,7 +83,7 @@ export default class FamilyHistoryNoteRow extends Component {
                     />
                 </Fragment>
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column>  
                     {cause_of_death_list}
                 </Grid.Column>
                 <Grid.Column>

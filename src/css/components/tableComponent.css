@@ -1,0 +1,11 @@
+.ui.input > input::-webkit-input-placeholder {
+  color: #DDDDDD;
+}
+
+.ui.input > input::-moz-placeholder {
+  color: #DDDDDD;
+}
+
+.ui.input > input:-ms-input-placeholder {
+  color: #DDDDDD;
+}
