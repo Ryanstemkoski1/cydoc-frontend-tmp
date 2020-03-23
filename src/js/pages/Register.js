@@ -1,12 +1,15 @@
-import React, {Component} from 'react';
-import { Form, Grid, Header, Segment, Button} from "semantic-ui-react";
+import React, {Component, Fragment} from 'react';
+import { Form, Grid, Header, Segment, Button, Label} from "semantic-ui-react";
 import {connect} from "react-redux";
 import {Redirect} from "react-router";
 import AuthContext from "../contexts/AuthContext";
 import NotesContext from "../contexts/NotesContext";
-
+import constants from "../constants/registration_constants"
 import {client} from "../constants/api.js"
 
+const degreeOptions = constants.degrees.map((degree) => ({key: degree, value: degree, text: degree}))
+const specialtyOptions = constants.specialties.map((specialty) => ({key: specialty, value: specialty, text: specialty}))
+const workfeatOptions = constants.workplaceFeatures.map((workfeat) => ({key: workfeat, value: workfeat, text: workfeat}))
 
 //Component that manages the layout of the login page
 export default class Register extends Component {
@@ -28,17 +31,29 @@ export default class Register extends Component {
                 institutionType: "",
                 address: "",
                 backupEmail: "",
-                role: ""
+                role: "",
+                studentStatus: "",
+                degreesCompleted: ["", "", ""],
+                degreesInProgress: ["", "", ""],
+                specialties: ["", ""],
+                workplaceFeatures: []
             },
             redirect: false
         };
         this.handleChange = this.handleChange.bind(this);
+        this.handleArrayChange = this.handleArrayChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(e, {name, value}){
         let newState = this.state;
         newState.formInfo[name] = value;
+        this.setState(newState);
+    }
+
+    handleArrayChange(e, {name, index, value}){
+        let newState = this.state;
+        newState.formInfo[name][index] = value;
         this.setState(newState);
     }
 
@@ -59,7 +74,146 @@ export default class Register extends Component {
             })
     }
 
+
+    additionalFields = () => {
+        if (this.state.formInfo.role === 'healthcare professional') {
+            return (
+                <Fragment>
+                    <label style={{fontSize: "10px"}}>student status</label>
+                    <Form.Group>
+                        <Form.Radio style={{fontSize: "10px"}}
+                            label='student'
+                            value='y'
+                            name='studentStatus'
+                            checked={this.state.formInfo.studentStatus === 'y'}
+                            onChange={this.handleChange}
+                        />
+                        <Form.Radio style={{fontSize: "10px"}}
+                            label='non-student'
+                            value='n'
+                            name='studentStatus'
+                            checked={this.state.formInfo.studentStatus === 'n'}
+                            onChange={this.handleChange}
+                        />
+                    </Form.Group>
+                    <label style={{fontSize: "10px"}}>degrees completed</label>
+                    <Form.Group>
+                        <Form.Dropdown
+                            search
+                            selection
+                            clearable
+                            options={degreeOptions}
+                            value={this.state.formInfo.degreesCompleted[0]}
+                            name='degreesCompleted'
+                            index={0}
+                            onChange={this.handleArrayChange}
+                        />
+                        <Form.Dropdown
+                            search
+                            selection
+                            clearable
+                            options={degreeOptions}
+                            value={this.state.formInfo.degreesCompleted[1]}
+                            name='degreesCompleted'
+                            index={1}
+                            onChange={this.handleArrayChange}
+                        />
+                        <Form.Dropdown
+                            search
+                            selection
+                            clearable
+                            options={degreeOptions}
+                            value={this.state.formInfo.degreesCompleted[2]}
+                            name='degreesCompleted'
+                            index={2}
+                            onChange={this.handleArrayChange}
+                        />
+                    </Form.Group>
+                    <label style={{fontSize: "10px"}}>degrees in progress</label>
+                    <Form.Group>
+                        <Form.Dropdown
+                            search
+                            selection
+                            clearable
+                            options={degreeOptions}
+                            value={this.state.formInfo.degreesInProgress[0]}
+                            name='degreesInProgress'
+                            index={0}
+                            onChange={this.handleArrayChange}
+                        />
+                        <Form.Dropdown
+                            search
+                            selection
+                            clearable
+                            options={degreeOptions}
+                            value={this.state.formInfo.degreesInProgress[1]}
+                            name='degreesInProgress'
+                            index={1}
+                            onChange={this.handleArrayChange}
+                        />
+                        <Form.Dropdown
+                            search
+                            selection
+                            clearable
+                            options={degreeOptions}
+                            value={this.state.formInfo.degreesInProgress[2]}
+                            name='degreesInProgress'
+                            index={2}
+                            onChange={this.handleArrayChange}
+                        />
+                    </Form.Group>
+                    <label style={{fontSize: "10px"}}>specialties</label>
+                    <Form.Group>
+                        <Form.Dropdown
+                            search
+                            selection
+                            clearable
+                            options={specialtyOptions}
+                            value={this.state.formInfo.specialties[0]}
+                            name='specialties'
+                            index={0}
+                            onChange={this.handleArrayChange}
+                        />
+                        <Form.Dropdown
+                            search
+                            selection
+                            clearable
+                            options={specialtyOptions}
+                            value={this.state.formInfo.specialties[1]}
+                            name='specialties'
+                            index={1}
+                            onChange={this.handleArrayChange}
+                        />
+                    </Form.Group>
+                    <Form.Input
+                        fluid
+                        label='workplace'
+                        name='workplace'
+                        value={this.state.formInfo.workplace}
+                        onChange={this.handleChange}
+                        required
+                    />
+                    <Form.Dropdown
+                        label='workplace features'
+                        selection
+                        multiple
+                        options={workfeatOptions}
+                        value={this.state.formInfo.workplaceFeatures}
+                        name='workplaceFeatures'
+                        onChange={this.handleChange}
+                    />
+                </Fragment>
+            )
+        }
+        else {
+            return (
+                null
+            )
+        }
+    }
+
     render() {
+
         if(this.state.redirect){
             return(<Redirect push to= "/login" />)
         }
@@ -154,42 +308,33 @@ export default class Register extends Component {
                                         required
                                     />
                                 </Form.Group>
-                                <Form.Input
-                                    fluid
-                                    label='workplace'
-                                    name='workplace'
-                                    value={this.state.formInfo.workplace}
-                                    onChange={this.handleChange}
-                                    required
-                                />
+                                <label style={{fontSize: "10px"}}>
+                                    I am a:
+                                </label>
                                 <Form.Group>
-                                    <Form.Input
-                                        fluid
-                                        label='intstitution type'
-                                        name='institutionType'
-                                        value={this.state.formInfo.institutionType}
+                                    <Form.Radio style={{fontSize: "10px"}}
+                                        label='patient'
+                                        value='patient'
+                                        name='role'
+                                        checked={this.state.formInfo.role === 'patient'}
                                         onChange={this.handleChange}
-                                        required
                                     />
-                                    <Form.Select
-                                        fluid
-                                        width={6}
-                                        options={[{key: "y", value: true, text: "yes"}, {key: "n", value: false, text: "no"}]}
-                                        label='inpatient?'
-                                        name='inPatient'
-                                        value={this.state.formInfo.inPatient}
+                                    <Form.Radio style={{fontSize: "10px"}}
+                                        label='healthcare professional'
+                                        value='healthcare professional'
+                                        name='role'
+                                        checked={this.state.formInfo.role === 'healthcare professional'}
                                         onChange={this.handleChange}
-                                        required
+                                    />
+                                    <Form.Radio style={{fontSize: "10px"}}
+                                        label='administrator'
+                                        value='administrator'
+                                        name='role'
+                                        checked={this.state.formInfo.role === 'administrator'}
+                                        onChange={this.handleChange}
                                     />
                                 </Form.Group>
-                                <Form.Input
-                                    fluid
-                                    label='role'
-                                    name='role'
-                                    value={this.state.formInfo.role}
-                                    onChange={this.handleChange}
-                                    required
-                                />
+                                {this.additionalFields()}
                                 <Form.Button color='violet' size='small' floated='left'>
                                     Sign Up
                                 </Form.Button>
