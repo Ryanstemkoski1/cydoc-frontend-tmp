@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import {Checkbox, Form, Grid, TextArea, Button} from "semantic-ui-react";
 =======
 import {Checkbox, Form, Grid, TextArea, Button, Dropdown} from "semantic-ui-react";
@@ -7,18 +8,24 @@ import {Checkbox, Form, Grid, TextArea, Button, Dropdown} from "semantic-ui-reac
 =======
 import {Checkbox, Form, Grid, TextArea, Button, Dropdown} from "semantic-ui-react";
 >>>>>>> 891c0a3f5a4908be1de14473b77fa2faa50782a8
+=======
+import {Checkbox, Form, Grid, TextArea, Button} from "semantic-ui-react";
+>>>>>>> master
 import ToggleButton from "../../components/ToggleButton";
 import React, {Component, Fragment} from "react";
 import PropTypes from 'prop-types';
 import { render } from "react-dom";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import AddRowButton from "../../components/AddRowButton";
 >>>>>>> 891c0a3f5a4908be1de14473b77fa2faa50782a8
 =======
 import AddRowButton from "../../components/AddRowButton";
 >>>>>>> 891c0a3f5a4908be1de14473b77fa2faa50782a8
+=======
+>>>>>>> master
 import FamilyHistoryDropdown from "./FamilyHistoryDropdown";
 import HPIContext from "../../contexts/HPIContext"
 import FamilyHistoryCauseofDeath from "../discussionplan/FamilyHistoryCauseofDeath";
