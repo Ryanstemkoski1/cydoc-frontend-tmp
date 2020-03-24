@@ -21,7 +21,7 @@ export default class FamilyHistoryCauseofDeath extends Component {
     render() {
         var cause_of_death = this.context["Family History"][this.props.index]["Cause of Death"][this.props.family_index]
         return ( 
-            <div style={{marginTop: '12px'}}>
+            <div>
                 <ToggleButton active={cause_of_death}
                                 condition={this.props.condition}
                                 title="Yes"

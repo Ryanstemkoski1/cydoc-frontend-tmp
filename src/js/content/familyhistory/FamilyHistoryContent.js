@@ -130,7 +130,7 @@ export default class FamilyHistoryContent extends Component {
         return(
             <Fragment>
                 <GridContent
-                    numColumns={5}
+                    numColumns={4}
                     contentHeader={<FamilyHistoryContentHeader />}
                     rows={listItems}
                     question_type = {(this.props.response_choice ? "hpi" : "add_row")}

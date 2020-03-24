@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { render } from "react-dom";
 import FamilyHistoryDropdown from "./FamilyHistoryDropdown";
 import HPIContext from "../../contexts/HPIContext"
-import FamilyHistoryCauseofDeath from "../discussionplan/FamilyHistoryCauseofDeath";
 
 
 //Component for a row in the Family History GridContent
@@ -47,19 +46,13 @@ export default class FamilyHistoryNoteRow extends Component {
                     index = {index}
                     family_index = {step}
                 /> )
-            cause_of_death_list.push(
-                <FamilyHistoryCauseofDeath
-                    condition = {condition}
-                    index = {index}
-                    family_index = {step}
-                 /> )
         }
         return (
             <Grid.Row>
-                <Grid.Column>
+                <Grid.Column width={3}>
                     {condition}
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column width={3}>
                     <ToggleButton active={yesActive}
                                   condition={condition}
                                   title="Yes"
@@ -69,10 +62,8 @@ export default class FamilyHistoryNoteRow extends Component {
                                   title="No"
                                   onToggleButtonClick={onToggleButtonClick}/>
                 </Grid.Column>
-                <Grid.Column>
-                    <div style={{marginTop: '40px'}}> 
+                <Grid.Column width={6} style={{marginBottom: 10, marginTop: 30}}>
                     {dropdown_list}
-                    </div>
                 <Fragment>
                     <Button
                         basic
@@ -83,10 +74,7 @@ export default class FamilyHistoryNoteRow extends Component {
                     />
                 </Fragment>
                 </Grid.Column>
-                <Grid.Column>  
-                    {cause_of_death_list}
-                </Grid.Column>
-                <Grid.Column>
+                <Grid.Column width={4}>
                     <Form>
                     <TextArea condition={condition} value={comments}
                                   onChange={onChange} placeholder='Comments'/>

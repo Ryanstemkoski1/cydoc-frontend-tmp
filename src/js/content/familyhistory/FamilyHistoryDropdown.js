@@ -11,10 +11,14 @@ export default class FamilyHistoryDropdown extends Component {
 
     constructor(props, context) {
         super(props, context)
+        var values = this.context['Family History']
+        var value = values[this.props.index]['Family Member'][this.props.family_index]
+        console.log(value)
         this.state = {
-            value: "Add Family Member"
+            value: value ? value : "Add Family Member"
         }
         this.handleChange = this.handleChange.bind(this)
+        this.handleClick = this.handleClick.bind(this)
     }
 
     handleChange(event, data) {
@@ -25,16 +29,36 @@ export default class FamilyHistoryDropdown extends Component {
         this.setState({value: data.value})
     }
 
+    handleClick(event, data) {
+        let index = data.condition.props.index
+        const values = this.context["Family History"];
+        values[index]["Cause of Death"][this.props.family_index] = data.title === "Yes" ? true : false 
+        this.context.onContextChange("Family History", values);
+    }
+
     render() {
+        var cause_of_death = this.context["Family History"][this.props.index]["Cause of Death"][this.props.family_index]
         return (
-                <Dropdown 
+            <div style={{marginBottom: 10}}>
+                <Dropdown
                     value={this.state.value}
                     button
+                    search
                     selection
                     fluid 
                     options={familyOptions}
                     onChange={this.handleChange}
+                    style={{width: '50%', display: 'inline-table', marginRight: 15}}
                 />
+                <ToggleButton   active={cause_of_death}
+                                condition={this.props.condition}
+                                title="Yes"
+                                onToggleButtonClick={this.handleClick} />
+                <ToggleButton   active={cause_of_death === false ? true : false}
+                                condition={this.props.condition}
+                                title="No"
+                                onToggleButtonClick={this.handleClick} />
+            </div>
         )
     }
 }
@@ -61,28 +85,63 @@ const familyOptions = [
         value: 'brother'
     },
     {
-        key: 'grandmother',
-        text: 'grandmother',
-        value: 'grandmother'
+        key: 'daughter',
+        text: 'daughter',
+        value: 'daughter'
     },
     {
-        key: 'grandfather',
-        text: 'grandfather',
-        value: 'grandfather'
+        key: 'son',
+        text: 'son',
+        value: 'son'
     },
     {
-        key: 'aunt',
-        text: 'aunt',
-        value: 'aunt'
+        key: 'maternal aunt',
+        text: 'maternal aunt',
+        value: 'maternal aunt'
     },
     {
-        key: 'uncle',
-        text: 'uncle',
-        value: 'uncle'
+        key: 'maternal uncle',
+        text: 'maternal uncle',
+        value: 'maternal uncle'
     },
     {
-        key: 'none',
-        text: 'none',
-        value: 'none'
+        key: 'paternal aunt',
+        text: 'paternal aunt',
+        value: 'paternal aunt'
+    },
+    {
+        key: 'paternal uncle',
+        text: 'paternal uncle',
+        value: 'paternal uncle'
+    },
+    {
+        key: 'maternal grandmother',
+        text: 'maternal grandmother',
+        value: 'maternal grandmother'
+    },
+    {
+        key: 'maternal grandfather',
+        text: 'maternal grandfather',
+        value: 'maternal grandfather'
+    },
+    {
+        key: 'paternal grandmother',
+        text: 'paternal grandmother',
+        value: 'paternal grandmother'
+    },
+    {
+        key: 'paternal grandfather',
+        text: 'paternal grandfather',
+        value: 'paternal grandfather'
+    },
+    {
+        key: 'cousin',
+        text: 'cousin',
+        value: 'cousin'
+    },
+    {
+        key: 'other',
+        text: 'other',
+        value: 'other'
     }
 ]
