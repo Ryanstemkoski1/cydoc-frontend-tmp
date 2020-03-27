@@ -13,7 +13,7 @@ export class TableBodyRow extends Component {
                     <Table.Cell key={index}>
                         <Input
                             transparent
-                            type = {placeholder === "Date" ? "date" : "text"}
+                            type="text"
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}

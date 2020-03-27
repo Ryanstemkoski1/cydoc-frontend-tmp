@@ -59,11 +59,12 @@ export default class TableContent extends Component {
         let content = ['header', 'meta', 'description'];
         let items = []
         for (let i = 0; i < nums.length; i++) {
-            items.push({});
+            items.push({key: i});
             for (let j = 0; j < tableBodyPlaceholders.length; j++) {
                 items[i][content[j]] = <Input
                     transparent
-                    type = {tableBodyPlaceholders[j] === "Date" ? "date" : "text"} 
+                    fluid
+                    type="text"
                     placeholder={tableBodyPlaceholders[j]}
                     onChange={this.handleTableBodyChange}
                     rowindex={i}

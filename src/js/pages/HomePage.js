@@ -9,10 +9,10 @@ class HomePage extends Component {
     render() {
         return (
             <Fragment>
-                <div class="nav-menu-container">
+                <div className="nav-menu-container">
                     <NavMenu/>
                 </div>
-                <div class="home-page-content-container">
+                <div className="home-page-content-container">
                     <HomePageContent/>
                 </div>
 
