@@ -1,7 +1,8 @@
-import React, { Component, Fragment } from 'react';
-import { Grid, Button, Checkbox } from 'semantic-ui-react'
-
-import ReviewOfSystemsCategory from './ReviewOfSystemsCategory'
+import React, { Component } from 'react';
+import Masonry from 'react-masonry-css';
+import '../../../css/content/reviewOfSystems.css';
+import ReviewOfSystemsCategory from './ReviewOfSystemsCategory';
+import {ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP} from '../../constants/breakpoints';
 
 //Component that manages the content for the Review of Systems section of the note
 export default class ReviewOfSystemsContent extends Component {
@@ -9,6 +10,8 @@ export default class ReviewOfSystemsContent extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            windowWidth: 0,
+            windowHeight: 0,
             test: {
                 "General": ["Δ weight", "Fatigue", "Weakness", "Fevers", "Chills", "Night sweats"],
                 "Eyes": ["Glasses", "Contacts", "Blurriness"],
@@ -20,7 +23,7 @@ export default class ReviewOfSystemsContent extends Component {
                 "Cardiovascular/Hematological": ["Chest pain", "Palpitations", "High BP", "Low BP", "Murmurs", "Edema", "Varicose veins", "Claudication", "Easy bruising", "Easy bleeding", "Anemia", "Transfusions"],
                 "Gastrointestinal": ["Δ appetite", "Nausea", "Vomiting", "Abdominal pain", "Dysphagia", "Heartburn", "Bloating", "Diarrhea", "Constipation", "Hematemesis", "Hemorrhoids", "Melena", "Hematochezia"],
                 "Genitourinary": ["Urinary tract infection", "Δ stream", "Frequency", "Hesitancy", "Urgency", "Polyuria", "Hematuria", "Nocturia", "Incontinence", "Stones"],
-                "Genital/Sexual/Gynecological": ["Discharge", "Sores", "Itching", "STD", "Contraception", "Hernias", "Testicular/vaginal pain", "Testicular mass", "Breast pain", "Breast masses", "Breast lumps", "Discharge", "Period irregularities", "Pregnancy complications"],
+                "Genital/Sexual/Gynecological": ["Discharge", "Sores", "Itching", "STD", "Contraception", "Hernias", "Testicular/vaginal pain", "Testicular mass", "Breast pain", "Breast masses", "Breast lumps", "Period irregularities", "Pregnancy complications"],
                 "Musculoskeletal": ["Osteoarthritis", "Rheumatoid arthritis", "Joint stiffness", "Joint pain", "Joint swelling", "Muscle cramps", "Muscle weakness", "Muscle pain"],
                 "Skin/Hair/Nails": ["Rashes", "Itching", "Dryness", "Δ hair", "Δ nails", "Sores", "Lumps", "Moles"],
                 "Endocrine": ["Heat intolerance", "Cold intolerance","Excessive sweating","Polydipsia","Polyphagia","Hyperthyroidism","Hypothyroidism","Diabetes","Skin color change","Excess hair growth"],
@@ -28,23 +31,52 @@ export default class ReviewOfSystemsContent extends Component {
                 "Psych": ["Anxiety", "Depression", "Suicide attempts"]
             }
         }
+        this.updateDimensions = this.updateDimensions.bind(this);
     }
 
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions);
+    }
+ 
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions);
+    }
+
+    updateDimensions() {
+        let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+        let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+ 
+        this.setState({ windowWidth, windowHeight });
+    }
 
     generateList = (systemsCategories) => {
         return Object.keys(systemsCategories).map(
             (label) =>
-                    <ReviewOfSystemsCategory category={label} options={systemsCategories[label]} />
+                    <ReviewOfSystemsCategory
+                        key={label}
+                        category={label}
+                        options={systemsCategories[label]}
+                    />
         )
     }
 
     render() {
+        const { windowWidth } = this.state;
+        
+        let numColumns = 1;
+        if (windowWidth > ROS_LARGE_BP) {
+            numColumns = 4;
+        } else if (windowWidth > ROS_MED_BP) {
+            numColumns = 3;
+        } else if (windowWidth > ROS_SMALL_BP) {
+            numColumns = 2;
+        }
+        
         return (
-            <Fragment>
-                <Grid columns={3} className="ui stackable grid" padded>
-                    {this.generateList(this.state.test)}
-                </Grid>
-            </Fragment>
+            <Masonry className='ros-container' breakpointCols={numColumns} columnClassName='ros-column'>
+                {this.generateList(this.state.test)}
+            </Masonry>
         );
     }
 }
