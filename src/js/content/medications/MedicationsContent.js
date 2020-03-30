@@ -9,7 +9,9 @@ import drug_names from '../../constants/drugNames'
 //Component that manages content for the Medications page
 export default class MedicationsContent extends Component {
     render() {
-        const category = "Medications"
+        const category = "Medications";
+        const placeholders = this.props.mobile ? [medications.fields[0], medications.fields[4], medications.fields[5]] : medications.fields;
+        
         return (
             <HPIContext.Consumer>
             {(context) => {
@@ -20,7 +22,7 @@ export default class MedicationsContent extends Component {
                     </h5>
                     <TableContent
                         tableHeaders={medications.fields}
-                        tableBodyPlaceholders={medications.fields}
+                        tableBodyPlaceholders={placeholders}
                         category = {category}
                         values={context["Medications"]}
                         onTableBodyChange={context.onContextChange.bind(context, "Medications")}

@@ -1,7 +1,9 @@
 import React from "react";
+import { Icon, Button } from 'semantic-ui-react';
 import "../css/Button.css"
 import DiseaseTag from "./DiseaseTag";
 import HPIContext from "../../../../../contexts/HPIContext";
+import '../../../../../../css/content/hpi.css';
 
 class ButtonItem extends React.Component {
     static contextType = HPIContext
@@ -34,10 +36,15 @@ class ButtonItem extends React.Component {
 
     render() {
         return (
-            <div className="button-item" align="left">
-            <button className="button" onClick={this.handleClick}> {this.props.name} 	&#8964; </button>
-            <div> {this.state.disease_array} </div>
-        </div>
+            <div>
+                <Button basic className="hpi-disease-button"  onClick={this.handleClick}>
+                    <Icon name='dropdown' /> 
+                    {this.props.name}
+                </Button>
+                <div className="diseases-array">
+                    {this.state.disease_array}
+                </div>
+            </div>
         )
     }
 }

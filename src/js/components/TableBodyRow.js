@@ -12,11 +12,17 @@ export class TableBodyRow extends Component {
             <Table.Row>
                 {this.props.tableBodyPlaceholders.map((placeholder, index) =>
                     <Table.Cell key={index}>
+<<<<<<< HEAD
                         {/* {placeholder === "Date" ? <DatePicker /> : */}
                         <TextArea
                             // transparent
                             style = {{outline: 'transparent', border: "none", width: "100%", height: "100%", resize: "none"}}
                             type = {placeholder === "Date" ? "date" : "text"}
+=======
+                        <Input
+                            transparent
+                            type="text"
+>>>>>>> 18ee2b4854d492eb2ba97d19a6be3f0e4dd2d9bd
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}

@@ -1,0 +1,56 @@
+.disease-container {
+    text-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-top: 2rem;
+    margin-left: -2rem;
+    width: auto;
+}
+
+.hpi-disease-button {
+    width: 100%;
+    text-align: left !important;
+}
+
+.diseases-array {
+    margin-bottom: 2rem;
+}
+
+.disease-column {
+    padding-left: 2rem;
+    background-clip: padding-box;
+}
+
+.positive-diseases-placeholder {
+    height: 37px;
+}
+
+.positive-disease {
+    color: white;
+    background-color: lightslategrey;
+}
+
+.next-button {
+    width: auto;
+    float: right;
+    padding-bottom: 2rem;
+}
+
+.disease-menu {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.disease-tab {
+    font-size: 13px;
+}
+
+.question-map {
+    margin-left: 3rem;
+}
+
+.arrow-buttons {
+    display: flex;
+    justify-content: space-between;
+}

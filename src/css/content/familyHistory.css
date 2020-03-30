@@ -19,6 +19,13 @@
   height: auto !important;
   width: 500px;
   margin-bottom: .5rem !important;
+}
+
+.display {
+  display: block;
+}
+
+.hide {
   display: none;
 }
 

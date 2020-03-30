@@ -8,6 +8,9 @@ import "../../../css/content/familyHistory.css";
 export default class MedicalHistoryNoteItem extends Component {
     render = () => {
         const { yesActive, condition, onToggleButtonClick, noActive, onset, onChange, comments} = this.props;
+
+        const showTextAreas = yesActive ? "display" : "hide";
+
         return (<Grid.Row>
             <Form className="family-hx-note-item">
                 <Form.Group inline className="condition-header">
@@ -32,7 +35,7 @@ export default class MedicalHistoryNoteItem extends Component {
                 <div className="condition-info">
                     <Form.TextArea
                         label="Onset"
-                        className={`text-area text-area-${condition.props.index}`}
+                        className={`text-area text-area-${condition.props.index} ${showTextAreas}`}
                         condition={condition.props.condition}
                         placeholder="Onset"
                         value={onset}
@@ -41,7 +44,7 @@ export default class MedicalHistoryNoteItem extends Component {
                     />
                     <Form.TextArea
                         label="Comments"
-                        className={`text-area text-area-${condition.props.index}`}
+                        className={`text-area text-area-${condition.props.index} ${showTextAreas}`}
                         condition={condition.props.condition}
                         placeholder="Comments"
                         value={comments}

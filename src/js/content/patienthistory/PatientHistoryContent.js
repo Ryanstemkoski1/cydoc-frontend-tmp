@@ -6,7 +6,7 @@ import MedicationsContent from "../medications/MedicationsContent";
 import AllergiesContent from "../allergies/AllergiesContent";
 import SocialHistoryContent from "../socialhistory/SocialHistoryContent";
 import '../../../css/content/patientHistory.css';
-import {PATIENT_HISTORY_MOBILE_BP} from "../../constants/breakpoints.js";
+import {PATIENT_HISTORY_MOBILE_BP, SOCIAL_HISTORY_MOBILE_BP} from "../../constants/breakpoints.js";
 
 export default class PatientHistoryContent extends Component {
     constructor() {
@@ -50,6 +50,7 @@ export default class PatientHistoryContent extends Component {
         const { windowWidth, activeItem } = this.state;
 
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
+        const socialHistoryMobile = windowWidth < SOCIAL_HISTORY_MOBILE_BP;
 
         const expandedTabs = this.state.patient_history.map((name, index) => 
             <Menu.Item 
@@ -94,7 +95,7 @@ export default class PatientHistoryContent extends Component {
                     <AllergiesContent mobile={collapseTabs}/>
                 </div>
                 <div id="social history" className="tab-content">
-                    <SocialHistoryContent />
+                    <SocialHistoryContent mobile={socialHistoryMobile}/>
                 </div>
             </div>
         )
