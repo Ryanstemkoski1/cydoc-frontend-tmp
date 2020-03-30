@@ -14,13 +14,14 @@ export class TableBodyRow extends Component {
                     <Table.Cell key={index}>
                         {/* {placeholder === "Date" ? <DatePicker /> : */}
                         <TextArea
+                            // transparent
                             style = {{outline: 'transparent', border: "none", width: "100%", height: "100%", resize: "none"}}
                             type = {placeholder === "Date" ? "date" : "text"}
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
-                        />}
+                        />
                     </Table.Cell>)}
             </Table.Row>
         );
