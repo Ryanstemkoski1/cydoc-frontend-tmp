@@ -7,6 +7,8 @@ import {CONDITIONS} from '../../constants/constants'
 import HPIContext from "../../contexts/HPIContext"
 import ConditionInput from "../../components/ConditionInput"
 import {FAMILY_HISTORY_MOBILE_BP} from "../../constants/breakpoints.js";
+import FamilyHistoryBlock from './FamilyHistoryBlock';
+import AddRowButton from '../../components/AddRowButton';
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.
@@ -23,6 +25,7 @@ export default class FamilyHistoryContent extends Component {
         this.updateDimensions = this.updateDimensions.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
+        this.addRow = this.addRow.bind(this)
 
         //Checks if all response choices exist and adds new ones
         const {response_choice} = this.props
@@ -41,8 +44,8 @@ export default class FamilyHistoryContent extends Component {
                     "Condition": response,
                     "Yes": false,
                     "No": false,
-                    "Family Member": "",
-                    "Cause of Death": false,
+                    "Family Member": [],
+                    "Cause of Death": [],
                     "Comments": ""
                 }
             }
@@ -88,6 +91,20 @@ export default class FamilyHistoryContent extends Component {
         this.context.onContextChange("Family History", values);
     }
 
+    addRow() {
+        let values = this.context["Family History"]
+        let last_index = Object.keys(values).length.toString()
+        values[last_index] = {
+            "Condition": "",
+            "Yes": false,
+            "No": false,
+            "Family Member": [],
+            "Cause of Death": [],
+            "Comments": ""
+        }
+        this.context.onContextChange("Family History", values);
+    }
+
     render(){
         const { windowWidth } = this.state;
         const mobile = windowWidth < FAMILY_HISTORY_MOBILE_BP;
@@ -126,19 +143,31 @@ export default class FamilyHistoryContent extends Component {
                                     noActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["No"]}
                                     CODActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Cause of Death"]}
             />)
-
+        const newItems = list_values.map((condition, index) => 
+        <FamilyHistoryBlock key={condition}
+                            index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index}
+                            condition={<ConditionInput key={condition} index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index} category={"Family History"}/>}
+                            familyMember={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Family Member"]}
+                            comments={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Comments"]}
+                            onChange={this.handleChange}
+        />
+        )
         return(
-            <Fragment>
-                <GridContent
-                    numColumns={4}
-                    contentHeader={<FamilyHistoryContentHeader />}
-                    rows={listItems}
-                    question_type = {(this.props.response_choice ? "hpi" : "add_row")}
-                    value_type = "Family History" 
-                    conditions={list_values}
-                    mobile={mobile}
-                />
-            </Fragment>
+            mobile ? 
+                <Fragment>
+                    <GridContent
+                        numColumns={4}
+                        contentHeader={<FamilyHistoryContentHeader />}
+                        rows={listItems}
+                        question_type = {(this.props.response_choice ? "hpi" : "add_row")}
+                        value_type = "Family History" 
+                        conditions={list_values}
+                        mobile={mobile}
+                    />
+                </Fragment> : 
+                <div> <div> {newItems} </div>
+                <AddRowButton onClick={this.addRow} name={"family history"} />
+                </div>
         );
     }
 }

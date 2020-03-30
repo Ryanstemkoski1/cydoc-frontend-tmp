@@ -5,6 +5,7 @@ import "../../css/components/addRowButton.css";
 
 //Functional component for the add row option in notes
 export default function AddRowButton(props) {
+    const name = props.name 
     return <div className="add-row">
         <Button
             basic
@@ -12,7 +13,7 @@ export default function AddRowButton(props) {
             icon="plus"
             onClick={props.onClick}
         />
-        add row
+        add {name}
     </div>;
 }
 

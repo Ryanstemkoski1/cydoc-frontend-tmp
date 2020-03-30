@@ -83,7 +83,7 @@ export default class TableContent extends Component {
         return ( this.props.mobile ? 
             <Fragment>
                 <Card.Group items={mobileRows} />
-                <AddRowButton onClick={this.addRow}/>
+                <AddRowButton onClick={this.addRow} name={this.props.name}/>
             </Fragment>
             : <Fragment>
                 <br/>
@@ -97,7 +97,7 @@ export default class TableContent extends Component {
                     </Table.Body>
                 </Table>
                 </div>
-                <AddRowButton onClick={this.addRow}/>
+                <AddRowButton onClick={this.addRow} name={this.props.name}/>
             </Fragment>
         );
     }

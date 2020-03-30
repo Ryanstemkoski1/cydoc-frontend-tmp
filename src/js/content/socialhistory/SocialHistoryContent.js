@@ -92,6 +92,7 @@ export default class SocialHistoryContent extends React.Component {
                              contentHeader={this.substanceUseContentHeader}
                              customNoteRow={rowToAdd}
                              rows={substanceUseRows}
+                             name={"social history"}
                              numColumns={5}/>
                 <Divider/>
                 <br/>

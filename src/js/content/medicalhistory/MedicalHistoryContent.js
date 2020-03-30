@@ -87,6 +87,7 @@ export default class MedicalHistoryContent extends React.Component {
                 question_type = {(this.props.response_choice ? "hpi" : "add_row")}
                 value_type = "Medical History"
                 mobile={collapseTabs}
+                name={"medical history"}
             />
         );
     }

@@ -19,6 +19,7 @@ export default class SurgicalHistoryContent extends Component {
                         values={context["Surgical History"]}
                         onTableBodyChange={context.onContextChange.bind(context, "Surgical History")}
                         mobile={this.props.mobile}
+                        name={"surgical history"}
                     />
                     )
                 }}

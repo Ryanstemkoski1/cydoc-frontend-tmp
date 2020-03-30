@@ -19,6 +19,7 @@ export default class AllergiesContent extends Component {
                     values={context["Allergies"]}
                     onTableBodyChange={context.onContextChange.bind(context, "Allergies")}
                     mobile={this.props.mobile}
+                    name="allergy"
                 />
                 )
             }}

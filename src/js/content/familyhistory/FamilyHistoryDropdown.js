@@ -13,7 +13,6 @@ export default class FamilyHistoryDropdown extends Component {
         super(props, context)
         var values = this.context['Family History']
         var value = values[this.props.index]['Family Member'][this.props.family_index]
-        console.log(value)
         this.state = {
             value: value ? value : "Add Family Member"
         }
@@ -48,7 +47,7 @@ export default class FamilyHistoryDropdown extends Component {
                     fluid 
                     options={familyOptions}
                     onChange={this.handleChange}
-                    style={{width: '50%', display: 'inline-table', marginRight: 15}}
+                    style={{width: '50%', display: 'inline-table', marginRight: 50}}
                 />
                 <ToggleButton   active={cause_of_death}
                                 condition={this.props.condition}
