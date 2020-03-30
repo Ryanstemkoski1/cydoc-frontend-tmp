@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from "react";
-import {Form, Grid, TextArea, Button, Header} from "semantic-ui-react";
+import {Form, Grid, TextArea, Button, Header, Card} from "semantic-ui-react";
 import HPIContext from "../../contexts/HPIContext"
 import ToggleButton from "../../components/ToggleButton";
 import FamilyHistoryDropdown from "./FamilyHistoryDropdown";
@@ -95,30 +95,36 @@ export default class FamilyHistoryBlock extends Component {
                 </Grid.Column>
             </Grid.Row>
         return (
-            <div style={{marginBottom: 30}}> 
-            <div> 
-                {condition} 
-                <ToggleButton active={this.context["Family History"][condition.props.index]["Yes"]}
-                            condition={condition}
-                            title="Yes"
-                            onToggleButtonClick={this.handleToggleButtonClick}/>
-                <ToggleButton active={this.context["Family History"][condition.props.index]["No"]}
-                            condition={condition}
-                            title="No"
-                            onToggleButtonClick={this.handleToggleButtonClick}/>
-            
-            </div> 
-                {this.context["Family History"][condition.props.index]["Yes"] ? 
-                    <Fragment>
-                        <GridContent
-                            numColumns={2}
-                            contentHeader={new_content_header}
-                            rows={new_row}
-                            value_type = "Family History"
-                        />
-                    </Fragment> : ""
-                }
-            </div>
+            // <Card> 
+            //     <Card.Content>
+            <div>
+                    {/* <Card.Header>  */}
+                        {condition} 
+                    <ToggleButton active={this.context["Family History"][condition.props.index]["Yes"]}
+                                condition={condition}
+                                title="Yes"
+                                onToggleButtonClick={this.handleToggleButtonClick}/>
+                    <ToggleButton active={this.context["Family History"][condition.props.index]["No"]}
+                                condition={condition}
+                                title="No"
+                                onToggleButtonClick={this.handleToggleButtonClick}/>
+                    {/* </Card.Header> */}
+                    <div style={{marginBottom: 30}}> 
+                    {this.context["Family History"][condition.props.index]["Yes"] ?  
+                            <Fragment>
+                                <GridContent
+                                    numColumns={2}
+                                    contentHeader={new_content_header}
+                                    rows={new_row}
+                                    value_type = "Family History"
+                                />
+                            </Fragment>
+                        : ""
+                    }
+                    </div>
+             </div>
+            //     </Card.Content> 
+            // </Card>
         )
     }
 }
