@@ -1,9 +1,11 @@
-import React, { Fragment } from 'react';
-import {Menu, Container} from 'semantic-ui-react'
+import React from 'react';
+import { Menu, Button, Container, Dropdown } from 'semantic-ui-react'
 import DiseaseFormQuestions from "./DiseaseFormQuestions";
 import '../css/App.css';
 import HPIContext from "../../../../../contexts/HPIContext";
 import Accordian from "./accordian"
+import { DISEASE_TABS_MED_BP, DISEASE_TABS_SMALL_BP } from '../../../../../constants/breakpoints';
+import '../../../../../../css/content/hpi.css';
 
 //The order goes DiseaseForm -> DiseaseFormQuestions -> QuestionAnswer -> ButtonTag
 
@@ -114,21 +116,15 @@ export class DiseaseForm extends React.Component {
         this.setState({questionMap: questionMap, functionLoad: true})
     }
 
-    myFunction() {
-        var x = document.getElementById("hpinav");
-        if (x.className === "topnav") {
-            x.className = "ui vertical text menu"
-            x.style.cssText = "margin-left: 60px;"
-        } else {
-          x.className = "topnav";
-          x.style.cssText = "margin-left: 0px;"
-        }
-      }
-
     render() {
-        const {functionLoad, questionMap} = this.state
-        const {tab_category} = this.props
-        let newMap = []
+        const {tab_category, diseaseTabs, windowWidth} = this.props;
+        const {functionLoad, questionMap} = this.state;
+
+        const collapseTabs = diseaseTabs.length >= 10
+            || (diseaseTabs.length >= 5 && windowWidth < DISEASE_TABS_MED_BP)
+            || windowWidth < DISEASE_TABS_SMALL_BP;
+
+        let newMap = [];
         if (functionLoad) {
             for (const uid in questionMap) {
                 let current_value = questionMap[uid]
@@ -147,27 +143,44 @@ export class DiseaseForm extends React.Component {
                     }
                     else {
                         for (const child_node in current_value['children']) {
-                            newMap.push(current_value['children'][child_node]['question']) }}}}}
+                            newMap.push(current_value['children'][child_node]['question']) }}}}
+        }
+
         return (
             <div>
-                <Menu tabular>
-                    <div className="topnav" id='hpinav'> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-                        <Container style={{alignItems: 'center', display: 'flex', height: "100%", overflowX: 'auto'}}>
-                            {this.props.diseaseTabs}
+                {collapseTabs ?
+                    <Menu tabular borderless>
+                        <Container>
+                            <Menu.Item active className='disease-tab'>
+                                {this.props.category}
+                            </Menu.Item>
+                            <Menu.Item>
+                                <Dropdown icon="ellipsis horizontal" options={diseaseTabs} />
+                            </Menu.Item>
                         </Container>
-                        <a href="javascript:void(0);" className="icon" onClick={this.myFunction}>
-                            <i className="fa fa-bars"></i>
-                        </a>
-                    </div>
-                </Menu>
+                    </Menu>
+                    : <Menu tabular borderless items={diseaseTabs} className='disease-menu'/>
+                }
                 
-                <h1 style={{marginLeft: 30}}> {this.props.category} </h1>
-                <div style={{marginLeft: 30}}>{newMap} </div>
-                <button onClick={this.back} style={{marginTop: 35, marginBottom: 35}} className='NextButton'> &laquo; </button>
-                {this.props.last ? "" :
-                    <button onClick={this.continue}
-                            style={{float:'right', marginTop: 35, marginBottom: 35}}
-                            className='NextButton'> &raquo; </button>}
+                <h1>{this.props.category}</h1>
+                <div className='question-map'>{newMap} </div>
+
+                <div className='arrow-buttons'>
+                    <Button
+                        circular
+                        icon='angle double left'
+                        className='next-button'
+                        onClick={this.back}
+                    />
+                    {this.props.last ? "" :
+                        <Button
+                            circular
+                            icon='angle double right'
+                            className='next-button'
+                            onClick={this.continue}
+                        />
+                    }
+                </div>
             </div>
         )
     }

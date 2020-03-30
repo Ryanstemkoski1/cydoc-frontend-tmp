@@ -1,6 +1,7 @@
 import React, {Component} from "react"
 import "./ButtonItem"
 import HPIContext from "../../../../../contexts/HPIContext";
+import '../../../../../../css/content/hpi.css';
 
 class PositiveDiseases extends Component {
     // If you wrap <div> around the button, you can get the buttons to line up under each other.
@@ -21,11 +22,7 @@ class PositiveDiseases extends Component {
     render() {
         return (
             <button
-                className="tag_text"
-                style={{
-                    backgroundColor: "lightslategrey",
-                    color: "white"
-                }}
+                className="tag_text positive-disease"
                 onClick={this.handleClick}
             >
                 {this.props.name}
