@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
-import { Form, Grid, Header, Segment, Button, Label} from "semantic-ui-react";
-import {connect} from "react-redux";
+import { Form, Grid, Header, Segment, Button, Label, Message} from "semantic-ui-react";
+import * as yup from "yup"
 import {Redirect} from "react-router";
 import AuthContext from "../contexts/AuthContext";
 import NotesContext from "../contexts/NotesContext";
@@ -10,6 +10,11 @@ import {client} from "../constants/api.js"
 const degreeOptions = constants.degrees.map((degree) => ({key: degree, value: degree, text: degree}))
 const specialtyOptions = constants.specialties.map((specialty) => ({key: specialty, value: specialty, text: specialty}))
 const workfeatOptions = constants.workplaceFeatures.map((workfeat) => ({key: workfeat, value: workfeat, text: workfeat}))
+const yasaSchema = yup.object().shape({
+    password: yup.string().required("password is required"),
+    passwordConfirm: yup.string().oneOf([yup.ref('password'), null], "passwords must match")
+})
+
 
 //Component that manages the layout of the login page
 export default class Register extends Component {
@@ -17,11 +22,13 @@ export default class Register extends Component {
     static contextType = AuthContext
 
     constructor(props) {
+        console.log(yup)
         super(props);
         this.state = {
             formInfo: {
                 username: "",
                 password: "",
+                passwordConfirm: "",
                 email: "",
                 phoneNumber: "",
                 firstName: "",
@@ -38,6 +45,7 @@ export default class Register extends Component {
                 specialties: ["", ""],
                 workplaceFeatures: []
             },
+            errorMessages: [],
             redirect: false
         };
         this.handleChange = this.handleChange.bind(this);
@@ -48,6 +56,11 @@ export default class Register extends Component {
     handleChange(e, {name, value}){
         let newState = this.state;
         newState.formInfo[name] = value;
+        let user = this.state.formInfo
+
+        yasaSchema.validate(user).then((v) => this.setState({errorMessages: []}))
+                                 .catch((v) => this.setState({errorMessages: v.errors}))
+
         this.setState(newState);
     }
 
@@ -62,6 +75,8 @@ export default class Register extends Component {
     handleSubmit = () => {
 
         let user = this.state.formInfo
+
+        console.log(yasaSchema.validate(user))
 
         client.post("/user/new", user)
             .then(res => {
@@ -230,7 +245,7 @@ export default class Register extends Component {
                         sign up
                     </Header>
                     <Segment clearing raised style={{borderColor: "white"}}>
-                        <Form size='mini' onSubmit={this.handleSubmit}>
+                        <Form size='mini' error={this.state.errorMessages.length} onSubmit={this.handleSubmit}>
                                 <Form.Input
                                     fluid
                                     label='username'
@@ -240,6 +255,7 @@ export default class Register extends Component {
                                     onChange={this.handleChange}
                                     required
                                     minLength={3}
+                                    error={{content: 'err', pointing: 'left'}}
                                 />
                                 <Form.Input
                                     fluid
@@ -247,6 +263,15 @@ export default class Register extends Component {
                                     label='password'
                                     name='password'
                                     value={this.state.formInfo.password}
+                                    onChange={this.handleChange}
+                                    required
+                                />
+                                <Form.Input
+                                    fluid
+                                    type={"password"}
+                                    label='reenter password'
+                                    name='passwordConfirm'
+                                    value={this.state.formInfo.passwordConfirm}
                                     onChange={this.handleChange}
                                     required
                                 />
@@ -335,11 +360,17 @@ export default class Register extends Component {
                                     />
                                 </Form.Group>
                                 {this.additionalFields()}
+                                <Message
+                                    error
+                                    header='Error!'
+                                    content={this.state.errorMessages}
+                                />
                                 <Form.Button color='violet' size='small' floated='left'>
                                     Sign Up
                                 </Form.Button>
                                 
                         </Form>
+                        
                     </Segment>
                 </Grid.Column>
             </Grid>
