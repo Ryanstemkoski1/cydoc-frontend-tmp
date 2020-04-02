@@ -115,25 +115,16 @@ export default class SocialHistoryContent extends React.Component {
         const secondaryFieldRows = this.generateSecondaryFieldRows();
         return(
             <Fragment>
-<<<<<<< HEAD
-                <GridContent value={this.props.value}
-                             contentHeader={this.substanceUseContentHeader}
-                             customNoteRow={rowToAdd}
-                             rows={substanceUseRows}
-                             name={"social history"}
-                             numColumns={5}/>
-                <Divider/>
-=======
                 <GridContent
                     value={this.props.value}
                     contentHeader={this.substanceUseContentHeader}
                     customNoteRow={rowToAdd}
                     rows={substanceUseRows}
+                    name={"social history"}
                     numColumns={5}
                     mobile={this.props.mobile}
                 />
                 {this.props.mobile ? <div/> : <Divider/>}
->>>>>>> 18ee2b4854d492eb2ba97d19a6be3f0e4dd2d9bd
                 <br/>
                 <Grid columns={2} stackable>
                     {secondaryFieldRows}
