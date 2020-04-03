@@ -1,5 +1,6 @@
 .family-hx-note-item {
   width: 100vw;
+  padding-left: 2rem;
 }
 
 .condition-header {
@@ -8,6 +9,7 @@
 
 .condition-name {
   margin-right: .8rem;
+  margin-bottom: .5rem;
   font-size: 15px;
 }
 

@@ -21,3 +21,7 @@
   width: auto !important;
   overflow-wrap: break-word;
 }
+
+.ui.grid > .row > .column.no-padding {
+  padding: 0;
+}

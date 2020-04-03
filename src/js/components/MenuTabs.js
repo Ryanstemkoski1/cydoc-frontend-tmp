@@ -124,12 +124,19 @@ class ConnectedMenuTabs extends Component {
 }
 
 function CollapsedMenuTabs(props) {
+    const curTab = props.tabMenuItems[props.activeTabIndex].props.name
+    const direction = curTab.length < 10 ? '' : 'left';
+
     return (
         <Menu tabular attached={props.attached}>
             <Container className="collapsed-menu-tabs">
                 {props.tabMenuItems[props.activeTabIndex]}
                 <Menu.Item>
-                    <Dropdown icon="ellipsis horizontal" options={props.tabMenuItems} />
+                    <Dropdown
+                        icon="ellipsis horizontal"
+                        direction={direction}
+                        options={props.tabMenuItems}
+                    />
                 </Menu.Item>
             </Container>
         </Menu>
