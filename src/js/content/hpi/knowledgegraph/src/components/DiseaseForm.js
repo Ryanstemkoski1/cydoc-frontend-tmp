@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Button, Container, Dropdown } from 'semantic-ui-react'
+import { Menu, Button, Dropdown } from 'semantic-ui-react';
 import DiseaseFormQuestions from "./DiseaseFormQuestions";
 import '../css/App.css';
 import HPIContext from "../../../../../contexts/HPIContext";
@@ -117,7 +117,7 @@ export class DiseaseForm extends React.Component {
     }
 
     render() {
-        const {tab_category, diseaseTabs, windowWidth} = this.props;
+        const {tab_category, diseaseTabs, windowWidth, category} = this.props;
         const {functionLoad, questionMap} = this.state;
 
         const collapseTabs = diseaseTabs.length >= 10
@@ -149,20 +149,17 @@ export class DiseaseForm extends React.Component {
         return (
             <div>
                 {collapseTabs ?
-                    <Menu tabular borderless>
-                        <Container>
-                            <Menu.Item active className='disease-tab'>
-                                {this.props.category}
-                            </Menu.Item>
-                            <Menu.Item>
-                                <Dropdown icon="ellipsis horizontal" options={diseaseTabs} />
-                            </Menu.Item>
-                        </Container>
-                    </Menu>
+                    <Dropdown
+                        text={category}
+                        options={diseaseTabs}
+                        selection
+                        fluid
+                        scrolling={false}
+                    />
                     : <Menu tabular borderless items={diseaseTabs} className='disease-menu'/>
                 }
                 
-                <h1>{this.props.category}</h1>
+                <h1 className='category-header'>{category}</h1>
                 <div className='question-map'>{newMap} </div>
 
                 <div className='arrow-buttons'>
@@ -184,7 +181,6 @@ export class DiseaseForm extends React.Component {
             </div>
         )
     }
-
 }
 
 export default DiseaseForm

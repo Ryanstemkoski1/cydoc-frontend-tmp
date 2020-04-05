@@ -2,7 +2,6 @@ import React, {Component, Fragment} from 'react'
 import {Menu, Container, Button, Dropdown} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import {TAB_NAMES} from '../constants/constants'
-import {connect} from "react-redux";
 import "../content/hpi/knowledgegraph/src/css/App.css";
 import {Input} from "semantic-ui-react";
 import HPIContext from '../contexts/HPIContext';
@@ -125,18 +124,24 @@ class ConnectedMenuTabs extends Component {
 
 function CollapsedMenuTabs(props) {
     const curTab = props.tabMenuItems[props.activeTabIndex].props.name
-    const direction = curTab.length < 10 ? '' : 'left';
 
     return (
         <Menu tabular attached={props.attached}>
             <Container className="collapsed-menu-tabs">
                 {props.tabMenuItems[props.activeTabIndex]}
                 <Menu.Item>
-                    <Dropdown
-                        icon="ellipsis horizontal"
-                        direction={direction}
-                        options={props.tabMenuItems}
-                    />
+                    {curTab.length < 10 ? 
+                        <Dropdown
+                            icon="ellipsis horizontal"
+                            options={props.tabMenuItems}
+                        />
+                        :
+                        <Dropdown
+                            icon="ellipsis horizontal"
+                            direction='left'
+                            options={props.tabMenuItems}
+                        />
+                    }
                 </Menu.Item>
             </Container>
         </Menu>

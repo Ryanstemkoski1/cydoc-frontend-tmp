@@ -10,13 +10,16 @@ import MedicalHistoryContent from "../../../../medicalhistory/MedicalHistoryCont
 import MedicationsContent from "../../../../medications/MedicationsContent";
 import SurgicalHistoryContent from "../../../../surgicalhistory/SurgicalHistoryContent";
 import HPIContext from "../../../../../contexts/HPIContext";
-import ListText from "./listText" 
+import ListText from "./listText";
+import { PATIENT_HISTORY_MOBILE_BP } from '../../../../../constants/breakpoints';
 
 class QuestionAnswer extends React.Component {
     static contextType = HPIContext
     constructor(props, context) {
         super(props, context)
         this.state = {
+            windowWidth: 0,
+            windowHeight: 0,
             response_array: [],
             startDate: new Date(),
             scale: 0,
@@ -39,11 +42,32 @@ class QuestionAnswer extends React.Component {
             }
             else if (this.props.responseType === 'LIST-TEXT') values[this.props.category_code][this.props.uid]["response"] = {1: "", 2: "", 3: ""}
         }
-        this.context.onContextChange("hpi", values) } 
+        this.updateDimensions = this.updateDimensions.bind(this);
+        this.context.onContextChange("hpi", values);
+    } 
+
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions);
+    }
+ 
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions);
+    }
+
+    updateDimensions() {
+        let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+        let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+ 
+        this.setState({ windowWidth, windowHeight });
+    }
 
     render() {
-        let button_map = []
-        const {responseType} = this.props
+        const {responseType} = this.props;
+        const { windowWidth } = this.state;
+
+        const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
+        let button_map = [];
         if (responseType === "YES-NO" || responseType === "NO-YES") {
             button_map.push(
                 <YesNo
@@ -127,6 +151,7 @@ class QuestionAnswer extends React.Component {
             button_map.push(<MedicalHistoryContent
                 key={this.props.question}
                 response_choice={this.props.response_choice}
+                collapseTabs={collapseTabs}
             />)
         } 
         else if (responseType === "MEDS-BLANK") {

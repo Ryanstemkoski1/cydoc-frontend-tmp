@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'semantic-ui-react';
 import ChestPainData from "./ChestPainData";
 import DiseaseFormQuestions from "../components/DiseaseFormQuestions";
 import '../css/App.css';
@@ -96,8 +97,18 @@ export class DiseaseForm extends React.Component {
                 </div>
                 <h1 style={{marginLeft: 50}}> {this.props.category} </h1>
                 {questionMap}
-                <button onClick={this.back} style={{marginTop: 35}} className='NextButton'> &laquo; </button>
-                <button onClick={this.continue} style={{float:'right', marginTop: 35}} className='NextButton'> &raquo; </button>
+                <Button
+                    circular
+                    icon='angle double left'
+                    className='next-button'
+                    onClick={this.back}
+                />
+                <Button
+                    circular
+                    icon='angle double right'
+                    className='next-button'
+                    onClick={this.continue}
+                />
             </div>
         )
     }

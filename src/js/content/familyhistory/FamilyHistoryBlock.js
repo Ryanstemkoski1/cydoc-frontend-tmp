@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from "react";
-import {Form, Grid, TextArea, Button, Header, Card} from "semantic-ui-react";
+import {Form, Grid, TextArea, Button, Header} from "semantic-ui-react";
 import HPIContext from "../../contexts/HPIContext"
 import ToggleButton from "../../components/ToggleButton";
 import FamilyHistoryDropdown from "./FamilyHistoryDropdown";
@@ -52,6 +52,7 @@ export default class FamilyHistoryBlock extends Component {
         for (let step = 0; step < range; step ++) {
             dropdown_list.push(
                 <FamilyHistoryDropdown
+                    key={index}
                     condition = {condition}
                     index = {index}
                     family_index = {step}
