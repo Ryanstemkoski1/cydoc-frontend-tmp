@@ -34,6 +34,9 @@ export default class TableContent extends Component {
             tableBodyPlaceholders={this.props.tableBodyPlaceholders}
             onTableBodyChange={this.handleTableBodyChange}
             values={this.props.values}
+            dropdown = {this.props.dropdown}
+            options={this.props.options}
+            dropdown_placeholder={this.props.dropdown_placeholder}
         />)
     }
 

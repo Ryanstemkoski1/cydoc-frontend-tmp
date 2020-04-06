@@ -79,7 +79,8 @@ export class DiseaseForm extends React.Component {
                 // check if the current node in the graph has children that we need to look for
                 if (children) { 
                     questionMap[uid]['children'] = {}
-                    let first_node = (edges[current_node_values[0]]['from']).substring(0,3) + "0001"
+                    let curr_node = edges[current_node_values[0]]['from']
+                    let first_node = (curr_node).substring(0,curr_node.length-2) + "01"
                     questionMap[uid]['children_category'] = nodes[first_node]['category']
                     // if statement so that we don't reset the children key every time we generate the child disease form
                     if (!('children' in values[tab_category][uid])) values[tab_category][uid]['children'] = {}
