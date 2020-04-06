@@ -1,15 +1,11 @@
 import React, {Component, Fragment} from 'react';
 import GridContent from "../../components/GridContent";
 import FamilyHistoryContentHeader from "./FamilyHistoryContentHeader";
-import FamilyHistoryNoteRow from "./FamilyHistoryNoteRow";
-import FamilyHistoryNoteItem from "./FamilyHistoryNoteItem";
-import {CONDITIONS} from '../../constants/constants'
 import HPIContext from "../../contexts/HPIContext"
 import ConditionInput from "../../components/ConditionInput"
 import {FAMILY_HISTORY_MOBILE_BP} from "../../constants/breakpoints.js";
 import FamilyHistoryBlock from './FamilyHistoryBlock';
 import AddRowButton from '../../components/AddRowButton';
-import { Card } from 'semantic-ui-react';
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.
@@ -119,40 +115,22 @@ export default class FamilyHistoryContent extends Component {
                 var condition = list_values[condition_index]
                 index_dict[condition] = conditions.indexOf(condition) 
             }}
-        const listItems = mobile ? 
-        list_values.map((condition, index) => 
-        <FamilyHistoryNoteItem   key={condition}
-                                    condition={<ConditionInput key={condition} index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index} category={"Family History"}/>}
-                                    familyMember={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Family Member"]}
-                                    comments={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Comments"]}
-                                    onChange={this.handleChange}
-                                    onToggleButtonClick={this.handleToggleButtonClick}
-                                    yesActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Yes"]}
-                                    noActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["No"]}
-                                    CODActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Cause of Death"]}
+        const listItems = list_values.map((condition, index) =>
+            <FamilyHistoryBlock
+                key={condition}
+                mobile={mobile}
+                onChange={this.handleChange}
+                condition={<ConditionInput
+                    key={condition}
+                    index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index}
+                    category={"Family History"}
+                />}
+                familyMember={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Family Member"]}
+                comments={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Comments"]}
+                index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index}
             />
-        ) :
-        list_values.map((condition, index) =>
-            <FamilyHistoryNoteRow   key={condition}
-                                    index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index}
-                                    condition={<ConditionInput key={condition} index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index} category={"Family History"}/>}
-                                    familyMember={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Family Member"]}
-                                    comments={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Comments"]}
-                                    onChange={this.handleChange}
-                                    onToggleButtonClick={this.handleToggleButtonClick}
-                                    yesActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Yes"]}
-                                    noActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["No"]}
-                                    CODActive={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Cause of Death"]}
-            />)
-        const newItems = list_values.map((condition, index) => 
-        <FamilyHistoryBlock key={condition}
-                            index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index}
-                            condition={<ConditionInput key={condition} index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index} category={"Family History"}/>}
-                            familyMember={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Family Member"]}
-                            comments={this.context["Family History"][Object.keys(index_dict).length > 0 ? index_dict[condition] : index]["Comments"]}
-                            onChange={this.handleChange}
-        />
-        )
+        );
+
         return(
             mobile ? 
                 <Fragment>
@@ -166,11 +144,10 @@ export default class FamilyHistoryContent extends Component {
                         mobile={mobile}
                     />
                 </Fragment> : 
-                <div style={{marginLeft: 50}} > 
-                <div> {newItems} </div> 
-                {/* <Card.Group>  {newItems}  </Card.Group> */}
-                <AddRowButton onClick={this.addRow} name={"family history"} />
-                </div>
+                <Fragment  > 
+                    {listItems}
+                    <AddRowButton onClick={this.addRow} name={"family history"} />
+                </Fragment>
         );
     }
 }

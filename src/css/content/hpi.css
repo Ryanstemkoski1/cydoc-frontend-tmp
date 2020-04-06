@@ -54,3 +54,13 @@
     display: flex;
     justify-content: space-between;
 }
+
+@media screen and (max-width: 700px) {
+    .category-header {
+        text-align: center;
+        margin-bottom: 0;
+    }
+    .question-map {
+        margin: auto .5rem;
+    }
+}

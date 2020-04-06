@@ -1,34 +1,74 @@
 .family-hx-note-item {
-  width: 100vw;
+    width: 100vw;
+    padding-left: 2rem;
+}
+
+.family-member-header {
+    display: inline;
 }
 
 .condition-header {
-  margin-bottom: .5rem !important;
+    margin-bottom: .5rem !important;
 }
 
 .condition-name {
-  margin-right: .8rem;
-  font-size: 15px;
+    margin-right: .8rem;
+    font-size: 15px;
 }
 
 .condition-info {
-  margin: auto 2.3rem;
+    margin: auto 2.3rem;
+}
+
+.dropdown-container {
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.dropdown-component-container {
+    margin-bottom: 10px;
+}
+
+.ui.fluid.dropdown.dropdown-inline {
+    display: inline-table;
+    width: 50%;
+    margin-right: 50px;
+
+}
+
+.dropdown-inline-mobile {
+    display: inline-table;
+}
+
+.condition-info-container {
+    margin-bottom: 30px;
 }
 
 .text-area {
-  height: auto !important;
-  width: 500px;
-  margin-bottom: .5rem !important;
+    height: auto !important;
+    width: 500px;
+    margin-bottom: .5rem !important;
 }
 
 .display {
-  display: block;
+    display: block;
 }
 
 .hide {
-  display: none;
+    display: none;
 }
 
-.cod-checkbox {
-  margin-bottom: .2rem !important;
+.ui.grid > .row > .column > .no-padding {
+    padding: 0;
+}
+
+@media screen and (max-width: 767px) {
+    .ui.grid > .column:not(.row).family-member-input {
+        padding-bottom: 0 !important;
+    }
+    
+    .ui.grid > .column:not(.row).cod-input {
+        padding-top: .4rem !important;
+        padding-bottom: 1.5rem !important;
+    }
 }

@@ -9,6 +9,8 @@ export default class SocialHistoryNoteItem extends Component {
     render() {
         const { values, condition, firstField, secondField, onToggleButtonClick, onChange } = this.props;
 
+        const showTextAreas = values[condition]["Yes"] || values[condition]["In the Past"] ? "display" : "hide";
+
         return (
             <Grid.Row>
                 <Form className="family-hx-note-item">
@@ -43,7 +45,7 @@ export default class SocialHistoryNoteItem extends Component {
                             />
                         </div>
                     </Form.Group>
-                    <div className="condition-info">
+                    <div className={`condition-info ${showTextAreas}`}>
                         <Grid stackable columns="equal">
                             <Grid.Column computer={5} tablet={8} mobile={16}>
                                 <Form.Field>

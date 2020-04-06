@@ -1,9 +1,11 @@
 import React, {Component, Fragment} from "react";
-import {Form, Grid, TextArea, Button, Header, Card} from "semantic-ui-react";
+import {Form, Grid, TextArea, Button, Header} from "semantic-ui-react";
 import HPIContext from "../../contexts/HPIContext"
 import ToggleButton from "../../components/ToggleButton";
 import FamilyHistoryDropdown from "./FamilyHistoryDropdown";
 import GridContent from "../../components/GridContent";
+import '../../../css/content/familyHistory.css';
+import '../../../css/content/reviewOfSystems.css';
 
 export default class FamilyHistoryBlock extends Component {
 
@@ -40,42 +42,41 @@ export default class FamilyHistoryBlock extends Component {
     }
 
     render() {
-        const { yesActive, condition, noActive, CODActive, familyMember, onChange, comments, index } = this.props;
+        const { mobile, onChange, condition, familyMember, comments, index } = this.props;
         // array of dropdowns displayed on Family History Family Member column
-        let dropdown_list = []
-        // array that lines up with the family history family member column, 
-        // indicating whether something is a cause of death or not for a family member 
-        let cause_of_death_list = []
+        let dropdown_list = [];
         // variable range that changes when the user clicks the + (add member) button 
-        var range = this.context["Family History"][index]["Family Member"].length 
+        var range = this.context["Family History"][index]["Family Member"].length;
         // if the range is 0 then we want there to be at least one dropdown
-        range = range > 0 ? range : 1
+        range = range > 0 ? range : 1;
         for (let step = 0; step < range; step ++) {
             dropdown_list.push(
                 <FamilyHistoryDropdown
+                    key={index}
                     condition = {condition}
                     index = {index}
                     family_index = {step}
+                    mobile = {mobile}
                 /> )
         }
         const new_content_header = 
             <Grid columns={3}>
                 <Grid.Row>
                     <Grid.Column width={4}>
-                        <Header as="h4" style={{display: 'inline'}}>Family Member</Header>
+                        <Header as="h4" className="family-member-header">Family Member</Header>
                     </Grid.Column>
-                    <Grid.Column width={3}>
+                    <Grid.Column width={4}>
                         <Header as="h4">Cause of Death</Header>
                     </Grid.Column>
-                    <Grid.Column width={9}>
+                    <Grid.Column width={8}>
                         <Header as="h4">Comments</Header>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
         const new_row = 
         <Grid.Row>
-                <Grid.Column width={7} style={{marginBottom: 10, marginTop: 30}}>
-                    {dropdown_list}
+            <Grid.Column width={8} className='dropdown-container'>
+                {dropdown_list}
                 <Fragment>
                     <Button
                         basic
@@ -86,31 +87,84 @@ export default class FamilyHistoryBlock extends Component {
                     />
                     add family member
                 </Fragment>
-                </Grid.Column>
-                <Grid.Column width={9}>
-                    <Form>
-                    <TextArea condition={condition} value={comments}
-                                  onChange={onChange} placeholder='Comments'/>
-                    </Form>
-                </Grid.Column>
-            </Grid.Row>
+            </Grid.Column>
+            <Grid.Column width={8}>
+                <Form>
+                <TextArea condition={condition} value={comments}
+                                onChange={onChange} placeholder='Comments'/>
+                </Form>
+            </Grid.Column>
+        </Grid.Row>
         return (
-            // <Card> 
-            //     <Card.Content>
-            <div>
-                    {/* <Card.Header>  */}
-                        {condition} 
-                    <ToggleButton active={this.context["Family History"][condition.props.index]["Yes"]}
-                                condition={condition}
-                                title="Yes"
-                                onToggleButtonClick={this.handleToggleButtonClick}/>
-                    <ToggleButton active={this.context["Family History"][condition.props.index]["No"]}
-                                condition={condition}
-                                title="No"
-                                onToggleButtonClick={this.handleToggleButtonClick}/>
-                    {/* </Card.Header> */}
-                    <div style={{marginBottom: 30}}> 
-                    {this.context["Family History"][condition.props.index]["Yes"] ?  
+            mobile ? (
+                <Grid.Row>
+                    <Form className='family-hx-note-item'>
+                        <Form.Group inline className="condition-header">
+                            <div className="condition-name">
+                                {condition}
+                            </div>
+                            <div>
+                                <ToggleButton
+                                    active={this.context["Family History"][condition.props.index]["Yes"]}
+                                    condition={condition}
+                                    title="Yes"
+                                    onToggleButtonClick={this.handleToggleButtonClick}
+                                />
+                                <ToggleButton
+                                    active={this.context["Family History"][condition.props.index]["No"]}
+                                    condition={condition}
+                                    title="No"
+                                    onToggleButtonClick={this.handleToggleButtonClick}
+                                />
+                            </div>
+                        </Form.Group>
+                        <div className='condition-info'>
+                            {this.context["Family History"][condition.props.index]["Yes"] ?
+                                <Fragment>
+                                    {dropdown_list}
+                                    <Fragment>
+                                        <Button
+                                            basic
+                                            circular
+                                            icon="plus"
+                                            size='mini'
+                                            onClick = {this.handlePlusClick}
+                                        />
+                                        add family member
+                                    </Fragment>
+                                    <Form.TextArea
+                                        label="Comments"
+                                        className="text-area"
+                                        condition={condition}
+                                        placeholder='Comments'
+                                        value={comments}
+                                        onChange={onChange}
+                                        rows={2} 
+                                    />
+                                </Fragment>
+                                : ""
+                            }
+                        </div>
+                    </Form>
+                </Grid.Row>
+            ) : (
+                <div>
+                    {condition} 
+                    <ToggleButton
+                        active={this.context["Family History"][condition.props.index]["Yes"]}
+                        condition={condition}
+                        title="Yes"
+                        onToggleButtonClick={this.handleToggleButtonClick}
+                    />
+                    <ToggleButton
+                        active={this.context["Family History"][condition.props.index]["No"]}
+                        condition={condition}
+                        title="No"
+                        onToggleButtonClick={this.handleToggleButtonClick}
+                    />
+                    
+                    <div className='condition-info-container'>
+                        {this.context["Family History"][condition.props.index]["Yes"] ?
                             <Fragment>
                                 <GridContent
                                     numColumns={2}
@@ -119,12 +173,11 @@ export default class FamilyHistoryBlock extends Component {
                                     value_type = "Family History"
                                 />
                             </Fragment>
-                        : ""
-                    }
+                            : ""
+                        }
                     </div>
-             </div>
-            //     </Card.Content> 
-            // </Card>
-        )
+                </div>
+            )
+        );
     }
 }

@@ -31,7 +31,7 @@ export default class ReviewOfSystemsCategory extends Component{
                     <Grid>
                     {this.options.map((option) => 
                         <Grid.Row key={option}>
-                            <Grid.Column width={5}>
+                            <Grid.Column width={4} className="no-padding">
                                 <Button
                                     compact
                                     floated='right'
@@ -44,13 +44,13 @@ export default class ReviewOfSystemsCategory extends Component{
                                 </Button>
                             </Grid.Column>
                             <Grid.Column
-                                width={6}
+                                width={7}
                                 verticalAlign='middle'
-                                className="ros-symptom"
+                                className="ros-symptom no-padding"
                             >
                                 {option}
                             </Grid.Column>
-                            <Grid.Column width={5}>
+                            <Grid.Column width={4} className="no-padding">
                                 <Button
                                     compact
                                     floated='left'

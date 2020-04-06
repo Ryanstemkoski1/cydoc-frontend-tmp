@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Segment, Container, Header} from 'semantic-ui-react';
+import {Segment, Header} from 'semantic-ui-react';
 import MedicalHistoryContent from "../content/medicalhistory/MedicalHistoryContent";
 import SurgicalHistoryContent from "../content/surgicalhistory/SurgicalHistoryContent";
 import MedicationsContent from "../content/medications/MedicationsContent";
@@ -15,6 +15,8 @@ import HPIContent from "../content/hpi/knowledgegraph/HPIContent";
 import PatientHistoryContent from "../content/patienthistory/PatientHistoryContent";
 import GenerateNote from '../content/generatenote/GenerateNote';
 import DiscussionPlan from '../content/discussionplan/DiscussionPlan';
+import { NOTE_PAGE_MOBILE_BP } from '../constants/breakpoints';
+import '../../css/components/notePage.css';
 
 //Component that manages the content displayed based on the activeItem prop
 // and records the information the user enters as state
@@ -23,17 +25,36 @@ export default class NotePage extends Component {
     constructor(props) {
         super(props);
         //bind methods
+        this.updateDimensions = this.updateDimensions.bind(this);
         this.handleMedicalHistoryChange = this.handleMedicalHistoryChange.bind(this);
         this.handleSocialHistoryChange = this.handleSocialHistoryChange.bind(this);
         this.handleAllergiesChange = this.handleAllergiesChange.bind(this);
         //initialize state
         this.state = {
+            windowWidth: 0,
+            windowHeight: 0,
             "Medical History": constants.MEDICAL_HISTORY.STATE,
             "Social History": constants.SOCIAL_HISTORY.STATE,
             "Allergies": allergies.state,
             "Medications": medications.state,
-            "Surgical History": surgicalHistory.state
+            "Surgical History": surgicalHistory.state,
         }
+    }
+
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions);
+    }
+ 
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions);
+    }
+
+    updateDimensions() {
+        let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+        let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+ 
+        this.setState({ windowWidth, windowHeight });
     }
 
     updateState(name, values){
@@ -55,13 +76,16 @@ export default class NotePage extends Component {
     handleSocialHistoryChange = (data, values) => this.updateState("Social History", values);
 
     render() {
+        const { windowWidth } = this.state;
+
+        const mobile = windowWidth < NOTE_PAGE_MOBILE_BP;
         //get content based on which tab is active
         const tabToDisplay = this.getTabToDisplay(this.props.activeItem);
 
         return (
             //Renders a white page that contains the tab name as the header and the
             //corresponding content to the active tab
-            <Segment style={{borderColor: "white", margin: "2rem"}} padded={"very"}>
+            <Segment className={mobile ? `note-page-container-mobile` : `note-page-container`}>
                 <Header as="h3" textAlign="center">
                     {this.props.activeItem.toLowerCase()}
                 </Header>

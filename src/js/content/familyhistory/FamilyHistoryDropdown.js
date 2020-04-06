@@ -1,9 +1,8 @@
-import { Dropdown, Container } from "semantic-ui-react"
-import React, {Component} from "react";
-import HPIContext from "../../contexts/HPIContext"
+import { Dropdown, Grid } from "semantic-ui-react";
+import React, { Component } from "react";
+import HPIContext from "../../contexts/HPIContext";
 import ToggleButton from "../../components/ToggleButton";
-import FamilyHistoryCauseofDeath from "../discussionplan/FamilyHistoryCauseofDeath";
-
+import '../../../css/content/familyHistory.css';
 
 export default class FamilyHistoryDropdown extends Component { 
 
@@ -36,29 +35,70 @@ export default class FamilyHistoryDropdown extends Component {
     }
 
     render() {
-        var cause_of_death = this.context["Family History"][this.props.index]["Cause of Death"][this.props.family_index]
+        const {index, family_index, mobile} = this.props;
+        const cause_of_death = this.context["Family History"][index]["Cause of Death"][family_index];
+
         return (
-            <div style={{marginBottom: 10}}>
-                <Dropdown
-                    value={this.state.value}
-                    button
-                    search
-                    selection
-                    fluid 
-                    options={familyOptions}
-                    onChange={this.handleChange}
-                    style={{width: '50%', display: 'inline-table', marginRight: 50}}
-                />
-                <ToggleButton   active={cause_of_death}
-                                condition={this.props.condition}
-                                title="Yes"
-                                onToggleButtonClick={this.handleClick} />
-                <ToggleButton   active={cause_of_death === false ? true : false}
-                                condition={this.props.condition}
-                                title="No"
-                                onToggleButtonClick={this.handleClick} />
-            </div>
-        )
+            mobile ? (
+                <div className='dropdown-component-container'>
+                    <Grid stackable>
+                        <Grid.Column mobile={8} className='family-member-input'>
+                            Family Member
+                            <Dropdown
+                                value={this.state.value}
+                                search
+                                selection
+                                fluid 
+                                options={familyOptions}
+                                onChange={this.handleChange}
+                                className='dropdown-inline-mobile'
+                            />
+                        </Grid.Column>
+                        <Grid.Column width={8} className='cod-input'>
+                            Cause of death?
+                            <div>
+                                <ToggleButton
+                                    active={cause_of_death}
+                                    condition={this.props.condition}
+                                    title="Yes"
+                                    onToggleButtonClick={this.handleClick}
+                                />
+                                <ToggleButton
+                                    active={cause_of_death === false ? true : false}
+                                    condition={this.props.condition}
+                                    title="No"
+                                    onToggleButtonClick={this.handleClick}
+                                />
+                            </div>
+                        </Grid.Column>
+                    </Grid>
+                </div>
+            ) : (
+                <div className='dropdown-component-container'>
+                    <Dropdown
+                        value={this.state.value}
+                        search
+                        selection
+                        fluid
+                        options={familyOptions}
+                        onChange={this.handleChange}
+                        className='dropdown-inline'
+                    />
+                    <ToggleButton
+                        active={cause_of_death}
+                        condition={this.props.condition}
+                        title="Yes"
+                        onToggleButtonClick={this.handleClick}
+                    />
+                    <ToggleButton
+                        active={cause_of_death === false ? true : false}
+                        condition={this.props.condition}
+                        title="No"
+                        onToggleButtonClick={this.handleClick}
+                    />
+                </div>
+            )
+        );
     }
 }
 
