@@ -143,14 +143,16 @@ class HPIContent extends Component {
                             {diseaseComponents}
                         </Masonry>
                         {positive_length > 0 ? 
+                        <div className='positive-diseases-placeholder'>
                             <Button
                                 circular
                                 icon='angle double right'
                                 className='next-button'
                                 onClick={this.continue}
                             />
+                            </div>
                             :
-                            <div />
+                            <div className='positive-diseases-placeholder' />
                         }
                     </Fragment>
                     )

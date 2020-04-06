@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Button } from 'semantic-ui-react';
 
 function Summary(props) {
     const {hpi, back} = props
@@ -41,7 +42,12 @@ function Summary(props) {
             <div>
                 <h1 style={{textAlign: 'center', marginTop: 23}}> Summary </h1>
                 <div> {array} </div>
-                <button onClick={back} className='NextButton' style={{marginTop: 30}}> &laquo; </button>
+                <Button
+                    circular
+                    icon='angle double right'
+                    className='next-button'
+                    onClick={back}
+                />
             </div>
         )
 }
