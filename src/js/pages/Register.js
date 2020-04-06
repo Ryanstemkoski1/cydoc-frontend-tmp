@@ -1,18 +1,50 @@
-import React, {Component, Fragment} from 'react';
-import { Form, Grid, Header, Segment, Button, Label, Message} from "semantic-ui-react";
+import React, { Component, Fragment } from 'react';
+import { Form, Grid, Header, Segment, Button, Label, Message } from "semantic-ui-react";
 import * as yup from "yup"
-import {Redirect} from "react-router";
+import { Redirect } from "react-router";
 import AuthContext from "../contexts/AuthContext";
-import NotesContext from "../contexts/NotesContext";
 import constants from "../constants/registration_constants"
-import {client} from "../constants/api.js"
+import { client } from "../constants/api.js"
 
-const degreeOptions = constants.degrees.map((degree) => ({key: degree, value: degree, text: degree}))
-const specialtyOptions = constants.specialties.map((specialty) => ({key: specialty, value: specialty, text: specialty}))
-const workfeatOptions = constants.workplaceFeatures.map((workfeat) => ({key: workfeat, value: workfeat, text: workfeat}))
+const degreeOptions = constants.degrees.map((degree) => ({ key: degree, value: degree, text: degree }))
+const specialtyOptions = constants.specialties.map((specialty) => ({ key: specialty, value: specialty, text: specialty }))
+const workfeatOptions = constants.workplaceFeatures.map((workfeat) => ({ key: workfeat, value: workfeat, text: workfeat }))
 const yasaSchema = yup.object().shape({
+    username: yup.string().required("username is required"),
     password: yup.string().required("password is required"),
-    passwordConfirm: yup.string().oneOf([yup.ref('password'), null], "passwords must match")
+    passwordConfirm: yup.string().oneOf([yup.ref('password'), null], "passwords must match"),
+    email: yup.string().required("email is required").email("email must be valid"),
+    backupEmail: yup.string().required("backup email is required").notOneOf([yup.ref('email')], "backup email must not be the same").email("backup email must be valid"),
+    phoneNumber: yup.string().required("phone number is required").matches(/^[\\(]{0,1}([0-9]){3}[\\)]{0,1}[ ]?([^0-1]){1}([0-9]){2}[ ]?[-]?[ ]?([0-9]){4}[ ]*((x){0,1}([0-9]){1,5}){0,1}$/, "phone number must be valid"),
+    firstName: yup.string().required("first name must not be blank"),
+    lastName: yup.string().required("last name must not be blank"),
+    role: yup.string().required("please specify your role"),
+    studentStatus: yup.string().when('role', {is: 'healthcare professional', then: yup.string().required("please specify your student status"), otherwise: yup.string()}),
+    workplace: yup.string().when('role', {is: 'healthcare professional', then: yup.string().required("workplace is required"), otherwise: yup.string()}),
+    degreesCompleted: yup.array().of(yup.string()).test(
+        'degreesCompleted-duplicates',
+        'Cannot put same degree twice under degrees completed',
+        arr => {
+            return arr.filter((item, index) => {
+                return item !== "" && arr.indexOf(item) != index
+            }).length === 0
+        }),
+    degreesInProgress: yup.array().of(yup.string().notOneOf([yup.ref('$degreesCompleted[0]'), yup.ref('$degreesCompleted[1]'), yup.ref('$degreesCompleted[2]')], 'Same degree cannot be both completed and in progress')).test(
+        'degreesInProgress-duplicates',
+        'Cannot put same degree twice under degrees in progress',
+        arr => {
+            return arr.filter((item, index) => {
+                return item !== "" && arr.indexOf(item) != index
+            }).length === 0
+        }),
+    specialties: yup.array().test(
+        'specialty-duplicates',
+        'Cannot put same specialty twice',
+        arr => {
+            return arr.filter((item, index) => {
+                return item !== "" && arr.indexOf(item) != index
+            }).length === 0
+        })
 })
 
 
@@ -22,7 +54,6 @@ export default class Register extends Component {
     static contextType = AuthContext
 
     constructor(props) {
-        console.log(yup)
         super(props);
         this.state = {
             formInfo: {
@@ -42,7 +73,7 @@ export default class Register extends Component {
                 studentStatus: "",
                 degreesCompleted: ["", "", ""],
                 degreesInProgress: ["", "", ""],
-                specialties: ["", ""],
+                specialties: ["", "", ""],
                 workplaceFeatures: []
             },
             errorMessages: [],
@@ -53,20 +84,17 @@ export default class Register extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(e, {name, value}){
+    handleChange(e, { name, value }) {
         let newState = this.state;
         newState.formInfo[name] = value;
-        let user = this.state.formInfo
-
-        yasaSchema.validate(user).then((v) => this.setState({errorMessages: []}))
-                                 .catch((v) => this.setState({errorMessages: v.errors}))
 
         this.setState(newState);
     }
 
-    handleArrayChange(e, {name, index, value}){
+    handleArrayChange(e, { name, index, value }) {
         let newState = this.state;
         newState.formInfo[name][index] = value;
+
         this.setState(newState);
     }
 
@@ -76,17 +104,19 @@ export default class Register extends Component {
 
         let user = this.state.formInfo
 
-        console.log(yasaSchema.validate(user))
-
-        client.post("/user/new", user)
-            .then(res => {
-                const user = res.data;
-                console.log(JSON.stringify(user))
-                this.setState({redirect: true})
-            })
-            .catch(err => {
-                console.log(err.response)
-            })
+        yasaSchema.validate(user, { abortEarly: false }).then((v) => {
+            this.setState({ errorMessages: [] })
+            client.post("/user/new", user)
+                .then(res => {
+                    const user = res.data;
+                    console.log(JSON.stringify(user))
+                    this.setState({ redirect: true })
+                })
+                .catch(err => {
+                    console.log(err.response)
+                })
+        })
+            .catch((v) => this.setState({ errorMessages: v.errors }))
     }
 
 
@@ -94,16 +124,16 @@ export default class Register extends Component {
         if (this.state.formInfo.role === 'healthcare professional') {
             return (
                 <Fragment>
-                    <label style={{fontSize: "10px"}}>student status</label>
+                    <label style={{ fontSize: "10px" }}>student status</label>
                     <Form.Group>
-                        <Form.Radio style={{fontSize: "10px"}}
+                        <Form.Radio style={{ fontSize: "10px" }}
                             label='student'
                             value='y'
                             name='studentStatus'
                             checked={this.state.formInfo.studentStatus === 'y'}
                             onChange={this.handleChange}
                         />
-                        <Form.Radio style={{fontSize: "10px"}}
+                        <Form.Radio style={{ fontSize: "10px" }}
                             label='non-student'
                             value='n'
                             name='studentStatus'
@@ -111,7 +141,7 @@ export default class Register extends Component {
                             onChange={this.handleChange}
                         />
                     </Form.Group>
-                    <label style={{fontSize: "10px"}}>degrees completed</label>
+                    <label style={{ fontSize: "10px" }}>degrees completed</label>
                     <Form.Group>
                         <Form.Dropdown
                             search
@@ -144,7 +174,7 @@ export default class Register extends Component {
                             onChange={this.handleArrayChange}
                         />
                     </Form.Group>
-                    <label style={{fontSize: "10px"}}>degrees in progress</label>
+                    <label style={{ fontSize: "10px" }}>degrees in progress</label>
                     <Form.Group>
                         <Form.Dropdown
                             search
@@ -177,7 +207,7 @@ export default class Register extends Component {
                             onChange={this.handleArrayChange}
                         />
                     </Form.Group>
-                    <label style={{fontSize: "10px"}}>specialties</label>
+                    <label style={{ fontSize: "10px" }}>specialties</label>
                     <Form.Group>
                         <Form.Dropdown
                             search
@@ -197,6 +227,16 @@ export default class Register extends Component {
                             value={this.state.formInfo.specialties[1]}
                             name='specialties'
                             index={1}
+                            onChange={this.handleArrayChange}
+                        />
+                        <Form.Dropdown
+                            search
+                            selection
+                            clearable
+                            options={specialtyOptions}
+                            value={this.state.formInfo.specialties[2]}
+                            name='specialties'
+                            index={2}
                             onChange={this.handleArrayChange}
                         />
                     </Form.Group>
@@ -228,149 +268,137 @@ export default class Register extends Component {
     }
 
     render() {
-
-        if(this.state.redirect){
-            return(<Redirect push to= "/login" />)
+        if (this.state.redirect) {
+            return (<Redirect push to="/login" />)
         }
 
         const { username, password } = this.state;
         return (
             //renders a one-column grid centered in the middle of the screen with login form
-            <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle' centered>
-                <Grid.Column style={{maxWidth: 450}}>
-                    <Header color='grey' textAlign='center' style={{fontSize: "60px", letterSpacing: "4.8px"}}>
+            <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle' centered>
+                <Grid.Column style={{ maxWidth: 600 }}>
+                    <Header color='grey' textAlign='center' style={{ fontSize: "60px", letterSpacing: "4.8px" }}>
                         cydoc
                     </Header>
                     <Header as='h4' color='grey' textAlign='center'>
                         sign up
                     </Header>
-                    <Segment clearing raised style={{borderColor: "white"}}>
-                        <Form size='mini' error={this.state.errorMessages.length} onSubmit={this.handleSubmit}>
+                    <Segment clearing raised style={{ borderColor: "white" }}>
+                        <Form size='small' error={this.state.errorMessages.length>0} onSubmit={this.handleSubmit}>
+                            <Form.Input
+                                fluid
+                                label='username'
+                                placeholder='username'
+                                name='username'
+                                value={this.state.formInfo.username}
+                                onChange={this.handleChange}
+                            />
+                            <Form.Input
+                                fluid
+                                type={"password"}
+                                label='password'
+                                name='password'
+                                value={this.state.formInfo.password}
+                                onChange={this.handleChange}
+                            />
+                            <Form.Input
+                                fluid
+                                type={"password"}
+                                label='reenter password'
+                                name='passwordConfirm'
+                                value={this.state.formInfo.passwordConfirm}
+                                onChange={this.handleChange}
+                            />
+                            <Form.Group>
                                 <Form.Input
                                     fluid
-                                    label='username'
-                                    placeholder='username'
-                                    name='username'
-                                    value={this.state.formInfo.username}
+                                    label='first name'
+                                    name='firstName'
+                                    value={this.state.formInfo.firstName}
                                     onChange={this.handleChange}
-                                    required
-                                    minLength={3}
-                                    error={{content: 'err', pointing: 'left'}}
                                 />
                                 <Form.Input
                                     fluid
-                                    type={"password"}
-                                    label='password'
-                                    name='password'
-                                    value={this.state.formInfo.password}
+                                    label='last name'
+                                    name='lastName'
+                                    value={this.state.formInfo.lastName}
                                     onChange={this.handleChange}
-                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Input
+                                    fluid
+                                    type='email'
+                                    label='email'
+                                    name='email'
+                                    value={this.state.formInfo.email}
+                                    onChange={this.handleChange}
                                 />
                                 <Form.Input
                                     fluid
-                                    type={"password"}
-                                    label='reenter password'
-                                    name='passwordConfirm'
-                                    value={this.state.formInfo.passwordConfirm}
+                                    type='email'
+                                    label='backup email'
+                                    name='backupEmail'
+                                    value={this.state.formInfo.backupEmail}
                                     onChange={this.handleChange}
-                                    required
                                 />
-                                <Form.Group>
-                                    <Form.Input
-                                        fluid
-                                        label='first name'
-                                        name='firstName'
-                                        value={this.state.formInfo.firstName}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                    <Form.Input
-                                        fluid
-                                        label='last name'
-                                        name='lastName'
-                                        value={this.state.formInfo.lastName}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </Form.Group>
-                                <Form.Group>
-                                    <Form.Input
-                                        fluid
-                                        type='email'
-                                        label='email'
-                                        name='email'
-                                        value={this.state.formInfo.email}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                    <Form.Input
-                                        fluid
-                                        type='email'
-                                        label='backup email'
-                                        name='backupEmail'
-                                        value={this.state.formInfo.backupEmail}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </Form.Group>
-                                <Form.Group>
-                                    <Form.Input
-                                        fluid
-                                        label='address'
-                                        name='address'
-                                        value={this.state.formInfo.address}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                    <Form.Input
-                                        fluid
-                                        width={6}
-                                        type='tel'
-                                        label='phone number'
-                                        name='phoneNumber'
-                                        value={this.state.formInfo.phoneNumber}
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </Form.Group>
-                                <label style={{fontSize: "10px"}}>
-                                    I am a:
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Input
+                                    fluid
+                                    label='address'
+                                    name='address'
+                                    value={this.state.formInfo.address}
+                                    onChange={this.handleChange}
+                                />
+                                <Form.Input
+                                    fluid
+                                    width={6}
+                                    type='tel'
+                                    label='phone number'
+                                    name='phoneNumber'
+                                    value={this.state.formInfo.phoneNumber}
+                                    onChange={this.handleChange}
+                                />
+                            </Form.Group>
+                            <label style={{ fontSize: "10px" }}>
+                                I am a:
                                 </label>
-                                <Form.Group>
-                                    <Form.Radio style={{fontSize: "10px"}}
-                                        label='patient'
-                                        value='patient'
-                                        name='role'
-                                        checked={this.state.formInfo.role === 'patient'}
-                                        onChange={this.handleChange}
-                                    />
-                                    <Form.Radio style={{fontSize: "10px"}}
-                                        label='healthcare professional'
-                                        value='healthcare professional'
-                                        name='role'
-                                        checked={this.state.formInfo.role === 'healthcare professional'}
-                                        onChange={this.handleChange}
-                                    />
-                                    <Form.Radio style={{fontSize: "10px"}}
-                                        label='administrator'
-                                        value='administrator'
-                                        name='role'
-                                        checked={this.state.formInfo.role === 'administrator'}
-                                        onChange={this.handleChange}
-                                    />
-                                </Form.Group>
-                                {this.additionalFields()}
-                                <Message
-                                    error
-                                    header='Error!'
-                                    content={this.state.errorMessages}
+                            <Form.Group>
+                                <Form.Radio style={{ fontSize: "10px" }}
+                                    label='patient'
+                                    value='patient'
+                                    name='role'
+                                    checked={this.state.formInfo.role === 'patient'}
+                                    onChange={this.handleChange}
                                 />
-                                <Form.Button color='violet' size='small' floated='left'>
-                                    Sign Up
+                                <Form.Radio style={{ fontSize: "10px" }}
+                                    label='healthcare professional'
+                                    value='healthcare professional'
+                                    name='role'
+                                    checked={this.state.formInfo.role === 'healthcare professional'}
+                                    onChange={this.handleChange}
+                                />
+                                <Form.Radio style={{ fontSize: "10px" }}
+                                    label='administrator'
+                                    value='administrator'
+                                    name='role'
+                                    checked={this.state.formInfo.role === 'administrator'}
+                                    onChange={this.handleChange}
+                                />
+                            </Form.Group>
+                            {this.additionalFields()}
+                            <Message
+                                error
+                                header='Error!'
+                                content={this.state.errorMessages.map(m => <Message.Item>{m}</Message.Item>)}
+                            />
+                            <Form.Button color='violet' size='small' floated='left'>
+                                Sign Up
                                 </Form.Button>
-                                
+
                         </Form>
-                        
+
                     </Segment>
                 </Grid.Column>
             </Grid>
