@@ -1,35 +1,36 @@
 import React, {Component, Fragment} from 'react';
-import {Table} from "semantic-ui-react";
+import {Table, Card, Input} from "semantic-ui-react";
 import AddRowButton from "./AddRowButton"
 import PropTypes from 'prop-types';
 import {TableBodyRow} from "./TableBodyRow";
+import HPIContext from "../contexts/HPIContext";
+import "../../css/components/tableComponent.css";
 
 //Component for a table layout
 export default class TableContent extends Component {
-    constructor(props) {
-        super(props);
+    static contextType = HPIContext
+    constructor(props, context) {
+        super(props, context);
         // TODO: add back addRow functionality
-        // this.addRow = this.addRow.bind(this);
+        this.addRow = this.addRow.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
+        this.makeTableItems = this.makeTableItems.bind(this);
     }
 
     //modify the current values in the table to reflect changes
     // and call the handler prop
-    handleTableBodyChange(event, data){
-        console.log(data);
+    handleTableBodyChange(event, data){ 
         let newState = this.props.values;
         newState[data.rowindex][data.placeholder] = data.value;
-        console.log(newState);
         this.props.onTableBodyChange(newState);
     }
 
-    //method to generate an collection of the three default rows
-    makeTableBodyRows(){
-        const nums = [0,1,2];
+    //method to generate an collection of rows
+    makeTableBodyRows(nums){
         return nums.map((rowindex, index) => <TableBodyRow
             key={index}
-            rowindex={rowindex}
+            rowindex={parseInt(rowindex)}
             tableBodyPlaceholders={this.props.tableBodyPlaceholders}
             onTableBodyChange={this.handleTableBodyChange}
             values={this.props.values}
@@ -46,17 +47,46 @@ export default class TableContent extends Component {
         );
     }
 
-    // addRow() {
-    //     let nextState = this.state;
-    //     nextState.rows.push(this.tableBodyRow);
-    //     this.setState(nextState);
-    // }
+    addRow() {
+        let values = this.context[this.props.category]
+        var last_index = values.length.toString()
+        values[last_index] = {Procedure: "", Date: "", Comments: ""}
+        this.context.onContextChange(this.props.category, values);
+    }
+
+    makeTableItems(nums) {
+        const { values, tableBodyPlaceholders } = this.props;
+        let content = ['header', 'meta', 'description'];
+        let items = []
+        for (let i = 0; i < nums.length; i++) {
+            items.push({key: i});
+            for (let j = 0; j < tableBodyPlaceholders.length; j++) {
+                items[i][content[j]] = <Input
+                    transparent
+                    fluid
+                    type="text"
+                    placeholder={tableBodyPlaceholders[j]}
+                    onChange={this.handleTableBodyChange}
+                    rowindex={i}
+                    value={values[i][tableBodyPlaceholders[j]]}
+                />
+            }
+        }
+        return items;
+    }
 
     render(){
+        var nums = Object.keys(this.props.values)
         const headerRow = this.makeHeader();
-        const rows = this.makeTableBodyRows();
-        return (
+        var rows = this.makeTableBodyRows(nums);
+        const mobileRows = this.makeTableItems(nums);
+
+        return ( this.props.mobile ? 
             <Fragment>
+                <Card.Group items={mobileRows} />
+                <AddRowButton onClick={this.addRow} name={this.props.name}/>
+            </Fragment>
+            : <Fragment>
                 <br/>
                 <div style={{width: "100%", height: "100%", overflowX: 'auto'}}> 
                 <Table celled>
@@ -68,7 +98,7 @@ export default class TableContent extends Component {
                     </Table.Body>
                 </Table>
                 </div>
-                <AddRowButton onClick={this.addRow}/>
+                <AddRowButton onClick={this.addRow} name={this.props.name}/>
             </Fragment>
         );
     }

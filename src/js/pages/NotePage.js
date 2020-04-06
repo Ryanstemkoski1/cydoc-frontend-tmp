@@ -61,16 +61,12 @@ export default class NotePage extends Component {
         return (
             //Renders a white page that contains the tab name as the header and the
             //corresponding content to the active tab
-                <Container style={{padding: 0, width:'100%', maxWidth:'none'}}>
-                    <br/>
-                    <Segment style={{borderColor: "white"}} padded={"very"}>
-                        <Header as="h3" textAlign="center">
-                            {this.props.activeItem.toLowerCase()}
-                        </Header>
-                        {tabToDisplay}
-                    </Segment>
-                    <br />
-                </Container>
+            <Segment style={{borderColor: "white", margin: "2rem"}} padded={"very"}>
+                <Header as="h3" textAlign="center">
+                    {this.props.activeItem.toLowerCase()}
+                </Header>
+                {tabToDisplay}
+            </Segment>
         );
     }
 

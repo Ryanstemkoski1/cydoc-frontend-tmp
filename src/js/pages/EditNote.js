@@ -2,6 +2,8 @@ import React, {Component, Fragment} from 'react';
 import MenuTabs from "../components/MenuTabs";
 import NotePage from "./NotePage";
 import NavMenu from "../components/NavMenu";
+import "../../css/components/navMenu.css";
+import {TAB_NAMES} from '../constants/constants';
 
 //Component that manages the active state of the create note editor
 //and defines the layout of the editor
@@ -10,29 +12,29 @@ class EditNote extends Component {
         super(props);
         this.onTabChange = this.onTabChange.bind(this);
         this.state = {
-            activeItem: 'HPI'
+            activeItem: 'HPI',
+            activeTabIndex: 0,
         }
     }
 
-    onTabChange(name){
-        this.setState({ activeItem: name })
+    onTabChange(name) {
+        let activeItem = name;
+        let activeTabIndex = TAB_NAMES.indexOf(name);
+
+        this.setState({ activeItem, activeTabIndex })
     }
 
     render() {
                 return (
                     <Fragment>
-                        <div style={{position: "relative", top: "140px"}}>
-                            <NotePage activeItem={this.state.activeItem}/>
-                        </div>
-                        {/*absolute positioning so that the menu is not sticky*/}
-                        <div style={{position: "absolute", top: "0", right: "0", left: "0", boxShadow: "0 3px 4px -6px gray"}}>
-                            <NavMenu attached="top"/>
-                            <MenuTabs
-                                activeItem={this.state.activeItem}
-                                onTabChange={this.onTabChange}
-                                attached
-                            />
-                        </div>
+                        <NavMenu class="nav-menu-container" />
+                        <MenuTabs
+                            activeItem={this.state.activeItem}
+                            onTabChange={this.onTabChange}
+                            activeTabIndex={this.state.activeTabIndex}
+                            attached
+                        />
+                        <NotePage activeItem={this.state.activeItem} />
                     </Fragment>
                 );
         }

@@ -1,0 +1,23 @@
+.ui.card:first-child {
+  margin-top: 1rem;
+}
+
+.ros-container {
+  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: -2rem;
+  width: auto;
+}
+
+.ros-column {
+  padding-left: 2rem;
+  background-clip: padding-box;
+}
+
+.ros-system {
+  margin-bottom: 2rem !important;
+  width: auto !important;
+  overflow-wrap: break-word;
+}

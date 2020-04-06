@@ -2,24 +2,35 @@ import React, { Component } from "react";
 import TableContent from "../../components/TableContent";
 import PropTypes from 'prop-types';
 import { medications } from "../../constants/States";
-import HPIContext from "../../contexts/HPIContext"
+import HPIContext from "../../contexts/HPIContext";
+import "../../../css/content/medicationsContent.css";
+import drug_names from '../../constants/drugNames'
 
 //Component that manages content for the Medications page
 export default class MedicationsContent extends Component {
     render() {
+        const category = "Medications";
+        const placeholders = this.props.mobile ? [medications.fields[0], medications.fields[4], medications.fields[5]] : medications.fields;
+        
         return (
             <HPIContext.Consumer>
             {(context) => {
-                console.log(context["Medications"])
-                console.log(context.onContextChange.bind(context, "Medications"))
                 return (
-                <TableContent
-                    tableHeaders={medications.fields}
-                    tableBodyPlaceholders={medications.fields}
-                    values={context["Medications"]}
-                    onTableBodyChange={context.onContextChange.bind(context, "Medications")}
-                    pop={true}
-                />
+                <div>
+                    <h5 className="scroll">
+                        scroll &rarr;
+                    </h5>
+                    <TableContent
+                        tableHeaders={medications.fields}
+                        tableBodyPlaceholders={placeholders}
+                        category = {category}
+                        values={context["Medications"]}
+                        onTableBodyChange={context.onContextChange.bind(context, "Medications")}
+                        pop={true}
+                        mobile={this.props.mobile}
+                        name={"medication"}
+                    />
+                </div>
                 )
             }}
             </HPIContext.Consumer>

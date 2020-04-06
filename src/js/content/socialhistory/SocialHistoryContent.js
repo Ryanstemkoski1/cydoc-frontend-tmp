@@ -1,7 +1,7 @@
 import React, {Fragment} from "react";
-import {Divider, Grid} from "semantic-ui-react";
+import {Divider, Grid, TextArea, Form} from "semantic-ui-react";
 import SocialHistoryNoteRow from "./SocialHistoryNoteRow";
-import SecondarySocialHistoryNoteRow from "./SecondarySocialHistoryNoteRow";
+import SocialHistoryNoteItem from "./SocialHistoryNoteItem";
 import GridContent from "../../components/GridContent";
 import {SOCIAL_HISTORY} from "../../constants/constants"
 import HPIContext from "../../contexts/HPIContext"
@@ -52,26 +52,53 @@ export default class SocialHistoryContent extends React.Component {
 
     //generates a collection for the living situation, diet, exercise portion
     generateSecondaryFieldRows() {
-        return this.secondaryFields.map(
-            (label, index) => <SecondarySocialHistoryNoteRow
-                key={index}
-                onChange={this.handleSecondaryFieldsChange}
-                values={this.context["Social History"]}
-                label={label}/>
+        return (
+            this.secondaryFields.map(
+            (label, index) =>
+                <Grid.Column key={index} computer={4} tablet={8} mobile={16}>
+                    <Form>
+                        <label>{label}</label>
+                        <TextArea
+                            onChange={this.handleSecondaryFieldsChange}
+                            value={this.context["Social History"][label]}
+                            field={label}
+                            rows={2}
+                        />
+                    </Form>
+                </Grid.Column>
+            )
         );
     }
 
     //Generates a collection of Grid.Row for the substance use portion
     generateSubstanceUseRows() {
-        return Object.keys(this.substanceUseFields).map(
-            (label, index) => <SocialHistoryNoteRow onChange={this.handleSocialHistoryChange}
-                                                    key={index}
-                                                    onToggleButtonClick={this.handleToggleButtonClick}
-                                                    condition={this.substanceUseFields[label].condition}
-                                                    firstField={this.substanceUseFields[label].firstField}
-                                                    secondField={this.substanceUseFields[label].secondField}
-                                                    values={this.context["Social History"]}/>
-        );
+        return (this.props.mobile ? (
+            Object.keys(this.substanceUseFields).map(
+                (label, index) =>
+                    <SocialHistoryNoteItem
+                        onChange={this.handleSocialHistoryChange}
+                        key={index}
+                        onToggleButtonClick={this.handleToggleButtonClick}
+                        condition={this.substanceUseFields[label].condition}
+                        firstField={this.substanceUseFields[label].firstField}
+                        secondField={this.substanceUseFields[label].secondField}
+                        values={this.context["Social History"]}
+                    />
+                )
+            ) : (
+            Object.keys(this.substanceUseFields).map(
+                (label, index) =>
+                    <SocialHistoryNoteRow
+                        onChange={this.handleSocialHistoryChange}
+                        key={index}
+                        onToggleButtonClick={this.handleToggleButtonClick}
+                        condition={this.substanceUseFields[label].condition}
+                        firstField={this.substanceUseFields[label].firstField}
+                        secondField={this.substanceUseFields[label].secondField}
+                        values={this.context["Social History"]}
+                    />
+            )
+        ));
     }
 
     render() {
@@ -88,14 +115,18 @@ export default class SocialHistoryContent extends React.Component {
         const secondaryFieldRows = this.generateSecondaryFieldRows();
         return(
             <Fragment>
-                <GridContent value={this.props.value}
-                             contentHeader={this.substanceUseContentHeader}
-                             customNoteRow={rowToAdd}
-                             rows={substanceUseRows}
-                             numColumns={5}/>
-                <Divider/>
+                <GridContent
+                    value={this.props.value}
+                    contentHeader={this.substanceUseContentHeader}
+                    customNoteRow={rowToAdd}
+                    rows={substanceUseRows}
+                    name={"social history"}
+                    numColumns={5}
+                    mobile={this.props.mobile}
+                />
+                {this.props.mobile ? <div/> : <Divider/>}
                 <br/>
-                <Grid columns={2}>
+                <Grid columns={2} stackable>
                     {secondaryFieldRows}
                 </Grid>
             </Fragment>

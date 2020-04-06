@@ -22,8 +22,8 @@ class HandleInput extends React.Component {
 
     handleClick() {
         var values = this.context['hpi']
-        if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'].splice(this.props.input_id, 1)
-        else values[this.props.category_code][this.props.uid]['response'].splice(this.props.input_id, 1) 
+        if (this.props.am_child) delete values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'][this.props.input_id]
+        else delete values[this.props.category_code][this.props.uid]['response'][this.props.input_id]
         this.context.onContextChange("hpi", values)
     }
 
@@ -44,11 +44,23 @@ class HandleInput extends React.Component {
                     <textarea
                         type='text'
                         onChange={this.handleInputChange}
-                        rows='4'
+                        rows='2'
                         value={this.state.textInput}
                     />
                 </Form>
             ) }
+        else if (this.props.type === 'LONG-TEXT') {
+            return (
+                <Form> 
+                    <textarea 
+                    type='text'
+                    onChange={this.handleInputChange}
+                    rows='4'
+                    value={this.state.textInput}
+                    />
+                </Form>
+            )
+        }
         else if (this.props.type === 'LIST-TEXT') {
             return (
                 <Form> 

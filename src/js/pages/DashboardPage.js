@@ -4,7 +4,8 @@ import NavMenu from "../components/NavMenu";
 import VerticalMenu from "../components/VerticalMenu";
 import {Grid, Segment} from "semantic-ui-react";
 import Records from "../components/Records";
-import NotesContext from "../contexts/NotesContext"
+import NotesContext from "../contexts/NotesContext";
+import "../../css/components/navMenu.css";
 
 //Component that manages the layout of the dashboard page
 export default class DashboardPage extends Component {
@@ -31,21 +32,19 @@ export default class DashboardPage extends Component {
         return (
             <Fragment>
                 
-                <div style={{ top: "0", right: "0", left: "0"}}>
+                <div class="nav-menu-container">
                     <NavMenu />
                 </div>
-                <div style={{position: "relative", boxShadow: "0 3px 4px -6px gray"}}>
-                    <Grid columns={2}>
-                        <Grid.Column width={4} style={{minWidth: "340px"}}>
-                            <VerticalMenu setActive={this.setActive}/>
-                        </Grid.Column>
-                        <Grid.Column width={8}>
-                            <Segment basic padded>
-                                <Records activeNote={this.state.activeNote} setActive={this.setActive}/>
-                            </Segment>
-                        </Grid.Column>
-                    </Grid>
-                </div>
+                <Grid columns={2}>
+                    <Grid.Column width={4} style={{minWidth: "340px"}}>
+                        <VerticalMenu setActive={this.setActive}/>
+                    </Grid.Column>
+                    <Grid.Column width={8}>
+                        <Segment basic padded>
+                            <Records activeNote={this.state.activeNote} setActive={this.setActive}/>
+                        </Segment>
+                    </Grid.Column>
+                </Grid>
             </Fragment>
         )
     }

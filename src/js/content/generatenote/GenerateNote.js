@@ -26,8 +26,8 @@ export default class GenerateNote extends Component {
             else document.getElementById(item).innerHTML = table 
         }
     }
-    generate_grid(item) {
-        var grid = "<h3>" + item + ":</h3><table style='width:100%'> <tr> <th> Condition </th>"
+    generate_grid(item, display) { 
+        var grid = "<h3>" + item + (display ? ":</h3><table style='width:100%'> <tr> <th> Condition </th>" : ":</h3><table style='width:100%'> <tr>") 
         var headers = Object.keys(Object.values(this.context[item])[0])
         for (var header_index in headers) {
             var header = headers[header_index]
@@ -40,7 +40,7 @@ export default class GenerateNote extends Component {
             var yes = this.context[item][key]["Yes"] 
             var no = this.context[item][key]["No"] 
             if (yes) {
-                grid += (" <td> " + key + "</td> ")
+                if (display) grid += (" <td> " + key + "</td> ")
                 var values = this.context[item][key]
                 for (var header_index in headers) {
                     var header = headers[header_index]
@@ -113,9 +113,10 @@ export default class GenerateNote extends Component {
             var display = false 
             var display_string = ("<div>" + item + ": ")
             for (var value in this.context["Physical Exam"][item]) {
+                if (item === 'Vitals') display_string += "</div> <div>"
                 if (this.context["Physical Exam"][item][value] && this.context["Physical Exam"][item][value] !== 0 && this.context["Physical Exam"][item][value] !== '0') {
-                    if (this.context["Physical Exam"][item][value] === true) display_string += (value + ", ")
-                    else display_string += (value + ": " + this.context["Physical Exam"][item][value] + ", ")
+                    if (this.context["Physical Exam"][item][value] === true) display_string += (value + ", ") 
+                    else display_string += (value + ": " + this.context["Physical Exam"][item][value] + ((value === 'Temperature') ? "&#176;" + "C" : "") + ((item === 'Vitals') ? "  " : ", "))
                     none = false 
                     display = true 
                 }
@@ -139,7 +140,7 @@ export default class GenerateNote extends Component {
                 <h5 id="Surgical History"> {this.generate_table('Surgical History')} </h5>
                 <h5 id="Medical History"> {this.generate_grid('Medical History')} </h5>
                 <h5 id="Family History"> {this.generate_grid('Family History')} </h5>
-                <h5 id="Social History"> {this.generate_grid('Social History')} </h5>
+                <h5 id="Social History"> {this.generate_grid('Social History', true)} </h5>
                 <h5 id="hpi"> {this.hpi()} </h5>
                 <h5 id="Review of Systems"> {this.review_of_systems()} </h5>
                 <h5 id="Physical Exam"> {this.physical_exam()} </h5>

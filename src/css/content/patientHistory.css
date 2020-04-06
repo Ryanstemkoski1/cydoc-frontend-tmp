@@ -1,0 +1,16 @@
+.patient-history-tab {
+  font-size: 13px;
+}
+
+.ui.selection.dropdown .menu {
+  max-height: 184px;
+}
+
+.tab-content {
+  margin-top: 25px;
+  display: none;
+}
+
+.initial {
+  display: block;
+}

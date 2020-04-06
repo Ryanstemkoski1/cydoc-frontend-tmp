@@ -10,7 +10,7 @@ import MedicalHistoryContent from "../../../../medicalhistory/MedicalHistoryCont
 import MedicationsContent from "../../../../medications/MedicationsContent";
 import SurgicalHistoryContent from "../../../../surgicalhistory/SurgicalHistoryContent";
 import HPIContext from "../../../../../contexts/HPIContext";
-import listText from "./listText" 
+import ListText from "./listText" 
 
 class QuestionAnswer extends React.Component {
     static contextType = HPIContext
@@ -30,14 +30,14 @@ class QuestionAnswer extends React.Component {
                 if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
                     values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = []
                 }
-                else if (this.props.responseType === 'LIST-TEXT') values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = ["", "", ""]
+                else if (this.props.responseType === 'LIST-TEXT') values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = {1: "", 2: "", 3: ""}
              } }
         else if (values[this.props.category_code][this.props.uid]["response"]=== "") {
             values[this.props.category_code][this.props.uid]["response_type"] = this.props.responseType
             if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
                 values[this.props.category_code][this.props.uid]["response"] = []
             }
-            else if (this.props.responseType === 'LIST-TEXT') values[this.props.category_code][this.props.uid]["response"] = ["", "", ""]
+            else if (this.props.responseType === 'LIST-TEXT') values[this.props.category_code][this.props.uid]["response"] = {1: "", 2: "", 3: ""}
         }
         this.context.onContextChange("hpi", values) } 
 
@@ -54,7 +54,7 @@ class QuestionAnswer extends React.Component {
                     am_child={this.props.am_child}
                     child_uid={this.props.child_uid}
                 /> )}
-        else if (responseType === "SHORT-TEXT") {
+        else if (responseType === "SHORT-TEXT" || responseType === "LONG-TEXT") {
             button_map.push(<HandleInput key={this.props.question} 
                                          type={this.props.responseType}
                                          answers={this.props.answers}
@@ -74,7 +74,7 @@ class QuestionAnswer extends React.Component {
                                         />)
         }
         else if (responseType === 'LIST-TEXT') {
-            button_map.push(<listText
+            button_map.push(<ListText
                 key={this.props.uid}
                 type={this.props.responseType} 
                 uid={this.props.uid}
@@ -83,7 +83,7 @@ class QuestionAnswer extends React.Component {
                 child_uid={this.props.child_uid}
                  />)
         }
-        else if (responseType === 'CLICK-BOXES'|| responseType === 'MEDS-POP') {
+        else if (responseType === 'CLICK-BOXES'|| responseType === 'MEDS-POP' || responseType === 'nan') {
             button_map = this.props.response_choice.map(item =>
                 <ButtonTag
                     key={item}

@@ -1,39 +1,64 @@
-import React, {Component} from 'react';
-import {Menu, Container} from 'semantic-ui-react'
+import React, { Component, Fragment } from 'react';
+import { Menu, Button } from 'semantic-ui-react'
+import Masonry from 'react-masonry-css';
 import './src/css/App.css';
-import ButtonItem from "./src/components/ButtonItem.js"
+import ButtonItem from "./src/components/ButtonItem.js";
 import diseaseData from "./src/components/data/Diseases";
 import PositiveDiseases from "./src/components/PositiveDiseases";
 import DiseaseForm from "./src/components/DiseaseForm";
-import DiseasesNames from "./src/components/data/DiseasesNames";
-import API from "./src/API.js"
-import {Grid} from "semantic-ui-react";
+import API from "./src/API.js";
 import HPIContext from "../../../contexts/HPIContext";
+import '../../../../css/content/hpi.css';
+import {ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP} from '../../../constants/breakpoints';
 
 class HPIContent extends Component {
     static contextType = HPIContext
     constructor(context) {
         super(context) 
         this.state = {
+            windowWidth: 0,
+            windowHeight: 0,
             diseaseArray: diseaseData,
             graphData: {},
             isLoaded: false, 
-            diseasesNames: DiseasesNames,
             children: [],
             activeItem: "",
             categories: {}
         }
-        this.handleItemClick = this.handleItemClick.bind(this)
+        this.updateDimensions = this.updateDimensions.bind(this);
+        this.handleItemClick = this.handleItemClick.bind(this);
     }
 
     componentDidMount() {
-        const data = API
+        const data = API;
         data.then(res => {
-            var categories = new Set()
+            var categories = {}
             var nodes = res.data['nodes'] 
-            for (var node in nodes) categories.add(nodes[node]["category"])
+            for (var node in nodes) {
+                var key = (((nodes[node]["category"].split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase()); 
+                categories[key] = node.substring(0, 3) + "0001"
+            }
+            categories["Shortness of Breath"] = categories["Shortbreath"]
+            categories["Nausea/Vomiting"] = categories["Nausea-vomiting"]
+            delete categories["Shortbreath"]
+            delete categories["Nausea-vomiting"]
             this.setState({isLoaded: true, graphData: res.data, categories: categories})
-        })}
+        });
+        
+        this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions);
+    }
+
+    updateDimensions() {
+        let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+        let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+ 
+        this.setState({ windowWidth, windowHeight });
+    }
 
     // Proceed to next step
     nextStep = () => {
@@ -64,50 +89,75 @@ class HPIContent extends Component {
     
 
     render() {
+        const {graphData, isLoaded, categories, windowWidth} = this.state;
+
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         const diseaseComponents = this.state.diseaseArray.map(item =>
-            <Grid.Column>
             <ButtonItem
                 key={item.id}
                 disease_id={item.id}
                 name={item.name}
                 diseases_list={item.diseases}
             />
-            </Grid.Column>)
-            const positiveDiseases = this.context["positivediseases"].map(disease =>
-                <PositiveDiseases
-                    key={disease} 
-                    name={disease}
-                />
-            );
+        );
+
+        const positiveDiseases = this.context["positivediseases"].map(disease =>
+            <PositiveDiseases
+                key={disease} 
+                name={disease}
+            />
+        );
 
         const diseaseTabs = this.context['positivediseases'].map((name, index) => 
-        <a>
-        <Menu.Item
+            <Menu.Item
                 key={index}
                 name={name}
                 active={this.context['activeHPI'] === name}
                 onClick={this.handleItemClick}
-                style={{borderColor: "white", fontSize: '13px'}}
-                /></a>
-        )
+                className='disease-tab'
+            />
+        );
 
-        const {graphData, isLoaded, diseasesNames} = this.state;
-        var step = this.context['step']
-        const positive_length = this.context['positivediseases'].length
+        var step = this.context['step'];
+        const positive_length = this.context['positivediseases'].length;
+
+        let numColumns = 1;
+        if (windowWidth > ROS_LARGE_BP) {
+            numColumns = 4;
+        } else if (windowWidth > ROS_MED_BP) {
+            numColumns = 3;
+        } else if (windowWidth > ROS_SMALL_BP) {
+            numColumns = 2;
+        }
+
         switch(step) {
             case 1:
                 return (
-                    <div className="App"> 
-                        {positiveDiseases}
-                        <Grid columns={2} padded className="ui stackable grid"> {diseaseComponents} </Grid> 
-                        {positive_length > 0 ? <button onClick={this.continue} style={{float:'right'}} className='NextButton'> &raquo; </button>: ""}
-                    </div>
+                    <Fragment>
+                        {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
+                        <Masonry
+                            className='disease-container'
+                            breakpointCols={numColumns}
+                            columnClassName='disease-column'
+                        >
+                            {diseaseComponents}
+                        </Masonry>
+                        {positive_length > 0 ? 
+                            <Button
+                                circular
+                                icon='angle double right'
+                                className='next-button'
+                                onClick={this.continue}
+                            />
+                            :
+                            <div />
+                        }
+                    </Fragment>
                     )
             default:
                 if (isLoaded) { 
                     let category = this.context['positivediseases'][step-2]
-                    let parent_code = diseasesNames[category]
+                    let parent_code = categories[category]
                     let category_code = graphData['nodes'][parent_code]['category']
                 return (
                     <DiseaseForm
@@ -116,10 +166,12 @@ class HPIContent extends Component {
                         nextStep = {this.nextStep}
                         prevStep = {this.prevStep}
                         category = {category}
+                        categories = {this.state.categories}
                         diseaseTabs = {diseaseTabs}
                         parent_code = {parent_code}
                         tab_category = {category_code}
                         last = {true ? step === positive_length+1 : false}
+                        windowWidth={windowWidth}
                     />
                     )}
                 else {return <h1> Loading... </h1>}

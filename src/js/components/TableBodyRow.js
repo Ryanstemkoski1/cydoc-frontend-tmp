@@ -1,6 +1,7 @@
 import React, {Component} from "react";
-import {Input, Table} from "semantic-ui-react";
+import {TextArea, Table, Form} from "semantic-ui-react";
 import PropTypes from "prop-types";
+import DatePicker from "react-date-picker";
 
 //Controlled component for a row in a TableContent component
 export class TableBodyRow extends Component {
@@ -11,8 +12,12 @@ export class TableBodyRow extends Component {
             <Table.Row>
                 {this.props.tableBodyPlaceholders.map((placeholder, index) =>
                     <Table.Cell key={index}>
-                        <Input
-                            transparent
+                        <TextArea
+                            className='table'
+                            style = {{outline: 'transparent', border: "none", width: "100%", height: "100%", resize: "none"}}
+                            type = {placeholder === "Date" ? "date" : "text"}
+                            rows={1}
+                            type="text"
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}

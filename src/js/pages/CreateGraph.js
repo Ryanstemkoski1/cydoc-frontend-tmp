@@ -1,6 +1,8 @@
 import React, {Fragment} from 'react';
 import NavMenu from "../components/NavMenu";
 import NewTemplateForm from "../components/NewTemplateForm";
+import "../../css/components/navMenu.css";
+import "../../css/components/newTemplateForm.css";
 
 export default class CreateGraph extends React.Component {
     constructor(props) {
@@ -11,11 +13,11 @@ export default class CreateGraph extends React.Component {
     render() {
         return (
             <Fragment>
-                <div style={{position: "relative", top: "100px"}}>
-                    <NewTemplateForm />
+                <div class="nav-menu-container">
+                    <NavMenu />
                 </div>
-                <div style={{position: "fixed", top: "0", right: "0", left: "0", boxShadow: "0 3px 4px -6px gray"}}>
-                    <NavMenu attached="top"/>
+                <div class="new-template-form-container">
+                    <NewTemplateForm />
                 </div>
             </Fragment>
         );

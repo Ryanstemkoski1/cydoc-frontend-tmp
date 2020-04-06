@@ -9,12 +9,16 @@ class DiseaseFormQuestions extends React.Component {
     render() {
         let question = this.props.question
         let symptom = question.search("SYMPTOM")
+        let disease = question.search("DISEASE")
         if (symptom > -1) {
             question = question.substring(0,symptom) + this.props.category.toLowerCase() + question.substring(symptom+7)
         }
+        if (disease > -1) {
+            question = question.substring(0, disease) + this.props.category.toLowerCase() + question.substring(disease + 7)
+        }
         let response_choice = ''
         const {responseType} = this.props
-        if (responseType === "CLICK-BOXES" || responseType.slice(-3,responseType.length) === 'POP') {
+        if (responseType === "CLICK-BOXES" || responseType.slice(-3,responseType.length) === 'POP' || responseType === 'nan') {
             let click = question.search("CLICK")
             // if CLICK exists
             if (click > 0) {
