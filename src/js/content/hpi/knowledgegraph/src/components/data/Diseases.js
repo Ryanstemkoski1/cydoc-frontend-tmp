@@ -70,7 +70,7 @@ const diseaseData = [
         name: "Special Demographics",
         diseases: [
             "Pediatrics",
-            "Pregnancy"
+            "Postpregnancy"
         ]
     },
 
