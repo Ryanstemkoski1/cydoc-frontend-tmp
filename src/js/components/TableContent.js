@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import {TableBodyRow} from "./TableBodyRow";
 import HPIContext from "../contexts/HPIContext";
 import "../../css/components/tableComponent.css";
-
+ 
 //Component for a table layout
 export default class TableContent extends Component {
     static contextType = HPIContext
@@ -34,9 +34,6 @@ export default class TableContent extends Component {
             tableBodyPlaceholders={this.props.tableBodyPlaceholders}
             onTableBodyChange={this.handleTableBodyChange}
             values={this.props.values}
-            dropdown = {this.props.dropdown}
-            options={this.props.options}
-            dropdown_placeholder={this.props.dropdown_placeholder}
         />)
     }
 
