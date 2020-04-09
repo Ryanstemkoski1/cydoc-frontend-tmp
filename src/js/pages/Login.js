@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import AuthContext from "../contexts/AuthContext";
 import NotesContext from "../contexts/NotesContext";
 import {client} from "../constants/api.js"
+import constants from "../constants/registration_constants"
 
 
 //Component that manages the layout of the login page
@@ -108,7 +109,7 @@ class LoginPage extends Component {
                 <NotesContext.Consumer>
                     {(context) => {
                         context.loadNotes(this.context.user._id)
-                        return(<Redirect push to= "/home" />)
+                        return(<Redirect push to= "/dashboard" />)
                     }}
                 </NotesContext.Consumer>
             );
