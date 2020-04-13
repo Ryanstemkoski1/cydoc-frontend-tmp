@@ -172,10 +172,16 @@ class QuestionAnswer extends React.Component {
                 <div>{this.props.question} <div style={{marginTop: 7}}>{button_map}</div> </div>
             )
         }
+        if (this.props.question === 'nan') { 
+            return ( 
+            <div> answer questions about {this.context["hpi"][this.props.category_code][this.props.uid]['children_category']} 
+                <div style={{marginTop: 7}}>{button_map}</div> 
+            </div> )
+        }
         return (
             <div style={{marginBottom: 20}}> 
                 <div> {this.props.question} <div style={{marginTop: 7}}>{button_map}</div> </div>
-                </div>
+            </div>
         )
     }
 }

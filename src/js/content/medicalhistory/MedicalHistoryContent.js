@@ -29,6 +29,7 @@ export default class MedicalHistoryContent extends React.Component {
             if (condition_index === -1) {
                 var condition_index = (Object.keys(values).length).toString()
                 values[condition_index] = {
+                    "index": condition_index,
                     "Condition": response,
                     "Yes": false,
                     "No": false,
@@ -36,7 +37,7 @@ export default class MedicalHistoryContent extends React.Component {
                     "Comments": ""
                 }
             }
-            response_choice_list.push({"index": condition_index, "response": response})
+            response_choice_list.push(condition_index)
         }
         this.context.onContextChange("Medical History", values)
         this.state = {
@@ -60,6 +61,7 @@ export default class MedicalHistoryContent extends React.Component {
     handleToggleButtonClick(event, data){
         let conditions_array = Object.keys(this.context['Medical History']).map((value) => this.context['Medical History'][value]["Condition"]);
         let index = conditions_array.indexOf(data.condition);
+        console.log(data.condition)
         const values = this.context["Medical History"]
         const responses = ["Yes", "No"]
         const prevState = values[index][data.title];
@@ -78,9 +80,8 @@ export default class MedicalHistoryContent extends React.Component {
 
     render(){ 
         const collapseTabs = this.props.collapseTabs;
-
         // The second OR statement gets the list of Conditions in the "Medical History" context
-        let list_values = this.state.response_choice || (Object.keys(this.context['Medical History'])).map((value) => this.context['Medical History'][value]["Condition"]) || CONDITIONS
+        let list_values = this.props.response_choice ? this.state.response_choice : (Object.keys(this.context['Medical History'])) || CONDITIONS
         const rows = this.generateListItems(list_values, collapseTabs); 
 
         return(
@@ -109,16 +110,16 @@ export default class MedicalHistoryContent extends React.Component {
                 yesActive={this.context["Medical History"][index]["Yes"]}
                 noActive={this.context["Medical History"][index]["No"]}
             />) :
-            conditions.map((condition, index) =>
+            conditions.map((condition_index, index) =>
             <MedicalHistoryNoteRow
-                key={condition['index']}
-                condition={<ConditionInput key={condition['index']} index={condition['index']} category={"Medical History"} condition={condition['response']}/>}
-                onset={this.context["Medical History"][condition['index']]["Onset"]}
-                comments={this.context["Medical History"][condition['index']]["Comments"]}
+                key={condition_index}
+                condition={<ConditionInput key={condition_index} index={condition_index} category={"Medical History"} condition={this.context["Medical History"][condition_index]['Condition']}/>}
+                onset={this.context["Medical History"][condition_index]["Onset"]}
+                comments={this.context["Medical History"][condition_index]["Comments"]}
                 onChange={this.handleChange}
                 onToggleButtonClick={this.handleToggleButtonClick}
-                yesActive={this.context["Medical History"][condition['index']]["Yes"]}
-                noActive={this.context["Medical History"][condition['index']]["No"]}
+                yesActive={this.context["Medical History"][condition_index]["Yes"]}
+                noActive={this.context["Medical History"][condition_index]["No"]}
             />);
     }
 }
