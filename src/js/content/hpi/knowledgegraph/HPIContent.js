@@ -38,13 +38,12 @@ class HPIContent extends Component {
                 var key = (((nodes[node]["category"].split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase()); 
                 categories[key] = node.substring(0, node.length-2) + "01"
             }
-            console.log(categories)
             categories["Shortness of Breath"] = categories["Shortbreath"]
             categories["Nausea/Vomiting"] = categories["Nausea-vomiting"]
             delete categories["Shortbreath"]
             delete categories["Nausea-vomiting"]
             this.setState({isLoaded: true, graphData: res.data, categories: categories})
-        }).catch(err => '');
+        })
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
     }
