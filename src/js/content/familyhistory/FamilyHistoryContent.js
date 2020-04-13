@@ -144,9 +144,9 @@ export default class FamilyHistoryContent extends Component {
                         mobile={mobile}
                     />
                 </Fragment> : 
-                <Fragment  > 
-                    {listItems}
-                    <AddRowButton onClick={this.addRow} name={"family history"} />
+                <Fragment> 
+                    <div style={{marginTop: 25}}> </div>{listItems}
+                    {this.props.fh_pop ? "" : <AddRowButton onClick={this.addRow} name={"family history"} />}
                 </Fragment>
         );
     }

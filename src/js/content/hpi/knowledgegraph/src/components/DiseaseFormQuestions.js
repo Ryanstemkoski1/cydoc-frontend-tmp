@@ -17,14 +17,15 @@ class DiseaseFormQuestions extends React.Component {
         const {responseType} = this.props
         if (responseType === "CLICK-BOXES" || responseType.slice(-3,responseType.length) === 'POP' || responseType === 'nan') {
             let click = question.search("CLICK")
+            let select = question.search('\\[')
+            let end_select = question.search('\\]')
             // if CLICK exists
             if (click > 0) {
-                response_choice = question.slice(click + 6, -1)  // slice off the click options
+                response_choice = question.slice(click + 6, end_select)  // slice off the click options
                 question = question.slice(0, click)     // slice off the question
             } else { // if it's a CLICK-BOX without CLICK indicated on the question
-                let select = question.search('\\[')
                 if (select > 0) {
-                    response_choice = question.slice(select + 1, -1)
+                    response_choice = question.slice(select + 1, end_select)
                     question = question.slice(0, select)
                 }
             }

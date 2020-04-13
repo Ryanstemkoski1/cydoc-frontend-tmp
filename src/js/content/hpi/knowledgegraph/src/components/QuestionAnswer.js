@@ -27,7 +27,7 @@ class QuestionAnswer extends React.Component {
         } 
         const values = this.context["hpi"]
         // Specifies whether the response type will be '' or [] form 
-        if (this.props.am_child) { 
+        if (this.props.am_child) {
             if (values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] === "") {
                 values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response_type'] = this.props.responseType 
                 if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
@@ -145,6 +145,7 @@ class QuestionAnswer extends React.Component {
             button_map.push(<FamilyHistoryContent
                 key={this.props.question}
                 response_choice={this.props.response_choice}
+                fh_pop={true}
             />) 
         }
         else if (responseType === "PMH-POP") {
