@@ -3,8 +3,7 @@ import { Menu, Button } from 'semantic-ui-react'
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
 import ButtonItem from "./src/components/ButtonItem.js";
-import diseaseData from "./src/components/data/Diseases";
-// import disease_abbrevs from "./src/components/data/disease_abbrevs"
+import disease_abbrevs from "./src/components/data/disease_abbrevs"
 import PositiveDiseases from "./src/components/PositiveDiseases";
 import DiseaseForm from "./src/components/DiseaseForm";
 import API from "./src/API.js";
@@ -19,8 +18,7 @@ class HPIContent extends Component {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
-            diseaseArray: diseaseData,
-            body_systems: {},
+            body_systems: [],
             graphData: {},
             isLoaded: false, 
             children: [],
@@ -34,24 +32,24 @@ class HPIContent extends Component {
     componentDidMount() {
         const data = API;
         data.then(res => {
-            var categories = Set()
+            var categories = new Set()
             var category_dict = {}
+            var body_systems = {}
             var nodes = res.data['nodes'] 
-            for (var node in nodes) {categories.add(nodes[node]["category"])}
-            for (var category in categories) {
-                var key_list = category.split("_")
-                var key = ""
-                for (var k in key_list) {
-                    key = key + k.substring(0,1).toUpperCase() + k.substring(1).toLowerCase()
-                }
-                category_dict[key] = node.substring(0, node.length-2) + "01"
-            }
-            category_dict["Shortness of Breath"] = category_dict["Shortbreath"]
-            category_dict["Nausea/Vomiting"] = category_dict["Nausea-vomiting"]
-            delete category_dict["Shortbreath"]
-            delete category_dict["Nausea-vomiting"]
-            this.setState({isLoaded: true, graphData: res.data, categories: category_dict})
-        }).catch(err => '');
+            for (var node in nodes) {
+                var category = nodes[node]["category"]
+                if (!(categories.has(category))) {
+                    categories.add(category)
+                    var key = (((category.split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase());
+                    if (key === "Shortbreath") key = "Shortness of Breath"
+                    if (key === "Nausea-vomiting") key = "Nausea/Vomiting" 
+                    category_dict[key] = node.substring(0, node.length-2) + "01"
+                    var body_system = nodes[node]["bodySystem"] 
+                    if (!(body_system in body_systems)) body_systems[body_system] = {"diseases": [], "name": disease_abbrevs[body_system]}
+                    body_systems[body_system]["diseases"].push(key)
+                }}
+            this.setState({isLoaded: true, graphData: res.data, categories: category_dict, body_systems: Object.values(body_systems)})
+        })
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
     }
@@ -96,15 +94,14 @@ class HPIContent extends Component {
     
 
     render() {
-        const {graphData, isLoaded, categories, windowWidth} = this.state;
+        const {graphData, isLoaded, categories, windowWidth, body_systems} = this.state;
 
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
-        const diseaseComponents = this.state.diseaseArray.map(item =>
+        const diseaseComponents = body_systems.map(item =>
             <ButtonItem
-                key={item.id}
-                disease_id={item.id}
-                name={item.name}
-                diseases_list={item.diseases}
+                key={item['name']}
+                name={item['name']}
+                diseases_list={item['diseases']}
             />
         );
 
