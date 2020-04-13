@@ -1,20 +1,23 @@
 import React, {Component} from 'react'
 import { Table} from 'semantic-ui-react'
 import AbdomenExamButtons from './AbdomenExamButtons'
+import HPIContext from '../../../contexts/HPIContext'
 
 export default class AbdomenExam extends Component {
 
+    static contextType = HPIContext 
+
     render = () => {
         var ab_map = []
-        const ab_quadrants = ["Right Upper Quadrant", "Left Upper Quadrant", "Right Lower Quadrant", "Left Lower Quadrant"]
-        for (var ab_index = 0; ab_index < ab_lobes.length/2; ab_index ++) {
+        const ab_quadrants = Object.keys(this.context["Physical Exam"]["Abdomen"])
+        for (var ab_index = 0; ab_index < ab_quadrants.length/2; ab_index ++) {
             ab_map.push(
                 <Table.Row key={ab_quadrants[2*ab_index]}>
-                    <Table.Cell> {ab_quadrants[2*ab_index]}  
-                        <AbdomenExamButtons key={ab_quadrants[2*ab_index]} lung_lobe={ab_quadrants[2*ab_index]}/> 
+                    <Table.Cell> <div style={{marginBottom: 5}}> {ab_quadrants[2*ab_index]} </div>
+                        <AbdomenExamButtons key={ab_quadrants[2*ab_index]} ab_quadrant={ab_quadrants[2*ab_index]}/> 
                     </Table.Cell>
-                    <Table.Cell> {ab_quadrants[2*ab_index+1]}  
-                        <AbdomenExamButtons key={ab_quadrants[2*ab_index+1]} lung_lobe={ab_quadrants[2*ab_index+1]}/> 
+                    <Table.Cell> <div style={{marginBottom: 5}}> {ab_quadrants[2*ab_index+1]}  </div>
+                        <AbdomenExamButtons key={ab_quadrants[2*ab_index+1]} ab_quadrant={ab_quadrants[2*ab_index+1]}/> 
                     </Table.Cell>
                 </Table.Row>
             )

@@ -10,41 +10,28 @@ export default class AbdomenExamButtons extends Component {
     }
 
     onClick(event, data) {
-        var values = this.context["Physical Exam"]["Lungs"][this.props.lung_lobe][data.children]
-        this.context.onContextChange("Physical Exam", !values);
+        var values = this.context["Physical Exam"]
+        var prevState = values["Abdomen"][this.props.ab_quadrant][data.children]
+        values["Abdomen"][this.props.ab_quadrant][data.children] = !prevState
+        this.context.onContextChange("Physical Exam", values);
     }
 
     render() {
-        var more_options = ["tenderness","rebound","guarding"]
-        const current_options = Object.keys(this.context["Physical Exam"]["Lungs"][this.props.lung_lobe])
-        more_options = more_options.filter(n => !current_options.includes(n))
-        var more_options_buttons = more_options.map(
-            item => <Button 
-                        key={this.props.lung_lobe + " " + item} 
-                        active={this.context["Physical Exam"]["Lungs"][this.props.lung_lobe][item]} 
-                        onClick={this.onPopupClick}> {item} 
-                    </Button>
-        )
-        var lung_buttons = []
-        var lung_button_dict = this.context["Physical Exam"]["Lungs"][this.props.lung_lobe]
-        for (var lung_button in lung_button_dict) {
-            lung_buttons.push(
+        var ab_quadrant_buttons = []
+        var ab_quadrant_dict = this.context["Physical Exam"]["Abdomen"][this.props.ab_quadrant]
+        for (var ab_quadrant_button in ab_quadrant_dict) {
+            ab_quadrant_buttons.push(
                 <Button
-                    key={this.props.lung_lobe + " " + lung_button}
-                    active={this.context["Physical Exam"]["Lungs"][this.props.lung_lobe][lung_button]}
+                    key={this.props.ab_quadrant + " " + ab_quadrant_button}
+                    color={this.context["Physical Exam"]["Abdomen"][this.props.ab_quadrant][ab_quadrant_button] ? 'grey' : ''}
                     onClick={this.onClick}
                 > 
-                    {lung_button} 
+                    {ab_quadrant_button} 
                 </Button>
             )
         } 
         return (
-                <div> 
-                    {lung_buttons}
-                    <Popup trigger={<Button basic circular icon="plus" size='mini'/>} flowing hoverable> 
-                        {more_options_buttons} 
-                    </Popup>
-                </div>
+                <div>{ab_quadrant_buttons}</div>
               )
         }
     }

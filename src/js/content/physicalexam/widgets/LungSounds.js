@@ -1,12 +1,15 @@
 import React, {Component} from 'react'
 import { Table} from 'semantic-ui-react'
 import LungSoundsButtons from './LungSoundsButtons'
+import HPIContext from '../../../contexts/HPIContext'
 
 export default class LungSounds extends Component {
 
+    static contextType = HPIContext 
+
     render = () => {
         var lung_map = []
-        const lung_lobes = ["Left Upper Lobe", "Right Upper Lobe", "Lingula", "Right Middle Lobe", "Left Lower Lobe", "Right Lower Lobe"]
+        const lung_lobes = Object.keys(this.context["Physical Exam"]["Lungs"])
         for (var lung_index = 0; lung_index < lung_lobes.length/2; lung_index ++) {
             lung_map.push(
                 <Table.Row key={lung_lobes[2*lung_index]}>
