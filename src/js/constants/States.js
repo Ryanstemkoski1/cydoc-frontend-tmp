@@ -42,7 +42,7 @@ export const reviewOfSystems = {
 
 export const physicalExam = {
     "state": {
-        "Vitals": {"Systolic Blood Pressure": 0, "Diastolic Blood Pressure": 0, "Heart Rate": 0, "RR": 0, "Temperature": 0, "Oxygen Saturation": 0, "Lungs": {"Left Upper Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Upper Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Lingula": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Middle Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Left Lower Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Lower Lobe": {"wheezes": false, "rales": false, "rhonchi": false}}},
+        "Vitals": {"Systolic Blood Pressure": 0, "Diastolic Blood Pressure": 0, "Heart Rate": 0, "RR": 0, "Temperature": 0, "Oxygen Saturation": 0},
         "General": {"Height": 0, "Weight": 0},
         "Head": {"Normocephalic": false, "Atraumatic": false, "Abnormal Findings": ""},
         "Eyes": {"PERRLA": false, "Sclera anicteric": false, "No redness": false, "No discharge": false, "EOMI": false, "Visual acuity intact": false, "Visual fields normal": false, "Fundoscopy": "", "Abnormal Findings": ""},
@@ -55,6 +55,7 @@ export const physicalExam = {
         "Gastrointestinal": {"Normal bowel sounds": false, "No bruits": false, "No hepatomegaly": false, "No splenomegaly": false, "Soft": false, "Nontender": false, "Nondistended": false, "No rebounding": false, "No guarding": false, "No masses": false, "Abnormal Findings": ""},
         "Tendon Reflexes": {"No dubbing": false, "No cyanosis": false, "No nail changes": false, "No edema": false, "Abnormal Findings": ""},
         "Extremities": {"Normal biceps": false, "Normal brachioradials": false, "Normal triceps": false, "Normal patellar": false, "Normal ankle jerk": false, "Normal plantar": false, "Abnormal Findings": ""},
-        "Skin": {"Warm and dry": false, "No visible lesions": false, "No tenting": false, "Normal turgor": false, "Abnormal Findings": ""}
+        "Skin": {"Warm and dry": false, "No visible lesions": false, "No tenting": false, "Normal turgor": false, "Abnormal Findings": ""},
+        "Lungs": {"Left Upper Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Upper Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Lingula": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Middle Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Left Lower Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Lower Lobe": {"wheezes": false, "rales": false, "rhonchi": false}}
     }
 }

@@ -10,17 +10,17 @@ export default class LungSounds extends Component {
         for (var lung_index = 0; lung_index < lung_lobes.length/2; lung_index ++) {
             lung_map.push(
                 <Table.Row key={lung_lobes[2*lung_index]}>
-                    <Table.Cell> {lung_lobes[2*lung_index]}  
+                    <Table.Cell verticalAlign='top'> <div style={{marginBottom: 5}}> {lung_lobes[2*lung_index]} </div>
                         <LungSoundsButtons key={lung_lobes[2*lung_index]} lung_lobe={lung_lobes[2*lung_index]}/> 
                     </Table.Cell>
-                    <Table.Cell> {lung_lobes[2*lung_index+1]}  
+                    <Table.Cell verticalAlign='top'> <div style={{marginBottom: 5}}> {lung_lobes[2*lung_index+1]} </div> 
                         <LungSoundsButtons key={lung_lobes[2*lung_index+1]} lung_lobe={lung_lobes[2*lung_index+1]}/> 
                     </Table.Cell>
                 </Table.Row>
             )
         }
         return (
-            <Table celled>
+            <Table celled fixed>
               <Table.Body>
                 {lung_map}
               </Table.Body>

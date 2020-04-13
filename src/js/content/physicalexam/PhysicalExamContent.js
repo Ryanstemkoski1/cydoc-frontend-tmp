@@ -69,7 +69,7 @@ export default class PhysicalExamContent extends React.Component {
 
     render() {
         return (
-            <Fragment><LungSounds />
+            <Fragment> <LungSounds />
                 <PhysicalExamGroup category="Vitals" abnormalFindings={false}>
                     <MyContext.Consumer> 
                         {category => 
