@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from "react";
-import {Form, Grid, TextArea, Button, Header} from "semantic-ui-react";
+import {Form, Grid, TextArea, Button, Header, Divider} from "semantic-ui-react";
 import HPIContext from "../../contexts/HPIContext"
 import ToggleButton from "../../components/ToggleButton";
 import FamilyHistoryDropdown from "./FamilyHistoryDropdown";
@@ -175,7 +175,8 @@ export default class FamilyHistoryBlock extends Component {
                             </Fragment>
                             : ""
                         }
-                    </div>
+                        <Divider style={{marginTop: 25}}/>
+                    </div> 
                 </div>
             )
         );

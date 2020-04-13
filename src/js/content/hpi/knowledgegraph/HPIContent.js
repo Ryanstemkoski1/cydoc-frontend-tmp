@@ -4,6 +4,7 @@ import Masonry from 'react-masonry-css';
 import './src/css/App.css';
 import ButtonItem from "./src/components/ButtonItem.js";
 import diseaseData from "./src/components/data/Diseases";
+import disease_abbrevs from "./src/components/data/disease_abbrevs"
 import PositiveDiseases from "./src/components/PositiveDiseases";
 import DiseaseForm from "./src/components/DiseaseForm";
 import API from "./src/API.js";
@@ -19,6 +20,7 @@ class HPIContent extends Component {
             windowWidth: 0,
             windowHeight: 0,
             diseaseArray: diseaseData,
+            body_systems: {},
             graphData: {},
             isLoaded: false, 
             children: [],
@@ -32,13 +34,22 @@ class HPIContent extends Component {
     componentDidMount() {
         const data = API;
         data.then(res => {
+            // var categories_set = []
             var categories = {}
+            // var body_systems = {}
             var nodes = res.data['nodes'] 
             for (var node in nodes) {
-                var key = (((nodes[node]["category"].split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase()); 
-                categories[key] = node.substring(0, node.length-2) + "01"
-            }
-            console.log(categories)
+                var category = node[node]['category']
+                // console.log(node[node]['category'] in categories_set)
+                // if (!(node[node]["category"] in categories_set)) {
+                    // categories_set.push(category)
+                    var key = (((category.split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase()); 
+                    categories[key] = node.substring(0, node.length-2) + "01"
+                    // var body_system = nodes[node]["bodySystem"]
+                    // if (!(body_system in body_systems)) body_systems[body_system] = {"name": disease_abbrevs[body_system], "diseases": Set()}
+                    // body_systems[body_system]['diseases'].add(key)
+                // }
+            } 
             categories["Shortness of Breath"] = categories["Shortbreath"]
             categories["Nausea/Vomiting"] = categories["Nausea-vomiting"]
             delete categories["Shortbreath"]
