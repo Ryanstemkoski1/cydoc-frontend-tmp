@@ -14,14 +14,11 @@ export default class MedicalHistoryContent extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
-        this.generateListItems = this.generateListItems.bind(this); 
-
         //Checks if all response choices exist and adds new ones
         const {response_choice} = this.props
         const values = this.context["Medical History"]
         var conditions = []
+        var response_choice_list = []
         // Creates list of conditions present in Medical History context 
         for (var value in values) {
             conditions.push(values[value]['Condition'].toLowerCase())
@@ -30,8 +27,8 @@ export default class MedicalHistoryContent extends React.Component {
             var response = response_choice[response_index]
             var condition_index = conditions.indexOf(response.toLowerCase())
             if (condition_index === -1) {
-                var index = (Object.keys(values).length).toString()
-                values[index] = {
+                var condition_index = (Object.keys(values).length).toString()
+                values[condition_index] = {
                     "Condition": response,
                     "Yes": false,
                     "No": false,
@@ -39,8 +36,15 @@ export default class MedicalHistoryContent extends React.Component {
                     "Comments": ""
                 }
             }
+            response_choice_list.push({"index": condition_index, "response": response})
         }
         this.context.onContextChange("Medical History", values)
+        this.state = {
+            response_choice: response_choice_list
+        }
+        this.handleChange = this.handleChange.bind(this);
+        this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
+        this.generateListItems = this.generateListItems.bind(this); 
     } 
 
     //handles input field events
@@ -76,7 +80,7 @@ export default class MedicalHistoryContent extends React.Component {
         const collapseTabs = this.props.collapseTabs;
 
         // The second OR statement gets the list of Conditions in the "Medical History" context
-        let list_values = this.props.response_choice || (Object.keys(this.context['Medical History'])).map((value) => this.context['Medical History'][value]["Condition"]) || CONDITIONS
+        let list_values = this.state.response_choice || (Object.keys(this.context['Medical History'])).map((value) => this.context['Medical History'][value]["Condition"]) || CONDITIONS
         const rows = this.generateListItems(list_values, collapseTabs); 
 
         return(
@@ -92,7 +96,7 @@ export default class MedicalHistoryContent extends React.Component {
         );
     }
 
-    generateListItems(conditions, mobile) {
+    generateListItems(conditions, mobile) { 
         return mobile ?
             conditions.map((condition, index) =>
             <MedicalHistoryNoteItem
@@ -107,14 +111,14 @@ export default class MedicalHistoryContent extends React.Component {
             />) :
             conditions.map((condition, index) =>
             <MedicalHistoryNoteRow
-                key={index}
-                condition={<ConditionInput key={index} index={index} category={"Medical History"} condition={condition}/>}
-                onset={this.context["Medical History"][index]["Onset"]}
-                comments={this.context["Medical History"][index]["Comments"]}
+                key={condition['index']}
+                condition={<ConditionInput key={condition['index']} index={condition['index']} category={"Medical History"} condition={condition['response']}/>}
+                onset={this.context["Medical History"][condition['index']]["Onset"]}
+                comments={this.context["Medical History"][condition['index']]["Comments"]}
                 onChange={this.handleChange}
                 onToggleButtonClick={this.handleToggleButtonClick}
-                yesActive={this.context["Medical History"][index]["Yes"]}
-                noActive={this.context["Medical History"][index]["No"]}
+                yesActive={this.context["Medical History"][condition['index']]["Yes"]}
+                noActive={this.context["Medical History"][condition['index']]["No"]}
             />);
     }
 }
