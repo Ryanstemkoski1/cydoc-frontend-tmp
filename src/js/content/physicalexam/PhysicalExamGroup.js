@@ -15,7 +15,7 @@ export default class PhysicalExamGroup extends Component{
         this.state = {}
     }
 
-    handleChange = (e, data) => {
+    handleChange = (e, data) => { 
         const values = this.context["Physical Exam"]
         values[this.props.category]["Abnormal Findings"] = data.value
         this.context.onContextChange("Physical Exam", values)

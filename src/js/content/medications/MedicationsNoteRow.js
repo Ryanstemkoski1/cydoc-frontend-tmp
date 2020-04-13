@@ -1,8 +1,6 @@
-import {Form, Grid, TextArea, Input, Label, Divider} from "semantic-ui-react";
-import ToggleButton from "../../components/ToggleButton";
-import React, {Component, Fragment} from 'react'
+import {Form, Grid, TextArea, Input, Divider} from "semantic-ui-react";
+import React, {Component} from 'react'
 import PropTypes from 'prop-types';
-import { forbiddenWordsMiddleware } from "../../middleware";
 
 //Component for a row the Medical History GridContent
 export default class MedicalHistoryNoteRow extends Component {
