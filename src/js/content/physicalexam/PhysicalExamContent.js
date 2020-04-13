@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Divider, Header, Form, Grid, Input, Button } from "semantic-ui-react";
+import { Form, Grid, Input, Button } from "semantic-ui-react";
 import PhysicalExamGroup from './PhysicalExamGroup';
 import { MyContext } from './PhysicalExamGroup';
 import SelectAllButton from './SelectAllButton'

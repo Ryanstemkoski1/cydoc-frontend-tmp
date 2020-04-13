@@ -42,7 +42,7 @@ export default class FamilyHistoryBlock extends Component {
     }
 
     render() {
-        const { mobile, onChange, condition, familyMember, comments, index } = this.props;
+        const { mobile, onChange, condition, comments, index } = this.props;
         // array of dropdowns displayed on Family History Family Member column
         let dropdown_list = [];
         // variable range that changes when the user clicks the + (add member) button 

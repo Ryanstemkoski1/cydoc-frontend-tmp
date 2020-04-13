@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import TableContent from "../../components/TableContent";
 import { allergies } from "../../constants/States";
-import PropTypes from 'prop-types';
 import HPIContext from "../../contexts/HPIContext"
 
 //Component that manages the layout for the allergies page
