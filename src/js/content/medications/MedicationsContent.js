@@ -4,6 +4,7 @@ import { medications } from "../../constants/States";
 import HPIContext from "../../contexts/HPIContext";
 import "../../../css/content/medicationsContent.css";
 import drug_names from '../../constants/drugNames'
+import top_drugs from '../../constants/top_drugs'
 
 //Component that manages content for the Medications page
 export default class MedicationsContent extends Component {
@@ -29,7 +30,7 @@ export default class MedicationsContent extends Component {
                         mobile={this.props.mobile}
                         name={"medication"}
                         dropdown={true}
-                        options={drug_names}
+                        options={top_drugs}
                         dropdown_placeholder={"Drug Name"}
                     />
                 </div>
