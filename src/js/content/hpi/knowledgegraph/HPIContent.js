@@ -67,14 +67,16 @@ class HPIContent extends Component {
 
     // Proceed to next step
     nextStep = () => {
-        this.context.onContextChange("step", this.context['step'] + 1)
-        this.context.onContextChange("activeHPI", this.context['positivediseases'][this.context['step']-1])
+        var current_step = this.context["step"]
+        this.context.onContextChange("step", current_step + 1)
+        this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-1])
     }
 
     // Go back to previous step
     prevStep = () => {
-        this.context.onContextChange("step", this.context['step'] - 1)
-        this.context.onContextChange("activeHPI", this.context['positivediseases'][this.context['step']-1])
+        var current_step = this.context["step"]
+        this.context.onContextChange("step", current_step-1)
+        this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-3])
     }
 
     continue = e => {
