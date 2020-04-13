@@ -32,18 +32,23 @@ class HPIContent extends Component {
     componentDidMount() {
         const data = API;
         data.then(res => {
-            var categories = {}
+            var categories = Set()
+            var category_dict = {}
             var nodes = res.data['nodes'] 
-            for (var node in nodes) {
-                var key = (((nodes[node]["category"].split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase()); 
-                categories[key] = node.substring(0, node.length-2) + "01"
+            for (var node in nodes) {categories.add(nodes[node]["category"])}
+            for (var category in categories) {
+                var key_list = category.split("_")
+                var key = ""
+                for (var k in key_list) {
+                    key = key + k.substring(0,1).toUpperCase() + k.substring(1).toLowerCase()
+                }
+                category_dict[key] = node.substring(0, node.length-2) + "01"
             }
-            console.log(categories)
-            categories["Shortness of Breath"] = categories["Shortbreath"]
-            categories["Nausea/Vomiting"] = categories["Nausea-vomiting"]
-            delete categories["Shortbreath"]
-            delete categories["Nausea-vomiting"]
-            this.setState({isLoaded: true, graphData: res.data, categories: categories})
+            category_dict["Shortness of Breath"] = category_dict["Shortbreath"]
+            category_dict["Nausea/Vomiting"] = category_dict["Nausea-vomiting"]
+            delete category_dict["Shortbreath"]
+            delete category_dict["Nausea-vomiting"]
+            this.setState({isLoaded: true, graphData: res.data, categories: category_dict})
         }).catch(err => '');
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
