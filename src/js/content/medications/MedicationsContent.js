@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import TableContent from "../../components/TableContent";
-import PropTypes from 'prop-types';
 import { medications } from "../../constants/States";
 import HPIContext from "../../contexts/HPIContext";
 import "../../../css/content/medicationsContent.css";

@@ -1,5 +1,5 @@
 import React from 'react'
-import {Input, Form} from "semantic-ui-react";
+import {Input} from "semantic-ui-react";
 import HPIContext from "../contexts/HPIContext"
 
 class ConditionInput extends React.Component {

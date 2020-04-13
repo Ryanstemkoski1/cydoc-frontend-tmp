@@ -42,9 +42,9 @@ export default class GenerateNote extends Component {
             if (yes) {
                 if (display) grid += (" <td> " + key + "</td> ")
                 var values = this.context[item][key]
-                for (var header_index in headers) {
-                    var header = headers[header_index]
-                    if (header !== "Yes" && header !== "No") grid += (" <td> " + values[header] + "</td> ")}
+                for (var head_index in headers) {
+                    var head = headers[head_index]
+                    if (head !== "Yes" && head !== "No") grid += (" <td> " + values[head] + "</td> ")}
                 grid += " </tr> <tr>"
             }
             else if (no) negatives.push(key)

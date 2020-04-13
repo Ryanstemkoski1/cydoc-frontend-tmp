@@ -2,9 +2,6 @@ import React from 'react'
 import QuestionAnswer from "./QuestionAnswer";
 
 class DiseaseFormQuestions extends React.Component {
-    constructor(props) {
-        super(props)
-    } 
 
     render() {
         let question = this.props.question
