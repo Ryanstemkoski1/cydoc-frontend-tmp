@@ -39,6 +39,7 @@ class HPIContent extends Component {
             // var body_systems = {}
             var nodes = res.data['nodes'] 
             for (var node in nodes) {
+<<<<<<< HEAD
                 var category = node[node]['category']
                 // console.log(node[node]['category'] in categories_set)
                 // if (!(node[node]["category"] in categories_set)) {
@@ -50,12 +51,17 @@ class HPIContent extends Component {
                     // body_systems[body_system]['diseases'].add(key)
                 // }
             } 
+=======
+                var key = (((nodes[node]["category"].split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase()); 
+                categories[key] = node.substring(0, node.length-2) + "01"
+            }
+>>>>>>> 92f28b445d1834bad0adce029303c850f803caa2
             categories["Shortness of Breath"] = categories["Shortbreath"]
             categories["Nausea/Vomiting"] = categories["Nausea-vomiting"]
             delete categories["Shortbreath"]
             delete categories["Nausea-vomiting"]
             this.setState({isLoaded: true, graphData: res.data, categories: categories})
-        }).catch(err => '');
+        })
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
     }
