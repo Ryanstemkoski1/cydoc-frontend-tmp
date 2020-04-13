@@ -3,7 +3,7 @@ import { Form, Grid, Header, Segment, Button, Label, Message } from "semantic-ui
 import * as yup from "yup"
 import { Redirect } from "react-router";
 import AuthContext from "../contexts/AuthContext";
-import constants from "../constants/registration_constants"
+import constants from "../constants/registration-constants"
 import { client } from "../constants/api.js"
 
 const degreeOptions = constants.degrees.map((degree) => ({ key: degree, value: degree, text: degree }))

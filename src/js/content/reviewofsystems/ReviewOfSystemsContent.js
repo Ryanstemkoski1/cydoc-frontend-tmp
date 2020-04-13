@@ -13,7 +13,7 @@ export default class ReviewOfSystemsContent extends Component {
             windowWidth: 0,
             windowHeight: 0,
             test: {
-                "General": ["Δ weight", "Fatigue", "Weakness", "Fevers", "Chills", "Night sweats"],
+                "General": ["Weight changes", "Fatigue", "Weakness", "Fevers", "Chills", "Night sweats"],
                 "Eyes": ["Glasses", "Contacts", "Blurriness"],
                 "Ears": ["Δ hearing", "Hearing loss", "Tinnitus", "Earache", "Discharge"],
                 "Nose": ["Colds", "Stuffiness", "Sneezing", "Itching", "Allergy", "Nosebleed"],

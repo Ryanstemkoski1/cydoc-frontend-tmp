@@ -1,0 +1,823 @@
+{
+    "sections": [
+        {
+            "name": "General",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "well-appearing",
+                        "well-nourished",
+                        "no acute distress"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "sitting upright",
+                        "laying still"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "in distress",
+                        "diaphoretic",
+                        "pale",
+                        "writhing"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Head",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normocephalic",
+                        "atraumatic"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "nuchal rigidity"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Eyes",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "PERRLA"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "sclera anicteric",
+                        "no redness",
+                        "no discharge"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "EOMI",
+                        "visual acuity intact",
+                        "visual fields intact"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "fundoscopy unremarkable"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "scleral icterus",
+                        "watery discharge",
+                        "purulent discharge",
+                        "pale conjunctiva",
+                        "injected/red conjunctiva"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "myopia",
+                        "hyperopia",
+                        "presbyopia",
+                        "ambylopia",
+                        "diplopia"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": true,
+                    "Display": "autocompletedropdown",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "arcus senilis",
+                        "astigmatism",
+                        "a-v nicking",
+                        "blepharitis",
+                        "bruising",
+                        "cataracts",
+                        "chemosis",
+                        "crusting",
+                        "chalazion",
+                        "copper wiring",
+                        "diabetic retinopathy",
+                        "drusen",
+                        "ectropion",
+                        "entropion",
+                        "exophthalmos",
+                        "hordeolum",
+                        "laceration",
+                        "macular degeneration",
+                        "nystagmus",
+                        "pain",
+                        "papilledema",
+                        "pterygium",
+                        "ptosis",
+                        "retinal detachment",
+                        "retinal hemorrhage",
+                        "silver wiring",
+                        "strabismus",
+                        "subconjunctival hemorrahge",
+                        "swelling",
+                        "xanthelasma"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Ears",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal auditory acuity",
+                        "normal Rinne",
+                        "normal Weber"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "otoscopy unremarkable",
+                        "normal tympanic membrane"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "diminished auditory acuity"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "Rinne unable to still hear fork on right",
+                        "Rinne unable to still hear fork on left"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "Weber louder on left",
+                        "Weber louder on right"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "otitis externa",
+                        "otitis media",
+                        "earwax",
+                        "exudate"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "tenderness to palpation",
+                        "pain on palpation"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "tympanic membrane red",
+                        "tympanic membrane bulging",
+                        "dull light reflex",
+                        "absent light reflex"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Nose",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "no sinus tenderness"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "normal internal nose on otoscopy"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "sinus tenderness to palpation",
+                        "rhinorrhea",
+                        "bleeding"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Throat",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "oropharynx clear",
+                        "MMM",
+                        "tongue pink and moist"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "tongue protrudes midline",
+                        "symmetric palate elevation"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal swallowing",
+                        "normal phonation"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "oropharynx erethematous",
+                        "mucous membranes dry"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "tongue deviates right",
+                        "tongue deviates left"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "palate lower on right",
+                        "palate lower on left"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "autocompletedropdown",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "hoarse voice",
+                        "angular chelitis",
+                        "blisters",
+                        "vesicles",
+                        "erythematous gums",
+                        "ulcerated gums",
+                        "tooth decay"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Neck",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "supple",
+                        "no thryomegaly",
+                        "no lymphadenopathy",
+                        "trachea midline"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "autocompletedropdown",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "shotty lymph nodes",
+                        "lymphadenopathy",
+                        "thyromegaly",
+                        "mass",
+                        "trachea deviated right",
+                        "trachea deviated left"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Pulmonary",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "CTAB",
+                        "no wheezes rales or rhonchi"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "normal percussion"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "coughing",
+                        "blue lips",
+                        "pursed lips",
+                        "gurgling",
+                        "labored breathing",
+                        "tripod position",
+                        "use of accessory muscles of breathing",
+                        "unable to speak in complete sentences",
+                        "pectus excavatum",
+                        "barrel chest",
+                        "kyphosis",
+                        "scoliosis"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Kidney",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "no CVAT"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "CVAT present"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Cardiac",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "RRR",
+                        "normal S1 S2",
+                        "no murmurs",
+                        "no rubs",
+                        "no gallops"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal PMI",
+                        "no bruits",
+                        "normal JVP"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "tachycardia",
+                        "bradycardia",
+                        "atrial fibrillation",
+                        "sinus arrhythmia"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "S3 (ventricular gallop)",
+                        "S4 (presystolic gallop)",
+                        "pericardial rub"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "PMI lateral",
+                        "PMI enlarged",
+                        "sustained PMI",
+                        "double impulse"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": true,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "carotid bruit"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "elevated JVP",
+                        "decreased JVP"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Pulses",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal brachial",
+                        "normal radial",
+                        "normal ulnar"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "normal dorsalis pedis"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Gastrointestinal",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal bowel sounds",
+                        "no bruits"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "no hepatomegaly",
+                        "no splenomegaly"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "soft",
+                        "nontender",
+                        "nondistended"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "no rebound tenderness",
+                        "no guarding",
+                        "no masses"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "hyperactive bowel sounds",
+                        "hypoactive bowel sounds",
+                        "abdominal bruit",
+                        "hepatomegaly",
+                        "splenomegaly",
+                        "ascites",
+                        "fluid wave",
+                        "distention",
+                        "obesity",
+                        "surgical scars"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Extremities",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "no clubbing",
+                        "no cyanosis",
+                        "no nail changes",
+                        "no edema"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "clubbing",
+                        "cyanosis",
+                        "onychomycosis",
+                        "pedal edema"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tendon Reflexes",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal biceps",
+                        "normal brachioradialis",
+                        "normal triceps"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal patellar",
+                        "normal ankle jerk",
+                        "normal plantar"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Skin",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "warm and dry",
+                        "no visible lesions"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "no tenting",
+                        "normal turgor"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "abnormal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "tenting",
+                        "decreased turgor"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Neuro Additional",
+            "rows": [
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal CN-V/trigeminal",
+                        "normal facial sensation",
+                        "normal jaw opening against resistance",
+                        "normal temporalis/masseter clench"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal CN-VII/facial",
+                        "normal eyebrow raise",
+                        "normal smile"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal CN-XI/accessory",
+                        "normal head turn against resistance",
+                        "normal shoulder shrug against resistance"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal cerebellum",
+                        "normal finger-nose",
+                        "normal heel-shin"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal UMN",
+                        "no pronator drift"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": true,
+                    "Findings": [
+                        "normal sensation to light touch",
+                        "normal temperature sensation",
+                        "normal vibration sensation"
+                    ]
+                },
+                {
+                    "Normal_or_Abnormal": "normal",
+                    "Needs_Right_Left": false,
+                    "Display": "buttons",
+                    "Include_SelectAll": false,
+                    "Findings": [
+                        "normal proprioception",
+                        "normal tandem gait",
+                        "normal Romberg"
+                    ]
+                }
+            ]
+        }
+    ]
+}
