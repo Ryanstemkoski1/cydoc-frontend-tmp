@@ -39,6 +39,16 @@ export class DiseaseForm extends React.Component {
         this.props.prevStep();
     }
 
+    first_page = e => {
+        e.preventDefault()
+        this.props.first_page()
+    }
+
+    last_page = e => {
+        e.preventDefault()
+        this.props.last_page()
+    }
+
     function() {
         const {category, parent_code, graphData, tab_category} = this.props;
         let graph = graphData['graph']
@@ -164,19 +174,31 @@ export class DiseaseForm extends React.Component {
                 <div className='question-map'>{newMap} </div>
 
                 <div className='arrow-buttons'>
-                    <Button
-                        circular
-                        icon='angle double left'
-                        className='next-button'
-                        onClick={this.back}
-                    />
-                    {this.props.last ? "" :
+                    <div className='next-button'> 
+                        <Button 
+                            circular
+                            icon = 'angle double left'
+                            onClick = {this.first_page}
+                        />
                         <Button
                             circular
-                            icon='angle double right'
-                            className='next-button'
-                            onClick={this.continue}
+                            icon='angle left'
+                            onClick={this.back}
+                        /> 
+                    </div>
+                    {this.props.last ? "" :
+                        <div className = 'next-button'> 
+                            <Button
+                                circular
+                                icon='angle right'
+                                onClick={this.continue}
+                            /> 
+                            <Button 
+                                circular
+                                icon = 'angle double right'
+                                onClick = {this.last_page}
                         />
+                        </div>
                     }
                 </div>
             </div>

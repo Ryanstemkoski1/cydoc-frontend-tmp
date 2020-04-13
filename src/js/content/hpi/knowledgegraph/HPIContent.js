@@ -79,6 +79,14 @@ class HPIContent extends Component {
         this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-3])
     }
 
+    first_page = () => this.context.onContextChange("step", 1)
+
+    last_page = () => {
+        var current_step = this.context['positivediseases'].length
+        this.context.onContextChange("step", current_step+1)
+        this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-1])
+    }
+
     continue = e => {
         e.preventDefault();
         this.nextStep();
@@ -152,7 +160,7 @@ class HPIContent extends Component {
                         <div className='positive-diseases-placeholder'>
                             <Button
                                 circular
-                                icon='angle double right'
+                                icon='angle right'
                                 className='next-button'
                                 onClick={this.continue}
                             />
@@ -173,6 +181,8 @@ class HPIContent extends Component {
                         graphData={graphData}
                         nextStep = {this.nextStep}
                         prevStep = {this.prevStep}
+                        first_page = {this.first_page}
+                        last_page = {this.last_page}
                         category = {category}
                         categories = {this.state.categories}
                         diseaseTabs = {diseaseTabs}
