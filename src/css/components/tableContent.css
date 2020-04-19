@@ -1,0 +1,27 @@
+.ui.input > input::-webkit-input-placeholder {
+    color: #DDDDDD;
+}
+
+.ui.input > input::-moz-placeholder {
+    color: #DDDDDD;
+}
+
+.ui.input > input:-ms-input-placeholder {
+    color: #DDDDDD;
+}
+
+.ui.input.content-input {
+    margin: .75rem 1rem 0 1.5rem;
+}
+
+.ui.input.first-content-input {
+    margin: 0 1rem 0 1.5rem;
+}
+
+.ui.styled.accordion .content {
+    padding: 0 1rem 1rem;
+}
+
+.table-display {
+    overflow-x: auto;
+}

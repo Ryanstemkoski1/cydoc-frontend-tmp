@@ -1,21 +1,22 @@
-import React, {Component, Fragment} from 'react';
-import {Table, Card, Input} from "semantic-ui-react";
-import AddRowButton from "./AddRowButton"
+import React, { Component, Fragment } from 'react';
+import { Table, Input, Accordion } from 'semantic-ui-react';
+import AddRowButton from './AddRowButton'
 import PropTypes from 'prop-types';
-import {TableBodyRow} from "./TableBodyRow";
-import HPIContext from "../contexts/HPIContext";
-import "../../css/components/tableComponent.css";
+import { TableBodyRow } from './TableBodyRow';
+import HPIContext from '../contexts/HPIContext';
+import '../../css/components/tableContent.css';
  
 //Component for a table layout
 export default class TableContent extends Component {
-    static contextType = HPIContext
+    static contextType = HPIContext;
+
     constructor(props, context) {
         super(props, context);
         // TODO: add back addRow functionality
         this.addRow = this.addRow.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
-        this.makeTableItems = this.makeTableItems.bind(this);
+        this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
     }
 
     //modify the current values in the table to reflect changes
@@ -48,57 +49,147 @@ export default class TableContent extends Component {
     }
 
     addRow() {
-        let values = this.context[this.props.category]
-        var last_index = values.length.toString()
-        values[last_index] = {Procedure: "", Date: "", Comments: ""}
+        let values = this.context[this.props.category];
+        const last_index = values.length.toString();
+        values[last_index] = {Procedure: '', Date: '', Comments: ''}
         this.context.onContextChange(this.props.category, values);
     }
 
-    makeTableItems(nums) {
-        const { values, tableBodyPlaceholders } = this.props;
-        let content = ['header', 'meta', 'description'];
-        let items = []
+    makeAccordionPanels(nums) {
+        const { values, tableBodyPlaceholders, name } = this.props;
+
+        const panels = [];
+
         for (let i = 0; i < nums.length; i++) {
-            items.push({key: i});
-            for (let j = 0; j < tableBodyPlaceholders.length; j++) {
-                items[i][content[j]] = <Input
-                    transparent
-                    fluid
-                    type="text"
-                    placeholder={tableBodyPlaceholders[j]}
-                    onChange={this.handleTableBodyChange}
-                    rowindex={i}
-                    value={values[i][tableBodyPlaceholders[j]]}
-                />
+            let titleContent;
+            const contentInputs = [];
+
+            switch(name) {
+                case 'surgical history': {
+                    titleContent = (
+                        <Fragment>
+                            <Input
+                                transparent
+                                placeholder={tableBodyPlaceholders[0]}
+                                onChange={this.handleTableBodyChange}
+                                rowindex={i}
+                                value={values[i][tableBodyPlaceholders[0]]}
+                            />
+                        </Fragment>
+                    );
+                    break;
+                }
+                case 'medication': {
+                    titleContent = (
+                        <Fragment>
+                            <Input
+                                transparent
+                                placeholder={tableBodyPlaceholders[0]}
+                                onChange={this.handleTableBodyChange}
+                                rowindex={i}
+                                value={values[i][tableBodyPlaceholders[0]]}
+                            />
+                            {' for '}
+                            <Input
+                                transparent
+                                placeholder={tableBodyPlaceholders[4]}
+                                onChange={this.handleTableBodyChange}
+                                rowindex={i}
+                                value={values[i][tableBodyPlaceholders[4]]}
+                            />
+                        </Fragment>
+                    );
+                    break;
+                }
+                case 'allergy': {
+                    titleContent = (
+                        <Fragment>
+                            <Input
+                                transparent
+                                placeholder={tableBodyPlaceholders[0]}
+                                onChange={this.handleTableBodyChange}
+                                rowindex={i}
+                                value={values[i][tableBodyPlaceholders[0]]}
+                            />
+                            {' causes '}
+                            <Input
+                                transparent
+                                placeholder={tableBodyPlaceholders[1]}
+                                onChange={this.handleTableBodyChange}
+                                rowindex={i}
+                                value={values[i][tableBodyPlaceholders[1]]}
+                            />
+                        </Fragment>
+                    );
+                    break;
+                }
             }
+
+            for (let j = 1; j < tableBodyPlaceholders.length; j++) {
+                contentInputs.push(
+                    <Input
+                        key={j}
+                        fluid
+                        transparent
+                        placeholder={tableBodyPlaceholders[j]}
+                        onChange={this.handleTableBodyChange}
+                        rowindex={i}
+                        value={values[i][tableBodyPlaceholders[j]]}
+                        className={j == 1 ? 'first-content-input' : 'content-input'}
+                    />
+                );
+            }
+
+            panels.push({
+                key: i,
+                title: {
+                    content: titleContent,
+                },
+                content: {
+                    content: (
+                        <Fragment>
+                            {contentInputs}
+                        </Fragment>
+                    ),
+                }
+            });
         }
-        return items;
+
+        return panels;
     }
 
-    render(){
-        var nums = Object.keys(this.props.values)
+    render() {
+        const {values, mobile } = this.props;
+        const nums = Object.keys(values);
         const headerRow = this.makeHeader();
-        var rows = this.makeTableBodyRows(nums);
-        const mobileRows = this.makeTableItems(nums);
+        const rows = this.makeTableBodyRows(nums);
+        const panels = this.makeAccordionPanels(nums);
 
-        return ( this.props.mobile ? 
+        const content = mobile ? (
+            <Accordion
+                defaultActiveIndex={[0, 1, 2]}
+                panels={panels}
+                exclusive={false}
+                fluid
+                styled
+            />
+        ) : (
+            <Table
+                celled
+                className='table-display'
+            >
+                <Table.Header content={headerRow} />
+                <Table.Body children={rows} />
+            </Table>
+        );
+
+        return (
             <Fragment>
-                <Card.Group items={mobileRows} />
-                <AddRowButton onClick={this.addRow} name={this.props.name}/>
-            </Fragment>
-            : <Fragment>
-                <br/>
-                <div style={{width: "100%", height: "100%", overflowX: 'auto'}}> 
-                <Table celled>
-                    <Table.Header>
-                        {headerRow}
-                    </Table.Header>
-                    <Table.Body>
-                        {rows}
-                    </Table.Body>
-                </Table>
-                </div>
-                <AddRowButton onClick={this.addRow} name={this.props.name}/>
+                {content}
+                <AddRowButton
+                    onClick={this.addRow}
+                    name={this.props.name}
+                />
             </Fragment>
         );
     }
