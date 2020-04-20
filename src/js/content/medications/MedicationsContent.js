@@ -3,8 +3,7 @@ import TableContent from "../../components/TableContent";
 import { medications } from "../../constants/States";
 import HPIContext from "../../contexts/HPIContext";
 import "../../../css/content/medicationsContent.css";
-import drug_names from '../../constants/drugNames'
-import '../../constants/drugNames'
+import drug_names from '../../constants/drugNames' 
 
 //Component that manages content for the Medications page
 export default class MedicationsContent extends Component {
@@ -14,8 +13,7 @@ export default class MedicationsContent extends Component {
             top_drugs: []
         }
     }
-    componentDidMount() {
-
+    componentDidMount() {  
     }
 
     render() {
