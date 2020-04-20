@@ -23,7 +23,7 @@ export default class AbdomenExam extends Component {
             )
         }
         return (
-            <Table celled>
+            <Table celled collapsing>
               <Table.Body>
                 {ab_map}
               </Table.Body>

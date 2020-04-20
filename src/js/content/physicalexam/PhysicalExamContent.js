@@ -6,6 +6,7 @@ import SelectAllButton from './SelectAllButton'
 import HPIContext from '../../contexts/HPIContext';
 import LungSounds from './widgets/LungSounds'
 import AbdomenExam from './widgets/AbdomenExam';
+import RightLeftWidget from './widgets/RightLeftWidget';
 //import NumericInput from 'react-numeric-input';
 
 //Component that manages content for the Physical Exam tab
@@ -70,7 +71,7 @@ export default class PhysicalExamContent extends React.Component {
 
     render() {
         return (
-            <Fragment> <LungSounds /> <AbdomenExam />
+            <Fragment> <LungSounds /> <AbdomenExam /> <RightLeftWidget type={"Pulse"} /> <RightLeftWidget type={"Reflex"} />
                 <PhysicalExamGroup category="Vitals" abnormalFindings={false}>
                     <MyContext.Consumer> 
                         {category => 

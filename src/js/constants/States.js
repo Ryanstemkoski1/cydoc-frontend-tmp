@@ -57,6 +57,8 @@ export const physicalExam = {
         "Extremities": {"Normal biceps": false, "Normal brachioradials": false, "Normal triceps": false, "Normal patellar": false, "Normal ankle jerk": false, "Normal plantar": false, "Abnormal Findings": ""},
         "Skin": {"Warm and dry": false, "No visible lesions": false, "No tenting": false, "Normal turgor": false, "Abnormal Findings": ""},
         "Lungs": {"Left Upper Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Upper Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Lingula": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Middle Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Left Lower Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Lower Lobe": {"wheezes": false, "rales": false, "rhonchi": false}},
-        "Abdomen": {"Right Upper Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Left Upper Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Right Lower Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Left Lower Quadrant": {"tenderness": false, "rebound": false, "guarding": false}}
+        "Abdomen": {"Right Upper Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Left Upper Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Right Lower Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Left Lower Quadrant": {"tenderness": false, "rebound": false, "guarding": false}},
+        "Pulse": [],
+        "Reflex": [],
     }
 }
