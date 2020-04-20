@@ -64,7 +64,7 @@ class HandleInput extends React.Component {
         else if (this.props.type === 'LIST-TEXT') {
             return (
                 <Form> 
-                <Input class="ui input focus" style={{width: '75%'}}
+                <Input class="ui input focus" style={{width: '50%'}}
                     type='text'
                     onChange={this.handleInputChange}
                     value={this.state.textInput}

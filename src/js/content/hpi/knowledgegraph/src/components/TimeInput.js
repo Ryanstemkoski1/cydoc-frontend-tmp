@@ -1,7 +1,5 @@
 import React, {Fragment, Component} from 'react'
-import { Grid } from "semantic-ui-react";
-import ToggleButton from "../../../../../components/ToggleButton";
-import DatePicker from "react-date-picker";
+import { Grid, Button } from "semantic-ui-react";
 import NumericInput from "react-numeric-input";
 import HPIContext from "../../../../../contexts/HPIContext";
 
@@ -32,16 +30,25 @@ class TimeInput extends Component {
         const values = this.context["hpi"][this.props.category_code][this.props.uid]
         var value = this.props.am_child ? values['children'][this.props.child_uid]['response'][0] : values["response"][0]
         var time_value = this.props.am_child ? values['children'][this.props.child_uid]['response'][1] : values["response"][1]
-        const time_options = ["minutes", "hours", "days", "weeks", "months", " years "]
-        var button_map = time_options.map((time_option, index) => 
-            <ToggleButton
-                active={time_value === time_option}
-                title={time_option}
-                onToggleButtonClick={this.handleToggleButtonClick}
-                style={{marginTop: 10}}
-            />)
+        const time_options = ["minutes", "hours", "days", "weeks", "months", "years"]
+        var button_map = []
+        for (var time_index = 0; time_index < time_options.length; time_index += 3) {
+            button_map.push(
+                <Grid.Row columns='equal' style={{padding: 0}}> 
+                        {time_options.slice(time_index, time_index+3).map((time_item) => 
+                        <Grid.Column style={{padding: 5}}>
+                            <Button
+                                color={time_value === time_item ? 'grey' : ''}
+                                title={time_item}
+                                onClick={this.handleToggleButtonClick}
+                                style={{width: '100%'}}
+                            > {time_item} </Button>
+                            </Grid.Column>
+                            )}
+                </Grid.Row>)
+        }
         return (
-            <Fragment style={{marginTop: 10}}> 
+            <div style={{marginTop: 30}}> 
                 <Grid columns={2}>
                     <Grid.Row> 
                         <Grid.Column width={3}>
@@ -55,12 +62,14 @@ class TimeInput extends Component {
                                 />
                             </div>
                         </Grid.Column>
-                        <Grid.Column width={5}> 
-                            {button_map}
+                        <Grid.Column width={6}> 
+                            <Grid> 
+                                {button_map}
+                            </Grid>
                         </Grid.Column>
                     </Grid.Row> 
                 </Grid>
-            </Fragment>
+            </div>
         )
     }
 }
