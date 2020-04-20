@@ -3,7 +3,6 @@ import TableContent from '../../components/TableContent';
 import { medications } from '../../constants/States';
 import HPIContext from '../../contexts/HPIContext';
 import drug_names from '../../constants/drugNames';
-import '../../../css/content/medicationsContent.css';
 
 //Component that manages content for the Medications page
 export default class MedicationsContent extends Component {
