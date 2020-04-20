@@ -1,26 +1,20 @@
-import React, {Fragment} from 'react';
-import NavMenu from "../components/NavMenu";
-import NewTemplateForm from "../components/NewTemplateForm";
-import "../../css/components/navMenu.css";
-import "../../css/components/newTemplateForm.css";
+import React, {Component, Fragment} from 'react';
+import NavMenu from '../components/NavMenu';
+import NewTemplateTitle from '../components/NewTemplateTitle';
+import '../../css/components/navMenu.css';
+import '../../css/components/newTemplate.css';
 
-export default class CreateGraph extends React.Component {
-    constructor(props) {
-        super(props);
-
-    }
-
+export default class CreateGraph extends Component {
     render() {
         return (
             <Fragment>
-                <div class="nav-menu-container">
+                <div className='nav-menu-container'>
                     <NavMenu />
                 </div>
-                <div class="new-template-form-container">
-                    <NewTemplateForm />
+                <div className='new-template-form-container'>
+                    <NewTemplateTitle />
                 </div>
             </Fragment>
         );
     }
-
 }
