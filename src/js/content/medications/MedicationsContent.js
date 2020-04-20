@@ -37,7 +37,7 @@ export default class MedicationsContent extends Component {
                         mobile={this.props.mobile}
                         name={"medication"}
                         dropdown={true}
-                        options={drug_types}
+                        options={drug_names}
                         dropdown_placeholder={"Drug Name"}
                     />
                 </div>
