@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import {Button} from "semantic-ui-react";
 import PropTypes from 'prop-types';
 import "../../css/components/addRowButton.css";

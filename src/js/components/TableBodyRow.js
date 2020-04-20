@@ -1,7 +1,6 @@
 import React, {Component} from "react";
-import {TextArea, Table, Form, Dropdown} from "semantic-ui-react";
+import {TextArea, Table, Dropdown} from "semantic-ui-react";
 import PropTypes from "prop-types";
-import DatePicker from "react-date-picker";
 
 //Controlled component for a row in a TableContent component
 export class TableBodyRow extends Component {
