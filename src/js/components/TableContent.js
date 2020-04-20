@@ -124,17 +124,30 @@ export default class TableContent extends Component {
                     );
                     break;
                 }
+                default: {
+                    titleContent = (
+                        <Form className='inline-form'>
+                            <Input
+                                transparent
+                                placeholder={tableBodyPlaceholders[0]}
+                                onChange={this.handleTableBodyChange}
+                                rowindex={i}
+                                value={values[i][tableBodyPlaceholders[0]]}
+                            />
+                        </Form>
+                    );
+                    break;
+                }
             }
 
             for (let j = 1; j < tableBodyPlaceholders.length; j++) {
-                if ((name === 'medication' && j == 4) || (name === 'allergy' && j == 1)) {
+                if ((name === 'medication' && j === 4) || (name === 'allergy' && j === 1)) {
                     // already in accordion title
                     continue;
                 } else if (tableBodyPlaceholders[j] === 'Side Effects') {
                     contentInputs.push(
-                        <Fragment>
+                        <Fragment key={j}>
                             <Input
-                                key={j}
                                 fluid
                                 transparent
                                 list='side-effects'
