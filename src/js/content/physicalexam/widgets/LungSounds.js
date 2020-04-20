@@ -17,7 +17,7 @@ export default class LungSounds extends Component {
                         <LungSoundsButtons key={lung_lobes[2*lung_index]} lung_lobe={lung_lobes[2*lung_index]}/> 
                     </Table.Cell>
                     <Table.Cell verticalAlign='top'> <div style={{marginBottom: 5}}> {lung_lobes[2*lung_index+1]} </div> 
-                        <LungSoundsButtons key={lung_lobes[2*lung_index+1]} lung_lobe={lung_lobes[2*lung_index+1]}/> 
+                        <LungSoundsButtons key={lung_lobes[2*lung_index+1]} lung_lobe={lung_lobes[2*lung_index+1]} position={'top right'}/> 
                     </Table.Cell>
                 </Table.Row>
             )

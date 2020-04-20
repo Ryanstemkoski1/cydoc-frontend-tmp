@@ -26,7 +26,6 @@ export default class LungSoundsButtons extends Component {
     }
 
     render() {
-        const standard_options = ["wheezes", "rales", "rhonchi"]
         var more_options = ["bronchial breath sounds","vesicular breath sounds","egophony", "whistling", "stridor"]
         const current_options = Object.keys(this.context["Physical Exam"]["Lungs"][this.props.lung_lobe])
         more_options = more_options.filter(n => !current_options.includes(n))
@@ -54,7 +53,7 @@ export default class LungSoundsButtons extends Component {
                 <div> 
                     {lung_buttons}
                     {more_options_buttons.length > 0 ? 
-                    <Popup trigger={<Button basic circular icon="plus" size='mini'/>} flowing hoverable> 
+                    <Popup trigger={<Button basic circular icon="plus" size='mini'/>} position={this.props.position} flowing hoverable> 
                         {more_options_buttons} 
                     </Popup> : ""}
                 </div>
