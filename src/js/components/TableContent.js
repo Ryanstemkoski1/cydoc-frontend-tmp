@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
-import { Table, Input, Accordion } from 'semantic-ui-react';
+import { Table, Input, Accordion, Form } from 'semantic-ui-react';
 import AddRowButton from './AddRowButton'
 import PropTypes from 'prop-types';
 import { TableBodyRow } from './TableBodyRow';
 import HPIContext from '../contexts/HPIContext';
+import { sideEffects } from '../constants/sideEffects';
 import '../../css/components/tableContent.css';
  
 //Component for a table layout
@@ -67,7 +68,7 @@ export default class TableContent extends Component {
             switch(name) {
                 case 'surgical history': {
                     titleContent = (
-                        <Fragment>
+                        <Form className='inline-form'>
                             <Input
                                 transparent
                                 placeholder={tableBodyPlaceholders[0]}
@@ -75,13 +76,13 @@ export default class TableContent extends Component {
                                 rowindex={i}
                                 value={values[i][tableBodyPlaceholders[0]]}
                             />
-                        </Fragment>
+                        </Form>
                     );
                     break;
                 }
                 case 'medication': {
                     titleContent = (
-                        <Fragment>
+                        <Form className='inline-form'>
                             <Input
                                 transparent
                                 placeholder={tableBodyPlaceholders[0]}
@@ -97,13 +98,13 @@ export default class TableContent extends Component {
                                 rowindex={i}
                                 value={values[i][tableBodyPlaceholders[4]]}
                             />
-                        </Fragment>
+                        </Form>
                     );
                     break;
                 }
                 case 'allergy': {
                     titleContent = (
-                        <Fragment>
+                        <Form className='inline-form'>
                             <Input
                                 transparent
                                 placeholder={tableBodyPlaceholders[0]}
@@ -119,25 +120,49 @@ export default class TableContent extends Component {
                                 rowindex={i}
                                 value={values[i][tableBodyPlaceholders[1]]}
                             />
-                        </Fragment>
+                        </Form>
                     );
                     break;
                 }
             }
 
             for (let j = 1; j < tableBodyPlaceholders.length; j++) {
-                contentInputs.push(
-                    <Input
-                        key={j}
-                        fluid
-                        transparent
-                        placeholder={tableBodyPlaceholders[j]}
-                        onChange={this.handleTableBodyChange}
-                        rowindex={i}
-                        value={values[i][tableBodyPlaceholders[j]]}
-                        className={j == 1 ? 'first-content-input' : 'content-input'}
-                    />
-                );
+                if ((name === 'medication' && j == 4) || (name === 'allergy' && j == 1)) {
+                    // already in accordion title
+                    continue;
+                } else if (tableBodyPlaceholders[j] === 'Side Effects') {
+                    contentInputs.push(
+                        <Fragment>
+                            <Input
+                                key={j}
+                                fluid
+                                transparent
+                                list='side-effects'
+                                placeholder={tableBodyPlaceholders[j]}
+                                onChange={this.handleTableBodyChange}
+                                rowindex={i}
+                                value={values[i][tableBodyPlaceholders[j]]}
+                                className='content-input'
+                            />
+                            <datalist id='side-effects'>
+                                {sideEffects}
+                            </datalist>
+                        </Fragment>
+                    );
+                } else {
+                    contentInputs.push(
+                        <Input
+                            key={j}
+                            fluid
+                            transparent
+                            placeholder={tableBodyPlaceholders[j]}
+                            onChange={this.handleTableBodyChange}
+                            rowindex={i}
+                            value={values[i][tableBodyPlaceholders[j]]}
+                            className='content-input'
+                        />
+                    );
+                }
             }
 
             panels.push({
@@ -167,7 +192,6 @@ export default class TableContent extends Component {
 
         const content = mobile ? (
             <Accordion
-                defaultActiveIndex={[0, 1, 2]}
                 panels={panels}
                 exclusive={false}
                 fluid
