@@ -33,6 +33,7 @@ class QuestionAnswer extends React.Component {
                 if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
                     values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = []
                 }
+                else if (this.props.responseType === 'TIME') values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = ["", ""]
                 else if (this.props.responseType === 'LIST-TEXT') values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = {1: "", 2: "", 3: ""}
              } }
         else if (values[this.props.category_code][this.props.uid]["response"]=== "") {
@@ -40,6 +41,7 @@ class QuestionAnswer extends React.Component {
             if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
                 values[this.props.category_code][this.props.uid]["response"] = []
             }
+            else if (this.props.responseType === "TIME") values[this.props.category_code][this.props.uid]["response"] = ["", ""]
             else if (this.props.responseType === 'LIST-TEXT') values[this.props.category_code][this.props.uid]["response"] = {1: "", 2: "", 3: ""}
         }
         this.updateDimensions = this.updateDimensions.bind(this);

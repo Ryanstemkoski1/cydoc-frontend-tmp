@@ -4,10 +4,20 @@ import { medications } from "../../constants/States";
 import HPIContext from "../../contexts/HPIContext";
 import "../../../css/content/medicationsContent.css";
 import drug_names from '../../constants/drugNames'
-import top_drugs from '../../constants/top_drugs'
+import '../../constants/drugNames'
 
 //Component that manages content for the Medications page
 export default class MedicationsContent extends Component {
+    constructor(context) {
+        super(context) 
+        this.state = {
+            top_drugs: []
+        }
+    }
+    componentDidMount() {
+
+    }
+
     render() {
         const category = "Medications";
         const placeholders = this.props.mobile ? [medications.fields[0], medications.fields[4], medications.fields[5]] : medications.fields;
@@ -30,7 +40,7 @@ export default class MedicationsContent extends Component {
                         mobile={this.props.mobile}
                         name={"medication"}
                         dropdown={true}
-                        options={top_drugs}
+                        options={drug_names}
                         dropdown_placeholder={"Drug Name"}
                     />
                 </div>

@@ -1,16 +1,11 @@
 import React from 'react'
-import NumericInput from "react-numeric-input";
+import NumericInput from "react-numeric-input"; 
 import HPIContext from "../../../../../contexts/HPIContext";
 
 class HandleNumericInput extends React.Component {
     static contextType = HPIContext 
     constructor(props, context) {
         super(props, context)
-        const values = this.context["hpi"][this.props.category_code][this.props.uid]
-        const answers = this.props.am_child ? values['children'][this.props.child_uid]['response'] : values["response"]
-        this.state = {
-            numericValue: answers !== null ? answers: null
-        }
         this.handleChange = this.handleChange.bind(this)
     }
 
@@ -23,10 +18,12 @@ class HandleNumericInput extends React.Component {
     }
 
     render() {
+        const values = this.context["hpi"][this.props.category_code][this.props.uid]
+        var value = this.props.am_child ? values['children'][this.props.child_uid]['response'] : values["response"]
         return (
             <NumericInput
                 key={this.props.question}
-                value={this.state.numericValue}
+                value={value}
                 min={0}
                 max={this.props.max}
                 onChange={this.handleChange}
