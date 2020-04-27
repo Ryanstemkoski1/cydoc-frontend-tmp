@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Table, Input, Accordion, Form } from 'semantic-ui-react';
+import { Table, Input, Accordion, Form, Dropdown } from 'semantic-ui-react';
 import AddRowButton from './AddRowButton'
 import PropTypes from 'prop-types';
 import { TableBodyRow } from './TableBodyRow';
@@ -13,11 +13,15 @@ export default class TableContent extends Component {
 
     constructor(props, context) {
         super(props, context);
+        this.state = {
+            sideEffectsOptions: sideEffects,
+        }
         // TODO: add back addRow functionality
         this.addRow = this.addRow.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
+        this.handleAddition = this.handleAddition.bind(this);
     }
 
     //modify the current values in the table to reflect changes
@@ -28,18 +32,31 @@ export default class TableContent extends Component {
         this.props.onTableBodyChange(newState);
     }
 
+    handleAddition(event, { value }) {
+        this.setState((prevState) => ({
+            sideEffectsOptions: [
+                {text: value, value},
+                ...prevState.sideEffectsOptions
+            ],
+        }));
+    }
+
     //method to generate an collection of rows
     makeTableBodyRows(nums){
-        return nums.map((rowindex, index) => <TableBodyRow
-            key={index}
-            rowindex={parseInt(rowindex)}
-            tableBodyPlaceholders={this.props.tableBodyPlaceholders}
-            onTableBodyChange={this.handleTableBodyChange}
-            values={this.props.values}
-            dropdown={this.props.dropdown}
-            options={this.props.options}
-            dropdown_placeholder={this.props.dropdown_placeholder}
-        />)
+        return nums.map((rowindex, index) => 
+            <TableBodyRow
+                key={index}
+                rowindex={parseInt(rowindex)}
+                tableBodyPlaceholders={this.props.tableBodyPlaceholders}
+                onTableBodyChange={this.handleTableBodyChange}
+                onAddItem={this.handleAddition}
+                values={this.props.values}
+                dropdown={this.props.dropdown}
+                options={this.props.options}
+                dropdown_placeholder={this.props.dropdown_placeholder}
+                sideEffectsOptions={this.state.sideEffectsOptions}
+            />
+        )
     }
 
     //Method to generate the table header row
@@ -149,21 +166,23 @@ export default class TableContent extends Component {
                     continue;
                 } else if (tableBodyPlaceholders[j] === 'Side Effects') {
                     contentInputs.push(
-                        <Fragment key={j}>
-                            <Input
+                        <Input key={j} fluid transparent className='content-input content-dropdown'>
+                            <Dropdown
                                 fluid
-                                transparent
-                                list='side-effects'
+                                search
+                                selection
+                                multiple
+                                allowAdditions
+                                icon=''
+                                options={this.state.sideEffectsOptions}
                                 placeholder={tableBodyPlaceholders[j]}
                                 onChange={this.handleTableBodyChange}
                                 rowindex={i}
                                 value={values[i][tableBodyPlaceholders[j]]}
-                                className='content-input'
+                                onAddItem={this.handleAddition}
+                                className='side-effects'
                             />
-                            <datalist id='side-effects'>
-                                {sideEffects}
-                            </datalist>
-                        </Fragment>
+                        </Input>
                     );
                 } else {
                     contentInputs.push(

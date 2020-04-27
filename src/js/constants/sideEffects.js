@@ -200,5 +200,5 @@ const rawSideEffects = [
 ];
 
 export const sideEffects = rawSideEffects.map((se, index) => {
-    return <option key={index} value={se} />
+    return { key: index, value: se, text: se }
 });

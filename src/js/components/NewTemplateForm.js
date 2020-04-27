@@ -18,8 +18,6 @@ class NewTemplateForm extends Component {
         this.state = {
             bodySystems: [],
             diseases: [],
-            questionTypes: [],
-            isLoaded: false,
             showOtherBodySystem: false,
             showOtherDisease: false,
         }
@@ -76,8 +74,6 @@ class NewTemplateForm extends Component {
             this.setState({
                 bodySystems: allBodySystems,
                 diseases: allDiseases,
-                questionTypes: allQuestionTypes,
-                isLoaded: true,
             });
         });
     }
@@ -125,60 +121,68 @@ class NewTemplateForm extends Component {
     }
 
     addQuestion() {
-        this.context.state.questions.push({
-            question: '',
+        let numQuestions = this.context.state.numQuestions;
+        let numEdges = this.context.state.numEdges;
+
+        const numZeros = 4 - numQuestions.toString().length;
+        const qId = '0'.repeat(numZeros) + numQuestions.toString();
+
+        this.context.state.nodes[qId] = {
+            id: qId,
+            text: '',
             type: '',
-            index: this.context.state.questions.length,
-            answerTemplate: {},
-            children: [],
-        });
-        this.context.onContextChange('questions', this.context.state.questions);
+            order: numQuestions,
+            answerInfo: {},
+        };
+
+        this.context.state.edges[numEdges] = {
+            from: '0000',
+            to: qId,
+        };
+        this.context.state.graph[qId] = [];
+        this.context.state.graph['0000'].push(numEdges);
+        
+        this.context.onContextChange('nodes', this.context.state.nodes);
+        this.context.onContextChange('graph', this.context.state.graph);
+        this.context.onContextChange('edges', this.context.state.edges);
+        this.context.onContextChange('numQuestions', numQuestions + 1);
+        this.context.onContextChange('numEdges', numEdges + 1);
     }
 
     render() {
-        const { bodySystems, diseases, questionTypes, isLoaded, showOtherBodySystem, showOtherDisease } = this.state;
+        const { bodySystems, diseases, showOtherBodySystem, showOtherDisease } = this.state;
+        console.log(this.context.state)
 
-        const bodySystemOptions = isLoaded ? bodySystems.map((bodySystem, index) => {
-            return {
-                key: index,
+        const bodySystemOptions = [{
+            value: OTHER_TEXT,
+            text: OTHER_TEXT,
+        }];
+        bodySystems.forEach(bodySystem => {
+            bodySystemOptions.push({
                 value: bodySystem,
                 text: bodySystem,
-            };
-        }) : [];
-
-        if (isLoaded) {
-            bodySystemOptions.push({
-                value: OTHER_TEXT,
-                text: OTHER_TEXT,
             });
-        }
+        });
 
-        const diseaseOptions = isLoaded ? diseases.map((disease, index) => {
-            return {
-                key: index,
+        const diseaseOptions = [{
+            value: OTHER_TEXT,
+            text: OTHER_TEXT,
+        }];
+        diseases.forEach(disease => {
+            diseaseOptions.push({
                 value: disease,
                 text: disease,
-            };
-        }) : [];
-
-        if (isLoaded) {
-            diseaseOptions.push({
-                value: OTHER_TEXT,
-                text: OTHER_TEXT,
             });
+        });
+
+        const questionsDisplay = [];
+        const rootEdges = this.context.state.graph['0000'];
+        for (let edge in rootEdges) {
+            const qId = this.context.state.edges[rootEdges[edge].toString()].to;
+            questionsDisplay.push(
+                <TemplateQuestion key={qId} qId={qId} />
+            );
         }
-
-        const questionTypeOptions = isLoaded ? questionTypes.map((type, index) => {
-            return {
-                key: index,
-                value: type,
-                text: type,
-            }
-        }) : [];
-
-        const questionsDisplay = this.context.state.questions.map((category, index) =>
-            <TemplateQuestion key={index} index={index} options={questionTypeOptions} />
-        );
 
         return (
             <Segment className='container'>

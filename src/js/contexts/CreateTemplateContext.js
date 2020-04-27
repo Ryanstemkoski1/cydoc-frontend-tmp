@@ -8,7 +8,15 @@ export class CreateTemplateStore extends Component {
         title: '',
         disease: '',
         bodySystem: '',
-        questions: [],
+        numQuestions: 1,
+        numEdges: 1,
+        graph: {
+            '0000': [],
+        },
+        nodes: {
+            '0000': {id: 'root'},
+        },
+        edges: {},
     }
 
     onContextChange = (attribute, value) => { 

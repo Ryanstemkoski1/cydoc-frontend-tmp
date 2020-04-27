@@ -12,8 +12,6 @@ export default class MedicationsContent extends Component {
             top_drugs: []
         }
     }
-    componentDidMount() {  
-    }
 
     render() {
         const category = 'Medications';
@@ -21,30 +19,24 @@ export default class MedicationsContent extends Component {
         
         return (
             <HPIContext.Consumer>
-            {(context) => {
-                return (
-                <div>
-                    <h5 className="scroll">
-                        scroll &rarr;
-                    </h5>
-                    <TableContent
-                        tableHeaders={medications.fields}
-                        tableBodyPlaceholders={placeholders}
-                        category = {category}
-                        values={context["Medications"]}
-                        onTableBodyChange={context.onContextChange.bind(context, "Medications")}
-                        pop={true}
-                        mobile={this.props.mobile}
-                        name={"medication"}
-                        dropdown={true}
-                        options={drug_names}
-                        dropdown_placeholder={"Drug Name"}
-                    />
-                </div>
-                )
-            }}
+                {(context) => {
+                    return (
+                        <TableContent
+                            tableHeaders={medications.fields}
+                            tableBodyPlaceholders={placeholders}
+                            category = {category}
+                            values={context['Medications']}
+                            onTableBodyChange={context.onContextChange.bind(context, 'Medications')}
+                            pop={true}
+                            mobile={this.props.mobile}
+                            name='medication'
+                            dropdown={true}
+                            options={drug_names}
+                            dropdown_placeholder='Drug Name'
+                        />
+                    );
+                }}
             </HPIContext.Consumer>
-            
         );
     }
 }

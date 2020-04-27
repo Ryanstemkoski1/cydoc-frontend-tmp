@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Container, Grid, Segment, Form, Input, Button, Dropdown } from 'semantic-ui-react';
+import { Container, Grid, Segment, Input, Button, Dropdown } from 'semantic-ui-react';
 import CreateTemplateContext from '../contexts/CreateTemplateContext';
+import TemplateAnswer from './TemplateAnswer';
+import questionTypes from '../constants/questionTypes';
 import '../../css/components/newTemplate.css';
 
 class TemplateQuestion extends Component {
@@ -8,111 +10,116 @@ class TemplateQuestion extends Component {
 
     constructor(props, context) {
         super(props, context);
-        this.state = {
-            showAddChildButton: false,
-        }
         this.saveQuestion = this.saveQuestion.bind(this);
         this.saveQuestionType = this.saveQuestionType.bind(this);
-        this.addChildQuestion = this.addChildQuestion.bind(this);
+        this.getQuestionTypes = this.getQuestionTypes.bind(this);
     }
 
-    saveQuestion = (event, { value, index }) => {
-        this.context.state.questions[index].question = value;
-        this.context.onContextChange('questions', this.context.state.questions);
+    saveQuestion = (event, { value, qid }) => {
+        this.context.state.nodes[qid].text = value;
+        this.context.onContextChange('nodes', this.context.state.nodes);
     }
 
-    saveQuestionType = (event, { value, index }) => {
-        const addChildButton = document.getElementById('add-child-question');
-        if (value === 'YES-NO') {
-            addChildButton.style.display = 'block';
-            this.setState({
-                showAddChildButton: true,
-            })
-            this.context.state.questions[index].type = value;
-            this.context.onContextChange('questions', this.context.state.questions);
-        } else {
-            addChildButton.style.display = 'none';
-            this.setState({
-                showAddChildButton: false,
-            })
-            this.context.state.questions[index].type = value;
-            this.context.onContextChange('questions', this.context.state.questions);
+    saveQuestionType = (event, { value, qid }) => {
+        let context = this.context.state;
+        context.nodes[qid].type = value;
+        context.nodes[qid].answerInfo = {};
+
+        if (value === questionTypes.basic['YES-NO'] || value === questionTypes.basic['NO-YES']) {
+            context.nodes[qid].answerInfo = {
+                yesResponse: '',
+                noResponse: '',
+            };
+        } else if (value === questionTypes.basic['SHORT-TEXT']
+        || value == questionTypes.basic['NUMBER']
+        || value == questionTypes.basic['TIME']
+        || value == questionTypes.basic['LIST-TEXT']) {
+            context.nodes[qid].answerInfo = {
+                startResponse: '',
+                endResponse: '',
+            };
+        } else if (value === questionTypes.basic['CLICK-BOXES']) {
+            context.nodes[qid].answerInfo = {
+                options: ['', '', ''],
+                startResponse: '',
+                endResponse: '',
+            };
+        } else if (value === questionTypes.advanced['FH-POP']
+        || value === questionTypes.advanced['PMH-POP']
+        || value === questionTypes.advanced['MEDS-POP']) {
+            context.nodes[qid].answerInfo = {
+                options: ['', '', ''],
+            };
         }
+
+        this.context.onContextChange('nodes', context.nodes);
     }
 
-    addChildQuestion = (event, { index }) => {
-        this.context.state.questions[index].children.push({
-            question: '',
-            type: '',
-            index: this.context.state.questions[index].children.length,
-            answerTemplate: {},
-            children: [],
-        });
-        this.context.onContextChange('questions', this.context.state.questions);
+    getQuestionTypes() {
+        const { qId } = this.props;
+
+        const allTypes = [];
+        for (let qType in questionTypes.basic) {
+            allTypes.push({
+                value: questionTypes.basic[qType],
+                text: questionTypes.basic[qType],
+            });
+        }
+        for (let qType in questionTypes.advanced) {
+            allTypes.push({
+                value: questionTypes.advanced[qType],
+                text: questionTypes.advanced[qType],
+            });
+        }
+
+        return (
+            <Dropdown
+                search
+                selection
+                placeholder='Question Type'
+                qid={qId}
+                options={allTypes}
+                value={this.context.state.nodes[qId].type}
+                onChange={this.saveQuestionType}
+                className='question-type'
+            />
+        );
     }
 
     render() {
-        const { index, options } = this.props;
+        const { qId } = this.props;
+        const questionTypeOptions = this.getQuestionTypes();
 
         return (
-            <Container key={index} className='question-container'>
+            <Container key={qId} className='question-container'>
                 <Segment>
-                    <Form>
-                        <Grid>
-                            <Grid.Column width={1} verticalAlign='middle'>
-                                <Button
-                                    basic
-                                    fluid
-                                    icon='move'
-                                    className='move-question'
+                    <Grid>
+                        <Grid.Column width={1} verticalAlign='middle'>
+                            <Button
+                                basic
+                                fluid
+                                icon='move'
+                                className='move-question'
+                            />
+                        </Grid.Column>
+                        <Grid.Column width={15}>
+                            <Grid.Row className='question-info'>
+                                <Input
+                                    qid={qId}
+                                    placeholder='Question'
+                                    value={this.context.state.nodes[qId].text}
+                                    onChange={this.saveQuestion}
+                                    transparent
+                                    size='large'
+                                    className='question-input'
                                 />
-                            </Grid.Column>
-                            <Grid.Column width={15}>
-                                <Grid.Row className='question-info'>
-                                    <Input
-                                        index={index}
-                                        placeholder='Question'
-                                        value={this.context.state.questions[index].question}
-                                        onChange={this.saveQuestion}
-                                        transparent
-                                        size='large'
-                                        className='question-input'
-                                    />
-                                    <Dropdown
-                                        search
-                                        selection
-                                        clearable
-                                        placeholder='Question type'
-                                        index={index}
-                                        value={this.context.state.questions[index].type}
-                                        options={options}
-                                        onChange={this.saveQuestionType}
-                                        className='question-type'
-                                    />
-                                </Grid.Row>
-                                <Grid.Row>
-                                    <Input
-                                        fluid
-                                        transparent
-                                        size='large'
-                                        placeholder='Answer'
-                                        className='answer-input'
-                                    />
-                                </Grid.Row>
-                                <Grid.Row>
-                                    <Button
-                                        basic
-                                        icon='add'
-                                        labelPosition='left'
-                                        index={index}
-                                        onClick={this.addChildQuestion}
-                                        content='Add follow-up question'
-                                        id='add-child-question'
-                                    />
-                                </Grid.Row>
-                            </Grid.Column>
-                        </Grid>
-                    </Form>
+                                {questionTypeOptions}
+                            </Grid.Row>
+                            <Grid.Row>
+                                <TemplateAnswer qId={qId} type={this.context.state.nodes[qId].type} />
+                            </Grid.Row>
+                        </Grid.Column>
+                    </Grid>
                 </Segment>
             </Container>
         );

@@ -75,10 +75,6 @@
   justify-content: space-between;
 }
 
-.answer-input {
-  margin: 2rem .5rem .5rem;
-}
-
 .ui.header.body-system {
   margin-top: .5rem;
 }
@@ -97,7 +93,55 @@
   margin-top: .5rem;
 }
 
-#add-child-question {
-  display: none;
+.add-child-question {
+  margin: 0 0 1rem 5.5rem;
+}
+
+.ui.button.add-child-button {
   margin-top: 1rem;
+}
+
+.ui.segment.yes-no-answer {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin-top: 1.5rem;
+}
+
+.answer-label {
+  padding: .67857143em 1em;
+  color: rgba(0, 0, 0, .95);
+  background-color: #ecf3f5;
+  border: 1px solid #d4d4d5;
+  border-radius: .5rem;
+  letter-spacing: 0;
+  font-weight: bold;
+}
+
+.answer-label-if-no {
+  padding-right: 1.4rem;
+}
+
+.ui.input.yes-no-input {
+  width: 80%;
+}
+
+.ui.input.fill-in-the-blank-input {
+  width: 40%;
+}
+
+.button-option {
+  margin-top: .5rem;
+}
+
+.ui.button.minus-button {
+  padding: .5rem;
+}
+
+.ui.button.add-option {
+  margin: .5rem 0 1.5rem;
+}
+
+.ui.button.add-option-pop {
+  margin: .5rem 0;
 }

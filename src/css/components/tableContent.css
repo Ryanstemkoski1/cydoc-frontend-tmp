@@ -12,6 +12,15 @@
 
 .ui.input.content-input {
     margin: .75rem 1rem 0 1.5rem;
+    letter-spacing: 0;
+}
+
+.ui.input.content-input-computer {
+    letter-spacing: 0;
+}
+
+.ui.input.content-dropdown {
+    padding-bottom: 0;
 }
 
 .ui.input.first-content-input {
@@ -32,4 +41,30 @@
 
 .table-display {
     overflow-x: auto;
+}
+
+.table-row-text {
+    outline: transparent;
+    border: none;
+    width: 100%;
+    height: 100%;
+    resize: none;
+}
+
+.ui.selection.dropdown.side-effects,
+.ui.selection.dropdown.side-effects:hover,
+.ui.active.selection.dropdown.side-effects,
+.ui.upward.active.selection.dropdown.side-effects:hover {
+    border: none;
+    box-shadow: none;
+}
+
+.ui.multiple.search.dropdown.side-effects > .text {
+    margin-left: 0;
+    letter-spacing: 0;
+    padding-left: 0;
+}
+
+.ui.multiple.search.dropdown.side-effects > input.search {
+    margin-left: -.4rem;
 }

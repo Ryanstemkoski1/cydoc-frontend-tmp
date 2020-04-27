@@ -7,9 +7,9 @@ export const allergies = {
 
 export const medications = {
     "fields": ['Drug Name', 'Start Date', 'Schedule', 'Dose', 'Reason for Taking', "Side Effects" , 'Comments'],
-    "state": [{ "Drug Name": "", "Start Date": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": "", "Comments": "" },
-    { "Drug Name": "", "Start Date": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": "", "Comments": "" },
-    { "Drug Name": "", "Start Date": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": "", "Comments": "" }]
+    "state": [{ "Drug Name": "", "Start Date": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": [], "Comments": "" },
+    { "Drug Name": "", "Start Date": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": [], "Comments": "" },
+    { "Drug Name": "", "Start Date": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": [], "Comments": "" }]
 };
 
 export const surgicalHistory = {
