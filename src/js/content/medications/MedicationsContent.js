@@ -2,17 +2,9 @@ import React, { Component } from 'react';
 import TableContent from '../../components/TableContent';
 import { medications } from '../../constants/States';
 import HPIContext from '../../contexts/HPIContext';
-import drug_names from '../../constants/drugNames';
 
 //Component that manages content for the Medications page
 export default class MedicationsContent extends Component {
-    constructor(context) {
-        super(context) 
-        this.state = {
-            top_drugs: []
-        }
-    }
-
     render() {
         const category = 'Medications';
         const placeholders = medications.fields;
@@ -30,9 +22,6 @@ export default class MedicationsContent extends Component {
                             pop={true}
                             mobile={this.props.mobile}
                             name='medication'
-                            dropdown={true}
-                            options={drug_names}
-                            dropdown_placeholder='Drug Name'
                         />
                     );
                 }}

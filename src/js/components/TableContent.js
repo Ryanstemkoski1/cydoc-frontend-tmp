@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { TableBodyRow } from './TableBodyRow';
 import HPIContext from '../contexts/HPIContext';
 import { sideEffects } from '../constants/sideEffects';
+import drug_names from '../constants/drugNames';
 import '../../css/components/tableContent.css';
  
 //Component for a table layout
@@ -15,13 +16,15 @@ export default class TableContent extends Component {
         super(props, context);
         this.state = {
             sideEffectsOptions: sideEffects,
+            medicationOptions: drug_names,
         }
         // TODO: add back addRow functionality
         this.addRow = this.addRow.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
-        this.handleAddition = this.handleAddition.bind(this);
+        this.handleAdditionSideEffects = this.handleAdditionSideEffects.bind(this);
+        this.handleAdditionMedication = this.handleAdditionMedication.bind(this);
     }
 
     //modify the current values in the table to reflect changes
@@ -32,11 +35,21 @@ export default class TableContent extends Component {
         this.props.onTableBodyChange(newState);
     }
 
-    handleAddition(event, { value }) {
+    handleAdditionSideEffects(event, { value }) {
         this.setState((prevState) => ({
             sideEffectsOptions: [
                 {text: value, value},
                 ...prevState.sideEffectsOptions
+            ],
+        }));
+    }
+
+    handleAdditionMedication(event, { value }) {
+        this.setState((prevState) => ({
+            medicationOptions: [
+                prevState.medicationOptions[0],
+                {text: value, value},
+                ...prevState.medicationOptions
             ],
         }));
     }
@@ -49,11 +62,10 @@ export default class TableContent extends Component {
                 rowindex={parseInt(rowindex)}
                 tableBodyPlaceholders={this.props.tableBodyPlaceholders}
                 onTableBodyChange={this.handleTableBodyChange}
-                onAddItem={this.handleAddition}
+                onAddSideEffect={this.handleAdditionSideEffects}
+                onAddMedication={this.handleAdditionMedication}
                 values={this.props.values}
-                dropdown={this.props.dropdown}
-                options={this.props.options}
-                dropdown_placeholder={this.props.dropdown_placeholder}
+                medicationOptions={this.state.medicationOptions}
                 sideEffectsOptions={this.state.sideEffectsOptions}
             />
         )
@@ -105,11 +117,24 @@ export default class TableContent extends Component {
                         <Form className='inline-form'>
                             <Input
                                 transparent
-                                placeholder={tableBodyPlaceholders[0]}
-                                onChange={this.handleTableBodyChange}
-                                rowindex={i}
-                                value={values[i][tableBodyPlaceholders[0]]}
-                            />
+                                className='content-input content-dropdown medication'
+                            >
+                                <Dropdown
+                                    fluid
+                                    search
+                                    selection
+                                    clearable
+                                    allowAdditions
+                                    icon=''
+                                    options={this.state.medicationOptions}
+                                    placeholder={tableBodyPlaceholders[0]}
+                                    onChange={this.handleTableBodyChange}
+                                    rowindex={i}
+                                    value={values[i][tableBodyPlaceholders[0]]}
+                                    onAddItem={this.handleAdditionMedication}
+                                    className='side-effects'
+                                />
+                            </Input>
                             {' for '}
                             <Input
                                 transparent
@@ -179,7 +204,7 @@ export default class TableContent extends Component {
                                 onChange={this.handleTableBodyChange}
                                 rowindex={i}
                                 value={values[i][tableBodyPlaceholders[j]]}
-                                onAddItem={this.handleAddition}
+                                onAddItem={this.handleAdditionSideEffects}
                                 className='side-effects'
                             />
                         </Input>

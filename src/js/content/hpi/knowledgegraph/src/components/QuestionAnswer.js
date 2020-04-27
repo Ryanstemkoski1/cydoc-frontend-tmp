@@ -161,6 +161,7 @@ class QuestionAnswer extends React.Component {
             button_map.push(<MedicationsContent
                 key={this.props.question}
                 pop={true}
+                mobile={collapseTabs}
             />)
         }
         else if (responseType === "PSH-BLANK") {

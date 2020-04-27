@@ -23,6 +23,10 @@
     padding-bottom: 0;
 }
 
+.ui.input.medication {
+    min-width: 10rem;
+}
+
 .ui.input.first-content-input {
     margin: 0 1rem 0 1.5rem;
 }

@@ -1,7 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import {Dropdown, Header, Icon, Menu} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import {Link} from "react-router-dom";
 import "../content/hpi/knowledgegraph/src/css/App.css";
 import AuthContext from "../contexts/AuthContext";
 import {DEFAULT_NAV_MENU_MOBILE_BP, LOGGEDIN_NAV_MENU_MOBILE_BP} from "../constants/breakpoints.js";

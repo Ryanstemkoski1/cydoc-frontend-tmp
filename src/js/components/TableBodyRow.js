@@ -5,18 +5,14 @@ import '../../css/components/tableContent.css';
 
 //Controlled component for a row in a TableContent component
 export class TableBodyRow extends Component {
-    render() {
-        const {values, rowindex, onTableBodyChange, onAddItem, dropdown, dropdown_placeholder, options, sideEffectsOptions} = this.props;
+    getCell(placeholder) {
+        const {values, rowindex, onTableBodyChange, onAddSideEffect, onAddMedication, medicationOptions, sideEffectsOptions} = this.props;
 
-        //returns a Table.Row with a cell for each item in tableBodyPlaceholders
-        var tableRows = this.props.tableBodyPlaceholders.map((placeholder, index) => {
+        let cell;
 
-            return (
-                placeholder === 'Side Effects' ? (
-                <Table.Cell
-                    key={index}
-                    verticalAlign='top'
-                >
+        switch (placeholder) {
+            case 'Side Effects': {
+                cell = (
                     <Input
                         fluid
                         className='content-input-computer content-dropdown'
@@ -33,13 +29,40 @@ export class TableBodyRow extends Component {
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
-                            onAddItem={onAddItem}
+                            onAddItem={onAddSideEffect}
                             className='side-effects'
                         />
                     </Input>
-                </Table.Cell>
-            ) : (
-                <Table.Cell key={index}>
+                );
+                break;
+            }
+            case 'Drug Name': {
+                cell = (
+                    <Input
+                        fluid
+                        className='content-input-computer content-dropdown'
+                    >
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            clearable
+                            allowAdditions
+                            icon=''
+                            options={medicationOptions}
+                            placeholder={placeholder}
+                            onChange={onTableBodyChange}
+                            rowindex={rowindex}
+                            value={values[rowindex][placeholder]}
+                            onAddItem={onAddMedication}
+                            className='side-effects medication'
+                        />
+                    </Input>
+                );
+                break;
+            }
+            default: {
+                cell = (
                     <TextArea
                         rows={3}
                         placeholder={placeholder}
@@ -48,27 +71,25 @@ export class TableBodyRow extends Component {
                         value={values[rowindex][placeholder]}
                         className='table-row-text'
                     />
+                );
+                break;
+            }
+        }
+        return cell;
+    }
+
+    render() {
+        //returns a Table.Row with a cell for each item in tableBodyPlaceholders
+        const { tableBodyPlaceholders } = this.props;
+
+        const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
+            return (
+                <Table.Cell key={index}>
+                    {this.getCell(placeholder)}
                 </Table.Cell>
             )
-            );
         });
 
-        if (dropdown) {
-            const key = tableRows[0].key
-            tableRows[0] = <Table.Cell key={key}>
-                <Dropdown 
-                    placeholder={dropdown_placeholder}
-                    fluid
-                    search
-                    selection
-                    clearable
-                    options={options}
-                    onChange={onTableBodyChange}
-                    rowindex={rowindex}
-                    value={values[rowindex][dropdown_placeholder]}
-                />
-            </Table.Cell> 
-        }
         return (
             <Table.Row>
                 {tableRows}

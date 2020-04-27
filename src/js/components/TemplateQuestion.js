@@ -31,9 +31,9 @@ class TemplateQuestion extends Component {
                 noResponse: '',
             };
         } else if (value === questionTypes.basic['SHORT-TEXT']
-        || value == questionTypes.basic['NUMBER']
-        || value == questionTypes.basic['TIME']
-        || value == questionTypes.basic['LIST-TEXT']) {
+        || value === questionTypes.basic['NUMBER']
+        || value === questionTypes.basic['TIME']
+        || value === questionTypes.basic['LIST-TEXT']) {
             context.nodes[qid].answerInfo = {
                 startResponse: '',
                 endResponse: '',
