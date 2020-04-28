@@ -10,9 +10,14 @@ class TemplateQuestion extends Component {
 
     constructor(props, context) {
         super(props, context);
+        this.state = {
+            selectedMore: false,
+        };
         this.saveQuestion = this.saveQuestion.bind(this);
         this.saveQuestionType = this.saveQuestionType.bind(this);
         this.getQuestionTypes = this.getQuestionTypes.bind(this);
+        this.getAdvancedDropdown = this.getAdvancedDropdown.bind(this);
+        this.removeAdvancedDropdown = this.removeAdvancedDropdown.bind(this);
     }
 
     saveQuestion = (event, { value, qid }) => {
@@ -58,19 +63,46 @@ class TemplateQuestion extends Component {
     getQuestionTypes() {
         const { qId } = this.props;
 
+        const basicTypes = [];
         const allTypes = [];
+        let options = [];
+
         for (let qType in questionTypes.basic) {
-            allTypes.push({
-                value: questionTypes.basic[qType],
+            basicTypes.push({
+                key: questionTypes.basic[qType],
                 text: questionTypes.basic[qType],
+                value: questionTypes.basic[qType],
+            });
+            allTypes.push({
+                key: questionTypes.basic[qType],
+                text: questionTypes.basic[qType],
+                value: questionTypes.basic[qType],
             });
         }
+
         for (let qType in questionTypes.advanced) {
             allTypes.push({
-                value: questionTypes.advanced[qType],
+                key: questionTypes.advanced[qType],
                 text: questionTypes.advanced[qType],
+                value: questionTypes.advanced[qType],
             });
         }
+
+        basicTypes.push({
+            key: 'More',
+            text: 'More...',
+            value: 'More...',
+            onClick: this.getAdvancedDropdown,
+        })
+
+        allTypes.push({
+            key: 'Less',
+            text: 'Less...',
+            value: 'Less...',
+            onClick: this.removeAdvancedDropdown,
+        })
+
+        options = this.state.selectedMore ? allTypes : basicTypes;
 
         return (
             <Dropdown
@@ -78,12 +110,25 @@ class TemplateQuestion extends Component {
                 selection
                 placeholder='Question Type'
                 qid={qId}
-                options={allTypes}
+                direction='left'
+                options={options}
                 value={this.context.state.nodes[qId].type}
                 onChange={this.saveQuestionType}
                 className='question-type'
             />
         );
+    }
+
+    getAdvancedDropdown() {
+        this.setState({
+            selectedMore: true,
+        });
+    }
+
+    removeAdvancedDropdown() {
+        this.setState({
+            selectedMore: false,
+        });
     }
 
     render() {

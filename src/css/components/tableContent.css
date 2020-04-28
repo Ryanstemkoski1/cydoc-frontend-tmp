@@ -15,6 +15,11 @@
     letter-spacing: 0;
 }
 
+.ui.input.content-input-surgical {
+    letter-spacing: 0;
+    width: 90%;
+}
+
 .ui.input.content-input-computer {
     letter-spacing: 0;
 }
@@ -71,4 +76,10 @@
 
 .ui.multiple.search.dropdown.side-effects > input.search {
     margin-left: -.4rem;
+}
+
+.ui.dropdown.condition-input {
+    font-size: 15px;
+    margin-bottom: 5px;
+    outline: none;
 }

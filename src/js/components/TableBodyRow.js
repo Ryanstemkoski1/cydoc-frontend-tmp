@@ -6,11 +6,36 @@ import '../../css/components/tableContent.css';
 //Controlled component for a row in a TableContent component
 export class TableBodyRow extends Component {
     getCell(placeholder) {
-        const {values, rowindex, onTableBodyChange, onAddSideEffect, onAddMedication, medicationOptions, sideEffectsOptions} = this.props;
+        const {values, rowindex, onTableBodyChange, onAddSideEffect, onAddMedication, onAddProcedure, medicationOptions, sideEffectsOptions, proceduresOptions} = this.props;
 
         let cell;
 
         switch (placeholder) {
+            case 'Procedure': {
+                cell = (
+                    <Input
+                        fluid
+                        className='content-input-computer content-dropdown'
+                    >
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            clearable
+                            allowAdditions
+                            icon=''
+                            options={proceduresOptions}
+                            placeholder={placeholder}
+                            onChange={onTableBodyChange}
+                            rowindex={rowindex}
+                            value={values[rowindex][placeholder]}
+                            onAddItem={onAddProcedure}
+                            className='side-effects'
+                        />
+                    </Input>
+                );
+                break;
+            }
             case 'Side Effects': {
                 cell = (
                     <Input
