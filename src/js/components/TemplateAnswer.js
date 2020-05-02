@@ -3,6 +3,7 @@ import { Input, Segment, Button } from 'semantic-ui-react';
 import CreateTemplateContext from '../contexts/CreateTemplateContext';
 import TemplateQuestion from './TemplateQuestion';
 import questionTypes from '../constants/questionTypes';
+import diseaseCodes from '../constants/diseaseCodes';
 
 class TemplateAnswer extends Component {
     static contextType = CreateTemplateContext;
@@ -25,9 +26,12 @@ class TemplateAnswer extends Component {
     addChildQuestion = (event, { parent }) => {
         let numQuestions = this.context.state.numQuestions;
         let numEdges = this.context.state.numEdges;
+        const disease = this.context.state.disease;
+        const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
+        const randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
 
         const numZeros = 4 - numQuestions.toString().length;
-        const childId = '0'.repeat(numZeros) + numQuestions.toString();
+        const childId = diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
 
         this.context.state.nodes[childId] = {
             id: childId,
@@ -146,9 +150,8 @@ class TemplateAnswer extends Component {
         let childQuestions;
 
         if (type === questionTypes.basic['YES-NO']) {
-            childQuestions = this.context.state.graph[qId].map(childQ => {
-                const numZeros = 4 - childQ.toString().length;
-                const childId = '0'.repeat(numZeros) + childQ.toString();
+            childQuestions = this.context.state.graph[qId].map(edge => {
+                const childId = this.context.state.edges[edge].to;
                 return <TemplateQuestion key={childId} qId={childId} />
             });
 
@@ -189,9 +192,8 @@ class TemplateAnswer extends Component {
                 </Segment>
             );
         } else if (type === questionTypes.basic['NO-YES']) {
-            childQuestions = this.context.state.graph[qId].map(childQ => {
-                const numZeros = 4 - childQ.toString().length;
-                const childId = '0'.repeat(numZeros) + childQ.toString();
+            childQuestions = this.context.state.graph[qId].map(edge => {
+                const childId = this.context.state.edges[edge].to;
                 return <TemplateQuestion key={childId} qId={childId} />
             });
 

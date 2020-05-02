@@ -1,11 +1,12 @@
 import React, { Component, createRef } from 'react';
-import { Button, Form, Header, Segment, Input, Grid, Dropdown } from 'semantic-ui-react';
+import { Button, Form, Header, Segment, Input, Grid, Dropdown, Message } from 'semantic-ui-react';
 import CreateTemplateContext from '../contexts/CreateTemplateContext';
 import '../../css/components/newTemplate.css';
 import '../../css/components/navMenu.css';
 import TemplateQuestion from './TemplateQuestion';
 import API from '../content/hpi/knowledgegraph/src/API';
 import disease_abbrevs from '../content/hpi/knowledgegraph/src/components/data/disease_abbrevs';
+import diseaseCodes from '../constants/diseaseCodes';
 
 const OTHER_TEXT = 'Other (specify below)';
 
@@ -20,6 +21,7 @@ class NewTemplateForm extends Component {
             diseases: [],
             showOtherBodySystem: false,
             showOtherDisease: false,
+            diseaseEmpty: true,
         }
         this.saveTitle = this.saveTitle.bind(this);
         this.saveBodySystem = this.saveBodySystem.bind(this);
@@ -103,29 +105,48 @@ class NewTemplateForm extends Component {
 
     saveDisease(event, { value }) {
         const otherInput = document.getElementById('other-disease');
+        const errorMessage = document.getElementById('disease-error-message');
+
         if (value === OTHER_TEXT) {
             otherInput.style.display = 'inline-block';
             this.setState({
                 showOtherDisease: true,
+                diseaseEmpty: true,
             })
             this.context.onContextChange('disease', '');
         } else if (this.state.diseases.includes(value)) {
             otherInput.style.display = 'none';
+            errorMessage.style.display = 'none';
             this.setState({
                 showOtherDisease: false,
+                diseaseEmpty: false,
             })
             this.context.onContextChange('disease', value);
         } else {
+            if (value === '') {
+                this.setState({ diseaseEmpty: true });
+            } else {
+                errorMessage.style.display = 'none';
+                this.setState({ diseaseEmpty: false });
+            }
             this.context.onContextChange('disease', value);
         }
     }
 
     addQuestion() {
+        if (this.state.diseaseEmpty) {
+            document.getElementById('disease-error-message').style.display = 'inline-block';
+            return;
+        }
+
         let numQuestions = this.context.state.numQuestions;
         let numEdges = this.context.state.numEdges;
+        const disease = this.context.state.disease;
+        const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
+        const randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
 
         const numZeros = 4 - numQuestions.toString().length;
-        const qId = '0'.repeat(numZeros) + numQuestions.toString();
+        const qId = diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
 
         this.context.state.nodes[qId] = {
             id: qId,
@@ -243,7 +264,15 @@ class NewTemplateForm extends Component {
                         </Grid.Column>
                     </Grid>
                 </Form>
-                {questionsDisplay}
+                <Message
+                    compact
+                    negative
+                    content='Please choose a disease before adding questions.'
+                    id='disease-error-message'
+                />
+                <div>
+                    {questionsDisplay}
+                </div>
                 <Button
                     circular
                     icon='add'

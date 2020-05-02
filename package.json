@@ -14,6 +14,7 @@
     "react-dnd": "^10.0.2",
     "react-dnd-touch-backend": "^10.0.2",
     "react-dom": "^16.13.1",
+    "react-grid-layout": "^0.18.3",
     "react-masonry-component": "^6.2.1",
     "react-masonry-css": "^1.0.14",
     "react-numeric-input": "^2.2.3",
