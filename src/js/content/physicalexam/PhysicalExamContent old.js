@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
-import { Divider, Header, Form, Grid, Input, Button } from "semantic-ui-react";
+import { Form, Grid, Input, Button } from "semantic-ui-react";
 import PhysicalExamGroup from './PhysicalExamGroup';
-import { MyContext } from './PhysicalExamGroup';
-import SelectAllButton from './SelectAllButton'
+import constants from '../../constants/physical-exam-constants.json'
 import HPIContext from '../../contexts/HPIContext';
+import LungSounds from './widgets/LungSounds'
+import AbdomenExam from './widgets/AbdomenExam';
+import RightLeftWidget from './widgets/RightLeftWidget';
 //import NumericInput from 'react-numeric-input';
 
 //Component that manages content for the Physical Exam tab
@@ -13,66 +15,15 @@ export default class PhysicalExamContent extends React.Component {
 
     constructor(props) {
         super(props)
-        this.handleChange = this.handleChange.bind(this)
-        this.handleClick = this.handleClick.bind(this)
-    }
-
-    handleClick = (category, name, value) => {
-        const values = this.context["Physical Exam"]
-        values[category][name] = value
-        this.context.onContextChange("Physical Exam", values)
-    }
-
-    handleChange = (category, name, value) => {
-        const values = this.context["Physical Exam"]
-        values[category][name] = value
-        this.context.onContextChange("Physical Exam", values)
-    }
-
-    generateInput = (category, name, label = null, labelPosition = null) => {
-        return (
-            <Input
-                label={label}
-                labelPosition={labelPosition}
-                name={name}
-                value={this.context["Physical Exam"][category][name]}
-                onChange={(e, { name, value }) => this.handleChange(category, name, value)} />
-        )
-    }
-
-    generateNumericInput = (category, name, label = null, labelPosition = null) => {
-        return (
-            <Input
-                type="number"
-                label={label}
-                labelPosition={labelPosition}
-                style={{ width: "100px" }}
-                name={name}
-                value={this.context["Physical Exam"][category][name]}
-                onChange={(e, { name, value }) => this.handleChange(category, name, value)} />
-        )
-    }
-
-    generateButton = (category, name) => {
-        return (
-            <Button
-                toggle
-                ref={React.createRef()}
-                content={name}
-                name={name}
-                category={category}
-                active={this.context["Physical Exam"][category][name]}
-                onClick={(e, { name, active }) => this.handleChange(category, name, !active)} />
-        )
     }
 
     render() {
         return (
-            <Fragment>
+            <Fragment> <LungSounds /> <AbdomenExam /> <RightLeftWidget type={"Pulse"} /> <RightLeftWidget type={"Reflex"} />
                 <PhysicalExamGroup category="Vitals" abnormalFindings={false}>
-                    <MyContext.Consumer>
-                        {category =>
-                            <Form>
+                    <MyContext.Consumer> 
+                        {category => 
+                            <Form> 
                                 <Grid columns="equal">
                                     <Grid.Column>
                                         <h5>Blood Pressure (mmHg)</h5>
