@@ -1,8 +1,5 @@
 import React, { Fragment } from 'react';
-import { Divider, Header, Form, Grid, Input, Button } from "semantic-ui-react";
-import PhysicalExamGroup from './PhysicalExamGroup';
-import { MyContext } from './PhysicalExamGroup';
-import HPIContext from '../../contexts/HPIContext';
+import { Button } from "semantic-ui-react";
 //import NumericInput from 'react-numeric-input';
 
 //Component that manages content for the Physical Exam tab
@@ -23,7 +20,7 @@ export default class SelectAllButton extends React.Component {
                     onClick={(e, { active }) => {
                         React.Children.map(
                             this.props.children,
-                            (child) => this.props.handleClick(child.props.category, child.props.name, !active)
+                            (child) => this.props.handleClick(child.props.name, !active)
                         )
                     }}
                 />

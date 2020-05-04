@@ -1,6 +1,7 @@
 import React from 'react'
 import constants from '../constants/constants';
 import {allergies, medications, surgicalHistory, reviewOfSystems, physicalExam} from '../constants/States'
+import peConstants from '../constants/physical-exam-constants'
 import NotesContext from './NotesContext'
 
 const Context = React.createContext('yasa')
@@ -9,24 +10,48 @@ export class HPIStore extends React.Component {
 
     static contextType = NotesContext
 
-    state = {
-        "title": "Untitled Note",
-        _id: "yasa",
-        "Allergies": allergies.state,
-        "Medications": medications.state,
-        "Surgical History": surgicalHistory.state,
-        "Medical History": constants.MEDICAL_HISTORY.STATE,
-        "Family History": constants.FAMILY_HISTORY.STATE,
-        "Social History": constants.SOCIAL_HISTORY.STATE,
-        "Review of Systems": reviewOfSystems.state,
-        "Physical Exam": physicalExam.state,
-        "positivediseases": [],
-        "activeHPI": "",
-        "positivecategories": [],
-        hpi: {},
-        "plan": {},
-        step: 1
+    constructor(props) {
+        super(props)
+
+        let peState = {}
+        peConstants.sections.forEach((section) => {
+            let sectionState = {}
+            section.rows.forEach((row) => {
+                if (row.needsRightLeft) {
+                    row.findings.forEach((finding) => {
+                        sectionState[finding] = {left: false, active: false, right: false}
+                    })
+                } else {
+                    row.findings.forEach((finding) => {
+                        sectionState[finding] = false
+                    })
+                }
+            })
+            peState[section.name] = sectionState
+        })
+
+        this.state = {
+            "title": "Untitled Note",
+            _id: "yasa",
+            "Allergies": allergies.state,
+            "Medications": medications.state,
+            "Surgical History": surgicalHistory.state,
+            "Medical History": constants.MEDICAL_HISTORY.STATE,
+            "Family History": constants.FAMILY_HISTORY.STATE,
+            "Social History": constants.SOCIAL_HISTORY.STATE,
+            "Review of Systems": reviewOfSystems.state,
+            "Physical Exam": physicalExam.state,
+            "Physical Exam 2": peState,
+            "positivediseases": [],
+            "activeHPI": "",
+            "positivecategories": [],
+            hpi: {},
+            "plan": {},
+            step: 1
+        }
     }
+
+    
 
     onContextChange = (name, values) => { 
         this.setState({[name]: values});
