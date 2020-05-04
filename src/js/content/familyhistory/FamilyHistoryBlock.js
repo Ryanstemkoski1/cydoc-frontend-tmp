@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from "react";
-import {Form, Grid, TextArea, Button, Header} from "semantic-ui-react";
+import {Form, Grid, TextArea, Button, Header, Divider} from "semantic-ui-react";
 import HPIContext from "../../contexts/HPIContext"
 import ToggleButton from "../../components/ToggleButton";
 import FamilyHistoryDropdown from "./FamilyHistoryDropdown";
@@ -42,7 +42,7 @@ export default class FamilyHistoryBlock extends Component {
     }
 
     render() {
-        const { mobile, onChange, condition, familyMember, comments, index } = this.props;
+        const { mobile, onChange, condition, comments, index } = this.props;
         // array of dropdowns displayed on Family History Family Member column
         let dropdown_list = [];
         // variable range that changes when the user clicks the + (add member) button 
@@ -175,7 +175,8 @@ export default class FamilyHistoryBlock extends Component {
                             </Fragment>
                             : ""
                         }
-                    </div>
+                        <Divider style={{marginTop: 25}}/>
+                    </div> 
                 </div>
             )
         );

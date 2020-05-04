@@ -7,9 +7,9 @@ export const allergies = {
 
 export const medications = {
     "fields": ['Drug Name', 'Start Date', 'Schedule', 'Dose', 'Reason for Taking', "Side Effects" , 'Comments'],
-    "state": [{ "Drug Name": "", "Start Date": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": "", "Comments": "" },
-    { "Drug Name": "", "Start Date": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": "", "Comments": "" },
-    { "Drug Name": "", "Start Date": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": "", "Comments": "" }]
+    "state": [{ "Drug Name": "", "Start Date": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": [], "Comments": "" },
+    { "Drug Name": "", "Start Date": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": [], "Comments": "" },
+    { "Drug Name": "", "Start Date": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": [], "Comments": "" }]
 };
 
 export const surgicalHistory = {
@@ -31,7 +31,7 @@ export const reviewOfSystems = {
         "Cardiovascular/Hematological": {"Chest pain": "", "Palpitations": "", "High BP": "", "Low BP": "", "Murmurs": "", "Edema": "", "Varicose veins": "", "Claudication": "", "Easy bruising": "", "Easy bleeding": "", "Anemia": "", "Transfusions": ""},
         "Gastrointestinal": {"Δ appetite": "", "Nausea": "", "Vomiting": "", "Abdominal pain": "", "Dysphagia": "", "Heartburn": "", "Bloating": "", "Diarrhea": "", "Constipation": "", "Hematemesis": "", "Hemorrhoids": "", "Melena": "", "Hematochezia": ""},
         "Genitourinary": {"Urinary tract infection": "", "Δ stream": "", "Frequency": "", "Hesitancy": "", "Urgency": "", "Polyuria": "", "Hematuria": "", "Nocturia": "", "Incontinence": "", "Stones": ""},
-        "Genital/Sexual/Gynecological": {"Discharge": "", "Sores": "", "Itching": "", "STD": "", "Contraception": "", "Hernias": "", "Testicular/vaginal pain": "", "Testicular mass": "", "Breast pain": "", "Breast masses": "", "Breast lumps": "", "Discharge": "", "Period irregularities": "", "Pregnancy complications": ""},
+        "Genital/Sexual/Gynecological": {"Discharge": "", "Sores": "", "Itching": "", "STD": "", "Contraception": "", "Hernias": "", "Testicular/vaginal pain": "", "Testicular mass": "", "Breast pain": "", "Breast masses": "", "Breast lumps": "", "Period irregularities": "", "Pregnancy complications": ""},
         "Musculoskeletal": {"Osteoarthritis": "", "Rheumatoid arthritis": "", "Joint stiffness": "", "Joint pain": "", "Joint swelling": "", "Muscle cramps": "", "Muscle weakness": "", "Muscle pain": ""},
         "Skin/Hair/Nails": {"Rashes": "", "Itching": "", "Dryness": "", "Δ hair": "", "Δ nails": "", "Sores": "", "Lumps": "", "Moles": ""},
         "Endocrine": {"Heat intolerance": "", "Cold intolerance": "","Excessive sweating": "","Polydipsia": "","Polyphagia": "","Hyperthyroidism": "","Hypothyroidism": "","Diabetes": "","Skin color change": "","Excess hair growth": ""},
@@ -55,6 +55,10 @@ export const physicalExam = {
         "Gastrointestinal": {"Normal bowel sounds": false, "No bruits": false, "No hepatomegaly": false, "No splenomegaly": false, "Soft": false, "Nontender": false, "Nondistended": false, "No rebounding": false, "No guarding": false, "No masses": false, "Abnormal Findings": ""},
         "Tendon Reflexes": {"No dubbing": false, "No cyanosis": false, "No nail changes": false, "No edema": false, "Abnormal Findings": ""},
         "Extremities": {"Normal biceps": false, "Normal brachioradials": false, "Normal triceps": false, "Normal patellar": false, "Normal ankle jerk": false, "Normal plantar": false, "Abnormal Findings": ""},
-        "Skin": {"Warm and dry": false, "No visible lesions": false, "No tenting": false, "Normal turgor": false, "Abnormal Findings": ""}
+        "Skin": {"Warm and dry": false, "No visible lesions": false, "No tenting": false, "Normal turgor": false, "Abnormal Findings": ""},
+        "Lungs": {"Left Upper Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Upper Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Lingula": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Middle Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Left Lower Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Lower Lobe": {"wheezes": false, "rales": false, "rhonchi": false}},
+        "Abdomen": {"Right Upper Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Left Upper Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Right Lower Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Left Lower Quadrant": {"tenderness": false, "rebound": false, "guarding": false}},
+        "Pulse": [],
+        "Reflex": [],
     }
 }

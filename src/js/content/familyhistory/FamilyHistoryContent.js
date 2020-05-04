@@ -136,7 +136,7 @@ export default class FamilyHistoryContent extends Component {
                 <Fragment>
                     <GridContent
                         numColumns={4}
-                        contentHeader={<FamilyHistoryContentHeader />}
+                        contentHeader={<FamilyHistoryContentHeader />} 
                         rows={listItems}
                         question_type = {(this.props.response_choice ? "hpi" : "add_row")}
                         value_type = "Family History" 
@@ -144,9 +144,9 @@ export default class FamilyHistoryContent extends Component {
                         mobile={mobile}
                     />
                 </Fragment> : 
-                <Fragment  > 
-                    {listItems}
-                    <AddRowButton onClick={this.addRow} name={"family history"} />
+                <Fragment> 
+                    <div style={{marginTop: 25}}> </div>{listItems}
+                    {this.props.fh_pop ? "" : <AddRowButton onClick={this.addRow} name={"family history"} />}
                 </Fragment>
         );
     }

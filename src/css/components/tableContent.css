@@ -1,0 +1,85 @@
+.ui.input > input::-webkit-input-placeholder {
+    color: #DDDDDD;
+}
+
+.ui.input > input::-moz-placeholder {
+    color: #DDDDDD;
+}
+
+.ui.input > input:-ms-input-placeholder {
+    color: #DDDDDD;
+}
+
+.ui.input.content-input {
+    margin: .75rem 1rem 0 1.5rem;
+    letter-spacing: 0;
+}
+
+.ui.input.content-input-surgical {
+    letter-spacing: 0;
+    width: 90%;
+}
+
+.ui.input.content-input-computer {
+    letter-spacing: 0;
+}
+
+.ui.input.content-dropdown {
+    padding-bottom: 0;
+}
+
+.ui.input.medication {
+    min-width: 10rem;
+}
+
+.ui.input.first-content-input {
+    margin: 0 1rem 0 1.5rem;
+}
+
+.ui.styled.accordion .active.title {
+    border-bottom: 1px solid rgba(34, 36, 38, .05);
+}
+
+.inline-form {
+    display: inline;
+}
+
+.ui.styled.accordion .content {
+    padding: 0 1rem 1rem;
+}
+
+.table-display {
+    overflow-x: auto;
+}
+
+.table-row-text {
+    outline: transparent;
+    border: none;
+    width: 100%;
+    height: 100%;
+    resize: none;
+}
+
+.ui.selection.dropdown.side-effects,
+.ui.selection.dropdown.side-effects:hover,
+.ui.active.selection.dropdown.side-effects,
+.ui.upward.active.selection.dropdown.side-effects:hover {
+    border: none;
+    box-shadow: none;
+}
+
+.ui.multiple.search.dropdown.side-effects > .text {
+    margin-left: 0;
+    letter-spacing: 0;
+    padding-left: 0;
+}
+
+.ui.multiple.search.dropdown.side-effects > input.search {
+    margin-left: -.4rem;
+}
+
+.ui.dropdown.condition-input {
+    font-size: 15px;
+    margin-bottom: 5px;
+    outline: none;
+}

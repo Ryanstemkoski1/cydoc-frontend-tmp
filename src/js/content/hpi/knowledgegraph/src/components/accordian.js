@@ -1,6 +1,5 @@
 import React, {Component} from "react"
 import { Accordion, Icon } from 'semantic-ui-react'
-import DiseaseFormQuestions from "./DiseaseFormQuestions";
 
 export default class Accordian extends Component {
     // accordion is collapsed by default

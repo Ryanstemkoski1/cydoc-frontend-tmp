@@ -1,0 +1,183 @@
+.new-template-form-container {
+  margin: 2rem;
+}
+
+.ui.segment.container {
+  padding: 2rem;
+}
+
+.center {
+  text-align: center;
+}
+
+.ui.header.new-template-header {
+  margin-bottom: 2rem;
+}
+
+.title-description {
+  margin-bottom: 1rem;
+}
+
+.input-title {
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+#disease-error-message {
+  margin: .25rem auto;
+  padding: .75rem;
+  display: none;
+}
+
+.ui.button.add-question-button {
+  margin-top: 1rem;
+  color: rgba(0, 0, 0, .95);
+  background-color: #ecf3f5;
+  border: 1px solid #d4d4d5;
+}
+
+.ui.container.category-container {
+  margin: 0 0 1rem !important;
+}
+
+.ui.accordion.question-container {
+  margin-top: 1rem;
+}
+
+.title {
+  padding: 0 !important;
+  border-left: 4.3px solid #707070;
+  border-radius: 2.3px;
+}
+
+.title > .icon {
+  display: none;
+}
+
+.question-title {
+  display: inline;
+  padding-left: 1rem;
+}
+
+.question-content {
+  margin-left: 2.85rem;
+}
+
+.ui.basic.button.move-question {
+  box-shadow: none;
+  padding: 0;
+}
+
+.ui.basic.button.move-question:hover {
+  cursor: move;
+}
+
+.input {
+  border-bottom: 1px solid white;
+  padding-bottom: .5rem;
+}
+
+.input.transparent:hover {
+  border-bottom: 1px solid rgba(34,36,38,.15);
+}
+
+.ui.dropdown:not(.button)>.default.text {
+  color: #d4d4d5;
+}
+
+.question-input {
+  padding: .5rem;
+  width: 90%;
+}
+
+.question-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ui.header.body-system {
+  margin-top: .5rem;
+}
+
+.info-dropdown {
+  margin-top: .3rem;
+}
+
+.ui.input #other-body-system {
+  display: none;
+  margin-top: .5rem;
+}
+
+.ui.input #other-disease {
+  display: none;
+  margin-top: .5rem;
+}
+
+.add-child-question {
+  margin: 0 0 1rem 3rem;
+}
+
+.ui.basic.button.remove-question {
+  box-shadow: none;
+  display: inline;
+  margin-right: 0;
+}
+
+.delete-message {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.ui.button.keep-button {
+  margin: 0 .5rem 0 1rem;
+}
+
+.ui.button.add-child-button {
+  margin-top: 1rem;
+}
+
+.ui.segment.yes-no-answer {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin-top: 1.5rem;
+}
+
+.answer-label {
+  padding: .67857143em 1em;
+  color: rgba(0, 0, 0, .95);
+  background-color: #ecf3f5;
+  border: 1px solid #d4d4d5;
+  border-radius: .5rem;
+  letter-spacing: 0;
+  font-weight: bold;
+}
+
+.answer-label-if-no {
+  padding-right: 1.4rem;
+}
+
+.ui.input.yes-no-input {
+  width: 80%;
+}
+
+.ui.input.fill-in-the-blank-input {
+  width: 40%;
+}
+
+.button-option {
+  margin-top: .5rem;
+}
+
+.ui.button.minus-button {
+  padding: .5rem;
+}
+
+.ui.button.add-option {
+  margin: .5rem 0 1.5rem;
+}
+
+.ui.button.add-option-pop {
+  margin: .5rem 0;
+}

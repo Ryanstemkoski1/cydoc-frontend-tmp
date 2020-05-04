@@ -3,7 +3,7 @@ import { Menu, Button } from 'semantic-ui-react'
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
 import ButtonItem from "./src/components/ButtonItem.js";
-import diseaseData from "./src/components/data/Diseases";
+import disease_abbrevs from "./src/components/data/disease_abbrevs"
 import PositiveDiseases from "./src/components/PositiveDiseases";
 import DiseaseForm from "./src/components/DiseaseForm";
 import API from "./src/API.js";
@@ -18,7 +18,7 @@ class HPIContent extends Component {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
-            diseaseArray: diseaseData,
+            body_systems: [],
             graphData: {},
             isLoaded: false, 
             children: [],
@@ -32,19 +32,24 @@ class HPIContent extends Component {
     componentDidMount() {
         const data = API;
         data.then(res => {
-            var categories = {}
+            var categories = new Set()
+            var category_dict = {}
+            var body_systems = {}
             var nodes = res.data['nodes'] 
             for (var node in nodes) {
-                var key = (((nodes[node]["category"].split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase()); 
-                categories[key] = node.substring(0, node.length-2) + "01"
-            }
-            console.log(categories)
-            categories["Shortness of Breath"] = categories["Shortbreath"]
-            categories["Nausea/Vomiting"] = categories["Nausea-vomiting"]
-            delete categories["Shortbreath"]
-            delete categories["Nausea-vomiting"]
-            this.setState({isLoaded: true, graphData: res.data, categories: categories})
-        }).catch(err => '');
+                var category = nodes[node]["category"]
+                if (!(categories.has(category))) {
+                    categories.add(category)
+                    var key = (((category.split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase());
+                    if (key === "Shortbreath") key = "Shortness of Breath"
+                    if (key === "Nausea-vomiting") key = "Nausea/Vomiting" 
+                    category_dict[key] = node.substring(0, node.length-2) + "01"
+                    var body_system = nodes[node]["bodySystem"] 
+                    if (!(body_system in body_systems)) body_systems[body_system] = {"diseases": [], "name": disease_abbrevs[body_system]}
+                    body_systems[body_system]["diseases"].push(key)
+                }}
+            this.setState({isLoaded: true, graphData: res.data, categories: category_dict, body_systems: Object.values(body_systems)})
+        })
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
     }
@@ -62,14 +67,24 @@ class HPIContent extends Component {
 
     // Proceed to next step
     nextStep = () => {
-        this.context.onContextChange("step", this.context['step'] + 1)
-        this.context.onContextChange("activeHPI", this.context['positivediseases'][this.context['step']-1])
+        var current_step = this.context["step"]
+        this.context.onContextChange("step", current_step + 1)
+        this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-1])
     }
 
     // Go back to previous step
     prevStep = () => {
-        this.context.onContextChange("step", this.context['step'] - 1)
-        this.context.onContextChange("activeHPI", this.context['positivediseases'][this.context['step']-1])
+        var current_step = this.context["step"]
+        this.context.onContextChange("step", current_step-1)
+        this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-3])
+    }
+
+    first_page = () => this.context.onContextChange("step", 1)
+
+    last_page = () => {
+        var current_step = this.context['positivediseases'].length
+        this.context.onContextChange("step", current_step+1)
+        this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-1])
     }
 
     continue = e => {
@@ -89,15 +104,14 @@ class HPIContent extends Component {
     
 
     render() {
-        const {graphData, isLoaded, categories, windowWidth} = this.state;
+        const {graphData, isLoaded, categories, windowWidth, body_systems} = this.state;
 
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
-        const diseaseComponents = this.state.diseaseArray.map(item =>
+        const diseaseComponents = body_systems.map(item =>
             <ButtonItem
-                key={item.id}
-                disease_id={item.id}
-                name={item.name}
-                diseases_list={item.diseases}
+                key={item['name']}
+                name={item['name']}
+                diseases_list={item['diseases']}
             />
         );
 
@@ -146,7 +160,7 @@ class HPIContent extends Component {
                         <div className='positive-diseases-placeholder'>
                             <Button
                                 circular
-                                icon='angle double right'
+                                icon='angle right'
                                 className='next-button'
                                 onClick={this.continue}
                             />
@@ -167,6 +181,8 @@ class HPIContent extends Component {
                         graphData={graphData}
                         nextStep = {this.nextStep}
                         prevStep = {this.prevStep}
+                        first_page = {this.first_page}
+                        last_page = {this.last_page}
                         category = {category}
                         categories = {this.state.categories}
                         diseaseTabs = {diseaseTabs}

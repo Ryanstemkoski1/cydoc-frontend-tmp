@@ -1,43 +1,120 @@
-import React, {Component} from "react";
-import {TextArea, Table, Form, Dropdown} from "semantic-ui-react";
-import PropTypes from "prop-types";
-import DatePicker from "react-date-picker";
+import React, { Component } from 'react';
+import { TextArea, Table, Dropdown, Input } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import '../../css/components/tableContent.css';
 
 //Controlled component for a row in a TableContent component
 export class TableBodyRow extends Component {
-    render() {
-        const {values, rowindex, onTableBodyChange, dropdown, dropdown_placeholder, options} = this.props;
-        //returns a Table.Row with a cell for each item in tableBodyPlaceholders
-        var tableRows = this.props.tableBodyPlaceholders.map((placeholder, index) =>
-                        <Table.Cell key={index}>
-                            <TextArea
-                                className='table'
-                                style = {{outline: 'transparent', border: "none", width: "100%", height: "100%", resize: "none"}}
-                                type = {placeholder === "Date" ? "date" : "text"}
-                                rows={3}
-                                type="text"
-                                placeholder={placeholder}
-                                onChange={onTableBodyChange}
-                                rowindex={rowindex}
-                                value={values[rowindex][placeholder]}
-                            />
-                        </Table.Cell>)
-        if (dropdown) {
-            const key = tableRows[0].key
-            tableRows[0] = <Table.Cell key={key}>
-                                <Dropdown 
-                                    placeholder={dropdown_placeholder}
-                                    fluid
-                                    search
-                                    selection
-                                    clearable
-                                    options={options}
-                                    onChange={onTableBodyChange}
-                                    rowindex={rowindex}
-                                    value={values[rowindex][dropdown_placeholder]}
-                                />
-                            </Table.Cell> 
+    getCell(placeholder) {
+        const {values, rowindex, onTableBodyChange, onAddSideEffect, onAddMedication, onAddProcedure, medicationOptions, sideEffectsOptions, proceduresOptions} = this.props;
+
+        let cell;
+
+        switch (placeholder) {
+            case 'Procedure': {
+                cell = (
+                    <Input
+                        fluid
+                        className='content-input-computer content-dropdown'
+                    >
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            clearable
+                            allowAdditions
+                            icon=''
+                            options={proceduresOptions}
+                            placeholder={placeholder}
+                            onChange={onTableBodyChange}
+                            rowindex={rowindex}
+                            value={values[rowindex][placeholder]}
+                            onAddItem={onAddProcedure}
+                            className='side-effects'
+                        />
+                    </Input>
+                );
+                break;
+            }
+            case 'Side Effects': {
+                cell = (
+                    <Input
+                        fluid
+                        className='content-input-computer content-dropdown'
+                    >
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            multiple
+                            allowAdditions
+                            icon=''
+                            options={sideEffectsOptions}
+                            placeholder={placeholder}
+                            onChange={onTableBodyChange}
+                            rowindex={rowindex}
+                            value={values[rowindex][placeholder]}
+                            onAddItem={onAddSideEffect}
+                            className='side-effects'
+                        />
+                    </Input>
+                );
+                break;
+            }
+            case 'Drug Name': {
+                cell = (
+                    <Input
+                        fluid
+                        className='content-input-computer content-dropdown'
+                    >
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            clearable
+                            allowAdditions
+                            icon=''
+                            options={medicationOptions}
+                            placeholder={placeholder}
+                            onChange={onTableBodyChange}
+                            rowindex={rowindex}
+                            value={values[rowindex][placeholder]}
+                            onAddItem={onAddMedication}
+                            className='side-effects medication'
+                        />
+                    </Input>
+                );
+                break;
+            }
+            default: {
+                cell = (
+                    <TextArea
+                        rows={3}
+                        placeholder={placeholder}
+                        onChange={onTableBodyChange}
+                        rowindex={rowindex}
+                        value={values[rowindex][placeholder]}
+                        className='table-row-text'
+                    />
+                );
+                break;
+            }
         }
+        return cell;
+    }
+
+    render() {
+        //returns a Table.Row with a cell for each item in tableBodyPlaceholders
+        const { tableBodyPlaceholders } = this.props;
+
+        const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
+            return (
+                <Table.Cell key={index}>
+                    {this.getCell(placeholder)}
+                </Table.Cell>
+            )
+        });
+
         return (
             <Table.Row>
                 {tableRows}

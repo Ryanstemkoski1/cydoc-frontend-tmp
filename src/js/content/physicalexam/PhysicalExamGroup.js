@@ -17,10 +17,17 @@ export default class PhysicalExamGroup extends Component {
         this.handleToggle = this.handleToggle.bind(this)
     }
 
+<<<<<<< HEAD
     handleToggle = (name, data) => {
         const values = this.context["Physical Exam 2"]
         values[this.props.name][name] = data
         this.context.onContextChange("Physical Exam 2", values)
+=======
+    handleChange = (e, data) => { 
+        const values = this.context["Physical Exam"]
+        values[this.props.category]["Abnormal Findings"] = data.value
+        this.context.onContextChange("Physical Exam", values)
+>>>>>>> master
     }
 
     handleLRToggle = (leftRight, name, data) => {

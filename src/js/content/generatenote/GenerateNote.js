@@ -42,9 +42,9 @@ export default class GenerateNote extends Component {
             if (yes) {
                 if (display) grid += (" <td> " + key + "</td> ")
                 var values = this.context[item][key]
-                for (var header_index in headers) {
-                    var header = headers[header_index]
-                    if (header !== "Yes" && header !== "No") grid += (" <td> " + values[header] + "</td> ")}
+                for (var head_index in headers) {
+                    var head = headers[head_index]
+                    if (head !== "Yes" && head !== "No") grid += (" <td> " + values[head] + "</td> ")}
                 grid += " </tr> <tr>"
             }
             else if (no) negatives.push(key)
@@ -112,14 +112,28 @@ export default class GenerateNote extends Component {
         for (var item in this.context["Physical Exam"]) {
             var display = false 
             var display_string = ("<div>" + item + ": ")
-            for (var value in this.context["Physical Exam"][item]) {
-                if (item === 'Vitals') display_string += "</div> <div>"
+            for (var value in this.context["Physical Exam"][item]) { 
+                if (item === 'Vitals') {
+                    var item_set = new Set(Object.values(this.context["Physical Exam"][item]))
+                    item_set.delete(0)
+                    if (item_set.length >0) display_string += "</div> <div>"
+                } 
                 if (this.context["Physical Exam"][item][value] && this.context["Physical Exam"][item][value] !== 0 && this.context["Physical Exam"][item][value] !== '0') {
                     if (this.context["Physical Exam"][item][value] === true) display_string += (value + ", ") 
+                    else if (typeof this.context["Physical Exam"][item][value] === 'object') {
+                        if (Object.values(this.context["Physical Exam"][item][value]).indexOf(true) > -1) {
+                            display_string += (value + ": ")
+                            for (var key in this.context["Physical Exam"][item][value]) {
+                                if (this.context["Physical Exam"][item][value][key]) display_string += key + ", " 
+                            } 
+                            display_string = display_string.slice(0, display_string.length)
+                        } }
                     else display_string += (value + ": " + this.context["Physical Exam"][item][value] + ((value === 'Temperature') ? "&#176;" + "C" : "") + ((item === 'Vitals') ? "  " : ", "))
-                    none = false 
-                    display = true 
                 }
+            } 
+            if (display_string !== ("<div>"+item + ": ")) { 
+                display = true 
+                none = false
             }
             display_string = display_string.slice(0, display_string.length-2)
             if (display) physical_exam += display_string + "</div>"

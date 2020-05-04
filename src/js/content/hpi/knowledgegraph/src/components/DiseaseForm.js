@@ -39,6 +39,16 @@ export class DiseaseForm extends React.Component {
         this.props.prevStep();
     }
 
+    first_page = e => {
+        e.preventDefault()
+        this.props.first_page()
+    }
+
+    last_page = e => {
+        e.preventDefault()
+        this.props.last_page()
+    }
+
     function() {
         const {category, parent_code, graphData, tab_category} = this.props;
         let graph = graphData['graph']
@@ -51,8 +61,8 @@ export class DiseaseForm extends React.Component {
             let current_node = edges[num_key]['from']
             let uid = nodes[current_node]['uid']
             let children = false
-                let current_node_values = graph[current_node]
-                if (current_node_values.length > 0) children = true
+            let current_node_values = graph[current_node] 
+            if (current_node_values.length > 0) children = true
                 questionMap[uid] = {
                     'question': <DiseaseFormQuestions
                         key={uid}
@@ -80,8 +90,13 @@ export class DiseaseForm extends React.Component {
                 if (children) { 
                     questionMap[uid]['children'] = {}
                     let curr_node = edges[current_node_values[0]]['from']
-                    let first_node = (curr_node).substring(0,curr_node.length-2) + "01"
+                    let first_node = (curr_node).substring(0,curr_node.length-2) + "01" 
                     questionMap[uid]['children_category'] = nodes[first_node]['category']
+                    var children_category_name = (((nodes[first_node]['category'].split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase());
+                    if (children_category_name === "Shortbreath") children_category_name = "Shortness of Breath"
+                    if (children_category_name === "Nausea-vomiting") children_category_name = "Nausea/Vomiting" 
+                    values[tab_category][uid]['children_category'] = children_category_name
+                    values[tab_category][uid]['children_category_code'] = nodes[first_node]['category']
                     // if statement so that we don't reset the children key every time we generate the child disease form
                     if (!('children' in values[tab_category][uid])) values[tab_category][uid]['children'] = {}
                     for (var new_index in current_node_values) {
@@ -96,7 +111,7 @@ export class DiseaseForm extends React.Component {
                                     question={nodes[new_current_node]['text']}
                                     responseType={nodes[new_current_node]['responseType']}
                                     category={category}
-                                    uid={uid}
+                                    uid={uid} 
                                     child_uid={child_uid} 
                                     current_node={current_node}
                                     category_code = {tab_category}
@@ -164,19 +179,31 @@ export class DiseaseForm extends React.Component {
                 <div className='question-map'>{newMap} </div>
 
                 <div className='arrow-buttons'>
-                    <Button
-                        circular
-                        icon='angle double left'
-                        className='next-button'
-                        onClick={this.back}
-                    />
-                    {this.props.last ? "" :
+                    <div className='next-button'> 
+                        <Button 
+                            circular
+                            icon = 'angle double left'
+                            onClick = {this.first_page}
+                        />
                         <Button
                             circular
-                            icon='angle double right'
-                            className='next-button'
-                            onClick={this.continue}
+                            icon='angle left'
+                            onClick={this.back}
+                        /> 
+                    </div>
+                    {this.props.last ? "" :
+                        <div className = 'next-button'> 
+                            <Button
+                                circular
+                                icon='angle right'
+                                onClick={this.continue}
+                            /> 
+                            <Button 
+                                circular
+                                icon = 'angle double right'
+                                onClick = {this.last_page}
                         />
+                        </div>
                     }
                 </div>
             </div>

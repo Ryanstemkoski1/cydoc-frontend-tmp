@@ -27,12 +27,13 @@ class QuestionAnswer extends React.Component {
         } 
         const values = this.context["hpi"]
         // Specifies whether the response type will be '' or [] form 
-        if (this.props.am_child) { 
+        if (this.props.am_child) {
             if (values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] === "") {
                 values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response_type'] = this.props.responseType 
                 if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
                     values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = []
                 }
+                else if (this.props.responseType === 'TIME') values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = ["", ""]
                 else if (this.props.responseType === 'LIST-TEXT') values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = {1: "", 2: "", 3: ""}
              } }
         else if (values[this.props.category_code][this.props.uid]["response"]=== "") {
@@ -40,6 +41,7 @@ class QuestionAnswer extends React.Component {
             if (this.props.responseType === 'CLICK-BOXES' || this.props.responseType === 'MEDS-POP') {
                 values[this.props.category_code][this.props.uid]["response"] = []
             }
+            else if (this.props.responseType === "TIME") values[this.props.category_code][this.props.uid]["response"] = ["", ""]
             else if (this.props.responseType === 'LIST-TEXT') values[this.props.category_code][this.props.uid]["response"] = {1: "", 2: "", 3: ""}
         }
         this.updateDimensions = this.updateDimensions.bind(this);
@@ -145,6 +147,7 @@ class QuestionAnswer extends React.Component {
             button_map.push(<FamilyHistoryContent
                 key={this.props.question}
                 response_choice={this.props.response_choice}
+                fh_pop={true}
             />) 
         }
         else if (responseType === "PMH-POP") {
@@ -158,6 +161,7 @@ class QuestionAnswer extends React.Component {
             button_map.push(<MedicationsContent
                 key={this.props.question}
                 pop={true}
+                mobile={collapseTabs}
             />)
         }
         else if (responseType === "PSH-BLANK") {
@@ -171,10 +175,16 @@ class QuestionAnswer extends React.Component {
                 <div>{this.props.question} <div style={{marginTop: 7}}>{button_map}</div> </div>
             )
         }
+        if (this.props.question === 'nan') { 
+            return ( 
+            <div> answer questions about {this.context["hpi"][this.props.category_code][this.props.uid]['children_category']} 
+                <div style={{marginTop: 7}}>{button_map}</div> 
+            </div> )
+        }
         return (
             <div style={{marginBottom: 20}}> 
                 <div> {this.props.question} <div style={{marginTop: 7}}>{button_map}</div> </div>
-                </div>
+            </div>
         )
     }
 }

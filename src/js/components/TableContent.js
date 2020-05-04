@@ -1,21 +1,33 @@
-import React, {Component, Fragment} from 'react';
-import {Table, Card, Input} from "semantic-ui-react";
-import AddRowButton from "./AddRowButton"
+import React, { Component, Fragment } from 'react';
+import { Table, Input, Accordion, Form, Dropdown } from 'semantic-ui-react';
+import AddRowButton from './AddRowButton'
 import PropTypes from 'prop-types';
-import {TableBodyRow} from "./TableBodyRow";
-import HPIContext from "../contexts/HPIContext";
-import "../../css/components/tableComponent.css";
+import { TableBodyRow } from './TableBodyRow';
+import HPIContext from '../contexts/HPIContext';
+import procedures from '../constants/procedures';
+import { sideEffects } from '../constants/sideEffects';
+import drug_names from '../constants/drugNames';
+import '../../css/components/tableContent.css';
  
 //Component for a table layout
 export default class TableContent extends Component {
-    static contextType = HPIContext
+    static contextType = HPIContext;
+
     constructor(props, context) {
         super(props, context);
+        this.state = {
+            proceduresOptions: procedures,
+            sideEffectsOptions: sideEffects,
+            medicationOptions: drug_names,
+        }
         // TODO: add back addRow functionality
         this.addRow = this.addRow.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
-        this.makeTableItems = this.makeTableItems.bind(this);
+        this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
+        this.handleAdditionSideEffects = this.handleAdditionSideEffects.bind(this);
+        this.handleAdditionMedication = this.handleAdditionMedication.bind(this);
+        this.handleAdditionProcedure = this.handleAdditionProcedure.bind(this);
     }
 
     //modify the current values in the table to reflect changes
@@ -26,15 +38,50 @@ export default class TableContent extends Component {
         this.props.onTableBodyChange(newState);
     }
 
+    handleAdditionSideEffects(event, { value }) {
+        this.setState((prevState) => ({
+            sideEffectsOptions: [
+                {key: value, text: value, value},
+                ...prevState.sideEffectsOptions
+            ],
+        }));
+    }
+
+    handleAdditionMedication(event, { value }) {
+        this.setState((prevState) => ({
+            medicationOptions: [
+                {key: value, text: value, value},
+                ...prevState.medicationOptions
+            ],
+        }));
+    }
+
+    handleAdditionProcedure(event, { value }) {
+        this.setState((prevState) => ({
+            proceduresOptions: [
+                {key: value, text: value, value},
+                ...prevState.proceduresOptions
+            ],
+        }));
+    }
+
     //method to generate an collection of rows
     makeTableBodyRows(nums){
-        return nums.map((rowindex, index) => <TableBodyRow
-            key={index}
-            rowindex={parseInt(rowindex)}
-            tableBodyPlaceholders={this.props.tableBodyPlaceholders}
-            onTableBodyChange={this.handleTableBodyChange}
-            values={this.props.values}
-        />)
+        return nums.map((rowindex, index) => 
+            <TableBodyRow
+                key={index}
+                rowindex={parseInt(rowindex)}
+                tableBodyPlaceholders={this.props.tableBodyPlaceholders}
+                onTableBodyChange={this.handleTableBodyChange}
+                onAddSideEffect={this.handleAdditionSideEffects}
+                onAddMedication={this.handleAdditionMedication}
+                onAddProcedure={this.handleAdditionProcedure}
+                values={this.props.values}
+                medicationOptions={this.state.medicationOptions}
+                sideEffectsOptions={this.state.sideEffectsOptions}
+                proceduresOptions={this.state.proceduresOptions}
+            />
+        )
     }
 
     //Method to generate the table header row
@@ -48,57 +95,211 @@ export default class TableContent extends Component {
     }
 
     addRow() {
-        let values = this.context[this.props.category]
-        var last_index = values.length.toString()
-        values[last_index] = {Procedure: "", Date: "", Comments: ""}
+        let values = this.context[this.props.category];
+        const last_index = values.length.toString();
+        values[last_index] = {Procedure: '', Date: '', Comments: ''}
         this.context.onContextChange(this.props.category, values);
     }
 
-    makeTableItems(nums) {
-        const { values, tableBodyPlaceholders } = this.props;
-        let content = ['header', 'meta', 'description'];
-        let items = []
+    makeAccordionPanels(nums) {
+        const { values, tableBodyPlaceholders, name } = this.props;
+
+        const panels = [];
+
         for (let i = 0; i < nums.length; i++) {
-            items.push({key: i});
-            for (let j = 0; j < tableBodyPlaceholders.length; j++) {
-                items[i][content[j]] = <Input
-                    transparent
-                    fluid
-                    type="text"
-                    placeholder={tableBodyPlaceholders[j]}
-                    onChange={this.handleTableBodyChange}
-                    rowindex={i}
-                    value={values[i][tableBodyPlaceholders[j]]}
-                />
+            let titleContent;
+            const contentInputs = [];
+
+            switch(name) {
+                case 'surgical history': {
+                    titleContent = (
+                        <Form className='inline-form'>
+                            <Input
+                                transparent
+                                className='content-input-surgical content-dropdown medication'
+                            >
+                                <Dropdown
+                                    fluid
+                                    search
+                                    selection
+                                    clearable
+                                    allowAdditions
+                                    icon=''
+                                    options={this.state.proceduresOptions}
+                                    placeholder={tableBodyPlaceholders[0]}
+                                    onChange={this.handleTableBodyChange}
+                                    rowindex={i}
+                                    value={values[i][tableBodyPlaceholders[0]]}
+                                    onAddItem={this.handleAdditionProcedure}
+                                    className='side-effects'
+                                />
+                            </Input>
+                        </Form>
+                    );
+                    break;
+                }
+                case 'medication': {
+                    titleContent = (
+                        <Form className='inline-form'>
+                            <Input
+                                transparent
+                                className='content-input content-dropdown medication'
+                            >
+                                <Dropdown
+                                    fluid
+                                    search
+                                    selection
+                                    clearable
+                                    allowAdditions
+                                    icon=''
+                                    options={this.state.medicationOptions}
+                                    placeholder={tableBodyPlaceholders[0]}
+                                    onChange={this.handleTableBodyChange}
+                                    rowindex={i}
+                                    value={values[i][tableBodyPlaceholders[0]]}
+                                    onAddItem={this.handleAdditionMedication}
+                                    className='side-effects'
+                                />
+                            </Input>
+                            {' for '}
+                            <Input
+                                transparent
+                                placeholder={tableBodyPlaceholders[4]}
+                                onChange={this.handleTableBodyChange}
+                                rowindex={i}
+                                value={values[i][tableBodyPlaceholders[4]]}
+                            />
+                        </Form>
+                    );
+                    break;
+                }
+                case 'allergy': {
+                    titleContent = (
+                        <Form className='inline-form'>
+                            <Input
+                                transparent
+                                placeholder={tableBodyPlaceholders[0]}
+                                onChange={this.handleTableBodyChange}
+                                rowindex={i}
+                                value={values[i][tableBodyPlaceholders[0]]}
+                            />
+                            {' causes '}
+                            <Input
+                                transparent
+                                placeholder={tableBodyPlaceholders[1]}
+                                onChange={this.handleTableBodyChange}
+                                rowindex={i}
+                                value={values[i][tableBodyPlaceholders[1]]}
+                            />
+                        </Form>
+                    );
+                    break;
+                }
+                default: {
+                    titleContent = (
+                        <Form className='inline-form'>
+                            <Input
+                                transparent
+                                placeholder={tableBodyPlaceholders[0]}
+                                onChange={this.handleTableBodyChange}
+                                rowindex={i}
+                                value={values[i][tableBodyPlaceholders[0]]}
+                            />
+                        </Form>
+                    );
+                    break;
+                }
             }
+
+            for (let j = 1; j < tableBodyPlaceholders.length; j++) {
+                if ((name === 'medication' && j === 4) || (name === 'allergy' && j === 1)) {
+                    // already in accordion title
+                    continue;
+                } else if (tableBodyPlaceholders[j] === 'Side Effects') {
+                    contentInputs.push(
+                        <Input key={j} fluid transparent className='content-input content-dropdown'>
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                multiple
+                                allowAdditions
+                                icon=''
+                                options={this.state.sideEffectsOptions}
+                                placeholder={tableBodyPlaceholders[j]}
+                                onChange={this.handleTableBodyChange}
+                                rowindex={i}
+                                value={values[i][tableBodyPlaceholders[j]]}
+                                onAddItem={this.handleAdditionSideEffects}
+                                className='side-effects'
+                            />
+                        </Input>
+                    );
+                } else {
+                    contentInputs.push(
+                        <Input
+                            key={j}
+                            fluid
+                            transparent
+                            placeholder={tableBodyPlaceholders[j]}
+                            onChange={this.handleTableBodyChange}
+                            rowindex={i}
+                            value={values[i][tableBodyPlaceholders[j]]}
+                            className='content-input'
+                        />
+                    );
+                }
+            }
+
+            panels.push({
+                key: i,
+                title: {
+                    content: titleContent,
+                },
+                content: {
+                    content: (
+                        <Fragment>
+                            {contentInputs}
+                        </Fragment>
+                    ),
+                }
+            });
         }
-        return items;
+
+        return panels;
     }
 
-    render(){
-        var nums = Object.keys(this.props.values)
+    render() {
+        const {values, mobile } = this.props;
+        const nums = Object.keys(values);
         const headerRow = this.makeHeader();
-        var rows = this.makeTableBodyRows(nums);
-        const mobileRows = this.makeTableItems(nums);
+        const rows = this.makeTableBodyRows(nums);
+        const panels = this.makeAccordionPanels(nums);
 
-        return ( this.props.mobile ? 
+        const content = mobile ? (
+            <Accordion
+                panels={panels}
+                exclusive={false}
+                fluid
+                styled
+            />
+        ) : (
+            <Table
+                celled
+                className='table-display'
+            >
+                <Table.Header content={headerRow} />
+                <Table.Body children={rows} />
+            </Table>
+        );
+
+        return (
             <Fragment>
-                <Card.Group items={mobileRows} />
-                <AddRowButton onClick={this.addRow} name={this.props.name}/>
-            </Fragment>
-            : <Fragment>
-                <br/>
-                <div style={{width: "100%", height: "100%", overflowX: 'auto'}}> 
-                <Table celled>
-                    <Table.Header>
-                        {headerRow}
-                    </Table.Header>
-                    <Table.Body>
-                        {rows}
-                    </Table.Body>
-                </Table>
-                </div>
-                <AddRowButton onClick={this.addRow} name={this.props.name}/>
+                {content}
+                <AddRowButton
+                    onClick={this.addRow}
+                    name={this.props.name}
+                />
             </Fragment>
         );
     }
