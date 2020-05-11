@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Divider, Header, Grid, Form, Button } from 'semantic-ui-react'
+import { Divider, Header, Grid, Form, TextArea } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import HPIContext from '../../contexts/HPIContext'
 import PhysicalExamRow from './PhysicalExamRow'
@@ -39,6 +39,12 @@ export default class PhysicalExamGroup extends Component {
         this.context.onContextChange("Physical Exam 2", values)
     }
 
+    handleTextChange = (e, data) => {
+            const values = this.context["Physical Exam 2"]
+            values[this.props.name].comments = data.value
+            this.context.onContextChange("Physical Exam 2", values)
+    }
+
     generateRows = (rows) => {
 
         return (
@@ -68,6 +74,14 @@ export default class PhysicalExamGroup extends Component {
                         <Grid.Row>
                             <Grid.Column>
                                 {this.generateRows(this.props.rows)}
+                            </Grid.Column>
+                            <Grid.Column floated="right" width={5}>
+                                        <Form.Field>
+                                            <label>Additional Comments</label>
+                                            <TextArea 
+                                                value={this.context["Physical Exam 2"][this.props.name].comments}
+                                                onChange={this.handleTextChange}/>
+                                        </Form.Field>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>

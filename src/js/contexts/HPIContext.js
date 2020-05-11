@@ -1,6 +1,6 @@
 import React from 'react'
 import constants from '../constants/constants';
-import {allergies, medications, surgicalHistory, reviewOfSystems, physicalExam} from '../constants/States'
+import { allergies, medications, surgicalHistory, reviewOfSystems, physicalExam } from '../constants/States'
 import peConstants from '../constants/physical-exam-constants'
 import NotesContext from './NotesContext'
 
@@ -13,13 +13,22 @@ export class HPIStore extends React.Component {
     constructor(props) {
         super(props)
 
-        let peState = {}
+        let peState = {
+            "Vitals": {
+                "Systolic Blood Pressure": 0,
+                "Diastolic Blood Pressure": 0,
+                "Heart Rate": 0,
+                "RR": 0,
+                "Temperature": 0,
+                "Oxygen Saturation": 0
+            },
+        }
         peConstants.sections.forEach((section) => {
-            let sectionState = {}
+            let sectionState = {comments: ''}
             section.rows.forEach((row) => {
                 if (row.needsRightLeft) {
                     row.findings.forEach((finding) => {
-                        sectionState[finding] = {left: false, active: false, right: false}
+                        sectionState[finding] = { left: false, active: false, right: false }
                     })
                 } else {
                     row.findings.forEach((finding) => {
@@ -51,10 +60,10 @@ export class HPIStore extends React.Component {
         }
     }
 
-    
 
-    onContextChange = (name, values) => { 
-        this.setState({[name]: values});
+
+    onContextChange = (name, values) => {
+        this.setState({ [name]: values });
     }
 
     saveNote = () => {
@@ -95,17 +104,19 @@ export class HPIStore extends React.Component {
     }
 
     render = () => {
-        return(
-            <Context.Provider value = {{...this.state, 
-                                        onContextChange: this.onContextChange, 
-                                        saveNote: this.saveNote, 
-                                        loadNote: this.loadNote,
-                                        deleteNote: this.deleteNote}}>
+        return (
+            <Context.Provider value={{
+                ...this.state,
+                onContextChange: this.onContextChange,
+                saveNote: this.saveNote,
+                loadNote: this.loadNote,
+                deleteNote: this.deleteNote
+            }}>
                 {this.props.children}
             </Context.Provider>
         )
     }
-    
+
 }
 
 export default Context;
