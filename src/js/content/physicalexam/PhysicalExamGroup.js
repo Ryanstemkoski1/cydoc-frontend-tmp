@@ -26,30 +26,30 @@ export default class PhysicalExamGroup extends Component {
     handleLRToggle = (leftRight, name, data) => {
         console.log(name)
         const values = this.context["Physical Exam 2"]
-        if (leftRight === null) {
+        if (leftRight === 'left' || leftRight === 'right') {
+            values[this.props.name][name][leftRight] = data
+        } else {
             values[this.props.name][name].active = data
-            if (data === false) {
+            if (data === false || leftRight === 'all') {
                 values[this.props.name][name].left = data
                 values[this.props.name][name].right = data
             }
-        } else {
-            values[this.props.name][name][leftRight] = data
         }
-        
+
         this.context.onContextChange("Physical Exam 2", values)
     }
 
     handleTextChange = (e, data) => {
-            const values = this.context["Physical Exam 2"]
-            values[this.props.name].comments = data.value
-            this.context.onContextChange("Physical Exam 2", values)
+        const values = this.context["Physical Exam 2"]
+        values[this.props.name].comments = data.value
+        this.context.onContextChange("Physical Exam 2", values)
     }
 
     generateRows = (rows) => {
 
         return (
-            rows.map((row) =>            
-                <PhysicalExamRow 
+            rows.map((row) =>
+                <PhysicalExamRow
                     row={row}
                     group={this.props.name}
                     handleToggle={this.handleToggle}
@@ -76,12 +76,12 @@ export default class PhysicalExamGroup extends Component {
                                 {this.generateRows(this.props.rows)}
                             </Grid.Column>
                             <Grid.Column floated="right" width={5}>
-                                        <Form.Field>
-                                            <label>Additional Comments</label>
-                                            <TextArea 
-                                                value={this.context["Physical Exam 2"][this.props.name].comments}
-                                                onChange={this.handleTextChange}/>
-                                        </Form.Field>
+                                <Form.Field>
+                                    <label>Additional Comments</label>
+                                    <TextArea
+                                        value={this.context["Physical Exam 2"][this.props.name].comments}
+                                        onChange={this.handleTextChange} />
+                                </Form.Field>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>

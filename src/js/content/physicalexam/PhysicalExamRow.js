@@ -41,7 +41,7 @@ export default class PhysicalExamRow extends React.Component {
                     onClick={this.props.handleLRToggle}
                 />
             })
-            SelectAllCallBack = this.props.handleLRToggle.bind(this, null)
+            SelectAllCallBack = this.props.handleLRToggle.bind(this, 'all')
         } else {
             buttons = findings.map((finding) => {
                 return <Button
