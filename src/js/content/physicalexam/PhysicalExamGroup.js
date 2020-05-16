@@ -18,14 +18,14 @@ export default class PhysicalExamGroup extends Component {
     }
 
     handleToggle = (name, data) => {
-        const values = this.context["Physical Exam 2"]
+        const values = this.context["Physical Exam"]
         values[this.props.name][name] = data
-        this.context.onContextChange("Physical Exam 2", values)
+        this.context.onContextChange("Physical Exam", values)
     }
 
     handleLRToggle = (leftRight, name, data) => {
         console.log(name)
-        const values = this.context["Physical Exam 2"]
+        const values = this.context["Physical Exam"]
         if (leftRight === 'left' || leftRight === 'right') {
             values[this.props.name][name][leftRight] = data
         } else {
@@ -36,13 +36,13 @@ export default class PhysicalExamGroup extends Component {
             }
         }
 
-        this.context.onContextChange("Physical Exam 2", values)
+        this.context.onContextChange("Physical Exam", values)
     }
 
     handleTextChange = (e, data) => {
-        const values = this.context["Physical Exam 2"]
+        const values = this.context["Physical Exam"]
         values[this.props.name].comments = data.value
-        this.context.onContextChange("Physical Exam 2", values)
+        this.context.onContextChange("Physical Exam", values)
     }
 
     generateRows = (rows) => {
@@ -79,7 +79,7 @@ export default class PhysicalExamGroup extends Component {
                                 <Form.Field>
                                     <label>Additional Comments</label>
                                     <TextArea
-                                        value={this.context["Physical Exam 2"][this.props.name].comments}
+                                        value={this.context["Physical Exam"][this.props.name].comments}
                                         onChange={this.handleTextChange} />
                                 </Form.Field>
                             </Grid.Column>

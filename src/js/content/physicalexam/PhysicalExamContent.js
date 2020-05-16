@@ -3,10 +3,6 @@ import { Form, Grid, Input, Button } from "semantic-ui-react";
 import PhysicalExamGroup from './PhysicalExamGroup';
 import constants from '../../constants/physical-exam-constants.json'
 import HPIContext from '../../contexts/HPIContext';
-import LungSounds from './widgets/LungSounds'
-import AbdomenExam from './widgets/AbdomenExam';
-import RightLeftWidget from './widgets/RightLeftWidget';
-//import NumericInput from 'react-numeric-input';
 
 //Component that manages content for the Physical Exam tab
 export default class PhysicalExamContent extends React.Component {
@@ -18,9 +14,9 @@ export default class PhysicalExamContent extends React.Component {
     }
 
     handleChange = (category, name, value) => {
-        const values = this.context["Physical Exam 2"]
+        const values = this.context["Physical Exam"]
         values[category][name] = value
-        this.context.onContextChange("Physical Exam 2", values)
+        this.context.onContextChange("Physical Exam", values)
     }
 
     generateNumericInput = (category, name, label = null, labelPosition = null) => {
@@ -31,7 +27,7 @@ export default class PhysicalExamContent extends React.Component {
                 labelPosition={labelPosition}
                 style={{ width: "100px" }}
                 name={name}
-                value={this.context["Physical Exam 2"][category][name]}
+                value={this.context["Physical Exam"][category][name]}
                 onChange={(e, { name, value }) => this.handleChange(category, name, value)} />
         )
     }
@@ -45,7 +41,6 @@ export default class PhysicalExamContent extends React.Component {
     render() {
         return (
             <Fragment>
-                <LungSounds /> <AbdomenExam /> <RightLeftWidget type={"Pulse"} /> <RightLeftWidget type={"Reflex"} />
                 <Form>
                     <Grid columns="equal">
                         <Grid.Column>

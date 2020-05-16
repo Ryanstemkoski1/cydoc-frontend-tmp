@@ -9,7 +9,7 @@ export default class AbdomenExam extends Component {
 
     render = () => {
         var ab_map = []
-        const ab_quadrants = Object.keys(this.context["Physical Exam"]["Abdomen"])
+        const ab_quadrants = Object.keys(this.context["Physical Exam"].widgets["Abdomen"])
         for (var ab_index = 0; ab_index < ab_quadrants.length/2; ab_index ++) {
             ab_map.push(
                 <Table.Row key={ab_quadrants[2*ab_index]}>

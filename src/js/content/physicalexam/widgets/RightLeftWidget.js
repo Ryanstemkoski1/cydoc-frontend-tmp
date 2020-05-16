@@ -20,19 +20,19 @@ export default class RightLeftWidget extends Component {
 
     onButtonClick(event, data) {
         var values = this.context['Physical Exam']
-        values[this.props.type][data.pe_index][data.index] = data.condition 
+        values.widgets[this.props.type][data.pe_index][data.index] = data.condition 
         this.context.onContextChange("Physical Exam", values)
     }
 
     addButton() {
         var values = this.context["Physical Exam"]
-        values[this.props.type].push({0: "", 1: "", 2: ""})
+        values.widgets[this.props.type].push({0: "", 1: "", 2: ""})
         this.context.onContextChange("Physical Exam", values)
     }
 
     removeButton(event, data) {
         var values = this.context["Physical Exam"]
-        values[this.props.type].splice(data.pe_index, 1)
+        values.widgets[this.props.type].splice(data.pe_index, 1)
         this.context.onContextChange("Physical Exam", values)
     }
 
@@ -44,7 +44,7 @@ export default class RightLeftWidget extends Component {
                 <div style={{marginTop: 10, marginBottom: 10, marginLeft: 10, marginRight: 10}}>
                     {pe_types[index].map((item) => 
                         <Button 
-                            color={this.context['Physical Exam'][this.props.type][pe_index][index] === item ? 'grey' : ''}
+                            color={this.context['Physical Exam'].widgets[this.props.type][pe_index][index] === item ? 'grey' : ''}
                             key={item}
                             pe_index={pe_index}
                             index={index}
@@ -58,7 +58,7 @@ export default class RightLeftWidget extends Component {
         }
 
     render = () => {
-        var values = this.context['Physical Exam'][this.props.type]
+        var values = this.context['Physical Exam'].widgets[this.props.type]
         var pes = []
         for (var index = 0; index < values.length; index ++) { 
             if (values.length > 0) pes.push(

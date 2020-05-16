@@ -431,6 +431,16 @@
                 {
                     "normalOrAbnormal": "abnormal",
                     "needsRightLeft": false,
+                    "display": "widget",
+                    "widget": "LUNG_WIDGET",
+                    "includeSelectAll": false,
+                    "findings": [
+
+                    ]
+                },
+                {
+                    "normalOrAbnormal": "abnormal",
+                    "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": false,
                     "findings": [
@@ -515,6 +525,16 @@
                 {
                     "normalOrAbnormal": "abnormal",
                     "needsRightLeft": false,
+                    "display": "widget",
+                    "widget": "MURMUR_WIDGET",
+                    "includeSelectAll": false,
+                    "findings": [
+                        
+                    ]
+                },
+                {
+                    "normalOrAbnormal": "abnormal",
+                    "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": false,
                     "findings": [
@@ -578,6 +598,16 @@
                     "findings": [
                         "normal dorsalis pedis"
                     ]
+                },
+                {
+                    "normalOrAbnormal": "abnormal",
+                    "needsRightLeft": false,
+                    "display": "widget",
+                    "widget": "PULSES_WIDGET",
+                    "includeSelectAll": false,
+                    "findings": [
+                        
+                    ]
                 }
             ]
         },
@@ -624,6 +654,16 @@
                         "no rebound tenderness",
                         "no guarding",
                         "no masses"
+                    ]
+                },
+                {
+                    "normalOrAbnormal": "abnormal",
+                    "needsRightLeft": false,
+                    "display": "widget",
+                    "widget": "ABDOMEN_WIDGET",
+                    "includeSelectAll": false,
+                    "findings": [
+                        
                     ]
                 },
                 {
@@ -699,6 +739,16 @@
                         "normal ankle jerk",
                         "normal plantar"
                     ]
+                },
+                {
+                    "normalOrAbnormal": "abnormal",
+                    "needsRightLeft": false,
+                    "display": "widget",
+                    "widget": "REFLEXES_WIDGET",
+                    "includeSelectAll": false,
+                    "findings": [
+                        
+                    ]
                 }
             ]
         },
@@ -733,6 +783,16 @@
                     "findings": [
                         "tenting",
                         "decreased turgor"
+                    ]
+                },
+                {
+                    "normalOrAbnormal": "abnormal",
+                    "needsRightLeft": false,
+                    "display": "widget",
+                    "widget": "SKIN_WIDGET",
+                    "includeSelectAll": false,
+                    "findings": [
+                        
                     ]
                 }
             ]
@@ -819,5 +879,13 @@
                 }
             ]
         }
-    ]
+    ],
+
+    "widgets": {
+        "Lungs": {"Left Upper Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Upper Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Lingula": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Middle Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Left Lower Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Lower Lobe": {"wheezes": false, "rales": false, "rhonchi": false}},
+        "Abdomen": {"Right Upper Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Left Upper Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Right Lower Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Left Lower Quadrant": {"tenderness": false, "rebound": false, "guarding": false}},
+        "Pulses": [],
+        "Reflexes": []
+    }
+
 }

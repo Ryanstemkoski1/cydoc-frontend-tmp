@@ -9,7 +9,7 @@ export default class LungSounds extends Component {
 
     render = () => {
         var lung_map = []
-        const lung_lobes = Object.keys(this.context["Physical Exam"]["Lungs"])
+        const lung_lobes = Object.keys(this.context["Physical Exam"].widgets["Lungs"])
         for (var lung_index = 0; lung_index < lung_lobes.length/2; lung_index ++) {
             lung_map.push(
                 <Table.Row key={lung_lobes[2*lung_index]}>

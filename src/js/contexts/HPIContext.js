@@ -22,6 +22,7 @@ export class HPIStore extends React.Component {
                 "Temperature": 0,
                 "Oxygen Saturation": 0
             },
+            widgets: peConstants.widgets
         }
         peConstants.sections.forEach((section) => {
             let sectionState = {comments: ''}
@@ -49,8 +50,7 @@ export class HPIStore extends React.Component {
             "Family History": constants.FAMILY_HISTORY.STATE,
             "Social History": constants.SOCIAL_HISTORY.STATE,
             "Review of Systems": reviewOfSystems.state,
-            "Physical Exam": physicalExam.state,
-            "Physical Exam 2": peState,
+            "Physical Exam": peState,
             "positivediseases": [],
             "activeHPI": "",
             "positivecategories": [],

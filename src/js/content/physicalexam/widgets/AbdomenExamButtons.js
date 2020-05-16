@@ -11,19 +11,19 @@ export default class AbdomenExamButtons extends Component {
 
     onClick(event, data) {
         var values = this.context["Physical Exam"]
-        var prevState = values["Abdomen"][this.props.ab_quadrant][data.children]
-        values["Abdomen"][this.props.ab_quadrant][data.children] = !prevState
+        var prevState = values.widgets["Abdomen"][this.props.ab_quadrant][data.children]
+        values.widgets["Abdomen"][this.props.ab_quadrant][data.children] = !prevState
         this.context.onContextChange("Physical Exam", values);
     }
 
     render() {
         var ab_quadrant_buttons = []
-        var ab_quadrant_dict = this.context["Physical Exam"]["Abdomen"][this.props.ab_quadrant]
+        var ab_quadrant_dict = this.context["Physical Exam"].widgets["Abdomen"][this.props.ab_quadrant]
         for (var ab_quadrant_button in ab_quadrant_dict) {
             ab_quadrant_buttons.push(
                 <Button
                     key={this.props.ab_quadrant + " " + ab_quadrant_button}
-                    color={this.context["Physical Exam"]["Abdomen"][this.props.ab_quadrant][ab_quadrant_button] ? 'grey' : ''}
+                    color={this.context["Physical Exam"].widgets["Abdomen"][this.props.ab_quadrant][ab_quadrant_button] ? 'grey' : ''}
                     onClick={this.onClick}
                 > 
                     {ab_quadrant_button} 
