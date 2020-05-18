@@ -41,8 +41,8 @@ export class HPIStore extends React.Component {
         })
 
         this.state = {
-            "title": "Untitled Note",
-            _id: "yasa",
+            title: "Untitled Note",
+            _id: null,
             "Allergies": allergies.state,
             "Medications": medications.state,
             "Surgical History": surgicalHistory.state,
@@ -51,21 +51,22 @@ export class HPIStore extends React.Component {
             "Social History": constants.SOCIAL_HISTORY.STATE,
             "Review of Systems": reviewOfSystems.state,
             "Physical Exam": peState,
-            "positivediseases": [],
-            "activeHPI": "",
-            "positivecategories": [],
+            positivediseases: [],
+            activeHPI: "",
+            positivecategories: [],
             hpi: {},
-            "plan": {},
+            plan: {},
             step: 1
         }
     }
 
 
-
+    //Sets context[name] equal to values
     onContextChange = (name, values) => {
         this.setState({ [name]: values });
     }
 
+    //Saves the current note, which updates the NotesContext's state
     saveNote = () => {
         let note = {
             noteName: this.state["title"],
@@ -91,6 +92,7 @@ export class HPIStore extends React.Component {
         this.context.updateNote(note)
     }
 
+    //Converts the schema of the provided note and updates the HPIContext's state
     loadNote = (note) => {
         this.setState({
             "title": note.noteName,
@@ -99,6 +101,7 @@ export class HPIStore extends React.Component {
         })
     }
 
+    //Deletes a note from NotesContext based on the note's id
     deleteNote = (note) => {
         this.context.deleteNote(note)
     }

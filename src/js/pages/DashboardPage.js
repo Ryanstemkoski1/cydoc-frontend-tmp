@@ -1,5 +1,4 @@
 import React, {Component, Fragment} from 'react';
-import {Redirect} from "react-router";
 import NavMenu from "../components/NavMenu";
 import VerticalMenu from "../components/VerticalMenu";
 import {Grid, Segment} from "semantic-ui-react";
