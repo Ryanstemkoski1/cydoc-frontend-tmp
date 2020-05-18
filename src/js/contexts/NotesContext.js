@@ -12,7 +12,7 @@ export class NotesStore extends React.Component {
         notes: []
     }
 
-    loadNotes = async (id = this.context.user._id) => {
+    loadNotes = async (_id = this.context.user._id) => {
 
         let response = await client.get("/records")
 
@@ -23,7 +23,7 @@ export class NotesStore extends React.Component {
 
         let notes = []
         response.data.forEach((note) => {
-            if (note.doctorID === this.context.user._id) {
+            if (note.doctorID === _id) {
                 notes.push(note)
             }
         })
