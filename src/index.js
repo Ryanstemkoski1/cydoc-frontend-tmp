@@ -1,7 +1,5 @@
 import React from "react";
-import { Provider } from "react-redux";
 import { CookiesProvider } from "react-cookie"
-import store from "./js/store/index";
 import './semantic/src/semantic/dist/semantic.min.css';
 import ReactDOM from 'react-dom';
 import './semantic/src/semantic/dist/semantic.min.css';
@@ -23,7 +21,6 @@ import { CreateTemplateStore } from "./js/contexts/CreateTemplateContext";
 
 
 ReactDOM.render(
-    <Provider store={store}>
         <CookiesProvider>
             <AuthStore>
                 <NotesStore>
@@ -46,6 +43,5 @@ ReactDOM.render(
                     </HPIStore>
                 </NotesStore>
             </AuthStore>
-        </CookiesProvider>
-    </Provider>, document.getElementById('root'));
+        </CookiesProvider>, document.getElementById('root'));
 

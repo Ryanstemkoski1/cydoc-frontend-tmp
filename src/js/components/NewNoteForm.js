@@ -1,6 +1,5 @@
 // src/js/components/NewNoteForm.js
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import uuidv1 from "uuid";
 import {Container, Form, Header, Segment} from "semantic-ui-react";
 import {Redirect} from "react-router-dom"
