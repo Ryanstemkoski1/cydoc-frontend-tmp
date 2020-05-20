@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Segment, Header} from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { Segment, Header } from 'semantic-ui-react';
 import MedicalHistoryContent from "./content/medicalhistory/MedicalHistoryContent";
 import SurgicalHistoryContent from "./content/surgicalhistory/SurgicalHistoryContent";
 import MedicationsContent from "./content/medications/MedicationsContent";
@@ -8,8 +8,6 @@ import FamilyHistoryContent from "./content/familyhistory/FamilyHistoryContent";
 import PropTypes from 'prop-types';
 import SocialHistoryContent from "./content/socialhistory/SocialHistoryContent";
 import PhysicalExamContent from "./content/physicalexam/PhysicalExamContent";
-import constants from 'constants/constants';
-import {allergies, medications, surgicalHistory} from 'constants/States'
 import ReviewOfSystemsContent from "./content/reviewofsystems/ReviewOfSystemsContent";
 import HPIContent from "./content/hpi/knowledgegraph/HPIContent";
 import PatientHistoryContent from "./content/patienthistory/PatientHistoryContent";
@@ -26,18 +24,10 @@ export default class NotePage extends Component {
         super(props);
         //bind methods
         this.updateDimensions = this.updateDimensions.bind(this);
-        this.handleMedicalHistoryChange = this.handleMedicalHistoryChange.bind(this);
-        this.handleSocialHistoryChange = this.handleSocialHistoryChange.bind(this);
-        this.handleAllergiesChange = this.handleAllergiesChange.bind(this);
         //initialize state
         this.state = {
             windowWidth: 0,
-            windowHeight: 0,
-            "Medical History": constants.MEDICAL_HISTORY.STATE,
-            "Social History": constants.SOCIAL_HISTORY.STATE,
-            "Allergies": allergies.state,
-            "Medications": medications.state,
-            "Surgical History": surgicalHistory.state,
+            windowHeight: 0
         }
     }
 
@@ -45,7 +35,7 @@ export default class NotePage extends Component {
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
     }
- 
+
     componentWillUnmount() {
         window.removeEventListener("resize", this.updateDimensions);
     }
@@ -53,27 +43,9 @@ export default class NotePage extends Component {
     updateDimensions() {
         let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
         let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
- 
+
         this.setState({ windowWidth, windowHeight });
     }
-
-    updateState(name, values){
-        //sets the state given a tab name and an object that represents the new state of that tab
-        let newState = this.state;
-        newState[name] = values;
-        this.setState(newState);
-    }
-
-    //individual handlers for each tab
-    handleSurgicalHistoryChange = (data, values) => this.updateState("Surgical History", values);
-
-    handleMedicationsChange = (data, values) => this.updateState("Medications", values);
-
-    handleAllergiesChange = (data, values) => this.updateState("Allergies", values);
-
-    handleMedicalHistoryChange = (data, values) => this.updateState("Medical History", values);
-
-    handleSocialHistoryChange = (data, values) => this.updateState("Social History", values);
 
     render() {
         const { windowWidth } = this.state;
@@ -103,39 +75,25 @@ export default class NotePage extends Component {
                 tabToDisplay = (<HPIContent />);
                 break;
             case "Medical History":
-                tabToDisplay = (<MedicalHistoryContent
-                    onMedicalHistoryChange={this.handleMedicalHistoryChange}
-                    values={this.state["Medical History"]}/>);
+                tabToDisplay = (<MedicalHistoryContent />);
                 break;
             case "Surgical History":
-                tabToDisplay = (<SurgicalHistoryContent
-                    onSurgicalHistoryChange={this.handleSurgicalHistoryChange}
-                    values={this.state["Surgical History"]}
-                />);
+                tabToDisplay = (<SurgicalHistoryContent />);
                 break;
             case "Medications":
-                tabToDisplay = (<MedicationsContent
-                    onMedicationsChange={this.handleMedicationsChange}
-                    values={this.state["Medications"]}
-                />);
+                tabToDisplay = (<MedicationsContent />);
                 break;
             case "Allergies":
-                tabToDisplay = (<AllergiesContent
-                    onAllergiesChange={this.handleAllergiesChange}
-                    values={this.state["Allergies"]}
-                />);
+                tabToDisplay = (<AllergiesContent />);
                 break;
             case "Family History":
-                tabToDisplay = (<FamilyHistoryContent/>);
+                tabToDisplay = (<FamilyHistoryContent />);
                 break;
             case "Social History":
-                tabToDisplay = (<SocialHistoryContent
-                    onSocialHistoryChange={this.handleSocialHistoryChange}
-                    values={this.state["Social History"]}
-                />);
+                tabToDisplay = (<SocialHistoryContent />);
                 break;
             case "Physical Exam":
-                tabToDisplay = (<PhysicalExamContent/>);
+                tabToDisplay = (<PhysicalExamContent />);
                 break;
             case "Review of Systems":
                 tabToDisplay = (<ReviewOfSystemsContent />);
@@ -159,5 +117,5 @@ export default class NotePage extends Component {
 };
 
 NotePage.propTypes = {
-  activeItem: PropTypes.string
+    activeItem: PropTypes.string
 };
