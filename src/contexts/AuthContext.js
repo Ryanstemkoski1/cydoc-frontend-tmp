@@ -1,8 +1,4 @@
 import React from 'react'
-import constants from 'constants/constants';
-import {allergies, medications, surgicalHistory} from 'constants/States'
-import axios from 'axios'
-import api from "constants/api"
 import { withCookies, Cookies } from 'react-cookie';
 
 const Context = React.createContext('yasa')

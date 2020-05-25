@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Form, Grid, Header, Segment, Button, Label, Message } from "semantic-ui-react";
+import { Form, Grid, Header, Segment, Message } from "semantic-ui-react";
 import * as yup from "yup"
 import { Redirect } from "react-router";
 import AuthContext from "../../contexts/AuthContext";
@@ -98,8 +98,6 @@ export default class Register extends Component {
         this.setState(newState);
     }
 
-
-    //TODO: Make an actual registration page
     handleSubmit = () => {
 
         let user = this.state.formInfo
