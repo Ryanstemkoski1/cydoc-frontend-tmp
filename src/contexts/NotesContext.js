@@ -1,6 +1,7 @@
 import React from 'react'
 import AuthContext from './AuthContext'
 import { client } from 'constants/api'
+import { noteBody } from 'constants/noteBody.js'
 
 const Context = React.createContext('yasa')
 
@@ -37,7 +38,7 @@ export class NotesStore extends React.Component {
             noteName: "Untitled Note",
             doctorID: this.context.user._id,
             clinicID: this.context.user.workplace,
-            body: null
+            body: noteBody
         }
 
 
