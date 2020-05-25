@@ -18,8 +18,8 @@ export default class LRButton extends React.Component {
                     <Button
                         attached='left'
                         content='L'
-                        active={this.context["Physical Exam 2"][this.props.group][this.props.name].left}
-                        color={this.context["Physical Exam 2"][this.props.group][this.props.name].left ? (this.props.color) : null}
+                        active={this.context["Physical Exam"][this.props.group][this.props.name].left}
+                        color={this.context["Physical Exam"][this.props.group][this.props.name].left ? (this.props.color) : null}
                         onClick={(e, {active}) => this.props.onClick('left', this.props.name, !active)}
                     />
                     <Button
@@ -31,8 +31,8 @@ export default class LRButton extends React.Component {
                     <Button
                         attached='right'
                         content='R'
-                        active={this.context["Physical Exam 2"][this.props.group][this.props.name].right}
-                        color={this.context["Physical Exam 2"][this.props.group][this.props.name].right ? (this.props.color) : null}
+                        active={this.context["Physical Exam"][this.props.group][this.props.name].right}
+                        color={this.context["Physical Exam"][this.props.group][this.props.name].right ? (this.props.color) : null}
                         onClick={(e, {active}) => this.props.onClick('right', this.props.name, !active)}
                     />
                 </Button.Group>
