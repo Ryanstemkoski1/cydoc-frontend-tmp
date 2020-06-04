@@ -18,9 +18,52 @@ const PRESCRIPTION_DEFAULT = {
     sig_comment: '',
     comment: '',
 };
+const PROCEDURES_DEFAULT = {
+    date: '',
+    procedure: '',
+    comment: '',
+};
 
+function ProcedureForm(props) {
+    const { all_data, updatePlan } = props;
+    return (
+        <Grid columns={3} stackable>
+            {
+                all_data.map((info, i) => (
+                <Grid.Row>
+                    <Grid.Column>
+                        <h4>Procedure</h4>
+                        <Input
+                            fluid
+                            type='text'
+                            placeholder='Procedure'
+                            defaultValue={info.procedure}
+                            onChange={(e) => updatePlan(i, 'procedure', e.target.value)}
+                        />
+                    </Grid.Column>
+                    <Grid.Column>
+                        <h4>Approximate Date</h4>
+                        <Input
+                            fluid
+                            type='date'
+                            defaultValue={info.date}
+                            onChange={(e) => updatePlan(i, 'date', e.target.value)}
+                        />
+                    </Grid.Column>
+                    <Grid.Column>
+                        <h4>Comments</h4>
+                        <div className='ui form'>
+                            <textarea value={info.comment} onChange={(e) => updatePlan(i, 'comment', e.target.value)}/>
+                        </div>
+                    </Grid.Column>
+                </Grid.Row>
+                ))
+            }
+        </Grid>
+    );
+}
 
-function Prescription(props) {
+function PrescriptionForm(props) {
     const RX_TYPE_OPTIONS = [
         { key: 'Medication', text: 'Medication', value: 'Medication' },
         { key: 'Text Value', text: 'Text Value', value: 'Text Value' },
@@ -33,64 +76,70 @@ function Prescription(props) {
         { key: 'day(s)', text: 'day(s)', value: 'day(s)' },
         { key: 'week(s)', text: 'week(s)', value: 'week(s)' },
     ];
+    const { all_prescriptions, updatePlan } = props;
     return (
         <Grid columns={3} stackable>
-            <Grid.Row>
-                <Grid.Column>
-                    <h4> Recipe (Rx) </h4>
-                    <Dropdown
-                        fluid
-                        selection
-                        defaultValue={props.info.rx_type}
-                        options={RX_TYPE_OPTIONS}
-                        onChange={(e, data) => props.onChange('rx_type', data.value)}
-                    />
-                    <Input
-                        fluid
-                        type='number'
-                        labelPosition='right'
-                        placeholder={0}
-                        defaultValue={props.info.rx_amount}
-                        label={<Dropdown 
-                            defaultValue={props.info.rx_unit}
-                            options={RX_UNIT_OPTIONS} 
-                            onChange={(e, data) => props.onChange('rx_unit', data.value)}/>}
-                        onChange={(e,data) => props.onChange('rx_amount', data.value)}
-                    />
-                </Grid.Column>
-                <Grid.Column>
-                    <h4> Signatura (Sig) </h4>
-                    <Input
-                        fluid
-                        type='number'
-                        labelPosition='right'
-                        placeholder={0}
-                        defaultValue={props.info.sig_amount}
-                        label={<Dropdown 
-                            defaultValue={props.info.sig_unit}
-                            options={SIG_UNIT_OPTIONS} 
-                            onChange={(e, data) => props.onChange('sig_unit', data.value)}/>}
-                        onChange={(e,data) => props.onChange('sig_amount', data.value)}
-                    />
-                    <Input
-                        fluid
-                        selection
-                        placeholder='e.g. 1 pill, everyday, with water'
-                        defaultValue={props.info.sig_type}
-                        options={RX_TYPE_OPTIONS}
-                        onChange={(e, data) => props.onChange('sig_comment', data.value)}
-                    />
-                </Grid.Column>
-                <Grid.Column stretched>
-                    <h4> Comments </h4>
-                    <div className='ui form'>
-                        <textarea value={props.info.comment} onChange={(e) => props.onChange('comment', e.target.value)}/>
-                    </div>
-                </Grid.Column>
-            </Grid.Row>
+            {
+                all_prescriptions.map((info, i) => (
+                <Grid.Row>
+                    <Grid.Column>
+                        <h4> Recipe (Rx) </h4>
+                        <Dropdown
+                            fluid
+                            selection
+                            defaultValue={info.rx_type}
+                            options={RX_TYPE_OPTIONS}
+                            onChange={(e, data) => updatePlan(i, 'rx_type', data.value)}
+                        />
+                        <Input
+                            fluid
+                            type='number'
+                            labelPosition='right'
+                            placeholder={0}
+                            defaultValue={info.rx_amount}
+                            label={<Dropdown 
+                                defaultValue={info.rx_unit}
+                                options={RX_UNIT_OPTIONS} 
+                                onChange={(e, data) => updatePlan(i, 'rx_unit', data.value)}/>}
+                            onChange={(e, data) => updatePlan(i, 'rx_amount', data.value)}
+                        />
+                    </Grid.Column>
+                    <Grid.Column>
+                        <h4> Signatura (Sig) </h4>
+                        <Input
+                            fluid
+                            type='number'
+                            labelPosition='right'
+                            placeholder={0}
+                            defaultValue={info.sig_amount}
+                            label={<Dropdown 
+                                defaultValue={info.sig_unit}
+                                options={SIG_UNIT_OPTIONS} 
+                                onChange={(e, data) => updatePlan( i, 'sig_unit', data.value)}/>}
+                            onChange={(e, data) => updatePlan(i, 'sig_amount', data.value)}
+                        />
+                        <Input
+                            fluid
+                            selection
+                            placeholder='e.g. 1 pill, everyday, with water'
+                            defaultValue={info.sig_type}
+                            options={RX_TYPE_OPTIONS}
+                            onChange={(e, data) => updatePlan(i, 'sig_comment', data.value)}
+                        />
+                    </Grid.Column>
+                    <Grid.Column>
+                        <h4> Comments </h4>
+                        <div className='ui form'>
+                            <textarea value={info.comment} onChange={(e, data) => updatePlan(i, 'comment', e.target.value)}/>
+                        </div>
+                    </Grid.Column>
+                </Grid.Row>
+                ))
+            }
         </Grid>
     );
 }
+
 
 class plan extends Component {
     static contextType = HPIContext
@@ -103,6 +152,8 @@ class plan extends Component {
             yes_color: "whitesmoke",
             no_color: "whitesmoke",
             prescriptions: [{ ...PRESCRIPTION_DEFAULT }],
+            procedures: [{...PROCEDURES_DEFAULT}],
+            referrals: [{...PROCEDURES_DEFAULT}],
         }
         this.handleYesClick = this.handleYesClick.bind(this)
         this.handleNoClick = this.handleNoClick.bind(this)
@@ -130,29 +181,11 @@ class plan extends Component {
         this.context.onContextChange("plan", values)
     }
 
-    generatePrescriptions = () => {
-        const unit_options = [
-            { key: 'mg', text: 'mg', value: 'mg' },
-            { key: 'mL', text: 'mL', value: 'mL' },
-        ]
-        return this.state.prescriptions.map((prescription, i) => (
-            <Input
-                key={i}
-                label={<Dropdown 
-                    defaultValue='mg' 
-                    options={unit_options} 
-                    onChange={(e, data) => this.updatePrescription(i, 'unit', data.value)}/>}
-                labelPosition='right'
-                placeholder='0'
-            />
-        ));
-    }
-
-    updatePrescription = (index, type, value) => {
-        const prescriptions = this.state.prescriptions.slice(); 
-        const target = prescriptions[index];
+    updatePlan = (section, index, type, value) => {
+        const values = this.state[section].slice(); 
+        const target = values[index];
         target[type] = value;
-        this.setState({ prescriptions });
+        this.setState({ [section]: values });
     } 
 
     render() {
@@ -160,28 +193,32 @@ class plan extends Component {
             <div>
                 <Header as='h3' dividing> Differential Diagnosis </Header>
                 <Header as='h3' dividing> Prescriptions </Header>
-                { this.state.prescriptions.map((prescription, i) => (
-                    <Prescription
-                        info={prescription}
-                        onChange={(type, value) => this.updatePrescription(i, type, value)}
-                    />
-                ))}
+                <PrescriptionForm
+                    all_prescriptions={this.state.prescriptions}
+                    updatePlan={(i, type, value) => this.updatePlan('prescriptions', i, type, value)}
+                />
                 <AddRowButton 
                     name='prescription'
                     onClick={() => this.setState({ prescriptions: this.state.prescriptions.concat(PRESCRIPTION_DEFAULT) })}
                 />
                 <Header as='h3' dividing> Procedures and Services </Header>
+                <ProcedureForm
+                    all_data={this.state.procedures}
+                    updatePlan={(i, type, value) => this.updatePlan('procedures', i, type, value)}
+                />
+                <AddRowButton 
+                    name='procedure or service'
+                    onClick={() => this.setState({ procedures: this.state.procedures.concat(PROCEDURES_DEFAULT) })}
+                />
                 <Header as='h3' dividing> Referrals </Header>
-                
-
-                <h4> Differential Diagnosis </h4>
-                <div className="ui form"> <textarea onChange={(event) => this.handleInputChange("Differential Diagnosis", event)} /> </div>
-                <h4> Plan (Medications) </h4>
-                <div className="ui form"> <textarea onChange={(event) => this.handleInputChange("Medications Plan", event)} /> </div>
-                <h4> Plan (Procedures/Services) </h4>
-                <div className="ui form"> <textarea onChange={(event) => this.handleInputChange("Procedures Plan", event)} /> </div>
-                <h4> Referrals/Consults </h4>
-                <div className="ui form"> <textarea onChange={(event) => this.handleInputChange("Referrals/Consults", event)} /> </div>
+                <ProcedureForm
+                    all_data={this.state.referrals}
+                    updatePlan={(i, type, value) => this.updatePlan('referrals', i, type, value)}
+                />
+                <AddRowButton 
+                    name='referral'
+                    onClick={() => this.setState({ referrals: this.state.referrals.concat(PROCEDURES_DEFAULT) })}
+                />
                 <h4> How sick is the patient on a scale from 1 (healthy) to 10 (critically ill)? </h4>
                 <NumericInput min={0} max={10} onChange={this.handleInputChange} />
                 <h4> Will you be admitting this patient to the hospital? </h4>
