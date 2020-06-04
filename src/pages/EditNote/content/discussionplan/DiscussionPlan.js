@@ -6,6 +6,7 @@ import {
     Input, 
     Dropdown,
     Grid,
+    Segment,
 } from 'semantic-ui-react';
 import AddRowButton from '../../../../components/tools/AddRowButton';
 
@@ -23,6 +24,30 @@ const PROCEDURES_DEFAULT = {
     procedure: '',
     comment: '',
 };
+
+function DiagnosisForm(props) {
+    return (
+        <Grid columns={2} stackable>
+            <Grid.Row>
+                <Grid.Column>
+                    <Input
+                        fluid
+                        placeholder='Condition'
+                    />
+                    <Input
+                        fluid
+                        placeholder='Diagnosis'
+                    />
+                </Grid.Column>
+                <Grid.Column>
+                    <div className='ui form'>
+                        <textarea placeholder='Comments'/>
+                    </div>
+                </Grid.Column>
+            </Grid.Row>
+        </Grid>
+    )
+}
 
 function ProcedureForm(props) {
     const { all_data, updatePlan } = props;
@@ -95,6 +120,7 @@ function PrescriptionForm(props) {
                             fluid
                             type='number'
                             labelPosition='right'
+                            min={0}
                             placeholder={0}
                             defaultValue={info.rx_amount}
                             label={<Dropdown 
@@ -110,6 +136,7 @@ function PrescriptionForm(props) {
                             fluid
                             type='number'
                             labelPosition='right'
+                            min={0}
                             placeholder={0}
                             defaultValue={info.sig_amount}
                             label={<Dropdown 
@@ -191,41 +218,49 @@ class plan extends Component {
     render() {
         return (
             <div>
-                <Header as='h3' dividing> Differential Diagnosis </Header>
-                <Header as='h3' dividing> Prescriptions </Header>
-                <PrescriptionForm
-                    all_prescriptions={this.state.prescriptions}
-                    updatePlan={(i, type, value) => this.updatePlan('prescriptions', i, type, value)}
-                />
-                <AddRowButton 
-                    name='prescription'
-                    onClick={() => this.setState({ prescriptions: this.state.prescriptions.concat(PRESCRIPTION_DEFAULT) })}
-                />
-                <Header as='h3' dividing> Procedures and Services </Header>
-                <ProcedureForm
-                    all_data={this.state.procedures}
-                    updatePlan={(i, type, value) => this.updatePlan('procedures', i, type, value)}
-                />
-                <AddRowButton 
-                    name='procedure or service'
-                    onClick={() => this.setState({ procedures: this.state.procedures.concat(PROCEDURES_DEFAULT) })}
-                />
-                <Header as='h3' dividing> Referrals </Header>
-                <ProcedureForm
-                    all_data={this.state.referrals}
-                    updatePlan={(i, type, value) => this.updatePlan('referrals', i, type, value)}
-                />
-                <AddRowButton 
-                    name='referral'
-                    onClick={() => this.setState({ referrals: this.state.referrals.concat(PROCEDURES_DEFAULT) })}
-                />
-                <h4> How sick is the patient on a scale from 1 (healthy) to 10 (critically ill)? </h4>
-                <NumericInput min={0} max={10} onChange={this.handleInputChange} />
-                <h4> Will you be admitting this patient to the hospital? </h4>
-                <button className="button_yesno" style={{backgroundColor: this.state.yes_color}} onClick={this.handleYesClick}> Yes </button> 
-                <button className="button_yesno" style={{backgroundColor: this.state.no_color}} onClick={this.handleNoClick}> No </button>
-                <h4> What other questions did you ask the patient that were not part of the existing questionnaire? </h4> 
-                <div className="ui form"> <textarea onChange={(event) => this.handleInputChange("Other Questions", event)} /> </div>
+                <Segment>
+                    <Header as='h3' dividing> Differential Diagnosis </Header>
+                    <DiagnosisForm/>
+                    <Header as='h3' dividing> Prescriptions </Header>
+                    <PrescriptionForm
+                        all_prescriptions={this.state.prescriptions}
+                        updatePlan={(i, type, value) => this.updatePlan('prescriptions', i, type, value)}
+                    />
+                    <AddRowButton 
+                        name='prescription'
+                        onClick={() => this.setState({ prescriptions: this.state.prescriptions.concat(PRESCRIPTION_DEFAULT) })}
+                    />
+                    <Header as='h3' dividing> Procedures and Services </Header>
+                    <ProcedureForm
+                        all_data={this.state.procedures}
+                        updatePlan={(i, type, value) => this.updatePlan('procedures', i, type, value)}
+                    />
+                    <AddRowButton 
+                        name='procedure or service'
+                        onClick={() => this.setState({ procedures: this.state.procedures.concat(PROCEDURES_DEFAULT) })}
+                    />
+                    <Header as='h3' dividing> Referrals </Header>
+                    <ProcedureForm
+                        all_data={this.state.referrals}
+                        updatePlan={(i, type, value) => this.updatePlan('referrals', i, type, value)}
+                    />
+                    <AddRowButton 
+                        name='referral'
+                        onClick={() => this.setState({ referrals: this.state.referrals.concat(PROCEDURES_DEFAULT) })}
+                    />
+                </Segment>
+                <Header as='h2' attached='top'>
+                    Help Improve Cydoc
+                </Header>
+                <Segment attached>
+                    <h4> How sick is the patient on a scale from 1 (healthy) to 10 (critically ill)? </h4>
+                    <NumericInput min={0} max={10} onChange={this.handleInputChange} />
+                    <h4> Will you be admitting this patient to the hospital? </h4>
+                    <button className="button_yesno" style={{backgroundColor: this.state.yes_color}} onClick={this.handleYesClick}> Yes </button> 
+                    <button className="button_yesno" style={{backgroundColor: this.state.no_color}} onClick={this.handleNoClick}> No </button>
+                    <h4> What other questions did you ask the patient that were not part of the existing questionnaire? </h4> 
+                    <div className="ui form"> <textarea onChange={(event) => this.handleInputChange("Other Questions", event)} /> </div>
+                </Segment>
             </div>
         )
     }
