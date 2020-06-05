@@ -18,7 +18,6 @@ import { AuthStore } from "./contexts/AuthContext";
 import { NotesStore } from "./contexts/NotesContext";
 import { CreateTemplateStore } from "./contexts/CreateTemplateContext";
 
-
 ReactDOM.render(
     <CookiesProvider>
         <AuthStore>
