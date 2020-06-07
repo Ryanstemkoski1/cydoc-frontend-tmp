@@ -21,7 +21,7 @@ class DiseaseTag extends React.Component {
         }
         else {
             values = values.concat(this.props.name)
-            plan['conditions'].unshift({...CONDITION_DEFAULT, name: this.props.name });
+            plan['conditions'].unshift({... JSON.parse(JSON.stringify(CONDITION_DEFAULT)), name: this.props.name });
         }
         this.context.onContextChange("positivediseases", values)
         this.context.onContextChange("activeHPI", values[0])
