@@ -6,6 +6,8 @@ import {
     Segment,
     Menu,
     Icon,
+    Grid,
+    Label,
 } from 'semantic-ui-react';
 import PlanInput from './PlanInput';
 import DiagnosisForm from './DiscussionPlanDiagnosis';
@@ -27,32 +29,25 @@ class plan extends Component {
             textInput: "",
             yes_id: 0,
             no_id: 0,
+            uncertain_id: 0,
             yes_color: "whitesmoke",
             no_color: "whitesmoke",
+            uncertain_color: "whitesmoke",
         }
-        this.handleYesClick = this.handleYesClick.bind(this)
-        this.handleNoClick = this.handleNoClick.bind(this)
-        this.handleInputChange = this.handleInputChange.bind(this)
+        this.active_color = "lightslategrey";
+        this.nonactive_color = "whitesmoke";
     }
 
-    handleInputChange = (title, event) => {
+    handleInputChange = (title, value) => {
         // this.setState({textInput: event.target.value})
-        const values = this.context["plan"]
-        values[title] = typeof event === 'object' ? event.target.value : event
-        this.context.onContextChange("plan", values)
+        const plan = {...this.context["plan"]}
+        plan['survey'][title] = value;
+        this.context.onContextChange("plan", plan)
     }
-
-    handleYesClick() {
-        this.setState({yes_color: "lightslategrey", yes_id: 1, no_id: -1, no_color: "whitesmoke"})
+    
+    handleOnClick = (type, value) => {
         const values = this.context["plan"]
-        values["Admitting Patient"] = "Yes"
-        this.context.onContextChange("plan", values)
-    }
-
-    handleNoClick() {
-        this.setState({yes_color: "whitesmoke", yes_id: -1, no_id: 1, no_color: "lightslategrey"})
-        const values = this.context["plan"]
-        values["Admitting Patient"] = "No"
+        values['survey'][type] = value;
         this.context.onContextChange("plan", values)
     }
 
@@ -88,7 +83,7 @@ class plan extends Component {
                         <GeneralForm
                             type='procedure'
                             header='Procedures and Services'
-                            subheader='procedure'
+                            subheader='Procedure'
                             placeholder='Procedure'
                             addRowName='procedure or service'
                             options={procedures}
@@ -106,17 +101,78 @@ class plan extends Component {
                             index={current}
                         />
                     </React.Fragment>)}
-                <Header as='h4' attached='top'>
-                    Help Improve Cydoc
-                </Header>
+                <Header as='h4' attached='top'> Help Improve Cydoc </Header>
                 <Segment attached>
-                    <h4> How sick is the patient on a scale from 1 (healthy) to 10 (critically ill)? </h4>
-                    <NumericInput min={0} max={10} onChange={this.handleInputChange} />
-                    <h4> Will you be admitting this patient to the hospital? </h4>
-                    <button className="button_yesno" style={{backgroundColor: this.state.yes_color}} onClick={this.handleYesClick}> Yes </button> 
-                    <button className="button_yesno" style={{backgroundColor: this.state.no_color}} onClick={this.handleNoClick}> No </button>
-                    <h4> What other questions did you ask the patient that were not part of the existing questionnaire? </h4> 
-                    <div className="ui form"> <textarea onChange={(event) => this.handleInputChange("Other Questions", event)} /> </div>
+                    <Grid stackable columns={2}>
+                        <Grid.Row>
+                            <Grid.Column width={7}>
+                                <h4> How sick is the patient? </h4>
+                            </Grid.Column>
+                            <Grid.Column floated='right'>
+                                <label> Healthy </label>
+                                <input 
+                                    type='range' 
+                                    min={0} 
+                                    max={10} 
+                                    step={1} 
+                                    value={plan['survey']['sickness']}
+                                    onChange={(e) => this.handleInputChange('sickness', parseInt(e.target.value))} 
+                                    />
+                                <label> Sick </label>
+                                <Label circular>{plan['survey']['sickness']}</Label>
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column width={7}>
+                                <h4> Will the patient be sent to the emergency department? </h4>
+                            </Grid.Column>
+                            <Grid.Column floated='right'>
+                                <button 
+                                    className="button_yesno" 
+                                    style={{backgroundColor: plan['survey']['emergency'] === 'Yes' ? this.active_color : this.nonactive_color}} 
+                                    onClick={() => this.handleOnClick('emergency', 'Yes')}> 
+                                    Yes 
+                                </button> 
+                                <button 
+                                    className="button_yesno" 
+                                    style={{backgroundColor: plan['survey']['emergency'] === 'No' ? this.active_color : this.nonactive_color}} 
+                                    onClick={() => this.handleOnClick('emergency', 'No')}> 
+                                    No 
+                                </button> 
+                                <button 
+                                    className="button_yesno" 
+                                    style={{backgroundColor: plan['survey']['emergency'] === 'Uncertain' ? this.active_color : this.nonactive_color}} 
+                                    onClick={() => this.handleOnClick('emergency', 'Uncertain')}> 
+                                    Uncertain 
+                                </button> 
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column width={7}>
+                                <h4> Will the patient be admitted to the hospital? </h4>
+                            </Grid.Column>
+                            <Grid.Column floated='right'>
+                                <button 
+                                    className="button_yesno" 
+                                    style={{backgroundColor: plan['survey']['admit_to_hospital'] === 'Yes' ? this.active_color : this.nonactive_color}} 
+                                    onClick={() => this.handleOnClick('admit_to_hospital', 'Yes')}> 
+                                    Yes 
+                                </button> 
+                                <button 
+                                    className="button_yesno" 
+                                    style={{backgroundColor: plan['survey']['admit_to_hospital'] === 'No' ? this.active_color : this.nonactive_color}} 
+                                    onClick={() => this.handleOnClick('admit_to_hospital', 'No')}> 
+                                    No 
+                                </button> 
+                                <button 
+                                    className="button_yesno" 
+                                    style={{backgroundColor: plan['survey']['admit_to_hospital'] === 'Uncertain' ? this.active_color : this.nonactive_color}} 
+                                    onClick={() => this.handleOnClick('admit_to_hospital', 'Uncertain')}> 
+                                    Uncertain 
+                                </button> 
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
                 </Segment>
             </div>
         )

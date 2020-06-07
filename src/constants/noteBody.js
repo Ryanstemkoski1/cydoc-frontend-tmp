@@ -43,6 +43,6 @@ export const noteBody = {
     activeHPI: "",
     positivecategories: [],
     hpi: {},
-    plan: { conditions: [], 'survey': {'sickness': 0, 'admit_to_hospital': '', 'emergency_department': ''} },
+    plan: { conditions: [], 'survey': {'sickness': 0, 'admit_to_hospital': '', 'emergency': ''} },
     step: 1
 }
