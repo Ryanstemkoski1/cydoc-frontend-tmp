@@ -3,184 +3,32 @@ import NumericInput from "react-numeric-input";
 import HPIContext from 'contexts/HPIContext.js'
 import { 
     Header, 
-    Input, 
-    Dropdown,
-    Grid,
     Segment,
+    Menu,
+    Icon,
 } from 'semantic-ui-react';
-import AddRowButton from '../../../../components/tools/AddRowButton';
+import PlanInput from './PlanInput';
+import DiagnosisForm from './DiscussionPlanDiagnosis';
+import PrescriptionForm from './DiscussionPlanPrescription';
+import GeneralForm from './DiscussionPlanForm';
+import { CONDITION_DEFAULT, PROCEDURES_DEFAULT, REFERRAL_DEFAULT } from './DiscussionPlanDefaults';
+import procedures from 'constants/procedures';
+import constants from 'constants/registration-constants.json';
+import './discussionPlan.css';
 
-const PRESCRIPTION_DEFAULT = {
-    rx_type: 'Medication',
-    rx_amount: null,
-    rx_unit: 'mg',
-    sig_amount: null,
-    sig_unit: 'day(s)',
-    sig_comment: '',
-    comment: '',
-};
-const PROCEDURES_DEFAULT = {
-    date: '',
-    procedure: '',
-    comment: '',
-};
-
-function DiagnosisForm(props) {
-    return (
-        <Grid columns={2} stackable>
-            <Grid.Row>
-                <Grid.Column>
-                    <Input
-                        fluid
-                        placeholder='Condition'
-                    />
-                    <Input
-                        fluid
-                        placeholder='Diagnosis'
-                    />
-                </Grid.Column>
-                <Grid.Column>
-                    <div className='ui form'>
-                        <textarea placeholder='Comments'/>
-                    </div>
-                </Grid.Column>
-            </Grid.Row>
-        </Grid>
-    )
-}
-
-function ProcedureForm(props) {
-    const { all_data, updatePlan } = props;
-    return (
-        <Grid columns={3} stackable>
-            {
-                all_data.map((info, i) => (
-                <Grid.Row>
-                    <Grid.Column>
-                        <h4>Procedure</h4>
-                        <Input
-                            fluid
-                            type='text'
-                            placeholder='Procedure'
-                            defaultValue={info.procedure}
-                            onChange={(e) => updatePlan(i, 'procedure', e.target.value)}
-                        />
-                    </Grid.Column>
-                    <Grid.Column>
-                        <h4>Approximate Date</h4>
-                        <Input
-                            fluid
-                            type='date'
-                            defaultValue={info.date}
-                            onChange={(e) => updatePlan(i, 'date', e.target.value)}
-                        />
-                    </Grid.Column>
-                    <Grid.Column>
-                        <h4>Comments</h4>
-                        <div className='ui form'>
-                            <textarea value={info.comment} onChange={(e) => updatePlan(i, 'comment', e.target.value)}/>
-                        </div>
-                    </Grid.Column>
-                </Grid.Row>
-                ))
-            }
-        </Grid>
-    );
-}
-
-function PrescriptionForm(props) {
-    const RX_TYPE_OPTIONS = [
-        { key: 'Medication', text: 'Medication', value: 'Medication' },
-        { key: 'Text Value', text: 'Text Value', value: 'Text Value' },
-    ];
-    const RX_UNIT_OPTIONS = [
-        { key: 'mg', text: 'mg', value: 'mg' },
-        { key: 'mL', text: 'mL', value: 'mL' },
-    ];
-    const SIG_UNIT_OPTIONS = [
-        { key: 'day(s)', text: 'day(s)', value: 'day(s)' },
-        { key: 'week(s)', text: 'week(s)', value: 'week(s)' },
-    ];
-    const { all_prescriptions, updatePlan } = props;
-    return (
-        <Grid columns={3} stackable>
-            {
-                all_prescriptions.map((info, i) => (
-                <Grid.Row>
-                    <Grid.Column>
-                        <h4> Recipe (Rx) </h4>
-                        <Dropdown
-                            fluid
-                            selection
-                            defaultValue={info.rx_type}
-                            options={RX_TYPE_OPTIONS}
-                            onChange={(e, data) => updatePlan(i, 'rx_type', data.value)}
-                        />
-                        <Input
-                            fluid
-                            type='number'
-                            labelPosition='right'
-                            min={0}
-                            placeholder={0}
-                            defaultValue={info.rx_amount}
-                            label={<Dropdown 
-                                defaultValue={info.rx_unit}
-                                options={RX_UNIT_OPTIONS} 
-                                onChange={(e, data) => updatePlan(i, 'rx_unit', data.value)}/>}
-                            onChange={(e, data) => updatePlan(i, 'rx_amount', data.value)}
-                        />
-                    </Grid.Column>
-                    <Grid.Column>
-                        <h4> Signatura (Sig) </h4>
-                        <Input
-                            fluid
-                            type='number'
-                            labelPosition='right'
-                            min={0}
-                            placeholder={0}
-                            defaultValue={info.sig_amount}
-                            label={<Dropdown 
-                                defaultValue={info.sig_unit}
-                                options={SIG_UNIT_OPTIONS} 
-                                onChange={(e, data) => updatePlan( i, 'sig_unit', data.value)}/>}
-                            onChange={(e, data) => updatePlan(i, 'sig_amount', data.value)}
-                        />
-                        <Input
-                            fluid
-                            selection
-                            placeholder='e.g. 1 pill, everyday, with water'
-                            defaultValue={info.sig_type}
-                            options={RX_TYPE_OPTIONS}
-                            onChange={(e, data) => updatePlan(i, 'sig_comment', data.value)}
-                        />
-                    </Grid.Column>
-                    <Grid.Column>
-                        <h4> Comments </h4>
-                        <div className='ui form'>
-                            <textarea value={info.comment} onChange={(e, data) => updatePlan(i, 'comment', e.target.value)}/>
-                        </div>
-                    </Grid.Column>
-                </Grid.Row>
-                ))
-            }
-        </Grid>
-    );
-}
-
+const specialtyOptions = constants.specialties.map((specialty) => ({ key: specialty, text: specialty, value: specialty }));
 
 class plan extends Component {
     static contextType = HPIContext
     constructor(context) {
-        super(context)
+        super(context);
         this.state = {
+            current: 0,
             textInput: "",
             yes_id: 0,
             no_id: 0,
             yes_color: "whitesmoke",
             no_color: "whitesmoke",
-            prescriptions: [{ ...PRESCRIPTION_DEFAULT }],
-            procedures: [{...PROCEDURES_DEFAULT}],
-            referrals: [{...PROCEDURES_DEFAULT}],
         }
         this.handleYesClick = this.handleYesClick.bind(this)
         this.handleNoClick = this.handleNoClick.bind(this)
@@ -208,48 +56,57 @@ class plan extends Component {
         this.context.onContextChange("plan", values)
     }
 
-    updatePlan = (section, index, type, value) => {
-        const values = this.state[section].slice(); 
-        const target = values[index];
-        target[type] = value;
-        this.setState({ [section]: values });
-    } 
+    addCondition = () => {
+        const { plan } = this.context;
+        const conditions = plan.conditions.concat({ ...JSON.parse(JSON.stringify(CONDITION_DEFAULT)) });
+        plan.conditions = conditions;
+        this.context.onContextChange('plan', plan);
+        this.setState({ current: conditions.length - 1});
+    }
 
     render() {
+        const { plan } = this.context;
+        const { current } = this.state;
+
+        const plans = this.context.plan.conditions.map((condition, i) => 
+            <Menu.Item onClick={() => this.setState({current: i})} active={this.state.current === i}>
+                <PlanInput index={i} name={condition.name} />
+            </Menu.Item>
+        );
+        plans.push(
+            <Menu.Item onClick={this.addCondition}>
+                <Icon name='plus'/>
+            </Menu.Item>);
         return (
             <div>
-                <Segment>
-                    <Header as='h3' dividing> Differential Diagnosis </Header>
-                    <DiagnosisForm/>
-                    <Header as='h3' dividing> Prescriptions </Header>
-                    <PrescriptionForm
-                        all_prescriptions={this.state.prescriptions}
-                        updatePlan={(i, type, value) => this.updatePlan('prescriptions', i, type, value)}
-                    />
-                    <AddRowButton 
-                        name='prescription'
-                        onClick={() => this.setState({ prescriptions: this.state.prescriptions.concat(PRESCRIPTION_DEFAULT) })}
-                    />
-                    <Header as='h3' dividing> Procedures and Services </Header>
-                    <ProcedureForm
-                        all_data={this.state.procedures}
-                        updatePlan={(i, type, value) => this.updatePlan('procedures', i, type, value)}
-                    />
-                    <AddRowButton 
-                        name='procedure or service'
-                        onClick={() => this.setState({ procedures: this.state.procedures.concat(PROCEDURES_DEFAULT) })}
-                    />
-                    <Header as='h3' dividing> Referrals </Header>
-                    <ProcedureForm
-                        all_data={this.state.referrals}
-                        updatePlan={(i, type, value) => this.updatePlan('referrals', i, type, value)}
-                    />
-                    <AddRowButton 
-                        name='referral'
-                        onClick={() => this.setState({ referrals: this.state.referrals.concat(PROCEDURES_DEFAULT) })}
-                    />
-                </Segment>
-                <Header as='h2' attached='top'>
+                <Menu stackable tabular items={plans}/>
+                    { plan.conditions.length > 0 
+                        && 
+                    (<React.Fragment>
+                        <DiagnosisForm index={current}/>
+                        <PrescriptionForm index={current}/>
+                        <GeneralForm
+                            type='procedure'
+                            header='Procedures and Services'
+                            subheader='procedure'
+                            placeholder='Procedure'
+                            addRowName='procedure or service'
+                            options={procedures}
+                            default={PROCEDURES_DEFAULT}
+                            index={current}
+                        />
+                        <GeneralForm
+                            type='referral'
+                            header='Referrals'
+                            subheader='Refer to'
+                            placeholder='Department'
+                            addRowName='referral'
+                            options={specialtyOptions}
+                            default={REFERRAL_DEFAULT}
+                            index={current}
+                        />
+                    </React.Fragment>)}
+                <Header as='h4' attached='top'>
                     Help Improve Cydoc
                 </Header>
                 <Segment attached>

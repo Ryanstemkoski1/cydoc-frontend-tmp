@@ -6,7 +6,7 @@ export const DIAGNOSIS_DEFAULT = {
 export const PRESCRIPTION_DEFAULT = {
     recipe_type: '',
     recipe_amount: '',
-    signature: '',
+    signatura: '',
     comment: '',
 };
 
@@ -27,6 +27,6 @@ export const CONDITION_DEFAULT = {
     'differential_diagnosis': [{...DIAGNOSIS_DEFAULT}],
     'prescription': [{...PRESCRIPTION_DEFAULT}],
     'procedure': [{...PROCEDURES_DEFAULT}],
-    'referrals': [{...REFERRAL_DEFAULT}],
+    'referral': [{...REFERRAL_DEFAULT}],
 };
 
