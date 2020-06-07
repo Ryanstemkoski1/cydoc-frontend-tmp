@@ -26,7 +26,7 @@ export const CONDITION_DEFAULT = {
     'name': '',
     'differential_diagnosis': [{...DIAGNOSIS_DEFAULT}],
     'prescription': [{...PRESCRIPTION_DEFAULT}],
-    'procedure_services': [{...PROCEDURES_DEFAULT}],
+    'procedure': [{...PROCEDURES_DEFAULT}],
     'referrals': [{...REFERRAL_DEFAULT}],
 };
 
