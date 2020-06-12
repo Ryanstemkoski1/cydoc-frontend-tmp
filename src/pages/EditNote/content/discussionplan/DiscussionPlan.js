@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import NumericInput from "react-numeric-input";
 import HPIContext from 'contexts/HPIContext.js'
 import { 
     Header, 
@@ -12,13 +11,11 @@ import {
 import PlanInput from './PlanInput';
 import DiagnosisForm from './DiscussionPlanDiagnosis';
 import PrescriptionForm from './DiscussionPlanPrescription';
-import GeneralForm from './DiscussionPlanForm';
-import { CONDITION_DEFAULT, PROCEDURES_DEFAULT, REFERRAL_DEFAULT } from './DiscussionPlanDefaults';
-import procedures from 'constants/procedures';
-import constants from 'constants/registration-constants.json';
+import ReferralForm from './DiscussionPlanReferral';
+import ProcedureForm from './DiscussionPlanProcedure';
+import { CONDITION_DEFAULT } from './DiscussionPlanDefaults';
 import './discussionPlan.css';
 
-const specialtyOptions = constants.specialties.map((specialty) => ({ key: specialty, text: specialty, value: specialty }));
 
 class plan extends Component {
     static contextType = HPIContext
@@ -59,6 +56,14 @@ class plan extends Component {
         this.setState({ current: conditions.length - 1});
     }
 
+    componentDidMount() {
+        const plan = { ...this.context.plan };
+        if (!('survey' in plan)) {
+            plan['survey'] = {'sickness': 0, 'admit_to_hospital': '', 'emergency': ''};
+            this.context.onContextChange('plan', plan);   
+        }
+    }
+
     render() {
         const { plan } = this.context;
         const { current } = this.state;
@@ -80,26 +85,8 @@ class plan extends Component {
                     (<React.Fragment>
                         <DiagnosisForm index={current}/>
                         <PrescriptionForm index={current}/>
-                        <GeneralForm
-                            type='procedure'
-                            header='Procedures and Services'
-                            subheader='Procedure'
-                            placeholder='Procedure'
-                            addRowName='procedure or service'
-                            options={procedures}
-                            default={PROCEDURES_DEFAULT}
-                            index={current}
-                        />
-                        <GeneralForm
-                            type='referral'
-                            header='Referrals'
-                            subheader='Refer to'
-                            placeholder='Department'
-                            addRowName='referral'
-                            options={specialtyOptions}
-                            default={REFERRAL_DEFAULT}
-                            index={current}
-                        />
+                        <ProcedureForm index={current}/>
+                        <ReferralForm index={current}/>
                     </React.Fragment>)}
                 <Header as='h4' attached='top'> Help Improve Cydoc </Header>
                 <Segment attached>
