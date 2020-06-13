@@ -22,9 +22,13 @@ export default class PlanInput extends React.Component {
         this.context.onContextChange('plan', plan);
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.name !== this.state.textInput) {
+            this.setState({ textInput: this.props.name });
+        }
+    }
+
     render() {
-        console.log(this.props.name);
-        console.log(this.state.textInput);
         return(
             <Input
                 fluid={this.props.fluid}

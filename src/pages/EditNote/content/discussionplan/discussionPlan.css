@@ -49,3 +49,11 @@
 .accordion.plan-section {
     margin: 1.5rem 0;
 }
+
+.delete-btn-wrapper {
+    align-items: center;
+}
+
+.delete-btn {
+    cursor: pointer;
+}

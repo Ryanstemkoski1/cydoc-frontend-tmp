@@ -8,7 +8,8 @@ import {
     Grid,
     Label,
     Dropdown,
-    Divider,
+    Button,
+    Modal,
 } from 'semantic-ui-react';
 import PlanInput from './PlanInput';
 import DiagnosisForm from './DiscussionPlanDiagnosis';
@@ -116,7 +117,15 @@ class plan extends Component {
             <div>
                 { collapseTabs 
                     ? <CollapsedMenu tabs={dropdownTabs} index={current}/>
-                    : <Menu stackable scrollable tabular items={expandedTabs}/>
+                    : <Menu stackable scrollable tabular>
+                        {expandedTabs}
+                        {expandedTabs.length > 1
+                            &&
+                        <Menu.Menu className='delete-btn-wrapper' position='right'>
+                            <DeleteCard name={plan['conditions'][current].name} index={current}/>
+                        </Menu.Menu>
+                        }
+                    </Menu>
                 }
                 { plan.conditions.length > 0 
                     && 
@@ -221,11 +230,8 @@ function CollapsedMenu(props) {
     });
     return (
         <Menu tabular>
-            {curTab.name === 'Add Condition'
-                ? <Menu.Item onClick={curTab.onClick}>
-                    <Icon name='plus'/>
-                </Menu.Item>
-                : <Menu.Item {...curTab}>
+            {curTab.name !== 'Add Condition'
+                && <Menu.Item {...curTab}>
                     <PlanInput name={curTab.name} index={curTab.key}/>
                 </Menu.Item>
             }
@@ -236,6 +242,51 @@ function CollapsedMenu(props) {
                     options={dropdownTabs}
                 />
             </Menu.Item>
+            {props.tabs.length > 1
+                &&
+            <Menu.Menu className='delete-btn-wrapper' position='right'>
+                <DeleteCard name={curTab.name} index={curTab.key}/>
+            </Menu.Menu>
+            }
         </Menu>
     )
+}
+
+class DeleteCard extends Component {
+    static contextType = HPIContext;
+    constructor(props) {
+        super(props);
+        this.state = {
+            openModal: false,
+        }
+    }
+
+    open = () => this.setState({ openModal: true });
+    close = () => this.setState({ openModal: false });
+    delete = () => {
+        const plan = {...this.context.plan}
+        plan['conditions'].splice(this.props.index, 1);
+        this.context.onContextChange('plan', plan);
+        this.close();
+    }
+
+    render() {
+        return (
+            <Modal 
+                size='tiny' 
+                open={this.state.openModal} 
+                onClose={this.close} 
+                trigger={<Icon onClick={this.open} name='trash alternate outline' className='delete-btn'/>}
+            >
+                <Modal.Header> Delete Condition </Modal.Header>
+                <Modal.Content>
+                    <p>Are you sure you want you delete plan for {this.props.name}</p>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button negative content='No'onClick={this.close}/>
+                    <Button positive content='Yes'onClick={this.delete}/>
+                </Modal.Actions>
+            </Modal>
+        )
+    }
 }
