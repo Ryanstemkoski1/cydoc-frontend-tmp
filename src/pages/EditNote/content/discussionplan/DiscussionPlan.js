@@ -7,6 +7,7 @@ import {
     Icon,
     Grid,
     Label,
+    Dropdown,
 } from 'semantic-ui-react';
 import PlanInput from './PlanInput';
 import DiagnosisForm from './DiscussionPlanDiagnosis';
@@ -14,6 +15,7 @@ import PrescriptionForm from './DiscussionPlanPrescription';
 import ReferralForm from './DiscussionPlanReferral';
 import ProcedureForm from './DiscussionPlanProcedure';
 import { CONDITION_DEFAULT } from './DiscussionPlanDefaults';
+import { DISCUSSION_PLAN_MENU_BP } from 'constants/breakpoints.js';
 import './discussionPlan.css';
 
 
@@ -23,20 +25,34 @@ class plan extends Component {
         super(context);
         this.state = {
             current: 0,
-            textInput: "",
-            yes_id: 0,
-            no_id: 0,
-            uncertain_id: 0,
             yes_color: "whitesmoke",
             no_color: "whitesmoke",
             uncertain_color: "whitesmoke",
+            windowWidth: 0,
+            windowHeight: 0,
+            dropdownOpen: false,
         }
+        this.updateDimensions = this.updateDimensions.bind(this);
         this.active_color = "lightslategrey";
         this.nonactive_color = "whitesmoke";
     }
 
+    componentWillMount() {
+        this.updateDimensions();
+        window.addEventListener('resize', this.updateDimensions);
+    }
+    
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateDimensions);
+    }
+
+    updateDimensions() {
+        const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
+        const windowHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
+        this.setState({ windowHeight, windowWidth });
+    }
+
     handleInputChange = (title, value) => {
-        // this.setState({textInput: event.target.value})
         const plan = {...this.context["plan"]}
         plan['survey'][title] = value;
         this.context.onContextChange("plan", plan)
@@ -56,38 +72,58 @@ class plan extends Component {
         this.setState({ current: conditions.length - 1});
     }
 
-    componentDidMount() {
-        const plan = { ...this.context.plan };
-        if (!('survey' in plan)) {
-            plan['survey'] = {'sickness': 0, 'admit_to_hospital': '', 'emergency': ''};
-            this.context.onContextChange('plan', plan);   
-        }
-    }
-
     render() {
         const { plan } = this.context;
-        const { current } = this.state;
+        const { current, windowWidth } = this.state;
+        const mobile = windowWidth < DISCUSSION_PLAN_MENU_BP;
+        const collapseTabs = mobile || plan.conditions.length * 150 > DISCUSSION_PLAN_MENU_BP;
+        
+        const expandedTabs = [];
+        const dropdownTabs = [];
+        this.context.plan.conditions.forEach((condition, i) => {
+            expandedTabs.push(
+                <Menu.Item onClick={() =>this.setState({current: i})} active={this.state.current === i}>
+                    <PlanInput index={i} name={condition.name} />
+                </Menu.Item>
+            );
+            dropdownTabs.push({
+                key: i,
+                name: condition.name,
+                text: condition.name,
+                value: condition.name,
+                active: this.state.current === i,
+                onClick: () => this.setState({current: i}),
+            });
+        });
 
-        const plans = this.context.plan.conditions.map((condition, i) => 
-            <Menu.Item onClick={() => this.setState({current: i})} active={this.state.current === i}>
-                <PlanInput index={i} name={condition.name} />
-            </Menu.Item>
-        );
-        plans.push(
+        expandedTabs.push(
             <Menu.Item onClick={this.addCondition}>
                 <Icon name='plus'/>
             </Menu.Item>);
+        dropdownTabs.push({
+            key: dropdownTabs.length,
+            name: 'Add Condition',
+            text: 'Add Condition',
+            value: 'Add Condition',
+            active: this.state.current === dropdownTabs.length,
+            onClick: this.addCondition,
+        });
+
+
         return (
             <div>
-                <Menu stackable tabular items={plans}/>
-                    { plan.conditions.length > 0 
-                        && 
-                    (<React.Fragment>
-                        <DiagnosisForm index={current}/>
-                        <PrescriptionForm index={current}/>
-                        <ProcedureForm index={current}/>
-                        <ReferralForm index={current}/>
-                    </React.Fragment>)}
+                { collapseTabs 
+                    ? <CollapsedMenu tabs={dropdownTabs} index={current}/>
+                    : <Menu stackable scrollable tabular items={expandedTabs}/>
+                }
+                { plan.conditions.length > 0 
+                    && 
+                (<React.Fragment>
+                    <DiagnosisForm index={current}/>
+                    <PrescriptionForm index={current}/>
+                    <ProcedureForm index={current}/>
+                    <ReferralForm index={current}/>
+                </React.Fragment>)}
                 <Header as='h4' attached='top'> Help Improve Cydoc </Header>
                 <Segment attached>
                     <Grid stackable columns={2}>
@@ -166,4 +202,37 @@ class plan extends Component {
     }
 }
 
-export default plan
+export default plan;
+
+function CollapsedMenu(props) {
+    const curTab = props.tabs[props.index];
+    const dropdownTabs = props.tabs.map((tab) => {
+        if (tab.name === 'Add Condition') {
+            return (
+                <Menu.Item onClick={tab.onClick}>
+                    <Icon name='plus'/>
+                </Menu.Item>
+            );
+        }
+        return <Menu.Item {...tab} />
+    });
+    return (
+        <Menu tabular>
+            {curTab.name === 'Add Condition'
+                ? <Menu.Item onClick={curTab.onClick}>
+                    <Icon name='plus'/>
+                </Menu.Item>
+                : <Menu.Item {...curTab}>
+                    <PlanInput name={curTab.name} index={curTab.key}/>
+                </Menu.Item>
+            }
+            <Menu.Item>
+                <Dropdown
+                    value=''
+                    icon='ellipsis horizontal'
+                    options={dropdownTabs}
+                />
+            </Menu.Item>
+        </Menu>
+    )
+}

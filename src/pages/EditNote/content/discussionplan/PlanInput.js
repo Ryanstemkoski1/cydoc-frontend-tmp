@@ -23,8 +23,11 @@ export default class PlanInput extends React.Component {
     }
 
     render() {
+        console.log(this.props.name);
+        console.log(this.state.textInput);
         return(
             <Input
+                fluid={this.props.fluid}
                 className={this.state.isTitleFocused === true ? 'ui input focus' : 'ui input transparent'}
                 type='text'
                 placeholder='Condition Name'
