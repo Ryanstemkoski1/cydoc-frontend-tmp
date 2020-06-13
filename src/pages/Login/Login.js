@@ -88,20 +88,20 @@ class LoginPage extends Component {
         const { username, password } = this.state;
         return (
             //renders a one-column grid centered in the middle of the screen with login form
-            <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle' centered>
+            <Grid textAlign='center' style={{ height: '100vh'}} verticalAlign='middle' centered>
                 <Grid.Column style={{ maxWidth: 450 }}>
                     <Header color='grey' textAlign='center' style={{ fontSize: "60px", letterSpacing: "4.8px" }}>
                         cydoc
                     </Header>
                     <Header as='h4' color='grey' textAlign='center'>
-                        log in or sign up
+                        Log in or Sign up
                     </Header>
+
                     <Segment clearing raised style={{ borderColor: "white" }}>
                         <Form size='mini' onSubmit={this.handleSubmit}>
                             <Form.Input
                                 fluid
-                                label='username'
-                                placeholder='username'
+                                label='Username'
                                 name='username'
                                 value={username}
                                 onChange={this.handleChange}
@@ -109,23 +109,24 @@ class LoginPage extends Component {
                             <Form.Input
                                 fluid
                                 type={"password"}
-                                label='password'
+                                label='Password'
                                 name='password'
                                 value={password}
                                 onChange={this.handleChange}
                             />
-                            <Form.Button color='violet' size='small' floated='left'>
+                            <Form.Button color='#EAF3F5' size='small' floated='center'>
                                 Log in
-                                </Form.Button>
+                            </Form.Button>
 
                         </Form>
                         <Link to={"/register"}>
-                            <Button color='grey' size='small' floated='right'>
+                            <Button color='teal' size='small' floated='right'>
                                 Sign up
                             </Button>
                         </Link>
-
                     </Segment>
+
+
                 </Grid.Column>
             </Grid>
         );

@@ -8,17 +8,15 @@
 @pageFont          : 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
 @normal            : normal;
-@bold              : @normal;
+@bold              : bold;
 
-
-@primaryColor   : @violet;
-@secondaryColor : @grey;
 @red            : #B03060;
 @orange         : #FE9A76;
 @yellow         : #FFD700;
 @olive          : #32CD32;
 @green          : #016936;
-@teal           : #008080;
+@teal           : #00809F;
+@lightTeal			:	#EAF3F5;
 @blue           : #0E6EB8;
 @violet         : #424874;
 @purple         : #B413EC;
@@ -26,13 +24,17 @@
 @brown          : #A52A2A;
 @grey           : #707070;
 @black          : #000000;
-@teal1          : #ECF3F5;
 @lightgrey      : #E0E1E2;
+@white					: #FFFFFF;
+
+@primaryColor   : @teal;
+@secondaryColor : @grey;
+
 /*-------------------
         Page
 --------------------*/
 
-@pageBackground      : @teal1;
+@pageBackground      : @lightTeal;
 @pageOverflowX       : hidden;
 
 @lineHeight          : 1.4285em;
@@ -42,7 +44,8 @@
   Page Heading
 ---------------*/
 
-@headerFontWeight : @normal;
+/*
+@headerFontWeight : @bold;
 @headerLineHeight : unit((18 / 14), em);
 
 @h1 : unit((28 / 14), rem);
@@ -50,7 +53,7 @@
 @h3 : unit((18 / 14), rem);
 @h4 : unit((15 / 14), rem);
 @h5 : unit((14 / 14), rem);
-
+*/
 
 /*-------------------
     Border Radius
@@ -59,6 +62,7 @@
 /* See Power-user section below
    for explanation of @px variables
 */
+/*
 @relativeBorderRadius: @relative7px;
 @absoluteBorderRadius: @7px;
 
@@ -66,3 +70,47 @@
 
 
 @linkColor           : @textColor;
+*/
+
+/*
+
+Shadow
+
+*/
+
+
+/*@subtleShadow:
+  0px 1px 2px 0 @borderColor
+;
+@floatingShadow:
+  0px 2px 4px 0px rgba(34, 36, 38, 0.12),
+  0px 2px 10px 0px rgba(34, 36, 38, 0.15)
+;
+
+@floatingShadowHover:
+  0px 2px 4px 0px rgba(34, 36, 38, 0.15),
+  0px 2px 10px 0px rgba(34, 36, 38, 0.25)
+;*/
+/*
+@subtleShadow:
+  0px 3px 5px 0px @borderColor
+;
+
+
+@floatingShadow:
+  0px 5px 10px 0px @borderColor,
+  0px 5px 20px 0px @borderColor
+;
+
+@floatingShadowHover:
+	0px 5px 10px 0px @borderColor
+	0px 5px 20px 0px @borderColor
+;
+
+
+*/
+
+
+
+
+

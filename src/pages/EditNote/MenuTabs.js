@@ -78,6 +78,7 @@ class ConnectedMenuTabs extends Component {
         return (
             <Fragment>
                 <Menu secondary>
+                    <div>
                     <Menu.Item>
                             <Input
                             className={this.state.isTitleFocused === true ? "ui input focus" : "ui input transparent"}
@@ -103,18 +104,22 @@ class ConnectedMenuTabs extends Component {
                                 Save
                             </Button>
                     </Menu.Item>
+                    </div>
+                    <div>
+                    {collapseMenu ? 
+                        (<CollapsedMenuTabs
+                            tabMenuItems={tabMenuItems}
+                            attached={this.props.attached}
+                            activeItem={activeItem}
+                            activeTabIndex={activeTabIndex}
+                        />) : (<ExpandededMenuTabs
+                            tabMenuItems={tabMenuItems}
+                            attached={this.props.attached}
+                            activeItem={activeItem}
+                        />)}
+                        </div>
+                
                 </Menu>
-                {collapseMenu ? 
-                    (<CollapsedMenuTabs
-                        tabMenuItems={tabMenuItems}
-                        attached={this.props.attached}
-                        activeItem={activeItem}
-                        activeTabIndex={activeTabIndex}
-                    />) : (<ExpandededMenuTabs
-                        tabMenuItems={tabMenuItems}
-                        attached={this.props.attached}
-                        activeItem={activeItem}
-                    />)}
             </Fragment>
 
         )

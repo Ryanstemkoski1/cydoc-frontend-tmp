@@ -43,10 +43,12 @@ class ConnectedNavMenu extends Component {
         const collapseLoggedInNav = windowWidth < LOGGEDIN_NAV_MENU_MOBILE_BP;
 
         return (
-            <Menu secondary borderless className="nav-menu" attached={this.props.attached}>
-                <Menu.Item as={Link} to="/home">
+            // Pass down the style
+            <Menu style={this.props.style} className="nav-menu" attached={this.props.attached}>
+
+                <Menu.Item>
                     <Header as="h2">
-                        cydoc
+                        <a href="/home">cydoc</a>
                     </Header>
                 </Menu.Item>
                 <Menu.Menu position="right">

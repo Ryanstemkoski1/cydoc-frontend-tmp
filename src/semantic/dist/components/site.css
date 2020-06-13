@@ -26,7 +26,7 @@ body {
   padding: 0px;
   overflow-x: hidden;
   min-width: 320px;
-  background: #ECF3F5;
+  background: #EAF3F5;
   font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.4285em;
@@ -47,7 +47,7 @@ h5 {
   font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
   line-height: 1.28571429em;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
-  font-weight: normal;
+  font-weight: bold;
   padding: 0em;
 }
 h1 {
@@ -102,11 +102,11 @@ p:last-child {
 --------------------*/
 
 a {
-  color: #707070;
+  color: #4183C4;
   text-decoration: none;
 }
 a:hover {
-  color: #724c4c;
+  color: #1e70bf;
   text-decoration: none;
 }
 

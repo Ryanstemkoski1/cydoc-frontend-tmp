@@ -27,7 +27,12 @@ class EditNote extends Component {
     render() {
         return (
             <Fragment>
-                <NavMenu class="nav-menu-container" />
+                <NavMenu style={{
+                    border: "0 0 0 0",
+                    padding: "0 0 0 0",
+                    boxShadow: "0 0 0 0",
+                    backgroundColor: "yellow !importants"
+                }} class="nav-menu-container"  />
                 <MenuTabs
                     activeItem={this.state.activeItem}
                     onTabChange={this.onTabChange}

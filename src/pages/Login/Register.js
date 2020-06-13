@@ -279,14 +279,13 @@ export default class Register extends Component {
                         cydoc
                     </Header>
                     <Header as='h4' color='grey' textAlign='center'>
-                        sign up
+                        Sign Up
                     </Header>
                     <Segment clearing raised style={{ borderColor: "white" }}>
                         <Form size='small' error={this.state.errorMessages.length>0} onSubmit={this.handleSubmit}>
                             <Form.Input
                                 fluid
                                 label='username'
-                                placeholder='username'
                                 name='username'
                                 value={this.state.formInfo.username}
                                 onChange={this.handleChange}
@@ -359,26 +358,27 @@ export default class Register extends Component {
                                     onChange={this.handleChange}
                                 />
                             </Form.Group>
-                            <label style={{ fontSize: "10px" }}>
+                            <label>
                                 I am a:
                                 </label>
                             <Form.Group>
-                                <Form.Radio style={{ fontSize: "10px" }}
-                                    label='patient'
-                                    value='patient'
-                                    name='role'
-                                    checked={this.state.formInfo.role === 'patient'}
-                                    onChange={this.handleChange}
-                                />
-                                <Form.Radio style={{ fontSize: "10px" }}
-                                    label='healthcare professional'
+                                <Form.Radio
+                                    label='Healthcare Professional'
                                     value='healthcare professional'
                                     name='role'
                                     checked={this.state.formInfo.role === 'healthcare professional'}
                                     onChange={this.handleChange}
                                 />
-                                <Form.Radio style={{ fontSize: "10px" }}
-                                    label='administrator'
+                                <Form.Radio 
+                                    label='Patient'
+                                    value='patient'
+                                    name='role'
+                                    checked={this.state.formInfo.role === 'patient'}
+                                    onChange={this.handleChange}
+                                />
+                                
+                                <Form.Radio
+                                    label='Administrator'
                                     value='administrator'
                                     name='role'
                                     checked={this.state.formInfo.role === 'administrator'}
@@ -391,9 +391,11 @@ export default class Register extends Component {
                                 header='Error!'
                                 content={this.state.errorMessages.map(m => <Message.Item>{m}</Message.Item>)}
                             />
-                            <Form.Button color='violet' size='small' floated='left'>
+                            <>
+                            <Form.Button color='teal' size='small' floated='right'>
                                 Sign Up
-                                </Form.Button>
+                            </Form.Button>
+                            </>
 
                         </Form>
 

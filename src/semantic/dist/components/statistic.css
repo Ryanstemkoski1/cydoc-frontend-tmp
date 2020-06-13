@@ -116,7 +116,7 @@
 .ui.statistic > .label {
   font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-size: 1em;
-  font-weight: normal;
+  font-weight: bold;
   color: #707070;
   text-transform: uppercase;
   text-align: center;
@@ -159,7 +159,7 @@
 .ui.statistic > .text.value {
   line-height: 1em;
   min-height: 2em;
-  font-weight: normal;
+  font-weight: bold;
   text-align: center;
 }
 .ui.statistics .statistic > .text.value + .label,
@@ -342,7 +342,7 @@
 .ui.teal.statistics .statistic > .value,
 .ui.statistics .teal.statistic > .value,
 .ui.teal.statistic > .value {
-  color: #008080;
+  color: #00809F;
 }
 .ui.blue.statistics .statistic > .value,
 .ui.statistics .blue.statistic > .value,
@@ -415,7 +415,7 @@
 .ui.inverted.teal.statistics .statistic > .value,
 .ui.statistics .inverted.teal.statistic > .value,
 .ui.inverted.teal.statistic > .value {
-  color: #6DFFFF;
+  color: #EAF3F5;
 }
 .ui.inverted.blue.statistics .statistic > .value,
 .ui.statistics .inverted.blue.statistic > .value,

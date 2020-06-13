@@ -34,7 +34,7 @@
 
 /* Divider */
 @dividerSize: 1px;
-@dividerBackground: @internalBorderColor;
+@dividerBackground: @white;
 
 /* Sub Menu */
 @subMenuDistance: 0.5em;
