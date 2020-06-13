@@ -57,3 +57,11 @@
 .delete-btn {
     cursor: pointer;
 }
+
+.plan-survey {
+    margin-top: 7.5rem;
+}
+
+.plan-survey > h4 {
+    font-weight: 500!important;
+}
