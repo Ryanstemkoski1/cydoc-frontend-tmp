@@ -8,6 +8,7 @@ import {
     Grid,
     Label,
     Dropdown,
+    Divider,
 } from 'semantic-ui-react';
 import PlanInput from './PlanInput';
 import DiagnosisForm from './DiscussionPlanDiagnosis';
@@ -15,7 +16,7 @@ import PrescriptionForm from './DiscussionPlanPrescription';
 import ReferralForm from './DiscussionPlanReferral';
 import ProcedureForm from './DiscussionPlanProcedure';
 import { CONDITION_DEFAULT } from './DiscussionPlanDefaults';
-import { DISCUSSION_PLAN_MENU_BP } from 'constants/breakpoints.js';
+import { DISCUSSION_PLAN_MENU_BP, DISCUSSION_PLAN_SECTION_BP } from 'constants/breakpoints.js';
 import './discussionPlan.css';
 
 
@@ -75,8 +76,9 @@ class plan extends Component {
     render() {
         const { plan } = this.context;
         const { current, windowWidth } = this.state;
-        const mobile = windowWidth < DISCUSSION_PLAN_MENU_BP;
-        const collapseTabs = mobile || plan.conditions.length * 150 > DISCUSSION_PLAN_MENU_BP;
+        const collapseTabs = windowWidth < DISCUSSION_PLAN_MENU_BP 
+        || plan.conditions.length * 150 > DISCUSSION_PLAN_MENU_BP;
+        const mobile = windowWidth < DISCUSSION_PLAN_SECTION_BP;
         
         const expandedTabs = [];
         const dropdownTabs = [];
@@ -124,8 +126,9 @@ class plan extends Component {
                     <ProcedureForm index={current} mobile={mobile}/>
                     <ReferralForm index={current} mobile={mobile}/>
                 </React.Fragment>)}
+                {/* <Divider horizontal as='h2' className='plan-survey-divider'>Help Improve Cydoc</Divider> */}
                 <Header as='h4' attached='top'> Help Improve Cydoc </Header>
-                <Segment attached>
+                <Segment attached piled>
                     <Grid stackable columns={2}>
                         <Grid.Row>
                             <Grid.Column width={7}>

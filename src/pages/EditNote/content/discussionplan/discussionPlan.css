@@ -1,15 +1,51 @@
-.recipe-amount {
-    margin-top: 1rem;
+.prescription > .title >.recipe {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding-top: 1rem;
 }
+
+.prescription > .content{
+    padding-left: 1.5em !important; 
+    margin-top: 1rem !important;
+}
+
+.recipe > .recipe-amount, 
+.plan-expanded-input {
+    padding-left: 1em !important;
+    margin: 1rem 0;
+}
+
+.plan-section_response > .title {
+    display: flex !important;
+    align-items: center;
+}
+
+.plan-section_response > .title,
 .section-title {
     border-left: none!important;
+}
+.plan-section_response > .content {
+    padding-bottom: 1rem!important;
 }
 
 .section-title > h2 {
     background-color: #ecf3f5!important;
-    font-weight: 500!important;
+    font-weight: 400!important;
 }
 
 .section-body {
     padding: 1em 0.5em!important;
+}
+
+.plan-main-input {
+    display: inline !important;
+}
+
+.ui.form.transparent > textarea {
+    border: none;
+}
+
+.accordion.plan-section {
+    margin: 1.5rem 0;
 }

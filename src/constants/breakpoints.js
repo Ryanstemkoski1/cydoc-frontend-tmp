@@ -18,3 +18,4 @@ export const DISEASE_TABS_MED_BP = 900;
 export const DISEASE_TABS_SMALL_BP = 800;
 
 export const DISCUSSION_PLAN_MENU_BP = 1000;
+export const DISCUSSION_PLAN_SECTION_BP = 850;
