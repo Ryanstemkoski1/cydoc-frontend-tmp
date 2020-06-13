@@ -4,6 +4,7 @@ import {
     Input, 
     Header, 
     Dropdown,
+    Accordion,
 } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton';
 import { DIAGNOSIS_DEFAULT } from './DiscussionPlanDefaults';
@@ -45,41 +46,48 @@ export default class DiagnosisForm extends Component{
         const { index } = this.props;
         const differential_diagnosis = this.context.plan['conditions'][index]['differential_diagnosis'];
         return (
-            <React.Fragment>
-                <Header as='h4' dividing> Differential Diagnosis </Header>
-                <Grid columns={2} stackable>
-                    { differential_diagnosis.map((diagnosis, i) => (
-                        <Grid.Row key={i}>
-                            <Grid.Column width={6}>
-                                <Dropdown
-                                    fluid
-                                    search
-                                    selection
-                                    allowAdditions
-                                    icon=''
-                                    value={diagnosis['diagnosis']}
-                                    options={this.state.options}
-                                    onAddItem={this.handleAdditionDiagnosis}
-                                    onChange={(e, data) => this.handleOnChange(i, 'diagnosis', data.value)}
-                                    placeholder='Diagnosis'
-                                />
-                            </Grid.Column>
-                            <Grid.Column width={10}>
-                                <Input
-                                    fluid
-                                    placeholder='Comments'
-                                    value={diagnosis['comment']}
-                                    onChange={(e) => this.handleOnChange(i, 'comment', e.target.value)}
-                                />
-                            </Grid.Column>
-                        </Grid.Row>
-                    ))}
-                </Grid>
-                <AddRowButton
-                    name='diagnosis'
-                    onClick={this.addRow}
-                />
-            </React.Fragment>
+            <Accordion styled fluid>
+                <Accordion.Title
+                    active
+                    className='section-title'
+                >
+                    <Header as='h2' size='large' content='Differential Diagnosis' attached/>
+                </Accordion.Title>
+                <Accordion.Content active>
+                    <Grid columns={2} stackable className='section-body'>
+                        { differential_diagnosis.map((diagnosis, i) => (
+                            <Grid.Row key={i}>
+                                <Grid.Column width={6}>
+                                    <Dropdown
+                                        fluid
+                                        search
+                                        selection
+                                        allowAdditions
+                                        icon=''
+                                        value={diagnosis['diagnosis']}
+                                        options={this.state.options}
+                                        onAddItem={this.handleAdditionDiagnosis}
+                                        onChange={(e, data) => this.handleOnChange(i, 'diagnosis', data.value)}
+                                        placeholder='Diagnosis'
+                                    />
+                                </Grid.Column>
+                                <Grid.Column width={10}>
+                                    <Input
+                                        fluid
+                                        placeholder='Comments'
+                                        value={diagnosis['comment']}
+                                        onChange={(e) => this.handleOnChange(i, 'comment', e.target.value)}
+                                    />
+                                </Grid.Column>
+                            </Grid.Row>
+                        ))}
+                    </Grid>
+                    <AddRowButton
+                        name='diagnosis'
+                        onClick={this.addRow}
+                    />
+                </Accordion.Content>
+            </Accordion>
         )
     }
 }

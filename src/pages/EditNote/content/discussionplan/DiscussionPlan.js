@@ -119,10 +119,10 @@ class plan extends Component {
                 { plan.conditions.length > 0 
                     && 
                 (<React.Fragment>
-                    <DiagnosisForm index={current}/>
-                    <PrescriptionForm index={current}/>
-                    <ProcedureForm index={current}/>
-                    <ReferralForm index={current}/>
+                    <DiagnosisForm index={current} mobile={mobile}/>
+                    <PrescriptionForm index={current} mobile={mobile}/>
+                    <ProcedureForm index={current} mobile={mobile}/>
+                    <ReferralForm index={current} mobile={mobile}/>
                 </React.Fragment>)}
                 <Header as='h4' attached='top'> Help Improve Cydoc </Header>
                 <Segment attached>

@@ -3,6 +3,7 @@ import {
     Grid, 
     Header, 
     Dropdown,
+    Accordion,
 } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton';
 import HPIContext from 'contexts/HPIContext.js'
@@ -17,6 +18,7 @@ export default class GeneralForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            expandPanels: false,
             options: specialtyOptions,
             whenOptions: this.generateOptions(['today', 'this week', 'this month', 'this year']),
         }
@@ -50,68 +52,82 @@ export default class GeneralForm extends Component {
         }));
     }
 
+    togglePanel = (e, data) => {
+        const { expandPanels } = this.state;
+        this.setState({ expandPanels: !expandPanels });
+    }
+
     render() {
         const {index} = this.props;
         const referrals = this.context.plan['conditions'][index]['referral'];
         return (
-            <React.Fragment>
-                <Header as='h4' dividing> Referrals </Header>
-                <Grid columns={3} stackable>
-                    <Grid.Row>
-                        <Grid.Column>Department</Grid.Column>
-                        <Grid.Column>When</Grid.Column>
-                        <Grid.Column>Comments</Grid.Column>
-                    </Grid.Row>
-                    { referrals.map((referral, i) => (
-                        <Grid.Row key={i}>
-                            <Grid.Column>
-                                <Dropdown
-                                    fluid
-                                    search
-                                    selection
-                                    allowAdditions
-                                    type='text'
-                                    icon=''
-                                    options={this.state.options}
-                                    value={referral['department']}
-                                    onAddItem={(e, data) => this.handleAddition('options', data.value)}
-                                    onChange={(e, data) => this.handleOnChange(i, 'department', data.value)}
-                                    placeholder={'Department'}
-                                />
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Dropdown
-                                    fluid
-                                    search
-                                    selection
-                                    allowAdditions
-                                    type='text'
-                                    icon=''
-                                    options={this.state.whenOptions}
-                                    value={referral['when']}
-                                    onAddItem={(e, data) => this.handleAddition('whenOptions', data.value)}
-                                    onChange={(e, data) => this.handleOnChange(i, 'when', data.value)}
-                                    placeholder='When'
-                                />
-                            </Grid.Column>
-                            <Grid.Column>
-                                <div className='ui form'>
-                                    <textarea 
-                                        placeholder='Comments'
-                                        value={referral['comment']} 
-                                        onChange={(e) => this.handleOnChange(i, 'comment', e.target.value)}
-                                    />
-                                </div>
-                            </Grid.Column>
+            <Accordion fluid styled>
+                <Accordion.Title
+                    active={this.state.expandPanels}
+                    onClick={this.togglePanel}
+                    className='section-title'
+                >
+                    <Header as='h2' size='large' content='Referrals' attached/>
+                </Accordion.Title>
+                <Accordion.Content active={this.state.expandPanels}>
+
+                    <Grid columns={3} stackable className='section-body'>
+                        <Grid.Row>
+                            <Grid.Column>Department</Grid.Column>
+                            <Grid.Column>When</Grid.Column>
+                            <Grid.Column>Comments</Grid.Column>
                         </Grid.Row>
-                        ))
-                    }
-                </Grid>
-                <AddRowButton 
-                    name={'referral'}
-                    onClick={this.addRow}
-                />
-            </React.Fragment>
+                        { referrals.map((referral, i) => (
+                            <Grid.Row key={i}>
+                                <Grid.Column>
+                                    <Dropdown
+                                        fluid
+                                        search
+                                        selection
+                                        allowAdditions
+                                        type='text'
+                                        icon=''
+                                        options={this.state.options}
+                                        value={referral['department']}
+                                        onAddItem={(e, data) => this.handleAddition('options', data.value)}
+                                        onChange={(e, data) => this.handleOnChange(i, 'department', data.value)}
+                                        placeholder={'Department'}
+                                    />
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Dropdown
+                                        fluid
+                                        search
+                                        selection
+                                        allowAdditions
+                                        type='text'
+                                        icon=''
+                                        options={this.state.whenOptions}
+                                        value={referral['when']}
+                                        onAddItem={(e, data) => this.handleAddition('whenOptions', data.value)}
+                                        onChange={(e, data) => this.handleOnChange(i, 'when', data.value)}
+                                        placeholder='When'
+                                    />
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <div className='ui form'>
+                                        <textarea 
+                                            placeholder='Comments'
+                                            value={referral['comment']} 
+                                            onChange={(e) => this.handleOnChange(i, 'comment', e.target.value)}
+                                        />
+                                    </div>
+                                </Grid.Column>
+                            </Grid.Row>
+                            ))
+                        }
+                    </Grid>
+                    <AddRowButton 
+                        name={'referral'}
+                        onClick={this.addRow}
+                    />
+                </Accordion.Content>
+            </Accordion>
         );
     }
 
