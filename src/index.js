@@ -12,7 +12,8 @@ import DashboardPage from "./pages/MyNotes/DashboardPage";
 import ThemingLayout from "./pages/About/Theming";
 import { PrivateRoute } from "./components/navigation/PrivateRoute";
 import CreateGraph from "./pages/CreateTemplate/CreateGraph";
-import EditGraph from './pages/CreateTemplate/EditGraph'
+import EditGraph from './pages/CreateTemplate/EditGraph';
+import ContactPage from './pages/Contact/ContactPage';
 import { HPIStore } from "./contexts/HPIContext";
 import { AuthStore } from "./contexts/AuthContext";
 import { NotesStore } from "./contexts/NotesContext";
@@ -35,6 +36,7 @@ ReactDOM.render(
                                 <PrivateRoute path="/creategraph" component={CreateGraph} />
                                 <PrivateRoute path="/editgraph" component={EditGraph} />
                                 <Route path="/about" component={ThemingLayout} />
+                                <Route path="/contact" component={ContactPage} />
                             </BrowserRouter>
                         </div>
                     </CreateTemplateStore>
