@@ -163,7 +163,7 @@ export default class PrescriptionForm extends Component {
                         <Input
                             fluid
                             type='text'
-                            className='recipe-amount'
+                            className='recipe-amount lg'
                             placeholder={'e.g. 81 mg tablet'}
                             value={prescription.recipe_amount}
                             onChange={(e) => this.handleOnChange(i, 'recipe_amount', e.target.value)}

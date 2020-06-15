@@ -74,6 +74,12 @@ class plan extends Component {
         this.setState({ current: conditions.length - 1});
     }
 
+    updateCurrent = (index) => {
+        if (index !== 0) {
+            this.setState({ current: index - 1});
+        } 
+    }
+
     render() {
         const { plan } = this.context;
         const { current, windowWidth } = this.state;
@@ -112,17 +118,16 @@ class plan extends Component {
             onClick: this.addCondition,
         });
 
-
         return (
             <div>
                 { collapseTabs 
-                    ? <CollapsedMenu tabs={dropdownTabs} index={current}/>
+                    ? <CollapsedMenu tabs={dropdownTabs} index={current} updateCurrent={this.updateCurrent}/>
                     : <Menu stackable scrollable tabular>
                         {expandedTabs}
                         {expandedTabs.length > 1
                             &&
                         <Menu.Menu className='delete-btn-wrapper' position='right'>
-                            <DeleteCard name={plan['conditions'][current].name} index={current}/>
+                            <DeleteCard name={plan['conditions'][current].name} index={current} updateCurrent={this.updateCurrent}/>
                         </Menu.Menu>
                         }
                     </Menu>
@@ -246,7 +251,7 @@ function CollapsedMenu(props) {
             {props.tabs.length > 1
                 &&
             <Menu.Menu className='delete-btn-wrapper' position='right'>
-                <DeleteCard name={curTab.name} index={curTab.key}/>
+                <DeleteCard name={curTab.name} index={curTab.key} updateCurrent={props.updateCurrent}/>
             </Menu.Menu>
             }
         </Menu>
@@ -265,6 +270,7 @@ class DeleteCard extends Component {
     open = () => this.setState({ openModal: true });
     close = () => this.setState({ openModal: false });
     delete = () => {
+        this.props.updateCurrent(this.props.index);
         const plan = {...this.context.plan}
         plan['conditions'].splice(this.props.index, 1);
         this.context.onContextChange('plan', plan);
@@ -274,19 +280,18 @@ class DeleteCard extends Component {
     render() {
         return (
             <Modal 
-                size='tiny' 
+                size='mini' 
                 open={this.state.openModal} 
                 onClose={this.close} 
                 trigger={<Icon onClick={this.open} name='trash alternate outline' className='delete-btn'/>}
             >
-                <Modal.Header> Delete Condition </Modal.Header>
                 <Modal.Content>
-                    <p>Are you sure you want you delete plan for {this.props.name}</p>
+                    Are you sure you want you delete the plan for {this.props.name}?
                 </Modal.Content>
-                <Modal.Actions>
-                    <Button negative content='No'onClick={this.close}/>
-                    <Button positive content='Yes'onClick={this.delete}/>
-                </Modal.Actions>
+                <Modal.Content>
+                    <Button color='grey' content='Cancel'onClick={this.close} />
+                    <Button color='violet' content='Delete'onClick={this.delete} floated='right'/>
+                </Modal.Content>
             </Modal>
         )
     }

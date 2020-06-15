@@ -10,6 +10,9 @@
     margin-top: 1rem !important;
 }
 
+.recipe-amount.lg {
+    margin-top: 1rem;
+}
 .recipe > .recipe-amount, 
 .plan-expanded-input {
     padding-left: 1em !important;
