@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import {Menu, Dropdown } from 'semantic-ui-react'
+import React, { Component, Fragment } from 'react'
+import { Menu, Dropdown, Tab, Container } from 'semantic-ui-react'
 import MedicalHistoryContent from "../medicalhistory/MedicalHistoryContent";
 import SurgicalHistoryContent from "../surgicalhistory/SurgicalHistoryContent";
 import MedicationsContent from "../medications/MedicationsContent";
@@ -53,7 +53,8 @@ export default class PatientHistoryContent extends Component {
         const socialHistoryMobile = windowWidth < SOCIAL_HISTORY_MOBILE_BP;
 
         const expandedTabs = this.state.patient_history.map((name, index) => 
-            <Menu.Item 
+            <Tab.Pane
+                attached={false}
                 key={index} 
                 name={name} 
                 active={this.state.activeItem === name} 
@@ -75,12 +76,40 @@ export default class PatientHistoryContent extends Component {
             });
         }
 
-        return (
-            <div> 
-                {collapseTabs ? 
-                    <Dropdown text={activeItem} options={dropdownTabs} selection fluid scrolling={false} />
-                    : <Menu tabular items={expandedTabs}/>
-                } 
+        const panes = [
+            {
+                menuItem: 'Medical History',
+                render: () => <Tab.Pane attached={false}>
+                    <MedicalHistoryContent collapseTabs={collapseTabs} />
+                </Tab.Pane>,
+            },
+            {
+                menuItem: 'Surgical History',
+                render: () => <Tab.Pane attached={false}>
+                    <SurgicalHistoryContent mobile={collapseTabs} />
+                </Tab.Pane>,
+            },
+            {
+                menuItem: 'Medications',
+                render: () => <Tab.Pane attached={false}>
+                    <MedicationsContent mobile={collapseTabs} />
+                </Tab.Pane>,
+            },
+            {
+                menuItem: 'Allergies',
+                render: () => <Tab.Pane attached={false}>
+                    <AllergiesContent mobile={collapseTabs}/>
+                </Tab.Pane>,
+            },
+            {
+                menuItem: 'Social History',
+                render: () => <Tab.Pane attached={false}>
+                    <SocialHistoryContent mobile={socialHistoryMobile}/>
+                </Tab.Pane>,
+            },
+        ]
+
+        /*
 
                 <div id="medical history" className="tab-content initial">
                     <MedicalHistoryContent collapseTabs={collapseTabs} />
@@ -88,7 +117,7 @@ export default class PatientHistoryContent extends Component {
                 <div id="surgical history" className="tab-content">
                     <SurgicalHistoryContent mobile={collapseTabs} />
                 </div>
-                <div id="medications" className="tab-content"> 
+                <div id="medications" className="tab-content">
                     <MedicationsContent mobile={collapseTabs} />
                 </div>
                 <div id="allergies" className="tab-content">
@@ -97,7 +126,20 @@ export default class PatientHistoryContent extends Component {
                 <div id="social history" className="tab-content">
                     <SocialHistoryContent mobile={socialHistoryMobile}/>
                 </div>
-            </div>
+         */
+
+        return (
+            <Container style={collapseTabs ? null : {
+                backgroundColor: "white",
+                boxShadow: "0px 5px 10px 1px grey",
+                padding: "10px 10px 10px 10px"
+            }}>
+                {collapseTabs ? 
+                    <Dropdown text={activeItem} options={dropdownTabs} selection fluid scrolling={false} />
+                    : <Tab menu={{ secondary: true }} panes={panes} />
+
+                }
+            </Container>
         )
     }
 }

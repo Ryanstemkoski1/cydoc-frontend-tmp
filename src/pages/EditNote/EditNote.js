@@ -4,6 +4,7 @@ import NotePage from "./NotePage";
 import NavMenu from "../../components/navigation/NavMenu";
 import 'components/navigation/NavMenu.css';
 import { TAB_NAMES } from 'constants/constants';
+import {Container} from "semantic-ui-react";
 
 //Component that manages the active state of the create note editor
 //and defines the layout of the editor
@@ -28,11 +29,11 @@ class EditNote extends Component {
         return (
             <Fragment>
                 <NavMenu style={{
-                    border: "0 0 0 0",
-                    padding: "0 0 0 0",
+                    margin: "0 0 0 0",
                     boxShadow: "0 0 0 0",
-                    backgroundColor: "yellow !importants"
+                    border: "0"
                 }} class="nav-menu-container"  />
+
                 <MenuTabs
                     activeItem={this.state.activeItem}
                     onTabChange={this.onTabChange}

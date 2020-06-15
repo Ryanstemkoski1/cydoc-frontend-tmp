@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Segment, Header } from 'semantic-ui-react';
+import React, { Component, Fragment } from 'react';
+import { Segment, Header, Container} from 'semantic-ui-react';
 import MedicalHistoryContent from "./content/medicalhistory/MedicalHistoryContent";
 import SurgicalHistoryContent from "./content/surgicalhistory/SurgicalHistoryContent";
 import MedicationsContent from "./content/medications/MedicationsContent";
@@ -57,12 +57,17 @@ export default class NotePage extends Component {
         return (
             //Renders a white page that contains the tab name as the header and the
             //corresponding content to the active tab
-            <Segment className={mobile ? `note-page-container-mobile` : `note-page-container`}>
-                <Header as="h3" textAlign="center">
-                    {this.props.activeItem.toLowerCase()}
+            /*
+            <Header as="h3" textAlign="center">
+                    {this.props.activeItem}
                 </Header>
+                className={mobile ? `note-page-container-mobile` : `note-page-container`}
+             */
+            <Container style={{
+                margin: "20px 0 0 0",
+            }}>
                 {tabToDisplay}
-            </Segment>
+            </Container>
         );
     }
 

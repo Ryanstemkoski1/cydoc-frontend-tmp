@@ -1,6 +1,6 @@
 .save-button {
   margin-bottom: 10px !important;
-  margin-left: 20px !important;
+  border: none;
 }
 
 .collapsed-menu-tabs {

@@ -24495,7 +24495,7 @@ Floated Menu / Item
 ---------------*/
 
 .ui.secondary.menu {
-  background: none;
+  background: #FFFFFF;
   margin-left: -0.35714286em;
   margin-right: -0.35714286em;
   border-radius: 0em;
@@ -24514,7 +24514,7 @@ Floated Menu / Item
   border: none;
   padding: 0.78571429em 0.92857143em;
   margin: 0em 0.35714286em;
-  background: none;
+  background: #EAF3F5;
   -webkit-transition: color 0.1s ease;
   transition: color 0.1s ease;
   border-radius: 0.28571429rem;

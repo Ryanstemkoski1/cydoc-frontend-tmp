@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {Menu, Container, Button, Dropdown} from 'semantic-ui-react'
+import {Menu, Container, Button, Dropdown, Grid} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import {TAB_NAMES} from 'constants/constants'
 import {Input} from "semantic-ui-react";
@@ -77,36 +77,34 @@ class ConnectedMenuTabs extends Component {
 
         return (
             <Fragment>
-                <Menu secondary>
-                    <div>
-                    <Menu.Item>
-                            <Input
-                            className={this.state.isTitleFocused === true ? "ui input focus" : "ui input transparent"}
-                            type='text'
-                            placeholder="Untitled Note"
-                            style={{fontSize: 16, marginBottom: 5, outline: 'none'}}
-                            onChange={this.handleInputChange}
-                            onFocus={()=>{
-                                this.setState({isTitleFocused: true})
-                                if (this.context.title === "Untitled Note") {
-                                    this.context.onContextChange("title", "")
-                                }
-                            }}
-                            onBlur={()=>{
-                                this.setState({isTitleFocused: false})
-                                if (this.context.title === '') {
-                                    this.context.onContextChange("title", "Untitled Note")
-                                }
-                            }}
-                            value={this.context.title} 
-                            />
-                            <Button onClick={this.context.saveNote} className="save-button">
-                                Save
-                            </Button>
-                    </Menu.Item>
-                    </div>
-                    <div>
-                    {collapseMenu ? 
+                <Grid centered={collapseMenu? false : true} padded style={{ backgroundColor: 'white'}}>
+                    <Input
+                        type='text'
+                        placeholder="Untitled Note"
+                        onChange={this.handleInputChange}
+                        onFocus={()=>{
+                            if (this.context.title === "Untitled Note") {
+                                this.context.onContextChange("title", "")
+                            }
+                        }}
+                        onBlur={()=>{
+                            this.setState({isTitleFocused: false})
+                            if (this.context.title === '') {
+                                this.context.onContextChange("title", "Untitled Note")
+                            }
+                        }}
+                        value={this.context.title}
+                    />
+                    <Button basic compact onClick={this.context.saveNote} className="save-button">
+                        Save
+                    </Button>
+                </Grid>
+
+                <Menu secondary style={{
+                    margin: "0 0 5px 0",
+                    boxShadow: "0 5px 10px -6px grey"
+                }}>
+                    {collapseMenu ?
                         (<CollapsedMenuTabs
                             tabMenuItems={tabMenuItems}
                             attached={this.props.attached}
@@ -116,9 +114,8 @@ class ConnectedMenuTabs extends Component {
                             tabMenuItems={tabMenuItems}
                             attached={this.props.attached}
                             activeItem={activeItem}
-                        />)}
-                        </div>
-                
+                        />)
+                    }
                 </Menu>
             </Fragment>
 

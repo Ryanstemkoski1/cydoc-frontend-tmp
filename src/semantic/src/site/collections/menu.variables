@@ -2,11 +2,9 @@
     User Variable Overrides
 *******************************/
 
-
+// Box shadows on menu bars
 @boxShadow: 0px 0px 10px 0px grey;
 
-
-
-
+// Making sure the colors of menu bars are correct
 @secondaryBackground: @white;
 @secondaryItemBackground: @lightTeal;
