@@ -24,6 +24,14 @@
     align-items: center;
 }
 
+.plan-section_response.prescription > .title {
+    align-items: flex-end;
+}
+
+.plan-section_response.prescription > .title > .dropdown.icon {
+    margin-bottom: 1rem !important;
+}
+
 .plan-section_response > .title,
 .section-title {
     border-left: none!important;
@@ -66,5 +74,5 @@
 }
 
 .plan-survey > h4 {
-    font-weight: 500!important;
+    font-weight: 600!important;
 }
