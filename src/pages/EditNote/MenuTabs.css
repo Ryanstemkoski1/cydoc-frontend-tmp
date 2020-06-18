@@ -10,11 +10,15 @@
 .expanded-menu-tabs {
   display: flex;
   justify-content: center;
-
 }
 
+.expanded-menu-tabs > .active {
+  border-radius: 1rem 1rem !important;
+}
+
+
 .stuck-container .note-name-menu {
-  padding-top: 3vh;
+  padding-top: 10px !important;
 }
 
 .note-name-menu input {
@@ -32,7 +36,8 @@
 
 .menu-tab .active.item {
   font-weight: normal !important;
-  background-color: RGBA(0, 128, 159, 0.25) !important;
+  /*background-color: RGBA(0, 128, 159, 0.25) !important;*/
+  background-color: #CDE1E9 !important;
   margin-bottom: -3px !important;
   border-bottom: 0 !important;
 

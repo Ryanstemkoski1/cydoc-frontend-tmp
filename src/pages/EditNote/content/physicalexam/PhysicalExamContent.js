@@ -35,12 +35,15 @@ export default class PhysicalExamContent extends React.Component {
 
     renderGroups = (groups) => {
         return groups.map((section) =>
-            <PhysicalExamGroup name={section.name} rows={section.rows} />
+            <Segment>
+                <PhysicalExamGroup name={section.name} rows={section.rows} />
+            </Segment>
         )
     }
 
     render() {
         return (
+            <>
             <Segment>
                 <Form>
                     <Grid columns="equal">
@@ -79,9 +82,11 @@ export default class PhysicalExamContent extends React.Component {
                         </Grid.Column>
                     </Grid>
                 </Form>
-                {this.renderGroups(constants.sections)}
             </Segment>
-        )
+        {this.renderGroups(constants.sections)}
+        </>
+
+    )
     }
 
 }

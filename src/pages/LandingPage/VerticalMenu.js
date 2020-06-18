@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {Icon, Menu, Button} from 'semantic-ui-react'
 import NotesContext from '../../contexts/NotesContext'
 
+import './VerticalMenu.css'
 
 //Component for the vertical menu that appears on the dashboard page
 export default class VerticalMenu extends Component {

@@ -67,7 +67,7 @@ export default class PhysicalExamGroup extends Component {
         return (
 
             <Fragment>
-                <Header as="h4">{this.props.name}</Header>
+                <Header as="h2">{this.props.name}</Header>
                 <Divider />
                 <Form>
                     <Grid columns="equal">

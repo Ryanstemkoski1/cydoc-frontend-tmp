@@ -78,8 +78,7 @@ class ConnectedMenuTabs extends Component {
             <div style={{backgroundColor: 'white'}}>
                 <Container textAlign={collapseMenu? 'left' : 'right'} className="note-name-menu">
                     <Input
-
-                        size={"massive"}
+                        size={collapseMenu? 'large' : "massive"}
                         transparent
                         type='text'
                         placeholder="Untitled Note"
@@ -129,17 +128,18 @@ function CollapsedMenuTabs(props) {
         <Menu tabular attached={props.attached}>
             <Container className="collapsed-menu-tabs">
                 {props.tabMenuItems[props.activeTabIndex]}
+                {props.tabMenuItems[props.tabMenuItems.length - 1]}
                 <Menu.Item>
                     {curTab.length < 10 ? 
                         <Dropdown
                             icon="ellipsis horizontal"
-                            options={props.tabMenuItems}
+                            options={props.tabMenuItems.slice(0, props.tabMenuItems.length - 1)}
                         />
                         :
                         <Dropdown
                             icon="ellipsis horizontal"
                             direction='left'
-                            options={props.tabMenuItems}
+                            options={props.tabMenuItems.slice(0, props.tabMenuItems.length - 1)}
                         />
                     }
                 </Menu.Item>

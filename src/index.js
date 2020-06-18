@@ -4,7 +4,7 @@ import './semantic/dist/semantic.min.css';
 import ReactDOM from 'react-dom';
 import { Route, BrowserRouter } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faBars} from '@fortawesome/free-solid-svg-icons'
 
 import EditNote 				from "./pages/EditNote/EditNote";
 import HomePage 				from "./pages/HomePage/HomePage";
@@ -20,7 +20,7 @@ import { AuthStore } 			from "./contexts/AuthContext";
 import { NotesStore } 			from "./contexts/NotesContext";
 import { CreateTemplateStore } 	from "./contexts/CreateTemplateContext";
 
-library.add(faUser)
+library.add(faUser, faBars)
 
 ReactDOM.render(
     <CookiesProvider>

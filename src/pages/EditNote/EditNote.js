@@ -31,20 +31,20 @@ class EditNote extends Component {
 
         return (
             <>
-            <div ref={this.noteContent}>
+                <div ref={this.noteContent}>
 
-                {/* style to ensure nav-menu is seamless */}
+                    {/* style to ensure nav-menu is seamless */}
                     <NavMenu className="edit-note-nav-menu" />
-                <Sticky context={this.noteContent}>
-                    <MenuTabs
-                        activeItem={this.state.activeItem}
-                        onTabChange={this.onTabChange}
-                        activeTabIndex={this.state.activeTabIndex}
-                        attached
-                    />
-                </Sticky>
-                    <NotePage activeItem={this.state.activeItem} />
-            </div>
+                    <Sticky context={this.noteContent}>
+                        <MenuTabs
+                            activeItem={this.state.activeItem}
+                            onTabChange={this.onTabChange}
+                            activeTabIndex={this.state.activeTabIndex}
+                            attached
+                        />
+                    </Sticky>
+                        <NotePage activeItem={this.state.activeItem} />
+                </div>
             </>
         );
     }

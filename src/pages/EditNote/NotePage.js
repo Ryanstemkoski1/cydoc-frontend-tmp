@@ -57,24 +57,6 @@ export default class NotePage extends Component {
             case "HPI":
                 tabToDisplay = (<HPIContent />);
                 break;
-            // case "Medical History":
-            //     tabToDisplay = (<MedicalHistoryContent />);
-            //     break;
-            // case "Surgical History":
-            //     tabToDisplay = (<SurgicalHistoryContent />);
-            //     break;
-            // case "Medications":
-            //     tabToDisplay = (<MedicationsContent />);
-            //     break;
-            // case "Allergies":
-            //     tabToDisplay = (<AllergiesContent />);
-            //     break;
-            // case "Family History":
-            //     tabToDisplay = (<FamilyHistoryContent />);
-            //     break;
-            // case "Social History":
-            //     tabToDisplay = (<SocialHistoryContent />);
-            //     break;
             case "Patient History":
                 tabToDisplay = (<PatientHistoryContent />);
                 break;
@@ -99,8 +81,8 @@ export default class NotePage extends Component {
 
     render() {
         const { windowWidth } = this.state;
-
         const mobile = windowWidth < NOTE_PAGE_MOBILE_BP;
+
         //get content based on which tab is active
         const tabToDisplay = this.getTabToDisplay(this.props.activeItem);
 

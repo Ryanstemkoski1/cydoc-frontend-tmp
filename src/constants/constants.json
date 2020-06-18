@@ -4,8 +4,8 @@
     "Patient History",
     "Review of Systems",
     "Physical Exam",
-    "Generate Note",
-    "Plan"
+    "Plan",
+    "Generate Note"
   ],
   "CONDITIONS": [
     "Type II Diabetes",
