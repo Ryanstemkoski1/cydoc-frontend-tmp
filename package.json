@@ -22,7 +22,10 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "^3.4.1",
     "yarn": "^1.22.4",
-    "yup": "0.28.3"
+    "yup": "0.28.3",
+    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
+    "@fortawesome/react-fontawesome": "^0.1.11"
   },
   "scripts": {
     "build-semantic": "cd src/semantic && gulp build-css build-assets",
@@ -56,5 +59,9 @@
     "semantic-ui": "^2.4.2",
     "semantic-ui-react": "^0.88.2",
     "uuid": "^3.4.0"
+  },
+  "resolutions": {
+    "graceful-fs": "4.2.3"
   }
+
 }

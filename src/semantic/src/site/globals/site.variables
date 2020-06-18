@@ -4,11 +4,11 @@
        Fonts
 --------------------*/
 
-@headerFont        : 'Helvetica Neue', Arial, Helvetica, sans-serif;
-@pageFont          : 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@headerFont     : 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@pageFont       : 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
-@normal            : normal;
-@bold              : bold;
+@normal         : normal;
+@bold           : bold;
 
 @red            : #B03060;
 @orange         : #FE9A76;
@@ -16,7 +16,7 @@
 @olive          : #32CD32;
 @green          : #016936;
 @teal           : #00809F;
-@lightTeal			:	#EAF3F5;
+@lightTeal		: #EAF3F5;
 @blue           : #0E6EB8;
 @violet         : #424874;
 @purple         : #B413EC;
@@ -25,7 +25,7 @@
 @grey           : #707070;
 @black          : #000000;
 @lightgrey      : #E0E1E2;
-@white					: #FFFFFF;
+@white			: #FFFFFF;
 
 @primaryColor   : @teal;
 @secondaryColor : @grey;

@@ -5,8 +5,10 @@ import SurgicalHistoryContent from "../surgicalhistory/SurgicalHistoryContent";
 import MedicationsContent from "../medications/MedicationsContent";
 import AllergiesContent from "../allergies/AllergiesContent";
 import SocialHistoryContent from "../socialhistory/SocialHistoryContent";
+import FamilyHistoryContent from "../familyhistory/FamilyHistoryContent";
 import './PatientHistory.css';
 import {PATIENT_HISTORY_MOBILE_BP, SOCIAL_HISTORY_MOBILE_BP} from "constants/breakpoints.js";
+import Segment from "semantic-ui-react/dist/commonjs/elements/Segment";
 
 export default class PatientHistoryContent extends Component {
     constructor() {
@@ -107,6 +109,12 @@ export default class PatientHistoryContent extends Component {
                     <SocialHistoryContent mobile={socialHistoryMobile}/>
                 </Tab.Pane>,
             },
+            {
+                menuItem: 'Family History',
+                render: () => <Tab.Pane attached={false}>
+                    <FamilyHistoryContent mobile={collapseTabs}/>
+                </Tab.Pane>,
+            },
         ]
 
         /*
@@ -129,17 +137,13 @@ export default class PatientHistoryContent extends Component {
          */
 
         return (
-            <Container style={collapseTabs ? null : {
-                backgroundColor: "white",
-                boxShadow: "0px 5px 10px 1px grey",
-                padding: "10px 10px 10px 10px"
-            }}>
+            <>
                 {collapseTabs ? 
                     <Dropdown text={activeItem} options={dropdownTabs} selection fluid scrolling={false} />
-                    : <Tab menu={{ secondary: true }} panes={panes} />
+                    : <Tab menu={{ attached: false, tabular: false }} panes={panes}/>
 
                 }
-            </Container>
+            </>
         )
     }
 }

@@ -47,6 +47,56 @@ export default class NotePage extends Component {
         this.setState({ windowWidth, windowHeight });
     }
 
+
+
+    getTabToDisplay(activeItem) {
+        //Instantiates and returns the correct content component based on the active tab
+        //passes in the corresponding handler and values prop
+        let tabToDisplay;
+        switch (activeItem) {
+            case "HPI":
+                tabToDisplay = (<HPIContent />);
+                break;
+            // case "Medical History":
+            //     tabToDisplay = (<MedicalHistoryContent />);
+            //     break;
+            // case "Surgical History":
+            //     tabToDisplay = (<SurgicalHistoryContent />);
+            //     break;
+            // case "Medications":
+            //     tabToDisplay = (<MedicationsContent />);
+            //     break;
+            // case "Allergies":
+            //     tabToDisplay = (<AllergiesContent />);
+            //     break;
+            // case "Family History":
+            //     tabToDisplay = (<FamilyHistoryContent />);
+            //     break;
+            // case "Social History":
+            //     tabToDisplay = (<SocialHistoryContent />);
+            //     break;
+            case "Patient History":
+                tabToDisplay = (<PatientHistoryContent />);
+                break;
+            case "Physical Exam":
+                tabToDisplay = (<PhysicalExamContent />);
+                break;
+            case "Review of Systems":
+                tabToDisplay = (<ReviewOfSystemsContent />);
+                break;
+            case "Generate Note":
+                tabToDisplay = (<GenerateNote />);
+                break;
+            case "Plan":
+                tabToDisplay = (<DiscussionPlan />)
+                break;
+            default:
+                tabToDisplay = (<HPIContent />);
+                break;
+        }
+        return tabToDisplay;
+    }
+
     render() {
         const { windowWidth } = this.state;
 
@@ -69,54 +119,6 @@ export default class NotePage extends Component {
                 {tabToDisplay}
             </Container>
         );
-    }
-
-    getTabToDisplay(activeItem) {
-        //Instantiates and returns the correct content component based on the active tab
-        //passes in the corresponding handler and values prop
-        let tabToDisplay;
-        switch (activeItem) {
-            case "HPI":
-                tabToDisplay = (<HPIContent />);
-                break;
-            case "Medical History":
-                tabToDisplay = (<MedicalHistoryContent />);
-                break;
-            case "Surgical History":
-                tabToDisplay = (<SurgicalHistoryContent />);
-                break;
-            case "Medications":
-                tabToDisplay = (<MedicationsContent />);
-                break;
-            case "Allergies":
-                tabToDisplay = (<AllergiesContent />);
-                break;
-            case "Family History":
-                tabToDisplay = (<FamilyHistoryContent />);
-                break;
-            case "Social History":
-                tabToDisplay = (<SocialHistoryContent />);
-                break;
-            case "Physical Exam":
-                tabToDisplay = (<PhysicalExamContent />);
-                break;
-            case "Review of Systems":
-                tabToDisplay = (<ReviewOfSystemsContent />);
-                break;
-            case "Patient History":
-                tabToDisplay = (<PatientHistoryContent />);
-                break;
-            case "Generate Note":
-                tabToDisplay = (<GenerateNote />);
-                break;
-            case "Plan":
-                tabToDisplay = (<DiscussionPlan />)
-                break;
-            default:
-                tabToDisplay = (<HPIContent />);
-                break;
-        }
-        return tabToDisplay;
     }
 
 };

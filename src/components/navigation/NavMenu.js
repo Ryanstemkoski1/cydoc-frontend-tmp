@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import { Dropdown, Header, Icon, Menu } from 'semantic-ui-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Dropdown, Header, Icon, Menu, Container, Image, Segment, Sticky } from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import AuthContext from "../../contexts/AuthContext";
 import HPIContext from 'contexts/HPIContext.js';
 import { DEFAULT_NAV_MENU_MOBILE_BP, LOGGEDIN_NAV_MENU_MOBILE_BP } from "constants/breakpoints.js";
-import 'components/navigation/NavMenu.css';
+import LogoLight from '../../assets/logo-light.png'
 
 //Navigation Bar component that will go at the top of most pages
 class ConnectedNavMenu extends Component {
@@ -43,15 +44,15 @@ class ConnectedNavMenu extends Component {
         const collapseLoggedInNav = windowWidth < LOGGEDIN_NAV_MENU_MOBILE_BP;
 
         return (
-            // Pass down the style
-            <Menu style={this.props.style} className="nav-menu" attached={this.props.attached}>
 
+            <Menu className={this.props.className + " nav-menu"} attached={this.props.attached}>
+                {/* Logo item */}
                 <Menu.Item>
-                    <Header as="h2">
-                        <a href="/home">cydoc</a>
-                    </Header>
+                    <Image className="nav-menu-logo-container" href='/home' src={LogoLight} />
                 </Menu.Item>
-                <Menu.Menu position="right">
+
+                {/* Navigation links */}
+                <Menu.Menu secondary position="right" style={{ margin : '10px 0 10px',}}>
                     {/* Menu will have different options depending on whether the user is logged in or not */}
                     {this.context.token ?
                         <LoggedInMenuItems
@@ -61,6 +62,7 @@ class ConnectedNavMenu extends Component {
                         <DefaultMenuItems collapseNav={collapseDefaultNav} />}
                 </Menu.Menu>
             </Menu>
+
         );
     }
 };
@@ -107,18 +109,18 @@ function LoggedInMenuItems(props) {
                                 null
                         }
                     </HPIContext.Consumer>
-                    <Dropdown.Item as={Link} name="createTemplate" to="/creategraph" text="Create Template" />
-                    <Dropdown.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
                     <Dropdown.Item as={Link} name="welcome" to="/dashboard">
                         Welcome, {props.name}
-                        <Icon name="user" className="user-icon" />
                     </Dropdown.Item>
+                    <Dropdown.Item as={Link} name="createTemplate" to="/creategraph" text="Create Template" />
+                    <Dropdown.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
+
                     <Dropdown.Item name="logout" href="/login" text="Logout" onClick={props.handleLogout} />
                 </Dropdown.Menu>
             </Dropdown>
         </Menu.Item>
         ) : (
-            <Fragment>
+            <>
                 <HPIContext.Consumer>
                     {value =>
                         value._id !== null ?
@@ -126,13 +128,13 @@ function LoggedInMenuItems(props) {
                             null
                     }
                 </HPIContext.Consumer>
-                <Menu.Item as={Link} name="createTemplate" to="/creategraph" text="Create Template" />
-                <Menu.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
                 <Menu.Item as={Link} name="welcome" to="/dashboard">
                     Welcome, {props.name}
-                    <Icon name="user" className="user-icon" />
                 </Menu.Item>
+                <Menu.Item as={Link} name="createTemplate" to="/creategraph" text="Create Template" />
+                <Menu.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
+
                 <Menu.Item name="logout" href="/login" text="Logout" onClick={props.handleLogout} />
-            </Fragment>
+            </>
         );
 }

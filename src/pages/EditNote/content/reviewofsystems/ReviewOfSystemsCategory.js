@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Grid, Button, Card} from 'semantic-ui-react';
+import {Grid, Button, Card, Container, Segment, Header} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import HPIContext from 'contexts/HPIContext.js';
 import './ReviewOfSystems.css';
@@ -25,9 +25,8 @@ export default class ReviewOfSystemsCategory extends Component{
 
     render() {
         return (
-            <Card className='ros-system'>
-                <Card.Content header={this.category} className='ros-system-title' />
-                <Card.Content>
+            <Segment raised>
+                <Header>{this.category}</Header>
                     <Grid>
                     {this.options.map((option) => 
                         <Grid.Row key={option}>
@@ -64,8 +63,7 @@ export default class ReviewOfSystemsCategory extends Component{
                         </Grid.Row>
                     )}
                     </Grid>
-                </Card.Content>
-            </Card>
+            </Segment>
         );
     }
 }

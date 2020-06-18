@@ -1,6 +1,6 @@
 .save-button {
-  margin-bottom: 10px !important;
-  border: none;
+  border-radius: 50px !important;
+  margin-left: 20px !important;
 }
 
 .collapsed-menu-tabs {
@@ -10,8 +10,37 @@
 .expanded-menu-tabs {
   display: flex;
   justify-content: center;
+
+}
+
+.stuck-container .note-name-menu {
+  padding-top: 3vh;
+}
+
+.note-name-menu input {
+  text-align: right !important;
+  color: teal !important;
 }
 
 .menu-tab {
-  font-size: 13px;
+  box-shadow: 0 10px 20px -3px RGBA(0, 128, 159, 0.2) !important;
+  padding-top: 0 !important;
 }
+.menu-tab .attached {
+  border-bottom: 0 !important;
+}
+
+.menu-tab .active.item {
+  font-weight: normal !important;
+  background-color: RGBA(0, 128, 159, 0.25) !important;
+  margin-bottom: -3px !important;
+  border-bottom: 0 !important;
+
+}
+
+.note-name-menu {
+  background-color: white;
+  margin-left: 0;
+
+}
+

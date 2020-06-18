@@ -1,10 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, Ref, createRef } from 'react';
+import {Sticky} from "semantic-ui-react";
 import MenuTabs from "./MenuTabs";
 import NotePage from "./NotePage";
 import NavMenu from "../../components/navigation/NavMenu";
-import 'components/navigation/NavMenu.css';
 import { TAB_NAMES } from 'constants/constants';
-import {Container} from "semantic-ui-react";
+
 
 //Component that manages the active state of the create note editor
 //and defines the layout of the editor
@@ -25,23 +25,27 @@ class EditNote extends Component {
         this.setState({ activeItem, activeTabIndex })
     }
 
-    render() {
-        return (
-            <Fragment>
-                <NavMenu style={{
-                    margin: "0 0 0 0",
-                    boxShadow: "0 0 0 0",
-                    border: "0"
-                }} class="nav-menu-container"  />
+    noteContent = createRef()
 
-                <MenuTabs
-                    activeItem={this.state.activeItem}
-                    onTabChange={this.onTabChange}
-                    activeTabIndex={this.state.activeTabIndex}
-                    attached
-                />
-                <NotePage activeItem={this.state.activeItem} />
-            </Fragment>
+    render() {
+
+        return (
+            <>
+            <div ref={this.noteContent}>
+
+                {/* style to ensure nav-menu is seamless */}
+                    <NavMenu className="edit-note-nav-menu" />
+                <Sticky context={this.noteContent}>
+                    <MenuTabs
+                        activeItem={this.state.activeItem}
+                        onTabChange={this.onTabChange}
+                        activeTabIndex={this.state.activeTabIndex}
+                        attached
+                    />
+                </Sticky>
+                    <NotePage activeItem={this.state.activeItem} />
+            </div>
+            </>
         );
     }
 }

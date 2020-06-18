@@ -71,14 +71,16 @@ class ConnectedMenuTabs extends Component {
                 active={activeItem === name}
                 onClick={this.handleItemClick}
                 href={"#"+ encodeURI(name)}
-                className="menu-tab"
             />
         );
 
         return (
-            <Fragment>
-                <Grid centered={collapseMenu? false : true} padded style={{ backgroundColor: 'white'}}>
+            <div style={{backgroundColor: 'white'}}>
+                <Container textAlign={collapseMenu? 'left' : 'right'} className="note-name-menu">
                     <Input
+
+                        size={"massive"}
+                        transparent
                         type='text'
                         placeholder="Untitled Note"
                         onChange={this.handleInputChange}
@@ -95,15 +97,12 @@ class ConnectedMenuTabs extends Component {
                         }}
                         value={this.context.title}
                     />
-                    <Button basic compact onClick={this.context.saveNote} className="save-button">
+                    <Button basic onClick={this.context.saveNote} className="save-button">
                         Save
                     </Button>
-                </Grid>
+                </Container>
 
-                <Menu secondary style={{
-                    margin: "0 0 5px 0",
-                    boxShadow: "0 5px 10px -6px grey"
-                }}>
+                <Menu secondary className="menu-tab">
                     {collapseMenu ?
                         (<CollapsedMenuTabs
                             tabMenuItems={tabMenuItems}
@@ -117,7 +116,7 @@ class ConnectedMenuTabs extends Component {
                         />)
                     }
                 </Menu>
-            </Fragment>
+            </div>
 
         )
     }

@@ -3,12 +3,14 @@ import { CookiesProvider } from "react-cookie"
 import './semantic/dist/semantic.min.css';
 import ReactDOM from 'react-dom';
 import { Route, BrowserRouter } from 'react-router-dom';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
 
 import EditNote 				from "./pages/EditNote/EditNote";
 import HomePage 				from "./pages/HomePage/HomePage";
-import Login 					from "./pages/Login/Login";
-import Register 				from "./pages/Login/Register"
-import DashboardPage 			from "./pages/MyNotes/DashboardPage";
+import Login 					from "./pages/Account/Login";
+import Register 				from "./pages/Account/Register"
+import LandingPage 			from "./pages/LandingPage/LandingPage";
 import ThemingLayout 			from "./pages/About/Theming";
 import { PrivateRoute } 		from "./components/navigation/PrivateRoute";
 import CreateGraph 				from "./pages/CreateTemplate/CreateGraph";
@@ -18,19 +20,21 @@ import { AuthStore } 			from "./contexts/AuthContext";
 import { NotesStore } 			from "./contexts/NotesContext";
 import { CreateTemplateStore } 	from "./contexts/CreateTemplateContext";
 
+library.add(faUser)
+
 ReactDOM.render(
     <CookiesProvider>
         <AuthStore>
             <NotesStore>
                 <HPIStore>
                     <CreateTemplateStore>
-                        <div style={{ letterSpacing: "1.8px" }}>
+                        <div>
                             <BrowserRouter >
                                 <Route path="/home" component={HomePage} />
                                 <Route path="/login" component={Login} />
                                 <Route path="/register" component={Register} />
                                 <PrivateRoute path="/editnote" component={EditNote} />
-                                <PrivateRoute path="/dashboard" component={DashboardPage} />
+                                <PrivateRoute path="/dashboard" component={LandingPage} />
                                 <PrivateRoute path="/creategraph" component={CreateGraph} />
                                 <PrivateRoute path="/editgraph" component={EditGraph} />
                                 <Route path="/about" component={ThemingLayout} />
