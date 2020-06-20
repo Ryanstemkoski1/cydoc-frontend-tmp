@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Form, Grid, Header, Segment, Button, Container } from "semantic-ui-react";
+import {Form, Grid, Header, Segment, Button, Container, Image, Menu} from "semantic-ui-react";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 
 import AuthContext from "../../contexts/AuthContext";
 import NotesContext from "../../contexts/NotesContext";
 import { client } from "constants/api.js"
-
+import LogoLight from '../../assets/logo-light.png'
+import LogoName from '../../assets/logo-name.png'
+import "./Account.css"
 
 // Component that manages the layout of the login page
 class LoginPage extends Component {
@@ -92,42 +94,63 @@ class LoginPage extends Component {
             // renders a one-column grid centered in the middle of the screen with login form
             // TODO: Make this into a container or card
             <Container className="login">
+                <Container textAlign="center">
+                    <Image size="tiny" spaced href='/home' src={LogoLight} />
+                    <Image size="small" spaced href='/home' src={LogoName} />
+                </Container>
 
-                    <Header color='grey' textAlign='center' style={{ fontSize: "60px", letterSpacing: "4.8px" }}>
-                        cydoc
-                    </Header>
-                    <Header as='h4' color='grey' textAlign='center'>
-                        Log in or Sign up
-                    </Header>
+                {/*<Header color='grey' textAlign='center' style={{ fontSize: "60px", letterSpacing: "4.8px" }}>*/}
+                {/*    cydoc*/}
+                {/*</Header>*/}
 
-                    <Segment clearing raised>
-                        <Form size='mini' onSubmit={this.handleSubmit}>
-                            <Form.Input
-                                fluid
-                                label='Username'
-                                name='username'
-                                value={username}
-                                onChange={this.handleChange}
-                            />
-                            <Form.Input
-                                fluid
-                                type={"password"}
-                                label='Password'
-                                name='password'
-                                value={password}
-                                onChange={this.handleChange}
-                            />
-                            <Form.Button color='#EAF3F5' size='small' floated='center'>
-                                Log in
-                            </Form.Button>
 
-                        </Form>
-                        <Link to={"/register"}>
-                            <Button color='teal' size='small' floated='right'>
-                                Sign up
-                            </Button>
-                        </Link>
-                    </Segment>
+                <Segment clearing raised>
+                    <Container className={"login-header"} color='black' textAlign='center'>
+                        Log in
+                    </Container>
+                    <Form size='mini' onSubmit={this.handleSubmit}>
+                        <Form.Input
+                            fluid
+                            label='Username'
+                            name='username'
+                            value={username}
+                            onChange={this.handleChange}
+                        />
+                        <Form.Input
+                            fluid
+                            type={"password"}
+                            label='Password'
+                            name='password'
+                            value={password}
+                            onChange={this.handleChange}
+                        />
+                        <Grid padded verticalAlign={"middle"} >
+                            <Grid.Row columns={2}>
+                                <Grid.Column>
+                                    <Link as={Button} to="/register" floated='left' className="make-an-account-button"
+                                    >
+                                        Make an Account
+                                    </Link>
+                                </Grid.Column>
+                                <Grid.Column textAlign={"right"}>
+                                    <Button color='teal' size='small'>
+                                        Log in
+                                    </Button>
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
+
+
+                        <Container>
+
+
+                        </Container>
+
+                    </Form>
+                    <Link to={"/register"}>
+
+                    </Link>
+                </Segment>
             </Container>
         );
     }

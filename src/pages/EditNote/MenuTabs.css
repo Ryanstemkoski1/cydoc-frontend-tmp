@@ -17,11 +17,36 @@
 }
 
 
-.stuck-container .note-name-menu {
+.expanded-menu-tabs > .item {
+  display: block !important;
+  width: 155px;
+  height: 40px;
   padding-top: 10px !important;
+  text-align: center !important;
+}
+
+.ui.secondary.menu .expanded-menu-tabs .item {
+  border-radius: 10px 10px 0 0 !important;
+
+}
+
+
+.stuck-container .note-name-menu {
+  padding-top: 15px !important;
+  margin-bottom: 10px !important;
+}
+
+.sticky-logo {
+  display: none !important;
+}
+
+.stuck-container .sticky-logo {
+  display: block !important;
+  margin: 0 !important;
 }
 
 .note-name-menu input {
+  padding: 10px !important;
   text-align: right !important;
   color: teal !important;
 }
@@ -35,7 +60,7 @@
 }
 
 .menu-tab .active.item {
-  font-weight: normal !important;
+  color: #034353 !important;
   /*background-color: RGBA(0, 128, 159, 0.25) !important;*/
   background-color: #CDE1E9 !important;
   margin-bottom: -3px !important;

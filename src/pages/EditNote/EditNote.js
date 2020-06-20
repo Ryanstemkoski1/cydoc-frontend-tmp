@@ -34,7 +34,12 @@ class EditNote extends Component {
                 <div ref={this.noteContent}>
 
                     {/* style to ensure nav-menu is seamless */}
-                    <NavMenu className="edit-note-nav-menu" />
+                    <NavMenu className="edit-note-nav-menu"
+                         activeItem={this.state.activeItem}
+                         onTabChange={this.onTabChange}
+                         activeTabIndex={this.state.activeTabIndex}
+                         attached
+                    />
                     <Sticky context={this.noteContent}>
                         <MenuTabs
                             activeItem={this.state.activeItem}
@@ -43,7 +48,7 @@ class EditNote extends Component {
                             attached
                         />
                     </Sticky>
-                        <NotePage activeItem={this.state.activeItem} />
+                    <NotePage activeItem={this.state.activeItem} />
                 </div>
             </>
         );

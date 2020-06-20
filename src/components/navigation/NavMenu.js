@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Dropdown, Menu, Image} from 'semantic-ui-react';
+import { Dropdown, Menu, Image, Icon, Button} from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import AuthContext from "../../contexts/AuthContext";
 import { DEFAULT_NAV_MENU_MOBILE_BP, LOGGEDIN_NAV_MENU_MOBILE_BP } from "constants/breakpoints.js";
 import LogoLight from '../../assets/logo-light.png'
+import LogoName from '../../assets/logo-name.png'
+
 import './NavMenu.css'
 
 // Navigation Bar component that will go at the top of most pages
@@ -49,12 +51,16 @@ class ConnectedNavMenu extends Component {
             <div>
                 <Menu className={this.props.className + " nav-menu"} attached={this.props.attached}>
                     {/* Logo item */}
+
                     <Menu.Item>
-                        <Image className="nav-menu-logo-container" href='/home' src={LogoLight} />
+                        {collapseLoggedInNav || collapseDefaultNav ? null :
+                            <Image className="nav-menu-logo" href='/home' src={LogoLight} />
+                        }
+                        <Image className="nav-menu-brand" size='small' href='/home' src={LogoName} />
                     </Menu.Item>
 
                     {/* Navigation links */}
-                    <Menu.Menu secondary position="right" style={{ margin : '10px 0 10px',}}>
+                    <Menu.Menu position="right">
                         {/* Menu will have different options depending on whether the user is logged in or not */}
                         {this.context.token ?
                             <LoggedInMenuItems
@@ -93,8 +99,13 @@ function DefaultMenuItems(props) {
         ) : (
             <Fragment>
                 <Menu.Item as={Link} name="about" to="/about" text="About" />
-                <Menu.Item as={Link} name="login" to="/login" text="Login" />
-                <Menu.Item as={Link} name="register" to="/register" text="Register" />
+                <Menu.Item>
+                    <Button.Group>
+                        <Button as={Link} basic color={"teal"} name="login" to="/login" text="Login" >Login</Button>
+                        <Button as={Link} color={"teal"} name="register" to="/register" text="Register" >Register</Button>
+                    </Button.Group>
+                </Menu.Item>
+
             </Fragment>
         );
 }
@@ -113,9 +124,9 @@ function LoggedInMenuItems(props) {
                         {/*    }*/}
                         {/*</HPIContext.Consumer>*/}
                         <Dropdown.Item name="welcome" style={{color: '#6DA3B1', fontStyle: 'italic', fontWeight: 'light'}}>
-                            Welcome, {props.name}
+                            {props.name}
                         </Dropdown.Item>
-                        <Dropdown.Item as={Link} name="createTemplate" to="/creategraph" text="Create Template" />
+                        {/*<Dropdown.Item as={Link} name="createTemplate" to="/creategraph" text="Create Template" />*/}
                         <Dropdown.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
 
                         <Dropdown.Item name="logout" href="/login" text="Logout" onClick={props.handleLogout} />
@@ -131,13 +142,18 @@ function LoggedInMenuItems(props) {
                 {/*            null*/}
                 {/*    }*/}
                 {/*</HPIContext.Consumer>*/}
-                <Menu.Item name="welcome" style={{color: '#6DA3B1', fontStyle: 'italic', fontWeight: 'normal'}}>
-                    Welcome, {props.name}
+                <Menu.Item name="welcome" style={{color: '#6DA3B1', fontWeight: 'normal'}}>
+                    <Icon name="user outline" /> {props.name}
                 </Menu.Item>
-                <Menu.Item as={Link} name="createTemplate" to="/creategraph" text="Create Template" />
-                <Menu.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
+                {/*<Menu.Item as={Link} name="createTemplate" to="/creategraph" text="Create Template" />*/}
+                <Menu.Item>
+                    <Button.Group>
+                        <Button as={Link} name="myNotes" to="/dashboard" text="My Notes" >My Notes</Button>
+                        <Button name="logout" href="/login" text="Logout" onClick={props.handleLogout} style={{color: '#FC4F56'}}>Log Out</Button>
 
-                <Menu.Item name="logout" href="/login" text="Logout" onClick={props.handleLogout} style={{color: '#DB2828'}}/>
-            </>
+
+                    </Button.Group>
+                </Menu.Item>
+                </>
         );
 }

@@ -1,10 +1,14 @@
 import React, { Component, Fragment } from 'react';
-import { Form, Grid, Header, Segment, Message } from "semantic-ui-react";
+import {Form, Grid, Header, Segment, Message, Container, Image, Label} from "semantic-ui-react";
 import * as yup from "yup"
 import { Redirect } from "react-router";
 import AuthContext from "../../contexts/AuthContext";
 import constants from "constants/registration-constants.json"
 import { client } from "constants/api.js"
+import "./Account.css"
+import LogoLight from "../../assets/logo-light.png";
+import LogoName from "../../assets/logo-name.png";
+
 
 const degreeOptions = constants.degrees.map((degree) => ({ key: degree, value: degree, text: degree }))
 const specialtyOptions = constants.specialties.map((specialty) => ({ key: specialty, value: specialty, text: specialty }))
@@ -122,24 +126,26 @@ export default class Register extends Component {
         if (this.state.formInfo.role === 'healthcare professional') {
             return (
                 <Fragment>
-                    <label style={{ fontSize: "10px" }}>student status</label>
+                    <label style={{color: '#262626', fontSize: '14px'}} >Are you a student?</label>
                     <Form.Group>
-                        <Form.Radio style={{ fontSize: "10px" }}
-                            label='student'
-                            value='y'
-                            name='studentStatus'
-                            checked={this.state.formInfo.studentStatus === 'y'}
-                            onChange={this.handleChange}
+                        <Form.Radio
+                            width={2}
+                                    label='Yes'
+                                    value='y'
+                                    name='studentStatus'
+                                    checked={this.state.formInfo.studentStatus === 'y'}
+                                    onChange={this.handleChange}
                         />
-                        <Form.Radio style={{ fontSize: "10px" }}
-                            label='non-student'
-                            value='n'
-                            name='studentStatus'
-                            checked={this.state.formInfo.studentStatus === 'n'}
-                            onChange={this.handleChange}
+                        <Form.Radio
+                            width={2}
+                                    label='No'
+                                    value='n'
+                                    name='studentStatus'
+                                    checked={this.state.formInfo.studentStatus === 'n'}
+                                    onChange={this.handleChange}
                         />
                     </Form.Group>
-                    <label style={{ fontSize: "10px" }}>degrees completed</label>
+                    <label style={{color: '#262626', fontSize: '14px'}} >Degrees completed</label>
                     <Form.Group>
                         <Form.Dropdown
                             search
@@ -172,7 +178,7 @@ export default class Register extends Component {
                             onChange={this.handleArrayChange}
                         />
                     </Form.Group>
-                    <label style={{ fontSize: "10px" }}>degrees in progress</label>
+                    <label style={{color: '#262626', fontSize: '14px'}} >Degrees in progress</label>
                     <Form.Group>
                         <Form.Dropdown
                             search
@@ -205,7 +211,7 @@ export default class Register extends Component {
                             onChange={this.handleArrayChange}
                         />
                     </Form.Group>
-                    <label style={{ fontSize: "10px" }}>specialties</label>
+                    <label style={{color: '#262626', fontSize: '14px'}} >Specialties</label>
                     <Form.Group>
                         <Form.Dropdown
                             search
@@ -240,14 +246,14 @@ export default class Register extends Component {
                     </Form.Group>
                     <Form.Input
                         fluid
-                        label='workplace'
+                        label='Workplace'
                         name='workplace'
                         value={this.state.formInfo.workplace}
                         onChange={this.handleChange}
                         required
                     />
                     <Form.Dropdown
-                        label='workplace features'
+                        label='Industry'
                         selection
                         multiple
                         options={workfeatOptions}
@@ -273,19 +279,22 @@ export default class Register extends Component {
         const { username, password } = this.state;
         return (
             //renders a one-column grid centered in the middle of the screen with login form
-            <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle' centered>
-                <Grid.Column style={{ maxWidth: 600 }}>
-                    <Header color='grey' textAlign='center' style={{ fontSize: "60px", letterSpacing: "4.8px" }}>
-                        cydoc
-                    </Header>
-                    <Header as='h4' color='grey' textAlign='center'>
-                        Sign Up
-                    </Header>
+            <Container className="sign-up">
+                <Container textAlign="center">
+                    <Image size="tiny" spaced href='/home' src={LogoLight} />
+                    <Image size="small" spaced href='/home' src={LogoName} />
+                </Container>
+                <Container>
+
                     <Segment clearing raised style={{ borderColor: "white" }}>
+                        <Container className="sign-up-header" color='black' textAlign='center'>
+                            Sign Up
+                        </Container>
                         <Form size='small' error={this.state.errorMessages.length>0} onSubmit={this.handleSubmit}>
                             <Form.Input
+
                                 fluid
-                                label='username'
+                                label='Username'
                                 name='username'
                                 value={this.state.formInfo.username}
                                 onChange={this.handleChange}
@@ -293,7 +302,7 @@ export default class Register extends Component {
                             <Form.Input
                                 fluid
                                 type={"password"}
-                                label='password'
+                                label='Password'
                                 name='password'
                                 value={this.state.formInfo.password}
                                 onChange={this.handleChange}
@@ -301,7 +310,7 @@ export default class Register extends Component {
                             <Form.Input
                                 fluid
                                 type={"password"}
-                                label='reenter password'
+                                label='Re-enter password'
                                 name='passwordConfirm'
                                 value={this.state.formInfo.passwordConfirm}
                                 onChange={this.handleChange}
@@ -309,15 +318,18 @@ export default class Register extends Component {
                             <Form.Group>
                                 <Form.Input
                                     fluid
-                                    label='first name'
+                                    placeholder='John'
+                                    label='First name'
                                     name='firstName'
                                     value={this.state.formInfo.firstName}
                                     onChange={this.handleChange}
                                 />
                                 <Form.Input
                                     fluid
-                                    label='last name'
+                                    placeholder='Doe'
+                                    label='Last name'
                                     name='lastName'
+
                                     value={this.state.formInfo.lastName}
                                     onChange={this.handleChange}
                                 />
@@ -325,16 +337,18 @@ export default class Register extends Component {
                             <Form.Group>
                                 <Form.Input
                                     fluid
+                                    placeholder='name@example.com'
                                     type='email'
-                                    label='email'
+                                    label='Email'
                                     name='email'
                                     value={this.state.formInfo.email}
                                     onChange={this.handleChange}
                                 />
                                 <Form.Input
                                     fluid
+                                    placeholder='name@example.com'
                                     type='email'
-                                    label='backup email'
+                                    label='Backup email'
                                     name='backupEmail'
                                     value={this.state.formInfo.backupEmail}
                                     onChange={this.handleChange}
@@ -358,26 +372,29 @@ export default class Register extends Component {
                                     onChange={this.handleChange}
                                 />
                             </Form.Group>
-                            <label>
+                            <label style={{color: '#262626', fontSize: '14px'}} >
                                 I am a:
-                                </label>
+                            </label>
                             <Form.Group>
                                 <Form.Radio
+                                    width={6}
                                     label='Healthcare Professional'
                                     value='healthcare professional'
                                     name='role'
                                     checked={this.state.formInfo.role === 'healthcare professional'}
                                     onChange={this.handleChange}
                                 />
-                                <Form.Radio 
+                                <Form.Radio
+                                    width={4}
                                     label='Patient'
                                     value='patient'
                                     name='role'
                                     checked={this.state.formInfo.role === 'patient'}
                                     onChange={this.handleChange}
                                 />
-                                
+
                                 <Form.Radio
+                                    width={7}
                                     label='Administrator'
                                     value='administrator'
                                     name='role'
@@ -392,16 +409,16 @@ export default class Register extends Component {
                                 content={this.state.errorMessages.map(m => <Message.Item>{m}</Message.Item>)}
                             />
                             <>
-                            <Form.Button color='teal' size='small' floated='right'>
-                                Sign Up
-                            </Form.Button>
+                                <Form.Button color='teal' size='small' floated='right'>
+                                    Sign Up
+                                </Form.Button>
                             </>
 
                         </Form>
 
                     </Segment>
-                </Grid.Column>
-            </Grid>
+                </Container>
+            </Container>
         );
     }
 }

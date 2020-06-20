@@ -1,11 +1,12 @@
 import React, {Component, Fragment} from 'react'
-import {Menu, Container, Button, Dropdown, Grid} from 'semantic-ui-react'
+import {Menu, Container, Button, Dropdown, Grid, Image} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import {TAB_NAMES} from 'constants/constants'
 import {Input} from "semantic-ui-react";
 import HPIContext from 'contexts/HPIContext.js';
 import {MENU_TABS_MOBILE_BP} from "../../constants/breakpoints.js";
 import "./MenuTabs.css";
+import LogoName from "../../assets/logo-name.png"
 
 //Component for the tabs that toggle the different sections of the Create Note editor
 class ConnectedMenuTabs extends Component {
@@ -77,28 +78,32 @@ class ConnectedMenuTabs extends Component {
         return (
             <div style={{backgroundColor: 'white'}}>
                 <Container textAlign={collapseMenu? 'left' : 'right'} className="note-name-menu">
-                    <Input
-                        size={collapseMenu? 'large' : "massive"}
-                        transparent
-                        type='text'
-                        placeholder="Untitled Note"
-                        onChange={this.handleInputChange}
-                        onFocus={()=>{
-                            if (this.context.title === "Untitled Note") {
-                                this.context.onContextChange("title", "")
-                            }
-                        }}
-                        onBlur={()=>{
-                            this.setState({isTitleFocused: false})
-                            if (this.context.title === '') {
-                                this.context.onContextChange("title", "Untitled Note")
-                            }
-                        }}
-                        value={this.context.title}
-                    />
-                    <Button basic onClick={this.context.saveNote} className="save-button">
-                        Save
-                    </Button>
+                    <Image floated="left" className="sticky-logo" size="tiny" src={LogoName} />
+                    <Container className="note-name-container">
+                        <Input
+                            size={collapseMenu? 'large' : "massive"}
+                            transparent
+                            type='text'
+                            placeholder="Untitled Note"
+                            onChange={this.handleInputChange}
+                            onFocus={()=>{
+                                if (this.context.title === "Untitled Note") {
+                                    this.context.onContextChange("title", "")
+                                }
+                            }}
+                            onBlur={()=>{
+                                this.setState({isTitleFocused: false})
+                                if (this.context.title === '') {
+                                    this.context.onContextChange("title", "Untitled Note")
+                                }
+                            }}
+                            value={this.context.title}
+                        />
+                        <Button basic onClick={this.context.saveNote} className="save-button">
+                            Save
+                        </Button>
+                    </Container>
+
                 </Container>
 
                 <Menu secondary className="menu-tab">

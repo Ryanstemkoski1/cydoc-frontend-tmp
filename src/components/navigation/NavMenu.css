@@ -4,19 +4,26 @@
     height: 10vh;
 
     /* Align menu links to the cydoc logo text */
-    padding-top: 2vh;
-    padding-bottom: 5.5vh;
-    padding-left: 5vw;
-    padding-right: 10vw;
+
 }
 
-.nav-menu .right.menu .item {
-    font-weight: 450;
+.nav-menu .button {
+    background-color: #CDE1E9;
+    color: #034353;
+    font-weight: 400;
+
 }
 
-.nav-menu-logo-container img {
-    margin-top: 3vh;
-    height: 9vh !important;
+.nav-menu-logo img {
+    margin-right: 10px;
+    height: 8vh !important;
+    width: auto !important;
+}
+
+
+.nav-menu-brand img {
+    padding-bottom: 0.5vh;
+    height: 6vh !important;
     width: auto !important;
 }
 
