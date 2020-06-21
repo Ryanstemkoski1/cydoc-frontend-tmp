@@ -21,7 +21,6 @@ export class HPIStore extends React.Component {
         }
     }
 
-
     //Sets context[name] equal to values
     onContextChange = (name, values) => {
         this.setState({ [name]: values });
@@ -29,6 +28,7 @@ export class HPIStore extends React.Component {
 
     //Saves the current note, which updates the NotesContext's state
     saveNote = () => {
+        console.log("saving")
         let note = {
             noteName: this.state["title"],
             _id: this.state._id,
@@ -49,7 +49,6 @@ export class HPIStore extends React.Component {
                 step: this.state.step
             }
         }
-
         this.context.updateNote(note)
     }
 

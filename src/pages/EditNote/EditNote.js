@@ -6,8 +6,8 @@ import NavMenu from "../../components/navigation/NavMenu";
 import { TAB_NAMES } from 'constants/constants';
 
 
-//Component that manages the active state of the create note editor
-//and defines the layout of the editor
+// Component that manages the active state of the create note editor
+// and defines the layout of the editor
 class EditNote extends Component {
     constructor(props) {
         super(props);
@@ -35,10 +35,6 @@ class EditNote extends Component {
 
                     {/* style to ensure nav-menu is seamless */}
                     <NavMenu className="edit-note-nav-menu"
-                         activeItem={this.state.activeItem}
-                         onTabChange={this.onTabChange}
-                         activeTabIndex={this.state.activeTabIndex}
-                         attached
                     />
                     <Sticky context={this.noteContent}>
                         <MenuTabs

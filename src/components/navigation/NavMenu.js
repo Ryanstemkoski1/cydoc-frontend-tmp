@@ -1,11 +1,13 @@
 import React, { Component, Fragment } from 'react';
-import { Dropdown, Menu, Image, Icon, Button} from 'semantic-ui-react';
+import {Dropdown, Menu, Image, Icon, Button, Input, Container} from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-
+import HPIContext from 'contexts/HPIContext.js';
 import AuthContext from "../../contexts/AuthContext";
+import NotesContext from "../../contexts/NotesContext";
+
 import { DEFAULT_NAV_MENU_MOBILE_BP, LOGGEDIN_NAV_MENU_MOBILE_BP } from "constants/breakpoints.js";
 import LogoLight from '../../assets/logo-light.png'
 import LogoName from '../../assets/logo-name.png'
@@ -53,11 +55,18 @@ class ConnectedNavMenu extends Component {
                     {/* Logo item */}
 
                     <Menu.Item>
-                        {collapseLoggedInNav || collapseDefaultNav ? null :
+                        {collapseLoggedInNav || collapseDefaultNav ?
+                            null :
                             <Image className="nav-menu-logo" href='/home' src={LogoLight} />
                         }
-                        <Image className="nav-menu-brand" size='small' href='/home' src={LogoName} />
+                        {collapseLoggedInNav || collapseDefaultNav ?
+                            <Image className="nav-menu-brand" size='small' href='/home' src={LogoName} />
+                            : null
+                        }
+
                     </Menu.Item>
+
+                    <NoteNameMenuItem />
 
                     {/* Navigation links */}
                     <Menu.Menu position="right">
@@ -83,6 +92,77 @@ NavMenu.propTypes = {
     // optional prop for stacking another menu above/below
     attached: PropTypes.string
 };
+
+// class component that allows display and change of note name
+class NoteNameMenuItem extends Component {
+
+    static contextType = HPIContext
+
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+            windowWidth: 0,
+            windowHeight: 0,
+            textInput: "Untitled",
+            isTitleFocused: false,
+        }
+        this.handleSave = this.handleSave.bind(this);
+    }
+
+    handleInputChange = (event) => {
+        this.setState({textInput: event.target.value})
+        this.context.onContextChange("title", event.target.value)
+    }
+
+    handleSave = () => {
+        this.context.saveNote({
+            noteName:"note",
+            body:
+                [
+                    {dogs:["terriers","corgis","dalmations"]},
+                    {fish:["goldfish", "beta"]}
+                ],
+            doctorID:"5d696a7dbf476c61064fd58d"
+        });
+    }
+
+    render () {
+        return (
+            <Menu.Item className="note-name-menu-item">
+                <HPIContext.Consumer>
+                    {value =>
+                        <>
+                            <Input
+                                size="massive"
+                                transparent
+                                type='text'
+                                placeholder="Untitled Note"
+                                onChange={this.handleInputChange}
+                                onFocus={()=>{
+                                    if (this.context.title === "Untitled Note") {
+                                        this.context.onContextChange("title", "")
+                                    }
+                                }}
+                                onBlur={()=>{
+                                    this.setState({isTitleFocused: false})
+                                    if (this.context.title === '') {
+                                        this.context.onContextChange("title", "Untitled Note")
+                                    }
+                                }}
+                                value={this.context.title}
+                            />
+                            <Button basic onClick={this.handleSave} className="save-button">
+                                Save
+                            </Button>
+                        </>
+                    }
+
+                </HPIContext.Consumer>
+            </Menu.Item>
+        )
+    }
+
+}
 
 //Functional component for menu items that show when user is not logged in
 function DefaultMenuItems(props) {
@@ -154,6 +234,6 @@ function LoggedInMenuItems(props) {
 
                     </Button.Group>
                 </Menu.Item>
-                </>
+            </>
         );
 }

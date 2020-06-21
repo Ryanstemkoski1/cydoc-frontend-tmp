@@ -40,7 +40,7 @@ class ConnectedMenuTabs extends Component {
         this.setState({ windowWidth, windowHeight });
     }
 
-    //onClick event is handled by parent
+    // onClick event is handled by parent
     handleItemClick = (e, { name }) => this.props.onTabChange(name);
 
     handleSave = () => {
@@ -54,11 +54,11 @@ class ConnectedMenuTabs extends Component {
             doctorID:"5d696a7dbf476c61064fd58d"
         });
     }
-
-    handleInputChange = (event) => {
-        this.setState({textInput: event.target.value}) 
-        this.context.onContextChange("title", event.target.value)
-    }
+    //
+    // handleInputChange = (event) => {
+    //     this.setState({textInput: event.target.value})
+    //     this.context.onContextChange("title", event.target.value)
+    // }
 
     render() {
         const {activeItem, activeTabIndex} = this.props;
@@ -79,31 +79,7 @@ class ConnectedMenuTabs extends Component {
             <div style={{backgroundColor: 'white'}}>
                 <Container textAlign={collapseMenu? 'left' : 'right'} className="note-name-menu">
                     <Image floated="left" className="sticky-logo" size="tiny" src={LogoName} />
-                    <Container className="note-name-container">
-                        <Input
-                            size={collapseMenu? 'large' : "massive"}
-                            transparent
-                            type='text'
-                            placeholder="Untitled Note"
-                            onChange={this.handleInputChange}
-                            onFocus={()=>{
-                                if (this.context.title === "Untitled Note") {
-                                    this.context.onContextChange("title", "")
-                                }
-                            }}
-                            onBlur={()=>{
-                                this.setState({isTitleFocused: false})
-                                if (this.context.title === '') {
-                                    this.context.onContextChange("title", "Untitled Note")
-                                }
-                            }}
-                            value={this.context.title}
-                        />
-                        <Button basic onClick={this.context.saveNote} className="save-button">
-                            Save
-                        </Button>
-                    </Container>
-
+                    
                 </Container>
 
                 <Menu secondary className="menu-tab">
