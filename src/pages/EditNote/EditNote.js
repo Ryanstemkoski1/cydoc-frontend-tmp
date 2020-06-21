@@ -1,5 +1,7 @@
-import React, { Component, Fragment, Ref, createRef } from 'react';
-import {Sticky} from "semantic-ui-react";
+import React, { Component, Fragment, createRef } from 'react';
+import {Segment} from 'semantic-ui-react';
+import {Container, Sticky} from "semantic-ui-react";
+
 import MenuTabs from "./MenuTabs";
 import NotePage from "./NotePage";
 import NavMenu from "../../components/navigation/NavMenu";
@@ -25,18 +27,19 @@ class EditNote extends Component {
         this.setState({ activeItem, activeTabIndex })
     }
 
+    // Reference for the Sticky navigation bars
     noteContent = createRef()
 
     render() {
-
         return (
             <>
                 <div ref={this.noteContent}>
-
-                    {/* style to ensure nav-menu is seamless */}
-                    <NavMenu className="edit-note-nav-menu"
-                    />
+                    {/* Top NavMenu and MenuTabs stay on top regardless of scroll*/}
                     <Sticky context={this.noteContent}>
+                        <NavMenu
+                            className="edit-note-nav-menu"
+                            displayNoteName={true}
+                        />
                         <MenuTabs
                             activeItem={this.state.activeItem}
                             onTabChange={this.onTabChange}
@@ -45,7 +48,9 @@ class EditNote extends Component {
                         />
                     </Sticky>
                     <NotePage activeItem={this.state.activeItem} />
+
                 </div>
+
             </>
         );
     }

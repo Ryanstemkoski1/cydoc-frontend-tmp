@@ -1,7 +1,7 @@
 import React, {Component} from "react"
 import "./ButtonItem"
 import HPIContext from 'contexts/HPIContext.js';
-import '../../hpi.css';
+import '../../HPI.css';
 
 class PositiveDiseases extends Component {
     // If you wrap <div> around the button, you can get the buttons to line up under each other.

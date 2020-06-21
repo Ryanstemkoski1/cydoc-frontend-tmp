@@ -3,7 +3,7 @@ import { Icon, Button } from 'semantic-ui-react';
 import "../css/Button.css"
 import DiseaseTag from "./DiseaseTag";
 import HPIContext from 'contexts/HPIContext.js';
-import '../../hpi.css';
+import '../../HPI.css';
 
 class ButtonItem extends React.Component {
     static contextType = HPIContext

@@ -80,11 +80,18 @@ export class NotesStore extends React.Component {
     }
 
     updateNote = async (note) => {
+        console.log("in updateNote")
 
         note.doctorID = this.context.user._id
         note.clinicID = this.context.user.workplace
 
-        this.setState({ notes: this.state.notes.map((prevNote) => prevNote._id === note._id ? note : prevNote) })
+        console.log("state's title is: " + note.noteName)
+
+
+        this.setState({
+            notes: this.state.notes.map(
+                (prevNote) => prevNote._id === note._id ? note : prevNote)
+        })
         let response = await client.put(`/record/${note._id}`, note)
 
         if (response == null) {

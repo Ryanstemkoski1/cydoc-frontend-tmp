@@ -5,7 +5,7 @@ import '../css/App.css';
 import HPIContext from 'contexts/HPIContext.js';
 import Accordian from "./accordian"
 import { DISEASE_TABS_MED_BP, DISEASE_TABS_SMALL_BP } from 'constants/breakpoints';
-import '../../hpi.css';
+import '../../HPI.css';
 
 //The order goes DiseaseForm -> DiseaseFormQuestions -> QuestionAnswer -> ButtonTag
 

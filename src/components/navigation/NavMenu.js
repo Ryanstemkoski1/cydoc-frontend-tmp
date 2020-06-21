@@ -2,16 +2,12 @@ import React, { Component, Fragment } from 'react';
 import {Dropdown, Menu, Image, Icon, Button, Input, Container} from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
-import HPIContext from 'contexts/HPIContext.js';
-import AuthContext from "../../contexts/AuthContext";
-import NotesContext from "../../contexts/NotesContext";
 
 import { DEFAULT_NAV_MENU_MOBILE_BP, LOGGEDIN_NAV_MENU_MOBILE_BP } from "constants/breakpoints.js";
+import HPIContext from 'contexts/HPIContext.js';
+import AuthContext from "../../contexts/AuthContext";
 import LogoLight from '../../assets/logo-light.png'
 import LogoName from '../../assets/logo-name.png'
-
 import './NavMenu.css'
 
 // Navigation Bar component that will go at the top of most pages
@@ -48,25 +44,25 @@ class ConnectedNavMenu extends Component {
         const { windowWidth } = this.state;
         const collapseDefaultNav = windowWidth < DEFAULT_NAV_MENU_MOBILE_BP;
         const collapseLoggedInNav = windowWidth < LOGGEDIN_NAV_MENU_MOBILE_BP;
-
         return (
             <div>
                 <Menu className={this.props.className + " nav-menu"} attached={this.props.attached}>
-                    {/* Logo item */}
 
+                    {/* Logo Image - display icon when tabs not collapsed, and brand name when collpased. */}
+                    {/* Only logo image is displayed when the note name must be shown next to it */}
                     <Menu.Item>
                         {collapseLoggedInNav || collapseDefaultNav ?
                             null :
                             <Image className="nav-menu-logo" href='/home' src={LogoLight} />
                         }
-                        {collapseLoggedInNav || collapseDefaultNav ?
+                        {this.props.displayNoteName ?
+                            null :
                             <Image className="nav-menu-brand" size='small' href='/home' src={LogoName} />
-                            : null
                         }
-
                     </Menu.Item>
 
-                    <NoteNameMenuItem />
+                    {/* When parent is EditNote, then display the note name item */}
+                    {this.props.displayNoteName ? <NoteNameMenuItem /> : null}
 
                     {/* Navigation links */}
                     <Menu.Menu position="right">
@@ -90,40 +86,21 @@ export default NavMenu;
 
 NavMenu.propTypes = {
     // optional prop for stacking another menu above/below
-    attached: PropTypes.string
+    attached: PropTypes.string,
+    // optional prop for whether to display or hide hte note name menu item
+    displayNoteName: PropTypes.bool
 };
 
-// class component that allows display and change of note name
+
+// class component that displays and changes note name
+// shown only if parent is EditNote.
 class NoteNameMenuItem extends Component {
 
     static contextType = HPIContext
 
-    constructor(props, context) {
-        super(props, context);
-        this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
-            textInput: "Untitled",
-            isTitleFocused: false,
-        }
-        this.handleSave = this.handleSave.bind(this);
-    }
-
     handleInputChange = (event) => {
         this.setState({textInput: event.target.value})
         this.context.onContextChange("title", event.target.value)
-    }
-
-    handleSave = () => {
-        this.context.saveNote({
-            noteName:"note",
-            body:
-                [
-                    {dogs:["terriers","corgis","dalmations"]},
-                    {fish:["goldfish", "beta"]}
-                ],
-            doctorID:"5d696a7dbf476c61064fd58d"
-        });
     }
 
     render () {
@@ -148,10 +125,11 @@ class NoteNameMenuItem extends Component {
                                     if (this.context.title === '') {
                                         this.context.onContextChange("title", "Untitled Note")
                                     }
-                                }}
+                                }
+                                }
                                 value={this.context.title}
                             />
-                            <Button basic onClick={this.handleSave} className="save-button">
+                            <Button basic onClick={this.context.saveNote} className="save-button">
                                 Save
                             </Button>
                         </>
@@ -164,7 +142,7 @@ class NoteNameMenuItem extends Component {
 
 }
 
-//Functional component for menu items that show when user is not logged in
+// Functional component for menu items that show when user is not logged in
 function DefaultMenuItems(props) {
     return props.collapseNav ?
         (<Menu.Item>
@@ -192,21 +170,13 @@ function DefaultMenuItems(props) {
 
 //Functional component for menu items that show when user is logged in
 function LoggedInMenuItems(props) {
-    return props.collapseNav ?
+    return (props.collapseNav ?
         (<Menu.Item>
                 <Dropdown icon="large bars">
                     <Dropdown.Menu>
-                        {/*<HPIContext.Consumer>*/}
-                        {/*    {value =>*/}
-                        {/*        value._id !== null ?*/}
-                        {/*            <Dropdown.Item as={Link} name="editNote" to="/editnote" text={`Edit Note (${value.title})`} /> :*/}
-                        {/*            null*/}
-                        {/*    }*/}
-                        {/*</HPIContext.Consumer>*/}
                         <Dropdown.Item name="welcome" style={{color: '#6DA3B1', fontStyle: 'italic', fontWeight: 'light'}}>
                             {props.name}
                         </Dropdown.Item>
-                        {/*<Dropdown.Item as={Link} name="createTemplate" to="/creategraph" text="Create Template" />*/}
                         <Dropdown.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
 
                         <Dropdown.Item name="logout" href="/login" text="Logout" onClick={props.handleLogout} />
@@ -215,17 +185,9 @@ function LoggedInMenuItems(props) {
             </Menu.Item>
         ) : (
             <>
-                {/*<HPIContext.Consumer>*/}
-                {/*    {value =>*/}
-                {/*        value._id !== null ?*/}
-                {/*            <Menu.Item as={Link} name="editNote" to="/editnote" text={`Edit Note (${value.title})`} /> :*/}
-                {/*            null*/}
-                {/*    }*/}
-                {/*</HPIContext.Consumer>*/}
                 <Menu.Item name="welcome" style={{color: '#6DA3B1', fontWeight: 'normal'}}>
                     <Icon name="user outline" /> {props.name}
                 </Menu.Item>
-                {/*<Menu.Item as={Link} name="createTemplate" to="/creategraph" text="Create Template" />*/}
                 <Menu.Item>
                     <Button.Group>
                         <Button as={Link} name="myNotes" to="/dashboard" text="My Notes" >My Notes</Button>
@@ -235,5 +197,7 @@ function LoggedInMenuItems(props) {
                     </Button.Group>
                 </Menu.Item>
             </>
-        );
+        )
+    );
 }
+

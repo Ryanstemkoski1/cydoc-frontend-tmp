@@ -1,12 +1,11 @@
 import React, {Component, Fragment} from 'react'
-import {Menu, Container, Button, Dropdown, Grid, Image} from 'semantic-ui-react'
+import {Menu, Container, Dropdown, Segment, Icon} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
+
 import {TAB_NAMES} from 'constants/constants'
-import {Input} from "semantic-ui-react";
 import HPIContext from 'contexts/HPIContext.js';
 import {MENU_TABS_MOBILE_BP} from "../../constants/breakpoints.js";
 import "./MenuTabs.css";
-import LogoName from "../../assets/logo-name.png"
 
 //Component for the tabs that toggle the different sections of the Create Note editor
 class ConnectedMenuTabs extends Component {
@@ -54,11 +53,7 @@ class ConnectedMenuTabs extends Component {
             doctorID:"5d696a7dbf476c61064fd58d"
         });
     }
-    //
-    // handleInputChange = (event) => {
-    //     this.setState({textInput: event.target.value})
-    //     this.context.onContextChange("title", event.target.value)
-    // }
+
 
     render() {
         const {activeItem, activeTabIndex} = this.props;
@@ -77,14 +72,13 @@ class ConnectedMenuTabs extends Component {
 
         return (
             <div style={{backgroundColor: 'white'}}>
-                <Container textAlign={collapseMenu? 'left' : 'right'} className="note-name-menu">
-                    <Image floated="left" className="sticky-logo" size="tiny" src={LogoName} />
-                    
-                </Container>
-
                 <Menu secondary className="menu-tab">
+                    {/* Menu is different depending on screen size */}
                     {collapseMenu ?
-                        (<CollapsedMenuTabs
+                        (
+
+
+                            <CollapsedMenuTabs
                             tabMenuItems={tabMenuItems}
                             attached={this.props.attached}
                             activeItem={activeItem}
@@ -98,20 +92,24 @@ class ConnectedMenuTabs extends Component {
                 </Menu>
             </div>
 
+
+
         )
     }
 }
 
+
+// Functional component to display when tabs are collapsed
 function CollapsedMenuTabs(props) {
     const curTab = props.tabMenuItems[props.activeTabIndex].props.name
 
     return (
-        <Menu tabular attached={props.attached}>
+        <Menu tabular attached={props.attached} >
             <Container className="collapsed-menu-tabs">
                 {props.tabMenuItems[props.activeTabIndex]}
                 {props.tabMenuItems[props.tabMenuItems.length - 1]}
-                <Menu.Item>
-                    {curTab.length < 10 ? 
+                <Menu.Item style={{flex: "0 0 auto"}}>
+                    {curTab.length < 10 ?
                         <Dropdown
                             icon="ellipsis horizontal"
                             options={props.tabMenuItems.slice(0, props.tabMenuItems.length - 1)}
@@ -126,9 +124,34 @@ function CollapsedMenuTabs(props) {
                 </Menu.Item>
             </Container>
         </Menu>
+        // <>
+        //     <div>
+        //     <Icon name="angle left" style={{
+        //         verticalAlign: 'middle',
+        //         textAlign: 'center',
+        //         padding: '5px '
+        //     }}/>
+        //     </div>
+        // <Menu tabular attached={props.attached} className="collapsed-menu-tabs" style={{
+        //     overflow: 'auto',
+        //     maxHeight: '50vh',
+        //     whiteSpace: 'nowrap',
+        //     display: 'flex',
+        //     flexWrap: 'nowrap',
+        //     overflowX: 'auto',
+        //     WebkitOverflowScrolling: 'touch'}}
+        // >
+        //
+        //     {props.tabMenuItems}
+        // </Menu>
+        // </>
     );
 }
 
+const MenuTabs = ConnectedMenuTabs;
+export default MenuTabs;
+
+// Functional component to display when tabs are all shown
 function ExpandededMenuTabs(props) {
     return <Menu tabular attached={props.attached}>
         <Container className="expanded-menu-tabs">
@@ -137,14 +160,12 @@ function ExpandededMenuTabs(props) {
     </Menu>;
 }
 
-ConnectedMenuTabs.propTypes = {
-  activeItem: PropTypes.string,
-  attached: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.bool
-  ]),
-  onTabChange: PropTypes.func
-};
 
-const MenuTabs = ConnectedMenuTabs;
-export default MenuTabs;
+ConnectedMenuTabs.propTypes = {
+    activeItem: PropTypes.string,
+    attached: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool
+    ]),
+    onTabChange: PropTypes.func
+};

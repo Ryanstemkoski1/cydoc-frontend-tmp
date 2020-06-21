@@ -6,9 +6,9 @@ import ButtonItem from "./src/components/ButtonItem.js";
 import disease_abbrevs from "./src/components/data/disease_abbrevs"
 import PositiveDiseases from "./src/components/PositiveDiseases";
 import DiseaseForm from "./src/components/DiseaseForm";
-import API from "./src/API.js";
+import API from "./src/API";
 import HPIContext from 'contexts/HPIContext.js';
-import './hpi.css';
+import './HPI.css';
 import {ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP} from 'constants/breakpoints';
 
 class HPIContent extends Component {

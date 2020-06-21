@@ -1,17 +1,15 @@
 
+/* Navigation Bar has a thicker drop shadow */
 .nav-menu {
     box-shadow: 0 0 20px 5px RGBA(0, 128, 159, 0.2) !important;
     height: 10vh;
-
-    /* Align menu links to the cydoc logo text */
-
 }
 
+/* Navigation button styles */
 .nav-menu .button {
     background-color: #CDE1E9;
     color: #034353;
     font-weight: 400;
-
 }
 
 .nav-menu-logo img {
@@ -20,19 +18,13 @@
     width: auto !important;
 }
 
-
 .nav-menu-brand img {
     padding-bottom: 0.5vh;
     height: 6vh !important;
     width: auto !important;
 }
 
+/* Make the divide between menu tabs seamless */
 .edit-note-nav-menu {
-    box-shadow: 0 0 0 0 !important;
-    margin: 0 !important;
     border: 0 !important;
-}
-
-.note-name-menu-item {
-
 }

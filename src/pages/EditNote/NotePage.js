@@ -1,18 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { Segment, Header, Container} from 'semantic-ui-react';
-import MedicalHistoryContent from "./content/medicalhistory/MedicalHistoryContent";
-import SurgicalHistoryContent from "./content/surgicalhistory/SurgicalHistoryContent";
-import MedicationsContent from "./content/medications/MedicationsContent";
-import AllergiesContent from "./content/allergies/AllergiesContent";
-import FamilyHistoryContent from "./content/familyhistory/FamilyHistoryContent";
 import PropTypes from 'prop-types';
-import SocialHistoryContent from "./content/socialhistory/SocialHistoryContent";
 import PhysicalExamContent from "./content/physicalexam/PhysicalExamContent";
 import ReviewOfSystemsContent from "./content/reviewofsystems/ReviewOfSystemsContent";
 import HPIContent from "./content/hpi/knowledgegraph/HPIContent";
 import PatientHistoryContent from "./content/patienthistory/PatientHistoryContent";
 import GenerateNote from './content/generatenote/GenerateNote';
-import DiscussionPlan from './content/discussionplan/DiscussionPlan';
+import DiscussionPlan from './content/plan/DiscussionPlan';
 import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
 import './NotePage.css';
 
@@ -87,19 +81,14 @@ export default class NotePage extends Component {
         const tabToDisplay = this.getTabToDisplay(this.props.activeItem);
 
         return (
-            //Renders a white page that contains the tab name as the header and the
-            //corresponding content to the active tab
-            /*
-            <Header as="h3" textAlign="center">
-                    {this.props.activeItem}
-                </Header>
-                className={mobile ? `note-page-container-mobile` : `note-page-container`}
-             */
+            <>
             <Container style={{
-                margin: "20px 0 0 0",
+                margin: "40px 0 40vh 0",
             }}>
                 {tabToDisplay}
             </Container>
+
+            </>
         );
     }
 

@@ -117,25 +117,6 @@ export default class PatientHistoryContent extends Component {
             },
         ]
 
-        /*
-
-                <div id="medical history" className="tab-content initial">
-                    <MedicalHistoryContent collapseTabs={collapseTabs} />
-                </div>
-                <div id="surgical history" className="tab-content">
-                    <SurgicalHistoryContent mobile={collapseTabs} />
-                </div>
-                <div id="medications" className="tab-content">
-                    <MedicationsContent mobile={collapseTabs} />
-                </div>
-                <div id="allergies" className="tab-content">
-                    <AllergiesContent mobile={collapseTabs}/>
-                </div>
-                <div id="social history" className="tab-content">
-                    <SocialHistoryContent mobile={socialHistoryMobile}/>
-                </div>
-         */
-
         return (
             <>
                 {collapseTabs ? 

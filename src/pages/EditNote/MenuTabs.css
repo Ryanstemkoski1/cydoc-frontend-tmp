@@ -1,76 +1,40 @@
-.save-button {
-  border-radius: 50px !important;
-  margin-left: 20px !important;
+
+/* Menu tabs have the box shadow instead of nav-menu */
+.menu-tab {
+  box-shadow: 0 10px 20px -3px RGBA(0, 128, 159, 0.2) !important;
 }
 
 .collapsed-menu-tabs {
   padding-left: 2rem;
+  border-bottom: 0 !important;
 }
+
 
 .expanded-menu-tabs {
   display: flex;
   justify-content: center;
 }
 
-.expanded-menu-tabs > .active {
-  border-radius: 1rem 1rem !important;
-}
-
-
-.expanded-menu-tabs > .item {
+/* round out the menu tabs more */
+.ui.secondary.menu .expanded-menu-tabs .item {
+  border-radius: 20px 20px 0 0 !important;
   display: block !important;
   width: 155px;
   height: 40px;
-  padding-top: 10px !important;
-  text-align: center !important;
+  text-align: center;
 }
 
-.ui.secondary.menu .expanded-menu-tabs .item {
-  border-radius: 10px 10px 0 0 !important;
-
+/* current active tab styles */
+.menu-tab .active.item {
+  color: #034353 !important;
+  background-color: #CDE1E9 !important;
+  margin-bottom: -2px !important;
 }
 
-
-.stuck-container .note-name-menu {
-  padding-top: 15px !important;
-  margin-bottom: 10px !important;
-}
-
-.sticky-logo {
-  display: none !important;
-}
-
-.stuck-container .sticky-logo {
-  display: block !important;
-  margin: 0 !important;
-}
-
-.note-name-menu input {
-  padding: 10px !important;
-  text-align: right !important;
+/* note name input box styles */
+.note-name-menu-item input {
+  width: 200px;
   color: teal !important;
 }
 
-.menu-tab {
-  box-shadow: 0 10px 20px -3px RGBA(0, 128, 159, 0.2) !important;
-  padding-top: 0 !important;
-}
-.menu-tab .attached {
-  border-bottom: 0 !important;
-}
-
-.menu-tab .active.item {
-  color: #034353 !important;
-  /*background-color: RGBA(0, 128, 159, 0.25) !important;*/
-  background-color: #CDE1E9 !important;
-  margin-bottom: -3px !important;
-  border-bottom: 0 !important;
-
-}
-
-.note-name-menu {
-  background-color: white;
-  margin-left: 0;
-
-}
 
