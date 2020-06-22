@@ -107,7 +107,7 @@ function LoggedInMenuItems(props) {
                     </HPIContext.Consumer>
                     <Dropdown.Item as={Link} name="createTemplate" to="/creategraph" text="Create Template" />
                     <Dropdown.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
-                    <Dropdown.Item as={Link} name="welcome" to="/dashboard">
+                    <Dropdown.Item as={Link} name="welcome" to="/editprofile">
                         Welcome, {props.name}
                         <Icon name="user" className="user-icon" />
                     </Dropdown.Item>
@@ -126,7 +126,7 @@ function LoggedInMenuItems(props) {
                 </HPIContext.Consumer>
                 <Menu.Item as={Link} name="createTemplate" to="/creategraph" text="Create Template" />
                 <Menu.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
-                <Menu.Item as={Link} name="welcome" to="/dashboard">
+                <Menu.Item as={Link} name="welcome" to="/editprofile">
                     Welcome, {props.name}
                     <Icon name="user" className="user-icon" />
                 </Menu.Item>

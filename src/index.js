@@ -17,6 +17,7 @@ import { HPIStore } from "./contexts/HPIContext";
 import { AuthStore } from "./contexts/AuthContext";
 import { NotesStore } from "./contexts/NotesContext";
 import { CreateTemplateStore } from "./contexts/CreateTemplateContext";
+import EditProfile from "./pages/Login/EditProfile";
 
 
 ReactDOM.render(
@@ -34,6 +35,7 @@ ReactDOM.render(
                                 <PrivateRoute path="/dashboard" component={DashboardPage} />
                                 <PrivateRoute path="/creategraph" component={CreateGraph} />
                                 <PrivateRoute path="/editgraph" component={EditGraph} />
+                                <PrivateRoute path="/editprofile" component={EditProfile} />
                                 <Route path="/about" component={ThemingLayout} />
                             </BrowserRouter>
                         </div>
