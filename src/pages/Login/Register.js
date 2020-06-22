@@ -4,10 +4,15 @@ import { client } from "constants/api.js";
 
 class Register extends React.Component {
 
+
+    // gets passed into UserForm handle submit
+    // creates a new user in the database
     handleSubmit = (user) => {
         return client.post("/user/new", user)
     }
 
+    // empty initial values for UserForm
+    // additional fields (e.g. title, pushTo) that are passed as props
     render() {
         return (
             <UserForm

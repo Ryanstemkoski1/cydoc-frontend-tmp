@@ -8,7 +8,7 @@ import constants from "constants/registration-constants.json"
 const degreeOptions = constants.degrees.map((degree) => ({ key: degree, value: degree, text: degree }))
 const specialtyOptions = constants.specialties.map((specialty) => ({ key: specialty, value: specialty, text: specialty }))
 const workfeatOptions = constants.workplaceFeatures.map((workfeat) => ({ key: workfeat, value: workfeat, text: workfeat }))
-export const yasaSchema = yup.object().shape({
+const yasaSchema = yup.object().shape({
     username: yup.string().required("username is required"),
     password: yup.string().required("password is required"),
     passwordConfirm: yup.string().oneOf([yup.ref('password'), null], "passwords must match"),
@@ -47,11 +47,12 @@ export const yasaSchema = yup.object().shape({
 })
 
 
-//Component that manages the layout of the login page
+// component that manages the layout of the Register and EditProfile pages
 class UserForm extends Component {
 
     static contextType = AuthContext
 
+    // state gets initial values as props
     constructor(props) {
         super(props);
         this.state = {
@@ -85,6 +86,9 @@ class UserForm extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    // when user hits submit/save button, fields are validated
+    // if error -- display error
+    // if no error -- put/save user in database
     handleSubmit = () => {
 
         let user = this.state.formInfo
@@ -102,19 +106,22 @@ class UserForm extends Component {
         }).catch((v) => this.setState({ errorMessages: v.errors }))
     }
 
-
+    // handles change in a single field (updates states based on changed info)
     handleChange(e, { name, value }) {
         let newState = this.state;
         newState.formInfo[name] = value;
         this.setState(newState);
     }
 
+    // handles change for array-based fieldss (also updates state)
     handleArrayChange(e, { name, index, value }) {
         let newState = this.state;
         newState.formInfo[name][index] = value;
         this.setState(newState);
     }
 
+    // helper function based on prop to determine if role field should be shown
+    // basically if Register page -- show, if EditProfile page -- don't show
     showRole = () => {
         if (this.props.show) {
             return (
@@ -150,6 +157,8 @@ class UserForm extends Component {
         }
     }
 
+    // show additional fields if user clicks on/is a healthcare professional
+    // prompts user for more information 
     additionalFields = () => {
         if (this.state.formInfo.role === 'healthcare professional') {
             return (
@@ -294,12 +303,13 @@ class UserForm extends Component {
     }
 
     render() {
+        // after submit redirect is set to true (if no errors) and user is redirected
         if (this.state.redirect) {
             return (<Redirect push to={this.props.pushTo}/>)
         }
 
+        //renders a one-column grid centered in the middle of the screen with profile form
         return (
-            //renders a one-column grid centered in the middle of the screen with login form
             <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle' centered>
                 <Grid.Column style={{ maxWidth: 600 }}>
                     <Header color='grey' textAlign='center' style={{ fontSize: "60px", letterSpacing: "4.8px" }}>
