@@ -22,6 +22,7 @@ class NewTemplateForm extends Component {
             showOtherBodySystem: false,
             showOtherDisease: false,
             diseaseEmpty: true,
+            bodySystemEmpty: true,
         }
         this.saveTitle = this.saveTitle.bind(this);
         this.saveBodySystem = this.saveBodySystem.bind(this);
@@ -86,19 +87,30 @@ class NewTemplateForm extends Component {
 
     saveBodySystem(event, { value }) {
         const otherInput = document.getElementById('other-body-system');
+        const errorMessage = document.getElementById('body-error-message');
+
         if (value === OTHER_TEXT) {
             otherInput.style.display = 'inline-block';
             this.setState({
                 showOtherBodySystem: true,
+                bodySystemEmpty: true,
             })
             this.context.onContextChange('bodySystem', '');
         } else if (this.state.bodySystems.includes(value)) {
             otherInput.style.display = 'none';
+            errorMessage.style.display = 'none';
             this.setState({
                 showOtherBodySystem: false,
+                bodySystemEmpty: false,
             })
             this.context.onContextChange('bodySystem', value);
         } else {
+            if (value === '') {
+                this.setState({ bodySystemEmpty: true });
+            } else {
+                errorMessage.style.display = 'none';
+                this.setState({ bodySystemEmpty: false });
+            }
             this.context.onContextChange('bodySystem', value);
         }
     }
@@ -139,6 +151,11 @@ class NewTemplateForm extends Component {
             return;
         }
 
+        if (this.state.bodySystemEmpty) {
+            document.getElementById('body-error-message').style.display = 'inline-block';
+            return;
+        }
+
         let numQuestions = this.context.state.numQuestions;
         let numEdges = this.context.state.numEdges;
         const disease = this.context.state.disease;
@@ -147,7 +164,7 @@ class NewTemplateForm extends Component {
 
         const numZeros = 4 - numQuestions.toString().length;
         const qId = diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
-
+        
         this.context.state.nodes[qId] = {
             id: qId,
             text: '',
@@ -168,6 +185,44 @@ class NewTemplateForm extends Component {
         this.context.onContextChange('edges', this.context.state.edges);
         this.context.onContextChange('numQuestions', numQuestions + 1);
         this.context.onContextChange('numEdges', numEdges + 1);
+    }
+
+    createTemplate = () => {
+        const { disease, edges, nodes, graph } = this.context.state;
+
+        const updatedEdges = {};
+        const updatedNodes = {};
+        const updatedGraph = {};
+        const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
+
+        // update all edge to/from to match current disease
+        for (let [key, edge] of Object.entries(edges)) {
+            const from = edge.from === '0000' || edge.from.startsWith(diseaseCode) ? edge.from : diseaseCode + edge.from.slice(3);
+            const to = edge.to === '0000' || edge.to.startsWith(diseaseCode) ? edge.to : diseaseCode + edge.to.slice(3);
+            updatedEdges[key] = { from, to };
+        }
+
+        // update all graph keys
+        for (let [key, children] of Object.entries(graph)) {
+            const id = key === '0000' || key.startsWith(diseaseCode) ? key : diseaseCode + key.slice(3);
+            updatedGraph[id] = children; 
+        }
+
+        // update all node keys and object values
+        for (let [key, data] of Object.entries(nodes)) {
+            if (key === '0000' || key.startsWith(diseaseCode)) {
+                updatedNodes[key] = data;
+            } else {
+                const id = diseaseCode + key.slice(3);
+                updatedNodes[id] = { ...data, id };
+            }
+        }
+
+        this.context.onContextChange('nodes', updatedNodes);
+        this.context.onContextChange('graph', updatedGraph);
+        this.context.onContextChange('edges', updatedEdges);
+
+        alert('Template created'); // for dev purposes 
     }
 
     render() {
@@ -270,6 +325,12 @@ class NewTemplateForm extends Component {
                     content='Please choose a disease before adding questions.'
                     id='disease-error-message'
                 />
+                <Message
+                    compact
+                    negative
+                    content='Please choose a body system before adding questions.'
+                    id='body-error-message'
+                />
                 <div>
                     {questionsDisplay}
                 </div>
@@ -279,6 +340,14 @@ class NewTemplateForm extends Component {
                     onClick={this.addQuestion}
                     content='Add question'
                     className='add-question-button'
+                />
+                <Button
+                    circular
+                    floated='right'
+                    content='Create Template'
+                    className='create-tmpl-button'
+                    onClick={this.createTemplate}
+                    disabled={this.context.state.numQuestions === 1}
                 />
             </Segment>
         );

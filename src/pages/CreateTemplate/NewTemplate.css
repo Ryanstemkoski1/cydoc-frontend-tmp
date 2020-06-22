@@ -23,12 +23,14 @@
   margin-bottom: 1rem;
 }
 
+#body-error-message,
 #disease-error-message {
   margin: .25rem auto;
   padding: .75rem;
   display: none;
 }
 
+.ui.button.create-tmpl-button,
 .ui.button.add-question-button {
   margin-top: 1rem;
   color: rgba(0, 0, 0, .95);
