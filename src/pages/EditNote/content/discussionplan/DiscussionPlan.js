@@ -146,7 +146,7 @@ class plan extends Component {
                         <Grid stackable columns={2}>
                             <Grid.Row>
                                 <Grid.Column width={7}>
-                                    <h4> How sick is the patient? </h4>
+                                    <Header as='h4'> How sick is the patient? </Header>
                                 </Grid.Column>
                                 <Grid.Column floated='right'>
                                     <label> Healthy </label>
@@ -164,7 +164,7 @@ class plan extends Component {
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column width={7}>
-                                    <h4> Will the patient be sent to the emergency department? </h4>
+                                    <Header as='h4'> Will the patient be sent to the emergency department? </Header>
                                 </Grid.Column>
                                 <Grid.Column floated='right'>
                                     <button 
@@ -189,7 +189,7 @@ class plan extends Component {
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid.Column width={7}>
-                                    <h4> Will the patient be admitted to the hospital? </h4>
+                                    <Header as='h4'> Will the patient be admitted to the hospital? </Header>
                                 </Grid.Column>
                                 <Grid.Column floated='right'>
                                     <button 
