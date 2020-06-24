@@ -80,13 +80,9 @@ export class NotesStore extends React.Component {
     }
 
     updateNote = async (note) => {
-        console.log("in updateNote")
 
         note.doctorID = this.context.user._id
         note.clinicID = this.context.user.workplace
-
-        console.log("state's title is: " + note.noteName)
-
 
         this.setState({
             notes: this.state.notes.map(

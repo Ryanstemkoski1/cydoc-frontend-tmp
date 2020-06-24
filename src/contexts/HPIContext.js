@@ -11,7 +11,7 @@ export class HPIStore extends React.Component {
 
     static contextType = NotesContext
 
-    constructor(props) {
+    constructor(props)
         super(props)
 
         this.state = {
@@ -28,8 +28,6 @@ export class HPIStore extends React.Component {
 
     //Saves the current note, which updates the NotesContext's state
     saveNote = () => {
-        console.log("saving")
-        console.log("state's title is: " + this.state["title"])
         let note = {
             noteName: this.state["title"],
             _id: this.state._id,
