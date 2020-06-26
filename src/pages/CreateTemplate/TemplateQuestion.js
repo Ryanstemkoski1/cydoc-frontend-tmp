@@ -359,7 +359,12 @@ class TemplateQuestion extends Component {
                             <Fragment />
                         }
                         {questionTypeOptions}
-                        <TemplateAnswer qId={qId} type={this.context.state.nodes[qId].type} />
+                        <TemplateAnswer 
+                            qId={qId} 
+                            type={this.context.state.nodes[qId].type} 
+                            graphData={this.props.graphData}
+                            allDiseases={this.props.allDiseases}
+                        />
                     </div>
                 ),
             }

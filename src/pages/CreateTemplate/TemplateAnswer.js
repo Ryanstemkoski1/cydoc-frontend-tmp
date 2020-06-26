@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Segment, Button } from 'semantic-ui-react';
+import { Input, Segment, Button, Dropdown } from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import TemplateQuestion from './TemplateQuestion';
 import questionTypes from 'constants/questionTypes';
@@ -10,12 +10,112 @@ class TemplateAnswer extends Component {
 
     constructor(props, context) {
         super(props, context);
+        this.state = {
+            showOtherGraphs: false,
+            otherGraph: null,
+        }
         this.saveAnswer = this.saveAnswer.bind(this);
         this.addChildQuestion = this.addChildQuestion.bind(this);
         this.saveButtonOption = this.saveButtonOption.bind(this);
         this.addButtonOption = this.addButtonOption.bind(this);
         this.removeButtonOption = this.removeButtonOption.bind(this);
     }
+
+    showGraphOptions = () => {
+        this.setState({ showOtherGraphs: true });
+    }
+
+    hideGraphOptions = () => {
+        this.setState({ showOtherGraphs: false, otherGraph: null });
+    }
+
+    saveGraphType = (e, { value }) => {
+        this.setState({ otherGraph: value });
+    }
+
+    getAnswerInfo = (type) => {
+        if (type === 'YES-NO' || type === 'NO-YES') {
+            return {
+                yesResponse: '',
+                noResponse: '',
+            }
+        } else if (type === 'SHORT-TEXT'
+        || type === 'NUMBER'
+        || type === 'TIME'
+        || type === 'LIST-TEXT') {
+            return {
+                startResponse: '',
+                endResponse: '',
+            }
+        } else if (type === 'CLICK-BOXES') {
+            return {
+                options: ['', '', ''],
+                startResponse: '',
+                endResponse: '',
+            }
+        } else if (type === 'FH-POP'
+        || type === 'PMH-POP'
+        || type === 'MEDS-POP') {
+            return {
+                options: ['', '', ''],
+            }
+        }
+    }
+
+    connectGraph = (e, { parent }) => {
+        let numQuestions = this.context.state.numQuestions;
+        let numEdges = this.context.state.numQuestions;
+        const { otherGraph } = this.state;
+        const { graph, edges, nodes } = this.props.graphData;
+        
+        const disease = this.context.state.disease;
+        const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
+        
+        let randomId;
+        let numZeros;
+        let childId;
+
+        const id = diseaseCodes[otherGraph] + '0001';
+        if (id in graph) {
+            // create edges and nodes for every new question
+            for (let edge of graph[id]) {
+                randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
+                numZeros = 4 - numQuestions.toString().length;
+                childId = diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
+                
+                const nodeId = edges[edge].from;
+                this.context.state.nodes[childId] = {
+                    id: childId,
+                    text: nodes[nodeId].text,
+                    type: nodes[nodeId].type,
+                    order: numQuestions,
+                    answerInfo: this.getAnswerInfo(nodes[nodeId].type),
+                }
+
+                this.context.state.edges[numEdges] = {
+                    from: parent,
+                    to: childId,
+                }
+
+                this.context.state.graph[childId] = [];
+                this.context.state.graph[parent].push(numEdges)
+                numEdges++;
+                numQuestions++;
+            }
+            this.context.onContextChange('nodes', this.context.state.nodes);
+            this.context.onContextChange('edges', this.context.state.edges);
+            this.context.onContextChange('graph', this.context.state.graph);
+            this.context.onContextChange('numEdges', numEdges);
+            this.context.onContextChange('numQuestions', numQuestions);
+            
+            this.setState({
+                showOtherGraphs: false,
+                otherGraph: null,
+            });
+        }
+    }
+
+
 
     saveAnswer = (event, { value, answer }) => {
         const { qId } = this.props;
@@ -148,12 +248,68 @@ class TemplateAnswer extends Component {
         const { qId, type } = this.props;
         let template;
         let childQuestions;
+        let otherGraphs;
 
         if (type === questionTypes.basic['YES-NO']) {
             childQuestions = this.context.state.graph[qId].map(edge => {
                 const childId = this.context.state.edges[edge].to;
-                return <TemplateQuestion key={childId} qId={childId} />
+                return (
+                    <TemplateQuestion 
+                        key={childId} 
+                        qId={childId} 
+                        allDiseases={this.props.allDiseases}
+                        graphData={this.props.graphData}
+                    />
+                );
             });
+
+            if (this.state.showOtherGraphs) {
+                const options = this.props.allDiseases.map((disease) => (
+                    {
+                        key: disease,
+                        text: disease,
+                        value: disease,
+                    }
+                ));
+
+                otherGraphs = (
+                    <Fragment>
+                        <Dropdown
+                            search
+                            selection
+                            placeholder='Other Diseases'
+                            direction='left'
+                            options={options}
+                            onChange={this.saveGraphType}
+                            value={this.state.otherGraph}
+                        />
+                        <Button 
+                            basic
+                            icon='arrow right'
+                            parent={qId}
+                            disabled={this.state.otherGraph === null}
+                            onClick={this.connectGraph}
+                            className='connect-button'
+                        />
+                        <Button 
+                            basic
+                            icon='cancel'
+                            onClick={this.hideGraphOptions}
+                            className='cancel-button'
+                        />
+                    </Fragment>
+                );
+            } else {
+                otherGraphs = (
+                    <Button
+                        basic
+                        parent={qId}
+                        content='Connect to other graphs'
+                        className='add-child-button'
+                        onClick={this.showGraphOptions}
+                    />
+                );
+            }
 
             template = (
                 <Segment className='yes-no-answer'>
@@ -188,13 +344,21 @@ class TemplateAnswer extends Component {
                             onClick={this.addChildQuestion}
                             className='add-child-button'
                         />
+                        {otherGraphs}
                     </div>
                 </Segment>
             );
         } else if (type === questionTypes.basic['NO-YES']) {
             childQuestions = this.context.state.graph[qId].map(edge => {
                 const childId = this.context.state.edges[edge].to;
-                return <TemplateQuestion key={childId} qId={childId} />
+                return (
+                    <TemplateQuestion 
+                        key={childId} 
+                        qId={childId} 
+                        allDiseases={this.props.allDiseases}
+                        graphData={this.props.graphData}
+                    />
+                );
             });
 
             template = (
@@ -229,6 +393,13 @@ class TemplateAnswer extends Component {
                             content='Add follow-up question'
                             onClick={this.addChildQuestion}
                             className='add-child-button'
+                        />
+                        <Button
+                            basic
+                            parent={qId}
+                            content='Connect to other graphs'
+                            className='add-child-button'
+                            onClick={this.showGraphOptions}
                         />
                     </div>
                 </Segment>
