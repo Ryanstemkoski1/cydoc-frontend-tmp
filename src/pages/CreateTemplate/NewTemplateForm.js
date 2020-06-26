@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { Button, Form, Header, Segment, Input, Grid, Dropdown, Message } from 'semantic-ui-react';
+import { Button, Form, Header, Segment, Input, Grid, Dropdown, Message, Icon } from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import './NewTemplate.css';
 import 'components/navigation/NavMenu.css';
@@ -7,6 +7,7 @@ import TemplateQuestion from './TemplateQuestion';
 import { graphClient } from 'constants/api.js';
 import diseaseAbbrevs from 'constants/diseaseAbbrevs.json';
 import diseaseCodes from 'constants/diseaseCodes';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const OTHER_TEXT = 'Other (specify below)';
 
@@ -19,6 +20,7 @@ class NewTemplateForm extends Component {
         this.state = {
             bodySystems: [],
             diseases: [],
+            graphData: {},
             showOtherBodySystem: false,
             showOtherDisease: false,
             diseaseEmpty: true,
@@ -77,6 +79,7 @@ class NewTemplateForm extends Component {
             this.setState({
                 bodySystems: allBodySystems,
                 diseases: allDiseases,
+                graphData: value.data,
             });
         });
     }
@@ -225,8 +228,27 @@ class NewTemplateForm extends Component {
         alert('Template created'); // for dev purposes 
     }
 
+    onDragEnd = (result) => {
+        const { destination, source, draggableId } = result;
+
+        if (!destination) {
+            return; // dropped outside, so do nothing
+        }
+        if (destination.index == source.index) {
+            return; // did not move
+        }
+        const graph = { ...this.context.state.graph };
+        const rootEdges = graph['0000'];
+        const newOrderedEdges = Array.from(rootEdges);
+        newOrderedEdges.splice(source.index, 1);
+        newOrderedEdges.splice(destination.index, 0, rootEdges[source.index]);
+        
+        graph['0000'] = newOrderedEdges;
+        this.context.onContextChange('graph', graph);
+    }
+
     render() {
-        const { bodySystems, diseases, showOtherBodySystem, showOtherDisease } = this.state;
+        const { bodySystems, diseases, showOtherBodySystem, showOtherDisease, graphData } = this.state;
         console.log(this.context.state)
 
         const bodySystemOptions = [{
@@ -251,14 +273,33 @@ class NewTemplateForm extends Component {
             });
         });
 
-        const questionsDisplay = [];
         const rootEdges = this.context.state.graph['0000'];
-        for (let edge in rootEdges) {
-            const qId = this.context.state.edges[rootEdges[edge].toString()].to;
-            questionsDisplay.push(
-                <TemplateQuestion key={qId} qId={qId} />
+        const questionsDisplay = rootEdges.map((edge, idx) => {
+            const qId = this.context.state.edges[edge.toString()].to;
+            return (
+                <Draggable key={qId} draggableId={qId} index={idx}>
+                    {(provided, snapshot) => (
+                        <div
+                            key={qId}
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className='root-question'
+                        >
+                            <Icon 
+                                name='bars'
+                                {...provided.dragHandleProps}
+                            />
+                            <TemplateQuestion 
+                                key={qId} 
+                                qId={qId} 
+                                allDiseases={diseases}
+                                graphData={graphData}
+                            />
+                        </div>
+                    )}
+                </Draggable>
             );
-        }
+        });
 
         return (
             <Segment className='container'>
@@ -331,9 +372,20 @@ class NewTemplateForm extends Component {
                     content='Please choose a body system before adding questions.'
                     id='body-error-message'
                 />
-                <div>
-                    {questionsDisplay}
-                </div>
+                <DragDropContext onDragEnd={this.onDragEnd}>
+                    <Droppable droppableId="questions">
+                        {(provided, snapshot) => (
+                            <div
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                                className="root-question-list"
+                            >
+                                {questionsDisplay}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
                 <Button
                     circular
                     icon='add'
