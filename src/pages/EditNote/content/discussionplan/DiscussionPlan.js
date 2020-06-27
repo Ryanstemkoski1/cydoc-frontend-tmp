@@ -1,22 +1,16 @@
 import React, {Component} from 'react'
 import HPIContext from 'contexts/HPIContext.js'
 import { 
-    Header, 
-    Segment,
     Menu,
     Icon,
-    Grid,
-    Label,
     Dropdown,
     Button,
     Modal,
 } from 'semantic-ui-react';
 import PlanInput from './PlanInput';
-import DiagnosisForm from './DiscussionPlanDiagnosis';
-import PrescriptionForm from './DiscussionPlanPrescription';
-import ReferralForm from './DiscussionPlanReferral';
-import ProcedureForm from './DiscussionPlanProcedure';
-import { CONDITION_DEFAULT } from './DiscussionPlanDefaults';
+import DiscussionPlanForm from './DiscussionPlanForm';
+import DiscussionPlanSurvey from './DiscussionPlanSurvey';
+import { CONDITION_DEFAULT, FORM_DEFAULTS } from './DiscussionPlanDefaults';
 import { DISCUSSION_PLAN_MENU_BP, DISCUSSION_PLAN_SECTION_BP } from 'constants/breakpoints.js';
 import './discussionPlan.css';
 
@@ -32,7 +26,6 @@ class plan extends Component {
             uncertain_color: "whitesmoke",
             windowWidth: 0,
             windowHeight: 0,
-            dropdownOpen: false,
         }
         this.updateDimensions = this.updateDimensions.bind(this);
         this.active_color = "lightslategrey";
@@ -52,18 +45,6 @@ class plan extends Component {
         const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
         const windowHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
         this.setState({ windowHeight, windowWidth });
-    }
-
-    handleInputChange = (title, value) => {
-        const plan = {...this.context["plan"]}
-        plan['survey'][title] = value;
-        this.context.onContextChange("plan", plan)
-    }
-    
-    handleOnClick = (type, value) => {
-        const values = this.context["plan"]
-        values['survey'][type] = value;
-        this.context.onContextChange("plan", values)
     }
 
     addCondition = () => {
@@ -118,6 +99,18 @@ class plan extends Component {
             onClick: this.addCondition,
         });
 
+        let subsections;
+        if (plan.conditions.length > 0) {
+            subsections = Object.keys(FORM_DEFAULTS).map((section, i) => (
+                <DiscussionPlanForm
+                    key={i}
+                    index={current}
+                    mobile={mobile}
+                    type={section}
+                />
+            ));
+        }
+
         return (
             <div>
                 { collapseTabs 
@@ -132,94 +125,12 @@ class plan extends Component {
                         }
                     </Menu>
                 }
-                { plan.conditions.length > 0 
-                    && 
-                (<React.Fragment>
-                    <DiagnosisForm index={current} mobile={mobile}/>
-                    <PrescriptionForm index={current} mobile={mobile}/>
-                    <ProcedureForm index={current} mobile={mobile}/>
-                    <ReferralForm index={current} mobile={mobile}/>
-                </React.Fragment>)}
-                <div className='plan-survey'>
-                    <Header as='h4' attached='top'> Help Improve Cydoc </Header>
-                    <Segment attached>
-                        <Grid stackable columns={2}>
-                            <Grid.Row>
-                                <Grid.Column width={7}>
-                                    <Header as='h4'> How sick is the patient? </Header>
-                                </Grid.Column>
-                                <Grid.Column floated='right'>
-                                    <label> Healthy </label>
-                                    <input 
-                                        type='range' 
-                                        min={0} 
-                                        max={10} 
-                                        step={1} 
-                                        value={plan['survey']['sickness']}
-                                        onChange={(e) => this.handleInputChange('sickness', parseInt(e.target.value))} 
-                                        />
-                                    <label> Sick </label>
-                                    <Label circular>{plan['survey']['sickness']}</Label>
-                                </Grid.Column>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Grid.Column width={7}>
-                                    <Header as='h4'> Will the patient be sent to the emergency department? </Header>
-                                </Grid.Column>
-                                <Grid.Column floated='right'>
-                                    <button 
-                                        className="button_yesno" 
-                                        style={{backgroundColor: plan['survey']['emergency'] === 'Yes' ? this.active_color : this.nonactive_color}} 
-                                        onClick={() => this.handleOnClick('emergency', 'Yes')}> 
-                                        Yes 
-                                    </button> 
-                                    <button 
-                                        className="button_yesno" 
-                                        style={{backgroundColor: plan['survey']['emergency'] === 'No' ? this.active_color : this.nonactive_color}} 
-                                        onClick={() => this.handleOnClick('emergency', 'No')}> 
-                                        No 
-                                    </button> 
-                                    <button 
-                                        className="button_yesno" 
-                                        style={{backgroundColor: plan['survey']['emergency'] === 'Uncertain' ? this.active_color : this.nonactive_color}} 
-                                        onClick={() => this.handleOnClick('emergency', 'Uncertain')}> 
-                                        Uncertain 
-                                    </button> 
-                                </Grid.Column>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Grid.Column width={7}>
-                                    <Header as='h4'> Will the patient be admitted to the hospital? </Header>
-                                </Grid.Column>
-                                <Grid.Column floated='right'>
-                                    <button 
-                                        className="button_yesno" 
-                                        style={{backgroundColor: plan['survey']['admit_to_hospital'] === 'Yes' ? this.active_color : this.nonactive_color}} 
-                                        onClick={() => this.handleOnClick('admit_to_hospital', 'Yes')}> 
-                                        Yes 
-                                    </button> 
-                                    <button 
-                                        className="button_yesno" 
-                                        style={{backgroundColor: plan['survey']['admit_to_hospital'] === 'No' ? this.active_color : this.nonactive_color}} 
-                                        onClick={() => this.handleOnClick('admit_to_hospital', 'No')}> 
-                                        No 
-                                    </button> 
-                                    <button 
-                                        className="button_yesno" 
-                                        style={{backgroundColor: plan['survey']['admit_to_hospital'] === 'Uncertain' ? this.active_color : this.nonactive_color}} 
-                                        onClick={() => this.handleOnClick('admit_to_hospital', 'Uncertain')}> 
-                                        Uncertain 
-                                    </button> 
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
-                    </Segment>
-                </div>
+                {subsections}
+                <DiscussionPlanSurvey plan={plan}/>
             </div>
         )
     }
 }
-
 export default plan;
 
 function CollapsedMenu(props) {

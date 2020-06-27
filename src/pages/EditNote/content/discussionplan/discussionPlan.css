@@ -1,11 +1,11 @@
-.prescription > .title >.recipe {
+.prescriptions > .title >.recipe {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     padding-top: 1rem;
 }
 
-.prescription > .content{
+.prescriptions > .content{
     padding-left: 1.5em !important; 
     margin-top: 1rem !important;
 }
@@ -24,11 +24,11 @@
     align-items: center;
 }
 
-.plan-section_response.prescription > .title {
+.plan-section_response.prescriptions > .title {
     align-items: flex-end;
 }
 
-.plan-section_response.prescription > .title > .dropdown.icon {
+.plan-section_response.prescriptions > .title > .dropdown.icon {
     margin-bottom: 1rem !important;
 }
 
@@ -75,4 +75,8 @@
 
 .plan-survey > h4 {
     font-weight: 600!important;
+}
+
+.ui.form > textarea {
+    height: 12rem !important;
 }
