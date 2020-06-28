@@ -243,8 +243,25 @@ class NewTemplateForm extends Component {
         newOrderedEdges.splice(source.index, 1);
         newOrderedEdges.splice(destination.index, 0, rootEdges[source.index]);
         
+        // update question order
+        const nodes = { ...this.context.state.nodes };
+        const edges = { ...this.context.state.edges };
+        nodes[draggableId].order = nodes[edges[rootEdges[destination.index]].to].order;
+        if (source.index > destination.index) {
+            for (let i = destination.index + 1; i <= source.index; i++) {
+                const nodeId = edges[newOrderedEdges[i]].to;
+                nodes[nodeId].order += 1;
+            }
+        } else {
+            for (let i = source.index; i < destination.index; i++) {
+                const nodeId = edges[newOrderedEdges[i]].to;
+                nodes[nodeId].order -= 1;
+            }
+        }
+
         graph['0000'] = newOrderedEdges;
         this.context.onContextChange('graph', graph);
+        this.context.onContextChange('nodes', nodes);
     }
 
     render() {

@@ -59,6 +59,7 @@
 .question-title {
   display: inline;
   padding-left: 1rem;
+  flex-grow: 1;
 }
 
 .question-content {
@@ -201,11 +202,15 @@
 }
 
 .question-container {
+
   margin: 1rem 0 !important;
 }
 
 .question-container > .title {
   border-left: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 
 .root-question-list {
