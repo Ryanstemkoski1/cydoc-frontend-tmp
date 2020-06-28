@@ -1,7 +1,4 @@
 import React from 'react'
-import constants from 'constants/constants';
-import { allergies, medications, surgicalHistory, reviewOfSystems } from 'constants/States'
-import peConstants from 'constants/physical-exam-constants'
 import NotesContext from './NotesContext'
 import { noteBody } from 'constants/noteBody.js'
 
@@ -29,27 +26,12 @@ export class HPIStore extends React.Component {
 
     //Saves the current note, which updates the NotesContext's state
     saveNote = () => {
+        let {title: noteName, _id, ...body} = this.state
         let note = {
-            noteName: this.state["title"],
-            _id: this.state._id,
-            body: {
-                "Allergies": this.state["Allergies"],
-                "Medications": this.state["Medications"],
-                "Surgical History": this.state["Surgical History"],
-                "Medical History": this.state["Medical History"],
-                "Family History": this.state["Family History"],
-                "Social History": this.state["Social History"],
-                "Review of Systems": this.state["Review of Systems"],
-                "Physical Exam": this.state["Physical Exam"],
-                "positivediseases": this.state["positivediseases"],
-                "activeHPI": this.state["activeHPI"],
-                "positivecategories": this.state["positivecategories"],
-                hpi: this.state.hpi,
-                "plan": this.state["plan"],
-                step: this.state.step
-            }
+            noteName,
+            _id,
+            body
         }
-
         this.context.updateNote(note)
     }
 
