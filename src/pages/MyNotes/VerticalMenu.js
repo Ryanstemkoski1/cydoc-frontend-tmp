@@ -24,7 +24,7 @@ export default class VerticalMenu extends Component {
 
     displayNotes = () => {
         return (
-            this.context.notes.map( (note) => 
+            Array.from(this.context.getNotes()).map( (note) => 
                 <Menu.Item
                 name={note.noteName}
                 key={note._id}
