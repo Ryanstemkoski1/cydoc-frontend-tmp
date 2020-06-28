@@ -58,7 +58,8 @@ export class NotesStore extends React.Component {
 
         if (response.status - 200 < 100) {
             let newNote = response.data
-            this.setState({ notes: this.state.notes.set(newNote._id, newNote) })
+            let prevNotes = new Map(this.state.notes)
+            this.setState({ notes: prevNotes.set(newNote._id, newNote) })
             alert("Create Success")
         } else {
             alert(response.data.Message)
@@ -82,7 +83,7 @@ export class NotesStore extends React.Component {
 
         if (response.status - 200 < 100) {
             this.setState((state, props) => {
-                let prevNotes = state.notes
+                let prevNotes = new Map(state.notes)
                 prevNotes.delete(note._id)
                 return { notes: prevNotes }
             })
@@ -108,7 +109,8 @@ export class NotesStore extends React.Component {
         console.log(response)
 
         if (response.status - 200 < 100) {
-            this.setState({ notes: this.state.notes.set(note._id, note) })
+            let prevNotes = new Map(this.state.notes)
+            this.setState({ notes: prevNotes.set(note._id, note) })
             alert("Save Success")
         } else {
             alert(response.data.Message)
