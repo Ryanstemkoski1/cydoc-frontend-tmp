@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Segment, Button, Dropdown } from 'semantic-ui-react';
+import { Input, Segment, Button, Dropdown, Icon } from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import TemplateQuestion from './TemplateQuestion';
 import questionTypes from 'constants/questionTypes';
 import diseaseCodes from 'constants/diseaseCodes';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 class TemplateAnswer extends Component {
     static contextType = CreateTemplateContext;
@@ -114,8 +115,6 @@ class TemplateAnswer extends Component {
             });
         }
     }
-
-
 
     saveAnswer = (event, { value, answer }) => {
         const { qId } = this.props;
@@ -244,6 +243,44 @@ class TemplateAnswer extends Component {
         return optionsText;
     }
 
+    onDragEnd = (result) => {
+        const { destination, source, draggableId } = result;
+
+        if (!destination) {
+            return; // dropped outside
+        }
+        if (destination.index == source.index) {
+            return; // did not move
+        }
+        const graph = { ...this.context.state.graph };
+        const rootEdges = graph[this.props.qId];
+        const newOrderedEdges = Array.from(rootEdges);
+        
+        // update edges array with order
+        newOrderedEdges.splice(source.index, 1);
+        newOrderedEdges.splice(destination.index, 0, rootEdges[source.index]);
+
+        // update affect nodes' order
+        const nodes = { ...this.context.state.nodes };
+        const edges = { ...this.context.state.edges };
+        nodes[draggableId].order = nodes[edges[rootEdges[destination.index]].to].order;
+        if (source.index > destination.index) {
+            for (let i = destination.index + 1; i <= source.index; i++) {
+                const nodeId = edges[newOrderedEdges[i]].to;
+                nodes[nodeId].order += 1;
+            }
+        } else {
+            for (let i = source.index; i < destination.index; i++) {
+                const nodeId = edges[newOrderedEdges[i]].to;
+                nodes[nodeId].order -= 1;
+            }
+        }
+
+        graph[this.props.qId] = newOrderedEdges;
+        this.context.onContextChange('graph', graph);
+        this.context.onContextChange('nodes', nodes);
+    }
+
     getAnswerTemplate(startEg, endEg, optionsText) {
         const { qId, type } = this.props;
         let template;
@@ -251,15 +288,26 @@ class TemplateAnswer extends Component {
         let otherGraphs;
 
         if (type === questionTypes.basic['YES-NO']) {
-            childQuestions = this.context.state.graph[qId].map(edge => {
+            childQuestions = this.context.state.graph[qId].map((edge, idx) => {
                 const childId = this.context.state.edges[edge].to;
                 return (
-                    <TemplateQuestion 
-                        key={childId} 
-                        qId={childId} 
-                        allDiseases={this.props.allDiseases}
-                        graphData={this.props.graphData}
-                    />
+                    <Draggable key={childId} draggableId={childId} index={idx}>
+                        {(provided) => (
+                            <div
+                                key={childId}
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                            >
+                                <TemplateQuestion 
+                                    key={childId} 
+                                    qId={childId} 
+                                    allDiseases={this.props.allDiseases}
+                                    graphData={this.props.graphData}
+                                />
+                            </div>
+                        )}
+                    </Draggable>
                 );
             });
 
@@ -335,7 +383,20 @@ class TemplateAnswer extends Component {
                         className='yes-no-input'
                     />
                     <div className='add-child-question'>
-                        {childQuestions}
+                        <DragDropContext onDragEnd={this.onDragEnd}>
+                            <Droppable droppableId={this.props.qId + '_sub'}>
+                                {(provided) => (
+                                    <div
+                                        ref={provided.innerRef}
+                                        {...provided.droppableProps}
+                                    >
+                                        {childQuestions}
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+
+                        </DragDropContext>
                         <Button
                             basic
                             icon='add'

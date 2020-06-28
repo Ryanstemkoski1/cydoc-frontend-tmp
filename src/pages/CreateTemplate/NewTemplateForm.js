@@ -391,7 +391,7 @@ class NewTemplateForm extends Component {
                 />
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Droppable droppableId="questions">
-                        {(provided, snapshot) => (
+                        {(provided) => (
                             <div
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
