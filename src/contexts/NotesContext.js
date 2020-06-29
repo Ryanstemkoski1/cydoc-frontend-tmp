@@ -19,6 +19,11 @@ export class NotesStore extends React.Component {
         return this.state.notes.values()
     }
 
+    //Returns all the user's active notes as an Iterable
+    getActiveNotes = () => {
+        return this.state.activeNotes.values()
+    }
+
     //Retrieves the user's notes using an API call
     loadNotes = async (_id = this.context.user._id) => {
 
