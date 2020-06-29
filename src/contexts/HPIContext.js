@@ -37,11 +37,18 @@ export class HPIStore extends React.Component {
 
     //Converts the schema of the provided note and updates the HPIContext's state
     loadNote = (note) => {
+        this.context.loadNote(note)
         this.setState({
             "title": note.noteName,
             _id: note._id,
             ...note.body
         })
+    }
+
+    //Saves the current note, then loads the provided note.
+    swapNote = (note) => {
+        this.saveNote()
+        this.loadNote(note)
     }
 
     //Deletes a note from NotesContext based on the note's id

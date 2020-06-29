@@ -10,7 +10,8 @@ export class NotesStore extends React.Component {
     static contextType = AuthContext
 
     state = {
-        notes: new Map()
+        notes: new Map(),
+        activeNotes: new Map()
     }
 
     //Returns all the user's notes as an Iterable
@@ -18,7 +19,7 @@ export class NotesStore extends React.Component {
         return this.state.notes.values()
     }
 
-    //Retrieves the uer's notes using an API call
+    //Retrieves the user's notes using an API call
     loadNotes = async (_id = this.context.user._id) => {
 
         let response = await client.get("/records")
@@ -36,6 +37,21 @@ export class NotesStore extends React.Component {
         })
 
         this.setState({ notes: notes });
+    }
+
+    //Adds the provided note into activeNotes
+    loadNote = (note) => {
+        let prevActiveNotes = this.state.activeNotes
+        this.setState({activeNotes: prevActiveNotes.set(note._id, note)})
+    }
+
+    //Removes the provided note from activeNotes using the note's id
+    unloadNote = (note) => {
+        this.setState((state, props) => {
+            let prevActiveNotes = new Map(state.activeNotes)
+            prevActiveNotes.delete(note._id)
+            return { activeNotes: prevActiveNotes }
+        })
     }
 
     //Adds a note to state and backend storage
@@ -84,8 +100,10 @@ export class NotesStore extends React.Component {
         if (response.status - 200 < 100) {
             this.setState((state, props) => {
                 let prevNotes = new Map(state.notes)
+                let prevActiveNotes = new Map(state.activeNotes)
                 prevNotes.delete(note._id)
-                return { notes: prevNotes }
+                prevActiveNotes.delete(note._id)
+                return { notes: prevNotes, activeNotes: prevActiveNotes }
             })
             alert("Delete Success")
         } else {
@@ -109,8 +127,11 @@ export class NotesStore extends React.Component {
         console.log(response)
 
         if (response.status - 200 < 100) {
-            let prevNotes = new Map(this.state.notes)
-            this.setState({ notes: prevNotes.set(note._id, note) })
+            this.setState((state, props) => {
+                let prevNotes = new Map(state.notes)
+                Object.assign(prevNotes.get(note._id), note)
+                return { notes: prevNotes }
+            })
             alert("Save Success")
         } else {
             alert(response.data.Message)
@@ -123,6 +144,8 @@ export class NotesStore extends React.Component {
                 ...this.state,
                 getNotes: this.getNotes,
                 loadNotes: this.loadNotes,
+                loadNote: this.loadNote,
+                unloadNote: this.unloadNote,
                 addNote: this.addNote,
                 deleteNote: this.deleteNote,
                 updateNote: this.updateNote
