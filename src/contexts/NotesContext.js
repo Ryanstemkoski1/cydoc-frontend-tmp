@@ -47,7 +47,7 @@ export class NotesStore extends React.Component {
     //Adds the provided note into activeNotes
     loadNote = (note) => {
         let prevActiveNotes = this.state.activeNotes
-        this.setState({activeNotes: prevActiveNotes.set(note._id, note)})
+        this.setState({ activeNotes: prevActiveNotes.set(note._id, note) })
     }
 
     //Removes the provided note from activeNotes using the note's id
@@ -134,7 +134,7 @@ export class NotesStore extends React.Component {
         if (response.status - 200 < 100) {
             this.setState((state, props) => {
                 let prevNotes = new Map(state.notes)
-                Object.assign(prevNotes.get(note._id), note)
+                Object.assign(prevNotes.get(note._id), { ...note, unsavedChanges: false })
                 return { notes: prevNotes }
             })
             alert("Save Success")
@@ -143,17 +143,28 @@ export class NotesStore extends React.Component {
         }
     }
 
+    //Updates a note in state ONLY
+    updateNoteLocally = (note) => {
+        this.setState((state, props) => {
+            let prevNotes = new Map(state.notes)
+            Object.assign(prevNotes.get(note._id), note)
+            return { notes: prevNotes }
+        })
+    }
+
     render = () => {
         return (
             <Context.Provider value={{
                 ...this.state,
                 getNotes: this.getNotes,
+                getActiveNotes: this.getActiveNotes,
                 loadNotes: this.loadNotes,
                 loadNote: this.loadNote,
                 unloadNote: this.unloadNote,
                 addNote: this.addNote,
                 deleteNote: this.deleteNote,
-                updateNote: this.updateNote
+                updateNote: this.updateNote,
+                updateNoteLocally: this.updateNoteLocally
             }}>
                 {this.props.children}
             </Context.Provider>

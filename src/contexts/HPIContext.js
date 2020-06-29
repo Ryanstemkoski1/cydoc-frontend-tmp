@@ -14,6 +14,7 @@ export class HPIStore extends React.Component {
         this.state = {
             title: "Untitled Note",
             _id: null,
+            unsavedChanges: false,
             ...noteBody
         }
     }
@@ -21,18 +22,30 @@ export class HPIStore extends React.Component {
 
     //Sets context[name] equal to values
     onContextChange = (name, values) => {
-        this.setState({ [name]: values });
+        this.setState(
+            {
+                [name]: values,
+                unsavedChanges: true
+            },
+            () => this.saveNote(true)
+        );
     }
 
     //Saves the current note, which updates the NotesContext's state
-    saveNote = () => {
-        let {title: noteName, _id, ...body} = this.state
+    saveNote = (localOnly = false) => {
+        let { title: noteName, _id, unsavedChanges, ...body } = this.state
         let note = {
             noteName,
             _id,
+            unsavedChanges,
             body
         }
-        this.context.updateNote(note)
+        if (localOnly === true) {
+            this.context.updateNoteLocally(note)
+        } else {
+            this.setState({ unsavedChanges: false })
+            this.context.updateNote(note)
+        }
     }
 
     //Converts the schema of the provided note and updates the HPIContext's state
@@ -41,13 +54,14 @@ export class HPIStore extends React.Component {
         this.setState({
             "title": note.noteName,
             _id: note._id,
+            unsavedChanges: note.unsavedChanges || false,
             ...note.body
         })
     }
 
     //Saves the current note, then loads the provided note.
     swapNote = (note) => {
-        this.saveNote()
+        this.saveNote(true)
         this.loadNote(note)
     }
 
@@ -63,6 +77,7 @@ export class HPIStore extends React.Component {
                 onContextChange: this.onContextChange,
                 saveNote: this.saveNote,
                 loadNote: this.loadNote,
+                swapNote: this.swapNote,
                 deleteNote: this.deleteNote
             }}>
                 {this.props.children}
