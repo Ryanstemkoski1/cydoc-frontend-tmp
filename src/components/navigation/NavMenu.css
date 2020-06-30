@@ -28,3 +28,19 @@
 .edit-note-nav-menu {
     border: 0 !important;
 }
+
+
+/* note name input box styles */
+.note-name-menu-item input {
+    width: 200px;
+    color: #0d5e70 !important;
+
+}
+.note-name-menu-item .input:hover {
+    border-bottom: 0;
+}
+
+
+.note-name-menu-item {
+    padding: 0 !important;
+}

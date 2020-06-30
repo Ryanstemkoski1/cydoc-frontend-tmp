@@ -99,11 +99,6 @@ class LoginPage extends Component {
                     <Image size="small" spaced href='/home' src={LogoName} />
                 </Container>
 
-                {/*<Header color='grey' textAlign='center' style={{ fontSize: "60px", letterSpacing: "4.8px" }}>*/}
-                {/*    cydoc*/}
-                {/*</Header>*/}
-
-
                 <Segment clearing raised>
                     <Container className={"login-header"} color='black' textAlign='center'>
                         Log in
@@ -139,17 +134,7 @@ class LoginPage extends Component {
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
-
-
-                        <Container>
-
-
-                        </Container>
-
                     </Form>
-                    <Link to={"/register"}>
-
-                    </Link>
                 </Segment>
             </Container>
         );

@@ -253,7 +253,7 @@ export default class Register extends Component {
                         required
                     />
                     <Form.Dropdown
-                        label='Industry'
+                        label='Workplace Features'
                         selection
                         multiple
                         options={workfeatOptions}

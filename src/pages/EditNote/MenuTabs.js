@@ -72,12 +72,10 @@ class ConnectedMenuTabs extends Component {
 
         return (
             <div style={{backgroundColor: 'white'}}>
-                <Menu secondary className="menu-tab">
+                <Menu secondary className={collapseMenu? "" : "menu-tab"}>
                     {/* Menu is different depending on screen size */}
                     {collapseMenu ?
                         (
-
-
                             <CollapsedMenuTabs
                             tabMenuItems={tabMenuItems}
                             attached={this.props.attached}
@@ -104,47 +102,26 @@ function CollapsedMenuTabs(props) {
     const curTab = props.tabMenuItems[props.activeTabIndex].props.name
 
     return (
-        <Menu tabular attached={props.attached} >
-            <Container className="collapsed-menu-tabs">
-                {props.tabMenuItems[props.activeTabIndex]}
-                {props.tabMenuItems[props.tabMenuItems.length - 1]}
-                <Menu.Item style={{flex: "0 0 auto"}}>
-                    {curTab.length < 10 ?
-                        <Dropdown
-                            icon="ellipsis horizontal"
-                            options={props.tabMenuItems.slice(0, props.tabMenuItems.length - 1)}
-                        />
-                        :
-                        <Dropdown
-                            icon="ellipsis horizontal"
-                            direction='left'
-                            options={props.tabMenuItems.slice(0, props.tabMenuItems.length - 1)}
-                        />
-                    }
-                </Menu.Item>
-            </Container>
+        <>
+            <div>
+
+            </div>
+        <Menu tabular attached={props.attached} className="collapsed-menu-tabs" style={{
+            overflow: 'auto',
+            maxHeight: '50vh',
+            whiteSpace: 'nowrap',
+            display: 'flex',
+            flexWrap: 'nowrap',
+            overflowX: 'auto',
+            scrollbarWidth: 'none',
+            WebkitOverflowScrolling: 'touch'}}
+        >
+            <Menu.Item className="arrow">
+                <Icon name="window maximize outline" style={{margin: '0'}} />
+            </Menu.Item>
+            {props.tabMenuItems}
         </Menu>
-        // <>
-        //     <div>
-        //     <Icon name="angle left" style={{
-        //         verticalAlign: 'middle',
-        //         textAlign: 'center',
-        //         padding: '5px '
-        //     }}/>
-        //     </div>
-        // <Menu tabular attached={props.attached} className="collapsed-menu-tabs" style={{
-        //     overflow: 'auto',
-        //     maxHeight: '50vh',
-        //     whiteSpace: 'nowrap',
-        //     display: 'flex',
-        //     flexWrap: 'nowrap',
-        //     overflowX: 'auto',
-        //     WebkitOverflowScrolling: 'touch'}}
-        // >
-        //
-        //     {props.tabMenuItems}
-        // </Menu>
-        // </>
+        </>
     );
 }
 

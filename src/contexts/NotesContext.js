@@ -84,10 +84,15 @@ export class NotesStore extends React.Component {
         note.doctorID = this.context.user._id
         note.clinicID = this.context.user.workplace
 
-        this.setState({
-            notes: this.state.notes.map(
-                (prevNote) => prevNote._id === note._id ? note : prevNote)
-        })
+        function filterNoteToState(state, props) {
+            notes: state.notes.map(
+                (prevNote) => prevNote._id === note._id ? note : prevNote);
+            return null;
+        }
+        console.log("saved")
+
+        this.setState(filterNoteToState)
+
         let response = await client.put(`/record/${note._id}`, note)
 
         if (response == null) {

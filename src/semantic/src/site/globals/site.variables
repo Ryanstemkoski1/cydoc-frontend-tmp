@@ -4,8 +4,11 @@
        Fonts
 --------------------*/
 
-@headerFont     : 'Helvetica Neue', Arial, Helvetica, sans-serif;
-@pageFont       : 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@fontName          : 'Nunito';
+@importGoogleFonts: true;
+
+@headerFont     : @fontName, Arial, Helvetica, sans-serif;
+@pageFont       : @fontName, Arial, Helvetica, sans-serif;
 
 @normal         : normal;
 @bold           : bold;

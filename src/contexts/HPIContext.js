@@ -11,7 +11,7 @@ export class HPIStore extends React.Component {
 
     static contextType = NotesContext
 
-    constructor(props)
+    constructor(props) {
         super(props)
 
         this.state = {

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Menu, Dropdown, Tab, Container } from 'semantic-ui-react'
+import { Menu, Dropdown, Tab, Container, Segment } from 'semantic-ui-react'
 import MedicalHistoryContent from "../medicalhistory/MedicalHistoryContent";
 import SurgicalHistoryContent from "../surgicalhistory/SurgicalHistoryContent";
 import MedicationsContent from "../medications/MedicationsContent";
@@ -8,7 +8,6 @@ import SocialHistoryContent from "../socialhistory/SocialHistoryContent";
 import FamilyHistoryContent from "../familyhistory/FamilyHistoryContent";
 import './PatientHistory.css';
 import {PATIENT_HISTORY_MOBILE_BP, SOCIAL_HISTORY_MOBILE_BP} from "constants/breakpoints.js";
-import Segment from "semantic-ui-react/dist/commonjs/elements/Segment";
 
 export default class PatientHistoryContent extends Component {
     constructor() {
@@ -16,8 +15,7 @@ export default class PatientHistoryContent extends Component {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
-            patient_history: ["medical history", "surgical history", "medications", "allergies", "social history"],
-            activeItem: "medical history"
+            activeTabName: "Medical History" // Default open pane is Medical History
         }
         this.updateDimensions = this.updateDimensions.bind(this);
         this.handleItemClick = this.handleItemClick.bind(this)
@@ -39,89 +37,80 @@ export default class PatientHistoryContent extends Component {
         this.setState({ windowWidth, windowHeight });
     }
 
-    handleItemClick = (e, {name}) => {
-        var tabcontent = document.getElementsByClassName("tab-content");
-        for (var i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        document.getElementById(name).style.display = "block";
-        this.setState({ activeItem: name });
-    }
+    handleItemClick = (e, { value }) => this.setState({ activeTabName: value })
 
     render() {
-        const { windowWidth, activeItem } = this.state;
+        const { windowWidth, activeTabName } = this.state;
 
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
         const socialHistoryMobile = windowWidth < SOCIAL_HISTORY_MOBILE_BP;
 
-        const expandedTabs = this.state.patient_history.map((name, index) => 
-            <Tab.Pane
-                attached={false}
-                key={index} 
-                name={name} 
-                active={this.state.activeItem === name} 
-                onClick={this.handleItemClick}
-                className="patient-history-tab" 
-            />
-        );
-
-        const dropdownTabs = [];
-        for (let i = 0; i < this.state.patient_history.length; i++) {
-            dropdownTabs.push({
-                key: i,
-                name: this.state.patient_history[i],
-                text: this.state.patient_history[i],
-                value: this.state.patient_history[i],
-                active: this.state.activeItem === this.state.patient_history[i],
-                onClick: this.handleItemClick,
-                className: "patient-history-tab",
-            });
-        }
-
+        // If more panes are needed, then add ONLY to this array.
+        // All other arrays needed for rendering are automatically constructed.
         const panes = [
             {
                 menuItem: 'Medical History',
-                render: () => <Tab.Pane attached={false}>
-                    <MedicalHistoryContent collapseTabs={collapseTabs} />
-                </Tab.Pane>,
+                content: <MedicalHistoryContent collapseTabs={collapseTabs} />
             },
             {
                 menuItem: 'Surgical History',
-                render: () => <Tab.Pane attached={false}>
-                    <SurgicalHistoryContent mobile={collapseTabs} />
-                </Tab.Pane>,
+                content: <SurgicalHistoryContent mobile={collapseTabs} />
             },
             {
                 menuItem: 'Medications',
-                render: () => <Tab.Pane attached={false}>
-                    <MedicationsContent mobile={collapseTabs} />
-                </Tab.Pane>,
+                content: <MedicationsContent mobile={collapseTabs} />
             },
             {
                 menuItem: 'Allergies',
-                render: () => <Tab.Pane attached={false}>
-                    <AllergiesContent mobile={collapseTabs}/>
-                </Tab.Pane>,
+                content: <AllergiesContent mobile={collapseTabs}/>
             },
             {
                 menuItem: 'Social History',
-                render: () => <Tab.Pane attached={false}>
-                    <SocialHistoryContent mobile={socialHistoryMobile}/>
-                </Tab.Pane>,
+                content: <SocialHistoryContent mobile={socialHistoryMobile}/>
             },
             {
                 menuItem: 'Family History',
-                render: () => <Tab.Pane attached={false}>
-                    <FamilyHistoryContent mobile={collapseTabs}/>
-                </Tab.Pane>,
-            },
+                content: <FamilyHistoryContent mobile={collapseTabs}/>
+            }
         ]
+
+        const dropdownOptions = panes.map(
+            (pane) => {
+                return {
+                    key: pane.menuItem,
+                    text: pane.menuItem,
+                    value: pane.menuItem
+                }
+            }
+        )
+
+        const expandedPanes = panes.map(
+            (pane) => {
+                return {
+                    menuItem: pane.menuItem,
+                    render: () => <Tab.Pane attached={false}> {pane.content} </Tab.Pane>
+                }
+            }
+        )
+
+        const compactPanes = panes.map(
+            (pane) => {
+                return {
+                    menuItem: pane.menuItem,
+                    render: () => <Segment> {pane.content} </Segment>
+                }
+            }
+        )
 
         return (
             <>
-                {collapseTabs ? 
-                    <Dropdown text={activeItem} options={dropdownTabs} selection fluid scrolling={false} />
-                    : <Tab menu={{ attached: false, tabular: false }} panes={panes}/>
+                {collapseTabs ?
+                    <>
+                        <Dropdown onChange={this.handleItemClick} options={dropdownOptions} selection fluid value={activeTabName}/>
+                        {compactPanes.find(e => e.menuItem == activeTabName).render()}
+                    </>
+                    :
+                    <Tab menu={{ pointing: true }} panes={expandedPanes}/>
 
                 }
             </>

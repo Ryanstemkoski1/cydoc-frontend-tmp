@@ -39,15 +39,16 @@ class ConnectedRecords extends Component {
 
         return (
             <Fragment>
-                <Segment style={{overflow: 'auto', maxHeight: "50vh" }}>
-                    <pre>{this.props.activeNote ? JSON.stringify(this.props.activeNote, null, 2) : "Select a Note!"}</pre>
-                </Segment>
+
                 <Button disabled={!this.props.activeNote} onClick={this.handleLoad} floated>
                     Load
                 </Button>
                 <Button disabled={!this.props.activeNote} onClick={this.handleDelete} floated>
                     Delete
                 </Button>
+                <Segment style={{overflow: 'auto', maxHeight: "50vh" }}>
+                    <pre>{this.props.activeNote ? JSON.stringify(this.props.activeNote, null, 2) : "Select a Note!"}</pre>
+                </Segment>
             </Fragment>
         );
     }

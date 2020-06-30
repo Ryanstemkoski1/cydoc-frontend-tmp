@@ -3,8 +3,6 @@ import { CookiesProvider } from "react-cookie"
 import './semantic/dist/semantic.min.css';
 import ReactDOM from 'react-dom';
 import { Route, BrowserRouter } from 'react-router-dom';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser, faBars} from '@fortawesome/free-solid-svg-icons'
 
 import EditNote 				from "./pages/EditNote/EditNote";
 import HomePage 				from "./pages/HomePage/HomePage";
@@ -19,8 +17,7 @@ import { HPIStore } 			from "./contexts/HPIContext";
 import { AuthStore } 			from "./contexts/AuthContext";
 import { NotesStore } 			from "./contexts/NotesContext";
 import { CreateTemplateStore } 	from "./contexts/CreateTemplateContext";
-
-library.add(faUser, faBars)
+import "./index.css";
 
 ReactDOM.render(
     <CookiesProvider>
@@ -29,7 +26,7 @@ ReactDOM.render(
                 <HPIStore>
                     <CreateTemplateStore>
                         <div>
-                            <BrowserRouter >
+                            <BrowserRouter>
                                 <Route path="/home" component={HomePage} />
                                 <Route path="/login" component={Login} />
                                 <Route path="/register" component={Register} />

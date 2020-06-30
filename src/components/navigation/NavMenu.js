@@ -51,7 +51,7 @@ class ConnectedNavMenu extends Component {
                     {/* Logo Image - display icon when tabs not collapsed, and brand name when collpased. */}
                     {/* Only logo image is displayed when the note name must be shown next to it */}
                     <Menu.Item>
-                        {collapseLoggedInNav || collapseDefaultNav ?
+                        {this.props.displayNoteName && collapseLoggedInNav?
                             null :
                             <Image className="nav-menu-logo" href='/home' src={LogoLight} />
                         }
@@ -62,7 +62,7 @@ class ConnectedNavMenu extends Component {
                     </Menu.Item>
 
                     {/* When parent is EditNote, then display the note name item */}
-                    {this.props.displayNoteName ? <NoteNameMenuItem /> : null}
+                    {this.props.displayNoteName ?  <NoteNameMenuItem /> : null}
 
                     {/* Navigation links */}
                     <Menu.Menu position="right">
@@ -71,7 +71,8 @@ class ConnectedNavMenu extends Component {
                             <LoggedInMenuItems
                                 handleLogout={this.context.logOut}
                                 name={this.context.user.firstName}
-                                collapseNav={collapseLoggedInNav} /> :
+                                collapseNav={collapseLoggedInNav} />
+                            :
                             <DefaultMenuItems collapseNav={collapseDefaultNav} />}
                     </Menu.Menu>
                 </Menu>
@@ -98,6 +99,10 @@ class NoteNameMenuItem extends Component {
 
     static contextType = HPIContext
 
+    // componentDidUpdate () {
+    //     this.context.saveNote();
+    // }
+
     handleInputChange = (event) => {
         this.setState({textInput: event.target.value})
         this.context.onContextChange("title", event.target.value)
@@ -110,9 +115,8 @@ class NoteNameMenuItem extends Component {
                     {value =>
                         <>
                             <Input
-                                size="massive"
+                                size="huge"
                                 transparent
-                                type='text'
                                 placeholder="Untitled Note"
                                 onChange={this.handleInputChange}
                                 onFocus={()=>{
@@ -125,8 +129,7 @@ class NoteNameMenuItem extends Component {
                                     if (this.context.title === '') {
                                         this.context.onContextChange("title", "Untitled Note")
                                     }
-                                }
-                                }
+                                }}
                                 value={this.context.title}
                             />
                             <Button basic onClick={this.context.saveNote} className="save-button">
@@ -146,7 +149,7 @@ class NoteNameMenuItem extends Component {
 function DefaultMenuItems(props) {
     return props.collapseNav ?
         (<Menu.Item>
-                <Dropdown>
+                <Dropdown icon="large bars" style={{color: "black"}}>
                     <Dropdown.Menu>
                         <Dropdown.Item as={Link} name="about" to="/about" text="About" />
                         <Dropdown.Item as={Link} name="login" to="/login" text="Login" />
@@ -170,19 +173,32 @@ function DefaultMenuItems(props) {
 
 //Functional component for menu items that show when user is logged in
 function LoggedInMenuItems(props) {
-    return (props.collapseNav ?
-        (<Menu.Item>
-                <Dropdown icon="large bars">
-                    <Dropdown.Menu>
-                        <Dropdown.Item name="welcome" style={{color: '#6DA3B1', fontStyle: 'italic', fontWeight: 'light'}}>
-                            {props.name}
-                        </Dropdown.Item>
-                        <Dropdown.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
+    return (props.collapseNav ? (
+            // (<Menu.Item>
+            //         <Dropdown icon="large bars">
+            //             <Dropdown.Menu>
+            //                 <Dropdown.Item name="welcome" style={{color: '#6DA3B1', fontStyle: 'italic', fontWeight: 'light'}}>
+            //                     {props.name}
+            //                 </Dropdown.Item>
+            //                 <Dropdown.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
+            //
+            //                 <Dropdown.Item name="logout" href="/home" text="Logout" onClick={props.handleLogout} />
+            //             </Dropdown.Menu>
+            //         </Dropdown>
+            //     </Menu.Item>
+            <>
+                <Menu.Item>
 
-                        <Dropdown.Item name="logout" href="/login" text="Logout" onClick={props.handleLogout} />
-                    </Dropdown.Menu>
-                </Dropdown>
-            </Menu.Item>
+                    <Button.Group>
+                        <Button as={Link} name="myNotes" to="/dashboard" text="My Notes" >
+                            <Icon name="sticky note outline" style={{margin: '0'}} />
+                        </Button>
+                        <Button name="logout" href="/home" text="Logout" onClick={props.handleLogout} style={{color: '#FC4F56'}}>
+                            <Icon name="sign out alternate" style={{margin: '0'}}/>
+                        </Button>
+                    </Button.Group>
+                </Menu.Item>
+            </>
         ) : (
             <>
                 <Menu.Item name="welcome" style={{color: '#6DA3B1', fontWeight: 'normal'}}>
@@ -191,7 +207,7 @@ function LoggedInMenuItems(props) {
                 <Menu.Item>
                     <Button.Group>
                         <Button as={Link} name="myNotes" to="/dashboard" text="My Notes" >My Notes</Button>
-                        <Button name="logout" href="/login" text="Logout" onClick={props.handleLogout} style={{color: '#FC4F56'}}>Log Out</Button>
+                        <Button name="logout" href="/home" text="Logout" onClick={props.handleLogout} style={{color: '#FC4F56'}}>Log Out</Button>
 
 
                     </Button.Group>

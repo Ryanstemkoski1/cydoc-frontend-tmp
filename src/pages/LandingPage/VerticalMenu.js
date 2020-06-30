@@ -15,6 +15,7 @@ export default class VerticalMenu extends Component {
         this.state = {
             activeItem: "Notes"
         }
+
     }
 
     //sets the corresponding menu item to active on click
@@ -40,30 +41,32 @@ export default class VerticalMenu extends Component {
 
     render() {
         const activeItem = this.state;
+        const stack = this.props.stack;
 
         return (
-            <Menu className="side-menu" vertical size="massive" secondary>
+            <Menu className="side-menu" size="massive" style={stack? {width: '100vw'} : {height: '100vh'}} secondary vertical>
                 <Menu.Item
                     header
                     name='Notes'
                     active={activeItem === 'Notes'}
                 >
                     <Icon name="plus" link onClick={this.context.addNote}/>
-                    <Icon name="search" />
                     Notes
                 </Menu.Item>
-                <Menu.Menu>
+
+                <Menu.Menu vertical>
                     {this.displayNotes()}
                 </Menu.Menu>
+
                 <Menu.Item
                     header
                     name='Knowledge Graphs'
                     active={activeItem === 'Knowledge Graphs'}
                 >
                     <Icon name="plus" />
-                    <Icon name="search" />
                     Knowledge Graphs
                 </Menu.Item>
+
                 <Menu.Menu>
                     <Menu.Item header>Recent</Menu.Item>
                     <Menu.Item

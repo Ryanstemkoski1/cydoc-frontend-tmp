@@ -31,7 +31,7 @@
 /* Default Styling */
 .ui.accordion .title:not(.ui) {
   padding: 0.5em 0em;
-  font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Nunito', Arial, Helvetica, sans-serif;
   font-size: 1em;
   color: #707070;
 }

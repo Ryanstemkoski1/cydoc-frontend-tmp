@@ -1,6 +1,8 @@
 export const DEFAULT_NAV_MENU_MOBILE_BP = 550;
 export const LOGGEDIN_NAV_MENU_MOBILE_BP = 700;
 
+export const LANDING_PAGE_MOBLE_BP = 600;
+
 export const MENU_TABS_MOBILE_BP = 650;
 
 export const NOTE_PAGE_MOBILE_BP = 450;

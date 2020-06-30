@@ -42,10 +42,7 @@ class plan extends Component {
 
     render() {
         return (
-            <>
-
-
-                <div>
+            <div>
                 <Segment>
                     <h4> Differential Diagnosis </h4>
                     <div className="ui form"> <textarea onChange={(event) => this.handleInputChange("Differential Diagnosis", event)} /> </div>
@@ -59,22 +56,20 @@ class plan extends Component {
                     <div className="ui form"> <textarea onChange={(event) => this.handleInputChange("Procedures Plan", event)} /> </div>
                 </Segment>
                 <Segment>
-                <h4> Referrals/Consults </h4>
-                <div className="ui form"> <textarea onChange={(event) => this.handleInputChange("Referrals/Consults", event)} /> </div>
+                    <h4> Referrals/Consults </h4>
+                    <div className="ui form"> <textarea onChange={(event) => this.handleInputChange("Referrals/Consults", event)} /> </div>
                 </Segment>
                 <Segment>
                     <h4> How sick is the patient on a scale from 1 (healthy) to 10 (critically ill)? </h4>
-                <NumericInput min={0} max={10} onChange={this.handleInputChange} />
-                <h4> Will you be admitting this patient to the hospital? </h4>
-                <button className="button_yesno" style={{backgroundColor: this.state.yes_color}} onClick={this.handleYesClick}> Yes </button>
-                <button className="button_yesno" style={{backgroundColor: this.state.no_color}} onClick={this.handleNoClick}> No </button>
+                    <NumericInput min={0} max={10} onChange={this.handleInputChange} />
+                    <h4> Will you be admitting this patient to the hospital? </h4>
+                    <button className="button_yesno" style={{backgroundColor: this.state.yes_color}} onClick={this.handleYesClick}> Yes </button>
+                    <button className="button_yesno" style={{backgroundColor: this.state.no_color}} onClick={this.handleNoClick}> No </button>
 
                     <h4> What other questions did you ask the patient that were not part of the existing questionnaire? </h4>
                     <div className="ui form"> <textarea onChange={(event) => this.handleInputChange("Other Questions", event)} /> </div>
                 </Segment>
-
             </div>
-            </>
         )
     }
 }
