@@ -41,6 +41,13 @@ export class NotesStore extends React.Component {
             body: noteBody
         }
 
+        if(this.state.notes) {
+            let lastNote = this.state.notes.slice(-1)
+            let staticSections = ["Family History", "Medical History", "Surgical History", "Surgical History", "Medications", "Allergies", "Social History"];
+            staticSections.forEach(entry => {
+                note.body[entry] = lastNote[0].body[entry]
+            })
+        }
 
         let response = await client.post("/record/new", note)
 
