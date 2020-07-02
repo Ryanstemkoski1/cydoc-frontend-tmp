@@ -2,11 +2,10 @@
   "TAB_NAMES": [
     "HPI",
     "Patient History",
-    "Family History",
     "Review of Systems",
     "Physical Exam",
-    "Generate Note",
-    "Plan"
+    "Plan",
+    "Generate Note"
   ],
   "CONDITIONS": [
     "Type II Diabetes",

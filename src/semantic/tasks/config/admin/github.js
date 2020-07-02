@@ -1,5 +1,5 @@
 /*******************************
-          GitHub Login
+          GitHub Account
 *******************************/
 /*
   Logs into GitHub using OAuth

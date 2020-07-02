@@ -2,7 +2,6 @@ import React, { Component, createRef } from 'react';
 import { Button, Form, Header, Segment, Input, Grid, Dropdown, Message } from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import './NewTemplate.css';
-import 'components/navigation/NavMenu.css';
 import TemplateQuestion from './TemplateQuestion';
 import { graphClient } from 'constants/api.js';
 import diseaseAbbrevs from 'constants/diseaseAbbrevs.json';
