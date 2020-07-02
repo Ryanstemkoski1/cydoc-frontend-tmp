@@ -6,7 +6,7 @@ import ReviewOfSystemsContent from "./content/reviewofsystems/ReviewOfSystemsCon
 import HPIContent from "./content/hpi/knowledgegraph/HPIContent";
 import PatientHistoryContent from "./content/patienthistory/PatientHistoryContent";
 import GenerateNote from './content/generatenote/GenerateNote';
-import DiscussionPlan from './content/plan/DiscussionPlan';
+import DiscussionPlan from './content/discussionplan/DiscussionPlan';
 import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
 import './NotePage.css';
 

@@ -6,6 +6,7 @@ import {
     Dropdown,
     Button,
     Modal,
+    Segment
 } from 'semantic-ui-react';
 import PlanInput from './PlanInput';
 import DiscussionPlanForm from './DiscussionPlanForm';
@@ -112,22 +113,26 @@ class plan extends Component {
         }
 
         return (
-            <div>
-                { collapseTabs 
-                    ? <CollapsedMenu tabs={dropdownTabs} index={current} updateCurrent={this.updateCurrent}/>
-                    : <Menu stackable scrollable tabular>
-                        {expandedTabs}
-                        {expandedTabs.length > 1
-                            &&
-                        <Menu.Menu className='delete-btn-wrapper' position='right'>
-                            <DeleteCard name={plan['conditions'][current].name} index={current} updateCurrent={this.updateCurrent}/>
-                        </Menu.Menu>
-                        }
-                    </Menu>
-                }
-                {subsections}
-                <DiscussionPlanSurvey plan={plan}/>
-            </div>
+            <>
+                <Segment>
+                    { collapseTabs
+                        ? <CollapsedMenu tabs={dropdownTabs} index={current} updateCurrent={this.updateCurrent}/>
+                        : <Menu stackable scrollable tabular>
+                            {expandedTabs}
+                            {expandedTabs.length > 1
+                                &&
+                            <Menu.Menu className='delete-btn-wrapper' position='right'>
+                                <DeleteCard name={plan['conditions'][current].name} index={current} updateCurrent={this.updateCurrent}/>
+                            </Menu.Menu>
+                            }
+                        </Menu>
+                    }
+                    {subsections}
+                </Segment>
+                <Segment>
+                    <DiscussionPlanSurvey plan={plan}/>
+                </Segment>
+            </>
         )
     }
 }

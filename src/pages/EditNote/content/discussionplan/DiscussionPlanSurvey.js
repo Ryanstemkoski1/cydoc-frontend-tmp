@@ -37,7 +37,6 @@ export default class DiscussionPlanSurvey extends Component {
         return (
             <div className='plan-survey'>
                 <Header as='h4' attached='top' content='Help Improve Cydoc'/>
-                <Segment attached>
                     <Grid stackable columns={2}>
                         <Grid.Row>
                             <Grid.Column width={7}>
@@ -108,7 +107,6 @@ export default class DiscussionPlanSurvey extends Component {
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
-                </Segment>
             </div>
         );
     }
