@@ -1,6 +1,7 @@
 import React from "react"
 import "./ButtonItem"
 import HPIContext from 'contexts/HPIContext.js';
+import { CONDITION_DEFAULT } from '../../../../discussionplan/DiscussionPlanDefaults';
 
 class DiseaseTag extends React.Component {
     static contextType = HPIContext
@@ -11,13 +12,20 @@ class DiseaseTag extends React.Component {
 
     handleClick() {
         let values = this.context['positivediseases']
+        const plan = {...this.context['plan']}
         let name_index = values.indexOf(this.props.name)
         if (name_index > -1) {
             values.splice(name_index, 1)
+            plan['conditions'].splice(plan['conditions'].findIndex(disease => disease.name === this.props.name), 1)
+
         }
-        else {values = values.concat(this.props.name)}
+        else {
+            values = values.concat(this.props.name)
+            plan['conditions'].unshift({... JSON.parse(JSON.stringify(CONDITION_DEFAULT)), name: this.props.name });
+        }
         this.context.onContextChange("positivediseases", values)
         this.context.onContextChange("activeHPI", values[0])
+        this.context.onContextChange("plan", plan)
     }
 
     render() {
