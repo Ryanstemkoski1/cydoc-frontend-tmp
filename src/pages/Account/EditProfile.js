@@ -7,7 +7,6 @@ class EditProfile extends React.Component {
 
     static contextType = AuthContext;
 
-
     // gets passed into UserForm handle submit
     // saves information in the database for an existing user
     handleSubmit = (user) => {

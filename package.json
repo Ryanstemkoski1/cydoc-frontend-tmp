@@ -29,7 +29,7 @@
     "watch-semantic": "cd src/semantic && yarn run build-semantic && gulp watch",
     "start": "yarn run build-semantic && react-scripts start",
     "build": "yarn run build-semantic && react-scripts build",
-    "test": "jest",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -55,6 +55,9 @@
     "redux-thunk": "^2.3.0",
     "semantic-ui": "^2.4.2",
     "semantic-ui-react": "^0.88.2",
-    "uuid": "^3.4.0"
+    "uuid": "^3.4.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "jest-enzyme": "^7.1.2"
   }
 }

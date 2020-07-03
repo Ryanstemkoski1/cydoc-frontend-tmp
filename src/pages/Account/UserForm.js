@@ -321,13 +321,13 @@ class UserForm extends Component {
 
                     <Segment clearing raised style={{ borderColor: "white" }}>
                         <Container className="sign-up-header" color='black' textAlign='center'>
-                            Sign Up
+                            {this.state.title}
                         </Container>
                         <Form size='small' error={this.state.errorMessages.length>0} onSubmit={this.handleSubmit}>
                             <Form.Input
-
                                 fluid
                                 label='Username'
+                                placeholder='username'
                                 name='username'
                                 value={this.state.formInfo.username}
                                 onChange={this.handleChange}
@@ -336,6 +336,7 @@ class UserForm extends Component {
                                 fluid
                                 type={"password"}
                                 label='Password'
+                                placeholder='password'
                                 name='password'
                                 value={this.state.formInfo.password}
                                 onChange={this.handleChange}
@@ -344,6 +345,7 @@ class UserForm extends Component {
                                 fluid
                                 type={"password"}
                                 label='Re-enter password'
+                                placeholder='re-enter password'
                                 name='passwordConfirm'
                                 value={this.state.formInfo.passwordConfirm}
                                 onChange={this.handleChange}
@@ -353,6 +355,7 @@ class UserForm extends Component {
                                     fluid
                                     placeholder='John'
                                     label='First name'
+                                    placeholder='first name'
                                     name='firstName'
                                     value={this.state.formInfo.firstName}
                                     onChange={this.handleChange}
@@ -361,8 +364,8 @@ class UserForm extends Component {
                                     fluid
                                     placeholder='Doe'
                                     label='Last name'
+                                    placeholder='last name'
                                     name='lastName'
-
                                     value={this.state.formInfo.lastName}
                                     onChange={this.handleChange}
                                 />
@@ -391,6 +394,7 @@ class UserForm extends Component {
                                 <Form.Input
                                     fluid
                                     label='address'
+                                    placeholder='address'
                                     name='address'
                                     value={this.state.formInfo.address}
                                     onChange={this.handleChange}
@@ -400,6 +404,7 @@ class UserForm extends Component {
                                     width={6}
                                     type='tel'
                                     label='phone number'
+                                    placeholder='phone number'
                                     name='phoneNumber'
                                     value={this.state.formInfo.phoneNumber}
                                     onChange={this.handleChange}
