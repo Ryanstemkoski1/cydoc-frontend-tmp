@@ -54,7 +54,7 @@ export class HPIStore extends React.Component {
         this.setState({
             "title": note.noteName,
             _id: note._id,
-            unsavedChanges: note.unsavedChanges || false,
+            unsavedChanges: note.unsavedChanges,
             ...note.body
         })
     }
