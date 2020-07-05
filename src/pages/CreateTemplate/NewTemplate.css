@@ -198,11 +198,15 @@
 
 .root-question {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+}
+
+.root-question > span {
+  margin-top: 0.5rem;
 }
 
 .question-container {
-  margin: 1rem 0 !important;
+  margin-top: 0 !important;
 }
 
 .question-container > .title {
@@ -216,3 +220,4 @@
   padding-left: 0.5rem;
   margin: 0.5rem 0;
 }
+

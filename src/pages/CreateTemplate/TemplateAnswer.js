@@ -288,28 +288,28 @@ class TemplateAnswer extends Component {
         let otherGraphs;
 
         if (type === questionTypes.basic['YES-NO']) {
-            childQuestions = this.context.state.graph[qId].map((edge, idx) => {
-                const childId = this.context.state.edges[edge].to;
-                return (
-                    <Draggable key={childId} draggableId={childId} index={idx}>
-                        {(provided) => (
-                            <div
-                                key={childId}
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                            >
-                                <TemplateQuestion 
-                                    key={childId} 
-                                    qId={childId} 
-                                    allDiseases={this.props.allDiseases}
-                                    graphData={this.props.graphData}
-                                />
-                            </div>
-                        )}
-                    </Draggable>
-                );
-            });
+            // childQuestions = this.context.state.graph[qId].map((edge, idx) => {
+            //     const childId = this.context.state.edges[edge].to;
+            //     return (
+            //         <Draggable key={childId} draggableId={childId} index={idx}>
+            //             {(provided) => (
+            //                 <div
+            //                     key={childId}
+            //                     ref={provided.innerRef}
+            //                     {...provided.draggableProps}
+            //                     {...provided.dragHandleProps}
+            //                 >
+            //                     <TemplateQuestion 
+            //                         key={childId} 
+            //                         qId={childId} 
+            //                         allDiseases={this.props.allDiseases}
+            //                         graphData={this.props.graphData}
+            //                     />
+            //                 </div>
+            //             )}
+            //         </Draggable>
+            //     );
+            // });
 
             if (this.state.showOtherGraphs) {
                 const options = this.props.allDiseases.map((disease) => (
@@ -383,7 +383,7 @@ class TemplateAnswer extends Component {
                         className='yes-no-input'
                     />
                     <div className='add-child-question'>
-                        <DragDropContext onDragEnd={this.onDragEnd}>
+                        {/* <DragDropContext onDragEnd={this.onDragEnd}>
                             <Droppable droppableId={this.props.qId + '_sub'}>
                                 {(provided) => (
                                     <div
@@ -396,7 +396,7 @@ class TemplateAnswer extends Component {
                                 )}
                             </Droppable>
 
-                        </DragDropContext>
+                        </DragDropContext> */}
                         <Button
                             basic
                             icon='add'
@@ -446,7 +446,7 @@ class TemplateAnswer extends Component {
                         className='yes-no-input'
                     />
                     <div className='add-child-question'>
-                        {childQuestions}
+                        {/* {childQuestions} */}
                         <Button
                             basic
                             icon='add'

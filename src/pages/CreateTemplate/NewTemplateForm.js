@@ -8,6 +8,10 @@ import { graphClient } from 'constants/api.js';
 import diseaseAbbrevs from 'constants/diseaseAbbrevs.json';
 import diseaseCodes from 'constants/diseaseCodes';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import SortableTree from 'react-sortable-tree';
+import Nestable from 'react-nestable';
+import 'react-sortable-tree/style.css';
+import './react-sortable-tree.css';
 
 const OTHER_TEXT = 'Other (specify below)';
 
@@ -30,6 +34,8 @@ class NewTemplateForm extends Component {
         this.saveBodySystem = this.saveBodySystem.bind(this);
         this.saveDisease = this.saveDisease.bind(this);
         this.addQuestion = this.addQuestion.bind(this);
+        this.flattenGraph = this.flattenGraph.bind(this);
+        this.createTreeData = this.createTreeData.bind(this);
     }
 
     componentDidMount() {
@@ -264,10 +270,80 @@ class NewTemplateForm extends Component {
         this.context.onContextChange('nodes', nodes);
     }
 
+    createTreeData = () => {
+        const { graph, edges, nodes } = this.context.state;
+        return graph['0000'].map(edge => {
+            // create treeNode for every root level question
+            const qId = edges[edge].to;
+            return this.flattenGraph(qId);
+        });
+    }
+    
+    createTreeData2 = () => {
+        const { graph, edges, nodes } = this.context.state;
+        return graph['0000'].map(edge => {
+            // create treeNode for every root level question
+            const qId = edges[edge].to;
+            return this.flattenGraph2(qId);
+        });
+    }
+
+    flattenGraph = (root) => {
+        const { graph, edges, nodes } = this.context.state;
+        
+        // create the children recursively
+        const children = graph[root].map(edge => {
+            const childId = edges[edge].to;
+            return this.flattenGraph(childId);
+        });
+        return {
+            children,
+            id: root,
+        };
+    }
+    flattenGraph2 = (root) => {
+        const { graph, edges, nodes } = this.context.state;
+        
+        // create the children recursively
+        const children = graph[root].map(edge => {
+            const childId = edges[edge].to;
+            return this.flattenGraph2(childId);
+        });
+        const title = (
+            <TemplateQuestion
+                key={root}
+                qId={root}
+                allDiseases={this.state.diseases}
+                graphData={this.state.graphData}
+            />
+        );
+        const item = {
+            title,
+            children,
+            expanded: false,
+        };
+        return item
+    }
+
+    renderItem = ({ item, collapseIcon, handler }) => {
+        console.log(item);
+        return (
+            <div className="root-question">
+                {handler}
+                {collapseIcon}
+                <TemplateQuestion
+                    key={item.id}
+                    qId={item.id}
+                    allDiseases={this.state.diseases}
+                    graphData={this.state.graphData}
+                />
+            </div>
+        )
+    }
+
     render() {
         const { bodySystems, diseases, showOtherBodySystem, showOtherDisease, graphData } = this.state;
-        console.log(this.context.state)
-
+        // console.log(this.context.state)
         const bodySystemOptions = [{
             value: OTHER_TEXT,
             text: OTHER_TEXT,
@@ -403,6 +479,17 @@ class NewTemplateForm extends Component {
                         )}
                     </Droppable>
                 </DragDropContext>
+                <div style={{ height: 70 * this.context.state.numQuestions }}>
+                    <SortableTree 
+                        treeData={this.createTreeData2()}
+                        onChange={treeData => console.log(treeData)}
+                    />
+                </div>
+                <Nestable
+                    items={this.createTreeData()}
+                    renderItem={this.renderItem}
+                    handler={<Icon name='bars'/>}
+                />
                 <Button
                     circular
                     icon='add'
