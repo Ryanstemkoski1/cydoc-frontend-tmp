@@ -132,8 +132,8 @@
         "firstField": "Drinks/Week",
         "secondField": "What kind of drinks?"
       },
-      "Substance Abuse": {
-        "condition": "Substance Abuse",
+      "Recreational Drugs": {
+        "condition": "Recreational Drugs",
         "firstField": "Drug Name",
         "secondField": "Mode of Delivery"
       }
@@ -155,7 +155,7 @@
         "Number of Years": "",
         "Comments": ""
       },
-      "Substance Abuse": {
+      "Recreational Drugs": {
         "Yes": false,
         "In the Past": false,
         "Never Used": false,

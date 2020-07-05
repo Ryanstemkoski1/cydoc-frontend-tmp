@@ -74,7 +74,7 @@ export default class RightLeftWidget extends Component {
         return (
             <div style={{marginTop: 20}} > 
                 {pes}
-                add {this.props.type.toLowerCase()} <Button basic circular icon="plus" size='mini' onClick={this.addButton}/>
+                add abnormal {this.props.type.toLowerCase()} <Button basic circular icon="plus" size='mini' onClick={this.addButton}/>
             </div>
               )
         }

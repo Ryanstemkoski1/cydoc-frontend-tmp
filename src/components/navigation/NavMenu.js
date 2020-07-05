@@ -153,7 +153,7 @@ function DefaultMenuItems(props) {
                     <Dropdown.Menu>
                         <Dropdown.Item as={Link} name="about" to="/about" text="About" />
                         <Dropdown.Item as={Link} name="login" to="/login" text="Login" />
-                        <Dropdown.Item as={Link} name="register" to="/register" text="Register" />
+                        <Dropdown.Item as={Link} name="register" to="/register" text="Sign Up" />
                     </Dropdown.Menu>
                 </Dropdown>
             </Menu.Item>
@@ -163,7 +163,7 @@ function DefaultMenuItems(props) {
                 <Menu.Item>
                     <Button.Group>
                         <Button as={Link} basic color={"teal"} name="login" to="/login" text="Login" >Login</Button>
-                        <Button as={Link} color={"teal"} name="register" to="/register" text="Register" >Register</Button>
+                        <Button as={Link} color={"teal"} name="register" to="/register" text="Sign Up" >Sign Up</Button>
                     </Button.Group>
                 </Menu.Item>
 

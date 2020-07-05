@@ -47,7 +47,7 @@ export default class ReviewOfSystemsCategory extends Component{
                                 verticalAlign='middle'
                                 className="ros-symptom no-padding"
                             >
-                                {option}
+                                {option.replace("Δ", "Changes in")}
                             </Grid.Column>
                             <Grid.Column width={4} className="no-padding">
                                 <Button
