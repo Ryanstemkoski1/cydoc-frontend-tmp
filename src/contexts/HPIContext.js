@@ -19,7 +19,6 @@ export class HPIStore extends React.Component {
         }
     }
 
-
     //Sets context[name] equal to values
     onContextChange = (name, values) => {
         this.setState(

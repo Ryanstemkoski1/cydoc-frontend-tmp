@@ -1,15 +1,46 @@
-.nav-menu-container {
-  display: flex;
-  justify-content: space-between;
-  box-shadow: 0 3px 4px -6px gray;
-}
 
+/* Navigation Bar has a thicker drop shadow */
 .nav-menu {
-  height: 10vh;
-  width: 101%;
-  padding: 1rem;
+    box-shadow: 0 0 20px 5px RGBA(0, 128, 159, 0.2) !important;
+    height: 10vh;
 }
 
-.user-icon {
-  padding-left: 10px;
+/* Navigation button styles */
+.nav-menu .button {
+    background-color: #CDE1E9;
+    color: #034353;
+    font-weight: 400;
+}
+
+.nav-menu-logo img {
+    margin-right: 10px;
+    height: 8vh !important;
+    width: auto !important;
+}
+
+.nav-menu-brand img {
+    padding-bottom: 0.5vh;
+    height: 6vh !important;
+    width: auto !important;
+}
+
+/* Make the divide between menu tabs seamless */
+.edit-note-nav-menu {
+    border: 0 !important;
+}
+
+
+/* note name input box styles */
+.note-name-menu-item input {
+    width: 200px;
+    color: #0d5e70 !important;
+
+}
+.note-name-menu-item .input:hover {
+    border-bottom: 0;
+}
+
+
+.note-name-menu-item {
+    padding: 0 !important;
 }

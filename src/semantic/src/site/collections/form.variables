@@ -1,3 +1,8 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+/* Form Label */
+@labelFontSize: @fontSize;
+@labelFontWeight: @normal;
+@labelColor: @darkTextColor;
