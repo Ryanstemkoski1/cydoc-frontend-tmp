@@ -6,6 +6,7 @@ import ConditionInput from 'components/tools/ConditionInput.js'
 import {FAMILY_HISTORY_MOBILE_BP} from "constants/breakpoints.js";
 import FamilyHistoryBlock from './FamilyHistoryBlock';
 import AddRowButton from 'components/tools/AddRowButton.js';
+import {Container, Segment} from "semantic-ui-react";
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.
@@ -133,7 +134,7 @@ export default class FamilyHistoryContent extends Component {
 
         return(
             mobile ? 
-                <Fragment>
+                <>
                     <GridContent
                         numColumns={4}
                         contentHeader={<FamilyHistoryContentHeader />} 
@@ -143,11 +144,11 @@ export default class FamilyHistoryContent extends Component {
                         conditions={list_values}
                         mobile={mobile}
                     />
-                </Fragment> : 
-                <Fragment> 
+                </> :
+                <>
                     <div style={{marginTop: 25}}> </div>{listItems}
                     {this.props.fh_pop ? "" : <AddRowButton onClick={this.addRow} name={"family history"} />}
-                </Fragment>
+                </>
         );
     }
 }

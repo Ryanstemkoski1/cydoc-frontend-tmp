@@ -10,9 +10,21 @@ export class NotesStore extends React.Component {
     static contextType = AuthContext
 
     state = {
-        notes: []
+        notes: new Map(),
+        activeNotes: new Map()
     }
 
+    //Returns all the user's notes as an Iterable
+    getNotes = () => {
+        return this.state.notes.values()
+    }
+
+    //Returns all the user's active notes as an Iterable
+    getActiveNotes = () => {
+        return this.state.activeNotes.values()
+    }
+
+    //Retrieves the user's notes using an API call
     loadNotes = async (_id = this.context.user._id) => {
 
         let response = await client.get("/records")
@@ -22,16 +34,32 @@ export class NotesStore extends React.Component {
             return
         }
 
-        let notes = []
+        let notes = new Map()
         response.data.forEach((note) => {
             if (note.doctorID === _id) {
-                notes.push(note)
+                notes.set(note._id, note)
             }
         })
 
         this.setState({ notes: notes });
     }
 
+    //Adds the provided note into activeNotes
+    loadNote = (note) => {
+        let prevActiveNotes = this.state.activeNotes
+        this.setState({ activeNotes: prevActiveNotes.set(note._id, note) })
+    }
+
+    //Removes the provided note from activeNotes using the note's id
+    unloadNote = (note) => {
+        this.setState((state, props) => {
+            let prevActiveNotes = new Map(state.activeNotes)
+            prevActiveNotes.delete(note._id)
+            return { activeNotes: prevActiveNotes }
+        })
+    }
+
+    //Adds a note to state and backend storage
     addNote = async () => {
 
         let note = {
@@ -57,19 +85,21 @@ export class NotesStore extends React.Component {
         }
 
         if (response.status - 200 < 100) {
-            this.setState({ notes: [...this.state.notes, response.data] })
+            let newNote = response.data
+            let prevNotes = new Map(this.state.notes)
+            this.setState({ notes: prevNotes.set(newNote._id, newNote) })
             alert("Create Success")
         } else {
             alert(response.data.Message)
         }
     }
 
+    //Deletes a note from state and backend storage
     deleteNote = async (note) => {
 
         note.doctorID = this.context.user._id
         note.clinicID = this.context.user.workplace
 
-        this.setState({ notes: this.state.notes.filter((prevNote) => prevNote._id !== note._id) })
         let response = await client.delete(`/record/${note._id}`, note)
 
         if (response == null) {
@@ -80,18 +110,25 @@ export class NotesStore extends React.Component {
         console.log(response)
 
         if (response.status - 200 < 100) {
+            this.setState((state, props) => {
+                let prevNotes = new Map(state.notes)
+                let prevActiveNotes = new Map(state.activeNotes)
+                prevNotes.delete(note._id)
+                prevActiveNotes.delete(note._id)
+                return { notes: prevNotes, activeNotes: prevActiveNotes }
+            })
             alert("Delete Success")
         } else {
             alert(response.data.Message)
         }
     }
 
+    //Updates a note in state and backend storage
     updateNote = async (note) => {
 
         note.doctorID = this.context.user._id
         note.clinicID = this.context.user.workplace
 
-        this.setState({ notes: this.state.notes.map((prevNote) => prevNote._id === note._id ? note : prevNote) })
         let response = await client.put(`/record/${note._id}`, note)
 
         if (response == null) {
@@ -102,20 +139,39 @@ export class NotesStore extends React.Component {
         console.log(response)
 
         if (response.status - 200 < 100) {
+            this.setState((state, props) => {
+                let prevNotes = new Map(state.notes)
+                Object.assign(prevNotes.get(note._id), { ...note, unsavedChanges: false })
+                return { notes: prevNotes }
+            })
             alert("Save Success")
         } else {
             alert(response.data.Message)
         }
     }
 
+    //Updates a note in state ONLY
+    updateNoteLocally = (note) => {
+        this.setState((state, props) => {
+            let prevNotes = new Map(state.notes)
+            Object.assign(prevNotes.get(note._id), note)
+            return { notes: prevNotes }
+        })
+    }
+
     render = () => {
         return (
             <Context.Provider value={{
                 ...this.state,
+                getNotes: this.getNotes,
+                getActiveNotes: this.getActiveNotes,
                 loadNotes: this.loadNotes,
+                loadNote: this.loadNote,
+                unloadNote: this.unloadNote,
                 addNote: this.addNote,
                 deleteNote: this.deleteNote,
-                updateNote: this.updateNote
+                updateNote: this.updateNote,
+                updateNoteLocally: this.updateNoteLocally
             }}>
                 {this.props.children}
             </Context.Provider>

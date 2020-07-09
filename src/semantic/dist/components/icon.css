@@ -286,14 +286,14 @@ i.inverted.circular.green.icon {
 
 /* Teal */
 i.teal.icon {
-  color: #008080 !important;
+  color: #00809F !important;
 }
 i.inverted.teal.icon {
-  color: #6DFFFF !important;
+  color: #EAF3F5 !important;
 }
 i.inverted.bordered.teal.icon,
 i.inverted.circular.teal.icon {
-  background-color: #008080 !important;
+  background-color: #00809F !important;
   color: #FFFFFF !important;
 }
 

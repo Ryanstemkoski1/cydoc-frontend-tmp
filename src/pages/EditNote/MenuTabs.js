@@ -1,8 +1,8 @@
 import React, {Component, Fragment} from 'react'
-import {Menu, Container, Button, Dropdown} from 'semantic-ui-react'
+import {Menu, Container, Dropdown, Segment, Icon} from 'semantic-ui-react'
 import PropTypes from 'prop-types'
+
 import {TAB_NAMES} from 'constants/constants'
-import {Input} from "semantic-ui-react";
 import HPIContext from 'contexts/HPIContext.js';
 import {MENU_TABS_MOBILE_BP} from "../../constants/breakpoints.js";
 import "./MenuTabs.css";
@@ -39,7 +39,7 @@ class ConnectedMenuTabs extends Component {
         this.setState({ windowWidth, windowHeight });
     }
 
-    //onClick event is handled by parent
+    // onClick event is handled by parent
     handleItemClick = (e, { name }) => this.props.onTabChange(name);
 
     handleSave = () => {
@@ -54,10 +54,6 @@ class ConnectedMenuTabs extends Component {
         });
     }
 
-    handleInputChange = (event) => {
-        this.setState({textInput: event.target.value}) 
-        this.context.onContextChange("title", event.target.value)
-    }
 
     render() {
         const {activeItem, activeTabIndex} = this.props;
@@ -71,82 +67,68 @@ class ConnectedMenuTabs extends Component {
                 active={activeItem === name}
                 onClick={this.handleItemClick}
                 href={"#"+ encodeURI(name)}
-                className="menu-tab"
             />
         );
 
         return (
-            <Fragment>
-                <Menu secondary>
-                    <Menu.Item>
-                            <Input
-                            className={this.state.isTitleFocused === true ? "ui input focus" : "ui input transparent"}
-                            type='text'
-                            placeholder="Untitled Note"
-                            style={{fontSize: 16, marginBottom: 5, outline: 'none'}}
-                            onChange={this.handleInputChange}
-                            onFocus={()=>{
-                                this.setState({isTitleFocused: true})
-                                if (this.context.title === "Untitled Note") {
-                                    this.context.onContextChange("title", "")
-                                }
-                            }}
-                            onBlur={()=>{
-                                this.setState({isTitleFocused: false})
-                                if (this.context.title === '') {
-                                    this.context.onContextChange("title", "Untitled Note")
-                                }
-                            }}
-                            value={this.context.title} 
-                            />
-                            <Button onClick={this.context.saveNote} className="save-button">
-                                Save
-                            </Button>
-                    </Menu.Item>
+            <div style={{backgroundColor: 'white'}}>
+                <Menu secondary className={collapseMenu? "" : "menu-tab"}>
+                    {/* Menu is different depending on screen size */}
+                    {collapseMenu ?
+                        (
+                            <CollapsedMenuTabs
+                            tabMenuItems={tabMenuItems}
+                            attached={this.props.attached}
+                            activeItem={activeItem}
+                            activeTabIndex={activeTabIndex}
+                        />) : (<ExpandededMenuTabs
+                            tabMenuItems={tabMenuItems}
+                            attached={this.props.attached}
+                            activeItem={activeItem}
+                        />)
+                    }
                 </Menu>
-                {collapseMenu ? 
-                    (<CollapsedMenuTabs
-                        tabMenuItems={tabMenuItems}
-                        attached={this.props.attached}
-                        activeItem={activeItem}
-                        activeTabIndex={activeTabIndex}
-                    />) : (<ExpandededMenuTabs
-                        tabMenuItems={tabMenuItems}
-                        attached={this.props.attached}
-                        activeItem={activeItem}
-                    />)}
-            </Fragment>
+            </div>
+
+
 
         )
     }
 }
 
+
+// Functional component to display when tabs are collapsed
 function CollapsedMenuTabs(props) {
     const curTab = props.tabMenuItems[props.activeTabIndex].props.name
 
     return (
-        <Menu tabular attached={props.attached}>
-            <Container className="collapsed-menu-tabs">
-                {props.tabMenuItems[props.activeTabIndex]}
-                <Menu.Item>
-                    {curTab.length < 10 ? 
-                        <Dropdown
-                            icon="ellipsis horizontal"
-                            options={props.tabMenuItems}
-                        />
-                        :
-                        <Dropdown
-                            icon="ellipsis horizontal"
-                            direction='left'
-                            options={props.tabMenuItems}
-                        />
-                    }
-                </Menu.Item>
-            </Container>
+        <>
+            <div>
+
+            </div>
+        <Menu tabular attached={props.attached} className="collapsed-menu-tabs" style={{
+            overflow: 'auto',
+            maxHeight: '50vh',
+            whiteSpace: 'nowrap',
+            display: 'flex',
+            flexWrap: 'nowrap',
+            overflowX: 'auto',
+            scrollbarWidth: 'none',
+            WebkitOverflowScrolling: 'touch'}}
+        >
+            <Menu.Item className="arrow">
+                <Icon name="window maximize outline" style={{margin: '0'}} />
+            </Menu.Item>
+            {props.tabMenuItems}
         </Menu>
+        </>
     );
 }
 
+const MenuTabs = ConnectedMenuTabs;
+export default MenuTabs;
+
+// Functional component to display when tabs are all shown
 function ExpandededMenuTabs(props) {
     return <Menu tabular attached={props.attached}>
         <Container className="expanded-menu-tabs">
@@ -155,14 +137,12 @@ function ExpandededMenuTabs(props) {
     </Menu>;
 }
 
-ConnectedMenuTabs.propTypes = {
-  activeItem: PropTypes.string,
-  attached: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.bool
-  ]),
-  onTabChange: PropTypes.func
-};
 
-const MenuTabs = ConnectedMenuTabs;
-export default MenuTabs;
+ConnectedMenuTabs.propTypes = {
+    activeItem: PropTypes.string,
+    attached: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool
+    ]),
+    onTabChange: PropTypes.func
+};

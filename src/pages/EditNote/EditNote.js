@@ -1,12 +1,15 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, createRef } from 'react';
+import {Segment} from 'semantic-ui-react';
+import {Container, Sticky} from "semantic-ui-react";
+
 import MenuTabs from "./MenuTabs";
 import NotePage from "./NotePage";
 import NavMenu from "../../components/navigation/NavMenu";
-import 'components/navigation/NavMenu.css';
 import { TAB_NAMES } from 'constants/constants';
 
-//Component that manages the active state of the create note editor
-//and defines the layout of the editor
+
+// Component that manages the active state of the create note editor
+// and defines the layout of the editor
 class EditNote extends Component {
     constructor(props) {
         super(props);
@@ -24,18 +27,31 @@ class EditNote extends Component {
         this.setState({ activeItem, activeTabIndex })
     }
 
+    // Reference for the Sticky navigation bars
+    noteContent = createRef()
+
     render() {
         return (
-            <Fragment>
-                <NavMenu class="nav-menu-container" />
-                <MenuTabs
-                    activeItem={this.state.activeItem}
-                    onTabChange={this.onTabChange}
-                    activeTabIndex={this.state.activeTabIndex}
-                    attached
-                />
-                <NotePage activeItem={this.state.activeItem} />
-            </Fragment>
+            <>
+                <div ref={this.noteContent}>
+                    {/* Top NavMenu and MenuTabs stay on top regardless of scroll*/}
+                    <Sticky context={this.noteContent}>
+                        <NavMenu
+                            className="edit-note-nav-menu"
+                            displayNoteName={true}
+                        />
+                        <MenuTabs
+                            activeItem={this.state.activeItem}
+                            onTabChange={this.onTabChange}
+                            activeTabIndex={this.state.activeTabIndex}
+                            attached
+                        />
+                    </Sticky>
+                    <NotePage activeItem={this.state.activeItem} />
+
+                </div>
+
+            </>
         );
     }
 }
