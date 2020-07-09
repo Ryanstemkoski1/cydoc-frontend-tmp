@@ -37,7 +37,6 @@ ReactDOM.render(
                                 <PrivateRoute path="/editgraph" component={EditGraph} />
                                 <PrivateRoute path="/editprofile" component={EditProfile} />
                                 <Route path="/about" component={ThemingLayout} />
-                                <Route path="/contact" component={ContactPage} />
                             </BrowserRouter>
                         </div>
                     </CreateTemplateStore>

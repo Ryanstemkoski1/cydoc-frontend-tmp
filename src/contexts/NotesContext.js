@@ -69,11 +69,12 @@ export class NotesStore extends React.Component {
             body: noteBody
         }
 
-        if(this.state.notes) {
-            let lastNote = this.state.notes.slice(-1)
+        //If notes map is not empty, takes most recent entry and autoloads static sections into new note
+        if(this.state.notes.size) {
+            let lastNote = Array.from(this.state.notes)[this.state.notes.size-1]
             let staticSections = ["Family History", "Medical History", "Surgical History", "Surgical History", "Medications", "Allergies", "Social History"];
             staticSections.forEach(entry => {
-                note.body[entry] = lastNote[0].body[entry]
+                note.body[entry] = lastNote[1].body[entry]
             })
         }
 
