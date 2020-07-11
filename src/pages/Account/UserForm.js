@@ -318,7 +318,6 @@ class UserForm extends Component {
                     <Image size="small" spaced href='/home' src={LogoName} />
                 </Container>
                 <Container>
-
                     <Segment clearing raised style={{ borderColor: "white" }}>
                         <Container className="sign-up-header" color='black' textAlign='center'>
                             {this.state.title}
@@ -430,7 +429,6 @@ class UserForm extends Component {
                                     checked={this.state.formInfo.role === 'patient'}
                                     onChange={this.handleChange}
                                 />
-
                                 <Form.Radio
                                     width={7}
                                     label='Administrator'
@@ -451,9 +449,7 @@ class UserForm extends Component {
                                     Sign Up
                                 </Form.Button>
                             </>
-
                         </Form>
-
                     </Segment>
                 </Container>
             </Container>
