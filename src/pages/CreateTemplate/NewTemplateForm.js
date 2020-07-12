@@ -8,8 +8,6 @@ import { graphClient } from 'constants/api.js';
 import diseaseAbbrevs from 'constants/diseaseAbbrevs.json';
 import diseaseCodes from 'constants/diseaseCodes';
 import Nestable from 'react-nestable';
-import 'react-sortable-tree/style.css';
-import './react-sortable-tree.css';
 
 const OTHER_TEXT = 'Other (specify below)';
 

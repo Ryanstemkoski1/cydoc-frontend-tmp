@@ -9,12 +9,10 @@ const questionTypes = {
         'LIST-TEXT': 'List',
     },
     advanced: {
-        'FH-POP': 'Family History, Prepopulated',
-        'PMH-POP': 'Past Medical History, Prepopulated',
-        'MEDS-POP': 'Medications, Prepopulated',
-        'PMH-BLANK': 'Past Medical History, Blank',
-        'MEDS-BLANK': 'Medications, Blank',
-        'PSH-BLANK': 'Past Surgical History, Blank',
+        'FH': 'Family History',
+        'PMH': 'Past Medical History',
+        'MEDS': 'Medications',
+        'PSH': 'Past Surgical History',
     },
 }
 

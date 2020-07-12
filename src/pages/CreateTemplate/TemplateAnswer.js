@@ -1,10 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { Input, Segment, Button, Dropdown, Icon } from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
-import TemplateQuestion from './TemplateQuestion';
 import questionTypes from 'constants/questionTypes';
 import diseaseCodes from 'constants/diseaseCodes';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { PATIENT_HISTORY_MOBILE_BP } from "constants/breakpoints";
+import MedicalHistoryContent from "pages/EditNote/content/medicalhistory/MedicalHistoryContent";
+import SurgicalHistoryContent from "pages/EditNote/content/surgicalhistory/SurgicalHistoryContent";
+import MedicationsContent from "pages/EditNote/content/medications/MedicationsContent";
+import FamilyHistoryContent from 'pages/EditNote/content/familyhistory/FamilyHistoryContent';
 
 class TemplateAnswer extends Component {
     static contextType = CreateTemplateContext;
@@ -12,14 +15,34 @@ class TemplateAnswer extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
+            windowWidth: 0,
+            windowHeight: 0,
             showOtherGraphs: false,
             otherGraph: null,
+            showPreview: false,
         }
+        this.updateDimensions = this.updateDimensions.bind(this);
         this.saveAnswer = this.saveAnswer.bind(this);
         this.addChildQuestion = this.addChildQuestion.bind(this);
         this.saveButtonOption = this.saveButtonOption.bind(this);
         this.addButtonOption = this.addButtonOption.bind(this);
         this.removeButtonOption = this.removeButtonOption.bind(this);
+    }
+
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions);
+    }
+ 
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions);
+    }
+
+    updateDimensions() {
+        let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+        let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+ 
+        this.setState({ windowWidth, windowHeight });
     }
 
     showGraphOptions = () => {
@@ -32,6 +55,10 @@ class TemplateAnswer extends Component {
 
     saveGraphType = (e, { value }) => {
         this.setState({ otherGraph: value });
+    }
+
+    togglePreviewTable = () => {
+        this.setState({ showPreview: !this.state.showPreview });
     }
 
     getAnswerInfo = (type) => {
@@ -54,9 +81,9 @@ class TemplateAnswer extends Component {
                 startResponse: '',
                 endResponse: '',
             }
-        } else if (type === 'FH-POP'
-        || type === 'PMH-POP'
-        || type === 'MEDS-POP') {
+        } else if (type.startsWith('FH')
+        || type.startsWith('PMH')
+        || type.startsWith('MEDS')) {
             return {
                 options: ['', '', ''],
             }
@@ -222,16 +249,20 @@ class TemplateAnswer extends Component {
                 optionsText = 'Button options:';
                 break;
             }
-            case questionTypes.advanced['FH-POP']: {
+            case questionTypes.advanced['FH']: {
                 optionsText = 'Family history options:';
                 break;
             }
-            case questionTypes.advanced['PMH-POP']: {
+            case questionTypes.advanced['PMH']: {
                 optionsText = 'Past medical history options:';
                 break;
             }
-            case questionTypes.advanced['MEDS-POP']: {
+            case questionTypes.advanced['MEDS']: {
                 optionsText = 'Medications options:';
+                break;
+            }
+            case questionTypes.advanced['PSH']: {
+                optionsText = 'Past surgical history options:';
                 break;
             }
             default: {
@@ -243,74 +274,45 @@ class TemplateAnswer extends Component {
         return optionsText;
     }
 
-    onDragEnd = (result) => {
-        const { destination, source, draggableId } = result;
+    getPreviewComponent = (type) => {
+        const { windowWidth, showPreview } = this.state;
+        const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
 
-        if (!destination) {
-            return; // dropped outside
+        let preview;
+        if (type.startsWith(questionTypes.advanced["FH"])) {
+            preview = (
+                <FamilyHistoryContent 
+                    collapseTabs={collapseTabs}
+                />
+            );
+        } else if (type.startsWith(questionTypes.advanced["MEDS"])) {
+            preview = (
+                <MedicationsContent 
+                    collapseTabs={collapseTabs}
+                />
+            );
+        } else if (type.startsWith(questionTypes.advanced["PMH"])) {
+            preview = (
+                <MedicalHistoryContent 
+                    collapseTabs={collapseTabs}
+                />
+            );
+        } else if (type.startsWith(questionTypes.advanced["PSH"])) {
+            preview = (
+                <SurgicalHistoryContent 
+                    collapseTabs={collapseTabs}
+                />
+            );
         }
-        if (destination.index == source.index) {
-            return; // did not move
-        }
-        const graph = { ...this.context.state.graph };
-        const rootEdges = graph[this.props.qId];
-        const newOrderedEdges = Array.from(rootEdges);
-        
-        // update edges array with order
-        newOrderedEdges.splice(source.index, 1);
-        newOrderedEdges.splice(destination.index, 0, rootEdges[source.index]);
-
-        // update affect nodes' order
-        const nodes = { ...this.context.state.nodes };
-        const edges = { ...this.context.state.edges };
-        nodes[draggableId].order = nodes[edges[rootEdges[destination.index]].to].order;
-        if (source.index > destination.index) {
-            for (let i = destination.index + 1; i <= source.index; i++) {
-                const nodeId = edges[newOrderedEdges[i]].to;
-                nodes[nodeId].order += 1;
-            }
-        } else {
-            for (let i = source.index; i < destination.index; i++) {
-                const nodeId = edges[newOrderedEdges[i]].to;
-                nodes[nodeId].order -= 1;
-            }
-        }
-
-        graph[this.props.qId] = newOrderedEdges;
-        this.context.onContextChange('graph', graph);
-        this.context.onContextChange('nodes', nodes);
+        return preview;
     }
 
     getAnswerTemplate(startEg, endEg, optionsText) {
         const { qId, type } = this.props;
         let template;
-        let childQuestions;
         let otherGraphs;
 
         if (type === questionTypes.basic['YES-NO']) {
-            // childQuestions = this.context.state.graph[qId].map((edge, idx) => {
-            //     const childId = this.context.state.edges[edge].to;
-            //     return (
-            //         <Draggable key={childId} draggableId={childId} index={idx}>
-            //             {(provided) => (
-            //                 <div
-            //                     key={childId}
-            //                     ref={provided.innerRef}
-            //                     {...provided.draggableProps}
-            //                     {...provided.dragHandleProps}
-            //                 >
-            //                     <TemplateQuestion 
-            //                         key={childId} 
-            //                         qId={childId} 
-            //                         allDiseases={this.props.allDiseases}
-            //                         graphData={this.props.graphData}
-            //                     />
-            //                 </div>
-            //             )}
-            //         </Draggable>
-            //     );
-            // });
-
             if (this.state.showOtherGraphs) {
                 const options = this.props.allDiseases.map((disease) => (
                     {
@@ -383,20 +385,6 @@ class TemplateAnswer extends Component {
                         className='yes-no-input'
                     />
                     <div className='add-child-question'>
-                        {/* <DragDropContext onDragEnd={this.onDragEnd}>
-                            <Droppable droppableId={this.props.qId + '_sub'}>
-                                {(provided) => (
-                                    <div
-                                        ref={provided.innerRef}
-                                        {...provided.droppableProps}
-                                    >
-                                        {childQuestions}
-                                        {provided.placeholder}
-                                    </div>
-                                )}
-                            </Droppable>
-
-                        </DragDropContext> */}
                         <Button
                             basic
                             icon='add'
@@ -410,18 +398,6 @@ class TemplateAnswer extends Component {
                 </Segment>
             );
         } else if (type === questionTypes.basic['NO-YES']) {
-            childQuestions = this.context.state.graph[qId].map(edge => {
-                const childId = this.context.state.edges[edge].to;
-                return (
-                    <TemplateQuestion 
-                        key={childId} 
-                        qId={childId} 
-                        allDiseases={this.props.allDiseases}
-                        graphData={this.props.graphData}
-                    />
-                );
-            });
-
             template = (
                 <Segment className='yes-no-answer'>
                     <span className='answer-label answer-label-if-no'>
@@ -446,7 +422,6 @@ class TemplateAnswer extends Component {
                         className='yes-no-input'
                     />
                     <div className='add-child-question'>
-                        {/* {childQuestions} */}
                         <Button
                             basic
                             icon='add'
@@ -514,7 +489,7 @@ class TemplateAnswer extends Component {
                     </div>
                 );
             }
-
+            
             template = (
                 <Segment className='yes-no-answer'>
                     <div>{optionsText}</div>
@@ -547,9 +522,10 @@ class TemplateAnswer extends Component {
                     />
                 </Segment>
             );
-        } else if(type === questionTypes.advanced['FH-POP']
-        || type === questionTypes.advanced['PMH-POP']
-        || type === questionTypes.advanced['MEDS-POP']) {
+        } else if(type.startsWith(questionTypes.advanced['FH'])
+        || type.startsWith(questionTypes.advanced['PMH'])
+        || type.startsWith(questionTypes.advanced['PSH'])
+        || type.startsWith(questionTypes.advanced['MEDS'])) {
             const options = [];
             for (let i = 0; i < this.context.state.nodes[qId].answerInfo.options.length; i++) {
                 options.push(
@@ -573,6 +549,10 @@ class TemplateAnswer extends Component {
                     </div>
                 );
             }
+            let preview;
+            if (this.state.showPreview) {
+                preview = this.getPreviewComponent(type);
+            }
 
             template = (
                 <Segment className='yes-no-answer'>
@@ -586,6 +566,15 @@ class TemplateAnswer extends Component {
                         onClick={this.addButtonOption}
                         className='add-option-pop'
                     />
+                    <Button
+                        basic
+                        size='small'
+                        icon={this.state.showPreview ? "search minus": "search plus"}
+                        content={this.state.showPreview ? "Hide table" : "Preview table"}
+                        onClick={this.togglePreviewTable}
+                        className='preview-table-btn'
+                    />
+                    {preview}
                 </Segment>
             );
         } else {

@@ -4,6 +4,7 @@ import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import TemplateAnswer from './TemplateAnswer';
 import questionTypes from 'constants/questionTypes';
 import './NewTemplate.css';
+import { contextType } from 'react-numeric-input';
 
 let DELETED_IDS = [];
 
@@ -63,14 +64,14 @@ class TemplateQuestion extends Component {
                 startResponse: '',
                 endResponse: '',
             };
-        } else if (value === questionTypes.advanced['FH-POP']
-        || value === questionTypes.advanced['PMH-POP']
-        || value === questionTypes.advanced['MEDS-POP']) {
+        } else if (value.startsWith(questionTypes.advanced['FH'])
+        || value.startsWith( questionTypes.advanced['PMH'])
+        || value.startsWith( questionTypes.advanced['PSH'])
+        || value.startsWith( questionTypes.advanced['MEDS'])) {
             context.nodes[qid].answerInfo = {
                 options: ['', '', ''],
             };
         }
-
         this.context.onContextChange('nodes', context.nodes);
     }
 
