@@ -38,11 +38,6 @@ export default class PatientHistoryContent extends Component {
     }
 
     handleItemClick = (e, {name}) => {
-        var tabcontent = document.getElementsByClassName("tab-content");
-        for (var i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-        document.getElementById(name).style.display = "block";
         this.setState({ activeItem: name });
     }
 
@@ -75,28 +70,51 @@ export default class PatientHistoryContent extends Component {
             });
         }
 
+        let activeContent;
+        switch(activeItem) {
+            case "medical history":
+                activeContent = (
+                    <div id="medical history" className="tab-content initial">
+                        <MedicalHistoryContent collapseTabs={collapseTabs} />
+                    </div>
+                );
+                break;
+            case "surgical history":
+                activeContent = (
+                    <div id="surgical history" className="tab-content">
+                        <SurgicalHistoryContent mobile={collapseTabs} />
+                    </div>
+                );
+                break;
+            case "medications":
+                activeContent = (
+                    <div id="medications" className="tab-content"> 
+                        <MedicationsContent mobile={collapseTabs} />
+                    </div>
+                );
+                break;
+            case "allergies":
+                activeContent = (
+                    <div id="allergies" className="tab-content">
+                        <AllergiesContent mobile={collapseTabs}/>
+                    </div>
+                );
+                break;
+            case "social history":
+                activeContent = (
+                    <div id="social history" className="tab-content">
+                        <SocialHistoryContent mobile={socialHistoryMobile}/>
+                    </div>
+                );
+                break;
+        }
         return (
             <div> 
                 {collapseTabs ? 
                     <Dropdown text={activeItem} options={dropdownTabs} selection fluid scrolling={false} />
                     : <Menu tabular items={expandedTabs}/>
-                } 
-
-                <div id="medical history" className="tab-content initial">
-                    <MedicalHistoryContent collapseTabs={collapseTabs} />
-                </div>
-                <div id="surgical history" className="tab-content">
-                    <SurgicalHistoryContent mobile={collapseTabs} />
-                </div>
-                <div id="medications" className="tab-content"> 
-                    <MedicationsContent mobile={collapseTabs} />
-                </div>
-                <div id="allergies" className="tab-content">
-                    <AllergiesContent mobile={collapseTabs}/>
-                </div>
-                <div id="social history" className="tab-content">
-                    <SocialHistoryContent mobile={socialHistoryMobile}/>
-                </div>
+                }
+                {activeContent}
             </div>
         )
     }
