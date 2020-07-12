@@ -58,7 +58,6 @@
 
 .question-title {
   display: inline;
-  padding-left: 1rem;
   flex-grow: 1;
 }
 
@@ -221,3 +220,6 @@
   margin: 0.5rem 0;
 }
 
+.collapse-icon {
+  padding-top: 0.5rem;
+}

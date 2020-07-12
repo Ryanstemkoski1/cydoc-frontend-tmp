@@ -7,8 +7,6 @@ import TemplateQuestion from './TemplateQuestion';
 import { graphClient } from 'constants/api.js';
 import diseaseAbbrevs from 'constants/diseaseAbbrevs.json';
 import diseaseCodes from 'constants/diseaseCodes';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import SortableTree from 'react-sortable-tree';
 import Nestable from 'react-nestable';
 import 'react-sortable-tree/style.css';
 import './react-sortable-tree.css';
@@ -29,6 +27,7 @@ class NewTemplateForm extends Component {
             showOtherDisease: false,
             diseaseEmpty: true,
             bodySystemEmpty: true,
+            oldTree: [],
         }
         this.saveTitle = this.saveTitle.bind(this);
         this.saveBodySystem = this.saveBodySystem.bind(this);
@@ -275,58 +274,27 @@ class NewTemplateForm extends Component {
         return graph['0000'].map(edge => {
             // create treeNode for every root level question
             const qId = edges[edge].to;
-            return this.flattenGraph(qId);
+            return this.flattenGraph(qId, '0000', edge);
         });
     }
     
-    createTreeData2 = () => {
-        const { graph, edges, nodes } = this.context.state;
-        return graph['0000'].map(edge => {
-            // create treeNode for every root level question
-            const qId = edges[edge].to;
-            return this.flattenGraph2(qId);
-        });
-    }
-
-    flattenGraph = (root) => {
+    flattenGraph = (root, parent, edge) => {
         const { graph, edges, nodes } = this.context.state;
         
         // create the children recursively
         const children = graph[root].map(edge => {
             const childId = edges[edge].to;
-            return this.flattenGraph(childId);
+            return this.flattenGraph(childId, root, edge);
         });
         return {
             children,
+            parent,
+            edge,
             id: root,
         };
     }
-    flattenGraph2 = (root) => {
-        const { graph, edges, nodes } = this.context.state;
-        
-        // create the children recursively
-        const children = graph[root].map(edge => {
-            const childId = edges[edge].to;
-            return this.flattenGraph2(childId);
-        });
-        const title = (
-            <TemplateQuestion
-                key={root}
-                qId={root}
-                allDiseases={this.state.diseases}
-                graphData={this.state.graphData}
-            />
-        );
-        const item = {
-            title,
-            children,
-            expanded: false,
-        };
-        return item
-    }
 
     renderItem = ({ item, collapseIcon, handler }) => {
-        console.log(item);
         return (
             <div className="root-question">
                 {handler}
@@ -341,9 +309,71 @@ class NewTemplateForm extends Component {
         )
     }
 
+    renderCollapseIcon = ({ isCollapsed }) => {
+        return <Icon name={`${isCollapsed ? "plus" : "minus"}`}/>
+    }
+
+    updateOrder = (items, item) => {
+        const { graph, edges } = this.context.state;
+
+        const [newParent, subtree] = this.findParent(items, "0000", item.id);
+        if (!newParent) {
+            return; // Couldn't find parent, something went wrong
+        }
+        // Update ordering if the parent IDs match
+        if (item.parent === newParent) {
+            const nodesToEdge = {};
+            const newEdges = [];
+            graph[newParent].forEach(edge => nodesToEdge[edges[edge].to] = edge);
+            for(let i = 0; i < subtree.length; i++) {
+                let nodeId = subtree[i].id;
+                newEdges.push(nodesToEdge[nodeId]);
+            }
+            graph[newParent] = newEdges;
+        } else {
+            // Level changed, so remove edge from old parent
+            graph[item.parent] = graph[item.parent].filter(edge => edge != item.edge);
+
+            // Update the parent and the graph with new edge
+            edges[item.edge].from = newParent;
+            const nodesToEdge = {};
+            const newEdges = [];
+            graph[newParent].forEach(edge => nodesToEdge[edges[edge].to] = edge);
+            for(let i = 0; i < subtree.length; i++) {
+                let nodeId = subtree[i].id;
+                if (nodeId == item.id) {
+                    newEdges.push(item.edge);
+                } else {
+                    newEdges.push(nodesToEdge[nodeId]);
+                }
+            }
+            graph[newParent] = newEdges;
+        }
+        this.context.onContextChange("graph", graph);
+        this.context.onContextChange("edges", edges);
+    }
+
+    findParent = (children, parent, target) => {
+        /**
+         * Searches the treeData from generated for react-nestable.
+         * Returns the id of the parent of the target using DFS, null if unsuccessful.
+         */
+        for (let i = 0; i < children.length; i++) {
+            let childId = children[i].id;
+            if (childId == target) {
+                return [parent, children];
+            }
+            let [guess, data] = this.findParent(children[i].children, childId, target);
+            if (guess) {
+                return [guess, data];
+            }
+        }
+        return [null, {}];
+    }
+
+
     render() {
         const { bodySystems, diseases, showOtherBodySystem, showOtherDisease, graphData } = this.state;
-        // console.log(this.context.state)
         const bodySystemOptions = [{
             value: OTHER_TEXT,
             text: OTHER_TEXT,
@@ -364,34 +394,6 @@ class NewTemplateForm extends Component {
                 value: disease,
                 text: disease,
             });
-        });
-
-        const rootEdges = this.context.state.graph['0000'];
-        const questionsDisplay = rootEdges.map((edge, idx) => {
-            const qId = this.context.state.edges[edge.toString()].to;
-            return (
-                <Draggable key={qId} draggableId={qId} index={idx}>
-                    {(provided, snapshot) => (
-                        <div
-                            key={qId}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            className='root-question'
-                        >
-                            <Icon 
-                                name='bars'
-                                {...provided.dragHandleProps}
-                            />
-                            <TemplateQuestion 
-                                key={qId} 
-                                qId={qId} 
-                                allDiseases={diseases}
-                                graphData={graphData}
-                            />
-                        </div>
-                    )}
-                </Draggable>
-            );
         });
 
         return (
@@ -465,30 +467,12 @@ class NewTemplateForm extends Component {
                     content='Please choose a body system before adding questions.'
                     id='body-error-message'
                 />
-                <DragDropContext onDragEnd={this.onDragEnd}>
-                    <Droppable droppableId="questions">
-                        {(provided) => (
-                            <div
-                                ref={provided.innerRef}
-                                {...provided.droppableProps}
-                                className="root-question-list"
-                            >
-                                {questionsDisplay}
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-                <div style={{ height: 70 * this.context.state.numQuestions }}>
-                    <SortableTree 
-                        treeData={this.createTreeData2()}
-                        onChange={treeData => console.log(treeData)}
-                    />
-                </div>
                 <Nestable
                     items={this.createTreeData()}
-                    renderItem={this.renderItem}
                     handler={<Icon name='bars'/>}
+                    renderItem={this.renderItem}
+                    renderCollapseIcon={this.renderCollapseIcon}
+                    onChange={this.updateOrder}
                 />
                 <Button
                     circular

@@ -288,7 +288,7 @@ class TemplateQuestion extends Component {
         const { showDeleteQuestion, active } = this.state;
 
         const questionTypeOptions = this.getQuestionTypes();
-        const curIcon = active ? 'caret down' : 'caret right';
+        const curIcon = active ? 'chevron down' : 'chevron right';
 
         const panels = [{
             key: qId,
