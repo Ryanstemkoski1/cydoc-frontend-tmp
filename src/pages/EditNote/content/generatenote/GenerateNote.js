@@ -8,16 +8,12 @@ class GenerateNote extends React.Component {
     reviewOfSystems() {
         const review = this.context["Review of Systems"];
 
-        // ACCOMPLISHED: renders a list of systems with nested lists for their questions
-        // TODO: sort questions by positive and negative and render that information instead
-        
         // EXAMPLE:
         // Review of Systems
         //   - General
         //      - Positive: ..., ..., ..., ...
         //      - Negative: ..., ..., ..., ...
-
-        let components = [];
+        var components = [];
         for (var key in review) {
             var positives = "";
             var negatives = "";
@@ -41,11 +37,12 @@ class GenerateNote extends React.Component {
                 negatives: negatives
             }
         }
+        // console.log(components);
 
         return (
             <div>
                 {Object.keys(components).map(key => (
-                    <li className="temp" key={key}>
+                    <li key={key}>
                         {key}
                         <ul>
                             Positive for: {components[key].positives}
@@ -53,6 +50,48 @@ class GenerateNote extends React.Component {
                         <ul>
                             Negative for: {components[key].negatives}
                         </ul>
+                    </li>
+                ))}
+            </div>
+        )
+    }
+
+    physicalExam() {
+        const physical = this.context["Physical Exam"];
+        // console.log(physical);
+        
+        var components = [];
+        for (var key in physical) {
+            var active = "";
+            for (var question in physical[key]) {
+                // console.log(question);
+                // console.log(physical[key][question]);
+                if (typeof physical[key][question] === 'object') {
+                    // console.log(question);
+                    if (physical[key][question].active === true) {
+                        if (physical[key][question].left === true) {
+                            active += question + ' (left), '
+                        }
+                        if (physical[key][question].right === true) {
+                            active += question + ' (right), '
+                        }
+                    }
+                }
+                else if (physical[key][question] === true) {
+                    active += question + ', ';
+                }
+            }
+            active = active.slice(0, active.length - 2);
+            components[key] = {
+                active: active
+            }
+        }
+
+        return (
+            <div>
+                {Object.keys(components).map(key => (
+                    <li key={key}>
+                        {key}: {components[key].active}
                     </li>
                 ))}
             </div>
@@ -68,6 +107,7 @@ class GenerateNote extends React.Component {
                 <h3> Review of Systems </h3>
                 {this.reviewOfSystems()}
                 <h3> Physical Exam </h3>
+                {this.physicalExam()}
                 <h3> Plan </h3>
             </div>
         )
