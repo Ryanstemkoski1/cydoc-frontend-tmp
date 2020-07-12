@@ -34,7 +34,7 @@ export default class TableContent extends Component {
     // and call the handler prop
     handleTableBodyChange(event, data){ 
         let newState = this.props.values;
-        newState[data.rowindex][data.placeholder] = data.value;
+        newState[data.rowindex][data.type] = data.value;
         this.props.onTableBodyChange(newState);
     }
 
@@ -67,6 +67,9 @@ export default class TableContent extends Component {
 
     //method to generate an collection of rows
     makeTableBodyRows(nums){
+        if (this.props.name === 'medication') {
+            console.log(this.props.values);
+        }
         return nums.map((rowindex, index) => 
             <TableBodyRow
                 key={index}
@@ -80,6 +83,7 @@ export default class TableContent extends Component {
                 medicationOptions={this.state.medicationOptions}
                 sideEffectsOptions={this.state.sideEffectsOptions}
                 proceduresOptions={this.state.proceduresOptions}
+                hidePlaceholders={this.props.name === 'medication'}
             />
         )
     }
@@ -287,6 +291,7 @@ export default class TableContent extends Component {
             <Table
                 celled
                 className='table-display'
+                // fixed={this.props.name==='medication'}
             >
                 <Table.Header content={headerRow} />
                 <Table.Body children={rows} />

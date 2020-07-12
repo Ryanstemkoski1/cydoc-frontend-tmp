@@ -25,6 +25,7 @@ export class TableBodyRow extends Component {
                             allowAdditions
                             icon=''
                             options={proceduresOptions}
+                            type={placeholder}
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
@@ -50,7 +51,8 @@ export class TableBodyRow extends Component {
                             allowAdditions
                             icon=''
                             options={sideEffectsOptions}
-                            placeholder={placeholder}
+                            type={placeholder}                    
+                            placeholder={this.props.hidePlaceholders ? "" : placeholder}                            onChange={onTableBodyChange}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
@@ -75,6 +77,7 @@ export class TableBodyRow extends Component {
                             allowAdditions
                             icon=''
                             options={medicationOptions}
+                            type={placeholder}
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
@@ -90,7 +93,8 @@ export class TableBodyRow extends Component {
                 cell = (
                     <TextArea
                         rows={3}
-                        placeholder={placeholder}
+                        type={placeholder}
+                        placeholder={this.props.hidePlaceholders ? "" : placeholder}
                         onChange={onTableBodyChange}
                         rowindex={rowindex}
                         value={values[rowindex][placeholder]}
@@ -108,6 +112,7 @@ export class TableBodyRow extends Component {
         const { tableBodyPlaceholders } = this.props;
 
         const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
+            console.log(Math.floor(16 / tableBodyPlaceholders.length));
             return (
                 <Table.Cell key={index}>
                     {this.getCell(placeholder)}
