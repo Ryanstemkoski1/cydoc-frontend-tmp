@@ -38,7 +38,7 @@ class TemplateAnswer extends Component {
         window.removeEventListener("resize", this.updateDimensions);
     }
 
-    updateDimensions() {
+    updateDimensions = () => {
         let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
         let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
  
@@ -81,9 +81,10 @@ class TemplateAnswer extends Component {
                 startResponse: '',
                 endResponse: '',
             }
-        } else if (type.startsWith('FH')
-        || type.startsWith('PMH')
-        || type.startsWith('MEDS')) {
+        } else if (type === 'FH'
+        || type === 'PMH'
+        || type === 'PSH'
+        || type === 'MEDS') {
             return {
                 options: ['', '', ''],
             }
@@ -279,28 +280,28 @@ class TemplateAnswer extends Component {
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
 
         let preview;
-        if (type.startsWith(questionTypes.advanced["FH"])) {
+        if (type === questionTypes.advanced["FH"]) {
             preview = (
                 <FamilyHistoryContent 
-                    collapseTabs={collapseTabs}
+                    mobile={collapseTabs}
                 />
             );
-        } else if (type.startsWith(questionTypes.advanced["MEDS"])) {
+        } else if (type === questionTypes.advanced["MEDS"]) {
             preview = (
                 <MedicationsContent 
-                    collapseTabs={collapseTabs}
+                    mobile={collapseTabs}
                 />
             );
-        } else if (type.startsWith(questionTypes.advanced["PMH"])) {
+        } else if (type === questionTypes.advanced["PMH"]) {
             preview = (
                 <MedicalHistoryContent 
-                    collapseTabs={collapseTabs}
+                    mobile={collapseTabs}
                 />
             );
-        } else if (type.startsWith(questionTypes.advanced["PSH"])) {
+        } else if (type === questionTypes.advanced["PSH"]) {
             preview = (
                 <SurgicalHistoryContent 
-                    collapseTabs={collapseTabs}
+                    mobile={collapseTabs}
                 />
             );
         }
@@ -312,7 +313,9 @@ class TemplateAnswer extends Component {
         let template;
         let otherGraphs;
 
-        if (type === questionTypes.basic['YES-NO']) {
+        if (type === questionTypes.basic['YES-NO']
+        || type === questionTypes.basic['NO-YES']
+        ) {
             if (this.state.showOtherGraphs) {
                 const options = this.props.allDiseases.map((disease) => (
                     {
@@ -360,30 +363,31 @@ class TemplateAnswer extends Component {
                     />
                 );
             }
+            const order = type === questionTypes.basic['YES-NO'] ? ['yes', 'no'] : ['no', 'yes'];
 
             template = (
                 <Segment className='yes-no-answer'>
-                    <span className='answer-label'>
-                        IF YES:
-                    </span>
-                    <Input
-                        placeholder='e.g. The patient has pain.'
-                        answer='yesResponse'
-                        value={this.context.state.nodes[qId].answerInfo.yesResponse}
-                        onChange={this.saveAnswer}
-                        className='yes-no-input'
-                    />
-                    <br />
-                    <span className='answer-label answer-label-if-no'>
-                        IF NO:
-                    </span>
-                    <Input
-                        placeholder='e.g. The patient does not have pain.'
-                        answer='noResponse'
-                        value={this.context.state.nodes[qId].answerInfo.noResponse}
-                        onChange={this.saveAnswer}
-                        className='yes-no-input'
-                    />
+                    { order.map((type, idx) => {
+                        const answer = type + "Response";
+                        const action = type === "yes" ? "has" : "does not have";
+                        
+                        return (
+                            <Fragment key={idx}>
+                                <span className={`answer-label answer-label-if-${type}`}>
+                                IF {type.toUpperCase()}:
+                                </span>
+                                <Input
+                                    placeholder={`e.g. The patient ${action} pain.`}
+                                    answer={answer}
+                                    value={this.context.state.nodes[qId].answerInfo[answer]}
+                                    onChange={this.saveAnswer}
+                                    className='yes-no-input'
+                                />
+                                {idx === 0 && (<br/>)}
+                            </Fragment>
+                        )
+
+                    })}
                     <div className='add-child-question'>
                         <Button
                             basic
@@ -394,49 +398,6 @@ class TemplateAnswer extends Component {
                             className='add-child-button'
                         />
                         {otherGraphs}
-                    </div>
-                </Segment>
-            );
-        } else if (type === questionTypes.basic['NO-YES']) {
-            template = (
-                <Segment className='yes-no-answer'>
-                    <span className='answer-label answer-label-if-no'>
-                        IF NO:
-                    </span>
-                    <Input
-                        placeholder='e.g. The patient does not have pain.'
-                        answer='yesResponse'
-                        value={this.context.state.nodes[qId].answerInfo.yesResponse}
-                        onChange={this.saveAnswer}
-                        className='yes-no-input'
-                    />
-                    <br />
-                    <span className='answer-label'>
-                        IF YES:
-                    </span>
-                    <Input
-                        placeholder='e.g. The patient has pain.'
-                        answer='noResponse'
-                        value={this.context.state.nodes[qId].answerInfo.noResponse}
-                        onChange={this.saveAnswer}
-                        className='yes-no-input'
-                    />
-                    <div className='add-child-question'>
-                        <Button
-                            basic
-                            icon='add'
-                            parent={qId}
-                            content='Add follow-up question'
-                            onClick={this.addChildQuestion}
-                            className='add-child-button'
-                        />
-                        <Button
-                            basic
-                            parent={qId}
-                            content='Connect to other graphs'
-                            className='add-child-button'
-                            onClick={this.showGraphOptions}
-                        />
                     </div>
                 </Segment>
             );
@@ -522,10 +483,10 @@ class TemplateAnswer extends Component {
                     />
                 </Segment>
             );
-        } else if(type.startsWith(questionTypes.advanced['FH'])
-        || type.startsWith(questionTypes.advanced['PMH'])
-        || type.startsWith(questionTypes.advanced['PSH'])
-        || type.startsWith(questionTypes.advanced['MEDS'])) {
+        } else if(type === questionTypes.advanced['FH']
+        || type === questionTypes.advanced['PMH']
+        || type === questionTypes.advanced['PSH']
+        || type === questionTypes.advanced['MEDS']) {
             const options = [];
             for (let i = 0; i < this.context.state.nodes[qId].answerInfo.options.length; i++) {
                 options.push(
