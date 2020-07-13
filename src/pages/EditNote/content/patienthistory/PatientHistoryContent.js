@@ -75,7 +75,7 @@ export default class PatientHistoryContent extends Component {
             case "medical history":
                 activeContent = (
                     <div id="medical history" className="tab-content initial">
-                        <MedicalHistoryContent collapseTabs={collapseTabs} />
+                        <MedicalHistoryContent mobile={collapseTabs} />
                     </div>
                 );
                 break;

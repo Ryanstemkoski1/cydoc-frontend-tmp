@@ -223,3 +223,7 @@
 .collapse-icon {
   padding-top: 0.5rem;
 }
+
+.content-preview {
+  min-height: 2.5rem;
+}

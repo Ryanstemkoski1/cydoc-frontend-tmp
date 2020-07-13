@@ -6,10 +6,32 @@ import './TableContent.css';
 //Controlled component for a row in a TableContent component
 export class TableBodyRow extends Component {
     getCell(placeholder) {
-        const {values, rowindex, onTableBodyChange, onAddSideEffect, onAddMedication, onAddProcedure, medicationOptions, sideEffectsOptions, proceduresOptions} = this.props;
+        const {
+            values, 
+            rowindex, 
+            onTableBodyChange, 
+            onAddSideEffect, 
+            onAddMedication, 
+            onAddProcedure, 
+            medicationOptions, 
+            sideEffectsOptions, 
+            proceduresOptions,
+            isPreview,
+        } = this.props;
 
         let cell;
 
+        if (isPreview) {
+            return (
+                <div className="content-preview">
+                    {
+                        placeholder === "Procedure" || placeholder === "Drug Name"
+                         ? rowindex
+                         : ""
+                    }
+                </div>
+            );
+        }
         switch (placeholder) {
             case 'Procedure': {
                 cell = (
@@ -52,7 +74,7 @@ export class TableBodyRow extends Component {
                             icon=''
                             options={sideEffectsOptions}
                             type={placeholder}                    
-                            placeholder={this.props.hidePlaceholders ? "" : placeholder}                            onChange={onTableBodyChange}
+                            placeholder={this.props.hidePlaceholders ? "" : placeholder}                            
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
@@ -112,7 +134,6 @@ export class TableBodyRow extends Component {
         const { tableBodyPlaceholders } = this.props;
 
         const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
-            console.log(Math.floor(16 / tableBodyPlaceholders.length));
             return (
                 <Table.Cell key={index}>
                     {this.getCell(placeholder)}

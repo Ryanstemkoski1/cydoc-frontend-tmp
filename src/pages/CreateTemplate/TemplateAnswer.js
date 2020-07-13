@@ -276,32 +276,42 @@ class TemplateAnswer extends Component {
     }
 
     getPreviewComponent = (type) => {
-        const { windowWidth, showPreview } = this.state;
+        const { windowWidth } = this.state;
+        const { nodes } = this.context.state;
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
 
         let preview;
+        const values = nodes[this.props.qId].answerInfo.options;
         if (type === questionTypes.advanced["FH"]) {
             preview = (
                 <FamilyHistoryContent 
+                    isPreview={true}
                     mobile={collapseTabs}
+                    values={values}
                 />
             );
         } else if (type === questionTypes.advanced["MEDS"]) {
             preview = (
                 <MedicationsContent 
+                    isPreview={true}
                     mobile={collapseTabs}
+                    values={values}
                 />
             );
         } else if (type === questionTypes.advanced["PMH"]) {
             preview = (
                 <MedicalHistoryContent 
+                    isPreview={true}
                     mobile={collapseTabs}
+                    values={values}
                 />
             );
         } else if (type === questionTypes.advanced["PSH"]) {
             preview = (
                 <SurgicalHistoryContent 
+                    isPreview={true}
                     mobile={collapseTabs}
+                    values={values}
                 />
             );
         }

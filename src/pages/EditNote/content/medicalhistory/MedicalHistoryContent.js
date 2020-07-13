@@ -79,10 +79,10 @@ export default class MedicalHistoryContent extends React.Component {
     }
 
     render(){ 
-        const collapseTabs = this.props.collapseTabs;
+        const mobile = this.props.mobile;
         // The second OR statement gets the list of Conditions in the "Medical History" context
         let list_values = this.props.response_choice ? this.state.response_choice : (Object.keys(this.context['Medical History'])) || CONDITIONS
-        const rows = this.generateListItems(list_values, collapseTabs); 
+        const rows = this.generateListItems(list_values, mobile); 
 
         return(
             <GridContent
@@ -91,7 +91,7 @@ export default class MedicalHistoryContent extends React.Component {
                 rows={rows}
                 question_type = {(this.props.response_choice ? "hpi" : "add_row")}
                 value_type = "Medical History"
-                mobile={collapseTabs}
+                mobile={mobile}
                 name={"medical history"}
             />
         );

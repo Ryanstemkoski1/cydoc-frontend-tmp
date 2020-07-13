@@ -67,23 +67,28 @@ export default class TableContent extends Component {
 
     //method to generate an collection of rows
     makeTableBodyRows(nums){
-        if (this.props.name === 'medication') {
-            console.log(this.props.values);
-        }
+        const { 
+            isPreview,
+            tableBodyPlaceholders,
+            values,
+            name,
+        } = this.props;
+
         return nums.map((rowindex, index) => 
             <TableBodyRow
                 key={index}
-                rowindex={parseInt(rowindex)}
-                tableBodyPlaceholders={this.props.tableBodyPlaceholders}
+                rowindex={isPreview ? rowindex : parseInt(rowindex)}
+                tableBodyPlaceholders={tableBodyPlaceholders}
                 onTableBodyChange={this.handleTableBodyChange}
                 onAddSideEffect={this.handleAdditionSideEffects}
                 onAddMedication={this.handleAdditionMedication}
                 onAddProcedure={this.handleAdditionProcedure}
-                values={this.props.values}
                 medicationOptions={this.state.medicationOptions}
                 sideEffectsOptions={this.state.sideEffectsOptions}
                 proceduresOptions={this.state.proceduresOptions}
-                hidePlaceholders={this.props.name === 'medication'}
+                hidePlaceholders={name === 'medication'}
+                values={values}
+                isPreview={isPreview}
             />
         )
     }
@@ -106,7 +111,7 @@ export default class TableContent extends Component {
     }
 
     makeAccordionPanels(nums) {
-        const { values, tableBodyPlaceholders, name } = this.props;
+        const { values, tableBodyPlaceholders, name, isPreview } = this.props;
 
         const panels = [];
 
@@ -116,8 +121,18 @@ export default class TableContent extends Component {
 
             switch(name) {
                 case 'surgical history': {
-                    titleContent = (
-                        <Form className='inline-form'>
+                    let mainInput;
+                    if (isPreview) {
+                        mainInput = (
+                            <Input
+                                disabled    
+                                transparent
+                                className='content-input medication'
+                                value={nums[i]}
+                            />
+                        );
+                    } else {
+                        mainInput = (
                             <Input
                                 transparent
                                 className='content-input-surgical content-dropdown medication'
@@ -138,13 +153,29 @@ export default class TableContent extends Component {
                                     className='side-effects'
                                 />
                             </Input>
+                        );
+                    }
+
+                    titleContent = (
+                        <Form className='inline-form'>
+                            {mainInput}
                         </Form>
                     );
                     break;
                 }
                 case 'medication': {
-                    titleContent = (
-                        <Form className='inline-form'>
+                    let mainInput;
+                    if (isPreview) {
+                        mainInput = (
+                            <Input
+                                disabled    
+                                transparent
+                                className='content-input content-dropdown medication'
+                                value={nums[i]}
+                            />
+                        );
+                    } else {
+                        mainInput = (
                             <Input
                                 transparent
                                 className='content-input content-dropdown medication'
@@ -165,13 +196,19 @@ export default class TableContent extends Component {
                                     className='side-effects'
                                 />
                             </Input>
+                        );
+                    }
+                    titleContent = (
+                        <Form className='inline-form'>
+                            {mainInput}
                             {' for '}
                             <Input
                                 transparent
                                 placeholder={tableBodyPlaceholders[4]}
                                 onChange={this.handleTableBodyChange}
                                 rowindex={i}
-                                value={values[i][tableBodyPlaceholders[4]]}
+                                value={isPreview ? "" : values[i][tableBodyPlaceholders[4]]}
+                                disabled={isPreview}
                             />
                         </Form>
                     );
@@ -220,35 +257,49 @@ export default class TableContent extends Component {
                     // already in accordion title
                     continue;
                 } else if (tableBodyPlaceholders[j] === 'Side Effects') {
-                    contentInputs.push(
-                        <Input key={j} fluid transparent className='content-input content-dropdown'>
-                            <Dropdown
-                                fluid
-                                search
-                                selection
-                                multiple
-                                allowAdditions
-                                icon=''
-                                options={this.state.sideEffectsOptions}
+                    if (isPreview) {
+                        contentInputs.push(
+                            <Input 
+                                fluid 
+                                disabled
+                                transparent 
+                                key={j} 
                                 placeholder={tableBodyPlaceholders[j]}
-                                onChange={this.handleTableBodyChange}
-                                rowindex={i}
-                                value={values[i][tableBodyPlaceholders[j]]}
-                                onAddItem={this.handleAdditionSideEffects}
-                                className='side-effects'
+                                className='content-input content-dropdown'
                             />
-                        </Input>
-                    );
+                        );
+                    } else {
+                        contentInputs.push(
+                            <Input key={j} fluid transparent className='content-input content-dropdown'>
+                                <Dropdown
+                                    fluid
+                                    search
+                                    selection
+                                    multiple
+                                    allowAdditions
+                                    icon=''
+                                    options={this.state.sideEffectsOptions}
+                                    placeholder={tableBodyPlaceholders[j]}
+                                    onChange={this.handleTableBodyChange}
+                                    rowindex={i}
+                                    value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
+                                    onAddItem={this.handleAdditionSideEffects}
+                                    className='side-effects'
+                                />
+                            </Input>
+                        );
+                    }
                 } else {
                     contentInputs.push(
                         <Input
                             key={j}
                             fluid
                             transparent
+                            rowindex={i}
+                            disabled={isPreview}
                             placeholder={tableBodyPlaceholders[j]}
                             onChange={this.handleTableBodyChange}
-                            rowindex={i}
-                            value={values[i][tableBodyPlaceholders[j]]}
+                            value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
                             className='content-input'
                         />
                     );
@@ -274,8 +325,8 @@ export default class TableContent extends Component {
     }
 
     render() {
-        const {values, mobile } = this.props;
-        const nums = Object.keys(values);
+        const {values, mobile, isPreview } = this.props;
+        const nums = isPreview ? values : Object.keys(values);
         const headerRow = this.makeHeader();
         const rows = this.makeTableBodyRows(nums);
         const panels = this.makeAccordionPanels(nums);
@@ -291,7 +342,6 @@ export default class TableContent extends Component {
             <Table
                 celled
                 className='table-display'
-                // fixed={this.props.name==='medication'}
             >
                 <Table.Header content={headerRow} />
                 <Table.Body children={rows} />
@@ -301,10 +351,13 @@ export default class TableContent extends Component {
         return (
             <Fragment>
                 {content}
-                <AddRowButton
-                    onClick={this.addRow}
-                    name={this.props.name}
-                />
+                {!isPreview
+                    &&
+                    <AddRowButton
+                        onClick={this.addRow}
+                        name={this.props.name}
+                    />
+                }
             </Fragment>
         );
     }
