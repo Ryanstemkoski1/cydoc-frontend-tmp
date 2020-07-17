@@ -1,13 +1,13 @@
 import  React from 'react';
 import HPIContext from '../../../../contexts/HPIContext';
-import { Segment } from 'semantic-ui-react'
-
+import { Button, Segment, Table, Label } from 'semantic-ui-react'
 
 // TODO: look into <li> keys -- throws a warning if duplicats, not a huge deal but probably fix
 // TODO: remove all console.log (currently commented out)
+let rich = true;
 class GenerateNote extends React.Component {
 
-    static contextType = HPIContext
+    static contextType = HPIContext;
 
     medicalHistory() {
         const medicalHistory = this.context["Medical History"];
@@ -20,14 +20,37 @@ class GenerateNote extends React.Component {
             }
         }
 
+        if (rich) {
+            return (
+                <Table celled>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Condition</Table.HeaderCell>
+                            <Table.HeaderCell>Onset</Table.HeaderCell>
+                            <Table.HeaderCell>Comments</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                            {Object.keys(conditions).map(key => (
+                                <Table.Row>
+                                    <Table.Cell>{conditions[key].Condition}</Table.Cell>
+                                    <Table.Cell>{conditions[key].Onset ? conditions[key].Onset : null}</Table.Cell>
+                                    <Table.Cell>{conditions[key].Comments ? conditions[key].Comments : null}</Table.Cell>
+                                </Table.Row>
+                            ))}
+                    </Table.Body>
+                </Table>
+            )
+        }
+        
         return (
             <div>
                 {Object.keys(conditions).map(key => (
                     <div>
                        <h4> {conditions[key].Condition} </h4> 
                        <ul>
-                           {conditions[key].Onset ? <li key={key}> Onset: {conditions[key].Onset} </li> : null}
-                           {conditions[key].Comments ? <li key={key}> Comments: {conditions[key].Comments} </li> : null}
+                           {conditions[key].Onset ? <li key={key}>Onset: {conditions[key].Onset}</li> : null}
+                           {conditions[key].Comments ? <li key={key}>Comments: {conditions[key].Comments}</li> : null}
                        </ul>
                     </div>
                 ))}
@@ -35,9 +58,34 @@ class GenerateNote extends React.Component {
         )
     }
 
+    // TODO: if one of the three procuedures is not filled out it makes an empty line
+    // must be getting saved, but also could just add a conditional
     surgicalHistory() {
         const surgicalHistory = this.context["Surgical History"];
         // console.log(surgicalHistory);
+
+        if (rich) {
+            return (
+                <Table>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Procedure</Table.HeaderCell>
+                            <Table.HeaderCell>Date</Table.HeaderCell>
+                            <Table.HeaderCell>Comments</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                    {Object.keys(surgicalHistory).map(key => (
+                        <Table.Row>
+                            <Table.Cell>{surgicalHistory[key].Procedure}</Table.Cell>
+                            <Table.Cell>{surgicalHistory[key].Date ? surgicalHistory[key].Date : null}</Table.Cell>
+                            <Table.Cell>{surgicalHistory[key].Comments ? surgicalHistory[key].Comments : null}</Table.Cell>
+                        </Table.Row>
+                    ))}
+                    </Table.Body>
+                </Table>
+            )
+        }
 
         return (
             <div>
@@ -45,8 +93,8 @@ class GenerateNote extends React.Component {
                     <div>
                         <h4> {surgicalHistory[key].Procedure} </h4>
                         <ul>
-                            {surgicalHistory[key].Date ? <li key={key}> Date: {surgicalHistory[key].Date} </li> : null}
-                            {surgicalHistory[key].Comments ? <li key={key}> Comments: {surgicalHistory[key].Comments} </li> : null}
+                            {surgicalHistory[key].Date ? <li key={key}>Date: {surgicalHistory[key].Date}</li> : null}
+                            {surgicalHistory[key].Comments ? <li key={key}>Comments: {surgicalHistory[key].Comments}</li> : null}
                         </ul>
                     </div>
                 ))}
@@ -58,6 +106,38 @@ class GenerateNote extends React.Component {
         const medications = this.context["Medications"];
         // console.log(medications);
 
+        if (rich) {
+            return (
+                <Table>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Drug Name</Table.HeaderCell>
+                            <Table.HeaderCell>Start Date</Table.HeaderCell>
+                            <Table.HeaderCell>Schedule</Table.HeaderCell>
+                            <Table.HeaderCell>Dose</Table.HeaderCell>
+                            <Table.HeaderCell>Reason for Taking</Table.HeaderCell>
+                            <Table.HeaderCell>Side Effects</Table.HeaderCell>
+                            <Table.HeaderCell>Comments</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {Object.keys(medications).map(key => (
+                            medications[key]['Drug Name'] ?
+                            <Table.Row>
+                                {medications[key]['Drug Name'] ? <Table.Cell>{medications[key]['Drug Name']}</Table.Cell> : null}
+                                {medications[key]['Start Date'] ? <Table.Cell>{medications[key]['Start Date']}</Table.Cell> : null}
+                                {medications[key]['Schedule'] ? <Table.Cell>{medications[key]['Schedule']}</Table.Cell> : null}
+                                {medications[key]['Dose'] ? <Table.Cell>{medications[key]['Dose']}</Table.Cell> : null}
+                                {medications[key]['Reason for Taking'] ? <Table.Cell>{medications[key]['Reason for Taking']}</Table.Cell> : null}
+                                {medications[key]['Side Effects'] ? <Table.Cell>{medications[key]['Side Effects']}</Table.Cell> : null}
+                                {medications[key]['Comments'] ? <Table.Cell>{medications[key]['Comments']}</Table.Cell> : null}
+                            </Table.Row> : null
+                        ))}
+                    </Table.Body>
+                </Table>
+            )
+        }
+
         return (
             <div>
                 {Object.keys(medications).map(key => (
@@ -65,12 +145,12 @@ class GenerateNote extends React.Component {
                     <div>
                         <h4> {medications[key]['Drug Name']} </h4>
                         <ul>
-                            {medications[key]['Start Date'] ? <li key={key}> Start Date: {medications[key]['Start Date']} </li> : null}
-                            {medications[key]['Schedule'] ? <li key={key}> Schedule: {medications[key]['Schedule']} </li> : null}
-                            {medications[key]['Dose'] ? <li key={key}> Dose: {medications[key]['Dose']} </li> : null}
-                            {medications[key]['Reason for Taking'] ? <li key={key}> Reason for Taking: {medications[key]['Reason for Taking']} </li> : null}
-                            {medications[key]['Side Effects'].length > 0 ? <li key={key}> Side Effects: {medications[key]['Side Effects'].join(', ')} </li> : null}
-                            {medications[key]['Comments'] ? <li key={key}> Comments: {medications[key]['Comments']} </li> : null}
+                            {medications[key]['Start Date'] ? <li key={key}>Start Date: {medications[key]['Start Date']}</li> : null}
+                            {medications[key]['Schedule'] ? <li key={key}>Schedule: {medications[key]['Schedule']}</li> : null}
+                            {medications[key]['Dose'] ? <li key={key}>Dose: {medications[key]['Dose']}</li> : null}
+                            {medications[key]['Reason for Taking'] ? <li key={key}>Reason for Taking: {medications[key]['Reason for Taking']}</li> : null}
+                            {medications[key]['Side Effects'].length > 0 ? <li key={key}>Side Effects: {medications[key]['Side Effects'].join(', ')}</li> : null}
+                            {medications[key]['Comments'] ? <li key={key}>Comments: {medications[key]['Comments']}</li> : null}
                         </ul>
                     </div> : null
                 ))}
@@ -81,6 +161,29 @@ class GenerateNote extends React.Component {
     allergies() {
         const allergies = this.context["Allergies"];
         // console.log(allergies);
+
+        if (rich) {
+            return (
+                <Table>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Inciting Agent</Table.HeaderCell>
+                            <Table.HeaderCell>Reaction</Table.HeaderCell>
+                            <Table.HeaderCell>Comments</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {Object.keys(allergies).map(key => (
+                            <Table.Row>
+                                {allergies[key]['Inciting Agent'] ? <Table.Cell>{allergies[key]['Inciting Agent']}</Table.Cell> : null}
+                                {allergies[key]['Reaction'] ? <Table.Cell>{allergies[key]['Reaction']}</Table.Cell> : null}
+                                {allergies[key]['Comments'] ? <Table.Cell>{allergies[key]['Comments']}</Table.Cell> : null}
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
+            )
+        }
 
         return (
             <div>
@@ -99,7 +202,7 @@ class GenerateNote extends React.Component {
 
     socialHistory() {
         const socialHistory = this.context["Social History"];
-        console.log(socialHistory);
+        // console.log(socialHistory);
 
         return (
             <div>
@@ -346,31 +449,43 @@ class GenerateNote extends React.Component {
         )
     }
 
+    // TODO: make this re-render page 
+    changeTextFormat() {
+        rich = !rich;
+    }
+
     render() {
         return (
-            <Segment>
-                <h1> {this.context.title} </h1>
-                <h2> History of Present Illness </h2>
-                <h2> Patient History </h2>
-                    <h3> Medical History </h3>
-                    {this.medicalHistory()}
-                    <h3> Surgical History </h3>
-                    {this.surgicalHistory()}
-                    <h3> Medications </h3>
-                    {this.medications()}
-                    <h3> Allergies </h3>
-                    {this.allergies()}
-                    <h3> Social History </h3>
-                    {this.socialHistory()}
-                    <h3> Family History </h3>
-                    {this.familyHistory()}
-                <h2> Review of Systems </h2>
-                {this.reviewOfSystems()}
-                <h2> Physical Exam </h2>
-                {this.physicalExam()}
-                <h2> Plan </h2>
-                {this.plan()}
-            </Segment>
+            <div>
+                <Button.Group>
+                    <Button onClick={this.changeTextFormat}>Plain Text </Button>
+                    <Button.Or />
+                    <Button onClick={this.changeTextFormat}>Rich Text</Button>
+                </Button.Group>
+                <Segment>
+                    <h1> {this.context.title} </h1>
+                    <h2> History of Present Illness </h2>
+                    <h2> Patient History </h2>
+                        <h3> Medical History </h3>
+                        {this.medicalHistory()}
+                        <h3> Surgical History </h3>
+                        {this.surgicalHistory()}
+                        <h3> Medications </h3>
+                        {this.medications()}
+                        <h3> Allergies </h3>
+                        {this.allergies()}
+                        <h3> Social History </h3>
+                        {this.socialHistory()}
+                        <h3> Family History </h3>
+                        {this.familyHistory()}
+                    <h2> Review of Systems </h2>
+                    {this.reviewOfSystems()}
+                    <h2> Physical Exam </h2>
+                    {this.physicalExam()}
+                    <h2> Plan </h2>
+                    {this.plan()}
+                </Segment>
+            </div>
         )
     }
 }
