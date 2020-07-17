@@ -4,8 +4,16 @@ import { Button, Segment, Table, Label } from 'semantic-ui-react'
 
 // TODO: look into <li> keys -- throws a warning if duplicats, not a huge deal but probably fix
 // TODO: remove all console.log (currently commented out)
-let rich = true;
 class GenerateNote extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            rich: false
+        }
+        this.richText = this.richText.bind(this);
+        this.plainText = this.plainText.bind(this);
+    }
 
     static contextType = HPIContext;
 
@@ -20,7 +28,7 @@ class GenerateNote extends React.Component {
             }
         }
 
-        if (rich) {
+        if (this.state.rich) {
             return (
                 <Table celled>
                     <Table.Header>
@@ -64,7 +72,7 @@ class GenerateNote extends React.Component {
         const surgicalHistory = this.context["Surgical History"];
         // console.log(surgicalHistory);
 
-        if (rich) {
+        if (this.state.rich) {
             return (
                 <Table>
                     <Table.Header>
@@ -106,7 +114,7 @@ class GenerateNote extends React.Component {
         const medications = this.context["Medications"];
         // console.log(medications);
 
-        if (rich) {
+        if (this.state.rich) {
             return (
                 <Table>
                     <Table.Header>
@@ -162,7 +170,8 @@ class GenerateNote extends React.Component {
         const allergies = this.context["Allergies"];
         // console.log(allergies);
 
-        if (rich) {
+        // TODO: fix whatever is going on with allergic reactions
+        if (this.state.rich) {
             return (
                 <Table>
                     <Table.Header>
@@ -301,14 +310,37 @@ class GenerateNote extends React.Component {
         }
         // console.log(components);
 
+        if (this.state.rich) {
+            return (
+                <Table>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>System</Table.HeaderCell>
+                            <Table.HeaderCell>Positive for</Table.HeaderCell>
+                            <Table.HeaderCell>Negative for</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {Object.keys(components).map(key => (
+                            <Table.Row>
+                                <Table.Cell>{key}</Table.Cell>
+                                {components[key].positives.length > 0 ? <Table.Cell>{components[key].positives.join(', ')}</Table.Cell> : null}
+                                {components[key].negatives.length > 0 ? <Table.Cell>{components[key].negatives.join(', ')}</Table.Cell> : null}
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
+            )
+        }
+
         return (
             <div>
                 {Object.keys(components).map(key => (
                     <div>
                         <h4> {key} </h4>
                         <ul>
-                            {components[key].positives.length > 0 ? <li key={key}> Positive for: {components[key].positives.join(', ')} </li> : null}
-                            {components[key].negatives.length > 0 ? <li key={key}> Negative for: {components[key].negatives.join(', ')} </li> : null}
+                            {components[key].positives.length > 0 ? <li key={key}>Positive for: {components[key].positives.join(', ')}</li> : null}
+                            {components[key].negatives.length > 0 ? <li key={key}>Negative for: {components[key].negatives.join(', ')}</li> : null}
                         </ul>
                     </div>
                 ))}
@@ -359,11 +391,35 @@ class GenerateNote extends React.Component {
             }
         }
 
+        // TODO: fix vitals
+        if (this.state.rich) {
+            return (
+                <Table>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Section</Table.HeaderCell>
+                            <Table.HeaderCell>Observations</Table.HeaderCell>
+                            <Table.HeaderCell>Comments</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {Object.keys(components).map(key => (
+                            <Table.Row>
+                                {components[key].active.length > 0 ? <Table.Cell>{key}</Table.Cell> : null}
+                                {components[key].active.length > 0 ? <Table.Cell>{components[key].active.join(', ')}</Table.Cell> : null}
+                                {components[key].comments !== "" ? <Table.Cell>{components[key].comments}</Table.Cell> : null}
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                </Table>
+            )
+        }
+
         return (
             <div>
                 <ul>
                 {Object.keys(components).map(key => (
-                    components[key].active.length > 0 ? <li> <b> {key} </b>: {components[key].active.join(', ')} <ul> {components[key].comments !== "" ? <li> Comments: {components[key].comments} </li> : null} </ul> </li> : null
+                    components[key].active.length > 0 ? <li><b>{key}</b>: {components[key].active.join(', ')} <ul>{components[key].comments !== "" ? <li>Comments: {components[key].comments}</li> : null}</ul></li> : null
                 ))}
                 </ul>
             </div>
@@ -449,18 +505,21 @@ class GenerateNote extends React.Component {
         )
     }
 
-    // TODO: make this re-render page 
-    changeTextFormat() {
-        rich = !rich;
+    richText() {
+        this.setState({rich : true})
+    }
+
+    plainText() {
+        this.setState({rich : false})
     }
 
     render() {
         return (
             <div>
                 <Button.Group>
-                    <Button onClick={this.changeTextFormat}>Plain Text </Button>
+                    <Button onClick={this.plainText}>Plain Text </Button>
                     <Button.Or />
-                    <Button onClick={this.changeTextFormat}>Rich Text</Button>
+                    <Button onClick={this.richText}>Rich Text</Button>
                 </Button.Group>
                 <Segment>
                     <h1> {this.context.title} </h1>
