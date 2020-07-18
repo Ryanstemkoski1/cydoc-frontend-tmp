@@ -13,7 +13,7 @@
              Page
 *******************************/
 
-@import url('https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin');
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,700,400italic,700italic&subset=latin');
 html,
 body {
   height: 100%;
@@ -26,8 +26,8 @@ body {
   padding: 0px;
   overflow-x: hidden;
   min-width: 320px;
-  background: #ECF3F5;
-  font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  background: #EAF3F5;
+  font-family: 'Nunito', Arial, Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.4285em;
   color: #707070;
@@ -44,10 +44,10 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: 'Nunito', Arial, Helvetica, sans-serif;
   line-height: 1.28571429em;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
-  font-weight: normal;
+  font-weight: bold;
   padding: 0em;
 }
 h1 {
@@ -102,11 +102,11 @@ p:last-child {
 --------------------*/
 
 a {
-  color: #707070;
+  color: #4183C4;
   text-decoration: none;
 }
 a:hover {
-  color: #724c4c;
+  color: #1e70bf;
   text-decoration: none;
 }
 

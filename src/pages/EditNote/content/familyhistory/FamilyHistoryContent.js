@@ -6,6 +6,7 @@ import ConditionInput from 'components/tools/ConditionInput.js'
 import {FAMILY_HISTORY_MOBILE_BP} from "constants/breakpoints.js";
 import FamilyHistoryBlock from './FamilyHistoryBlock';
 import AddRowButton from 'components/tools/AddRowButton.js';
+import {Container, Segment} from "semantic-ui-react";
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.
@@ -25,29 +26,32 @@ export default class FamilyHistoryContent extends Component {
         this.addRow = this.addRow.bind(this)
 
         //Checks if all response choices exist and adds new ones
-        const {response_choice} = this.props
-        const values = this.context["Family History"]
-        var conditions = []
-        // Creates list of conditions present in Family History
-        for (var value in values) {
-            conditions.push(values[value]['Condition'].toLowerCase())
-        }
-        for (var response_index in response_choice) {
-            var response = response_choice[response_index]
-            var condition_index = conditions.indexOf(response.toLowerCase())
-            if (condition_index === -1) {
-                var index = (Object.keys(values).length).toString()
-                values[index] = {
-                    "Condition": response,
-                    "Yes": false,
-                    "No": false,
-                    "Family Member": [],
-                    "Cause of Death": [],
-                    "Comments": ""
+        const { response_choice, isPreview } = this.props;
+        if (!isPreview) {
+            const values = this.context["Family History"]
+            var conditions = []
+            // Creates list of conditions present in Family History
+            for (var value in values) {
+                conditions.push(values[value]['Condition'].toLowerCase())
+            }
+            for (var response_index in response_choice) {
+                var response = response_choice[response_index]
+                var condition_index = conditions.indexOf(response.toLowerCase())
+                if (condition_index === -1) {
+                    var index = (Object.keys(values).length).toString()
+                    values[index] = {
+                        "Condition": response,
+                        "Yes": false,
+                        "No": false,
+                        "Family Member": [],
+                        "Cause of Death": [],
+                        "Comments": ""
+                    }
                 }
             }
+            this.context.onContextChange("Family History", values)
         }
-        this.context.onContextChange("Family History", values)
+        
     }
 
     componentDidMount() {
@@ -133,7 +137,7 @@ export default class FamilyHistoryContent extends Component {
 
         return(
             mobile ? 
-                <Fragment>
+                <>
                     <GridContent
                         numColumns={4}
                         contentHeader={<FamilyHistoryContentHeader />} 
@@ -143,11 +147,11 @@ export default class FamilyHistoryContent extends Component {
                         conditions={list_values}
                         mobile={mobile}
                     />
-                </Fragment> : 
-                <Fragment> 
+                </> :
+                <>
                     <div style={{marginTop: 25}}> </div>{listItems}
                     {this.props.fh_pop ? "" : <AddRowButton onClick={this.addRow} name={"family history"} />}
-                </Fragment>
+                </>
         );
     }
 }

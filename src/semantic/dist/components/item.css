@@ -140,8 +140,8 @@
 .ui.items > .item > .content > .header {
   display: inline-block;
   margin: -0.21425em 0em 0em;
-  font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-weight: normal;
+  font-family: 'Nunito', Arial, Helvetica, sans-serif;
+  font-weight: bold;
   color: rgba(0, 0, 0, 0.85);
 }
 
@@ -241,7 +241,7 @@
   color: rgba(0, 0, 0, 0.85);
 }
 .ui.items > .item > .content > a.header:hover {
-  color: #724c4c;
+  color: #1e70bf;
 }
 
 /* Meta */
@@ -452,7 +452,7 @@
 }
 .ui.items a.item:hover .content .header,
 .ui.link.items > .item:hover .content .header {
-  color: #724c4c;
+  color: #1e70bf;
 }
 
 /*--------------

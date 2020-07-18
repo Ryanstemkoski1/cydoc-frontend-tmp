@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import NavMenu from "../../components/navigation/NavMenu";
 import NewTemplateForm from './NewTemplateForm';
-import 'components/navigation/NavMenu.css';
 import './NewTemplate.css';
 
 export default class EditGraph extends Component {

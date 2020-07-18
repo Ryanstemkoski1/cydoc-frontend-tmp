@@ -3,6 +3,7 @@ import { Form, Grid, Input, Button } from "semantic-ui-react";
 import PhysicalExamGroup from './PhysicalExamGroup';
 import constants from 'constants/physical-exam-constants.json'
 import HPIContext from 'contexts/HPIContext.js';
+import Segment from "semantic-ui-react/dist/commonjs/elements/Segment";
 
 //Component that manages content for the Physical Exam tab
 export default class PhysicalExamContent extends React.Component {
@@ -34,13 +35,16 @@ export default class PhysicalExamContent extends React.Component {
 
     renderGroups = (groups) => {
         return groups.map((section) =>
-            <PhysicalExamGroup name={section.name} rows={section.rows} />
+            <Segment>
+                <PhysicalExamGroup name={section.name} rows={section.rows} />
+            </Segment>
         )
     }
 
     render() {
         return (
-            <Fragment>
+            <>
+            <Segment>
                 <Form>
                     <Grid columns="equal">
                         <Grid.Column>
@@ -78,9 +82,11 @@ export default class PhysicalExamContent extends React.Component {
                         </Grid.Column>
                     </Grid>
                 </Form>
-                {this.renderGroups(constants.sections)}
-            </Fragment>
-        )
+            </Segment>
+        {this.renderGroups(constants.sections)}
+        </>
+
+    )
     }
 
 }

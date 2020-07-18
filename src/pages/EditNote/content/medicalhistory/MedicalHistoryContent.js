@@ -15,31 +15,35 @@ export default class MedicalHistoryContent extends React.Component {
     constructor(props, context) {
         super(props, context);
         //Checks if all response choices exist and adds new ones
-        const {response_choice} = this.props
-        const values = this.context["Medical History"]
-        var conditions = []
-        var response_choice_list = []
-        // Creates list of conditions present in Medical History context 
-        for (var value in values) {
-            conditions.push(values[value]['Condition'].toLowerCase())
-        }
-        for (var response_index in response_choice) {
-            var response = response_choice[response_index]
-            var condition_index = conditions.indexOf(response.toLowerCase())
-            if (condition_index === -1) {
-                var condition_index = (Object.keys(values).length).toString()
-                values[condition_index] = {
-                    "index": condition_index,
-                    "Condition": response,
-                    "Yes": false,
-                    "No": false,
-                    "Onset": "",
-                    "Comments": ""
-                }
+        const { response_choice, isPreview } = this.props;
+        const response_choice_list = []
+        if (!isPreview) {
+            const values = this.context["Medical History"]
+            var conditions = []
+            // Creates list of conditions present in Medical History context 
+            for (var value in values) {
+                conditions.push(values[value]['Condition'].toLowerCase())
             }
-            response_choice_list.push(condition_index)
+            for (var response_index in response_choice) {
+                var response = response_choice[response_index]
+                var condition_index = conditions.indexOf(response.toLowerCase())
+                if (condition_index === -1) {
+                    var condition_index = (Object.keys(values).length).toString()
+                    values[condition_index] = {
+                        "index": condition_index,
+                        "Condition": response,
+                        "Yes": false,
+                        "No": false,
+                        "Onset": "",
+                        "Comments": ""
+                    }
+                }
+                response_choice_list.push(condition_index)
+            }
+            
+            this.context.onContextChange("Medical History", values)
+            
         }
-        this.context.onContextChange("Medical History", values)
         this.state = {
             response_choice: response_choice_list
         }

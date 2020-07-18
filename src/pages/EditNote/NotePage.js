@@ -1,12 +1,6 @@
-import React, { Component } from 'react';
-import { Segment, Header } from 'semantic-ui-react';
-import MedicalHistoryContent from "./content/medicalhistory/MedicalHistoryContent";
-import SurgicalHistoryContent from "./content/surgicalhistory/SurgicalHistoryContent";
-import MedicationsContent from "./content/medications/MedicationsContent";
-import AllergiesContent from "./content/allergies/AllergiesContent";
-import FamilyHistoryContent from "./content/familyhistory/FamilyHistoryContent";
+import React, { Component, Fragment } from 'react';
+import { Segment, Header, Container} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import SocialHistoryContent from "./content/socialhistory/SocialHistoryContent";
 import PhysicalExamContent from "./content/physicalexam/PhysicalExamContent";
 import ReviewOfSystemsContent from "./content/reviewofsystems/ReviewOfSystemsContent";
 import HPIContent from "./content/hpi/knowledgegraph/HPIContent";
@@ -47,24 +41,7 @@ export default class NotePage extends Component {
         this.setState({ windowWidth, windowHeight });
     }
 
-    render() {
-        const { windowWidth } = this.state;
 
-        const mobile = windowWidth < NOTE_PAGE_MOBILE_BP;
-        //get content based on which tab is active
-        const tabToDisplay = this.getTabToDisplay(this.props.activeItem);
-
-        return (
-            //Renders a white page that contains the tab name as the header and the
-            //corresponding content to the active tab
-            <Segment className={mobile ? `note-page-container-mobile` : `note-page-container`}>
-                <Header as="h3" textAlign="center">
-                    {this.props.activeItem.toLowerCase()}
-                </Header>
-                {tabToDisplay}
-            </Segment>
-        );
-    }
 
     getTabToDisplay(activeItem) {
         //Instantiates and returns the correct content component based on the active tab
@@ -74,32 +51,14 @@ export default class NotePage extends Component {
             case "HPI":
                 tabToDisplay = (<HPIContent />);
                 break;
-            case "Medical History":
-                tabToDisplay = (<MedicalHistoryContent />);
-                break;
-            case "Surgical History":
-                tabToDisplay = (<SurgicalHistoryContent />);
-                break;
-            case "Medications":
-                tabToDisplay = (<MedicationsContent />);
-                break;
-            case "Allergies":
-                tabToDisplay = (<AllergiesContent />);
-                break;
-            case "Family History":
-                tabToDisplay = (<FamilyHistoryContent />);
-                break;
-            case "Social History":
-                tabToDisplay = (<SocialHistoryContent />);
+            case "Patient History":
+                tabToDisplay = (<PatientHistoryContent />);
                 break;
             case "Physical Exam":
                 tabToDisplay = (<PhysicalExamContent />);
                 break;
             case "Review of Systems":
                 tabToDisplay = (<ReviewOfSystemsContent />);
-                break;
-            case "Patient History":
-                tabToDisplay = (<PatientHistoryContent />);
                 break;
             case "Generate Note":
                 tabToDisplay = (<GenerateNote />);
@@ -112,6 +71,25 @@ export default class NotePage extends Component {
                 break;
         }
         return tabToDisplay;
+    }
+
+    render() {
+        const { windowWidth } = this.state;
+        const mobile = windowWidth < NOTE_PAGE_MOBILE_BP;
+
+        //get content based on which tab is active
+        const tabToDisplay = this.getTabToDisplay(this.props.activeItem);
+
+        return (
+            <>
+            <Container style={{
+                margin: "40px 0 40vh 0",
+            }}>
+                {tabToDisplay}
+            </Container>
+
+            </>
+        );
     }
 
 };

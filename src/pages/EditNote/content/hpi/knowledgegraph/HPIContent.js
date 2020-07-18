@@ -1,14 +1,14 @@
 import React, { Component, Fragment } from 'react';
-import { Menu, Button } from 'semantic-ui-react'
+import { Menu, Button, Segment } from 'semantic-ui-react'
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
 import ButtonItem from "./src/components/ButtonItem.js";
 import disease_abbrevs from "./src/components/data/disease_abbrevs"
 import PositiveDiseases from "./src/components/PositiveDiseases";
 import DiseaseForm from "./src/components/DiseaseForm";
-import API from "./src/API.js";
+import API from "./src/API";
 import HPIContext from 'contexts/HPIContext.js';
-import './hpi.css';
+import './HPI.css';
 import {ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP} from 'constants/breakpoints';
 
 class HPIContent extends Component {
@@ -147,7 +147,8 @@ class HPIContent extends Component {
         switch(step) {
             case 1:
                 return (
-                    <Fragment>
+
+                    <Segment>
                         {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
                         <Masonry
                             className='disease-container'
@@ -168,7 +169,7 @@ class HPIContent extends Component {
                             :
                             <div className='positive-diseases-placeholder' />
                         }
-                    </Fragment>
+                    </Segment>
                     )
             default:
                 if (isLoaded) { 

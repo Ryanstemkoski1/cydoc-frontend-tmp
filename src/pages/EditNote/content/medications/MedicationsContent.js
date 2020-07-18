@@ -8,7 +8,6 @@ export default class MedicationsContent extends Component {
     render() {
         const category = 'Medications';
         const placeholders = medications.fields;
-        
         return (
             <HPIContext.Consumer>
                 {(context) => {

@@ -1,7 +1,4 @@
 import React from 'react'
-import constants from 'constants/constants';
-import { allergies, medications, surgicalHistory, reviewOfSystems } from 'constants/States'
-import peConstants from 'constants/physical-exam-constants'
 import NotesContext from './NotesContext'
 import { noteBody } from 'constants/noteBody.js'
 
@@ -17,49 +14,54 @@ export class HPIStore extends React.Component {
         this.state = {
             title: "Untitled Note",
             _id: null,
+            unsavedChanges: false,
             ...noteBody
         }
     }
 
-
     //Sets context[name] equal to values
     onContextChange = (name, values) => {
-        this.setState({ [name]: values });
+        this.setState(
+            {
+                [name]: values,
+                unsavedChanges: true
+            },
+            () => this.saveNote(true)
+        );
     }
 
     //Saves the current note, which updates the NotesContext's state
-    saveNote = () => {
+    saveNote = (localOnly = false) => {
+        let { title: noteName, _id, unsavedChanges, ...body } = this.state
         let note = {
-            noteName: this.state["title"],
-            _id: this.state._id,
-            body: {
-                "Allergies": this.state["Allergies"],
-                "Medications": this.state["Medications"],
-                "Surgical History": this.state["Surgical History"],
-                "Medical History": this.state["Medical History"],
-                "Family History": this.state["Family History"],
-                "Social History": this.state["Social History"],
-                "Review of Systems": this.state["Review of Systems"],
-                "Physical Exam": this.state["Physical Exam"],
-                "positivediseases": this.state["positivediseases"],
-                "activeHPI": this.state["activeHPI"],
-                "positivecategories": this.state["positivecategories"],
-                hpi: this.state.hpi,
-                "plan": this.state["plan"],
-                step: this.state.step
-            }
+            noteName,
+            _id,
+            unsavedChanges,
+            body
         }
-
-        this.context.updateNote(note)
+        if (localOnly === true) {
+            this.context.updateNoteLocally(note)
+        } else {
+            this.setState({ unsavedChanges: false })
+            this.context.updateNote(note)
+        }
     }
 
     //Converts the schema of the provided note and updates the HPIContext's state
     loadNote = (note) => {
+        this.context.loadNote(note)
         this.setState({
             "title": note.noteName,
             _id: note._id,
+            unsavedChanges: note.unsavedChanges,
             ...note.body
         })
+    }
+
+    //Saves the current note, then loads the provided note.
+    swapNote = (note) => {
+        this.saveNote(true)
+        this.loadNote(note)
     }
 
     //Deletes a note from NotesContext based on the note's id
@@ -74,6 +76,7 @@ export class HPIStore extends React.Component {
                 onContextChange: this.onContextChange,
                 saveNote: this.saveNote,
                 loadNote: this.loadNote,
+                swapNote: this.swapNote,
                 deleteNote: this.deleteNote
             }}>
                 {this.props.children}

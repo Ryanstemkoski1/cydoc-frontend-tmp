@@ -1,14 +1,3 @@
 /*******************************
     User Variable Overrides
 *******************************/
-
-@tabularHorizontalPadding: @relativeSmall;
-
-
-/* Menu */
-@verticalMargin: 0em;
-@verticalBackground: #FFFFFF;
-@activeItemBackground: #6DA3B1;
-@secondaryActiveItemBackground: #6DA3B1;
-@secondaryActiveHoveredItemBackground: #6DA3B1;
-@activeHoveredItemBackground: #6DA3B1;

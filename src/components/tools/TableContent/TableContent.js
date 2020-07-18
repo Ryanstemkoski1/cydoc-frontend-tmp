@@ -114,7 +114,6 @@ export default class TableContent extends Component {
         const { values, tableBodyPlaceholders, name, isPreview } = this.props;
 
         const panels = [];
-
         for (let i = 0; i < nums.length; i++) {
             let titleContent;
             const contentInputs = [];

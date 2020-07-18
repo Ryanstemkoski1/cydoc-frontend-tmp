@@ -253,7 +253,7 @@
   content: 'Ad';
   color: #FFFFFF;
   font-size: 1em;
-  font-weight: normal;
+  font-weight: bold;
 }
 .ui.mobile.test.ad:after {
   font-size: 0.85714286em;
