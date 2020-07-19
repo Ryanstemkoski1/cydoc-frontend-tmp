@@ -2,3 +2,5 @@
     User Variable Overrides
 *******************************/
 
+@placeholderBackground: @lightTeal;
+@borderWidth: 0px;

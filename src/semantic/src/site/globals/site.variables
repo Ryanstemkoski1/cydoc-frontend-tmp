@@ -7,18 +7,18 @@
 @fontName          : 'Nunito';
 @importGoogleFonts: true;
 
-@headerFont     : @fontName, Arial, Helvetica, sans-serif;
+@headerFont     : 'Lato', Arial, Helvetica, sans-serif;
 @pageFont       : @fontName, Arial, Helvetica, sans-serif;
 
 @normal         : normal;
 @bold           : bold;
 
-@red            : #B03060;
+@red            : #db5151;
 @orange         : #FE9A76;
 @yellow         : #FFD700;
 @olive          : #32CD32;
 @green          : #016936;
-@teal           : #00809F;
+@teal           : #007a9a;
 @lightTeal		: #EAF3F5;
 @blue           : #0E6EB8;
 @violet         : #424874;
@@ -62,29 +62,22 @@
     Border Radius
 --------------------*/
 
-/* See Power-user section below
-   for explanation of @px variables
-*/
-/*
+
 @relativeBorderRadius: @relative7px;
 @absoluteBorderRadius: @7px;
-
-@defaultBorderRadius: @absoluteBorderRadius;
-
+@defaultBorderRadius: 0px;
 
 @linkColor           : @textColor;
-*/
+
+
+/*-----------------
+       Shadows
+ ------------------*/
+
+@subtleShadow:
+  0 10px 15px 5px RGBA(0, 128, 159, 0.2);
 
 /*
-
-Shadow
-
-*/
-
-
-/*@subtleShadow:
-  0px 1px 2px 0 @borderColor
-;
 @floatingShadow:
   0px 2px 4px 0px rgba(34, 36, 38, 0.12),
   0px 2px 10px 0px rgba(34, 36, 38, 0.15)
@@ -93,25 +86,9 @@ Shadow
 @floatingShadowHover:
   0px 2px 4px 0px rgba(34, 36, 38, 0.15),
   0px 2px 10px 0px rgba(34, 36, 38, 0.25)
-;*/
-/*
-@subtleShadow:
-  0px 3px 5px 0px @borderColor
 ;
-
-
-@floatingShadow:
-  0px 5px 10px 0px @borderColor,
-  0px 5px 20px 0px @borderColor
-;
-
-@floatingShadowHover:
-	0px 5px 10px 0px @borderColor
-	0px 5px 20px 0px @borderColor
-;
-
-
 */
+
 
 
 

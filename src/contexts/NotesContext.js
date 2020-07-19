@@ -62,13 +62,16 @@ export class NotesStore extends React.Component {
     //Adds a note to state and backend storage
     addNote = async () => {
 
+        let currentTime = Date.now();
+
         let note = {
             noteName: "Untitled Note",
             doctorID: this.context.user._id,
             clinicID: this.context.user.workplace,
+            createdTime: currentTime,
+            modifiedTime: currentTime,
             body: noteBody
         }
-
 
         let response = await client.post("/record/new", note)
 
@@ -81,7 +84,8 @@ export class NotesStore extends React.Component {
             let newNote = response.data
             let prevNotes = new Map(this.state.notes)
             this.setState({ notes: prevNotes.set(newNote._id, newNote) })
-            alert("Create Success")
+            return newNote
+            alert("Create Success");
         } else {
             alert(response.data.Message)
         }
@@ -118,6 +122,10 @@ export class NotesStore extends React.Component {
 
     //Updates a note in state and backend storage
     updateNote = async (note) => {
+
+        console.log("note details");
+        console.log(note);
+
 
         note.doctorID = this.context.user._id
         note.clinicID = this.context.user.workplace

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Grid, Button, Card, Container, Segment, Header} from 'semantic-ui-react';
+import {Grid, Button, Card, Divider, Segment, Header} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import HPIContext from 'contexts/HPIContext.js';
 import './ReviewOfSystems.css';
@@ -25,9 +25,10 @@ export default class ReviewOfSystemsCategory extends Component{
 
     render() {
         return (
-            <Segment raised>
-                <Header>{this.category}</Header>
-                    <Grid>
+            <Segment>
+                <Header as={'h2'}>{this.category}</Header>
+                <Divider />
+                    <Grid padded>
                     {this.options.map((option) => 
                         <Grid.Row key={option}>
                             <Grid.Column width={4} className="no-padding">
