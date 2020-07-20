@@ -113,12 +113,23 @@ class TemplateAnswer extends Component {
                 childId = diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
                 
                 const nodeId = edges[edge].from;
+                let type = nodes[nodeId].responseType;
+                let responseType;
+
+                // convert response type to the human readable version
+                if (type in questionTypes.basic) {
+                    responseType = questionTypes.basic[type];
+                } else {
+                    const advType = type.split("-");
+                    type = advType[0]
+                    responseType = questionTypes.advanced[type];
+                }
                 this.context.state.nodes[childId] = {
+                    responseType,
                     id: childId,
                     text: nodes[nodeId].text,
-                    type: nodes[nodeId].type,
                     order: numQuestions,
-                    answerInfo: this.getAnswerInfo(nodes[nodeId].type),
+                    answerInfo: this.getAnswerInfo(type),
                 }
 
                 this.context.state.edges[numEdges] = {
@@ -163,7 +174,7 @@ class TemplateAnswer extends Component {
         this.context.state.nodes[childId] = {
             id: childId,
             text: '',
-            type: '',
+            responseType: '',
             order: numQuestions,
             answerInfo: {},
         };

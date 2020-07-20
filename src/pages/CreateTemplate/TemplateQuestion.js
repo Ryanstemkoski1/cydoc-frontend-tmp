@@ -4,7 +4,6 @@ import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import TemplateAnswer from './TemplateAnswer';
 import questionTypes from 'constants/questionTypes';
 import './NewTemplate.css';
-import { contextType } from 'react-numeric-input';
 
 let DELETED_IDS = [];
 
@@ -13,8 +12,12 @@ class TemplateQuestion extends Component {
 
     constructor(props, context) {
         super(props, context);
+
+        // Default to showing advanced options if node itself uses one
+        const responseType = this.context.state.nodes[this.props.qId].responseType;
+        const selectedMore = responseType !== '' && !(responseType in questionTypes.basic);
         this.state = {
-            selectedMore: false,
+            selectedMore,
             showDeleteQuestion: false,
             active: false,
         };
@@ -42,7 +45,7 @@ class TemplateQuestion extends Component {
 
     saveQuestionType = (event, { value, qid }) => {
         let context = this.context.state;
-        context.nodes[qid].type = value;
+        context.nodes[qid].responseType = value;
         context.nodes[qid].answerInfo = {};
 
         if (value === questionTypes.basic['YES-NO'] || value === questionTypes.basic['NO-YES']) {
@@ -80,7 +83,7 @@ class TemplateQuestion extends Component {
         const graph = this.context.state.graph;
         const edges = this.context.state.edges;
 
-        if ((nodes[qid].type !== 'Yes/No' && nodes[qid].type !== 'No/Yes') || graph[qid].length === 0) {
+        if ((nodes[qid].responseType !== 'Yes/No' && nodes[qid].responseType !== 'No/Yes') || graph[qid].length === 0) {
             // not Y/N question || Y/N question with no children
             for (let edge in edges) {
                 const eInfo = edges[edge];
@@ -266,7 +269,7 @@ class TemplateQuestion extends Component {
                 qid={qId}
                 direction='left'
                 options={options}
-                value={this.context.state.nodes[qId].type}
+                value={this.context.state.nodes[qId].responseType}
                 onChange={this.saveQuestionType}
             />
         );
@@ -362,7 +365,7 @@ class TemplateQuestion extends Component {
                         {questionTypeOptions}
                         <TemplateAnswer 
                             qId={qId} 
-                            type={this.context.state.nodes[qId].type} 
+                            type={this.context.state.nodes[qId].responseType} 
                             graphData={this.props.graphData}
                             allDiseases={this.props.allDiseases}
                         />

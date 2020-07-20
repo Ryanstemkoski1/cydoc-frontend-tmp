@@ -173,7 +173,7 @@ class NewTemplateForm extends Component {
         this.context.state.nodes[qId] = {
             id: qId,
             text: '',
-            type: '',
+            responseType: '',
             order: numQuestions,
             answerInfo: {},
         };
