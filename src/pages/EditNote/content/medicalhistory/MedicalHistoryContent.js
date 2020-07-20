@@ -85,11 +85,19 @@ export default class MedicalHistoryContent extends React.Component {
     render(){ 
         const mobile = this.props.mobile;
         // The second OR statement gets the list of Conditions in the "Medical History" context
-        let list_values = this.props.response_choice ? this.state.response_choice : (Object.keys(this.context['Medical History'])) || CONDITIONS
+        let list_values;
+        if (this.props.isPreview) {
+            list_values = this.props.values;
+        } else {
+            list_values = this.props.response_choice 
+                ? this.state.response_choice 
+                : (Object.keys(this.context['Medical History'])) || CONDITIONS
+        }
         const rows = this.generateListItems(list_values, mobile); 
 
         return(
             <GridContent
+                isPreview={this.props.isPreview}
                 numColumns={4}
                 contentHeader={<MedicalHistoryContentHeader />}
                 rows={rows}
@@ -102,29 +110,83 @@ export default class MedicalHistoryContent extends React.Component {
     }
 
     generateListItems(conditions, mobile) { 
+        const { isPreview } = this.props;
         return mobile ?
-            conditions.map((condition, index) =>
-            <MedicalHistoryNoteItem
-                key={index}
-                condition={<ConditionInput key={index} index={index}  category={"Medical History"} condition={condition}/>}
-                onset={this.context["Medical History"][index]["Onset"]}
-                comments={this.context["Medical History"][index]["Comments"]}
-                onChange={this.handleChange}
-                onToggleButtonClick={this.handleToggleButtonClick}
-                yesActive={this.context["Medical History"][index]["Yes"]}
-                noActive={this.context["Medical History"][index]["No"]}
-            />) :
-            conditions.map((condition_index, index) =>
-            <MedicalHistoryNoteRow
-                key={condition_index}
-                condition={<ConditionInput key={condition_index} index={condition_index} category={"Medical History"} condition={this.context["Medical History"][condition_index]['Condition']}/>}
-                onset={this.context["Medical History"][condition_index]["Onset"]}
-                comments={this.context["Medical History"][condition_index]["Comments"]}
-                onChange={this.handleChange}
-                onToggleButtonClick={this.handleToggleButtonClick}
-                yesActive={this.context["Medical History"][condition_index]["Yes"]}
-                noActive={this.context["Medical History"][condition_index]["No"]}
-            />);
+            conditions.map((condition, index) => {
+                if (isPreview) {
+                    return (
+                        <MedicalHistoryNoteItem
+                            key={index}
+                            isPreview={isPreview}
+                            condition={<ConditionInput 
+                                key={index} 
+                                index={index}
+                                category={"Medical History"}
+                                isPreview={isPreview}
+                                condition={condition}/>}
+                            onset={''}
+                            comments={''}
+                            onChange={() => {}}
+                            onToggleButtonClick={() => {}}
+                            yesActive={false}
+                            noActive={false}
+                        />
+                    );
+                } else {
+                    return (
+                        <MedicalHistoryNoteItem
+                            key={index}
+                            condition={<ConditionInput 
+                                key={index} 
+                                index={index}
+                                category={"Medical History"}
+                                condition={condition}/>}
+                            onset={this.context["Medical History"][index]["Onset"]}
+                            comments={this.context["Medical History"][index]["Comments"]}
+                            onChange={this.handleChange}
+                            onToggleButtonClick={this.handleToggleButtonClick}
+                            yesActive={this.context["Medical History"][index]["Yes"]}
+                            noActive={this.context["Medical History"][index]["No"]}
+                        />
+                    );
+                }
+            }) :
+            conditions.map((condition_index, index) => {
+                if (isPreview) {
+                    return (
+                        <MedicalHistoryNoteRow
+                            key={index}
+                            isPreview={isPreview}
+                            condition={<ConditionInput 
+                                key={index} 
+                                isPreview={isPreview}
+                                index={condition_index} 
+                                category={"Medical History"} 
+                                condition={condition_index}
+                            />}
+                            onset={''}
+                            comments={''}
+                            onChange={() => {}}
+                            onToggleButtonClick={() => {}}
+                            yesActive={false}
+                            noActive={false}
+                        />
+                    )
+                } else {
+                    return (
+                        <MedicalHistoryNoteRow
+                            key={index}
+                            condition={<ConditionInput key={index} index={condition_index} category={"Medical History"} condition={this.context["Medical History"][condition_index]['Condition']}/>}
+                            onset={this.context["Medical History"][condition_index]["Onset"]}
+                            comments={this.context["Medical History"][condition_index]["Comments"]}
+                            onChange={this.handleChange}
+                            onToggleButtonClick={this.handleToggleButtonClick}
+                            yesActive={this.context["Medical History"][condition_index]["Yes"]}
+                            noActive={this.context["Medical History"][condition_index]["No"]}
+                        />
+                    )
+                }
+            });
     }
 }
 
