@@ -302,6 +302,10 @@ class TemplateQuestion extends Component {
         const { qId } = this.props;
         const { showChangeQuestion, showDeleteQuestion, active } = this.state;
 
+        if (!(qId in this.context.state.nodes)) {
+            return <Fragment></Fragment>
+        }
+
         const questionTypeOptions = this.getQuestionTypes();
         const curIcon = active ? 'chevron down' : 'chevron right';
 
