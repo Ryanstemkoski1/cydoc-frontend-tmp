@@ -106,6 +106,20 @@ class TemplateAnswer extends Component {
 
         const id = diseaseCodes[otherGraph] + '0001';
         if (id in graph) {
+            // sort edges by the node's question order
+            graph[id].sort((a, b) => {
+                const nodeA = parseFloat(nodes[edges[a].from].questionOrder);
+                const nodeB = parseFloat(nodes[edges[b].from].questionOrder);
+                
+                if (nodeA < nodeB) {
+                    return -1;
+                } else if (nodeA > nodeB) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+
             // create edges and nodes for every new question
             for (let edge of graph[id]) {
                 randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
@@ -124,12 +138,35 @@ class TemplateAnswer extends Component {
                     type = advType[0]
                     responseType = questionTypes.advanced[type];
                 }
+
+                // preprocess the text to prepopulate the answerinfo if necessary
+                let text = nodes[nodeId].text;
+                let answerInfo = this.getAnswerInfo(type);
+                
+                if (type === 'CLICK-BOXES' || nodes[nodeId].responseType.slice(-3, responseType.length) === 'POP' || responseType === 'nan') {
+                    let click = text.search('CLICK');
+                    let selectStart = text.search('\\[');
+                    let selectEnd = text.search('\\]');
+                    let choices;
+                    if (click > -1) { // options are indicated by CLICK[...]
+                        choices = text.slice(click + 6, selectEnd);
+                        text = text.slice(0, click);
+                    } else { // options are indicated by [...]
+                        if (selectStart > 0) {
+                            choices = text.slice(selectStart + 1, selectEnd);
+                            text = text.slice(0, selectStart);
+                        }
+                    }
+                    choices = choices.split(",").map(response => response.trim());
+                    answerInfo.options = choices;
+                }
+
                 this.context.state.nodes[childId] = {
+                    text,
+                    answerInfo,
                     responseType,
                     id: childId,
-                    text: nodes[nodeId].text,
                     order: numQuestions,
-                    answerInfo: this.getAnswerInfo(type),
                 }
 
                 this.context.state.edges[numEdges] = {
