@@ -91,6 +91,9 @@ class TemplateAnswer extends Component {
         }
     }
 
+    /**
+     * Imports top level questions from selected `otherGraph`
+     */
     connectGraph = (e, { parent }) => {
         let numQuestions = this.context.state.numQuestions;
         let numEdges = this.context.state.numQuestions;

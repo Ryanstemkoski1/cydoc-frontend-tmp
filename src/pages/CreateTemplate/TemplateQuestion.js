@@ -19,6 +19,7 @@ class TemplateQuestion extends Component {
         this.state = {
             selectedMore,
             showDeleteQuestion: false,
+            showChangeQuestion: false,
             active: false,
         };
         this.changeActive = this.changeActive.bind(this);
@@ -45,6 +46,16 @@ class TemplateQuestion extends Component {
 
     saveQuestionType = (event, { value, qid }) => {
         let context = this.context.state;
+        
+        // questions with children questions can NOT be converted
+        // to something other than yes/no.  Raise a message instead.
+        if (value !== questionTypes.basic['YES-NO'] 
+            && value !== questionTypes.basic['NO-YES']
+            && context.graph[qid].length > 0) {
+            this.setState({ showChangeQuestion: true });
+            return;
+        }
+
         context.nodes[qid].responseType = value;
         context.nodes[qid].answerInfo = {};
 
@@ -289,7 +300,7 @@ class TemplateQuestion extends Component {
 
     render() {
         const { qId } = this.props;
-        const { showDeleteQuestion, active } = this.state;
+        const { showChangeQuestion, showDeleteQuestion, active } = this.state;
 
         const questionTypeOptions = this.getQuestionTypes();
         const curIcon = active ? 'chevron down' : 'chevron right';
@@ -329,7 +340,7 @@ class TemplateQuestion extends Component {
                 active: active,
                 content: (
                     <div className='question-content'>
-                        {showDeleteQuestion ? 
+                        {showDeleteQuestion &&
                             <Fragment>
                                 <Message
                                     compact
@@ -359,9 +370,22 @@ class TemplateQuestion extends Component {
                                 />
                                 <br />
                             </Fragment>
-                            :
-                            <Fragment />
+                        } 
+                        {showChangeQuestion &&
+                            <Fragment>
+                            <Message
+                                compact
+                                negative
+                                header="Only Yes/No and No/Yes questions can have follow-up questions."
+                                onDismiss={() => this.setState({ showChangeQuestion: false })}
+                                content="Alternatively, you may
+                                        delete this question and create a new question of the desired type,
+                                        or move the follow-up questions to a different level before proceeding."
+                            />
+                            <br />
+                        </Fragment>
                         }
+
                         {questionTypeOptions}
                         <TemplateAnswer 
                             qId={qId} 
