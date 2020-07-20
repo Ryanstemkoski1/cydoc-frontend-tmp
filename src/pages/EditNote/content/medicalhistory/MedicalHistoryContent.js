@@ -140,7 +140,7 @@ export default class MedicalHistoryContent extends React.Component {
                                 key={index} 
                                 index={index}
                                 category={"Medical History"}
-                                condition={condition}/>}
+                                condition={this.context["Medical History"][condition]['Condition']}/>}
                             onset={this.context["Medical History"][index]["Onset"]}
                             comments={this.context["Medical History"][index]["Comments"]}
                             onChange={this.handleChange}
@@ -176,7 +176,12 @@ export default class MedicalHistoryContent extends React.Component {
                     return (
                         <MedicalHistoryNoteRow
                             key={index}
-                            condition={<ConditionInput key={index} index={condition_index} category={"Medical History"} condition={this.context["Medical History"][condition_index]['Condition']}/>}
+                            condition={<ConditionInput 
+                                key={index} 
+                                index={condition_index} 
+                                category={"Medical History"} 
+                                condition={this.context["Medical History"][condition_index]['Condition']}
+                            />}
                             onset={this.context["Medical History"][condition_index]["Onset"]}
                             comments={this.context["Medical History"][condition_index]["Comments"]}
                             onChange={this.handleChange}
