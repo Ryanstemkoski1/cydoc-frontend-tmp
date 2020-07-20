@@ -7,11 +7,16 @@ class ConditionInput extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        const condition = this.context[this.props.category][this.props.index]['Condition'];
-        const answer = condition.length === 0 ? '' : condition;
+        let answer;
+        let isTitleFocused = false;
+        if (!this.props.isPreview) {
+            const condition = this.context[this.props.category][this.props.index]['Condition'];
+            answer = condition.length === 0 ? '' : condition;
+            isTitleFocused = condition.length === 0;
+        }
         this.state = {
             textInput: answer,
-            isTitleFocused: condition.length === 0
+            isTitleFocused,
         };
         this.handleInputChange = this.handleInputChange.bind(this);
     }
@@ -29,13 +34,14 @@ class ConditionInput extends React.Component {
     render() {
         return(
             <Input
+                disabled={this.props.isPreview}
                 className={this.state.isTitleFocused === true ? 'ui input focus' : 'ui input transparent'}
                 type='text'
                 placeholder='Condition'
                 onChange={this.handleInputChange}
                 onFocus={()=>{this.setState({isTitleFocused: true})}}
                 onBlur={()=>{this.setState({isTitleFocused: false})}}
-                value={this.state.textInput} 
+                value={this.props.isPreview ? this.props.condition : this.state.textInput} 
             />
         )
         }
