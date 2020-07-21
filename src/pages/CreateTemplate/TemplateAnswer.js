@@ -81,10 +81,10 @@ class TemplateAnswer extends Component {
                 startResponse: '',
                 endResponse: '',
             }
-        } else if (type === 'FH'
-        || type === 'PMH'
-        || type === 'PSH'
-        || type === 'MEDS') {
+        } else if (type.startsWith('FH')
+        || type.startsWith('PMH')
+        || type.startsWith('PSH')
+        || type.startsWith('MEDS')) {
             return {
                 options: ['', '', ''],
             }
@@ -296,7 +296,9 @@ class TemplateAnswer extends Component {
         const { type } = this.props;
         let optionsText;
 
-        switch(type) {
+        let responseType = type.split("-")[0];
+
+        switch(responseType) {
             case questionTypes.basic['CLICK-BOXES']: {
                 optionsText = 'Button options:';
                 break;
@@ -332,8 +334,9 @@ class TemplateAnswer extends Component {
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
 
         let preview;
+        const responseType = type.split('-')[0];
         const values = nodes[this.props.qId].answerInfo.options;
-        if (type === questionTypes.advanced["FH"]) {
+        if (responseType === questionTypes.advanced["FH"]) {
             preview = (
                 <FamilyHistoryContent 
                     isPreview={true}
@@ -341,7 +344,7 @@ class TemplateAnswer extends Component {
                     values={values}
                 />
             );
-        } else if (type === questionTypes.advanced["MEDS"]) {
+        } else if (responseType === questionTypes.advanced["MEDS"]) {
             preview = (
                 <MedicationsContent 
                     isPreview={true}
@@ -349,7 +352,7 @@ class TemplateAnswer extends Component {
                     values={values}
                 />
             );
-        } else if (type === questionTypes.advanced["PMH"]) {
+        } else if (responseType === questionTypes.advanced["PMH"]) {
             preview = (
                 <MedicalHistoryContent 
                     isPreview={true}
@@ -357,7 +360,7 @@ class TemplateAnswer extends Component {
                     values={values}
                 />
             );
-        } else if (type === questionTypes.advanced["PSH"]) {
+        } else if (responseType === questionTypes.advanced["PSH"]) {
             preview = (
                 <SurgicalHistoryContent 
                     isPreview={true}
@@ -544,10 +547,10 @@ class TemplateAnswer extends Component {
                     />
                 </Segment>
             );
-        } else if(type === questionTypes.advanced['FH']
-        || type === questionTypes.advanced['PMH']
-        || type === questionTypes.advanced['PSH']
-        || type === questionTypes.advanced['MEDS']) {
+        } else if(type.startsWith( questionTypes.advanced['FH'])
+        || type.startsWith( questionTypes.advanced['PMH'])
+        || type.startsWith( questionTypes.advanced['PSH'])
+        || type.startsWith( questionTypes.advanced['MEDS'])) {
             const options = [];
             for (let i = 0; i < this.context.state.nodes[qId].answerInfo.options.length; i++) {
                 options.push(
@@ -596,7 +599,9 @@ class TemplateAnswer extends Component {
                         onClick={this.togglePreviewTable}
                         className='preview-table-btn'
                     />
-                    {preview}
+                    <span className='preview'>
+                       {preview}
+                    </span>
                 </Segment>
             );
         } else {
