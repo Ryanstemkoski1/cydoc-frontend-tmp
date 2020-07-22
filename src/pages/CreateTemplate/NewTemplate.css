@@ -114,6 +114,7 @@
   margin-top: .5rem;
 }
 
+.choose-yes-no,
 .add-child-question {
   margin: 0 0 1rem 3rem;
 }
@@ -231,3 +232,14 @@
 .preview .content-input.disabled {
   opacity: 1 !important;
 }
+
+.choose-yes-no {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.choose-yes-no > p,
+.choose-yes-no > .radio {
+  margin-left: 1rem;
+}
+

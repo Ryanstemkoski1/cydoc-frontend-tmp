@@ -277,8 +277,6 @@ class TemplateQuestion extends Component {
             responseType = responseType.split('-')[0];
         }
 
-        console.log(responseType);
-
         return (
             <Dropdown
                 search

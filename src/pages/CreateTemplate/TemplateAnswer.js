@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Segment, Button, Dropdown, Icon } from 'semantic-ui-react';
+import { Input, Segment, Button, Dropdown, Icon, Radio } from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import questionTypes from 'constants/questionTypes';
 import diseaseCodes from 'constants/diseaseCodes';
@@ -402,8 +402,16 @@ class TemplateAnswer extends Component {
         return preview;
     }
 
+    changeFollowupType = (e, { value }) => {
+        const { qId } = this.props;
+        const nodes = { ...this.context.state.nodes };
+        nodes[qId].responseType = value;
+        this.context.onContextChange('nodes', nodes);
+    }
+
     getAnswerTemplate(startEg, endEg, optionsText) {
         const { qId, type } = this.props;
+        const { graph, nodes } = this.context.state;
         let template;
         let otherGraphs;
 
@@ -490,6 +498,28 @@ class TemplateAnswer extends Component {
                         />
                         {otherGraphs}
                     </div>
+                    { graph[qId].length > 0
+                        && (
+                            <div className='choose-yes-no'>
+                                <p>
+                                    Ask followup questions if answered:
+                                </p>
+                                <Radio 
+                                    label='Yes' 
+                                    value='YES-NO'
+                                    checked={nodes[qId].responseType === 'YES-NO'} 
+                                    onChange={this.changeFollowupType}
+                                />
+                                <Radio 
+                                    label='No' 
+                                    value='NO-YES'
+                                    checked={nodes[qId].responseType === 'NO-YES'}
+                                    onChange={this.changeFollowupType}
+                                />
+                            </div>
+                        )
+
+                    }
                 </Segment>
             );
         } else if (type === 'SHORT-TEXT'
