@@ -241,14 +241,31 @@ class TemplateAnswer extends Component {
 
     addButtonOption = (event) => {
         const { qId } = this.props;
-        this.context.state.nodes[qId].answerInfo.options.push('');
-        this.context.onContextChange('nodes', this.context.state.nodes);
+        const nodes = { ...this.context.state.nodes };
+        nodes[qId].answerInfo.options.push('');
+        
+        // update response type from BLANK -> POP
+        if (nodes[qId].responseType.endsWith("BLANK")) {
+            const prefix = nodes[qId].responseType.split("-")[0];
+            nodes[qId].responseType = prefix + '-POP';
+        }
+
+        this.context.onContextChange('nodes', nodes);
     }
 
     removeButtonOption = (event, { index }) => {
         const { qId } = this.props;
-        this.context.state.nodes[qId].answerInfo.options.splice(index, 1);
-        this.context.onContextChange('nodes', this.context.state.nodes);
+        const nodes = { ...this.context.state.nodes };
+        nodes[qId].answerInfo.options.splice(index, 1);
+
+        // update response type from POP -> BLANK
+        if (nodes[qId].answerInfo.options.length === 0 
+            && nodes[qId].responseType.endsWith('POP')) {
+            const prefix = nodes[qId].responseType.split("-")[0];
+            nodes[qId].responseType = prefix + "-BLANK";
+        }
+
+        this.context.onContextChange('nodes', nodes);
     }
 
     getExampleTexts() {
