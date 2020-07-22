@@ -86,7 +86,7 @@ class TemplateAnswer extends Component {
         || type.startsWith('PSH')
         || type.startsWith('MEDS')) {
             return {
-                options: ['', '', ''],
+                options: [],
             }
         }
     }
@@ -258,26 +258,26 @@ class TemplateAnswer extends Component {
         let endEg;
 
         switch (type) {
-            case questionTypes.basic['SHORT-TEXT']: {
+            case 'SHORT-TEXT': {
                 startEg = 'e.g. The pain is located in the';
                 break;
             }
-            case questionTypes.basic['NUMBER']: {
+            case 'NUMBER': {
                 startEg = 'e.g. The patient rates the pain at';
                 endEg = 'e.g. out of 10.';
                 break;
             }
-            case questionTypes.basic['TIME']: {
+            case 'TIME': {
                 startEg = 'e.g. The pain started';
                 endEg = 'e.g. ago.';
                 break;   
             }
-            case questionTypes.basic['LIST-TEXT']: {
+            case 'LIST-TEXT': {
                 startEg = 'e.g. The patient visited';
                 endEg = 'e.g. while traveling.';
                 break;
             }
-            case questionTypes.basic['CLICK-BOXES']: {
+            case 'CLICK-BOXES': {
                 startEg = 'e.g. The patient has had a(n)';
                 endEg = 'e.g. exam this year.';
                 break;
@@ -295,27 +295,29 @@ class TemplateAnswer extends Component {
     getOptionsText() {
         const { type } = this.props;
         let optionsText;
-
         let responseType = type.split("-")[0];
+        if (!(responseType in questionTypes.advanced)) {
+            responseType = type;
+        }
 
         switch(responseType) {
-            case questionTypes.basic['CLICK-BOXES']: {
+            case 'CLICK-BOXES': {
                 optionsText = 'Button options:';
                 break;
             }
-            case questionTypes.advanced['FH']: {
+            case 'FH': {
                 optionsText = 'Family history options:';
                 break;
             }
-            case questionTypes.advanced['PMH']: {
+            case 'PMH': {
                 optionsText = 'Past medical history options:';
                 break;
             }
-            case questionTypes.advanced['MEDS']: {
+            case 'MEDS': {
                 optionsText = 'Medications options:';
                 break;
             }
-            case questionTypes.advanced['PSH']: {
+            case 'PSH': {
                 optionsText = 'Past surgical history options:';
                 break;
             }
@@ -335,39 +337,50 @@ class TemplateAnswer extends Component {
 
         let preview;
         const responseType = type.split('-')[0];
+        if (!(responseType in questionTypes.advanced)) {
+            responseType = type;
+        }
+
         const values = nodes[this.props.qId].answerInfo.options;
-        if (responseType === questionTypes.advanced["FH"]) {
-            preview = (
-                <FamilyHistoryContent 
-                    isPreview={true}
-                    mobile={collapseTabs}
-                    values={values}
-                />
-            );
-        } else if (responseType === questionTypes.advanced["MEDS"]) {
-            preview = (
-                <MedicationsContent 
-                    isPreview={true}
-                    mobile={collapseTabs}
-                    values={values}
-                />
-            );
-        } else if (responseType === questionTypes.advanced["PMH"]) {
-            preview = (
-                <MedicalHistoryContent 
-                    isPreview={true}
-                    mobile={collapseTabs}
-                    values={values}
-                />
-            );
-        } else if (responseType === questionTypes.advanced["PSH"]) {
-            preview = (
-                <SurgicalHistoryContent 
-                    isPreview={true}
-                    mobile={collapseTabs}
-                    values={values}
-                />
-            );
+        switch (responseType) {
+            case "FH":
+                preview = (
+                    <FamilyHistoryContent 
+                        isPreview={true}
+                        mobile={collapseTabs}
+                        values={values}
+                    />
+                );
+                break;
+            case "MEDS":
+                preview = (
+                    <MedicationsContent 
+                        isPreview={true}
+                        mobile={collapseTabs}
+                        values={values}
+                    />
+                );
+                break;
+            case "PMH":
+                preview = (
+                    <MedicalHistoryContent 
+                        isPreview={true}
+                        mobile={collapseTabs}
+                        values={values}
+                    />
+                );
+                break;
+            case "PSH":
+                preview = (
+                    <SurgicalHistoryContent 
+                        isPreview={true}
+                        mobile={collapseTabs}
+                        values={values}
+                    />
+                );
+                break;
+            default:
+                break;
         }
         return preview;
     }
@@ -377,9 +390,7 @@ class TemplateAnswer extends Component {
         let template;
         let otherGraphs;
 
-        if (type === questionTypes.basic['YES-NO']
-        || type === questionTypes.basic['NO-YES']
-        ) {
+        if (type === 'YES-NO'|| type === 'NO-YES') {
             if (this.state.showOtherGraphs) {
                 const options = this.props.allDiseases.map((disease) => (
                     {
@@ -427,11 +438,10 @@ class TemplateAnswer extends Component {
                     />
                 );
             }
-            const order = type === questionTypes.basic['YES-NO'] ? ['yes', 'no'] : ['no', 'yes'];
 
             template = (
                 <Segment className='yes-no-answer'>
-                    { order.map((type, idx) => {
+                    { ['yes', 'no'].map((type, idx) => {
                         const answer = type + "Response";
                         const action = type === "yes" ? "has" : "does not have";
                         
@@ -465,10 +475,10 @@ class TemplateAnswer extends Component {
                     </div>
                 </Segment>
             );
-        } else if (type === questionTypes.basic['SHORT-TEXT']
-        || type === questionTypes.basic['NUMBER']
-        || type === questionTypes.basic['TIME']
-        || type === questionTypes.basic['LIST-TEXT']) {
+        } else if (type === 'SHORT-TEXT'
+        || type === 'NUMBER'
+        || type === 'TIME'
+        || type === 'LIST-TEXT') {
             template = (
                 <Segment className='yes-no-answer'>
                     <Input
@@ -490,7 +500,7 @@ class TemplateAnswer extends Component {
                     />
                 </Segment>
             );
-        } else if (type === questionTypes.basic['CLICK-BOXES']) {
+        } else if (type === 'CLICK-BOXES') {
             const options = [];
             for (let i = 0; i < this.context.state.nodes[qId].answerInfo.options.length; i++) {
                 options.push(
@@ -547,10 +557,10 @@ class TemplateAnswer extends Component {
                     />
                 </Segment>
             );
-        } else if(type.startsWith( questionTypes.advanced['FH'])
-        || type.startsWith( questionTypes.advanced['PMH'])
-        || type.startsWith( questionTypes.advanced['PSH'])
-        || type.startsWith( questionTypes.advanced['MEDS'])) {
+        } else if (type.startsWith('FH')
+        || type.startsWith('PMH')
+        || type.startsWith('PSH')
+        || type.startsWith('MEDS')) {
             const options = [];
             for (let i = 0; i < this.context.state.nodes[qId].answerInfo.options.length; i++) {
                 options.push(

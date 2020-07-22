@@ -1,7 +1,6 @@
 const questionTypes = {
     basic: {
         'YES-NO': 'Yes/No',
-        'NO-YES': 'No/Yes',
         'SHORT-TEXT': 'Short Text',
         'NUMBER': 'Number',
         'CLICK-BOXES': 'Buttons',
@@ -9,10 +8,10 @@ const questionTypes = {
         'LIST-TEXT': 'List',
     },
     advanced: {
-        'FH': 'Family History',
-        'PMH': 'Past Medical History',
+        'FH': 'Family history',
+        'PMH': 'Past medical history',
         'MEDS': 'Medications',
-        'PSH': 'Past Surgical History',
+        'PSH': 'Past surgical history',
     },
 }
 

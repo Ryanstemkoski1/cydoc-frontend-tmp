@@ -49,9 +49,7 @@ class TemplateQuestion extends Component {
         
         // questions with children questions can NOT be converted
         // to something other than yes/no.  Raise a message instead.
-        if (value !== questionTypes.basic['YES-NO'] 
-            && value !== questionTypes.basic['NO-YES']
-            && context.graph[qid].length > 0) {
+        if (value !== 'YES-NO' && context.graph[qid].length > 0) {
             this.setState({ showChangeQuestion: true });
             return;
         }
@@ -59,32 +57,33 @@ class TemplateQuestion extends Component {
         context.nodes[qid].responseType = value;
         context.nodes[qid].answerInfo = {};
 
-        if (value === questionTypes.basic['YES-NO'] || value === questionTypes.basic['NO-YES']) {
+        if (value === 'YES-NO' || value === 'NO-YES') {
             context.nodes[qid].answerInfo = {
                 yesResponse: '',
                 noResponse: '',
             };
-        } else if (value === questionTypes.basic['SHORT-TEXT']
-        || value === questionTypes.basic['NUMBER']
-        || value === questionTypes.basic['TIME']
-        || value === questionTypes.basic['LIST-TEXT']) {
+        } else if (value === 'SHORT-TEXT'
+        || value === 'NUMBER'
+        || value === 'TIME'
+        || value === 'LIST-TEXT') {
             context.nodes[qid].answerInfo = {
                 startResponse: '',
                 endResponse: '',
             };
-        } else if (value === questionTypes.basic['CLICK-BOXES']) {
+        } else if (value === 'CLICK-BOXES') {
             context.nodes[qid].answerInfo = {
                 options: ['', '', ''],
                 startResponse: '',
                 endResponse: '',
             };
-        } else if (value.startsWith(questionTypes.advanced['FH'])
-        || value.startsWith( questionTypes.advanced['PMH'])
-        || value.startsWith( questionTypes.advanced['PSH'])
-        || value.startsWith( questionTypes.advanced['MEDS'])) {
+        } else if (value === 'FH'
+        || value === 'PMH'
+        || value === 'PSH'
+        || value === 'MEDS') {
             context.nodes[qid].answerInfo = {
-                options: ['', '', ''],
+                options: [],
             };
+            context.nodes[qid].responseType = value + '-BLANK';
         }
         this.context.onContextChange('nodes', context.nodes);
     }
@@ -94,7 +93,7 @@ class TemplateQuestion extends Component {
         const graph = this.context.state.graph;
         const edges = this.context.state.edges;
 
-        if ((nodes[qid].responseType !== 'Yes/No' && nodes[qid].responseType !== 'No/Yes') || graph[qid].length === 0) {
+        if ((nodes[qid].responseType !== 'YES-NO' && nodes[qid].responseType !== 'NO-YES') || graph[qid].length === 0) {
             // not Y/N question || Y/N question with no children
             for (let edge in edges) {
                 const eInfo = edges[edge];
@@ -239,12 +238,12 @@ class TemplateQuestion extends Component {
             basicTypes.push({
                 key: questionTypes.basic[qType],
                 text: questionTypes.basic[qType],
-                value: questionTypes.basic[qType],
+                value: qType,
             });
             allTypes.push({
                 key: questionTypes.basic[qType],
                 text: questionTypes.basic[qType],
-                value: questionTypes.basic[qType],
+                value: qType,
             });
         }
 
@@ -252,7 +251,7 @@ class TemplateQuestion extends Component {
             allTypes.push({
                 key: questionTypes.advanced[qType],
                 text: questionTypes.advanced[qType],
-                value: questionTypes.advanced[qType],
+                value: qType,
             });
         }
 
@@ -271,6 +270,14 @@ class TemplateQuestion extends Component {
         })
 
         options = this.state.selectedMore ? allTypes : basicTypes;
+        let responseType = this.context.state.nodes[qId].responseType;
+        if (responseType === 'NO-YES') {
+            responseType = 'YES-NO';
+        } else if (responseType.endsWith('POP') || responseType.endsWith('BLANK')) {
+            responseType = responseType.split('-')[0];
+        }
+
+        console.log(responseType);
 
         return (
             <Dropdown
@@ -280,7 +287,7 @@ class TemplateQuestion extends Component {
                 qid={qId}
                 direction='left'
                 options={options}
-                value={this.context.state.nodes[qId].responseType}
+                value={responseType}
                 onChange={this.saveQuestionType}
             />
         );
