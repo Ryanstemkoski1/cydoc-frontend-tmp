@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Segment, Button, Dropdown, Icon, Radio } from 'semantic-ui-react';
+import { Input, Segment, Button, Dropdown, Divider, Popup } from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import questionTypes from 'constants/questionTypes';
 import diseaseCodes from 'constants/diseaseCodes';
@@ -436,13 +436,37 @@ class TemplateAnswer extends Component {
                             onChange={this.saveGraphType}
                             value={this.state.otherGraph}
                         />
-                        <Button 
-                            basic
-                            icon='arrow right'
-                            parent={qId}
-                            disabled={this.state.otherGraph === null}
-                            onClick={this.connectGraph}
-                            className='connect-button'
+                        <Popup
+                            on='click'
+                            trigger={
+                                <Button 
+                                    basic
+                                    icon='arrow right'
+                                    circular
+                                    disabled={this.state.otherGraph === null}
+                                    className='connect-button'
+                                />
+                            }
+                            content={
+                                <Button.Group vertical className='connect-graph-btns'>
+                                    <Button
+                                        basic
+                                        fluid
+                                        parent={qId}
+                                        onClick={this.connectGraph}
+                                    >
+                                        Connect to root
+                                    </Button>
+                                    <Divider fitted/>
+                                    <Button
+                                        basic
+                                        fluid
+                                        parent={qId}
+                                    >
+                                        Connect select questions
+                                    </Button>
+                                </Button.Group>
+                            }
                         />
                         <Button 
                             basic
@@ -502,7 +526,7 @@ class TemplateAnswer extends Component {
                         && (
                             <div className='choose-yes-no'>
                                 <p>
-                                    If the patient answers
+                                    Ask the follow-up questions if the patient answers
                                 </p>
                                 <Button 
                                     value='YES-NO'
@@ -518,9 +542,6 @@ class TemplateAnswer extends Component {
                                     onClick={this.changeFollowupType}
                                     color={nodes[qId].responseType === 'NO-YES' ? 'violet' : 'grey'}
                                 />
-                                <p>
-                                    then ask the follow-up questions
-                                </p>
                             </div>
                         )
 
