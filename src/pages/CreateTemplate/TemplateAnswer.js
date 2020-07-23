@@ -502,20 +502,25 @@ class TemplateAnswer extends Component {
                         && (
                             <div className='choose-yes-no'>
                                 <p>
-                                    Ask followup questions if answered:
+                                    If the patient answers
                                 </p>
-                                <Radio 
-                                    label='Yes' 
+                                <Button 
                                     value='YES-NO'
-                                    checked={nodes[qId].responseType === 'YES-NO'} 
-                                    onChange={this.changeFollowupType}
-                                />
-                                <Radio 
-                                    label='No' 
+                                    className='yes-no-btn'
+                                    onClick={this.changeFollowupType}
+                                    content='YES'
+                                    color={nodes[qId].responseType === 'YES-NO' ? 'violet' : 'grey'}
+                                    />
+                                <Button
                                     value='NO-YES'
-                                    checked={nodes[qId].responseType === 'NO-YES'}
-                                    onChange={this.changeFollowupType}
+                                    content='NO'
+                                    className='yes-no-btn'
+                                    onClick={this.changeFollowupType}
+                                    color={nodes[qId].responseType === 'NO-YES' ? 'violet' : 'grey'}
                                 />
+                                <p>
+                                    then ask the follow-up questions
+                                </p>
                             </div>
                         )
 
