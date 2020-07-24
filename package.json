@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.19.2",
+    "firebase": "^7.15.1",
     "gulp-chmod": "^3.0.0",
     "history": "^1.17.0",
     "node": "^11.15.0",
