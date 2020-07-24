@@ -1,6 +1,6 @@
 import  React from 'react';
 import HPIContext from '../../../../contexts/HPIContext';
-import { Button, Segment, Table, Label } from 'semantic-ui-react'
+import { Button, Segment, Table } from 'semantic-ui-react'
 
 // TODO: look into <li> keys -- throws a warning if duplicats, not a huge deal but probably fix
 // TODO: remove all console.log (currently commented out)
@@ -30,7 +30,7 @@ class GenerateNote extends React.Component {
 
         if (this.state.rich) {
             return (
-                <Table striped>
+                <Table>
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Condition</Table.HeaderCell>
@@ -72,7 +72,7 @@ class GenerateNote extends React.Component {
 
         if (this.state.rich) {
             return (
-                <Table celled>
+                <Table>
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Procedure</Table.HeaderCell>
@@ -114,7 +114,7 @@ class GenerateNote extends React.Component {
 
         if (this.state.rich) {
             return (
-                <Table celled>
+                <Table>
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Drug Name</Table.HeaderCell>
@@ -171,7 +171,7 @@ class GenerateNote extends React.Component {
         // TODO: fix whatever is going on with allergic reactions
         if (this.state.rich) {
             return (
-                <Table celled>
+                <Table>
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Inciting Agent</Table.HeaderCell>
@@ -214,7 +214,7 @@ class GenerateNote extends React.Component {
                 <div>
                     <b>Tobacco</b>
                     <ul>
-                        {socialHistory.Tobacco.Yes === true ? <li> Currently uses tobacco </li> : <li> Never used </li>}
+                        {socialHistory.Tobacco['Yes'] === true ? <li> Currently uses tobacco </li> : <li> Never used </li>}
                         {socialHistory.Tobacco['In the Past'] === true ? <li> Used to use tobacco but does not anymore </li> : null}
                         {socialHistory.Tobacco['Packs/Day'] && socialHistory.Tobacco['Number of Years'] ? <li> {socialHistory.Tobacco['Number of Years']*socialHistory.Tobacco['Packs/Day']} pack years </li> : null}
                         {socialHistory.Tobacco.Comments ? <li> Comments: {socialHistory.Tobacco.Comments} </li> : null}
@@ -255,25 +255,51 @@ class GenerateNote extends React.Component {
 
         var components = [];
         for (var condition in familyHistory) {
+            var familyMembers = [];
             if (familyHistory[condition].Yes === true) {
-                components.push(familyHistory[condition]);
+                // components.push(familyHistory[condition]);
+                if (familyHistory[condition]['Family Member']) {
+                    for (var member in familyHistory[condition]['Family Member']) {
+                        if (familyHistory[condition]['Cause of Death'][member]) {
+                            familyMembers.push(`${familyHistory[condition]['Family Member'][member]} (cause of death)`);
+                        }
+                        else {
+                            familyMembers.push(familyHistory[condition]['Family Member'][member]);
+                        }
+                    }
+                }
+                components[condition] = {
+                    condition: familyHistory[condition]['Condition'],
+                    family: familyMembers,
+                    comments: familyHistory[condition]['Comments']
+                }
             }
         }
+        console.log(components);
 
         return (
+            // <ul>
+            //     {Object.keys(components).map(key => (
+            //         <li>
+            //             <b>{components[key]['Condition']}: </b>
+            //             {Object.keys(components[key]['Family Member']).map(member => (
+            //                 <ul>
+            //                     <li>
+            //                         {components[key]['Family Member'][member] ? `${components[key]['Family Member'][member]}: ` : null}
+            //                         {components[key]['Cause of Death'][member] ? components[key]['Cause of Death'][member] ? `Cause of death. ` : null : null}
+            //                         {components[key]['Comments'] ? components[key]['Comments'] : null}
+            //                     </li>
+            //                 </ul>
+            //             ))}
+            //         </li>
+            //     ))}
+            // </ul>
             <ul>
                 {Object.keys(components).map(key => (
                     <li>
-                        <b>{components[key]['Condition']}: </b>
-                        {Object.keys(components[key]['Family Member']).map(member => (
-                            <ul>
-                                <li>
-                                    {components[key]['Family Member'][member] ? `${components[key]['Family Member'][member]}: ` : null}
-                                    {components[key]['Cause of Death'][member] ? components[key]['Cause of Death'][member] ? `Cause of death. ` : null : null}
-                                    {components[key]['Comments'] ? components[key]['Comments'] : null}
-                                </li>
-                            </ul>
-                        ))}
+                        <b>{components[key].condition}: </b>
+                        {components[key].family.length > 0 ? `${components[key].family.join(', ')}. ` : null} 
+                        {components[key].comments}
                     </li>
                 ))}
             </ul>
@@ -308,28 +334,29 @@ class GenerateNote extends React.Component {
         }
         // console.log(components);
 
-        if (this.state.rich) {
-            return (
-                <Table celled>
-                    <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell>System</Table.HeaderCell>
-                            <Table.HeaderCell>Positive for</Table.HeaderCell>
-                            <Table.HeaderCell>Negative for</Table.HeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {Object.keys(components).map(key => (
-                            <Table.Row>
-                                <Table.Cell>{key}</Table.Cell>
-                                {components[key].positives.length > 0 ? <Table.Cell>{components[key].positives.join(', ')}</Table.Cell> : null}
-                                {components[key].negatives.length > 0 ? <Table.Cell>{components[key].negatives.join(', ')}</Table.Cell> : null}
-                            </Table.Row>
-                        ))}
-                    </Table.Body>
-                </Table>
-            )
-        }
+        // DON'T WANT/NEED A TABLE VIEW FOR THIS SECTION
+        // if (this.state.rich) {
+        //     return (
+        //         <Table>
+        //             <Table.Header>
+        //                 <Table.Row>
+        //                     <Table.HeaderCell>System</Table.HeaderCell>
+        //                     <Table.HeaderCell>Positive for</Table.HeaderCell>
+        //                     <Table.HeaderCell>Negative for</Table.HeaderCell>
+        //                 </Table.Row>
+        //             </Table.Header>
+        //             <Table.Body>
+        //                 {Object.keys(components).map(key => (
+        //                     <Table.Row>
+        //                         <Table.Cell>{key}</Table.Cell>
+        //                         {components[key].positives.length > 0 ? <Table.Cell>{components[key].positives.join(', ')}</Table.Cell> : null}
+        //                         {components[key].negatives.length > 0 ? <Table.Cell>{components[key].negatives.join(', ')}</Table.Cell> : null}
+        //                     </Table.Row>
+        //                 ))}
+        //             </Table.Body>
+        //         </Table>
+        //     )
+        // }
 
         return (
             <ul>
@@ -349,6 +376,7 @@ class GenerateNote extends React.Component {
     //       display units for things like vitals
     // unclear if this 100% works because of how the data is stored but it's definitely close
     // probably should look more into widgets 
+    // TODO: normal vs. abnormal 
     physicalExam() {
         const physical = this.context["Physical Exam"];
         // console.log(physical);
@@ -390,7 +418,7 @@ class GenerateNote extends React.Component {
         // TODO: fix vitals
         if (this.state.rich) {
             return (
-                <Table celled>
+                <Table>
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Section</Table.HeaderCell>
@@ -431,6 +459,7 @@ class GenerateNote extends React.Component {
         console.log(plan);
         // console.log(plan.conditions);
 
+        // DON'T NEED A TABLE/RICH TEXT VERSION FOR THIS
         return (
             Object.keys(conditions).map(key => (
                 <div>
@@ -446,7 +475,7 @@ class GenerateNote extends React.Component {
                         ))}
                     </ol>
                     
-                    {/* TODO: not show anything if these fields are null */}
+                    {/* TODO: not show anything if these fields are null? Or just remove periods? Form validation? */}
                     <b>Prescriptions</b>
                     <ul>
                         {Object.keys(conditions[key].prescriptions).map(prescription => (

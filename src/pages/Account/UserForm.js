@@ -109,14 +109,14 @@ class UserForm extends Component {
     }
 
     // handles change in a single field (updates states based on changed info)
-    handleChange(e, { name, value }) {
+    handleChange(e, {name, value}) {
         let newState = this.state;
         newState.formInfo[name] = value;
         this.setState(newState);
     }
 
     // handles change for array-based fieldss (also updates state)
-    handleArrayChange(e, { name, index, value }) {
+    handleArrayChange(e, {name, index, value}) {
         let newState = this.state;
         newState.formInfo[name][index] = value;
         this.setState(newState);
@@ -446,7 +446,7 @@ class UserForm extends Component {
                             />
                             <>
                                 <Form.Button color='teal' size='small' floated='right'>
-                                    Sign Up
+                                    {this.buttonText}
                                 </Form.Button>
                             </>
                         </Form>
