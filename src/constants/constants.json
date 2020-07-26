@@ -125,17 +125,23 @@
       "Tobacco": {
         "condition": "Tobacco",
         "firstField": "Packs/Day",
-        "secondField": "Number of Years"
+        "secondField": "Number of Years",
+        "thirdField": "Products Used",
+        "quitYear": "Quit Year"
       },
       "Alcohol": {
         "condition": "Alcohol",
-        "firstField": "Drinks/Week",
-        "secondField": "What kind of drinks?"
+        "firstField": "Drink Type",
+        "secondField": "Drink Size",
+        "thirdField": "# Per Week",
+        "quitYear": "Quit Year"
       },
       "Substance Abuse": {
         "condition": "Substance Abuse",
         "firstField": "Drug Name",
-        "secondField": "Mode of Delivery"
+        "secondField": "Mode of Delivery",
+        "thirdField": "# Per Week",
+        "quitYear": "Quit Year"
       }
     },
     "STATE": {
@@ -143,8 +149,10 @@
         "Yes": false,
         "In the Past": false,
         "Never Used": false,
-        "Drinks/Week": "",
-        "What kind of drinks?": "",
+        "Drinks Type": "",
+        "Drink Size": "",
+        "# Per Week": "",
+        "Quit Year": "",
         "Comments": ""
       },
       "Tobacco": {
@@ -153,6 +161,8 @@
         "Never Used": false,
         "Packs/Day": "",
         "Number of Years": "",
+        "Products Used": "",
+        "Quit Year": "",
         "Comments": ""
       },
       "Substance Abuse": {
@@ -161,6 +171,8 @@
         "Never Used": false,
         "Drug Name": "",
         "Mode of Delivery": "",
+        "# Per Week": "",
+        "Quit Year": "",
         "Comments": ""
       },
       "Living Situation": "",

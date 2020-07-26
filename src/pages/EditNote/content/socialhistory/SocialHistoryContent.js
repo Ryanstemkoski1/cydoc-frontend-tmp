@@ -1,11 +1,13 @@
 import React, {Fragment} from "react";
-import {Divider, Grid, TextArea, Form} from "semantic-ui-react";
+import {Divider, Grid, TextArea, Form, Segment} from "semantic-ui-react";
 import SocialHistoryNoteRow from "./SocialHistoryNoteRow";
 import SocialHistoryNoteItem from "./SocialHistoryNoteItem";
 import GridContent from 'components/tools/GridContent.js';
-import {SOCIAL_HISTORY} from "constants/constants"
-import HPIContext from 'contexts/HPIContext.js'
-
+import {SOCIAL_HISTORY} from "constants/constants";
+import HPIContext from 'contexts/HPIContext.js';
+import Tobacco from './Tobacco';
+import Alcohol from './Alcohol';
+import SubstanceAbuse from './SubstanceAbuse';
 
 export default class SocialHistoryContent extends React.Component {
 
@@ -70,7 +72,7 @@ export default class SocialHistoryContent extends React.Component {
         );
     }
 
-    //Generates a collection of Grid.Row for the substance use portion
+    // Generates a collection of Grid.Row for the substance use portion
     generateSubstanceUseRows() {
         return (this.props.mobile ? (
             Object.keys(this.substanceUseFields).map(
@@ -82,6 +84,9 @@ export default class SocialHistoryContent extends React.Component {
                         condition={this.substanceUseFields[label].condition}
                         firstField={this.substanceUseFields[label].firstField}
                         secondField={this.substanceUseFields[label].secondField}
+                        thirdField={this.substanceUseFields[label].thirdField}
+                        fourthField={this.substanceUseFields[label].fourthField ? this.substanceUseFields[label].fourthField : null}
+                        fifthField={this.substanceUseFields[label].fifthField ? this.substanceUseFields[label].fifthField : null}
                         values={this.context["Social History"]}
                     />
                 )
@@ -95,41 +100,61 @@ export default class SocialHistoryContent extends React.Component {
                         condition={this.substanceUseFields[label].condition}
                         firstField={this.substanceUseFields[label].firstField}
                         secondField={this.substanceUseFields[label].secondField}
+                        thirdField={this.substanceUseFields[label].thirdField}
+                        fourthField={this.substanceUseFields[label].fourthField ? this.substanceUseFields[label].fourthField : null}
+                        fifthField={this.substanceUseFields[label].fifthField ? this.substanceUseFields[label].fifthField : null}
                         values={this.context["Social History"]}
                     />
             )
         ));
     }
 
+    // render() {
+
+    //     //a blank row to allow addition of drugs
+    //     //TODO: make add row button aligned with the firstField
+    //     const rowToAdd = (<SocialHistoryNoteRow
+    //         onChange={this.handleSubstanceUseChange}
+    //         condition=""
+    //         firstField={this.substanceUseFields["Substance Abuse"].firstField}
+    //         secondField={this.substanceUseFields["Substance Abuse"].secondField}/>);
+
+    //     const substanceUseRows = this.generateSubstanceUseRows();
+    //     const secondaryFieldRows = this.generateSecondaryFieldRows();
+    //     return(
+    //         <Fragment>
+    //             <GridContent
+    //                 value={this.props.value}
+    //                 contentHeader={this.substanceUseContentHeader}
+    //                 customNoteRow={rowToAdd}
+    //                 rows={substanceUseRows}
+    //                 name={"social history"}
+    //                 numColumns={5}
+    //                 mobile={this.props.mobile}
+    //             />
+    //             {this.props.mobile ? <div/> : <Divider/>}
+    //             <br/>
+    //             <Grid columns={2} stackable>
+    //                 {secondaryFieldRows}
+    //             </Grid>
+    //         </Fragment>
+    //     )
+    // }
+
     render() {
-
-        //a blank row to allow addition of drugs
-        //TODO: make add row button aligned with the firstField
-        const rowToAdd = (<SocialHistoryNoteRow
-            onChange={this.handleSubstanceUseChange}
-            condition=""
-            firstField={this.substanceUseFields["Substance Abuse"].firstField}
-            secondField={this.substanceUseFields["Substance Abuse"].secondField}/>);
-
-        const substanceUseRows = this.generateSubstanceUseRows();
-        const secondaryFieldRows = this.generateSecondaryFieldRows();
-        return(
+        return (
             <Fragment>
-                <GridContent
-                    value={this.props.value}
-                    contentHeader={this.substanceUseContentHeader}
-                    customNoteRow={rowToAdd}
-                    rows={substanceUseRows}
-                    name={"social history"}
-                    numColumns={5}
-                    mobile={this.props.mobile}
-                />
-                {this.props.mobile ? <div/> : <Divider/>}
-                <br/>
-                <Grid columns={2} stackable>
-                    {secondaryFieldRows}
-                </Grid>
+                <Segment>
+                    <Tobacco values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick} />
+                </Segment>
+                <Segment>
+                    <Alcohol values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick}/>
+                </Segment>
+                <Segment>
+                    <SubstanceAbuse values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick}/>
+                </Segment>
             </Fragment>
         )
     }
 }
+
