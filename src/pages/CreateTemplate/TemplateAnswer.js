@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Segment, Button, Dropdown, Divider, Popup } from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import questionTypes from 'constants/questionTypes';
 import diseaseCodes from 'constants/diseaseCodes';
@@ -8,6 +7,15 @@ import MedicalHistoryContent from "pages/EditNote/content/medicalhistory/Medical
 import SurgicalHistoryContent from "pages/EditNote/content/surgicalhistory/SurgicalHistoryContent";
 import MedicationsContent from "pages/EditNote/content/medications/MedicationsContent";
 import FamilyHistoryContent from 'pages/EditNote/content/familyhistory/FamilyHistoryContent';
+import ImportQuestionForm from './ImportQuestionForm';
+import { getAnswerInfo } from './util';
+import { 
+    Input, 
+    Segment, 
+    Button, 
+    Dropdown, 
+    Message,
+} from 'semantic-ui-react';
 
 class TemplateAnswer extends Component {
     static contextType = CreateTemplateContext;
@@ -61,36 +69,6 @@ class TemplateAnswer extends Component {
         this.setState({ showPreview: !this.state.showPreview });
     }
 
-    getAnswerInfo = (type) => {
-        if (type === 'YES-NO' || type === 'NO-YES') {
-            return {
-                yesResponse: '',
-                noResponse: '',
-            }
-        } else if (type === 'SHORT-TEXT'
-        || type === 'NUMBER'
-        || type === 'TIME'
-        || type === 'LIST-TEXT') {
-            return {
-                startResponse: '',
-                endResponse: '',
-            }
-        } else if (type === 'CLICK-BOXES') {
-            return {
-                options: ['', '', ''],
-                startResponse: '',
-                endResponse: '',
-            }
-        } else if (type.startsWith('FH')
-        || type.startsWith('PMH')
-        || type.startsWith('PSH')
-        || type.startsWith('MEDS')) {
-            return {
-                options: [],
-            }
-        }
-    }
-
     /**
      * Imports top level questions from selected `otherGraph`
      */
@@ -123,7 +101,7 @@ class TemplateAnswer extends Component {
                     id: rootId,
                     text: nodes[id].text,
                     responseType: nodes[id].responseType,
-                    answerInfo: this.getAnswerInfo(nodes[id].responseType),
+                    answerInfo: getAnswerInfo(nodes[id].responseType),
                     order: numQuestions,
                 }
                 contextEdges[numEdges] = {
@@ -158,18 +136,7 @@ class TemplateAnswer extends Component {
                 childId = diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
                 
                 const nodeId = edges[edge].from;
-                let type = nodes[nodeId].responseType;
-                let responseType;
-
-                // convert response type to the human readable version
-                if (type in questionTypes.basic) {
-                    responseType = questionTypes.basic[type];
-                } else {
-                    const advType = type.split("-");
-                    type = advType[0];
-                    responseType = questionTypes.advanced[type];
-                }
-
+                let responseType = nodes[nodeId].responseType;
                 let text = nodes[nodeId].text;
                 if (text === 'nan') {
                     // TODO: Some root questions are connected to other root questions
@@ -177,14 +144,18 @@ class TemplateAnswer extends Component {
                     // root's children or skip over it?
                     continue;
                 }
-                let answerInfo = this.getAnswerInfo(type);
+                let answerInfo = getAnswerInfo(responseType);
                 let placeholder = text.search(/SYMPTOM|DISEASE/);
                 if (placeholder > -1) {
                     // replace occurrences of SYMPTOM or DISEASE with disease itself
                     text = text.substring(0, placeholder) + otherGraph.toLowerCase() + text.substring(placeholder +7)
                 }
                 // preprocess the text to prepopulate the answerinfo if necessary
-                if (type === 'CLICK-BOXES' || nodes[nodeId].responseType.slice(-3, responseType.length) === 'POP' || responseType === 'nan') {
+                if (
+                    responseType === 'CLICK-BOXES' 
+                    || nodes[nodeId].responseType.slice(-3, responseType.length) === 'POP' 
+                    || responseType === 'nan'
+                ) {
                     let click = text.search('CLICK');
                     let selectStart = text.search('\\[');
                     let selectEnd = text.search('\\]');
@@ -463,60 +434,41 @@ class TemplateAnswer extends Component {
                 ));
 
                 otherGraphs = (
-                    <Fragment>
+                    <Message 
+                        compact
+                        onDismiss={this.hideGraphOptions}
+                    >
                         <Dropdown
                             search
+                            fluid
                             selection
                             placeholder='Other Diseases'
                             direction='left'
                             options={options}
                             onChange={this.saveGraphType}
                             value={this.state.otherGraph}
+                            className='connect-graph-options'
                         />
-                        <Popup
-                            on='click'
-                            trigger={
-                                <Button 
-                                    basic
-                                    icon='arrow right'
-                                    circular
-                                    disabled={this.state.otherGraph === null}
-                                    className='connect-button'
-                                />
-                            }
-                            content={
-                                <Button.Group vertical className='connect-graph-btns'>
-                                    <Button
-                                        basic
-                                        fluid
-                                        parent={qId}
-                                        onClick={this.connectGraph}
-                                    >
-                                        Connect to root
-                                    </Button>
-                                    <Divider fitted/>
-                                    <Button
-                                        basic
-                                        fluid
-                                        parent={qId}
-                                    >
-                                        Connect select questions
-                                    </Button>
-                                </Button.Group>
-                            }
-                        />
-                        <Button 
-                            basic
-                            icon='cancel'
-                            onClick={this.hideGraphOptions}
-                            className='cancel-button'
-                        />
-                    </Fragment>
+                        <div className='connect-graph-btns'>
+                            <Button
+                                parent={qId}
+                                disabled={this.state.otherGraph === null}
+                                onClick={this.connectGraph}
+                                >
+                                Connect to root
+                            </Button>
+                            <ImportQuestionForm
+                                parent={qId}
+                                disabled={this.state.otherGraph === null}
+                            />
+                        </div>
+                    </Message>
                 );
             } else {
                 otherGraphs = (
                     <Button
                         basic
+                        icon='upload'
                         parent={qId}
                         content='Connect to other graphs'
                         className='add-child-button'
@@ -557,6 +509,8 @@ class TemplateAnswer extends Component {
                             onClick={this.addChildQuestion}
                             className='add-child-button'
                         />
+                    </div>
+                    <div className='connect-graph'>
                         {otherGraphs}
                     </div>
                     { graph[qId].length > 0

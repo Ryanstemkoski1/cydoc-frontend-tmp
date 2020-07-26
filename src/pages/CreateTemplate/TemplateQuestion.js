@@ -3,6 +3,7 @@ import { Input, Icon, Dropdown, Accordion, Button, Message } from 'semantic-ui-r
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import TemplateAnswer from './TemplateAnswer';
 import questionTypes from 'constants/questionTypes';
+import { getAnswerInfo } from './util';
 import './NewTemplate.css';
 
 let DELETED_IDS = [];
@@ -55,34 +56,12 @@ class TemplateQuestion extends Component {
         }
 
         context.nodes[qid].responseType = value;
-        context.nodes[qid].answerInfo = {};
-
-        if (value === 'YES-NO' || value === 'NO-YES') {
-            context.nodes[qid].answerInfo = {
-                yesResponse: '',
-                noResponse: '',
-            };
-        } else if (value === 'SHORT-TEXT'
-        || value === 'NUMBER'
-        || value === 'TIME'
-        || value === 'LIST-TEXT') {
-            context.nodes[qid].answerInfo = {
-                startResponse: '',
-                endResponse: '',
-            };
-        } else if (value === 'CLICK-BOXES') {
-            context.nodes[qid].answerInfo = {
-                options: ['', '', ''],
-                startResponse: '',
-                endResponse: '',
-            };
-        } else if (value === 'FH'
-        || value === 'PMH'
-        || value === 'PSH'
-        || value === 'MEDS') {
-            context.nodes[qid].answerInfo = {
-                options: [],
-            };
+        context.nodes[qid].answerInfo = getAnswerInfo(value);
+        if (value === 'FH'
+            || value === 'PMH'
+            || value === 'PSH'
+            || value === 'MEDS'
+        ) {
             context.nodes[qid].responseType = value + '-BLANK';
         }
         this.context.onContextChange('nodes', context.nodes);
