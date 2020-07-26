@@ -95,8 +95,7 @@ class TemplateAnswer extends Component {
      * Imports top level questions from selected `otherGraph`
      */
     connectGraph = (e, { parent }) => {
-        let numQuestions = this.context.state.numQuestions;
-        let numEdges = this.context.state.numQuestions;
+        let { numQuestions, numEdges } = this.context.state;
         const { otherGraph } = this.state;
         const { graph, edges, nodes } = this.props.graphData;
         
@@ -107,8 +106,37 @@ class TemplateAnswer extends Component {
         let numZeros;
         let childId;
 
+        const contextNodes = { ...this.context.state.nodes };
+        const contextEdges = { ...this.context.state.edges };
+        const contextGraph = { ...this.context.state.graph };
+
         const id = diseaseCodes[otherGraph] + '0001';
+        let questionParent = parent;
         if (id in graph) {
+            // add the original root if the text is not "nan"
+            if (nodes[id].text !== 'nan') {
+                randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
+                numZeros = 4 - numQuestions.toString().length;
+                const rootId = diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
+  
+                contextNodes[rootId] = {
+                    id: rootId,
+                    text: nodes[id].text,
+                    responseType: nodes[id].responseType,
+                    answerInfo: this.getAnswerInfo(nodes[id].responseType),
+                    order: numQuestions,
+                }
+                contextEdges[numEdges] = {
+                    from: parent,
+                    to: rootId,
+                }
+                contextGraph[rootId] = [];
+                contextGraph[parent].push(numEdges)
+                numQuestions++;
+                numEdges++;
+                questionParent = rootId;
+            }
+
             // sort edges by the node's question order
             graph[id].sort((a, b) => {
                 const nodeA = parseFloat(nodes[edges[a].from].questionOrder);
@@ -138,14 +166,24 @@ class TemplateAnswer extends Component {
                     responseType = questionTypes.basic[type];
                 } else {
                     const advType = type.split("-");
-                    type = advType[0]
+                    type = advType[0];
                     responseType = questionTypes.advanced[type];
                 }
 
-                // preprocess the text to prepopulate the answerinfo if necessary
                 let text = nodes[nodeId].text;
+                if (text === 'nan') {
+                    // TODO: Some root questions are connected to other root questions
+                    // In these cases, and the questions are nans, do we import the other
+                    // root's children or skip over it?
+                    continue;
+                }
                 let answerInfo = this.getAnswerInfo(type);
-                
+                let placeholder = text.search(/SYMPTOM|DISEASE/);
+                if (placeholder > -1) {
+                    // replace occurrences of SYMPTOM or DISEASE with disease itself
+                    text = text.substring(0, placeholder) + otherGraph.toLowerCase() + text.substring(placeholder +7)
+                }
+                // preprocess the text to prepopulate the answerinfo if necessary
                 if (type === 'CLICK-BOXES' || nodes[nodeId].responseType.slice(-3, responseType.length) === 'POP' || responseType === 'nan') {
                     let click = text.search('CLICK');
                     let selectStart = text.search('\\[');
@@ -163,8 +201,7 @@ class TemplateAnswer extends Component {
                     choices = choices.split(",").map(response => response.trim());
                     answerInfo.options = choices;
                 }
-
-                this.context.state.nodes[childId] = {
+                contextNodes[childId] = {
                     text,
                     answerInfo,
                     responseType,
@@ -172,19 +209,19 @@ class TemplateAnswer extends Component {
                     order: numQuestions,
                 }
 
-                this.context.state.edges[numEdges] = {
-                    from: parent,
+                contextEdges[numEdges] = {
+                    from: questionParent,
                     to: childId,
                 }
 
-                this.context.state.graph[childId] = [];
-                this.context.state.graph[parent].push(numEdges)
+                contextGraph[childId] = [];
+                contextGraph[questionParent].push(numEdges)
                 numEdges++;
                 numQuestions++;
             }
-            this.context.onContextChange('nodes', this.context.state.nodes);
-            this.context.onContextChange('edges', this.context.state.edges);
-            this.context.onContextChange('graph', this.context.state.graph);
+            this.context.onContextChange('nodes', contextNodes);
+            this.context.onContextChange('edges', contextEdges);
+            this.context.onContextChange('graph', contextGraph);
             this.context.onContextChange('numEdges', numEdges);
             this.context.onContextChange('numQuestions', numQuestions);
             
