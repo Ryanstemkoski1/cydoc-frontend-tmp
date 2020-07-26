@@ -7,6 +7,7 @@ import { graphClient } from 'constants/api.js';
 import diseaseAbbrevs from 'constants/diseaseAbbrevs.json';
 import diseaseCodes from 'constants/diseaseCodes';
 import Nestable from 'react-nestable';
+import { createNodeId } from './util';
 
 const OTHER_TEXT = 'Other (specify below)';
 
@@ -165,10 +166,7 @@ class NewTemplateForm extends Component {
         let numEdges = this.context.state.numEdges;
         const disease = this.context.state.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
-        const randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
-
-        const numZeros = 4 - numQuestions.toString().length;
-        const qId = diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
+        const qId = createNodeId(diseaseCode, numQuestions);
         
         this.context.state.nodes[qId] = {
             id: qId,
@@ -230,42 +228,6 @@ class NewTemplateForm extends Component {
         alert('Template created'); // for dev purposes 
     }
 
-    onDragEnd = (result) => {
-        const { destination, source, draggableId } = result;
-
-        if (!destination) {
-            return; // dropped outside, so do nothing
-        }
-        if (destination.index == source.index) {
-            return; // did not move
-        }
-        const graph = { ...this.context.state.graph };
-        const rootEdges = graph['0000'];
-        const newOrderedEdges = Array.from(rootEdges);
-        newOrderedEdges.splice(source.index, 1);
-        newOrderedEdges.splice(destination.index, 0, rootEdges[source.index]);
-        
-        // update question order
-        const nodes = { ...this.context.state.nodes };
-        const edges = { ...this.context.state.edges };
-        nodes[draggableId].order = nodes[edges[rootEdges[destination.index]].to].order;
-        if (source.index > destination.index) {
-            for (let i = destination.index + 1; i <= source.index; i++) {
-                const nodeId = edges[newOrderedEdges[i]].to;
-                nodes[nodeId].order += 1;
-            }
-        } else {
-            for (let i = source.index; i < destination.index; i++) {
-                const nodeId = edges[newOrderedEdges[i]].to;
-                nodes[nodeId].order -= 1;
-            }
-        }
-
-        graph['0000'] = newOrderedEdges;
-        this.context.onContextChange('graph', graph);
-        this.context.onContextChange('nodes', nodes);
-    }
-
     createTreeData = () => {
         const { graph, edges, nodes } = this.context.state;
         return graph['0000'].map(edge => {
@@ -307,7 +269,10 @@ class NewTemplateForm extends Component {
     }
 
     renderCollapseIcon = ({ isCollapsed }) => {
-        return <Icon name={`${isCollapsed ? "plus" : "minus"}`}/>
+        return <Icon 
+            className='collapse-icon' 
+            name={`${isCollapsed ? "plus" : "minus"}`}
+        />
     }
 
     updateOrder = (items, item) => {

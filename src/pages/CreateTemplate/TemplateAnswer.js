@@ -8,7 +8,7 @@ import SurgicalHistoryContent from "pages/EditNote/content/surgicalhistory/Surgi
 import MedicationsContent from "pages/EditNote/content/medications/MedicationsContent";
 import FamilyHistoryContent from 'pages/EditNote/content/familyhistory/FamilyHistoryContent';
 import ImportQuestionForm from './ImportQuestionForm';
-import { getAnswerInfo } from './util';
+import { getAnswerInfo, createNodeId } from './util';
 import { 
     Input, 
     Segment, 
@@ -80,8 +80,6 @@ class TemplateAnswer extends Component {
         const disease = this.context.state.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
         
-        let randomId;
-        let numZeros;
         let childId;
 
         const contextNodes = { ...this.context.state.nodes };
@@ -93,9 +91,7 @@ class TemplateAnswer extends Component {
         if (id in graph) {
             // add the original root if the text is not "nan"
             if (nodes[id].text !== 'nan') {
-                randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
-                numZeros = 4 - numQuestions.toString().length;
-                const rootId = diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
+                const rootId = createNodeId(diseaseCode, numQuestions);
   
                 contextNodes[rootId] = {
                     id: rootId,
@@ -131,9 +127,7 @@ class TemplateAnswer extends Component {
 
             // create edges and nodes for every new question
             for (let edge of graph[id]) {
-                randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
-                numZeros = 4 - numQuestions.toString().length;
-                childId = diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
+                childId = createNodeId(diseaseCode, numQuestions);
                 
                 const nodeId = edges[edge].from;
                 let responseType = nodes[nodeId].responseType;
@@ -153,7 +147,7 @@ class TemplateAnswer extends Component {
                 // preprocess the text to prepopulate the answerinfo if necessary
                 if (
                     responseType === 'CLICK-BOXES' 
-                    || nodes[nodeId].responseType.slice(-3, responseType.length) === 'POP' 
+                    || responseType.slice(-3, responseType.length) === 'POP' 
                     || responseType === 'nan'
                 ) {
                     let click = text.search('CLICK');

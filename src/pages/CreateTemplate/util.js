@@ -27,3 +27,9 @@ export const getAnswerInfo = (type) => {
         }
     }
 }
+
+export const createNodeId = (diseaseCode, numQuestions) => {
+    const randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
+    const numZeros = 4 - numQuestions.toString().length;
+    return diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
+}
