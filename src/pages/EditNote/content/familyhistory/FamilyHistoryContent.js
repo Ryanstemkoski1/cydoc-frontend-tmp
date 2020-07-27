@@ -44,7 +44,8 @@ export default class FamilyHistoryContent extends Component {
                     "No": false,
                     "Family Member": [],
                     "Cause of Death": [],
-                    "Comments": ""
+                    "Living": [],
+                    "Comments": []
                 }
             }
         }
@@ -98,7 +99,8 @@ export default class FamilyHistoryContent extends Component {
             "No": false,
             "Family Member": [],
             "Cause of Death": [],
-            "Comments": ""
+            "Living": [],
+            "Comments": []
         }
         this.context.onContextChange("Family History", values);
     }

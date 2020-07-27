@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from "react";
-import {Form, Grid, TextArea, Button, Header, Divider} from "semantic-ui-react";
+import {Form, Grid, TextArea, Button, Header, Divider, Label, Icon, Container } from "semantic-ui-react";
 import HPIContext from 'contexts/HPIContext.js'
 import ToggleButton from 'components/tools/ToggleButton.js';
 import FamilyHistoryDropdown from "./FamilyHistoryDropdown";
@@ -26,6 +26,7 @@ export default class FamilyHistoryBlock extends Component {
         var members = values[this.props.index]['Family Member']
         if (members[members.length-1]) values[this.props.index]['Family Member'].push("")
         this.context.onContextChange("Family History", values)
+        
     }
 
     handleToggleButtonClick(event, data){
@@ -42,7 +43,7 @@ export default class FamilyHistoryBlock extends Component {
     }
 
     render() {
-        const { mobile, onChange, condition, comments, index } = this.props;
+        const { mobile, condition, comments, index, familyMember } = this.props;
         // array of dropdowns displayed on Family History Family Member column
         let dropdown_list = [];
         // variable range that changes when the user clicks the + (add member) button 
@@ -51,31 +52,41 @@ export default class FamilyHistoryBlock extends Component {
         range = range > 0 ? range : 1;
         for (let step = 0; step < range; step ++) {
             dropdown_list.push(
-                <FamilyHistoryDropdown
-                    key={index}
-                    condition = {condition}
-                    index = {index}
-                    family_index = {step}
-                    mobile = {mobile}
-                /> )
+                <Container>
+                    {/* <Icon name="close" link /> */}
+                    <FamilyHistoryDropdown
+                        key={index}
+                        condition = {condition}
+                        index = {index}
+                        family_index = {step}
+                        mobile = {mobile}
+                        comments = {comments}
+                        familyMember = {familyMember}
+                    /> 
+                
+                </Container>
+                
+            )
         }
         const new_content_header = 
             <Grid columns={3}>
                 <Grid.Row>
-                    <Grid.Column width={4}>
-                        <Header as="h4" className="family-member-header">Family Member</Header>
+                    <Grid.Column width={1}>
                     </Grid.Column>
                     <Grid.Column width={4}>
-                        <Header as="h4">Cause of Death</Header>
+                        <Header.Subheader className="family-member-header">Family Member</Header.Subheader>
+                    </Grid.Column>
+                    <Grid.Column width={3}>
+                        <Header.Subheader>Cause of Death</Header.Subheader>
                     </Grid.Column>
                     <Grid.Column width={8}>
-                        <Header as="h4">Comments</Header>
+                        <Header.Subheader>Comments</Header.Subheader>
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
         const new_row = 
         <Grid.Row>
-            <Grid.Column width={8} className='dropdown-container'>
+            <Grid.Column width={16} className='dropdown-container'>
                 {dropdown_list}
                 <Fragment>
                     <Button
@@ -87,12 +98,6 @@ export default class FamilyHistoryBlock extends Component {
                     />
                     add family member
                 </Fragment>
-            </Grid.Column>
-            <Grid.Column width={8}>
-                <Form>
-                <TextArea condition={condition} value={comments}
-                                onChange={onChange} placeholder='Comments'/>
-                </Form>
             </Grid.Column>
         </Grid.Row>
         return (
@@ -132,15 +137,7 @@ export default class FamilyHistoryBlock extends Component {
                                         />
                                         add family member
                                     </Fragment>
-                                    <Form.TextArea
-                                        label="Comments"
-                                        className="text-area"
-                                        condition={condition}
-                                        placeholder='Comments'
-                                        value={comments}
-                                        onChange={onChange}
-                                        rows={2} 
-                                    />
+                                    
                                 </Fragment>
                                 : ""
                             }
