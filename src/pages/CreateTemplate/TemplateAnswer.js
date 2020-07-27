@@ -15,6 +15,8 @@ import {
     Button, 
     Dropdown, 
     Message,
+    Icon,
+    List,
 } from 'semantic-ui-react';
 
 class TemplateAnswer extends Component {
@@ -401,7 +403,7 @@ class TemplateAnswer extends Component {
         this.context.onContextChange('nodes', nodes);
     }
 
-    editChildren = (e, { qId }) => {
+    editChildren = (qId) => {
         let { numQuestions, numEdges } = this.context.state;
         const { graphData } = this.props;
         const { edges, nodes, graph } = graphData;
@@ -556,14 +558,15 @@ class TemplateAnswer extends Component {
             }
             if (this.context.state.nodes[qId].hasChildren) {
                 editChildren = (
-                    <Button
-                        basic
-                        icon='edit'
-                        qId={qId}
-                        content='Edit follow-up questions'
-                        onClick={this.editChildren}
-                        className='add-child-button'
-                    />
+                    <List 
+                        className='edit-children' 
+                        onClick={() => this.editChildren(qId)}
+                    >
+                        <List.Item>
+                            <List.Icon name='triangle right'/>
+                            Edit follow up questions
+                        </List.Item>
+                    </List>
                 )
             }
 
@@ -600,9 +603,6 @@ class TemplateAnswer extends Component {
                             className='add-child-button'
                         />
                     </div>
-                    <div className='add-child-question'>
-                        {editChildren}
-                    </div>
                     <div className='connect-graph'>
                         {otherGraphs}
                     </div>
@@ -630,6 +630,8 @@ class TemplateAnswer extends Component {
                         )
 
                     }
+                    {editChildren}
+
                 </Segment>
             );
         } else if (type === 'SHORT-TEXT'

@@ -226,6 +226,7 @@
   margin: 0.5rem 0;
 }
 
+.edit-children,
 .collapse-icon {
   cursor: pointer;
 }
