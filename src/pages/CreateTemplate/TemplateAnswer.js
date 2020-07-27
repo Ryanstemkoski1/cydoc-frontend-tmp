@@ -164,6 +164,8 @@ class TemplateAnswer extends Component {
                     responseType,
                     id: childId,
                     order: numQuestions,
+                    hasChildren: graph[nodeId].length > 0,
+                    originalId: nodeId,
                 }
 
                 contextEdges[numEdges] = {
