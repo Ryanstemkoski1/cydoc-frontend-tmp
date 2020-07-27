@@ -401,6 +401,88 @@ class TemplateAnswer extends Component {
         this.context.onContextChange('nodes', nodes);
     }
 
+    editChildren = (e, { qId }) => {
+        let { numQuestions, numEdges } = this.context.state;
+        const { graphData } = this.props;
+        const { edges, nodes, graph } = graphData;
+        
+        const disease = this.context.state.disease;
+        const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
+        
+        let childId;
+
+        const contextNodes = { ...this.context.state.nodes };
+        const contextEdges = { ...this.context.state.edges };
+        const contextGraph = { ...this.context.state.graph };
+
+        const originalId = contextNodes[qId].originalId;
+        if (originalId in graph) {
+            sortEdges(graph[originalId], edges, nodes);
+
+            // create edges and nodes for every new question
+            for (let edge of graph[originalId]) {
+                childId = createNodeId(diseaseCode, numQuestions);
+                
+                const nodeId = edges[edge].from;
+                let responseType = nodes[nodeId].responseType;
+                let text = nodes[nodeId].text;
+                if (text === 'nan') {
+                    // TODO: Some root questions are connected to other root questions
+                    // In these cases, and the questions are nans, do we import the other
+                    // root's children or skip over it?
+                    continue;
+                }
+                let answerInfo = getAnswerInfo(responseType);
+                // preprocess the text to prepopulate the answerinfo if necessary
+                if (
+                    responseType === 'CLICK-BOXES' 
+                    || responseType.endsWith('POP')
+                    || responseType === 'nan'
+                ) {
+                    let click = text.search('CLICK');
+                    let selectStart = text.search('\\[');
+                    let selectEnd = text.search('\\]');
+                    let choices;
+                    if (click > -1) { // options are indicated by CLICK[...]
+                        choices = text.slice(click + 6, selectEnd);
+                        text = text.slice(0, click);
+                    } else { // options are indicated by [...]
+                        if (selectStart > 0) {
+                            choices = text.slice(selectStart + 1, selectEnd);
+                            text = text.slice(0, selectStart);
+                        }
+                    }
+                    choices = choices.split(",").map(response => response.trim());
+                    answerInfo.options = choices;
+                }
+                contextNodes[childId] = {
+                    text,
+                    answerInfo,
+                    responseType,
+                    id: childId,
+                    order: numQuestions,
+                }
+
+                contextEdges[numEdges] = {
+                    from: qId,
+                    to: childId,
+                }
+
+                contextGraph[childId] = [];
+                contextGraph[qId].push(numEdges)
+                numEdges++;
+                numQuestions++;
+            }
+            this.context.onContextChange('nodes', contextNodes);
+            this.context.onContextChange('edges', contextEdges);
+            this.context.onContextChange('graph', contextGraph);
+            this.context.onContextChange('numEdges', numEdges);
+            this.context.onContextChange('numQuestions', numQuestions);
+        }
+        contextNodes[qId].hasChildren = false;
+        this.context.onContextChange('nodes', contextNodes);
+    }
+
     getAnswerTemplate(startEg, endEg, optionsText) {
         const { qId, type } = this.props;
         const { graph, nodes } = this.context.state;
@@ -408,6 +490,7 @@ class TemplateAnswer extends Component {
         let otherGraphs;
 
         if (type === 'YES-NO'|| type === 'NO-YES') {
+            let editChildren;
             if (this.state.showOtherGraphs) {
                 const options = this.props.allDiseases.map((disease) => (
                     {
@@ -471,6 +554,18 @@ class TemplateAnswer extends Component {
                     />
                 );
             }
+            if (this.context.state.nodes[qId].hasChildren) {
+                editChildren = (
+                    <Button
+                        basic
+                        icon='edit'
+                        qId={qId}
+                        content='Edit follow-up questions'
+                        onClick={this.editChildren}
+                        className='add-child-button'
+                    />
+                )
+            }
 
             template = (
                 <Segment className='yes-no-answer'>
@@ -504,6 +599,9 @@ class TemplateAnswer extends Component {
                             onClick={this.addChildQuestion}
                             className='add-child-button'
                         />
+                    </div>
+                    <div className='add-child-question'>
+                        {editChildren}
                     </div>
                     <div className='connect-graph'>
                         {otherGraphs}

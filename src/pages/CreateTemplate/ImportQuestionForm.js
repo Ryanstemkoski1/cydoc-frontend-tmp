@@ -68,6 +68,7 @@ class ImportQuestionForm extends Component {
                         text,
                         responseType,
                         answerInfo,
+                        hasChildren: graph[nodeId].length > 0,
                     }
                 });
             this.setState({ graph: editedGraph });
@@ -105,6 +106,8 @@ class ImportQuestionForm extends Component {
                     text: question.text,
                     answerInfo: question.answerInfo,
                     responseType: question.responseType,
+                    hasChildren: question.hasChildren,
+                    originalId: question.id,
                     order: numQuestions,
                 }
                 edges[numEdges] = {

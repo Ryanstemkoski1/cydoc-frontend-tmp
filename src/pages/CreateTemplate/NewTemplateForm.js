@@ -435,6 +435,7 @@ class NewTemplateForm extends Component {
                     renderItem={this.renderItem}
                     renderCollapseIcon={this.renderCollapseIcon}
                     onChange={this.updateOrder}
+                    threshold={50}
                 />
                 <Button
                     circular

@@ -234,7 +234,7 @@
   min-height: 2.5rem;
 }
 
-.preview .condition-name .ui.disabled,
+.preview .ui.disabled,
 .preview .content-input.disabled {
   opacity: 1 !important;
 }
