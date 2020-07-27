@@ -85,7 +85,7 @@ class TemplateQuestion extends Component {
             delete nodes[qid];
         } else {
             // Y/N question with children
-            this.setState({ showDeleteQuestion: true });
+            this.setState({ showDeleteQuestion: true, active: true });
         }
 
         this.context.onContextChange('nodes', nodes);
