@@ -33,3 +33,25 @@ export const createNodeId = (diseaseCode, numQuestions) => {
     const numZeros = 4 - numQuestions.toString().length;
     return diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
 }
+
+
+/**
+ * Sorts the list of edges in place, given a mapping of nodes
+ * @param {Array[Object]} edgeList 
+ * @param {Array[Object]} edges 
+ * @param {Object} nodes 
+ */
+export const sortEdges = (edgeList, edges, nodes) => {
+    edgeList.sort((a, b) => {
+        const nodeA = parseFloat(nodes[edges[a].from].questionOrder);
+        const nodeB = parseFloat(nodes[edges[b].from].questionOrder);
+        
+        if (nodeA < nodeB) {
+            return -1;
+        } else if (nodeA > nodeB) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+}

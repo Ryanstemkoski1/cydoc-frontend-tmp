@@ -115,8 +115,9 @@
 }
 
 .choose-yes-no,
+.connect-graph,
 .add-child-question {
-  margin: 0 0 1rem 3rem;
+  margin-left: 3rem;
 }
 
 .ui.basic.button.remove-question {
@@ -137,6 +138,7 @@
 
 .ui.button.add-child-button {
   margin-top: 1rem;
+  width: 17rem;
 }
 
 .ui.segment.yes-no-answer {
@@ -204,6 +206,10 @@
   margin-top: 0.5rem;
 }
 
+.nestable-item-handler {
+  cursor: grabbing;
+}
+
 .question-container {
   margin-top: 0 !important;
 }
@@ -221,7 +227,7 @@
 }
 
 .collapse-icon {
-  padding-top: 0.5rem;
+  cursor: pointer;
 }
 
 .content-preview {
@@ -250,4 +256,27 @@
 
 .choose-yes-no > p {
   margin: 0;
+}
+
+.connect-graph {
+  margin-bottom: 1rem;
+}
+
+.connect-graph-btns {
+  margin-top: 1rem;
+}
+
+.connect-graph > .ui.message {
+  background-color: white;
+  margin-top: 1rem;
+  padding: 1.25rem 2rem !important;
+}
+
+.options-container {
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.connect-graph-option {
+  padding: 1rem 0 !important;
 }

@@ -8,7 +8,7 @@ import SurgicalHistoryContent from "pages/EditNote/content/surgicalhistory/Surgi
 import MedicationsContent from "pages/EditNote/content/medications/MedicationsContent";
 import FamilyHistoryContent from 'pages/EditNote/content/familyhistory/FamilyHistoryContent';
 import ImportQuestionForm from './ImportQuestionForm';
-import { getAnswerInfo, createNodeId } from './util';
+import { getAnswerInfo, createNodeId, sortEdges } from './util';
 import { 
     Input, 
     Segment, 
@@ -28,6 +28,7 @@ class TemplateAnswer extends Component {
             showOtherGraphs: false,
             otherGraph: null,
             showPreview: false,
+            showQuestionSelect: false,
         }
         this.updateDimensions = this.updateDimensions.bind(this);
         this.saveAnswer = this.saveAnswer.bind(this);
@@ -112,18 +113,7 @@ class TemplateAnswer extends Component {
             }
 
             // sort edges by the node's question order
-            graph[id].sort((a, b) => {
-                const nodeA = parseFloat(nodes[edges[a].from].questionOrder);
-                const nodeB = parseFloat(nodes[edges[b].from].questionOrder);
-                
-                if (nodeA < nodeB) {
-                    return -1;
-                } else if (nodeA > nodeB) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
+            sortEdges(graph[id], edges, nodes);
 
             // create edges and nodes for every new question
             for (let edge of graph[id]) {
@@ -147,7 +137,7 @@ class TemplateAnswer extends Component {
                 // preprocess the text to prepopulate the answerinfo if necessary
                 if (
                     responseType === 'CLICK-BOXES' 
-                    || responseType.slice(-3, responseType.length) === 'POP' 
+                    || responseType.endsWith('POP')
                     || responseType === 'nan'
                 ) {
                     let click = text.search('CLICK');
@@ -451,10 +441,21 @@ class TemplateAnswer extends Component {
                                 >
                                 Connect to root
                             </Button>
-                            <ImportQuestionForm
+                            <Button
                                 parent={qId}
                                 disabled={this.state.otherGraph === null}
-                            />
+                                onClick={() => this.setState({ showQuestionSelect: true })}
+                            >
+                                Select questions
+                            </Button>
+                            {this.state.showQuestionSelect && (
+                                <ImportQuestionForm
+                                    parent={qId}
+                                    closeModal={() => { this.setState({ showQuestionSelect: false}); this.hideGraphOptions(); }}
+                                    graphData={this.props.graphData}
+                                    otherGraph={this.state.otherGraph}
+                                />
+                            )}
                         </div>
                     </Message>
                 );
