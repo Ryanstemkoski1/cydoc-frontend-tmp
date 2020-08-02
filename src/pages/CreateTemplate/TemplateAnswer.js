@@ -405,6 +405,12 @@ class TemplateAnswer extends Component {
         this.context.onContextChange('nodes', nodes);
     }
 
+    /**
+     * Import all direct children of node with qId from the knowledge graph 
+     * (The graph fetched from the backend, not the context).
+     * 
+     * @param {String} qId 
+     */
     editChildren = (qId) => {
         let { numQuestions, numEdges } = this.context.state;
         const { graphData } = this.props;
@@ -465,6 +471,8 @@ class TemplateAnswer extends Component {
                     responseType,
                     id: childId,
                     order: numQuestions,
+                    hasChildren: graph[nodeId].length > 0,
+                    originalId: nodeId,
                 }
 
                 contextEdges[numEdges] = {
