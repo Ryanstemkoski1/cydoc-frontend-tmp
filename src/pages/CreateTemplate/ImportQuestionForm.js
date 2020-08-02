@@ -1,7 +1,7 @@
 import React, { Component, createRef } from 'react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import diseaseCodes from 'constants/diseaseCodes';
-import { sortEdges, getAnswerInfo, createNodeId } from './util';
+import { sortEdges, getAnswerInfo, createNodeId, parseQuestionText } from './util';
 import { 
     Button, 
     Segment,
@@ -32,37 +32,19 @@ class ImportQuestionForm extends Component {
             sortEdges(graph[id], edges, nodes);
             // TODO: Account for "nan"s?
             const editedGraph = graph[id]
-                .filter(edge => nodes[edges[edge].from].text !== 'nan')
+                // .filter(edge => nodes[edges[edge].from].text !== 'nan')
                 .map((edge, i) => {
                     const nodeId = edges[edge].from;
                     const responseType = nodes[nodeId].responseType;
                     let text = nodes[nodeId].text;
+                    console.log(text);
                     let answerInfo = getAnswerInfo(responseType);
                     let placeholder = text.search(/SYMPTOM|DISEASE/);
                     if (placeholder > -1) {
                         text = text.substring(0, placeholder) + otherGraph.toLowerCase() + text.substring(placeholder +7)
                     } 
-                    if (
-                        responseType === 'CLICK-BOXES' 
-                        || responseType.endsWith('POP')
-                        || responseType === 'nan'
-                    ) {
-                        let click = text.search('CLICK');
-                        let selectStart = text.search('\\[');
-                        let selectEnd = text.search('\\]');
-                        let choices;
-                        if (click > -1) { // options are indicated by CLICK[...]
-                            choices = text.slice(click + 6, selectEnd);
-                            text = text.slice(0, click);
-                        } else { // options are indicated by [...]
-                            if (selectStart > 0) {
-                                choices = text.slice(selectStart + 1, selectEnd);
-                                text = text.slice(0, selectStart);
-                            }
-                        }
-                        choices = choices.split(",").map(response => response.trim());
-                        answerInfo.options = choices;
-                    }
+                    text = parseQuestionText(responseType, text, answerInfo, nodes[nodeId].category);
+
                     return {
                         id: nodeId,
                         text,

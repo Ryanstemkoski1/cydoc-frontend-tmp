@@ -8,7 +8,7 @@ import SurgicalHistoryContent from "pages/EditNote/content/surgicalhistory/Surgi
 import MedicationsContent from "pages/EditNote/content/medications/MedicationsContent";
 import FamilyHistoryContent from 'pages/EditNote/content/familyhistory/FamilyHistoryContent';
 import ImportQuestionForm from './ImportQuestionForm';
-import { getAnswerInfo, createNodeId, sortEdges } from './util';
+import { getAnswerInfo, createNodeId, sortEdges, parseQuestionText } from './util';
 import { 
     Input, 
     Segment, 
@@ -124,12 +124,6 @@ class TemplateAnswer extends Component {
                 const nodeId = edges[edge].from;
                 let responseType = nodes[nodeId].responseType;
                 let text = nodes[nodeId].text;
-                if (text === 'nan') {
-                    // TODO: Some root questions are connected to other root questions
-                    // In these cases, and the questions are nans, do we import the other
-                    // root's children or skip over it?
-                    continue;
-                }
                 let answerInfo = getAnswerInfo(responseType);
                 let placeholder = text.search(/SYMPTOM|DISEASE/);
                 if (placeholder > -1) {
@@ -137,27 +131,7 @@ class TemplateAnswer extends Component {
                     text = text.substring(0, placeholder) + otherGraph.toLowerCase() + text.substring(placeholder +7)
                 }
                 // preprocess the text to prepopulate the answerinfo if necessary
-                if (
-                    responseType === 'CLICK-BOXES' 
-                    || responseType.endsWith('POP')
-                    || responseType === 'nan'
-                ) {
-                    let click = text.search('CLICK');
-                    let selectStart = text.search('\\[');
-                    let selectEnd = text.search('\\]');
-                    let choices;
-                    if (click > -1) { // options are indicated by CLICK[...]
-                        choices = text.slice(click + 6, selectEnd);
-                        text = text.slice(0, click);
-                    } else { // options are indicated by [...]
-                        if (selectStart > 0) {
-                            choices = text.slice(selectStart + 1, selectEnd);
-                            text = text.slice(0, selectStart);
-                        }
-                    }
-                    choices = choices.split(",").map(response => response.trim());
-                    answerInfo.options = choices;
-                }
+                text = parseQuestionText(responseType, text, answerInfo, nodes[nodeId].category);
                 contextNodes[childId] = {
                     text,
                     answerInfo,
@@ -436,35 +410,10 @@ class TemplateAnswer extends Component {
                 const nodeId = edges[edge].from;
                 let responseType = nodes[nodeId].responseType;
                 let text = nodes[nodeId].text;
-                if (text === 'nan') {
-                    // TODO: Some root questions are connected to other root questions
-                    // In these cases, and the questions are nans, do we import the other
-                    // root's children or skip over it?
-                    continue;
-                }
                 let answerInfo = getAnswerInfo(responseType);
                 // preprocess the text to prepopulate the answerinfo if necessary
-                if (
-                    responseType === 'CLICK-BOXES' 
-                    || responseType.endsWith('POP')
-                    || responseType === 'nan'
-                ) {
-                    let click = text.search('CLICK');
-                    let selectStart = text.search('\\[');
-                    let selectEnd = text.search('\\]');
-                    let choices;
-                    if (click > -1) { // options are indicated by CLICK[...]
-                        choices = text.slice(click + 6, selectEnd);
-                        text = text.slice(0, click);
-                    } else { // options are indicated by [...]
-                        if (selectStart > 0) {
-                            choices = text.slice(selectStart + 1, selectEnd);
-                            text = text.slice(0, selectStart);
-                        }
-                    }
-                    choices = choices.split(",").map(response => response.trim());
-                    answerInfo.options = choices;
-                }
+                text = parseQuestionText(responseType, text, answerInfo, nodes[nodeId].category);
+
                 contextNodes[childId] = {
                     text,
                     answerInfo,
@@ -491,7 +440,7 @@ class TemplateAnswer extends Component {
             this.context.onContextChange('numEdges', numEdges);
             this.context.onContextChange('numQuestions', numQuestions);
         }
-        contextNodes[qId].hasChildren = false;
+        delete contextNodes[qId].hasChildren;
         this.context.onContextChange('nodes', contextNodes);
     }
 

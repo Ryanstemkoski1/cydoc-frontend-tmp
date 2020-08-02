@@ -55,3 +55,44 @@ export const sortEdges = (edgeList, edges, nodes) => {
         }
     });
 }
+
+/**
+ * Given the node's responseType, text, and answerInfo, 
+ * parse the text for the options, if appropriate, and mutate the
+ * node's answerInfo directly. 
+ * 
+ * Returns the parsed text.
+ * 
+ * @param {String} responseType 
+ * @param {String} text 
+ * @param {Object} answerInfo 
+ * @param {String} category 
+ */
+export const parseQuestionText = (responseType, text, answerInfo, category) => {
+    if (text === 'nan') {
+        text = `Root for ${category.replace("_", " ").toLowerCase()} (This question has no text, only follow-up questions)`;
+    }
+    
+    if (
+        responseType === 'CLICK-BOXES' 
+        || responseType.endsWith('POP')
+        || responseType === 'nan'
+    ) {
+        let click = text.search('CLICK');
+        let selectStart = text.search('\\[');
+        let selectEnd = text.search('\\]');
+        let choices;
+        if (click > -1) { // options are indicated by CLICK[...]
+            choices = text.slice(click + 6, selectEnd);
+            text = text.slice(0, click);
+        } else { // options are indicated by [...]
+            if (selectStart > 0) {
+                choices = text.slice(selectStart + 1, selectEnd);
+                text = text.slice(0, selectStart);
+            }
+        }
+        choices = choices.split(",").map(response => response.trim());
+        answerInfo.options = choices;
+    }
+    return text;
+}
