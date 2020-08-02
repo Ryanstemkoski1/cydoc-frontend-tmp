@@ -1,7 +1,13 @@
 import React, { Component, createRef } from 'react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import diseaseCodes from 'constants/diseaseCodes';
-import { sortEdges, getAnswerInfo, createNodeId, parseQuestionText } from './util';
+import { 
+    sortEdges, 
+    getAnswerInfo, 
+    createNodeId, 
+    parseQuestionText, 
+    parsePlaceholder,
+} from './util';
 import { 
     Button, 
     Segment,
@@ -30,19 +36,14 @@ class ImportQuestionForm extends Component {
         const id = diseaseCodes[otherGraph] + '0001';
         if (id in graph) {
             sortEdges(graph[id], edges, nodes);
-            // TODO: Account for "nan"s?
             const editedGraph = graph[id]
-                // .filter(edge => nodes[edges[edge].from].text !== 'nan')
-                .map((edge, i) => {
+                .map((edge) => {
                     const nodeId = edges[edge].from;
                     const responseType = nodes[nodeId].responseType;
                     let text = nodes[nodeId].text;
-                    console.log(text);
                     let answerInfo = getAnswerInfo(responseType);
-                    let placeholder = text.search(/SYMPTOM|DISEASE/);
-                    if (placeholder > -1) {
-                        text = text.substring(0, placeholder) + otherGraph.toLowerCase() + text.substring(placeholder +7)
-                    } 
+
+                    text = parsePlaceholder(text, otherGraph);
                     text = parseQuestionText(responseType, text, answerInfo, nodes[nodeId].category);
 
                     return {
@@ -54,18 +55,18 @@ class ImportQuestionForm extends Component {
                     }
                 });
             this.setState({ graph: editedGraph });
-            }
+        }
     }
 
     /**
      * Toggles checked state of question with id=nodeId
      */
-    toggleCheck = (e, { nodeId }) => {
+    toggleCheck = (e, { nodeid }) => {
         const { checked } = this.state;
-        if (checked.has(nodeId)) {
-            checked.delete(nodeId);
+        if (checked.has(nodeid)) {
+            checked.delete(nodeid);
         } else {
-            checked.add(nodeId);
+            checked.add(nodeid);
         }
 
         this.setState({ checked });
@@ -129,7 +130,7 @@ class ImportQuestionForm extends Component {
                 >
                     <Checkbox
                         label={text}
-                        nodeId={question.id}
+                        nodeid={question.id}
                         onChange={this.toggleCheck}
                         checked={this.state.checked.has(question.id)}
                     />
@@ -160,7 +161,6 @@ class ImportQuestionForm extends Component {
                         Cancel
                     </Button>
                     <Button 
-                        icon='plus' 
                         color='violet'
                         onClick={this.importQuestions}
                     >

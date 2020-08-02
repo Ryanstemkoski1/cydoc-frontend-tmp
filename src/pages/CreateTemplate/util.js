@@ -96,3 +96,78 @@ export const parseQuestionText = (responseType, text, answerInfo, category) => {
     }
     return text;
 }
+
+/**
+ * Replace all occurences of SYMPTOM or DISEASE with the given category
+ * 
+ * @param {String} text 
+ * @param {String} category 
+ */
+export const parsePlaceholder = (text, category) => {
+    let placeholder = text.search(/SYMPTOM|DISEASE/);
+    if (placeholder > -1) {
+        text = text.substring(0, placeholder) 
+            + category.replace("_", " ").toLowerCase() 
+            + text.substring(placeholder +7);
+    }
+    return text;
+}
+
+/**
+ * Adds all direct children question of the given parent directly
+ * to the graph object itself.
+ * 
+ * Returns the updated numQuestions and numEdges count.
+ */
+export const addChildrenNodes = (
+    parentId,
+    children, 
+    category,
+    diseaseCode, 
+    graphData,
+    contextData,
+) => {
+    let { 
+        numQuestions,
+        numEdges,
+        contextEdges,
+        contextGraph,
+        contextNodes
+    } = contextData;
+    const { graph, edges, nodes } = graphData;
+
+    // Create edges and nodes for every new question
+    for (let edge of children) {
+        const childId = createNodeId(diseaseCode, numQuestions);
+        
+        const nodeId = edges[edge].from;
+        let responseType = nodes[nodeId].responseType;
+        let text = nodes[nodeId].text;
+        let answerInfo = getAnswerInfo(responseType);
+        
+        // Preprocess the text to prepopulate the answerinfo if necessary
+        // or replace instances of SYMPTOM and DISEASE
+        text = parsePlaceholder(text, category);
+        text = parseQuestionText(responseType, text, answerInfo, nodes[nodeId].category);
+        contextNodes[childId] = {
+            text,
+            answerInfo,
+            responseType,
+            id: childId,
+            order: numQuestions,
+            hasChildren: graph[nodeId].length > 0,
+            originalId: nodeId,
+        }
+
+        contextEdges[numEdges] = {
+            from: parentId,
+            to: childId,
+        }
+
+        contextGraph[childId] = [];
+        contextGraph[parentId].push(numEdges)
+        numEdges++;
+        numQuestions++;
+    }
+    return { numEdges, numQuestions };
+}

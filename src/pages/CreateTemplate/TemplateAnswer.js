@@ -8,7 +8,14 @@ import SurgicalHistoryContent from "pages/EditNote/content/surgicalhistory/Surgi
 import MedicationsContent from "pages/EditNote/content/medications/MedicationsContent";
 import FamilyHistoryContent from 'pages/EditNote/content/familyhistory/FamilyHistoryContent';
 import ImportQuestionForm from './ImportQuestionForm';
-import { getAnswerInfo, createNodeId, sortEdges, parseQuestionText } from './util';
+import { 
+    getAnswerInfo, 
+    createNodeId, 
+    sortEdges, 
+    parseQuestionText, 
+    parsePlaceholder,
+    addChildrenNodes,
+} from './util';
 import { 
     Input, 
     Segment, 
@@ -33,6 +40,7 @@ class TemplateAnswer extends Component {
             showQuestionSelect: false,
         }
         this.updateDimensions = this.updateDimensions.bind(this);
+        this.connectGraph = this.connectGraph.bind(this);
         this.saveAnswer = this.saveAnswer.bind(this);
         this.addChildQuestion = this.addChildQuestion.bind(this);
         this.saveButtonOption = this.saveButtonOption.bind(this);
@@ -85,9 +93,9 @@ class TemplateAnswer extends Component {
         
         let childId;
 
-        const contextNodes = { ...this.context.state.nodes };
-        const contextEdges = { ...this.context.state.edges };
-        const contextGraph = { ...this.context.state.graph };
+        const contextNodes = this.context.state.nodes;
+        const contextEdges = this.context.state.edges;
+        const contextGraph = this.context.state.graph;
 
         const id = diseaseCodes[otherGraph] + '0001';
         let questionParent = parent;
@@ -102,6 +110,8 @@ class TemplateAnswer extends Component {
                     responseType: nodes[id].responseType,
                     answerInfo: getAnswerInfo(nodes[id].responseType),
                     order: numQuestions,
+                    hasChanged: false,
+                    originalId: nodes[id],
                 }
                 contextEdges[numEdges] = {
                     from: parent,
@@ -116,42 +126,20 @@ class TemplateAnswer extends Component {
 
             // sort edges by the node's question order
             sortEdges(graph[id], edges, nodes);
-
+            
             // create edges and nodes for every new question
-            for (let edge of graph[id]) {
-                childId = createNodeId(diseaseCode, numQuestions);
-                
-                const nodeId = edges[edge].from;
-                let responseType = nodes[nodeId].responseType;
-                let text = nodes[nodeId].text;
-                let answerInfo = getAnswerInfo(responseType);
-                let placeholder = text.search(/SYMPTOM|DISEASE/);
-                if (placeholder > -1) {
-                    // replace occurrences of SYMPTOM or DISEASE with disease itself
-                    text = text.substring(0, placeholder) + otherGraph.toLowerCase() + text.substring(placeholder +7)
-                }
-                // preprocess the text to prepopulate the answerinfo if necessary
-                text = parseQuestionText(responseType, text, answerInfo, nodes[nodeId].category);
-                contextNodes[childId] = {
-                    text,
-                    answerInfo,
-                    responseType,
-                    id: childId,
-                    order: numQuestions,
-                    hasChildren: graph[nodeId].length > 0,
-                    originalId: nodeId,
-                }
+            let newCount = addChildrenNodes(
+                questionParent, 
+                graph[id],
+                otherGraph,
+                diseaseCode,
+                this.props.graphData,
+                { numQuestions, numEdges, contextNodes, contextGraph, contextEdges },
+            );
+            numQuestions = newCount.numQuestions;
+            numEdges = newCount.numEdges;
 
-                contextEdges[numEdges] = {
-                    from: questionParent,
-                    to: childId,
-                }
 
-                contextGraph[childId] = [];
-                contextGraph[questionParent].push(numEdges)
-                numEdges++;
-                numQuestions++;
-            }
             this.context.onContextChange('nodes', contextNodes);
             this.context.onContextChange('edges', contextEdges);
             this.context.onContextChange('graph', contextGraph);
@@ -392,8 +380,6 @@ class TemplateAnswer extends Component {
         
         const disease = this.context.state.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
-        
-        let childId;
 
         const contextNodes = { ...this.context.state.nodes };
         const contextEdges = { ...this.context.state.edges };
@@ -404,36 +390,17 @@ class TemplateAnswer extends Component {
             sortEdges(graph[originalId], edges, nodes);
 
             // create edges and nodes for every new question
-            for (let edge of graph[originalId]) {
-                childId = createNodeId(diseaseCode, numQuestions);
-                
-                const nodeId = edges[edge].from;
-                let responseType = nodes[nodeId].responseType;
-                let text = nodes[nodeId].text;
-                let answerInfo = getAnswerInfo(responseType);
-                // preprocess the text to prepopulate the answerinfo if necessary
-                text = parseQuestionText(responseType, text, answerInfo, nodes[nodeId].category);
+            let newCount = addChildrenNodes(
+                qId,
+                graph[originalId],
+                "",
+                diseaseCode,
+                graphData,
+                { numQuestions, numEdges, contextNodes, contextGraph, contextEdges },
+            );
+            numQuestions = newCount.numQuestions;
+            numEdges = newCount.numEdges;
 
-                contextNodes[childId] = {
-                    text,
-                    answerInfo,
-                    responseType,
-                    id: childId,
-                    order: numQuestions,
-                    hasChildren: graph[nodeId].length > 0,
-                    originalId: nodeId,
-                }
-
-                contextEdges[numEdges] = {
-                    from: qId,
-                    to: childId,
-                }
-
-                contextGraph[childId] = [];
-                contextGraph[qId].push(numEdges)
-                numEdges++;
-                numQuestions++;
-            }
             this.context.onContextChange('nodes', contextNodes);
             this.context.onContextChange('edges', contextEdges);
             this.context.onContextChange('graph', contextGraph);
