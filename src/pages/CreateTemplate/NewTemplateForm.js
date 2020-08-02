@@ -7,7 +7,7 @@ import { graphClient } from 'constants/api.js';
 import diseaseAbbrevs from 'constants/diseaseAbbrevs.json';
 import diseaseCodes from 'constants/diseaseCodes';
 import Nestable from 'react-nestable';
-import { createNodeId } from './util';
+import { createNodeId, updateParent } from './util';
 
 const OTHER_TEXT = 'Other (specify below)';
 
@@ -174,6 +174,8 @@ class NewTemplateForm extends Component {
             responseType: '',
             order: numQuestions,
             answerInfo: {},
+            parent: '0000',
+            hasChanged: true,
         };
 
         this.context.state.edges[numEdges] = {
@@ -193,6 +195,8 @@ class NewTemplateForm extends Component {
     createTemplate = () => {
         const { disease, edges, nodes, graph } = this.context.state;
 
+        const unchangedNodes = new Set();
+
         const updatedEdges = {};
         const updatedNodes = {};
         const updatedGraph = {};
@@ -200,19 +204,43 @@ class NewTemplateForm extends Component {
 
         // update all edge to/from to match current disease
         for (let [key, edge] of Object.entries(edges)) {
+            // If both nodes are unchanged imported nodes, then no need to create an edge
+            if (!nodes[edge.from].hasChanged && !nodes[edge.to].hasChanged) {
+                continue;
+            }
+            let to;
+            // Otherwise, if the incoming node has changed, make sure to use the old ID.
+            // There'll never exist an edge of original -> new because adding a new child
+            // is considered altering the original. So hasChanged would be false.
+            if (edge.from !== '0000' && !nodes[edge.to].hasChanged) {
+                to  = nodes[edge.to].originalId;
+            } else {
+                to = edge.to === '0000' || edge.to.startsWith(diseaseCode) ? edge.to : diseaseCode + edge.to.slice(3);
+            }
             const from = edge.from === '0000' || edge.from.startsWith(diseaseCode) ? edge.from : diseaseCode + edge.from.slice(3);
-            const to = edge.to === '0000' || edge.to.startsWith(diseaseCode) ? edge.to : diseaseCode + edge.to.slice(3);
             updatedEdges[key] = { from, to };
         }
 
         // update all graph keys
         for (let [key, children] of Object.entries(graph)) {
+            // Skip over unchanged nodes
+            if (key !== "0000" && !nodes[key].hasChanged) {
+                continue;
+            }
             const id = key === '0000' || key.startsWith(diseaseCode) ? key : diseaseCode + key.slice(3);
             updatedGraph[id] = children; 
         }
 
         // update all node keys and object values
         for (let [key, data] of Object.entries(nodes)) {
+            if (key !== "0000" && !data.hasChanged) {
+                continue;
+            }
+            // If node has changed, the following data is now useless
+            delete data.hasChanged;
+            delete data.originalId;
+            delete data.parent;
+
             if (key === '0000' || key.startsWith(diseaseCode)) {
                 updatedNodes[key] = data;
             } else {
@@ -221,10 +249,13 @@ class NewTemplateForm extends Component {
             }
         }
 
-        this.context.onContextChange('nodes', updatedNodes);
-        this.context.onContextChange('graph', updatedGraph);
-        this.context.onContextChange('edges', updatedEdges);
-
+        // this.context.onContextChange('nodes', updatedNodes);
+        // this.context.onContextChange('graph', updatedGraph);
+        // this.context.onContextChange('edges', updatedEdges);
+        
+        console.log(updatedNodes);
+        console.log(updatedEdges);
+        console.log(updatedGraph);
         alert('Template created'); // for dev purposes 
     }
 
@@ -276,7 +307,7 @@ class NewTemplateForm extends Component {
     }
 
     updateOrder = (items, item) => {
-        const { graph, edges } = this.context.state;
+        const { graph, edges, nodes } = this.context.state;
 
         const [newParent, subtree] = this.findParent(items, "0000", item.id);
         if (!newParent) {
@@ -292,6 +323,7 @@ class NewTemplateForm extends Component {
                 newEdges.push(nodesToEdge[nodeId]);
             }
             graph[newParent] = newEdges;
+            updateParent(nodes, newParent);
         } else {
             // Level changed, so remove edge from old parent
             graph[item.parent] = graph[item.parent].filter(edge => edge != item.edge);
@@ -309,7 +341,10 @@ class NewTemplateForm extends Component {
                     newEdges.push(nodesToEdge[nodeId]);
                 }
             }
-            graph[newParent] = newEdges;
+            graph[newParent] = newEdges;            
+            updateParent(nodes, newParent);
+            updateParent(nodes, item.parent);
+
         }
         this.context.onContextChange("graph", graph);
         this.context.onContextChange("edges", edges);

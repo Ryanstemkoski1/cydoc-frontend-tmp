@@ -12,8 +12,7 @@ import {
     getAnswerInfo, 
     createNodeId, 
     sortEdges, 
-    parseQuestionText, 
-    parsePlaceholder,
+    updateParent,
     addChildrenNodes,
 } from './util';
 import { 
@@ -91,14 +90,14 @@ class TemplateAnswer extends Component {
         const disease = this.context.state.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
         
-        let childId;
-
         const contextNodes = this.context.state.nodes;
         const contextEdges = this.context.state.edges;
         const contextGraph = this.context.state.graph;
 
         const id = diseaseCodes[otherGraph] + '0001';
         let questionParent = parent;
+        updateParent(contextNodes, parent);
+
         if (id in graph) {
             // add the original root if the text is not "nan"
             if (nodes[id].text !== 'nan') {
@@ -106,12 +105,13 @@ class TemplateAnswer extends Component {
   
                 contextNodes[rootId] = {
                     id: rootId,
+                    parent,
                     text: nodes[id].text,
                     responseType: nodes[id].responseType,
                     answerInfo: getAnswerInfo(nodes[id].responseType),
                     order: numQuestions,
                     hasChanged: false,
-                    originalId: nodes[id],
+                    originalId: id,
                 }
                 contextEdges[numEdges] = {
                     from: parent,
@@ -155,8 +155,10 @@ class TemplateAnswer extends Component {
 
     saveAnswer = (event, { value, answer }) => {
         const { qId } = this.props;
-        this.context.state.nodes[qId].answerInfo[answer] = value;
-        this.context.onContextChange('nodes', this.context.state.nodes);
+        const { nodes } = this.context.state;
+        nodes[qId].answerInfo[answer] = value;
+        updateParent(nodes, qId);
+        this.context.onContextChange('nodes', nodes);
     }
 
     addChildQuestion = (event, { parent }) => {
@@ -164,17 +166,17 @@ class TemplateAnswer extends Component {
         let numEdges = this.context.state.numEdges;
         const disease = this.context.state.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
-        const randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
-
-        const numZeros = 4 - numQuestions.toString().length;
-        const childId = diseaseCode + '-' + randomId.toString() + '-' + '0'.repeat(numZeros) + numQuestions.toString();
-
+        const childId = createNodeId(diseaseCode, numQuestions);
+        
+        updateParent(this.context.state.nodes, parent);
+        
         this.context.state.nodes[childId] = {
             id: childId,
             text: '',
             responseType: '',
             order: numQuestions,
             answerInfo: {},
+            hasChanged: true,
         };
 
         this.context.state.edges[numEdges] = {
@@ -193,15 +195,18 @@ class TemplateAnswer extends Component {
 
     saveButtonOption = (event, { value, index }) => {
         const { qId } = this.props;
-        this.context.state.nodes[qId].answerInfo.options[index] = value;
-        this.context.onContextChange('nodes', this.context.state.nodes);
+        const { nodes } = this.context.state;
+        nodes[qId].answerInfo.options[index] = value;
+        updateParent(nodes, qId);
+        this.context.onContextChange('nodes', nodes);
     }
 
     addButtonOption = (event) => {
         const { qId } = this.props;
         const nodes = { ...this.context.state.nodes };
         nodes[qId].answerInfo.options.push('');
-        
+        updateParent(nodes, qId);
+
         // update response type from BLANK -> POP
         if (nodes[qId].responseType.endsWith("BLANK")) {
             const prefix = nodes[qId].responseType.split("-")[0];
@@ -215,7 +220,8 @@ class TemplateAnswer extends Component {
         const { qId } = this.props;
         const nodes = { ...this.context.state.nodes };
         nodes[qId].answerInfo.options.splice(index, 1);
-
+        updateParent(nodes, qId);
+        
         // update response type from POP -> BLANK
         if (nodes[qId].answerInfo.options.length === 0 
             && nodes[qId].responseType.endsWith('POP')) {
@@ -364,6 +370,7 @@ class TemplateAnswer extends Component {
         const { qId } = this.props;
         const nodes = { ...this.context.state.nodes };
         nodes[qId].responseType = value;
+        updateParent(nodes, qId);
         this.context.onContextChange('nodes', nodes);
     }
 
@@ -409,6 +416,7 @@ class TemplateAnswer extends Component {
         }
         delete contextNodes[qId].hasChildren;
         this.context.onContextChange('nodes', contextNodes);
+
     }
 
     getAnswerTemplate(startEg, endEg, optionsText) {
@@ -482,11 +490,11 @@ class TemplateAnswer extends Component {
                     />
                 );
             }
-            if (this.context.state.nodes[qId].hasChildren) {
+            if (this.context.state.nodes[qId].hasChildren && !this.context.state.nodes[qId].hasChanged) {
                 editChildren = (
                     <List 
                         className='edit-children' 
-                        onClick={() => this.editChildren(qId)}
+                        onClick={() => this.props.editChildren(qId, this.context.state.nodes)}
                     >
                         <List.Item>
                             <List.Icon name='triangle right'/>

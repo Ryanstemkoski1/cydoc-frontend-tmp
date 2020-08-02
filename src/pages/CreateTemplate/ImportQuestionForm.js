@@ -92,6 +92,7 @@ class ImportQuestionForm extends Component {
                     hasChildren: question.hasChildren,
                     originalId: question.id,
                     order: numQuestions,
+                    hasChanged: false,
                 }
                 edges[numEdges] = {
                     from: parent,

@@ -157,6 +157,8 @@ export const addChildrenNodes = (
             order: numQuestions,
             hasChildren: graph[nodeId].length > 0,
             originalId: nodeId,
+            hasChanged: false,
+            parent: parentId,
         }
 
         contextEdges[numEdges] = {
@@ -170,4 +172,18 @@ export const addChildrenNodes = (
         numQuestions++;
     }
     return { numEdges, numQuestions };
+}
+
+/**
+ * Walk up the knowledge graph and update all imported nodes
+ * to hasChanged=true to indicate not to use the original ID anymore
+ * 
+ * @param {Object} nodes 
+ * @param {String} qid 
+ */
+export const updateParent = (nodes, qid) => {
+    if (qid && !nodes[qid].hasChanged) {
+        nodes[qid].hasChanged = true;
+        updateParent(nodes, nodes[qid].parent);
+    }
 }
