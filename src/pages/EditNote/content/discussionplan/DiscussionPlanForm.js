@@ -131,7 +131,7 @@ export default class DiscussionPlanForm extends Component{
                                 options={this.state.mainOptions}
                                 onChange={this.handleOnChange}
                                 onAddItem={this.handleAddOption}
-                                placeholder='Medication'
+                                placeholder='Medication Name'
                             />
                             <Input
                                 fluid
@@ -222,7 +222,7 @@ export default class DiscussionPlanForm extends Component{
         if (type === 'prescriptions') {
             subheaders = (
             <Grid.Row>
-                    <Grid.Column> Recipe (Rx) </Grid.Column>
+                    <Grid.Column> Rx </Grid.Column>
                     <Grid.Column> Signature (Sig) </Grid.Column>
                     <Grid.Column> Comments </Grid.Column>
             </Grid.Row>
@@ -281,7 +281,7 @@ export default class DiscussionPlanForm extends Component{
             } else {
                 title = (
                     <div className='recipe'>
-                        Recipe (Rx)
+                        Rx
                         <Input 
                             transparent 
                             className='content-input-surgical content-dropdown medication plan-main-input recipe'
@@ -299,7 +299,7 @@ export default class DiscussionPlanForm extends Component{
                                 options={this.state.mainOptions}
                                 onAddItem={this.handleAddOption}
                                 onChange={this.handleOnChange}
-                                placeholder='Prescription'
+                                placeholder='Medication Name'
                                 className='side-effects'
                             />
                         </Input>

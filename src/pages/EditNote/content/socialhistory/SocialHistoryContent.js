@@ -108,8 +108,8 @@ export default class SocialHistoryContent extends React.Component {
         const rowToAdd = (<SocialHistoryNoteRow
             onChange={this.handleSubstanceUseChange}
             condition=""
-            firstField={this.substanceUseFields["Substance Abuse"].firstField}
-            secondField={this.substanceUseFields["Substance Abuse"].secondField}/>);
+            firstField={this.substanceUseFields["Recreational Drugs"].firstField}
+            secondField={this.substanceUseFields["Recreational Drugs"].secondField}/>);
 
         const substanceUseRows = this.generateSubstanceUseRows();
         const secondaryFieldRows = this.generateSecondaryFieldRows();

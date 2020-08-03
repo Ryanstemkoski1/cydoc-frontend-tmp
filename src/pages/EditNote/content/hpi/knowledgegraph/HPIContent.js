@@ -44,10 +44,11 @@ class HPIContent extends Component {
                     if (key === "Shortbreath") key = "Shortness of Breath"
                     if (key === "Nausea-vomiting") key = "Nausea/Vomiting" 
                     category_dict[key] = node.substring(0, node.length-2) + "01"
-                    var body_system = nodes[node]["bodySystem"] 
+                    var body_system = nodes[node]["bodySystem"];
                     if (!(body_system in body_systems)) body_systems[body_system] = {"diseases": [], "name": disease_abbrevs[body_system]}
                     body_systems[body_system]["diseases"].push(key)
                 }}
+            delete body_systems["GENERAL"];
             this.setState({isLoaded: true, graphData: res.data, categories: category_dict, body_systems: Object.values(body_systems)})
         })
         this.updateDimensions();
