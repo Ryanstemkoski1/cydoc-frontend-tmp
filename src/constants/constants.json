@@ -136,8 +136,8 @@
         "thirdField": "# Per Week",
         "quitYear": "Quit Year"
       },
-      "Substance Abuse": {
-        "condition": "Substance Abuse",
+      "Recreational Drugs": {
+        "condition": "Recreational Drugs",
         "firstField": "Drug Name",
         "secondField": "Mode of Delivery",
         "thirdField": "# Per Week",
@@ -149,11 +149,18 @@
         "Yes": false,
         "In the Past": false,
         "Never Used": false,
-        "Drinks Type": "",
-        "Drink Size": "",
-        "# Per Week": "",
+        "fields": [{"Drink Type": "", "Drink Size": "", "# Per Week": ""}],
         "Quit Year": "",
-        "Comments": ""
+        "Comments": "",
+        "InterestedInQuitting": {
+          "Yes": false,
+          "Maybe": false,
+          "No": false
+        },
+        "TriedToQuit": {
+          "Yes": false,
+          "No": false
+        }
       },
       "Tobacco": {
         "Yes": false,
@@ -163,17 +170,33 @@
         "Number of Years": "",
         "Products Used": "",
         "Quit Year": "",
-        "Comments": ""
+        "Comments": "",
+        "InterestedInQuitting": {
+          "Yes": false,
+          "Maybe": false,
+          "No": false
+        },
+        "TriedToQuit": {
+          "Yes": false,
+          "No": false
+        }
       },
-      "Substance Abuse": {
+      "Recreational Drugs": {
         "Yes": false,
         "In the Past": false,
         "Never Used": false,
-        "Drug Name": "",
-        "Mode of Delivery": "",
-        "# Per Week": "",
+        "fields": [{"Drug Name": "", "Mode of Delivery": "", "# Per Week": ""}],
         "Quit Year": "",
-        "Comments": ""
+        "Comments": "",
+        "InterestedInQuitting": {
+          "Yes": false,
+          "Maybe": false,
+          "No": false
+        },
+        "TriedToQuit": {
+          "Yes": false,
+          "No": false
+        }
       },
       "Living Situation": "",
       "Employment": "",

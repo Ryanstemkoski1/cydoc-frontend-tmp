@@ -19,7 +19,7 @@ class GenerateNote extends React.Component {
 
     medicalHistory() {
         const medicalHistory = this.context["Medical History"];
-        //console.log(medicalHistory);
+        // console.log(medicalHistory);
 
         const conditions = [];
         for (var condition in medicalHistory) {
@@ -207,39 +207,56 @@ class GenerateNote extends React.Component {
 
     socialHistory() {
         const socialHistory = this.context["Social History"];
-        // console.log(socialHistory);
+        console.log(socialHistory);
 
         return (
             <div>
                 <div>
                     <b>Tobacco</b>
                     <ul>
-                        {socialHistory.Tobacco['Yes'] === true ? <li> Currently uses tobacco </li> : <li> Never used </li>}
-                        {socialHistory.Tobacco['In the Past'] === true ? <li> Used to use tobacco but does not anymore </li> : null}
-                        {socialHistory.Tobacco['Packs/Day'] && socialHistory.Tobacco['Number of Years'] ? <li> {socialHistory.Tobacco['Number of Years']*socialHistory.Tobacco['Packs/Day']} pack years </li> : null}
-                        {socialHistory.Tobacco.Comments ? <li> Comments: {socialHistory.Tobacco.Comments} </li> : null}
+                        {socialHistory.Tobacco['Yes'] === true ? <li>Currently uses tobacco</li> : null}
+                        {socialHistory.Tobacco['In the Past'] === true ? <li>Used to use tobacco but does not anymore</li> : null}
+                        {socialHistory.Tobacco['Quit Year'] ? <li>Quit Year: {socialHistory.Tobacco['Quit Year']}</li> : null}
+                        {socialHistory.Tobacco['Never Used'] === true ? <li>Never used</li> : null}
+                        {socialHistory.Tobacco['Packs/Day'] && socialHistory.Tobacco['Number of Years'] ? <li>{socialHistory.Tobacco['Number of Years']*socialHistory.Tobacco['Packs/Day']} pack years</li> : null}
+                        {socialHistory.Tobacco['Products Used'] ? <li>Products used: {socialHistory.Tobacco['Products Used'].join(', ')}</li> : null}
+                        {socialHistory.Tobacco['InterestedInQuitting']['Yes'] === true ? <li>Interested in quitting? Yes</li> : null}
+                        {socialHistory.Tobacco['InterestedInQuitting']['Maybe'] === true ? <li>Interested in quitting? Maybe</li> : null}
+                        {socialHistory.Tobacco['InterestedInQuitting']['No'] === true ? <li>Interested in quitting? No</li> : null}
+                        {socialHistory.Tobacco['TriedToQuit']['Yes'] === true ? <li>Tried to quit? Yes</li> : <li>Tried to quit? No</li>}
+                        {socialHistory.Tobacco['Comments'] ? <li>Comments: {socialHistory.Tobacco['Comments']}</li> : null}
                     </ul>
                 </div>
                 
                 <div>
                     <b>Alcohol</b>
                     <ul>
-                        {socialHistory.Alcohol.Yes === true ? <li> Currently uses alcohol </li> : <li> Never used </li>}
-                        {socialHistory.Alcohol['In the Past'] === true ? <li> Used to use alcohol but does not anymore </li> : null}
-                        {socialHistory.Alcohol['What kind of drinks?'] ? <li> Drinks: {socialHistory.Alcohol['What kind of drinks?']} </li> : null}
-                        {socialHistory.Alcohol.Comments ? <li> Comments: {socialHistory.Alcohol.Comments} </li> : null}
+                        {socialHistory.Alcohol['Yes'] === true ? <li>Currently uses alcohol</li> : null}
+                        {socialHistory.Alcohol['In the Past'] === true ? <li>Used to use alcohol but does not anymore</li> : null}
+                        {socialHistory.Alcohol['Quit Year'] ? <li>Quit Year: {socialHistory.Alcohol['Quit Year']}</li> : null}
+                        {socialHistory.Alcohol['Never Used'] === true ? <li>Never used</li> : null}
+                        {socialHistory.Alcohol['InterestedInQuitting']['Yes'] === true ? <li>Interested in quitting? Yes</li> : null}
+                        {socialHistory.Alcohol['InterestedInQuitting']['Maybe'] === true ? <li>Interested in quitting? Maybe</li> : null}
+                        {socialHistory.Alcohol['InterestedInQuitting']['No'] === true ? <li>Interested in quitting? No</li> : null}
+                        {socialHistory.Alcohol['TriedToQuit']['Yes'] === true ? <li>Tried to quit? Yes</li> : <li>Tried to quit? No</li>}
+                        {socialHistory.Alcohol['Comments'] ? <li>Comments: {socialHistory.Alcohol['Comments']}</li> : null}
                     </ul>
                 </div>
                 
-                {/* TODO: make this better organized by drug used (aka don't say uses substances, put the actuall drug) */}
                 <div>
-                    <b>Substance Abuse</b>
+                    <b>Recreational Drugs</b>
                     <ul>
-                        {socialHistory['Substance Abuse'].Yes === true ? <li> Currently uses substances </li> : <li> Never used </li>}
-                        {socialHistory['Substance Abuse']['In the Past'] === true ? <li> Used to use substances but does not anymore </li> : null}
-                        {socialHistory['Substance Abuse'].Comments ? <li> Comments: {socialHistory['Substance Abuse'].Comments} </li> : null}
+                        {socialHistory['Recreational Drugs']['Yes'] === true ? <li>Currently uses substances</li> : null}
+                        {socialHistory['Recreational Drugs']['In the Past'] === true ? <li>Used to use substances but does not anymore</li> : null}
+                        {socialHistory['Recreational Drugs']['Quit Year'] ? <li>Quit Year: {socialHistory['Recreational Drugs']['Quit Year']}</li> : null}
+                        {socialHistory['Recreational Drugs']['Never'] === true ? <li>Never used</li> : null}
+                        {socialHistory['Recreational Drugs']['InterestedInQuitting']['Yes'] === true ? <li>Interested in quitting? Yes</li> : null}
+                        {socialHistory['Recreational Drugs']['InterestedInQuitting']['Maybe'] === true ? <li>Interested in quitting? Maybe</li> : null}
+                        {socialHistory['Recreational Drugs']['InterestedInQuitting']['No'] === true ? <li>Interested in quitting? No</li> : null}
+                        {socialHistory['Recreational Drugs']['TriedToQuit']['Yes'] === true ? <li>Tried to quit? Yes</li> : <li>Tried to quit? No</li>}
+                        {socialHistory['Recreational Drugs']['Comments'] ? <li>Comments: {socialHistory['Recreational Drugs']['Comments']}</li> : null}
                     </ul>
-                </div>
+                </div> 
                 
                 <div> <b>Living Situation: </b> {socialHistory['Living Situation']} </div>
                 <div> <b>Employment: </b> {socialHistory.Employment} </div>
@@ -275,7 +292,7 @@ class GenerateNote extends React.Component {
                 }
             }
         }
-        console.log(components);
+        // console.log(components);
 
         return (
             // <ul>
@@ -456,7 +473,7 @@ class GenerateNote extends React.Component {
     plan() {
         const plan = this.context.plan;
         const conditions = plan.conditions;
-        console.log(plan);
+        // console.log(plan);
         // console.log(plan.conditions);
 
         // DON'T NEED A TABLE/RICH TEXT VERSION FOR THIS

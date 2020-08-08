@@ -7,7 +7,7 @@ import {SOCIAL_HISTORY} from "constants/constants";
 import HPIContext from 'contexts/HPIContext.js';
 import Tobacco from './Tobacco';
 import Alcohol from './Alcohol';
-import SubstanceAbuse from './SubstanceAbuse';
+import RecreationalDrugs from './RecreationalDrugs';
 
 export default class SocialHistoryContent extends React.Component {
 
@@ -16,10 +16,12 @@ export default class SocialHistoryContent extends React.Component {
     constructor(props) {
         super(props);
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
+        this.handleInterestedToggleButtonClick = this.handleInterestedToggleButtonClick.bind(this);
+        this.handleTriedToggleButtonClick = this.handleTriedToggleButtonClick.bind(this);
         this.handleSocialHistoryChange = this.handleSocialHistoryChange.bind(this);
         this.handleSecondaryFieldsChange = this.handleSecondaryFieldsChange.bind(this);
         this.generateSecondaryFieldRows = this.generateSecondaryFieldRows.bind(this);
-        this.generateSubstanceUseRows = this.generateSubstanceUseRows.bind(this);
+        // this.generateSubstanceUseRows = this.generateSubstanceUseRows.bind(this);
         this.substanceUseContentHeader = SOCIAL_HISTORY.SUBSTANCE_USE_CONTENT_HEADER;
         this.secondaryFields = SOCIAL_HISTORY.SECONDARY_FIELDS;
         this.substanceUseFields = SOCIAL_HISTORY.SUBSTANCE_USE_FIELDS;
@@ -39,15 +41,43 @@ export default class SocialHistoryContent extends React.Component {
         this.context.onContextChange("Social History", values);
     }
 
-    //handles button in substance use portion
-    handleToggleButtonClick(event, data){
+    //handles button for usage in substance use portion
+    handleToggleButtonClick(event, data) {
         const values = this.context["Social History"];
-        const responses = ['Yes', 'In the Past', 'Never Used']
+        const responses = ['Yes', 'In the Past', 'Never Used'];
         const prevState = values[data.condition][data.title];
         values[data.condition][data.title] = ! prevState;
         for (var response_index in responses) {
             var response = responses[response_index]
             if (data.title !== response) values[data.condition][response] = false
+        }
+        this.context.onContextChange("Social History", values);
+    }
+
+    //handles button for interested in quitting question in substance use portion
+    handleInterestedToggleButtonClick(event, data) {
+        const values = this.context["Social History"];
+        const responses = ['Yes', 'Maybe', 'No'];
+        console.log(data);
+        const prevState = values[data.condition]["InterestedInQuitting"][data.title];
+        values[data.condition]["InterestedInQuitting"][data.title] = ! prevState;
+        for (var response_index in responses) {
+            var response = responses[response_index]
+            if (data.title !== response) values[data.condition]["InterestedInQuitting"][response] = false;
+            console.log(values[data.condition]["InterestedInQuitting"][response]);
+        }
+        this.context.onContextChange("Social History", values);        
+    }
+
+    //handles button for tried to quit question in substance use portion
+    handleTriedToggleButtonClick(event, data) {
+        const values = this.context["Social History"];
+        const responses = ['Yes', 'No'];
+        const prevState = values[data.condition]["TriedToQuit"][data.title];
+        values[data.condition]["TriedToQuit"][data.title] = ! prevState;
+        for (var response_index in responses) {
+            var response = responses[response_index]
+            if (data.title !== response) values[data.condition]["TriedToQuit"][response] = false
         }
         this.context.onContextChange("Social History", values);
     }
@@ -72,42 +102,44 @@ export default class SocialHistoryContent extends React.Component {
         );
     }
 
-    // Generates a collection of Grid.Row for the substance use portion
-    generateSubstanceUseRows() {
-        return (this.props.mobile ? (
-            Object.keys(this.substanceUseFields).map(
-                (label, index) =>
-                    <SocialHistoryNoteItem
-                        onChange={this.handleSocialHistoryChange}
-                        key={index}
-                        onToggleButtonClick={this.handleToggleButtonClick}
-                        condition={this.substanceUseFields[label].condition}
-                        firstField={this.substanceUseFields[label].firstField}
-                        secondField={this.substanceUseFields[label].secondField}
-                        thirdField={this.substanceUseFields[label].thirdField}
-                        fourthField={this.substanceUseFields[label].fourthField ? this.substanceUseFields[label].fourthField : null}
-                        fifthField={this.substanceUseFields[label].fifthField ? this.substanceUseFields[label].fifthField : null}
-                        values={this.context["Social History"]}
-                    />
-                )
-            ) : (
-            Object.keys(this.substanceUseFields).map(
-                (label, index) =>
-                    <SocialHistoryNoteRow
-                        onChange={this.handleSocialHistoryChange}
-                        key={index}
-                        onToggleButtonClick={this.handleToggleButtonClick}
-                        condition={this.substanceUseFields[label].condition}
-                        firstField={this.substanceUseFields[label].firstField}
-                        secondField={this.substanceUseFields[label].secondField}
-                        thirdField={this.substanceUseFields[label].thirdField}
-                        fourthField={this.substanceUseFields[label].fourthField ? this.substanceUseFields[label].fourthField : null}
-                        fifthField={this.substanceUseFields[label].fifthField ? this.substanceUseFields[label].fifthField : null}
-                        values={this.context["Social History"]}
-                    />
-            )
-        ));
-    }
+    // // Generates a collection of Grid.Row for the substance use portion
+    // generateSubstanceUseRows() {
+    //     return (this.props.mobile ? (
+    //         Object.keys(this.substanceUseFields).map(
+    //             (label, index) =>
+    //                 <SocialHistoryNoteItem
+    //                     onChange={this.handleSocialHistoryChange}
+    //                     key={index}
+    //                     onToggleButtonClick={this.handleToggleButtonClick}
+    //                     onInterestedButtonClick={this.handleInterestedToggleButtonClick}
+    //                     onTriedButtonClick={this.handleTriedToggleButtonClick}
+    //                     condition={this.substanceUseFields[label].condition}
+    //                     firstField={this.substanceUseFields[label].firstField}
+    //                     secondField={this.substanceUseFields[label].secondField}
+    //                     thirdField={this.substanceUseFields[label].thirdField}
+    //                     fourthField={this.substanceUseFields[label].fourthField ? this.substanceUseFields[label].fourthField : null}
+    //                     fifthField={this.substanceUseFields[label].fifthField ? this.substanceUseFields[label].fifthField : null}
+    //                     values={this.context["Social History"]}
+    //                 />
+    //             )
+    //         ) : (
+    //         Object.keys(this.substanceUseFields).map(
+    //             (label, index) =>
+    //                 <SocialHistoryNoteRow
+    //                     onChange={this.handleSocialHistoryChange}
+    //                     key={index}
+    //                     onToggleButtonClick={this.handleToggleButtonClick}
+    //                     condition={this.substanceUseFields[label].condition}
+    //                     firstField={this.substanceUseFields[label].firstField}
+    //                     secondField={this.substanceUseFields[label].secondField}
+    //                     thirdField={this.substanceUseFields[label].thirdField}
+    //                     fourthField={this.substanceUseFields[label].fourthField ? this.substanceUseFields[label].fourthField : null}
+    //                     fifthField={this.substanceUseFields[label].fifthField ? this.substanceUseFields[label].fifthField : null}
+    //                     values={this.context["Social History"]}
+    //                 />
+    //         )
+    //     ));
+    // }
 
     // render() {
 
@@ -142,16 +174,26 @@ export default class SocialHistoryContent extends React.Component {
     // }
 
     render() {
+        
+        const secondaryFieldRows = this.generateSecondaryFieldRows();
+        // console.log(this.context["Social History"]);
+        // console.log(SOCIAL_HISTORY.STATE);
+        
         return (
             <Fragment>
                 <Segment>
-                    <Tobacco values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick} />
+                    <Tobacco values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick} onInterestedButtonClick={this.handleInterestedToggleButtonClick} onTriedButtonClick={this.handleTriedToggleButtonClick} onTableBodyChange={this.context.onContextChange.bind(this.context, 'Social History')} />
                 </Segment>
                 <Segment>
-                    <Alcohol values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick}/>
+                    <Alcohol values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick} onInterestedButtonClick={this.handleInterestedToggleButtonClick} onTriedButtonClick={this.handleTriedToggleButtonClick}/>
                 </Segment>
                 <Segment>
-                    <SubstanceAbuse values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick}/>
+                    <RecreationalDrugs values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick} onInterestedButtonClick={this.handleInterestedToggleButtonClick} onTriedButtonClick={this.handleTriedToggleButtonClick}/>
+                </Segment>
+                <Segment>
+                    <Grid columns={2} stackable>
+                        {secondaryFieldRows}
+                    </Grid>
                 </Segment>
             </Fragment>
         )

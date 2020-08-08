@@ -4,19 +4,20 @@ import { SOCIAL_HISTORY } from 'constants/constants';
 import SocialHistoryTableContent from 'components/tools/SocialHistoryTableContent';
 import HPIContext from 'contexts/HPIContext';
 
-class Alcohol extends React.Component {
+// CHANGE TO RECREATIONAL DRUGS
+class RecreationalDrugs extends React.Component {
 
     static contextType = HPIContext
 
     constructor(props) {
         super(props);
-        this.alcoholFields = SOCIAL_HISTORY.SUBSTANCE_USE_FIELDS.Alcohol;
+        this.recreationalDrugsFields = SOCIAL_HISTORY.SUBSTANCE_USE_FIELDS["Recreational Drugs"];
         this.additionalFields = this.additionalFields.bind(this);
     }
 
     additionalFields() {
-        const condition = this.alcoholFields.condition;
-        const fields = this.alcoholFields;
+        const condition = this.recreationalDrugsFields.condition;
+        const fields = this.recreationalDrugsFields;
         const values = this.props.values;
         
         if (values[condition]["Yes"] || values[condition]["In the Past"]) {
@@ -38,8 +39,8 @@ class Alcohol extends React.Component {
                     name={condition}
                     values={values}
                     category={'Social History'}
-                    addRow='drink type'
-                    prompt={values[condition]["In the Past"] ? 'Please summarize what you used to drink:' : ''}
+                    addRow='drug'
+                    prompt={values[condition]["In the Past"] ? 'Please summarize what recreational drugs you previously used:' : ''}
                 />
             )
         }
@@ -52,8 +53,8 @@ class Alcohol extends React.Component {
                 onToggleButtonClick={this.props.onToggleButtonClick}
                 onInterestedButtonClick={this.props.onInterestedButtonClick}
                 onTriedButtonClick={this.props.onTriedButtonClick}
-                condition={this.alcoholFields.condition}
-                fields={this.alcoholFields}
+                condition={this.recreationalDrugsFields.condition}
+                fields={this.recreationalDrugsFields}
                 values={this.props.values}
                 additionalFields={this.additionalFields}
             />
@@ -62,4 +63,4 @@ class Alcohol extends React.Component {
 
 }
 
-export default Alcohol;
+export default RecreationalDrugs;

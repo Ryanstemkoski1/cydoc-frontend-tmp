@@ -1,35 +1,26 @@
-import {Form, Grid, Input, Dropdown} from 'semantic-ui-react';
+import {Form, Grid, Input } from 'semantic-ui-react';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import '../familyhistory/FamilyHistory.css';
-import tobaccoProducts from 'constants/SocialHistory/tobaccoProducts';
-import drinkTypes from 'constants/SocialHistory/drinkTypes';
-import drinkSizes from 'constants/SocialHistory/drinkSizes'
-import drugNames from 'constants/SocialHistory/drugNames';
-import modesOfDelivery from 'constants/SocialHistory/modesOfDelivery';
+import HPIContext from 'contexts/HPIContext.js';
 
 //Component that defines the layout for the Substance Use portion
 
-const dropDowns = ["Products Used", "Drink Type", "Drink Size", "Drug Name", "Mode of Delivery"];
-
 export default class SocialHistoryNoteItem extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            ProductsUsed: tobaccoProducts,
-            DrinkType: drinkTypes,
-            DrinkSize: drinkSizes,
-            DrugName: drugNames,
-            ModeofDelivery: modesOfDelivery,
-        }
+    static contextType = HPIContext;
+
+    constructor(props, context) {
+        super(props, context);
+        this.includeQuitYear = this.includeQuitYear.bind(this);
+        this.quittingQuestions = this.quittingQuestions.bind(this);
+        this.additionalFields = this.additionalFields.bind(this);
     }
 
     includeQuitYear() {
 
         const { values, condition, onChange, quitYear, fields } = this.props;
-        // TODO: figure out why values[condition]["Quit Year"] is undefined
 
         if (values[condition]["In the Past"]) {
             return (
@@ -50,7 +41,7 @@ export default class SocialHistoryNoteItem extends Component {
 
     quittingQuestions() {
 
-        const { values, condition } = this.props;
+        const { values, condition, onInterestedButtonClick, onTriedButtonClick } = this.props;
 
         if (values[condition]["Yes"]) {
             return (
@@ -63,19 +54,28 @@ export default class SocialHistoryNoteItem extends Component {
                                 </div>
                                 <div>
                                     <ToggleButton
+                                        onToggleButtonClick={onInterestedButtonClick}
+                                        condition={condition}
                                         title="Yes"
                                         size={"small"}
                                         compact={true}
+                                        active={values[condition]["InterestedInQuitting"]["Yes"]}
                                     />
                                     <ToggleButton
+                                        onToggleButtonClick={onInterestedButtonClick}
+                                        condition={condition}
                                         title="Maybe"
                                         size={"small"}
                                         compact={true}
+                                        active={values[condition]["InterestedInQuitting"]["Maybe"]}
                                     />
                                     <ToggleButton
+                                        onToggleButtonClick={onInterestedButtonClick}
+                                        condition={condition}
                                         title="No"
                                         size={"small"}
                                         compact={true}
+                                        active={values[condition]["InterestedInQuitting"]["No"]}
                                     />
                                 </div>
                             </Form.Group>
@@ -89,14 +89,20 @@ export default class SocialHistoryNoteItem extends Component {
                                 </div>
                                 <div>
                                     <ToggleButton
+                                        onToggleButtonClick={onTriedButtonClick}
+                                        condition={condition}
                                         title="Yes"
                                         size={"small"}
                                         compact={true}
+                                        active={values[condition]["TriedToQuit"]["Yes"]}
                                     />
                                     <ToggleButton
+                                        onToggleButtonClick={onTriedButtonClick}
+                                        condition={condition}
                                         title="No"
                                         size={"small"}
                                         compact={true}
+                                        active={values[condition]["TriedToQuit"]["No"]}
                                     />
                                 </div>
                             </Form.Group>
@@ -107,44 +113,23 @@ export default class SocialHistoryNoteItem extends Component {
         }
     }
 
-    // TODO: make it so you can "add row" for drugs and alcohol
-    // TODO: have an onChange for drop downs
     additionalFields() {
 
-        const space = /\s/g;
-        const { values, condition, onChange, fields } = this.props;
-        const showTextAreas = values[condition]["Yes"] || values[condition]["In the Past"] ? "display" : "hide";
+        const { values, condition, onChange } = this.props;
+        // const showTextAreas = values[condition]["Yes"] || values[condition]["In the Past"] ? "display" : "hide";
 
         if (values[condition]["Yes"] || values[condition]["In the Past"]) {
             return (
-                <div className={`condition-info ${showTextAreas}`}>
-                    <Grid stackable columns="equal">
-                        {Object.keys(fields).map(key => (
-                            key !== "condition" && key !== "quitYear" && ! dropDowns.includes(fields[key]) ?
-                            <Grid.Column computer={5} tablet={8} mobile={16}>
-                                <Form.Field>
-                                    <label>{fields[key]}</label>
-                                    <Input
-                                        field={fields[key]}
-                                        condition={condition}
-                                        value={values[condition][key]}
-                                        onChange={onChange}
-                                    />
-                                </Form.Field>
-                            </Grid.Column> : dropDowns.includes(fields[key]) ? 
-                            <Grid.Column>
-                                <label>{fields[key]}</label>
-                                <Dropdown
-                                    placeholder={fields[key]}
-                                    fluid
-                                    multiple
-                                    search
-                                    selection
-                                    options={this.state[fields[key].replace(space, "")]}
-                                />
-                            </Grid.Column> : null
-                        ))}
+                // <div className={`condition-info ${showTextAreas}`}>
+                <div> 
+                    <br />
+                    <Grid>
                         {this.includeQuitYear()}
+                    </Grid>
+                    <br />
+                    {this.props.additionalFields()}
+                    <br />
+                    <Grid stackable columns="equal">
                         <Grid.Row>
                             <Grid.Column computer={5} tablet={8} mobile={16}>
                                 <Form.TextArea
@@ -168,6 +153,9 @@ export default class SocialHistoryNoteItem extends Component {
     render() {
         
         const { values, condition, onToggleButtonClick } = this.props;
+        // console.log(values);
+        // console.log(condition);
+        // console.log(values[condition]);
 
         return (
             <Grid.Row>
@@ -210,9 +198,16 @@ export default class SocialHistoryNoteItem extends Component {
     }
 }
 
+// TODO: update this
 SocialHistoryNoteItem.propTypes = {
     condition: PropTypes.string.isRequired,
     firstField: PropTypes.string.isRequired,
     secondField: PropTypes.string.isRequired,
     thirdField: PropTypes.string.isRequired
+    
+    // onChange={this.props.onChange}
+    // onToggleButtonClick={this.props.onToggleButtonClick}
+    // condition={this.tobaccoFields.condition}
+    // fields={this.tobaccoFields}
+    // values={this.props.values}
 }
