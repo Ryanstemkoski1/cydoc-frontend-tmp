@@ -235,6 +235,15 @@ class GenerateNote extends React.Component {
                         {socialHistory.Alcohol['In the Past'] === true ? <li>Used to use alcohol but does not anymore</li> : null}
                         {socialHistory.Alcohol['Quit Year'] ? <li>Quit Year: {socialHistory.Alcohol['Quit Year']}</li> : null}
                         {socialHistory.Alcohol['Never Used'] === true ? <li>Never used</li> : null}
+                        {socialHistory.Alcohol['fields'][0]['Drink Type'] !== "" ? <li>Products used: {Object.keys(socialHistory.Alcohol['fields']).map(key => (
+                            <ul>
+                                <li>{socialHistory.Alcohol['fields'][key]['Drink Type']}</li>
+                                <ul>
+                                    <li>{socialHistory.Alcohol['fields'][key]['Drink Size']}</li>
+                                    <li>{socialHistory.Alcohol['fields'][key]['# Per Week']} per week</li>
+                                </ul>
+                            </ul>
+                        ))}</li> : null}
                         {socialHistory.Alcohol['InterestedInQuitting']['Yes'] === true ? <li>Interested in quitting? Yes</li> : null}
                         {socialHistory.Alcohol['InterestedInQuitting']['Maybe'] === true ? <li>Interested in quitting? Maybe</li> : null}
                         {socialHistory.Alcohol['InterestedInQuitting']['No'] === true ? <li>Interested in quitting? No</li> : null}
@@ -250,6 +259,15 @@ class GenerateNote extends React.Component {
                         {socialHistory['Recreational Drugs']['In the Past'] === true ? <li>Used to use substances but does not anymore</li> : null}
                         {socialHistory['Recreational Drugs']['Quit Year'] ? <li>Quit Year: {socialHistory['Recreational Drugs']['Quit Year']}</li> : null}
                         {socialHistory['Recreational Drugs']['Never'] === true ? <li>Never used</li> : null}
+                        {socialHistory['Recreational Drugs']['fields'][0]['Drug Name'] !== "" ? <li>Products used: {Object.keys(socialHistory['Recreational Drugs']['fields']).map(key => (
+                            <ul>
+                                <li>{socialHistory['Recreational Drugs']['fields'][key]['Drug Name']}</li>
+                                <ul>
+                                    <li>{socialHistory['Recreational Drugs']['fields'][key]['Mode of Delivery']}</li>
+                                    <li>{socialHistory['Recreational Drugs']['fields'][key]['# Per Week']} per week</li>
+                                </ul>
+                            </ul>
+                        ))}</li> : null}
                         {socialHistory['Recreational Drugs']['InterestedInQuitting']['Yes'] === true ? <li>Interested in quitting? Yes</li> : null}
                         {socialHistory['Recreational Drugs']['InterestedInQuitting']['Maybe'] === true ? <li>Interested in quitting? Maybe</li> : null}
                         {socialHistory['Recreational Drugs']['InterestedInQuitting']['No'] === true ? <li>Interested in quitting? No</li> : null}
