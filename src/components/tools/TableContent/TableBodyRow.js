@@ -5,6 +5,22 @@ import './TableContent.css';
 
 //Controlled component for a row in a TableContent component
 export class TableBodyRow extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            invalidYear: false,
+        };
+    }
+
+    onYearChange = (e, data) => {
+        // if (!/^(19\d\d|20[0-2]\d)$/.test(value)) {
+        this.setState({ invalidYear: data.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(data.value) });
+        this.props.onTableBodyChange(e, data);
+        // } else {
+            // this.setState({ })
+        // }
+    }
+
     getCell(placeholder) {
         const {values, rowindex, onTableBodyChange, onAddSideEffect, onAddMedication, onAddProcedure, medicationOptions, sideEffectsOptions, proceduresOptions} = this.props;
 
@@ -86,6 +102,24 @@ export class TableBodyRow extends Component {
                 );
                 break;
             }
+            case 'Start Year':
+                cell = (
+                    <div className='table-year-input'>
+                        <TextArea
+                            rows={3}
+                            placeholder={placeholder}
+                            onChange={this.onYearChange}
+                            rowindex={rowindex}
+                            value={values[rowindex][placeholder]}
+                            className='table-row-text'
+                        />
+                        { this.state.invalidYear && (
+                            <p className='error'>Please enter a year between 1900 and 2020</p>
+                        )}
+                    </div>
+
+                )
+                break;
             default: {
                 cell = (
                     <TextArea

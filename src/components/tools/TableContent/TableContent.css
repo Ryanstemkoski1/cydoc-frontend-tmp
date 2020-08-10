@@ -83,3 +83,45 @@
     margin-bottom: 5px;
     outline: none;
 }
+
+.year-error {
+    color: darkred;
+}
+
+.table-year-input {
+    position: relative;
+    display: inline-block;
+}
+  
+.table-year-input .error {
+    /* visibility: hidden; */
+    width: 12.5rem;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    transition: opacity 0.3s;
+    /* opacity: 0; */
+}
+
+.table-year-input .error::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+/* 
+.table-row-text:focus .error {
+    visibility: visible;
+    opacity: 1;
+} */

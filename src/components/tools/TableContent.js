@@ -273,12 +273,12 @@ export default class TableContent extends Component {
         const {values, mobile } = this.props;
         const nums = Object.keys(values);
         const headerRow = this.makeHeader();
-        const rows = this.makeTableBodyRows(nums);
-        const panels = this.makeAccordionPanels(nums);
+        // const rows = this.makeTableBodyRows(nums);
+        // const panels = this.makeAccordionPanels(nums);
 
         const content = mobile ? (
             <Accordion
-                panels={panels}
+                panels={this.makeAccordionPanels(nums)}
                 exclusive={false}
                 fluid
                 styled
@@ -289,7 +289,7 @@ export default class TableContent extends Component {
                 className='table-display'
             >
                 <Table.Header content={headerRow} />
-                <Table.Body children={rows} />
+                <Table.Body children={this.makeTableBodyRows(nums)} />
             </Table>
         );
 
