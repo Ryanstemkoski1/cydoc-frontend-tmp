@@ -36,6 +36,10 @@ class NewTemplateForm extends Component {
     }
 
     componentDidMount() {
+        /**
+         * Fetches the existing knowledge graphs from the backend to prepopulate the
+         * available body systems and diseases. 
+         */
         graphClient.get('/graph').then(value => {
             const nodes = value.data.nodes;
             const allBodySystems = [];
@@ -47,6 +51,7 @@ class NewTemplateForm extends Component {
                 const category = nodes[node].category;
                 const questionType = nodes[node].responseType;
         
+                // Maintain a mapping of body systems to the associated diseases 
                 if (!(categories.has(category))) {
                     const bodySys = nodes[node].bodySystem;
                     let key = (((category.split('_')).join(' ')).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase());
@@ -71,6 +76,7 @@ class NewTemplateForm extends Component {
                 }
             }
 
+            // Merge all body system diseases into one cummulative list of diseases
             for (let i = 0; i < Object.values(bodySystems).length; i++) {
                 const bodySys = Object.values(bodySystems)[i];
                 allBodySystems.push(bodySys.name);
@@ -87,14 +93,23 @@ class NewTemplateForm extends Component {
         });
     }
 
+    /**
+     * Updates the value of the title of the template in the context
+     */
     saveTitle(event, { value }) {
         this.context.onContextChange('title', value);
     }
 
+    /**
+     * Updates the selected body system and display an input field for
+     * the user to type in their own if OTHER was selected.
+     * 
+     * If the value is left empty, raise an error message that prevents
+     * the user from adding questions.
+     */
     saveBodySystem(event, { value }) {
         const otherInput = document.getElementById('other-body-system');
         const errorMessage = document.getElementById('body-error-message');
-
         if (value === OTHER_TEXT) {
             otherInput.style.display = 'inline-block';
             this.setState({
@@ -121,6 +136,13 @@ class NewTemplateForm extends Component {
         }
     }
 
+    /**
+     * Updates the selected disease and display an input field for
+     * the user to type in their own if OTHER was selected
+     * 
+     * If the value is left empty, raise an error message that prevents
+     * the user from adding questions.
+     */
     saveDisease(event, { value }) {
         const otherInput = document.getElementById('other-disease');
         const errorMessage = document.getElementById('disease-error-message');
@@ -151,6 +173,10 @@ class NewTemplateForm extends Component {
         }
     }
 
+    /**
+     * Adds a blank question to the form if a disease and body system was selected.
+     * Display an error message otherwise.
+     */
     addQuestion() {
         if (this.state.diseaseEmpty) {
             document.getElementById('disease-error-message').style.display = 'inline-block';
@@ -168,6 +194,7 @@ class NewTemplateForm extends Component {
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
         const qId = createNodeId(diseaseCode, numQuestions);
         
+        // Create a default node with the parent being the root
         this.context.state.nodes[qId] = {
             id: qId,
             text: '',
@@ -192,10 +219,13 @@ class NewTemplateForm extends Component {
         this.context.onContextChange('numEdges', numEdges + 1);
     }
 
+    /**
+     * Processes the graph data in the template by filtering out unchanged imported nodes 
+     * and ensuring all new nodes start with the correct disease code, and send a request
+     * to the backend
+     */
     createTemplate = () => {
         const { disease, edges, nodes, graph } = this.context.state;
-
-        const unchangedNodes = new Set();
 
         const updatedEdges = {};
         const updatedNodes = {};
@@ -249,16 +279,19 @@ class NewTemplateForm extends Component {
             }
         }
 
-        // this.context.onContextChange('nodes', updatedNodes);
-        // this.context.onContextChange('graph', updatedGraph);
-        // this.context.onContextChange('edges', updatedEdges);
-        
+        // TODO: Send data to backend when the backend is set up
+        // TODO: Depending on how questionOrder is saved, we will need to reflect that
+        //       here as well
         console.log(updatedNodes);
         console.log(updatedEdges);
         console.log(updatedGraph);
         alert('Template created'); // for dev purposes 
     }
 
+    /**
+     * Condense the tree structured graph (made up of nodes) into a single JSON object
+     * for react-nestable to read
+     */
     createTreeData = () => {
         const { graph, edges, nodes } = this.context.state;
         return graph['0000'].map(edge => {
@@ -268,6 +301,13 @@ class NewTemplateForm extends Component {
         });
     }
     
+    /**
+     * Helper function for condensing a tree into a JSON. Returns the condensed JSON object.
+     * 
+     * @param {String} root: The ID of the root of the subtree being condensed
+     * @param {*} parent: The parent of the root
+     * @param {*} edge: The ID of the edge connecting the parent to the root
+     */
     flattenGraph = (root, parent, edge) => {
         const { graph, edges, nodes } = this.context.state;
         
@@ -284,6 +324,13 @@ class NewTemplateForm extends Component {
         };
     }
 
+    /**
+     * Returns the Component representation of a question
+     * 
+     * @param {Object} item: the question being rendered
+     * @param {React.Component} collapseIcon: the icon for collapsing children nodes
+     * @param {React.Component} handler: the icon for dragging the node around
+     */
     renderItem = ({ item, collapseIcon, handler }) => {
         return (
             <div className="root-question">
@@ -299,6 +346,11 @@ class NewTemplateForm extends Component {
         )
     }
 
+    /**
+     * Returns the Component responsible for toggling between collapsed/shown children nodes
+     * 
+     * @param {Boolean} isCollapsed 
+     */
     renderCollapseIcon = ({ isCollapsed }) => {
         return <Icon 
             className='collapse-icon' 
@@ -306,6 +358,12 @@ class NewTemplateForm extends Component {
         />
     }
 
+    /**
+     * Updates the graph data with the new question orders after a drag and drop is performed
+     * 
+     * @param {*} items: the updated JSON representation of the knowledge graph
+     * @param {*} item: the item that was dragged
+     */
     updateOrder = (items, item) => {
         const { graph, edges, nodes } = this.context.state;
 
@@ -313,7 +371,7 @@ class NewTemplateForm extends Component {
         if (!newParent) {
             return; // Couldn't find parent, something went wrong
         }
-        // Update ordering if the parent IDs match
+        // Update ordering within a level if the parent IDs match
         if (item.parent === newParent) {
             const nodesToEdge = {};
             const newEdges = [];
@@ -350,11 +408,15 @@ class NewTemplateForm extends Component {
         this.context.onContextChange("edges", edges);
     }
 
+    /**
+     * Searches the treeData in Depth-first search manner and returns the parent 
+     * of the target (null if unsuccessful) and the subtree itself
+     * 
+     * @param {Array<Object>} children: list of children to search through
+     * @param {String} parent: ID of the direct parent of the children
+     * @param {String} target: ID to look for 
+     */
     findParent = (children, parent, target) => {
-        /**
-         * Searches the treeData from generated for react-nestable.
-         * Returns the id of the parent of the target using DFS, null if unsuccessful.
-         */
         for (let i = 0; i < children.length; i++) {
             let childId = children[i].id;
             if (childId == target) {

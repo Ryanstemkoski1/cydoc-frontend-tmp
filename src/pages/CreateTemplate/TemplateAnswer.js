@@ -71,6 +71,9 @@ class TemplateAnswer extends Component {
         this.setState({ showOtherGraphs: false, otherGraph: null });
     }
 
+    /**
+     * @param {String} value: graph to be imported
+     */
     saveGraphType = (e, { value }) => {
         this.setState({ otherGraph: value });
     }
@@ -80,7 +83,8 @@ class TemplateAnswer extends Component {
     }
 
     /**
-     * Imports top level questions from selected `otherGraph`
+     * Import top level questions from the selected `otherGraph` and its root if its text is not `nan`
+     * @param {String} parent: qid of the nodes to connect the questions to
      */
     connectGraph = (e, { parent }) => {
         let { numQuestions, numEdges } = this.context.state;
@@ -153,6 +157,11 @@ class TemplateAnswer extends Component {
         }
     }
 
+    /**
+     * Updates the answer info of the target question. 
+     * @param {String} value: new answer value
+     * @param {String} answer: the type of answerInfo
+     */
     saveAnswer = (event, { value, answer }) => {
         const { qId } = this.props;
         const { nodes } = this.context.state;
@@ -161,6 +170,10 @@ class TemplateAnswer extends Component {
         this.context.onContextChange('nodes', nodes);
     }
 
+    /**
+     * Add a followup question to the target question in the context.
+     * @param {String} parent: qid of the node to add the questions to
+     */
     addChildQuestion = (event, { parent }) => {
         let numQuestions = this.context.state.numQuestions;
         let numEdges = this.context.state.numEdges;
@@ -193,6 +206,11 @@ class TemplateAnswer extends Component {
         this.context.onContextChange('numEdges', numEdges + 1);
     }
 
+    /**
+     * Updates the value of the option at the given index 
+     * @param {String} value: text value of the option
+     * @param {Number} index: index of the option
+     */
     saveButtonOption = (event, { value, index }) => {
         const { qId } = this.props;
         const { nodes } = this.context.state;
@@ -201,6 +219,10 @@ class TemplateAnswer extends Component {
         this.context.onContextChange('nodes', nodes);
     }
 
+    /**
+     * Adds an amoty option to the target question and changes the response type
+     * to POP if previously BLANK
+     */
     addButtonOption = (event) => {
         const { qId } = this.props;
         const nodes = { ...this.context.state.nodes };
@@ -216,6 +238,11 @@ class TemplateAnswer extends Component {
         this.context.onContextChange('nodes', nodes);
     }
 
+    /**
+     * Deletes the target option from the node's `answerInfo` and updates the node's response
+     * type to BLANK if it was the last remaining option
+     * @param {Number} index: index of the option to remove 
+     */
     removeButtonOption = (event, { index }) => {
         const { qId } = this.props;
         const nodes = { ...this.context.state.nodes };
@@ -232,6 +259,9 @@ class TemplateAnswer extends Component {
         this.context.onContextChange('nodes', nodes);
     }
 
+    /**
+     * Returns the placeholder text to be displayed in the answer info
+     */
     getExampleTexts() {
         const { type } = this.props;
 
@@ -273,6 +303,9 @@ class TemplateAnswer extends Component {
         return {startEg, endEg};
     }
 
+    /**
+     * Returns the label text for questions with options
+     */
     getOptionsText() {
         const { type } = this.props;
         let optionsText;
@@ -311,6 +344,11 @@ class TemplateAnswer extends Component {
         return optionsText;
     }
 
+    /**
+     * Returns a preview component for advanced typed questions that cannot be editted.
+     * Its purpose is to give the user an idea of how the options will be rendered.
+     * @param {String} type: the response type
+     */
     getPreviewComponent = (type) => {
         const { windowWidth } = this.state;
         const { nodes } = this.context.state;
@@ -366,6 +404,10 @@ class TemplateAnswer extends Component {
         return preview;
     }
 
+    /**
+     * Changes whether the followup questions should be asked when YES or when NO
+     * @param {String} value: "YES" or "NO"
+     */
     changeFollowupType = (e, { value }) => {
         const { qId } = this.props;
         const nodes = { ...this.context.state.nodes };
@@ -419,6 +461,12 @@ class TemplateAnswer extends Component {
 
     }
 
+    /**
+     * Returns the component for displaying the response information according to the type
+     * @param {String} startEg
+     * @param {String} endEg 
+     * @param {String} optionsText 
+     */
     getAnswerTemplate(startEg, endEg, optionsText) {
         const { qId, type } = this.props;
         const { graph, nodes } = this.context.state;
@@ -428,6 +476,7 @@ class TemplateAnswer extends Component {
         if (type === 'YES-NO'|| type === 'NO-YES') {
             let editChildren;
             if (this.state.showOtherGraphs) {
+                // List all possible graphs to import from
                 const options = this.props.allDiseases.map((disease) => (
                     {
                         key: disease,
@@ -491,6 +540,8 @@ class TemplateAnswer extends Component {
                 );
             }
             if (this.context.state.nodes[qId].hasChildren && !this.context.state.nodes[qId].hasChanged) {
+                // If the question is an unchanged, imported question with children, display a button
+                // rather than actually displaying all of the children
                 editChildren = (
                     <List 
                         className='edit-children' 
@@ -677,6 +728,8 @@ class TemplateAnswer extends Component {
                     </div>
                 );
             }
+            // Questions of advanced types have a preview feature. Allow this to be toggled on/off
+            // since its quite spacious.
             let preview;
             if (this.state.showPreview) {
                 preview = this.getPreviewComponent(type);

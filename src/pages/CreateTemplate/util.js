@@ -1,3 +1,7 @@
+/**
+ * Returns the answerInfo object associated with the given type 
+ * @param {String} type: the question's response type
+ */
 export const getAnswerInfo = (type) => {
     if (type === 'YES-NO' || type === 'NO-YES') {
         return {
@@ -28,6 +32,11 @@ export const getAnswerInfo = (type) => {
     }
 }
 
+/**
+ * Returns a randomly generated node qid based on the disease code
+ * @param {String} diseaseCode: 3-character abbreviation of the disease
+ * @param {*} numQuestions: number of questions in the context
+ */
 export const createNodeId = (diseaseCode, numQuestions) => {
     const randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
     const numZeros = 4 - numQuestions.toString().length;
@@ -57,10 +66,8 @@ export const sortEdges = (edgeList, edges, nodes) => {
 }
 
 /**
- * Given the node's responseType, text, and answerInfo, 
- * parse the text for the options, if appropriate, and mutate the
- * node's answerInfo directly. 
- * 
+ * Given the node's responseType, text, and answerInfo, parse the text for the options, 
+ * if appropriate, and mutate the node's answerInfo directly.
  * Returns the parsed text.
  * 
  * @param {String} responseType 

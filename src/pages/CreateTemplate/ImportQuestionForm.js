@@ -10,7 +10,6 @@ import {
 } from './util';
 import { 
     Button, 
-    Segment,
     Modal,
     List,
     Checkbox,
@@ -72,6 +71,9 @@ class ImportQuestionForm extends Component {
         this.setState({ checked });
     }
 
+    /**
+     * Adds all of the selected questions to the context as a direct child of the parent
+     */
     importQuestions = () => {
         let { numQuestions, numEdges } = this.context.state;
         const { graph, nodes, edges } = this.context.state;
