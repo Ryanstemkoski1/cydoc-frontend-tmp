@@ -6,11 +6,15 @@ import MenuTabs from "./MenuTabs";
 import NotePage from "./NotePage";
 import NavMenu from "../../components/navigation/NavMenu";
 import { TAB_NAMES } from 'constants/constants';
-
+import HPIContext from '../../contexts/HPIContext'
+import { Redirect } from 'react-router';
 
 // Component that manages the active state of the create note editor
 // and defines the layout of the editor
 class EditNote extends Component {
+
+    static contextType = HPIContext
+
     constructor(props) {
         super(props);
         this.onTabChange = this.onTabChange.bind(this);
@@ -31,6 +35,11 @@ class EditNote extends Component {
     noteContent = createRef()
 
     render() {
+        // Redirects to LandingPage if there is no valid note in constext
+        if (this.context._id === null) {
+            return <Redirect push to="/dashboard" />
+        }
+
         return (
             <>
                 <div ref={this.noteContent}>

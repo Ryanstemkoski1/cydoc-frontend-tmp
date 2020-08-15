@@ -8,7 +8,6 @@ import "../familyhistory/FamilyHistory.css";
 export default class SocialHistoryNoteItem extends Component {
     render() {
         const { values, condition, firstField, secondField, onToggleButtonClick, onChange } = this.props;
-
         const showTextAreas = values[condition]["Yes"] || values[condition]["In the Past"] ? "display" : "hide";
 
         return (
