@@ -74,7 +74,7 @@ export default class FamilyHistoryDropdown extends Component {
                 <div className='dropdown-component-container'>
                     <Grid stackable>
                         <Grid.Row>
-                            <Grid.Column mobile={8} className='family-member-input'>
+                            <Grid.Column mobile={6} className='family-member-input'>
                                 Family Member
                                 <Dropdown
                                     value={family_member}
@@ -86,7 +86,8 @@ export default class FamilyHistoryDropdown extends Component {
                                     className='dropdown-inline-mobile'
                                 />
                             </Grid.Column>
-                            <Grid.Column width={8} className='cod-input'>
+                            <Grid.Column mobile={1} />
+                            <Grid.Column mobile={4} className='cod-input'>
                                 Cause of death?
                                 <div>
                                     <ToggleButton
@@ -103,12 +104,32 @@ export default class FamilyHistoryDropdown extends Component {
                                     />
                                 </div>
                             </Grid.Column>
+                            <Grid.Column mobile={1} />
+                            {cause_of_death === true || cause_of_death === undefined ? "" :
+                                <Grid.Column mobile={4} >
+                                    Living?
+                                    <div>
+                                        <ToggleButton
+                                            active={living}
+                                            condition={this.props.condition}
+                                            title="Yes"
+                                            onToggleButtonClick={this.handleLivingToggle}
+                                        />
+                                        <ToggleButton
+                                            active={living === false ? true : false}
+                                            condition={this.props.condition}
+                                            title="No"
+                                            onToggleButtonClick={this.handleLivingToggle}
+                                        />
+                                    </div>
+                                </Grid.Column>
+                            }
                         </Grid.Row>
                         <Grid.Row>
-                            <Grid.Column>
+                            <Grid.Column mobile={16}>
                                 <Form.TextArea
                                     label="Comments"
-                                    className="text-area"
+                                    className="text-area comments-box-mobile"
                                     condition={condition}
                                     value={comment}
                                     placeholder='Comments'
@@ -133,7 +154,7 @@ export default class FamilyHistoryDropdown extends Component {
                                     onClick = {this.handleDelete}
                                 />
                             </Grid.Column>
-                            <Grid.Column width={4}>
+                            <Grid.Column width={3}>
                                 <Dropdown
                                     value={family_member}
                                     search
@@ -161,7 +182,7 @@ export default class FamilyHistoryDropdown extends Component {
                                 />
                             </Grid.Column>
 
-                            <Grid.Column width={8}>
+                            <Grid.Column width={9}>
                                 <Form>
                                     <Form.TextArea rows={1} condition={condition} value={comment}
                                                 onChange={this.handleCommentsChange} placeholder='Comments'/>
@@ -169,10 +190,10 @@ export default class FamilyHistoryDropdown extends Component {
                             </Grid.Column>
                         </Grid.Row>
                         {cause_of_death === true || cause_of_death === undefined ? "" :
-                        <Grid.Row>
-                            <Grid.Column width={4} />
+                        <Grid.Row className="living-toggle-row">
+                            <Grid.Column width={3} />
                             <Grid.Column width={1}>
-                                <Header.Subheader>Living?</Header.Subheader>
+                                <Header.Subheader className="living-toggle-title">Living?</Header.Subheader>
                             </Grid.Column>
                             <Grid.Column width={3}>
                                 <ToggleButton

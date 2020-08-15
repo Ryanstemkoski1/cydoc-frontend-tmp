@@ -73,13 +73,13 @@ export default class FamilyHistoryBlock extends Component {
                 <Grid.Row>
                     <Grid.Column width={1}>
                     </Grid.Column>
-                    <Grid.Column width={4}>
+                    <Grid.Column width={3}>
                         <Header.Subheader className="family-member-header">Family Member</Header.Subheader>
                     </Grid.Column>
                     <Grid.Column width={3}>
                         <Header.Subheader>Cause of Death</Header.Subheader>
                     </Grid.Column>
-                    <Grid.Column width={8}>
+                    <Grid.Column width={9}>
                         <Header.Subheader>Comments</Header.Subheader>
                     </Grid.Column>
                 </Grid.Row>

@@ -73,3 +73,16 @@
         padding-bottom: 1.5rem !important;
     }
 }
+
+.living-toggle-row {
+    padding-top: 0rem !important;
+    padding-bottom: 28px !important;
+}
+
+.living-toggle-title {
+    padding-top: 8px;
+}
+
+.comments-box-mobile {
+    padding-top: 0rem !important;
+}

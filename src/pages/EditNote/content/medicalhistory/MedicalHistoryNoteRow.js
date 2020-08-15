@@ -23,13 +23,13 @@ export default class MedicalHistoryNoteRow extends Component {
             </Grid.Column>
             <Grid.Column>
                 <Form>
-                    <TextArea condition={condition.props.condition} placeholder='Onset' value={onset}
+                    <TextArea rows={2} condition={condition.props.condition} placeholder='Onset' value={onset}
                               onChange={onChange}/>
                 </Form>
             </Grid.Column>
             <Grid.Column>
                 <Form>
-                    <TextArea condition={condition.props.condition} value={comments}
+                    <TextArea rows={2} condition={condition.props.condition} value={comments}
                               onChange={onChange} placeholder='Comments'/>
                 </Form>
             </Grid.Column>
