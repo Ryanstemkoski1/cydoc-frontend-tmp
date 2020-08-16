@@ -147,11 +147,24 @@ export default class TableContent extends Component {
                             {' for '}
                             <Input
                                 transparent
-                                placeholder={tableBodyPlaceholders[4]}
-                                onChange={this.handleTableBodyChange}
-                                rowindex={i}
-                                value={values[i][tableBodyPlaceholders[4]]}
-                            />
+                                className='content-input content-dropdown medication'
+                            >
+                                <Dropdown
+                                    fluid
+                                    search
+                                    selection
+                                    allowAdditions
+                                    icon=''
+                                    optiontype='diseaseOptions'
+                                    options={this.state.diseaseOptions}
+                                    placeholder={tableBodyPlaceholders[4]}
+                                    onChange={this.handleTableBodyChange}
+                                    rowindex={i}
+                                    value={values[i][tableBodyPlaceholders[4]]}
+                                    onAddItem={this.handleAddition}
+                                    className='side-effects'
+                                />
+                            </Input>
                         </Form>
                     );
                     break;
