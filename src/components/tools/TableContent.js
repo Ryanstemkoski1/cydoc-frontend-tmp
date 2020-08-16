@@ -273,8 +273,6 @@ export default class TableContent extends Component {
         const {values, mobile } = this.props;
         const nums = Object.keys(values);
         const headerRow = this.makeHeader();
-        // const rows = this.makeTableBodyRows(nums);
-        // const panels = this.makeAccordionPanels(nums);
 
         const content = mobile ? (
             <Accordion

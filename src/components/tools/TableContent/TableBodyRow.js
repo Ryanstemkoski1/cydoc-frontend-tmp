@@ -1,19 +1,32 @@
 import React, { Component } from 'react';
 import { TextArea, Table, Dropdown, Input } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import diseases from 'constants/diseaseCodes';
 import './TableContent.css';
 
 //Controlled component for a row in a TableContent component
 export class TableBodyRow extends Component {
     constructor(props) {
         super(props);
+        const diseaseOptions = Object.keys(diseases).map((d,i) => ({ key: d, value:d, text:d }));
         this.state = {
+            diseaseOptions,
             invalidYear: false,
         };
+        this.handleAdditionDisease = this.handleAdditionDisease.bind(this);
     }
 
     onYearChange = (e) => {
         this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
+    }
+
+    handleAdditionDisease(event, { value }) {
+        this.setState((prevState) => ({
+            diseaseOptions: [
+                {key: value, text: value, value},
+                ...prevState.diseaseOptions
+            ],
+        }));
     }
 
     getCell(placeholder) {
@@ -115,6 +128,30 @@ export class TableBodyRow extends Component {
                     </div>
 
                 )
+                break;
+            case 'Reason for Taking':
+                cell = (
+                    <Input
+                        fluid
+                        className='content-input-computer content-dropdown'
+                    >
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            multiple
+                            allowAdditions
+                            icon=''
+                            options={this.state.diseaseOptions}
+                            placeholder={placeholder}
+                            onChange={onTableBodyChange}
+                            rowindex={rowindex}
+                            value={values[rowindex][placeholder]}
+                            onAddItem={this.handleAdditionDisease}
+                            className='side-effects'
+                        />
+                    </Input>
+                );
                 break;
             default: {
                 cell = (
