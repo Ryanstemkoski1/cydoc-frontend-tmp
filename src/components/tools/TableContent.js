@@ -7,6 +7,7 @@ import HPIContext from 'contexts/HPIContext.js';
 import procedures from 'constants/procedures';
 import { sideEffects } from 'constants/sideEffects';
 import drug_names from 'constants/drugNames';
+import diseases from 'constants/diseases';
 import '../../css/components/tableContent.css';
  
 //Component for a table layout
@@ -28,6 +29,7 @@ export default class TableContent extends Component {
         this.handleAdditionSideEffects = this.handleAdditionSideEffects.bind(this);
         this.handleAdditionMedication = this.handleAdditionMedication.bind(this);
         this.handleAdditionProcedure = this.handleAdditionProcedure.bind(this);
+        this.handleAdditionDisease = this.handleAdditionDisease.bind(this);
     }
 
     //modify the current values in the table to reflect changes
@@ -65,6 +67,15 @@ export default class TableContent extends Component {
         }));
     }
 
+    handleAdditionDisease(event, { value }) {
+        this.setState((prevState) => ({
+            diseaseOptions: [
+                {key: value, text: value, value},
+                ...prevState.diseaseOptions
+            ],
+        }));
+    }
+    
     //method to generate an collection of rows
     makeTableBodyRows(nums){
         return nums.map((rowindex, index) => 
@@ -76,10 +87,12 @@ export default class TableContent extends Component {
                 onAddSideEffect={this.handleAdditionSideEffects}
                 onAddMedication={this.handleAdditionMedication}
                 onAddProcedure={this.handleAdditionProcedure}
+                onAddDisease={this.handleAdditionDisease}
                 values={this.props.values}
                 medicationOptions={this.state.medicationOptions}
                 sideEffectsOptions={this.state.sideEffectsOptions}
                 proceduresOptions={this.state.proceduresOptions}
+                diseaseOptions={this.state.diseaseOptions}
             />
         )
     }

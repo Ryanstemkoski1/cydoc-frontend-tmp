@@ -7,6 +7,7 @@ import HPIContext from 'contexts/HPIContext.js';
 import procedures from 'constants/procedures';
 import { sideEffects } from 'constants/sideEffects';
 import drug_names from 'constants/drugNames';
+import diseases from 'constants/diseases';
 import './TableContent.css';
  
 //Component for a table layout
@@ -19,15 +20,14 @@ export default class TableContent extends Component {
             proceduresOptions: procedures,
             sideEffectsOptions: sideEffects,
             medicationOptions: drug_names,
+            diseaseOptions: diseases,
         }
         // TODO: add back addRow functionality
         this.addRow = this.addRow.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
-        this.handleAdditionSideEffects = this.handleAdditionSideEffects.bind(this);
-        this.handleAdditionMedication = this.handleAdditionMedication.bind(this);
-        this.handleAdditionProcedure = this.handleAdditionProcedure.bind(this);
+        this.handleAddition = this.handleAddition.bind(this);
     }
 
     //modify the current values in the table to reflect changes
@@ -38,29 +38,11 @@ export default class TableContent extends Component {
         this.props.onTableBodyChange(newState);
     }
 
-    handleAdditionSideEffects(event, { value }) {
+    handleAddition(event, { optiontype, value }) {
         this.setState((prevState) => ({
-            sideEffectsOptions: [
+            [optiontype]: [
                 {key: value, text: value, value},
-                ...prevState.sideEffectsOptions
-            ],
-        }));
-    }
-
-    handleAdditionMedication(event, { value }) {
-        this.setState((prevState) => ({
-            medicationOptions: [
-                {key: value, text: value, value},
-                ...prevState.medicationOptions
-            ],
-        }));
-    }
-
-    handleAdditionProcedure(event, { value }) {
-        this.setState((prevState) => ({
-            proceduresOptions: [
-                {key: value, text: value, value},
-                ...prevState.proceduresOptions
+                ...prevState[optiontype]
             ],
         }));
     }
@@ -73,13 +55,12 @@ export default class TableContent extends Component {
                 rowindex={parseInt(rowindex)}
                 tableBodyPlaceholders={this.props.tableBodyPlaceholders}
                 onTableBodyChange={this.handleTableBodyChange}
-                onAddSideEffect={this.handleAdditionSideEffects}
-                onAddMedication={this.handleAdditionMedication}
-                onAddProcedure={this.handleAdditionProcedure}
+                onAddItem={this.handleAddition}
                 values={this.props.values}
                 medicationOptions={this.state.medicationOptions}
                 sideEffectsOptions={this.state.sideEffectsOptions}
                 proceduresOptions={this.state.proceduresOptions}
+                diseaseOptions={this.state.diseaseOptions}
             />
         )
     }
@@ -125,12 +106,13 @@ export default class TableContent extends Component {
                                     clearable
                                     allowAdditions
                                     icon=''
+                                    optiontype='proceduresOptions'
                                     options={this.state.proceduresOptions}
                                     placeholder={tableBodyPlaceholders[0]}
                                     onChange={this.handleTableBodyChange}
                                     rowindex={i}
                                     value={values[i][tableBodyPlaceholders[0]]}
-                                    onAddItem={this.handleAdditionProcedure}
+                                    onAddItem={this.handleAddition}
                                     className='side-effects'
                                 />
                             </Input>
@@ -152,12 +134,13 @@ export default class TableContent extends Component {
                                     clearable
                                     allowAdditions
                                     icon=''
+                                    optiontype='medicationOptions'
                                     options={this.state.medicationOptions}
                                     placeholder={tableBodyPlaceholders[0]}
                                     onChange={this.handleTableBodyChange}
                                     rowindex={i}
                                     value={values[i][tableBodyPlaceholders[0]]}
-                                    onAddItem={this.handleAdditionMedication}
+                                    onAddItem={this.handleAddition}
                                     className='side-effects'
                                 />
                             </Input>
@@ -225,12 +208,13 @@ export default class TableContent extends Component {
                                 multiple
                                 allowAdditions
                                 icon=''
+                                optiontype='sideEffectsOptions'
                                 options={this.state.sideEffectsOptions}
                                 placeholder={tableBodyPlaceholders[j]}
                                 onChange={this.handleTableBodyChange}
                                 rowindex={i}
                                 value={values[i][tableBodyPlaceholders[j]]}
-                                onAddItem={this.handleAdditionSideEffects}
+                                onAddItem={this.handleAddition}
                                 className='side-effects'
                             />
                         </Input>

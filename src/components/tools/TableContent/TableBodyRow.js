@@ -1,36 +1,32 @@
 import React, { Component } from 'react';
 import { TextArea, Table, Dropdown, Input } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import diseases from 'constants/diseaseCodes';
 import './TableContent.css';
 
 //Controlled component for a row in a TableContent component
 export class TableBodyRow extends Component {
     constructor(props) {
         super(props);
-        const diseaseOptions = Object.keys(diseases).map((d,i) => ({ key: d, value:d, text:d }));
         this.state = {
-            diseaseOptions,
             invalidYear: false,
         };
-        this.handleAdditionDisease = this.handleAdditionDisease.bind(this);
     }
 
     onYearChange = (e) => {
         this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
     }
 
-    handleAdditionDisease(event, { value }) {
-        this.setState((prevState) => ({
-            diseaseOptions: [
-                {key: value, text: value, value},
-                ...prevState.diseaseOptions
-            ],
-        }));
-    }
-
     getCell(placeholder) {
-        const {values, rowindex, onTableBodyChange, onAddSideEffect, onAddMedication, onAddProcedure, medicationOptions, sideEffectsOptions, proceduresOptions} = this.props;
+        const {
+            values, 
+            rowindex, 
+            onTableBodyChange, 
+            onAddItem,
+            medicationOptions, 
+            sideEffectsOptions, 
+            proceduresOptions,
+            diseaseOptions,
+        } = this.props;
 
         let cell;
 
@@ -49,11 +45,12 @@ export class TableBodyRow extends Component {
                             allowAdditions
                             icon=''
                             options={proceduresOptions}
+                            optiontype='proceduresOptions'
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
-                            onAddItem={onAddProcedure}
+                            onAddItem={onAddItem}
                             className='side-effects'
                         />
                     </Input>
@@ -74,11 +71,12 @@ export class TableBodyRow extends Component {
                             allowAdditions
                             icon=''
                             options={sideEffectsOptions}
+                            optiontype='sideEffectsOptions'
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
-                            onAddItem={onAddSideEffect}
+                            onAddItem={onAddItem}
                             className='side-effects'
                         />
                     </Input>
@@ -99,11 +97,12 @@ export class TableBodyRow extends Component {
                             allowAdditions
                             icon=''
                             options={medicationOptions}
+                            optiontype='medicationOptions'
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
-                            onAddItem={onAddMedication}
+                            onAddItem={onAddItem}
                             className='side-effects medication'
                         />
                     </Input>
@@ -139,15 +138,15 @@ export class TableBodyRow extends Component {
                             fluid
                             search
                             selection
-                            multiple
                             allowAdditions
                             icon=''
-                            options={this.state.diseaseOptions}
+                            options={diseaseOptions}
+                            optiontype='diseaseOptions'
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
-                            onAddItem={this.handleAdditionDisease}
+                            onAddItem={onAddItem}
                             className='side-effects'
                         />
                     </Input>
