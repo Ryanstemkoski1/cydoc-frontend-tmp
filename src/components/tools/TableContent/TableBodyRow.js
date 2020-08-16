@@ -12,13 +12,8 @@ export class TableBodyRow extends Component {
         };
     }
 
-    onYearChange = (e, data) => {
-        // if (!/^(19\d\d|20[0-2]\d)$/.test(value)) {
-        this.setState({ invalidYear: data.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(data.value) });
-        this.props.onTableBodyChange(e, data);
-        // } else {
-            // this.setState({ })
-        // }
+    onYearChange = (e) => {
+        this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
     }
 
     getCell(placeholder) {
@@ -108,7 +103,8 @@ export class TableBodyRow extends Component {
                         <TextArea
                             rows={3}
                             placeholder={placeholder}
-                            onChange={this.onYearChange}
+                            onChange={onTableBodyChange}
+                            onBlur={this.onYearChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
                             className='table-row-text'
