@@ -21,6 +21,7 @@ export default class TableContent extends Component {
             sideEffectsOptions: sideEffects,
             medicationOptions: drug_names,
             diseaseOptions: diseases,
+            active: new Set(),
         }
         // TODO: add back addRow functionality
         this.addRow = this.addRow.bind(this);
@@ -33,6 +34,9 @@ export default class TableContent extends Component {
     //modify the current values in the table to reflect changes
     // and call the handler prop
     handleTableBodyChange(event, data){ 
+        if (data.placeholder === 'Drug Name' && !this.state.active.has(data.rowindex)) {
+            this.toggleAccordion(data.rowindex);
+        }
         let newState = this.props.values;
         newState[data.rowindex][data.placeholder] = data.value;
         this.props.onTableBodyChange(newState);
@@ -45,6 +49,16 @@ export default class TableContent extends Component {
                 ...prevState[optiontype]
             ],
         }));
+    }
+
+    toggleAccordion = (idx) => {
+        const { active } = this.state;
+        if (active.has(idx)) {
+            active.delete(idx);
+        } else {
+            active.add(idx);
+        }
+        this.setState({ active });
     }
 
     //method to generate an collection of rows
@@ -122,7 +136,7 @@ export default class TableContent extends Component {
                 }
                 case 'medication': {
                     titleContent = (
-                        <Form className='inline-form'>
+                        <Form className='inline-form medication'>
                             <Input
                                 transparent
                                 className='content-input content-dropdown medication'
@@ -144,27 +158,30 @@ export default class TableContent extends Component {
                                     className='side-effects'
                                 />
                             </Input>
-                            {' for '}
-                            <Input
-                                transparent
-                                className='content-input content-dropdown medication'
-                            >
-                                <Dropdown
-                                    fluid
-                                    search
-                                    selection
-                                    allowAdditions
-                                    icon=''
-                                    optiontype='diseaseOptions'
-                                    options={this.state.diseaseOptions}
-                                    placeholder={tableBodyPlaceholders[4]}
-                                    onChange={this.handleTableBodyChange}
-                                    rowindex={i}
-                                    value={values[i][tableBodyPlaceholders[4]]}
-                                    onAddItem={this.handleAddition}
-                                    className='side-effects'
-                                />
-                            </Input>
+                            <span className='reason-wrapper'>
+                                for
+                                <Input
+                                    transparent
+                                    className='content-input content-dropdown medication reason'
+                                >
+                                    <Dropdown
+                                        fluid
+                                        search
+                                        selection
+                                        allowAdditions
+                                        icon=''
+                                        optiontype='diseaseOptions'
+                                        options={this.state.diseaseOptions}
+                                        placeholder={tableBodyPlaceholders[4]}
+                                        onChange={this.handleTableBodyChange}
+                                        rowindex={i}
+                                        value={values[i][tableBodyPlaceholders[4]]}
+                                        onAddItem={this.handleAddition}
+                                        className='side-effects medication'
+                                    />
+                                </Input>
+
+                            </span>
                         </Form>
                     );
                     break;
@@ -250,6 +267,7 @@ export default class TableContent extends Component {
 
             panels.push({
                 key: i,
+                active: this.state.active.has(i),
                 title: {
                     content: titleContent,
                 },
@@ -259,7 +277,8 @@ export default class TableContent extends Component {
                             {contentInputs}
                         </Fragment>
                     ),
-                }
+                },
+                onTitleClick: () => this.toggleAccordion(i),
             });
         }
 
