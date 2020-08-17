@@ -155,6 +155,7 @@ export class NotesStore extends React.Component {
     updateNoteLocally = (note) => {
         this.setState((state, props) => {
             let prevNotes = new Map(state.notes)
+            console.log(note);
             Object.assign(prevNotes.get(note._id), note)
             return { notes: prevNotes }
         })

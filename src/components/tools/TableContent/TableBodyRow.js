@@ -6,10 +6,32 @@ import './TableContent.css';
 //Controlled component for a row in a TableContent component
 export class TableBodyRow extends Component {
     getCell(placeholder) {
-        const {values, rowindex, onTableBodyChange, onAddSideEffect, onAddMedication, onAddProcedure, medicationOptions, sideEffectsOptions, proceduresOptions} = this.props;
+        const {
+            values, 
+            rowindex, 
+            onTableBodyChange, 
+            onAddSideEffect, 
+            onAddMedication, 
+            onAddProcedure, 
+            medicationOptions, 
+            sideEffectsOptions, 
+            proceduresOptions,
+            isPreview,
+        } = this.props;
 
         let cell;
 
+        if (isPreview) {
+            return (
+                <div className="content-preview">
+                    {
+                        placeholder === "Procedure" || placeholder === "Drug Name"
+                         ? rowindex
+                         : ""
+                    }
+                </div>
+            );
+        }
         switch (placeholder) {
             case 'Procedure': {
                 cell = (
@@ -25,6 +47,7 @@ export class TableBodyRow extends Component {
                             allowAdditions
                             icon=''
                             options={proceduresOptions}
+                            type={placeholder}
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
@@ -50,7 +73,8 @@ export class TableBodyRow extends Component {
                             allowAdditions
                             icon=''
                             options={sideEffectsOptions}
-                            placeholder={placeholder}
+                            type={placeholder}                    
+                            placeholder={this.props.hidePlaceholders ? "" : placeholder}                            
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
@@ -75,6 +99,7 @@ export class TableBodyRow extends Component {
                             allowAdditions
                             icon=''
                             options={medicationOptions}
+                            type={placeholder}
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
@@ -90,7 +115,8 @@ export class TableBodyRow extends Component {
                 cell = (
                     <TextArea
                         rows={3}
-                        placeholder={placeholder}
+                        type={placeholder}
+                        placeholder={this.props.hidePlaceholders ? "" : placeholder}
                         onChange={onTableBodyChange}
                         rowindex={rowindex}
                         value={values[rowindex][placeholder]}
