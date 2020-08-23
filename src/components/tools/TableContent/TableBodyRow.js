@@ -114,6 +114,7 @@ export class TableBodyRow extends Component {
                     <div className='table-year-input'>
                         <TextArea
                             rows={3}
+                            type='number'
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             onBlur={this.onYearChange}

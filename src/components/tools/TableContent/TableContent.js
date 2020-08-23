@@ -22,6 +22,7 @@ export default class TableContent extends Component {
             medicationOptions: drug_names,
             diseaseOptions: diseases,
             active: new Set(),
+            invalidYear: false,
         }
         // TODO: add back addRow functionality
         this.addRow = this.addRow.bind(this);
@@ -29,6 +30,7 @@ export default class TableContent extends Component {
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
+        this.onYearChange = this.onYearChange.bind(this);
     }
 
     //modify the current values in the table to reflect changes
@@ -49,6 +51,10 @@ export default class TableContent extends Component {
                 ...prevState[optiontype]
             ],
         }));
+    }
+
+    onYearChange = (e) => {
+        this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
     }
 
     toggleAccordion = (idx) => {
@@ -249,6 +255,26 @@ export default class TableContent extends Component {
                             />
                         </Input>
                     );
+                } else if (tableBodyPlaceholders[j] === 'Start Year') {
+                    contentInputs.push(
+                        <div className='table-year-input mobile' key={j}>
+                            <Input 
+                                key={j}
+                                fluid 
+                                transparent 
+                                rowindex={i}
+                                type='number'
+                                placeholder={tableBodyPlaceholders[j]}
+                                value={values[i][tableBodyPlaceholders[j]]}
+                                onChange={this.handleTableBodyChange}
+                                onBlur={this.onYearChange}
+                                className='content-input content-dropdown'
+                            />
+                            { this.state.invalidYear && (
+                                <p className='error'>Please enter a year between 1900 and 2020</p>
+                            )}
+                        </div>
+                    );
                 } else {
                     contentInputs.push(
                         <Input
@@ -264,7 +290,7 @@ export default class TableContent extends Component {
                     );
                 }
             }
-
+            console.log(contentInputs);
             panels.push({
                 key: i,
                 active: this.state.active.has(i),
