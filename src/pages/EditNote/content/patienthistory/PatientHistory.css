@@ -8,9 +8,5 @@
 
 .tab-content {
   margin-top: 25px;
-  display: none;
-}
-
-.initial {
   display: block;
 }

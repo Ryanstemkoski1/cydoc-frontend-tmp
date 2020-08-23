@@ -6,6 +6,7 @@ import LRButton from './LRButton'
 import LungSounds from './widgets/LungSounds'
 import AbdomenExam from './widgets/AbdomenExam';
 import RightLeftWidget from './widgets/RightLeftWidget';
+import HeartMurmurs from './widgets/HeartMurmurs';
 
 
 export default class PhysicalExamRow extends React.Component {
@@ -105,6 +106,8 @@ export default class PhysicalExamRow extends React.Component {
                 return <AbdomenExam />
             case 'REFLEXES_WIDGET':
                 return <RightLeftWidget type='Reflexes' />
+            case 'MURMUR_WIDGET':
+                return <HeartMurmurs type= 'Murmurs'/>
             default:
                 return null
         }

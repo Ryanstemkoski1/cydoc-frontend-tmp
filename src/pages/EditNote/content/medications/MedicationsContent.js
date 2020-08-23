@@ -8,16 +8,16 @@ export default class MedicationsContent extends Component {
     render() {
         const category = 'Medications';
         const placeholders = medications.fields;
-        
         return (
             <HPIContext.Consumer>
                 {(context) => {
                     return (
                         <TableContent
+                            isPreview={this.props.isPreview}
                             tableHeaders={medications.fields}
                             tableBodyPlaceholders={placeholders}
                             category = {category}
-                            values={context['Medications']}
+                            values={this.props.values || context['Medications']}
                             onTableBodyChange={context.onContextChange.bind(context, 'Medications')}
                             pop={true}
                             mobile={this.props.mobile}

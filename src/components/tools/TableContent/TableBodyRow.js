@@ -26,10 +26,22 @@ export class TableBodyRow extends Component {
             sideEffectsOptions, 
             proceduresOptions,
             diseaseOptions,
+            isPreview,
         } = this.props;
 
         let cell;
 
+        if (isPreview) {
+            return (
+                <div className="content-preview">
+                    {
+                        placeholder === "Procedure" || placeholder === "Drug Name"
+                         ? rowindex
+                         : ""
+                    }
+                </div>
+            );
+        }
         switch (placeholder) {
             case 'Procedure': {
                 cell = (
@@ -46,7 +58,7 @@ export class TableBodyRow extends Component {
                             icon=''
                             options={proceduresOptions}
                             optiontype='proceduresOptions'
-                            placeholder={placeholder}
+                            type={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
@@ -72,7 +84,7 @@ export class TableBodyRow extends Component {
                             icon=''
                             options={sideEffectsOptions}
                             optiontype='sideEffectsOptions'
-                            placeholder={placeholder}
+                            type={placeholder}                    
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
@@ -98,7 +110,7 @@ export class TableBodyRow extends Component {
                             icon=''
                             options={medicationOptions}
                             optiontype='medicationOptions'
-                            placeholder={placeholder}
+                            type={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
@@ -115,7 +127,6 @@ export class TableBodyRow extends Component {
                         <TextArea
                             rows={3}
                             type='number'
-                            placeholder={placeholder}
                             onChange={onTableBodyChange}
                             onBlur={this.onYearChange}
                             rowindex={rowindex}
@@ -143,7 +154,6 @@ export class TableBodyRow extends Component {
                             icon=''
                             options={diseaseOptions}
                             optiontype='diseaseOptions'
-                            placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
@@ -157,7 +167,7 @@ export class TableBodyRow extends Component {
                 cell = (
                     <TextArea
                         rows={3}
-                        placeholder={placeholder}
+                        type={placeholder}
                         onChange={onTableBodyChange}
                         rowindex={rowindex}
                         value={values[rowindex][placeholder]}

@@ -40,7 +40,7 @@ export default class TableContent extends Component {
             this.toggleAccordion(data.rowindex);
         }
         let newState = this.props.values;
-        newState[data.rowindex][data.placeholder] = data.value;
+        newState[data.rowindex][data.type] = data.value;
         this.props.onTableBodyChange(newState);
     }
 
@@ -69,11 +69,18 @@ export default class TableContent extends Component {
 
     //method to generate an collection of rows
     makeTableBodyRows(nums){
+        const { 
+            isPreview,
+            tableBodyPlaceholders,
+            values,
+            name,
+        } = this.props;
+
         return nums.map((rowindex, index) => 
             <TableBodyRow
                 key={index}
-                rowindex={parseInt(rowindex)}
-                tableBodyPlaceholders={this.props.tableBodyPlaceholders}
+                rowindex={isPreview ? rowindex : parseInt(rowindex)}
+                tableBodyPlaceholders={tableBodyPlaceholders}
                 onTableBodyChange={this.handleTableBodyChange}
                 onAddItem={this.handleAddition}
                 values={this.props.values}
@@ -81,6 +88,8 @@ export default class TableContent extends Component {
                 sideEffectsOptions={this.state.sideEffectsOptions}
                 proceduresOptions={this.state.proceduresOptions}
                 diseaseOptions={this.state.diseaseOptions}
+                values={values}
+                isPreview={isPreview}
             />
         )
     }
@@ -103,18 +112,27 @@ export default class TableContent extends Component {
     }
 
     makeAccordionPanels(nums) {
-        const { values, tableBodyPlaceholders, name } = this.props;
+        const { values, tableBodyPlaceholders, name, isPreview } = this.props;
 
         const panels = [];
-
         for (let i = 0; i < nums.length; i++) {
             let titleContent;
             const contentInputs = [];
 
             switch(name) {
                 case 'surgical history': {
-                    titleContent = (
-                        <Form className='inline-form'>
+                    let mainInput;
+                    if (isPreview) {
+                        mainInput = (
+                            <Input
+                                disabled    
+                                transparent
+                                className='content-input medication'
+                                value={nums[i]}
+                            />
+                        );
+                    } else {
+                        mainInput = (
                             <Input
                                 transparent
                                 className='content-input-surgical content-dropdown medication'
@@ -126,6 +144,7 @@ export default class TableContent extends Component {
                                     clearable
                                     allowAdditions
                                     icon=''
+                                    type={tableBodyPlaceholders[0]}
                                     optiontype='proceduresOptions'
                                     options={this.state.proceduresOptions}
                                     placeholder={tableBodyPlaceholders[0]}
@@ -136,13 +155,29 @@ export default class TableContent extends Component {
                                     className='side-effects'
                                 />
                             </Input>
+                        );
+                    }
+
+                    titleContent = (
+                        <Form className='inline-form'>
+                            {mainInput}
                         </Form>
                     );
                     break;
                 }
                 case 'medication': {
-                    titleContent = (
-                        <Form className='inline-form medication'>
+                    let mainInput;
+                    if (isPreview) {
+                        mainInput = (
+                            <Input
+                                disabled    
+                                transparent
+                                className='content-input content-dropdown medication'
+                                value={nums[i]}
+                            />
+                        );
+                    } else {
+                        mainInput = (
                             <Input
                                 transparent
                                 className='content-input content-dropdown medication'
@@ -155,6 +190,7 @@ export default class TableContent extends Component {
                                     allowAdditions
                                     icon=''
                                     optiontype='medicationOptions'
+                                    type={tableBodyPlaceholders[0]}
                                     options={this.state.medicationOptions}
                                     placeholder={tableBodyPlaceholders[0]}
                                     onChange={this.handleTableBodyChange}
@@ -164,6 +200,11 @@ export default class TableContent extends Component {
                                     className='side-effects'
                                 />
                             </Input>
+                        );
+                    }
+                    titleContent = (
+                        <Form className='inline-form'>
+                            {mainInput}
                             <span className='reason-wrapper'>
                                 for
                                 <Input
@@ -177,16 +218,17 @@ export default class TableContent extends Component {
                                         allowAdditions
                                         icon=''
                                         optiontype='diseaseOptions'
+                                        type={tableBodyPlaceholders[4]}
                                         options={this.state.diseaseOptions}
                                         placeholder={tableBodyPlaceholders[4]}
                                         onChange={this.handleTableBodyChange}
                                         rowindex={i}
-                                        value={values[i][tableBodyPlaceholders[4]]}
+                                        value={isPreview ? "" : values[i][tableBodyPlaceholders[4]]}
+                                        disabled={isPreview}
                                         onAddItem={this.handleAddition}
                                         className='side-effects medication'
                                     />
                                 </Input>
-
                             </span>
                         </Form>
                     );
@@ -198,6 +240,7 @@ export default class TableContent extends Component {
                             <Input
                                 transparent
                                 placeholder={tableBodyPlaceholders[0]}
+                                type={tableBodyPlaceholders[0]}
                                 onChange={this.handleTableBodyChange}
                                 rowindex={i}
                                 value={values[i][tableBodyPlaceholders[0]]}
@@ -206,6 +249,7 @@ export default class TableContent extends Component {
                             <Input
                                 transparent
                                 placeholder={tableBodyPlaceholders[1]}
+                                type={tableBodyPlaceholders[1]}
                                 onChange={this.handleTableBodyChange}
                                 rowindex={i}
                                 value={values[i][tableBodyPlaceholders[1]]}
@@ -219,6 +263,7 @@ export default class TableContent extends Component {
                         <Form className='inline-form'>
                             <Input
                                 transparent
+                                type={tableBodyPlaceholders[0]}
                                 placeholder={tableBodyPlaceholders[0]}
                                 onChange={this.handleTableBodyChange}
                                 rowindex={i}
@@ -235,26 +280,39 @@ export default class TableContent extends Component {
                     // already in accordion title
                     continue;
                 } else if (tableBodyPlaceholders[j] === 'Side Effects') {
-                    contentInputs.push(
-                        <Input key={j} fluid transparent className='content-input content-dropdown'>
-                            <Dropdown
-                                fluid
-                                search
-                                selection
-                                multiple
-                                allowAdditions
-                                icon=''
-                                optiontype='sideEffectsOptions'
-                                options={this.state.sideEffectsOptions}
+                    if (isPreview) {
+                        contentInputs.push(
+                            <Input 
+                                fluid 
+                                disabled
+                                transparent 
+                                key={j} 
                                 placeholder={tableBodyPlaceholders[j]}
-                                onChange={this.handleTableBodyChange}
-                                rowindex={i}
-                                value={values[i][tableBodyPlaceholders[j]]}
-                                onAddItem={this.handleAddition}
-                                className='side-effects'
+                                className='content-input content-dropdown'
                             />
-                        </Input>
-                    );
+                        );
+                    } else {
+                        contentInputs.push(
+                            <Input key={j} fluid transparent className='content-input content-dropdown'>
+                                <Dropdown
+                                    fluid
+                                    search
+                                    selection
+                                    multiple
+                                    allowAdditions
+                                    icon=''
+                                    options={this.state.sideEffectsOptions}
+                                    type={tableBodyPlaceholders[j]}
+                                    placeholder={tableBodyPlaceholders[j]}
+                                    onChange={this.handleTableBodyChange}
+                                    rowindex={i}
+                                    value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
+                                    onAddItem={this.handleAdditionSideEffects}
+                                    className='side-effects'
+                                />
+                            </Input>
+                        );
+                    }
                 } else if (tableBodyPlaceholders[j] === 'Start Year') {
                     contentInputs.push(
                         <div className='table-year-input mobile' key={j}>
@@ -263,9 +321,9 @@ export default class TableContent extends Component {
                                 fluid 
                                 transparent 
                                 rowindex={i}
-                                type='number'
+                                type={tableBodyPlaceholders[j]}
                                 placeholder={tableBodyPlaceholders[j]}
-                                value={values[i][tableBodyPlaceholders[j]]}
+                                value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
                                 onChange={this.handleTableBodyChange}
                                 onBlur={this.onYearChange}
                                 className='content-input content-dropdown'
@@ -281,16 +339,17 @@ export default class TableContent extends Component {
                             key={j}
                             fluid
                             transparent
+                            rowindex={i}
+                            disabled={isPreview}
+                            type={tableBodyPlaceholders[j]}
                             placeholder={tableBodyPlaceholders[j]}
                             onChange={this.handleTableBodyChange}
-                            rowindex={i}
-                            value={values[i][tableBodyPlaceholders[j]]}
+                            value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
                             className='content-input'
                         />
                     );
                 }
             }
-            console.log(contentInputs);
             panels.push({
                 key: i,
                 active: this.state.active.has(i),
@@ -312,8 +371,8 @@ export default class TableContent extends Component {
     }
 
     render() {
-        const {values, mobile } = this.props;
-        const nums = Object.keys(values);
+        const {values, mobile, isPreview } = this.props;
+        const nums = isPreview ? values : Object.keys(values);
         const headerRow = this.makeHeader();
         const rows = this.makeTableBodyRows(nums);
         const panels = this.makeAccordionPanels(nums);
@@ -338,10 +397,13 @@ export default class TableContent extends Component {
         return (
             <Fragment>
                 {content}
-                <AddRowButton
-                    onClick={this.addRow}
-                    name={this.props.name}
-                />
+                {!isPreview
+                    &&
+                    <AddRowButton
+                        onClick={this.addRow}
+                        name={this.props.name}
+                    />
+                }
             </Fragment>
         );
     }

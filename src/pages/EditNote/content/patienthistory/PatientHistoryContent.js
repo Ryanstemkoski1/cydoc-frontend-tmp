@@ -37,6 +37,9 @@ export default class PatientHistoryContent extends Component {
         this.setState({ windowWidth, windowHeight });
     }
 
+    // handleItemClick = (e, {name}) => {
+    //     this.setState({ activeItem: name });
+    // }
     handleItemClick = (e, { value }) => this.setState({ activeTabName: value })
 
     render() {
@@ -50,7 +53,7 @@ export default class PatientHistoryContent extends Component {
         const panes = [
             {
                 menuItem: 'Medical History',
-                content: <MedicalHistoryContent collapseTabs={collapseTabs} />
+                content: <MedicalHistoryContent mobile={collapseTabs} />
             },
             {
                 menuItem: 'Surgical History',

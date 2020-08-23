@@ -13,10 +13,11 @@ export default class SurgicalHistoryContent extends Component {
                 {(context) => {
                     return (
                         <TableContent
+                            isPreview={this.props.isPreview}
                             category={category}
                             tableHeaders={surgicalHistory.fields}
                             tableBodyPlaceholders={surgicalHistory.fields}
-                            values={context['Surgical History']}
+                            values={this.props.values || context['Surgical History']}
                             onTableBodyChange={context.onContextChange.bind(context, 'Surgical History')}
                             mobile={this.props.mobile}
                             name='surgical history'
