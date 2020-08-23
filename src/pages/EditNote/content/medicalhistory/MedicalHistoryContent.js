@@ -6,6 +6,8 @@ import GridContent from 'components/tools/GridContent.js';
 import {CONDITIONS} from 'constants/constants'
 import HPIContext from 'contexts/HPIContext.js'
 import ConditionInput from 'components/tools/ConditionInput.js'
+import {adjustValue} from './util';
+import {medicalMapping} from 'constants/word-mappings';
 
 //Component that manages the layout of the medical history tab content
 export default class MedicalHistoryContent extends React.Component {
@@ -17,12 +19,15 @@ export default class MedicalHistoryContent extends React.Component {
         //Checks if all response choices exist and adds new ones
         const { response_choice, isPreview } = this.props;
         const response_choice_list = []
+        const seenConditions = new Set();
         if (!isPreview) {
             const values = this.context["Medical History"]
             var conditions = []
             // Creates list of conditions present in Medical History context 
             for (var value in values) {
-                conditions.push(values[value]['Condition'].toLowerCase())
+                let name = values[value]['Condition'].toLowerCase();
+                conditions.push(name);
+                seenConditions.add(adjustValue(name, medicalMapping));
             }
             for (var response_index in response_choice) {
                 var response = response_choice[response_index]
@@ -45,11 +50,13 @@ export default class MedicalHistoryContent extends React.Component {
             
         }
         this.state = {
+            seenConditions,
             response_choice: response_choice_list
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
         this.generateListItems = this.generateListItems.bind(this); 
+        this.addSeenCondition = this.addSeenCondition.bind(this); 
     } 
 
     //handles input field events
@@ -65,7 +72,6 @@ export default class MedicalHistoryContent extends React.Component {
     handleToggleButtonClick(event, data){
         let conditions_array = Object.keys(this.context['Medical History']).map((value) => this.context['Medical History'][value]["Condition"]);
         let index = conditions_array.indexOf(data.condition);
-        console.log(data.condition)
         const values = this.context["Medical History"]
         const responses = ["Yes", "No"]
         const prevState = values[index][data.title];
@@ -80,6 +86,12 @@ export default class MedicalHistoryContent extends React.Component {
         for (let i = 0; i < textAreas.length; i++) {
             data.title === responses[0] ? textAreas[i].style.display = "block" : textAreas[i].style.display = "none"; 
         }
+    }
+
+    addSeenCondition = (value) => {
+        const { seenConditions } = this.state;
+        seenConditions.add(value);
+        this.setState({ seenConditions });
     }
 
     render(){ 
@@ -111,6 +123,7 @@ export default class MedicalHistoryContent extends React.Component {
 
     generateListItems(conditions, mobile) { 
         const { isPreview } = this.props;
+        const { seenConditions } = this.state;
         return mobile ?
             conditions.map((condition, index) => {
                 if (isPreview) {
@@ -123,6 +136,8 @@ export default class MedicalHistoryContent extends React.Component {
                                 index={index}
                                 category={"Medical History"}
                                 isPreview={isPreview}
+                                seenConditions={seenConditions}
+                                addSeenCondition={this.addSeenCondition}
                                 condition={condition}/>}
                             onset={''}
                             comments={''}
@@ -140,6 +155,8 @@ export default class MedicalHistoryContent extends React.Component {
                                 key={index} 
                                 index={index}
                                 category={"Medical History"}
+                                seenConditions={seenConditions}
+                                addSeenCondition={this.addSeenCondition}
                                 condition={this.context["Medical History"][condition]['Condition']}/>}
                             onset={this.context["Medical History"][index]["Onset"]}
                             comments={this.context["Medical History"][index]["Comments"]}
@@ -163,6 +180,8 @@ export default class MedicalHistoryContent extends React.Component {
                                 index={condition_index} 
                                 category={"Medical History"} 
                                 condition={condition_index}
+                                seenConditions={seenConditions}
+                                addSeenCondition={this.addSeenCondition}
                             />}
                             onset={''}
                             comments={''}
@@ -180,6 +199,8 @@ export default class MedicalHistoryContent extends React.Component {
                                 key={index} 
                                 index={condition_index} 
                                 category={"Medical History"} 
+                                seenConditions={seenConditions}
+                                addSeenCondition={this.addSeenCondition}
                                 condition={this.context["Medical History"][condition_index]['Condition']}
                             />}
                             onset={this.context["Medical History"][condition_index]["Onset"]}
