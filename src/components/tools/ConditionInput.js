@@ -38,12 +38,11 @@ class ConditionInput extends React.Component {
     handleOnBlur = (e) => {
         this.setState({isTitleFocused: false});
         const val = adjustValue(e.target.value, medicalMapping);
-        console.log(val, this.props.seenConditions.has(val), this.props.seenConditions);
-        if (this.props.seenConditions.has(val)) {
+        if (val in this.props.seenConditions && parseInt(this.props.index) !== this.props.seenConditions[val]) {
             this.setState({ isRepeat: true });
         } else {
             this.setState({ isRepeat: false });
-            this.props.addSeenCondition(val);
+            this.props.addSeenCondition(val, this.props.index);
         }
     }
 

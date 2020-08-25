@@ -19,7 +19,7 @@ export default class MedicalHistoryContent extends React.Component {
         //Checks if all response choices exist and adds new ones
         const { response_choice, isPreview } = this.props;
         const response_choice_list = []
-        const seenConditions = new Set();
+        // const seenConditions = {};
         if (!isPreview) {
             const values = this.context["Medical History"]
             var conditions = []
@@ -27,11 +27,12 @@ export default class MedicalHistoryContent extends React.Component {
             for (var value in values) {
                 let name = values[value]['Condition'].toLowerCase();
                 conditions.push(name);
-                seenConditions.add(adjustValue(name, medicalMapping));
+                // seenConditions.add(adjustValue(name, medicalMapping));
             }
             for (var response_index in response_choice) {
                 var response = response_choice[response_index]
                 var condition_index = conditions.indexOf(response.toLowerCase())
+                // seenConditions[adjustValue(response, medicalMapping)] = condition_index;
                 if (condition_index === -1) {
                     var condition_index = (Object.keys(values).length).toString()
                     values[condition_index] = {
@@ -50,7 +51,7 @@ export default class MedicalHistoryContent extends React.Component {
             
         }
         this.state = {
-            seenConditions,
+            // seenConditions,
             response_choice: response_choice_list
         }
         this.handleChange = this.handleChange.bind(this);
@@ -58,6 +59,17 @@ export default class MedicalHistoryContent extends React.Component {
         this.generateListItems = this.generateListItems.bind(this); 
         this.addSeenCondition = this.addSeenCondition.bind(this); 
     } 
+
+    componentDidMount() {
+        const values = this.context["Medical History"];
+        const seenConditions = {};
+        Object.keys(values).forEach((val, i) => {
+            let name = values[val]['Condition'];
+            seenConditions[adjustValue(name, medicalMapping)] = i;
+        });
+        this.setState({ seenConditions });
+
+    }
 
     //handles input field events
     handleChange(event, data){
@@ -88,9 +100,9 @@ export default class MedicalHistoryContent extends React.Component {
         }
     }
 
-    addSeenCondition = (value) => {
+    addSeenCondition = (value, index) => {
         const { seenConditions } = this.state;
-        seenConditions.add(value);
+        seenConditions[value] = index;
         this.setState({ seenConditions });
     }
 
