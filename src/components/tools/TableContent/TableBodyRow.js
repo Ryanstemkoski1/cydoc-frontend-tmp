@@ -5,17 +5,27 @@ import './TableContent.css';
 
 //Controlled component for a row in a TableContent component
 export class TableBodyRow extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            invalidYear: false,
+        };
+    }
+
+    onYearChange = (e) => {
+        this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
+    }
+
     getCell(placeholder) {
         const {
             values, 
             rowindex, 
             onTableBodyChange, 
-            onAddSideEffect, 
-            onAddMedication, 
-            onAddProcedure, 
+            onAddItem,
             medicationOptions, 
             sideEffectsOptions, 
             proceduresOptions,
+            diseaseOptions,
             isPreview,
         } = this.props;
 
@@ -47,12 +57,12 @@ export class TableBodyRow extends Component {
                             allowAdditions
                             icon=''
                             options={proceduresOptions}
+                            optiontype='proceduresOptions'
                             type={placeholder}
-                            placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
-                            onAddItem={onAddProcedure}
+                            onAddItem={onAddItem}
                             className='side-effects'
                         />
                     </Input>
@@ -73,12 +83,12 @@ export class TableBodyRow extends Component {
                             allowAdditions
                             icon=''
                             options={sideEffectsOptions}
+                            optiontype='sideEffectsOptions'
                             type={placeholder}                    
-                            placeholder={this.props.hidePlaceholders ? "" : placeholder}                            
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
-                            onAddItem={onAddSideEffect}
+                            onAddItem={onAddItem}
                             className='side-effects'
                         />
                     </Input>
@@ -99,24 +109,65 @@ export class TableBodyRow extends Component {
                             allowAdditions
                             icon=''
                             options={medicationOptions}
+                            optiontype='medicationOptions'
                             type={placeholder}
-                            placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
-                            onAddItem={onAddMedication}
+                            onAddItem={onAddItem}
                             className='side-effects medication'
                         />
                     </Input>
                 );
                 break;
             }
+            case 'Start Year':
+                cell = (
+                    <div className='table-year-input'>
+                        <TextArea
+                            rows={3}
+                            type='number'
+                            onChange={onTableBodyChange}
+                            onBlur={this.onYearChange}
+                            rowindex={rowindex}
+                            value={values[rowindex][placeholder]}
+                            className='table-row-text'
+                        />
+                        { this.state.invalidYear && (
+                            <p className='error'>Please enter a year between 1900 and 2020</p>
+                        )}
+                    </div>
+
+                )
+                break;
+            case 'Reason for Taking':
+                cell = (
+                    <Input
+                        fluid
+                        className='content-input-computer content-dropdown'
+                    >
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            allowAdditions
+                            icon=''
+                            options={diseaseOptions}
+                            optiontype='diseaseOptions'
+                            onChange={onTableBodyChange}
+                            rowindex={rowindex}
+                            value={values[rowindex][placeholder]}
+                            onAddItem={onAddItem}
+                            className='side-effects'
+                        />
+                    </Input>
+                );
+                break;
             default: {
                 cell = (
                     <TextArea
                         rows={3}
                         type={placeholder}
-                        placeholder={this.props.hidePlaceholders ? "" : placeholder}
                         onChange={onTableBodyChange}
                         rowindex={rowindex}
                         value={values[rowindex][placeholder]}

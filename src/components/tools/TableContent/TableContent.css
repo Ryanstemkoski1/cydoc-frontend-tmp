@@ -85,3 +85,60 @@
     margin-bottom: 5px;
     outline: none;
 }
+
+.year-error {
+    color: darkred;
+}
+
+.table-year-input {
+    position: relative;
+    display: inline-block;
+}
+  
+.table-year-input .error {
+    width: 12.5rem;
+    background-color: #9f3a38;
+    color: #fff;
+    text-align: center;
+    border-radius: 2.5px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 75%;
+    left: 50%;
+    margin-left: -60px;
+    transition: opacity 0.3s;
+}
+
+.table-year-input .error::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 25%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #9f3a38 transparent;
+}
+
+.table-year-input.mobile {
+    display: block;
+}
+
+.table-year-input.mobile .error {
+    width: 85%;
+    padding: 10px;
+    top: 120%;
+    left: 20%;
+}
+
+.table-year-input.mobile .error::after {
+    left: 20%;
+}
+/** For smaller screens e.g. iPhone 6/7/8 */
+@media (max-width: 425px) {
+    .reason-wrapper {
+        display: block;
+        margin-left: 2em;
+    }
+}

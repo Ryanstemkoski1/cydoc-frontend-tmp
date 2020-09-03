@@ -32,6 +32,11 @@ class plan extends Component {
         this.active_color = "lightslategrey";
         this.nonactive_color = "whitesmoke";
     }
+    componentDidMount() {
+        if (this.context.plan.conditions.length === 0) {
+            this.addCondition();
+        }
+    }
 
     componentWillMount() {
         this.updateDimensions();
