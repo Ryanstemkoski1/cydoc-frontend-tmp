@@ -1,8 +1,7 @@
-import {Form, Grid, Input } from 'semantic-ui-react';
+import {Form, Grid, Input, Divider } from 'semantic-ui-react';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import React, {Component} from 'react'
 import PropTypes from 'prop-types';
-import '../familyhistory/FamilyHistory.css';
 import HPIContext from 'contexts/HPIContext.js';
 
 //Component that defines the layout for the Substance Use portion
@@ -18,6 +17,7 @@ export default class SocialHistoryNoteItem extends Component {
         this.additionalFields = this.additionalFields.bind(this);
     }
 
+    // asks users to enter the quit year if they stopped using alcohol, drugs, etc.
     includeQuitYear() {
 
         const { values, condition, onChange, quitYear, fields } = this.props;
@@ -26,8 +26,9 @@ export default class SocialHistoryNoteItem extends Component {
             return (
                 <Grid.Column computer={5} tablet={8} mobile={16}>
                     <Form.Field>
-                        <label>{fields.quitYear}</label>
+                        {fields.quitYear}
                         <Input
+                            type="number"
                             field={quitYear}
                             condition={condition}
                             value={values[condition][fields.quitYear]}
@@ -39,14 +40,14 @@ export default class SocialHistoryNoteItem extends Component {
         }
     }
 
+    // if user is currently using alcohol, drugs, etc. ask if they have tried to quit and if they are interested in quitting
     quittingQuestions() {
 
         const { values, condition, onInterestedButtonClick, onTriedButtonClick } = this.props;
 
         if (values[condition]["Yes"]) {
             return (
-                <div>
-                    <Grid.Row>
+                <Grid stackable>
                         <Form className="family-hx-note-item">
                             <Form.Group inline className="condition-header">
                                 <div className="condition-name">
@@ -80,11 +81,9 @@ export default class SocialHistoryNoteItem extends Component {
                                 </div>
                             </Form.Group>
                         </Form>
-                    </Grid.Row>
-                    <Grid.Row>
                         <Form className="family-hx-note-item">
                             <Form.Group inline className="condition-header">
-                                <div className="condition-name">
+                                <div className="condition-name"> 
                                     Have you tried to quit before?
                                 </div>
                                 <div>
@@ -107,55 +106,47 @@ export default class SocialHistoryNoteItem extends Component {
                                 </div>
                             </Form.Group>
                         </Form>
+                </Grid>
+            )
+        }
+    }
+
+    // adds quitYear, additionalFields from props (specific to section), and quittingQuestions based on user responses to "Yes, In the Past, No"
+    additionalFields() {
+
+        const { values, condition, onChange } = this.props;
+
+        if (values[condition]["Yes"] || values[condition]["In the Past"]) {
+            return (
+                <div> 
+                    <Divider hidden />
+                    <Grid stackable>
+                        {this.includeQuitYear()}
+                    </Grid>
+                    <Divider hidden />
+                    {this.props.additionalFields()}
+                    <Divider hidden />
+                    {this.quittingQuestions()}
+                    <Divider hidden />
+                    <Grid.Row>
+                        <div className="condition-name">Comments</div>
+                        <Form.TextArea inline className='condition-header'
+                            field={"Comments"}
+                            condition={condition}
+                            value={values[condition]["Comments"]}
+                            onChange={onChange}
+                            placeholder= {this.props.mobile ? "Comments" : null}
+                        />
                     </Grid.Row>
                 </div>
             )
         }
     }
 
-    additionalFields() {
-
-        const { values, condition, onChange } = this.props;
-        // const showTextAreas = values[condition]["Yes"] || values[condition]["In the Past"] ? "display" : "hide";
-
-        if (values[condition]["Yes"] || values[condition]["In the Past"]) {
-            return (
-                // <div className={`condition-info ${showTextAreas}`}>
-                <div> 
-                    <br />
-                    <Grid>
-                        {this.includeQuitYear()}
-                    </Grid>
-                    <br />
-                    {this.props.additionalFields()}
-                    <br />
-                    <Grid stackable columns="equal">
-                        <Grid.Row>
-                            <Grid.Column computer={5} tablet={8} mobile={16}>
-                                <Form.TextArea
-                                    className="text-area"
-                                    label="Comments"
-                                    field={"Comments"}
-                                    condition={condition}
-                                    value={values[condition]["Comments"]}
-                                    onChange={onChange}
-                                    placeholder="Comments"
-                                />
-                            </Grid.Column>
-                        </Grid.Row>
-                        {this.quittingQuestions()}
-                    </Grid>
-                </div>
-            )
-        }
-    }
-
+    // renders a SocialHistoryNoteItem with three toggle buttons to describe a user's current drinking/drug use/tobacco habits and additional fields as specified above
     render() {
         
-        const { values, condition, onToggleButtonClick } = this.props;
-        // console.log(values);
-        // console.log(condition);
-        // console.log(values[condition]);
+        const { values, condition, onToggleButtonClick, onChange } = this.props;
 
         return (
             <Grid.Row>
@@ -191,7 +182,8 @@ export default class SocialHistoryNoteItem extends Component {
                             />
                         </div>
                     </Form.Group>
-                   {this.additionalFields()}
+                    {this.additionalFields()}
+                    {values[condition]['Yes'] || values[condition]['In the Past'] ? <Divider hidden /> : null}
                 </Form>
             </Grid.Row>
         );
@@ -203,7 +195,8 @@ SocialHistoryNoteItem.propTypes = {
     condition: PropTypes.string.isRequired,
     firstField: PropTypes.string.isRequired,
     secondField: PropTypes.string.isRequired,
-    thirdField: PropTypes.string.isRequired
+    thirdField: PropTypes.string.isRequired,
+    quitYear: PropTypes.string.isRequired
     
     // onChange={this.props.onChange}
     // onToggleButtonClick={this.props.onToggleButtonClick}

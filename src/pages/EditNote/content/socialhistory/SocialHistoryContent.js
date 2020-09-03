@@ -21,7 +21,6 @@ export default class SocialHistoryContent extends React.Component {
         this.handleSocialHistoryChange = this.handleSocialHistoryChange.bind(this);
         this.handleSecondaryFieldsChange = this.handleSecondaryFieldsChange.bind(this);
         this.generateSecondaryFieldRows = this.generateSecondaryFieldRows.bind(this);
-        // this.generateSubstanceUseRows = this.generateSubstanceUseRows.bind(this);
         this.substanceUseContentHeader = SOCIAL_HISTORY.SUBSTANCE_USE_CONTENT_HEADER;
         this.secondaryFields = SOCIAL_HISTORY.SECONDARY_FIELDS;
         this.substanceUseFields = SOCIAL_HISTORY.SUBSTANCE_USE_FIELDS;
@@ -102,77 +101,7 @@ export default class SocialHistoryContent extends React.Component {
         );
     }
 
-    // // Generates a collection of Grid.Row for the substance use portion
-    // generateSubstanceUseRows() {
-    //     return (this.props.mobile ? (
-    //         Object.keys(this.substanceUseFields).map(
-    //             (label, index) =>
-    //                 <SocialHistoryNoteItem
-    //                     onChange={this.handleSocialHistoryChange}
-    //                     key={index}
-    //                     onToggleButtonClick={this.handleToggleButtonClick}
-    //                     onInterestedButtonClick={this.handleInterestedToggleButtonClick}
-    //                     onTriedButtonClick={this.handleTriedToggleButtonClick}
-    //                     condition={this.substanceUseFields[label].condition}
-    //                     firstField={this.substanceUseFields[label].firstField}
-    //                     secondField={this.substanceUseFields[label].secondField}
-    //                     thirdField={this.substanceUseFields[label].thirdField}
-    //                     fourthField={this.substanceUseFields[label].fourthField ? this.substanceUseFields[label].fourthField : null}
-    //                     fifthField={this.substanceUseFields[label].fifthField ? this.substanceUseFields[label].fifthField : null}
-    //                     values={this.context["Social History"]}
-    //                 />
-    //             )
-    //         ) : (
-    //         Object.keys(this.substanceUseFields).map(
-    //             (label, index) =>
-    //                 <SocialHistoryNoteRow
-    //                     onChange={this.handleSocialHistoryChange}
-    //                     key={index}
-    //                     onToggleButtonClick={this.handleToggleButtonClick}
-    //                     condition={this.substanceUseFields[label].condition}
-    //                     firstField={this.substanceUseFields[label].firstField}
-    //                     secondField={this.substanceUseFields[label].secondField}
-    //                     thirdField={this.substanceUseFields[label].thirdField}
-    //                     fourthField={this.substanceUseFields[label].fourthField ? this.substanceUseFields[label].fourthField : null}
-    //                     fifthField={this.substanceUseFields[label].fifthField ? this.substanceUseFields[label].fifthField : null}
-    //                     values={this.context["Social History"]}
-    //                 />
-    //         )
-    //     ));
-    // }
-
-    // render() {
-
-    //     //a blank row to allow addition of drugs
-    //     //TODO: make add row button aligned with the firstField
-    //     const rowToAdd = (<SocialHistoryNoteRow
-    //         onChange={this.handleSubstanceUseChange}
-    //         condition=""
-    //         firstField={this.substanceUseFields["Substance Abuse"].firstField}
-    //         secondField={this.substanceUseFields["Substance Abuse"].secondField}/>);
-
-    //     const substanceUseRows = this.generateSubstanceUseRows();
-    //     const secondaryFieldRows = this.generateSecondaryFieldRows();
-    //     return(
-    //         <Fragment>
-    //             <GridContent
-    //                 value={this.props.value}
-    //                 contentHeader={this.substanceUseContentHeader}
-    //                 customNoteRow={rowToAdd}
-    //                 rows={substanceUseRows}
-    //                 name={"social history"}
-    //                 numColumns={5}
-    //                 mobile={this.props.mobile}
-    //             />
-    //             {this.props.mobile ? <div/> : <Divider/>}
-    //             <br/>
-    //             <Grid columns={2} stackable>
-    //                 {secondaryFieldRows}
-    //             </Grid>
-    //         </Fragment>
-    //     )
-    // }
-
+    // renders Tobacco, Alcohol, and RecreationalDrugs components 
     render() {
         
         const secondaryFieldRows = this.generateSecondaryFieldRows();
@@ -182,13 +111,13 @@ export default class SocialHistoryContent extends React.Component {
         return (
             <Fragment>
                 <Segment>
-                    <Tobacco values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick} onInterestedButtonClick={this.handleInterestedToggleButtonClick} onTriedButtonClick={this.handleTriedToggleButtonClick} onTableBodyChange={this.context.onContextChange.bind(this.context, 'Social History')} />
+                    <Tobacco mobile={this.props.mobile} values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick} onInterestedButtonClick={this.handleInterestedToggleButtonClick} onTriedButtonClick={this.handleTriedToggleButtonClick} onTableBodyChange={this.context.onContextChange.bind(this.context, 'Social History')} />
                 </Segment>
                 <Segment>
-                    <Alcohol values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick} onInterestedButtonClick={this.handleInterestedToggleButtonClick} onTriedButtonClick={this.handleTriedToggleButtonClick}/>
+                    <Alcohol mobile={this.props.mobile} values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick} onInterestedButtonClick={this.handleInterestedToggleButtonClick} onTriedButtonClick={this.handleTriedToggleButtonClick}/>
                 </Segment>
                 <Segment>
-                    <RecreationalDrugs values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick} onInterestedButtonClick={this.handleInterestedToggleButtonClick} onTriedButtonClick={this.handleTriedToggleButtonClick}/>
+                    <RecreationalDrugs mobile={this.props.mobile} values={this.context["Social History"]} onChange={this.handleSocialHistoryChange} onToggleButtonClick={this.handleToggleButtonClick} onInterestedButtonClick={this.handleInterestedToggleButtonClick} onTriedButtonClick={this.handleTriedToggleButtonClick}/>
                 </Segment>
                 <Segment>
                     <Grid columns={2} stackable>

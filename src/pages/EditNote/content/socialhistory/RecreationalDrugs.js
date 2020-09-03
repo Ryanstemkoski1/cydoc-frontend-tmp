@@ -4,7 +4,6 @@ import { SOCIAL_HISTORY } from 'constants/constants';
 import SocialHistoryTableContent from 'components/tools/SocialHistoryTableContent';
 import HPIContext from 'contexts/HPIContext';
 
-// CHANGE TO RECREATIONAL DRUGS
 class RecreationalDrugs extends React.Component {
 
     static contextType = HPIContext
@@ -15,6 +14,7 @@ class RecreationalDrugs extends React.Component {
         this.additionalFields = this.additionalFields.bind(this);
     }
 
+    // creates a SocialHistoryTableContent where user can enter drug name, mode of delivery, and number per week
     additionalFields() {
         const condition = this.recreationalDrugsFields.condition;
         const fields = this.recreationalDrugsFields;
@@ -22,30 +22,22 @@ class RecreationalDrugs extends React.Component {
         
         if (values[condition]["Yes"] || values[condition]["In the Past"]) {
             return (
-                // <TableContent
-                //     tableHeaders={[fields.firstField, fields.secondField, fields.thirdField]}
-                //     tableBodyPlaceholders={[fields.firstField, fields.secondField, fields.thirdField]}
-                //     onTableBodyChange={this.context.onContextChange.bind(this.context, 'Social History')}
-                //     name={condition}
-                //     values={values}
-                //     mobile={this.props.mobile}
-                //     category={'Social History'}
-                //     initRows={[1]}
-                // />
                 <SocialHistoryTableContent
-                    tableHeaders={[fields.firstField, fields.secondField, fields.thirdField]}
-                    tableBodyPlaceholders={[fields.firstField, fields.secondField, fields.thirdField]}
+                    mobile={this.props.mobile}
+                    tableHeaders={[fields.firstField, fields.secondField, fields.thirdField, '']}
+                    tableBodyPlaceholders={[fields.firstField, fields.secondField, fields.thirdField, 'delete']}
                     onTableBodyChange={this.context.onContextChange.bind(this.context, 'Social History')}
                     name={condition}
                     values={values}
                     category={'Social History'}
                     addRow='drug'
-                    prompt={values[condition]["In the Past"] ? 'Please summarize what recreational drugs you previously used:' : ''}
+                    prompt={values[condition]["In the Past"] ? 'Please summarize what recreational drugs you previously used:' : 'Please summarize your current drug use:'}
                 />
             )
         }
     }
 
+    // renders a SocialHistoryNoteItem with information specific to RecreationalDrugs
     render() {
         return (
             <SocialHistoryNoteItem

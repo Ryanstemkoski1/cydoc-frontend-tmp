@@ -10,13 +10,7 @@ import LogoLight from '../../assets/logo-light.png'
 import LogoName from '../../assets/logo-name.png'
 import "./Account.css"
 
-import blue1 from '../../assets/alicia-logos/blue1.png';
-import blue2 from '../../assets/alicia-logos/blue2.png';
-import blue3 from '../../assets/alicia-logos/blue3.png';
-import blue4 from '../../assets/alicia-logos/blue4.png';
-import blue5 from '../../assets/alicia-logos/blue5.png';
-import whitetext from '../../assets/alicia-logos/whitetext.png';
-import halfblue from '../../assets/alicia-logos/halfblue.png';
+import blues from '../../assets/alicia-logos/blues.png';
 
 
 // Component that manages the layout of the login page
@@ -99,14 +93,13 @@ class LoginPage extends Component {
 
         const { username, password } = this.state;
         return (
-
             // renders a one-column grid centered in the middle of the screen with login form
             // TODO: Make this into a container or card
             <Container className="login">
                 <Container textAlign="center">
                     {/* <Image size="tiny" spaced href='/home' src={LogoLight} />
                     <Image size="small" spaced href='/home' src={LogoName} /> */}
-                    <Image size="medium" spaced centered href='/home' src={blue3} />
+                    <Image size="large" spaced centered href='/home' src={blues} />
                 </Container>
 
                 <Segment clearing raised>

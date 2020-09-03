@@ -14,6 +14,7 @@ class Alcohol extends React.Component {
         this.additionalFields = this.additionalFields.bind(this);
     }
 
+    // if currently uses alcohol or used in past, create the SocialHistoryTableContent so that a user can summarize their drinking
     additionalFields() {
         const condition = this.alcoholFields.condition;
         const fields = this.alcoholFields;
@@ -21,30 +22,22 @@ class Alcohol extends React.Component {
         
         if (values[condition]["Yes"] || values[condition]["In the Past"]) {
             return (
-                // <TableContent
-                //     tableHeaders={[fields.firstField, fields.secondField, fields.thirdField]}
-                //     tableBodyPlaceholders={[fields.firstField, fields.secondField, fields.thirdField]}
-                //     onTableBodyChange={this.context.onContextChange.bind(this.context, 'Social History')}
-                //     name={condition}
-                //     values={values}
-                //     mobile={this.props.mobile}
-                //     category={'Social History'}
-                //     initRows={[1]}
-                // />
                 <SocialHistoryTableContent
-                    tableHeaders={[fields.firstField, fields.secondField, fields.thirdField]}
-                    tableBodyPlaceholders={[fields.firstField, fields.secondField, fields.thirdField]}
+                    mobile={this.props.mobile}
+                    tableHeaders={[fields.firstField, fields.secondField, fields.thirdField, '']}
+                    tableBodyPlaceholders={[fields.firstField, fields.secondField, fields.thirdField, 'delete']}
                     onTableBodyChange={this.context.onContextChange.bind(this.context, 'Social History')}
                     name={condition}
                     values={values}
                     category={'Social History'}
                     addRow='drink type'
-                    prompt={values[condition]["In the Past"] ? 'Please summarize what you used to drink:' : ''}
+                    prompt={values[condition]["In the Past"] ? 'Please summarize what you used to drink:' : 'Please summarize your current drinking habits:'}
                 />
             )
         }
     }
 
+    // renders a SocialHistoryNoteItem with information specific to the Alcohol section
     render() {
         return (
             <SocialHistoryNoteItem

@@ -1,4 +1,4 @@
-import {Form, Grid, Input, TextArea} from "semantic-ui-react";
+import {Form, Grid, Input, TextArea, Divider} from "semantic-ui-react";
 import ToggleButton from 'components/tools/ToggleButton.js';
 import React, {Component} from 'react'
 import PropTypes from 'prop-types';
@@ -159,6 +159,7 @@ export default class SocialHistoryNoteRow extends Component {
                             </Form.Field>
                         </Form>
                     </Grid.Column>
+                    <Divider hidden />
                     {this.quittingQuestions()}
                 </>
             )

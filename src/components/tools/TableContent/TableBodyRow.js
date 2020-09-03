@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextArea, Table, Dropdown, Input } from 'semantic-ui-react';
+import { TextArea, Table, Dropdown, Input, Form, Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import './TableContent.css';
 
@@ -8,6 +8,7 @@ export class TableBodyRow extends Component {
     getCell(placeholder) {
         const {values, name, rowindex, onTableBodyChange, onAddSideEffect, onAddMedication, onAddProcedure, onAddDrink, medicationOptions, sideEffectsOptions, proceduresOptions, drinkOptions, drinkSizes, drugOptions, modesOfDelivery} = this.props;
         let cell;
+        const mobile = true;
 
         if (name === 'Alcohol' || name === 'Recreational Drugs') {
             switch (placeholder) {
@@ -21,7 +22,6 @@ export class TableBodyRow extends Component {
                                 fluid
                                 search
                                 selection
-                                clearable
                                 options={drinkOptions}
                                 placeholder={placeholder}
                                 onChange={onTableBodyChange}
@@ -31,7 +31,7 @@ export class TableBodyRow extends Component {
                                 className='side-effects'
                             />
                         </Input>
-                    );
+                    );  
                     break;
                 }
                 case 'Drink Size': {
@@ -44,7 +44,6 @@ export class TableBodyRow extends Component {
                                 fluid
                                 search
                                 selection
-                                clearable
                                 options={drinkSizes}
                                 placeholder={placeholder}
                                 onChange={onTableBodyChange}
@@ -67,7 +66,6 @@ export class TableBodyRow extends Component {
                                 fluid
                                 search
                                 selection
-                                clearable
                                 options={drugOptions}
                                 placeholder={placeholder}
                                 onChange={onTableBodyChange}
@@ -89,7 +87,7 @@ export class TableBodyRow extends Component {
                                 fluid
                                 search
                                 selection
-                                clearable
+                                multiple
                                 options={modesOfDelivery}
                                 placeholder={placeholder}
                                 onChange={onTableBodyChange}
@@ -105,6 +103,7 @@ export class TableBodyRow extends Component {
                     cell = (
                         <Input
                             fluid
+                            type="number"
                             className='content-input-computer content-dropdown'
                             onChange={onTableBodyChange}
                             placeholder={placeholder}
@@ -114,6 +113,17 @@ export class TableBodyRow extends Component {
                         />
                     );
                     break;
+                }
+                case 'delete': {
+                    cell = (
+                        <Button
+                            rowindex={rowindex}
+                            circular
+                            icon='close'
+                            size='mini'
+                            onClick={this.props.handleDelete}
+                        />      
+                    )
                 }
             }
         } else {
@@ -218,7 +228,7 @@ export class TableBodyRow extends Component {
 
         const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
             return (
-                <Table.Cell key={index}>
+                <Table.Cell key={index} collapsing={placeholder === 'delete' ? true : false} style={placeholder === 'delete' ? { borderTop: 0, borderLeft: 0 } : null}>
                     {this.getCell(placeholder)}
                 </Table.Cell>
             )

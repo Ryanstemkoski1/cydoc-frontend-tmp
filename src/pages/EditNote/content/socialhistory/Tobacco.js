@@ -3,7 +3,7 @@ import SocialHistoryNoteItem from './SocialHistoryNoteItem';
 import { SOCIAL_HISTORY } from 'constants/constants';
 import {Form, Grid, Input, Dropdown} from 'semantic-ui-react';
 import tobaccoProducts from 'constants/SocialHistory/tobaccoProducts';
-
+import '../familyhistory/FamilyHistory.css';
 
 class Tobacco extends React.Component {
 
@@ -14,12 +14,14 @@ class Tobacco extends React.Component {
         this.handleDropdown = this.handleDropdown.bind(this);
     }
 
+    // handles user click for the dropdown menu (products used)
     handleDropdown(event, data) {
         let newState = this.props.values;
         newState['Tobacco'][data.placeholder] = data.value;
         this.props.onTableBodyChange(newState);
     }
 
+    // asks for packs per day, number of years, and products used
     additionalFields() {
 
         const condition = this.tobaccoFields.condition;
@@ -28,41 +30,54 @@ class Tobacco extends React.Component {
 
         if (values[condition]["Yes"] || values[condition]["In the Past"]) {
             return (
-                <div>
-                    <Grid stackable columns="equal">
-                        {Object.keys(fields).map(key => (
-                            key !== "condition" && key !== "quitYear" && key !== "thirdField" ?
-                            <Grid.Column computer={5} tablet={8} mobile={16}>
-                                <Form.Field>
-                                    <label>{fields[key]}</label>
-                                    <Input
-                                        field={fields[key]}
-                                        condition={condition}
-                                        value={values[condition][fields[key]]}
-                                        onChange={this.props.onChange}
-                                    />
-                                </Form.Field> 
-                            </Grid.Column> : fields[key] === "Products Used" ? 
-                            <Grid.Column>
-                                <label>{fields[key]}</label>
-                                <Dropdown
-                                    placeholder={fields[key]}
-                                    fluid
-                                    multiple
-                                    search
-                                    selection
-                                    options={tobaccoProducts}
-                                    onChange={this.handleDropdown}
-                                    // value={values[condition][key]} how to do value when array??
+                <Grid stackable>
+                    <Grid.Row columns="equal">
+                        <Grid.Column>
+                            <Form.Field>
+                                {fields["firstField"]}
+                                <Input
+                                    field={fields["firstField"]}
+                                    condition={condition}
+                                    value={values[condition][fields["firstField"]]}
+                                    onChange={this.props.onChange}
                                 />
-                            </Grid.Column> : null
-                        ))}
-                    </Grid>
-                </div>
+                            </Form.Field> 
+                        </Grid.Column>
+                        <Grid.Column>
+                            <Form.Field>
+                                {fields["secondField"]}
+                                {/* TODO: require numerical value, type=number might not work on all browsers? */}
+                                <Input
+                                    type="number"
+                                    field={fields["secondField"]}
+                                    condition={condition}
+                                    value={values[condition][fields["secondField"]]}
+                                    onChange={this.props.onChange}
+                                />
+                            </Form.Field> 
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column>
+                            {fields["thirdField"]}
+                            <Dropdown
+                                // placeholder={this.props.mobile ? fields["thirdField"] : null}
+                                fluid
+                                multiple
+                                search
+                                selection
+                                options={tobaccoProducts}
+                                onChange={this.handleDropdown}
+                                value={values[condition][fields["thirdField"]]}
+                            />
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
             )
         }
     }
 
+    // renders a SocialHistoryNoteItem with information specific to the Tobacco section
     render() {
         return (
             <SocialHistoryNoteItem
