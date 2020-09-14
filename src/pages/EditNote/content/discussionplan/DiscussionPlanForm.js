@@ -29,6 +29,7 @@ export default class DiscussionPlanForm extends Component{
         super(props);
         this.state = {
             expandPanels: false,
+            active: new Set(),
             mainOptions: TYPE_TO_OPTIONS[this.props.type],
             whenOptions: this.generateOptions(['today', 'this week', 'this month', 'this year',]),
         }
@@ -58,6 +59,9 @@ export default class DiscussionPlanForm extends Component{
     }
 
     handleOnChange = (e, { index, name, value }) => {
+        if (name === 'diagnosis' && !this.state.active.has(index)) {
+            this.toggleAccordion(index);
+        }
         const plan = { ...this.context.plan };
         const data = plan['conditions'][this.props.index][this.props.type];
         data[index][name] = value;
@@ -68,6 +72,16 @@ export default class DiscussionPlanForm extends Component{
         this.setState({
             expandPanels: !this.state.expandPanels
         });
+    }
+
+    toggleAccordion = (idx) => {
+        const { active } = this.state;
+        if (active.has(idx)) {
+            active.delete(idx);
+        } else {
+            active.add(idx);
+        }
+        this.setState({ active });
     }
 
     componentDidUpdate(prevProps) {
@@ -400,9 +414,11 @@ export default class DiscussionPlanForm extends Component{
             }
             return {
                 key: idx,
+                active: this.state.active.has(idx),
                 title: {
                     content: title,
                 },
+                onTitleClick: () => this.toggleAccordion(idx),
                 content: { content, },
             };
         });

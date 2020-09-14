@@ -43,7 +43,7 @@ export default class FamilyHistoryBlock extends Component {
     }
 
     render() {
-        const { mobile, condition, comments, index, familyMember } = this.props;
+        const { mobile, condition, comments, index, familyMember, isPreview } = this.props;
         // array of dropdowns displayed on Family History Family Member column
         let dropdown_list = [];
         // variable range that changes when the user clicks the + (add member) button 
@@ -100,6 +100,14 @@ export default class FamilyHistoryBlock extends Component {
                 </Fragment>
             </Grid.Column>
         </Grid.Row>
+        let handleToggle = this.handleToggleButtonClick;
+        let yesActive = this.context["Family History"][condition.props.index]["Yes"];
+        let noActive = this.context["Family History"][condition.props.index]["No"];
+        if (isPreview) {
+            handleToggle = () => {};
+            yesActive = false;
+            noActive = false;
+        }
         return (
             mobile ? (
                 <Grid.Row>
@@ -110,16 +118,16 @@ export default class FamilyHistoryBlock extends Component {
                             </div>
                             <div>
                                 <ToggleButton
-                                    active={this.context["Family History"][condition.props.index]["Yes"]}
+                                    active={yesActive}
                                     condition={condition}
                                     title="Yes"
-                                    onToggleButtonClick={this.handleToggleButtonClick}
+                                    onToggleButtonClick={handleToggle}
                                 />
                                 <ToggleButton
-                                    active={this.context["Family History"][condition.props.index]["No"]}
+                                    active={noActive}
                                     condition={condition}
                                     title="No"
-                                    onToggleButtonClick={this.handleToggleButtonClick}
+                                    onToggleButtonClick={handleToggle}
                                 />
                             </div>
                         </Form.Group>
@@ -148,16 +156,16 @@ export default class FamilyHistoryBlock extends Component {
                 <div>
                     {condition} 
                     <ToggleButton
-                        active={this.context["Family History"][condition.props.index]["Yes"]}
+                        active={yesActive}
                         condition={condition}
                         title="Yes"
-                        onToggleButtonClick={this.handleToggleButtonClick}
+                        onToggleButtonClick={handleToggle}
                     />
                     <ToggleButton
-                        active={this.context["Family History"][condition.props.index]["No"]}
+                        active={noActive}
                         condition={condition}
                         title="No"
-                        onToggleButtonClick={this.handleToggleButtonClick}
+                        onToggleButtonClick={handleToggle}
                     />
                     
                     <div className='condition-info-container'>

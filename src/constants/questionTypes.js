@@ -1,7 +1,6 @@
 const questionTypes = {
     basic: {
         'YES-NO': 'Yes/No',
-        'NO-YES': 'No/Yes',
         'SHORT-TEXT': 'Short Text',
         'NUMBER': 'Number',
         'CLICK-BOXES': 'Buttons',
@@ -9,12 +8,10 @@ const questionTypes = {
         'LIST-TEXT': 'List',
     },
     advanced: {
-        'FH-POP': 'Family History, Prepopulated',
-        'PMH-POP': 'Past Medical History, Prepopulated',
-        'MEDS-POP': 'Medications, Prepopulated',
-        'PMH-BLANK': 'Past Medical History, Blank',
-        'MEDS-BLANK': 'Medications, Blank',
-        'PSH-BLANK': 'Past Surgical History, Blank',
+        'FH': 'Family history',
+        'PMH': 'Past medical history',
+        'MEDS': 'Medications',
+        'PSH': 'Past surgical history',
     },
 }
 

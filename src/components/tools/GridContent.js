@@ -31,8 +31,7 @@ export default class GridContent extends Component {
     }
 
     render(){
-        const {numColumns, contentHeader, rows, mobile} = this.props;
-
+        const {numColumns, contentHeader, rows, mobile, isPreview} = this.props;
         return mobile ?
             (<Fragment>
                 <br/>
@@ -40,7 +39,9 @@ export default class GridContent extends Component {
                     {rows}
                 </Grid>
                 <Divider />
-                {this.props.question_type === "add_row" ? <AddRowButton onClick={this.addRow} name={this.props.name}/> : ""}
+                {!isPreview && this.props.question_type === "add_row" 
+                    ? <AddRowButton onClick={this.addRow} name={this.props.name}/> 
+                    : ""}
             </Fragment>
             ) : (
             <Fragment>
@@ -50,7 +51,9 @@ export default class GridContent extends Component {
                 <Grid columns={numColumns} verticalAlign='middle'>
                     {rows}
                 </Grid>
-                {this.props.question_type === "add_row" ? <AddRowButton onClick={this.addRow} name={this.props.name}/> : ""}
+                {!isPreview && this.props.question_type === "add_row" 
+                    ? <AddRowButton onClick={this.addRow} name={this.props.name}/> 
+                    : ""}
             </Fragment>
         );
     }
