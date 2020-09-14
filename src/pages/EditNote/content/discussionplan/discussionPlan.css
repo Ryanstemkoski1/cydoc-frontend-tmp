@@ -40,10 +40,10 @@
     padding-bottom: 1rem!important;
 }
 
-/*.section-title > h2 {*/
-/*    background-color: #ecf3f5!important;*/
-/*    font-weight: 400!important;*/
-/*}*/
+.section-title > h2 {
+    background-color: #ecf3f5!important;
+    font-weight: 400!important;
+}
 
 .section-body {
     padding: 1em 0.5em!important;
@@ -72,4 +72,8 @@
 
 .ui.form > textarea {
     height: 12rem !important;
+}
+
+.prescriptions .active.title {
+    border-bottom: none !important;
 }

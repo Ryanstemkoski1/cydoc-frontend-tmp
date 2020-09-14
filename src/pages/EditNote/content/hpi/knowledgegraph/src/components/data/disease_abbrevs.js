@@ -4,7 +4,7 @@ const disease_abbrevs = {
     "NEURO": "Neurological",
     "ENDOCRINE": "Endocrine",
     "LIFESTYLE": "Lifestyle",
-    "SYSTEMIC": "Systematic",
+    "SYSTEMIC": "Systemic",
     "GENERAL": "General",
     "MSK": "Musculoskeletal",
     "PAIN": "Pain",

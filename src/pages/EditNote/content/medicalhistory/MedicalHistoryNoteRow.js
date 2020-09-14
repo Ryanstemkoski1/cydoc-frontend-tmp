@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 //Component for a row the Medical History GridContent
 export default class MedicalHistoryNoteRow extends Component {
     render = () => {
-        const { yesActive, condition, onToggleButtonClick, noActive, onset, onChange, comments} = this.props;
+        const { yesActive, condition, onToggleButtonClick, noActive, onset, onChange, comments, isPreview } = this.props;
         return (<Grid.Row>
             <Grid.Column>
                 {condition}
@@ -24,13 +24,13 @@ export default class MedicalHistoryNoteRow extends Component {
             <Grid.Column>
                 <Form>
                     <TextArea condition={condition.props.condition} placeholder='Onset' value={onset}
-                              onChange={onChange}/>
+                              onChange={onChange} disabled={isPreview}/>
                 </Form>
             </Grid.Column>
             <Grid.Column>
                 <Form>
                     <TextArea condition={condition.props.condition} value={comments}
-                              onChange={onChange} placeholder='Comments'/>
+                              onChange={onChange} placeholder='Comments' disabled={isPreview}/>
                 </Form>
             </Grid.Column>
         </Grid.Row>)

@@ -23,6 +23,13 @@ class ButtonItem extends React.Component {
         this.handleClick = this.handleClick.bind(this)
     }
 
+    componentDidMount() {
+        if (!(this.context["positivecategories"].includes(this.props.name))) {
+            this.setState({disease_array: this.state.disease_buttons})
+            this.context["positivecategories"].push(this.props.name)
+        }
+    }
+
     handleClick() {
         if (!(this.context["positivecategories"].includes(this.props.name))) {
             this.setState({disease_array: this.state.disease_buttons})

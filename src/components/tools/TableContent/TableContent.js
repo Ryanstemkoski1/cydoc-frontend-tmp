@@ -7,6 +7,7 @@ import HPIContext from 'contexts/HPIContext.js';
 import procedures from 'constants/procedures';
 import { sideEffects } from 'constants/sideEffects';
 import drug_names from 'constants/drugNames';
+import diseases from 'constants/diseases';
 import './TableContent.css';
  
 //Component for a table layout
@@ -19,67 +20,76 @@ export default class TableContent extends Component {
             proceduresOptions: procedures,
             sideEffectsOptions: sideEffects,
             medicationOptions: drug_names,
+            diseaseOptions: diseases,
+            active: new Set(),
+            invalidYear: false,
         }
         // TODO: add back addRow functionality
         this.addRow = this.addRow.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
-        this.handleAdditionSideEffects = this.handleAdditionSideEffects.bind(this);
-        this.handleAdditionMedication = this.handleAdditionMedication.bind(this);
-        this.handleAdditionProcedure = this.handleAdditionProcedure.bind(this);
+        this.handleAddition = this.handleAddition.bind(this);
+        this.onYearChange = this.onYearChange.bind(this);
     }
 
     //modify the current values in the table to reflect changes
     // and call the handler prop
     handleTableBodyChange(event, data){ 
+        if (data.placeholder === 'Drug Name' && !this.state.active.has(data.rowindex)) {
+            this.toggleAccordion(data.rowindex);
+        }
         let newState = this.props.values;
-        newState[data.rowindex][data.placeholder] = data.value;
+        newState[data.rowindex][data.type] = data.value;
         this.props.onTableBodyChange(newState);
     }
 
-    handleAdditionSideEffects(event, { value }) {
+    handleAddition(event, { optiontype, value }) {
         this.setState((prevState) => ({
-            sideEffectsOptions: [
+            [optiontype]: [
                 {key: value, text: value, value},
-                ...prevState.sideEffectsOptions
+                ...prevState[optiontype]
             ],
         }));
     }
 
-    handleAdditionMedication(event, { value }) {
-        this.setState((prevState) => ({
-            medicationOptions: [
-                {key: value, text: value, value},
-                ...prevState.medicationOptions
-            ],
-        }));
+    onYearChange = (e) => {
+        this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
     }
 
-    handleAdditionProcedure(event, { value }) {
-        this.setState((prevState) => ({
-            proceduresOptions: [
-                {key: value, text: value, value},
-                ...prevState.proceduresOptions
-            ],
-        }));
+    toggleAccordion = (idx) => {
+        const { active } = this.state;
+        if (active.has(idx)) {
+            active.delete(idx);
+        } else {
+            active.add(idx);
+        }
+        this.setState({ active });
     }
 
     //method to generate an collection of rows
     makeTableBodyRows(nums){
+        const { 
+            isPreview,
+            tableBodyPlaceholders,
+            values,
+            name,
+        } = this.props;
+
         return nums.map((rowindex, index) => 
             <TableBodyRow
                 key={index}
-                rowindex={parseInt(rowindex)}
-                tableBodyPlaceholders={this.props.tableBodyPlaceholders}
+                rowindex={isPreview ? rowindex : parseInt(rowindex)}
+                tableBodyPlaceholders={tableBodyPlaceholders}
                 onTableBodyChange={this.handleTableBodyChange}
-                onAddSideEffect={this.handleAdditionSideEffects}
-                onAddMedication={this.handleAdditionMedication}
-                onAddProcedure={this.handleAdditionProcedure}
+                onAddItem={this.handleAddition}
                 values={this.props.values}
                 medicationOptions={this.state.medicationOptions}
                 sideEffectsOptions={this.state.sideEffectsOptions}
                 proceduresOptions={this.state.proceduresOptions}
+                diseaseOptions={this.state.diseaseOptions}
+                values={values}
+                isPreview={isPreview}
             />
         )
     }
@@ -102,18 +112,27 @@ export default class TableContent extends Component {
     }
 
     makeAccordionPanels(nums) {
-        const { values, tableBodyPlaceholders, name } = this.props;
+        const { values, tableBodyPlaceholders, name, isPreview } = this.props;
 
         const panels = [];
-
         for (let i = 0; i < nums.length; i++) {
             let titleContent;
             const contentInputs = [];
 
             switch(name) {
                 case 'surgical history': {
-                    titleContent = (
-                        <Form className='inline-form'>
+                    let mainInput;
+                    if (isPreview) {
+                        mainInput = (
+                            <Input
+                                disabled    
+                                transparent
+                                className='content-input medication'
+                                value={nums[i]}
+                            />
+                        );
+                    } else {
+                        mainInput = (
                             <Input
                                 transparent
                                 className='content-input-surgical content-dropdown medication'
@@ -125,22 +144,40 @@ export default class TableContent extends Component {
                                     clearable
                                     allowAdditions
                                     icon=''
+                                    type={tableBodyPlaceholders[0]}
+                                    optiontype='proceduresOptions'
                                     options={this.state.proceduresOptions}
                                     placeholder={tableBodyPlaceholders[0]}
                                     onChange={this.handleTableBodyChange}
                                     rowindex={i}
                                     value={values[i][tableBodyPlaceholders[0]]}
-                                    onAddItem={this.handleAdditionProcedure}
+                                    onAddItem={this.handleAddition}
                                     className='side-effects'
                                 />
                             </Input>
+                        );
+                    }
+
+                    titleContent = (
+                        <Form className='inline-form'>
+                            {mainInput}
                         </Form>
                     );
                     break;
                 }
                 case 'medication': {
-                    titleContent = (
-                        <Form className='inline-form'>
+                    let mainInput;
+                    if (isPreview) {
+                        mainInput = (
+                            <Input
+                                disabled    
+                                transparent
+                                className='content-input content-dropdown medication'
+                                value={nums[i]}
+                            />
+                        );
+                    } else {
+                        mainInput = (
                             <Input
                                 transparent
                                 className='content-input content-dropdown medication'
@@ -152,23 +189,47 @@ export default class TableContent extends Component {
                                     clearable
                                     allowAdditions
                                     icon=''
+                                    optiontype='medicationOptions'
+                                    type={tableBodyPlaceholders[0]}
                                     options={this.state.medicationOptions}
                                     placeholder={tableBodyPlaceholders[0]}
                                     onChange={this.handleTableBodyChange}
                                     rowindex={i}
                                     value={values[i][tableBodyPlaceholders[0]]}
-                                    onAddItem={this.handleAdditionMedication}
+                                    onAddItem={this.handleAddition}
                                     className='side-effects'
                                 />
                             </Input>
-                            {' for '}
-                            <Input
-                                transparent
-                                placeholder={tableBodyPlaceholders[4]}
-                                onChange={this.handleTableBodyChange}
-                                rowindex={i}
-                                value={values[i][tableBodyPlaceholders[4]]}
-                            />
+                        );
+                    }
+                    titleContent = (
+                        <Form className='inline-form'>
+                            {mainInput}
+                            <span className='reason-wrapper'>
+                                for
+                                <Input
+                                    transparent
+                                    className='content-input content-dropdown medication reason'
+                                >
+                                    <Dropdown
+                                        fluid
+                                        search
+                                        selection
+                                        allowAdditions
+                                        icon=''
+                                        optiontype='diseaseOptions'
+                                        type={tableBodyPlaceholders[4]}
+                                        options={this.state.diseaseOptions}
+                                        placeholder={tableBodyPlaceholders[4]}
+                                        onChange={this.handleTableBodyChange}
+                                        rowindex={i}
+                                        value={isPreview ? "" : values[i][tableBodyPlaceholders[4]]}
+                                        disabled={isPreview}
+                                        onAddItem={this.handleAddition}
+                                        className='side-effects medication'
+                                    />
+                                </Input>
+                            </span>
                         </Form>
                     );
                     break;
@@ -179,6 +240,7 @@ export default class TableContent extends Component {
                             <Input
                                 transparent
                                 placeholder={tableBodyPlaceholders[0]}
+                                type={tableBodyPlaceholders[0]}
                                 onChange={this.handleTableBodyChange}
                                 rowindex={i}
                                 value={values[i][tableBodyPlaceholders[0]]}
@@ -187,6 +249,7 @@ export default class TableContent extends Component {
                             <Input
                                 transparent
                                 placeholder={tableBodyPlaceholders[1]}
+                                type={tableBodyPlaceholders[1]}
                                 onChange={this.handleTableBodyChange}
                                 rowindex={i}
                                 value={values[i][tableBodyPlaceholders[1]]}
@@ -200,6 +263,7 @@ export default class TableContent extends Component {
                         <Form className='inline-form'>
                             <Input
                                 transparent
+                                type={tableBodyPlaceholders[0]}
                                 placeholder={tableBodyPlaceholders[0]}
                                 onChange={this.handleTableBodyChange}
                                 rowindex={i}
@@ -216,24 +280,58 @@ export default class TableContent extends Component {
                     // already in accordion title
                     continue;
                 } else if (tableBodyPlaceholders[j] === 'Side Effects') {
-                    contentInputs.push(
-                        <Input key={j} fluid transparent className='content-input content-dropdown'>
-                            <Dropdown
-                                fluid
-                                search
-                                selection
-                                multiple
-                                allowAdditions
-                                icon=''
-                                options={this.state.sideEffectsOptions}
+                    if (isPreview) {
+                        contentInputs.push(
+                            <Input 
+                                fluid 
+                                disabled
+                                transparent 
+                                key={j} 
                                 placeholder={tableBodyPlaceholders[j]}
-                                onChange={this.handleTableBodyChange}
-                                rowindex={i}
-                                value={values[i][tableBodyPlaceholders[j]]}
-                                onAddItem={this.handleAdditionSideEffects}
-                                className='side-effects'
+                                className='content-input content-dropdown'
                             />
-                        </Input>
+                        );
+                    } else {
+                        contentInputs.push(
+                            <Input key={j} fluid transparent className='content-input content-dropdown'>
+                                <Dropdown
+                                    fluid
+                                    search
+                                    selection
+                                    multiple
+                                    allowAdditions
+                                    icon=''
+                                    options={this.state.sideEffectsOptions}
+                                    type={tableBodyPlaceholders[j]}
+                                    placeholder={tableBodyPlaceholders[j]}
+                                    onChange={this.handleTableBodyChange}
+                                    rowindex={i}
+                                    value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
+                                    onAddItem={this.handleAdditionSideEffects}
+                                    className='side-effects'
+                                />
+                            </Input>
+                        );
+                    }
+                } else if (tableBodyPlaceholders[j] === 'Start Year') {
+                    contentInputs.push(
+                        <div className='table-year-input mobile' key={j}>
+                            <Input 
+                                key={j}
+                                fluid 
+                                transparent 
+                                rowindex={i}
+                                type={tableBodyPlaceholders[j]}
+                                placeholder={tableBodyPlaceholders[j]}
+                                value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
+                                onChange={this.handleTableBodyChange}
+                                onBlur={this.onYearChange}
+                                className='content-input content-dropdown'
+                            />
+                            { this.state.invalidYear && (
+                                <p className='error'>Please enter a year between 1900 and 2020</p>
+                            )}
+                        </div>
                     );
                 } else {
                     contentInputs.push(
@@ -241,18 +339,20 @@ export default class TableContent extends Component {
                             key={j}
                             fluid
                             transparent
+                            rowindex={i}
+                            disabled={isPreview}
+                            type={tableBodyPlaceholders[j]}
                             placeholder={tableBodyPlaceholders[j]}
                             onChange={this.handleTableBodyChange}
-                            rowindex={i}
-                            value={values[i][tableBodyPlaceholders[j]]}
+                            value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
                             className='content-input'
                         />
                     );
                 }
             }
-
             panels.push({
                 key: i,
+                active: this.state.active.has(i),
                 title: {
                     content: titleContent,
                 },
@@ -262,7 +362,8 @@ export default class TableContent extends Component {
                             {contentInputs}
                         </Fragment>
                     ),
-                }
+                },
+                onTitleClick: () => this.toggleAccordion(i),
             });
         }
 
@@ -270,15 +371,12 @@ export default class TableContent extends Component {
     }
 
     render() {
-        const {values, mobile } = this.props;
-        const nums = Object.keys(values);
-        const headerRow = this.makeHeader();
-        const rows = this.makeTableBodyRows(nums);
-        const panels = this.makeAccordionPanels(nums);
+        const {values, mobile, isPreview } = this.props;
+        const nums = isPreview ? values : Object.keys(values);
 
         const content = mobile ? (
             <Accordion
-                panels={panels}
+                panels={this.makeAccordionPanels(nums)}
                 exclusive={false}
                 fluid
                 styled
@@ -288,18 +386,21 @@ export default class TableContent extends Component {
                 celled
                 className='table-display'
             >
-                <Table.Header content={headerRow} />
-                <Table.Body children={rows} />
+                <Table.Header content={this.makeHeader()} />
+                <Table.Body children={this.makeTableBodyRows(nums)} />
             </Table>
         );
 
         return (
             <Fragment>
                 {content}
-                <AddRowButton
-                    onClick={this.addRow}
-                    name={this.props.name}
-                />
+                {!isPreview
+                    &&
+                    <AddRowButton
+                        onClick={this.addRow}
+                        name={this.props.name}
+                    />
+                }
             </Fragment>
         );
     }

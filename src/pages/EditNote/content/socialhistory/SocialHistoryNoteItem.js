@@ -7,6 +7,7 @@ import HPIContext from 'contexts/HPIContext.js';
 //Component that defines the layout for the Substance Use portion
 
 export default class SocialHistoryNoteItem extends Component {
+<<<<<<< HEAD
 
     static contextType = HPIContext;
 
@@ -147,6 +148,11 @@ export default class SocialHistoryNoteItem extends Component {
     render() {
         
         const { values, condition, onToggleButtonClick, onChange } = this.props;
+=======
+    render() {
+        const { values, condition, firstField, secondField, onToggleButtonClick, onChange } = this.props;
+        const showTextAreas = values[condition]["Yes"] || values[condition]["In the Past"] ? "display" : "hide";
+>>>>>>> master
 
         return (
             <Grid.Row>

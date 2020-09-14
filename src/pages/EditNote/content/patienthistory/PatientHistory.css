@@ -8,9 +8,11 @@
 
 .tab-content {
   margin-top: 25px;
-  display: none;
+  display: block;
 }
 
-.initial {
-  display: block;
+.condition-error {
+  margin-top: 0.5rem;
+  color: #b03060;
+  font-style: italic;
 }

@@ -69,6 +69,14 @@ export class NotesStore extends React.Component {
             body: noteBody
         }
 
+        //If notes map is not empty, takes most recent entry and autoloads static sections into new note
+        if(this.state.notes.size) {
+            let lastNote = Array.from(this.state.notes)[this.state.notes.size-1]
+            let staticSections = ["Family History", "Medical History", "Surgical History", "Medications", "Allergies", "Social History"];
+            staticSections.forEach(entry => {
+                note.body[entry] = lastNote[1].body[entry]
+            })
+        }
 
         let response = await client.post("/record/new", note)
 
@@ -147,6 +155,7 @@ export class NotesStore extends React.Component {
     updateNoteLocally = (note) => {
         this.setState((state, props) => {
             let prevNotes = new Map(state.notes)
+            console.log(note);
             Object.assign(prevNotes.get(note._id), note)
             return { notes: prevNotes }
         })

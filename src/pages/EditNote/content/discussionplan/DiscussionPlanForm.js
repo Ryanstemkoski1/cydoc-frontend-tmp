@@ -29,6 +29,7 @@ export default class DiscussionPlanForm extends Component{
         super(props);
         this.state = {
             expandPanels: false,
+            active: new Set(),
             mainOptions: TYPE_TO_OPTIONS[this.props.type],
             whenOptions: this.generateOptions(['today', 'this week', 'this month', 'this year',]),
         }
@@ -58,6 +59,9 @@ export default class DiscussionPlanForm extends Component{
     }
 
     handleOnChange = (e, { index, name, value }) => {
+        if (name === 'diagnosis' && !this.state.active.has(index)) {
+            this.toggleAccordion(index);
+        }
         const plan = { ...this.context.plan };
         const data = plan['conditions'][this.props.index][this.props.type];
         data[index][name] = value;
@@ -68,6 +72,16 @@ export default class DiscussionPlanForm extends Component{
         this.setState({
             expandPanels: !this.state.expandPanels
         });
+    }
+
+    toggleAccordion = (idx) => {
+        const { active } = this.state;
+        if (active.has(idx)) {
+            active.delete(idx);
+        } else {
+            active.add(idx);
+        }
+        this.setState({ active });
     }
 
     componentDidUpdate(prevProps) {
@@ -131,7 +145,7 @@ export default class DiscussionPlanForm extends Component{
                                 options={this.state.mainOptions}
                                 onChange={this.handleOnChange}
                                 onAddItem={this.handleAddOption}
-                                placeholder='Medication'
+                                placeholder='Medication Name'
                             />
                             <Input
                                 fluid
@@ -222,7 +236,7 @@ export default class DiscussionPlanForm extends Component{
         if (type === 'prescriptions') {
             subheaders = (
             <Grid.Row>
-                    <Grid.Column> Recipe (Rx) </Grid.Column>
+                    <Grid.Column> Rx </Grid.Column>
                     <Grid.Column> Signature (Sig) </Grid.Column>
                     <Grid.Column> Comments </Grid.Column>
             </Grid.Row>
@@ -281,7 +295,7 @@ export default class DiscussionPlanForm extends Component{
             } else {
                 title = (
                     <div className='recipe'>
-                        Recipe (Rx)
+                        Rx
                         <Input 
                             transparent 
                             className='content-input-surgical content-dropdown medication plan-main-input recipe'
@@ -299,7 +313,7 @@ export default class DiscussionPlanForm extends Component{
                                 options={this.state.mainOptions}
                                 onAddItem={this.handleAddOption}
                                 onChange={this.handleOnChange}
-                                placeholder='Prescription'
+                                placeholder='Medication Name'
                                 className='side-effects'
                             />
                         </Input>
@@ -400,9 +414,11 @@ export default class DiscussionPlanForm extends Component{
             }
             return {
                 key: idx,
+                active: this.state.active.has(idx),
                 title: {
                     content: title,
                 },
+                onTitleClick: () => this.toggleAccordion(idx),
                 content: { content, },
             };
         });

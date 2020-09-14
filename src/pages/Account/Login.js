@@ -127,7 +127,7 @@ class LoginPage extends Component {
                                 <Grid.Column>
                                     <Link style={{color:'#007db3'}}as={Button} to="/register" floated='left' className="make-an-account-button"
                                     >
-                                        Make an Account
+                                        Sign Up
                                     </Link>
                                 </Grid.Column>
                                 <Grid.Column textAlign={"right"}>

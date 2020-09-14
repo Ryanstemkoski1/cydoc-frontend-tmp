@@ -11,7 +11,7 @@ export default function MedicalHistoryContentHeader() {
                 </Grid.Column>
                 <Grid.Column/>
                 <Grid.Column>
-                    <Header as="h4">Onset</Header>
+                    <Header as="h4">Start Year</Header>
                 </Grid.Column>
                 <Grid.Column>
                     <Header as="h4">Comments</Header>

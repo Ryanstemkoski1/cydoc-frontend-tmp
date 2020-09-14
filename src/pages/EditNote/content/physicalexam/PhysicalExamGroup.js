@@ -46,7 +46,6 @@ export default class PhysicalExamGroup extends Component {
     }
 
     generateRows = (rows) => {
-
         return (
             rows.map((row) =>
                 <PhysicalExamRow
@@ -61,11 +60,7 @@ export default class PhysicalExamGroup extends Component {
     }
 
     render() {
-
-
-
         return (
-
             <Fragment>
                 <Header as="h2">{this.props.name}</Header>
                 <Divider />
@@ -87,13 +82,8 @@ export default class PhysicalExamGroup extends Component {
                     </Grid>
                 </Form>
             </Fragment>
-
-
         )
-
     }
-
-
 }
 
 PhysicalExamGroup.propTypes = {
