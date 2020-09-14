@@ -152,6 +152,7 @@ class SocialHistoryTableContent extends React.Component {
                         circular
                         icon='close' 
                         compact
+                        basic
                         onClick={this.deleteRow}
                     />
                 </Grid>

@@ -36,6 +36,7 @@ class Tobacco extends React.Component {
                             <Form.Field>
                                 {fields["firstField"]}
                                 <Input
+                                    type="number"
                                     field={fields["firstField"]}
                                     condition={condition}
                                     value={values[condition][fields["firstField"]]}
@@ -61,7 +62,7 @@ class Tobacco extends React.Component {
                         <Grid.Column>
                             {fields["thirdField"]}
                             <Dropdown
-                                // placeholder={this.props.mobile ? fields["thirdField"] : null}
+                                placeholder={fields["thirdField"]}
                                 fluid
                                 multiple
                                 search

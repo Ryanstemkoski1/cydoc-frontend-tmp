@@ -1,8 +1,5 @@
 import React, {Fragment} from "react";
-import {Divider, Grid, TextArea, Form, Segment} from "semantic-ui-react";
-import SocialHistoryNoteRow from "./SocialHistoryNoteRow";
-import SocialHistoryNoteItem from "./SocialHistoryNoteItem";
-import GridContent from 'components/tools/GridContent.js';
+import {Grid, TextArea, Form, Segment} from "semantic-ui-react";
 import {SOCIAL_HISTORY} from "constants/constants";
 import HPIContext from 'contexts/HPIContext.js';
 import Tobacco from './Tobacco';
@@ -47,7 +44,7 @@ export default class SocialHistoryContent extends React.Component {
         const prevState = values[data.condition][data.title];
         values[data.condition][data.title] = ! prevState;
         for (var response_index in responses) {
-            var response = responses[response_index]
+            let response = responses[response_index]
             if (data.title !== response) values[data.condition][response] = false
         }
         this.context.onContextChange("Social History", values);
@@ -61,7 +58,7 @@ export default class SocialHistoryContent extends React.Component {
         const prevState = values[data.condition]["InterestedInQuitting"][data.title];
         values[data.condition]["InterestedInQuitting"][data.title] = ! prevState;
         for (var response_index in responses) {
-            var response = responses[response_index]
+            let response = responses[response_index]
             if (data.title !== response) values[data.condition]["InterestedInQuitting"][response] = false;
             console.log(values[data.condition]["InterestedInQuitting"][response]);
         }
@@ -75,7 +72,7 @@ export default class SocialHistoryContent extends React.Component {
         const prevState = values[data.condition]["TriedToQuit"][data.title];
         values[data.condition]["TriedToQuit"][data.title] = ! prevState;
         for (var response_index in responses) {
-            var response = responses[response_index]
+            let response = responses[response_index]
             if (data.title !== response) values[data.condition]["TriedToQuit"][response] = false
         }
         this.context.onContextChange("Social History", values);

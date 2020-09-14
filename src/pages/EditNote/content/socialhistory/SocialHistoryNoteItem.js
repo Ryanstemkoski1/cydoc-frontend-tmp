@@ -20,7 +20,7 @@ export default class SocialHistoryNoteItem extends Component {
     // asks users to enter the quit year if they stopped using alcohol, drugs, etc.
     includeQuitYear() {
 
-        const { values, condition, onChange, quitYear, fields } = this.props;
+        const { values, condition, onChange, fields } = this.props;
 
         if (values[condition]["In the Past"]) {
             return (
@@ -29,7 +29,7 @@ export default class SocialHistoryNoteItem extends Component {
                         {fields.quitYear}
                         <Input
                             type="number"
-                            field={quitYear}
+                            field={fields.quitYear}
                             condition={condition}
                             value={values[condition][fields.quitYear]}
                             onChange={onChange}

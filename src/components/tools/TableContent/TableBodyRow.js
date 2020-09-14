@@ -121,6 +121,7 @@ export class TableBodyRow extends Component {
                             circular
                             icon='close'
                             size='mini'
+                            basic
                             onClick={this.props.handleDelete}
                         />      
                     )

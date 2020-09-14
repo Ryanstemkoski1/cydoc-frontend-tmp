@@ -1,6 +1,7 @@
 import  React from 'react';
 import HPIContext from '../../../../contexts/HPIContext';
-import { Button, Segment, Table } from 'semantic-ui-react'
+import { Button, Segment, Table } from 'semantic-ui-react';
+import constants from '../../../../constants/physical-exam-constants';
 
 // TODO: look into <li> keys -- throws a warning if duplicats, not a huge deal but probably fix
 // TODO: remove all console.log (currently commented out)
@@ -11,8 +12,6 @@ class GenerateNote extends React.Component {
         this.state = {
             rich: false
         }
-        this.richText = this.richText.bind(this);
-        this.plainText = this.plainText.bind(this);
     }
 
     static contextType = HPIContext;
@@ -64,8 +63,6 @@ class GenerateNote extends React.Component {
         )
     }
 
-    // TODO: if one of the three procuedures is not filled out it makes an empty line
-    // must be getting saved, but also could just add a conditional
     surgicalHistory() {
         const surgicalHistory = this.context["Surgical History"];
         // console.log(surgicalHistory);
@@ -168,7 +165,6 @@ class GenerateNote extends React.Component {
         const allergies = this.context["Allergies"];
         // console.log(allergies);
 
-        // TODO: fix whatever is going on with allergic reactions
         if (this.state.rich) {
             return (
                 <Table>
@@ -195,11 +191,12 @@ class GenerateNote extends React.Component {
         return (
             <ul>
                 {Object.keys(allergies).map(key => (
+                    allergies[key]['Inciting Agent'] ? 
                     <li>
                         <b>{allergies[key]['Inciting Agent']}. </b>
                         {allergies[key]['Reaction'] ? `Reaction: ${allergies[key]['Reaction']}. ` : null}
                         {allergies[key]['Comments'] ? `Comments: ${allergies[key]['Comments']}` : null}
-                    </li>
+                    </li> : null
                 ))}
             </ul>
         )
@@ -225,6 +222,24 @@ class GenerateNote extends React.Component {
         return productsUsed.join(', ');
     }
 
+    interestedInQuitting(socialHistorySection) {
+        let str;
+        socialHistorySection['InterestedInQuitting']['Yes'] === true ? str = 'Interested in quitting? Yes' :
+            socialHistorySection['InterestedInQuitting']['Maybe'] === true ? str = 'Interested in quitting? Maybe' :
+            socialHistorySection['InterestedInQuitting']['No'] === true ? str = 'Interested in quitting? No' : str = null;
+        return str;
+    }
+
+    triedToQuit(socialHistorySection) {
+        let str;
+        if (socialHistorySection['TriedToQuit']['Yes'] === true) {
+            str = 'Tried to quit? Yes';
+        } else if (socialHistorySection['TriedToQuit']['No'] === true) {
+            str = 'Tried to quit? No';
+        }
+        return str;
+    }
+
     socialHistory() {
         const socialHistory = this.context["Social History"];
         // console.log(socialHistory);
@@ -240,10 +255,8 @@ class GenerateNote extends React.Component {
                         {socialHistory.Tobacco['Never Used'] === true ? <li>Never used</li> : null}
                         {socialHistory.Tobacco['Packs/Day'] && socialHistory.Tobacco['Number of Years'] ? <li>{socialHistory.Tobacco['Number of Years']*socialHistory.Tobacco['Packs/Day']} pack years</li> : null}
                         {socialHistory.Tobacco['Products Used'] ? <li>Products used: {socialHistory.Tobacco['Products Used'].join(', ')}</li> : null}
-                        {socialHistory.Tobacco['InterestedInQuitting']['Yes'] === true ? <li>Interested in quitting? Yes</li> : null}
-                        {socialHistory.Tobacco['InterestedInQuitting']['Maybe'] === true ? <li>Interested in quitting? Maybe</li> : null}
-                        {socialHistory.Tobacco['InterestedInQuitting']['No'] === true ? <li>Interested in quitting? No</li> : null}
-                        {socialHistory.Tobacco['TriedToQuit']['Yes'] === true ? <li>Tried to quit? Yes</li> : <li>Tried to quit? No</li>}
+                        {socialHistory.Tobacco['Yes'] === true || socialHistory.Tobacco['In the Past'] === true ? <li>{this.interestedInQuitting(socialHistory.Tobacco)}</li> : null}
+                        {socialHistory.Tobacco['Yes'] === true || socialHistory.Tobacco['In the Past'] === true ? <li>{this.triedToQuit(socialHistory.Tobacco)}</li> : null}
                         {socialHistory.Tobacco['Comments'] ? <li>Comments: {socialHistory.Tobacco['Comments']}</li> : null}
                     </ul>
                 </div>
@@ -256,10 +269,8 @@ class GenerateNote extends React.Component {
                         {socialHistory.Alcohol['Quit Year'] ? <li>Quit Year: {socialHistory.Alcohol['Quit Year']}</li> : null}
                         {socialHistory.Alcohol['Never Used'] === true ? <li>Never used</li> : null}
                         {socialHistory.Alcohol['fields'][0]['Drink Type'] !== "" ? <li>Products used: {this.alcoholProductsUsed(socialHistory)}</li> : null}
-                        {socialHistory.Alcohol['InterestedInQuitting']['Yes'] === true ? <li>Interested in quitting? Yes</li> : null}
-                        {socialHistory.Alcohol['InterestedInQuitting']['Maybe'] === true ? <li>Interested in quitting? Maybe</li> : null}
-                        {socialHistory.Alcohol['InterestedInQuitting']['No'] === true ? <li>Interested in quitting? No</li> : null}
-                        {socialHistory.Alcohol['TriedToQuit']['Yes'] === true ? <li>Tried to quit? Yes</li> : <li>Tried to quit? No</li>}
+                        {socialHistory.Alcohol['Yes'] === true || socialHistory.Alcohol['In the Past'] === true ? <li>{this.interestedInQuitting(socialHistory.Alcohol)}</li> : null}
+                        {socialHistory.Alcohol['Yes'] === true || socialHistory.Alcohol['In the Past'] === true ? <li>{this.triedToQuit(socialHistory.Alcohol)}</li> : null}
                         {socialHistory.Alcohol['Comments'] ? <li>Comments: {socialHistory.Alcohol['Comments']}</li> : null}
                     </ul>
                 </div>
@@ -272,10 +283,8 @@ class GenerateNote extends React.Component {
                         {socialHistory['Recreational Drugs']['Quit Year'] ? <li>Quit Year: {socialHistory['Recreational Drugs']['Quit Year']}</li> : null}
                         {socialHistory['Recreational Drugs']['Never'] === true ? <li>Never used</li> : null}
                         {socialHistory['Recreational Drugs']['fields'][0]['Drug Name'] !== "" ? <li>Products used: {this.recreationalDrugsProductsUsed(socialHistory)}</li> : null}
-                        {socialHistory['Recreational Drugs']['InterestedInQuitting']['Yes'] === true ? <li>Interested in quitting? Yes</li> : null}
-                        {socialHistory['Recreational Drugs']['InterestedInQuitting']['Maybe'] === true ? <li>Interested in quitting? Maybe</li> : null}
-                        {socialHistory['Recreational Drugs']['InterestedInQuitting']['No'] === true ? <li>Interested in quitting? No</li> : null}
-                        {socialHistory['Recreational Drugs']['TriedToQuit']['Yes'] === true ? <li>Tried to quit? Yes</li> : <li>Tried to quit? No</li>}
+                        {socialHistory['Recreational Drugs']['Yes'] === true || socialHistory['Recreational Drugs']['In the Past'] === true ? <li>{this.interestedInQuitting(socialHistory['Recreational Drugs'])}</li> : null}
+                        {socialHistory['Recreational Drugs']['Yes'] === true || socialHistory['Recreational Drugs']['In the Past'] === true ? <li>{this.triedToQuit(socialHistory['Recreational Drugs'])}</li> : null}
                         {socialHistory['Recreational Drugs']['Comments'] ? <li>Comments: {socialHistory['Recreational Drugs']['Comments']}</li> : null}
                     </ul>
                 </div> 
@@ -292,11 +301,10 @@ class GenerateNote extends React.Component {
         const familyHistory = this.context["Family History"];
         // console.log(familyHistory);
 
-        var components = [];
+        let components = [];
         for (var condition in familyHistory) {
-            var familyMembers = [];
+            let familyMembers = [];
             if (familyHistory[condition].Yes === true) {
-                // components.push(familyHistory[condition]);
                 if (familyHistory[condition]['Family Member']) {
                     for (var member in familyHistory[condition]['Family Member']) {
                         if (familyHistory[condition]['Cause of Death'][member]) {
@@ -314,25 +322,8 @@ class GenerateNote extends React.Component {
                 }
             }
         }
-        // console.log(components);
 
         return (
-            // <ul>
-            //     {Object.keys(components).map(key => (
-            //         <li>
-            //             <b>{components[key]['Condition']}: </b>
-            //             {Object.keys(components[key]['Family Member']).map(member => (
-            //                 <ul>
-            //                     <li>
-            //                         {components[key]['Family Member'][member] ? `${components[key]['Family Member'][member]}: ` : null}
-            //                         {components[key]['Cause of Death'][member] ? components[key]['Cause of Death'][member] ? `Cause of death. ` : null : null}
-            //                         {components[key]['Comments'] ? components[key]['Comments'] : null}
-            //                     </li>
-            //                 </ul>
-            //             ))}
-            //         </li>
-            //     ))}
-            // </ul>
             <ul>
                 {Object.keys(components).map(key => (
                     <li>
@@ -349,29 +340,22 @@ class GenerateNote extends React.Component {
         const review = this.context["Review of Systems"];
         // console.log(review);
 
-        var components = [];
+        let components = [];
         for (var key in review) {
-            var positives = [];
-            var negatives = [];
-            // console.log(key);
-            // console.log(review[key]);
+            let positives = [];
+            let negatives = [];
             for (var question in review[key]) {
-                // console.log(question);
-                // console.log(review[key][question])
                 if (review[key][question] === 'y') {
                     positives.push(question.toLowerCase());
                 } else if (review[key][question] === 'n') {
                     negatives.push(question.toLowerCase());
                 }
             }
-            // console.log(positives);
-            // console.log(negatives);
             components[key] = {
                 positives: positives,
                 negatives: negatives
             }
         }
-        // console.log(components);
 
         // DON'T WANT/NEED A TABLE VIEW FOR THIS SECTION
         // if (this.state.rich) {
@@ -418,32 +402,69 @@ class GenerateNote extends React.Component {
     // TODO: normal vs. abnormal 
     physicalExam() {
         const physical = this.context["Physical Exam"];
-        // console.log(physical);
-        
-        var components = [];
+        const vitalUnits = {'Heart Rate': ' bpm', 'Temperature': ' °C'};
+        console.log(vitalUnits['Heart Rate']);
+
+        let vitals = []
+        let components = [];
         for (var key in physical) {
-            var active = [];
-            var comments = "";
+            let active = [];
+            let comments = "";
+            let keyObject = constants.sections.find(o => o.name === key); // finds section in constants in order to access normal/abnormal info later
+            // specific to vitals section
+            if (key === 'Vitals') {
+                vitals.push(physical[key]['Systolic Blood Pressure'] + '/' + physical[key]['Diastolic Blood Pressure'] + ' mmHG');
+                for (var vital in physical[key]) {
+                    console.log(vital);
+                    if (vital !== 'Systolic Blood Pressure' && vital !== 'Diastolic Blood Pressure') {
+                        vitals.push(vital + ': ' + physical[key][vital] + (vitalUnits[vital] ? vitalUnits[vital] : ""));
+                    }
+                }
+            }
             for (var question in physical[key]) {
-                // console.log(question);
-                // console.log(physical[key][question]);
-                if (typeof physical[key][question] === 'object') {
-                    // console.log(question);
-                    if (physical[key][question].active === true) {
-                        if (physical[key][question].left === true) {
-                            active.push(question + ' (left)');
+                // deals with findings that have a left or right option
+                if (typeof physical[key][question] === 'object' && keyObject) {
+                    let isNormal = true;
+                    for (var i = 0; i < keyObject.rows.length; i++) {
+                        if (keyObject.rows[i].findings.includes(question)) {
+                            keyObject.rows[i].normalOrAbnormal === "normal" ? isNormal = true : isNormal = false;
                         }
-                        if (physical[key][question].right === true) {
-                            active.push(question + ' (right)');
+                    }
+                    if (isNormal) {
+                        if (physical[key][question].active === true) {
+                            if (physical[key][question].right === true && physical[key][question].left === true) {
+                                active.push(question + ' (bilateral)');
+                            }
+                            else if (physical[key][question].left === true) {
+                                active.push(question + ' (left)');
+                            }
+                            else if (physical[key][question].right === true) {
+                                active.push(question + ' (right)');
+                            }
+                        }
+                    } else {
+                        if (physical[key][question].active === true) {
+                            if (physical[key][question].right === true && physical[key][question].left === true) {
+                                active.push('bilateral ' + question);
+                            }
+                            else if (physical[key][question].left === true) {
+                                active.push('left ' + question);
+                            }
+                            else if (physical[key][question].right === true) {
+                                active.push('right ' + question);
+                            }
                         }
                     }
                 }
+                // gets comments section of physical exam 
                 else if (typeof physical[key][question] === 'string' && physical[key] !== 'Vitals') {
                     comments = physical[key][question];
                 }
+                // grabs findings that don't have a left/right component 
                 else if (physical[key][question] === true) {
                     active.push(question);
                 }
+                // TODO: idk fix this -- deals with widgets?
                 else if (physical[key][question] !== "" && physical[key][question] !== false) {
                     active.push(question + ': ' + physical[key][question]);
                 }
@@ -454,7 +475,6 @@ class GenerateNote extends React.Component {
             }
         }
 
-        // TODO: fix vitals
         if (this.state.rich) {
             return (
                 <Table>
@@ -480,6 +500,7 @@ class GenerateNote extends React.Component {
 
         return (
             <ul>
+                <li><b>Vitals</b>: {vitals.join(', ')}</li>
                 {Object.keys(components).map(key => (
                     components[key].active.length > 0 ? 
                         <li>
@@ -549,21 +570,13 @@ class GenerateNote extends React.Component {
         )
     }
 
-    richText() {
-        this.setState({rich : true})
-    }
-
-    plainText() {
-        this.setState({rich : false})
-    }
-
     render() {
         return (
             <div>
                 <Button.Group>
-                    <Button onClick={this.plainText}>Plain Text </Button>
+                    <Button onClick={() => this.setState({rich : false})}>Plain Text </Button>
                     <Button.Or />
-                    <Button onClick={this.richText}>Rich Text</Button>
+                    <Button onClick={() => this.setState({rich : true})}>Rich Text</Button>
                 </Button.Group>
                 <Segment>
                     <h1> {this.context.title} </h1>
