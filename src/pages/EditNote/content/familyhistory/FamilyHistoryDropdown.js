@@ -1,5 +1,5 @@
-import { Dropdown, Grid, Form, Button, Header } from "semantic-ui-react";
-import React, { Component } from "react";
+import { Dropdown, Grid, Form, Button, Header, Divider, Icon } from "semantic-ui-react";
+import React, { Component, Fragment } from "react";
 import HPIContext from 'contexts/HPIContext.js';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import './FamilyHistory.css';
@@ -72,72 +72,92 @@ export default class FamilyHistoryDropdown extends Component {
         return (
             mobile ? (
                 <div className='dropdown-component-container'>
-                    <Grid stackable>
-                        <Grid.Row>
-                            <Grid.Column mobile={6} className='family-member-input'>
-                                Family Member
-                                <Dropdown
-                                    value={family_member}
-                                    search
-                                    selection
-                                    fluid 
-                                    options={familyOptions}
-                                    onChange={this.handleChange}
-                                    className='dropdown-inline-mobile'
-                                />
-                            </Grid.Column>
-                            <Grid.Column mobile={1} />
-                            <Grid.Column mobile={4} className='cod-input'>
-                                Cause of death?
-                                <div>
-                                    <ToggleButton
-                                        active={cause_of_death}
-                                        condition={this.props.condition}
-                                        title="Yes"
-                                        onToggleButtonClick={this.handleCauseOfDeathToggle}
-                                    />
-                                    <ToggleButton
-                                        active={cause_of_death === false ? true : false}
-                                        condition={this.props.condition}
-                                        title="No"
-                                        onToggleButtonClick={this.handleCauseOfDeathToggle}
-                                    />
-                                </div>
-                            </Grid.Column>
-                            <Grid.Column mobile={1} />
-                            {cause_of_death === true || cause_of_death === undefined ? "" :
-                                <Grid.Column mobile={4} >
-                                    Living?
-                                    <div>
-                                        <ToggleButton
-                                            active={living}
-                                            condition={this.props.condition}
-                                            title="Yes"
-                                            onToggleButtonClick={this.handleLivingToggle}
+                    <Grid >
+                        <Grid.Row >
+                            <Grid.Column width={1} />
+                            <Grid.Column>
+                                <Grid.Row width={14}>
+                                    <Grid.Column width={6}>
+                                        <Header.Subheader className="family-history-header-mobile">Family Member</Header.Subheader>
+                                        <Dropdown
+                                            value={family_member}
+                                            search
+                                            selection
+                                            fluid 
+                                            options={familyOptions}
+                                            onChange={this.handleChange}
+                                            className='dropdown-inline-mobile'
+                                            style={{width: "65vw"}}
                                         />
-                                        <ToggleButton
-                                            active={living === false ? true : false}
-                                            condition={this.props.condition}
-                                            title="No"
-                                            onToggleButtonClick={this.handleLivingToggle}
-                                        />
-                                    </div>
-                                </Grid.Column>
-                            }
-                        </Grid.Row>
-                        <Grid.Row>
-                            <Grid.Column mobile={16}>
-                                <Form.TextArea
-                                    label="Comments"
-                                    className="text-area comments-box-mobile"
-                                    condition={condition}
-                                    value={comment}
-                                    placeholder='Comments'
-                                    onChange={this.handleCommentsChange}
-                                    rows={1}
-                                />
+                                    </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row columns={2}>
+                                    <Grid.Column width={4}>
+                                        <Header.Subheader className="family-history-header-mobile">Cause of Death?</Header.Subheader>
+                                        <div className='family-history-toggle'>
+                                            <ToggleButton
+                                                active={cause_of_death}
+                                                condition={this.props.condition}
+                                                title="Yes"
+                                                onToggleButtonClick={this.handleCauseOfDeathToggle}
+                                            />
+                                            <ToggleButton
+                                                active={cause_of_death === false ? true : false}
+                                                condition={this.props.condition}
+                                                title="No"
+                                                onToggleButtonClick={this.handleCauseOfDeathToggle}
+                                            />
+                                        </div>
+                                    </Grid.Column>
+                                    {/* <Grid.Column mobile={1} /> */}
+                                    <Grid.Column width={4}>
+                                        {cause_of_death === true || cause_of_death === undefined ? "" :
+                                            <Fragment>
+                                                <Header.Subheader className="family-history-header-mobile">Living?</Header.Subheader>
+                                                <div className="family-history-toggle">
+                                                    <ToggleButton
+                                                        active={living}
+                                                        condition={this.props.condition}
+                                                        title="Yes"
+                                                        onToggleButtonClick={this.handleLivingToggle}
+                                                    />
+                                                    <ToggleButton
+                                                        active={living === false ? true : false}
+                                                        condition={this.props.condition}
+                                                        title="No"
+                                                        onToggleButtonClick={this.handleLivingToggle}
+                                                    />
+                                                </div>
+                                            </Fragment>
+                                        }
+                                    </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row>
+                                    <Header.Subheader className="family-history-header-mobile">Comments</Header.Subheader>
+                                    <Form.TextArea
+                                        className="text-area comments-box-mobile"
+                                        condition={condition}
+                                        value={comment}
+                                        placeholder='Comments'
+                                        onChange={this.handleCommentsChange}
+                                        rows={1}
+                                        style={{width: "65vw"}}
+                                    />
+                                </Grid.Row>
+                                <Grid.Row width={4} style={{whiteSpace: "nowrap"}}>
+                                    <Button
+                                        basic
+                                        circular
+                                        icon="close"
+                                        size='mini'
+                                        onClick = {this.handleDelete}
+                                    /> 
+                                    delete family member
+                                </Grid.Row>
+                                
                             </Grid.Column>
                         </Grid.Row>
+                        <Divider />
                     </Grid>
                 </div>
             ) : (
@@ -211,8 +231,7 @@ export default class FamilyHistoryDropdown extends Component {
                             </Grid.Column>
                         </Grid.Row> 
                         }
-                        
-
+                        <Divider />
                     </Grid>
                     
                 </div>

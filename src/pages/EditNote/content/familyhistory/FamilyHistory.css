@@ -85,4 +85,15 @@
 
 .comments-box-mobile {
     padding-top: 0rem !important;
+    max-width: 70vw;
+}
+
+.family-history-toggle {
+    display: flex
+}
+
+.family-history-header-mobile {
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+    min-width: 20em;
 }

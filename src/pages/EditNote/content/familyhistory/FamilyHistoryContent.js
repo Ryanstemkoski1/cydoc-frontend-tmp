@@ -92,7 +92,9 @@ export default class FamilyHistoryContent extends Component {
 
     addRow() {
         let values = this.context["Family History"]
+        console.log(values)
         let last_index = Object.keys(values).length.toString()
+        console.log(last_index)
         values[last_index] = {
             "Condition": "",
             "Yes": false,
