@@ -44,7 +44,7 @@ export default class LRButton extends React.Component {
                         content={this.props.content}
                         active={this.props.active}
                         color={this.props.color}
-                        onClick={(e) => this.props.onClick(null, this.props.name, !this.props.active)}
+                        onClick={(e) => this.props.onClick('all', this.props.name, !this.props.active)}
                     />
                 </Button.Group>
             )
