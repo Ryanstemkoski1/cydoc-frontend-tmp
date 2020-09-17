@@ -46,7 +46,7 @@ export default class PhysicalExamContent extends React.Component {
             <>
             <Segment>
                 <Form>
-                    <Grid columns="equal">
+                    <Grid stackable columns="equal">
                         <Grid.Column>
                             <h5>Blood Pressure (mmHg)</h5>
                             <Form.Field>
