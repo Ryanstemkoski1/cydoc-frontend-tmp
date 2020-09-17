@@ -44,7 +44,7 @@ class EditNote extends Component {
             <>
                 <div ref={this.noteContent}>
                     {/* Top NavMenu and MenuTabs stay on top regardless of scroll*/}
-                    <Sticky context={this.noteContent}>
+                    <Sticky context={this.noteContent} id = "stickyHeader">
                         <NavMenu
                             className="edit-note-nav-menu"
                             displayNoteName={true}
