@@ -23,6 +23,7 @@ export default class SelectAllButton extends React.Component {
                             (child) => this.props.handleClick(child.props.name, !active)
                         )
                     }}
+                    style={{marginBottom: 5}}
                 />
                 {this.props.children}
             </Fragment>

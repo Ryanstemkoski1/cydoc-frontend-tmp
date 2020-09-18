@@ -121,14 +121,14 @@ export default class PatientHistoryContent extends Component {
 
         const gridButtons = panes.map(
             (pane) => {
-                return <Button basic children = {pane.menuItem} onClick={this.handleItemClick} active={activeTabName==pane.menuItem}/>
+                return <Button basic children = {pane.menuItem} onClick={this.handleItemClick} active={activeTabName==pane.menuItem} style={{marginBottom: 5}}/>
             }
         )
         return (
             <>
                 {collapseTabs ?
                     <Container>
-                        <Grid stackable centered className={"patient-history-menu"} relaxed>
+                        <Grid stackable centered className={"patient-history-menu"} relaxed style={{paddingTop: 10, paddingBottom: 5}}>
                             {gridButtons}
                         </Grid>
                         {compactPanes.find(e => e.menuItem == activeTabName).render()}

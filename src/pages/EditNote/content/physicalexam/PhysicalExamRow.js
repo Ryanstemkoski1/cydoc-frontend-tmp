@@ -44,6 +44,7 @@ export default class PhysicalExamRow extends React.Component {
                     active={this.context["Physical Exam"][this.props.group][finding].active}
                     color={this.context["Physical Exam"][this.props.group][finding].active ? (normalOrAbnormal == 'normal' ? 'green' : 'red') : null}
                     onClick={this.props.handleLRToggle}
+                    style = {{marginBottom: 5}}
                 />
             })
             SelectAllCallBack = this.props.handleLRToggle.bind(this, 'all')
@@ -55,6 +56,7 @@ export default class PhysicalExamRow extends React.Component {
                     active={this.context["Physical Exam"][this.props.group][finding]}
                     color={this.context["Physical Exam"][this.props.group][finding] ? (normalOrAbnormal == 'normal' ? 'green' : 'red') : null}
                     onClick={(e, { name, active }) => this.props.handleToggle(name, !active)}
+                    style = {{marginBottom: 5}}
                 />
             })
             SelectAllCallBack = this.props.handleToggle

@@ -25,6 +25,7 @@ export default class AbdomenExamButtons extends Component {
                     key={this.props.ab_quadrant + " " + ab_quadrant_button}
                     color={this.context["Physical Exam"].widgets["Abdomen"][this.props.ab_quadrant][ab_quadrant_button] ? 'grey' : ''}
                     onClick={this.onClick}
+                    style = {{marginBottom: 5}}
                 > 
                     {ab_quadrant_button} 
                 </Button>
