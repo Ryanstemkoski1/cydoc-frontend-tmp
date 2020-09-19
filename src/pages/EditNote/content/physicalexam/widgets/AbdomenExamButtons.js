@@ -23,7 +23,7 @@ export default class AbdomenExamButtons extends Component {
             ab_quadrant_buttons.push(
                 <Button
                     key={this.props.ab_quadrant + " " + ab_quadrant_button}
-                    color={this.context["Physical Exam"].widgets["Abdomen"][this.props.ab_quadrant][ab_quadrant_button] ? 'grey' : ''}
+                    color={this.context["Physical Exam"].widgets["Abdomen"][this.props.ab_quadrant][ab_quadrant_button] ? 'red' : ''}
                     onClick={this.onClick}
                 > 
                     {ab_quadrant_button} 
