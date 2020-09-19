@@ -150,7 +150,7 @@
         "In the Past": false,
         "Never Used": false,
         "fields": [{"Drink Type": "", "Drink Size": "", "# Per Week": ""}],
-        "Quit Year": "",
+        "Quit Year": null,
         "Comments": "",
         "InterestedInQuitting": {
           "Yes": false,
@@ -169,7 +169,7 @@
         "Packs/Day": "",
         "Number of Years": "",
         "Products Used": "",
-        "Quit Year": "",
+        "Quit Year": null,
         "Comments": "",
         "InterestedInQuitting": {
           "Yes": false,
@@ -186,7 +186,7 @@
         "In the Past": false,
         "Never Used": false,
         "fields": [{"Drug Name": "", "Mode of Delivery": "", "# Per Week": ""}],
-        "Quit Year": "",
+        "Quit Year": null,
         "Comments": "",
         "InterestedInQuitting": {
           "Yes": false,

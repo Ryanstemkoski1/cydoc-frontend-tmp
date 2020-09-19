@@ -3,6 +3,7 @@ import ToggleButton from 'components/tools/ToggleButton.js';
 import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import HPIContext from 'contexts/HPIContext.js';
+import '../../../../components/tools/TableContent/TableContent.css';
 
 //Component that defines the layout for the Substance Use portion
 
@@ -12,9 +13,16 @@ export default class SocialHistoryNoteItem extends Component {
 
     constructor(props, context) {
         super(props, context);
+        this.state = {
+            invalidYear: false,
+        };
         this.includeQuitYear = this.includeQuitYear.bind(this);
         this.quittingQuestions = this.quittingQuestions.bind(this);
         this.additionalFields = this.additionalFields.bind(this);
+    }
+
+    onYearChange = (e) => {
+        this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
     }
 
     // asks users to enter the quit year if they stopped using alcohol, drugs, etc.
@@ -25,15 +33,19 @@ export default class SocialHistoryNoteItem extends Component {
         if (values[condition]["In the Past"]) {
             return (
                 <Grid.Column computer={5} tablet={8} mobile={16}>
-                    <Form.Field>
+                    <Form.Field className='table-year-input'>
                         {fields.quitYear}
                         <Input
                             type="number"
                             field={fields.quitYear}
+                            onBlur={this.onYearChange}
                             condition={condition}
                             value={values[condition][fields.quitYear]}
                             onChange={onChange}
                         />
+                        {this.state.invalidYear && (
+                            <p className='error'>Please enter a year between 1900 and 2020</p>
+                        )}
                     </Form.Field>
                 </Grid.Column>
             )
