@@ -12,9 +12,6 @@ export default class ReviewOfSystemsContent extends Component {
         super(props)
         this.state = {
             windowWidth: 0,
-<<<<<<< HEAD
-            windowHeight: 0
-=======
             windowHeight: 0,
             test: {
                 "General": ["Weight changes", "Fatigue", "Weakness", "Fevers", "Chills", "Night sweats"],
@@ -34,7 +31,6 @@ export default class ReviewOfSystemsContent extends Component {
                 "Neurological": ["Headache","Changes in vision","Double vision","Fainting/blackouts","Seizures","Paralysis","Numbness","Tingling","Loss of sensation","Vertigo/dizziness","Tremor","Difficulty walking","Changes in coordination","Confusion","Memory loss"],
                 "Psych": ["Anxiety", "Depression", "Suicide attempts"]
             }
->>>>>>> master
         }
         this.updateDimensions = this.updateDimensions.bind(this);
     }

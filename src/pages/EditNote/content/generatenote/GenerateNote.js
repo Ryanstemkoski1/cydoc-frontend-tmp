@@ -402,10 +402,11 @@ class GenerateNote extends React.Component {
     // TODO: normal vs. abnormal 
     physicalExam() {
         const physical = this.context["Physical Exam"];
+        console.log(physical);
         const vitalUnits = {'Heart Rate': ' bpm', 'Temperature': ' °C'};
-        console.log(vitalUnits['Heart Rate']);
 
-        let vitals = []
+        let vitals = [];
+        let widgets = [];
         let components = [];
         for (var key in physical) {
             let active = [];
@@ -413,65 +414,97 @@ class GenerateNote extends React.Component {
             let keyObject = constants.sections.find(o => o.name === key); // finds section in constants in order to access normal/abnormal info later
             // specific to vitals section
             if (key === 'Vitals') {
-                vitals.push(physical[key]['Systolic Blood Pressure'] + '/' + physical[key]['Diastolic Blood Pressure'] + ' mmHG');
+                vitals.push(physical[key]['Systolic Blood Pressure'] + '/' + physical[key]['Diastolic Blood Pressure'] + ' mmHg');
                 for (var vital in physical[key]) {
-                    console.log(vital);
                     if (vital !== 'Systolic Blood Pressure' && vital !== 'Diastolic Blood Pressure') {
                         vitals.push(vital + ': ' + physical[key][vital] + (vitalUnits[vital] ? vitalUnits[vital] : ""));
                     }
                 }
-            }
-            for (var question in physical[key]) {
-                // deals with findings that have a left or right option
-                if (typeof physical[key][question] === 'object' && keyObject) {
-                    let isNormal = true;
-                    for (var i = 0; i < keyObject.rows.length; i++) {
-                        if (keyObject.rows[i].findings.includes(question)) {
-                            keyObject.rows[i].normalOrAbnormal === "normal" ? isNormal = true : isNormal = false;
+            // specific to widgets
+            } else if (key === 'widgets') {
+                for (var widget in physical[key]) {
+                    if (widget === 'Pulses') {
+                        // TODO: change this, will remain mostly the same but info was partly wrong 
+                        for (var pulse in physical[key][widget]) {
+                           var abnormalPulse = physical[key][widget][pulse];
+                           widgets.push('Abnormal Pulse: ' + abnormalPulse[0] + ', ' + abnormalPulse[1] + ', ' + abnormalPulse[2]); 
+                        }
+                    } else if (widget === 'Abdomen') {
+                        let findings = {'tenderness': [], 'rebound': [], 'guarding': []};
+                        for (var quadrant in physical[key][widget]) {
+                            var quadrantInfo = physical[key][widget][quadrant];
+                            if (quadrantInfo.tenderness) {findings['tenderness'].push(quadrant.toLowerCase())};
+                            if (quadrantInfo.rebound) {findings['rebound'].push(quadrant.toLowerCase())}; 
+                            if (quadrantInfo.guarding) {findings['guarding'].push(quadrant.toLowerCase())}; 
+                        }
+                        widgets.push('tenderness in the ' + findings['tenderness'].join(', ').replace(/, ([^,]*)$/, ' and $1'));
+                        widgets.push('rebound in the ' + findings['rebound'].join(', ').replace(/, ([^,]*)$/, ' and $1'));
+                        widgets.push('guarding in the ' + findings['guarding'].join(', ').replace(/, ([^,]*)$/, ' and $1'));
+                    } else if (widget === 'Lungs') {
+                        for (var lobe in physical[key][widget]) {
+                            console.log(lobe);
+                        }
+                    } else if (widget === 'Reflexes') {
+                        for (var reflex in physical[key][widget]) {
+                            var reflexInfo = physical[key][widget][reflex];
+                            widgets.push('Reflex: ' + reflexInfo[2] + ' ' + reflexInfo[1] + ' ' + reflexInfo[0]);
+                        }
+                    } else if (widget === 'Murmurs') {
+                        //todo??
+                    } else if (widget === 'ExpandMurmurs') {
+                        //todo??
+                    }
+                }
+            // everything else in physical exam 
+            } else {
+                for (var question in physical[key]) {
+                    // deals with findings that have a left or right option
+                    if (typeof physical[key][question] === 'object' && keyObject) {
+                        let isNormal = true;
+                        for (var i = 0; i < keyObject.rows.length; i++) {
+                            if (keyObject.rows[i].findings.includes(question)) {
+                                keyObject.rows[i].normalOrAbnormal === "normal" ? isNormal = true : isNormal = false;
+                            }
+                        }
+                        if (isNormal) {
+                            if (physical[key][question].active === true) {
+                                if (physical[key][question].right === true && physical[key][question].left === true) {
+                                    active.push(question + ' (bilateral)');
+                                }
+                                else if (physical[key][question].left === true) {
+                                    active.push(question + ' (left)');
+                                }
+                                else if (physical[key][question].right === true) {
+                                    active.push(question + ' (right)');
+                                }
+                            }
+                        } else {
+                            if (physical[key][question].active === true) {
+                                if (physical[key][question].right === true && physical[key][question].left === true) {
+                                    active.push('bilateral ' + question);
+                                }
+                                else if (physical[key][question].left === true) {
+                                    active.push('left ' + question);
+                                }
+                                else if (physical[key][question].right === true) {
+                                    active.push('right ' + question);
+                                }
+                            }
                         }
                     }
-                    if (isNormal) {
-                        if (physical[key][question].active === true) {
-                            if (physical[key][question].right === true && physical[key][question].left === true) {
-                                active.push(question + ' (bilateral)');
-                            }
-                            else if (physical[key][question].left === true) {
-                                active.push(question + ' (left)');
-                            }
-                            else if (physical[key][question].right === true) {
-                                active.push(question + ' (right)');
-                            }
-                        }
-                    } else {
-                        if (physical[key][question].active === true) {
-                            if (physical[key][question].right === true && physical[key][question].left === true) {
-                                active.push('bilateral ' + question);
-                            }
-                            else if (physical[key][question].left === true) {
-                                active.push('left ' + question);
-                            }
-                            else if (physical[key][question].right === true) {
-                                active.push('right ' + question);
-                            }
-                        }
+                    // gets comments section of physical exam 
+                    else if (typeof physical[key][question] === 'string' && physical[key] !== 'Vitals') {
+                        comments = physical[key][question];
+                    }
+                    // grabs findings that don't have a left/right component 
+                    else if (physical[key][question] === true) {
+                        active.push(question);
                     }
                 }
-                // gets comments section of physical exam 
-                else if (typeof physical[key][question] === 'string' && physical[key] !== 'Vitals') {
-                    comments = physical[key][question];
+                components[key] = {
+                    active: active,
+                    comments: comments
                 }
-                // grabs findings that don't have a left/right component 
-                else if (physical[key][question] === true) {
-                    active.push(question);
-                }
-                // TODO: idk fix this -- deals with widgets?
-                else if (physical[key][question] !== "" && physical[key][question] !== false) {
-                    active.push(question + ': ' + physical[key][question]);
-                }
-            }
-            components[key] = {
-                active: active,
-                comments: comments
             }
         }
 
@@ -509,6 +542,7 @@ class GenerateNote extends React.Component {
                             {components[key].active.join(', ')}.
                         </li> : null
                 ))}
+                <li><b>Widgets</b>: {widgets.join(', ')}</li>
             </ul>
         )
     }

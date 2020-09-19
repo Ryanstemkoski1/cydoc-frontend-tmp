@@ -172,7 +172,6 @@ class SocialHistoryTableContent extends React.Component {
                 }
             });
         }
-
         return panels;
     }
 

@@ -17,9 +17,39 @@ export class TableBodyRow extends Component {
     }
 
     getCell(placeholder) {
-        const {values, name, rowindex, onTableBodyChange, onAddSideEffect, onAddMedication, onAddProcedure, onAddDrink, medicationOptions, sideEffectsOptions, proceduresOptions, drinkOptions, drinkSizes, drugOptions, modesOfDelivery} = this.props;
+        const {
+            values, 
+            name,
+            rowindex, 
+            onTableBodyChange, 
+            onAddMedication,
+            onAddSideEffect,
+            onAddDrink,
+            onAddItem,
+            medicationOptions, 
+            sideEffectsOptions, 
+            proceduresOptions,
+            diseaseOptions,
+            drinkOptions,
+            drinkSizes,
+            drugOptions,
+            modesOfDelivery,
+            isPreview,
+        } = this.props;
+
         let cell;
-        const mobile = true;
+
+        if (isPreview) {
+            return (
+                <div className="content-preview">
+                    {
+                        placeholder === "Procedure" || placeholder === "Drug Name"
+                         ? rowindex
+                         : ""
+                    }
+                </div>
+            );
+        }
 
         if (name === 'Alcohol' || name === 'Recreational Drugs') {
             switch (placeholder) {
@@ -180,16 +210,15 @@ export class TableBodyRow extends Component {
                                 allowAdditions
                                 icon=''
                                 options={sideEffectsOptions}
-                                optiontype='sideEffectsOptions'
-                                type={placeholder}                    
-                                onChange={onTableBodyChange}
                                 placeholder={placeholder}
-                                rowindex={rowindex}
                                 onChange={onTableBodyChange}
-                                value={values[name]["fields"][rowindex][placeholder]}
+                                rowindex={rowindex}
+                                value={values[rowindex][placeholder]}
+                                onAddItem={onAddSideEffect}
+                                className='side-effects'
                             />
-                            </Input>
-                        );
+                        </Input>
+                    );
                     break;
                 }
                 // this one is for medications
@@ -215,19 +244,6 @@ export class TableBodyRow extends Component {
                                 className='side-effects medication'
                             />
                         </Input>
-                    );
-                    break;
-                }
-                default: {
-                    cell = (
-                        <TextArea
-                            rows={3}
-                            placeholder={placeholder}
-                            onChange={onTableBodyChange}
-                            rowindex={rowindex}
-                            value={values[rowindex][placeholder]}
-                            className='table-row-text'
-                        />
                     );
                     break;
                 }
@@ -272,6 +288,19 @@ export class TableBodyRow extends Component {
                         </Input>
                     );
                 break;
+                default: {
+                    cell = (
+                        <TextArea
+                            rows={3}
+                            placeholder={placeholder}
+                            onChange={onTableBodyChange}
+                            rowindex={rowindex}
+                            value={values[rowindex][placeholder]}
+                            className='table-row-text'
+                        />
+                    );
+                    break;
+                }
             }
         }
         return cell;
