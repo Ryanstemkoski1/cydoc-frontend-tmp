@@ -161,7 +161,7 @@ class ExpandMurmurs extends Component{
                 <div style={{marginTop: 10, marginBottom: 10, marginLeft: 10, marginRight: 10}}>
                     {pe_rows[index].map((word)=>
                         <Button 
-                        color={(this.context['Physical Exam'].widgets[this.props.type][pe_index][name].some(x => (x ==word))? 'grey' : '')}
+                        color={(this.context['Physical Exam'].widgets[this.props.type][pe_index][name].some(x => (x ==word))? 'red' : '')}
                         key={word}
                         pe_index={pe_index}
                         index={index}
