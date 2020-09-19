@@ -32,7 +32,7 @@ export default class LungSoundsButtons extends Component {
         var more_options_buttons = more_options.map(
             item => <Button 
                         key={this.props.lung_lobe + " " + item} 
-                        color={this.context["Physical Exam"].widgets["Lungs"][this.props.lung_lobe][item] ? 'grey': ''} 
+                        color={this.context["Physical Exam"].widgets["Lungs"][this.props.lung_lobe][item] ? 'red': ''} 
                         onClick={this.onPopupClick}> {item} 
                     </Button>
         )
@@ -42,7 +42,7 @@ export default class LungSoundsButtons extends Component {
             lung_buttons.push(
                 <Button
                     key={this.props.lung_lobe + " " + lung_button}
-                    color={this.context["Physical Exam"].widgets["Lungs"][this.props.lung_lobe][lung_button] ? 'grey' : ''}
+                    color={this.context["Physical Exam"].widgets["Lungs"][this.props.lung_lobe][lung_button] ? 'red' : ''}
                     onClick={this.onClick}
                     style = {{marginBottom: 5}}
                 > 
