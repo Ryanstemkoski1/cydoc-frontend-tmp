@@ -40,7 +40,8 @@ export default class LungSoundsButtons extends Component {
         var lung_button_dict = this.context["Physical Exam"].widgets["Lungs"][this.props.lung_lobe]
         for (var lung_button in lung_button_dict) {
             lung_buttons.push(
-                <Button
+                <Button fluid
+                    size = {'small'}
                     key={this.props.lung_lobe + " " + lung_button}
                     color={this.context["Physical Exam"].widgets["Lungs"][this.props.lung_lobe][lung_button] ? 'red' : ''}
                     onClick={this.onClick}

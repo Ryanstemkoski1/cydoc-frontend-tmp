@@ -24,7 +24,7 @@ export default class LungSounds extends Component {
         }
         return (
             <div> 
-            <Table celled fixed>
+            <Table celled unstackable>
               <Table.Body>
                 {lung_map}
               </Table.Body>

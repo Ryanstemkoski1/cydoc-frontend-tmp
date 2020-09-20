@@ -21,10 +21,12 @@ export default class AbdomenExamButtons extends Component {
         var ab_quadrant_dict = this.context["Physical Exam"].widgets["Abdomen"][this.props.ab_quadrant]
         for (var ab_quadrant_button in ab_quadrant_dict) {
             ab_quadrant_buttons.push(
-                <Button
+                <Button fluid
+                    size = {'small'}
                     key={this.props.ab_quadrant + " " + ab_quadrant_button}
                     color={this.context["Physical Exam"].widgets["Abdomen"][this.props.ab_quadrant][ab_quadrant_button] ? 'red' : ''}
                     onClick={this.onClick}
+                    style = {{marginBottom: 5}}
                 > 
                     {ab_quadrant_button} 
                 </Button>

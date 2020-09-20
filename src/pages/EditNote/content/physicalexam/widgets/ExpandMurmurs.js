@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Table, Button} from 'semantic-ui-react'
+import {Table, Button, Popup} from 'semantic-ui-react'
 import HPIcontext from 'contexts/HPIContext.js'
 
 
@@ -239,7 +239,7 @@ class ExpandMurmurs extends Component{
 
             <div style={{marginTop: 20}} > 
             {arr}
-            Expand specific murmurs <Button basic circular icon="plus" size='mini' onClick={this.addButton}/>
+            Expand specific murmurs <Popup content="Please select Systolic or Diastolic before expanding" trigger={<Button basic circular icon="plus" size='mini' onClick={this.addButton}/>} />
             </div>
 
         )
