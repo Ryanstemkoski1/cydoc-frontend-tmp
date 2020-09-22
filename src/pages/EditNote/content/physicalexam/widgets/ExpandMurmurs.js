@@ -239,7 +239,7 @@ class ExpandMurmurs extends Component{
 
             <div style={{marginTop: 20}} > 
             {arr}
-            Expand specific murmurs <Popup content="Please select Systolic or Diastolic before expanding" trigger={<Button basic circular icon="plus" size='mini' onClick={this.addButton}/>} />
+            Expand specific murmurs <Popup content="Please select systolic or diastolic before expanding" trigger={<Button basic circular icon="plus" size='mini' onClick={this.addButton}/>} />
             </div>
 
         )
