@@ -1,7 +1,8 @@
-import React, {Component} from 'react'
-import { Table} from 'semantic-ui-react'
-import LungSoundsButtons from './LungSoundsButtons'
-import HPIContext from 'contexts/HPIContext.js'
+import React, {Component} from 'react';
+import { Table} from 'semantic-ui-react';
+import LungSoundsButtons from './LungSoundsButtons';
+import HPIContext from 'contexts/HPIContext.js';
+import './TableCSS.css';
 
 export default class LungSounds extends Component {
 
