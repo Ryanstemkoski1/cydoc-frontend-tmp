@@ -1,0 +1,9 @@
+.ui.celled.unstackable.table {
+    width: 650px;
+}
+
+@media only screen and (max-width: 375px) {
+    .ui.celled.unstackable.table {
+        width: 300px;
+    }
+}

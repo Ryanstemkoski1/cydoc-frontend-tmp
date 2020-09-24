@@ -1,6 +1,7 @@
-import React, {Component} from 'react'
-import { Button, Popup } from 'semantic-ui-react'
-import HPIContext from 'contexts/HPIContext.js'
+import React, {Component} from 'react';
+import { Button, Popup } from 'semantic-ui-react';
+import HPIContext from 'contexts/HPIContext.js';
+import './TableCSS.css';
 
 export default class LungSoundsButtons extends Component {
     static contextType = HPIContext 
