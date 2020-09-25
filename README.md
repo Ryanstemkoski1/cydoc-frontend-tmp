@@ -1,3 +1,9 @@
+## Useful Links
+
+* Context Guide for Cydoc by Bowen Jiang: https://hackmd.io/@V9JhPTboR22VgzH3xH0q0Q/B12G0NJsL
+* MaterialUI: https://material-ui.com/
+* Moqups: www.moqups.com
+
 ## Installation
 I followed this tutorial to install Semantic UI. When you clone this repo and run `npm install` it will take you through 
 an interactive installer. Make sure you install in src/semantic when it asks you (both for semantic and dist). 
@@ -56,26 +62,52 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+## Testing
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+How to get started with testing
+In your terminal run these two commands:
+```npm install --save-dev jest
+npm install --save-dev enzyme jest-enzyme enzyme-adapter-react-16```
 
-### Analyzing the Bundle Size
+In your test file (e.g. Register.test.js), include these imports:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+```import React from 'react'
+import Enzyme from 'enzyme'
+import EnzymeAdapter from 'enzyme-adapter-react-16'
+import ComponentToBeTested from 'wherever/component/is/located'```
 
-### Making a Progressive Web App
+Also in your test file, include this single line to set up the testing:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+```Enzyme.configure({ adapter: new EnzymeAdapter() })```
 
-### Advanced Configuration
+When testing, it will also be common to have this import:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+```import Enzyme, { shallow } from 'enzyme'```
 
-### Deployment
+And this corresponding line of code within a test:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+```const wrapper = shallow(<MyComponent />)```
 
-### `npm run build` fails to minify
+(the method shallow renders the single component you are testing, it does not render child components -- to render child components it is common to use mount instead of shallow)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Typically, tests will follow this format:
+
+```test('short description of the test', () => {
+     expect(something)
+});```
+
+If you want to group tests together within the file, use:
+
+```describe('here is a group of tests', () => {
+     test('test one', () => { });
+     test('test two', () => { });
+});```
+
+To find documentation on testing with Enzyme, go to:
+https://enzymejs.github.io/enzyme/
+
+For more help check out the Udemy course "2019 Update! React Testing with Jest and Enzyme"
+
+Alicia Steiman's notes on this course are available here: https://drive.google.com/file/d/1BB6xr8zONUKdINGIZk4Zt6rDz_Cfq0cD/view?usp=sharing
+
+A front-end testing instruction video by Alicia Steiman is available here: https://drive.google.com/file/d/1_GTnP3PYZx-tipXoDZQG3Tau8vqFbpje/view?usp=sharing
