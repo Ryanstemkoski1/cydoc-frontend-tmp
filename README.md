@@ -66,13 +66,15 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 How to get started with testing
 In your terminal run these two commands:
-```npm install --save-dev jest
+```
+npm install --save-dev jest
 npm install --save-dev enzyme jest-enzyme enzyme-adapter-react-16
 ```
 
 In your test file (e.g. Register.test.js), include these imports:
 
-```import React from 'react'
+```
+import React from 'react'
 import Enzyme from 'enzyme'
 import EnzymeAdapter from 'enzyme-adapter-react-16'
 import ComponentToBeTested from 'wherever/component/is/located'
@@ -80,31 +82,36 @@ import ComponentToBeTested from 'wherever/component/is/located'
 
 Also in your test file, include this single line to set up the testing:
 
-```Enzyme.configure({ adapter: new EnzymeAdapter() })
+```
+Enzyme.configure({ adapter: new EnzymeAdapter() })
 ```
 
 When testing, it will also be common to have this import:
 
-```import Enzyme, { shallow } from 'enzyme'
+```
+import Enzyme, { shallow } from 'enzyme'
 ```
 
 And this corresponding line of code within a test:
 
-```const wrapper = shallow(<MyComponent />)
+```
+const wrapper = shallow(<MyComponent />)
 ```
 
 (the method shallow renders the single component you are testing, it does not render child components -- to render child components it is common to use mount instead of shallow)
 
 Typically, tests will follow this format:
 
-```test('short description of the test', () => {
+```
+test('short description of the test', () => {
      expect(something)
 });
 ```
 
 If you want to group tests together within the file, use:
 
-```describe('here is a group of tests', () => {
+```
+describe('here is a group of tests', () => {
      test('test one', () => { });
      test('test two', () => { });
 });
