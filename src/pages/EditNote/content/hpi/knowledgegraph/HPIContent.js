@@ -150,14 +150,6 @@ class HPIContent extends Component {
                 return (
 
                     <Segment>
-                        {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
-                        <Masonry
-                            className='disease-container'
-                            breakpointCols={numColumns}
-                            columnClassName='disease-column'
-                        >
-                            {diseaseComponents}
-                        </Masonry>
                         {positive_length > 0 ? 
                         <div className='positive-diseases-placeholder'>
                             <Button
@@ -170,6 +162,16 @@ class HPIContent extends Component {
                             :
                             <div className='positive-diseases-placeholder' />
                         }
+
+                        {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
+                        <Masonry
+                            className='disease-container'
+                            breakpointCols={numColumns}
+                            columnClassName='disease-column'
+                        >
+                            {diseaseComponents}
+                        </Masonry>
+                        
                     </Segment>
                     )
             default:
