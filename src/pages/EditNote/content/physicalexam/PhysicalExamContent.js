@@ -71,6 +71,8 @@ export default class PhysicalExamContent extends React.Component {
     renderSegments = (groups) => {
         const segments = [
         <Segment>
+            <Header as="h2">Vitals</Header>
+            <Divider />
             <Form>
                 <Grid stackable columns="equal">
                     <Grid.Column>
@@ -131,7 +133,7 @@ export default class PhysicalExamContent extends React.Component {
                 content: {
                     content: (
                         <>
-                        <Header as="h2">Vitals</Header>
+                        <Header as="h2" style={{paddingTop: '1rem'}}>Vitals</Header>
                         <Divider />
                         <Form>
                             <Grid stackable columns="equal">
