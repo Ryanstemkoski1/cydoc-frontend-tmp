@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Form, Grid, Input, Button } from "semantic-ui-react";
+import { Form, Grid, Input, Button, Icon } from "semantic-ui-react";
 import PhysicalExamGroup from './PhysicalExamGroup';
 import constants from 'constants/physical-exam-constants.json'
 import HPIContext from 'contexts/HPIContext.js';
@@ -84,6 +84,10 @@ export default class PhysicalExamContent extends React.Component {
                 </Form>
             </Segment>
         {this.renderGroups(constants.sections)}
+        <Button icon labelPosition='right' floated='right'>
+            Next Form
+            <Icon name='right arrow'/>
+        </Button>
         </>
 
     )

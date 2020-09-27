@@ -3,6 +3,7 @@ import Masonry from 'react-masonry-css';
 import './ReviewOfSystems.css';
 import ReviewOfSystemsCategory from './ReviewOfSystemsCategory';
 import {ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP} from 'constants/breakpoints';
+import { Button, Icon } from 'semantic-ui-react';
 
 //Component that manages the content for the Review of Systems section of the note
 export default class ReviewOfSystemsContent extends Component {
@@ -74,9 +75,15 @@ export default class ReviewOfSystemsContent extends Component {
         }
         
         return (
+        <>
             <Masonry className='ros-container' breakpointCols={numColumns} columnClassName='ros-column'>
                 {this.generateList(this.state.test)}
             </Masonry>
+            <Button icon labelPosition='right' floated='right'>
+            Next Form
+            <Icon name='right arrow'/>
+            </Button>
+        </>
         );
     }
 }

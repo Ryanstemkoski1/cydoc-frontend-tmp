@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Menu, Dropdown, Tab, Container, Segment } from 'semantic-ui-react'
+import { Menu, Dropdown, Tab, Container, Segment, Icon, Button } from 'semantic-ui-react'
 import MedicalHistoryContent from "../medicalhistory/MedicalHistoryContent";
 import SurgicalHistoryContent from "../surgicalhistory/SurgicalHistoryContent";
 import MedicationsContent from "../medications/MedicationsContent";
@@ -113,8 +113,13 @@ export default class PatientHistoryContent extends Component {
                         {compactPanes.find(e => e.menuItem == activeTabName).render()}
                     </>
                     :
+                    <>
                     <Tab menu={{ pointing: true }} panes={expandedPanes}/>
-
+                    <Button icon labelPosition='right' floated='right'>
+                        Next Form
+                        <Icon name='right arrow'/>
+                    </Button>
+                    </>
                 }
             </>
         )
