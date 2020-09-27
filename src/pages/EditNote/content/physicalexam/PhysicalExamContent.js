@@ -145,26 +145,42 @@ export default class PhysicalExamContent extends React.Component {
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <h5>Heart Rate</h5>
-                                    <Form.Field>
+                                    <Form.Field inline>
+                                        <label>
+                                            <Header as='h5'>
+                                                Heart Rate
+                                            </Header>
+                                        </label>
                                         {this.generateNumericInput("Vitals", "Heart Rate", "bpm", "right")}
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <h5>RR</h5>
-                                    <Form.Field>
+                                    <Form.Field inline>
+                                        <label>
+                                            <Header as='h5'>
+                                                RR
+                                            </Header>
+                                        </label>
                                         {this.generateNumericInput("Vitals", "RR")}
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <h5>Temperature</h5>
-                                    <Form.Field>
+                                    <Form.Field inline>
+                                        <label>
+                                            <Header as='h5'>
+                                                Temperature
+                                            </Header>
+                                        </label>
                                         {this.generateNumericInput("Vitals", "Temperature", "℃", "right")}
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <h5>Oxygen Saturation</h5>
                                     <Form.Field>
+                                        <label>
+                                            <Header as='h5'>
+                                                Oxygen Saturation
+                                            </Header>
+                                        </label>
                                         {this.generateNumericInput("Vitals", "Oxygen Saturation")}
                                     </Form.Field>
                                 </Grid.Column>
