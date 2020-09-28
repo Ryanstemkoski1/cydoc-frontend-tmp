@@ -31,7 +31,6 @@ class EditNote extends Component {
         this.setState({ activeItem, activeTabIndex })
     }
 
-
     // Reference for the Sticky navigation bars
     noteContent = createRef()
 

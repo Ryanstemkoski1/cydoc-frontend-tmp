@@ -14,7 +14,7 @@ export default class LRButton extends React.Component {
     render = () => {
         if (this.props.active) {
             return (
-                <Button.Group style={{ padding: '2px' }}>
+                <Button.Group>
                     <Button
                         attached='left'
                         content='L'
@@ -39,7 +39,7 @@ export default class LRButton extends React.Component {
             )
         } else {
             return (
-                <Button.Group style={{ padding: '2px' }}>
+                <Button.Group>
                     <Button 
                         content={this.props.content}
                         active={this.props.active}
