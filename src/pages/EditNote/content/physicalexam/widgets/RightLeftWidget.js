@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { Table, Button } from 'semantic-ui-react'
 import HPIContext from 'contexts/HPIContext.js'
+import '../PhysicalExam.css'
 
 export default class RightLeftWidget extends Component {
 
@@ -50,7 +51,7 @@ export default class RightLeftWidget extends Component {
                             index={index}
                             condition={item}
                             onClick={this.onButtonClick}
-                            style={{marginBottom: 5}}
+                            className={"spaced-buttons"}
                         > {item} </Button>
                     )}
                 </div>

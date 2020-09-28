@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Button } from "semantic-ui-react";
 import HPIContext from 'contexts/HPIContext.js'
+import './PhysicalExam.css'
 
 //Component that manages content for the Physical Exam tab
 export default class LRButton extends React.Component {
@@ -14,7 +15,7 @@ export default class LRButton extends React.Component {
     render = () => {
         if (this.props.active) {
             return (
-                <Button.Group style = {{marginBottom: 5}}>
+                <Button.Group className={"spaced-buttons"}>
                     <Button
                         attached='left'
                         content='L'
@@ -39,7 +40,7 @@ export default class LRButton extends React.Component {
             )
         } else {
             return (
-                <Button.Group style = {{marginBottom: 5}}>
+                <Button.Group className={"spaced-buttons"}>
                     <Button
                         content={this.props.content}
                         active={this.props.active}
