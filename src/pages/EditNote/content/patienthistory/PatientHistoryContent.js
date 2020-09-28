@@ -113,13 +113,7 @@ export default class PatientHistoryContent extends Component {
                         {compactPanes.find(e => e.menuItem == activeTabName).render()}
                     </>
                     :
-                    <>
                     <Tab menu={{ pointing: true }} panes={expandedPanes}/>
-                    <Button icon labelPosition='right' floated='right'>
-                        Next Form
-                        <Icon name='right arrow'/>
-                    </Button>
-                    </>
                 }
             </>
         )

@@ -84,10 +84,6 @@ export default class PhysicalExamContent extends React.Component {
                 </Form>
             </Segment>
         {this.renderGroups(constants.sections)}
-        <Button icon labelPosition='right' floated='right'>
-            Next Form
-            <Icon name='right arrow'/>
-        </Button>
         </>
 
     )

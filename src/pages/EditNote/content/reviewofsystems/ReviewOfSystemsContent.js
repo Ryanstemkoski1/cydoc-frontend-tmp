@@ -75,15 +75,9 @@ export default class ReviewOfSystemsContent extends Component {
         }
         
         return (
-        <>
             <Masonry className='ros-container' breakpointCols={numColumns} columnClassName='ros-column'>
                 {this.generateList(this.state.test)}
             </Masonry>
-            <Button icon labelPosition='right' floated='right'>
-            Next Form
-            <Icon name='right arrow'/>
-            </Button>
-        </>
         );
     }
 }

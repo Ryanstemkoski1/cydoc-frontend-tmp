@@ -173,10 +173,6 @@ class HPIContent extends Component {
                         </Masonry>
                         
                     </Segment>
-                    <Button icon labelPosition='right' floated='right'>
-                        Next Form
-                        <Icon name='right arrow'/>
-                    </Button>
                 </>
                     )
             default:

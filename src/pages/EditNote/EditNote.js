@@ -1,6 +1,6 @@
 import React, { Component, Fragment, createRef } from 'react';
 import {Segment} from 'semantic-ui-react';
-import {Container, Sticky} from "semantic-ui-react";
+import {Container, Sticky, Button, Icon} from "semantic-ui-react";
 
 import MenuTabs from "./MenuTabs";
 import NotePage from "./NotePage";
@@ -31,6 +31,7 @@ class EditNote extends Component {
         this.setState({ activeItem, activeTabIndex })
     }
 
+
     // Reference for the Sticky navigation bars
     noteContent = createRef()
 
@@ -57,7 +58,11 @@ class EditNote extends Component {
                         />
                     </Sticky>
                     <NotePage activeItem={this.state.activeItem} />
-
+                    
+                    <Button icon labelPosition='right' floated='right'>
+                        Next Form
+                        <Icon name='right arrow'/>
+                    </Button>
                 </div>
 
             </>
