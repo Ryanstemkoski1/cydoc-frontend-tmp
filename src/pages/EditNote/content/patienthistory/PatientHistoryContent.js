@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Menu, Dropdown, Tab, Container, Segment } from 'semantic-ui-react'
+import { Button, Container, Grid, Tab, Segment} from 'semantic-ui-react'
 import MedicalHistoryContent from "../medicalhistory/MedicalHistoryContent";
 import SurgicalHistoryContent from "../surgicalhistory/SurgicalHistoryContent";
 import MedicationsContent from "../medications/MedicationsContent";
@@ -24,8 +24,12 @@ export default class PatientHistoryContent extends Component {
     componentDidMount() {
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
+        // Using timeout to ensure that tab/dropdown menu is rendered before setting 
+        setTimeout((_event) => {
+            this.setMenuPosition();
+        }, 0);
     }
- 
+
     componentWillUnmount() {
         window.removeEventListener("resize", this.updateDimensions);
     }
@@ -35,12 +39,22 @@ export default class PatientHistoryContent extends Component {
         let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
  
         this.setState({ windowWidth, windowHeight });
+        this.setMenuPosition();
+    }
+
+    setMenuPosition() {
+       const stickyHeaderHeight = document.getElementById("stickyHeader").offsetHeight;
+        // Ensuring that the patient history tabs are rendered
+        while (this.fixedMenu == null || this.fixedMenu.length == 0) {
+            this.fixedMenu = document.getElementsByClassName("patient-history-menu");
+        }
+        this.fixedMenu[0].style.top = `${stickyHeaderHeight}px`;
     }
 
     // handleItemClick = (e, {name}) => {
     //     this.setState({ activeItem: name });
     // }
-    handleItemClick = (e, { value }) => this.setState({ activeTabName: value })
+    handleItemClick = (e, { children }) => this.setState({ activeTabName: children })
 
     render() {
         const { windowWidth, activeTabName } = this.state;
@@ -105,15 +119,22 @@ export default class PatientHistoryContent extends Component {
             }
         )
 
+        const gridButtons = panes.map(
+            (pane) => {
+                return <Button basic children = {pane.menuItem} onClick={this.handleItemClick} active={activeTabName==pane.menuItem} style={{marginBottom: 5}}/>
+            }
+        )
         return (
             <>
                 {collapseTabs ?
-                    <>
-                        <Dropdown onChange={this.handleItemClick} options={dropdownOptions} selection fluid value={activeTabName}/>
+                    <Container>
+                        <Grid stackable centered className={"patient-history-menu"} relaxed style={{paddingTop: 10, paddingBottom: 5}}>
+                            {gridButtons}
+                        </Grid>
                         {compactPanes.find(e => e.menuItem == activeTabName).render()}
-                    </>
+                    </Container>
                     :
-                    <Tab menu={{ pointing: true }} panes={expandedPanes}/>
+                    <Tab menu={{ pointing: true, className: "patient-history-menu"}} panes={expandedPanes} />
 
                 }
             </>

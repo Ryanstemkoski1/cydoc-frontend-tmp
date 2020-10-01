@@ -29,8 +29,8 @@ export default class MedicalHistoryNoteRow extends Component {
             </Grid.Column>
             <Grid.Column>
                 <Form>
-                    <TextArea condition={condition.props.condition} value={comments}
-                              onChange={onChange} placeholder='Comments' disabled={isPreview}/>
+                    <Form.TextArea condition={condition.props.condition} value={comments}
+                        onChange={onChange} placeholder='Comments' disabled={isPreview} rows={2}/>
                 </Form>
             </Grid.Column>
         </Grid.Row>)
