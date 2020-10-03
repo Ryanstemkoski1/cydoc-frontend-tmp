@@ -85,8 +85,6 @@ export default class PhysicalExamGroup extends Component {
             <Fragment>
                 {windowWidth != 0 && windowWidth < PHYSICAL_EXAM_MOBILE_BP ?
                 <>
-                    <Header as="h2" style={{paddingTop: '1rem'}}>{this.props.name}</Header>
-                    <Divider />
                     <Form>
                         {this.generateRows(this.props.rows)}
                         <Form.Field style={{paddingBottom: 100}}>

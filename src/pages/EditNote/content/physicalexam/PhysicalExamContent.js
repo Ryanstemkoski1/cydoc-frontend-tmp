@@ -125,6 +125,7 @@ export default class PhysicalExamContent extends React.Component {
             {
                 key: 'Vitals',
                 title: {
+                    className: "dropdown-title",
                     content: "Vitals",
                     icon: 'dropdown'
                 },
@@ -133,8 +134,6 @@ export default class PhysicalExamContent extends React.Component {
                 content: {
                     content: (
                         <>
-                        <Header as="h2" style={{paddingTop: '1rem'}}>Vitals</Header>
-                        <Divider />
                         <Form>
                             <Grid stackable columns="equal">
                                 <Grid.Column>
@@ -198,6 +197,7 @@ export default class PhysicalExamContent extends React.Component {
                 {
                     key: groups[i - 1].name,
                     title: {
+                        className: "dropdown-title",
                         content: groups[i - 1].name,
                         icon: 'dropdown'
                     },
