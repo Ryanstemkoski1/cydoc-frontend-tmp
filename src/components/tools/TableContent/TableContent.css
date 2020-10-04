@@ -67,14 +67,7 @@
 .ui.upward.active.selection.dropdown.side-effects:hover {
     border: none;
     box-shadow: none;
-    /* word-break: break-word !important; */
 }
-
-
-.ui.input.content-text, .ui.input.drug-text {
-    font-size: 12px;
-}
-
 
 .ui.multiple.search.dropdown.side-effects > .text {
     margin-left: 0;
