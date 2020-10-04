@@ -1,0 +1,8 @@
+.note-preview {
+    overflow: auto;
+    max-height: 50vh;
+}
+
+.landing-page-grid {
+    min-width: 340px;
+}

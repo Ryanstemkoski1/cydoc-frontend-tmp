@@ -1,5 +1,6 @@
 import React from 'react';
 import {Grid, Header} from "semantic-ui-react";
+import './FamilyHistory.css';
 
 //functional component for the heading above the divider for Family History
 export default function FamilyHistoryContentHeader() {
@@ -13,7 +14,7 @@ export default function FamilyHistoryContentHeader() {
                     <Header as="h4">Family Hx?</Header>
                 </Grid.Column>
                 <Grid.Column width={3}>
-                    <Header as="h4" style={{display: 'inline'}}>Family Member</Header>
+                    <Header as="h4" className='family-member'>Family Member</Header>
                 </Grid.Column>
                 <Grid.Column width={3}>
                     <Header as="h4">Cause of Death</Header>

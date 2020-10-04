@@ -183,7 +183,7 @@ export default class FamilyHistoryBlock extends Component {
                             </Fragment>
                             : ""
                         }
-                        <Divider style={{marginTop: 25}}/>
+                        <Divider className='divider-style'/>
                     </div> 
                 </div>
             )

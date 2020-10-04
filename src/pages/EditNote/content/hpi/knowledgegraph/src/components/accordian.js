@@ -1,5 +1,6 @@
-import React, {Component} from "react"
-import { Accordion, Icon } from 'semantic-ui-react'
+import React, {Component} from "react";
+import { Accordion, Icon } from 'semantic-ui-react';
+import '../css/accordian.css';
 
 export default class Accordian extends Component {
     // accordion is collapsed by default
@@ -22,7 +23,7 @@ export default class Accordian extends Component {
           child_questions.push(child_question)
         } 
     return (
-        <Accordion style={{marginBottom: 35}}>
+        <Accordion className='accordion-container'>
             <Accordion.Title 
               active={activeIndex === 0}
               index={0}

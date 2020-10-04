@@ -5,6 +5,7 @@ import {Container, Grid, Menu, Segment} from "semantic-ui-react";
 import Records from "./Records";
 import NotesContext from "../../contexts/NotesContext";
 import { LANDING_PAGE_MOBLE_BP } from "constants/breakpoints.js";
+import './LandingPage.css';
 
 //Component that manages the layout of the dashboard page
 export default class LandingPage extends Component {
@@ -63,7 +64,7 @@ export default class LandingPage extends Component {
                     </>
                     :
                     <Grid columns={2}>
-                        <Grid.Column width={4} style={{minWidth: "340px"}}>
+                        <Grid.Column width={4} className='landing-page-grid'>
                             <VerticalMenu setActive={this.setActive} />
                         </Grid.Column>
                         <Grid.Column width={8}>

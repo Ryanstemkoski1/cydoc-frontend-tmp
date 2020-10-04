@@ -82,9 +82,7 @@ export default class NotePage extends Component {
 
         return (
             <>
-            <Container style={{
-                margin: "40px 0 40vh 0",
-            }}>
+            <Container className='active-tab-container'>
                 {tabToDisplay}
             </Container>
 

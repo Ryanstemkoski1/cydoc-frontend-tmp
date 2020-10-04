@@ -83,7 +83,6 @@ export default class FamilyHistoryDropdown extends Component {
                         options={familyOptions}
                         onChange={this.handleChange}
                         className='dropdown-inline'
-                        style={{width: '45%'}}
                     />
                     <ToggleButton
                         active={cause_of_death}

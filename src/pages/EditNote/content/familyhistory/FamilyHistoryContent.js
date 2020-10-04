@@ -7,6 +7,7 @@ import {FAMILY_HISTORY_MOBILE_BP} from "constants/breakpoints.js";
 import FamilyHistoryBlock from './FamilyHistoryBlock';
 import AddRowButton from 'components/tools/AddRowButton.js';
 import {Container, Segment} from "semantic-ui-react";
+import './FamilyHistory.css';
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.
@@ -173,7 +174,7 @@ export default class FamilyHistoryContent extends Component {
                     />
                 </> :
                 <>
-                    <div style={{marginTop: 25}}> </div>{listItems}
+                    <div className='content-style'> </div>{listItems}
                     {this.props.fh_pop || this.props.isPreview ? "" : <AddRowButton onClick={this.addRow} name={"family history"} />}
                 </>
         );
