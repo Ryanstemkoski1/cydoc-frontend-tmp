@@ -17,7 +17,7 @@ class ExpandMurmurs extends Component{
             ["tricuspid regurg", "best heard LLSB ", "radiation to LUSB"],
             ["ventricular septal defect", "best heard LLSB", "palpable thrill"]],
             pe_rows2: [["mitral prolapse", "systolic click", "incr with Valsava"], ["physiologic"]],
-            pe_rows3:[["aortic refurg", "early", "best heard LLSB", "best heard RLSB"], 
+            pe_rows3:[["aortic regurg", "early", "best heard LLSB", "best heard RLSB"], 
             ["mitral stenosis", "mid", "best heard apex", "opening snap"],
             ["tricuspid stenosis", "best heard LLSB"],
             ["pulmonary regurg", "best heard LLSB"]]

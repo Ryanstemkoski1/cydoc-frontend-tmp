@@ -356,57 +356,27 @@ class GenerateNote extends React.Component {
                 negatives: negatives
             }
         }
-
-        // DON'T WANT/NEED A TABLE VIEW FOR THIS SECTION
-        // if (this.state.rich) {
-        //     return (
-        //         <Table>
-        //             <Table.Header>
-        //                 <Table.Row>
-        //                     <Table.HeaderCell>System</Table.HeaderCell>
-        //                     <Table.HeaderCell>Positive for</Table.HeaderCell>
-        //                     <Table.HeaderCell>Negative for</Table.HeaderCell>
-        //                 </Table.Row>
-        //             </Table.Header>
-        //             <Table.Body>
-        //                 {Object.keys(components).map(key => (
-        //                     <Table.Row>
-        //                         <Table.Cell>{key}</Table.Cell>
-        //                         {components[key].positives.length > 0 ? <Table.Cell>{components[key].positives.join(', ')}</Table.Cell> : null}
-        //                         {components[key].negatives.length > 0 ? <Table.Cell>{components[key].negatives.join(', ')}</Table.Cell> : null}
-        //                     </Table.Row>
-        //                 ))}
-        //             </Table.Body>
-        //         </Table>
-        //     )
-        // }
-
         return (
             <ul>
                 {Object.keys(components).map(key => (
-                    <li>
-                        <b>{key}: </b>
-                        {components[key].positives.length > 0 ? `Positive for ${components[key].positives.join(', ')}. `: null}
-                        {components[key].negatives.length > 0 ? `Negative for ${components[key].negatives.join(', ')}. ` : null}
-                    </li>
+                    components[key].positives.length > 0 || components[key].negatives.length > 0 ?
+                        <li>
+                            <b>{key}: </b>
+                            {components[key].positives.length > 0 ? `Positive for ${components[key].positives.join(', ')}. `: null}
+                            {components[key].negatives.length > 0 ? `Negative for ${components[key].negatives.join(', ')}. ` : null}
+                        </li>
+                    : null
                 ))}
             </ul>
         )
     }
 
-    // TODO: look more into this class
-    //       do an extensive testing of all buttons/sections and reformat as needed
-    //       display units for things like vitals
-    // unclear if this 100% works because of how the data is stored but it's definitely close
-    // probably should look more into widgets 
-    // TODO: normal vs. abnormal 
     physicalExam() {
         const physical = this.context["Physical Exam"];
         console.log(physical);
         const vitalUnits = {'Heart Rate': ' bpm', 'Temperature': ' °C'};
-
         let vitals = [];
-        let widgets = [];
+        let widgets = {'Pulses': [], 'Gastrointestinal': [], 'Pulmonary': [], 'Tendon Reflexes': [], 'Cardiac': [], 'expandMurmurs': []};
         let components = [];
         for (var key in physical) {
             let active = [];
@@ -422,37 +392,64 @@ class GenerateNote extends React.Component {
                 }
             // specific to widgets
             } else if (key === 'widgets') {
-                for (var widget in physical[key]) {
+                const physicalWidgets = physical['widgets'];
+                for (var widget in physicalWidgets) {
                     if (widget === 'Pulses') {
-                        // TODO: change this, will remain mostly the same but info was partly wrong 
-                        for (var pulse in physical[key][widget]) {
-                           var abnormalPulse = physical[key][widget][pulse];
-                           widgets.push('Abnormal Pulse: ' + abnormalPulse[0] + ', ' + abnormalPulse[1] + ', ' + abnormalPulse[2]); 
+                        for (var pulse in physicalWidgets[widget]) {
+                           var abnormalPulse = physicalWidgets[widget][pulse];
+                           widgets['Pulses'].push(abnormalPulse[2] + ' ' + abnormalPulse[1] + ' ' + abnormalPulse[0]); 
                         }
                     } else if (widget === 'Abdomen') {
-                        let findings = {'tenderness': [], 'rebound': [], 'guarding': []};
-                        for (var quadrant in physical[key][widget]) {
-                            var quadrantInfo = physical[key][widget][quadrant];
-                            if (quadrantInfo.tenderness) {findings['tenderness'].push(quadrant.toLowerCase())};
-                            if (quadrantInfo.rebound) {findings['rebound'].push(quadrant.toLowerCase())}; 
-                            if (quadrantInfo.guarding) {findings['guarding'].push(quadrant.toLowerCase())}; 
+                        let findings = {};
+                        for (var quadrant in physicalWidgets[widget]) {
+                            var quadrantInfo = physicalWidgets[widget][quadrant];
+                            for (var info in quadrantInfo) {
+                                if (!(info in findings)) {
+                                    findings[info] = [];
+                                }
+                                if (quadrantInfo[info]) { 
+                                    findings[info].push(quadrant.toLowerCase())
+                                }
+                            }
                         }
-                        widgets.push('tenderness in the ' + findings['tenderness'].join(', ').replace(/, ([^,]*)$/, ' and $1'));
-                        widgets.push('rebound in the ' + findings['rebound'].join(', ').replace(/, ([^,]*)$/, ' and $1'));
-                        widgets.push('guarding in the ' + findings['guarding'].join(', ').replace(/, ([^,]*)$/, ' and $1'));
+                        for (var key in findings) {
+                            widgets['Gastrointestinal'].push(key + ' in the ' + findings[key].join(', ').replace(/, ([^,]*)$/, ' and $1'));
+                        }
                     } else if (widget === 'Lungs') {
-                        for (var lobe in physical[key][widget]) {
-                            console.log(lobe);
+                        let findings = {};
+                        for (var lobe in physicalWidgets[widget]) {
+                            var lobeInfo = physicalWidgets[widget][lobe];
+                            for (var finding in lobeInfo) {
+                                if (!(finding in findings)) {
+                                    findings[finding] = [];
+                                }
+                                if (lobeInfo[finding] === true) {
+                                    findings[finding].push(lobe.toLowerCase());
+                                }
+                            }
+                        }
+                        for (var key in findings) {
+                            widgets['Pulmonary'].push(key + ' in the ' + findings[key].join(', ').replace(/, ([^,]*)$/, ' and $1'));
                         }
                     } else if (widget === 'Reflexes') {
-                        for (var reflex in physical[key][widget]) {
-                            var reflexInfo = physical[key][widget][reflex];
-                            widgets.push('Reflex: ' + reflexInfo[2] + ' ' + reflexInfo[1] + ' ' + reflexInfo[0]);
+                        for (var reflex in physicalWidgets[widget]) {
+                            var reflexInfo = physicalWidgets[widget][reflex];
+                            widgets['Tendon Reflexes'].push(reflexInfo[2] + ' ' + reflexInfo[1] + ' ' + reflexInfo[0]);
                         }
                     } else if (widget === 'Murmurs') {
-                        //todo??
+                        for (var murmur in physicalWidgets[widget]) {
+                            var murmurInfo = physicalWidgets[widget][murmur];
+                            var crescDecres = murmurInfo['cresdecres'] === 'cresc-decresc' ? 'crescendo-decrescendo' : murmurInfo['cresdecres'];
+                            var quality = murmurInfo['quality'] !== "" ? ' with a ' + murmurInfo['quality'].join(', ') + ' quality' : null;
+                            var heardBest = murmurInfo['heardbest'] !== "" ? ' heard best at ' + murmurInfo['heardbest']: null;
+                            let finding = murmurInfo['systdiast'].substring(0, 1).toUpperCase() + murmurInfo['systdiast'].substring(1) + ' ' + crescDecres + ' murmur' + quality + heardBest + '. Intensity ' + murmurInfo['intensity'] + ', ' + murmurInfo['pitch'] + ' pitch.';
+                            widgets['Cardiac'].push(finding);
+                        }
                     } else if (widget === 'ExpandMurmurs') {
-                        //todo??
+                        for (var expand in physicalWidgets[widget]) {
+                            let findings = [];
+                            var expandInfo = physicalWidgets[widget][expand];
+                        }
                     }
                 }
             // everything else in physical exam 
@@ -507,7 +504,7 @@ class GenerateNote extends React.Component {
                 }
             }
         }
-
+        // add comments to the observations 
         if (this.state.rich) {
             return (
                 <Table>
@@ -515,34 +512,45 @@ class GenerateNote extends React.Component {
                         <Table.Row>
                             <Table.HeaderCell>Section</Table.HeaderCell>
                             <Table.HeaderCell>Observations</Table.HeaderCell>
-                            <Table.HeaderCell>Comments</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
                         {Object.keys(components).map(key => (
-                            <Table.Row>
-                                {components[key].active.length > 0 ? <Table.Cell>{key}</Table.Cell> : null}
-                                {components[key].active.length > 0 ? <Table.Cell>{components[key].active.join(', ')}</Table.Cell> : null}
-                                {components[key].comments !== "" ? <Table.Cell>{components[key].comments}</Table.Cell> : null}
-                            </Table.Row>
+                            key in widgets && (components[key].active.length > 0 || widgets[key].length > 0) ?
+                                <Table.Row>
+                                    <Table.Cell singleLine>{key}</Table.Cell>
+                                    <Table.Cell>{components[key].active.join(', ') + '. ' + widgets[key].join(', ') + '. ' + components[key].comments}</Table.Cell>
+                                </Table.Row>
+                            : !(key in widgets) && components[key].active.length > 0 ?
+                                <Table.Row>
+                                    <Table.Cell singleLine>{key}</Table.Cell>
+                                    <Table.Cell>{components[key].active.join(', ') + '. ' + components[key].comments}</Table.Cell>
+                                </Table.Row> 
+                            : null
                         ))}
                     </Table.Body>
                 </Table>
             )
         }
 
+        //don't need to make widgets a "sub bullet"
+        //if empty don't show 
         return (
             <ul>
                 <li><b>Vitals</b>: {vitals.join(', ')}</li>
                 {Object.keys(components).map(key => (
-                    components[key].active.length > 0 ? 
+                    key in widgets && (components[key].active.length > 0 || widgets[key].length > 0) ? 
                         <li>
                             <b>{key}: </b>
-                            {components[key].comments !== "" ? `${components[key].comments}. ` : null} 
-                            {components[key].active.join(', ')}.
-                        </li> : null
+                            {components[key].active.join(', ') + '. ' + widgets[key].join(', ') + '. ' + components[key].comments}
+                        </li>
+                    : !(key in widgets) && components[key].active.length > 0 ? 
+                        <li>
+                            <b>{key}: </b>
+                            {components[key].active.join(', ') + '. ' + components[key].comments}
+                        </li> 
+                    : null
                 ))}
-                <li><b>Widgets</b>: {widgets.join(', ')}</li>
             </ul>
         )
     }
@@ -569,7 +577,7 @@ class GenerateNote extends React.Component {
                         ))}
                     </ol>
                     
-                    {/* TODO: not show anything if these fields are null? Or just remove periods? Form validation? */}
+                    {/* TODO: not show anything if these fields are null? Or just remove periods? */}
                     <b>Prescriptions</b>
                     <ul>
                         {Object.keys(conditions[key].prescriptions).map(prescription => (

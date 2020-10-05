@@ -227,7 +227,7 @@ class SocialHistoryTableContent extends React.Component {
         ) : (
             <div>
                 <p>{this.props.prompt}</p>
-                <Table celled className='table-display'>
+                <Table celled>
                     <Table.Header content={headerRow} />
                     <Table.Body children={rows} />
                 </Table>

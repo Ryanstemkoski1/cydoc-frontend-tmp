@@ -9,7 +9,7 @@ export default class RightLeftWidget extends Component {
     constructor(props, context) { 
         super(props, context)
         this.state = {
-            pe_types: this.props.type === "Pulse" ? 
+            pe_types: this.props.type === "Pulses" ? 
             [["brachial", "radial", "ulnar", "dorsalis pedis"], ['right', 'left'], ["0 absent", "1+ weak", "2+", "3+ normal", "4+ bounding"]] : 
             [["biceps", "brachioradialis", "triceps", "patellar", "ankle jerk", "plantar"], ["right", "left"], ["0 no response", "1+ slight", "2+ normal", "3+ very brisk", "4+ clonus"]]
         }
