@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from "react";
-import {Form, Grid, TextArea, Button, Header, Divider, Label, Icon, Container } from "semantic-ui-react";
+import {Form, Grid, TextArea, Button, Header, Divider } from "semantic-ui-react";
 import HPIContext from 'contexts/HPIContext.js'
 import ToggleButton from 'components/tools/ToggleButton.js';
 import FamilyHistoryDropdown from "./FamilyHistoryDropdown";
@@ -52,20 +52,15 @@ export default class FamilyHistoryBlock extends Component {
         range = range > 0 ? range : 1;
         for (let step = 0; step < range; step ++) {
             dropdown_list.push(
-                <Container>
-                    {/* <Icon name="close" link /> */}
-                    <FamilyHistoryDropdown
-                        key={index}
-                        condition = {condition}
-                        index = {index}
-                        family_index = {step}
-                        mobile = {mobile}
-                        comments = {comments}
-                        familyMember = {familyMember}
-                    /> 
-                
-                </Container>
-                
+                <FamilyHistoryDropdown
+                    key={index}
+                    condition = {condition}
+                    index = {index}
+                    family_index = {step}
+                    mobile = {mobile}
+                    comments = {comments}
+                    familyMember = {familyMember}
+                /> 
             )
         }
         const new_content_header = 

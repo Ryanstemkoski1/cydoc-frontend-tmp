@@ -6,7 +6,6 @@ import ConditionInput from 'components/tools/ConditionInput.js'
 import {FAMILY_HISTORY_MOBILE_BP} from "constants/breakpoints.js";
 import FamilyHistoryBlock from './FamilyHistoryBlock';
 import AddRowButton from 'components/tools/AddRowButton.js';
-import {Container, Segment} from "semantic-ui-react";
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.
@@ -95,9 +94,7 @@ export default class FamilyHistoryContent extends Component {
 
     addRow() {
         let values = this.context["Family History"]
-        console.log(values)
         let last_index = Object.keys(values).length.toString()
-        console.log(last_index)
         values[last_index] = {
             "Condition": "",
             "Yes": false,

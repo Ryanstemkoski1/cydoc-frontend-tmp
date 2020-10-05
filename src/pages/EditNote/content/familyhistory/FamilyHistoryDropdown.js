@@ -1,4 +1,4 @@
-import { Dropdown, Grid, Form, Button, Header, Divider, Icon } from "semantic-ui-react";
+import { Dropdown, Grid, Form, Button, Header, Divider } from "semantic-ui-react";
 import React, { Component, Fragment } from "react";
 import HPIContext from 'contexts/HPIContext.js';
 import ToggleButton from 'components/tools/ToggleButton.js';
