@@ -3,6 +3,7 @@ import { Divider, Header, Grid, Form, TextArea } from 'semantic-ui-react'
 import PropTypes from 'prop-types'
 import HPIContext from 'contexts/HPIContext.js'
 import PhysicalExamRow from './PhysicalExamRow'
+import {PHYSICAL_EXAM_MOBILE_BP} from "constants/breakpoints.js";
 
 export const MyContext = React.createContext('yasa')
 
@@ -13,8 +14,26 @@ export default class PhysicalExamGroup extends Component {
 
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {
+            windowWidth: 0
+        }
         this.handleToggle = this.handleToggle.bind(this)
+        this.updateDimensions = this.updateDimensions.bind(this)
+    }
+
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener("resize", this.updateDimensions);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions);
+    }
+
+    updateDimensions() {
+        let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+ 
+        this.setState({ windowWidth });
     }
 
     handleToggle = (name, data) => {
@@ -60,27 +79,49 @@ export default class PhysicalExamGroup extends Component {
     }
 
     render() {
+        const windowWidth = this.state.windowWidth
+
         return (
             <Fragment>
-                <Header as="h2">{this.props.name}</Header>
-                <Divider />
-                <Form>
-                    <Grid columns="equal">
-                        <Grid.Row>
-                            <Grid.Column>
-                                {this.generateRows(this.props.rows)}
-                            </Grid.Column>
-                            <Grid.Column floated="right" width={5}>
-                                <Form.Field>
-                                    <label>Additional Comments</label>
-                                    <TextArea
-                                        value={this.context["Physical Exam"][this.props.name].comments}
-                                        onChange={this.handleTextChange} />
-                                </Form.Field>
-                            </Grid.Column>
-                        </Grid.Row>
-                    </Grid>
-                </Form>
+                {windowWidth != 0 && windowWidth < PHYSICAL_EXAM_MOBILE_BP ?
+                <>
+                    <Header as="h2" style={{paddingTop: '1rem'}}>{this.props.name}</Header>
+                    <Divider />
+                    <Form>
+                        {this.generateRows(this.props.rows)}
+                        <Form.Field style={{paddingBottom: 100}}>
+                            <label>Additional Comments</label>
+                            <Form.TextArea
+                                value={this.context["Physical Exam"][this.props.name].comments}
+                                onChange={this.handleTextChange} 
+                                style={{maxHeight: 75}}
+                            />
+                        </Form.Field>
+                    </Form>
+                </>
+                :
+                <>
+                    <Header as="h2">{this.props.name}</Header>
+                    <Divider />
+                    <Form>
+                        <Grid columns="equal">
+                            <Grid.Row>
+                                <Grid.Column>
+                                    {this.generateRows(this.props.rows)}
+                                </Grid.Column>
+                                <Grid.Column floated="right" width={5}>
+                                    <Form.Field>
+                                        <label>Additional Comments</label>
+                                        <Form.TextArea
+                                            value={this.context["Physical Exam"][this.props.name].comments}
+                                            onChange={this.handleTextChange} />
+                                    </Form.Field>
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
+                    </Form>
+                </>
+                }
             </Fragment>
         )
     }
