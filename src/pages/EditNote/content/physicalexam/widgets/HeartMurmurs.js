@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Table, Button} from 'semantic-ui-react'
 import HPIcontext from 'contexts/HPIContext.js'
 import ExpandMurmurs from './ExpandMurmurs'
+import '../PhysicalExam.css'
 
 class HeartMurmurs extends Component{
 
@@ -102,6 +103,7 @@ class HeartMurmurs extends Component{
                         index={index}
                         condition={word}
                         onClick={this.onButtonClick}
+                        className={"spaced-buttons"}
                         > 
                         {word}</Button>
                     )}

@@ -24,11 +24,17 @@ class EditNote extends Component {
         }
     }
 
+    componentDidMount() {
+        // Setting view to top of the page upon loading a note
+        setTimeout((_e) => {window.scrollTo(0,0)}, 0);
+    }
+
     onTabChange(name) {
         let activeItem = name;
         let activeTabIndex = TAB_NAMES.indexOf(name);
 
         this.setState({ activeItem, activeTabIndex })
+        window.scrollTo(0,0);
     }
 
     // Reference for the Sticky navigation bars
@@ -44,7 +50,7 @@ class EditNote extends Component {
             <>
                 <div ref={this.noteContent}>
                     {/* Top NavMenu and MenuTabs stay on top regardless of scroll*/}
-                    <Sticky context={this.noteContent}>
+                    <Sticky context={this.noteContent} id = "stickyHeader">
                         <NavMenu
                             className="edit-note-nav-menu"
                             displayNoteName={true}

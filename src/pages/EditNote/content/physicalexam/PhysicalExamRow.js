@@ -7,6 +7,7 @@ import LungSounds from './widgets/LungSounds'
 import AbdomenExam from './widgets/AbdomenExam';
 import RightLeftWidget from './widgets/RightLeftWidget';
 import HeartMurmurs from './widgets/HeartMurmurs';
+import './PhysicalExam.css'
 
 
 export default class PhysicalExamRow extends React.Component {
@@ -44,6 +45,7 @@ export default class PhysicalExamRow extends React.Component {
                     active={this.context["Physical Exam"][this.props.group][finding].active}
                     color={this.context["Physical Exam"][this.props.group][finding].active ? (normalOrAbnormal == 'normal' ? 'green' : 'red') : null}
                     onClick={this.props.handleLRToggle}
+                    className={"spaced-buttons"}
                 />
             })
             SelectAllCallBack = this.props.handleLRToggle.bind(this, 'all')
@@ -55,6 +57,7 @@ export default class PhysicalExamRow extends React.Component {
                     active={this.context["Physical Exam"][this.props.group][finding]}
                     color={this.context["Physical Exam"][this.props.group][finding] ? (normalOrAbnormal == 'normal' ? 'green' : 'red') : null}
                     onClick={(e, { name, active }) => this.props.handleToggle(name, !active)}
+                    className={"spaced-buttons"}
                 />
             })
             SelectAllCallBack = this.props.handleToggle
