@@ -135,7 +135,6 @@ export default class PatientHistoryContent extends Component {
                     </Container>
                     :
                     <Tab menu={{ pointing: true, className: "patient-history-menu"}} panes={expandedPanes} />
-
                 }
             </>
         )
