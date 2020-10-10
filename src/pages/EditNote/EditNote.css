@@ -1,0 +1,14 @@
+.ui.button.previous-button, .ui.button.next-button {
+    position: sticky !important;
+    bottom: 0;
+    opacity: 0.8;
+    margin: 0;
+}
+
+.ui.button.previous-button:hover, .ui.button.next-button:hover {
+    opacity: 1;
+}
+
+.ui.container.active-tab-container {
+    margin-bottom: 10px;
+}

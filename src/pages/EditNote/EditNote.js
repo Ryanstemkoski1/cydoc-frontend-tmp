@@ -1,13 +1,13 @@
 import React, { Component, Fragment, createRef } from 'react';
 import {Segment} from 'semantic-ui-react';
 import {Container, Sticky, Button, Icon} from "semantic-ui-react";
-
 import MenuTabs from "./MenuTabs";
 import NotePage from "./NotePage";
 import NavMenu from "../../components/navigation/NavMenu";
 import { TAB_NAMES } from 'constants/constants';
 import HPIContext from '../../contexts/HPIContext'
 import { Redirect } from 'react-router';
+import './EditNote.css';
 
 // Component that manages the active state of the create note editor
 // and defines the layout of the editor
@@ -18,6 +18,8 @@ class EditNote extends Component {
     constructor(props) {
         super(props);
         this.onTabChange = this.onTabChange.bind(this);
+        this.onNextClick = this.onNextClick.bind(this);
+        this.onPreviousClick = this.onPreviousClick.bind(this);
         this.state = {
             activeItem: 'HPI',
             activeTabIndex: 0,
@@ -34,6 +36,64 @@ class EditNote extends Component {
         let activeTabIndex = TAB_NAMES.indexOf(name);
 
         this.setState({ activeItem, activeTabIndex })
+        window.scrollTo(0,0);
+    }
+
+    // brings users to the next form when clicked
+    onNextClick() {
+        this.setState(state => {
+            if (state.activeItem === 'HPI') {
+                return {
+                    activeItem: 'Patient History',
+                }
+            } else if (state.activeItem === 'Patient History') {
+                return {
+                    activeItem: 'Review of Systems',
+                }
+            } else if (state.activeItem === 'Review of Systems') {
+                return {
+                    activeItem: 'Physical Exam',
+                }
+            } else if (state.activeItem === 'Physical Exam') {
+                return {
+                    activeItem: 'Plan',
+                }
+            } else if (state.activeItem === 'Plan') {
+                return {
+                    activeItem: 'Generate Note',
+                }
+            }
+        })
+        // brings users to the top of the page after button click
+        window.scrollTo(0,0);
+    }
+
+    // brings users to the previous form when clicked
+    onPreviousClick() {
+        this.setState(state => {
+            if (state.activeItem === 'Patient History') {
+                return {
+                    activeItem: 'HPI',
+                }
+            } else if (state.activeItem === 'Review of Systems') {
+                return {
+                    activeItem: 'Patient History',
+                }
+            } else if (state.activeItem === 'Physical Exam') {
+                return {
+                    activeItem: 'Review of Systems',
+                }
+            } else if (state.activeItem === 'Plan') {
+                return {
+                    activeItem: 'Physical lExam',
+                }
+            } else if (state.activeItem === 'Generate Note') {
+                return {
+                    activeItem: 'Plan',
+                }
+            }
+        })
+        // brings users to the top of the page after button click
         window.scrollTo(0,0);
     }
 
@@ -63,11 +123,25 @@ class EditNote extends Component {
                         />
                     </Sticky>
                     <NotePage activeItem={this.state.activeItem} />
-                    
-                    <Button icon labelPosition='right' floated='right'>
+                    {this.state.activeItem === 'HPI' ? 
+                    (
+                        <Button icon labelPosition='right' floated='right' onClick={this.onNextClick} className='next-button'>
+                        Next Form
+                        <Icon name='right arrow'/>                    
+                        </Button>
+
+                    ) : (
+                    <>
+                        <Button icon labelPosition='left' floated='left' onClick={this.onPreviousClick} className='previous-button'>
+                        Previous Form
+                        <Icon name='left arrow'/>
+                        </Button>
+                        <Button icon labelPosition='right' floated='right' onClick={this.onNextClick} className='next-button'>
                         Next Form
                         <Icon name='right arrow'/>
-                    </Button>
+                        </Button>
+                    </>
+                    )}
                 </div>
 
             </>
