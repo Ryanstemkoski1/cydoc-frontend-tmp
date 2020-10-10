@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Menu, Button, Segment } from 'semantic-ui-react'
+import { Menu, Button, Segment, Icon } from 'semantic-ui-react'
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
 import ButtonItem from "./src/components/ButtonItem.js";
@@ -148,16 +148,8 @@ class HPIContent extends Component {
         switch(step) {
             case 1:
                 return (
-
+                <>
                     <Segment>
-                        {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
-                        <Masonry
-                            className='disease-container'
-                            breakpointCols={numColumns}
-                            columnClassName='disease-column'
-                        >
-                            {diseaseComponents}
-                        </Masonry>
                         {positive_length > 0 ? 
                         <div className='positive-diseases-placeholder'>
                             <Button
@@ -170,7 +162,18 @@ class HPIContent extends Component {
                             :
                             <div className='positive-diseases-placeholder' />
                         }
+
+                        {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
+                        <Masonry
+                            className='disease-container'
+                            breakpointCols={numColumns}
+                            columnClassName='disease-column'
+                        >
+                            {diseaseComponents}
+                        </Masonry>
+                        
                     </Segment>
+                </>
                     )
             default:
                 if (isLoaded) { 
