@@ -2,6 +2,7 @@ import React from 'react'
 import NotesContext from './NotesContext'
 import { noteBody } from 'constants/noteBody.js'
 
+
 const Context = React.createContext('yasa')
 
 export class HPIStore extends React.Component {
@@ -14,8 +15,11 @@ export class HPIStore extends React.Component {
         this.state = {
             title: "Untitled Note",
             _id: null,
+            createdTime: 0,
+            modifiedTime: 0,
             unsavedChanges: false,
-            ...noteBody
+            ...noteBody,
+
         }
     }
 
@@ -25,17 +29,21 @@ export class HPIStore extends React.Component {
             {
                 [name]: values,
                 unsavedChanges: true
-            },
-            () => this.saveNote(true)
+            }
+            // ,
+            // () => this.saveNote(true)
         );
     }
 
     //Saves the current note, which updates the NotesContext's state
     saveNote = (localOnly = false) => {
-        let { title: noteName, _id, unsavedChanges, ...body } = this.state
+        let { title: noteName, _id, createdTime, modifiedTime, unsavedChanges, ...body  } = this.state
+        let currentTime = Date.now()
         let note = {
             noteName,
             _id,
+            createdTime,
+            modifiedTime: currentTime,
             unsavedChanges,
             body
         }
@@ -66,7 +74,20 @@ export class HPIStore extends React.Component {
 
     //Deletes a note from NotesContext based on the note's id
     deleteNote = (note) => {
-        this.context.deleteNote(note)
+        this.context.deleteNote(note);
+    }
+
+    addNote = async () => {
+        const note = await this.context.addNote();
+        return note;
+    }
+
+    loadAllNotes = () => {
+        return this.context.loadNotes();
+    }
+
+    getAllNotes = () => {
+        return this.context.getNotes();
     }
 
     render = () => {
@@ -77,7 +98,10 @@ export class HPIStore extends React.Component {
                 saveNote: this.saveNote,
                 loadNote: this.loadNote,
                 swapNote: this.swapNote,
-                deleteNote: this.deleteNote
+                deleteNote: this.deleteNote,
+                addNote: this.addNote,
+                loadAllNotes: this.loadAllNotes,
+                getAllNotes: this.getAllNotes
             }}>
                 {this.props.children}
             </Context.Provider>
