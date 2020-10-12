@@ -54,60 +54,9 @@ export default class PhysicalExamContent extends React.Component {
                 onChange={(e, { name, value }) => this.handleChange(category, name, value)} />
         )
     }
-
-    renderSegments = (groups) => {
-        const segments = [
-        <Segment>
-            <Header as="h2">Vitals</Header>
-            <Divider />
-            <Form>
-                <Grid stackable columns="equal">
-                    <Grid.Column>
-                        <h5>Blood Pressure (mmHg)</h5>
-                        <Form.Field>
-                            {this.generateNumericInput("Vitals", "Systolic Blood Pressure", "systolic", "right")}
-                        </Form.Field>
-                        <Form.Field>
-                            {this.generateNumericInput("Vitals", "Diastolic Blood Pressure", "diastolic", "right")}
-                        </Form.Field>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <h5>Heart Rate</h5>
-                        <Form.Field>
-                            {this.generateNumericInput("Vitals", "Heart Rate", "bpm", "right")}
-                        </Form.Field>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <h5>RR</h5>
-                        <Form.Field>
-                            {this.generateNumericInput("Vitals", "RR")}
-                        </Form.Field>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <h5>Temperature</h5>
-                        <Form.Field>
-                            {this.generateNumericInput("Vitals", "Temperature", "℃", "right")}
-                        </Form.Field>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <h5>Oxygen Saturation</h5>
-                        <Form.Field>
-                            {this.generateNumericInput("Vitals", "Oxygen Saturation")}
-                        </Form.Field>
-                    </Grid.Column>
-                </Grid>
-            </Form>
-        </Segment>]
-        groups.forEach((section) =>
-            segments.push(<Segment>
-                <PhysicalExamGroup name={section.name} rows={section.rows} />
-            </Segment>)
-        )
-        return segments
-    }
     
-    renderMobileSections = (groups) => {
-        const segments = [
+    renderPanels = (groups) => {
+        const panels = [
             {
                 key: 'Vitals',
                 title: {
@@ -177,7 +126,7 @@ export default class PhysicalExamContent extends React.Component {
             }
         ]
         for (let i = 1; i < groups.length + 1; i++) {
-            segments.push(
+            panels.push(
                 {
                     key: groups[i - 1].name,
                     title: {
@@ -193,21 +142,12 @@ export default class PhysicalExamContent extends React.Component {
                 }
             )
         }
-        return segments
+        return panels
     }
 
     render() {
-        const windowWidth = this.state.windowWidth
         return (
-            <>
-                {windowWidth != 0 && windowWidth < PHYSICAL_EXAM_MOBILE_BP ?
-                    <Accordion styled fluid panels = {this.renderMobileSections(constants.sections)}/>
-                :
-                    <>
-                {this.renderSegments(constants.sections)}
-                    </>
-                }
-            </>
+            <Accordion styled fluid panels = {this.renderPanels(constants.sections)} />
         )
     }
 
