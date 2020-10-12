@@ -87,7 +87,6 @@ export default class FamilyHistoryDropdown extends Component {
                                             options={familyOptions}
                                             onChange={this.handleChange}
                                             className='dropdown-inline-mobile'
-                                            style={{width: "65vw"}}
                                         />
                                     </Grid.Column>
                                 </Grid.Row>
@@ -141,10 +140,9 @@ export default class FamilyHistoryDropdown extends Component {
                                         placeholder='Comments'
                                         onChange={this.handleCommentsChange}
                                         rows={1}
-                                        style={{width: "65vw"}}
                                     />
                                 </Grid.Row>
-                                <Grid.Row width={4} style={{whiteSpace: "nowrap"}}>
+                                <Grid.Row width={4} className="delete-family-member-row-mobile">
                                     <Button
                                         basic
                                         circular
@@ -183,7 +181,6 @@ export default class FamilyHistoryDropdown extends Component {
                                     options={familyOptions}
                                     onChange={this.handleChange}
                                     className='dropdown-inline'
-                                    style={{width: '45%'}}
                                 />
                             </Grid.Column>
                             

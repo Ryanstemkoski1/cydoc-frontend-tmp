@@ -32,13 +32,14 @@
 
 .ui.fluid.dropdown.dropdown-inline {
     display: inline-table;
-    width: 50%;
+    width: 45%;
     margin-right: 50px;
 
 }
 
 .dropdown-inline-mobile {
     display: inline-table;
+    width: 60vw !important;
 }
 
 .condition-info-container {
@@ -85,7 +86,8 @@
 
 .comments-box-mobile {
     padding-top: 0rem !important;
-    max-width: 70vw;
+    /* max-width: 70vw; */
+    width: 60vw;
 }
 
 .family-history-toggle {
@@ -96,4 +98,8 @@
     padding-bottom: 0.5em;
     padding-top: 0.5em;
     min-width: 20em;
+}
+
+.delete-family-member-row-mobile {
+    white-space: nowrap;
 }
