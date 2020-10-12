@@ -85,7 +85,7 @@ class EditNote extends Component {
                 }
             } else if (state.activeItem === 'Plan') {
                 return {
-                    activeItem: 'Physical lExam',
+                    activeItem: 'Physical Exam',
                 }
             } else if (state.activeItem === 'Generate Note') {
                 return {
@@ -124,13 +124,12 @@ class EditNote extends Component {
                     </Sticky>
                     <NotePage activeItem={this.state.activeItem} />
                     {this.state.activeItem === 'HPI' ? 
-                    (
-                        <Button icon labelPosition='right' floated='right' onClick={this.onNextClick} className='next-button'>
-                        Next Form
-                        <Icon name='right arrow'/>                    
-                        </Button>
-
-                    ) : (
+                    // <Button icon labelPosition='right' floated='right' onClick={this.onNextClick} className='next-button'>
+                    // Next Form
+                    // <Icon name='right arrow'/>
+                    // </Button>
+                    ""
+                    : (
                     <>
                         <Button icon labelPosition='left' floated='left' onClick={this.onPreviousClick} className='previous-button'>
                         Previous Form

@@ -102,7 +102,7 @@ class HPIContent extends Component {
         this.context.onContextChange("step", this.context['positivediseases'].indexOf(name)+2) 
         this.context.onContextChange("activeHPI", name)
     }
-    
+
 
     render() {
         const {graphData, isLoaded, categories, windowWidth, body_systems} = this.state;
@@ -150,7 +150,7 @@ class HPIContent extends Component {
                 return (
                 <>
                     <Segment>
-                        {positive_length > 0 ? 
+                        {/* {positive_length > 0 ? 
                         <div className='positive-diseases-placeholder'>
                             <Button
                                 circular
@@ -161,7 +161,7 @@ class HPIContent extends Component {
                             </div>
                             :
                             <div className='positive-diseases-placeholder' />
-                        }
+                        } */}
 
                         {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
                         <Masonry
@@ -173,6 +173,18 @@ class HPIContent extends Component {
                         </Masonry>
                         
                     </Segment>
+
+                    {positive_length > 0 ? 
+                    <Button icon labelPosition='right' floated='right' onClick={this.continue} className='next-button'>
+                    Next Form
+                    <Icon name='right arrow'/>
+                    </Button>
+                    :
+                    <Button icon labelPosition='right' floated='right'>
+                    Next Form
+                    <Icon name='right arrow'/>
+                    </Button>
+                    }
                 </>
                     )
             default:
@@ -181,6 +193,7 @@ class HPIContent extends Component {
                     let parent_code = categories[category]
                     let category_code = graphData['nodes'][parent_code]['category']
                 return (
+                    <>
                     <DiseaseForm
                         key={step-2}
                         graphData={graphData}
@@ -196,6 +209,15 @@ class HPIContent extends Component {
                         last = {true ? step === positive_length+1 : false}
                         windowWidth={windowWidth}
                     />
+                    <Button icon labelPosition='left' floated='left' onClick={this.back} className='next-button'>
+                    Previous Form
+                    <Icon name='left arrow'/>
+                    </Button>
+                    <Button icon labelPosition='right' floated='right' onClick={this.continue} className='next-button'>
+                    Next Form
+                    <Icon name='right arrow'/>
+                    </Button>
+                    </>
                     )}
                 else {return <h1> Loading... </h1>}
         }
