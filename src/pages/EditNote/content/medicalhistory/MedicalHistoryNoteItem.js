@@ -41,7 +41,7 @@ export default class MedicalHistoryNoteItem extends Component {
                         placeholder="Onset"
                         value={onset}
                         onChange={onChange}
-                        rows={1}
+                        rows={2}
                     />
                     { onset !== "" && (onset < 1900 || onset > currentYear)  && (
                         <p className='mobile-error'>Please enter a valid year after 1900</p>

@@ -25,7 +25,7 @@ export default class MedicalHistoryNoteRow extends Component {
             <Grid.Column>
                 <Form>
                     <Form.TextArea condition={condition.props.condition} placeholder='Onset' value={onset}
-                              onChange={onChange} disabled={isPreview} rows={1}/>
+                              onChange={onChange} disabled={isPreview} rows={2}/>
                 </Form>
                 { onset !== "" && (onset < 1900 || onset > currentYear) && (
                     <p className='error'>Please enter a valid year after 1900</p>
