@@ -45,7 +45,7 @@ export default class RightLeftWidget extends Component {
                 <div style={{marginTop: 10, marginBottom: 10, marginLeft: 10, marginRight: 10}}>
                     {pe_types[index].map((item) => 
                         <Button 
-                            color={this.context['Physical Exam'].widgets[this.props.type][pe_index][index] === item ? 'grey' : ''}
+                            color={this.context['Physical Exam'].widgets[this.props.type][pe_index][index] === item ? 'red' : ''}
                             key={item}
                             pe_index={pe_index}
                             index={index}

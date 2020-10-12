@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Menu, Button, Segment, Header, Divider } from 'semantic-ui-react'
+import { Menu, Button, Segment, Icon } from 'semantic-ui-react'
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
 import ButtonItem from "./src/components/ButtonItem.js";
@@ -148,11 +148,22 @@ class HPIContent extends Component {
         switch(step) {
             case 1:
                 return (
-
+                <>
                     <Segment>
-                        <Header as={'h2'}>Select Diseases</Header>
-                        <Divider />
-                            {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
+                        {positive_length > 0 ? 
+                        <div className='positive-diseases-placeholder'>
+                            <Button
+                                circular
+                                icon='angle right'
+                                className='next-button'
+                                onClick={this.continue}
+                            />
+                            </div>
+                            :
+                            <div className='positive-diseases-placeholder' />
+                        }
+
+                        {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
                         <Masonry
                             className='disease-container'
                             breakpointCols={numColumns}
@@ -160,20 +171,10 @@ class HPIContent extends Component {
                         >
                             {diseaseComponents}
                         </Masonry>
-                        {positive_length > 0 ?
-                            <div className='positive-diseases-placeholder'>
-                                <Button
-                                    circular
-                                    icon='angle right'
-                                    className='next-button'
-                                    onClick={this.continue}
-                                />
-                            </div>
-                            :
-                            <div className='positive-diseases-placeholder' />
-                        }
+                        
                     </Segment>
-                )
+                </>
+                    )
             default:
                 if (isLoaded) {
                     let category = this.context['positivediseases'][step-2]
