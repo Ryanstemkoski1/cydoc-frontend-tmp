@@ -8,8 +8,8 @@ import "./MedicalHistoryNote.css"
 //Component for a row the Medical History GridContent
 export default class MedicalHistoryNoteItem extends Component {
     render = () => {
-        const { yesActive, condition, onToggleButtonClick, noActive, onset, onChange, comments} = this.props;
-
+        const { yesActive, condition, onToggleButtonClick, noActive, onset, onChange, comments, currentYear} = this.props;
+        
         const showTextAreas = yesActive ? "display" : "hide";
 
         return (<Grid.Row>
@@ -43,8 +43,8 @@ export default class MedicalHistoryNoteItem extends Component {
                         onChange={onChange}
                         rows={1}
                     />
-                    { onset !== "" && !/^(19\d\d|20[0-2]\d)$/.test(onset) && (
-                        <p className='mobile-error'>Please enter a year between 1900 and 2020</p>
+                    { onset !== "" && (onset < 1900 || onset > currentYear)  && (
+                        <p className='mobile-error'>Please enter a valid year after 1900</p>
                     )}
                     <Form.TextArea
                         label="Comments"

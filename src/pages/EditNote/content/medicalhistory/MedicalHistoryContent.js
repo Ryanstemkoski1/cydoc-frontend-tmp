@@ -19,6 +19,7 @@ export default class MedicalHistoryContent extends React.Component {
         //Checks if all response choices exist and adds new ones
         const { response_choice, isPreview } = this.props;
         const response_choice_list = []
+        this.currentYear = new Date(Date.now()).getFullYear();
         // const seenConditions = {};
         if (!isPreview) {
             const values = this.context["Medical History"]
@@ -157,6 +158,7 @@ export default class MedicalHistoryContent extends React.Component {
                             onToggleButtonClick={() => {}}
                             yesActive={false}
                             noActive={false}
+                            currentYear={this.currentYear}
                         />
                     );
                 } else {
@@ -176,6 +178,7 @@ export default class MedicalHistoryContent extends React.Component {
                             onToggleButtonClick={this.handleToggleButtonClick}
                             yesActive={this.context["Medical History"][index]["Yes"]}
                             noActive={this.context["Medical History"][index]["No"]}
+                            currentYear={this.currentYear}
                         />
                     );
                 }
@@ -201,6 +204,7 @@ export default class MedicalHistoryContent extends React.Component {
                             onToggleButtonClick={() => {}}
                             yesActive={false}
                             noActive={false}
+                            currentYear={this.currentYear}
                         />
                     )
                 } else {
@@ -221,6 +225,7 @@ export default class MedicalHistoryContent extends React.Component {
                             onToggleButtonClick={this.handleToggleButtonClick}
                             yesActive={this.context["Medical History"][condition_index]["Yes"]}
                             noActive={this.context["Medical History"][condition_index]["No"]}
+                            currentYear={this.currentYear}
                         />
                     )
                 }
