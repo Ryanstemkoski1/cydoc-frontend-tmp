@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from "react";
 import {Button, Divider, Header, Icon, Menu, Modal, Search, Segment, Input, Grid, Radio, ButtonGroup} from "semantic-ui-react";
 import {Link} from "react-router-dom";
+import {Redirect} from "react-router";
 import './LandingPage.css'
 import Form from "semantic-ui-react/dist/commonjs/collections/Form";
 
@@ -12,7 +13,8 @@ export default class CreateTemplateSegment extends Component {
         this.handleItemClick = this.handleItemClick.bind(this);
         // this.setActive = this.setActive.bind(this);
         this.state = {
-            activeItem: "Notes"
+            activeItem: "Notes",
+            redirect: false
         }
         this.templates = [
             'History of Present Illness',
@@ -24,6 +26,9 @@ export default class CreateTemplateSegment extends Component {
 
     handleItemClick(event, { content }){
         this.setState({activeItem: content});
+        if (content == "History of Present Illness") {
+            this.setState({redirect: true})
+        }
     }
 
     displayTemplates = () => {
@@ -52,6 +57,11 @@ export default class CreateTemplateSegment extends Component {
     }
 
     render() {
+        if (this.state.redirect) {
+            return (
+                <Redirect to = "/creategraph"/>
+            )
+        }
         return (
             <Segment className='landing-page-columns'>
                 <Header as='h2'>New Template</Header>
