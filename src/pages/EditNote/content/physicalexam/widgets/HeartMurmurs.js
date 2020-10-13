@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Table, Button} from 'semantic-ui-react'
 import HPIcontext from 'contexts/HPIContext.js'
 import ExpandMurmurs from './ExpandMurmurs'
+import '../PhysicalExam.css'
 
 class HeartMurmurs extends Component{
 
@@ -95,13 +96,14 @@ class HeartMurmurs extends Component{
                         
                         <Button 
                         color={name ==="quality"? 
-                                (this.context['Physical Exam'].widgets[this.props.type][pe_index][name].some(x => (x ==word))? 'grey' : ''):
-                                this.context['Physical Exam'].widgets[this.props.type][pe_index][name] === word ? 'grey' : ''}
+                                (this.context['Physical Exam'].widgets[this.props.type][pe_index][name].some(x => (x ==word))? 'red' : ''):
+                                this.context['Physical Exam'].widgets[this.props.type][pe_index][name] === word ? 'red' : ''}
                         key={word}
                         pe_index={pe_index}
                         index={index}
                         condition={word}
                         onClick={this.onButtonClick}
+                        className={"spaced-buttons"}
                         > 
                         {word}</Button>
                     )}

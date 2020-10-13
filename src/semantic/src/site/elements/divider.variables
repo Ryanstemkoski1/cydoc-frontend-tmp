@@ -5,3 +5,8 @@
 
 /* Text */
 @letterSpacing: normal;
+@margin: 0.5rem -1rem;
+@highlightWidth: 1px;
+@highlightColor: #c8e2ea;
+@shadowWidth: 0px;
+

@@ -2,6 +2,7 @@ import {Form, Grid, TextArea} from "semantic-ui-react";
 import ToggleButton from 'components/tools/ToggleButton.js';
 import React, {Component} from 'react'
 import PropTypes from 'prop-types';
+import './MedicalHistoryNote.css';
 
 //Component for a row the Medical History GridContent
 export default class MedicalHistoryNoteRow extends Component {
@@ -25,7 +26,11 @@ export default class MedicalHistoryNoteRow extends Component {
                 <Form>
                     <TextArea rows={2} condition={condition.props.condition} placeholder='Onset' value={onset}
                               onChange={onChange} disabled={isPreview}/>
+
                 </Form>
+                { onset !== "" && !/^(19\d\d|20[0-2]\d)$/.test(onset) && (
+                    <p className='error'>Please enter a year between 1900 and 2020</p>
+                )}
             </Grid.Column>
             <Grid.Column>
                 <Form>

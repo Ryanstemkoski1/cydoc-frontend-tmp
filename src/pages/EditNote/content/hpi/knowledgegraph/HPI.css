@@ -23,7 +23,7 @@
 }
 
 .positive-diseases-placeholder {
-    height: 37px;
+    height: 31px;
 }
 
 .positive-disease {
@@ -55,10 +55,15 @@
     justify-content: space-between;
 }
 
+.category-header {
+    margin-top: -20px;
+}
+
 @media screen and (max-width: 700px) {
     .category-header {
         text-align: center;
         margin-bottom: 0;
+        margin-top: -20px;
     }
     .question-map {
         margin: auto .5rem;

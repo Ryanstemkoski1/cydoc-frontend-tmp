@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { Button, Popup } from 'semantic-ui-react'
 import HPIContext from 'contexts/HPIContext.js'
+import '../PhysicalExam.css'
 
 export default class LungSoundsButtons extends Component {
     static contextType = HPIContext 
@@ -32,8 +33,9 @@ export default class LungSoundsButtons extends Component {
         var more_options_buttons = more_options.map(
             item => <Button 
                         key={this.props.lung_lobe + " " + item} 
-                        color={this.context["Physical Exam"].widgets["Lungs"][this.props.lung_lobe][item] ? 'grey': ''} 
-                        onClick={this.onPopupClick}> {item} 
+                        color={this.context["Physical Exam"].widgets["Lungs"][this.props.lung_lobe][item] ? 'red': ''} 
+                        onClick={this.onPopupClick}> 
+                        {item} 
                     </Button>
         )
         var lung_buttons = []
@@ -41,10 +43,11 @@ export default class LungSoundsButtons extends Component {
         for (var lung_button in lung_button_dict) {
             lung_buttons.push(
                 <Button
+                    size = {'small'}
                     key={this.props.lung_lobe + " " + lung_button}
-                    color={this.context["Physical Exam"].widgets["Lungs"][this.props.lung_lobe][lung_button] ? 'grey' : ''}
+                    color={this.context["Physical Exam"].widgets["Lungs"][this.props.lung_lobe][lung_button] ? 'red' : ''}
                     onClick={this.onClick}
-                    style = {{marginBottom: 5}}
+                    className={"spaced-buttons"}
                 > 
                     {lung_button} 
                 </Button>
@@ -53,7 +56,7 @@ export default class LungSoundsButtons extends Component {
                 <div> 
                     {lung_buttons}
                     {more_options_buttons.length > 0 ? 
-                    <Popup trigger={<Button basic circular icon="plus" size='mini'/>} position={this.props.position} flowing hoverable> 
+                    <Popup trigger={<Button basic circular icon="plus" size='mini' className={"spaced-buttons"}/>} position={this.props.position} flowing hoverable> 
                         {more_options_buttons} 
                     </Popup> : ""}
                 </div>

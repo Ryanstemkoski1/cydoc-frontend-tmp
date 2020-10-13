@@ -174,8 +174,6 @@ export class DiseaseForm extends React.Component {
                     />
                     : <Menu tabular borderless items={diseaseTabs} className='disease-menu'/>
                 }
-                
-                <div className='question-map'>{newMap} </div>
 
                 <div className='arrow-buttons'>
                     <div className='next-button'> 
@@ -205,6 +203,9 @@ export class DiseaseForm extends React.Component {
                         </div>
                     }
                 </div>
+                    <h1 className='category-header'>{category}</h1>
+                    <div className='question-map'>{newMap} </div>
+
             </div>
         )
     }
