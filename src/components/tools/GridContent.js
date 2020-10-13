@@ -25,7 +25,7 @@ export default class GridContent extends Component {
             "Yes": false,
             "No": false,
             "Onset": "",
-            "Comments": "" 
+            "Comments": ""
         }
         this.context.onContextChange(this.props.value_type, values);
     }

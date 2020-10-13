@@ -24,8 +24,9 @@ export default class MedicalHistoryNoteRow extends Component {
             </Grid.Column>
             <Grid.Column>
                 <Form>
-                    <Form.TextArea condition={condition.props.condition} placeholder='Onset' value={onset}
-                              onChange={onChange} disabled={isPreview} rows={1}/>
+                    <TextArea rows={2} condition={condition.props.condition} placeholder='Onset' value={onset}
+                              onChange={onChange} disabled={isPreview}/>
+
                 </Form>
                 { onset !== "" && !/^(19\d\d|20[0-2]\d)$/.test(onset) && (
                     <p className='error'>Please enter a year between 1900 and 2020</p>
@@ -33,8 +34,8 @@ export default class MedicalHistoryNoteRow extends Component {
             </Grid.Column>
             <Grid.Column>
                 <Form>
-                    <Form.TextArea condition={condition.props.condition} value={comments}
-                        onChange={onChange} placeholder='Comments' disabled={isPreview} rows={2}/>
+                    <TextArea rows={2} condition={condition.props.condition} value={comments}
+                              onChange={onChange} placeholder='Comments' disabled={isPreview}/>
                 </Form>
             </Grid.Column>
         </Grid.Row>)
