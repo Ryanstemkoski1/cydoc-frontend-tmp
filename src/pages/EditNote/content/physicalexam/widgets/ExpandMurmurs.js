@@ -29,20 +29,20 @@ class ExpandMurmurs extends Component{
     }
 
 
-    
+    // figure out a way to push the info to an object associated with the widget being expanded
     addButton(){
         var values = this.context["Physical Exam"]
         values.widgets[this.props.type].push({"cresdecres": [], "pansystolic": [], "other": [], "decres": []})
         this.context.onContextChange("Physical Exam", values)
         console.log(values.widgets[this.props.type])
     }
-
+    // also here need to make sure its only removing the expanded for the specific widget and not all of them
     removeButton(event, data){
         var values =this.context["Physical Exam"]
         values.widgets[this.props.type].splice(data.pe_index,1)
         this.context.onContextChange("Physical Exam", values)
     }
-
+    // figure out a way to associate this information with the selected widget (access that widget in murmurs from context and update or add the information accordingly)
     onButtonClick(event, data){
         var values = this.context['Physical Exam']
         

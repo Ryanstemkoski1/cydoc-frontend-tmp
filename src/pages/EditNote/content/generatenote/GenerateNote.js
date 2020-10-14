@@ -374,7 +374,7 @@ class GenerateNote extends React.Component {
     physicalExam() {
         const physical = this.context["Physical Exam"];
         console.log(physical);
-        const vitalUnits = {'Heart Rate': ' bpm', 'Temperature': ' °C'};
+        const vitalUnits = {'Heart Rate': ' bpm', 'Temperature': ' °C', 'RR': ' bpm', 'Oxygen Saturation': ' PaO₂'};
         let vitals = [];
         let widgets = {'Pulses': [], 'Gastrointestinal': [], 'Pulmonary': [], 'Tendon Reflexes': [], 'Cardiac': [], 'expandMurmurs': []};
         let components = [];
@@ -515,6 +515,10 @@ class GenerateNote extends React.Component {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
+                        <Table.Row>
+                            <Table.Cell singleLine>Vitals</Table.Cell>
+                            <Table.Cell>{vitals.join(', ')}</Table.Cell>
+                        </Table.Row>
                         {Object.keys(components).map(key => (
                             key in widgets && (components[key].active.length > 0 || widgets[key].length > 0) ?
                                 <Table.Row>
@@ -533,11 +537,9 @@ class GenerateNote extends React.Component {
             )
         }
 
-        //don't need to make widgets a "sub bullet"
-        //if empty don't show 
         return (
             <ul>
-                <li><b>Vitals</b>: {vitals.join(', ')}</li>
+                <li><b>Vitals: </b>{vitals.join(', ')}</li>
                 {Object.keys(components).map(key => (
                     key in widgets && (components[key].active.length > 0 || widgets[key].length > 0) ? 
                         <li>
@@ -561,7 +563,6 @@ class GenerateNote extends React.Component {
         // console.log(plan);
         // console.log(plan.conditions);
 
-        // DON'T NEED A TABLE/RICH TEXT VERSION FOR THIS
         return (
             Object.keys(conditions).map(key => (
                 <div>
