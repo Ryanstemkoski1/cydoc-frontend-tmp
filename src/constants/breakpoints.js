@@ -1,7 +1,7 @@
 export const DEFAULT_NAV_MENU_MOBILE_BP = 550;
 export const LOGGEDIN_NAV_MENU_MOBILE_BP = 700;
 
-export const LANDING_PAGE_MOBLE_BP = 600;
+export const LANDING_PAGE_MOBLE_BP = 1000;
 
 export const MENU_TABS_MOBILE_BP = 650;
 
@@ -21,3 +21,5 @@ export const DISEASE_TABS_SMALL_BP = 800;
 
 export const DISCUSSION_PLAN_MENU_BP = 1000;
 export const DISCUSSION_PLAN_SECTION_BP = 850;
+
+export const PHYSICAL_EXAM_MOBILE_BP = 1080;

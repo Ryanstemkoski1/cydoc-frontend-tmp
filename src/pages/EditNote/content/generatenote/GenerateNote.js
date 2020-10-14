@@ -384,9 +384,11 @@ class GenerateNote extends React.Component {
             let keyObject = constants.sections.find(o => o.name === key); // finds section in constants in order to access normal/abnormal info later
             // specific to vitals section
             if (key === 'Vitals') {
-                vitals.push(physical[key]['Systolic Blood Pressure'] + '/' + physical[key]['Diastolic Blood Pressure'] + ' mmHg');
+                if (physical[key]['Systolic Blood Pressure'] != 0 || physical[key]['Diastolic Blood Pressure'] !== 0) {
+                    vitals.push(physical[key]['Systolic Blood Pressure'] + '/' + physical[key]['Diastolic Blood Pressure'] + ' mmHg');
+                }
                 for (var vital in physical[key]) {
-                    if (vital !== 'Systolic Blood Pressure' && vital !== 'Diastolic Blood Pressure') {
+                    if (vital !== 'Systolic Blood Pressure' && vital !== 'Diastolic Blood Pressure' && physical[key][vital] !== 0) {
                         vitals.push(vital + ': ' + physical[key][vital] + (vitalUnits[vital] ? vitalUnits[vital] : ""));
                     }
                 }
@@ -404,14 +406,15 @@ class GenerateNote extends React.Component {
                         for (var quadrant in physicalWidgets[widget]) {
                             var quadrantInfo = physicalWidgets[widget][quadrant];
                             for (var info in quadrantInfo) {
-                                if (!(info in findings)) {
-                                    findings[info] = [];
-                                }
                                 if (quadrantInfo[info]) { 
+                                    if (!(info in findings)) {
+                                        findings[info] = [];
+                                    }
                                     findings[info].push(quadrant.toLowerCase())
                                 }
                             }
                         }
+                        console.log(findings);
                         for (var key in findings) {
                             widgets['Gastrointestinal'].push(key + ' in the ' + findings[key].join(', ').replace(/, ([^,]*)$/, ' and $1'));
                         }
@@ -420,10 +423,10 @@ class GenerateNote extends React.Component {
                         for (var lobe in physicalWidgets[widget]) {
                             var lobeInfo = physicalWidgets[widget][lobe];
                             for (var finding in lobeInfo) {
-                                if (!(finding in findings)) {
-                                    findings[finding] = [];
-                                }
-                                if (lobeInfo[finding] === true) {
+                                if (lobeInfo[finding]) {
+                                    if (!(finding in findings)) {
+                                        findings[finding] = [];
+                                    }
                                     findings[finding].push(lobe.toLowerCase());
                                 }
                             }
@@ -515,10 +518,12 @@ class GenerateNote extends React.Component {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        <Table.Row>
-                            <Table.Cell singleLine>Vitals</Table.Cell>
-                            <Table.Cell>{vitals.join(', ')}</Table.Cell>
-                        </Table.Row>
+                        {vitals.length > 0 ? 
+                            <Table.Row>
+                                <Table.Cell singleLine>Vitals</Table.Cell>
+                                <Table.Cell>{vitals.join(', ')}</Table.Cell>
+                            </Table.Row>
+                        : null}
                         {Object.keys(components).map(key => (
                             key in widgets && (components[key].active.length > 0 || widgets[key].length > 0) ?
                                 <Table.Row>
@@ -539,12 +544,17 @@ class GenerateNote extends React.Component {
 
         return (
             <ul>
-                <li><b>Vitals: </b>{vitals.join(', ')}</li>
+                {vitals.length > 0 ? <li><b>Vitals: </b>{vitals.join(', ')}</li> : null}
                 {Object.keys(components).map(key => (
-                    key in widgets && (components[key].active.length > 0 || widgets[key].length > 0) ? 
+                    key in widgets && (components[key].active.length > 0 && widgets[key].length > 0) ? 
                         <li>
                             <b>{key}: </b>
                             {components[key].active.join(', ') + '. ' + widgets[key].join(', ') + '. ' + components[key].comments}
+                        </li>
+                    : (key in widgets && (!(components[key].active.length > 0) && widgets[key].length > 0)) ? 
+                        <li>
+                            <b>{key}: </b>
+                            {widgets[key].join(', ') + '. ' + components[key].comments}
                         </li>
                     : !(key in widgets) && components[key].active.length > 0 ? 
                         <li>

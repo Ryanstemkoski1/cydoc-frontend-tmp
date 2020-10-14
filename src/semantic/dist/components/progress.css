@@ -23,7 +23,7 @@
           box-shadow: none;
   background: rgba(0, 0, 0, 0.1);
   padding: 0em;
-  border-radius: 0.28571429rem;
+  border-radius: 0px;
 }
 .ui.progress:first-child {
   margin: 0em 0em 2.5em;
@@ -46,7 +46,7 @@
   width: 0%;
   min-width: 2em;
   background: #888888;
-  border-radius: 0.28571429rem;
+  border-radius: 0px;
   -webkit-transition: width 0.1s ease, background-color 0.1s ease;
   transition: width 0.1s ease, background-color 0.1s ease;
 }
@@ -212,7 +212,7 @@
 ---------------*/
 
 .ui.progress.error .bar {
-  background-color: #B03060 !important;
+  background-color: #db5151 !important;
 }
 .ui.progress.error .bar,
 .ui.progress.error .bar::after {
@@ -240,7 +240,7 @@
   right: 0px;
   bottom: 0px;
   background: #FFFFFF;
-  border-radius: 0.28571429rem;
+  border-radius: 0px;
   -webkit-animation: progress-active 2s ease infinite;
           animation: progress-active 2s ease infinite;
 }
@@ -308,7 +308,7 @@
   color: #F2C037;
 }
 .ui.inverted.progress.error > .label {
-  color: #B03060;
+  color: #db5151;
 }
 
 /*--------------
@@ -329,7 +329,7 @@
   height: 0.2rem;
   padding: 0px;
   overflow: hidden;
-  border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+  border-radius: 0em 0em 0px 0px;
 }
 .ui.progress.attached .bar {
   border-radius: 0em;
@@ -339,7 +339,7 @@
 .ui.progress.top.attached,
 .ui.progress.top.attached .bar {
   top: 0px;
-  border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+  border-radius: 0px 0px 0em 0em;
 }
 .ui.progress.top.attached .bar {
   border-radius: 0em;
@@ -367,7 +367,7 @@
 
 /* Red */
 .ui.red.progress .bar {
-  background-color: #B03060;
+  background-color: #db5151;
 }
 .ui.red.inverted.progress .bar {
   background-color: #FF695E;
@@ -407,7 +407,7 @@
 
 /* Teal */
 .ui.teal.progress .bar {
-  background-color: #00809F;
+  background-color: #007a9a;
 }
 .ui.teal.inverted.progress .bar {
   background-color: #EAF3F5;

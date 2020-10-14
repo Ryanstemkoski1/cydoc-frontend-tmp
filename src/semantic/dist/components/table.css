@@ -22,7 +22,7 @@
   border: 1px solid rgba(34, 36, 38, 0.15);
   -webkit-box-shadow: none;
           box-shadow: none;
-  border-radius: 0.28571429rem;
+  border-radius: 0px;
   text-align: left;
   color: #707070;
   border-collapse: separate;
@@ -70,13 +70,13 @@
   border-left: none;
 }
 .ui.table thead tr:first-child > th:first-child {
-  border-radius: 0.28571429rem 0em 0em 0em;
+  border-radius: 0px 0em 0em 0em;
 }
 .ui.table thead tr:first-child > th:last-child {
-  border-radius: 0em 0.28571429rem 0em 0em;
+  border-radius: 0em 0px 0em 0em;
 }
 .ui.table thead tr:first-child > th:only-child {
-  border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+  border-radius: 0px 0px 0em 0em;
 }
 
 /* Footer */
@@ -100,13 +100,13 @@
   border-left: none;
 }
 .ui.table tfoot tr:first-child > th:first-child {
-  border-radius: 0em 0em 0em 0.28571429rem;
+  border-radius: 0em 0em 0em 0px;
 }
 .ui.table tfoot tr:first-child > th:last-child {
-  border-radius: 0em 0em 0.28571429rem 0em;
+  border-radius: 0em 0em 0px 0em;
 }
 .ui.table tfoot tr:first-child > th:only-child {
-  border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+  border-radius: 0em 0em 0px 0px;
 }
 
 /* Table Row */
@@ -580,7 +580,7 @@
   margin-bottom: 0em;
   top: 0px;
   margin-top: 1em;
-  border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+  border-radius: 0px 0px 0em 0em;
 }
 .ui.table[class*="top attached"]:first-child {
   margin-top: 0em;
@@ -594,7 +594,7 @@
   margin-bottom: 1em;
   -webkit-box-shadow: none, none;
           box-shadow: none, none;
-  border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+  border-radius: 0em 0em 0px 0px;
 }
 .ui[class*="bottom attached"].table:last-child {
   margin-bottom: 0em;
@@ -643,10 +643,10 @@
 
 /* Red */
 .ui.red.table {
-  border-top: 0.2em solid #B03060;
+  border-top: 0.2em solid #db5151;
 }
 .ui.inverted.red.table {
-  background-color: #B03060 !important;
+  background-color: #db5151 !important;
   color: #FFFFFF !important;
 }
 
@@ -688,10 +688,10 @@
 
 /* Teal */
 .ui.teal.table {
-  border-top: 0.2em solid #00809F;
+  border-top: 0.2em solid #007a9a;
 }
 .ui.inverted.teal.table {
-  background-color: #00809F !important;
+  background-color: #007a9a !important;
   color: #FFFFFF !important;
 }
 

@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Button } from "semantic-ui-react";
+import './PhysicalExam.css'
 //import NumericInput from 'react-numeric-input';
 
 //Component that manages content for the Physical Exam tab
@@ -23,6 +24,7 @@ export default class SelectAllButton extends React.Component {
                             (child) => this.props.handleClick(child.props.name, !active)
                         )
                     }}
+                    className={"spaced-buttons"}
                 />
                 {this.props.children}
             </Fragment>

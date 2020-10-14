@@ -102,7 +102,7 @@ class LoginPage extends Component {
                     <Image size="large" spaced centered href='/home' src={blues} />
                 </Container>
 
-                <Segment clearing raised>
+                <Segment clearing>
                     <Container className={"login-header"} color='black' textAlign='center'>
                         Log in
                     </Container>

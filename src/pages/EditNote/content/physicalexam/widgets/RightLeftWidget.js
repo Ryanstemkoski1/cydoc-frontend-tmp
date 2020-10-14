@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { Table, Button } from 'semantic-ui-react'
 import HPIContext from 'contexts/HPIContext.js'
+import '../PhysicalExam.css'
 
 export default class RightLeftWidget extends Component {
 
@@ -44,12 +45,13 @@ export default class RightLeftWidget extends Component {
                 <div style={{marginTop: 10, marginBottom: 10, marginLeft: 10, marginRight: 10}}>
                     {pe_types[index].map((item) => 
                         <Button 
-                            color={this.context['Physical Exam'].widgets[this.props.type][pe_index][index] === item ? 'grey' : ''}
+                            color={this.context['Physical Exam'].widgets[this.props.type][pe_index][index] === item ? 'red' : ''}
                             key={item}
                             pe_index={pe_index}
                             index={index}
                             condition={item}
                             onClick={this.onButtonClick}
+                            className={"spaced-buttons"}
                         > {item} </Button>
                     )}
                 </div>

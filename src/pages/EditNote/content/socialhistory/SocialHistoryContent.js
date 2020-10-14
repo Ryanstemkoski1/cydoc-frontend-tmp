@@ -102,7 +102,7 @@ export default class SocialHistoryContent extends React.Component {
     render() {
         
         const secondaryFieldRows = this.generateSecondaryFieldRows();
-        // console.log(this.context["Social History"]);
+        console.log(this.context["Social History"]);
         // console.log(SOCIAL_HISTORY.STATE);
         
         return (

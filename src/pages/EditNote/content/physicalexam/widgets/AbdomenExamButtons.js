@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { Button, Popup } from 'semantic-ui-react'
 import HPIContext from 'contexts/HPIContext.js'
+import '../PhysicalExam.css'
 
 export default class AbdomenExamButtons extends Component {
     static contextType = HPIContext 
@@ -22,9 +23,11 @@ export default class AbdomenExamButtons extends Component {
         for (var ab_quadrant_button in ab_quadrant_dict) {
             ab_quadrant_buttons.push(
                 <Button
+                    size = {'small'}
                     key={this.props.ab_quadrant + " " + ab_quadrant_button}
-                    color={this.context["Physical Exam"].widgets["Abdomen"][this.props.ab_quadrant][ab_quadrant_button] ? 'grey' : ''}
+                    color={this.context["Physical Exam"].widgets["Abdomen"][this.props.ab_quadrant][ab_quadrant_button] ? 'red' : ''}
                     onClick={this.onClick}
+                    className={"spaced-buttons"}
                 > 
                     {ab_quadrant_button} 
                 </Button>

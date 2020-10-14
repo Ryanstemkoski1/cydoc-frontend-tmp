@@ -318,7 +318,7 @@ class UserForm extends Component {
                     <Image size="small" spaced href='/home' src={LogoName} />
                 </Container>
                 <Container>
-                    <Segment clearing raised style={{ borderColor: "white" }}>
+                    <Segment clearing style={{ borderColor: "white" }}>
                         <Container className="sign-up-header" color='black' textAlign='center'>
                             {this.state.title}
                         </Container>

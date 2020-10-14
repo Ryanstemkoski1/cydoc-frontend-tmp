@@ -8,7 +8,9 @@ import EditNote 				from "./pages/EditNote/EditNote";
 import HomePage 				from "./pages/HomePage/HomePage";
 import Login 					from "./pages/Account/Login";
 import Register 				from "./pages/Account/Register"
-import LandingPage 			from "./pages/LandingPage/LandingPage";
+import LandingPage 			    from "./pages/LandingPage/LandingPage";
+import LandingPageOld 			    from "./pages/LandingPage/LandingPage-old";
+
 import ThemingLayout 			from "./pages/About/Theming";
 import { PrivateRoute } 		from "./components/navigation/PrivateRoute";
 import CreateGraph 				from "./pages/CreateTemplate/CreateGraph";
