@@ -14,13 +14,13 @@ import {ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP} from 'constants/breakpoints';
 class HPIContent extends Component {
     static contextType = HPIContext
     constructor(context) {
-        super(context) 
+        super(context)
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
             body_systems: [],
             graphData: {},
-            isLoaded: false, 
+            isLoaded: false,
             children: [],
             activeItem: "",
             categories: {}
@@ -35,16 +35,16 @@ class HPIContent extends Component {
             var categories = new Set()
             var category_dict = {}
             var body_systems = {}
-            var nodes = res.data['nodes'] 
+            var nodes = res.data['nodes']
             for (var node in nodes) {
                 var category = nodes[node]["category"]
                 if (!(categories.has(category))) {
                     categories.add(category)
                     var key = (((category.split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase());
                     if (key === "Shortbreath") key = "Shortness of Breath"
-                    if (key === "Nausea-vomiting") key = "Nausea/Vomiting" 
+                    if (key === "Nausea-vomiting") key = "Nausea/Vomiting"
                     category_dict[key] = node.substring(0, node.length-2) + "01"
-                    var body_system = nodes[node]["bodySystem"];
+                    var body_system = nodes[node]["bodySystem"]
                     if (!(body_system in body_systems)) body_systems[body_system] = {"diseases": [], "name": disease_abbrevs[body_system]}
                     body_systems[body_system]["diseases"].push(key)
                 }}
@@ -62,7 +62,7 @@ class HPIContent extends Component {
     updateDimensions() {
         let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
         let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
- 
+
         this.setState({ windowWidth, windowHeight });
     }
 
@@ -98,11 +98,11 @@ class HPIContent extends Component {
         this.prevStep();
     }
 
-    handleItemClick = (e, {name}) => { 
-        this.context.onContextChange("step", this.context['positivediseases'].indexOf(name)+2) 
+    handleItemClick = (e, {name}) => {
+        this.context.onContextChange("step", this.context['positivediseases'].indexOf(name)+2)
         this.context.onContextChange("activeHPI", name)
     }
-    
+
 
     render() {
         const {graphData, isLoaded, categories, windowWidth, body_systems} = this.state;
@@ -118,12 +118,12 @@ class HPIContent extends Component {
 
         const positiveDiseases = this.context["positivediseases"].map(disease =>
             <PositiveDiseases
-                key={disease} 
+                key={disease}
                 name={disease}
             />
         );
 
-        const diseaseTabs = this.context['positivediseases'].map((name, index) => 
+        const diseaseTabs = this.context['positivediseases'].map((name, index) =>
             <Menu.Item
                 key={index}
                 name={name}
@@ -176,26 +176,28 @@ class HPIContent extends Component {
                 </>
                     )
             default:
-                if (isLoaded) { 
+                if (isLoaded) {
                     let category = this.context['positivediseases'][step-2]
                     let parent_code = categories[category]
                     let category_code = graphData['nodes'][parent_code]['category']
-                return (
-                    <DiseaseForm
-                        key={step-2}
-                        graphData={graphData}
-                        nextStep = {this.nextStep}
-                        prevStep = {this.prevStep}
-                        first_page = {this.first_page}
-                        last_page = {this.last_page}
-                        category = {category}
-                        categories = {this.state.categories}
-                        diseaseTabs = {diseaseTabs}
-                        parent_code = {parent_code}
-                        tab_category = {category_code}
-                        last = {true ? step === positive_length+1 : false}
-                        windowWidth={windowWidth}
-                    />
+                    return (
+                        <Segment>
+                        <DiseaseForm
+                            key={step-2}
+                            graphData={graphData}
+                            nextStep = {this.nextStep}
+                            prevStep = {this.prevStep}
+                            first_page = {this.first_page}
+                            last_page = {this.last_page}
+                            category = {category}
+                            categories = {this.state.categories}
+                            diseaseTabs = {diseaseTabs}
+                            parent_code = {parent_code}
+                            tab_category = {category_code}
+                            last = {true ? step === positive_length+1 : false}
+                            windowWidth={windowWidth}
+                        />
+                        </Segment>
                     )}
                 else {return <h1> Loading... </h1>}
         }

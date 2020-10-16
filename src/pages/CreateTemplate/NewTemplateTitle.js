@@ -27,7 +27,7 @@ class NewTemplateTitle extends Component {
                 <Header
                     as='h2'
                     textAlign='center'
-                    content='new template'
+                    content='New History of Present Illness Template'
                     className='new-template-header'
                 />
                 <Form className='center' onSubmit={this.editGraph}>

@@ -40,25 +40,21 @@ class HandleInput extends React.Component {
     render() {
         if (this.props.type === 'SHORT-TEXT') {
             return (
-                <Form>
-                    <textarea
-                        type='text'
-                        onChange={this.handleInputChange}
-                        rows='2'
-                        value={this.state.textInput}
-                    />
-                </Form>
+                <Form.TextArea
+                    // type='text'
+                    onChange={this.handleInputChange}
+                    rows='2'
+                    value={this.state.textInput}
+                />
             ) }
         else if (this.props.type === 'LONG-TEXT') {
             return (
-                <Form> 
-                    <textarea 
-                    type='text'
+                <Form.TextArea
+                    // type='text'
                     onChange={this.handleInputChange}
                     rows='4'
                     value={this.state.textInput}
-                    />
-                </Form>
+                />
             )
         }
         else if (this.props.type === 'LIST-TEXT') {
