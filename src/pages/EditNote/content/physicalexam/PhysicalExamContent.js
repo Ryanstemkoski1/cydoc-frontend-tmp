@@ -13,15 +13,9 @@ export default class PhysicalExamContent extends React.Component {
 
     constructor(props) {
         super(props)
-        let isActiveIndex = []
-        // Initializing boolean array of false for each section in the physical exam content
-        for (let i  = 0; i < constants.sections.length + 1; i++){
-            isActiveIndex.push(false)
-        }
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
-            isActiveIndex
         }
         this.updateDimensions = this.updateDimensions.bind(this);
     }
@@ -40,13 +34,6 @@ export default class PhysicalExamContent extends React.Component {
         let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
  
         this.setState({ windowWidth, windowHeight });
-    }
-
-    handleClick = (e, data) => {
-        const { active, index } = data
-        let newIsActiveState = this.state.isActiveIndex
-        newIsActiveState[index] = !active
-        this.setState({activeIndex: newIsActiveState})
     }
 
     handleChange = (category, name, value) => {
@@ -120,21 +107,17 @@ export default class PhysicalExamContent extends React.Component {
     }
     
     renderMobileSections = (groups) => {
-        const { isActiveIndex } = this.state
         const segments = [
             {
                 key: 'Vitals',
                 title: {
+                    className: "dropdown-title",
                     content: "Vitals",
                     icon: 'dropdown'
                 },
-                active: isActiveIndex[0],
-                onTitleClick: this.handleClick,
                 content: {
                     content: (
                         <>
-                        <Header as="h2" style={{paddingTop: '1rem'}}>Vitals</Header>
-                        <Divider />
                         <Form>
                             <Grid stackable columns="equal">
                                 <Grid.Column>
@@ -198,11 +181,10 @@ export default class PhysicalExamContent extends React.Component {
                 {
                     key: groups[i - 1].name,
                     title: {
+                        className: "dropdown-title",
                         content: groups[i - 1].name,
                         icon: 'dropdown'
                     },
-                    active: isActiveIndex[i],
-                    onTitleClick: this.handleClick,
                     content: {
                         content: (
                             <PhysicalExamGroup name={groups[i - 1].name} rows={groups[i - 1].rows} />

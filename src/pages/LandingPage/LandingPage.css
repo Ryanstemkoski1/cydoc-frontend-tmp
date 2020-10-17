@@ -1,8 +1,72 @@
-.note-preview {
-    overflow: auto;
-    max-height: 50vh;
+.landing-page-columns {
+    height: 550px !important;
+    max-width: 350px !important;
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+.landing-page-columns-mobile {
+    height: 350px !important;
+    max-width: 500px !important;
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
-.landing-page-grid {
-    min-width: 340px;
+.my-notes-modal {
+    width: 100%;
+    height: 700px;
+}
+
+/* Columns of all modal grid*/
+
+.months-column {
+    width: 200px !important;
+    height: 670px;
+    padding-right: 0px !important;
+}
+
+.date-column {
+    width: 340px !important;
+    height: 670px;
+    padding-left: 5px !important;
+}
+
+.details-column {
+    width: 300px !important;
+    height: 670px;
+    text-align: center !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding-left: 30px !important;
+    padding-right: 0px !important;
+}
+
+.template-column {
+    width: 340px !important;
+    height: 600px;
+    margin-right: 10px;
+}
+
+
+/* The placeholder segment in each column */
+.list-placeholder {
+    width: 110% !important;;
+    height: 90% !important;
+    justify-content: start !important;
+    overflow: auto !important;
+}
+
+.list-placeholder-templates {
+    width: 110% !important;;
+    height: 80% !important;
+    justify-content: start !important;
+    overflow: auto !important;
+}
+
+.right-bottom-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
 }

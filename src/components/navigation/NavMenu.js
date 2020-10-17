@@ -99,10 +99,6 @@ class NoteNameMenuItem extends Component {
 
     static contextType = HPIContext
 
-    // componentDidUpdate () {
-    //     this.context.saveNote();
-    // }
-
     handleInputChange = (event) => {
         this.setState({textInput: event.target.value})
         this.context.onContextChange("title", event.target.value)

@@ -40,7 +40,6 @@ class ConnectedRecords extends Component {
 
         return (
             <Fragment>
-
                 <Button disabled={!this.props.activeNote} onClick={this.handleLoad} floated>
                     Load
                 </Button>

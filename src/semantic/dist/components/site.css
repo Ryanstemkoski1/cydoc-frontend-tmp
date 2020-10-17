@@ -44,7 +44,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: 'Nunito', Arial, Helvetica, sans-serif;
+  font-family: 'Lato', Arial, Helvetica, sans-serif;
   line-height: 1.28571429em;
   margin: calc(2rem -  0.14285714em ) 0em 1rem;
   font-weight: bold;
@@ -102,11 +102,11 @@ p:last-child {
 --------------------*/
 
 a {
-  color: #4183C4;
+  color: #707070;
   text-decoration: none;
 }
 a:hover {
-  color: #1e70bf;
+  color: #724c4c;
   text-decoration: none;
 }
 
@@ -144,10 +144,6 @@ input::-webkit-selection {
 }
 textarea::-moz-selection,
 input::-moz-selection {
-  background-color: rgba(100, 100, 100, 0.4);
-  color: #707070;
-}
-textarea::-moz-selection, input::-moz-selection {
   background-color: rgba(100, 100, 100, 0.4);
   color: #707070;
 }

@@ -14,7 +14,7 @@
 *******************************/
 
 .ui.divider {
-  margin: 1rem 0rem;
+  margin: 0.5rem -1rem;
   line-height: 1;
   height: 0em;
   font-weight: bold;
@@ -33,8 +33,8 @@
 ---------------*/
 
 .ui.divider:not(.vertical):not(.horizontal) {
-  border-top: 1px solid rgba(34, 36, 38, 0.15);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 0px solid rgba(34, 36, 38, 0.15);
+  border-bottom: 1px solid #c8e2ea;
 }
 
 /*--------------
@@ -100,8 +100,8 @@
   left: 50%;
   content: '';
   z-index: 3;
-  border-left: 1px solid rgba(34, 36, 38, 0.15);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 0px solid rgba(34, 36, 38, 0.15);
+  border-right: 1px solid #c8e2ea;
   width: 0%;
   height: calc(100% -  1rem );
 }

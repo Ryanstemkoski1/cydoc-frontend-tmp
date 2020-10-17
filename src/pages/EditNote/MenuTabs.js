@@ -20,7 +20,6 @@ class ConnectedMenuTabs extends Component {
         }
         this.updateDimensions = this.updateDimensions.bind(this);
         this.handleItemClick =  this.handleItemClick.bind(this);
-        this.handleSave = this.handleSave.bind(this);
     }
 
     componentDidMount() {
@@ -41,18 +40,6 @@ class ConnectedMenuTabs extends Component {
 
     // onClick event is handled by parent
     handleItemClick = (e, { name }) => this.props.onTabChange(name);
-
-    handleSave = () => {
-        this.props.saveNote({
-            noteName:"note",
-            body:
-                [
-                    {dogs:["terriers","corgis","dalmations"]},
-                    {fish:["goldfish", "beta"]}
-                ],
-            doctorID:"5d696a7dbf476c61064fd58d"
-        });
-    }
 
 
     render() {
