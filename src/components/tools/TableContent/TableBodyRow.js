@@ -13,7 +13,8 @@ export class TableBodyRow extends Component {
     }
 
     onYearChange = (e) => {
-        this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
+        const startYear = e.target.value;
+        this.setState({ invalidYear: startYear !== "" && (startYear < 1900 || startYear > this.props.currentYear) });
     }
 
     getCell(placeholder) {
@@ -126,7 +127,7 @@ export class TableBodyRow extends Component {
                     <div className='table-year-input'>
                         <TextArea
                             rows={3}
-                            type='number'
+                            type={placeholder}
                             onChange={onTableBodyChange}
                             onBlur={this.onYearChange}
                             rowindex={rowindex}
@@ -134,7 +135,7 @@ export class TableBodyRow extends Component {
                             className='table-row-text'
                         />
                         { this.state.invalidYear && (
-                            <p className='error'>Please enter a year between 1900 and 2020</p>
+                            <p className='error'>Please enter a valid year after 1900.</p>
                         )}
                     </div>
 

@@ -24,6 +24,7 @@ export default class TableContent extends Component {
             active: new Set(),
             invalidYear: false,
         }
+        this.currentYear = new Date(Date.now()).getFullYear();
         // TODO: add back addRow functionality
         this.addRow = this.addRow.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
@@ -54,7 +55,8 @@ export default class TableContent extends Component {
     }
 
     onYearChange = (e) => {
-        this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
+        const startYear = e.target.value;
+        this.setState({ invalidYear: startYear !== "" && (startYear < 1900 || startYear > this.currentYear) });
     }
 
     toggleAccordion = (idx) => {
@@ -90,6 +92,7 @@ export default class TableContent extends Component {
                 diseaseOptions={this.state.diseaseOptions}
                 values={values}
                 isPreview={isPreview}
+                currentYear={this.currentYear}
             />
         )
     }
@@ -329,7 +332,7 @@ export default class TableContent extends Component {
                                 className='content-input content-dropdown'
                             />
                             { this.state.invalidYear && (
-                                <p className='error'>Please enter a year between 1900 and 2020</p>
+                                <p className='error'>Please enter a valid year after 1900.</p>
                             )}
                         </div>
                     );
