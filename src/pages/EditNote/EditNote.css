@@ -3,12 +3,32 @@
     bottom: 0;
     opacity: 0.8;
     margin: 0;
+    display: block;
+    font-size: 13px;
 }
 
 .ui.button.previous-button:hover, .ui.button.next-button:hover {
     opacity: 1;
 }
 
+.ui.button.small-previous-button, .ui.button.small-next-button {
+    display: none;
+    position: sticky !important;
+    bottom: 0;
+    opacity: 0.8;
+    margin: 0;
+}
+
 .ui.container.active-tab-container {
     margin-bottom: 10px;
+}
+
+@media screen and (max-width: 1300px) {
+    .ui.button.previous-button, .ui.button.next-button {
+        display: none;
+    }
+
+    .ui.button.small-previous-button, .ui.button.small-next-button {
+        display: block;
+    }
 }

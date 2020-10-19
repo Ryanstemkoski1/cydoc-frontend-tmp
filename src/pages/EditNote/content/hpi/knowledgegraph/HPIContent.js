@@ -91,11 +91,13 @@ class HPIContent extends Component {
     continue = e => {
         e.preventDefault();
         this.nextStep();
+        window.scrollTo(0,0);
     }
 
     back = e => {
         e.preventDefault();
         this.prevStep();
+        window.scrollTo(0,0);
     }
 
     handleItemClick = (e, {name}) => {
@@ -103,6 +105,7 @@ class HPIContent extends Component {
         this.context.onContextChange("activeHPI", name)
     }
 
+    nextFormClick = () => this.props.nextFormClick();
 
     render() {
         const {graphData, isLoaded, categories, windowWidth, body_systems} = this.state;
@@ -150,19 +153,6 @@ class HPIContent extends Component {
                 return (
                 <>
                     <Segment>
-                        {/* {positive_length > 0 ? 
-                        <div className='positive-diseases-placeholder'>
-                            <Button
-                                circular
-                                icon='angle right'
-                                className='next-button'
-                                onClick={this.continue}
-                            />
-                            </div>
-                            :
-                            <div className='positive-diseases-placeholder' />
-                        } */}
-
                         {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
                         <Masonry
                             className='disease-container'
@@ -170,17 +160,16 @@ class HPIContent extends Component {
                             columnClassName='disease-column'
                         >
                             {diseaseComponents}
-                        </Masonry>
-                        
+                        </Masonry>      
                     </Segment>
 
                     {positive_length > 0 ? 
-                    <Button icon labelPosition='right' floated='right' onClick={this.continue} className='next-button'>
+                    <Button icon labelPosition='right' floated='right' onClick={this.continue} className='hpi-next-button'>
                     Next Form
                     <Icon name='right arrow'/>
-                    </Button>
+                    </Button> 
                     :
-                    <Button icon labelPosition='right' floated='right'>
+                    <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='hpi-next-button'>
                     Next Form
                     <Icon name='right arrow'/>
                     </Button>
@@ -209,14 +198,29 @@ class HPIContent extends Component {
                         last = {true ? step === positive_length+1 : false}
                         windowWidth={windowWidth}
                     />
-                    <Button icon labelPosition='left' floated='left' onClick={this.back} className='next-button'>
+                    {step === positive_length+1 ?
+                    <>
+                    <Button icon labelPosition='left' floated='left' onClick={this.back} className='hpi-previous-button'>
                     Previous Form
                     <Icon name='left arrow'/>
                     </Button>
-                    <Button icon labelPosition='right' floated='right' onClick={this.continue} className='next-button'>
+                    <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='hpi-next-button'>
                     Next Form
                     <Icon name='right arrow'/>
                     </Button>
+                    </>
+                    :
+                    <>
+                    <Button icon labelPosition='left' floated='left' onClick={this.back} className='hpi-previous-button'>
+                    Previous Form
+                    <Icon name='left arrow'/>
+                    </Button>
+                    <Button icon labelPosition='right' floated='right' onClick={this.continue} className='hpi-next-button'>
+                    Next Form
+                    <Icon name='right arrow'/>
+                    </Button>
+                    </>
+                    }
                     </>
                     )}
                 else {return <h1> Loading... </h1>}
