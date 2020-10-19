@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Menu, Button, Segment, Tab } from 'semantic-ui-react'
+import { Menu, Button, Segment, Icon } from 'semantic-ui-react'
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
 import ButtonItem from "./src/components/ButtonItem.js";
@@ -14,13 +14,13 @@ import {ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP} from 'constants/breakpoints';
 class HPIContent extends Component {
     static contextType = HPIContext
     constructor(context) {
-        super(context) 
+        super(context)
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
             body_systems: [],
             graphData: {},
-            isLoaded: false, 
+            isLoaded: false,
             children: [],
             activeTabName: "",
             categories: {}
@@ -59,9 +59,9 @@ class HPIContent extends Component {
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
         // Using timeout to ensure that tab/dropdown menu is rendered before setting 
-        setTimeout((_event) => {
-            this.setMenuPosition();
-        }, 0);
+        // setTimeout((_event) => {
+        //     this.setMenuPosition();
+        // }, 0);
     }
 
     componentWillUnmount() {
@@ -71,9 +71,9 @@ class HPIContent extends Component {
     updateDimensions() {
         let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
         let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
- 
+
         this.setState({ windowWidth, windowHeight });
-        this.setMenuPosition();
+        // this.setMenuPosition();
     }
 
     setMenuPosition() {
@@ -128,7 +128,7 @@ class HPIContent extends Component {
         this.context.onContextChange("step", this.context['positivediseases'].indexOf(name)+2) 
         this.context.onContextChange("activeHPI", name)
     }
-    
+
 
     render() {
         const {graphData, isLoaded, categories, windowWidth, body_systems} = this.state;
@@ -150,7 +150,7 @@ class HPIContent extends Component {
         // (categories/diseases for which they are positive)
         const positiveDiseases = this.context["positivediseases"].map(disease =>    
             <PositiveDiseases
-                key={disease} 
+                key={disease}
                 name={disease}
             />
         );
@@ -191,14 +191,6 @@ class HPIContent extends Component {
                     // if the user has chosen any diseases (positive_length > 0), then the right button can be displayed
                     // to advance to other pages of the HPI form
                     <Segment>
-                        {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
-                        <Masonry
-                            className='disease-container'
-                            breakpointCols={numColumns}
-                            columnClassName='disease-column'
-                        >
-                            {diseaseComponents}
-                        </Masonry>
                         {positive_length > 0 ? 
                         <div className='positive-diseases-placeholder'>
                             <Button
@@ -211,6 +203,16 @@ class HPIContent extends Component {
                             :
                             <div className='positive-diseases-placeholder' />
                         }
+
+                        {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
+                        <Masonry
+                            className='disease-container'
+                            breakpointCols={numColumns}
+                            columnClassName='disease-column'
+                        >
+                            {diseaseComponents}
+                        </Masonry>
+                        
                     </Segment>
                     )
             default:
@@ -219,22 +221,24 @@ class HPIContent extends Component {
                     let category = this.context['positivediseases'][step-2] // since step 1 was for the landing page
                     let parent_code = categories[category]
                     let category_code = graphData['nodes'][parent_code]['category']
-                return (
-                    <DiseaseForm
-                        key={step-2}
-                        graphData={graphData}
-                        nextStep = {this.nextStep}
-                        prevStep = {this.prevStep}
-                        first_page = {this.first_page}
-                        last_page = {this.last_page}
-                        category = {category}
-                        categories = {this.state.categories}
-                        diseaseTabs = {diseaseTabs}
-                        parent_code = {parent_code}
-                        tab_category = {category_code}
-                        last = {true ? step === positive_length+1 : false}
-                        windowWidth={windowWidth}
-                    />
+                    return (
+                        <Segment>
+                        <DiseaseForm
+                            key={step-2}
+                            graphData={graphData}
+                            nextStep = {this.nextStep}
+                            prevStep = {this.prevStep}
+                            first_page = {this.first_page}
+                            last_page = {this.last_page}
+                            category = {category}
+                            categories = {this.state.categories}
+                            diseaseTabs = {diseaseTabs}
+                            parent_code = {parent_code}
+                            tab_category = {category_code}
+                            last = {true ? step === positive_length+1 : false}
+                            windowWidth={windowWidth}
+                        />
+                        </Segment>
                     )}
                 // if API data is not yet loaded, show loading screen 
                 else {return <h1> Loading... </h1>}

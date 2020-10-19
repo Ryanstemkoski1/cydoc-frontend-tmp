@@ -1,32 +1,32 @@
 import React, {Component, Fragment} from 'react';
 import NavMenu from "../../components/navigation/NavMenu";
 import VerticalMenu from "./VerticalMenu";
-import {Container, Grid, Menu, Segment, Header, Divider, Icon, Button } from "semantic-ui-react";
-import { Link } from 'react-router-dom'
+import {Container, Grid, Menu, Segment} from "semantic-ui-react";
 import Records from "./Records";
 import NotesContext from "../../contexts/NotesContext";
 import { LANDING_PAGE_MOBLE_BP } from "constants/breakpoints.js";
-import {Redirect} from "react-router";
-import OpenRecentSegment from "./OpenNotes";
-import CreateTemplateSegment from "./CreateTemplate";
-import NewNoteSegment from "./NewNote";
-import './LandingPage.css'
 
 //Component that manages the layout of the dashboard page
 export default class LandingPageOld extends Component {
 
+    static contextType = NotesContext
 
     constructor(props) {
         super(props);
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
+            activeNote: null
         }
         this.updateDimensions = this.updateDimensions.bind(this);
     }
 
+    setActive = (note) => {
+        this.setState({activeNote: note})
+    }
 
     componentDidMount = () => {
+        this.context.loadNotes()
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
     }
@@ -47,27 +47,29 @@ export default class LandingPageOld extends Component {
         const { windowWidth } = this.state;
 
         const stack = windowWidth < LANDING_PAGE_MOBLE_BP;
-
+        
         return (
             <>
                 <div>
                     <NavMenu className="landing-page-nav-menu"/>
                 </div>
-                {stack ?
-                    <Container style={{margin: "20px 0 0 0"}}>
-                        <OpenRecentSegment stack={stack}/>
-                        <NewNoteSegment stack={stack}/>
-                    </Container>
+                {stack?
+                    <>
+                    <VerticalMenu setActive={this.setActive} stack/>
+
+                    <Segment basic padded>
+                        <Records activeNote={this.state.activeNote} setActive={this.setActive}/>
+                    </Segment>
+                    </>
                     :
-                    <Grid columns={3} style={{margin: "20px 0 40vh 0"}}>
-                        <Grid.Column>
-                            <OpenRecentSegment stack={stack}/>
+                    <Grid columns={2}>
+                        <Grid.Column width={4} style={{minWidth: "340px"}}>
+                            <VerticalMenu setActive={this.setActive} />
                         </Grid.Column>
-                        <Grid.Column>
-                            <NewNoteSegment stack={stack}/>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <CreateTemplateSegment stack={stack}/>
+                        <Grid.Column width={8}>
+                            <Segment basic padded>
+                                <Records activeNote={this.state.activeNote} setActive={this.setActive}/>
+                            </Segment>
                         </Grid.Column>
                     </Grid>
                 }
@@ -77,12 +79,3 @@ export default class LandingPageOld extends Component {
     }
 
 }
-
-function newNoteSegment() {
-    return (
-        <Segment>
-
-        </Segment>
-    )
-}
-

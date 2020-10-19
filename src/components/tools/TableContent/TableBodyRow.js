@@ -73,7 +73,7 @@ export class TableBodyRow extends Component {
                 cell = (
                     <Input
                         fluid
-                        className='content-input-computer content-dropdown'
+                        className='content-input-computer content-dropdown content-text'
                     >
                         <Dropdown
                             fluid
@@ -99,7 +99,7 @@ export class TableBodyRow extends Component {
                 cell = (
                     <Input
                         fluid
-                        className='content-input-computer content-dropdown'
+                        className='content-input-computer content-dropdown drug-text'
                     >
                         <Dropdown
                             fluid
@@ -186,7 +186,7 @@ export class TableBodyRow extends Component {
 
         const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
             return (
-                <Table.Cell key={index}>
+                <Table.Cell selectable key={index}>
                     {this.getCell(placeholder)}
                 </Table.Cell>
             )

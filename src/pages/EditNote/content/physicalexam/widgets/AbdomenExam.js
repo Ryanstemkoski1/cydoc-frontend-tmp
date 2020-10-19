@@ -1,7 +1,8 @@
-import React, {Component} from 'react'
-import { Table} from 'semantic-ui-react'
-import AbdomenExamButtons from './AbdomenExamButtons'
-import HPIContext from 'contexts/HPIContext.js'
+import React, {Component} from 'react';
+import { Table } from 'semantic-ui-react';
+import AbdomenExamButtons from './AbdomenExamButtons';
+import HPIContext from 'contexts/HPIContext.js';
+import './TableCSS.css';
 
 export default class AbdomenExam extends Component {
 
@@ -23,11 +24,11 @@ export default class AbdomenExam extends Component {
             )
         }
         return (
-            <Table celled collapsing>
+            <Table celled unstackable>
               <Table.Body>
                 {ab_map}
               </Table.Body>
-              </Table>
-              )
+              </Table>  
+         )
         }
     }

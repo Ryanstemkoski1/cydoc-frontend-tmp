@@ -1,7 +1,8 @@
-import React, {Component} from 'react'
-import { Table} from 'semantic-ui-react'
-import LungSoundsButtons from './LungSoundsButtons'
-import HPIContext from 'contexts/HPIContext.js'
+import React, {Component} from 'react';
+import { Table} from 'semantic-ui-react';
+import LungSoundsButtons from './LungSoundsButtons';
+import HPIContext from 'contexts/HPIContext.js';
+import './TableCSS.css';
 
 export default class LungSounds extends Component {
 
@@ -24,7 +25,7 @@ export default class LungSounds extends Component {
         }
         return (
             <div> 
-            <Table celled fixed>
+            <Table celled unstackable>
               <Table.Body>
                 {lung_map}
               </Table.Body>

@@ -6,7 +6,6 @@ import ConditionInput from 'components/tools/ConditionInput.js'
 import {FAMILY_HISTORY_MOBILE_BP} from "constants/breakpoints.js";
 import FamilyHistoryBlock from './FamilyHistoryBlock';
 import AddRowButton from 'components/tools/AddRowButton.js';
-import {Container, Segment} from "semantic-ui-react";
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.
@@ -45,7 +44,8 @@ export default class FamilyHistoryContent extends Component {
                         "No": false,
                         "Family Member": [],
                         "Cause of Death": [],
-                        "Comments": ""
+                        "Living": [],
+                        "Comments": []
                     }
                 }
             }
@@ -101,7 +101,8 @@ export default class FamilyHistoryContent extends Component {
             "No": false,
             "Family Member": [],
             "Cause of Death": [],
-            "Comments": ""
+            "Living": [],
+            "Comments": []
         }
         this.context.onContextChange("Family History", values);
     }
