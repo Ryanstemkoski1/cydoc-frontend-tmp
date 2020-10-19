@@ -63,6 +63,15 @@
     padding: 0;
 }
 
+.condition-divider {
+    margin-top: 25px ;
+    height: 2px ;
+    width: 100% ;
+    background-color:#707070;
+    opacity: 30%;
+    border: none;
+}
+
 @media screen and (max-width: 767px) {
     .ui.grid > .column:not(.row).family-member-input {
         padding-bottom: 0 !important;

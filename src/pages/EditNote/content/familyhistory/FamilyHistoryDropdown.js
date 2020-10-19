@@ -43,7 +43,7 @@ export default class FamilyHistoryDropdown extends Component {
                 <div className='dropdown-component-container'>
                     <Grid stackable>
                         <Grid.Column mobile={8} className='family-member-input'>
-                            Family Member
+                            Family Member with {this.props.condition}
                             <Dropdown
                                 value={this.state.value}
                                 search
