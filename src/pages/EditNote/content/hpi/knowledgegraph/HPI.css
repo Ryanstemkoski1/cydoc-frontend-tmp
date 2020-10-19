@@ -58,6 +58,20 @@
     bottom: 0;
     margin: 0;
     opacity: 0.8;
+    display: block;
+    font-size: 13px;
+}
+
+.ui.button.hpi-previous-button:hover, .ui.button.hpi-next-button:hover {
+    opacity: 1;
+}
+
+.ui.button.hpi-small-previous-button, .ui.button.hpi-small-next-button {
+    display: none;
+    position: sticky !important;
+    bottom: 0;
+    opacity: 0.8;
+    margin: 0;
 }
 
 @media screen and (max-width: 700px) {
@@ -68,5 +82,15 @@
     }
     .question-map {
         margin: auto .5rem;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .ui.button.hpi-previous-button, .ui.button.hpi-next-button {
+        display: none;
+    }
+
+    .ui.button.hpi-small-previous-button, .ui.button.hpi-small-next-button {
+        display: block;
     }
 }

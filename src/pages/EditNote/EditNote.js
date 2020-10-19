@@ -123,15 +123,6 @@ class EditNote extends Component {
                     </Sticky>
                     <NotePage activeItem={this.state.activeItem} onNextClick={this.onNextClick}/>
                     {this.state.activeItem === 'HPI' ? 
-                    // <>
-                    // <Button icon labelPosition='right' floated='right' onClick={this.onNextClick} className='next-button'>
-                    //     Next Form
-                    // <Icon name='right arrow'/>
-                    // </Button>
-                    // <Button icon floated='right' onClick={this.onNextClick} className='small-next-button'>
-                    // <Icon name='right arrow'/>
-                    // </Button>
-                    // </>
                     ""
                     : (
                     <>

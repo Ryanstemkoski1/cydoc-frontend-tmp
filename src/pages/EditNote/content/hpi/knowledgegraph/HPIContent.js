@@ -164,15 +164,25 @@ class HPIContent extends Component {
                     </Segment>
 
                     {positive_length > 0 ? 
+                    <>
+                    <Button icon floated='right' onClick={this.continue} className='hpi-small-next-button'>
+                    <Icon name='right arrow'/>
+                    </Button> 
                     <Button icon labelPosition='right' floated='right' onClick={this.continue} className='hpi-next-button'>
                     Next Form
                     <Icon name='right arrow'/>
-                    </Button> 
+                    </Button>
+                    </>
                     :
+                    <>
+                    <Button icon floated='right' onClick={this.nextFormClick} className='hpi-small-next-button'>
+                    <Icon name='right arrow'/>
+                    </Button>
                     <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='hpi-next-button'>
                     Next Form
                     <Icon name='right arrow'/>
                     </Button>
+                    </>
                     }
                 </>
                     )
@@ -200,9 +210,16 @@ class HPIContent extends Component {
                     />
                     {step === positive_length+1 ?
                     <>
+                    <Button icon floated='left' onClick={this.back} className='hpi-small-previous-button'>
+                    <Icon name='left arrow'/>
+                    </Button>
                     <Button icon labelPosition='left' floated='left' onClick={this.back} className='hpi-previous-button'>
                     Previous Form
                     <Icon name='left arrow'/>
+                    </Button>
+
+                    <Button icon floated='right' onClick={this.nextFormClick} className='hpi-small-next-button'>
+                    <Icon name='right arrow'/>
                     </Button>
                     <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='hpi-next-button'>
                     Next Form
@@ -211,9 +228,16 @@ class HPIContent extends Component {
                     </>
                     :
                     <>
+                    <Button icon floated='left' onClick={this.back} className='hpi-small-previous-button'>
+                    <Icon name='left arrow'/>
+                    </Button>
                     <Button icon labelPosition='left' floated='left' onClick={this.back} className='hpi-previous-button'>
                     Previous Form
                     <Icon name='left arrow'/>
+                    </Button>
+
+                    <Button icon floated='right' onClick={this.continue} className='hpi-small-next-button'>
+                    <Icon name='right arrow'/>
                     </Button>
                     <Button icon labelPosition='right' floated='right' onClick={this.continue} className='hpi-next-button'>
                     Next Form
