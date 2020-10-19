@@ -26,7 +26,7 @@ export class DiseaseForm extends React.Component {
     }
 
     componentDidMount() {
-        this.function()
+        this.function() // so it is only run once 
     }
 
     continue = e => {
@@ -55,15 +55,16 @@ export class DiseaseForm extends React.Component {
         let nodes = graphData['nodes']
         let edges = graphData['edges']
         var questionMap = {}
-        const parent_values = graph[parent_code]
+        const parent_values = graph[parent_code] // edges associated to parent node
+        // for each edge associated to parent node 
         for (var index in parent_values) {
-            let num_key = parent_values[index].toString()
-            let current_node = edges[num_key]['from']
-            let uid = nodes[current_node]['uid']
-            let children = false
-            let current_node_values = graph[current_node] 
-            if (current_node_values.length > 0) children = true
-                questionMap[uid] = {
+            let num_key = parent_values[index].toString() // edge integer to string (as found in edges)
+            let current_node = edges[num_key]['from'] // child node 
+            let uid = nodes[current_node]['uid'] // unique ID 
+            let children = false 
+            let current_node_values = graph[current_node] // edges associated to child node 
+            if (current_node_values.length > 0) children = true // check if the child node has children
+                questionMap[uid] = { // store the child node and question into questionMap 
                     'question': <DiseaseFormQuestions
                         key={uid}
                         question={nodes[current_node]['text']}
@@ -76,7 +77,7 @@ export class DiseaseForm extends React.Component {
                     />
                 }
                 let values = this.context['hpi']
-                if (!(uid in values[tab_category])){ 
+                if (!(uid in values[tab_category])){ // store node and associated info under HPI Context 
                     values[tab_category][uid] = {
                         'category': tab_category,
                         'category_name': category,
@@ -141,7 +142,8 @@ export class DiseaseForm extends React.Component {
             || windowWidth < DISEASE_TABS_SMALL_BP;
 
         let newMap = [];
-        if (functionLoad) {
+        if (functionLoad) { 
+            // if function() is complete, then loop through questionMap to create a list of questions to display in the form
             for (const uid in questionMap) {
                 let current_value = questionMap[uid]
                 let question = current_value['question']
@@ -150,6 +152,7 @@ export class DiseaseForm extends React.Component {
                     if (current_value['children']['type']) {
                         newMap.push(current_value['children'])
                 }
+                // if the children questions are of a different category, display accordian view
                     if (tab_category !== current_value['children_category']) {
                         newMap.push(
                         <Accordian 

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Menu, Button, Segment } from 'semantic-ui-react'
+import { Menu, Button, Segment, Tab } from 'semantic-ui-react'
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
 import ButtonItem from "./src/components/ButtonItem.js";
@@ -22,7 +22,7 @@ class HPIContent extends Component {
             graphData: {},
             isLoaded: false, 
             children: [],
-            activeItem: "",
+            activeTabName: "",
             categories: {}
         }
         this.updateDimensions = this.updateDimensions.bind(this);
@@ -30,29 +30,38 @@ class HPIContent extends Component {
     }
 
     componentDidMount() {
+        // Loads Cydoc knowledge graph to populate HPI, 
+        // organizes parent nodes by their category (medical condition) and body system
         const data = API;
         data.then(res => {
-            var categories = new Set()
-            var category_dict = {}
-            var body_systems = {}
+            var categories = new Set() // List of categories (medical conditions) from nodes
+            var category_dict = {} // Dict of category : parent node value 
+            var body_systems = {} // Dict of body system : list of categories (medical conditions)
             var nodes = res.data['nodes'] 
             for (var node in nodes) {
                 var category = nodes[node]["category"]
+                // get set of all categories 
                 if (!(categories.has(category))) {
                     categories.add(category)
+                    // Turn category string into human readable format 
                     var key = (((category.split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase());
-                    if (key === "Shortbreath") key = "Shortness of Breath"
+                    if (key === "Shortbreath") key = "Shortness of Breath" //Specific examples
                     if (key === "Nausea-vomiting") key = "Nausea/Vomiting" 
-                    category_dict[key] = node.substring(0, node.length-2) + "01"
+                    category_dict[key] = node.substring(0, node.length-2) + "01" // Assuming parent node ends in 0001 
                     var body_system = nodes[node]["bodySystem"];
+                    // Use disease abbreviations found in disease_abbrevs.js
                     if (!(body_system in body_systems)) body_systems[body_system] = {"diseases": [], "name": disease_abbrevs[body_system]}
                     body_systems[body_system]["diseases"].push(key)
                 }}
-            delete body_systems["GENERAL"];
+            delete body_systems["GENERAL"]; // not using GENERAL 
             this.setState({isLoaded: true, graphData: res.data, categories: category_dict, body_systems: Object.values(body_systems)})
         })
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
+        // Using timeout to ensure that tab/dropdown menu is rendered before setting 
+        setTimeout((_event) => {
+            this.setMenuPosition();
+        }, 0);
     }
 
     componentWillUnmount() {
@@ -64,7 +73,17 @@ class HPIContent extends Component {
         let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
  
         this.setState({ windowWidth, windowHeight });
+        this.setMenuPosition();
     }
+
+    setMenuPosition() {
+        const stickyHeaderHeight = document.getElementById("stickyHeader").offsetHeight;
+         // Ensuring that the hpi tabs are rendered
+         while (this.fixedMenu == null || this.fixedMenu.length == 0) {
+             this.fixedMenu = document.getElementsByClassName("disease-menu");
+         }
+         this.fixedMenu[0].style.top = `${stickyHeaderHeight}px`;
+     }
 
     // Proceed to next step
     nextStep = () => {
@@ -80,24 +99,31 @@ class HPIContent extends Component {
         this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-3])
     }
 
+    // get to first page (change step = 1)
     first_page = () => this.context.onContextChange("step", 1)
 
+    // skip to last page (last category) [change step to be last]
     last_page = () => {
         var current_step = this.context['positivediseases'].length
         this.context.onContextChange("step", current_step+1)
         this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-1])
     }
 
+    // go to the next page (change step = step + 1)
     continue = e => {
         e.preventDefault();
         this.nextStep();
     }
 
+    // go to previous page (change step = step - 1)
     back = e => {
         e.preventDefault();
         this.prevStep();
     }
 
+    // responds to tabs - the clicked tab's name will be indexed from the list of positive diseases and 
+    // corresponds to its step - 2. The page will then change to the clicked tab's corresponding disease
+    // category and the active tab will change to that as well.
     handleItemClick = (e, {name}) => { 
         this.context.onContextChange("step", this.context['positivediseases'].indexOf(name)+2) 
         this.context.onContextChange("activeHPI", name)
@@ -108,34 +134,47 @@ class HPIContent extends Component {
         const {graphData, isLoaded, categories, windowWidth, body_systems} = this.state;
 
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
+        /* Creates list of body system buttons to add in the front page. 
+           Loops through state variable, body_systems, saved from the API */
         const diseaseComponents = body_systems.map(item =>
             <ButtonItem
-                key={item['name']}
-                name={item['name']}
-                diseases_list={item['diseases']}
+                key={item['name']}                  // name of body system
+                name={item['name']}                 
+                diseases_list={item['diseases']}    // list of categories (diseases) associated with current body system
             />
         );
 
-        const positiveDiseases = this.context["positivediseases"].map(disease =>
+        // diseases that the user has chosen
+        // Creates list of category buttons clicked by the user (categories/diseases for which they are positive) 
+        // Loops through the HPI context storing which categories user clicked in the front page 
+        // (categories/diseases for which they are positive)
+        const positiveDiseases = this.context["positivediseases"].map(disease =>    
             <PositiveDiseases
                 key={disease} 
                 name={disease}
             />
         );
 
+        // tabs with the diseases the user has chosen
+        // Loops through HPI context storing which categories user clicked in front page
         const diseaseTabs = this.context['positivediseases'].map((name, index) => 
             <Menu.Item
                 key={index}
                 name={name}
-                active={this.context['activeHPI'] === name}
+                /* if the current category in the for loop matches the active category (this.context['activeHPI']), 
+                the menu item is marked as active, meaning it will be displayed as clicked (pressed down) */
+                active={this.context['activeHPI'] === name}  
                 onClick={this.handleItemClick}
-                className='disease-tab'
+                className='disease-tab'  // CSS 
             />
-        );
-
+        ); 
+        
+        // each step correlates to a different tab
         var step = this.context['step'];
+        // number of positive diseases, which is also the nnumber of steps   
         const positive_length = this.context['positivediseases'].length;
 
+        // window/screen responsiveness
         let numColumns = 1;
         if (windowWidth > ROS_LARGE_BP) {
             numColumns = 4;
@@ -145,10 +184,12 @@ class HPIContent extends Component {
             numColumns = 2;
         }
 
+        // depending on the current step, we switch to a different view 
         switch(step) {
             case 1:
                 return (
-
+                    // if the user has chosen any diseases (positive_length > 0), then the right button can be displayed
+                    // to advance to other pages of the HPI form
                     <Segment>
                         {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
                         <Masonry
@@ -173,8 +214,9 @@ class HPIContent extends Component {
                     </Segment>
                     )
             default:
+                // if API data is loaded, render the DiseaseForm
                 if (isLoaded) { 
-                    let category = this.context['positivediseases'][step-2]
+                    let category = this.context['positivediseases'][step-2] // since step 1 was for the landing page
                     let parent_code = categories[category]
                     let category_code = graphData['nodes'][parent_code]['category']
                 return (
@@ -194,6 +236,7 @@ class HPIContent extends Component {
                         windowWidth={windowWidth}
                     />
                     )}
+                // if API data is not yet loaded, show loading screen 
                 else {return <h1> Loading... </h1>}
         }
     }

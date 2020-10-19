@@ -9,6 +9,7 @@ class ButtonItem extends React.Component {
     static contextType = HPIContext
     constructor(props, context) {
         super(props, context)
+        // create disease buttons based on user's chosen diseases 
         var disease_buttons = this.props.diseases_list.map(disease =>
             <DiseaseTag
                 key={disease}
@@ -23,6 +24,8 @@ class ButtonItem extends React.Component {
         this.handleClick = this.handleClick.bind(this)
     }
 
+    // add body system to positive categories if not there yet 
+    // consider deprecating - same as handleClick() and state
     componentDidMount() {
         if (!(this.context["positivecategories"].includes(this.props.name))) {
             this.setState({disease_array: this.state.disease_buttons})
@@ -30,6 +33,8 @@ class ButtonItem extends React.Component {
         }
     }
 
+    // if the current body system isn't in positivecategories, then add it. Otherwise, if it is already in positivecategories,
+    // then clicking it again would remove it from positivecategories and thus prevent the disease_array from displaying.
     handleClick() {
         if (!(this.context["positivecategories"].includes(this.props.name))) {
             this.setState({disease_array: this.state.disease_buttons})

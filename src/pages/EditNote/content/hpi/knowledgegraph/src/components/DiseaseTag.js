@@ -29,13 +29,14 @@ class DiseaseTag extends React.Component {
     }
 
     render() {
+        // change color of button and font based on whether the user chose this disease category or not
         let color = this.context['positivediseases'].indexOf(this.props.name) > -1 ? "lightslategrey" : "whitesmoke"
         let font_color = this.context['positivediseases'].indexOf(this.props.name) > -1 ? "white" : "black"
         return (
             <button
                 className="tag_text"
                 style={{
-                    display: !this.props.name && "none",
+                    display: !this.props.name && "none", //display button only if it's not none and is a valid name
                     backgroundColor: color,
                     color: font_color
                 }}

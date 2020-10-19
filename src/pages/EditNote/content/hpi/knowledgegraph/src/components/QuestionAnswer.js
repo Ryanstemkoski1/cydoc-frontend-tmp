@@ -26,7 +26,9 @@ class QuestionAnswer extends React.Component {
             input: ""
         } 
         const values = this.context["hpi"]
+        // Initialize response values 
         // Specifies whether the response type will be '' or [] form 
+        // TODO: Make more efficient and streamlined. 
         if (this.props.am_child) {
             if (values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] === "") {
                 values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response_type'] = this.props.responseType 
@@ -169,7 +171,8 @@ class QuestionAnswer extends React.Component {
                 key={this.props.question}
                 pop={true}
             />)
-        }
+        } 
+        // TODO: deprecate since it's the exact same as the last return
         if (this.props.accordion) {
             return (
                 <div>{this.props.question} <div style={{marginTop: 7}}>{button_map}</div> </div>

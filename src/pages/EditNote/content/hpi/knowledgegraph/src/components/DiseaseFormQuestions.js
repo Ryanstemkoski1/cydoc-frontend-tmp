@@ -7,6 +7,7 @@ class DiseaseFormQuestions extends React.Component {
         let question = this.props.question
         let symptom = question.search("SYMPTOM")
         let disease = question.search("DISEASE")
+        // "SYMPTOM" and "DISEASE" should be replaced by the name of the current disease if it is part of the question text.
         if (symptom > -1) {
             question = question.substring(0,symptom) + this.props.category.toLowerCase() + question.substring(symptom+7)
         }
@@ -15,6 +16,7 @@ class DiseaseFormQuestions extends React.Component {
         }
         let response_choice = ''
         const {responseType} = this.props
+        // Create buttons for users to click as their answer 
         if (responseType === "CLICK-BOXES" || responseType.slice(-3,responseType.length) === 'POP' || responseType === 'nan') {
             let click = question.search("CLICK")
             let select = question.search('\\[')
