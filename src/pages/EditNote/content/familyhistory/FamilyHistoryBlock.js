@@ -175,7 +175,7 @@ export default class FamilyHistoryBlock extends Component {
                             </Fragment>
                             : ""
                         }
-                        <Divider style={{marginTop: 25}}/>
+                        <hr className="condition-divider"/>
                     </div> 
                 </div>
             )
