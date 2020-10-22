@@ -192,7 +192,7 @@ class HPIContent extends Component {
                     let parent_code = categories[category]
                     let category_code = graphData['nodes'][parent_code]['category']
                 return (
-                    <>
+                    <div className='hpi-disease-container'>
                     <DiseaseForm
                         key={step-2}
                         graphData={graphData}
@@ -245,7 +245,7 @@ class HPIContent extends Component {
                     </Button>
                     </>
                     }
-                    </>
+                    </div>
                     )}
                 else {return <h1> Loading... </h1>}
         }

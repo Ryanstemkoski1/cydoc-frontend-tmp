@@ -41,7 +41,7 @@ export default class NotePage extends Component {
         this.setState({ windowWidth, windowHeight });
     }
 
-    nextFormClick = (e) => this.props.onNextClick();
+    nextFormClick = () => this.props.onNextClick();
 
 
     getTabToDisplay(activeItem) {
