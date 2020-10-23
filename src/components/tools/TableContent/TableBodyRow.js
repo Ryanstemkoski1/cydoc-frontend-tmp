@@ -155,6 +155,7 @@ export class TableBodyRow extends Component {
                             icon=''
                             options={diseaseOptions}
                             optiontype='diseaseOptions'
+                            type={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
