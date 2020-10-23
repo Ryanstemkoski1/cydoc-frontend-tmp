@@ -17,6 +17,21 @@ export class TableBodyRow extends Component {
         this.setState({ invalidYear: startYear !== "" && (startYear < 1900 || startYear > this.props.currentYear) });
     }
 
+    handleCellClick = (e) => {
+        const innerInput = e.target.lastElementChild
+        // Handles clicks outside of the "clickable area" (padding) of the input/textarea component within a cell
+        if (innerInput != null) {
+            if (innerInput.type == "textarea") {
+                // Focuses textareas (eg. Schedule, Dose, and Comments)
+                innerInput.focus();
+            }
+            else {
+                // Opens input dropdowns (eg. Drug Names, Reason for Taking, Side Effects)
+                innerInput.click();
+            }
+        }
+    }
+
     getCell(placeholder) {
         const {
             values, 
@@ -126,7 +141,7 @@ export class TableBodyRow extends Component {
                 cell = (
                     <div className='table-year-input'>
                         <TextArea
-                            rows={3}
+                            rows={1}
                             type={placeholder}
                             onChange={onTableBodyChange}
                             onBlur={this.onYearChange}
@@ -188,7 +203,7 @@ export class TableBodyRow extends Component {
 
         const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
             return (
-                <Table.Cell selectable key={index}>
+                <Table.Cell key={index} onClick={this.handleCellClick}>
                     {this.getCell(placeholder)}
                 </Table.Cell>
             )
