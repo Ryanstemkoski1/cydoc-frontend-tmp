@@ -14,20 +14,6 @@ export default class GridContent extends Component {
         super(props, context);
         this.defaultRows = this.props.rows;
         this.onChange = this.props.onChange;
-        this.addRow = this.addRow.bind(this);
-    }
-
-    addRow() {
-        let values = this.context[this.props.value_type]
-        let last_index = Object.keys(values).length.toString()
-        values[last_index] = {
-            'Condition': "",
-            "Yes": false,
-            "No": false,
-            "Onset": "",
-            "Comments": ""
-        }
-        this.context.onContextChange(this.props.value_type, values);
     }
 
     render(){
@@ -40,7 +26,7 @@ export default class GridContent extends Component {
                 </Grid>
                 <Divider />
                 {!isPreview && this.props.question_type === "add_row" 
-                    ? <AddRowButton onClick={this.addRow} name={this.props.name}/> 
+                    ? <AddRowButton onClick={this.props.addRow} name={this.props.name}/> 
                     : ""}
             </Fragment>
             ) : (

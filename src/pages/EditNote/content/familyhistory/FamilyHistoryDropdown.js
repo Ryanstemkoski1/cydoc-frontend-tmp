@@ -11,7 +11,6 @@ export default class FamilyHistoryDropdown extends Component {
     constructor(props, context) {
         super(props, context)
         var values = this.context['Family History']
-        console.log(values);
         var value = values[this.props.index]['Family Member'][this.props.family_index]
         this.state = {
             value: value ? value : "Add Family Member"
@@ -80,7 +79,7 @@ export default class FamilyHistoryDropdown extends Component {
                             <Grid.Column>
                                 <Grid.Row width={14}>
                                     <Grid.Column width={6}>
-                                        <Header.Subheader className="family-history-header-mobile">Family Member</Header.Subheader>
+                                        <Header.Subheader className="family-history-header-mobile">Family Member with {this.props.condition.props.seenConditions[this.props.condition.key]}</Header.Subheader>
                                         <Dropdown
                                             value={family_member}
                                             search
@@ -210,11 +209,12 @@ export default class FamilyHistoryDropdown extends Component {
                         </Grid.Row>
                         {cause_of_death === true || cause_of_death === undefined ? "" :
                         <Grid.Row className="living-toggle-row">
-                            <Grid.Column width={3} />
-                            <Grid.Column width={1}>
+                            <Grid.Column width={4} />
+                            
+                            <Grid.Column width={3}>
+                            <Grid.Column width={2}>
                                 <Header.Subheader className="living-toggle-title">Living?</Header.Subheader>
                             </Grid.Column>
-                            <Grid.Column width={3}>
                                 <ToggleButton
                                     active={living}
                                     condition={this.props.condition}

@@ -53,7 +53,6 @@ export default class FamilyHistoryContent extends Component {
             this.state = {
                 seenConditions: conditions
             }
-
             this.context.onContextChange("Family History", values)
         }
         
@@ -115,7 +114,7 @@ export default class FamilyHistoryContent extends Component {
     }
 
     addSeenCond = (value, index) => {
-        const { seenConditions } = this.state.seenConditions;
+        const  seenConditions = this.state.seenConditions;
         seenConditions[value] = index;
         this.setState({ seenConditions });
     }
@@ -188,11 +187,12 @@ export default class FamilyHistoryContent extends Component {
                         value_type = "Family History" 
                         conditions={list_values}
                         mobile={mobile}
+                        addRow={this.addRow}
+                        name={"family history"}
                     />
                 </> :
                 <>
                     <div style={{marginTop: 25}}> </div>{listItems}
-                    {this.props.fh_pop || this.props.isPreview ? "" : <AddRowButton onClick={this.addRow} name={"family history"} />}
                 </>
         );
     }

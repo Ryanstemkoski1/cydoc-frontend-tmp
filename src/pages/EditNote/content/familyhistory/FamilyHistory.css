@@ -66,10 +66,10 @@
 
 .condition-divider {
     margin-top: 25px ;
-    height: 2px ;
+    height: 5px ;
     width: 100% ;
     background-color:#707070;
-    opacity: 30%;
+    opacity: 60%;
     border: none;
 }
 
@@ -90,7 +90,7 @@
 }
 
 .living-toggle-title {
-    padding-top: 8px;
+    padding-bottom: 5px;
 }
 
 .comments-box-mobile {
