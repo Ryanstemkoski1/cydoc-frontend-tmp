@@ -16,15 +16,20 @@ export default class TableContent extends Component {
 
     constructor(props, context) {
         super(props, context);
+        this.currentYear = new Date(Date.now()).getFullYear();
+        const isInvalidYear = [];
+        for (let i = 0; i < props.values.length; i++) {
+            const startYear = props.values[i]["Start Year"]
+            isInvalidYear.push(startYear !== "" && (startYear < 1900 || startYear > this.currentYear))
+        }
         this.state = {
             proceduresOptions: procedures,
             sideEffectsOptions: sideEffects,
             medicationOptions: drug_names,
             diseaseOptions: diseases,
             active: new Set(),
-            invalidYear: false,
+            isInvalidYear
         }
-        this.currentYear = new Date(Date.now()).getFullYear();
         // TODO: add back addRow functionality
         this.addRow = this.addRow.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
@@ -54,9 +59,10 @@ export default class TableContent extends Component {
         }));
     }
 
-    onYearChange = (e) => {
-        const startYear = e.target.value;
-        this.setState({ invalidYear: startYear !== "" && (startYear < 1900 || startYear > this.currentYear) });
+    onYearChange(_e, index, startYear) {
+        const newIsInvalidYear = this.state.isInvalidYear;
+        newIsInvalidYear[index] = startYear !== "" && (startYear < 1900 || startYear > this.currentYear)
+        this.setState({ invalidYear: newIsInvalidYear });
     }
 
     toggleAccordion = (idx) => {
@@ -328,10 +334,10 @@ export default class TableContent extends Component {
                                 placeholder={tableBodyPlaceholders[j]}
                                 value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
                                 onChange={this.handleTableBodyChange}
-                                onBlur={this.onYearChange}
+                                onBlur={(e) => this.onYearChange(e, i, values[i][tableBodyPlaceholders[j]])}
                                 className='content-input content-dropdown'
                             />
-                            { this.state.invalidYear && (
+                            { this.state.isInvalidYear[i] && (
                                 <p className='error'>Please enter a valid year after 1900.</p>
                             )}
                         </div>
