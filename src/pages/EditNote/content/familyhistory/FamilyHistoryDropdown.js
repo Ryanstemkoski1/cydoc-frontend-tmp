@@ -11,6 +11,7 @@ export default class FamilyHistoryDropdown extends Component {
     constructor(props, context) {
         super(props, context)
         var values = this.context['Family History']
+        console.log(values);
         var value = values[this.props.index]['Family Member'][this.props.family_index]
         this.state = {
             value: value ? value : "Add Family Member"
@@ -67,6 +68,7 @@ export default class FamilyHistoryDropdown extends Component {
         const cause_of_death = this.context["Family History"][index]["Cause of Death"][family_index];
         const family_member = familyMember[family_index]
         const comment = comments[family_index]
+        console.log(this.context);
         const living = this.context["Family History"][index]["Living"][family_index]
 
         return (

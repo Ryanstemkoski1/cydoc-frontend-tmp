@@ -47,8 +47,11 @@ export default class FamilyHistoryBlock extends Component {
         // array of dropdowns displayed on Family History Family Member column
         let dropdown_list = [];
         // variable range that changes when the user clicks the + (add member) button 
-        var range = this.context["Family History"][index]["Family Member"].length;
-        // if the range is 0 then we want there to be at least one dropdown
+        // we want there to be at least one dropdown
+        var range = 1;
+        if(this.context["Family History"][index]["Family Member"]) {
+            range = this.context["Family History"][index]["Family Member"].length;
+        }
         range = range > 0 ? range : 1;
         for (let step = 0; step < range; step ++) {
             dropdown_list.push(

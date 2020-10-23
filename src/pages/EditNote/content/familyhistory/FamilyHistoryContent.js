@@ -22,7 +22,8 @@ export default class FamilyHistoryContent extends Component {
         this.updateDimensions = this.updateDimensions.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
-        this.addRow = this.addRow.bind(this)
+        this.addRow = this.addRow.bind(this);
+        this.addSeenCond = this.addSeenCond.bind(this); 
 
         //Checks if all response choices exist and adds new ones
         const { response_choice, isPreview } = this.props;
@@ -49,6 +50,10 @@ export default class FamilyHistoryContent extends Component {
                     }
                 }
             }
+            this.state = {
+                seenConditions: conditions
+            }
+
             this.context.onContextChange("Family History", values)
         }
         
@@ -73,6 +78,7 @@ export default class FamilyHistoryContent extends Component {
     //handles input field events
     handleChange(event, data){
         let index = data.condition.props.index
+        console.log(this.context["Family History"]);
         const values = this.context["Family History"];
         values[index][data.placeholder] = data.value;
         this.context.onContextChange("Family History", values);
@@ -95,6 +101,7 @@ export default class FamilyHistoryContent extends Component {
     addRow() {
         let values = this.context["Family History"]
         let last_index = Object.keys(values).length.toString()
+        console.log("last_index", last_index);
         values[last_index] = {
             "Condition": "",
             "Yes": false,
@@ -105,6 +112,12 @@ export default class FamilyHistoryContent extends Component {
             "Comments": []
         }
         this.context.onContextChange("Family History", values);
+    }
+
+    addSeenCond = (value, index) => {
+        const { seenConditions } = this.state.seenConditions;
+        seenConditions[value] = index;
+        this.setState({ seenConditions });
     }
 
     render(){
@@ -129,6 +142,8 @@ export default class FamilyHistoryContent extends Component {
                         mobile={mobile}
                         onChange={() => {}}
                         condition={<ConditionInput
+                            seenConditions={conditions}
+                            addSeenCondition={this.addSeenCond}
                             isPreview={this.props.isPreview}
                             condition={condition}
                             key={index}
@@ -147,6 +162,8 @@ export default class FamilyHistoryContent extends Component {
                     mobile={mobile}
                     onChange={this.handleChange}
                     condition={<ConditionInput
+                        seenConditions={conditions}
+                        addSeenCondition={this.addSeenCond}
                         key={condition}
                         index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index}
                         category={"Family History"}
