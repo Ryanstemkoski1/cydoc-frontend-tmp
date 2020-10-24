@@ -2,7 +2,8 @@ import React, {Component, Fragment} from "react";
 import { Redirect } from "react-router"
 import {Grid, Segment, Button} from "semantic-ui-react";
 
-import HPIContext from 'contexts/HPIContext.js'
+import HPIContext from 'contexts/HPIContext.js';
+import './LandingPage.css';
 
 class ConnectedRecords extends Component {
 
@@ -45,7 +46,7 @@ class ConnectedRecords extends Component {
                 <Button disabled={!this.props.activeNote} onClick={this.handleDelete} floated>
                     Delete
                 </Button>
-                <Segment style={{overflow: 'auto', maxHeight: "50vh" }}>
+                <Segment className='note-preview'>
                     <pre>{this.props.activeNote ? JSON.stringify(this.props.activeNote, null, 2) : "Select a Note!"}</pre>
                 </Segment>
             </Fragment>

@@ -91,11 +91,13 @@ class HPIContent extends Component {
     continue = e => {
         e.preventDefault();
         this.nextStep();
+        window.scrollTo(0,0);
     }
 
     back = e => {
         e.preventDefault();
         this.prevStep();
+        window.scrollTo(0,0);
     }
 
     handleItemClick = (e, {name}) => {
@@ -103,6 +105,7 @@ class HPIContent extends Component {
         this.context.onContextChange("activeHPI", name)
     }
 
+    nextFormClick = () => this.props.nextFormClick();
 
     render() {
         const {graphData, isLoaded, categories, windowWidth, body_systems} = this.state;
@@ -150,19 +153,6 @@ class HPIContent extends Component {
                 return (
                 <>
                     <Segment>
-                        {positive_length > 0 ? 
-                        <div className='positive-diseases-placeholder'>
-                            <Button
-                                circular
-                                icon='angle right'
-                                className='next-button'
-                                onClick={this.continue}
-                            />
-                            </div>
-                            :
-                            <div className='positive-diseases-placeholder' />
-                        }
-
                         {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
                         <Masonry
                             className='disease-container'
@@ -170,9 +160,30 @@ class HPIContent extends Component {
                             columnClassName='disease-column'
                         >
                             {diseaseComponents}
-                        </Masonry>
-                        
+                        </Masonry>      
                     </Segment>
+
+                    {positive_length > 0 ? 
+                    <>
+                    <Button icon floated='right' onClick={this.continue} className='hpi-small-next-button'>
+                    <Icon name='right arrow'/>
+                    </Button> 
+                    <Button icon labelPosition='right' floated='right' onClick={this.continue} className='hpi-next-button'>
+                    Next Form
+                    <Icon name='right arrow'/>
+                    </Button>
+                    </>
+                    :
+                    <>
+                    <Button icon floated='right' onClick={this.nextFormClick} className='hpi-small-next-button'>
+                    <Icon name='right arrow'/>
+                    </Button>
+                    <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='hpi-next-button'>
+                    Next Form
+                    <Icon name='right arrow'/>
+                    </Button>
+                    </>
+                    }
                 </>
                     )
             default:
@@ -180,24 +191,61 @@ class HPIContent extends Component {
                     let category = this.context['positivediseases'][step-2]
                     let parent_code = categories[category]
                     let category_code = graphData['nodes'][parent_code]['category']
-                    return (
-                        <Segment>
-                        <DiseaseForm
-                            key={step-2}
-                            graphData={graphData}
-                            nextStep = {this.nextStep}
-                            prevStep = {this.prevStep}
-                            first_page = {this.first_page}
-                            last_page = {this.last_page}
-                            category = {category}
-                            categories = {this.state.categories}
-                            diseaseTabs = {diseaseTabs}
-                            parent_code = {parent_code}
-                            tab_category = {category_code}
-                            last = {true ? step === positive_length+1 : false}
-                            windowWidth={windowWidth}
-                        />
-                        </Segment>
+                return (
+                    <div className='hpi-disease-container'>
+                    <DiseaseForm
+                        key={step-2}
+                        graphData={graphData}
+                        nextStep = {this.nextStep}
+                        prevStep = {this.prevStep}
+                        first_page = {this.first_page}
+                        last_page = {this.last_page}
+                        category = {category}
+                        categories = {this.state.categories}
+                        diseaseTabs = {diseaseTabs}
+                        parent_code = {parent_code}
+                        tab_category = {category_code}
+                        last = {true ? step === positive_length+1 : false}
+                        windowWidth={windowWidth}
+                    />
+                    {step === positive_length+1 ?
+                    <>
+                    <Button icon floated='left' onClick={this.back} className='hpi-small-previous-button'>
+                    <Icon name='left arrow'/>
+                    </Button>
+                    <Button icon labelPosition='left' floated='left' onClick={this.back} className='hpi-previous-button'>
+                    Previous Form
+                    <Icon name='left arrow'/>
+                    </Button>
+
+                    <Button icon floated='right' onClick={this.nextFormClick} className='hpi-small-next-button'>
+                    <Icon name='right arrow'/>
+                    </Button>
+                    <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='hpi-next-button'>
+                    Next Form
+                    <Icon name='right arrow'/>
+                    </Button>
+                    </>
+                    :
+                    <>
+                    <Button icon floated='left' onClick={this.back} className='hpi-small-previous-button'>
+                    <Icon name='left arrow'/>
+                    </Button>
+                    <Button icon labelPosition='left' floated='left' onClick={this.back} className='hpi-previous-button'>
+                    Previous Form
+                    <Icon name='left arrow'/>
+                    </Button>
+
+                    <Button icon floated='right' onClick={this.continue} className='hpi-small-next-button'>
+                    <Icon name='right arrow'/>
+                    </Button>
+                    <Button icon labelPosition='right' floated='right' onClick={this.continue} className='hpi-next-button'>
+                    Next Form
+                    <Icon name='right arrow'/>
+                    </Button>
+                    </>
+                    }
+                    </div>
                     )}
                 else {return <h1> Loading... </h1>}
         }
