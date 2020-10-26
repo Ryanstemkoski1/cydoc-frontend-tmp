@@ -137,6 +137,7 @@ export class TableBodyRow extends Component {
                 );
                 break;
             }
+            case 'Year':
             case 'Start Year':
                 cell = (
                     <div className='table-year-input'>

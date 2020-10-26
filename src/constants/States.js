@@ -13,10 +13,10 @@ export const medications = {
 };
 
 export const surgicalHistory = {
-    "fields": ["Procedure", "Date", "Comments"],
-    "state": [{ "Procedure": "", "Date": "", "Comments": "" },
-    { "Procedure": "", "Date": "", "Comments": "" },
-    { "Procedure": "", "Date": "", "Comments": "" }]
+    "fields": ["Procedure", "Year", "Comments"],
+    "state": [{ "Procedure": "", "Year": "", "Comments": "" },
+    { "Procedure": "", "Year": "", "Comments": "" },
+    { "Procedure": "", "Year": "", "Comments": "" }]
 };
 
 export const reviewOfSystems = {
