@@ -58,7 +58,7 @@ class ConnectedMenuTabs extends Component {
         );
 
         return (
-            <div style={{backgroundColor: 'white'}}>
+            <div className='form-tabs'>
                 <Menu secondary className={collapseMenu? "" : "menu-tab"}>
                     {/* Menu is different depending on screen size */}
                     {collapseMenu ?
@@ -93,18 +93,9 @@ function CollapsedMenuTabs(props) {
             <div>
 
             </div>
-        <Menu tabular attached={props.attached} className="collapsed-menu-tabs" style={{
-            overflow: 'auto',
-            maxHeight: '50vh',
-            whiteSpace: 'nowrap',
-            display: 'flex',
-            flexWrap: 'nowrap',
-            overflowX: 'auto',
-            scrollbarWidth: 'none',
-            WebkitOverflowScrolling: 'touch'}}
-        >
+        <Menu tabular attached={props.attached} className="collapsed-menu-tabs">
             <Menu.Item className="arrow">
-                <Icon name="window maximize outline" style={{margin: '0'}} />
+                <Icon name="window maximize outline" className='collapsed-menu-icon'/>
             </Menu.Item>
             {props.tabMenuItems}
         </Menu>

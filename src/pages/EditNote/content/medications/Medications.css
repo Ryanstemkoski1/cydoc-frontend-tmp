@@ -1,0 +1,68 @@
+.table-display {
+    table-layout: fixed;
+}
+
+.table-header > p {
+    text-align: center;
+    font-size: 0.95em;
+}
+
+.ui.input.content-text {
+    font-size: 0.95em;
+}
+
+.ui.input.drug-text {
+    font-size: 1em;
+}
+
+.ui.input.content-input-computer {
+    letter-spacing: 0;
+}
+
+.ui.input.content-dropdown {
+    padding-bottom: 0;
+}
+
+.ui.input.medication {
+    min-width: 10rem;
+}
+
+.ui.input.first-content-input {
+    margin: 0 1rem 0 1.5rem;
+}
+
+.ui.selection.dropdown.side-effects,
+.ui.selection.dropdown.side-effects:hover,
+.ui.active.selection.dropdown.side-effects,
+.ui.upward.active.selection.dropdown.side-effects:hover {
+    border: none;
+    box-shadow: none;
+}
+
+.ui.multiple.search.dropdown.side-effects > .text {
+    margin-left: 0;
+    letter-spacing: 0;
+    padding-left: 0;
+}
+
+.ui.multiple.search.dropdown.side-effects > input.search {
+    margin-left: -.4rem;
+}
+
+.ui.input > .dropdown.side-effects-text {
+    width: 100%;
+}
+
+.ui.dropdown.condition-input {
+    font-size: 15px;
+    margin-bottom: 5px;
+    outline: none;
+}
+
+/** For smaller screens e.g. iPhone 6/7/8 */
+@media (max-width: 425px) {
+    .reason-wrapper {
+        display: block;
+        margin-left: 2em;
+    }
+}
