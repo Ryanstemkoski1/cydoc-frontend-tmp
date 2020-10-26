@@ -44,7 +44,7 @@ export default class SocialHistoryContent extends React.Component {
         const prevState = values[data.condition][data.title];
         values[data.condition][data.title] = ! prevState;
         for (var response_index in responses) {
-            let response = responses[response_index]
+            var response = responses[response_index]
             if (data.title !== response) values[data.condition][response] = false
         }
         this.context.onContextChange("Social History", values);
@@ -54,13 +54,11 @@ export default class SocialHistoryContent extends React.Component {
     handleInterestedToggleButtonClick(event, data) {
         const values = this.context["Social History"];
         const responses = ['Yes', 'Maybe', 'No'];
-        console.log(data);
         const prevState = values[data.condition]["InterestedInQuitting"][data.title];
         values[data.condition]["InterestedInQuitting"][data.title] = ! prevState;
         for (var response_index in responses) {
-            let response = responses[response_index]
+            var response = responses[response_index]
             if (data.title !== response) values[data.condition]["InterestedInQuitting"][response] = false;
-            console.log(values[data.condition]["InterestedInQuitting"][response]);
         }
         this.context.onContextChange("Social History", values);        
     }
@@ -72,7 +70,7 @@ export default class SocialHistoryContent extends React.Component {
         const prevState = values[data.condition]["TriedToQuit"][data.title];
         values[data.condition]["TriedToQuit"][data.title] = ! prevState;
         for (var response_index in responses) {
-            let response = responses[response_index]
+            var response = responses[response_index]
             if (data.title !== response) values[data.condition]["TriedToQuit"][response] = false
         }
         this.context.onContextChange("Social History", values);
