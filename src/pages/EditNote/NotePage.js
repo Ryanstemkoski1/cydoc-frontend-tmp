@@ -61,7 +61,7 @@ export default class NotePage extends Component {
             case "Review of Systems":
                 tabToDisplay = (<ReviewOfSystemsContent />);
                 break;
-            case "Generate Note":
+            case "Generated Note":
                 tabToDisplay = (<GenerateNote />);
                 break;
             case "Plan":

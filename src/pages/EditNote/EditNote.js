@@ -59,7 +59,7 @@ class EditNote extends Component {
                 }
             } else if (state.activeItem === 'Plan') {
                 return {
-                    activeItem: 'Generate Note',
+                    activeItem: 'Generated Note',
                 }
             }
         })
@@ -86,7 +86,7 @@ class EditNote extends Component {
                 return {
                     activeItem: 'Physical Exam',
                 }
-            } else if (state.activeItem === 'Generate Note') {
+            } else if (state.activeItem === 'Generated Note') {
                 return {
                     activeItem: 'Plan',
                 }

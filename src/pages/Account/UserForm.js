@@ -110,14 +110,14 @@ class UserForm extends Component {
     }
 
     // handles change in a single field (updates states based on changed info)
-    handleChange(e, { name, value }) {
+    handleChange(e, {name, value}) {
         let newState = this.state;
         newState.formInfo[name] = value;
         this.setState(newState);
     }
 
     // handles change for array-based fieldss (also updates state)
-    handleArrayChange(e, { name, index, value }) {
+    handleArrayChange(e, {name, index, value}) {
         let newState = this.state;
         newState.formInfo[name][index] = value;
         this.setState(newState);
@@ -324,16 +324,15 @@ class UserForm extends Component {
                     <Image size="small" spaced href='/home' src={LogoName} />
                 </Container>
                 <Container>
-
                     <Segment clearing raised className='sign-up-segment'>
                         <Container className="sign-up-header" color='black' textAlign='center'>
-                            Sign Up
+                            {this.state.title}
                         </Container>
                         <Form size='small' error={this.state.errorMessages.length>0} onSubmit={this.handleSubmit}>
                             <Form.Input
-
                                 fluid
                                 label='Username'
+                                placeholder='username'
                                 name='username'
                                 value={this.state.formInfo.username}
                                 onChange={this.handleChange}
@@ -342,6 +341,7 @@ class UserForm extends Component {
                                 fluid
                                 type={"password"}
                                 label='Password'
+                                placeholder='password'
                                 name='password'
                                 value={this.state.formInfo.password}
                                 onChange={this.handleChange}
@@ -350,6 +350,7 @@ class UserForm extends Component {
                                 fluid
                                 type={"password"}
                                 label='Re-enter password'
+                                placeholder='re-enter password'
                                 name='passwordConfirm'
                                 value={this.state.formInfo.passwordConfirm}
                                 onChange={this.handleChange}
@@ -359,6 +360,7 @@ class UserForm extends Component {
                                     fluid
                                     placeholder='John'
                                     label='First name'
+                                    placeholder='first name'
                                     name='firstName'
                                     value={this.state.formInfo.firstName}
                                     onChange={this.handleChange}
@@ -367,8 +369,8 @@ class UserForm extends Component {
                                     fluid
                                     placeholder='Doe'
                                     label='Last name'
+                                    placeholder='last name'
                                     name='lastName'
-
                                     value={this.state.formInfo.lastName}
                                     onChange={this.handleChange}
                                 />
@@ -397,6 +399,7 @@ class UserForm extends Component {
                                 <Form.Input
                                     fluid
                                     label='address'
+                                    placeholder='address'
                                     name='address'
                                     value={this.state.formInfo.address}
                                     onChange={this.handleChange}
@@ -406,6 +409,7 @@ class UserForm extends Component {
                                     width={6}
                                     type='tel'
                                     label='phone number'
+                                    placeholder='phone number'
                                     name='phoneNumber'
                                     value={this.state.formInfo.phoneNumber}
                                     onChange={this.handleChange}
@@ -431,7 +435,6 @@ class UserForm extends Component {
                                     checked={this.state.formInfo.role === 'patient'}
                                     onChange={this.handleChange}
                                 />
-
                                 <Form.Radio
                                     width={7}
                                     label='Administrator'
@@ -449,12 +452,10 @@ class UserForm extends Component {
                             />
                             <>
                                 <Form.Button color='teal' size='small' floated='right'>
-                                    Sign Up
+                                    {this.buttonText}
                                 </Form.Button>
                             </>
-
                         </Form>
-
                     </Segment>
                 </Container>
             </Container>
