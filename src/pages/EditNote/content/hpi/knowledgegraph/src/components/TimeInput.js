@@ -2,6 +2,7 @@ import React, {Fragment, Component} from 'react'
 import { Grid, Button } from "semantic-ui-react";
 import NumericInput from "react-numeric-input";
 import HPIContext from 'contexts/HPIContext.js';
+import '../css/TimeInput.css';
 
 class TimeInput extends Component {
     static contextType = HPIContext 
@@ -33,25 +34,24 @@ class TimeInput extends Component {
         var button_map = []
         for (var time_index = 0; time_index < time_options.length; time_index += 3) {
             button_map.push(
-                <Grid.Row columns='equal' style={{padding: 0}}> 
+                <Grid.Row columns='equal' className='time-grid-row'> 
                         {time_options.slice(time_index, time_index+3).map((time_item) => 
-                        <Grid.Column style={{padding: 5}}>
+                        <Grid.Column className='time-grid-column'>
                             <Button
                                 color={time_value === time_item ? 'grey' : ''}
                                 title={time_item}
                                 onClick={this.handleToggleButtonClick}
-                                style={{width: '100%'}}
-                            > {time_item} </Button>
+                                className='time-grid-button'> {time_item} </Button>
                             </Grid.Column>
                             )}
                 </Grid.Row>)
         }
         return (
-            <div style={{marginTop: 30}}> 
+            <div className='time-div'> 
                 <Grid columns={2}>
                     <Grid.Row> 
                         <Grid.Column width={3}>
-                            <div style={{position: 'relative', top: '30%', left: '30%'}}> 
+                            <div className='time-input'> 
                                 <NumericInput
                                     size={10}
                                     key={question}

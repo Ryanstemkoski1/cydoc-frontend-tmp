@@ -108,12 +108,14 @@ class HPIContent extends Component {
     continue = e => {
         e.preventDefault();
         this.nextStep();
+        window.scrollTo(0,0);
     }
 
     // go to previous page (change step = step - 1)
     back = e => {
         e.preventDefault();
         this.prevStep();
+        window.scrollTo(0,0);
     }
 
     // responds to tabs - the clicked tab's name will be indexed from the list of positive diseases and 
@@ -124,6 +126,7 @@ class HPIContent extends Component {
         this.context.onContextChange("activeHPI", name)
     }
 
+    nextFormClick = () => this.props.nextFormClick();
 
     render() {
         const {graphData, isLoaded, windowWidth, body_systems} = this.state;
@@ -186,19 +189,6 @@ class HPIContent extends Component {
                     // if the user has chosen any diseases (positive_length > 0), then the right button can be displayed
                     // to advance to other pages of the HPI form
                     <Segment>
-                        {positive_length > 0 ? 
-                        <div className='positive-diseases-placeholder'>
-                            <Button
-                                circular
-                                icon='angle right'
-                                className='next-button'
-                                onClick={this.continue}
-                            />
-                            </div>
-                            :
-                            <div className='positive-diseases-placeholder' />
-                        }
-
                         {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
                         <Masonry
                             className='disease-container'
@@ -206,17 +196,36 @@ class HPIContent extends Component {
                             columnClassName='disease-column'
                         >
                             {diseaseComponents}
-                        </Masonry>
-                        
+                        </Masonry>      
                     </Segment>
-                    )
+
+                    {positive_length > 0 ? 
+                    <>
+                    <Button icon floated='right' onClick={this.continue} className='hpi-small-next-button'>
+                    <Icon name='right arrow'/>
+                    </Button> 
+                    <Button icon labelPosition='right' floated='right' onClick={this.continue} className='hpi-next-button'>
+                    Next Form
+                    <Icon name='right arrow'/>
+                    </Button>
+                    </>
+                    :
+                    <>
+                    <Button icon floated='right' onClick={this.nextFormClick} className='hpi-small-next-button'>
+                    <Icon name='right arrow'/>
+                    </Button>
+                    <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='hpi-next-button'>
+                    Next Form
+                    <Icon name='right arrow'/>
+                    </Button>
+                    </>
+                    } )
             default:
                 // if API data is loaded, render the DiseaseForm
                 if (isLoaded) { 
                     let category_code = this.context['positivediseases'][step-2]
                     let parent_node = category_code + "0001"
                     return (
-                        <Segment>
                         <DiseaseForm
                             key={parent_node}
                             parent_node = {parent_node}
@@ -229,7 +238,45 @@ class HPIContent extends Component {
                             last = {true ? step === positive_length+1 : false}
                             windowWidth={windowWidth}
                         />
-                        </Segment>
+               
+                    {step === positive_length+1 ?
+                    <>
+                    <Button icon floated='left' onClick={this.back} className='hpi-small-previous-button'>
+                    <Icon name='left arrow'/>
+                    </Button>
+                    <Button icon labelPosition='left' floated='left' onClick={this.back} className='hpi-previous-button'>
+                    Previous Form
+                    <Icon name='left arrow'/>
+                    </Button>
+
+                    <Button icon floated='right' onClick={this.nextFormClick} className='hpi-small-next-button'>
+                    <Icon name='right arrow'/>
+                    </Button>
+                    <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='hpi-next-button'>
+                    Next Form
+                    <Icon name='right arrow'/>
+                    </Button>
+                    </>
+                    :
+                    <>
+                    <Button icon floated='left' onClick={this.back} className='hpi-small-previous-button'>
+                    <Icon name='left arrow'/>
+                    </Button>
+                    <Button icon labelPosition='left' floated='left' onClick={this.back} className='hpi-previous-button'>
+                    Previous Form
+                    <Icon name='left arrow'/>
+                    </Button>
+
+                    <Button icon floated='right' onClick={this.continue} className='hpi-small-next-button'>
+                    <Icon name='right arrow'/>
+                    </Button>
+                    <Button icon labelPosition='right' floated='right' onClick={this.continue} className='hpi-next-button'>
+                    Next Form
+                    <Icon name='right arrow'/>
+                    </Button>
+                    </>
+                    }
+                    </div> 
                     )}
                 // if API data is not yet loaded, show loading screen 
                 else {return <h1> Loading... </h1>}

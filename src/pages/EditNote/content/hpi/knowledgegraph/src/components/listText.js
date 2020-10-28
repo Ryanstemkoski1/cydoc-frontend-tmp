@@ -1,6 +1,7 @@
 import React from 'react'
 import HPIContext from 'contexts/HPIContext.js';
 import HandleInput from './HandleInput';
+import '../css/listText.css';
 
 export default class ListText extends React.Component {
     static contextType = HPIContext 
@@ -34,6 +35,6 @@ export default class ListText extends React.Component {
         return (
         <div> 
             <div> {button_map}</div>
-            <div> <button onClick={this.handlePlusClick} style={{borderRadius: '50%'}}> + </button> </div>
+            <div> <button onClick={this.handlePlusClick} className='button-plus-click'> + </button> </div>
         </div>)
         }}

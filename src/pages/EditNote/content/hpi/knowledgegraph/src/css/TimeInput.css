@@ -1,0 +1,22 @@
+.ui.grid > .row.time-grid-row {
+    padding: 5px;
+}
+
+.ui.grid > .row > .column.time-grid-column {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.ui.button.time-grid-button {
+    width: 100%;
+}
+
+.time-div {
+    margin-top: 30px;
+}
+
+.ui.grid > .row > .column > .time-input {
+    position: relative;
+    top: 30%;
+    left: 30%;
+}
