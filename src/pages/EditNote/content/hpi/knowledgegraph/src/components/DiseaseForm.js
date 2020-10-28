@@ -6,6 +6,7 @@ import HPIContext from 'contexts/HPIContext.js';
 import Accordian from "./accordian"
 import { DISEASE_TABS_MED_BP, DISEASE_TABS_SMALL_BP } from 'constants/breakpoints';
 import '../../HPI.css';
+import diseaseCodes from '../../../../../../../constants/diseaseCodes'
 
 //The order goes DiseaseForm -> DiseaseFormQuestions -> QuestionAnswer -> ButtonTag
 
@@ -14,19 +15,22 @@ export class DiseaseForm extends React.Component {
     constructor(props, context) {
         super(props, context)
         this.state = {
-            diseasesNames: this.props.categories,
-            functionLoad: false,
-            questionMap: {}
+            functionLoad: false, // true when knowledge graph is processed
+            question_map: {}, // stores question components for each node 
+            response_types: { "CLICK-BOXES": [], "MEDS-POP": [], "TIME": ["", ""], "LIST-TEXT":  {1: "", 2: "", 3: ""}} // can we improve upon this 
         }
         let values = this.context['hpi']
-        if (!(this.props.tab_category in values)) {
-            values[this.props.tab_category] = {}
+        // if there a way for me to add this directly to HPIContext?
+        if (!('nodes' in values)) { 
+            values['nodes'] = {} 
+            values['questionOrder_to_node'] = {}
+            values['parent_to_child_questionOrder'] = {}
             this.context.onContextChange("hpi", values)
-        }
+        } 
     }
 
     componentDidMount() {
-        this.function() // so it is only run once 
+        this.process_knowledge_graph()
     }
 
     continue = e => {
@@ -49,121 +53,129 @@ export class DiseaseForm extends React.Component {
         this.props.last_page()
     }
 
-    function() {
-        const {category, parent_code, graphData, tab_category} = this.props;
-        let graph = graphData['graph']
-        let nodes = graphData['nodes']
-        let edges = graphData['edges']
-        var questionMap = {}
-        const parent_values = graph[parent_code] // edges associated to parent node
-        // for each edge associated to parent node 
-        for (var index in parent_values) {
-            let num_key = parent_values[index].toString() // edge integer to string (as found in edges)
-            let current_node = edges[num_key]['from'] // child node 
-            let uid = nodes[current_node]['uid'] // unique ID 
-            let children = false 
-            let current_node_values = graph[current_node] // edges associated to child node 
-            if (current_node_values.length > 0) children = true // check if the child node has children
-                questionMap[uid] = { // store the child node and question into questionMap 
-                    'question': <DiseaseFormQuestions
-                        key={uid}
-                        question={nodes[current_node]['text']}
-                        responseType={nodes[current_node]['responseType']}
-                        category={category}
-                        uid={uid} 
-                        has_children={children}
-                        current_node={current_node}
-                        category_code = {tab_category}
-                    />
-                }
-                let values = this.context['hpi']
-                if (!(uid in values[tab_category])){ // store node and associated info under HPI Context 
-                    values[tab_category][uid] = {
-                        'category': tab_category,
-                        'category_name': category,
-                        'question': nodes[current_node]['text'],
-                        'response': "",
-                        'response_type': ''
-                    }
-                    this.context.onContextChange("hpi", values)
-                }
-                // check if the current node in the graph has children that we need to look for
-                if (children) { 
-                    questionMap[uid]['children'] = {}
-                    let curr_node = edges[current_node_values[0]]['from']
-                    let first_node = (curr_node).substring(0,curr_node.length-2) + "01" 
-                    questionMap[uid]['children_category'] = nodes[first_node]['category']
-                    var children_category_name = (((nodes[first_node]['category'].split("_")).join(" ")).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase());
-                    if (children_category_name === "Shortbreath") children_category_name = "Shortness of Breath"
-                    if (children_category_name === "Nausea-vomiting") children_category_name = "Nausea/Vomiting" 
-                    values[tab_category][uid]['children_category'] = children_category_name
-                    values[tab_category][uid]['children_category_code'] = nodes[first_node]['category']
-                    // if statement so that we don't reset the children key every time we generate the child disease form
-                    if (!('children' in values[tab_category][uid])) values[tab_category][uid]['children'] = {}
-                    for (var new_index in current_node_values) {
-                        // the first edge index from the first child
-                        let new_edge_index = current_node_values[new_index].toString()
-                        // the child's node
-                        let new_current_node = edges[new_edge_index]['from']
-                        let child_uid = nodes[new_current_node]['uid']
-                        questionMap[uid]['children'][new_current_node] = {
-                        'question': <DiseaseFormQuestions
-                                    key={nodes[new_current_node][uid]}
-                                    question={nodes[new_current_node]['text']}
-                                    responseType={nodes[new_current_node]['responseType']}
-                                    category={category}
-                                    uid={uid} 
-                                    child_uid={child_uid} 
-                                    current_node={current_node}
-                                    category_code = {tab_category}
-                                    am_child={true}
-                        />
-                    }
-                if (!(child_uid in values[tab_category][uid]['children'])) {  
-                    values[tab_category][uid]['children'][child_uid] = {
-                        'category': tab_category,
-                        'category_name': category,
-                        'question': nodes[new_current_node]['text'],
-                        'response': "",
-                        'response_type': ""
-                        } } }
-            this.context.onContextChange("hpi", values) 
-                } } 
-                    
-        this.setState({questionMap: questionMap, functionLoad: true})
+    // organizes child nodes in order based on their questionOrder attribute
+    questionOrder(list_edges, nodes, edges, cat_code) {
+        var child_ranks = []
+        for (var edge_idx in list_edges) {
+            var edge = list_edges[edge_idx]
+            var node = edges[edge.toString()]['from']
+            var question_order = parseInt(nodes[node]['questionOrder'])
+            if (!(question_order)) question_order = child_ranks.length + 2 //remove when Pacemaker has a questionOrder property
+            var curr_cat = node.substring(0, 3)
+            // weigh the child category if it is different from the parent's category
+            if (curr_cat !== cat_code) {
+                var weight = curr_cat.charCodeAt(0) + curr_cat.charCodeAt(1) + curr_cat.charCodeAt(2) // weigh based on unicode sum of prefix
+                question_order += weight 
+            }
+            child_ranks.push([question_order, node]) 
+        }
+        child_ranks.sort() 
+        var rank_child = child_ranks.map(( rank ) => rank[0]) // sort based on questionOrder
+        var child_nodes = child_ranks.map(( rank ) => rank[1]) // child nodes are in order based on the order of the questionOrder
+        return [rank_child, child_nodes] 
+     }
+
+    // processes knowledge graph to determine order of questions in HPI based on questionOrder attribute of nodes
+    process_knowledge_graph() { // TODO: does this also need a set to keep track of nodes like for traversal()
+        const {graphData, parent_node} = this.props
+        var values = this.context['hpi']
+        var graph = graphData['graph']
+        var nodes = graphData['nodes']
+        var edges = graphData['edges']
+        var cat_code = parent_node.substring(0, 3)
+        if (cat_code in values['questionOrder_to_node']) return // if the questionOrder_to_node was already made, then don't need to process knowledge graph again
+        var questionOrder_to_node = {} 
+        var parent_to_child_questionOrder = {}
+        var question_map = {}
+        var queue = [parent_node]
+        while (queue.length) { 
+            var curr_node = queue.shift() 
+            var rank = parseInt(nodes[curr_node]['questionOrder'])
+            if (!(rank)) rank = Object.keys(questionOrder_to_node).length + 1 // remove when Pacemaker has questionOrder attribute 
+            var curr_category = curr_node.substring(0, 3)
+            var uid = nodes[curr_node]['uid']
+            if (curr_category !== cat_code) {
+                var weight = curr_category.charCodeAt(0) + curr_category.charCodeAt(1) + curr_category.charCodeAt(2)
+                rank += weight 
+            }
+            parent_to_child_questionOrder[rank] = curr_node 
+            var edges_list = graph[curr_node] 
+            var child_array = this.questionOrder(edges_list, nodes, edges, cat_code) 
+            var child_order = child_array[0]
+            var child_nodes = child_array[1]
+            questionOrder_to_node[rank] = child_order 
+            queue = queue.concat(child_nodes)
+            if (!(curr_node in values['nodes'])){
+                values['nodes'][curr_node] = nodes[curr_node] 
+                var response_type = nodes[curr_node]['responseType']
+                // use saved response so when going back to a page, the answers aren't wiped out 
+                values['nodes'][curr_node]['response'] = response_type in this.state.response_types ? this.state.response_types[response_type] : ""
+            }
+            question_map[curr_node] = <DiseaseFormQuestions key={uid} node={curr_node} category={cat_code}/>
+        }
+        values['questionOrder_to_node'][cat_code] = questionOrder_to_node 
+        values['parent_to_child_questionOrder'][cat_code] = parent_to_child_questionOrder 
+        this.context.onContextChange('hpi', values)
+        this.setState({question_map: question_map, functionLoad: true})
+    }
+
+    // checks if all of the children are of a different category than the parent node. If so, they are displayed in an accordion
+    check_accordion(child_edges) {
+        const {parent_node} = this.props
+        var cat_code = parent_node.substring(0,3)
+        var parent_to_child_questionOrder = this.context['hpi']['parent_to_child_questionOrder'][cat_code]
+        const {question_map} = this.state
+        var child_questions = []
+        for (var i in child_edges) {
+            var edge = child_edges[i] 
+            var child_node = parent_to_child_questionOrder[edge]
+            var child_cat = child_node.substring(0, 3)
+            if (child_cat === cat_code) return false 
+            child_questions.push(question_map[child_node])
+        }  
+        return <Accordian child_questions={child_questions}/>
+    }
+
+    // iterates through question components in order of their questionOrder to be displayed on the HPI interview page
+    traversal() { 
+        // TODO: Include Accordian for cases with different category children questions 
+        const {question_map} = this.state
+        var values = this.context['hpi']
+        var cat_code = this.props.parent_node.substring(0, 3)
+        var questionOrder_to_node = values['questionOrder_to_node'][cat_code]
+        var parent_to_child_questionOrder = values['parent_to_child_questionOrder'][cat_code]
+        var question_arr = [] 
+        var traversed = new Set() 
+        var stack = [1]   
+        while (stack.length) {  
+            var curr_edge = stack.pop() 
+            if (traversed.has(curr_edge)) continue // sublinear performance, but is there a way to be even more efficient with checking for traversal?
+            traversed.add(curr_edge)
+            var curr_node = parent_to_child_questionOrder[curr_edge] 
+            var child_edges = (values['nodes'][curr_node]['response'] === "Yes" || curr_edge === 1) ? questionOrder_to_node[curr_edge]: []
+            child_edges.sort()
+            child_edges.reverse()
+            var child_map = child_edges.length ? this.check_accordion(child_edges): false
+            question_arr.push(question_map[curr_node])
+            if (child_map) question_arr.push(child_map) 
+            else stack = stack.concat(child_edges)
+        }
+        question_arr.shift() 
+        return question_arr
     }
 
     render() {
-        const {tab_category, diseaseTabs, windowWidth, category} = this.props;
-        const {functionLoad, questionMap} = this.state;
-
+        const {diseaseTabs, windowWidth, parent_node} = this.props;
         const collapseTabs = diseaseTabs.length >= 10
             || (diseaseTabs.length >= 5 && windowWidth < DISEASE_TABS_MED_BP)
             || windowWidth < DISEASE_TABS_SMALL_BP;
 
-        let newMap = [];
-        if (functionLoad) { 
-            // if function() is complete, then loop through questionMap to create a list of questions to display in the form
-            for (const uid in questionMap) {
-                let current_value = questionMap[uid]
-                let question = current_value['question']
-                newMap.push(question)
-                if (this.context["hpi"][this.props.tab_category][uid]['display_children']) {
-                    if (current_value['children']['type']) {
-                        newMap.push(current_value['children'])
-                }
-                // if the children questions are of a different category, display accordian view
-                    if (tab_category !== current_value['children_category']) {
-                        newMap.push(
-                        <Accordian 
-                            current_children={current_value['children']} 
-                            category={current_value['children_category']}
-                        />)
-                    }
-                    else {
-                        for (const child_node in current_value['children']) {
-                            newMap.push(current_value['children'][child_node]['question']) }}}}
+        var question_arr = []
+        if (this.state.functionLoad) { 
+            question_arr = this.traversal()
         }
+
+        var category = Object.keys(diseaseCodes).find(key => diseaseCodes[key] === parent_node.substring(0,3)) 
 
         return (
             <div>
@@ -207,7 +219,7 @@ export class DiseaseForm extends React.Component {
                     }
                 </div>
                     <h1 className='category-header'>{category}</h1>
-                    <div className='question-map'>{newMap} </div>
+                    <div className='question-map'>{question_arr} </div>
 
             </div>
         )

@@ -5,8 +5,8 @@ class ButtonTag extends React.Component {
     static contextType = HPIContext
     constructor(props, context) {
         super(props, context)
-        const values = this.context["hpi"][this.props.category_code][this.props.uid]
-        const answers = this.props.am_child ? values['children'][this.props.child_uid]['response'] : values["response"]
+        const values = this.context["hpi"]['nodes'][this.props.node]
+        const answers = values["response"]
         this.state = {
             id: (answers !== null && answers.includes(this.props.name)) ? -1 :  1,
             buttonColor: (answers !== null && answers.includes(this.props.name)) ? "lightslategrey": "whitesmoke",
@@ -28,14 +28,7 @@ class ButtonTag extends React.Component {
         }
         this.setState({id: this.state.id*-1, buttonColor: new_color, fontColor: font_color})
         const values = this.context["hpi"] 
-        if (this.props.am_child) {
-            values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = 
-            values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'].concat(this.props.name) 
-        }
-        else {
-            values[this.props.category_code][this.props.uid]["response"] = values[this.props.category_code][this.props.uid]["response"].concat(this.props.name)
-            values[this.props.category_code][this.props.uid]["display_children"] = this.props.children 
-        }
+        values['nodes'][this.props.node]["response"] = values['nodes'][this.props.node]["response"].concat(this.props.name)
         this.context.onContextChange("hpi", values) 
     }
 

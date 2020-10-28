@@ -14,22 +14,21 @@ class TimeInput extends Component {
     handleToggleButtonClick(event){
         const values = this.context["hpi"];
         console.log(event.target.title)
-        if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'][1] = event.target.title
-        else values[this.props.category_code][this.props.uid]["response"][1] = event.target.title
+        values['nodes'][this.props.node]["response"][1] = event.target.title
         this.context.onContextChange("hpi", values);
     }
 
     handleInputChange = (event) => {
         const values = this.context["hpi"]
-        if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'][0] = event 
-        else values[this.props.category_code][this.props.uid]["response"][0] = event
+        values['nodes'][this.props.node]["response"][0] = event
         this.context.onContextChange("hpi", values)
     }
 
     render() {
-        const values = this.context["hpi"][this.props.category_code][this.props.uid]
-        var value = this.props.am_child ? values['children'][this.props.child_uid]['response'][0] : values["response"][0]
-        var time_value = this.props.am_child ? values['children'][this.props.child_uid]['response'][1] : values["response"][1]
+        const values = this.context["hpi"]['nodes'][this.props.node]
+        var value = values["response"][0]
+        var time_value = values["response"][1]
+        var question = values['text']
         const time_options = ["minutes", "hours", "days", "weeks", "months", "years"]
         var button_map = []
         for (var time_index = 0; time_index < time_options.length; time_index += 3) {
@@ -55,7 +54,7 @@ class TimeInput extends Component {
                             <div style={{position: 'relative', top: '30%', left: '30%'}}> 
                                 <NumericInput
                                     size={10}
-                                    key={this.props.question}
+                                    key={question}
                                     value={value}
                                     min={0} 
                                     onChange={this.handleInputChange}

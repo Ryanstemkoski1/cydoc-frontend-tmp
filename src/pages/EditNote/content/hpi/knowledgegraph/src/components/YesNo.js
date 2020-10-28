@@ -5,8 +5,8 @@ class YesNo extends React.Component {
     static contextType = HPIContext
     constructor(props, context) {
         super(props, context)
-        const values = this.context["hpi"][this.props.category_code][this.props.uid]
-        const answers = this.props.am_child ? values['children'][this.props.child_uid]['response'] : values["response"] 
+        const values = this.context["hpi"]['nodes'][this.props.node]
+        const answers = values["response"] 
         this.state = {
             yes_id: 0,
             no_id: 0,
@@ -19,26 +19,19 @@ class YesNo extends React.Component {
         this.handleYesClick = this.handleYesClick.bind(this)
         this.handleNoClick = this.handleNoClick.bind(this)
     }
+    // eventually combine into one function.
 
     handleYesClick() {
         this.setState({yes_color: "lightslategrey", yes_id: 1, no_id: -1, no_color: "whitesmoke", yes_font: "white", no_font: "black"})
         const values = this.context["hpi"]
-        if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = "Yes"
-        else {
-            values[this.props.category_code][this.props.uid]["response"] = "Yes"
-            if (this.props.has_children) values[this.props.category_code][this.props.uid]["display_children"] = true
-        }
+        values['nodes'][this.props.node]["response"] = "Yes"
         this.context.onContextChange("hpi", values)
     }
 
     handleNoClick() {
         this.setState({yes_color: "whitesmoke", yes_id: -1, no_id: 1, no_color: "lightslategrey", yes_font: "black", no_font: "white"})
         const values = this.context["hpi"]
-        if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = "No"
-        else { 
-            values[this.props.category_code][this.props.uid]["display_children"] = false
-            values[this.props.category_code][this.props.uid]["response"] = "No"
-        }
+        values['nodes'][this.props.node]["response"] = "No"
         this.context.onContextChange("hpi", values)
     }
 

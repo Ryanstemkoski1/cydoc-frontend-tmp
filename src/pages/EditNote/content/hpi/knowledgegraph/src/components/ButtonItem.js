@@ -4,6 +4,7 @@ import "../css/Button.css"
 import DiseaseTag from "./DiseaseTag";
 import HPIContext from 'contexts/HPIContext.js';
 import '../../HPI.css';
+import diseaseCodes from '../../../../../../../constants/diseaseCodes'
 
 class ButtonItem extends React.Component {
     static contextType = HPIContext
@@ -13,7 +14,7 @@ class ButtonItem extends React.Component {
         var disease_buttons = this.props.diseases_list.map(disease =>
             <DiseaseTag
                 key={disease}
-                name={disease}
+                name={Object.keys(diseaseCodes).find(key => diseaseCodes[key] === disease)}
                 handler = {this.handler}
             />)
         this.state = {

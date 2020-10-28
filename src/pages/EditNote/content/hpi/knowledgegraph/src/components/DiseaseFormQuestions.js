@@ -1,10 +1,19 @@
 import React from 'react'
 import QuestionAnswer from "./QuestionAnswer";
+import HPIContext from 'contexts/HPIContext.js';
+import { useDispatch } from 'react-redux';
 
 class DiseaseFormQuestions extends React.Component {
+    static contextType = HPIContext
 
-    render() {
-        let question = this.props.question
+    // Can we change this so that it doesn't need to re-render each time the component is updated? 
+    render() { 
+        var values = this.context['hpi']
+        var curr_node = values['nodes'][this.props.node]
+        var question = curr_node['text']
+        var response_type = curr_node['responseType']
+        var uid = curr_node['uid']
+        // var question = question_text 
         let symptom = question.search("SYMPTOM")
         let disease = question.search("DISEASE")
         // "SYMPTOM" and "DISEASE" should be replaced by the name of the current disease if it is part of the question text.
@@ -15,9 +24,8 @@ class DiseaseFormQuestions extends React.Component {
             question = question.substring(0, disease) + this.props.category.toLowerCase() + question.substring(disease + 7)
         }
         let response_choice = ''
-        const {responseType} = this.props
         // Create buttons for users to click as their answer 
-        if (responseType === "CLICK-BOXES" || responseType.slice(-3,responseType.length) === 'POP' || responseType === 'nan') {
+        if (response_type === "CLICK-BOXES" || response_type.slice(-3,response_type.length) === 'POP' || response_type === 'nan') {
             let click = question.search("CLICK")
             let select = question.search('\\[')
             let end_select = question.search('\\]')
@@ -35,21 +43,17 @@ class DiseaseFormQuestions extends React.Component {
             for (let response_index in response_choice) {
                 response_choice[response_index] = response_choice[response_index].trim()
             }
-        } else if (responseType === "YES-NO" || responseType==="NO-YES") {
+        } else if (response_type === "YES-NO" || response_type==="NO-YES") {
             response_choice = ["Yes", "No"]
         } else response_choice = []
         return (
-            <div style={{marginTop: 30, marginLeft: this.props.am_child ? 23:0}}>
+            <div style={{marginTop: 30}}>
                 <QuestionAnswer
+                    key={uid}
                     question={question}
-                    responseType={this.props.responseType}
+                    responseType={response_type}
                     response_choice={response_choice}
-                    handler={this.handler}
-                    has_children={this.props.has_children} 
-                    category_code = {this.props.category_code}
-                    uid = {this.props.uid}
-                    child_uid = {this.props.child_uid}
-                    am_child={this.props.am_child}
+                    node={this.props.node}
                 />
             </div>
         )
