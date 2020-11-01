@@ -64,6 +64,18 @@
     padding: 0;
 }
 
+.ui.divider.divider-style {
+    margin-top: 25px;
+}
+
+.content-style {
+    margin-top: 25px;
+}
+
+.family-member {
+    display: inline;
+}
+
 @media screen and (max-width: 767px) {
     .ui.grid > .column:not(.row).family-member-input {
         padding-bottom: 0 !important;
