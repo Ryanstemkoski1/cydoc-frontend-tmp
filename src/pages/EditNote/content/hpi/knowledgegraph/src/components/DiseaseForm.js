@@ -153,7 +153,7 @@ export class DiseaseForm extends React.Component {
             traversed.add(curr_edge)
             var curr_node = parent_to_child_questionOrder[curr_edge] 
             var child_edges = (values['nodes'][curr_node]['response'] === "Yes" || curr_edge === 1) ? questionOrder_to_node[curr_edge]: []
-            child_edges.sort()
+            child_edges = child_edges.sort((a,b) => a - b) // numerical sort by comparison - .sort() in JavaScript is alphabetical
             child_edges.reverse()
             var child_map = child_edges.length ? this.check_accordion(child_edges): false
             question_arr.push(question_map[curr_node])

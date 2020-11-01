@@ -78,6 +78,7 @@ Function: Render the page of the HPI form for each disease.
     * A stack is used because there are many children of children of children and a recursive-like function is needed to examine the questions in order. 
         * A stack is used over a queue because child questions, when the parent question's response is "Yes", take priority over other questions on the same level as the parent node. If a queue were used, the children of the first parent node (0001) would be examined in order, and the children of the children would be added to the end of the queue, which would prevent them from being viewed first in this function. Thus, a stack is better used, by pushing the children nodes is descending order to the top of the stack so that they are retrieved in ascending order while also allowing retrieval of children of children in order.
         * During the while loop, a set is used to keep track of which nodes have been examined already. Without this set, the stack would lead to a stack overflow error (endless recursion; in too deep).
+            * Set.has() has sublinear performance but isn't O(1) lookup ([source](https://stackoverflow.com/questions/55057200/is-the-set-has-method-o1-and-array-indexof-on)).
     * check_accordion() is called in order to create an expandible accordion for questions of a separate category.
     * In the end, the first parent question is removed because it is assumed that the user is positive for the condition/disease/symptoms if they chose it in the beginning.
 6. check_accordion() 
