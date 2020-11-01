@@ -122,7 +122,7 @@ class HPIContent extends Component {
     // corresponds to its step - 2. The page will then change to the clicked tab's corresponding disease
     // category and the active tab will change to that as well.
     handleItemClick = (e, {name}) => { 
-        this.context.onContextChange("step", this.context['positivediseases'].indexOf(Object.keys(diseaseCodes).find(key => diseaseCodes[key] === name))+2) 
+        this.context.onContextChange("step", this.context['positivediseases'].indexOf(diseaseCodes[name])+2) 
         this.context.onContextChange("activeHPI", name)
     }
 

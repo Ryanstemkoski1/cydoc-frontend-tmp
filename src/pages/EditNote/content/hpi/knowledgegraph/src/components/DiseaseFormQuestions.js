@@ -2,6 +2,7 @@ import React from 'react'
 import QuestionAnswer from "./QuestionAnswer";
 import HPIContext from 'contexts/HPIContext.js';
 import { useDispatch } from 'react-redux';
+import diseaseCodes from '../../../../../../../constants/diseaseCodes'
 
 class DiseaseFormQuestions extends React.Component {
     static contextType = HPIContext
@@ -16,12 +17,13 @@ class DiseaseFormQuestions extends React.Component {
         // var question = question_text 
         let symptom = question.search("SYMPTOM")
         let disease = question.search("DISEASE")
+        let disease_name = Object.keys(diseaseCodes).find(key => diseaseCodes[key] === this.props.category)
         // "SYMPTOM" and "DISEASE" should be replaced by the name of the current disease if it is part of the question text.
         if (symptom > -1) {
-            question = question.substring(0,symptom) + this.props.category.toLowerCase() + question.substring(symptom+7)
+            question = question.substring(0,symptom) + disease_name.toLowerCase() + question.substring(symptom+7)
         }
         if (disease > -1) {
-            question = question.substring(0, disease) + this.props.category.toLowerCase() + question.substring(disease + 7)
+            question = question.substring(0, disease) + disease_name.toLowerCase() + question.substring(disease + 7)
         }
         let response_choice = ''
         // Create buttons for users to click as their answer 

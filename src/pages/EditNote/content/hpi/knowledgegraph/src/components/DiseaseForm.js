@@ -69,7 +69,7 @@ export class DiseaseForm extends React.Component {
             }
             child_ranks.push([question_order, node]) 
         }
-        child_ranks.sort() 
+        child_ranks = child_ranks.sort((a,b) => a - b)
         var rank_child = child_ranks.map(( rank ) => rank[0]) // sort based on questionOrder
         var child_nodes = child_ranks.map(( rank ) => rank[1]) // child nodes are in order based on the order of the questionOrder
         return [rank_child, child_nodes] 
@@ -83,7 +83,6 @@ export class DiseaseForm extends React.Component {
         var nodes = graphData['nodes']
         var edges = graphData['edges']
         var cat_code = parent_node.substring(0, 3)
-        if (cat_code in values['questionOrder_to_node']) return // if the questionOrder_to_node was already made, then don't need to process knowledge graph again
         var questionOrder_to_node = {} 
         var parent_to_child_questionOrder = {}
         var question_map = {}
@@ -100,7 +99,7 @@ export class DiseaseForm extends React.Component {
             }
             parent_to_child_questionOrder[rank] = curr_node 
             var edges_list = graph[curr_node] 
-            var child_array = this.questionOrder(edges_list, nodes, edges, cat_code) 
+            var child_array = this.questionOrder(edges_list, nodes, edges, cat_code)
             var child_order = child_array[0]
             var child_nodes = child_array[1]
             questionOrder_to_node[rank] = child_order 
@@ -120,14 +119,14 @@ export class DiseaseForm extends React.Component {
     }
 
     // checks if all of the children are of a different category than the parent node. If so, they are displayed in an accordion
-    check_accordion(child_edges) {
-        const {parent_node} = this.props
+    check_accordion(child_edges) { 
+        const {parent_node} = this.props 
         var cat_code = parent_node.substring(0,3)
         var parent_to_child_questionOrder = this.context['hpi']['parent_to_child_questionOrder'][cat_code]
         const {question_map} = this.state
         var child_questions = []
-        for (var i in child_edges) {
-            var edge = child_edges[i] 
+        for (var i in child_edges) { 
+            var edge = child_edges[i]  
             var child_node = parent_to_child_questionOrder[edge]
             var child_cat = child_node.substring(0, 3)
             if (child_cat === cat_code) return false 
@@ -151,7 +150,7 @@ export class DiseaseForm extends React.Component {
             var curr_edge = stack.pop() 
             if (traversed.has(curr_edge)) continue // sublinear performance, but is there a way to be even more efficient with checking for traversal?
             traversed.add(curr_edge)
-            var curr_node = parent_to_child_questionOrder[curr_edge] 
+            var curr_node = parent_to_child_questionOrder[curr_edge]  
             var child_edges = (values['nodes'][curr_node]['response'] === "Yes" || curr_edge === 1) ? questionOrder_to_node[curr_edge]: []
             child_edges = child_edges.sort((a,b) => a - b) // numerical sort by comparison - .sort() in JavaScript is alphabetical
             child_edges.reverse()
@@ -160,7 +159,7 @@ export class DiseaseForm extends React.Component {
             if (child_map) question_arr.push(child_map) 
             else stack = stack.concat(child_edges)
         }
-        question_arr.shift() 
+        question_arr.shift()  
         return question_arr
     }
 
