@@ -10,7 +10,7 @@ import {
 import AddRowButton from 'components/tools/AddRowButton';
 import { FORM_DEFAULTS } from './DiscussionPlanDefaults';
 import HPIContext from 'contexts/HPIContext.js'
-import diseases from 'constants/diseases';
+import diseases from 'constants/differential_diagnoses';
 import medications from 'constants/drugNames';
 import procedures from 'constants/procedures';
 import constants from 'constants/registration-constants.json';
