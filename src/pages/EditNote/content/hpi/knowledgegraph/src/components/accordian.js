@@ -1,6 +1,7 @@
 import React, {Component} from "react"
 import { Accordion, Icon } from 'semantic-ui-react'
 import diseaseCodes from '../../../../../../../constants/diseaseCodes'
+import '../css/accordian.css';
 
 export default class Accordian extends Component {
     // accordion is collapsed by default
@@ -19,7 +20,7 @@ export default class Accordian extends Component {
       var child_node = this.props.child_questions[0].props.node
       var category = Object.keys(diseaseCodes).find(key => diseaseCodes[key] === child_node.substring(0,3)) 
     return (
-        <Accordion style={{marginBottom: 35}}>
+        <Accordion className='accordion-container'>
             <Accordion.Title 
               active={activeIndex === 0}
               index={0}

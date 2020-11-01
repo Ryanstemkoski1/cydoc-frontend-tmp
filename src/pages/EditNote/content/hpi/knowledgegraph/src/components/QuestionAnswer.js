@@ -120,10 +120,10 @@ class QuestionAnswer extends React.Component {
                 key={this.props.node}
                 pop={true}
             />)
-        } 
+        }
         return (
-            <div style={{marginBottom: 20}}> 
-                <div> {this.props.question} <div style={{marginTop: 7}}>{button_map}</div> </div>
+            <div className='qa-div'> 
+                <div> {this.props.question} <div className='qa-button'>{button_map}</div> </div>
             </div>
         )
     }
