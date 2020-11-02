@@ -33,7 +33,7 @@ export default class GridContent extends Component {
             <Fragment>
                 <br/>
                 {contentHeader}
-                <Divider/>
+                {this.props.small ? <Divider style={{width: "90%", margin: "auto", marginTop: "5px", marginBottom: "5px"}}/> : <Divider/>}
                 <Grid columns={numColumns} verticalAlign='middle'>
                     {rows}
                 </Grid>

@@ -15,6 +15,7 @@ export default class FamilyHistoryBlock extends Component {
         super(props, context)
         this.handlePlusClick = this.handlePlusClick.bind(this)
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this)
+        this.handleDelete = this.handleDelete.bind(this)
     }
 
     handlePlusClick() {
@@ -26,7 +27,15 @@ export default class FamilyHistoryBlock extends Component {
         var members = values[this.props.index]['Family Member']
         if (members[members.length-1]) values[this.props.index]['Family Member'].push("")
         this.context.onContextChange("Family History", values)
-        
+    }
+
+    handleDelete(index, family_index) {
+        var values = this.context['Family History'];
+        values[index]['Family Member'].splice(family_index, 1)
+        values[index]['Cause of Death'].splice(family_index, 1)
+        values[index]['Comments'].splice(family_index, 1)
+        values[index]['Living'].splice(family_index, 1)
+        this.context.onContextChange("Family History", values)
     }
 
     handleToggleButtonClick(event, data){
@@ -63,6 +72,7 @@ export default class FamilyHistoryBlock extends Component {
                     mobile = {mobile}
                     comments = {comments}
                     familyMember = {familyMember}
+                    handleDelete = {this.handleDelete}
                 /> 
             )
         }
@@ -174,11 +184,12 @@ export default class FamilyHistoryBlock extends Component {
                                     contentHeader={new_content_header}
                                     rows={new_row}
                                     value_type = "Family History"
+                                    small={true}
                                 />
                             </Fragment>
                             : ""
                         }
-                        <hr className="condition-divider"/>
+                        <Divider className='divider-style'/>
                     </div> 
                 </div>
             )

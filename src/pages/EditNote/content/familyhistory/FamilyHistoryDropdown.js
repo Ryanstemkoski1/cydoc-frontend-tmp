@@ -18,7 +18,6 @@ export default class FamilyHistoryDropdown extends Component {
         this.handleChange = this.handleChange.bind(this)
         this.handleCauseOfDeathToggle = this.handleCauseOfDeathToggle.bind(this)
         this.handleCommentsChange = this.handleCommentsChange.bind(this)
-        this.handleDelete = this.handleDelete.bind(this)
         this.handleLivingToggle = this.handleLivingToggle.bind(this)
     }
 
@@ -52,22 +51,22 @@ export default class FamilyHistoryDropdown extends Component {
         this.context.onContextChange("Family History", values)
     }
 
-    handleDelete(event, data) {
-        const { index, family_index } = this.props
-        var values = this.context['Family History'];
-        values[index]['Family Member'].splice(family_index, 1)
-        values[index]['Cause of Death'].splice(family_index, 1)
-        values[index]['Comments'].splice(family_index, 1)
-        values[index]['Living'].splice(family_index, 1)
-        this.context.onContextChange("Family History", values)
-    }
+    // handleDelete(event, data) {
+    //     const { index, family_index } = this.props
+    //     var values = this.context['Family History'];
+    //     values[index]['Family Member'].splice(family_index, 1)
+    //     values[index]['Cause of Death'].splice(family_index, 1)
+    //     values[index]['Comments'].splice(family_index, 1)
+    //     values[index]['Living'].splice(family_index, 1)
+    //     this.context.onContextChange("Family History", values)
+    // }
 
     render() {
         const {index, family_index, mobile, condition, comments, familyMember} = this.props;
         const cause_of_death = this.context["Family History"][index]["Cause of Death"][family_index];
-        const family_member = familyMember[family_index]
+        let family_member = familyMember[family_index]
+        if(!family_member) family_member = "";
         const comment = comments[family_index]
-        console.log(this.context);
         const living = this.context["Family History"][index]["Living"][family_index]
 
         return (
@@ -149,7 +148,7 @@ export default class FamilyHistoryDropdown extends Component {
                                         circular
                                         icon="close"
                                         size='mini'
-                                        onClick = {this.handleDelete}
+                                        onClick = {()=>this.props.handleDelete(this.props.index, this.props.family_index)}
                                     /> 
                                     delete family member
                                 </Grid.Row>
