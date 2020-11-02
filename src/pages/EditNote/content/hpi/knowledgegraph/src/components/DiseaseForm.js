@@ -174,35 +174,6 @@ export class DiseaseForm extends React.Component {
                     />
                     : <Menu tabular borderless items={diseaseTabs} className='disease-menu'/>
                 }
-
-                <div className='arrow-buttons'>
-                    <div className='next-button'> 
-                        <Button 
-                            circular
-                            icon = 'angle double left'
-                            onClick = {this.first_page}
-                        />
-                        <Button
-                            circular
-                            icon='angle left'
-                            onClick={this.back}
-                        /> 
-                    </div>
-                    {this.props.last ? "" :
-                        <div className = 'next-button'> 
-                            <Button
-                                circular
-                                icon='angle right'
-                                onClick={this.continue}
-                            /> 
-                            <Button 
-                                circular
-                                icon = 'angle double right'
-                                onClick = {this.last_page}
-                        />
-                        </div>
-                    }
-                </div>
                     <h1 className='category-header'>{category}</h1>
                     <div className='question-map'>{newMap} </div>
 

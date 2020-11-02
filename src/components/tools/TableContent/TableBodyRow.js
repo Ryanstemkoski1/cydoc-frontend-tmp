@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextArea, Table, Dropdown, Input } from 'semantic-ui-react';
+import { TextArea, Table, Dropdown, Input, Form, Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import './TableContent.css';
 
@@ -22,11 +22,10 @@ export class TableBodyRow extends Component {
         // Handles clicks outside of the "clickable area" (padding) of the input/textarea component within a cell
         if (innerInput != null) {
             if (innerInput.type == "textarea") {
-                // Focuses textareas (eg. Schedule, Dose, and Comments)
                 innerInput.focus();
             }
             else {
-                // Opens input dropdowns (eg. Drug Names, Reason for Taking, Side Effects)
+                // for Inputs/dropdowns
                 innerInput.click();
             }
         }
@@ -35,13 +34,21 @@ export class TableBodyRow extends Component {
     getCell(placeholder) {
         const {
             values, 
+            name,
             rowindex, 
             onTableBodyChange, 
+            onAddMedication,
+            onAddSideEffect,
+            onAddDrink,
             onAddItem,
             medicationOptions, 
             sideEffectsOptions, 
             proceduresOptions,
             diseaseOptions,
+            drinkOptions,
+            drinkSizes,
+            drugOptions,
+            modesOfDelivery,
             isPreview,
         } = this.props;
 
@@ -58,141 +65,257 @@ export class TableBodyRow extends Component {
                 </div>
             );
         }
-        switch (placeholder) {
-            case 'Procedure': {
-                cell = (
-                    <Input
-                        fluid
-                        className='content-input-computer content-dropdown'
-                    >
-                        <Dropdown
+
+        if (name === 'Alcohol' || name === 'Recreational Drugs') {
+            switch (placeholder) {
+                case 'Drink Type': {
+                    cell = (
+                        <Input
                             fluid
-                            search
-                            selection
-                            clearable
-                            allowAdditions
-                            icon=''
-                            options={proceduresOptions}
-                            optiontype='proceduresOptions'
-                            type={placeholder}
-                            onChange={onTableBodyChange}
-                            rowindex={rowindex}
-                            value={values[rowindex][placeholder]}
-                            onAddItem={onAddItem}
-                            className='side-effects'
-                        />
-                    </Input>
-                );
-                break;
-            }
-            case 'Side Effects': {
-                cell = (
-                    <Input
-                        fluid
-                        className='content-input-computer content-dropdown content-text'
-                    >
-                        <Dropdown
+                            className='content-input-computer content-dropdown'
+                        >
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                options={drinkOptions}
+                                placeholder={placeholder}
+                                onChange={onTableBodyChange}
+                                rowindex={rowindex}
+                                value={values[name]["fields"][rowindex][placeholder]}
+                                onAddItem={onAddDrink}
+                                className='side-effects'
+                            />
+                        </Input>
+                    );  
+                    break;
+                }
+                case 'Drink Size': {
+                    cell = (
+                        <Input
                             fluid
-                            search
-                            selection
-                            multiple
-                            allowAdditions
-                            icon=''
-                            options={sideEffectsOptions}
-                            optiontype='sideEffectsOptions'
-                            type={placeholder}                    
-                            onChange={onTableBodyChange}
-                            rowindex={rowindex}
-                            value={values[rowindex][placeholder]}
-                            onAddItem={onAddItem}
-                            className='side-effects'
-                        />
-                    </Input>
-                );
-                break;
-            }
-            case 'Drug Name': {
-                cell = (
-                    <Input
-                        fluid
-                        className='content-input-computer content-dropdown drug-text'
-                    >
-                        <Dropdown
+                            className='content-input-computer content-dropdown'
+                        >
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                options={drinkSizes}
+                                placeholder={placeholder}
+                                onChange={onTableBodyChange}
+                                rowindex={rowindex}
+                                value={values[name]["fields"][rowindex][placeholder]}
+                                className='side-effects'
+                            />
+                        </Input>
+                    );
+                    break;
+                }
+                // this one is for recreational drugs
+                case 'Drug Name': {
+                    cell = (
+                        <Input
                             fluid
-                            search
-                            selection
-                            clearable
-                            allowAdditions
-                            icon=''
-                            options={medicationOptions}
-                            optiontype='medicationOptions'
-                            type={placeholder}
+                            className='content-input-computer content-dropdown'
+                        >
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                options={drugOptions}
+                                placeholder={placeholder}
+                                onChange={onTableBodyChange}
+                                rowindex={rowindex}
+                                value={values[name]["fields"][rowindex][placeholder]}
+                                className='side-effects'
+                            />
+                        </Input>
+                    );
+                    break;
+                }
+                case 'Mode of Delivery': {
+                    cell = (
+                        <Input
+                            fluid
+                            className='content-input-computer content-dropdown'
+                        >
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                multiple
+                                options={modesOfDelivery}
+                                placeholder={placeholder}
+                                onChange={onTableBodyChange}
+                                rowindex={rowindex}
+                                value={values[name]["fields"][rowindex][placeholder]}
+                                className='side-effects'
+                            />
+                        </Input>
+                    );
+                    break;
+                }
+                case '# Per Week': {
+                    cell = (
+                        <Input
+                            fluid
+                            type="number"
+                            className='content-input-computer content-dropdown'
                             onChange={onTableBodyChange}
+                            placeholder={placeholder}
                             rowindex={rowindex}
-                            value={values[rowindex][placeholder]}
-                            onAddItem={onAddItem}
-                            className='side-effects medication'
+                            onChange={onTableBodyChange}
+                            value={values[name]["fields"][rowindex][placeholder]}
                         />
-                    </Input>
-                );
-                break;
+                    );
+                    break;
+                }
+                case 'delete': {
+                    cell = (
+                        <Button
+                            rowindex={rowindex}
+                            circular
+                            icon='close'
+                            size='mini'
+                            basic
+                            onClick={this.props.handleDelete}
+                        />      
+                    )
+                }
             }
-            case 'Year':
-            case 'Start Year':
-                cell = (
-                    <div className='table-year-input'>
+        } else {
+            switch (placeholder) {
+                case 'Procedure': {
+                    cell = (
+                        <Input
+                            fluid
+                            className='content-input-computer content-dropdown'
+                        >
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                clearable
+                                allowAdditions
+                                icon=''
+                                options={proceduresOptions}
+                                optiontype='proceduresOptions'
+                                type={placeholder}
+                                onChange={onTableBodyChange}
+                                rowindex={rowindex}
+                                value={values[rowindex][placeholder]}
+                                onAddItem={onAddItem}
+                                className='side-effects'
+                            />
+                        </Input>
+                    );
+                    break;
+                }
+                case 'Side Effects': {
+                    cell = (
+                        <Input
+                            fluid
+                            className='content-input-computer content-dropdown'
+                        >
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                multiple
+                                allowAdditions
+                                icon=''
+                                options={sideEffectsOptions}
+                                placeholder={placeholder}
+                                onChange={onTableBodyChange}
+                                rowindex={rowindex}
+                                value={values[rowindex][placeholder]}
+                                onAddItem={onAddSideEffect}
+                                className='side-effects'
+                            />
+                        </Input>
+                    );
+                    break;
+                }
+                // this one is for medications
+                case 'Drug Name': {
+                    cell = (
+                        <Input
+                            fluid
+                            className='content-input-computer content-dropdown'
+                        >
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                clearable
+                                allowAdditions
+                                icon=''
+                                options={medicationOptions}
+                                placeholder={placeholder}
+                                onChange={onTableBodyChange}
+                                rowindex={rowindex}
+                                value={values[rowindex][placeholder]}
+                                onAddItem={onAddMedication}
+                                className='side-effects medication'
+                            />
+                        </Input>
+                    );
+                    break;
+                }
+                case 'Start Year':
+                    cell = (
+                        <div className='table-year-input'>
+                            <TextArea
+                                rows={3}
+                                type='number'
+                                onChange={onTableBodyChange}
+                                onBlur={this.onYearChange}
+                                rowindex={rowindex}
+                                value={values[rowindex][placeholder]}
+                                className='table-row-text'
+                            />
+                            { this.state.invalidYear && (
+                                <p className='error'>Please enter a year between 1900 and 2020</p>
+                            )}
+                        </div>
+                    )
+                    break;
+                case 'Reason for Taking':
+                    cell = (
+                        <Input
+                            fluid
+                            className='content-input-computer content-dropdown'
+                        >
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                allowAdditions
+                                icon=''
+                                options={diseaseOptions}
+                                optiontype='diseaseOptions'
+                                onChange={onTableBodyChange}
+                                rowindex={rowindex}
+                                value={values[rowindex][placeholder]}
+                                onAddItem={onAddItem}
+                                className='side-effects'
+                            />
+                        </Input>
+                    );
+                    break;
+                default: {
+                    cell = (
                         <TextArea
-                            rows={1}
+                            rows={3}
                             type={placeholder}
                             onChange={onTableBodyChange}
-                            onBlur={this.onYearChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
                             className='table-row-text'
                         />
-                        { this.state.invalidYear && (
-                            <p className='error'>Please enter a valid year after 1900.</p>
-                        )}
-                    </div>
-
-                )
-                break;
-            case 'Reason for Taking':
-                cell = (
-                    <Input
-                        fluid
-                        className='content-input-computer content-dropdown'
-                    >
-                        <Dropdown
-                            fluid
-                            search
-                            selection
-                            allowAdditions
-                            icon=''
-                            options={diseaseOptions}
-                            optiontype='diseaseOptions'
-                            type={placeholder}
-                            onChange={onTableBodyChange}
-                            rowindex={rowindex}
-                            value={values[rowindex][placeholder]}
-                            onAddItem={onAddItem}
-                            className='side-effects'
-                        />
-                    </Input>
-                );
-                break;
-            default: {
-                cell = (
-                    <TextArea
-                        rows={3}
-                        type={placeholder}
-                        onChange={onTableBodyChange}
-                        rowindex={rowindex}
-                        value={values[rowindex][placeholder]}
-                        className='table-row-text'
-                    />
-                );
-                break;
+                    );
+                    break;
+                }
             }
         }
         return cell;
@@ -204,7 +327,12 @@ export class TableBodyRow extends Component {
 
         const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
             return (
-                <Table.Cell key={index} onClick={this.handleCellClick}>
+                <Table.Cell 
+                    key={index} 
+                    collapsing={placeholder === 'delete' ? true : false} 
+                    style={placeholder === 'delete' ? { borderTop: 0, borderLeft: 0 } : null}
+                    onClick={this.handleCellClick}
+                >
                     {this.getCell(placeholder)}
                 </Table.Cell>
             )

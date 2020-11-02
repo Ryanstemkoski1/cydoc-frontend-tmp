@@ -1,6 +1,7 @@
 import React from 'react'
 import {Input, Form} from "semantic-ui-react";
 import HPIContext from 'contexts/HPIContext.js';
+import '../css/HandleInput.css';
 
 class HandleInput extends React.Component {
     static contextType = HPIContext 
@@ -60,7 +61,8 @@ class HandleInput extends React.Component {
         else if (this.props.type === 'LIST-TEXT') {
             return (
                 <Form> 
-                <Input class="ui input focus" style={{width: '50%'}}
+                <Input class="ui input focus" 
+                    className='list-text'
                     type='text'
                     onChange={this.handleInputChange}
                     value={this.state.textInput}

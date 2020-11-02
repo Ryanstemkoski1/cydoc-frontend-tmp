@@ -9,3 +9,7 @@
   margin: 1rem;
   padding: 1rem;
 }
+
+.active-tab-container {
+  margin: 40px 0 40vh 0;
+}

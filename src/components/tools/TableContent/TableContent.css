@@ -69,15 +69,6 @@
     box-shadow: none;
 }
 
-.ui.selection.dropdown .menu {
-    min-width: max-content;
-}
-
-.ui.input.content-text, .ui.input.drug-text {
-    font-size: 12px;
-}
-
-
 .ui.multiple.search.dropdown.side-effects > .text {
     margin-left: 0;
     letter-spacing: 0;
