@@ -10,7 +10,7 @@ class HandleInput extends React.Component {
         const values = this.context["hpi"]['nodes'][this.props.node]
         var answers = ""
         // Currently, every letter is saved into Context 
-        answers = this.props.type === "LIST-TEXT" ? values['response'][this.props.input_id] : values["response"]
+        answers = this.props.type === "LIST-TEXT" ? values['response'][this.props.inputID] : values["response"]
         this.state = {
             textInput: answers !== null ? answers: ""
         }
@@ -20,14 +20,14 @@ class HandleInput extends React.Component {
 
     handleClick() {
         var values = this.context['hpi']
-        delete values['nodes'][this.props.node]['response'][this.props.input_id]
+        delete values['nodes'][this.props.node]['response'][this.props.inputID] // fix error 
         this.context.onContextChange("hpi", values)
     }
 
     handleInputChange = (event) => { 
         this.setState({textInput: event.target.value})
         const values = this.context["hpi"] 
-        if (this.props.type === 'LIST-TEXT') values['nodes'][this.props.node]["response"][this.props.input_id] = event.target.value
+        if (this.props.type === 'LIST-TEXT') values['nodes'][this.props.node]["response"][this.props.inputID] = event.target.value
         else values['nodes'][this.props.node]["response"] = event.target.value
         this.context.onContextChange("hpi", values)
     }

@@ -11,7 +11,7 @@ class ButtonItem extends React.Component {
     constructor(props, context) {
         super(props, context)
         // create disease buttons based on user's chosen diseases 
-        var diseaseButtons = this.props.diseases_list.map(disease =>
+        var diseaseButtons = this.props.diseasesList.map(disease =>
             <DiseaseTag
                 key={disease}
                 name={Object.keys(diseaseCodes).find(key => diseaseCodes[key] === disease)}

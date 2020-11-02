@@ -12,29 +12,29 @@ export default class ListText extends React.Component {
 
     handlePlusClick() {
         var values = this.context['hpi']
-        var list_keys = Object.keys(values['nodes'][this.props.node]['response'])
-        var last_index = list_keys[list_keys.length - 1] + 1
-        values['nodes'][this.props.node]["response"][last_index] = ""
+        var listKeys = Object.keys(values['nodes'][this.props.node]['response'])
+        var lastIndex = listKeys[listKeys.length - 1] + 1
+        values['nodes'][this.props.node]["response"][lastIndex] = ""
         this.context.onContextChange("hpi", values)
     }
 
     render() {
         var values = this.context['hpi']
-        var button_map = []
-        let input_res = this.context['hpi']['nodes'][this.props.node]
-        let res = input_res['response']
+        var buttonMap = []
+        let inputRes = this.context['hpi']['nodes'][this.props.node]
+        let res = inputRes['response']
         for (var res_index in res) { 
-            button_map.push(<HandleInput 
+            buttonMap.push(<HandleInput 
                 key = {res_index}
                 type = {values['nodes'][this.props.node]['responseType']}
-                input_id={res_index} 
+                inputID={res_index} 
                 category = {'nodes'}
                 node={this.props.node}
             />)
         }
         return (
         <div> 
-            <div> {button_map}</div>
+            <div> {buttonMap}</div>
             <div> <button onClick={this.handlePlusClick} className='button-plus-click'> + </button> </div>
         </div>)
         }}

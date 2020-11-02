@@ -20,7 +20,6 @@ class QuestionAnswer extends React.Component {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
-            response_array: [],
             startDate: new Date(),
             scale: 0,
             input: ""
@@ -49,31 +48,31 @@ class QuestionAnswer extends React.Component {
         const { responseType } = this.props;
         
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
-        let button_map = [];
+        let buttonMap = [];
         if (responseType === "YES-NO" || responseType === "NO-YES") {
-            button_map.push(
+            buttonMap.push(
                 <YesNo
                     key={this.props.node}
                     node={this.props.node}
                 /> )}
         else if (responseType === "SHORT-TEXT" || responseType === "LONG-TEXT") {
-            button_map.push(<HandleInput key={this.props.node}
+            buttonMap.push(<HandleInput key={this.props.node}
                                          node={this.props.node}
                                           />)
         }
         else if (responseType === 'TIME') {
-            button_map.push(<TimeInput key={this.props.node}
+            buttonMap.push(<TimeInput key={this.props.node}
                                        node={this.props.node}
                                         />)
         }
         else if (responseType === 'LIST-TEXT') {
-            button_map.push(<ListText
+            buttonMap.push(<ListText
                 key={this.props.node}
                 node={this.props.node}
                  />)
         }
         else if (responseType === 'CLICK-BOXES'|| responseType === 'MEDS-POP' || responseType === 'nan') {
-            button_map = this.props.response_choice.map(item =>
+            buttonMap = this.props.responseChoice.map(item =>
                 <ButtonTag
                     key={item}
                     name={item}
@@ -82,48 +81,48 @@ class QuestionAnswer extends React.Component {
             )
         }
         else if (responseType === 'AGE') {
-            button_map.push( <HandleNumericInput
+            buttonMap.push( <HandleNumericInput
                 key={this.props.node}
                 node={this.props.node}
                 max={120}
             /> )}
         else if (responseType === "NUMBER") {
-            button_map.push(<HandleNumericInput
+            buttonMap.push(<HandleNumericInput
                 key={this.props.node}
                 node={this.props.node}
                 max={10}
             />)
         }
         else if (responseType === "FH-POP") {
-            button_map.push(<FamilyHistoryContent
+            buttonMap.push(<FamilyHistoryContent
                 key={this.props.node}
-                response_choice={this.props.response_choice}
+                response_choice={this.props.responseChoice}
                 fh_pop={true}
             />) 
         }
         else if (responseType === "PMH-POP") {
-            button_map.push(<MedicalHistoryContent
+            buttonMap.push(<MedicalHistoryContent
                 key={this.props.node}
-                response_choice={this.props.response_choice}
+                response_choice={this.props.responseChoice}
                 collapseTabs={collapseTabs}
             />)
         } 
         else if (responseType === "MEDS-BLANK") {
-            button_map.push(<MedicationsContent
+            buttonMap.push(<MedicationsContent
                 key={this.props.node}
                 pop={true}
                 mobile={collapseTabs}
             />)
         }
         else if (responseType === "PSH-BLANK") {
-            button_map.push(<SurgicalHistoryContent
+            buttonMap.push(<SurgicalHistoryContent
                 key={this.props.node}
                 pop={true}
             />)
         }
         return (
             <div className='qa-div'> 
-                <div> {this.props.question} <div className='qa-button'>{button_map}</div> </div>
+                <div> {this.props.question} <div className='qa-button'>{buttonMap}</div> </div>
             </div>
         )
     }

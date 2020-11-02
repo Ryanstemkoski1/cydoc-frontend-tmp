@@ -27,20 +27,20 @@ class TimeInput extends Component {
     render() {
         const values = this.context["hpi"]['nodes'][this.props.node]
         var value = values["response"][0]
-        var time_value = values["response"][1]
+        var timeValue = values["response"][1]
         var question = values['text']
-        const time_options = ["minutes", "hours", "days", "weeks", "months", "years"]
-        var button_map = []
-        for (var time_index = 0; time_index < time_options.length; time_index += 3) {
-            button_map.push(
+        const timeOptions = ["minutes", "hours", "days", "weeks", "months", "years"]
+        var buttonMap = []
+        for (var timeIndex = 0; timeIndex < timeOptions.length; timeIndex += 3) {
+            buttonMap.push(
                 <Grid.Row columns='equal' className='time-grid-row'> 
-                        {time_options.slice(time_index, time_index+3).map((time_item) => 
+                        {timeOptions.slice(timeIndex, timeIndex+3).map((timeItem) => 
                         <Grid.Column className='time-grid-column'>
                             <Button
-                                color={time_value === time_item ? 'grey' : ''}
-                                title={time_item}
+                                color={timeValue === timeItem ? 'grey' : ''}
+                                title={timeItem}
                                 onClick={this.handleToggleButtonClick}
-                                className='time-grid-button'> {time_item} </Button>
+                                className='time-grid-button'> {timeItem} </Button>
                             </Grid.Column>
                             )}
                 </Grid.Row>)
@@ -62,7 +62,7 @@ class TimeInput extends Component {
                         </Grid.Column>
                         <Grid.Column width={6}> 
                             <Grid> 
-                                {button_map}
+                                {buttonMap}
                             </Grid>
                         </Grid.Column>
                     </Grid.Row> 

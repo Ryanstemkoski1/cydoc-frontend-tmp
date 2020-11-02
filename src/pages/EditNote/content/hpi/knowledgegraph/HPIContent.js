@@ -3,7 +3,7 @@ import { Menu, Button, Segment, Icon } from 'semantic-ui-react'
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
 import ButtonItem from "./src/components/ButtonItem.js";
-import disease_abbrevs from "./src/components/data/disease_abbrevs"
+import diseaseAbbrevs from "./src/components/data/diseaseAbbrevs"
 import PositiveDiseases from "./src/components/PositiveDiseases";
 import DiseaseForm from "./src/components/DiseaseForm";
 import API from "./src/API";
@@ -43,10 +43,10 @@ class HPIContent extends Component {
                 // get set of all categories 
                 if (!(categoryCodes.has(code))) {
                     categoryCodes.add(code)
-                    var body_system = nodes[node]["bodySystem"];
-                    // Use disease abbreviations found in disease_abbrevs.js
-                    if (!(body_system in bodySystems)) bodySystems[body_system] = {"diseases": [], "name": disease_abbrevs[body_system]}
-                    bodySystems[body_system]["diseases"].push(code)
+                    var bodySystem = nodes[node]["bodySystem"];
+                    // Use disease abbreviations found in diseaseAbbrevs.js
+                    if (!(bodySystem in bodySystems)) bodySystems[bodySystem] = {"diseases": [], "name": diseaseAbbrevs[bodySystem]}
+                    bodySystems[bodySystem]["diseases"].push(code)
                 }}
             delete bodySystems["GENERAL"]; // not using GENERAL 
             this.setState({isLoaded: true, graphData: res.data, categoryCodes: categoryCodes, bodySystems: Object.values(bodySystems)})
@@ -82,16 +82,16 @@ class HPIContent extends Component {
 
     // Proceed to next step
     nextStep = () => {
-        var current_step = this.context["step"]
-        this.context.onContextChange("step", current_step + 1)
-        this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-1])
+        var currentStep = this.context["step"]
+        this.context.onContextChange("step", currentStep + 1)
+        this.context.onContextChange("activeHPI", this.context['positivediseases'][currentStep-1])
     }
 
     // Go back to previous step
     prevStep = () => {
-        var current_step = this.context["step"]
-        this.context.onContextChange("step", current_step-1)
-        this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-3])
+        var currentStep = this.context["step"]
+        this.context.onContextChange("step", currentStep-1)
+        this.context.onContextChange("activeHPI", this.context['positivediseases'][currentStep-3])
     }
 
     // get to first page (change step = 1)
@@ -99,9 +99,9 @@ class HPIContent extends Component {
 
     // skip to last page (last category) [change step to be last]
     lastPage = () => {
-        var current_step = this.context['positivediseases'].length
-        this.context.onContextChange("step", current_step+1)
-        this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-1])
+        var currentStep = this.context['positivediseases'].length
+        this.context.onContextChange("step", currentStep+1)
+        this.context.onContextChange("activeHPI", this.context['positivediseases'][currentStep-1])
     }
 
     // go to the next page (change step = step + 1)
@@ -138,7 +138,7 @@ class HPIContent extends Component {
             <ButtonItem
                 key={item['name']}                  // name of body system
                 name={item['name']}                 
-                diseases_list={item['diseases']}    // list of categories (diseases) associated with current body system
+                diseasesList={item['diseases']}    // list of categories (diseases) associated with current body system
             />
         );
 
@@ -170,7 +170,7 @@ class HPIContent extends Component {
         // each step correlates to a different tab
         var step = this.context['step'];
         // number of positive diseases, which is also the nnumber of steps   
-        const positive_length = this.context['positivediseases'].length;
+        const positiveLength = this.context['positivediseases'].length;
 
         // window/screen responsiveness
         let numColumns = 1;
@@ -186,11 +186,11 @@ class HPIContent extends Component {
         switch(step) {
             case 1:
                 return (
-                    // if the user has chosen any diseases (positive_length > 0), then the right button can be displayed
+                    // if the user has chosen any diseases (positiveLength > 0), then the right button can be displayed
                     // to advance to other pages of the HPI form
                     <>
                     <Segment>
-                        {positive_length > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
+                        {positiveLength > 0 ? positiveDiseases : <div className='positive-diseases-placeholder' />}
                         <Masonry
                             className='disease-container'
                             breakpointCols={numColumns}
@@ -200,7 +200,7 @@ class HPIContent extends Component {
                         </Masonry>      
                     </Segment>
 
-                    {positive_length > 0 ? 
+                    {positiveLength > 0 ? 
                     <>
                     <Button icon floated='right' onClick={this.continue} className='hpi-small-next-button'>
                     <Icon name='right arrow'/>
@@ -226,23 +226,23 @@ class HPIContent extends Component {
             default:
                 // if API data is loaded, render the DiseaseForm
                 if (isLoaded) { 
-                    let category_code = this.context['positivediseases'][step-2]
-                    let parent_node = category_code + "0001"
+                    let categoryCode = this.context['positivediseases'][step-2]
+                    let parentNode = categoryCode + "0001"
                     return (
                         <div className='hpi-disease-container'>
                         <DiseaseForm
-                            key={parent_node}
-                            parent_node = {parent_node}
+                            key={parentNode}
+                            parentNode = {parentNode}
                             graphData={graphData}
                             nextStep = {this.nextStep}
                             prevStep = {this.prevStep}
                             firstPage = {this.firstPage}
                             lastPage = {this.lastPage}
                             diseaseTabs = {diseaseTabs}
-                            last = {true ? step === positive_length+1 : false}
+                            last = {true ? step === positiveLength+1 : false}
                             windowWidth={windowWidth}
                         />
-                        {step === positive_length+1 ?
+                        {step === positiveLength+1 ?
                             <>
                             <Button icon floated='left' onClick={this.back} className='hpi-small-previous-button'>
                             <Icon name='left arrow'/>

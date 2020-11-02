@@ -17,8 +17,8 @@ export default class ChildAccordian extends Component {
 
   render() {
       const { activeIndex } = this.state 
-      var child_node = this.props.child_questions[0].props.node
-      var category = Object.keys(diseaseCodes).find(key => diseaseCodes[key] === child_node.substring(0,3)) 
+      var childNode = this.props.childQuestions[0].props.node
+      var category = Object.keys(diseaseCodes).find(key => diseaseCodes[key] === childNode.substring(0,3)) 
     return (
         <Accordion className='accordion-container'>
             <Accordion.Title 
@@ -30,7 +30,7 @@ export default class ChildAccordian extends Component {
               Answer more questions about {category}
             </Accordion.Title>
               <Accordion.Content active={activeIndex === 0}>
-              {this.props.child_questions}
+              {this.props.childQuestions}
               </Accordion.Content>
           </Accordion>
     )

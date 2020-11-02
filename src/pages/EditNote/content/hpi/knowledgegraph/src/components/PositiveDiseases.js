@@ -15,10 +15,10 @@ class PositiveDiseases extends Component {
     handleClick() {
         const plan = {...this.context['plan']}
         let values = this.context['positivediseases']
-        let disease_code = diseaseCodes[this.props.name]
-        if (values.indexOf(disease_code) > -1) {
-            values.splice(values.indexOf(disease_code), 1)
-            plan['conditions'].splice(plan['conditions'].findIndex(disease => disease.name === disease_code), 1)
+        let diseaseCode = diseaseCodes[this.props.name]
+        if (values.indexOf(diseaseCode) > -1) {
+            values.splice(values.indexOf(diseaseCode), 1)
+            plan['conditions'].splice(plan['conditions'].findIndex(disease => disease.name === diseaseCode), 1)
         }
         this.context.onContextChange("positivediseases", values)
         this.context.onContextChange("plan", plan) 

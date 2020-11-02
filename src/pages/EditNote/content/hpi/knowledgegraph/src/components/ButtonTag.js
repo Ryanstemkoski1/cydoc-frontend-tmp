@@ -16,17 +16,17 @@ class ButtonTag extends React.Component {
     }
 
     handleClick() {
-        let new_color
-        let font_color
+        let newColor
+        let fontColor
         if (this.state.id === 1) {
-            new_color = "lightslategrey"
-            font_color = "white"
+            newColor = "lightslategrey"
+            fontColor = "white"
         }
         else {
-            new_color = "whitesmoke"
-            font_color = "black"
+            newColor = "whitesmoke"
+            fontColor = "black"
         }
-        this.setState({id: this.state.id*-1, buttonColor: new_color, fontColor: font_color})
+        this.setState({id: this.state.id*-1, buttonColor: newColor, fontColor: fontColor})
         const values = this.context["hpi"] 
         values['nodes'][this.props.node]["response"] = values['nodes'][this.props.node]["response"].concat(this.props.name)
         this.context.onContextChange("hpi", values) 
