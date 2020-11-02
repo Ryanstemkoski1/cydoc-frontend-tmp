@@ -114,7 +114,7 @@ export default class FamilyHistoryContent extends Component {
     }
 
     addSeenCond = (value, index) => {
-        const  seenConditions = this.state.seenConditions;
+        const seenConditions = this.state.seenConditions;
         seenConditions[value] = index;
         this.setState({ seenConditions });
     }
@@ -145,6 +145,8 @@ export default class FamilyHistoryContent extends Component {
                             addSeenCondition={this.addSeenCond}
                             isPreview={this.props.isPreview}
                             condition={condition}
+                            seenCondition={conditions}
+                            
                             key={index}
                             index={index}
                             category={"Family History"}
@@ -164,6 +166,7 @@ export default class FamilyHistoryContent extends Component {
                         seenConditions={conditions}
                         addSeenCondition={this.addSeenCond}
                         key={condition}
+                        seenConditions={conditions}
                         index={Object.keys(index_dict).length > 0 ? index_dict[condition] : index}
                         category={"Family History"}
                     />}
