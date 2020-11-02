@@ -3,7 +3,7 @@ import { Accordion, Icon } from 'semantic-ui-react'
 import diseaseCodes from '../../../../../../../constants/diseaseCodes'
 import '../css/accordian.css';
 
-export default class Accordian extends Component {
+export default class ChildAccordian extends Component {
     // accordion is collapsed by default
     state = {activeIndex: -1}
 

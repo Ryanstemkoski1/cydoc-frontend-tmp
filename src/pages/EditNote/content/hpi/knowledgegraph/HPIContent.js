@@ -19,12 +19,12 @@ class HPIContent extends Component {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
-            body_systems: [],
+            bodySystems: [],
             graphData: {},
             isLoaded: false,
             children: [],
             activeTabName: "",
-            category_codes: {}
+            categoryCodes: {}
         }
         this.updateDimensions = this.updateDimensions.bind(this);
         this.handleItemClick = this.handleItemClick.bind(this);
@@ -35,21 +35,21 @@ class HPIContent extends Component {
         // organizes parent nodes by their category code (medical condition) and body system
         const data = API;
         data.then(res => {
-            var category_codes = new Set() // List of category codes (medical conditions) from nodes
-            var body_systems = {} // Dict of body system : list of category codes (medical conditions)
+            var categoryCodes = new Set() // List of category codes (medical conditions) from nodes
+            var bodySystems = {} // Dict of body system : list of category codes (medical conditions)
             var nodes = res.data['nodes'] 
             for (var node in nodes) {
                 var code = node.substring(0, 3)
                 // get set of all categories 
-                if (!(category_codes.has(code))) {
-                    category_codes.add(code)
+                if (!(categoryCodes.has(code))) {
+                    categoryCodes.add(code)
                     var body_system = nodes[node]["bodySystem"];
                     // Use disease abbreviations found in disease_abbrevs.js
-                    if (!(body_system in body_systems)) body_systems[body_system] = {"diseases": [], "name": disease_abbrevs[body_system]}
-                    body_systems[body_system]["diseases"].push(code)
+                    if (!(body_system in bodySystems)) bodySystems[body_system] = {"diseases": [], "name": disease_abbrevs[body_system]}
+                    bodySystems[body_system]["diseases"].push(code)
                 }}
-            delete body_systems["GENERAL"]; // not using GENERAL 
-            this.setState({isLoaded: true, graphData: res.data, category_codes: category_codes, body_systems: Object.values(body_systems)})
+            delete bodySystems["GENERAL"]; // not using GENERAL 
+            this.setState({isLoaded: true, graphData: res.data, categoryCodes: categoryCodes, bodySystems: Object.values(bodySystems)})
         })
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
@@ -95,10 +95,10 @@ class HPIContent extends Component {
     }
 
     // get to first page (change step = 1)
-    first_page = () => this.context.onContextChange("step", 1)
+    firstPage = () => this.context.onContextChange("step", 1)
 
     // skip to last page (last category) [change step to be last]
-    last_page = () => {
+    lastPage = () => {
         var current_step = this.context['positivediseases'].length
         this.context.onContextChange("step", current_step+1)
         this.context.onContextChange("activeHPI", this.context['positivediseases'][current_step-1])
@@ -129,12 +129,12 @@ class HPIContent extends Component {
     nextFormClick = () => this.props.nextFormClick();
 
     render() {
-        const {graphData, isLoaded, windowWidth, body_systems} = this.state;
+        const {graphData, isLoaded, windowWidth, bodySystems} = this.state;
 
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         /* Creates list of body system buttons to add in the front page. 
-           Loops through state variable, body_systems, saved from the API */
-        const diseaseComponents = body_systems.map(item =>
+           Loops through state variable, bodySystems, saved from the API */
+        const diseaseComponents = bodySystems.map(item =>
             <ButtonItem
                 key={item['name']}                  // name of body system
                 name={item['name']}                 
@@ -236,8 +236,8 @@ class HPIContent extends Component {
                             graphData={graphData}
                             nextStep = {this.nextStep}
                             prevStep = {this.prevStep}
-                            first_page = {this.first_page}
-                            last_page = {this.last_page}
+                            firstPage = {this.firstPage}
+                            lastPage = {this.lastPage}
                             diseaseTabs = {diseaseTabs}
                             last = {true ? step === positive_length+1 : false}
                             windowWidth={windowWidth}

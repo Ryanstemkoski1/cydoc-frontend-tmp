@@ -11,16 +11,15 @@ class ButtonItem extends React.Component {
     constructor(props, context) {
         super(props, context)
         // create disease buttons based on user's chosen diseases 
-        var disease_buttons = this.props.diseases_list.map(disease =>
+        var diseaseButtons = this.props.diseases_list.map(disease =>
             <DiseaseTag
                 key={disease}
                 name={Object.keys(diseaseCodes).find(key => diseaseCodes[key] === disease)}
                 handler = {this.handler}
             />)
         this.state = {
-            disease_buttons: disease_buttons,
-            disease_array: this.context["positivecategories"].includes(this.props.name) ? disease_buttons : [],
-            diseases_positive: []
+            diseaseButtons: diseaseButtons,
+            diseaseArray: this.context["positivecategories"].includes(this.props.name) ? diseaseButtons : []
         }
         this.handleClick = this.handleClick.bind(this)
     }
@@ -29,20 +28,20 @@ class ButtonItem extends React.Component {
     // consider deprecating - same as handleClick() and state
     componentDidMount() {
         if (!(this.context["positivecategories"].includes(this.props.name))) {
-            this.setState({disease_array: this.state.disease_buttons})
+            this.setState({diseaseArray: this.state.diseaseButtons})
             this.context["positivecategories"].push(this.props.name)
         }
     }
 
     // if the current body system isn't in positivecategories, then add it. Otherwise, if it is already in positivecategories,
-    // then clicking it again would remove it from positivecategories and thus prevent the disease_array from displaying.
+    // then clicking it again would remove it from positivecategories and thus prevent the diseaseArray from displaying.
     handleClick() {
         if (!(this.context["positivecategories"].includes(this.props.name))) {
-            this.setState({disease_array: this.state.disease_buttons})
+            this.setState({diseaseArray: this.state.diseaseButtons})
             this.context["positivecategories"].push(this.props.name)
         }
         else {
-            this.setState({disease_array: []})
+            this.setState({diseaseArray: []})
             this.context["positivecategories"].splice(this.context["positivecategories"].indexOf(this.props.name), 1)
         }
     }
@@ -55,7 +54,7 @@ class ButtonItem extends React.Component {
                     {this.props.name}
                 </Button>
                 <div className="diseases-array">
-                    {this.state.disease_array}
+                    {this.state.diseaseArray}
                 </div>
             </div>
         )

@@ -1,4 +1,4 @@
-import React, {Fragment, Component} from 'react'
+import React, {Component} from 'react'
 import { Grid, Button } from "semantic-ui-react";
 import NumericInput from "react-numeric-input";
 import HPIContext from 'contexts/HPIContext.js';
@@ -13,8 +13,7 @@ class TimeInput extends Component {
     }
 
     handleToggleButtonClick(event){
-        const values = this.context["hpi"];
-        console.log(event.target.title)
+        const values = this.context["hpi"]; 
         values['nodes'][this.props.node]["response"][1] = event.target.title
         this.context.onContextChange("hpi", values);
     }
