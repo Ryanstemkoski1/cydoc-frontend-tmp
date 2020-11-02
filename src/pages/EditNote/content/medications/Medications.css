@@ -37,6 +37,11 @@
 .ui.upward.active.selection.dropdown.side-effects:hover {
     border: none;
     box-shadow: none;
+    padding: 0px;
+}
+
+a.ui.label, a.ui.active.label {
+    max-width: 100%;
 }
 
 .ui.selection.dropdown .menu {
