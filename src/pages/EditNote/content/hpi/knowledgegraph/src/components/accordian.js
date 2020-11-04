@@ -1,9 +1,11 @@
 import React, {Component} from "react"
 import { Accordion, Icon } from 'semantic-ui-react'
+import diseaseCodes from '../../../../../../../constants/diseaseCodes'
+import '../css/accordian.css';
 
-export default class Accordian extends Component {
+export default class ChildAccordian extends Component {
     // accordion is collapsed by default
-  state = { activeIndex: -1 }
+    state = {activeIndex: -1}
 
   handleClick = (e, titleProps) => {
     const { index } = titleProps
@@ -14,25 +16,21 @@ export default class Accordian extends Component {
   }
 
   render() {
-      const { activeIndex } = this.state
-      const { current_children } = this.props
-      let child_questions = []
-      for (var child_node in current_children) {
-          let child_question = current_children[child_node]['question']
-          child_questions.push(child_question)
-        } 
+      const { activeIndex } = this.state 
+      var childNode = this.props.childQuestions[0].props.node
+      var category = Object.keys(diseaseCodes).find(key => diseaseCodes[key] === childNode.substring(0,3)) 
     return (
-        <Accordion style={{marginBottom: 35}}>
+        <Accordion className='accordion-container'>
             <Accordion.Title 
               active={activeIndex === 0}
               index={0}
               onClick={this.handleClick}
             >
               <Icon name='dropdown' />
-              Answer more questions about {this.props.category}
+              Answer more questions about {category}
             </Accordion.Title>
               <Accordion.Content active={activeIndex === 0}>
-              {child_questions}
+              {this.props.childQuestions}
               </Accordion.Content>
           </Accordion>
     )

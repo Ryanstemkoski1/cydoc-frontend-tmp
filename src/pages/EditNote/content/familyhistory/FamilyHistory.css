@@ -64,13 +64,16 @@
     padding: 0;
 }
 
-.condition-divider {
-    margin-top: 25px ;
-    height: 5px ;
-    width: 100% ;
-    background-color:#707070;
-    opacity: 60%;
-    border: none;
+.ui.divider.divider-style {
+    margin-top: 25px;
+}
+
+.content-style {
+    margin-top: 25px;
+}
+
+.family-member {
+    display: inline;
 }
 
 @media screen and (max-width: 767px) {
