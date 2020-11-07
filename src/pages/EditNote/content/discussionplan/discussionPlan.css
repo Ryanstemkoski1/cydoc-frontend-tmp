@@ -115,14 +115,19 @@
     background-color: #e9e9e9;
   }
 
-.autocomplete-active {
-    /*when navigating through the items using the arrow keys:*/
-    background-color: DodgerBlue !important;
-    color: #ffffff;
-  }
+
 
 .ui.input[type=text] {
     background-color: #f1f1f1;
-    width: 100%;
+    width: 100px;
+    height: 100px;
   }
 
+
+@media screen and (max-width: 400px) {
+
+    #myInput {
+        width: 70vw;
+        border: none;
+    }
+}

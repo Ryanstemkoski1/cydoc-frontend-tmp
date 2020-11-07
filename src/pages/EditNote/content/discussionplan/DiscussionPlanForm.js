@@ -34,6 +34,7 @@ export default class DiscussionPlanForm extends Component{
             active: new Set(),
             mainOptions: TYPE_TO_OPTIONS[this.props.type],
             whenOptions: this.generateOptions(['today', 'this week', 'this month', 'this year',]),
+            value: '',
         }
         this.handleOnChange = this.handleOnChange.bind(this);
     }
@@ -61,6 +62,7 @@ export default class DiscussionPlanForm extends Component{
     }
 
     handleOnChange = (e, { index, name, value }) => {
+        console.log('index', index, 'name', name, 'value', value)
         if (name === 'diagnosis' && !this.state.active.has(index)) {
             this.toggleAccordion(index);
         }
@@ -374,8 +376,10 @@ export default class DiscussionPlanForm extends Component{
         return data.map((datum, idx) => {
             let title;
             let content;
-            if (type === 'differential_diagnosis'
-                || type === 'procedures_and_services'
+            if (
+                // type === 'differential_diagnosis'
+                // || 
+                type === 'procedures_and_services'
                 || type === 'referrals') {
                 title = (
                     <Input 
@@ -400,6 +404,24 @@ export default class DiscussionPlanForm extends Component{
                         />
                     </Input>
                 );
+            } else if (type === 'differential_diagnosis') {
+                title = (
+                    <form autocomplete='off' action='/action_page.php'>
+                        <div class='autocomplete'>
+                            <Input
+                                id='myInput'
+                                type='text' 
+                                placeholder='Diagnosis' 
+                                name='diagnosis'
+                                index={idx}
+                                value={datum['diagnosis']}
+                                options={TYPE_TO_OPTIONS['differential_diagnosis']}
+                                onChange={this.handleOnChange}
+                                onAddItem={this.handleAddOption}
+                            />
+                        </div>
+                    </form>
+                )
             } else {
                 title = (
                     <div className='recipe'>
