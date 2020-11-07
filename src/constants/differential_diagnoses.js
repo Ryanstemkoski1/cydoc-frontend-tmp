@@ -4653,11 +4653,7 @@ const differential_diagnoses =
     "128105004.0": "von Willebrand disorder "
 }
 
-const diseases =[{
-    key: '',
-    value: '',
-    text: ''
-}];
+const diseases =[{}];
 
 
 for (const d in differential_diagnoses) {

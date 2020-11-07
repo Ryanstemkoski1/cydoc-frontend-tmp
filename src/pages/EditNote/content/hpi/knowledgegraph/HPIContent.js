@@ -193,6 +193,7 @@ class HPIContent extends Component {
                     let category_code = graphData['nodes'][parent_code]['category']
                 return (
                     <div className='hpi-disease-container'>
+                    <Segment>
                     <DiseaseForm
                         key={step-2}
                         graphData={graphData}
@@ -208,6 +209,7 @@ class HPIContent extends Component {
                         last = {true ? step === positive_length+1 : false}
                         windowWidth={windowWidth}
                     />
+                    </Segment>
                     {step === positive_length+1 ?
                     <>
                     <Button icon floated='left' onClick={this.back} className='hpi-small-previous-button'>
