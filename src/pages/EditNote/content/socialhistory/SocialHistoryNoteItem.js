@@ -56,6 +56,7 @@ export default class SocialHistoryNoteItem extends Component {
     quittingQuestions() {
 
         const { values, condition, onInterestedButtonClick, onTriedButtonClick } = this.props;
+        console.log(values[condition]["InterestedInQuitting"]["Yes"]);
 
         if (values[condition]["Yes"]) {
             return (
