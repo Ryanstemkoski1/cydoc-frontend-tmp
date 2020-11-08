@@ -34,7 +34,6 @@ export default class DiscussionPlanForm extends Component{
             active: new Set(),
             mainOptions: TYPE_TO_OPTIONS[this.props.type],
             whenOptions: this.generateOptions(['today', 'this week', 'this month', 'this year',]),
-            value: '',
         }
         this.handleOnChange = this.handleOnChange.bind(this);
     }
@@ -67,8 +66,10 @@ export default class DiscussionPlanForm extends Component{
             this.toggleAccordion(index);
         }
         const plan = { ...this.context.plan };
+        console.log('PLAN', plan)
         const data = plan['conditions'][this.props.index][this.props.type];
         data[index][name] = value;
+        console.log('DATA', data)
         this.context.onContextChange('plan', plan);
     }
 
@@ -138,6 +139,7 @@ export default class DiscussionPlanForm extends Component{
                   /*execute a function when someone clicks on the item value (DIV element):*/
                       b.addEventListener("click", function(e) {
                       /*insert the value for the autocomplete text field:*/
+                      console.log('THIS', this.getElementsByTagName('input')[0])
                       inp.value = this.getElementsByTagName("input")[0].value;
                       /*close the list of autocompleted values,
                       (or any other open lists of autocompleted values:*/
