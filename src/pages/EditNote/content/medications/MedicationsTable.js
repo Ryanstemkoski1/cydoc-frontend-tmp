@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Table, Input, Accordion, Form, Dropdown } from 'semantic-ui-react';
+import { Table, Input, Accordion, Form, Dropdown, Label } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton.js'
 import PropTypes from 'prop-types';
 import HPIContext from 'contexts/HPIContext.js';
@@ -179,24 +179,27 @@ export default class MedicationsTable extends Component {
                         );
                     } else {
                         contentInputs.push(
-                            <Input key={j} fluid transparent className='content-input content-dropdown'>
-                                <Dropdown
-                                    fluid
-                                    search
-                                    selection
-                                    multiple
-                                    allowAdditions
-                                    icon=''
-                                    options={this.state.sideEffectsOptions}
-                                    type={tableBodyPlaceholders[j]}
-                                    placeholder={tableBodyPlaceholders[j]}
-                                    onChange={this.handleTableBodyChange}
-                                    rowindex={i}
-                                    value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
-                                    onAddItem={this.handleAdditionSideEffects}
-                                    className='side-effects'
-                                />
-                            </Input>
+                            <div>
+                                <Input key={j} fluid className='content-input content-dropdown'>
+                                <Label basic className={'medications-input-label-mobile'} content={`${tableBodyPlaceholders[j]}:`} style={{fontSize: "1rem"}}/>
+                                    <Dropdown
+                                        fluid
+                                        search
+                                        selection
+                                        multiple
+                                        allowAdditions
+                                        icon=''
+                                        options={this.state.sideEffectsOptions}
+                                        type={tableBodyPlaceholders[j]}
+                                        placeholder="Click here to select side effect(s)"
+                                        onChange={this.handleTableBodyChange}
+                                        rowindex={i}
+                                        value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
+                                        onAddItem={this.handleAdditionSideEffects}
+                                        className='side-effects'
+                                    />
+                                </Input>
+                            </div>
                         );
                     }
                 } else if (tableBodyPlaceholders[j] === 'Start Year') {
@@ -208,7 +211,8 @@ export default class MedicationsTable extends Component {
                                 transparent 
                                 rowindex={i}
                                 type={tableBodyPlaceholders[j]}
-                                placeholder={tableBodyPlaceholders[j]}
+                                label={{basic: true, content: 'Start Year:', className: 'medications-input-label-mobile'}}
+                                placeholder="e.g. 2020"
                                 value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
                                 onChange={this.handleTableBodyChange}
                                 onBlur={this.onYearChange}
@@ -228,7 +232,14 @@ export default class MedicationsTable extends Component {
                             rowindex={i}
                             disabled={isPreview}
                             type={tableBodyPlaceholders[j]}
-                            placeholder={tableBodyPlaceholders[j]}
+                            label={{basic: true, content: `${tableBodyPlaceholders[j]}:`, className: 'medications-input-label-mobile'}}
+                            placeholder={
+                                tableBodyPlaceholders[j] == "Schedule" ?
+                                    "e.g. once a day" : 
+                                    tableBodyPlaceholders[j] == "Dose" ? 
+                                        "e.g. 81 mg tablet" : 
+                                        "e.g. take with food" // Default is for comments input
+                            }
                             onChange={this.handleTableBodyChange}
                             value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
                             className='content-input'

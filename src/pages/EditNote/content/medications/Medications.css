@@ -72,6 +72,15 @@ a.ui.label, a.ui.active.label {
     outline: none;
 }
 
+.medications-input-label-mobile {
+    border: none !important;
+}
+
+.reason-wrapper {
+    display: inline-block;
+    padding-left: 5rem;
+}
+
 /** For smaller screens e.g. iPhone 6/7/8 */
 @media (max-width: 425px) {
     .reason-wrapper {
