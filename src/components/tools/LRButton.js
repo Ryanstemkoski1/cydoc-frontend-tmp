@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { Button } from "semantic-ui-react"
 import HPIContext from 'contexts/HPIContext.js'
-import './PhysicalExam.css'
+import './LRButton.css'
 import PropTypes from 'prop-types'
 
 //Button component that displays additional left/right buttons when toggled
