@@ -1,4 +1,4 @@
-const disease_abbrevs = {
+const diseaseAbbrevs = {
     "CVRESP": "Cardiovascular & Respiratory",
     "GIGU": "Gastrointestinal & Genitourinary",
     "NEURO": "Neurological",
@@ -10,4 +10,4 @@ const disease_abbrevs = {
     "PAIN": "Pain",
     "SPECIALDEMOG": "Special Demographics"
 }
-export default disease_abbrevs
+export default diseaseAbbrevs
