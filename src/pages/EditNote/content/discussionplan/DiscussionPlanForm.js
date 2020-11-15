@@ -208,7 +208,6 @@ export default class DiscussionPlanForm extends Component{
       });
       }
 
-
     makeGridContent = (type, data) => {
         const gridBody = data.map((datum, idx) => {
             switch(type) {
@@ -223,7 +222,7 @@ export default class DiscussionPlanForm extends Component{
                                         placeholder='Diagnosis' 
                                         name='diagnosis'
                                         index={idx}
-                                        value={datum['diagnosis']}
+                                        value={this.value}
                                         options={TYPE_TO_OPTIONS['differential_diagnosis']}
                                         onChange={this.handleOnChange}
                                         onAddItem={this.handleAddOption}
