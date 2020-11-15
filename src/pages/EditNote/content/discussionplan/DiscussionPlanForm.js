@@ -66,10 +66,10 @@ export default class DiscussionPlanForm extends Component{
             this.toggleAccordion(index);
         }
         const plan = { ...this.context.plan };
-        console.log('PLAN', plan)
         const data = plan['conditions'][this.props.index][this.props.type];
+        console.log('beforedata', data)
         data[index][name] = value;
-        console.log('DATA', data)
+        console.log('with value data', data[index][value])
         this.context.onContextChange('plan', plan);
     }
 
@@ -137,13 +137,14 @@ export default class DiscussionPlanForm extends Component{
                   /*insert a input field that will hold the current array item's value:*/
                   b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
                   /*execute a function when someone clicks on the item value (DIV element):*/
-                      b.addEventListener("click", function(e) {
-                      /*insert the value for the autocomplete text field:*/
-                      console.log('THIS', this.getElementsByTagName('input')[0])
-                      inp.value = this.getElementsByTagName("input")[0].value;
-                      /*close the list of autocompleted values,
-                      (or any other open lists of autocompleted values:*/
-                      closeAllLists();
+                  b.addEventListener("click", function(e) {
+                  /*insert the value for the autocomplete text field:*/
+                  inp.value = this.getElementsByTagName("input")[0].value;
+                  const myInput = global.document.getElementById('myInput');
+                  myInput.setAttribute('value', inp.value)
+                  /*close the list of autocompleted values,
+                  (or any other open lists of autocompleted values:*/
+                  closeAllLists();
                   });
                   a.appendChild(b);
               }
