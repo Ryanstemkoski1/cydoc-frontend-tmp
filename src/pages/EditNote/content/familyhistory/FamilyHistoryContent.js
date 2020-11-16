@@ -20,7 +20,7 @@ export default class FamilyHistoryContent extends Component {
     };
     this.updateDimensions = this.updateDimensions.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
+    // this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
     this.addRow = this.addRow.bind(this);
     this.addSeenCond = this.addSeenCond.bind(this);
 
@@ -82,18 +82,18 @@ export default class FamilyHistoryContent extends Component {
   }
 
   //handles toggle button events
-  handleToggleButtonClick(event, data) {
-    let index = data.condition.props.index;
-    const values = this.context['Family History'];
-    const responses = ['Yes', 'No'];
-    const prevState = values[index][data.title];
-    values[index][data.title] = !prevState;
-    for (var response_index in responses) {
-      var response = responses[response_index];
-      if (data.title !== response) values[index][response] = false;
-    }
-    this.context.onContextChange('Family History', values);
-  }
+  //   handleToggleButtonClick(event, data) {
+  //     let index = data.condition.props.index;
+  //     const values = this.context['Family History'];
+  //     const responses = ['Yes', 'No'];
+  //     const prevState = values[index][data.title];
+  //     values[index][data.title] = !prevState;
+  //     for (var response_index in responses) {
+  //       var response = responses[response_index];
+  //       if (data.title !== response) values[index][response] = false;
+  //     }
+  //     this.context.onContextChange('Family History', values);
+  //   }
 
   addRow() {
     let values = this.context['Family History'];

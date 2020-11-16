@@ -46,6 +46,7 @@ export default class FamilyHistoryBlock extends Component {
   }
 
   handleToggleButtonClick(event, data) {
+    console.log(data, 'data');
     let index = data.condition.props.index;
     const values = this.context['Family History'];
     const responses = ['Yes', 'No'];

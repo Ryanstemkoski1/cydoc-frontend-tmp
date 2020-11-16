@@ -62,5 +62,5 @@ export default class GridContent extends Component {
 GridContent.propTypes = {
   contentHeader: PropTypes.any.isRequired, //Heading that goes over the divider
   numColumns: PropTypes.number.isRequired, //Number of columns in the grid
-  rows: PropTypes.array.isRequired, //The rows that will comprise the body of the note. Array of Grid.Row Components.
+  //   rows: PropTypes.array.isRequired, //The rows that will comprise the body of the note. Array of Grid.Row Components.
 };
