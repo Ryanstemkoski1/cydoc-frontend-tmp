@@ -5,7 +5,7 @@
     "Review of Systems",
     "Physical Exam",
     "Plan",
-    "Generated Note"
+    "Generate Note"
   ],
   "CONDITIONS": [
     "Type II Diabetes",
@@ -131,23 +131,17 @@
       "Tobacco": {
         "condition": "Tobacco",
         "firstField": "Packs/Day",
-        "secondField": "Number of Years",
-        "thirdField": "Products Used",
-        "quitYear": "Quit Year"
+        "secondField": "Number of Years"
       },
       "Alcohol": {
         "condition": "Alcohol",
-        "firstField": "Drink Type",
-        "secondField": "Drink Size",
-        "thirdField": "# Per Week",
-        "quitYear": "Quit Year"
+        "firstField": "Drinks/Week",
+        "secondField": "What kind of drinks?"
       },
       "Recreational Drugs": {
         "condition": "Recreational Drugs",
         "firstField": "Drug Name",
-        "secondField": "Mode of Delivery",
-        "thirdField": "# Per Week",
-        "quitYear": "Quit Year"
+        "secondField": "Mode of Delivery"
       }
     },
     "STATE": {
@@ -155,18 +149,9 @@
         "Yes": false,
         "In the Past": false,
         "Never Used": false,
-        "fields": [{"Drink Type": "", "Drink Size": "", "# Per Week": ""}],
-        "Quit Year": null,
-        "Comments": "",
-        "InterestedInQuitting": {
-          "Yes": false,
-          "Maybe": false,
-          "No": false
-        },
-        "TriedToQuit": {
-          "Yes": false,
-          "No": false
-        }
+        "Drinks/Week": "",
+        "What kind of drinks?": "",
+        "Comments": ""
       },
       "Tobacco": {
         "Yes": false,
@@ -174,35 +159,15 @@
         "Never Used": false,
         "Packs/Day": "",
         "Number of Years": "",
-        "Products Used": "",
-        "Quit Year": null,
-        "Comments": "",
-        "InterestedInQuitting": {
-          "Yes": false,
-          "Maybe": false,
-          "No": false
-        },
-        "TriedToQuit": {
-          "Yes": false,
-          "No": false
-        }
+        "Comments": ""
       },
       "Recreational Drugs": {
         "Yes": false,
         "In the Past": false,
         "Never Used": false,
-        "fields": [{"Drug Name": "", "Mode of Delivery": "", "# Per Week": ""}],
-        "Quit Year": null,
-        "Comments": "",
-        "InterestedInQuitting": {
-          "Yes": false,
-          "Maybe": false,
-          "No": false
-        },
-        "TriedToQuit": {
-          "Yes": false,
-          "No": false
-        }
+        "Drug Name": "",
+        "Mode of Delivery": "",
+        "Comments": ""
       },
       "Living Situation": "",
       "Employment": "",

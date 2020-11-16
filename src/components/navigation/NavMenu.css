@@ -44,21 +44,3 @@
 .note-name-menu-item {
     padding: 0 !important;
 }
-
-
-.ui.dropdown.collapsed-dropdown {
-    color: black;
-}
-
-.ui.button > .icon.collapsed-icon {
-    margin: 0px;
-}
-
-.ui.button.logout-button {
-    color: #FC4F56;
-}
-
-.ui.menu.item.user-item {
-    color: #6DA3B1;
-    font-weight: normal;
-}

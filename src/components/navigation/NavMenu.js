@@ -145,7 +145,7 @@ class NoteNameMenuItem extends Component {
 function DefaultMenuItems(props) {
     return props.collapseNav ?
         (<Menu.Item>
-                <Dropdown icon="large bars" className='collapsed-dropdown'>
+                <Dropdown icon="large bars" style={{color: "black"}}>
                     <Dropdown.Menu>
                         <Dropdown.Item as={Link} name="about" to="/about" text="About" />
                         <Dropdown.Item as={Link} name="login" to="/login" text="Login" />
@@ -187,10 +187,10 @@ function LoggedInMenuItems(props) {
 
                     <Button.Group>
                         <Button as={Link} name="myNotes" to="/dashboard" text="My Notes" >
-                            <Icon name="sticky note outline" className='collapsed-icon'/>
+                            <Icon name="sticky note outline" style={{margin: '0'}} />
                         </Button>
-                        <Button name="logout" href="/home" text="Logout" onClick={props.handleLogout} className='logout-button'>
-                            <Icon name="sign out alternate" className='collapsed-icon'/>
+                        <Button name="logout" href="/home" text="Logout" onClick={props.handleLogout} style={{color: '#FC4F56'}}>
+                            <Icon name="sign out alternate" style={{margin: '0'}}/>
                         </Button>
                     </Button.Group>
                 </Menu.Item>

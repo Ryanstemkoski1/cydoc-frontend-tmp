@@ -41,9 +41,10 @@ export default class VerticalMenu extends Component {
 
     render() {
         const activeItem = this.state;
+        const stack = this.props.stack;
 
         return (
-            <Menu className="side-menu" size="massive" secondary vertical>
+            <Menu className="side-menu" size="massive" style={stack? {width: '100vw'} : {height: '100vh'}} secondary vertical>
                 <Menu.Item
                     header
                     name='Notes'

@@ -41,7 +41,6 @@ export default class NotePage extends Component {
         this.setState({ windowWidth, windowHeight });
     }
 
-    nextFormClick = () => this.props.onNextClick();
 
 
     getTabToDisplay(activeItem) {
@@ -50,7 +49,7 @@ export default class NotePage extends Component {
         let tabToDisplay;
         switch (activeItem) {
             case "HPI":
-                tabToDisplay = (<HPIContent nextFormClick={this.nextFormClick}/>);
+                tabToDisplay = (<HPIContent />);
                 break;
             case "Patient History":
                 tabToDisplay = (<PatientHistoryContent />);
@@ -61,7 +60,7 @@ export default class NotePage extends Component {
             case "Review of Systems":
                 tabToDisplay = (<ReviewOfSystemsContent />);
                 break;
-            case "Generated Note":
+            case "Generate Note":
                 tabToDisplay = (<GenerateNote />);
                 break;
             case "Plan":
@@ -83,7 +82,9 @@ export default class NotePage extends Component {
 
         return (
             <>
-            <Container className='active-tab-container'>
+            <Container style={{
+                margin: "40px 0 40vh 0",
+            }}>
                 {tabToDisplay}
             </Container>
 

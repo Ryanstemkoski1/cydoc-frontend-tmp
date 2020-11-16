@@ -10,9 +10,6 @@ import LogoLight from '../../assets/logo-light.png'
 import LogoName from '../../assets/logo-name.png'
 import "./Account.css"
 
-import blues from '../../assets/alicia-logos/blues.png';
-
-
 // Component that manages the layout of the login page
 class LoginPage extends Component {
 
@@ -93,13 +90,13 @@ class LoginPage extends Component {
 
         const { username, password } = this.state;
         return (
+
             // renders a one-column grid centered in the middle of the screen with login form
             // TODO: Make this into a container or card
             <Container className="login">
                 <Container textAlign="center">
-                    {/* <Image size="tiny" spaced href='/home' src={LogoLight} />
-                    <Image size="small" spaced href='/home' src={LogoName} /> */}
-                    <Image size="large" spaced centered href='/home' src={blues} />
+                    <Image size="tiny" spaced href='/home' src={LogoLight} />
+                    <Image size="small" spaced href='/home' src={LogoName} />
                 </Container>
 
                 <Segment clearing>
@@ -125,13 +122,13 @@ class LoginPage extends Component {
                         <Grid padded verticalAlign={"middle"} >
                             <Grid.Row columns={2}>
                                 <Grid.Column>
-                                    <Link style={{color:'#007db3'}}as={Button} to="/register" floated='left' className="make-an-account-button"
+                                    <Link as={Button} to="/register" floated='left' className="make-an-account-button"
                                     >
                                         Sign Up
                                     </Link>
                                 </Grid.Column>
                                 <Grid.Column textAlign={"right"}>
-                                    <Button style={{backgroundColor:'#0000ff', color:'white'}} size='small'>
+                                    <Button color='teal' size='small'>
                                         Log in
                                     </Button>
                                 </Grid.Column>

@@ -21,6 +21,14 @@ export default class PatientHistoryContent extends Component {
       activeTabName: 'Medical History', // Default open pane is Medical History
       activeIndex: 0,
     };
+    this.panesMock = [
+      'Medical History',
+      'Surgical History',
+      'Medications',
+      'Allergies',
+      'Social History',
+      'Family History',
+    ];
     this.updateDimensions = this.updateDimensions.bind(this);
     this.handleItemClick = this.handleItemClick.bind(this);
   }
@@ -56,40 +64,31 @@ export default class PatientHistoryContent extends Component {
     this.fixedMenu[0].style.top = `${stickyHeaderHeight}px`;
   }
 
-  // handleItemClick = (e, {name}) => {
-  //     this.setState({ activeItem: name });
-  // }
   handleItemClick = (_, { children }) => {
-    console.log(children, 'children');
-    const panesMock = [
-      'Medical History',
-      'Surgical History',
-      'Medications',
-      'Allergies',
-      'Social History',
-      'Family History',
-    ];
     this.setState({
       activeTabName: children,
-      activeIndex: panesMock.findIndex((p) => {
+      activeIndex: this.panesMock.findIndex((p) => {
         return p === children;
       }),
     });
   };
 
   handleTabChange = (_, { activeIndex }) => {
-    this.setState({ activeIndex });
+    this.setState({
+      activeIndex,
+      activeTabName: this.panesMock.filter((p) => {
+        return p === this.panesMock[activeIndex];
+      }),
+    });
   };
 
   render() {
     const { windowWidth, activeTabName, activeIndex } = this.state;
 
-    console.log('activeIndex', activeIndex);
-
     const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
     const socialHistoryMobile = windowWidth < SOCIAL_HISTORY_MOBILE_BP;
 
-    // If more panes are needed, then add ONLY to this array.
+    // If more panes are needed, then add to this array and the array in the constructor.
     // All other arrays needed for rendering are automatically constructed.
     const panes = [
       {
@@ -141,7 +140,6 @@ export default class PatientHistoryContent extends Component {
     });
 
     const gridButtons = panes.map((pane) => {
-      console.log(pane.menuItem, activeTabName == pane.menuItem);
       return (
         <Button
           basic
@@ -152,15 +150,6 @@ export default class PatientHistoryContent extends Component {
         />
       );
     });
-
-    // const newPanes = panes.map((pane) => {
-    //   return pane.menuItem;
-    // });
-    // console.log(panes, 'panes');
-    // console.log(newPanes, 'newPanes');
-    // const activeIndex = newPanes.findIndex((tabName) => {
-    //   return tabName === activeTabName;
-    // });
 
     return (
       <>

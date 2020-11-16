@@ -1,60 +1,53 @@
 import React from 'react'
 import QuestionAnswer from "./QuestionAnswer";
-import HPIContext from 'contexts/HPIContext.js';
-import { useDispatch } from 'react-redux';
-import diseaseCodes from '../../../../../../../constants/diseaseCodes'
 
 class DiseaseFormQuestions extends React.Component {
-    static contextType = HPIContext
 
-    // Can we change this so that it doesn't need to re-render each time the component is updated? 
-    render() { 
-        var values = this.context['hpi']
-        var currNode = values['nodes'][this.props.node]
-        var question = currNode['text']
-        var responseType = currNode['responseType']
-        var uid = currNode['uid']
+    render() {
+        let question = this.props.question
         let symptom = question.search("SYMPTOM")
         let disease = question.search("DISEASE")
-        let diseaseName = Object.keys(diseaseCodes).find(key => diseaseCodes[key] === this.props.category)
-        // "SYMPTOM" and "DISEASE" should be replaced by the name of the current disease if it is part of the question text.
         if (symptom > -1) {
-            question = question.substring(0,symptom) + diseaseName.toLowerCase() + question.substring(symptom+7)
+            question = question.substring(0,symptom) + this.props.category.toLowerCase() + question.substring(symptom+7)
         }
         if (disease > -1) {
-            question = question.substring(0, disease) + diseaseName.toLowerCase() + question.substring(disease + 7)
+            question = question.substring(0, disease) + this.props.category.toLowerCase() + question.substring(disease + 7)
         }
-        let responseChoice = ''
-        // Create buttons for users to click as their answer 
+        let response_choice = ''
+        const {responseType} = this.props
         if (responseType === "CLICK-BOXES" || responseType.slice(-3,responseType.length) === 'POP' || responseType === 'nan') {
             let click = question.search("CLICK")
             let select = question.search('\\[')
-            let endSelect = question.search('\\]')
+            let end_select = question.search('\\]')
             // if CLICK exists
             if (click > 0) {
-                responseChoice = question.slice(click + 6, endSelect)  // slice off the click options
+                response_choice = question.slice(click + 6, end_select)  // slice off the click options
                 question = question.slice(0, click)     // slice off the question
             } else { // if it's a CLICK-BOX without CLICK indicated on the question
                 if (select > 0) {
-                    responseChoice = question.slice(select + 1, endSelect)
+                    response_choice = question.slice(select + 1, end_select)
                     question = question.slice(0, select)
                 }
             }
-            responseChoice = responseChoice.split(",")
-            for (let responseIndex in responseChoice) {
-                responseChoice[responseIndex] = responseChoice[responseIndex].trim()
+            response_choice = response_choice.split(",")
+            for (let response_index in response_choice) {
+                response_choice[response_index] = response_choice[response_index].trim()
             }
         } else if (responseType === "YES-NO" || responseType==="NO-YES") {
-            responseChoice = ["Yes", "No"]
-        } else responseChoice = []
+            response_choice = ["Yes", "No"]
+        } else response_choice = []
         return (
-            <div style={{marginTop: 30}}>
+            <div style={{marginTop: 30, marginLeft: this.props.am_child ? 23:0}}>
                 <QuestionAnswer
-                    key={uid}
                     question={question}
-                    responseType={responseType}
-                    responseChoice={responseChoice}
-                    node={this.props.node}
+                    responseType={this.props.responseType}
+                    response_choice={response_choice}
+                    handler={this.handler}
+                    has_children={this.props.has_children} 
+                    category_code = {this.props.category_code}
+                    uid = {this.props.uid}
+                    child_uid = {this.props.child_uid}
+                    am_child={this.props.am_child}
                 />
             </div>
         )

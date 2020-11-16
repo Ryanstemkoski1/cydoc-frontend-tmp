@@ -327,7 +327,7 @@ export default class TableContent extends Component {
                                 fluid 
                                 transparent 
                                 rowindex={i}
-                                type="number"
+                                type={tableBodyPlaceholders[j]}
                                 placeholder={tableBodyPlaceholders[j]}
                                 value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
                                 onChange={this.handleTableBodyChange}

@@ -11,17 +11,17 @@ class HandleNumericInput extends React.Component {
 
     handleChange = (event) => {
         const values = this.context["hpi"]
-        values['nodes'][this.props.node]["response"] = event
+        if (this.props.am_child) values[this.props.category_code][this.props.uid]['children'][this.props.child_uid]['response'] = event 
+        else values[this.props.category_code][this.props.uid]["response"] = event
         this.context.onContextChange("hpi", values)
     }
 
     render() {
-        const values = this.context["hpi"]['nodes'][this.props.node]
-        var value = values["response"]
-        var question = values['text'] 
+        const values = this.context["hpi"][this.props.category_code][this.props.uid]
+        var value = this.props.am_child ? values['children'][this.props.child_uid]['response'] : values["response"]
         return (
             <NumericInput
-                key={question}
+                key={this.props.question}
                 value={value}
                 min={0}
                 max={this.props.max}

@@ -29,7 +29,6 @@ ReactDOM.render(
                 <HPIStore>
                     <CreateTemplateStore>
                         <div>
-                        {/* <div style={{backgroundColor:'#d5dfe1'}}> */}
                             <BrowserRouter>
                                 <Route path="/home" component={HomePage} />
                                 <Route path="/login" component={Login} />

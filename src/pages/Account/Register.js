@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 
 import UserForm from './UserForm';
-import { client } from "constants/api.js";
-import "./Account.css";
+import { client } from "constants/api.js"
+import "./Account.css"
 import LogoLight from "../../assets/logo-light.png";
 import LogoName from "../../assets/logo-name.png";
 
@@ -18,6 +18,7 @@ class Register extends React.Component {
     // additional fields (e.g. title, pushTo) that are passed as props
     render() {
         return (
+
             <UserForm
                 username=""
                 password=""

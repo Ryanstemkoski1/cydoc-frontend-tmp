@@ -147,7 +147,7 @@ class HeartMurmurs extends Component{
                     Pitch: {block4}
                     Quality: {block5}
                     <ExpandMurmurs type= 'ExpandMurmurs' ind={pe_index}/>
-                    {/* TODO: figure out why expand murmurs is going on every murmur, i think it has to do with this line of code */}
+                    
 
                 </Table>
             )

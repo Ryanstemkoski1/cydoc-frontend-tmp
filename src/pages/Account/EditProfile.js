@@ -7,6 +7,7 @@ class EditProfile extends React.Component {
 
     static contextType = AuthContext;
 
+
     // gets passed into UserForm handle submit
     // saves information in the database for an existing user
     handleSubmit = (user) => {
@@ -32,7 +33,7 @@ class EditProfile extends React.Component {
                 address={user.address}
                 backupEmail={user.backupEmail}
                 role={user.role}
-                studentStatus={user.studentStatus === undefined ? "" : user.studentStatus}
+                studentStatus={user.studentStatus === undefined? "" : user.studentStatus}
                 degreesCompleted={user.degreesCompleted === undefined ? ["", "", ""] : user.degreesCompleted}
                 degreesInProgress={user.degreesInProgress === undefined ? ["", "", ""] : user.degreesInProgress}
                 specialties={user.specialties === undefined ? ["", "", ""] : user.specialties}
