@@ -3,6 +3,8 @@
 .nav-menu {
     box-shadow: 0 0 20px 5px RGBA(0, 128, 159, 0.2) !important;
     height: 10vh;
+    padding-top: 40px;
+    padding-bottom: 70px;
 }
 
 /* Navigation button styles */
@@ -43,6 +45,9 @@
 
 .note-name-menu-item {
     padding: 0 !important;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
 }
 
 
@@ -61,4 +66,41 @@
 .ui.menu.item.user-item {
     color: #6DA3B1;
     font-weight: normal;
+}
+
+.note-title {
+    flex: 80%
+}
+
+.save-button {
+    flex: 20%;
+}
+
+.patient-info {
+    flex: 60%;
+    padding: 0 !important;
+    margin-top: 20px !important;
+}
+
+.ui.tiny.modal {
+    width: 450px;
+}
+
+.patient-modal-button {
+    flex: 40%;
+    margin-top: 10px !important;
+}
+
+.ui.modal > .content {
+    display: flex;
+    flex-direction: column;
+}
+
+.patient-info-input {
+    padding-bottom: 10px;
+}
+
+.ui.label {
+    width: 120px;
+    padding-right: 0;
 }

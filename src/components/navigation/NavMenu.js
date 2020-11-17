@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import {Dropdown, Menu, Image, Icon, Button, Input, Container} from 'semantic-ui-react';
+import {Dropdown, Menu, Image, Icon, Button, Input, Modal, Form, Segment, Header} from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
@@ -59,7 +59,7 @@ class ConnectedNavMenu extends Component {
                             null :
                             <Image className="nav-menu-brand" size='small' href='/home' src={LogoName} />
                         }
-                    </Menu.Item>
+                    </Menu.Item>    
 
                     {/* When parent is EditNote, then display the note name item */}
                     {this.props.displayNoteName ?  <NoteNameMenuItem /> : null}
@@ -98,19 +98,61 @@ NavMenu.propTypes = {
 class NoteNameMenuItem extends Component {
 
     static contextType = HPIContext
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false,
+            firstName: '',
+            lastName: '',
+            dob: '',
+            email: '',
+            phone: ''
+        };
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.savePatientInfo = this.savePatientInfo.bind(this);
+    }
 
     handleInputChange = (event) => {
         this.setState({textInput: event.target.value})
         this.context.onContextChange("title", event.target.value)
     }
 
+    closeModal() {
+        this.setState({open: false})
+    }
+
+    openModal() {
+        this.setState({open: true})
+    }
+
+    savePatientInfo() {
+        var firstName = document.getElementById('first-name');
+        var lastName = document.getElementById('last-name');
+        var dob = document.getElementById('dob');
+        var email = document.getElementById('email');
+        var phone = document.getElementById('phone-number');
+
+        this.setState({
+            firstName: firstName.value,
+            lastName: lastName.value,
+            dob: dob.value,
+            email: email.value,
+            phone: phone.value
+        })
+        alert('Patient information is saved!');
+        this.closeModal();
+    }
+
     render () {
+        const { open, firstName, lastName, dob, phone, email } = this.state
         return (
             <Menu.Item className="note-name-menu-item">
                 <HPIContext.Consumer>
                     {value =>
                         <>
                             <Input
+                                className='note-title'
                                 size="huge"
                                 transparent
                                 placeholder="Untitled Note"
@@ -128,13 +170,55 @@ class NoteNameMenuItem extends Component {
                                 }}
                                 value={this.context.title}
                             />
-                            <Button basic onClick={this.context.saveNote} className="save-button">
+                            <Button mini onClick={this.context.saveNote} className="save-button">
                                 Save
                             </Button>
                         </>
                     }
-
                 </HPIContext.Consumer>
+                <div className='patient-info'> 
+                    <h4>
+                    Patient: {this.state.firstName} {this.state.lastName}
+                    </h4>
+                </div>
+                <Modal
+                    className='patient-modal'
+                    onClose={this.closeModal}
+                    onOpen={this.openModal}
+                    open={open}
+                    size='tiny'
+                    dimmer='inverted'
+                    trigger={<Button className='patient-modal-button' tiny basic>View/Edit Patient Info</Button>}
+                    >
+                    <Header>Patient Information</Header>
+                    <Modal.Content>
+                        <Input
+                        className='patient-info-input'
+                        id='first-name'
+                        fluid
+                        label='First Name'
+                        placeholder='First Name'
+                        type='text'
+                        value={this.firstName}
+                        />
+                        <Input
+                        className='patient-info-input'
+                        id='last-name'
+                        fluid
+                        label='Last Name'
+                        placeholder='Last Name'
+                        type='text'
+                        value={this.lastName}
+                        />
+                        <Input className='patient-info-input' id='dob' label='Date Of Birth' placeholder='MM/DD/YYYY' type='text' value={this.dob}/>
+                        <Input className='patient-info-input' id='email' label='Email' placeholder='johndoe@email.com' type='text' value={this.email}/>
+                        <Input className='patient-info-input' id='phone-number' label='Phone Number' placeholder='000-000-0000' type='text' value={this.phone}/>
+                    </Modal.Content>
+                    <Modal.Actions>                    
+                        <Button color='blue' onClick={this.savePatientInfo}>Save</Button>
+                        <Button color='black' onClick={this.closeModal}>Close</Button>
+                    </Modal.Actions>
+                </Modal>
             </Menu.Item>
         )
     }

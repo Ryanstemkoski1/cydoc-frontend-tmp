@@ -34,8 +34,10 @@ export default class DiscussionPlanForm extends Component{
             active: new Set(),
             mainOptions: TYPE_TO_OPTIONS[this.props.type],
             whenOptions: this.generateOptions(['today', 'this week', 'this month', 'this year',]),
+            // selected: ''
         }
         this.handleOnChange = this.handleOnChange.bind(this);
+        // this.OnChangeFunct = this.OnChangeFunct.bind(this);
     }
     
     generateOptions = (values) => {
@@ -113,6 +115,9 @@ export default class DiscussionPlanForm extends Component{
         var arr = _.compact(_.map(obj, o => o.text));
 
         var currentFocus;
+        const myInput = global.document.getElementById('myInput');
+        // let selectionInput = '';
+
         /*execute a function when someone writes in the text field:*/
         inp.addEventListener("input", function(e) {
             var a, b, val = this.value;
@@ -140,8 +145,10 @@ export default class DiscussionPlanForm extends Component{
                   b.addEventListener("click", function(e) {
                   /*insert the value for the autocomplete text field:*/
                   inp.value = this.getElementsByTagName("input")[0].value;
-                  const myInput = global.document.getElementById('myInput');
+                //   console.log('INSIDE VALUE', inp.value)
                   myInput.setAttribute('value', inp.value)
+                //   selectionInput = inp.value
+                //   console.log('COMPARETHIS', selectionInput)
                   /*close the list of autocompleted values,
                   (or any other open lists of autocompleted values:*/
                   closeAllLists();
@@ -149,6 +156,9 @@ export default class DiscussionPlanForm extends Component{
                   a.appendChild(b);
               }
             }
+            // console.log('OUTSIDE', typeof myInput.value)
+            // console.log('THISinputCHECK', myInput.value)
+            // console.log('SELECTIONINPUT', selectionInput)
 
         });
         /*execute a function presses a key on the keyboard:*/
@@ -207,6 +217,10 @@ export default class DiscussionPlanForm extends Component{
           closeAllLists(e.target);
       });
       }
+
+    // OnChangeFunct (value) {
+    //     this.setState({ selected: value})
+    // }
 
     makeGridContent = (type, data) => {
         const gridBody = data.map((datum, idx) => {
