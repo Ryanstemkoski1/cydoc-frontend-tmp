@@ -18,6 +18,7 @@ class HPIContent extends Component {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
+            headerHeight: 0,
             body_systems: [],
             graphData: {},
             isLoaded: false,
@@ -27,6 +28,7 @@ class HPIContent extends Component {
         }
         this.updateDimensions = this.updateDimensions.bind(this);
         this.handleItemClick = this.handleItemClick.bind(this);
+        this.setMenuPosition = this.setMenuPosition.bind(this);
     }
 
     componentDidMount() {
@@ -53,18 +55,31 @@ class HPIContent extends Component {
         })
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
+        window.addEventListener("scroll", this.setMenuPosition);
     }
 
     componentWillUnmount() {
         window.removeEventListener("resize", this.updateDimensions);
+        window.removeEventListener("scroll", this.setMenuPosition);
     }
 
     updateDimensions() {
         let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
         let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+        let headerHeight = document.getElementById("stickyHeader")?.offsetHeight ?? 0;
 
-        this.setState({ windowWidth, windowHeight });
+        this.setState({ windowWidth, windowHeight, headerHeight });
+        this.setMenuPosition();
     }
+
+    setMenuPosition() {
+        let fixedMenu = document.getElementById("disease-menu");
+        // Ensuring that the hpi tabs are rendered
+        if (fixedMenu != null) {
+            fixedMenu.style.top = `${this.state.headerHeight}px`;
+            window.removeEventListener("scroll", this.setMenuPosition);
+        }
+     }
 
     // Proceed to next step
     nextStep = () => {
@@ -103,6 +118,10 @@ class HPIContent extends Component {
     handleItemClick = (e, {name}) => {
         this.context.onContextChange("step", this.context['positivediseases'].indexOf(name)+2)
         this.context.onContextChange("activeHPI", name)
+        setTimeout((_event) => {
+            window.scrollTo(0,0)
+            this.setMenuPosition()
+        }, 0);
     }
 
     nextFormClick = () => this.props.nextFormClick();

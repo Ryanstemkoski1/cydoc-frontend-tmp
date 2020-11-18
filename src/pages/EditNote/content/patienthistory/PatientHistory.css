@@ -17,7 +17,7 @@
   font-style: italic;
 }
 
-.patient-history-menu {
+#patient-history-menu {
   position: sticky;
   z-index: 1;
   background-color: white;
