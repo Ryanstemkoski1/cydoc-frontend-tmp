@@ -175,50 +175,51 @@ class NoteNameMenuItem extends Component {
                             </Button>
                         </>
                     }
+                
+                    <div className='patient-info'> 
+                        <h4>
+                        Patient: {this.state.firstName} {this.state.lastName}
+                        </h4>
+                    </div>
+                    <Modal
+                        className='patient-modal'
+                        onClose={this.closeModal}
+                        onOpen={this.openModal}
+                        open={open}
+                        size='tiny'
+                        dimmer='inverted'
+                        trigger={<Button className='patient-modal-button' tiny basic>View/Edit Patient Info</Button>}
+                        >
+                        <Header>Patient Information</Header>
+                        <Modal.Content>
+                            <Input
+                            className='patient-info-input'
+                            id='first-name'
+                            fluid
+                            label='First Name'
+                            placeholder='First Name'
+                            type='text'
+                            value={this.firstName}
+                            />
+                            <Input
+                            className='patient-info-input'
+                            id='last-name'
+                            fluid
+                            label='Last Name'
+                            placeholder='Last Name'
+                            type='text'
+                            value={this.lastName}
+                            />
+                            <Input className='patient-info-input' id='dob' label='Date Of Birth' placeholder='MM/DD/YYYY' type='text' value={this.dob}/>
+                            <Input className='patient-info-input' id='email' label='Email' placeholder='johndoe@email.com' type='text' value={this.email}/>
+                            <Input className='patient-info-input' id='phone-number' label='Phone Number' placeholder='000-000-0000' type='text' value={this.phone}/>
+                        </Modal.Content>
+                        <Modal.Actions>                    
+                            <Button color='blue' onClick={this.savePatientInfo}>Save</Button>
+                            <Button color='black' onClick={this.closeModal}>Close</Button>
+                        </Modal.Actions>
+                    </Modal>
                 </HPIContext.Consumer>
-                <div className='patient-info'> 
-                    <h4>
-                    Patient: {this.state.firstName} {this.state.lastName}
-                    </h4>
-                </div>
-                <Modal
-                    className='patient-modal'
-                    onClose={this.closeModal}
-                    onOpen={this.openModal}
-                    open={open}
-                    size='tiny'
-                    dimmer='inverted'
-                    trigger={<Button className='patient-modal-button' tiny basic>View/Edit Patient Info</Button>}
-                    >
-                    <Header>Patient Information</Header>
-                    <Modal.Content>
-                        <Input
-                        className='patient-info-input'
-                        id='first-name'
-                        fluid
-                        label='First Name'
-                        placeholder='First Name'
-                        type='text'
-                        value={this.firstName}
-                        />
-                        <Input
-                        className='patient-info-input'
-                        id='last-name'
-                        fluid
-                        label='Last Name'
-                        placeholder='Last Name'
-                        type='text'
-                        value={this.lastName}
-                        />
-                        <Input className='patient-info-input' id='dob' label='Date Of Birth' placeholder='MM/DD/YYYY' type='text' value={this.dob}/>
-                        <Input className='patient-info-input' id='email' label='Email' placeholder='johndoe@email.com' type='text' value={this.email}/>
-                        <Input className='patient-info-input' id='phone-number' label='Phone Number' placeholder='000-000-0000' type='text' value={this.phone}/>
-                    </Modal.Content>
-                    <Modal.Actions>                    
-                        <Button color='blue' onClick={this.savePatientInfo}>Save</Button>
-                        <Button color='black' onClick={this.closeModal}>Close</Button>
-                    </Modal.Actions>
-                </Modal>
             </Menu.Item>
         )
     }

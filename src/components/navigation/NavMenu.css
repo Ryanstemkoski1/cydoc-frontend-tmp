@@ -44,10 +44,10 @@
 
 
 .note-name-menu-item {
-    padding: 0 !important;
+    padding-top: 0 !important;
     display: flex;
     flex-wrap: wrap;
-    flex-direction: row;
+    width: 40vw;
 }
 
 
