@@ -1,6 +1,6 @@
 import React from 'react'
 import {Button} from 'semantic-ui-react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
 
 //functional component for a basic button that toggles to purple when active

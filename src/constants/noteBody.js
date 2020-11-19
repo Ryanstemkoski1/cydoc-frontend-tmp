@@ -18,7 +18,7 @@ peConstants.sections.forEach((section) => {
     section.rows.forEach((row) => {
         if (row.needsRightLeft) {
             row.findings.forEach((finding) => {
-                sectionState[finding] = { left: false, active: false, right: false }
+                sectionState[finding] = { left: false, center: false, right: false }
             })
         } else {
             row.findings.forEach((finding) => {
