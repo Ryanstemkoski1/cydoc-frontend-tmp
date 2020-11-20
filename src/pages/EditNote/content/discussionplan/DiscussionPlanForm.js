@@ -34,10 +34,8 @@ export default class DiscussionPlanForm extends Component{
             active: new Set(),
             mainOptions: TYPE_TO_OPTIONS[this.props.type],
             whenOptions: this.generateOptions(['today', 'this week', 'this month', 'this year',]),
-            // selected: ''
         }
         this.handleOnChange = this.handleOnChange.bind(this);
-        // this.OnChangeFunct = this.OnChangeFunct.bind(this);
     }
     
     generateOptions = (values) => {
@@ -54,6 +52,7 @@ export default class DiscussionPlanForm extends Component{
     }
 
     handleAddOption = (e, { optiontype, value }) => {
+        console.log('ADDOPTION', value)
         this.setState((prevState) => ({
             [optiontype]: [
                 { value, key: value, text: value },
@@ -69,9 +68,7 @@ export default class DiscussionPlanForm extends Component{
         }
         const plan = { ...this.context.plan };
         const data = plan['conditions'][this.props.index][this.props.type];
-        console.log('beforedata', data)
         data[index][name] = value;
-        console.log('with value data', data[index][value])
         this.context.onContextChange('plan', plan);
     }
 
@@ -116,7 +113,6 @@ export default class DiscussionPlanForm extends Component{
 
         var currentFocus;
         const myInput = global.document.getElementById('myInput');
-        // let selectionInput = '';
 
         /*execute a function when someone writes in the text field:*/
         inp.addEventListener("input", function(e) {
@@ -135,31 +131,26 @@ export default class DiscussionPlanForm extends Component{
                 /*check if the item starts with the same letters as the text field value:*/
                 if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
                   /*create a DIV element for each matching element:*/
-                  b = document.createElement("DIV");
-                  /*make the matching letters bold:*/
-                  b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                  b.innerHTML += arr[i].substr(val.length);
-                  /*insert a input field that will hold the current array item's value:*/
-                  b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-                  /*execute a function when someone clicks on the item value (DIV element):*/
-                  b.addEventListener("click", function(e) {
-                  /*insert the value for the autocomplete text field:*/
-                  inp.value = this.getElementsByTagName("input")[0].value;
-                //   console.log('INSIDE VALUE', inp.value)
-                  myInput.setAttribute('value', inp.value)
-                //   selectionInput = inp.value
-                //   console.log('COMPARETHIS', selectionInput)
-                  /*close the list of autocompleted values,
-                  (or any other open lists of autocompleted values:*/
-                  closeAllLists();
-                  });
-                  a.appendChild(b);
-              }
-            }
-            // console.log('OUTSIDE', typeof myInput.value)
-            // console.log('THISinputCHECK', myInput.value)
-            // console.log('SELECTIONINPUT', selectionInput)
+                    b = document.createElement("DIV");
+                    /*make the matching letters bold:*/
+                    b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                    b.innerHTML += arr[i].substr(val.length);
+                    /*insert a input field that will hold the current array item's value:*/
+                    b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
 
+                    /*execute a function when someone clicks on the item value (DIV element):*/
+                    b.addEventListener("click", function(e) {
+                    /*insert the value for the autocomplete text field:*/
+                        inp.value = this.getElementsByTagName("input")[0].value;              
+                        myInput.setAttribute('value', inp.value)
+                        console.log('COMPARETHIS', selectionInput)
+                        /*close the list of autocompleted values,
+                        (or any other open lists of autocompleted values:*/
+                        closeAllLists();
+                    });
+                    a.appendChild(b);
+                }
+            }
         });
         /*execute a function presses a key on the keyboard:*/
         inp.addEventListener("keydown", function(e) {
@@ -218,9 +209,6 @@ export default class DiscussionPlanForm extends Component{
       });
       }
 
-    // OnChangeFunct (value) {
-    //     this.setState({ selected: value})
-    // }
 
     makeGridContent = (type, data) => {
         const gridBody = data.map((datum, idx) => {
@@ -236,7 +224,7 @@ export default class DiscussionPlanForm extends Component{
                                         placeholder='Diagnosis' 
                                         name='diagnosis'
                                         index={idx}
-                                        value={this.value}
+                                        value={datum['diagnosis']}
                                         options={TYPE_TO_OPTIONS['differential_diagnosis']}
                                         onChange={this.handleOnChange}
                                         onAddItem={this.handleAddOption}

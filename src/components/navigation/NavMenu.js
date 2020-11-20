@@ -175,7 +175,7 @@ class NoteNameMenuItem extends Component {
                             </Button>
                         </>
                     }
-                
+                    </HPIContext.Consumer>
                     <div className='patient-info'> 
                         <h4>
                         Patient: {this.state.firstName} {this.state.lastName}
@@ -219,7 +219,7 @@ class NoteNameMenuItem extends Component {
                             <Button color='black' onClick={this.closeModal}>Close</Button>
                         </Modal.Actions>
                     </Modal>
-                </HPIContext.Consumer>
+
             </Menu.Item>
         )
     }

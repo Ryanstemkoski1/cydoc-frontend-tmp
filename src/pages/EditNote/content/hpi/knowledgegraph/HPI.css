@@ -69,14 +69,14 @@
 
 .ui.button.hpi-previous-button {
     position: absolute;
-    margin-left: -12.8em;
+    margin-left: -10.8em;
 }
 
 
 
 .ui.button.hpi-next-button {
     position: absolute;
-    margin-right: -12.8em;
+    margin-right: -10.8em;
 }
 
 .ui.button.hpi-previous-button:hover, .ui.button.hpi-next-button:hover {
