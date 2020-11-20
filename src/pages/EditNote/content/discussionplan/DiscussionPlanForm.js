@@ -143,7 +143,6 @@ export default class DiscussionPlanForm extends Component{
                     /*insert the value for the autocomplete text field:*/
                         inp.value = this.getElementsByTagName("input")[0].value;              
                         myInput.setAttribute('value', inp.value)
-                        console.log('COMPARETHIS', selectionInput)
                         /*close the list of autocompleted values,
                         (or any other open lists of autocompleted values:*/
                         closeAllLists();
