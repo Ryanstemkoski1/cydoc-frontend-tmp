@@ -226,8 +226,8 @@ class HPIContent extends Component {
             default:
                 // if API data is loaded, render the DiseaseForm
                 if (isLoaded) { 
-                    let categoryCode = this.context['positivediseases'][step-2] 
-                    let parentNode = diseaseCodes[categoryCode] + "0001"
+                    let categoryCode = this.context['positivediseases'][step-2]
+                    let parentNode = categoryCode + "0001"
                     return (
                         <div className='hpi-disease-container'>
                         <DiseaseForm
