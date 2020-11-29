@@ -2,13 +2,12 @@ import React, { Component, Fragment } from 'react';
 import {Dropdown, Menu, Image, Icon, Button, Input, Modal, Form, Segment, Header} from 'semantic-ui-react';
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types';
-
 import { DEFAULT_NAV_MENU_MOBILE_BP, LOGGEDIN_NAV_MENU_MOBILE_BP } from "constants/breakpoints.js";
 import HPIContext from 'contexts/HPIContext.js';
 import AuthContext from "../../contexts/AuthContext";
 import LogoLight from '../../assets/logo-light.png'
 import LogoName from '../../assets/logo-name.png'
-import './NavMenu.css'
+import './NavMenu.css';
 
 // Navigation Bar component that will go at the top of most pages
 class ConnectedNavMenu extends Component {
@@ -102,15 +101,30 @@ class NoteNameMenuItem extends Component {
         super(props);
         this.state = {
             open: false,
-            firstName: '',
-            lastName: '',
-            dob: '',
-            email: '',
-            phone: ''
+            firstName: this.firstName,
+            middleName: this.middleName,
+            lastName: this.lastName,
+            dob: this.dob,
+            primaryEmail: this.primaryEmail,
+            secondaryEmail: this.secondaryEmail,
+            primaryPhone: this.primaryPhone,
+            secondaryPhone: this.secondaryPhone,
+            invalidFirstName: false,
+            invalidLastName: false,
+            invalidEmail: false,
+            invalidPhone: false,
+            invalidDate: false
+
         };
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.savePatientInfo = this.savePatientInfo.bind(this);
+        this.onFirstNameChange = this.onFirstNameChange.bind(this);
+        this.onLastNameChange = this.onLastNameChange.bind(this);
+        this.onPhoneChange = this.onPhoneChange.bind(this);
+        this.onEmailChange = this.onEmailChange.bind(this);
+        this.onDateChange = this.onDateChange.bind(this);
+        this.setChange = this.setChange.bind(this);
     }
 
     handleInputChange = (event) => {
@@ -127,25 +141,86 @@ class NoteNameMenuItem extends Component {
     }
 
     savePatientInfo() {
-        var firstName = document.getElementById('first-name');
-        var lastName = document.getElementById('last-name');
-        var dob = document.getElementById('dob');
-        var email = document.getElementById('email');
-        var phone = document.getElementById('phone-number');
-
-        this.setState({
-            firstName: firstName.value,
-            lastName: lastName.value,
-            dob: dob.value,
-            email: email.value,
-            phone: phone.value
-        })
         alert('Patient information is saved!');
         this.closeModal();
+    };
+
+    // validations
+    onFirstNameChange = (e) => {
+        if (!e.target.value) {
+            this.setState({ invalidFirstName: true})
+        } else {
+            this.setState({ invalidFirstName: false})
+        }
+    }
+
+    onLastNameChange = (e) => {
+        if (!e.target.value) {
+            this.setState({ invalidLastName: true})
+        } else {
+            this.setState({ invalidLastName: false})
+        }
+    }
+
+    onPhoneChange = (e) => {
+        const re = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
+        if (!e.target.value || !re.test(e.target.value)) {
+            this.setState({ invalidPhone: true})
+        } else {
+            this.setState({ invalidPhone: false})
+        }
+    }
+
+    onEmailChange = (e) => {
+        const re = /^[0-9?A-z0-9?]+(\.)?[0-9?A-z0-9?]+@[A-z]+\.[A-z]{3}.?[A-z]{0,3}$/g;
+        if (!e.target.value || !re.test(e.target.value)) {
+            this.setState({ invalidEmail: true})
+        } else {
+            this.setState({ invalidEmail: false})
+        }
+    }
+
+    onDateChange = (e) => {
+        const re = /^((0?[13578]|10|12)(-|\/)(([1-9])|(0[1-9])|([12])([0-9]?)|(3[01]?))(-|\/)((19)([2-9])(\d{1})|(20)([01])(\d{1})|([8901])(\d{1}))|(0?[2469]|11)(-|\/)(([1-9])|(0[1-9])|([12])([0-9]?)|(3[0]?))(-|\/)((19)([2-9])(\d{1})|(20)([01])(\d{1})|([8901])(\d{1})))$/gm;
+        if (!e.target.value || !re.test(e.target.value)) {
+            this.setState({ invalidDate: true})
+        } else {
+            this.setState({ invalidDate: false})
+        }
+    }
+
+    setChange = (e, {id, value}) => {
+
+        switch(id) {
+            case 'first-name':
+                this.setState({firstName: value});
+                break;
+            case 'middle-name':
+                this.setState({middleName: value});
+                break;
+            case 'last-name':
+                this.setState({lastName: value});
+                break;
+            case 'primary-phone':
+                this.setState({primaryPhone: value});
+                break;
+            case 'secondary-phone':
+                this.setState({secondaryPhone: value});
+                break;
+            case 'primary-email':
+                this.setState({primaryEmail: value});
+                break;
+            case 'secondary-email':
+                this.setState({secondaryEmail: value});
+                break;
+            case 'dob':
+                this.setState({dob: value});
+                break;
+        }
     }
 
     render () {
-        const { open, firstName, lastName, dob, phone, email } = this.state
+        const { open } = this.state
         return (
             <Menu.Item className="note-name-menu-item">
                 <HPIContext.Consumer>
@@ -179,6 +254,8 @@ class NoteNameMenuItem extends Component {
                     <div className='patient-info'> 
                         <h4>
                         Patient: {this.state.firstName} {this.state.lastName}
+                        {/* <br></br>
+                        Age: */}
                         </h4>
                     </div>
                     <Modal
@@ -192,34 +269,134 @@ class NoteNameMenuItem extends Component {
                         >
                         <Header>Patient Information</Header>
                         <Modal.Content>
-                            <Input
-                            className='patient-info-input'
-                            id='first-name'
-                            fluid
-                            label='First Name'
-                            placeholder='First Name'
-                            type='text'
-                            value={this.firstName}
-                            />
-                            <Input
-                            className='patient-info-input'
-                            id='last-name'
-                            fluid
-                            label='Last Name'
-                            placeholder='Last Name'
-                            type='text'
-                            value={this.lastName}
-                            />
-                            <Input className='patient-info-input' id='dob' label='Date Of Birth' placeholder='MM/DD/YYYY' type='text' value={this.dob}/>
-                            <Input className='patient-info-input' id='email' label='Email' placeholder='johndoe@email.com' type='text' value={this.email}/>
-                            <Input className='patient-info-input' id='phone-number' label='Phone Number' placeholder='000-000-0000' type='text' value={this.phone}/>
+                        <Form>
+                            <div className='full-name'>
+                            <Form.Field required>
+                                <label>First Name</label>
+                                <Input
+                                    className='patient-info-input'
+                                    id='first-name'
+                                    fluid
+                                    placeholder='First Name'
+                                    type='text'
+                                    value={this.state.firstName}
+                                    onBlur={this.onFirstNameChange}
+                                    onChange={this.setChange}
+                                />                            
+                            </Form.Field>
+                            {/* { this.state.invalidFirstName && (
+                                <p className='error' id='first-name-error'>First name must not be blank</p>
+                            )} */}
+                            <Form.Field>
+                                <label>Middle Name</label>
+                                <Input
+                                    className='patient-info-input'
+                                    id='middle-name'
+                                    fluid
+                                    placeholder='Middle Name'
+                                    type='text'
+                                    value={this.state.middleName}
+                                    // onBlur={this.onLastNameChange}
+                                    onChange={this.setChange}
+                                />
+                            </Form.Field>
+                            <Form.Field required>
+                                <label>Last Name</label>
+                                <Input
+                                    className='patient-info-input'
+                                    id='last-name'
+                                    fluid
+                                    placeholder='Last Name'
+                                    type='text'
+                                    value={this.state.lastName}
+                                    onBlur={this.onLastNameChange}
+                                    onChange={this.setChange}
+                                />
+                            </Form.Field>
+                            {/* { this.state.invalidLastName && (
+                                <p className='error' id='last-name-error'>Last name must not be blank</p>
+                            )} */}
+                            </div>
+                            <Form.Field required>
+                                <label>Date Of Birth</label>
+                                <Input
+                                    className='patient-info-input' 
+                                    id='dob' 
+                                    placeholder='MM/DD/YYYY' 
+                                    type='text' 
+                                    value={this.state.dob}
+                                    onBlur={this.onDateChange} 
+                                    onChange={this.setChange}
+                                />
+                            </Form.Field>
+                            { this.state.invalidDate && (
+                                <p className='error'>Date must be valid</p>
+                            )}
+
+                            <Form.Field required>
+                                <label>Primary Email</label>
+                                <Input 
+                                    className='patient-info-input' 
+                                    id='primary-email' 
+                                    placeholder='johndoe@email.com' 
+                                    type='text' 
+                                    value={this.state.primaryEmail}
+                                    onBlur={this.onEmailChange}
+                                    onChange={this.setChange}
+                                />
+                            </Form.Field>
+                            { this.state.invalidEmail && (
+                                <p className='error'>Email must be valid</p>
+                            )}
+
+                            <Form.Field>
+                                <label>Secondary Email</label>
+                                <Input 
+                                    className='patient-info-input' 
+                                    id='secondary-email' 
+                                    placeholder='johndoe@email.com' 
+                                    type='text' 
+                                    value={this.state.secondaryEmail}
+                                    // onBlur={this.onEmailChange}
+                                    onChange={this.setChange}
+                                />
+                            </Form.Field>
+
+                            <Form.Field required>
+                                <label>Primary Phone Number</label>
+                                <Input 
+                                    className='patient-info-input' 
+                                    id='primary-phone' 
+                                    placeholder='000-000-0000' 
+                                    type='text' 
+                                    value={this.state.primaryPhone}
+                                    onBlur={this.onPhoneChange}
+                                    onChange={this.setChange}
+                                />
+                            </Form.Field>
+                            { this.state.invalidPhone && (
+                                <p className='error'>Phone number must be valid</p>
+                            )}
+
+                            <Form.Field>
+                                <label>Secondary Phone Number</label>
+                                <Input 
+                                    className='patient-info-input' 
+                                    id='secondary-phone' 
+                                    placeholder='000-000-0000' 
+                                    type='text' 
+                                    value={this.state.secondaryPhone}
+                                    // onBlur={this.onPhoneChange}
+                                    onChange={this.setChange}
+                                />
+                            </Form.Field>
+                            </Form>
                         </Modal.Content>
                         <Modal.Actions>                    
-                            <Button color='blue' onClick={this.savePatientInfo}>Save</Button>
+                            <Button color='blue' type='submit' onClick={this.savePatientInfo}>Save</Button>
                             <Button color='black' onClick={this.closeModal}>Close</Button>
                         </Modal.Actions>
                     </Modal>
-
             </Menu.Item>
         )
     }

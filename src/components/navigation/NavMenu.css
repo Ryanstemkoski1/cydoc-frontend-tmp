@@ -86,9 +86,10 @@
     width: 450px;
 }
 
-.patient-modal-button {
+.ui.basic.button.patient-modal-button {
     flex: 40%;
     margin-top: 10px !important;
+    font-size: 13px !important;
 }
 
 .ui.modal > .content {
@@ -103,4 +104,31 @@
 .ui.label {
     width: 120px;
     padding-right: 0;
+}
+
+.error {
+    position: relative;
+    z-index: 1 !important;
+    font-size: 13px;
+    margin: -10px !important;
+}
+
+.full-name {
+    display: flex;
+}
+
+#first-name, #middle-name, #last-name {
+    flex: 33%;
+}
+
+#first-name, #middle-name {
+    margin-right: 10px;
+}
+
+@media screen and (max-width: 1000px) {
+    .ui.tiny.modal {
+        width: 250px;
+        left: 65px;
+        top: 100px;
+    }
 }
