@@ -109,6 +109,8 @@ class NoteNameMenuItem extends Component {
             secondaryEmail: this.secondaryEmail,
             primaryPhone: this.primaryPhone,
             secondaryPhone: this.secondaryPhone,
+            age: this.age,
+            months: this.months,
             invalidFirstName: false,
             invalidLastName: false,
             invalidEmail: false,
@@ -142,6 +144,8 @@ class NoteNameMenuItem extends Component {
 
     savePatientInfo() {
         alert('Patient information is saved!');
+        // this.grabDate(this.state.dob);
+        this.getAge(this.state.dob);
         this.closeModal();
     };
 
@@ -181,7 +185,7 @@ class NoteNameMenuItem extends Component {
     }
 
     onDateChange = (e) => {
-        const re = /^((0?[13578]|10|12)(-|\/)(([1-9])|(0[1-9])|([12])([0-9]?)|(3[01]?))(-|\/)((19)([2-9])(\d{1})|(20)([01])(\d{1})|([8901])(\d{1}))|(0?[2469]|11)(-|\/)(([1-9])|(0[1-9])|([12])([0-9]?)|(3[0]?))(-|\/)((19)([2-9])(\d{1})|(20)([01])(\d{1})|([8901])(\d{1})))$/gm;
+        const re = /^((0[1-9]|10|11|12)(-|\/)(([1-9])|(0[1-9])|([12])([0-9])|(3[01]))(-|\/)((19)([2-9])(\d{1})|(20)([012])(\d{1})|([8901])(\d{1})))$/gm;
         if (!e.target.value || !re.test(e.target.value)) {
             this.setState({ invalidDate: true})
         } else {
@@ -219,6 +223,39 @@ class NoteNameMenuItem extends Component {
         }
     }
 
+    getAge(dateString) {
+        var now = new Date();      
+        var yearNow = now.getYear();
+        var monthNow = now.getMonth();
+      
+        var dob = new Date(dateString.substring(6,10),
+                           dateString.substring(0,2)-1,                   
+                           dateString.substring(3,5)                  
+                           );
+      
+        var yearDob = dob.getYear();
+        var monthDob = dob.getMonth();
+        var age = {};
+            
+        let yearAge = yearNow - yearDob;
+      
+        if (monthNow >= monthDob)
+          var monthAge = monthNow - monthDob;
+        else {
+          yearAge--;
+          var monthAge = 12 + monthNow -monthDob;
+        }
+      
+        age = {
+            years: yearAge,
+            months: monthAge,
+            };
+      
+        this.setState({age: age.years});
+        this.setState({months: age.months});
+      }
+      
+      
     render () {
         const { open } = this.state
         return (
@@ -252,11 +289,14 @@ class NoteNameMenuItem extends Component {
                     }
                     </HPIContext.Consumer>
                     <div className='patient-info'> 
-                        <h4>
-                        Patient: {this.state.firstName} {this.state.lastName}
-                        {/* <br></br>
-                        Age: */}
-                        </h4>
+                    {this.state.age > 1 ?
+                        <h4>Patient: {this.state.firstName} {this.state.lastName}, {this.state.age} years old</h4>
+                        : ""
+                    }
+                    {this.state.age === 0 ?
+                        <h4>Patient: {this.state.firstName} {this.state.lastName}, {this.state.months} months old</h4>
+                        : ""
+                    }
                     </div>
                     <Modal
                         className='patient-modal'
@@ -265,7 +305,7 @@ class NoteNameMenuItem extends Component {
                         open={open}
                         size='tiny'
                         dimmer='inverted'
-                        trigger={<Button className='patient-modal-button' tiny basic>View/Edit Patient Info</Button>}
+                        trigger={<Button className='patient-modal-button' tiny basic>Add/Edit Patient Info</Button>}
                         >
                         <Header>Patient Information</Header>
                         <Modal.Content>

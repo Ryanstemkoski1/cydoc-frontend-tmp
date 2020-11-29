@@ -125,15 +125,6 @@
     margin-right: 10px;
 }
 
-@media screen and (max-width: 1000px) {
-    .ui.tiny.modal {
-        width: 250px;
-        left: 65px;
-        top: 100px;
-    }
-}
-
-
 @media screen and (max-width: 500px) {
 
     .nav-menu {
