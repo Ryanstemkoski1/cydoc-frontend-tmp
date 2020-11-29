@@ -5,10 +5,12 @@
     margin: 0;
     display: block;
     font-size: 13px;
+    background: #c8e2ea;
 }
 
 .ui.button.previous-button:hover, .ui.button.next-button:hover {
     opacity: 1;
+    background: #c8e2ea;
 }
 
 .ui.button.small-previous-button, .ui.button.small-next-button {
@@ -17,6 +19,7 @@
     bottom: 0;
     opacity: 0.8;
     margin: 0;
+    background: #c8e2ea;
 }
 
 .edit-note-nav-menu {

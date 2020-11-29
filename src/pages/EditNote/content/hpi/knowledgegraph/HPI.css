@@ -60,6 +60,7 @@
     opacity: 0.8;
     display: block;
     font-size: 13px;
+    background: #c8e2ea;
 }
 
 .hpi-disease-container {
@@ -72,8 +73,6 @@
     margin-left: -10.8em;
 }
 
-
-
 .ui.button.hpi-next-button {
     position: absolute;
     margin-right: -10.8em;
@@ -81,6 +80,7 @@
 
 .ui.button.hpi-previous-button:hover, .ui.button.hpi-next-button:hover {
     opacity: 1;
+    background: #c8e2ea;
 }
 
 .ui.button.hpi-small-previous-button, .ui.button.hpi-small-next-button {
@@ -89,6 +89,7 @@
     bottom: 0;
     opacity: 0.8;
     margin: 0;
+    background: #c8e2ea;
 }
 
 @media screen and (max-width: 700px) {
