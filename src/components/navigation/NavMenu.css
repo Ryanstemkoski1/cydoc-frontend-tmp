@@ -2,7 +2,7 @@
 /* Navigation Bar has a thicker drop shadow */
 .nav-menu {
     box-shadow: 0 0 20px 5px RGBA(0, 128, 159, 0.2) !important;
-    height: 10vh;
+    height: 90px;
     padding-top: 40px;
     padding-bottom: 70px;
 }
@@ -47,7 +47,7 @@
     padding-top: 0 !important;
     display: flex;
     flex-wrap: wrap;
-    width: 40vw;
+    width: 450px;
 }
 
 
@@ -131,4 +131,50 @@
         left: 65px;
         top: 100px;
     }
+}
+
+
+@media screen and (max-width: 500px) {
+
+    .nav-menu {
+        height: 200px;
+    }
+
+    .ui.tiny.modal {
+        width: 250px;
+        left: 65px;
+        top: 100px;
+    }
+
+    .full-name {
+        display: block;
+        margin-bottom: 15px;
+    }
+    
+    #first-name, #middle-name {
+        margin-right: 0;
+    }
+
+    .note-name-menu-item {
+        width: 200px;
+    }
+
+    .note-title {
+        padding: 10px;
+        margin-top: 10px !important;
+    }
+
+    .ui.button.save-button {
+        margin-top: 5px !important;
+        padding: 8px !important;
+    }
+
+    .patient-info {
+        margin: 15px !important;
+    }
+
+    .ui.basic.button.patient-modal-button {
+        margin-top: 0 !important;
+    }
+    
 }
