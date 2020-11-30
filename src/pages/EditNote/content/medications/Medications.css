@@ -72,13 +72,22 @@ a.ui.label, a.ui.active.label {
     outline: none;
 }
 
-.medications-input-label-mobile {
+.medications-content-input-label {
     border: none !important;
 }
 
 .reason-wrapper {
     display: inline-block;
     padding-left: 5rem;
+}
+
+.medications-desktop-accordion-title {
+    border: none !important;
+    margin: 0 !important;
+}
+
+.medications-desktop-accordion-dropdown-icon {
+    position: fixed;
 }
 
 /** For smaller screens e.g. iPhone 6/7/8 */
