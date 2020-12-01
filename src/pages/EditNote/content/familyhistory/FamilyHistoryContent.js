@@ -20,7 +20,6 @@ export default class FamilyHistoryContent extends Component {
     };
     this.updateDimensions = this.updateDimensions.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    // this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
     this.addRow = this.addRow.bind(this);
     this.addSeenCond = this.addSeenCond.bind(this);
 
@@ -80,20 +79,6 @@ export default class FamilyHistoryContent extends Component {
     values[index][data.placeholder] = data.value;
     this.context.onContextChange('Family History', values);
   }
-
-  //handles toggle button events
-  //   handleToggleButtonClick(event, data) {
-  //     let index = data.condition.props.index;
-  //     const values = this.context['Family History'];
-  //     const responses = ['Yes', 'No'];
-  //     const prevState = values[index][data.title];
-  //     values[index][data.title] = !prevState;
-  //     for (var response_index in responses) {
-  //       var response = responses[response_index];
-  //       if (data.title !== response) values[index][response] = false;
-  //     }
-  //     this.context.onContextChange('Family History', values);
-  //   }
 
   addRow() {
     let values = this.context['Family History'];
@@ -203,7 +188,7 @@ export default class FamilyHistoryContent extends Component {
       }
     });
 
-    return mobile ? (
+    return (
       <>
         <GridContent
           isPreview={this.props.isPreview}
@@ -217,11 +202,6 @@ export default class FamilyHistoryContent extends Component {
           addRow={this.addRow}
           name={'family history'}
         />
-      </>
-    ) : (
-      <>
-        <div style={{ marginTop: 25 }}> </div>
-        {listItems}
       </>
     );
   }

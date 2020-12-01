@@ -195,10 +195,12 @@ export default class FamilyHistoryDropdown extends Component {
                 circular
                 icon='close'
                 size='mini'
-                onClick={this.props.handleDelete(
-                  this.props.index,
-                  this.props.family_index
-                )}
+                onClick={() =>
+                  this.props.handleDelete(
+                    this.props.index,
+                    this.props.family_index
+                  )
+                }
               />
             </Grid.Column>
             <Grid.Column width={3}>
