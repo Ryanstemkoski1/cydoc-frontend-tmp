@@ -17,6 +17,7 @@ export default class GridContent extends Component {
 
   render() {
     const { numColumns, contentHeader, rows, mobile, isPreview } = this.props;
+    console.log(numColumns);
     return mobile ? (
       <Fragment>
         <br />

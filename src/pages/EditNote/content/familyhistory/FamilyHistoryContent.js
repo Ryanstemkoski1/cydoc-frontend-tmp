@@ -188,7 +188,7 @@ export default class FamilyHistoryContent extends Component {
       }
     });
 
-    return (
+    return mobile ? (
       <>
         <GridContent
           isPreview={this.props.isPreview}
@@ -200,8 +200,14 @@ export default class FamilyHistoryContent extends Component {
           conditions={list_values}
           mobile={mobile}
           addRow={this.addRow}
-          name={'family history'}
+          name={'disease'}
         />
+      </>
+    ) : (
+      <>
+        <div style={{ marginTop: 25 }}> </div>
+        {listItems}
+        <AddRowButton onClick={this.addRow} name={'disease'} />
       </>
     );
   }
