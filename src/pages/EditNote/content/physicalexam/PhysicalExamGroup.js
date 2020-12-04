@@ -48,7 +48,7 @@ export default class PhysicalExamGroup extends Component {
         if (leftRight === 'left' || leftRight === 'right') {
             values[this.props.name][name][leftRight] = data
         } else {
-            values[this.props.name][name].active = data
+            values[this.props.name][name].center = data
             if (data === false || leftRight === 'all') {
                 values[this.props.name][name].left = data
                 values[this.props.name][name].right = data
