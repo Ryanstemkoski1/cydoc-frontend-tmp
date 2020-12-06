@@ -95,14 +95,14 @@ class HPIContent extends Component {
     }
 
     // get to first page (change step = 1)
-    firstPage = () => this.context.onContextChange("step", 1)
+    // firstPage = () => this.context.onContextChange("step", 1)
 
-    // skip to last page (last category) [change step to be last]
-    lastPage = () => {
-        var currentStep = this.context['positivediseases'].length
-        this.context.onContextChange("step", currentStep+1)
-        this.context.onContextChange("activeHPI", this.context['positivediseases'][currentStep-1])
-    }
+    // // skip to last page (last category) [change step to be last]
+    // lastPage = () => {
+    //     var currentStep = this.context['positivediseases'].length
+    //     this.context.onContextChange("step", currentStep+1)
+    //     this.context.onContextChange("activeHPI", this.context['positivediseases'][currentStep-1])
+    // }
 
     // go to the next page (change step = step + 1)
     continue = e => {
@@ -234,10 +234,6 @@ class HPIContent extends Component {
                             key={parentNode}
                             parentNode = {parentNode}
                             graphData={graphData}
-                            nextStep = {this.nextStep}
-                            prevStep = {this.prevStep}
-                            firstPage = {this.firstPage}
-                            lastPage = {this.lastPage}
                             diseaseTabs = {diseaseTabs}
                             last = {true ? step === positiveLength+1 : false}
                             windowWidth={windowWidth}

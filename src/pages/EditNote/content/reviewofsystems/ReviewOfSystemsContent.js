@@ -45,6 +45,10 @@ export default class ReviewOfSystemsContent extends Component {
         )
     }
 
+    nextFormClick = () => this.props.nextFormClick();
+
+    previousFormClick = () => this.props.previousFormClick();
+
     render() {
         const { windowWidth } = this.state;
         
@@ -58,9 +62,27 @@ export default class ReviewOfSystemsContent extends Component {
         }
         
         return (
+            <>
             <Masonry className='ros-container' breakpointCols={numColumns} columnClassName='ros-column'>
                 {this.generateList(sections)}
             </Masonry>
+
+            <Button icon floated='left' onClick={this.previousFormClick} className='small-previous-button'>
+            <Icon name='left arrow'/>
+            </Button>
+            <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='previous-button'>
+            Previous Form
+            <Icon name='left arrow'/>
+            </Button>
+
+            <Button icon floated='right' onClick={this.nextFormClick} className='small-next-button'>
+            <Icon name='right arrow'/>
+            </Button>
+            <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='next-button'>
+            Next Form
+            <Icon name='right arrow'/>
+            </Button>
+            </>
         );
     }
 }

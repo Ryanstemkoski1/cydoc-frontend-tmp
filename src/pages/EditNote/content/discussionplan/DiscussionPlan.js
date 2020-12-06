@@ -67,6 +67,10 @@ class plan extends Component {
         } 
     }
 
+    nextFormClick = () => this.props.nextFormClick();
+
+    previousFormClick = () => this.props.previousFormClick();
+
     render() {
         const { plan } = this.context;
         const { current, windowWidth } = this.state;
@@ -137,7 +141,23 @@ class plan extends Component {
                 <Segment>
                     <DiscussionPlanSurvey plan={plan}/>
                 </Segment>
-            </>
+
+                <Button icon floated='left' onClick={this.previousFormClick} className='small-previous-button'>
+                <Icon name='left arrow'/>
+                </Button>
+                <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='previous-button'>
+                Previous Form
+                <Icon name='left arrow'/>
+                </Button>
+
+                <Button icon floated='right' onClick={this.nextFormClick} className='small-next-button'>
+                <Icon name='right arrow'/>
+                </Button>
+                <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='next-button'>
+                Next Form
+                <Icon name='right arrow'/>
+                </Button>
+                </>
         )
     }
 }

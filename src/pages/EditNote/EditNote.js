@@ -121,10 +121,10 @@ class EditNote extends Component {
                             attached
                         />
                     </Sticky>
-                    <NotePage activeItem={this.state.activeItem} onNextClick={this.onNextClick}/>
-                    {this.state.activeItem === 'HPI' ? 
+                    <NotePage activeItem={this.state.activeItem} onNextClick={this.onNextClick} onPreviousClick={this.onPreviousClick} />
+                    {/* {this.state.activeItem === 'HPI' || this.state.activeItem === 'Patient History' ? 
                     ""
-                    : (
+                    : 
                     <>
                         <Button icon floated='left' onClick={this.onPreviousClick} className='small-previous-button'>
                         <Icon name='left arrow'/>
@@ -142,7 +142,7 @@ class EditNote extends Component {
                         <Icon name='right arrow'/>
                         </Button>
                     </>
-                    )}
+                    } */}
                 </div>
 
             </>

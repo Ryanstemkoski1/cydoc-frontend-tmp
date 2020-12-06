@@ -33,26 +33,6 @@ export class DiseaseForm extends React.Component {
         this.processKnowledgeGraph()
     }
 
-    continue = e => {
-        e.preventDefault();
-        this.props.nextStep();
-    }
-
-    back = e => {
-        e.preventDefault();
-        this.props.prevStep();
-    }
- 
-    firstPage = e => {
-        e.preventDefault()
-        this.props.firstPage()
-    }
-
-    lastPage = e => {
-        e.preventDefault()
-        this.props.lastPage()
-    }
-
     // organizes child nodes in order based on their questionOrder attribute
     questionOrder(listEdges, nodes, edges, catCode) {
         var childRanks = []
