@@ -143,10 +143,14 @@ class NoteNameMenuItem extends Component {
     }
 
     savePatientInfo() {
-        alert('Patient information is saved!');
-        // this.grabDate(this.state.dob);
-        this.getAge(this.state.dob);
-        this.closeModal();
+        const { invalidDate, invalidEmail, invalidFirstName, invalidLastName, invalidPhone } = this.state
+        if (invalidFirstName || invalidLastName || invalidEmail || invalidPhone || invalidDate) {
+            alert('Please make sure all the required fields are completed')
+        } else {
+            alert('Patient information is saved!');
+            this.getAge(this.state.dob);
+            this.closeModal();   
+        }
     };
 
     // validations
@@ -289,7 +293,11 @@ class NoteNameMenuItem extends Component {
                     }
                     </HPIContext.Consumer>
                     <div className='patient-info'> 
-                    {this.state.age > 1 ?
+                    {this.state.age > 1 && this.state.age < 11 ? 
+                        <h4>Patient: {this.state.firstName} {this.state.lastName}, {this.state.age} years and {this.state.months} months old</h4>
+                        : ""
+                    }
+                    {this.state.age >= 11 ?
                         <h4>Patient: {this.state.firstName} {this.state.lastName}, {this.state.age} years old</h4>
                         : ""
                     }
@@ -297,6 +305,7 @@ class NoteNameMenuItem extends Component {
                         <h4>Patient: {this.state.firstName} {this.state.lastName}, {this.state.months} months old</h4>
                         : ""
                     }
+                    
                     </div>
                     <Modal
                         className='patient-modal'
