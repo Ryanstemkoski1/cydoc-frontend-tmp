@@ -3,7 +3,8 @@ import { Button } from "semantic-ui-react";
 import './PhysicalExam.css'
 //import NumericInput from 'react-numeric-input';
 
-//Component that manages content for the Physical Exam tab
+
+//Component that triggers its handleClick function on all children when clicked
 export default class SelectAllButton extends React.Component {
 
     constructor(props) {
