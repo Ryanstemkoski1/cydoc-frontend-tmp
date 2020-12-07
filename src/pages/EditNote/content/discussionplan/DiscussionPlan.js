@@ -142,18 +142,18 @@ class plan extends Component {
                     <DiscussionPlanSurvey plan={plan}/>
                 </Segment>
 
-                <Button icon floated='left' onClick={this.previousFormClick} className='small-previous-button'>
+                <Button icon floated='left' onClick={this.previousFormClick} className='small-plan-previous-button'>
                 <Icon name='left arrow'/>
                 </Button>
-                <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='previous-button'>
+                <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='plan-previous-button'>
                 Previous Form
                 <Icon name='left arrow'/>
                 </Button>
 
-                <Button icon floated='right' onClick={this.nextFormClick} className='small-next-button'>
+                <Button icon floated='right' onClick={this.nextFormClick} className='small-plan-next-button'>
                 <Icon name='right arrow'/>
                 </Button>
-                <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='next-button'>
+                <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='plan-next-button'>
                 Next Form
                 <Icon name='right arrow'/>
                 </Button>

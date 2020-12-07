@@ -212,18 +212,18 @@ export default class PhysicalExamContent extends React.Component {
                 </>
                 }
 
-                <Button icon floated='left' onClick={this.previousFormClick} className='small-previous-button'>
+                <Button icon floated='left' onClick={this.previousFormClick} className='small-physical-previous-button'>
                 <Icon name='left arrow'/>
                 </Button>
-                <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='previous-button'>
+                <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='physical-previous-button'>
                 Previous Form
                 <Icon name='left arrow'/>
                 </Button>
 
-                <Button icon floated='right' onClick={this.nextFormClick} className='small-next-button'>
+                <Button icon floated='right' onClick={this.nextFormClick} className='small-physical-next-button'>
                 <Icon name='right arrow'/>
                 </Button>
-                <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='next-button'>
+                <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='physical-next-button'>
                 Next Form
                 <Icon name='right arrow'/>
                 </Button>

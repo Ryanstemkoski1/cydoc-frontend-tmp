@@ -16,10 +16,12 @@ export default class PatientHistoryContent extends Component {
             windowWidth: 0,
             windowHeight: 0,
             activeTabName: 'Medical History', // Default open pane is Medical History
-            activeIndex: this.activeIndex
+            activeIndex: this.activeIndex,
         }
         this.updateDimensions = this.updateDimensions.bind(this);
         this.handleItemClick = this.handleItemClick.bind(this);
+        this.onNextClick = this.onNextClick.bind(this);
+        this.onPreviousClick = this.onPreviousClick.bind(this);
     }
 
     componentDidMount() {
@@ -102,6 +104,63 @@ export default class PatientHistoryContent extends Component {
         return tabToDisplay;    
     }
 
+    onNextClick() {
+        this.setState(state => {
+            if (state.activeTabName === 'Medical History') {
+                return {
+                    activeTabName: 'Surgical History',
+                }
+            } else if (state.activeTabName === 'Surgical History') {
+                return {
+                    activeTabName: 'Medications',
+                }
+            } else if (state.activeTabName === 'Medications') {
+                return {
+                    activeTabName: 'Allergies',
+                }
+            } else if (state.activeTabName === 'Allergies') {
+                return {
+                    activeTabName: 'Social History',
+                }
+            } else if (state.activeTabName === 'Social History') {
+                return {
+                    activeTabName: 'Family History',
+                }
+            }
+        })
+        // // brings users to the top of the page after button click
+        // window.scrollTo(0,0);
+    }
+
+    // brings users to the previous form when clicked
+    onPreviousClick() {
+        this.setState(state => {
+            if (state.activeItem === 'Surgical History') {
+                return {
+                    activeItem: 'Medical History',
+                }
+            } else if (state.activeItem === 'Medications') {
+                return {
+                    activeItem: 'Surgical History',
+                }
+            } else if (state.activeItem === 'Allergies') {
+                return {
+                    activeItem: 'Medications',
+                }
+            } else if (state.activeItem === 'Social History') {
+                return {
+                    activeItem: 'Allergies',
+                }
+            } else if (state.activeItem === 'Family History') {
+                return {
+                    activeItem: 'Social History',
+                }
+            }
+        })
+        // brings users to the top of the page after button click
+        window.scrollTo(0,0);
+    }
+
 
     render() {
         const { windowWidth, activeTabName, activeIndex } = this.state;
@@ -118,7 +177,7 @@ export default class PatientHistoryContent extends Component {
                         icon
                         labelPosition='left'
                         floated='left'
-                        className='previous-button'
+                        className='patient-previous-button'
                         onClick={this.previousFormClick}
                     >
                     Previous Form
@@ -129,7 +188,7 @@ export default class PatientHistoryContent extends Component {
                         icon
                         labelPosition='right'
                         floated='right'
-                        className='next-button'
+                        className='patient-next-button'
                         value={1}
                         activeTabName='Surgical History'
                         onClick={this.handleNextTab}
@@ -149,7 +208,7 @@ export default class PatientHistoryContent extends Component {
                         icon
                         labelPosition='left'
                         floated='left'
-                        className='previous-button'
+                        className='patient-previous-button'
                         value={0}
                         activeTabName='Medical History'
                         onClick={this.handlePrevTab}
@@ -162,7 +221,7 @@ export default class PatientHistoryContent extends Component {
                         icon
                         labelPosition='right'
                         floated='right'
-                        className='next-button'
+                        className='patient-next-button'
                         value={2}
                         activeTabName='Medications'
                         onClick={this.handleNextTab}
@@ -182,7 +241,7 @@ export default class PatientHistoryContent extends Component {
                         icon
                         labelPosition='left'
                         floated='left'
-                        className='previous-button'
+                        className='patient-previous-button'
                         value={1}
                         activeTabName='Surgical History'
                         onClick={this.handlePrevTab}
@@ -195,7 +254,7 @@ export default class PatientHistoryContent extends Component {
                         icon
                         labelPosition='right'
                         floated='right'
-                        className='next-button'
+                        className='patient-next-button'
                         value={3}
                         activeTabName='Allergies'
                         onClick={this.handleNextTab}
@@ -215,7 +274,7 @@ export default class PatientHistoryContent extends Component {
                         icon
                         labelPosition='left'
                         floated='left'
-                        className='previous-button'
+                        className='patient-previous-button'
                         value={2}
                         activeTabName='Medications'
                         onClick={this.handlePrevTab}
@@ -228,7 +287,7 @@ export default class PatientHistoryContent extends Component {
                         icon
                         labelPosition='right'
                         floated='right'
-                        className='next-button'
+                        className='patient-next-button'
                         value={4}
                         activeTabName='Social History'
                         onClick={this.handleNextTab}
@@ -248,7 +307,7 @@ export default class PatientHistoryContent extends Component {
                         icon
                         labelPosition='left'
                         floated='left'
-                        className='previous-button'
+                        className='patient-previous-button'
                         value={3}
                         activeTabName='Allergies'
                         onClick={this.handlePrevTab}
@@ -261,7 +320,7 @@ export default class PatientHistoryContent extends Component {
                         icon
                         labelPosition='right'
                         floated='right'
-                        className='next-button'
+                        className='patient-next-button'
                         value={5}
                         activeTabName='Family History'
                         onClick={this.handleNextTab}
@@ -281,7 +340,7 @@ export default class PatientHistoryContent extends Component {
                         icon
                         labelPosition='left'
                         floated='left'
-                        className='previous-button'
+                        className='patient-previous-button'
                         value={4}
                         activeTabName='Social History'
                         onClick={this.handlePrevTab}
@@ -294,7 +353,7 @@ export default class PatientHistoryContent extends Component {
                         icon
                         labelPosition='right'
                         floated='right'
-                        className='next-button'
+                        className='patient-next-button'
                         onClick={this.nextFormClick}
                     >
                     Next Form
@@ -317,18 +376,47 @@ export default class PatientHistoryContent extends Component {
             <>
                 {collapseTabs ?
                     <Container>
-                        <Grid stackable centered className={"patient-history-menu"} relaxed style={{paddingTop: 10, paddingBottom: 5}}>
+                        <Grid stackable centered className={"patient-history-menu"} relaxed>
                             {gridButtons}
                         </Grid>
                         <Segment>{tabToDisplay}</Segment>
-
-                        <Button icon floated='left' onClick={this.previousFormClick} className='small-previous-button'>
+                        {activeTabName === 'Medical History' ? 
+                        <>
+                        <Button icon floated='left' onClick={this.previousFormClick} className='small-patient-previous-button'>
                         <Icon name='left arrow'/>
                         </Button>
 
-                        <Button icon floated='right' onClick={this.nextFormClick} className='small-next-button'>
+                        <Button icon floated='right' onClick={this.onNextClick} className='small-patient-next-button'>
+                        <Icon name='right arrow'/>
+                        </Button>  
+                        </> 
+                        : ''
+                        }
+
+                        {activeTabName === 'Family History'? 
+                        <>
+                        <Button icon floated='left' onClick={this.onPreviousClick} className='small-patient-previous-button'>
+                        <Icon name='left arrow'/>
+                        </Button>
+
+                        <Button icon floated='right' onClick={this.nextFormClick} className='small-patient-next-button'>
                         <Icon name='right arrow'/>
                         </Button>
+                        </>
+                        : ''
+                        }
+                        {activeTabName === 'Social History' || activeTabName === 'Allergies' || activeTabName === 'Medications' || activeTabName === 'Surgical History' ?
+                        <>
+                        <Button icon floated='left' onClick={this.onPreviousClick} className='small-patient-previous-button'>
+                        <Icon name='left arrow'/>
+                        </Button>
+
+                        <Button icon floated='right' onClick={this.onNextClick} className='small-patient-next-button'>
+                        <Icon name='right arrow'/>
+                        </Button>
+                        </>
+                        :''
+                        }            
                     </Container>
                     :
                     <Tab menu={{ pointing: true, className: "patient-history-menu"}} panes={panes} activeIndex={activeIndex} activeTabName={this.state.activeTabName} onTabChange={this.handleTabChange}/>

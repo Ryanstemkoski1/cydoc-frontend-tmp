@@ -23,9 +23,11 @@
   background-color: white;
   border: 1px solid #c7c7c7;
   border-radius: 5px;
+  padding-top: 10px;
+  padding-bottom: 5px;
 }
 
-.ui.icon.button.previous-button, .ui.icon.button.next-button {
+.ui.icon.button.patient-previous-button, .ui.icon.button.patient-next-button {
   position: sticky !important;
   bottom: 0;
   margin: 0;
@@ -35,16 +37,30 @@
   background: #c8e2ea;
 }
 
-.ui.icon.button.previous-button:hover, .ui.icon.button.next-button:hover {
+.ui.icon.button.patient-previous-button:hover, .ui.icon.button.patient-next-button:hover {
   opacity: 1;
   background: #c8e2ea;
 }
 
-.ui.icon.button.previous-button {
-  margin-left: -12.8em;
+.ui.icon.button.patient-previous-button {
+  margin-left: -10.8em;
 }
 
-.ui.icon.button.next-button {
-  margin-right: -12.8em;
+.ui.icon.button.patient-next-button {
+  margin-right: -10.8em;
 }
 
+.ui.icon.button.small-patient-previous-button, .ui.icon.button.small-patient-next-button {
+  display: block;
+  position: sticky !important;
+  bottom: 0;
+  opacity: 0.8;
+  margin: 0;
+  background: #c8e2ea;
+}
+
+/* @media screen and (max-width: 1300px) {
+  .ui.icon.button.patient-previous-button, .ui.icon.button.patient-next-button {
+
+  }
+} */

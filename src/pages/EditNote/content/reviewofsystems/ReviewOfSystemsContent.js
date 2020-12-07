@@ -67,18 +67,18 @@ export default class ReviewOfSystemsContent extends Component {
                 {this.generateList(sections)}
             </Masonry>
 
-            <Button icon floated='left' onClick={this.previousFormClick} className='small-previous-button'>
+            <Button icon floated='left' onClick={this.previousFormClick} className='small-ros-previous-button'>
             <Icon name='left arrow'/>
             </Button>
-            <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='previous-button'>
+            <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='ros-previous-button'>
             Previous Form
             <Icon name='left arrow'/>
             </Button>
 
-            <Button icon floated='right' onClick={this.nextFormClick} className='small-next-button'>
+            <Button icon floated='right' onClick={this.nextFormClick} className='small-ros-next-button'>
             <Icon name='right arrow'/>
             </Button>
-            <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='next-button'>
+            <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='ros-next-button'>
             Next Form
             <Icon name='right arrow'/>
             </Button>

@@ -69,12 +69,10 @@
 }
 
 .ui.button.hpi-previous-button {
-    position: absolute;
     margin-left: -10.8em;
 }
 
 .ui.button.hpi-next-button {
-    position: absolute;
     margin-right: -10.8em;
 }
 
@@ -102,6 +100,14 @@
         display: block;
     }
     
+    .ui.icon.button.hpi-small-previous-button {
+        margin-left: -2.8em;
+    }
+
+    .ui.icon.button.hpi-small-next-button {
+        margin-right: -2.8em;
+    }
+    
 }
 
 @media screen and (max-width: 700px) {
@@ -112,5 +118,13 @@
     }
     .question-map {
         margin: auto .5rem;
+    }
+
+    .ui.icon.button.hpi-small-previous-button {
+        margin-left: 0;
+    }
+
+    .ui.icon.button.hpi-small-next-button {
+        margin-right: 0;
     }
 }
