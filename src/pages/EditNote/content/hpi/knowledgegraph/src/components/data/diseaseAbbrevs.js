@@ -1,0 +1,13 @@
+const diseaseAbbrevs = {
+    "CVRESP": "Cardiovascular & Respiratory",
+    "GIGU": "Gastrointestinal & Genitourinary",
+    "NEURO": "Neurological",
+    "ENDOCRINE": "Endocrine",
+    "LIFESTYLE": "Lifestyle",
+    "SYSTEMIC": "Systemic",
+    "GENERAL": "General",
+    "MSK": "Musculoskeletal",
+    "PAIN": "Pain",
+    "SPECIALDEMOG": "Special Demographics"
+}
+export default diseaseAbbrevs

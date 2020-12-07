@@ -6,7 +6,14 @@
 }
 
 .collapsed-menu-tabs {
-
+  overflow: auto;
+  max-height: 50vh;
+  white-space: nowrap;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 
@@ -53,3 +60,10 @@
   background-color: #6db2c5 !important;
 }
 
+.form-tabs {
+  background-color: white;
+}
+
+.collapsed-menu-icon {
+  margin: 0;
+}

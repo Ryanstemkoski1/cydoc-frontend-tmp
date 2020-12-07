@@ -6,6 +6,7 @@ import AuthContext from "../../contexts/AuthContext";
 import constants from "constants/registration-constants.json"
 import LogoLight from "../../assets/logo-light.png";
 import LogoName from "../../assets/logo-name.png";
+import './UserForm.css';
 
 const degreeOptions = constants.degrees.map((degree) => ({ key: degree, value: degree, text: degree }))
 const specialtyOptions = constants.specialties.map((specialty) => ({ key: specialty, value: specialty, text: specialty }))
@@ -109,14 +110,14 @@ class UserForm extends Component {
     }
 
     // handles change in a single field (updates states based on changed info)
-    handleChange(e, { name, value }) {
+    handleChange(e, {name, value}) {
         let newState = this.state;
         newState.formInfo[name] = value;
         this.setState(newState);
     }
 
     // handles change for array-based fieldss (also updates state)
-    handleArrayChange(e, { name, index, value }) {
+    handleArrayChange(e, {name, index, value}) {
         let newState = this.state;
         newState.formInfo[name][index] = value;
         this.setState(newState);
@@ -128,25 +129,28 @@ class UserForm extends Component {
         if (this.props.show) {
             return (
                 <Fragment>
-                    <label style={{ fontSize: "10px" }}>
+                    <label className='sign-up-font'>
                         I am a:
                     </label>
                     <Form.Group>
-                        <Form.Radio style={{ fontSize: "10px" }}
+                        <Form.Radio 
+                            className='sign-up-font'
                             label='patient'
                             value='patient'
                             name='role'
                             checked={this.state.formInfo.role === 'patient'}
                             onChange={this.handleChange}
                         />
-                        <Form.Radio style={{ fontSize: "10px" }}
+                        <Form.Radio
+                            className='sign-up-font'
                             label='healthcare professional'
                             value='healthcare professional'
                             name='role'
                             checked={this.state.formInfo.role === 'healthcare professional'}
                             onChange={this.handleChange}
                         />
-                        <Form.Radio style={{ fontSize: "10px" }}
+                        <Form.Radio
+                            className='sign-up-font'
                             label='administrator'
                             value='administrator'
                             name='role'
@@ -165,16 +169,18 @@ class UserForm extends Component {
         if (this.state.formInfo.role === 'healthcare professional') {
             return (
                 <Fragment>
-                    <label style={{ fontSize: "10px" }}>student status</label>
+                    <label className='sign-up-font'>student status</label>
                     <Form.Group>
-                        <Form.Radio style={{ fontSize: "10px" }}
+                        <Form.Radio
+                            className='sign-up-font'
                             label='student'
                             value='y'
                             name='studentStatus'
                             checked={this.state.formInfo.studentStatus === 'y'}
                             onChange={this.handleChange}
                         />
-                        <Form.Radio style={{ fontSize: "10px" }}
+                        <Form.Radio
+                            className='sign-up-font'
                             label='non-student'
                             value='n'
                             name='studentStatus'
@@ -182,7 +188,7 @@ class UserForm extends Component {
                             onChange={this.handleChange}
                         />
                     </Form.Group>
-                    <label style={{ fontSize: "10px" }}>degrees completed</label>
+                    <label className='sign-up-font'>degrees completed</label>
                     <Form.Group>
                         <Form.Dropdown
                             search
@@ -215,7 +221,7 @@ class UserForm extends Component {
                             onChange={this.handleArrayChange}
                         />
                     </Form.Group>
-                    <label style={{ fontSize: "10px" }}>degrees in progress</label>
+                    <label className='sign-up-font'>degrees in progress</label>
                     <Form.Group>
                         <Form.Dropdown
                             search
@@ -248,7 +254,7 @@ class UserForm extends Component {
                             onChange={this.handleArrayChange}
                         />
                     </Form.Group>
-                    <label style={{ fontSize: "10px" }}>specialties</label>
+                    <label className='sign-up-font'>specialties</label>
                     <Form.Group>
                         <Form.Dropdown
                             search
@@ -318,16 +324,15 @@ class UserForm extends Component {
                     <Image size="small" spaced href='/home' src={LogoName} />
                 </Container>
                 <Container>
-
-                    <Segment clearing style={{ borderColor: "white" }}>
+                    <Segment clearing raised className='sign-up-segment'>
                         <Container className="sign-up-header" color='black' textAlign='center'>
-                            Sign Up
+                            {this.state.title}
                         </Container>
                         <Form size='small' error={this.state.errorMessages.length>0} onSubmit={this.handleSubmit}>
                             <Form.Input
-
                                 fluid
                                 label='Username'
+                                placeholder='username'
                                 name='username'
                                 value={this.state.formInfo.username}
                                 onChange={this.handleChange}
@@ -336,6 +341,7 @@ class UserForm extends Component {
                                 fluid
                                 type={"password"}
                                 label='Password'
+                                placeholder='password'
                                 name='password'
                                 value={this.state.formInfo.password}
                                 onChange={this.handleChange}
@@ -344,6 +350,7 @@ class UserForm extends Component {
                                 fluid
                                 type={"password"}
                                 label='Re-enter password'
+                                placeholder='re-enter password'
                                 name='passwordConfirm'
                                 value={this.state.formInfo.passwordConfirm}
                                 onChange={this.handleChange}
@@ -353,6 +360,7 @@ class UserForm extends Component {
                                     fluid
                                     placeholder='John'
                                     label='First name'
+                                    placeholder='first name'
                                     name='firstName'
                                     value={this.state.formInfo.firstName}
                                     onChange={this.handleChange}
@@ -361,8 +369,8 @@ class UserForm extends Component {
                                     fluid
                                     placeholder='Doe'
                                     label='Last name'
+                                    placeholder='last name'
                                     name='lastName'
-
                                     value={this.state.formInfo.lastName}
                                     onChange={this.handleChange}
                                 />
@@ -391,6 +399,7 @@ class UserForm extends Component {
                                 <Form.Input
                                     fluid
                                     label='address'
+                                    placeholder='address'
                                     name='address'
                                     value={this.state.formInfo.address}
                                     onChange={this.handleChange}
@@ -400,12 +409,13 @@ class UserForm extends Component {
                                     width={6}
                                     type='tel'
                                     label='phone number'
+                                    placeholder='phone number'
                                     name='phoneNumber'
                                     value={this.state.formInfo.phoneNumber}
                                     onChange={this.handleChange}
                                 />
                             </Form.Group>
-                            <label style={{color: '#262626', fontSize: '14px'}} >
+                            <label className='label-font'>
                                 I am a:
                             </label>
                             <Form.Group>
@@ -425,7 +435,6 @@ class UserForm extends Component {
                                     checked={this.state.formInfo.role === 'patient'}
                                     onChange={this.handleChange}
                                 />
-
                                 <Form.Radio
                                     width={7}
                                     label='Administrator'
@@ -443,12 +452,10 @@ class UserForm extends Component {
                             />
                             <>
                                 <Form.Button color='teal' size='small' floated='right'>
-                                    Sign Up
+                                    {this.buttonText}
                                 </Form.Button>
                             </>
-
                         </Form>
-
                     </Segment>
                 </Container>
             </Container>
