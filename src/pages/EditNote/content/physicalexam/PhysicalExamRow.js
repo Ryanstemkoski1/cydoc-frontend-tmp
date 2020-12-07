@@ -1,5 +1,5 @@
-import React, { Fragment } from 'react';
-import { Button, Grid, Dropdown } from "semantic-ui-react";
+import React, { Fragment } from 'react'
+import { Button, Grid, Dropdown } from "semantic-ui-react"
 import HPIContext from 'contexts/HPIContext.js'
 import SelectAllButton from './SelectAllButton'
 import LRButton from '../../../../components/tools/LRButton'

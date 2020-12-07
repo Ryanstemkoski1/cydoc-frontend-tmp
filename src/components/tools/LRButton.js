@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import { Button } from "semantic-ui-react";
 import HPIContext from 'contexts/HPIContext.js'
+import './LRButton.css'
+import PropTypes from 'prop-types'
 
 //Component that manages content for the Physical Exam tab
 export default class LRButton extends React.Component {
@@ -24,7 +26,7 @@ export default class LRButton extends React.Component {
                     />
                     <Button
                         content={this.props.content}
-                        active={this.props.active}
+                        active={this.props.toggle.center}
                         color={this.props.color}
                         onClick={(e, {active}) => this.props.onClick('center', this.props.name, !active)}
                     />
@@ -51,5 +53,12 @@ export default class LRButton extends React.Component {
         }
         
     }
+}
 
+LRButton.propTypes = {
+    color: PropTypes.string,
+    content: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+    toggle: PropTypes.object.isRequired
 }
