@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
-import { Button, Grid, Dropdown } from "semantic-ui-react";
+import React, { Fragment } from 'react'
+import { Button, Grid, Dropdown } from "semantic-ui-react"
 import HPIContext from 'contexts/HPIContext.js'
 import SelectAllButton from './SelectAllButton'
-import LRButton from './LRButton'
+import LRButton from '../../../../components/tools/LRButton'
 import LungSounds from './widgets/LungSounds'
 import AbdomenExam from './widgets/AbdomenExam';
 import RightLeftWidget from './widgets/RightLeftWidget';
@@ -41,9 +41,9 @@ export default class PhysicalExamRow extends React.Component {
                 return <LRButton
                     content={finding}
                     name={finding}
-                    group={this.props.group}
-                    active={this.context["Physical Exam"][this.props.group][finding].active}
-                    color={this.context["Physical Exam"][this.props.group][finding].active ? (normalOrAbnormal == 'normal' ? 'green' : 'red') : null}
+                    active={this.context["Physical Exam"][this.props.group][finding].center}
+                    toggle={this.context["Physical Exam"][this.props.group][finding]}
+                    color={this.context["Physical Exam"][this.props.group][finding].center ? (normalOrAbnormal == 'normal' ? 'green' : 'red') : null}
                     onClick={this.props.handleLRToggle}
                     className={"spaced-buttons"}
                 />
