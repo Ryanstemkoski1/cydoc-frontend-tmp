@@ -16,7 +16,7 @@ export default class GridContent extends Component {
         this.onChange = this.props.onChange;
     }
 
-    render(){
+    render() {
         const {numColumns, contentHeader, rows, mobile, isPreview} = this.props;
         return mobile ?
             (<Fragment>
@@ -46,14 +46,8 @@ export default class GridContent extends Component {
 }
 
 GridContent.propTypes = {
-<<<<<<< HEAD
-  contentHeader: PropTypes.any.isRequired, //Heading that goes over the divider
-  numColumns: PropTypes.number.isRequired, //Number of columns in the grid
-  //   rows: PropTypes.array.isRequired, //The rows that will comprise the body of the note. Array of Grid.Row Components.
-=======
     contentHeader: PropTypes.any.isRequired, //Heading that goes over the divider
     numColumns: PropTypes.number.isRequired, //Number of columns in the grid
     rows: PropTypes.array.isRequired, //The rows that will comprise the body of the note. Array of Grid.Row Components.
->>>>>>> parent of fa83317... Tab bug fix
 };
 
