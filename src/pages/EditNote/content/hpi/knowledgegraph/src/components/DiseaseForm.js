@@ -64,7 +64,7 @@ export class DiseaseForm extends React.Component {
             var currCat = node.substring(0, 3)
             // weigh the child category if it is different from the parent's category
             if (currCat !== catCode) {
-                var newQuesOrder = parseInt(currCat.charCodeAt(0).toString() + currCat.charCodeAt(1).toString() + currCat.charCodeAt(2).toString() + quesOrder.toString()) // weigh based on unicode sum of prefix
+                var newQuesOrder = parseInt(currCat.charCodeAt(0).toString() + currCat.charCodeAt(1).toString() + currCat.charCodeAt(2).toString() + quesOrder.toString()) // weigh based on utf-16 numbers
                 edgeToQuestionOrder[edge] = newQuesOrder
                 quesOrder = edge 
             }
