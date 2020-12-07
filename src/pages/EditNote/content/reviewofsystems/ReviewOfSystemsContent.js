@@ -47,7 +47,11 @@ export default class ReviewOfSystemsContent extends Component {
 
     nextFormClick = () => this.props.nextFormClick();
 
-    previousFormClick = () => this.props.previousFormClick();
+    previousFormClick = () => {
+        this.props.previousFormClick();
+        window.localStorage.setItem('activeIndex', 5);
+        window.localStorage.setItem('activeTabName', 'Family History')
+    }
 
     render() {
         const { windowWidth } = this.state;

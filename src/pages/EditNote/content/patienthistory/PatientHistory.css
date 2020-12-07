@@ -59,8 +59,14 @@
   background: #c8e2ea;
 }
 
-/* @media screen and (max-width: 1300px) {
-  .ui.icon.button.patient-previous-button, .ui.icon.button.patient-next-button {
+@media screen and (max-width: 1300px) {
 
+  .ui.icon.button.small-patient-previous-button {
+    margin-left: -2.8em;
+  } 
+
+  .ui.icon.button.small-patient-next-button {
+    margin-right: -2.8em;
   }
-} */
+
+}

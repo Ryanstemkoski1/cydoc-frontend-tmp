@@ -16,17 +16,20 @@ export default class PatientHistoryContent extends Component {
             windowWidth: 0,
             windowHeight: 0,
             activeTabName: 'Medical History', // Default open pane is Medical History
-            activeIndex: this.activeIndex,
+            activeIndex: 0,
         }
         this.updateDimensions = this.updateDimensions.bind(this);
         this.handleItemClick = this.handleItemClick.bind(this);
         this.onNextClick = this.onNextClick.bind(this);
         this.onPreviousClick = this.onPreviousClick.bind(this);
+        this.handleTabChange = this.handleTabChange.bind(this);
+        this.updateIndex = this.updateIndex.bind(this);
     }
 
     componentDidMount() {
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
+        this.updateIndex();
         // Using timeout to ensure that tab/dropdown menu is rendered before setting 
         setTimeout((_event) => {
             this.setMenuPosition();
@@ -54,20 +57,45 @@ export default class PatientHistoryContent extends Component {
         this.fixedMenu[0].style.top = `${stickyHeaderHeight}px`;
     }
 
+    updateIndex() {
+        let index = window.localStorage.getItem('activeIndex');
+        let tab = window.localStorage.getItem('activeTabName')
+        this.setState({activeIndex: index});
+        this.setState({activeTabName: tab})
+    }
+
     handleItemClick = (e, { children }) => this.setState({ activeTabName: children })
 
     nextFormClick = () => this.props.nextFormClick();
 
     previousFormClick = () => this.props.previousFormClick();
 
-    handleTabChange = (e, { panes, activeIndex }) => this.setState({ activeIndex, activeTabName: panes.menuItem });
+    handleTabChange = (e, { activeIndex }) => {
+        this.setState({ activeIndex});
+        if (activeIndex === 0) {
+            this.setState({ activeTabName: 'Medical History'});
+        } else if (activeIndex === 1) {
+            this.setState({ activeTabName: 'Surgical History'});
+        } else if (activeIndex === 2) {
+            this.setState({ activeTabName: 'Medications'});
+        } else if (activeIndex === 3) {
+            this.setState({ activeTabName: 'Allergies'});
+        } else if (activeIndex === 4) {
+            this.setState({ activeTabName: 'Social History'});
+        } else if (activeIndex === 5) {
+            this.setState({ activeTabName: 'Family History'});
+        } else {
+            this.setState({ activeTabName: 'Medical History'});
+        }
+    }
 
     handlePrevTab = (e, {activeTabName}) => {
         this.setState({ activeIndex: e.target.value, activeTabName: activeTabName })
+        console.log('STATE', activeTabName, this.state.activeTabName)
     }
 
     handleNextTab = (e, {activeTabName}) => {
-        this.setState({ activeIndex: e.target.value, activeTabName: activeTabName });
+        this.setState({ activeIndex: e.target.value, activeTabName: activeTabName })
     }
 
     // panes for mobile view
@@ -128,37 +156,33 @@ export default class PatientHistoryContent extends Component {
                 }
             }
         })
-        // // brings users to the top of the page after button click
-        // window.scrollTo(0,0);
     }
 
     // brings users to the previous form when clicked
     onPreviousClick() {
         this.setState(state => {
-            if (state.activeItem === 'Surgical History') {
+            if (state.activeTabName === 'Surgical History') {
                 return {
-                    activeItem: 'Medical History',
+                    activeTabName: 'Medical History',
                 }
-            } else if (state.activeItem === 'Medications') {
+            } else if (state.activeTabName === 'Medications') {
                 return {
-                    activeItem: 'Surgical History',
+                    activeTabName: 'Surgical History',
                 }
-            } else if (state.activeItem === 'Allergies') {
+            } else if (state.activeTabName === 'Allergies') {
                 return {
-                    activeItem: 'Medications',
+                    activeTabName: 'Medications',
                 }
-            } else if (state.activeItem === 'Social History') {
+            } else if (state.activeTabName === 'Social History') {
                 return {
-                    activeItem: 'Allergies',
+                    activeTabName: 'Allergies',
                 }
-            } else if (state.activeItem === 'Family History') {
+            } else if (state.activeTabName === 'Family History') {
                 return {
-                    activeItem: 'Social History',
+                    activeTabName: 'Social History',
                 }
             }
         })
-        // brings users to the top of the page after button click
-        window.scrollTo(0,0);
     }
 
 
@@ -419,7 +443,7 @@ export default class PatientHistoryContent extends Component {
                         }            
                     </Container>
                     :
-                    <Tab menu={{ pointing: true, className: "patient-history-menu"}} panes={panes} activeIndex={activeIndex} activeTabName={this.state.activeTabName} onTabChange={this.handleTabChange}/>
+                    <Tab menu={{ pointing: true, className: "patient-history-menu"}} id='tab-panes' panes={panes} activeIndex={activeIndex} onTabChange={this.handleTabChange} />
                 }
             </>
 

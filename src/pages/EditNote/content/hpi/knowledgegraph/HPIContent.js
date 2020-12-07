@@ -126,7 +126,11 @@ class HPIContent extends Component {
         this.context.onContextChange("activeHPI", name)
     }
 
-    nextFormClick = () => this.props.nextFormClick();
+    nextFormClick = () => {
+        this.props.nextFormClick();
+        window.localStorage.setItem('activeIndex', 0);
+        window.localStorage.setItem('activeTabName', 'Medical History')
+    }
 
     render() {
         const {graphData, isLoaded, windowWidth, bodySystems} = this.state;

@@ -34,8 +34,10 @@ export default class DiscussionPlanForm extends Component{
             active: new Set(),
             mainOptions: TYPE_TO_OPTIONS[this.props.type],
             whenOptions: this.generateOptions(['today', 'this week', 'this month', 'this year',]),
+            disease: ''
         }
         this.handleOnChange = this.handleOnChange.bind(this);
+        this.grabValue = this.grabValue.bind(this);
     }
     
     generateOptions = (values) => {
@@ -142,13 +144,13 @@ export default class DiscussionPlanForm extends Component{
                     b.addEventListener("click", function(e) {
                     /*insert the value for the autocomplete text field:*/
                         inp.value = this.getElementsByTagName("input")[0].value;              
-                        myInput.setAttribute('value', inp.value)
+                        myInput.setAttribute('value', inp.value);
+                        myInput.innerHTML = inp.value;
                         /*close the list of autocompleted values,
                         (or any other open lists of autocompleted values:*/
                         closeAllLists();
                     });
                     a.appendChild(b);
-                    this.changeValue(inp.value);
                 }
             }
         });
@@ -208,6 +210,16 @@ export default class DiscussionPlanForm extends Component{
           closeAllLists(e.target);
       });
       }
+    
+    grabValue(e) {
+        console.log('e', e, e.target.value)
+        const target = e.target.value;
+        this.setState({ disease: target});
+        console.log('STATE', this.state.disease)
+        document.getElementById('myInput').value = e.target.value;
+        console.log(document.getElementById('myInput').value)
+        
+    }
 
     makeGridContent = (type, data) => {
         const gridBody = data.map((datum, idx) => {
@@ -223,10 +235,9 @@ export default class DiscussionPlanForm extends Component{
                                         placeholder='Diagnosis' 
                                         name='diagnosis'
                                         index={idx}
-                                        // value={datum['diagnosis']}
+                                        // value={datum["diagnosis"]}
                                         options={TYPE_TO_OPTIONS['differential_diagnosis']}
-                                        onChange={this.handleOnChange}
-                                        onAddItem={this.handleAddOption}
+                                        onChange={this.grabValue}
                                     />
                                 </div>
                             </form>
