@@ -5,8 +5,7 @@ class YesNo extends React.Component {
     static contextType = HPIContext
     constructor(props, context) {
         super(props, context)
-        const values = this.context["hpi"]['nodes'][this.props.node]
-        const answers = values["response"] 
+        const answers = this.context['hpi']['nodes'][this.props.node]['response']
         this.state = {
             yesID: 0,
             noID: 0,
