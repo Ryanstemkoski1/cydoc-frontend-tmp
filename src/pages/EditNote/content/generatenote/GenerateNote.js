@@ -1,7 +1,8 @@
 import  React from 'react';
 import HPIContext from '../../../../contexts/HPIContext';
-import { Button, Segment, Table } from 'semantic-ui-react';
+import { Button, Segment, Table, Icon } from 'semantic-ui-react';
 import constants from '../../../../constants/physical-exam-constants';
+import './GenerateNote.css';
 
 // TODO: look into <li> keys -- throws a warning if duplicats, not a huge deal but probably fix
 // TODO: remove all console.log (currently commented out)
@@ -623,6 +624,8 @@ class GenerateNote extends React.Component {
         )
     }
 
+    previousFormClick = () => this.props.previousFormClick();
+
     render() {
         return (
             <div>
@@ -654,6 +657,14 @@ class GenerateNote extends React.Component {
                     <h3> Plan </h3>
                     {this.plan()}
                 </Segment>
+
+                <Button icon floated='left' onClick={this.previousFormClick} className='small-note-previous-button'>
+                <Icon name='left arrow'/>
+                </Button>
+                <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='note-previous-button'>
+                Previous Form
+                <Icon name='left arrow'/>
+                </Button>
             </div>
         )
     }

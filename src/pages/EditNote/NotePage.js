@@ -64,7 +64,7 @@ export default class NotePage extends Component {
                 tabToDisplay = (<ReviewOfSystemsContent nextFormClick={this.nextFormClick} previousFormClick={this.previousFormClick} />);
                 break;
             case "Generated Note":
-                tabToDisplay = (<GenerateNote nextFormClick={this.nextFormClick} previousFormClick={this.previousFormClick} />);
+                tabToDisplay = (<GenerateNote previousFormClick={this.previousFormClick} />);
                 break;
             case "Plan":
                 tabToDisplay = (<DiscussionPlan nextFormClick={this.nextFormClick} previousFormClick={this.previousFormClick} />)
