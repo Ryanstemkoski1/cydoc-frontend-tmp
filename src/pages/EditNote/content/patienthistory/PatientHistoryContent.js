@@ -22,7 +22,6 @@ export default class PatientHistoryContent extends Component {
       activeIndex: 0,
     };
     this.updateDimensions = this.updateDimensions.bind(this);
-    this.handleItemClick = this.handleItemClick.bind(this);
   }
 
   componentDidMount() {
@@ -56,8 +55,7 @@ export default class PatientHistoryContent extends Component {
     this.fixedMenu[0].style.top = `${stickyHeaderHeight}px`;
   }
 
-  handleItemClick = (_, { children }) => {
-    const paneNames = []
+  handleItemClick = (children, paneNames) => {
     this.setState({
       activeTabName: children,
       activeIndex: paneNames.findIndex((p) => {
@@ -66,8 +64,7 @@ export default class PatientHistoryContent extends Component {
     });
   };
 
-  handleTabChange = (_, { activeIndex }, paneNames) => {
-    console.log(activeIndex);
+  handleTabChange = (activeIndex, paneNames) => {
     this.setState({
       activeIndex,
       activeTabName: paneNames.filter((p) => {
@@ -75,7 +72,7 @@ export default class PatientHistoryContent extends Component {
       }),
     });
   };
-
+  
   render() {
     const { windowWidth, activeTabName, activeIndex } = this.state;
 
@@ -132,7 +129,7 @@ export default class PatientHistoryContent extends Component {
         <Button
           basic
           children={pane.menuItem}
-          onClick={() => this.handleItemClick(paneNames)}
+          onClick={(_, {children}) => this.handleItemClick(children, paneNames)}
           active={activeTabName == pane.menuItem}
           style={{ marginBottom: 5 }}
         />
@@ -159,7 +156,7 @@ export default class PatientHistoryContent extends Component {
             menu={{ pointing: true, className: 'patient-history-menu' }}
             panes={expandedPanes}
             activeIndex={activeIndex}
-            onTabChange={() => this.handleTabChange(_, _, paneNames)}
+            onTabChange={(_, {activeIndex}) => this.handleTabChange(activeIndex, paneNames)}
           />
         )}
       </>
