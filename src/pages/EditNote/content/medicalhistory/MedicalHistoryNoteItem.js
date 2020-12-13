@@ -3,7 +3,6 @@ import ToggleButton from 'components/tools/ToggleButton.js';
 import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import "../familyhistory/FamilyHistory.css";
-import "./MedicalHistoryNote.css"
 
 //Component for a row the Medical History GridContent
 export default class MedicalHistoryNoteItem extends Component {
@@ -44,7 +43,7 @@ export default class MedicalHistoryNoteItem extends Component {
                         rows={2}
                     />
                     { onset !== "" && (onset < 1900 || onset > currentYear)  && (
-                        <p className='mobile-error'>Please enter a valid year after 1900</p>
+                        <p className='year-validation-mobile-error'>Please enter a valid year after 1900</p>
                     )}
                     <Form.TextArea
                         label="Comments"

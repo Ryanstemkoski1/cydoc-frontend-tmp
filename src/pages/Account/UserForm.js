@@ -82,7 +82,6 @@ class UserForm extends Component {
             errorMessages: [],
             redirect: false,
             title: this.props.title,
-            buttonText: this.props.buttonText
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleArrayChange = this.handleArrayChange.bind(this);
@@ -358,7 +357,6 @@ class UserForm extends Component {
                             <Form.Group>
                                 <Form.Input
                                     fluid
-                                    placeholder='John'
                                     label='First name'
                                     placeholder='first name'
                                     name='firstName'
@@ -367,7 +365,6 @@ class UserForm extends Component {
                                 />
                                 <Form.Input
                                     fluid
-                                    placeholder='Doe'
                                     label='Last name'
                                     placeholder='last name'
                                     name='lastName'
@@ -452,7 +449,7 @@ class UserForm extends Component {
                             />
                             <>
                                 <Form.Button color='teal' size='small' floated='right'>
-                                    {this.buttonText}
+                                    {this.props.buttonText}
                                 </Form.Button>
                             </>
                         </Form>
