@@ -26,7 +26,7 @@ export default class MedicalHistoryNoteRow extends Component {
                     <Form.TextArea condition={condition.props.condition} placeholder='Onset' value={onset}
                               onChange={onChange} disabled={isPreview} rows={1}/>
                 </Form>
-                { onset !== "" && (onset < 1900 || onset > currentYear) && (
+                { onset !== "" && (isNaN(+onset) || onset < 1900 || onset > currentYear) && (
                     <p className='year-validation-error'>Please enter a valid year after 1900</p>
                 )}
             </Grid.Column>
@@ -45,7 +45,7 @@ export default class MedicalHistoryNoteRow extends Component {
                     <Form.TextArea condition={condition.props.condition} placeholder='End Year' value={endYear}
                               onChange={onChange} disabled={isPreview} rows={1} disabled={isResolved != 'Yes'}/>
                 </Form>
-                { isResolved == 'Yes' && endYear !== "" && (endYear < 1900 || endYear > currentYear || endYear < onset) && (
+                { isResolved == 'Yes' && endYear !== "" && (isNaN(+endYear) || endYear < 1900 || endYear > currentYear || endYear < onset) && (
                     <p className='year-validation-error'>Please enter a valid year after 1900 and the onset</p>
                 )}
             </Grid.Column>

@@ -6,10 +6,10 @@ export const allergies = {
 };
 
 export const medications = {
-    "fields": ['Drug Name', 'Start Year', 'Schedule', 'Dose', 'Reason for Taking', "Side Effects" , 'Comments'],
-    "state": [{ "Drug Name": "", "Start Year": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": [], "Comments": "" },
-    { "Drug Name": "", "Start Year": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": [], "Comments": "" },
-    { "Drug Name": "", "Start Year": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": [], "Comments": "" }]
+    "fields": ['Drug Name', 'Start Year', 'Currently Taking', 'End Year', 'Schedule', 'Dose', 'Reason for Taking', "Side Effects" , 'Comments'],
+    "state": [{ "Drug Name": "", "Start Year": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": [], "Currently Taking": "", "End Year": "", "Comments": "" },
+    { "Drug Name": "", "Start Year": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": [], "Currently Taking": "", "End Year": "", "Comments": "" },
+    { "Drug Name": "", "Start Year": "", "Schedule": "", "Dose": "", "Reason for Taking": "", "Side Effects": [], "Currently Taking": "", "End Year": "", "Comments": "" }]
 };
 
 export const surgicalHistory = {
