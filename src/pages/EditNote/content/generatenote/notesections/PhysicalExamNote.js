@@ -3,6 +3,16 @@ import { Table } from 'semantic-ui-react';
 import constants from '../../../../../constants/physical-exam-constants';
 
 class PhysicalExamNote extends React.Component {
+    displayComments(comments) {
+        if (comments === "") {
+            return '';
+        }
+        if (comments.endsWith('.')) {
+            return comments + ' ';
+        }
+        return comments + '. ';
+    }
+
     render() {
         const physical = this.props.physicalExam;
 
@@ -21,11 +31,11 @@ class PhysicalExamNote extends React.Component {
             
             // specific to vitals section
             if (key === 'Vitals') {
-                if (physical[key]['Systolic Blood Pressure'] != 0 || physical[key]['Diastolic Blood Pressure'] !== 0) {
+                if ((physical[key]['Systolic Blood Pressure'] !== 0 && physical[key]['Systolic Blood Pressure'] !== "") || (physical[key]['Diastolic Blood Pressure'] !== 0 && physical[key]['Diastolic Blood Pressure'] !== "")) {
                     vitals.push(physical[key]['Systolic Blood Pressure'] + '/' + physical[key]['Diastolic Blood Pressure'] + ' mmHg');
                 }
                 for (var vital in physical[key]) {
-                    if (vital !== 'Systolic Blood Pressure' && vital !== 'Diastolic Blood Pressure' && physical[key][vital] !== 0) {
+                    if (vital !== 'Systolic Blood Pressure' && vital !== 'Diastolic Blood Pressure' && (physical[key][vital] !== 0 && physical[key][vital] !== "")) {
                         vitals.push(vital + ': ' + physical[key][vital] + (vitalUnits[vital] ? vitalUnits[vital] : ""));
                     }
                 }
@@ -51,7 +61,6 @@ class PhysicalExamNote extends React.Component {
                                 }
                             }
                         }
-                        console.log(findings);
                         for (var key in findings) {
                             widgets['Gastrointestinal'].push(key + ' in the ' + findings[key].join(', ').replace(/, ([^,]*)$/, ' and $1'));
                         }
@@ -97,7 +106,7 @@ class PhysicalExamNote extends React.Component {
                 for (var question in physical[key]) {
                     // deals with findings that have a left or right option
                     if (typeof physical[key][question] === 'object' && keyObject) {
-                        let isNormal = true;
+                        let isNormal;
                         for (var i = 0; i < keyObject.rows.length; i++) {
                             if (keyObject.rows[i].findings.includes(question)) {
                                 keyObject.rows[i].normalOrAbnormal === "normal" ? isNormal = true : isNormal = false;
@@ -165,12 +174,12 @@ class PhysicalExamNote extends React.Component {
                             key in widgets && (components[key].active.length > 0 || widgets[key].length > 0) ?
                                 <Table.Row>
                                     <Table.Cell singleLine>{key}</Table.Cell>
-                                    <Table.Cell>{components[key].active.join(', ') + '. ' + widgets[key].join(', ') + '. ' + components[key].comments}</Table.Cell>
+                                    <Table.Cell>{this.displayComments(components[key].comments) + components[key].active.join(', ') + '. ' + widgets[key].join(', ') + '.'}</Table.Cell>
                                 </Table.Row>
                             : !(key in widgets) && components[key].active.length > 0 ?
                                 <Table.Row>
                                     <Table.Cell singleLine>{key}</Table.Cell>
-                                    <Table.Cell>{components[key].active.join(', ') + '. ' + components[key].comments}</Table.Cell>
+                                    <Table.Cell>{this.displayComments(components[key].comments) + components[key].active.join(', ') + '.'}</Table.Cell>
                                 </Table.Row> 
                             : null
                         ))}
@@ -186,17 +195,17 @@ class PhysicalExamNote extends React.Component {
                     key in widgets && (components[key].active.length > 0 && widgets[key].length > 0) ? 
                         <li>
                             <b>{key}: </b>
-                            {components[key].active.join(', ') + '. ' + widgets[key].join(', ') + '. ' + components[key].comments}
+                            {this.displayComments(components[key].comments) + components[key].active.join(', ') + '. ' + widgets[key].join(', ') + '.'}
                         </li>
                     : (key in widgets && (!(components[key].active.length > 0) && widgets[key].length > 0)) ? 
                         <li>
                             <b>{key}: </b>
-                            {widgets[key].join(', ') + '. ' + components[key].comments}
+                            {this.displayComments(components[key].comments) + widgets[key].join(', ') + '.'}
                         </li>
                     : !(key in widgets) && components[key].active.length > 0 ? 
                         <li>
                             <b>{key}: </b>
-                            {components[key].active.join(', ') + '. ' + components[key].comments}
+                            {this.displayComments(components[key].comments) + components[key].active.join(', ') + '.'}
                         </li> 
                     : null
                 ))}

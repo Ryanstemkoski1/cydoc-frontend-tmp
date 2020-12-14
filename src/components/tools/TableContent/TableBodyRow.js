@@ -312,7 +312,7 @@ export class TableBodyRow extends Component {
 
         const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
             return (
-                <Table.Cell key={index} collapsing={placeholder === 'delete' ? true : false} style={placeholder === 'delete' ? { borderTop: 0, borderLeft: 0 } : null}>
+                <Table.Cell key={index} collapsing={placeholder === 'delete' ? true : false} style={placeholder === 'delete' ? { borderLeft: 0 } : null}>
                     {this.getCell(placeholder)}
                 </Table.Cell>
             )
