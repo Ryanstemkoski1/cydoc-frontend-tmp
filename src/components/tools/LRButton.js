@@ -1,9 +1,10 @@
-import React, { Fragment } from 'react';
-import { Button } from "semantic-ui-react";
+import React, { Fragment } from 'react'
+import { Button } from "semantic-ui-react"
 import HPIContext from 'contexts/HPIContext.js'
-import './PhysicalExam.css'
+import './LRButton.css'
+import PropTypes from 'prop-types'
 
-//Component that manages content for the Physical Exam tab
+//Button component that displays additional left/right buttons when toggled
 export default class LRButton extends React.Component {
 
     static contextType = HPIContext
@@ -13,27 +14,27 @@ export default class LRButton extends React.Component {
     }
 
     render = () => {
-        if (this.props.active) {
+        if (this.props.toggle.center) {
             return (
                 <Button.Group className={"spaced-buttons"}>
                     <Button
                         attached='left'
                         content='L'
-                        active={this.context["Physical Exam"][this.props.group][this.props.name].left}
-                        color={this.context["Physical Exam"][this.props.group][this.props.name].left ? (this.props.color) : null}
+                        active={this.props.toggle.left}
+                        color={this.props.toggle.left ? (this.props.color) : null}
                         onClick={(e, {active}) => this.props.onClick('left', this.props.name, !active)}
                     />
                     <Button
                         content={this.props.content}
-                        active={this.props.active}
+                        active={this.props.toggle.center}
                         color={this.props.color}
-                        onClick={(e, {active}) => this.props.onClick(null, this.props.name, !active)}
+                        onClick={(e, {active}) => this.props.onClick('center', this.props.name, !active)}
                     />
                     <Button
                         attached='right'
                         content='R'
-                        active={this.context["Physical Exam"][this.props.group][this.props.name].right}
-                        color={this.context["Physical Exam"][this.props.group][this.props.name].right ? (this.props.color) : null}
+                        active={this.props.toggle.right}
+                        color={this.props.toggle.right ? (this.props.color) : null}
                         onClick={(e, {active}) => this.props.onClick('right', this.props.name, !active)}
                     />
                 </Button.Group>
@@ -43,9 +44,9 @@ export default class LRButton extends React.Component {
                 <Button.Group className={"spaced-buttons"}>
                     <Button
                         content={this.props.content}
-                        active={this.props.active}
+                        active={this.props.toggle.center}
                         color={this.props.color}
-                        onClick={(e) => this.props.onClick('all', this.props.name, !this.props.active)}
+                        onClick={(e, {active}) => this.props.onClick('all', this.props.name, !active)}
                     />
                 </Button.Group>
             )
@@ -53,4 +54,12 @@ export default class LRButton extends React.Component {
         
     }
 
+}
+
+LRButton.propTypes = {
+    color: PropTypes.string,
+    content: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+    toggle: PropTypes.object.isRequired
 }
