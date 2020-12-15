@@ -16,17 +16,17 @@ export class DiseaseForm extends React.Component {
         super(props, context)
         this.state = {
             functionLoad: false, // true when knowledge graph is processed
-            questionMap: {}, // stores question components for each node 
-            responseTypes: { "CLICK-BOXES": [], "MEDS-POP": [], "TIME": ["", ""], "LIST-TEXT":  {1: "", 2: "", 3: ""}} // can we improve upon this 
+            questionMap: {}, // stores question components for each node
+            responseTypes: { "CLICK-BOXES": [], "MEDS-POP": [], "TIME": ["", ""], "LIST-TEXT":  {1: "", 2: "", 3: ""}} // can we improve upon this
         }
         let values = this.context['hpi']
         // if there a way for me to add this directly to HPIContext?
-        if (!('nodes' in values)) { 
-            values['nodes'] = {} 
+        if (!('nodes' in values)) {
+            values['nodes'] = {}
             values['questionOrderToNode'] = {}
             values['parentToChildQuestionOrder'] = {}
             this.context.onContextChange("hpi", values)
-        } 
+        }
     }
 
     componentDidMount() {
@@ -42,7 +42,7 @@ export class DiseaseForm extends React.Component {
         e.preventDefault();
         this.props.prevStep();
     }
- 
+
     firstPage = e => {
         e.preventDefault()
         this.props.firstPage()
@@ -65,14 +65,14 @@ export class DiseaseForm extends React.Component {
             // weigh the child category if it is different from the parent's category
             if (currCat !== catCode) {
                 var weight = currCat.charCodeAt(0) + currCat.charCodeAt(1) + currCat.charCodeAt(2) // weigh based on unicode sum of prefix
-                quesOrder += weight 
+                quesOrder += weight
             }
-            childRanks.push([quesOrder, node]) 
+            childRanks.push([quesOrder, node])
         }
         childRanks = childRanks.sort((a,b) => a - b)
         var rankChild = childRanks.map(( rank ) => rank[0]) // sort based on questionOrder
         var childNodes = childRanks.map(( rank ) => rank[1]) // child nodes are in order based on the order of the questionOrder
-        return [rankChild, childNodes] 
+        return [rankChild, childNodes]
      }
 
     // processes knowledge graph to determine order of questions in HPI based on questionOrder attribute of nodes
@@ -83,82 +83,82 @@ export class DiseaseForm extends React.Component {
         var nodes = graphData['nodes']
         var edges = graphData['edges']
         var catCode = parentNode.substring(0, 3)
-        var questionOrderToNode = {} 
+        var questionOrderToNode = {}
         var parentToChildQuestionOrder = {}
         var questionMap = {}
         var queue = [parentNode]
-        while (queue.length) { 
-            var currNode = queue.shift() 
+        while (queue.length) {
+            var currNode = queue.shift()
             var rank = parseInt(nodes[currNode]['questionOrder'])
-            if (!(rank)) rank = Object.keys(questionOrderToNode).length + 1 // remove when Pacemaker has questionOrder attribute 
+            if (!(rank)) rank = Object.keys(questionOrderToNode).length + 1 // remove when Pacemaker has questionOrder attribute
             var currCategory = currNode.substring(0, 3)
             var uid = nodes[currNode]['uid']
             if (currCategory !== catCode) {
                 var weight = currCategory.charCodeAt(0) + currCategory.charCodeAt(1) + currCategory.charCodeAt(2)
-                rank += weight 
+                rank += weight
             }
-            parentToChildQuestionOrder[rank] = currNode 
-            var edgesList = graph[currNode] 
+            parentToChildQuestionOrder[rank] = currNode
+            var edgesList = graph[currNode]
             var childArray = this.questionOrder(edgesList, nodes, edges, catCode)
             var childOrder = childArray[0]
             var childNodes = childArray[1]
-            questionOrderToNode[rank] = childOrder 
+            questionOrderToNode[rank] = childOrder
             queue = queue.concat(childNodes)
             if (!(currNode in values['nodes'])){
-                values['nodes'][currNode] = nodes[currNode] 
+                values['nodes'][currNode] = nodes[currNode]
                 var responseType = nodes[currNode]['responseType']
-                // use saved response so when going back to a page, the answers aren't wiped out 
+                // use saved response so when going back to a page, the answers aren't wiped out
                 values['nodes'][currNode]['response'] = responseType in this.state.responseTypes ? this.state.responseTypes[responseType] : ""
             }
             questionMap[currNode] = <DiseaseFormQuestions key={uid} node={currNode} category={catCode}/>
         }
-        values['questionOrderToNode'][catCode] = questionOrderToNode 
-        values['parentToChildQuestionOrder'][catCode] = parentToChildQuestionOrder 
+        values['questionOrderToNode'][catCode] = questionOrderToNode
+        values['parentToChildQuestionOrder'][catCode] = parentToChildQuestionOrder
         this.context.onContextChange('hpi', values)
         this.setState({questionMap: questionMap, functionLoad: true})
     }
 
     // checks if all of the children are of a different category than the parent node. If so, they are displayed in an accordion
-    checkAccordion(childEdges) { 
-        const {parentNode} = this.props 
+    checkAccordion(childEdges) {
+        const {parentNode} = this.props
         var catCode = parentNode.substring(0,3)
         var parentToChildQuestionOrder = this.context['hpi']['parentToChildQuestionOrder'][catCode]
         const {questionMap} = this.state
         var childQuestions = []
-        for (var i in childEdges) { 
-            var edge = childEdges[i]  
+        for (var i in childEdges) {
+            var edge = childEdges[i]
             var childNode = parentToChildQuestionOrder[edge]
             var childCat = childNode.substring(0, 3)
-            if (childCat === catCode) return false 
+            if (childCat === catCode) return false
             childQuestions.push(questionMap[childNode])
-        }  
+        }
         return <ChildAccordian childQuestions={childQuestions}/>
     }
 
     // iterates through question components in order of their questionOrder to be displayed on the HPI interview page
-    traversal() { 
-        // TODO: Include Accordian for cases with different category children questions 
+    traversal() {
+        // TODO: Include Accordian for cases with different category children questions
         const {questionMap} = this.state
         var values = this.context['hpi']
         var catCode = this.props.parentNode.substring(0, 3)
         var questionOrderToNode = values['questionOrderToNode'][catCode]
         var parentToChildQuestionOrder = values['parentToChildQuestionOrder'][catCode]
-        var questionArr = [] 
-        var traversed = new Set() 
-        var stack = [1]   
-        while (stack.length) {  
-            var currEdge = stack.pop() 
+        var questionArr = []
+        var traversed = new Set()
+        var stack = [1]
+        while (stack.length) {
+            var currEdge = stack.pop()
             if (traversed.has(currEdge)) continue // sublinear performance, but is there a way to be even more efficient with checking for traversal?
             traversed.add(currEdge)
-            var currNode = parentToChildQuestionOrder[currEdge]  
+            var currNode = parentToChildQuestionOrder[currEdge]
             var childEdges = (values['nodes'][currNode]['response'] === "Yes" || currEdge === 1) ? questionOrderToNode[currEdge]: []
             childEdges = childEdges.sort((a,b) => b - a) // numerical sort by comparison - .sort() in JavaScript is alphabetical
             var childMap = childEdges.length ? this.checkAccordion(childEdges): false
             questionArr.push(questionMap[currNode])
-            if (childMap) questionArr.push(childMap) 
+            if (childMap) questionArr.push(childMap)
             else stack = stack.concat(childEdges)
         }
-        questionArr.shift()  
+        questionArr.shift()
         return questionArr
     }
 
@@ -169,11 +169,11 @@ export class DiseaseForm extends React.Component {
             || windowWidth < DISEASE_TABS_SMALL_BP;
 
         var questionArr = []
-        if (this.state.functionLoad) { 
+        if (this.state.functionLoad) {
             questionArr = this.traversal()
         }
 
-        var category = Object.keys(diseaseCodes).find(key => diseaseCodes[key] === parentNode.substring(0,3)) 
+        var category = Object.keys(diseaseCodes).find(key => diseaseCodes[key] === parentNode.substring(0,3))
 
         return (
             <div>
@@ -187,7 +187,7 @@ export class DiseaseForm extends React.Component {
                     />
                     : <Menu tabular borderless items={diseaseTabs} className='disease-menu'/>
                 }
-                    <h1 className='category-header'>{category}</h1>
+                    <h1 className='category-header' style={{paddingTop: '20px'}}>{category}</h1>
                     <div className='question-map'>{questionArr} </div>
 
             </div>
