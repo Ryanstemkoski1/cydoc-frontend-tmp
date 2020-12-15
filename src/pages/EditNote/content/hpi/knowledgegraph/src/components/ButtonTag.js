@@ -27,9 +27,9 @@ class ButtonTag extends React.Component {
             fontColor = "black"
         }
         this.setState({id: this.state.id*-1, buttonColor: newColor, fontColor: fontColor})
-        const values = this.context["hpi"] 
+        const values = this.context["hpi"]
         values['nodes'][this.props.node]["response"] = values['nodes'][this.props.node]["response"].concat(this.props.name)
-        this.context.onContextChange("hpi", values) 
+        this.context.onContextChange("hpi", values)
     }
 
     render() {
@@ -43,7 +43,7 @@ class ButtonTag extends React.Component {
                 }}
                 onClick={this.handleClick}
             >
-                {this.props.name} 
+                {this.props.name}
             </button>
         )
     }

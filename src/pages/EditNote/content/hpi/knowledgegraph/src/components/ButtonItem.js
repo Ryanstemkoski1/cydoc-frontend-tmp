@@ -10,7 +10,7 @@ class ButtonItem extends React.Component {
     static contextType = HPIContext
     constructor(props, context) {
         super(props, context)
-        // create disease buttons based on user's chosen diseases 
+        // create disease buttons based on user's chosen diseases
         var diseaseButtons = this.props.diseasesList.map(disease =>
             <DiseaseTag
                 key={disease}
@@ -24,7 +24,7 @@ class ButtonItem extends React.Component {
         this.handleClick = this.handleClick.bind(this)
     }
 
-    // add body system to positive categories if not there yet 
+    // add body system to positive categories if not there yet
     // consider deprecating - same as handleClick() and state
     componentDidMount() {
         if (!(this.context["positivecategories"].includes(this.props.name))) {
@@ -50,7 +50,7 @@ class ButtonItem extends React.Component {
         return (
             <div>
                 <Button basic className="hpi-disease-button"  onClick={this.handleClick}>
-                    <Icon name='dropdown' /> 
+                    <Icon name='dropdown' />
                     {this.props.name}
                 </Button>
                 <div className="diseases-array">
