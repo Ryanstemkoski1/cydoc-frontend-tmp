@@ -26,7 +26,7 @@ export default class LRButton extends React.Component {
                     />
                     <Button
                         content={this.props.content}
-                        active={this.props.toggle.center}
+                        active={this.props.active}
                         color={this.props.color}
                         onClick={(e, {active}) => this.props.onClick('center', this.props.name, !active)}
                     />
