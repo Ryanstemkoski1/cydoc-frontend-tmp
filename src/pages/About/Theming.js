@@ -1,10 +1,19 @@
 
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Button, Container, Divider, Grid, Header, Image, Menu, Segment } from 'semantic-ui-react'
+import NavMenu from "../../components/navigation/NavMenu";
+import HomePageContent from "../HomePage/HomePageContent";
 
 // This will eventually be replaced by the About page
 const ThemingLayout = () => (
-    <Container style={{ marginTop: '3em' }}>
+    <Fragment>
+        <div className="nav-menu-container">
+            <NavMenu />
+        </div>
+        <div className="home-page-content-container">
+            <HomePageContent mainText='coming soon.' />
+        </div>
+    {/* <Container>
         <Header as='h1'>Theming Examples</Header>
 
         <Header as='h2' dividing>
@@ -276,7 +285,8 @@ const ThemingLayout = () => (
                 </Segment>
             </Grid.Column>
         </Grid>
-    </Container>
+    </Container> */}
+    </Fragment>
 )
 
 export default ThemingLayout
