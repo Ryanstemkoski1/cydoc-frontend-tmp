@@ -56,6 +56,7 @@ export default class PhysicalExamContent extends React.Component {
     }
     
     renderPanels = (groups) => {
+        const isMobileView = this.state.windowWidth <= PHYSICAL_EXAM_MOBILE_BP
         const panels = [
             {
                 key: 'Vitals',
@@ -68,9 +69,11 @@ export default class PhysicalExamContent extends React.Component {
                     content: (
                         <>
                         <Form>
-                            <Grid stackable columns="equal">
+                            <Grid stackable columns="3">
                                 <Grid.Column>
-                                    <h5>Blood Pressure (mmHg)</h5>
+                                    <Header as="h5">
+                                        Blood Pressure (mmHg)
+                                    </Header>
                                     <Form.Field>
                                         {this.generateNumericInput("Vitals", "Systolic Blood Pressure", "systolic", "right")}
                                     </Form.Field>
@@ -78,8 +81,9 @@ export default class PhysicalExamContent extends React.Component {
                                         {this.generateNumericInput("Vitals", "Diastolic Blood Pressure", "diastolic", "right")}
                                     </Form.Field>
                                 </Grid.Column>
-                                <Grid.Column>
-                                    <Form.Field inline>
+                                
+                                    <Grid.Column>
+                                    <Form.Field inline={isMobileView}>
                                         <label>
                                             <Header as='h5'>
                                                 Heart Rate
@@ -89,7 +93,7 @@ export default class PhysicalExamContent extends React.Component {
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <Form.Field inline>
+                                    <Form.Field inline={isMobileView}>
                                         <label>
                                             <Header as='h5'>
                                                 RR
@@ -99,7 +103,7 @@ export default class PhysicalExamContent extends React.Component {
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <Form.Field inline>
+                                    <Form.Field inline={isMobileView}>
                                         <label>
                                             <Header as='h5'>
                                                 Temperature
@@ -109,7 +113,7 @@ export default class PhysicalExamContent extends React.Component {
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <Form.Field>
+                                    <Form.Field inline={isMobileView}>
                                         <label>
                                             <Header as='h5'>
                                                 Oxygen Saturation
