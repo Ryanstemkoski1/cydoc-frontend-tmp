@@ -10,11 +10,12 @@ export class TableBodyRow extends Component {
         this.state = {
             invalidYear: false,
         };
+        this.onYearChange = this.onYearChange.bind(this)
     }
 
     onYearChange = (e) => {
         const startYear = e.target.value;
-        this.setState({ invalidYear: startYear !== "" && (startYear < 1900 || startYear > this.props.currentYear) });
+        this.setState({ invalidYear: startYear != '' && (isNaN(+startYear) || startYear < 1900 || startYear > this.props.currentYear) });
     }
 
     handleCellClick = (e) => {
@@ -262,12 +263,13 @@ export class TableBodyRow extends Component {
                     );
                     break;
                 }
+                case 'Year':
                 case 'Start Year':
                     cell = (
                         <div className='table-year-input'>
                             <TextArea
                                 rows={3}
-                                type='number'
+                                type={placeholder}
                                 onChange={onTableBodyChange}
                                 onBlur={this.onYearChange}
                                 rowindex={rowindex}
