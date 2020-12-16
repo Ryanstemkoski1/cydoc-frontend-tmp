@@ -466,7 +466,7 @@ class UserForm extends Component {
                             />
                             <>
                                 <Form.Button color='teal' size='small' floated='right' disabled={this.props.disableRegister}>
-                                    {this.buttonText}
+                                    {this.props.buttonText}
                                 </Form.Button>
                             </>
                         </Form>
