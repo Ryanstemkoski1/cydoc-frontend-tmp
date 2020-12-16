@@ -44,6 +44,12 @@ export default class TableContent extends Component {
     handleTableBodyChange(event, data){ 
         if (data.placeholder === 'Drug Name' && !this.state.active.has(data.rowindex)) {
             this.toggleAccordion(data.rowindex);
+        } else {
+            const { active } = this.state;
+            if(!active.has(data.rowindex)) {
+                active.add(data.rowindex);
+                this.setState({active});
+            }
         }
         let newState = this.props.values;
         newState[data.rowindex][data.type] = data.value;
@@ -147,10 +153,10 @@ export default class TableContent extends Component {
                                 className='content-input-surgical content-dropdown medication'
                             >
                                 <Dropdown
+                                    clearable
                                     fluid
                                     search
                                     selection
-                                    clearable
                                     allowAdditions
                                     icon=''
                                     type={tableBodyPlaceholders[0]}

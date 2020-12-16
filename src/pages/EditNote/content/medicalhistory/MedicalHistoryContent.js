@@ -60,6 +60,7 @@ export default class MedicalHistoryContent extends React.Component {
         this.handleResolvedToggleButtonClick = this.handleResolvedToggleButtonClick.bind(this);
         this.generateListItems = this.generateListItems.bind(this); 
         this.addSeenCondition = this.addSeenCondition.bind(this); 
+        this.addRow = this.addRow.bind(this);
     } 
 
     componentDidMount() {
@@ -117,7 +118,20 @@ export default class MedicalHistoryContent extends React.Component {
     addSeenCondition = (value, index) => {
         const { seenConditions } = this.state;
         seenConditions[value] = index;
-        this.setState({ seenConditions });
+        this.setState({ seenConditions });   
+    }
+
+    addRow() {
+        let values = this.context[this.props.value_type]
+        let last_index = Object.keys(values).length.toString()
+        values[last_index] = {
+            'Condition': "",
+            "Yes": false,
+            "No": false,
+            "Onset": "",
+            "Comments": ""
+        }
+        this.context.onContextChange(this.props.value_type, values);
     }
 
     render(){ 
@@ -142,6 +156,7 @@ export default class MedicalHistoryContent extends React.Component {
                 question_type = {(this.props.response_choice ? "hpi" : "add_row")}
                 value_type = "Medical History"
                 mobile={mobile}
+                addRow={this.addRow}
                 name={"medical history"}
             />
         );
