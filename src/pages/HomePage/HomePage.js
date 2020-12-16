@@ -12,7 +12,7 @@ class HomePage extends Component {
                     <NavMenu />
                 </div>
                 <div className="home-page-content-container">
-                    <HomePageContent />
+                    <HomePageContent mainText='meet cydoc.' />
                 </div>
 
             </Fragment>
