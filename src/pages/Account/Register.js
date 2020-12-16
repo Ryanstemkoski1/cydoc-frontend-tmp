@@ -42,6 +42,7 @@ class Register extends React.Component {
                 handleSubmit={this.handleSubmit}
                 show={true}
                 pushTo="/login"
+                disableRegister={true}
             />
         );
     }
