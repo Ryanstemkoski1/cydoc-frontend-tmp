@@ -659,11 +659,11 @@ class GenerateNote extends React.Component {
                 </Segment>
 
                 <Button icon floated='left' onClick={this.previousFormClick} className='small-note-previous-button'>
-                <Icon name='left arrow'/>
+                <Icon name='arrow left'/>
                 </Button>
                 <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='note-previous-button'>
                 Previous Form
-                <Icon name='left arrow'/>
+                <Icon name='arrow left'/>
                 </Button>
             </div>
         )
