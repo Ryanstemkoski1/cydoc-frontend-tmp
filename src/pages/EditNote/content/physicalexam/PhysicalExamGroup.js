@@ -99,8 +99,6 @@ export default class PhysicalExamGroup extends Component {
                 </>
                 :
                 <>
-                    <Header as="h2">{this.props.name}</Header>
-                    <Divider />
                     <Form>
                         <Grid columns="equal">
                             <Grid.Row>

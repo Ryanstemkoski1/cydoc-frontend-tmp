@@ -22,6 +22,8 @@
         "Yes": false,
         "No": false,
         "Onset": "",
+        "Resolved": "",
+        "End Year": "",
         "Comments": ""
       },
       "1": {
@@ -29,6 +31,8 @@
         "Yes": false,
         "No": false,
         "Onset": "",
+        "Resolved": "",
+        "End Year": "",
         "Comments": ""
       },
       "2": {
@@ -36,6 +40,8 @@
         "Yes": false,
         "No": false,
         "Onset": "",
+        "Resolved": "",
+        "End Year": "",
         "Comments": ""
       },
       "3": {
@@ -43,6 +49,8 @@
         "Yes": false,
         "No": false,
         "Onset": "",
+        "Resolved": "",
+        "End Year": "",
         "Comments": ""
       },
       "4": {
@@ -50,6 +58,8 @@
         "Yes": false,
         "No": false,
         "Onset": "",
+        "Resolved": "",
+        "End Year": "",
         "Comments": ""
       },
       "5": {
@@ -57,6 +67,8 @@
         "Yes": false,
         "No": false,
         "Onset": "",
+        "Resolved": "",
+        "End Year": "",
         "Comments": ""
       }
     }

@@ -14,45 +14,45 @@ import {
 
 export default class PatientHistoryContent extends Component {
   constructor() {
-    super();
+    super()
     this.state = {
-      windowWidth: 0,
-      windowHeight: 0,
-      activeTabName: 'Medical History', // Default open pane is Medical History
-      activeIndex: 0,
-    };
+        windowWidth: 0,
+        windowHeight: 0,
+        headerHeight: 0,
+        activeTabName: "Medical History", // Default open pane is Medical History\
+        activeIndex: 0
+    }
     this.updateDimensions = this.updateDimensions.bind(this);
+    this.handleItemClick = this.handleItemClick.bind(this)
+    this.setMenuPosition = this.setMenuPosition.bind(this)
   }
 
   componentDidMount() {
     this.updateDimensions();
-    window.addEventListener('resize', this.updateDimensions);
-    // Using timeout to ensure that tab/dropdown menu is rendered before setting
-    setTimeout((_event) => {
-      this.setMenuPosition();
-    }, 0);
+    window.addEventListener("resize", this.updateDimensions);
+    window.addEventListener("scroll", this.setMenuPosition)
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateDimensions);
+    window.removeEventListener("resize", this.updateDimensions);
+    window.removeEventListener("scroll", this.setMenuPosition)
   }
 
   updateDimensions() {
-    let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-    let windowHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
+    let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+    let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+    let headerHeight = document.getElementById("stickyHeader")?.offsetHeight ?? 0;
 
-    this.setState({ windowWidth, windowHeight });
+    this.setState({ windowWidth, windowHeight, headerHeight });
     this.setMenuPosition();
   }
 
   setMenuPosition() {
-    const stickyHeaderHeight = document.getElementById('stickyHeader')
-      .offsetHeight;
-    // Ensuring that the patient history tabs are rendered
-    while (this.fixedMenu == null || this.fixedMenu.length == 0) {
-      this.fixedMenu = document.getElementsByClassName('patient-history-menu');
+    const fixedMenu = document.getElementById("patient-history-menu");
+    if (fixedMenu != null) {
+        fixedMenu.style.top = `${this.state.headerHeight}px`;
+        window.removeEventListener("scroll", this.setMenuPosition)
     }
-    this.fixedMenu[0].style.top = `${stickyHeaderHeight}px`;
   }
 
   handleItemClick = (children, paneNames) => {
@@ -143,7 +143,7 @@ export default class PatientHistoryContent extends Component {
             <Grid
               stackable
               centered
-              className={'patient-history-menu'}
+              id={'patient-history-menu'}
               relaxed
               style={{ paddingTop: 10, paddingBottom: 5 }}
             >
@@ -153,7 +153,7 @@ export default class PatientHistoryContent extends Component {
           </Container>
         ) : (
           <Tab
-            menu={{ pointing: true, className: 'patient-history-menu' }}
+            menu={{ pointing: true, id: 'patient-history-menu' }}
             panes={expandedPanes}
             activeIndex={activeIndex}
             onTabChange={(_, {activeIndex}) => this.handleTabChange(activeIndex, paneNames)}

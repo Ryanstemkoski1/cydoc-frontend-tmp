@@ -184,10 +184,12 @@ export class DiseaseForm extends React.Component {
                         selection
                         fluid
                         scrolling={false}
+                        id='disease-menu'
                     />
-                    : <Menu tabular borderless items={diseaseTabs} className='disease-menu'/>
+                    : <Menu tabular borderless items={diseaseTabs} className='disease-menu' id='disease-menu'/>
                 }
-                    <h1 className='category-header' style={{paddingTop: '20px'}}>{category}</h1>
+                    <br/>
+                    <h1 className='category-header'>{category}</h1>
                     <div className='question-map'>{questionArr} </div>
 
             </div>
