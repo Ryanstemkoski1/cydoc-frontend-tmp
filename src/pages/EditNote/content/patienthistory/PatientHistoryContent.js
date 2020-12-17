@@ -7,7 +7,10 @@ import AllergiesContent from "../allergies/AllergiesContent";
 import SocialHistoryContent from "../socialhistory/SocialHistoryContent";
 import FamilyHistoryContent from "../familyhistory/FamilyHistoryContent";
 import './PatientHistory.css';
-import {PATIENT_HISTORY_MOBILE_BP, SOCIAL_HISTORY_MOBILE_BP} from "constants/breakpoints.js";
+import {
+  PATIENT_HISTORY_MOBILE_BP,
+  SOCIAL_HISTORY_MOBILE_BP,
+} from 'constants/breakpoints.js';
 
 export default class PatientHistoryContent extends Component {
     constructor() {
@@ -24,7 +27,8 @@ export default class PatientHistoryContent extends Component {
         this.onPreviousClick = this.onPreviousClick.bind(this);
         this.handleTabChange = this.handleTabChange.bind(this);
         this.updateIndex = this.updateIndex.bind(this);
-    }
+        this.setMenuPosition = this.setMenuPosition.bind(this)
+     }
 
     componentDidMount() {
         this.updateDimensions();
@@ -36,26 +40,28 @@ export default class PatientHistoryContent extends Component {
         }, 0);
     }
 
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.updateDimensions);
-    }
 
-    updateDimensions() {
-        let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
-        let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
- 
-        this.setState({ windowWidth, windowHeight });
-        this.setMenuPosition();
-    }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateDimensions);
+    window.removeEventListener("scroll", this.setMenuPosition)
+  }
 
-    setMenuPosition() {
-       const stickyHeaderHeight = document.getElementById("stickyHeader").offsetHeight;
-        // Ensuring that the patient history tabs are rendered
-        while (this.fixedMenu == null || this.fixedMenu.length == 0) {
-            this.fixedMenu = document.getElementsByClassName("patient-history-menu");
-        }
-        this.fixedMenu[0].style.top = `${stickyHeaderHeight}px`;
+  updateDimensions() {
+    let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
+    let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+    let headerHeight = document.getElementById("stickyHeader")?.offsetHeight ?? 0;
+
+    this.setState({ windowWidth, windowHeight, headerHeight });
+    this.setMenuPosition();
+  }
+
+  setMenuPosition() {
+    const fixedMenu = document.getElementById("patient-history-menu");
+    if (fixedMenu != null) {
+        fixedMenu.style.top = `${this.state.headerHeight}px`;
+        window.removeEventListener("scroll", this.setMenuPosition)
     }
+  }
 
     updateIndex() {
         let index = window.localStorage.getItem('activeIndex');
@@ -102,9 +108,7 @@ export default class PatientHistoryContent extends Component {
         const collapseTabs = this.state.windowWidth < PATIENT_HISTORY_MOBILE_BP;
         const socialHistoryMobile = this.state.windowWidth < SOCIAL_HISTORY_MOBILE_BP;
 
-
         let tabToDisplay;
-
         switch (activeTabName) {
             case "Medical History":
                 tabToDisplay = (<MedicalHistoryContent mobile={collapseTabs} />);

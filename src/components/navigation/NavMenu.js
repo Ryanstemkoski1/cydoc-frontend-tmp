@@ -508,16 +508,14 @@ function LoggedInMenuItems(props) {
             </>
         ) : (
             <>
-                <Menu.Item name="welcome" className='user-item'>
-                    <Icon name="user outline" /> {props.name}
-                </Menu.Item>
                 <Menu.Item>
                     <Button.Group>
                         <Button as={Link} name="myNotes" to="/dashboard" text="My Notes" >My Notes</Button>
-                        <Button name="logout" href="/home" text="Logout" onClick={props.handleLogout} className='logout-button'>Log Out</Button>
-
-
+                        <Button name="logout" href="/home" text="Logout" onClick={props.handleLogout} className="logout-button">Log Out</Button>
                     </Button.Group>
+                </Menu.Item>
+                <Menu.Item name="welcome" style={{color: '#6DA3B1', fontWeight: 'normal'}}>
+                    <Icon name="user outline" /> {props.name}
                 </Menu.Item>
             </>
         )

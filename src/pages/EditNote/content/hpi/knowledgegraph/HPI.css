@@ -36,6 +36,12 @@
     overflow-y: hidden;
 }
 
+#disease-menu {
+    position: sticky !important;
+    background-color: whitesmoke !important;
+    z-index: 2;
+}
+
 .disease-tab {
     font-size: 13px;
 }

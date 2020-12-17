@@ -17,7 +17,7 @@
   font-style: italic;
 }
 
-.patient-history-menu {
+#patient-history-menu {
   position: sticky;
   z-index: 1;
   background-color: white;
@@ -68,5 +68,5 @@
   .ui.icon.button.small-patient-next-button {
     margin-right: -2.8em;
   }
-
 }
+
