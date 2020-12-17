@@ -91,7 +91,6 @@ export default class PatientHistoryContent extends Component {
 
     handlePrevTab = (e, {activeTabName}) => {
         this.setState({ activeIndex: e.target.value, activeTabName: activeTabName })
-        console.log('STATE', activeTabName, this.state.activeTabName)
     }
 
     handleNextTab = (e, {activeTabName}) => {
@@ -205,7 +204,7 @@ export default class PatientHistoryContent extends Component {
                         onClick={this.previousFormClick}
                     >
                     Previous Form
-                    <Icon name='left arrow' />
+                    <Icon name='arrow left' />
                     </Button>
 
                     <Button
@@ -218,7 +217,7 @@ export default class PatientHistoryContent extends Component {
                         onClick={this.handleNextTab}
                     >
                     Next Form
-                    <Icon name='right arrow' />
+                    <Icon name='arrow right' />
                     </Button>
                     </Tab.Pane>
                 )
@@ -238,7 +237,7 @@ export default class PatientHistoryContent extends Component {
                         onClick={this.handlePrevTab}
                     >
                     Previous Form
-                    <Icon name='left arrow' />
+                    <Icon name='arrow left' />
                     </Button>
 
                     <Button
@@ -251,7 +250,7 @@ export default class PatientHistoryContent extends Component {
                         onClick={this.handleNextTab}
                     >
                     Next Form
-                    <Icon name='right arrow' />
+                    <Icon name='arrow right' />
                     </Button>
                     </Tab.Pane>
                     )
@@ -271,7 +270,7 @@ export default class PatientHistoryContent extends Component {
                         onClick={this.handlePrevTab}
                     >
                     Previous Form
-                    <Icon name='left arrow' />
+                    <Icon name='arrow left' />
                     </Button>
 
                     <Button
@@ -284,7 +283,7 @@ export default class PatientHistoryContent extends Component {
                         onClick={this.handleNextTab}
                     >
                     Next Form
-                    <Icon name='right arrow' />
+                    <Icon name='arrow right' />
                     </Button>
                     </Tab.Pane>
                 )
@@ -304,7 +303,7 @@ export default class PatientHistoryContent extends Component {
                         onClick={this.handlePrevTab}
                     >
                     Previous Form
-                    <Icon name='left arrow' />
+                    <Icon name='arrow left' />
                     </Button>
 
                     <Button
@@ -317,7 +316,7 @@ export default class PatientHistoryContent extends Component {
                         onClick={this.handleNextTab}
                     >
                     Next Form
-                    <Icon name='right arrow' />
+                    <Icon name='arrow right' />
                     </Button>
                     </Tab.Pane>
                 )
@@ -337,7 +336,7 @@ export default class PatientHistoryContent extends Component {
                         onClick={this.handlePrevTab}
                     >
                     Previous Form
-                    <Icon name='left arrow' />
+                    <Icon name='arrow left' />
                     </Button>
 
                     <Button
@@ -350,7 +349,7 @@ export default class PatientHistoryContent extends Component {
                         onClick={this.handleNextTab}
                     >
                     Next Form
-                    <Icon name='right arrow' />
+                    <Icon name='arrow right' />
                     </Button>
                     </Tab.Pane>
                 )
@@ -370,7 +369,7 @@ export default class PatientHistoryContent extends Component {
                         onClick={this.handlePrevTab}
                     >
                     Previous Form
-                    <Icon name='left arrow' />
+                    <Icon name='arrow left' />
                     </Button>
 
                     <Button
@@ -381,7 +380,7 @@ export default class PatientHistoryContent extends Component {
                         onClick={this.nextFormClick}
                     >
                     Next Form
-                    <Icon name='right arrow' />
+                    <Icon name='arrow right' />
                     </Button>
                     </Tab.Pane>
                 )
@@ -407,11 +406,11 @@ export default class PatientHistoryContent extends Component {
                         {activeTabName === 'Medical History' ? 
                         <>
                         <Button icon floated='left' onClick={this.previousFormClick} className='small-patient-previous-button'>
-                        <Icon name='left arrow'/>
+                        <Icon name='arrow left'/>
                         </Button>
 
                         <Button icon floated='right' onClick={this.onNextClick} className='small-patient-next-button'>
-                        <Icon name='right arrow'/>
+                        <Icon name='arrow right'/>
                         </Button>  
                         </> 
                         : ''
@@ -420,11 +419,11 @@ export default class PatientHistoryContent extends Component {
                         {activeTabName === 'Family History'? 
                         <>
                         <Button icon floated='left' onClick={this.onPreviousClick} className='small-patient-previous-button'>
-                        <Icon name='left arrow'/>
+                        <Icon name='arrow left'/>
                         </Button>
 
                         <Button icon floated='right' onClick={this.nextFormClick} className='small-patient-next-button'>
-                        <Icon name='right arrow'/>
+                        <Icon name='arrow right'/>
                         </Button>
                         </>
                         : ''
@@ -432,11 +431,11 @@ export default class PatientHistoryContent extends Component {
                         {activeTabName === 'Social History' || activeTabName === 'Allergies' || activeTabName === 'Medications' || activeTabName === 'Surgical History' ?
                         <>
                         <Button icon floated='left' onClick={this.onPreviousClick} className='small-patient-previous-button'>
-                        <Icon name='left arrow'/>
+                        <Icon name='arrow left'/>
                         </Button>
 
                         <Button icon floated='right' onClick={this.onNextClick} className='small-patient-next-button'>
-                        <Icon name='right arrow'/>
+                        <Icon name='arrow right'/>
                         </Button>
                         </>
                         :''
