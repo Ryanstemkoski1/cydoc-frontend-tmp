@@ -55,6 +55,11 @@ class HPIContent extends Component {
         })
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
+        // Using timeout to ensure that tab/dropdown menu is rendered before setting
+        // setTimeout((_event) => {
+        //     this.setMenuPosition();
+        // }, 0);
+
         window.addEventListener("scroll", this.setMenuPosition);
     }
 
@@ -124,7 +129,7 @@ class HPIContent extends Component {
     // category and the active tab will change to that as well.
     handleItemClick = (e, {name}) => {
         this.context.onContextChange("step", this.context['positivediseases'].indexOf(diseaseCodes[name])+2)
-        this.context.onContextChange("activeHPI", name)
+        this.context.onContextChange("activeHPI", Object.values(diseaseCodes).find(value => diseaseCodes[name] === value))
         setTimeout((_event) => {
             window.scrollTo(0,0)
             this.setMenuPosition()
@@ -166,12 +171,12 @@ class HPIContent extends Component {
                 name={Object.keys(diseaseCodes).find(key => diseaseCodes[key] === name)}
                 /* if the current category in the for loop matches the active category (this.context['activeHPI']),
                 the menu item is marked as active, meaning it will be displayed as clicked (pressed down) */
-                active={this.context['activeHPI'] === Object.keys(diseaseCodes).find(key => diseaseCodes[key] === name)}
+                active={this.context['activeHPI'] === name}
                 onClick={this.handleItemClick}
                 className='disease-tab'  // CSS
             />
         );
-
+        
         // each step correlates to a different tab
         var step = this.context['step'];
         // number of positive diseases, which is also the nnumber of steps
@@ -295,3 +300,5 @@ class HPIContent extends Component {
 }
 
 export default HPIContent;
+
+//Object.keys(diseaseCodes).find(key => diseaseCodes[key] === name)
