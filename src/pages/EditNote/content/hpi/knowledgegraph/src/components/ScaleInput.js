@@ -13,7 +13,6 @@ class ScaleInput extends React.Component{
   static contextType = HPIContext
   constructor(props, context) {
     super(props, context)
-    console.log(props);
     const values = this.context["hpi"]['nodes'][this.props.node]
     const answers = values["response"]
     this.state = {
@@ -23,41 +22,52 @@ class ScaleInput extends React.Component{
   }
 
   handleVal(event){
-    if(event.target.value < 0){
-      this.setState({val: 0});
+    /*if(event.target.value < 1){
+      this.setState({val: 1});
     }
     else if (event.target.value > 10){
       this.setState({val: 10});
     }
     else{
       this.setState({val: event.target.value});
-    }
+    }*/
     const values = this.context["hpi"]
     values['nodes'][this.props.node]["response"] = this.state.val;
     this.context.onContextChange("hpi", values)
+    console.log(this.context.hpi)
+  }
+
+  handleClear(e){
+    e.preventDefault();
+    this.setState()
   }
 
   render(){
     return(
       <div>
-      <label> Healthy </label>
+      <label> 1 </label>
       <input
         type='range'
-        min={0}
-        max={10}
-        step={1}
-        value = {this.state.num}
-        onChange = {e => this.setState({val : e.target.value})}
+        min="1"
+        max="10"
+        step="1"
+        value = {this.state.val}
+        onChange = {e => this.setState({val: e.target.value}, e => this.handleVal(e))}
         />
-      <label> Sick </label>
+      <label> 10 </label>
       <input
-        min={0}
-        max={10}
-        step={1}
+        min="1"
+        max="10"
+        step="1"
         type = "number"
-        value = {this.state.num}
-        onChange = {e => this.handleNumber(e)}
+        value = {this.state.val}
+        onChange = {e => this.setState({val: e.target.value}, e => this.handleVal(e))}
       />
+      <button
+        className = "ui basic button"
+        onSubmit = {e => this.handleClear(e)}>
+        Clear
+      </button>
       </div>
   );
 };

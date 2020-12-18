@@ -114,6 +114,22 @@ export class DiseaseForm extends React.Component {
         }
         values['questionOrderToNode'][catCode] = questionOrderToNode
         values['parentToChildQuestionOrder'][catCode] = parentToChildQuestionOrder
+        /*values['nodes']['PEM0010'] = {
+          bodySystem: "CVRESP",
+          category: "PULMONARY_EMBOLISM",
+          creationTime: "2020-03-30 18:28:08.135102+00:00",
+          medID: "PEM0010",
+          noteSection: "HPI",
+          questionOrder: "10.0",
+          response: "",
+          responseType: "SCALE1TO10",
+          text: "New Question",
+          uid: "82903nrflkajsd903290"
+        }
+        values['questionOrderToNode']['PEM'][1].unshift(10);
+        values['parentToChildQuestionOrder']['PEM'][10] = "PEM0010";
+        questionMap['PEM0010'] = <DiseaseFormQuestions key='82903nrflkajsd903290' node='PEM0010' category='PEM'/>*/
+
         this.context.onContextChange('hpi', values)
         this.setState({questionMap: questionMap, functionLoad: true})
     }

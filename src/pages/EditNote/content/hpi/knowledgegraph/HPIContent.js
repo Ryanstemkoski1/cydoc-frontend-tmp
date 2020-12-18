@@ -151,7 +151,6 @@ class HPIContent extends Component {
                 diseasesList={item['diseases']}    // list of categories (diseases) associated with current body system
             />
         );
-
         // diseases that the user has chosen
         // Creates list of category buttons clicked by the user (categories/diseases for which they are positive)
         // Loops through the HPI context storing which categories user clicked in the front page
@@ -162,7 +161,6 @@ class HPIContent extends Component {
                 name={Object.keys(diseaseCodes).find(key => diseaseCodes[key] === disease)}
             />
         );
-
         // tabs with the diseases the user has chosen
         // Loops through HPI context storing which categories user clicked in front page
         const diseaseTabs = this.context['positivediseases'].map((name, index) =>
@@ -176,7 +174,6 @@ class HPIContent extends Component {
                 className='disease-tab'  // CSS
             />
         );
-        
         // each step correlates to a different tab
         var step = this.context['step'];
         // number of positive diseases, which is also the nnumber of steps

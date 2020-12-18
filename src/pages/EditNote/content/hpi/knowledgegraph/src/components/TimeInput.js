@@ -37,7 +37,7 @@ class TimeInput extends Component {
                         {timeOptions.slice(timeIndex, timeIndex+3).map((timeItem) =>
                         <Grid.Column className='time-grid-column'>
                             <Button
-                                color={timeValue === timeItem ? 'violet' : ''}
+                                color={timeValue === timeItem ? 'violet' : 'basic'}
                                 title={timeItem}
                                 onClick={this.handleToggleButtonClick}
                                 className='time-grid-button'> {timeItem} </Button>

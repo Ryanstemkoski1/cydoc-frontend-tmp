@@ -12,6 +12,7 @@ import SurgicalHistoryContent from "../../../../surgicalhistory/SurgicalHistoryC
 import HPIContext from 'contexts/HPIContext.js';
 import ListText from "./listText";
 import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
+import ScaleInput from './ScaleInput';
 
 class QuestionAnswer extends React.Component {
     static contextType = HPIContext
@@ -23,15 +24,15 @@ class QuestionAnswer extends React.Component {
             startDate: new Date(),
             scale: 0,
             input: ""
-        }    
-        this.updateDimensions = this.updateDimensions.bind(this); 
-    } 
+        }
+        this.updateDimensions = this.updateDimensions.bind(this);
+    }
 
     componentDidMount() {
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
     }
- 
+
     componentWillUnmount() {
         window.removeEventListener("resize", this.updateDimensions);
     }
@@ -39,14 +40,14 @@ class QuestionAnswer extends React.Component {
     updateDimensions() {
         let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
         let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
- 
+
         this.setState({ windowWidth, windowHeight });
     }
 
     render() {
         const { windowWidth } = this.state;
         const { responseType } = this.props;
-        
+
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
         let buttonMap = [];
         if (responseType === "YES-NO" || responseType === "NO-YES") {
@@ -98,7 +99,7 @@ class QuestionAnswer extends React.Component {
                 key={this.props.node}
                 response_choice={this.props.responseChoice}
                 fh_pop={true}
-            />) 
+            />)
         }
         else if (responseType === "PMH-POP") {
             buttonMap.push(<MedicalHistoryContent
@@ -106,7 +107,7 @@ class QuestionAnswer extends React.Component {
                 response_choice={this.props.responseChoice}
                 collapseTabs={collapseTabs}
             />)
-        } 
+        }
         else if (responseType === "MEDS-BLANK") {
             buttonMap.push(<MedicationsContent
                 key={this.props.node}
@@ -120,8 +121,14 @@ class QuestionAnswer extends React.Component {
                 pop={true}
             />)
         }
+        else if (responseType === "SCALE1TO10") {
+            buttonMap.push(<ScaleInput
+                key={this.props.node}
+                node={this.props.node}
+            />)
+        }
         return (
-            <div className='qa-div'> 
+            <div className='qa-div'>
                 <div> {this.props.question} <div className='qa-button'>{buttonMap}</div> </div>
             </div>
         )

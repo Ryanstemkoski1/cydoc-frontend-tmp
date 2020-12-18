@@ -56,13 +56,4 @@ class YesNo extends React.Component {
 
 }
 
-/*style={{
-backgroundColor: this.state.yesColor,
-color: this.state.yesFont
-style={{
-backgroundColor: this.state.noColor,
-color: this.state.noFont
-}}
-}}*/
-
 export default YesNo;
