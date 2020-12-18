@@ -9,7 +9,7 @@ export const NOTE_PAGE_MOBILE_BP = 450;
 
 export const FAMILY_HISTORY_MOBILE_BP = 1000;
 
-export const PATIENT_HISTORY_MOBILE_BP = 900;
+export const PATIENT_HISTORY_MOBILE_BP = 1300;
 export const SOCIAL_HISTORY_MOBILE_BP = 1045;
 
 export const ROS_LARGE_BP = 1430;
@@ -22,4 +22,4 @@ export const DISEASE_TABS_SMALL_BP = 800;
 export const DISCUSSION_PLAN_MENU_BP = 1000;
 export const DISCUSSION_PLAN_SECTION_BP = 850;
 
-export const PHYSICAL_EXAM_MOBILE_BP = 1080;
+export const PHYSICAL_EXAM_MOBILE_BP = 874;

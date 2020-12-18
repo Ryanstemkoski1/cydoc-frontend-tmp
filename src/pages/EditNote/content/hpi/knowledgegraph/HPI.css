@@ -36,6 +36,12 @@
     overflow-y: hidden;
 }
 
+#disease-menu {
+    position: sticky !important;
+    background-color: whitesmoke !important;
+    z-index: 2;
+}
+
 .disease-tab {
     font-size: 13px;
 }
@@ -60,6 +66,7 @@
     opacity: 0.8;
     display: block;
     font-size: 13px;
+    background: #c8e2ea;
 }
 
 .hpi-disease-container {
@@ -68,19 +75,16 @@
 }
 
 .ui.button.hpi-previous-button {
-    position: absolute;
-    margin-left: -15.1em;
+    margin-left: -13em;
 }
 
-
-
 .ui.button.hpi-next-button {
-    position: absolute;
-    margin-right: -15.1em;
+    margin-right: -13em;
 }
 
 .ui.button.hpi-previous-button:hover, .ui.button.hpi-next-button:hover {
     opacity: 1;
+    background: #c8e2ea;
 }
 
 .ui.button.hpi-small-previous-button, .ui.button.hpi-small-next-button {
@@ -89,6 +93,27 @@
     bottom: 0;
     opacity: 0.8;
     margin: 0;
+    background: #c8e2ea;
+}
+
+
+@media screen and (max-width: 1300px) {
+    .ui.button.hpi-previous-button, .ui.button.hpi-next-button {
+        display: none;
+    }
+
+    .ui.button.hpi-small-previous-button, .ui.button.hpi-small-next-button {
+        display: block;
+    }
+    
+    .ui.icon.button.hpi-small-previous-button {
+        margin-left: -2.8em;
+    }
+
+    .ui.icon.button.hpi-small-next-button {
+        margin-right: -2.8em;
+    }
+    
 }
 
 @media screen and (max-width: 700px) {
@@ -100,24 +125,12 @@
     .question-map {
         margin: auto .5rem;
     }
-}
 
-@media screen and (max-width: 1300px) {
-    .ui.button.hpi-previous-button, .ui.button.hpi-next-button {
-        display: none;
+    .ui.icon.button.hpi-small-previous-button {
+        margin-left: 0;
     }
 
-    .ui.button.hpi-small-previous-button, .ui.button.hpi-small-next-button {
-        display: block;
-    }
-    
-    .ui.button.hpi-small-previous-button {
-    position: absolute;
-    margin-left: -5.5em;
-    }
-
-    .ui.button.hpi-small-next-button {
-    position: absolute;
-    margin-right: -5.5em;
+    .ui.icon.button.hpi-small-next-button {
+        margin-right: 0;
     }
 }

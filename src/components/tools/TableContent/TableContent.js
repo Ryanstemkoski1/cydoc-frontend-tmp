@@ -16,13 +16,19 @@ export default class TableContent extends Component {
 
     constructor(props, context) {
         super(props, context);
+        this.currentYear = new Date(Date.now()).getFullYear();
+        const isInvalidYear = [];
+        for (let i = 0; i < props.values.length; i++) {
+            const startYear = props.values[i]["Start Year"]
+            isInvalidYear.push(startYear !== "" && (startYear < 1900 || startYear > this.currentYear))
+        }
         this.state = {
             proceduresOptions: procedures,
             sideEffectsOptions: sideEffects,
             medicationOptions: drug_names,
             diseaseOptions: diseases,
             active: new Set(),
-            invalidYear: false,
+            isInvalidYear
         }
         // TODO: add back addRow functionality
         this.addRow = this.addRow.bind(this);
@@ -38,6 +44,12 @@ export default class TableContent extends Component {
     handleTableBodyChange(event, data){ 
         if (data.placeholder === 'Drug Name' && !this.state.active.has(data.rowindex)) {
             this.toggleAccordion(data.rowindex);
+        } else {
+            const { active } = this.state;
+            if(!active.has(data.rowindex)) {
+                active.add(data.rowindex);
+                this.setState({active});
+            }
         }
         let newState = this.props.values;
         newState[data.rowindex][data.type] = data.value;
@@ -53,8 +65,10 @@ export default class TableContent extends Component {
         }));
     }
 
-    onYearChange = (e) => {
-        this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
+    onYearChange(_e, index, startYear) {
+        const newIsInvalidYear = this.state.isInvalidYear;
+        newIsInvalidYear[index] = startYear !== "" && (startYear < 1900 || startYear > this.currentYear)
+        this.setState({ invalidYear: newIsInvalidYear });
     }
 
     toggleAccordion = (idx) => {
@@ -90,6 +104,7 @@ export default class TableContent extends Component {
                 diseaseOptions={this.state.diseaseOptions}
                 values={values}
                 isPreview={isPreview}
+                currentYear={this.currentYear}
             />
         )
     }
@@ -138,10 +153,10 @@ export default class TableContent extends Component {
                                 className='content-input-surgical content-dropdown medication'
                             >
                                 <Dropdown
+                                    clearable
                                     fluid
                                     search
                                     selection
-                                    clearable
                                     allowAdditions
                                     icon=''
                                     type={tableBodyPlaceholders[0]}
@@ -325,11 +340,11 @@ export default class TableContent extends Component {
                                 placeholder={tableBodyPlaceholders[j]}
                                 value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
                                 onChange={this.handleTableBodyChange}
-                                onBlur={this.onYearChange}
+                                onBlur={(e) => this.onYearChange(e, i, values[i][tableBodyPlaceholders[j]])}
                                 className='content-input content-dropdown'
                             />
-                            { this.state.invalidYear && (
-                                <p className='error'>Please enter a year between 1900 and 2020</p>
+                            { this.state.isInvalidYear[i] && (
+                                <p className='error'>Please enter a valid year after 1900.</p>
                             )}
                         </div>
                     );

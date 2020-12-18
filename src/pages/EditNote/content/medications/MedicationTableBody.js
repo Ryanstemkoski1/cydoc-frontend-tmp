@@ -11,6 +11,20 @@ export class MedicationTableBody extends Component {
         };
     }
 
+    handleCellClick = (e) => {
+        const innerInput = e.target.lastElementChild
+        // Handles clicks outside of the "clickable area" (padding) of the input/textarea component within a cell
+        if (innerInput != null) {
+            if (innerInput.type == "textarea") {
+                innerInput.focus();
+            }
+            else {
+                // for Inputs/dropdowns
+                innerInput.click();
+            }
+        }
+    }
+
     onYearChange = (e) => {
         this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
     }
@@ -91,7 +105,7 @@ export class MedicationTableBody extends Component {
                     >
                         <TextArea
                             rows={3}
-                            type='number'
+                            type={placeholder}
                             onChange={onTableBodyChange}
                             onBlur={this.onYearChange}
                             rowindex={rowindex}
@@ -153,7 +167,7 @@ export class MedicationTableBody extends Component {
 
         const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
             return (
-                <Table.Cell selectable key={index}>
+                <Table.Cell key={index} onClick={this.handleCellClick}>
                     {this.getCell(placeholder)}
                 </Table.Cell>
             )

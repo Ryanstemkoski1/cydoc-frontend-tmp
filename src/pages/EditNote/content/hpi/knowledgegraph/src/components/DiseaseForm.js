@@ -32,26 +32,6 @@ export class DiseaseForm extends React.Component {
         this.processKnowledgeGraph()
     }
 
-    continue = e => {
-        e.preventDefault();
-        this.props.nextStep();
-    }
-
-    back = e => {
-        e.preventDefault();
-        this.props.prevStep();
-    }
- 
-    firstPage = e => {
-        e.preventDefault()
-        this.props.firstPage()
-    }
-
-    lastPage = e => {
-        e.preventDefault()
-        this.props.lastPage()
-    }
-
     // organizes child nodes in order based on their questionOrder attribute
     questionOrder(listEdges, nodes, edges, catCode) {
         var childRanks = []
@@ -171,9 +151,11 @@ export class DiseaseForm extends React.Component {
                         selection
                         fluid
                         scrolling={false}
+                        id='disease-menu'
                     />
-                    : <Menu tabular borderless items={diseaseTabs} className='disease-menu'/>
+                    : <Menu tabular borderless items={diseaseTabs} className='disease-menu' id='disease-menu'/>
                 }
+                    <br/>
                     <div className='question-map'>{questionArr} </div>
 
             </div>
