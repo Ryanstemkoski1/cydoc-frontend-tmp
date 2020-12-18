@@ -5,6 +5,8 @@ import YesNo from "./YesNo";
 import HandleInput from "./HandleInput"
 import HandleNumericInput from "./HandleNumericInput";
 import TimeInput from "./TimeInput";
+import BodyLocation, { bodyLocationDefaultState } from "./BodyLocation.js"
+import TimeOfDayInput from "./TimeOfDayInput.js"
 import FamilyHistoryContent from "../../../../familyhistory/FamilyHistoryContent";
 import MedicalHistoryContent from "../../../../medicalhistory/MedicalHistoryContent";
 import MedicationsContent from "../../../../medications/MedicationsContent";
@@ -57,14 +59,26 @@ class QuestionAnswer extends React.Component {
                 /> )}
         else if (responseType === "SHORT-TEXT" || responseType === "LONG-TEXT") {
             buttonMap.push(<HandleInput key={this.props.node}
-                                         node={this.props.node}
-                                          />)
+                                        node={this.props.node}
+                            />)
         }
         else if (responseType === 'TIME') {
             buttonMap.push(<TimeInput key={this.props.node}
-                                       node={this.props.node}
-                                        />)
+                                      node={this.props.node}
+                            />)
         }
+        else if (responseType === 'TIME3DAYS') {
+            buttonMap.push(<TimeInput key={this.props.node}
+                                      node={this.props.node}
+                            />)
+        }
+
+        else if (responseType === 'TIMEOFDAY') {
+            buttonMap.push(<TimeOfDayInput key={this.props.node}
+                                           node={this.props.node}
+                            />)
+        }
+
         else if (responseType === 'LIST-TEXT') {
             buttonMap.push(<ListText
                 key={this.props.node}
@@ -92,6 +106,11 @@ class QuestionAnswer extends React.Component {
                 node={this.props.node}
                 max={10}
             />)
+        }
+        else if (responseType === "BODYLOCATION") {
+            buttonMap.push(<BodyLocation key={this.props.node}
+                                         node={this.props.node}
+                           />)
         }
         else if (responseType === "FH-POP") {
             buttonMap.push(<FamilyHistoryContent
