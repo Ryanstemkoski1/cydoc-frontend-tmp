@@ -149,10 +149,35 @@ export default class PhysicalExamContent extends React.Component {
         return panels
     }
 
+    nextFormClick = () => this.props.nextFormClick();
+
+    previousFormClick = () => this.props.previousFormClick();
+
     render() {
         return (
-            <Accordion styled fluid panels = {this.renderPanels(constants.sections)} />
+            <>
+                <Accordion styled fluid panels = {this.renderPanels(constants.sections)} />
+
+                <Button icon floated='left' onClick={this.previousFormClick} className='small-physical-previous-button'>
+                <Icon name='arrow left'/>
+                </Button>
+                <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='physical-previous-button'>
+                Previous Form
+                <Icon name='arrow left'/>
+                </Button>
+
+                <Button icon floated='right' onClick={this.nextFormClick} className='small-physical-next-button'>
+                <Icon name='arrow right'/>
+                </Button>
+                <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='physical-next-button'>
+                Next Form
+                <Icon name='arrow right'/>
+                </Button>
+
+            </>            
         )
     }
 
 }
+
+            
