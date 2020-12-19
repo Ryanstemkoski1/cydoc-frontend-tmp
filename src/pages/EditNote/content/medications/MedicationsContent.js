@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { Table, Input, Accordion, Form, Dropdown, Label, Icon } from 'semantic-ui-react'; 
-import { medications } from 'constants/States';
 import { sideEffects } from 'constants/sideEffects';
 import drug_names from 'constants/drugNames';
 import diseases from 'constants/diseases';
@@ -15,15 +14,29 @@ export default class MedicationsContent extends Component {
 
     constructor(props, context) {
         super(props, context);
+        this.currentYear = new Date(Date.now()).getFullYear();
+        const values = this.context["Medications"]
+        let invalidStartYearSet = new Set()
+        let invalidEndYearSet = new Set()
+        for (let i = 0; i < values.length; i++) {
+            const startYear = +values[i]["Start Year"]
+            const endYear = +values[i]["End Year"]
+            if (values[i]["Start Year"] !== "" && (isNaN(startYear) || startYear < 1900 || startYear > this.currentYear)) {
+                invalidStartYearSet.add(i)
+            }
+            if (values[i]["End Year"] !== "" && (isNaN(endYear) || endYear < 1900 || endYear > this.currentYear)) {
+                invalidEndYearSet.add(i)
+            }
+        }
+
         this.state = {
             sideEffectsOptions: sideEffects,
             medicationOptions: drug_names,
             diseaseOptions: diseases,
             active: new Set(),
-            invalidStartYear: new Set(),
-            invalidEndYear: new Set()
+            invalidStartYear: invalidStartYearSet,
+            invalidEndYear: invalidEndYearSet
         }
-        this.currentYear = new Date(Date.now()).getFullYear();
         this.addRow = this.addRow.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
@@ -34,7 +47,7 @@ export default class MedicationsContent extends Component {
     addRow() {
         let values = this.context["Medications"];
         const last_index = values.length.toString();
-        values[last_index] = {"Drug Name": '', "Start Year": '', "Schedule": '', "Dose": '', "Reason for Taking": '', "Side Effects": []}
+        values[last_index] = {"Drug Name": '', "Start Year": '', "Currently Taking": '', "End Year": '', "Schedule": '', "Dose": '', "Reason for Taking": '', "Side Effects": [], "Comments": ''}
         this.context.onContextChange("Medications", values);
     }
 
@@ -48,7 +61,7 @@ export default class MedicationsContent extends Component {
         // Year validation
         if (data.type == 'Start Year') {
             const onset = +data.value
-            if (onset !== "" && (isNaN(onset) || onset < 1900 || onset > this.currentYear)) {
+            if (data.value !== "" && (isNaN(onset) || onset < 1900 || onset > this.currentYear)) {
                 if (!this.state.invalidStartYear.has(data.rowindex)){
                     let newInvalidStartYear = this.state.invalidStartYear
                     newInvalidStartYear.add(data.rowindex)
@@ -64,7 +77,7 @@ export default class MedicationsContent extends Component {
         }
         else if (data.type == 'End Year') {
             const endYear = +data.value
-            if (endYear !== "" && (isNaN(endYear) || endYear < 1900 || endYear > this.currentYear)) {
+            if (data.value !== "" && (isNaN(endYear) || endYear < 1900 || endYear > this.currentYear)) {
                 if (!this.state.invalidEndYear.has(data.rowindex)){
                     let newInvalidEndYear = this.state.invalidEndYear
                     newInvalidEndYear.add(data.rowindex)
@@ -116,7 +129,6 @@ export default class MedicationsContent extends Component {
     makeAccordionPanels(nums) {
         const { mobile, isPreview } = this.props;
         const values = this.context["Medications"]
-        const fields = medications.fields
         
         const panels = [];
         for (let i = 0; i < nums.length; i++) {
@@ -225,7 +237,7 @@ export default class MedicationsContent extends Component {
                         className='content-input content-dropdown'
                     />
                     { this.state.invalidStartYear.has(i) && (
-                        <p className='year-validation-error'>Please enter a valid year between 1900 and 2020</p>
+                        <p className='year-validation-mobile-error'>Please enter a valid year between 1900 and 2020</p>
                     )}
                 </>
             )
