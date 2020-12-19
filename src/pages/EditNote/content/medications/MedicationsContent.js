@@ -6,6 +6,7 @@ import drug_names from 'constants/drugNames';
 import diseases from 'constants/diseases';
 import HPIContext from 'contexts/HPIContext.js';
 import AddRowButton from 'components/tools/AddRowButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import './Medications.css';
 
 
@@ -19,14 +20,15 @@ export default class MedicationsContent extends Component {
             medicationOptions: drug_names,
             diseaseOptions: diseases,
             active: new Set(),
-            invalidYear: false,
+            invalidStartYear: new Set(),
+            invalidEndYear: new Set()
         }
-
+        this.currentYear = new Date(Date.now()).getFullYear();
         this.addRow = this.addRow.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
-        this.onYearChange = this.onYearChange.bind(this);
+        this.handleTakingToggleButtonClick = this.handleTakingToggleButtonClick.bind(this);
     }
 
     addRow() {
@@ -42,9 +44,54 @@ export default class MedicationsContent extends Component {
             active.add(data.rowindex);
             this.setState({active});
         }
+
+        // Year validation
+        if (data.type == 'Start Year') {
+            const onset = +data.value
+            if (onset !== "" && (isNaN(onset) || onset < 1900 || onset > this.currentYear)) {
+                if (!this.state.invalidStartYear.has(data.rowindex)){
+                    let newInvalidStartYear = this.state.invalidStartYear
+                    newInvalidStartYear.add(data.rowindex)
+                    this.setState({invalidStartYear: newInvalidStartYear})
+                }
+
+            }
+            else if (this.state.invalidStartYear.has(data.rowindex)) {
+                let newInvalidStartYear = this.state.invalidStartYear
+                newInvalidStartYear.delete(data.rowindex)
+                this.setState({invalidStartYear: newInvalidStartYear})
+            }
+        }
+        else if (data.type == 'End Year') {
+            const endYear = +data.value
+            if (endYear !== "" && (isNaN(endYear) || endYear < 1900 || endYear > this.currentYear)) {
+                if (!this.state.invalidEndYear.has(data.rowindex)){
+                    let newInvalidEndYear = this.state.invalidEndYear
+                    newInvalidEndYear.add(data.rowindex)
+                    this.setState({invalidEndYear: newInvalidEndYear})
+                }
+            }
+            else if (this.state.invalidEndYear.has(data.rowindex)) {
+                let newInvalidEndYear = this.state.invalidEndYear
+                newInvalidEndYear.delete(data.rowindex)
+                this.setState({invalidEndYear: newInvalidEndYear})
+            }
+        }
+
         let newState = this.context["Medications"];
         newState[data.rowindex][data.type] = data.value;
         this.context.onContextChange("Medications", newState);
+    }
+
+    handleTakingToggleButtonClick(_event, data) {
+        let values = this.context["Medications"]
+        values[data.condition]["Currently Taking"] = values[data.condition]["Currently Taking"] == data.title ? "" : data.title
+
+        // Clearing any entry in End Year
+        values[data.condition]["End Year"] = ""
+        this.state.invalidEndYear.delete(data.condition) // the row index is being passed through the condition property
+        
+        this.context.onContextChange("Medications", values)
     }
 
     handleAddition(_event, { optiontype, value }) {
@@ -54,10 +101,6 @@ export default class MedicationsContent extends Component {
                 ...prevState[optiontype]
             ],
         }));
-    }
-
-    onYearChange = (e) => {
-        this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
     }
 
     toggleAccordion = (idx) => {
@@ -73,54 +116,49 @@ export default class MedicationsContent extends Component {
     makeAccordionPanels(nums) {
         const { mobile, isPreview } = this.props;
         const values = this.context["Medications"]
-        const tableBodyPlaceholders = medications.fields
-
+        const fields = medications.fields
+        
         const panels = [];
         for (let i = 0; i < nums.length; i++) {
-            let titleContent;
-            const contentInputs = [];
-                
-            let drugNameInput;
-            if (isPreview) {
-                drugNameInput = (
-                    <Input
-                        disabled    
-                        transparent
-                        className='content-input content-dropdown medication'
-                        value={nums[i]}
+            let titleContent, contentInputs;
+
+            const drugNameInput = (
+                <Input
+                    disabled={isPreview}
+                    transparent={isPreview}
+                    className='content-input content-dropdown medication'
+                    value={isPreview ? nums[i] : nums[i]['Drug Name']}
+                >
+                {
+                    !isPreview && 
+                    <Dropdown
+                        fluid
+                        search
+                        selection
+                        clearable
+                        allowAdditions
+                        icon=''
+                        optiontype='medicationOptions'
+                        type={"Drug Name"}
+                        options={this.state.medicationOptions}
+                        placeholder={"medication"}
+                        onChange={this.handleTableBodyChange}
+                        rowindex={i}
+                        value={values[i]["Drug Name"]}
+                        onAddItem={this.handleAddition}
+                        className='side-effects'
                     />
-                );
-            } else {
-                drugNameInput = (
-                    <Input
-                        transparent
-                        className='content-input content-dropdown medication'
-                    >
-                        <Dropdown
-                            fluid
-                            search
-                            selection
-                            clearable
-                            allowAdditions
-                            icon=''
-                            optiontype='medicationOptions'
-                            type={"Drug Name"}
-                            options={this.state.medicationOptions}
-                            placeholder={"medication"}
-                            onChange={this.handleTableBodyChange}
-                            rowindex={i}
-                            value={values[i]["Drug Name"]}
-                            onAddItem={this.handleAddition}
-                            className='side-effects'
-                        />
-                    </Input>
-                );
-            }
-            let reasonForTakingInput = (
+                }
+                </Input>
+            )
+
+            const reasonForTakingInput = (
                 <Input
                     transparent
                     className='content-input content-dropdown medication reason'
                 >
+                {
+                    !isPreview &&
                     <Dropdown
                         fluid
                         search
@@ -133,14 +171,146 @@ export default class MedicationsContent extends Component {
                         placeholder={"e.g. arthritis"}
                         onChange={this.handleTableBodyChange}
                         rowindex={i}
-                        value={isPreview ? "" : values[i]["Reason for Taking"]}
-                        disabled={isPreview}
+                        value={values[i]["Reason for Taking"]}
                         onAddItem={this.handleAddition}
                         className='side-effects medication'
                         direction="left"
                     />
+                }
                 </Input>
             ) 
+
+            const scheduleInput = (
+                <Input
+                    fluid
+                    transparent
+                    rowindex={i}
+                    disabled={isPreview}
+                    type='Schedule'
+                    label={mobile && {basic: true, content: 'Schedule: ', className: 'medications-content-input-label'}}
+                    placeholder='e.g. once a day'
+                    onChange={this.handleTableBodyChange}
+                    value={isPreview ? "" : values[i]['Schedule']}
+                    className='content-input'
+                />
+            )
+
+            const doseInput = (
+                <Input
+                    fluid
+                    transparent
+                    rowindex={i}
+                    disabled={isPreview}
+                    type='Dose'
+                    label={mobile && {basic: true, content: 'Dose: ', className: 'medications-content-input-label'}}
+                    placeholder='e.g. 81 mg tablet'
+                    onChange={this.handleTableBodyChange}
+                    value={isPreview ? "" : values[i]['Dose']}
+                    className='content-input'
+                />
+            )
+
+            const startYearInput = (
+                <>
+                    <Input 
+                        fluid 
+                        transparent 
+                        rowindex={i}
+                        disabled={isPreview}
+                        type='Start Year'
+                        label={{basic: true, content: 'Start Year:', className: 'medications-content-input-label'}}
+                        placeholder="e.g. 2020"
+                        value={isPreview ? "" : values[i]['Start Year']}
+                        onChange={this.handleTableBodyChange}
+                        className='content-input content-dropdown'
+                    />
+                    { this.state.invalidStartYear.has(i) && (
+                        <p className='year-validation-error'>Please enter a valid year between 1900 and 2020</p>
+                    )}
+                </>
+            )
+
+            const currentlyTakingInput = (
+                <div>
+                    <Label basic className="ui input content-input medications-content-input-label" content="Currently Taking: "></Label>
+                    <ToggleButton active={values[i]["Currently Taking"] == 'Yes'}
+                        condition={i}
+                        title="Yes"
+                        onToggleButtonClick={this.handleTakingToggleButtonClick}/>
+                    <ToggleButton active={values[i]["Currently Taking"] == 'No'}
+                        condition={i}
+                        title="No"
+                        onToggleButtonClick={this.handleTakingToggleButtonClick}/>
+                </div>
+            )
+
+            const endYearInput = (
+                <>
+                    {
+                    values[i]["Currently Taking"] == 'No' &&
+                        <div>
+                        <Input 
+                            fluid 
+                            transparent 
+                            rowindex={i}
+                            disabled={isPreview}
+                            type="End Year"
+                            label={{basic: true, content: 'End Year:', className: 'medications-content-input-label'}}
+                            placeholder="e.g. 2020"
+                            value={isPreview ? "" : values[i]["End Year"]}
+                            onChange={this.handleTableBodyChange}
+                            className='content-input content-dropdown'
+                        />
+                        { this.state.invalidEndYear.has(i) && (
+                            <p className='year-validation-mobile-error'>Please enter a valid year between 1900 and 2020</p>
+                        )}
+                        </div>
+                    }
+                </>
+            )
+
+            const sideEffectsInput = (
+                <>
+                    <Input fluid className='content-input content-dropdown'>
+                    <Label basic className={'medications-content-input-label'} content={"Side Effects: "}/>
+                    {
+                        !isPreview && 
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            multiple
+                            allowAdditions
+                            icon=''
+                            options={this.state.sideEffectsOptions}
+                            type={"Side Effects"}
+                            placeholder="Click here to select side effect(s)"
+                            onChange={this.handleTableBodyChange}
+                            rowindex={i}
+                            value={values[i]["Side Effects"]}
+                            onAddItem={this.handleAdditionSideEffects}
+                            className='side-effects'
+                        />
+                    }
+                        
+                    </Input>
+                </>
+            )
+
+            const commentsInput = (
+                <Input
+                    fluid
+                    transparent
+                    rowindex={i}
+                    disabled={isPreview}
+                    type='Comments'
+                    label={{basic: true, content: 'Comments: ', className: 'medications-content-input-label'}}
+                    placeholder='e.g. take with food'
+                    onChange={this.handleTableBodyChange}
+                    value={isPreview ? "" : values[i]['Comments']}
+                    className='content-input'
+                />
+            )
 
             if (mobile) {
                 titleContent = (
@@ -152,93 +322,18 @@ export default class MedicationsContent extends Component {
                         </span>
                     </Form>
                 );
-                for (let j = 1; j < tableBodyPlaceholders.length; j++) {
-                    if (j == 4) {
-                        // already in accordion title
-                        continue;
-                    } else if (tableBodyPlaceholders[j] === 'Side Effects') {
-                        if (isPreview) {
-                            contentInputs.push(
-                                <Input 
-                                    fluid 
-                                    disabled
-                                    transparent 
-                                    key={j} 
-                                    placeholder={tableBodyPlaceholders[j]}
-                                    className='content-input content-dropdown'
-                                />
-                            );
-                        } else {
-                            contentInputs.push(
-                                <div>
-                                    <Input key={j} fluid className='content-input content-dropdown'>
-                                    <Label basic className={'medications-content-input-label'} content={`${tableBodyPlaceholders[j]}:`} style={{fontSize: "1rem"}}/>
-                                        <Dropdown
-                                            fluid
-                                            search
-                                            selection
-                                            multiple
-                                            allowAdditions
-                                            icon=''
-                                            options={this.state.sideEffectsOptions}
-                                            type={tableBodyPlaceholders[j]}
-                                            placeholder="Click here to select side effect(s)"
-                                            onChange={this.handleTableBodyChange}
-                                            rowindex={i}
-                                            value={isPreview ? [] : values[i][tableBodyPlaceholders[j]]}
-                                            onAddItem={this.handleAdditionSideEffects}
-                                            className='side-effects'
-                                        />
-                                    </Input>
-                                </div>
-                            );
-                        }
-                    } else if (tableBodyPlaceholders[j] === 'Start Year') {
-                        contentInputs.push(
-                            <div className='table-year-input mobile' key={j}>
-                                <Input 
-                                    key={j}
-                                    fluid 
-                                    transparent 
-                                    rowindex={i}
-                                    disabled={isPreview}
-                                    type={tableBodyPlaceholders[j]}
-                                    label={{basic: true, content: 'Start Year:', className: 'medications-content-input-label'}}
-                                    placeholder="e.g. 2020"
-                                    value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
-                                    onChange={this.handleTableBodyChange}
-                                    onBlur={this.onYearChange}
-                                    className='content-input content-dropdown'
-                                />
-                                { this.state.invalidYear && (
-                                    <p className='error'>Please enter a year between 1900 and 2020</p>
-                                )}
-                            </div>
-                        );
-                    } else {
-                        contentInputs.push(
-                            <Input
-                                key={j}
-                                fluid
-                                transparent
-                                rowindex={i}
-                                disabled={isPreview}
-                                type={tableBodyPlaceholders[j]}
-                                label={{basic: true, content: `${tableBodyPlaceholders[j]}:`, className: 'medications-content-input-label'}}
-                                placeholder={
-                                    tableBodyPlaceholders[j] == "Schedule" ?
-                                        "e.g. once a day" : 
-                                        tableBodyPlaceholders[j] == "Dose" ? 
-                                            "e.g. 81 mg tablet" : 
-                                            "e.g. take with food" // Default is for comments input
-                                }
-                                onChange={this.handleTableBodyChange}
-                                value={isPreview ? "" : values[i][tableBodyPlaceholders[j]]}
-                                className='content-input'
-                            />
-                        );
-                    }
-                }
+                
+                contentInputs = (
+                    <>
+                        {startYearInput}
+                        {currentlyTakingInput}
+                        {endYearInput}
+                        {scheduleInput}
+                        {doseInput}
+                        {sideEffectsInput}
+                        {commentsInput}
+                    </>
+                )
             }
             else {
                 titleContent = (
@@ -250,30 +345,10 @@ export default class MedicationsContent extends Component {
                                         {drugNameInput}
                                     </Table.Cell>
                                     <Table.Cell width={3}>
-                                        <Input
-                                            fluid
-                                            transparent
-                                            rowindex={i}
-                                            disabled={isPreview}
-                                            type={"Dose"}
-                                            placeholder={"e.g. 81 mg tablet"}
-                                            onChange={this.handleTableBodyChange}
-                                            value={isPreview ? "" : values[i]["Dose"]}
-                                            className='content-input'
-                                        />
+                                        {doseInput}
                                     </Table.Cell>
                                     <Table.Cell width={3}>
-                                        <Input
-                                            fluid
-                                            transparent
-                                            rowindex={i}
-                                            disabled={isPreview}
-                                            type={"Schedule"}
-                                            placeholder={"e.g. once a day"}
-                                            onChange={this.handleTableBodyChange}
-                                            value={isPreview ? "" : values[i]["Schedule"]}
-                                            className='content-input'
-                                        />
+                                        {scheduleInput}
                                     </Table.Cell>
                                     <Table.Cell width={1}>
                                         <i>for</i>
@@ -286,67 +361,17 @@ export default class MedicationsContent extends Component {
                         </Table>
                 </>
                 )
-                
-                contentInputs.push(
-                    <div className='table-year-input mobile'>
-                        <Input 
-                            fluid 
-                            transparent 
-                            rowindex={i}
-                            disabled={isPreview}
-                            type={"Start Year"}
-                            label={{basic: true, content: 'Start Year:', className: 'medications-content-input-label'}}
-                            placeholder="e.g. 2020"
-                            value={isPreview ? "" : values[i]["Start Year"]}
-                            onChange={this.handleTableBodyChange}
-                            onBlur={this.onYearChange}
-                            className='content-input content-dropdown'
-                        />
-                        { this.state.invalidYear && (
-                            <p className='error'>Please enter a year between 1900 and 2020</p>
-                        )}
-                    </div>
-                );
 
-                contentInputs.push(
-                    <div>
-                        <Input fluid className='content-input content-dropdown'>
-                        <Label basic className={'medications-content-input-label'} content={"Side Effects: "} style={{fontSize: "1rem"}}/>
-                            <Dropdown
-                                fluid
-                                search
-                                selection
-                                multiple
-                                allowAdditions
-                                disabled={isPreview}
-                                icon=''
-                                options={this.state.sideEffectsOptions}
-                                type={"Side Effects"}
-                                placeholder="Click here to select side effect(s)"
-                                onChange={this.handleTableBodyChange}
-                                rowindex={i}
-                                value={isPreview ? [] : values[i]["Side Effects"]}
-                                onAddItem={this.handleAdditionSideEffects}
-                                className='side-effects'
-                            />
-                        </Input>
-                    </div>
-                );
+                contentInputs = (
+                    <>
+                        {startYearInput}
+                        {currentlyTakingInput}
+                        {endYearInput}
+                        {sideEffectsInput}
+                        {commentsInput}
+                    </>
+                )
 
-                contentInputs.push(
-                    <Input
-                        fluid
-                        transparent
-                        rowindex={i}
-                        disabled={isPreview}
-                        type={"Comments"}
-                        label={{basic: true, content: "Comments: ", className: 'medications-content-input-label'}}
-                        placeholder={"e.g. take with food"}
-                        onChange={this.handleTableBodyChange}
-                        value={isPreview ? "" : values[i]["Comments"]}
-                        className='content-input'
-                    />
-                );
             }
             
             panels.push({
@@ -377,7 +402,6 @@ export default class MedicationsContent extends Component {
     }
 
     render() {
-        console.log(this.context["Medications"])
         const {values, isPreview} = this.props;
         const nums = isPreview ? values : this.context["Medications"]
 
