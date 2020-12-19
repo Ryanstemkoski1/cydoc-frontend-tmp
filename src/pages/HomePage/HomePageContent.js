@@ -9,7 +9,7 @@ export default class HomePageContent extends React.Component{
             <Grid textAlign='center' verticalAlign='middle' centered>
                 <Grid.Column>
                     <Header as="h1" textAlign="center">
-                        meet cydoc.
+                        {this.props.mainText}
                     </Header>
                 </Grid.Column>
             </Grid>

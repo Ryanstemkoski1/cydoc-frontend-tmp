@@ -56,6 +56,7 @@ export default class PhysicalExamContent extends React.Component {
     }
     
     renderPanels = (groups) => {
+        const isMobileView = this.state.windowWidth <= PHYSICAL_EXAM_MOBILE_BP
         const panels = [
             {
                 key: 'Vitals',
@@ -68,9 +69,11 @@ export default class PhysicalExamContent extends React.Component {
                     content: (
                         <>
                         <Form>
-                            <Grid stackable columns="equal">
+                            <Grid stackable columns="3">
                                 <Grid.Column>
-                                    <h5>Blood Pressure (mmHg)</h5>
+                                    <Header as="h5">
+                                        Blood Pressure (mmHg)
+                                    </Header>
                                     <Form.Field>
                                         {this.generateNumericInput("Vitals", "Systolic Blood Pressure", "systolic", "right")}
                                     </Form.Field>
@@ -78,8 +81,9 @@ export default class PhysicalExamContent extends React.Component {
                                         {this.generateNumericInput("Vitals", "Diastolic Blood Pressure", "diastolic", "right")}
                                     </Form.Field>
                                 </Grid.Column>
-                                <Grid.Column>
-                                    <Form.Field inline>
+                                
+                                    <Grid.Column>
+                                    <Form.Field inline={isMobileView}>
                                         <label>
                                             <Header as='h5'>
                                                 Heart Rate
@@ -89,7 +93,7 @@ export default class PhysicalExamContent extends React.Component {
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <Form.Field inline>
+                                    <Form.Field inline={isMobileView}>
                                         <label>
                                             <Header as='h5'>
                                                 RR
@@ -99,7 +103,7 @@ export default class PhysicalExamContent extends React.Component {
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <Form.Field inline>
+                                    <Form.Field inline={isMobileView}>
                                         <label>
                                             <Header as='h5'>
                                                 Temperature
@@ -109,7 +113,7 @@ export default class PhysicalExamContent extends React.Component {
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <Form.Field>
+                                    <Form.Field inline={isMobileView}>
                                         <label>
                                             <Header as='h5'>
                                                 Oxygen Saturation
@@ -145,10 +149,35 @@ export default class PhysicalExamContent extends React.Component {
         return panels
     }
 
+    nextFormClick = () => this.props.nextFormClick();
+
+    previousFormClick = () => this.props.previousFormClick();
+
     render() {
         return (
-            <Accordion styled fluid panels = {this.renderPanels(constants.sections)} />
+            <>
+                <Accordion styled fluid panels = {this.renderPanels(constants.sections)} />
+
+                <Button icon floated='left' onClick={this.previousFormClick} className='small-physical-previous-button'>
+                <Icon name='arrow left'/>
+                </Button>
+                <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='physical-previous-button'>
+                Previous Form
+                <Icon name='arrow left'/>
+                </Button>
+
+                <Button icon floated='right' onClick={this.nextFormClick} className='small-physical-next-button'>
+                <Icon name='arrow right'/>
+                </Button>
+                <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='physical-next-button'>
+                Next Form
+                <Icon name='arrow right'/>
+                </Button>
+
+            </>            
         )
     }
 
 }
+
+            

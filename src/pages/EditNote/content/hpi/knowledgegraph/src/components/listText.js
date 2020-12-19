@@ -13,8 +13,8 @@ export default class ListText extends React.Component {
     handlePlusClick() {
         var values = this.context['hpi']
         var listKeys = Object.keys(values['nodes'][this.props.node]['response'])
-        var lastIndex = listKeys[listKeys.length - 1] + 1
-        values['nodes'][this.props.node]["response"][lastIndex] = ""
+        var lastIndex = parseInt(listKeys[listKeys.length - 1]) + 1
+        values['nodes'][this.props.node]['response'][lastIndex] = ""
         this.context.onContextChange("hpi", values)
     }
 
@@ -23,17 +23,17 @@ export default class ListText extends React.Component {
         var buttonMap = []
         let inputRes = this.context['hpi']['nodes'][this.props.node]
         let res = inputRes['response']
-        for (var res_index in res) { 
+        for (var resIndex in res) { 
             buttonMap.push(<HandleInput 
-                key = {res_index}
+                key = {resIndex}
                 type = {values['nodes'][this.props.node]['responseType']}
-                inputID={res_index} 
+                inputID={resIndex} 
                 category = {'nodes'}
                 node={this.props.node}
             />)
         }
         return (
-        <div> 
+        <div>
             <div> {buttonMap}</div>
             <div> <button onClick={this.handlePlusClick} className='button-plus-click'> + </button> </div>
         </div>)

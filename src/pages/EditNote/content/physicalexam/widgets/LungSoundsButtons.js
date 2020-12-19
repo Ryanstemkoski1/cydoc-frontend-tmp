@@ -12,8 +12,8 @@ export default class LungSoundsButtons extends Component {
     }
 
     onPopupClick(event, data) {
-        var values = this.context["Physical Exam"]
-        values.widgets["Lungs"][this.props.lung_lobe][data.children[1]] = true 
+        var values = this.context["Physical Exam"] 
+        values.widgets["Lungs"][this.props.lung_lobe][data.children] = true         
         this.context.onContextChange("Physical Exam", values);
     }
 
@@ -35,7 +35,7 @@ export default class LungSoundsButtons extends Component {
                         key={this.props.lung_lobe + " " + item} 
                         color={this.context["Physical Exam"].widgets["Lungs"][this.props.lung_lobe][item] ? 'red': ''} 
                         onClick={this.onPopupClick}> 
-                        {item} 
+                        {item}
                     </Button>
         )
         var lung_buttons = []
@@ -56,9 +56,9 @@ export default class LungSoundsButtons extends Component {
                 <div> 
                     {lung_buttons}
                     {more_options_buttons.length > 0 ? 
-                    <Popup trigger={<Button basic circular icon="plus" size='mini' className={"spaced-buttons"}/>} position={this.props.position} flowing hoverable> 
+                    <Popup trigger={<Button basic circular icon="plus" className={"spaced-buttons"}/>} position={this.props.position} flowing hoverable> 
                         {more_options_buttons} 
-                    </Popup> : ""}
+                    </Popup>: ""}
                 </div>
               )
         }

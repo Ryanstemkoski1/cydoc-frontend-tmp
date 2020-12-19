@@ -1,0 +1,53 @@
+.ui.icon.button.note-previous-button {
+    position: sticky !important;
+    bottom: 0;
+    opacity: 0.8;
+    margin: 0;
+    display: block;
+    font-size: 13px;
+    background: #c8e2ea;
+  }
+  
+  .ui.icon.button.note-previous-button:hover {
+    opacity: 1;
+    background: #c8e2ea;
+  }
+  
+  .ui.icon.button.note-previous-button {
+    margin-left: -13em;
+  }
+  
+  .ui.icon.button.small-note-previous-button {
+    display: none;
+    position: sticky !important;
+    bottom: 0;
+    opacity: 0.8;
+    margin: 0;
+    background: #c8e2ea;
+  }
+  
+  @media screen and (max-width: 1300px) {
+    .ui.icon.button.note-previous-button {
+        display: none;
+    }
+  
+    .ui.icon.button.small-note-previous-button {
+        display: block;
+    }
+    
+    .ui.icon.button.small-note-previous-button {
+      margin-left: -2.8em;
+    }
+  
+  }
+  
+  @media screen and (max-width: 400px) {
+    .ui.icon.button.small-note-previous-button {
+      margin-left: 0;
+    }
+  
+    .ui.icon.button.small-note-next-button {
+      margin-right: 0;
+    }
+  }
+  

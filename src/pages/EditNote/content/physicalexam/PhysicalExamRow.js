@@ -41,6 +41,7 @@ export default class PhysicalExamRow extends React.Component {
                 return <LRButton
                     content={finding}
                     name={finding}
+                    group={this.props.group}
                     active={this.context["Physical Exam"][this.props.group][finding].center}
                     toggle={this.context["Physical Exam"][this.props.group][finding]}
                     color={this.context["Physical Exam"][this.props.group][finding].center ? (normalOrAbnormal == 'normal' ? 'green' : 'red') : null}

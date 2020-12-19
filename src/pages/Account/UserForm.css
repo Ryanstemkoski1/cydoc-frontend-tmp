@@ -10,3 +10,13 @@
     color: #262626;
     font-size: 14px;
 }
+
+.coming-soon {
+    color: black;
+    font-size: 1.5rem;
+    padding-top: 1rem;
+}
+
+.disabled {
+    opacity: .4;
+}

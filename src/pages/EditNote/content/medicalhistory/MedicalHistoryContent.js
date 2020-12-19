@@ -56,9 +56,11 @@ export default class MedicalHistoryContent extends React.Component {
             response_choice: response_choice_list
         }
         this.handleChange = this.handleChange.bind(this);
-        this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this);
+        this.handleConditionToggleButtonClick = this.handleConditionToggleButtonClick.bind(this);
+        this.handleResolvedToggleButtonClick = this.handleResolvedToggleButtonClick.bind(this);
         this.generateListItems = this.generateListItems.bind(this); 
         this.addSeenCondition = this.addSeenCondition.bind(this); 
+        this.addRow = this.addRow.bind(this);
     } 
 
     componentDidMount() {
@@ -81,8 +83,8 @@ export default class MedicalHistoryContent extends React.Component {
         this.context.onContextChange("Medical History", values);
     }
 
-    //handles toggle button events
-    handleToggleButtonClick(event, data){
+    //handles condition toggle button events
+    handleConditionToggleButtonClick(event, data){
         let conditions_array = Object.keys(this.context['Medical History']).map((value) => this.context['Medical History'][value]["Condition"]);
         let index = conditions_array.indexOf(data.condition);
         const values = this.context["Medical History"]
@@ -100,11 +102,36 @@ export default class MedicalHistoryContent extends React.Component {
             data.title === responses[0] ? textAreas[i].style.display = "block" : textAreas[i].style.display = "none"; 
         }
     }
+    // handles button events for "Has Condition Resolved?"
+    handleResolvedToggleButtonClick(_event, data) {
+        let conditions_array = Object.keys(this.context['Medical History']).map((value) => this.context['Medical History'][value]["Condition"]);
+        let index = conditions_array.indexOf(data.condition);
+        let values = this.context["Medical History"]
+        values[index]["Resolved"] = values[index]["Resolved"] == data.title ? "" : data.title
+
+        // Clearing any entry in End Year
+        values[index]["End Year"] = ""
+        
+        this.context.onContextChange("Medical History", values)
+    }
 
     addSeenCondition = (value, index) => {
         const { seenConditions } = this.state;
         seenConditions[value] = index;
-        this.setState({ seenConditions });
+        this.setState({ seenConditions });   
+    }
+
+    addRow() {
+        let values = this.context[this.props.value_type]
+        let last_index = Object.keys(values).length.toString()
+        values[last_index] = {
+            'Condition': "",
+            "Yes": false,
+            "No": false,
+            "Onset": "",
+            "Comments": ""
+        }
+        this.context.onContextChange(this.props.value_type, values);
     }
 
     render(){ 
@@ -123,12 +150,13 @@ export default class MedicalHistoryContent extends React.Component {
         return(
             <GridContent
                 isPreview={this.props.isPreview}
-                numColumns={4}
+                numColumns={6}
                 contentHeader={<MedicalHistoryContentHeader />}
                 rows={rows}
                 question_type = {(this.props.response_choice ? "hpi" : "add_row")}
                 value_type = "Medical History"
                 mobile={mobile}
+                addRow={this.addRow}
                 name={"medical history"}
             />
         );
@@ -175,10 +203,13 @@ export default class MedicalHistoryContent extends React.Component {
                             onset={this.context["Medical History"][index]["Onset"]}
                             comments={this.context["Medical History"][index]["Comments"]}
                             onChange={this.handleChange}
-                            onToggleButtonClick={this.handleToggleButtonClick}
+                            onConditionToggleButtonClick={this.handleConditionToggleButtonClick}
+                            onResolvedToggleButtonClick={this.handleResolvedToggleButtonClick}
                             yesActive={this.context["Medical History"][index]["Yes"]}
                             noActive={this.context["Medical History"][index]["No"]}
                             currentYear={this.currentYear}
+                            isResolved={this.context["Medical History"][index]["Resolved"]}
+                            endYear={this.context["Medical History"][index]["End Year"]}
                         />
                     );
                 }
@@ -222,10 +253,13 @@ export default class MedicalHistoryContent extends React.Component {
                             onset={this.context["Medical History"][condition_index]["Onset"]}
                             comments={this.context["Medical History"][condition_index]["Comments"]}
                             onChange={this.handleChange}
-                            onToggleButtonClick={this.handleToggleButtonClick}
+                            onConditionToggleButtonClick={this.handleConditionToggleButtonClick}
+                            onResolvedToggleButtonClick={this.handleResolvedToggleButtonClick}
                             yesActive={this.context["Medical History"][condition_index]["Yes"]}
                             noActive={this.context["Medical History"][condition_index]["No"]}
                             currentYear={this.currentYear}
+                            isResolved={this.context["Medical History"][condition_index]["Resolved"]}
+                            endYear={this.context["Medical History"][condition_index]["End Year"]}
                         />
                     )
                 }
