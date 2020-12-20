@@ -6,7 +6,6 @@ import procedures from 'constants/procedures';
 import { Accordion, Dropdown, Form, Icon, Input, Table } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton';
 
-//Component that manages the content for the  Surgical History tab
 export default class SurgicalHistoryContent extends Component {
     static contextType = HPIContext
 
@@ -103,7 +102,6 @@ export default class SurgicalHistoryContent extends Component {
                 fields={surgicalHistory.fields}
                 onTableBodyChange={this.handleTableBodyChange}
                 onAddItem={this.handleAddition}
-                values={this.props.values}
                 proceduresOptions={this.state.proceduresOptions}
                 values={values}
                 isPreview={this.props.isPreview}
