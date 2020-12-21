@@ -40,7 +40,7 @@ class DiseaseTag extends React.Component {
         //let fontColor = this.context['positivediseases'].indexOf(category) > -1 ? "white" : "black"
         return (
             <button
-                className= {`ui ${buttonColor} button`}
+                className= {`ui compact ${buttonColor} button`}
                 onClick={this.handleClick}
             >
                 {this.props.name}

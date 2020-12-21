@@ -202,15 +202,18 @@ export class DiseaseForm extends React.Component {
                         scrolling={false}
                         id='disease-menu'
                     />
-                    : <Menu tabular borderless items={diseaseTabs} className='disease-menu' id='disease-menu'/>
+                  : <Menu pointing items={diseaseTabs} /> //id='disease-menu' //className='disease-menu'
                 }
-                    <br/>
+                    <div className="ui segment">
                     <h1 className='category-header'>{category}</h1>
                     <div className='question-map'>{questionArr} </div>
+                    </div>
 
             </div>
         )
     }
 }
+
+
 
 export default DiseaseForm

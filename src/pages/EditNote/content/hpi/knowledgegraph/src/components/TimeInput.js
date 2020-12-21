@@ -12,7 +12,7 @@ class TimeInput extends Component {
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this)
     }
 
-    handleToggleButtonClick(event){
+    handleToggleButtonClick = (event) => {
         const values = this.context["hpi"];
         values['nodes'][this.props.node]["response"][1] = event.target.title
         this.context.onContextChange("hpi", values);
@@ -47,9 +47,9 @@ class TimeInput extends Component {
         }
         return (
             <div className='time-div'>
-                <Grid columns={2}>
+                <Grid container doubling columns={2}>
                     <Grid.Row>
-                        <Grid.Column width={3}>
+                        <Grid.Column width = {5}>
                             <div className='time-input'>
                                 <NumericInput
                                     size={10}
@@ -60,7 +60,7 @@ class TimeInput extends Component {
                                 />
                             </div>
                         </Grid.Column>
-                        <Grid.Column width={6}>
+                        <Grid.Column width = {10}>
                             <Grid>
                                 {buttonMap}
                             </Grid>

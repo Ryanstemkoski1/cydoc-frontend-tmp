@@ -16,41 +16,38 @@ class ScaleInput extends React.Component{
     const values = this.context["hpi"]['nodes'][this.props.node]
     const answers = values["response"]
     this.state = {
-      val: 0
+      val: undefined
     }
 
   }
 
   handleVal(event){
-    /*if(event.target.value < 1){
-      this.setState({val: 1});
-    }
-    else if (event.target.value > 10){
-      this.setState({val: 10});
-    }
-    else{
-      this.setState({val: event.target.value});
-    }*/
     const values = this.context["hpi"]
     values['nodes'][this.props.node]["response"] = this.state.val;
     this.context.onContextChange("hpi", values)
-    console.log(this.context.hpi)
   }
 
   handleClear(e){
     e.preventDefault();
-    this.setState()
+    document.getElementById("scale-slider").value = undefined;
+    document.getElementById("scale-value").value = undefined;
+    this.setState({val: undefined})
+
+    const values = this.context["hpi"]
+    values['nodes'][this.props.node]["response"] = undefined;
+    this.context.onContextChange("hpi", values)
   }
 
   render(){
     return(
-      <div>
+      <div className = "scale-input">
       <label> 1 </label>
       <input
         type='range'
         min="1"
         max="10"
         step="1"
+        id = "scale-slider"
         value = {this.state.val}
         onChange = {e => this.setState({val: e.target.value}, e => this.handleVal(e))}
         />
@@ -60,12 +57,18 @@ class ScaleInput extends React.Component{
         max="10"
         step="1"
         type = "number"
+        id = "scale-value"
         value = {this.state.val}
         onChange = {e => this.setState({val: e.target.value}, e => this.handleVal(e))}
       />
       <button
-        className = "ui basic button"
-        onSubmit = {e => this.handleClear(e)}>
+        className = "ui compact basic button"
+        style= {{marginLeft: 10}}
+        onClick = {e => {
+          this.handleClear(e);
+          this.setState({val: undefined});
+          }
+        }>
         Clear
       </button>
       </div>

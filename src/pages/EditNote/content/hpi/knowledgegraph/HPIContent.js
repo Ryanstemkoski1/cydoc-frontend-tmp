@@ -237,7 +237,6 @@ class HPIContent extends Component {
                     let parentNode = categoryCode + "0001"
                     return (
                         <div className='hpi-disease-container'>
-                        <div className="ui segment">
                         <DiseaseForm
                             key={parentNode}
                             parentNode = {parentNode}
@@ -250,7 +249,6 @@ class HPIContent extends Component {
                             last = {true ? step === positiveLength+1 : false}
                             windowWidth={windowWidth}
                         />
-                      </div>
                         {step === positiveLength+1 ?
                             <>
                             <Button icon floated='left' onClick={this.back} className='hpi-small-previous-button'>

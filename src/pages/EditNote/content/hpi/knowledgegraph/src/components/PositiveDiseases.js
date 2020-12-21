@@ -28,7 +28,7 @@ class PositiveDiseases extends Component {
     render() {
         return (
             <button
-                className="ui violet button positive-disease"
+                className="ui compact violet button positive-disease"
                 onClick={this.handleClick}
             >
                 {this.props.name}
