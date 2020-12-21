@@ -2,11 +2,25 @@ import React from 'react';
 import { Table } from 'semantic-ui-react';
 
 class MedicationsNote extends React.Component {
+    checkEmpty() {
+        for (const key in this.props.medications) {
+            if (!(this.props.medications[key]["Comments"] === "" && this.props.medications[key]["Dose"] === "" && this.props.medications[key]["Drug Name"] === "" && this.props.medications[key]["Schedule"] === "" && this.props.medications[key]["Start Year"] === "" && this.props.medications[key]["Side Effects"].length === 0)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     render() {
         const medications = this.props.medications;
-        console.log(medications);
 
-        if (this.props.isRich) {
+        if (this.checkEmpty()) {
+            return (
+                <div>No medications reported.</div>
+            );
+        }
+
+        else if (this.props.isRich) {
             return (
                 <Table>
                     <Table.Header>

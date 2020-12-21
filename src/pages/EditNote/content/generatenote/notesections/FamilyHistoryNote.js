@@ -1,6 +1,15 @@
 import React from 'react';
 
 class FamilyHistoryNote extends React.Component {
+    checkEmpty() {
+        for (const key in this.props.familyHistory) {
+            if (!(this.props.familyHistory[key].Yes === false && this.props.familyHistory[key].No === false)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     render() {
         const familyHistory = this.props.familyHistory;
 
@@ -24,6 +33,12 @@ class FamilyHistoryNote extends React.Component {
                     comments: familyHistory[condition]['Comments']
                 }
             }
+        }
+
+        if (this.checkEmpty()) {
+            return (
+                <div>No family history reported.</div>
+            );
         }
 
         return (

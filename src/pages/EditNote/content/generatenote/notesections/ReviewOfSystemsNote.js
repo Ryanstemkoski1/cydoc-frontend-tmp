@@ -20,6 +20,18 @@ class ReviewOfSystemsNote extends React.Component {
                 negatives: negatives
             }
         }
+
+        let isEmpty = true;
+        for (const component in components) {
+            if (!(components[component].positives.length === 0 && components[component].negatives.length === 0)) {
+                isEmpty = false;
+            }
+        }
+
+        if (isEmpty) {
+            return <div>No review of systems reported.</div>
+        }
+        
         return (
             <ul>
                 {Object.keys(components).map(key => (

@@ -2,10 +2,26 @@ import React from 'react';
 import { Table } from 'semantic-ui-react';
 
 class AllergiesNote extends React.Component {
+
+    checkEmpty() {
+        for (const key in this.props.allergies) {
+            if (!(this.props.allergies[key]["Inciting Agent"] === "" && this.props.allergies[key]["Reaction"] === "" && this.props.allergies[key]["Comments"] === "")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     render() {
         const allergies = this.props.allergies;
 
-        if (this.props.isRich) {
+        if (this.checkEmpty()) {
+            return (
+                <div>No allergies reported.</div>
+            );
+        }
+
+        else if (this.props.isRich) {
             return (
                 <Table>
                     <Table.Header>

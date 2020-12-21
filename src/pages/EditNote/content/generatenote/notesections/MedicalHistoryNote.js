@@ -2,6 +2,16 @@ import React from 'react';
 import { Table } from 'semantic-ui-react'
 
 class MedicalHistoryNote extends React.Component {
+
+    checkEmpty() {
+        for (const key in this.props.medicalHistory) {
+            if (!(this.props.medicalHistory[key].Yes === false && this.props.medicalHistory[key].No === false)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     render() {
         const medicalHistory = this.props.medicalHistory;
 
@@ -12,7 +22,13 @@ class MedicalHistoryNote extends React.Component {
             }
         }
 
-        if (this.props.isRich) {
+        if (this.checkEmpty()) {
+            return (
+                <div>No medical history reported.</div>
+            );
+        }
+
+        else if (this.props.isRich) {
             return (
                 <Table>
                     <Table.Header>

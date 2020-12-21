@@ -2,6 +2,27 @@ import React from 'react';
 
 class SocialHistoryNote extends React.Component {
 
+    checkEmptyAlcohol() {
+        if (this.props.socialHistory.Alcohol['Yes'] === false && this.props.socialHistory.Alcohol['In the Past'] === false && this.props.socialHistory.Alcohol['Never Used'] === false) {
+            return true;
+        }
+        return false;
+    }
+
+    checkEmptyTobacco() {
+        if (this.props.socialHistory.Tobacco['Yes'] === false && this.props.socialHistory.Tobacco['In the Past'] === false && this.props.socialHistory.Tobacco['Never Used'] === false) {
+            return true;
+        }
+        return false;
+    }
+
+    checkEmptyRecreationalDrugs() {
+        if (this.props.socialHistory['Recreational Drugs']['Yes'] === false && this.props.socialHistory['Recreational Drugs']['In the Past'] === false && this.props.socialHistory['Recreational Drugs']['Never Used'] === false) {
+            return true;
+        }
+        return false;
+    }
+
     alcoholProductsUsed(socialHistory) {
         const productsUsed = [];
         const alcohol = socialHistory.Alcohol['fields'];
@@ -52,9 +73,10 @@ class SocialHistoryNote extends React.Component {
 
     render() {
         const socialHistory = this.props.socialHistory;
-
+        
         return (
             <div>
+                {this.checkEmptyTobacco() ? <div>No tobacco use reported.</div> :
                 <div>
                     <b>Tobacco</b>
                     <ul>
@@ -68,8 +90,9 @@ class SocialHistoryNote extends React.Component {
                         {(socialHistory.Tobacco['Yes'] === true || socialHistory.Tobacco['In the Past'] === true) && !this.checkEmptyAnswers(socialHistory.Tobacco) ? <li>{this.triedToQuit(socialHistory.Tobacco)}</li> : null}
                         {socialHistory.Tobacco['Comments'] ? <li>Comments: {socialHistory.Tobacco['Comments']}</li> : null}
                     </ul>
-                </div>
+                </div>}
                 
+                {this.checkEmptyAlcohol() ? <div>No alcohol use reported.</div> : 
                 <div>
                     <b>Alcohol</b>
                     <ul>
@@ -82,8 +105,9 @@ class SocialHistoryNote extends React.Component {
                         {(socialHistory.Alcohol['Yes'] === true || socialHistory.Alcohol['In the Past'] === true) && !this.checkEmptyAnswers(socialHistory.Alcohol) ? <li>{this.triedToQuit(socialHistory.Alcohol)}</li> : null}
                         {socialHistory.Alcohol['Comments'] ? <li>Comments: {socialHistory.Alcohol['Comments']}</li> : null}
                     </ul>
-                </div>
+                </div>}
                 
+                {this.checkEmptyRecreationalDrugs() ? <div>No recreational drug use reported.</div> :
                 <div>
                     <b>Recreational Drugs</b>
                     <ul>
@@ -96,12 +120,12 @@ class SocialHistoryNote extends React.Component {
                         {(socialHistory['Recreational Drugs']['Yes'] === true || socialHistory['Recreational Drugs']['In the Past'] === true) && !this.checkEmptyAnswers(socialHistory['Recreational Drugs']) ? <li>{this.triedToQuit(socialHistory['Recreational Drugs'])}</li> : null}
                         {socialHistory['Recreational Drugs']['Comments'] ? <li>Comments: {socialHistory['Recreational Drugs']['Comments']}</li> : null}
                     </ul>
-                </div> 
+                </div>} 
                 
-                <div> <b>Living Situation: </b> {socialHistory['Living Situation']} </div>
-                <div> <b>Employment: </b> {socialHistory.Employment} </div>
-                <div> <b>Diet: </b> {socialHistory.Diet} </div>
-                <div> <b> Exercise: </b> {socialHistory.Exercise} </div>
+                {socialHistory['Living Situation'] === "" ? <div>No living situation reported.</div> : <div><b>Living Situation: </b>{socialHistory['Living Situation']}</div>}
+                {socialHistory.Employment === "" ? <div>No employment reported.</div> : <div><b>Employment: </b>{socialHistory.Employment}</div>}
+                {socialHistory.Diet === "" ? <div>No diet reported.</div> : <div><b>Diet: </b>{socialHistory.Diet}</div>}
+                {socialHistory.Exercise === "" ? <div>No exercise reported.</div> : <div><b>Exercise: </b>{socialHistory.Exercise}</div>}
             </div>
         )
     }

@@ -31,11 +31,11 @@ class PhysicalExamNote extends React.Component {
             
             // specific to vitals section
             if (key === 'Vitals') {
-                if ((physical[key]['Systolic Blood Pressure'] !== 0 && physical[key]['Systolic Blood Pressure'] !== "") || (physical[key]['Diastolic Blood Pressure'] !== 0 && physical[key]['Diastolic Blood Pressure'] !== "")) {
+                if ((physical[key]['Systolic Blood Pressure'] !== 0 && physical[key]['Systolic Blood Pressure'] !== null) || (physical[key]['Diastolic Blood Pressure'] !== 0 && physical[key]['Diastolic Blood Pressure'] !== null)) {
                     vitals.push(physical[key]['Systolic Blood Pressure'] + '/' + physical[key]['Diastolic Blood Pressure'] + ' mmHg');
                 }
                 for (var vital in physical[key]) {
-                    if (vital !== 'Systolic Blood Pressure' && vital !== 'Diastolic Blood Pressure' && (physical[key][vital] !== 0 && physical[key][vital] !== "")) {
+                    if (vital !== 'Systolic Blood Pressure' && vital !== 'Diastolic Blood Pressure' && (physical[key][vital] !== 0 && physical[key][vital] !== null)) {
                         vitals.push(vital + ': ' + physical[key][vital] + (vitalUnits[vital] ? vitalUnits[vital] : ""));
                     }
                 }
@@ -153,7 +153,20 @@ class PhysicalExamNote extends React.Component {
                 }
             }
         }
-        // add comments to the observations 
+
+        let isEmpty = true;
+        for (const component in components) {
+            if (!(components[component].active.length === 0 && components[component].comments === "")) {
+                isEmpty = false;
+            }
+        }
+
+        if (isEmpty) {
+            return (
+                <div>No physical exam reported.</div>
+            );
+        }
+
         if (this.props.isRich) {
             return (
                 <Table>

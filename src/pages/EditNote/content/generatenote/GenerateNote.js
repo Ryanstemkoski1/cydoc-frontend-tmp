@@ -12,6 +12,7 @@ import FamilyHistoryNote from './notesections/FamilyHistoryNote';
 import ReviewOfSystemsNote from './notesections/ReviewOfSystemsNote';
 import PhysicalExamNote from './notesections/PhysicalExamNote';
 import PlanNote from './notesections/PlanNote';
+import HPINote from './notesections/HPINote';
 
 // TODO: look into <li> keys -- throws a warning if duplicats, not a huge deal but probably fix
 class GenerateNote extends React.Component {
@@ -36,6 +37,7 @@ class GenerateNote extends React.Component {
                 <Segment>
                     <h1> {this.context.title} </h1>
                     <h3> History of Present Illness </h3>
+                    <HPINote />
                     <h3> Patient History </h3>
                         <h4> Medical History </h4>
                         <MedicalHistoryNote isRich={this.state.rich} medicalHistory={this.context["Medical History"]} />

@@ -1,9 +1,16 @@
 import React from 'react';
 
 class PlanNote extends React.Component {
+
     render() {
         const plan = this.props.plan;
         const conditions = plan.conditions;
+
+        if (conditions.length === 0) {
+            return (
+                <div>No plan reported.</div>
+            );
+        }
 
         return (
             Object.keys(conditions).map(key => (
@@ -20,14 +27,13 @@ class PlanNote extends React.Component {
                         ))}
                     </ol>
                     
-                    {/* TODO: not show anything if these fields are null? Or just remove periods? */}
                     <b>Prescriptions</b>
                     <ul>
                         {Object.keys(conditions[key].prescriptions).map(prescription => (
                             <li key={key}>
                                 <b>{conditions[key].prescriptions[prescription].recipe_type} </b>    
-                                {`${conditions[key].prescriptions[prescription].recipe_amount}. `} 
-                                {`${conditions[key].prescriptions[prescription].signatura}. `}
+                                {conditions[key].prescriptions[prescription].recipe_amount === "" ? null : `${conditions[key].prescriptions[prescription].recipe_amount}. `} 
+                                {conditions[key].prescriptions[prescription].signatura === "" ? null : `${conditions[key].prescriptions[prescription].signatura}. `}
                                 {conditions[key].prescriptions[prescription].comment} 
                             </li>
                         ))}
