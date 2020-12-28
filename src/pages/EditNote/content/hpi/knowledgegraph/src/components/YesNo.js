@@ -12,9 +12,7 @@ class YesNo extends React.Component {
             noID: 0,
             // colors of the yes and no buttons depending on whether either are clicked
             yesStyle: (answers !== null && answers === "Yes") ? "violet": "basic",
-            //yesFont: (answers !== null && answers === "Yes") ? "white": "black",
             noStyle: (answers !== null && answers === "No") ? "violet": "basic",
-            //noFont: (answers !== null && answers === "No") ? "white": "black"
         }
         this.handleYesClick = this.handleYesClick.bind(this)
         this.handleNoClick = this.handleNoClick.bind(this)
