@@ -187,7 +187,7 @@ export class DiseaseForm extends React.Component {
                         scrolling={false}
                         id='disease-menu'
                     />
-                  : <Menu pointing items={diseaseTabs} /> //id='disease-menu' //className='disease-menu'
+                  : <Menu pointing items={diseaseTabs} />
                 }
                     <div className="ui segment">
                     <h1 className='category-header'>{category}</h1>
