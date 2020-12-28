@@ -4,4 +4,9 @@
 
 .dropdown-title {
     font-size: 1.5rem !important;
+    font-family: Nunito,Arial,Helvetica,sans-serif !important;
+}
+
+h5.ui.header{
+  font-family: Nunito,Arial,Helvetica,sans-serif !important;
 }

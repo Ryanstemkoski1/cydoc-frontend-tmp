@@ -45,8 +45,15 @@ a.ui.label, a.ui.active.label {
 }
 
 .ui.selection.dropdown .menu {
-    min-width: max-content;
+  min-width: max-content;
 }
+
+@media screen and (max-width: 900px){
+  .ui.selection.dropdown .menu {
+    min-width: fit-content;
+  }
+}
+
 
 .ui.input.content-text, .ui.input.drug-text {
     font-size: 12px;

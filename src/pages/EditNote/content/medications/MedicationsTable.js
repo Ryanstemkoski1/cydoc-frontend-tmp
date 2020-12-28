@@ -36,7 +36,7 @@ export default class MedicationsTable extends Component {
 
     //modify the current values in the table to reflect changes
     // and call the handler prop
-    handleTableBodyChange(event, data){ 
+    handleTableBodyChange(event, data){
         if (data.placeholder === 'Drug Name' && !this.state.active.has(data.rowindex)) {
             this.toggleAccordion(data.rowindex);
         }
@@ -85,7 +85,7 @@ export default class MedicationsTable extends Component {
         // Clearing any entry in End Year
         values[data.condition]["End Year"] = ""
         this.state.invalidEndYear.delete(data.condition) // the row index is being passed through the condition property
-        
+
         this.context.onContextChange("Medications", values)
     }
 
@@ -116,12 +116,12 @@ export default class MedicationsTable extends Component {
         for (let i = 0; i < nums.length; i++) {
             let titleContent;
             const contentInputs = [];
-                
+
             let drugNameInput;
             if (isPreview) {
                 drugNameInput = (
                     <Input
-                        disabled    
+                        disabled
                         transparent
                         className='content-input content-dropdown medication'
                         value={nums[i]}
@@ -177,7 +177,7 @@ export default class MedicationsTable extends Component {
                         direction="left"
                     />
                 </Input>
-            ) 
+            )
 
             if (mobile) {
                 titleContent = (
@@ -196,11 +196,11 @@ export default class MedicationsTable extends Component {
                     } else if (tableBodyPlaceholders[j] === 'Side Effects') {
                         if (isPreview) {
                             contentInputs.push(
-                                <Input 
-                                    fluid 
+                                <Input
+                                    fluid
                                     disabled
-                                    transparent 
-                                    key={j} 
+                                    transparent
+                                    key={j}
                                     placeholder={tableBodyPlaceholders[j]}
                                     className='content-input content-dropdown'
                                 />
@@ -233,10 +233,10 @@ export default class MedicationsTable extends Component {
                     } else if (tableBodyPlaceholders[j] === 'Start Year') {
                         contentInputs.push(
                             <div className='table-year-input mobile' key={j}>
-                                <Input 
+                                <Input
                                     key={j}
-                                    fluid 
-                                    transparent 
+                                    fluid
+                                    transparent
                                     rowindex={i}
                                     type={tableBodyPlaceholders[j]}
                                     label={{basic: true, content: 'Start Year:', className: 'medications-content-input-label'}}
@@ -270,9 +270,9 @@ export default class MedicationsTable extends Component {
                                 {
                                     values[i]["Currently Taking"] == 'No' &&
                                         <div className='table-year-input mobile'>
-                                        <Input 
-                                            fluid 
-                                            transparent 
+                                        <Input
+                                            fluid
+                                            transparent
                                             rowindex={i}
                                             type={"End Year"}
                                             label={{basic: true, content: 'End Year:', className: 'medications-content-input-label'}}
@@ -300,9 +300,9 @@ export default class MedicationsTable extends Component {
                                 label={{basic: true, content: `${tableBodyPlaceholders[j]}:`, className: 'medications-content-input-label'}}
                                 placeholder={
                                     tableBodyPlaceholders[j] == "Schedule" ?
-                                        "e.g. once a day" : 
-                                        tableBodyPlaceholders[j] == "Dose" ? 
-                                            "e.g. 81 mg tablet" : 
+                                        "e.g. once a day" :
+                                        tableBodyPlaceholders[j] == "Dose" ?
+                                            "e.g. 81 mg tablet" :
                                             "e.g. take with food" // Default is for comments input
                                 }
                                 onChange={this.handleTableBodyChange}
@@ -316,7 +316,7 @@ export default class MedicationsTable extends Component {
             else {
                 titleContent = (
                     <>
-                        <Table className={"medications-desktop-accordion-title"}>     
+                        <Table className={"medications-desktop-accordion-title"}>
                             <Table.Cell width={3}>
                                 {drugNameInput}
                             </Table.Cell>
@@ -355,12 +355,12 @@ export default class MedicationsTable extends Component {
                         </Table>
                 </>
                 )
-                
+
                 contentInputs.push(
                     <div className='table-year-input mobile'>
-                        <Input 
-                            fluid 
-                            transparent 
+                        <Input
+                            fluid
+                            transparent
                             rowindex={i}
                             type={"Start Year"}
                             label={{basic: true, content: 'Start Year:', className: 'medications-content-input-label'}}
@@ -394,9 +394,9 @@ export default class MedicationsTable extends Component {
                         {
                             values[i]["Currently Taking"] == 'No' &&
                                 <div className='table-year-input mobile'>
-                                <Input 
-                                    fluid 
-                                    transparent 
+                                <Input
+                                    fluid
+                                    transparent
                                     rowindex={i}
                                     type={"End Year"}
                                     label={{basic: true, content: 'End Year:', className: 'medications-content-input-label'}}
@@ -452,15 +452,16 @@ export default class MedicationsTable extends Component {
                     />
                 );
             }
-            
+
             panels.push({
                 key: i,
                 active: this.state.active.has(i),
                 title: {
                     content: titleContent,
-                    icon: (
-                        <Icon name="dropdown" corner="top left" className="medications-desktop-accordion-dropdown-icon"/>
-                    )
+                    //icon: (
+                        //<Icon name="dropdown" corner="top left" className="medications-desktop-accordion-dropdown-icon"/>
+                    //)
+                    icon: 'dropdown'
                 },
                 content: {
                     content: (
@@ -489,14 +490,14 @@ export default class MedicationsTable extends Component {
     }
 
     makeTableBodyRows(nums){
-        const { 
+        const {
             isPreview,
             tableBodyPlaceholders,
             values,
             name,
         } = this.props;
 
-        return nums.map((rowindex, index) => 
+        return nums.map((rowindex, index) =>
             <MedicationTableBody
                 key={index}
                 rowindex={isPreview ? rowindex : parseInt(rowindex)}
@@ -517,7 +518,7 @@ export default class MedicationsTable extends Component {
     render() {
         const {values, isPreview } = this.props;
         const nums = isPreview ? values : Object.keys(values);
-    
+
         const content =
             <Accordion
                 panels={this.makeAccordionPanels(nums)}

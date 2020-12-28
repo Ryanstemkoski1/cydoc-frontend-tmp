@@ -73,7 +73,8 @@ export default class FamilyHistoryDropdown extends Component {
     ][family_index];
     let family_member = familyMember[family_index];
     if (!family_member) family_member = '';
-    const comment = comments[family_index];
+    let comment = comments[family_index];
+    if (!comment) comment = '';
     const living = this.context['Family History'][index]['Living'][
       family_index
     ];
