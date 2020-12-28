@@ -295,5 +295,3 @@ class HPIContent extends Component {
 }
 
 export default HPIContent;
-
-//Object.keys(diseaseCodes).find(key => diseaseCodes[key] === name)
