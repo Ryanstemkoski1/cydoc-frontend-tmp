@@ -190,8 +190,8 @@ export class DiseaseForm extends React.Component {
                   : <Menu pointing items={diseaseTabs} />
                 }
                     <div className="ui segment">
-                    <h1 className='category-header'>{category}</h1>
-                    <div className='question-map'>{questionArr} </div>
+                        <h1 className='category-header'>{category}</h1>
+                        <div className='question-map'>{questionArr} </div>
                     </div>
 
             </div>
