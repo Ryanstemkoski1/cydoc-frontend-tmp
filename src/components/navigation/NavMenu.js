@@ -5,8 +5,7 @@ import PropTypes from 'prop-types';
 import { DEFAULT_NAV_MENU_MOBILE_BP, LOGGEDIN_NAV_MENU_MOBILE_BP } from "constants/breakpoints.js";
 import HPIContext from 'contexts/HPIContext.js';
 import AuthContext from "../../contexts/AuthContext";
-import LogoLight from '../../assets/logo-light.png'
-import LogoName from '../../assets/logo-name.png'
+import Logo from '../../assets/cydoc-logo.svg';
 import './NavMenu.css';
 
 // Navigation Bar component that will go at the top of most pages
@@ -47,18 +46,12 @@ class ConnectedNavMenu extends Component {
             <div>
                 <Menu className={this.props.className + " nav-menu"} attached={this.props.attached}>
 
-                    {/* Logo Image - display icon when tabs not collapsed, and brand name when collpased. */}
-                    {/* Only logo image is displayed when the note name must be shown next to it */}
                     <Menu.Item>
-                        {this.props.displayNoteName && collapseLoggedInNav?
-                            null :
-                            <Image className="nav-menu-logo" href='/home' src={LogoLight} />
-                        }
                         {this.props.displayNoteName ?
                             null :
-                            <Image className="nav-menu-brand" size='small' href='/home' src={LogoName} />
-                        }
-                    </Menu.Item>    
+                            <Image as={Link} to='/home' size='tiny' src={Logo} />
+                        } 
+                    </Menu.Item>
 
                     {/* When parent is EditNote, then display the note name item */}
                     {this.props.displayNoteName ?  <NoteNameMenuItem /> : null}
@@ -456,7 +449,7 @@ class NoteNameMenuItem extends Component {
 function DefaultMenuItems(props) {
     return props.collapseNav ?
         (<Menu.Item>
-                <Dropdown icon="large bars" className='collapsed-dropdown'>
+                <Dropdown icon="big bars" className='collapsed-dropdown'>
                     <Dropdown.Menu>
                         <Dropdown.Item as={Link} name="about" to="/about" text="About" />
                         <Dropdown.Item as={Link} name="login" to="/login" text="Login" />
@@ -469,8 +462,8 @@ function DefaultMenuItems(props) {
                 <Menu.Item as={Link} name="about" to="/about" text="About" />
                 <Menu.Item>
                     <Button.Group>
-                        <Button as={Link} basic color={"teal"} name="login" to="/login" text="Login" >Login</Button>
-                        <Button as={Link} color={"teal"} name="register" to="/register" text="Sign Up" >Sign Up</Button>
+                        <Button as={Link} basic color="teal" name="login" to="/login" content="Login" />
+                        <Button as={Link} color="teal" name="register" to="/register" content="Sign Up" />
                     </Button.Group>
                 </Menu.Item>
 
@@ -521,4 +514,3 @@ function LoggedInMenuItems(props) {
         )
     );
 }
-

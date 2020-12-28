@@ -4,8 +4,7 @@ import * as yup from "yup"
 import { Redirect } from "react-router";
 import AuthContext from "../../contexts/AuthContext";
 import constants from "constants/registration-constants.json"
-import LogoLight from "../../assets/logo-light.png";
-import LogoName from "../../assets/logo-name.png";
+import Logo from '../../assets/cydoc-logo.svg';
 import './UserForm.css';
 
 const degreeOptions = constants.degrees.map((degree) => ({ key: degree, value: degree, text: degree }))
@@ -318,13 +317,11 @@ class UserForm extends Component {
         //renders a one-column grid centered in the middle of the screen with profile form
         return (
             <Container className="sign-up">
-                <Container textAlign="center">
-                    <Image size="tiny" spaced href='/home' src={LogoLight} />
-                    <Image size="small" spaced href='/home' src={LogoName} />
-                </Container>
                 <Container>
                     <Segment clearing raised className='sign-up-segment'>
-                        {this.props.disableRegister && 
+                        <Container textAlign='center'>
+                            <Image size="tiny" href='/home' src={Logo} />
+                        </Container>                        {this.props.disableRegister && 
                             <Container className='coming-soon' color='black' textAlign='center'>
                                 coming soon
                             </Container>
