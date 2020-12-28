@@ -10,7 +10,6 @@ class ButtonTag extends React.Component {
         this.state = {
             id: (answers !== null && answers.includes(this.props.name)) ? -1 :  1,
             buttonStyle: (answers !== null && answers.includes(this.props.name)) ? "violet": "basic",
-            //fontColor: (answers !== null && answers.includes(this.props.name)) ? "white": "black",
         }
         this.handleClick = this.handleClick.bind(this)
     }
@@ -19,11 +18,9 @@ class ButtonTag extends React.Component {
         let newStyle
         if (this.state.id === 1) {
             newStyle = "violet"
-            //fontColor = "white"
         }
         else {
             newStyle = "basic"
-            //fontColor = "black"
         }
         this.setState({id: this.state.id*-1, buttonStyle: newStyle})
         const values = this.context["hpi"]
@@ -45,11 +42,3 @@ class ButtonTag extends React.Component {
 }
 
 export default ButtonTag
-
-/*
-style={{
-    display: !this.props.name && "none",
-    backgroundColor: this.state.buttonColor,
-    color: this.state.fontColor
-}}
-*/
