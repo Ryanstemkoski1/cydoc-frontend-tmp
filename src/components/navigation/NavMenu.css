@@ -16,6 +16,7 @@
 
 .nav-menu-logo img {
     margin-right: 10px;
+    margin-top: 25px;
     height: 8vh !important;
     width: auto !important;
 }
@@ -148,6 +149,7 @@
 
     .note-name-menu-item {
         width: 200px;
+        padding-left: 0 !important;
     }
 
     .note-title {
