@@ -293,7 +293,7 @@ class NoteNameMenuItem extends Component {
                     }
                     </HPIContext.Consumer>
                     <div className='patient-info'> 
-                    {this.state.age > 1 && this.state.age < 11 ? 
+                    {this.state.age >= 1 && this.state.age < 11 ? 
                         <h4>Patient: {this.state.firstName} {this.state.lastName}, {this.state.age} years and {this.state.months} months old</h4>
                         : ""
                     }
@@ -301,7 +301,7 @@ class NoteNameMenuItem extends Component {
                         <h4>Patient: {this.state.firstName} {this.state.lastName}, {this.state.age} years old</h4>
                         : ""
                     }
-                    {this.state.age === 0 ?
+                    {this.state.age < 1 ?
                         <h4>Patient: {this.state.firstName} {this.state.lastName}, {this.state.months} months old</h4>
                         : ""
                     }
