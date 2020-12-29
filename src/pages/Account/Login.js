@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import {Form, Grid, Header, Segment, Button, Container, Image, Menu} from "semantic-ui-react";
+import React, { Component } from 'react';
+import { Form, Grid, Segment, Button, Container, Image } from "semantic-ui-react";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 
@@ -9,9 +9,6 @@ import { client } from "constants/api.js"
 import Logo from '../../assets/cydoc-logo.svg';
 import NavMenu from '../../components/navigation/NavMenu';
 import "./Account.css"
-
-import blues from '../../assets/alicia-logos/blues.png';
-
 
 // Component that manages the layout of the login page
 class LoginPage extends Component {
@@ -95,7 +92,7 @@ class LoginPage extends Component {
         return (
             // renders a one-column grid centered in the middle of the screen with login form
             // TODO: Make this into a container or card
-            <Fragment>
+            <>
                 <div className='nav-menu-container'>
                     <NavMenu />
                 </div>
@@ -141,7 +138,7 @@ class LoginPage extends Component {
                         </Form>
                     </Segment>
                 </Container>
-            </Fragment>
+            </>
         );
     }
 }
