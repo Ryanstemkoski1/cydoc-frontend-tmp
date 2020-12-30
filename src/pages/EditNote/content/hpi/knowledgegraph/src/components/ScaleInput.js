@@ -41,36 +41,36 @@ class ScaleInput extends React.Component{
   render(){
     return(
       <div className = "scale-input">
-      <label> 1 </label>
-      <input
-        type='range'
-        min="1"
-        max="10"
-        step="1"
-        id = "scale-slider"
-        value = {this.state.val}
-        onChange = {e => this.setState({val: e.target.value}, e => this.handleVal(e))}
+        <label> 1 </label>
+        <input
+          type='range'
+          min="1"
+          max="10"
+          step="1"
+          id = "scale-slider"
+          value = {this.state.val}
+          onChange = {e => this.setState({val: e.target.value}, e => this.handleVal(e))}
+          />
+        <label> 10 </label>
+        <input
+          min="1"
+          max="10"
+          step="1"
+          type = "number"
+          id = "scale-value"
+          value = {this.state.val}
+          onChange = {e => this.setState({val: e.target.value}, e => this.handleVal(e))}
         />
-      <label> 10 </label>
-      <input
-        min="1"
-        max="10"
-        step="1"
-        type = "number"
-        id = "scale-value"
-        value = {this.state.val}
-        onChange = {e => this.setState({val: e.target.value}, e => this.handleVal(e))}
-      />
-      <button
-        className = "ui compact basic button"
-        style= {{marginLeft: 10}}
-        onClick = {e => {
-          this.handleClear(e);
-          this.setState({val: undefined});
-          }
-        }>
+        <button
+          className = "ui compact basic button"
+          style= {{marginLeft: 10}}
+          onClick = {e => {
+            this.handleClear(e);
+            this.setState({val: undefined});
+            }
+          }>
         Clear
-      </button>
+        </button>
       </div>
   );
 };

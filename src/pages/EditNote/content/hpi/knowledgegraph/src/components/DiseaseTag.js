@@ -36,8 +36,6 @@ class DiseaseTag extends React.Component {
         const { category } = this.state
         // change color of button and font based on whether the user chose this disease category or not
         let buttonColor = this.context['positivediseases'].indexOf(category) > -1 ? "violet" : "basic";
-        //let color = this.context['positivediseases'].indexOf(category) > -1 ? "lightslategrey" : "whitesmoke"
-        //let fontColor = this.context['positivediseases'].indexOf(category) > -1 ? "white" : "black"
         return (
             <button
                 className= {`ui compact ${buttonColor} button`}
@@ -50,9 +48,3 @@ class DiseaseTag extends React.Component {
 }
 
 export default DiseaseTag
-
-/*style={{
-    display: !category && "none", //display button only if it's not none and is a valid name
-    backgroundColor: color,
-    color: fontColor
-}}*/
