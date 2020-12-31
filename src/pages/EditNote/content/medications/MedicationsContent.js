@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Table, Input, Accordion, Form, Dropdown, Label, Icon } from 'semantic-ui-react'; 
 import { sideEffects } from 'constants/sideEffects';
 import drug_names from 'constants/drugNames';
@@ -151,9 +151,9 @@ export default class MedicationsContent extends Component {
                         allowAdditions
                         icon=''
                         optiontype='medicationOptions'
-                        type={"Drug Name"}
+                        type="Drug Name"
                         options={this.state.medicationOptions}
-                        placeholder={"medication"}
+                        placeholder="medication"
                         onChange={this.handleTableBodyChange}
                         rowindex={i}
                         value={values[i]["Drug Name"]}
@@ -178,9 +178,9 @@ export default class MedicationsContent extends Component {
                         allowAdditions
                         icon=''
                         optiontype='diseaseOptions'
-                        type={"Reason for Taking"}
+                        type="Reason for Taking"
                         options={this.state.diseaseOptions}
-                        placeholder={"e.g. arthritis"}
+                        placeholder="e.g. arthritis"
                         onChange={this.handleTableBodyChange}
                         rowindex={i}
                         value={values[i]["Reason for Taking"]}
@@ -236,8 +236,8 @@ export default class MedicationsContent extends Component {
                         onChange={this.handleTableBodyChange}
                         className='content-input content-dropdown'
                     />
-                    { this.state.invalidStartYear.has(i) && (
-                        <p className='year-validation-mobile-error'>Please enter a valid year between 1900 and 2020</p>
+                    {this.state.invalidStartYear.has(i) && (
+                        <p className='year-validation-mobile-error'>Please enter a valid year between 1900 and {this.currentYear}</p>
                     )}
                 </>
             )
@@ -274,7 +274,7 @@ export default class MedicationsContent extends Component {
                             className='content-input content-dropdown'
                         />
                         { this.state.invalidEndYear.has(i) && (
-                            <p className='year-validation-mobile-error'>Please enter a valid year between 1900 and 2020</p>
+                            <p className='year-validation-mobile-error'>Please enter a valid year between 1900 and {this.currentYear}</p>
                         )}
                         </div>
                     }
@@ -295,7 +295,7 @@ export default class MedicationsContent extends Component {
                             allowAdditions
                             icon=''
                             options={this.state.sideEffectsOptions}
-                            type={"Side Effects"}
+                            type="Side Effects"
                             placeholder="Click here to select side effect(s)"
                             onChange={this.handleTableBodyChange}
                             rowindex={i}
@@ -397,9 +397,9 @@ export default class MedicationsContent extends Component {
                 },
                 content: {
                     content: (
-                        <Fragment>
+                        <>
                             {contentInputs}
-                        </Fragment>
+                        </>
                     ),
                 },
                 onTitleClick: (event) => {
@@ -426,7 +426,7 @@ export default class MedicationsContent extends Component {
             />
 
         return (
-            <Fragment>
+            <>
                 {content}
                 {!this.props.isPreview
                     &&
@@ -435,7 +435,7 @@ export default class MedicationsContent extends Component {
                         name='medication'
                     />
                 }
-            </Fragment>
+            </>
         )
     }
 }

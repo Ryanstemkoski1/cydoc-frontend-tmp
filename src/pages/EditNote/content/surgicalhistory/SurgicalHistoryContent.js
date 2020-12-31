@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { surgicalHistory } from 'constants/States';
 import { SurgicalHistoryTableBodyRow } from './SurgicalHistoryTableBodyRow';
 import HPIContext from 'contexts/HPIContext.js';
@@ -176,8 +176,8 @@ export default class SurgicalHistoryContent extends Component {
                         onChange={this.handleTableBodyChange}
                         className='content-input content-dropdown'
                     />
-                    { this.state.isInvalidYear.has(i) && (
-                        <p className='year-validation-mobile-error'>Please enter a valid year between 1900 and 2020</p>
+                    {this.state.isInvalidYear.has(i) && (
+                        <p className='year-validation-mobile-error'>Please enter a valid year between 1900 and {this.currentYear}</p>
                     )}
                     <Input
                         fluid
@@ -205,9 +205,9 @@ export default class SurgicalHistoryContent extends Component {
                 },
                 content: {
                     content: (
-                        <Fragment>
+                        <>
                             {contentInputs}
-                        </Fragment>
+                        </>
                     ),
                 },
                 onTitleClick: (_event) => {
@@ -241,7 +241,7 @@ export default class SurgicalHistoryContent extends Component {
         )
 
         return (
-            <Fragment>
+            <>
                 {content}
                 {!this.props.isPreview
                     &&
@@ -250,7 +250,7 @@ export default class SurgicalHistoryContent extends Component {
                         name='surgical history'
                     />
                 }
-            </Fragment>
+            </>
         )
     }
 }
