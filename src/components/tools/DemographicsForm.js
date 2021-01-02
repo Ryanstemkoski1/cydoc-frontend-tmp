@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Radio } from 'semantic-ui-react';
-import './IdentityQuestions.css';
-import { race, ethnicity, gender, asian, otherRace, otherEthnicity } from '../../constants/identity-constants.json';
+import './DemographicsForm.css';
+import { asian, otherRace, otherEthnicity } from '../../constants/demographics-constants.json';
 
 class IdentityQuestions extends Component {
 

@@ -9,7 +9,7 @@ import LogoLight from '../../assets/logo-light.png'
 import LogoName from '../../assets/logo-name.png'
 import './NavMenu.css';
 import states from 'constants/stateAbbreviations.json';
-import IdentityQuestions from '../tools/IdentityQuestions';
+import DemographicsForm from '../tools/DemographicsForm';
 
 const stateOptions = states.map((state) => ({key: state, value: state, text: state}));
 
@@ -466,7 +466,7 @@ class NoteNameMenuItem extends Component {
                             <Form.Field widths='5' className='mobile-checkbox' label='Mobile' control='input' type='checkbox' />
                             </Form.Group>
                             
-                            <IdentityQuestions 
+                            <DemographicsForm 
                                 race=''
                                 asian={[]}
                                 otherRace={[]}

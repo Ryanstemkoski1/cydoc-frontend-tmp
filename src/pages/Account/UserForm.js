@@ -7,7 +7,7 @@ import constants from "constants/registration-constants.json"
 import LogoLight from "../../assets/logo-light.png";
 import LogoName from "../../assets/logo-name.png";
 import './UserForm.css';
-import IdentityQuestions from '../../components/tools/IdentityQuestions';
+import DemographicsForm from '../../components/tools/DemographicsForm';
 
 const degreeOptions = constants.degrees.map((degree) => ({ key: degree, value: degree, text: degree }))
 const specialtyOptions = constants.specialties.map((specialty) => ({ key: specialty, value: specialty, text: specialty }))
@@ -518,7 +518,7 @@ class UserForm extends Component {
                                 header='Error!'
                                 content={this.state.errorMessages.map(m => <Message.Item>{m}</Message.Item>)}
                             />
-                            <IdentityQuestions
+                            <DemographicsForm
                                 race=''
                                 asian={[]}
                                 otherRace={[]}
