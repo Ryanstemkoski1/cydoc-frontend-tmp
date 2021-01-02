@@ -7,6 +7,7 @@ import constants from "constants/registration-constants.json"
 import LogoLight from "../../assets/logo-light.png";
 import LogoName from "../../assets/logo-name.png";
 import './UserForm.css';
+import IdentityQuestions from '../../components/tools/IdentityQuestions';
 
 const degreeOptions = constants.degrees.map((degree) => ({ key: degree, value: degree, text: degree }))
 const specialtyOptions = constants.specialties.map((specialty) => ({ key: specialty, value: specialty, text: specialty }))
@@ -65,8 +66,11 @@ class UserForm extends Component {
                 passwordConfirm: this.props.passwordConfirm,
                 email: this.props.email,
                 phoneNumber: this.props.phoneNumber,
+                secondaryNumber: this.props.secondaryNumber,
                 firstName: this.props.firstName,
+                middleName: this.props.middleName,
                 lastName: this.props.lastName,
+                dob: this.props.dob,
                 workplace: this.props.workplace,
                 inPatient: this.props.inPatient,
                 institutionType: this.props.institutionType,
@@ -340,7 +344,7 @@ class UserForm extends Component {
                                 name='username'
                                 value={this.state.formInfo.username}
                                 onChange={this.handleChange}
-                                disabled
+                                // disabled
                             />
                             <Form.Input
                                 fluid
@@ -350,7 +354,7 @@ class UserForm extends Component {
                                 name='password'
                                 value={this.state.formInfo.password}
                                 onChange={this.handleChange}
-                                disabled
+                                // disabled
                             />
                             <Form.Input
                                 fluid
@@ -360,7 +364,7 @@ class UserForm extends Component {
                                 name='passwordConfirm'
                                 value={this.state.formInfo.passwordConfirm}
                                 onChange={this.handleChange}
-                                disabled
+                                // disabled
                             />
                             <Form.Group>
                                 <Form.Input
@@ -370,8 +374,19 @@ class UserForm extends Component {
                                     name='firstName'
                                     value={this.state.formInfo.firstName}
                                     onChange={this.handleChange}
-                                    disabled
+                                    // disabled
                                 />
+                                <Form.Input
+                                    fluid
+                                    label='middle name'
+                                    placeholder='middle name'
+                                    name='middleName'
+                                    value={this.state.formInfo.middleName}
+                                    onChange={this.handleChange}
+                                    // disabled
+                                />
+                            </Form.Group>
+                            <Form.Group>
                                 <Form.Input
                                     fluid
                                     label='Last name'
@@ -379,9 +394,19 @@ class UserForm extends Component {
                                     name='lastName'
                                     value={this.state.formInfo.lastName}
                                     onChange={this.handleChange}
-                                    disabled
+                                    // disabled
+                                />
+                                <Form.Input
+                                    fluid
+                                    label='Date of Birth'
+                                    placeholder='Date of Birth'
+                                    name='dob'
+                                    value={this.state.formInfo.dob}
+                                    onChange={this.handleChange}
+                                    // disabled
                                 />
                             </Form.Group>
+
                             <Form.Group>
                                 <Form.Input
                                     fluid
@@ -391,7 +416,7 @@ class UserForm extends Component {
                                     name='email'
                                     value={this.state.formInfo.email}
                                     onChange={this.handleChange}
-                                    disabled
+                                    // disabled
                                 />
                                 <Form.Input
                                     fluid
@@ -401,11 +426,11 @@ class UserForm extends Component {
                                     name='backupEmail'
                                     value={this.state.formInfo.backupEmail}
                                     onChange={this.handleChange}
-                                    disabled
+                                    // disabled
                                 />
                             </Form.Group>
                             <Form.Group>
-                                <Form.Input
+                                {/* <Form.Input
                                     fluid
                                     label='address'
                                     placeholder='address'
@@ -413,7 +438,7 @@ class UserForm extends Component {
                                     value={this.state.formInfo.address}
                                     onChange={this.handleChange}
                                     disabled
-                                />
+                                /> */}
                                 <Form.Input
                                     fluid
                                     width={6}
@@ -423,8 +448,37 @@ class UserForm extends Component {
                                     name='phoneNumber'
                                     value={this.state.formInfo.phoneNumber}
                                     onChange={this.handleChange}
-                                    disabled
+                                    // disabled
                                 />
+                                <Form.Field 
+                                    width={2} 
+                                    className='mobile-checkbox' 
+                                    label='Mobile' 
+                                    control='input' 
+                                    type='checkbox' 
+                                    // disabled 
+                                />
+
+                                <Form.Input
+                                    fluid
+                                    width={6}
+                                    type='tel'
+                                    label='secondary phone number'
+                                    placeholder='secondary phone number'
+                                    name='phoneNumber'
+                                    value={this.state.formInfo.secondaryNumber}
+                                    onChange={this.handleChange}
+                                    // disabled
+                                />
+                                <Form.Field 
+                                    width={2} 
+                                    className='mobile-checkbox' 
+                                    label='Mobile' 
+                                    control='input' 
+                                    type='checkbox' 
+                                    // disabled 
+                                />
+
                             </Form.Group>
                             <label className={`label-font ${this.props.disableRegister ? 'disabled' : ''}`}>
                                 I am a:
@@ -437,7 +491,7 @@ class UserForm extends Component {
                                     name='role'
                                     checked={this.state.formInfo.role === 'healthcare professional'}
                                     onChange={this.handleChange}
-                                    disabled
+                                    // disabled
                                 />
                                 <Form.Radio
                                     width={4}
@@ -446,7 +500,7 @@ class UserForm extends Component {
                                     name='role'
                                     checked={this.state.formInfo.role === 'patient'}
                                     onChange={this.handleChange}
-                                    disabled
+                                    // disabled
                                 />
                                 <Form.Radio
                                     width={7}
@@ -455,7 +509,7 @@ class UserForm extends Component {
                                     name='role'
                                     checked={this.state.formInfo.role === 'administrator'}
                                     onChange={this.handleChange}
-                                    disabled
+                                    // disabled
                                 />
                             </Form.Group>
                             {this.additionalFields()}
@@ -463,6 +517,14 @@ class UserForm extends Component {
                                 error
                                 header='Error!'
                                 content={this.state.errorMessages.map(m => <Message.Item>{m}</Message.Item>)}
+                            />
+                            <IdentityQuestions
+                                race=''
+                                asian={[]}
+                                otherRace={[]}
+                                ethnicity=''
+                                otherEthnicity={[]}
+                                gender=''
                             />
                             <>
                                 <Form.Button color='teal' size='small' floated='right' disabled={this.props.disableRegister}>
