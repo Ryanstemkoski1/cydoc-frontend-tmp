@@ -436,7 +436,7 @@ class NoteNameMenuItem extends Component {
                             </Form.Group>
 
                             <Form.Group>
-                            <Form.Input required widths='5'
+                            <Form.Input required width={8}
                                 label='Primary Phone'
                                 className='patient-info-input' 
                                 id='primary-phone' 
@@ -449,11 +449,11 @@ class NoteNameMenuItem extends Component {
                             { this.state.invalidPhone && (
                                 <p className='error'>Phone number must be valid</p>
                             )}
-                            <Form.Field widths='5' className='mobile-checkbox' label='Mobile' control='input' type='checkbox' />
+                            <Form.Field width={4} className='mobile-checkbox' label='Mobile' control='input' type='checkbox' />
                             </Form.Group>
 
                             <Form.Group>
-                            <Form.Input widths='5'
+                            <Form.Input width={8}
                                 label='Secondary Phone'
                                 className='patient-info-input' 
                                 id='secondary-phone' 
@@ -463,7 +463,7 @@ class NoteNameMenuItem extends Component {
                                 // onBlur={this.onPhoneChange}
                                 onChange={this.setChange}
                             />
-                            <Form.Field widths='5' className='mobile-checkbox' label='Mobile' control='input' type='checkbox' />
+                            <Form.Field width={4} className='mobile-checkbox' label='Mobile' control='input' type='checkbox' />
                             </Form.Group>
                             
                             <DemographicsForm 
