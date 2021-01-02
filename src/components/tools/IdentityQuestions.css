@@ -1,0 +1,11 @@
+.field.identity-fields {
+    height: 30px;
+}
+
+.fields.identity-groups {
+    padding-top: 10px;
+}
+
+.grouped.fields > .field.identity-fields.additional {
+    margin-left: 15px;
+}

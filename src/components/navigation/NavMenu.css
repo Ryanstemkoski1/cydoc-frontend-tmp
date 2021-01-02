@@ -114,16 +114,8 @@
     margin: -10px !important;
 }
 
-.full-name {
-    display: flex;
-}
-
-#first-name, #middle-name, #last-name {
-    flex: 33%;
-}
-
-#first-name, #middle-name {
-    margin-right: 10px;
+.field.mobile-checkbox {
+    padding-top: 35px;
 }
 
 @media screen and (max-width: 500px) {

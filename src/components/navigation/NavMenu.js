@@ -8,6 +8,10 @@ import AuthContext from "../../contexts/AuthContext";
 import LogoLight from '../../assets/logo-light.png'
 import LogoName from '../../assets/logo-name.png'
 import './NavMenu.css';
+import states from 'constants/stateAbbreviations.json';
+import IdentityQuestions from '../tools/IdentityQuestions';
+
+const stateOptions = states.map((state) => ({key: state, value: state, text: state}));
 
 // Navigation Bar component that will go at the top of most pages
 class ConnectedNavMenu extends Component {
@@ -90,7 +94,6 @@ NavMenu.propTypes = {
     // optional prop for whether to display or hide hte note name menu item
     displayNoteName: PropTypes.bool
 };
-
 
 // class component that displays and changes note name
 // shown only if parent is EditNote.
@@ -198,7 +201,6 @@ class NoteNameMenuItem extends Component {
     }
 
     setChange = (e, {id, value}) => {
-
         switch(id) {
             case 'first-name':
                 this.setState({firstName: value});
@@ -319,10 +321,9 @@ class NoteNameMenuItem extends Component {
                         <Header>Patient Information</Header>
                         <Modal.Content>
                         <Form>
-                            <div className='full-name'>
-                            <Form.Field required>
-                                <label>First Name</label>
-                                <Input
+                            <Form.Group widths='equal'>
+                                <Form.Input required
+                                    label='First Name'
                                     className='patient-info-input'
                                     id='first-name'
                                     fluid
@@ -332,13 +333,12 @@ class NoteNameMenuItem extends Component {
                                     onBlur={this.onFirstNameChange}
                                     onChange={this.setChange}
                                 />                            
-                            </Form.Field>
-                            {/* { this.state.invalidFirstName && (
-                                <p className='error' id='first-name-error'>First name must not be blank</p>
-                            )} */}
-                            <Form.Field>
-                                <label>Middle Name</label>
-                                <Input
+                                {/* { this.state.invalidFirstName && (
+                                    <p className='error' id='first-name-error'>First name must not be blank</p>
+                                )} */}
+
+                                <Form.Input
+                                    label='Middle Name'
                                     className='patient-info-input'
                                     id='middle-name'
                                     fluid
@@ -348,10 +348,11 @@ class NoteNameMenuItem extends Component {
                                     // onBlur={this.onLastNameChange}
                                     onChange={this.setChange}
                                 />
-                            </Form.Field>
-                            <Form.Field required>
-                                <label>Last Name</label>
-                                <Input
+                            </Form.Group>
+
+                            <Form.Group widths='equal'>
+                                <Form.Input required
+                                    label='Last Name'
                                     className='patient-info-input'
                                     id='last-name'
                                     fluid
@@ -361,14 +362,12 @@ class NoteNameMenuItem extends Component {
                                     onBlur={this.onLastNameChange}
                                     onChange={this.setChange}
                                 />
-                            </Form.Field>
-                            {/* { this.state.invalidLastName && (
-                                <p className='error' id='last-name-error'>Last name must not be blank</p>
-                            )} */}
-                            </div>
-                            <Form.Field required>
-                                <label>Date Of Birth</label>
-                                <Input
+                                { this.state.invalidLastName && (
+                                    <p className='error' id='last-name-error'>Last name must not be blank</p>
+                                )} 
+
+                                <Form.Input required
+                                    label='Date Of Birth'
                                     className='patient-info-input' 
                                     id='dob' 
                                     placeholder='MM/DD/YYYY' 
@@ -377,14 +376,41 @@ class NoteNameMenuItem extends Component {
                                     onBlur={this.onDateChange} 
                                     onChange={this.setChange}
                                 />
-                            </Form.Field>
-                            { this.state.invalidDate && (
-                                <p className='error'>Date must be valid</p>
-                            )}
+                                { this.state.invalidDate && (
+                                    <p className='error'>Date must be valid</p>
+                                )}
+                            </Form.Group>
 
-                            <Form.Field required>
-                                <label>Primary Email</label>
-                                <Input 
+                            <Form.Input
+                                size='small'
+                                label='Street Address'
+                                id='street-address'
+                                type='text'
+                            />
+
+                            <Form.Group>
+                                <Form.Input width={8}
+                                    label='City'
+                                    id='city'
+                                    type='text'
+                                />
+
+                                <Form.Select width={3}
+                                    fluid
+                                    label='State'
+                                    options={stateOptions}
+                                />
+
+                                <Form.Input width={5}
+                                    label='Zip Code'
+                                    id='zipcode'
+                                    type='text'
+                                />
+                            </Form.Group>
+
+                            <Form.Group widths='equal'>
+                                <Form.Input required
+                                    label='Primary Email'
                                     className='patient-info-input' 
                                     id='primary-email' 
                                     placeholder='johndoe@email.com' 
@@ -393,14 +419,12 @@ class NoteNameMenuItem extends Component {
                                     onBlur={this.onEmailChange}
                                     onChange={this.setChange}
                                 />
-                            </Form.Field>
-                            { this.state.invalidEmail && (
-                                <p className='error'>Email must be valid</p>
-                            )}
+                                { this.state.invalidEmail && (
+                                    <p className='error'>Email must be valid</p>
+                                )}
 
-                            <Form.Field>
-                                <label>Secondary Email</label>
-                                <Input 
+                                <Form.Input
+                                    label='Secondary Email'
                                     className='patient-info-input' 
                                     id='secondary-email' 
                                     placeholder='johndoe@email.com' 
@@ -409,36 +433,48 @@ class NoteNameMenuItem extends Component {
                                     // onBlur={this.onEmailChange}
                                     onChange={this.setChange}
                                 />
-                            </Form.Field>
+                            </Form.Group>
 
-                            <Form.Field required>
-                                <label>Primary Phone Number</label>
-                                <Input 
-                                    className='patient-info-input' 
-                                    id='primary-phone' 
-                                    placeholder='000-000-0000' 
-                                    type='text' 
-                                    value={this.state.primaryPhone}
-                                    onBlur={this.onPhoneChange}
-                                    onChange={this.setChange}
+                            <Form.Group>
+                            <Form.Input required widths='5'
+                                label='Primary Phone'
+                                className='patient-info-input' 
+                                id='primary-phone' 
+                                placeholder='000-000-0000' 
+                                type='text' 
+                                value={this.state.primaryPhone}
+                                onBlur={this.onPhoneChange}
+                                onChange={this.setChange}
                                 />
-                            </Form.Field>
                             { this.state.invalidPhone && (
                                 <p className='error'>Phone number must be valid</p>
                             )}
+                            <Form.Field widths='5' className='mobile-checkbox' label='Mobile' control='input' type='checkbox' />
+                            </Form.Group>
 
-                            <Form.Field>
-                                <label>Secondary Phone Number</label>
-                                <Input 
-                                    className='patient-info-input' 
-                                    id='secondary-phone' 
-                                    placeholder='000-000-0000' 
-                                    type='text' 
-                                    value={this.state.secondaryPhone}
-                                    // onBlur={this.onPhoneChange}
-                                    onChange={this.setChange}
-                                />
-                            </Form.Field>
+                            <Form.Group>
+                            <Form.Input widths='5'
+                                label='Secondary Phone'
+                                className='patient-info-input' 
+                                id='secondary-phone' 
+                                placeholder='000-000-0000' 
+                                type='text' 
+                                value={this.state.secondaryPhone}
+                                // onBlur={this.onPhoneChange}
+                                onChange={this.setChange}
+                            />
+                            <Form.Field widths='5' className='mobile-checkbox' label='Mobile' control='input' type='checkbox' />
+                            </Form.Group>
+                            
+                            <IdentityQuestions 
+                                race=''
+                                asian={[]}
+                                otherRace={[]}
+                                ethnicity=''
+                                otherEthnicity={[]}
+                                gender=''
+                            />
+
                             </Form>
                         </Modal.Content>
                         <Modal.Actions>                    
