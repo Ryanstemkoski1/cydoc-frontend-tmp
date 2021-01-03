@@ -108,6 +108,12 @@ class NoteNameMenuItem extends Component {
             middleName: this.middleName,
             lastName: this.lastName,
             dob: this.dob,
+            address: {
+                street: this.street,
+                city: this.city,
+                state: this.state,
+                zip: this.zip
+            },
             primaryEmail: this.primaryEmail,
             secondaryEmail: this.secondaryEmail,
             primaryPhone: this.primaryPhone,
@@ -211,32 +217,63 @@ class NoteNameMenuItem extends Component {
     }
 
     setChange = (e, {id, value}) => {
-        switch(id) {
-            case 'first-name':
-                this.setState({firstName: value});
-                break;
-            case 'middle-name':
-                this.setState({middleName: value});
-                break;
-            case 'last-name':
-                this.setState({lastName: value});
-                break;
-            case 'primary-phone':
-                this.setState({primaryPhone: value});
-                break;
-            case 'secondary-phone':
-                this.setState({secondaryPhone: value});
-                break;
-            case 'primary-email':
-                this.setState({primaryEmail: value});
-                break;
-            case 'secondary-email':
-                this.setState({secondaryEmail: value});
-                break;
-            case 'dob':
-                this.setState({dob: value});
-                break;
+
+        let newState = this.state;
+        newState[id] = value;
+        this.setState(newState);
+
+        if (id === 'street') {
+            newState.address[id] = value;
+            this.setState(newState);
+        } else if (id === 'city') {
+            newState.address[id] = value;
+            this.setState(newState);
+        } else if (id === 'state') {
+            newState.address[id] = value;
+            this.setState(newState);
+        } else if (id === 'zip') {
+            newState.address[id] = value;
+            this.setState(newState);
         }
+
+        // switch(id) {
+        //     case 'first-name':
+        //         this.setState({firstName: value});
+        //         break;
+        //     case 'middle-name':
+        //         this.setState({middleName: value});
+        //         break;
+        //     case 'last-name':
+        //         this.setState({lastName: value});
+        //         break;
+        //     case 'primary-phone':
+        //         this.setState({primaryPhone: value});
+        //         break;
+        //     case 'secondary-phone':
+        //         this.setState({secondaryPhone: value});
+        //         break;
+        //     case 'primary-email':
+        //         this.setState({primaryEmail: value});
+        //         break;
+        //     case 'secondary-email':
+        //         this.setState({secondaryEmail: value});
+        //         break;
+        //     case 'dob':
+        //         this.setState({address: value});
+        //         break;
+        //     case 'street':
+        //         this.setState({state: value});
+        //         break;
+        //     case 'city':
+        //         this.setState({city: value});
+        //         break;
+        //     case 'state':
+        //         this.setState({state: value});
+        //         break;
+        //     case 'zipcode':
+        //         this.setState({zip: value});
+        //         break;
+        // }
     }
 
     setPrimaryMobile = (e, {value}) => {
@@ -373,7 +410,7 @@ class NoteNameMenuItem extends Component {
                                 <Form.Input required
                                     label='First Name'
                                     className='patient-info-input'
-                                    id='first-name'
+                                    id='firstName'
                                     fluid
                                     placeholder='First Name'
                                     type='text'
@@ -381,14 +418,14 @@ class NoteNameMenuItem extends Component {
                                     onBlur={this.onFirstNameChange}
                                     onChange={this.setChange}
                                 />                            
-                                {/* { this.state.invalidFirstName && (
+                                { this.state.invalidFirstName && (
                                     <p className='error' id='first-name-error'>First name must not be blank</p>
-                                )} */}
+                                )}
 
                                 <Form.Input
                                     label='Middle Name'
                                     className='patient-info-input'
-                                    id='middle-name'
+                                    id='middleName'
                                     fluid
                                     placeholder='Middle Name'
                                     type='text'
@@ -402,7 +439,7 @@ class NoteNameMenuItem extends Component {
                                 <Form.Input required
                                     label='Last Name'
                                     className='patient-info-input'
-                                    id='last-name'
+                                    id='lastName'
                                     fluid
                                     placeholder='Last Name'
                                     type='text'
@@ -425,15 +462,17 @@ class NoteNameMenuItem extends Component {
                                     onChange={this.setChange}
                                 />
                                 { this.state.invalidDate && (
-                                    <p className='error'>Date must be valid</p>
+                                    <p className='error' id='dob-errer'>Date must be valid</p>
                                 )}
                             </Form.Group>
 
                             <Form.Input
                                 size='small'
                                 label='Street Address'
-                                id='street-address'
+                                id='street'
                                 type='text'
+                                value={this.state.address.street}
+                                onChange={this.setChange}
                             />
 
                             <Form.Group>
@@ -441,18 +480,25 @@ class NoteNameMenuItem extends Component {
                                     label='City'
                                     id='city'
                                     type='text'
+                                    value={this.state.address.city}
+                                    onChange={this.setChange}
                                 />
 
                                 <Form.Select width={3}
                                     fluid
                                     label='State'
+                                    id='state'
                                     options={stateOptions}
+                                    value={this.state.address.state}
+                                    onChange={this.setChange}
                                 />
 
                                 <Form.Input width={5}
                                     label='Zip Code'
-                                    id='zipcode'
+                                    id='zip'
                                     type='text'
+                                    value={this.state.address.zip}
+                                    onChange={this.setChange}
                                 />
                             </Form.Group>
 
@@ -460,7 +506,7 @@ class NoteNameMenuItem extends Component {
                                 <Form.Input required
                                     label='Primary Email'
                                     className='patient-info-input' 
-                                    id='primary-email' 
+                                    id='primaryEmail' 
                                     placeholder='johndoe@email.com' 
                                     type='text' 
                                     value={this.state.primaryEmail}
@@ -474,7 +520,7 @@ class NoteNameMenuItem extends Component {
                                 <Form.Input
                                     label='Secondary Email'
                                     className='patient-info-input' 
-                                    id='secondary-email' 
+                                    id='secondaryEmail' 
                                     placeholder='johndoe@email.com' 
                                     type='text' 
                                     value={this.state.secondaryEmail}
@@ -487,7 +533,7 @@ class NoteNameMenuItem extends Component {
                             <Form.Input required width={8}
                                 label='Primary Phone'
                                 className='patient-info-input' 
-                                id='primary-phone' 
+                                id='primaryPhone' 
                                 type='text' 
                                 value={this.state.primaryPhone}
                                 onBlur={this.onPhoneChange}
@@ -512,7 +558,7 @@ class NoteNameMenuItem extends Component {
                             <Form.Input width={8}
                                 label='Secondary Phone'
                                 className='patient-info-input' 
-                                id='secondary-phone' 
+                                id='secondaryPhone' 
                                 type='text' 
                                 value={this.state.secondaryPhone}
                                 // onBlur={this.onPhoneChange}
