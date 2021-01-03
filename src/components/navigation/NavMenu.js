@@ -235,45 +235,6 @@ class NoteNameMenuItem extends Component {
             newState.address[id] = value;
             this.setState(newState);
         }
-
-        // switch(id) {
-        //     case 'first-name':
-        //         this.setState({firstName: value});
-        //         break;
-        //     case 'middle-name':
-        //         this.setState({middleName: value});
-        //         break;
-        //     case 'last-name':
-        //         this.setState({lastName: value});
-        //         break;
-        //     case 'primary-phone':
-        //         this.setState({primaryPhone: value});
-        //         break;
-        //     case 'secondary-phone':
-        //         this.setState({secondaryPhone: value});
-        //         break;
-        //     case 'primary-email':
-        //         this.setState({primaryEmail: value});
-        //         break;
-        //     case 'secondary-email':
-        //         this.setState({secondaryEmail: value});
-        //         break;
-        //     case 'dob':
-        //         this.setState({address: value});
-        //         break;
-        //     case 'street':
-        //         this.setState({state: value});
-        //         break;
-        //     case 'city':
-        //         this.setState({city: value});
-        //         break;
-        //     case 'state':
-        //         this.setState({state: value});
-        //         break;
-        //     case 'zipcode':
-        //         this.setState({zip: value});
-        //         break;
-        // }
     }
 
     setPrimaryMobile = (e, {value}) => {
@@ -406,7 +367,7 @@ class NoteNameMenuItem extends Component {
                         <Header>Patient Information</Header>
                         <Modal.Content>
                         <Form>
-                            <Form.Group widths='equal'>
+                            <Form.Group widths='equal' className='error-div'>
                                 <Form.Input required
                                     label='First Name'
                                     className='patient-info-input'
@@ -435,7 +396,7 @@ class NoteNameMenuItem extends Component {
                                 />
                             </Form.Group>
 
-                            <Form.Group widths='equal'>
+                            <Form.Group widths='equal' className='error-div'>
                                 <Form.Input required
                                     label='Last Name'
                                     className='patient-info-input'
@@ -462,7 +423,7 @@ class NoteNameMenuItem extends Component {
                                     onChange={this.setChange}
                                 />
                                 { this.state.invalidDate && (
-                                    <p className='error' id='dob-errer'>Date must be valid</p>
+                                    <p className='error' id='dob-error'>Date must be valid</p>
                                 )}
                             </Form.Group>
 
@@ -478,6 +439,7 @@ class NoteNameMenuItem extends Component {
                             <Form.Group>
                                 <Form.Input width={8}
                                     label='City'
+                                    className='address'
                                     id='city'
                                     type='text'
                                     value={this.state.address.city}
@@ -487,6 +449,7 @@ class NoteNameMenuItem extends Component {
                                 <Form.Select width={3}
                                     fluid
                                     label='State'
+                                    className='address'
                                     id='state'
                                     options={stateOptions}
                                     value={this.state.address.state}
@@ -495,6 +458,7 @@ class NoteNameMenuItem extends Component {
 
                                 <Form.Input width={5}
                                     label='Zip Code'
+                                    className='address'
                                     id='zip'
                                     type='text'
                                     value={this.state.address.zip}
@@ -502,7 +466,7 @@ class NoteNameMenuItem extends Component {
                                 />
                             </Form.Group>
 
-                            <Form.Group widths='equal'>
+                            <Form.Group widths='equal' className='error-div'>
                                 <Form.Input required
                                     label='Primary Email'
                                     className='patient-info-input' 
@@ -514,7 +478,7 @@ class NoteNameMenuItem extends Component {
                                     onChange={this.setChange}
                                 />
                                 { this.state.invalidEmail && (
-                                    <p className='error'>Email must be valid</p>
+                                    <p className='error' id='email-error'>Email must be valid</p>
                                 )}
 
                                 <Form.Input
@@ -529,51 +493,51 @@ class NoteNameMenuItem extends Component {
                                 />
                             </Form.Group>
 
-                            <Form.Group>
-                            <Form.Input required width={8}
-                                label='Primary Phone'
-                                className='patient-info-input' 
-                                id='primaryPhone' 
-                                type='text' 
-                                value={this.state.primaryPhone}
-                                onBlur={this.onPhoneChange}
-                                onChange={this.setPrimaryMobile}
+                            <Form.Group className='error-div phone-div'>
+                                <Form.Input required width={8}
+                                    label='Primary Phone'
+                                    className='patient-info-input' 
+                                    id='primaryPhone' 
+                                    type='text' 
+                                    value={this.state.primaryPhone}
+                                    onBlur={this.onPhoneChange}
+                                    onChange={this.setPrimaryMobile}
+                                    />
+                                { this.state.invalidPhone && (
+                                    <p className='error' id='phone-error'>Phone number must be valid</p>
+                                )}
+                                <Form.Field 
+                                    width={4} 
+                                    className='mobile-checkbox' 
+                                    label='Mobile' 
+                                    control='input' 
+                                    type='checkbox' 
+                                    name='primaryMobile'
+                                    checked={this.state.primaryMobile}
+                                    onChange={this.handleMobile}
                                 />
-                            { this.state.invalidPhone && (
-                                <p className='error'>Phone number must be valid</p>
-                            )}
-                            <Form.Field 
-                                width={4} 
-                                className='mobile-checkbox' 
-                                label='Mobile' 
-                                control='input' 
-                                type='checkbox' 
-                                name='primaryMobile'
-                                checked={this.state.primaryMobile}
-                                onChange={this.handleMobile}
-                            />
                             </Form.Group>
 
-                            <Form.Group>
-                            <Form.Input width={8}
-                                label='Secondary Phone'
-                                className='patient-info-input' 
-                                id='secondaryPhone' 
-                                type='text' 
-                                value={this.state.secondaryPhone}
-                                // onBlur={this.onPhoneChange}
-                                onChange={this.setSecondaryMobile}
-                            />
-                            <Form.Field 
-                                width={4} 
-                                className='mobile-checkbox' 
-                                label='Mobile' 
-                                control='input' 
-                                type='checkbox'
-                                name='secondaryMobile'
-                                checked={this.state.secondaryMobile}
-                                onChange={this.handleMobile}
-                            />
+                            <Form.Group className='phone-div'>
+                                <Form.Input width={8}
+                                    label='Secondary Phone'
+                                    className='patient-info-input' 
+                                    id='secondaryPhone' 
+                                    type='text' 
+                                    value={this.state.secondaryPhone}
+                                    // onBlur={this.onPhoneChange}
+                                    onChange={this.setSecondaryMobile}
+                                />
+                                <Form.Field 
+                                    width={4} 
+                                    className='mobile-checkbox' 
+                                    label='Mobile' 
+                                    control='input' 
+                                    type='checkbox'
+                                    name='secondaryMobile'
+                                    checked={this.state.secondaryMobile}
+                                    onChange={this.handleMobile}
+                                />
                             </Form.Group>
                             
                             <DemographicsForm 
@@ -585,7 +549,7 @@ class NoteNameMenuItem extends Component {
                                 gender=''
                             />
 
-                            </Form>
+                        </Form>
                         </Modal.Content>
                         <Modal.Actions>                    
                             <Button color='blue' type='submit' onClick={this.savePatientInfo}>Save</Button>
