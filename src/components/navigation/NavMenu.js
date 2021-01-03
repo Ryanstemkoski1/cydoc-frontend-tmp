@@ -132,6 +132,8 @@ class NoteNameMenuItem extends Component {
         this.onDateChange = this.onDateChange.bind(this);
         this.setChange = this.setChange.bind(this);
         this.handleMobile = this.handleMobile.bind(this);
+        this.setPrimaryMobile = this.setPrimaryMobile.bind(this);
+        this.setSecondaryMobile = this.setSecondaryMobile.bind(this);
     }
 
     handleInputChange = (event) => {
@@ -176,12 +178,18 @@ class NoteNameMenuItem extends Component {
     }
 
     onPhoneChange = (e) => {
-        const re = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
-        if (!e.target.value || !re.test(e.target.value)) {
-            this.setState({ invalidPhone: true})
-        } else {
+        // regex for digits with dashes
+        const dashes = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
+
+        // regex for digits only
+        const digits = /^[0-9]{10}$/;
+
+        if (e.target.value || dashes.test(e.target.value) || digits.test(e.target.value)) {
             this.setState({ invalidPhone: false})
+        } else {
+            this.setState({ invalidPhone: true})
         }
+
     }
 
     onEmailChange = (e) => {
@@ -228,6 +236,26 @@ class NoteNameMenuItem extends Component {
             case 'dob':
                 this.setState({dob: value});
                 break;
+        }
+    }
+
+    setPrimaryMobile = (e, {value}) => {
+        const digits = /^[0-9]{10}$/;
+        if (value.match(digits)) {
+            let number = value.slice(0,3) + "-" + value.slice(3,6) + "-" + value.slice(6);
+            this.setState({ primaryPhone: number})
+        } else {
+            this.setState({ primaryPhone: value})
+        }
+    }
+
+    setSecondaryMobile = (e, {value}) => {
+        const digits = /^[0-9]{10}$/;
+        if (value.match(digits)) {
+            let number = value.slice(0,3) + "-" + value.slice(3,6) + "-" + value.slice(6);
+            this.setState({ secondaryPhone: number})
+        } else {
+            this.setState({ secondaryPhone: value})
         }
     }
 
@@ -460,11 +488,10 @@ class NoteNameMenuItem extends Component {
                                 label='Primary Phone'
                                 className='patient-info-input' 
                                 id='primary-phone' 
-                                placeholder='000-000-0000' 
                                 type='text' 
                                 value={this.state.primaryPhone}
                                 onBlur={this.onPhoneChange}
-                                onChange={this.setChange}
+                                onChange={this.setPrimaryMobile}
                                 />
                             { this.state.invalidPhone && (
                                 <p className='error'>Phone number must be valid</p>
@@ -486,11 +513,10 @@ class NoteNameMenuItem extends Component {
                                 label='Secondary Phone'
                                 className='patient-info-input' 
                                 id='secondary-phone' 
-                                placeholder='000-000-0000' 
                                 type='text' 
                                 value={this.state.secondaryPhone}
                                 // onBlur={this.onPhoneChange}
-                                onChange={this.setChange}
+                                onChange={this.setSecondaryMobile}
                             />
                             <Form.Field 
                                 width={4} 
