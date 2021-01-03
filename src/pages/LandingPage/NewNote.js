@@ -1,112 +1,115 @@
-import React, {Component, useContext} from "react";
-import NotesContext from "../../contexts/NotesContext";
-import HPIContext from "../../contexts/HPIContext";
-import {Button, Divider, Header, Icon, Menu, Segment, ButtonGroup, Input, Grid, Radio, Modal} from "semantic-ui-react";
-import {Redirect} from "react-router";
-import './LandingPage.css'
-import Form from "semantic-ui-react/dist/commonjs/collections/Form";
+import React, { Component } from 'react';
+import HPIContext from '../../contexts/HPIContext';
+import {
+    Button,
+    Divider,
+    Header,
+    Icon,
+    Menu,
+    Segment,
+    ButtonGroup,
+    Grid,
+    Radio,
+    Modal,
+} from 'semantic-ui-react';
+import { Redirect } from 'react-router';
+import './LandingPage.css';
+import Form from 'semantic-ui-react/dist/commonjs/collections/Form';
 
 export default class NewNoteSegment extends Component {
-
-    static contextType = HPIContext
+    static contextType = HPIContext;
 
     constructor(props) {
-
         super(props);
         this.handleBlankNoteClick = this.handleBlankNoteClick.bind(this);
         this.state = {
             activeTemplate: null,
-            redirect: false
-        }
+            redirect: false,
+        };
     }
 
-    componentDidMount = () => {
-
-    }
+    componentDidMount = () => {};
 
     handleBlankNoteClick = async () => {
         const note = await this.context.addNote();
-        console.log(note);
-        if (note==null) {
-            console.log("note is null");
-
-        } else {
-            console.log("note is NOT null");
+        if (note !== null) {
             this.context.loadNote(note);
-            this.setState({redirect: true});
+            this.setState({ redirect: true });
         }
-
-    }
-
+    };
 
     displayPinnedTemplates = () => {
-        let pinnedTemplates = [
-            "Pinned A",
-            "Pinned A",
-            "Pinned A",
-            "Pinned A"
-        ]
-        return (
-            pinnedTemplates.map((template) => {
-                return (
-                    <ButtonGroup fluid compact style={{display: 'inline'}}>
-                        <Button
-                            basic>
-                            <Icon name='file alternate outline'/>
-                            {template}
-                        </Button>
-                        <Button basic style={{position: 'absolute', right: '0'}}>
-                            <Icon name='thumb tack'/>
-                        </Button>
-                    </ButtonGroup>
-                )
-            })
-        )
-    }
-
-    displayRecentTemplates = () => {
-        let recentTemplates = [
-            "Recent A",
-            "Recent A",
-            "Recent A",
-            "Recent A",
-        ]
-        return recentTemplates.map((template) => {
+        let pinnedTemplates = ['Pinned A', 'Pinned A', 'Pinned A', 'Pinned A'];
+        return pinnedTemplates.map((template, index) => {
             return (
-                <ButtonGroup fluid compact style={{display: 'inline'}}>
-                    <Button
-                        basic>
-                        <Icon name='file alternate outline'/>
+                <ButtonGroup
+                    key={index}
+                    fluid
+                    compact
+                    style={{ display: 'inline' }}
+                >
+                    <Button basic>
+                        <Icon name='file alternate outline' />
                         {template}
                     </Button>
-                    <Button basic style={{position: 'absolute', right: '0'}}>
-                        <Icon name='thumb tack' color='grey' rotated='clockwise'/>
+                    <Button basic style={{ position: 'absolute', right: '0' }}>
+                        <Icon name='thumb tack' />
                     </Button>
                 </ButtonGroup>
-            )
-        })
-    }
+            );
+        });
+    };
 
-    render () {
-
-        if (this.state.redirect) {
+    displayRecentTemplates = () => {
+        let recentTemplates = ['Recent A', 'Recent A', 'Recent A', 'Recent A'];
+        return recentTemplates.map((template, index) => {
             return (
-                <Redirect to= "/editnote" />
-            )
+                <ButtonGroup
+                    key={index}
+                    fluid
+                    compact
+                    style={{ display: 'inline' }}
+                >
+                    <Button basic>
+                        <Icon name='file alternate outline' />
+                        {template}
+                    </Button>
+                    <Button basic style={{ position: 'absolute', right: '0' }}>
+                        <Icon
+                            name='thumb tack'
+                            color='grey'
+                            rotated='clockwise'
+                        />
+                    </Button>
+                </ButtonGroup>
+            );
+        });
+    };
+
+    render() {
+        if (this.state.redirect) {
+            return <Redirect to='/editnote' />;
         }
 
         return (
-            <Segment className={this.props.stack ? 'landing-page-columns-mobile': 'landing-page-columns'}>
+            <Segment
+                className={
+                    this.props.stack
+                        ? 'landing-page-columns-mobile'
+                        : 'landing-page-columns'
+                }
+            >
                 <Header as='h2'>New Note</Header>
-                <ButtonGroup basic style={{position: 'absolute', top:'10px', right: '10px'}}>
-                    <Button
-                        color="teal"
-                        onClick={this.handleBlankNoteClick}
-                    >New Blank Note
+                <ButtonGroup
+                    basic
+                    style={{ position: 'absolute', top: '10px', right: '10px' }}
+                >
+                    <Button color='teal' onClick={this.handleBlankNoteClick}>
+                        New Blank Note
                     </Button>
                 </ButtonGroup>
                 <Divider />
-                <Menu secondary vertical style={{width: '100%'}}>
+                <Menu secondary vertical style={{ width: '100%' }}>
                     <Menu.Item>
                         <Header as={'h3'}>Pinned</Header>
                         {this.displayPinnedTemplates()}
@@ -117,27 +120,22 @@ export default class NewNoteSegment extends Component {
                     </Menu.Item>
                 </Menu>
 
-                <ButtonGroup className="right-bottom-button">
-                    <Modal trigger={<Button >Browse Templates...</Button>}>
-                        {this.props.stack? null : <BrowseTemplates />}
+                <ButtonGroup className='right-bottom-button'>
+                    <Modal trigger={<Button>Browse Templates...</Button>}>
+                        {this.props.stack ? null : <BrowseTemplates />}
                     </Modal>
                 </ButtonGroup>
             </Segment>
-        )
-
+        );
     }
-
 }
 
-
 class BrowseTemplates extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
             activeTemplate: null,
-
-        }
+        };
     }
 
     templates = {
@@ -145,24 +143,15 @@ class BrowseTemplates extends Component {
             'Template A',
             'Template B',
             'Template C',
-            'Template D'
+            'Template D',
         ],
-        'Physical Exam': [
-            'Template E',
-            'Template F',
-            'Template G'
-        ],
-        'Review of Systems': [
-            'Template H',
-            'Template I',
-        ],
-    }
+        'Physical Exam': ['Template E', 'Template F', 'Template G'],
+        'Review of Systems': ['Template H', 'Template I'],
+    };
 
-    handleChange = () => {
-    }
+    handleChange = () => {};
 
     render() {
-
         return (
             <Segment className='my-notes-modal'>
                 <Header as={'h2'}>My Templates</Header>
@@ -172,73 +161,108 @@ class BrowseTemplates extends Component {
                 <Grid>
                     <Grid.Column className='template-column' width={5}>
                         <Header as={'h3'}>History of Present Illness</Header>
-                        <Segment placeholder className='list-placeholder-templates'>
-                            <Menu as={Form} secondary vertical style={{width: '100%'}}>
-
-                                {this.templates['History of Present Illness'].map((template) => {
+                        <Segment
+                            placeholder
+                            className='list-placeholder-templates'
+                        >
+                            <Menu
+                                as={Form}
+                                secondary
+                                vertical
+                                style={{ width: '100%' }}
+                            >
+                                {this.templates[
+                                    'History of Present Illness'
+                                ].map((template, index) => {
                                     return (
-                                        <Form.Group>
+                                        <Form.Group key={index}>
                                             <Radio
                                                 label={template}
                                                 name={template}
                                                 value={template}
-                                                checked={this.state.activeTemplate === template}
+                                                checked={
+                                                    this.state
+                                                        .activeTemplate ===
+                                                    template
+                                                }
                                                 onChange={this.handleChange}
                                             ></Radio>
                                         </Form.Group>
-                                    )
+                                    );
                                 })}
-
                             </Menu>
                         </Segment>
                     </Grid.Column>
 
                     <Grid.Column className='template-column' width={5}>
                         <Header as={'h3'}>Physical Exam</Header>
-                        <Segment placeholder className='list-placeholder-templates'>
-                            <Menu as={Form} secondary vertical style={{width: '100%'}}>
-                                {this.templates['Physical Exam'].map((template) => {
-                                    return (
-                                        <Form.Group>
-                                            <Radio
-                                                label={template}
-                                                name={template}
-                                                value={template}
-                                                checked={this.state.activeTemplate === template}
-                                                onChange={this.handleChange}
-                                            ></Radio>
-                                        </Form.Group>
-                                    )
-                                })}
-
+                        <Segment
+                            placeholder
+                            className='list-placeholder-templates'
+                        >
+                            <Menu
+                                as={Form}
+                                secondary
+                                vertical
+                                style={{ width: '100%' }}
+                            >
+                                {this.templates['Physical Exam'].map(
+                                    (template, index) => {
+                                        return (
+                                            <Form.Group key={index}>
+                                                <Radio
+                                                    label={template}
+                                                    name={template}
+                                                    value={template}
+                                                    checked={
+                                                        this.state
+                                                            .activeTemplate ===
+                                                        template
+                                                    }
+                                                    onChange={this.handleChange}
+                                                ></Radio>
+                                            </Form.Group>
+                                        );
+                                    }
+                                )}
                             </Menu>
                         </Segment>
                     </Grid.Column>
 
                     <Grid.Column className='template-column' width={5}>
                         <Header as={'h3'}>Review of Systems</Header>
-                        <Segment placeholder className='list-placeholder-templates'>
-                            <Menu as={Form} secondary vertical style={{width: '100%'}}>
-
-                                {this.templates['History of Present Illness'].map((template) => {
+                        <Segment
+                            placeholder
+                            className='list-placeholder-templates'
+                        >
+                            <Menu
+                                as={Form}
+                                secondary
+                                vertical
+                                style={{ width: '100%' }}
+                            >
+                                {this.templates[
+                                    'History of Present Illness'
+                                ].map((template, index) => {
                                     return (
-                                        <Form.Group>
+                                        <Form.Group key={index}>
                                             <Radio
                                                 label={template}
                                                 name={template}
                                                 value={template}
-                                                checked={this.state.activeTemplate === template}
+                                                checked={
+                                                    this.state
+                                                        .activeTemplate ===
+                                                    template
+                                                }
                                                 onChange={this.handleChange}
                                             ></Radio>
                                         </Form.Group>
-                                    )
+                                    );
                                 })}
-
                             </Menu>
                         </Segment>
                     </Grid.Column>
-
-
                 </Grid>
 
                 <Button
@@ -248,16 +272,7 @@ class BrowseTemplates extends Component {
                 >
                     Create
                 </Button>
-
-
-
-
-
-
-
             </Segment>
-        )
-
+        );
     }
-
 }

@@ -1,5 +1,15 @@
 import React, { Component, createRef } from 'react';
-import { Button, Form, Header, Segment, Input, Grid, Dropdown, Message, Icon } from 'semantic-ui-react';
+import {
+    Button,
+    Form,
+    Header,
+    Segment,
+    Input,
+    Grid,
+    Dropdown,
+    Message,
+    Icon,
+} from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import './NewTemplate.css';
 import TemplateQuestion from './TemplateQuestion';
@@ -26,7 +36,7 @@ class NewTemplateForm extends Component {
             diseaseEmpty: true,
             bodySystemEmpty: true,
             oldTree: [],
-        }
+        };
         this.saveTitle = this.saveTitle.bind(this);
         this.saveBodySystem = this.saveBodySystem.bind(this);
         this.saveDisease = this.saveDisease.bind(this);
@@ -38,9 +48,9 @@ class NewTemplateForm extends Component {
     componentDidMount() {
         /**
          * Fetches the existing knowledge graphs from the backend to prepopulate the
-         * available body systems and diseases. 
+         * available body systems and diseases.
          */
-        graphClient.get('/graph').then(value => {
+        graphClient.get('/graph').then((value) => {
             const nodes = value.data.nodes;
             const allBodySystems = [];
             const allDiseases = [];
@@ -50,12 +60,16 @@ class NewTemplateForm extends Component {
             for (const node in nodes) {
                 const category = nodes[node].category;
                 const questionType = nodes[node].responseType;
-        
-                // Maintain a mapping of body systems to the associated diseases 
-                if (!(categories.has(category))) {
+
+                // Maintain a mapping of body systems to the associated diseases
+                if (!categories.has(category)) {
                     const bodySys = nodes[node].bodySystem;
-                    let key = (((category.split('_')).join(' ')).toLowerCase()).replace(/^\w| \w/gim, c => c.toUpperCase());
-                    
+                    let key = category
+                        .split('_')
+                        .join(' ')
+                        .toLowerCase()
+                        .replace(/^\w| \w/gim, (c) => c.toUpperCase());
+
                     categories.add(category);
                     if (key === 'Shortbreath') {
                         key = 'Shortness of Breath';
@@ -71,7 +85,7 @@ class NewTemplateForm extends Component {
                     bodySystems[bodySys].diseases.push(key);
                 }
 
-                if (! allQuestionTypes.includes(questionType)) {
+                if (!allQuestionTypes.includes(questionType)) {
                     allQuestionTypes.push(questionType);
                 }
             }
@@ -103,7 +117,7 @@ class NewTemplateForm extends Component {
     /**
      * Updates the selected body system and display an input field for
      * the user to type in their own if OTHER was selected.
-     * 
+     *
      * If the value is left empty, raise an error message that prevents
      * the user from adding questions.
      */
@@ -115,7 +129,7 @@ class NewTemplateForm extends Component {
             this.setState({
                 showOtherBodySystem: true,
                 bodySystemEmpty: true,
-            })
+            });
             this.context.onContextChange('bodySystem', '');
         } else if (this.state.bodySystems.includes(value)) {
             otherInput.style.display = 'none';
@@ -123,7 +137,7 @@ class NewTemplateForm extends Component {
             this.setState({
                 showOtherBodySystem: false,
                 bodySystemEmpty: false,
-            })
+            });
             this.context.onContextChange('bodySystem', value);
         } else {
             if (value === '') {
@@ -139,7 +153,7 @@ class NewTemplateForm extends Component {
     /**
      * Updates the selected disease and display an input field for
      * the user to type in their own if OTHER was selected
-     * 
+     *
      * If the value is left empty, raise an error message that prevents
      * the user from adding questions.
      */
@@ -152,7 +166,7 @@ class NewTemplateForm extends Component {
             this.setState({
                 showOtherDisease: true,
                 diseaseEmpty: true,
-            })
+            });
             this.context.onContextChange('disease', '');
         } else if (this.state.diseases.includes(value)) {
             otherInput.style.display = 'none';
@@ -160,7 +174,7 @@ class NewTemplateForm extends Component {
             this.setState({
                 showOtherDisease: false,
                 diseaseEmpty: false,
-            })
+            });
             this.context.onContextChange('disease', value);
         } else {
             if (value === '') {
@@ -179,12 +193,14 @@ class NewTemplateForm extends Component {
      */
     addQuestion() {
         if (this.state.diseaseEmpty) {
-            document.getElementById('disease-error-message').style.display = 'inline-block';
+            document.getElementById('disease-error-message').style.display =
+                'inline-block';
             return;
         }
 
         if (this.state.bodySystemEmpty) {
-            document.getElementById('body-error-message').style.display = 'inline-block';
+            document.getElementById('body-error-message').style.display =
+                'inline-block';
             return;
         }
 
@@ -193,7 +209,7 @@ class NewTemplateForm extends Component {
         const disease = this.context.state.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
         const qId = createNodeId(diseaseCode, numQuestions);
-        
+
         // Create a default node with the parent being the root
         this.context.state.nodes[qId] = {
             id: qId,
@@ -211,7 +227,7 @@ class NewTemplateForm extends Component {
         };
         this.context.state.graph[qId] = [];
         this.context.state.graph['0000'].push(numEdges);
-        
+
         this.context.onContextChange('nodes', this.context.state.nodes);
         this.context.onContextChange('graph', this.context.state.graph);
         this.context.onContextChange('edges', this.context.state.edges);
@@ -220,7 +236,7 @@ class NewTemplateForm extends Component {
     }
 
     /**
-     * Processes the graph data in the template by filtering out unchanged imported nodes 
+     * Processes the graph data in the template by filtering out unchanged imported nodes
      * and ensuring all new nodes start with the correct disease code, and send a request
      * to the backend
      */
@@ -243,27 +259,36 @@ class NewTemplateForm extends Component {
             // There'll never exist an edge of original -> new because adding a new child
             // is considered altering the original. So hasChanged would be false.
             if (edge.from !== '0000' && !nodes[edge.to].hasChanged) {
-                to  = nodes[edge.to].originalId;
+                to = nodes[edge.to].originalId;
             } else {
-                to = edge.to === '0000' || edge.to.startsWith(diseaseCode) ? edge.to : diseaseCode + edge.to.slice(3);
+                to =
+                    edge.to === '0000' || edge.to.startsWith(diseaseCode)
+                        ? edge.to
+                        : diseaseCode + edge.to.slice(3);
             }
-            const from = edge.from === '0000' || edge.from.startsWith(diseaseCode) ? edge.from : diseaseCode + edge.from.slice(3);
+            const from =
+                edge.from === '0000' || edge.from.startsWith(diseaseCode)
+                    ? edge.from
+                    : diseaseCode + edge.from.slice(3);
             updatedEdges[key] = { from, to };
         }
 
         // update all graph keys
         for (let [key, children] of Object.entries(graph)) {
             // Skip over unchanged nodes
-            if (key !== "0000" && !nodes[key].hasChanged) {
+            if (key !== '0000' && !nodes[key].hasChanged) {
                 continue;
             }
-            const id = key === '0000' || key.startsWith(diseaseCode) ? key : diseaseCode + key.slice(3);
-            updatedGraph[id] = children; 
+            const id =
+                key === '0000' || key.startsWith(diseaseCode)
+                    ? key
+                    : diseaseCode + key.slice(3);
+            updatedGraph[id] = children;
         }
 
         // update all node keys and object values
         for (let [key, data] of Object.entries(nodes)) {
-            if (key !== "0000" && !data.hasChanged) {
+            if (key !== '0000' && !data.hasChanged) {
                 continue;
             }
             // If node has changed, the following data is now useless
@@ -282,37 +307,34 @@ class NewTemplateForm extends Component {
         // TODO: Send data to backend when the backend is set up
         // TODO: Depending on how questionOrder is saved, we will need to reflect that
         //       here as well
-        console.log(updatedNodes);
-        console.log(updatedEdges);
-        console.log(updatedGraph);
-        alert('Template created'); // for dev purposes 
-    }
+        alert('Template created'); // for dev purposes
+    };
 
     /**
      * Condense the tree structured graph (made up of nodes) into a single JSON object
      * for react-nestable to read
      */
     createTreeData = () => {
-        const { graph, edges, nodes } = this.context.state;
-        return graph['0000'].map(edge => {
+        const { graph, edges } = this.context.state;
+        return graph['0000'].map((edge) => {
             // create treeNode for every root level question
             const qId = edges[edge].to;
             return this.flattenGraph(qId, '0000', edge);
         });
-    }
-    
+    };
+
     /**
      * Helper function for condensing a tree into a JSON. Returns the condensed JSON object.
-     * 
+     *
      * @param {String} root: The ID of the root of the subtree being condensed
      * @param {*} parent: The parent of the root
      * @param {*} edge: The ID of the edge connecting the parent to the root
      */
     flattenGraph = (root, parent, edge) => {
-        const { graph, edges, nodes } = this.context.state;
-        
+        const { graph, edges } = this.context.state;
+
         // create the children recursively
-        const children = graph[root].map(edge => {
+        const children = graph[root].map((edge) => {
             const childId = edges[edge].to;
             return this.flattenGraph(childId, root, edge);
         });
@@ -322,18 +344,18 @@ class NewTemplateForm extends Component {
             edge,
             id: root,
         };
-    }
+    };
 
     /**
      * Returns the Component representation of a question
-     * 
+     *
      * @param {Object} item: the question being rendered
      * @param {React.Component} collapseIcon: the icon for collapsing children nodes
      * @param {React.Component} handler: the icon for dragging the node around
      */
     renderItem = ({ item, collapseIcon, handler }) => {
         return (
-            <div className="root-question">
+            <div className='root-question'>
                 {handler}
                 {collapseIcon}
                 <TemplateQuestion
@@ -343,31 +365,33 @@ class NewTemplateForm extends Component {
                     graphData={this.state.graphData}
                 />
             </div>
-        )
-    }
+        );
+    };
 
     /**
      * Returns the Component responsible for toggling between collapsed/shown children nodes
-     * 
-     * @param {Boolean} isCollapsed 
+     *
+     * @param {Boolean} isCollapsed
      */
     renderCollapseIcon = ({ isCollapsed }) => {
-        return <Icon 
-            className='collapse-icon' 
-            name={`${isCollapsed ? "plus" : "minus"}`}
-        />
-    }
+        return (
+            <Icon
+                className='collapse-icon'
+                name={`${isCollapsed ? 'plus' : 'minus'}`}
+            />
+        );
+    };
 
     /**
      * Updates the graph data with the new question orders after a drag and drop is performed
-     * 
+     *
      * @param {*} items: the updated JSON representation of the knowledge graph
      * @param {*} item: the item that was dragged
      */
     updateOrder = (items, item) => {
         const { graph, edges, nodes } = this.context.state;
 
-        const [newParent, subtree] = this.findParent(items, "0000", item.id);
+        const [newParent, subtree] = this.findParent(items, '0000', item.id);
         if (!newParent) {
             return; // Couldn't find parent, something went wrong
         }
@@ -375,8 +399,10 @@ class NewTemplateForm extends Component {
         if (item.parent === newParent) {
             const nodesToEdge = {};
             const newEdges = [];
-            graph[newParent].forEach(edge => nodesToEdge[edges[edge].to] = edge);
-            for(let i = 0; i < subtree.length; i++) {
+            graph[newParent].forEach(
+                (edge) => (nodesToEdge[edges[edge].to] = edge)
+            );
+            for (let i = 0; i < subtree.length; i++) {
                 let nodeId = subtree[i].id;
                 newEdges.push(nodesToEdge[nodeId]);
             }
@@ -384,71 +410,86 @@ class NewTemplateForm extends Component {
             updateParent(nodes, newParent);
         } else {
             // Level changed, so remove edge from old parent
-            graph[item.parent] = graph[item.parent].filter(edge => edge != item.edge);
+            graph[item.parent] = graph[item.parent].filter(
+                (edge) => edge !== item.edge
+            );
 
             // Update the parent and the graph with new edge
             edges[item.edge].from = newParent;
             const nodesToEdge = {};
             const newEdges = [];
-            graph[newParent].forEach(edge => nodesToEdge[edges[edge].to] = edge);
-            for(let i = 0; i < subtree.length; i++) {
+            graph[newParent].forEach(
+                (edge) => (nodesToEdge[edges[edge].to] = edge)
+            );
+            for (let i = 0; i < subtree.length; i++) {
                 let nodeId = subtree[i].id;
-                if (nodeId == item.id) {
+                if (nodeId === item.id) {
                     newEdges.push(item.edge);
                 } else {
                     newEdges.push(nodesToEdge[nodeId]);
                 }
             }
-            graph[newParent] = newEdges;            
+            graph[newParent] = newEdges;
             updateParent(nodes, newParent);
             updateParent(nodes, item.parent);
-
         }
-        this.context.onContextChange("graph", graph);
-        this.context.onContextChange("edges", edges);
-    }
+        this.context.onContextChange('graph', graph);
+        this.context.onContextChange('edges', edges);
+    };
 
     /**
-     * Searches the treeData in Depth-first search manner and returns the parent 
+     * Searches the treeData in Depth-first search manner and returns the parent
      * of the target (null if unsuccessful) and the subtree itself
-     * 
+     *
      * @param {Array<Object>} children: list of children to search through
      * @param {String} parent: ID of the direct parent of the children
-     * @param {String} target: ID to look for 
+     * @param {String} target: ID to look for
      */
     findParent = (children, parent, target) => {
         for (let i = 0; i < children.length; i++) {
             let childId = children[i].id;
-            if (childId == target) {
+            if (childId === target) {
                 return [parent, children];
             }
-            let [guess, data] = this.findParent(children[i].children, childId, target);
+            let [guess, data] = this.findParent(
+                children[i].children,
+                childId,
+                target
+            );
             if (guess) {
                 return [guess, data];
             }
         }
         return [null, {}];
-    }
-
+    };
 
     render() {
-        const { bodySystems, diseases, showOtherBodySystem, showOtherDisease, graphData } = this.state;
-        const bodySystemOptions = [{
-            value: OTHER_TEXT,
-            text: OTHER_TEXT,
-        }];
-        bodySystems.forEach(bodySystem => {
+        const {
+            bodySystems,
+            diseases,
+            showOtherBodySystem,
+            showOtherDisease,
+        } = this.state;
+        const bodySystemOptions = [
+            {
+                value: OTHER_TEXT,
+                text: OTHER_TEXT,
+            },
+        ];
+        bodySystems.forEach((bodySystem) => {
             bodySystemOptions.push({
                 value: bodySystem,
                 text: bodySystem,
             });
         });
 
-        const diseaseOptions = [{
-            value: OTHER_TEXT,
-            text: OTHER_TEXT,
-        }];
-        diseases.forEach(disease => {
+        const diseaseOptions = [
+            {
+                value: OTHER_TEXT,
+                text: OTHER_TEXT,
+            },
+        ];
+        diseases.forEach((disease) => {
             diseaseOptions.push({
                 value: disease,
                 text: disease,
@@ -478,7 +519,11 @@ class NewTemplateForm extends Component {
                                 selection
                                 clearable
                                 placeholder='e.g. Endocrine'
-                                value={showOtherBodySystem ? OTHER_TEXT : this.context.state.bodySystem}
+                                value={
+                                    showOtherBodySystem
+                                        ? OTHER_TEXT
+                                        : this.context.state.bodySystem
+                                }
                                 options={bodySystemOptions}
                                 onChange={this.saveBodySystem}
                                 className='info-dropdown'
@@ -499,7 +544,11 @@ class NewTemplateForm extends Component {
                                 selection
                                 clearable
                                 placeholder='e.g. Diabetes'
-                                value={showOtherDisease ? OTHER_TEXT : this.context.state.disease}
+                                value={
+                                    showOtherDisease
+                                        ? OTHER_TEXT
+                                        : this.context.state.disease
+                                }
                                 options={diseaseOptions}
                                 onChange={this.saveDisease}
                                 className='info-dropdown'
@@ -528,7 +577,7 @@ class NewTemplateForm extends Component {
                 />
                 <Nestable
                     items={this.createTreeData()}
-                    handler={<Icon name='bars'/>}
+                    handler={<Icon name='bars' />}
                     renderItem={this.renderItem}
                     renderCollapseIcon={this.renderCollapseIcon}
                     onChange={this.updateOrder}

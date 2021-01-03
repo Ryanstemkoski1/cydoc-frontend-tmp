@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import EditProfile from '../pages/Account/EditProfile';
 import AuthContext from '../contexts/AuthContext';
@@ -9,20 +9,20 @@ Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const testUser = {
     user: {
-        _id: "5e1bf03333dde9658ac24012",
-        username: "yasab",
-        password: "basay",
-        email: "yasa@b.aig",
-        phoneNumber: "1234567890",
-        firstName: "Yasab",
-        lastName: "Aig",
-        workplace: "Duck",
-        inPatient: "No?",
-        institutionType: "Yasa",
-        address: "Yasa",
-        backupEmail: "yasab27@gmail.com",
-        role: "healthcare professional"
-    }
+        _id: '5e1bf03333dde9658ac24012',
+        username: 'yasab',
+        password: 'basay',
+        email: 'yasa@b.aig',
+        phoneNumber: '1234567890',
+        firstName: 'Yasab',
+        lastName: 'Aig',
+        workplace: 'Duck',
+        inPatient: 'No?',
+        institutionType: 'Yasa',
+        address: 'Yasa',
+        backupEmail: 'yasab27@gmail.com',
+        role: 'healthcare professional',
+    },
 };
 
 const setup = (context) => {
@@ -31,7 +31,7 @@ const setup = (context) => {
             <EditProfile />
         </AuthContext.Provider>
     );
-}
+};
 
 test('renders without crashing', () => {
     const wrapper = setup(testUser);
@@ -44,10 +44,9 @@ test('EditProfile renders one UserForm component', () => {
 });
 
 describe('testing props to UserForm based on current user', () => {
-
     const wrapper = setup(testUser).find(UserForm);
-    const emptyString = "";
-    const stringArray = ["", "", ""];
+    const emptyString = '';
+    const stringArray = ['', '', ''];
     const emptyArray = [];
 
     test('defined user props', () => {
@@ -59,11 +58,13 @@ describe('testing props to UserForm based on current user', () => {
         expect(wrapper.props().lastName).toEqual(testUser.user.lastName);
         expect(wrapper.props().workplace).toEqual(testUser.user.workplace);
         expect(wrapper.props().inPatient).toEqual(testUser.user.inPatient);
-        expect(wrapper.props().institutionType).toEqual(testUser.user.institutionType);
+        expect(wrapper.props().institutionType).toEqual(
+            testUser.user.institutionType
+        );
         expect(wrapper.props().address).toEqual(testUser.user.address);
         expect(wrapper.props().backupEmail).toEqual(testUser.user.backupEmail);
         expect(wrapper.props().role).toEqual(testUser.user.role);
-    })
+    });
 
     test('undefined user props set to default values', () => {
         expect(wrapper.props().studentStatus).toEqual(emptyString);
@@ -71,18 +72,17 @@ describe('testing props to UserForm based on current user', () => {
         expect(wrapper.props().degreesInProgress).toEqual(stringArray);
         expect(wrapper.props().specialties).toEqual(stringArray);
         expect(wrapper.props().workplaceFeatures).toEqual(emptyArray);
-    })
+    });
 });
 
 describe('testing text-based props to UserForm', () => {
-
     const wrapper = setup(testUser).find(UserForm);
 
     test('title text', () => {
-        expect(wrapper.props().title).toEqual("edit profile");
+        expect(wrapper.props().title).toEqual('edit profile');
     });
 
     test('button text', () => {
-        expect(wrapper.props().buttonText).toEqual("Save");
+        expect(wrapper.props().buttonText).toEqual('Save');
     });
-})
+});

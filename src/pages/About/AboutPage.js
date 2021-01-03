@@ -29,7 +29,8 @@ class AboutPage extends Component {
 
     updateDimensions() {
         let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-        let windowHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
+        let windowHeight =
+            typeof window !== 'undefined' ? window.innerHeight : 0;
 
         this.setState({ windowWidth, windowHeight });
     }
@@ -50,7 +51,9 @@ class AboutPage extends Component {
                                 content={aboutContent.betterNotes.header}
                                 className='about-header white'
                             />
-                            <p className='better-notes-description'>{aboutContent.betterNotes.description}</p>
+                            <p className='better-notes-description'>
+                                {aboutContent.betterNotes.description}
+                            </p>
                             <BetterNotesIcons windowWidth={windowWidth} />
                         </div>
                     </div>

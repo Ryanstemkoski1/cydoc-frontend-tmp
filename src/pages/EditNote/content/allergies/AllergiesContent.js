@@ -17,11 +17,14 @@ export default class AllergiesContent extends Component {
                             tableHeaders={allergies.fields}
                             tableBodyPlaceholders={allergies.fields}
                             values={context['Allergies']}
-                            onTableBodyChange={context.onContextChange.bind(context, 'Allergies')}
+                            onTableBodyChange={context.onContextChange.bind(
+                                context,
+                                'Allergies'
+                            )}
                             mobile={this.props.mobile}
                             name='allergy'
                         />
-                    )
+                    );
                 }}
             </HPIContext.Consumer>
         );

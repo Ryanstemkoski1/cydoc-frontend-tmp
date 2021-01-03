@@ -17,9 +17,8 @@ test('Register renders one UserForm component', () => {
 });
 
 describe('testing props to UserForm are empty', () => {
-
-    const emptyString = "";
-    const stringArray = ["", "", ""];
+    const emptyString = '';
+    const stringArray = ['', '', ''];
     const emptyArray = [];
     const wrapper = shallow(<Register />).find(UserForm);
 
@@ -55,14 +54,13 @@ describe('testing props to UserForm are empty', () => {
 });
 
 describe('testing text-based props to UserForm', () => {
-
     const wrapper = shallow(<Register />).find(UserForm);
 
     test('title text', () => {
-        expect(wrapper.props().title).toEqual("sign up");
+        expect(wrapper.props().title).toEqual('sign up');
     });
 
     test('button text', () => {
-        expect(wrapper.props().buttonText).toEqual("Sign Up");
+        expect(wrapper.props().buttonText).toEqual('Sign Up');
     });
 });

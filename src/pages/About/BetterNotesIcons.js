@@ -9,7 +9,11 @@ export const BetterNotesIcons = (props) => {
         <Grid>
             <Grid.Row verticalAlign='middle'>
                 <Grid.Column textAlign='center'>
-                    <Icon name='window restore outline' className='white-icon' size='huge' />
+                    <Icon
+                        name='window restore outline'
+                        className='white-icon'
+                        size='huge'
+                    />
                     <p>{aboutContent.betterNotes.intuitiveInterface}</p>
                 </Grid.Column>
             </Grid.Row>
@@ -21,7 +25,11 @@ export const BetterNotesIcons = (props) => {
             </Grid.Row>
             <Grid.Row verticalAlign='middle' textAlign='right'>
                 <Grid.Column textAlign='center'>
-                    <Icon name='mobile alternate' className='white-icon' size='huge' />
+                    <Icon
+                        name='mobile alternate'
+                        className='white-icon'
+                        size='huge'
+                    />
                     <p>{aboutContent.betterNotes.mobileFriendly}</p>
                 </Grid.Column>
             </Grid.Row>
@@ -30,7 +38,11 @@ export const BetterNotesIcons = (props) => {
         <Grid>
             <Grid.Row>
                 <Grid.Column textAlign='center' tablet={5}>
-                    <Icon name='window restore outline' className='white-icon' size='huge' />
+                    <Icon
+                        name='window restore outline'
+                        className='white-icon'
+                        size='huge'
+                    />
                     <p>{aboutContent.betterNotes.intuitiveInterface}</p>
                 </Grid.Column>
                 <Grid.Column textAlign='center' tablet={6}>
@@ -38,7 +50,11 @@ export const BetterNotesIcons = (props) => {
                     <p>{aboutContent.betterNotes.webBased}</p>
                 </Grid.Column>
                 <Grid.Column textAlign='center' tablet={5}>
-                    <Icon name='mobile alternate' className='white-icon' size='huge' />
+                    <Icon
+                        name='mobile alternate'
+                        className='white-icon'
+                        size='huge'
+                    />
                     <p>{aboutContent.betterNotes.mobileFriendly}</p>
                 </Grid.Column>
             </Grid.Row>
