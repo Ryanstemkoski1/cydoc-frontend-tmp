@@ -26,9 +26,7 @@ class Register extends React.Component {
                 phoneNumber=""
                 secondaryNumber=""
                 firstName=""
-                middleName=""
                 lastName=""
-                dob=""
                 workplace=""
                 inPatient={null}
                 institutionType=""

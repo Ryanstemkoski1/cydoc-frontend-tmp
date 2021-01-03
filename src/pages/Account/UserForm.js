@@ -81,15 +81,19 @@ class UserForm extends Component {
                 degreesCompleted: this.props.degreesCompleted,
                 degreesInProgress: this.props.degreesInProgress,
                 specialties: this.props.specialties,
-                workplaceFeatures: this.props.workplaceFeatures
+                workplaceFeatures: this.props.workplaceFeatures,
+
             },
             errorMessages: [],
             redirect: false,
-            title: this.props.title,
+            title: this.props.title,                
+            primaryMobile: false,
+            secondaryMobile: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleArrayChange = this.handleArrayChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleMobile = this.handleMobile.bind(this);
     }
 
     // when user hits submit/save button, fields are validated
@@ -124,6 +128,25 @@ class UserForm extends Component {
         let newState = this.state;
         newState.formInfo[name][index] = value;
         this.setState(newState);
+    }
+
+    handleMobile = (e) => {
+        let mobile = e.target.name;
+        if (mobile === 'primaryMobile') {
+            if (!this.state.primaryMobile) {
+                this.setState({ primaryMobile: true})
+            } else {
+                this.setState({ primaryMobile: false})
+            }
+        }
+
+        if (mobile === 'secondaryMobile') {
+            if (!this.state.secondaryMobile) {
+                this.setState({ secondaryMobile: true})
+            } else {
+                this.setState({ secondaryMobile: false})
+            }
+        }
     }
 
     // helper function based on prop to determine if role field should be shown
@@ -455,7 +478,10 @@ class UserForm extends Component {
                                     className='mobile-checkbox' 
                                     label='Mobile' 
                                     control='input' 
-                                    type='checkbox' 
+                                    type='checkbox'
+                                    name='primaryMobile'
+                                    checked={this.state.primaryMobile}
+                                    onChange={this.handleMobile} 
                                     // disabled 
                                 />
 
@@ -476,6 +502,9 @@ class UserForm extends Component {
                                     label='Mobile' 
                                     control='input' 
                                     type='checkbox' 
+                                    name='secondaryMobile'
+                                    checked={this.state.secondaryMobile}
+                                    onChange={this.handleMobile}
                                     // disabled 
                                 />
 

@@ -118,8 +118,9 @@ class NoteNameMenuItem extends Component {
             invalidLastName: false,
             invalidEmail: false,
             invalidPhone: false,
-            invalidDate: false
-
+            invalidDate: false,
+            primaryMobile: false,
+            secondaryMobile: false
         };
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -130,6 +131,7 @@ class NoteNameMenuItem extends Component {
         this.onEmailChange = this.onEmailChange.bind(this);
         this.onDateChange = this.onDateChange.bind(this);
         this.setChange = this.setChange.bind(this);
+        this.handleMobile = this.handleMobile.bind(this);
     }
 
     handleInputChange = (event) => {
@@ -261,7 +263,25 @@ class NoteNameMenuItem extends Component {
         this.setState({months: age.months});
       }
       
-      
+    handleMobile = (e) => {
+        let mobile = e.target.name;
+        if (mobile === 'primaryMobile') {
+            if (!this.state.primaryMobile) {
+                this.setState({ primaryMobile: true})
+            } else {
+                this.setState({ primaryMobile: false})
+            }
+        }
+
+        if (mobile === 'secondaryMobile') {
+            if (!this.state.secondaryMobile) {
+                this.setState({ secondaryMobile: true})
+            } else {
+                this.setState({ secondaryMobile: false})
+            }
+        }
+    }
+
     render () {
         const { open } = this.state
         return (
@@ -449,7 +469,16 @@ class NoteNameMenuItem extends Component {
                             { this.state.invalidPhone && (
                                 <p className='error'>Phone number must be valid</p>
                             )}
-                            <Form.Field width={4} className='mobile-checkbox' label='Mobile' control='input' type='checkbox' />
+                            <Form.Field 
+                                width={4} 
+                                className='mobile-checkbox' 
+                                label='Mobile' 
+                                control='input' 
+                                type='checkbox' 
+                                name='primaryMobile'
+                                checked={this.state.primaryMobile}
+                                onChange={this.handleMobile}
+                            />
                             </Form.Group>
 
                             <Form.Group>
@@ -463,7 +492,16 @@ class NoteNameMenuItem extends Component {
                                 // onBlur={this.onPhoneChange}
                                 onChange={this.setChange}
                             />
-                            <Form.Field width={4} className='mobile-checkbox' label='Mobile' control='input' type='checkbox' />
+                            <Form.Field 
+                                width={4} 
+                                className='mobile-checkbox' 
+                                label='Mobile' 
+                                control='input' 
+                                type='checkbox'
+                                name='secondaryMobile'
+                                checked={this.state.secondaryMobile}
+                                onChange={this.handleMobile}
+                            />
                             </Form.Group>
                             
                             <DemographicsForm 
