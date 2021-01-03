@@ -1,3 +1,3 @@
-import axios from 'axios';
+import axios from "axios";
 
-export default axios.get('https://cydocgraph.herokuapp.com/graph');
+export default axios.get('https://cydocgraph.herokuapp.com/graph')

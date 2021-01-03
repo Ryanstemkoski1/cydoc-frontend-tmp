@@ -5,7 +5,8 @@ import SocialHistoryTableContent from 'components/tools/SocialHistoryTableConten
 import HPIContext from 'contexts/HPIContext';
 
 class Alcohol extends React.Component {
-    static contextType = HPIContext;
+
+    static contextType = HPIContext
 
     constructor(props) {
         super(props);
@@ -18,38 +19,21 @@ class Alcohol extends React.Component {
         const condition = this.alcoholFields.condition;
         const fields = this.alcoholFields;
         const values = this.props.values;
-
-        if (values[condition]['Yes'] || values[condition]['In the Past']) {
+        
+        if (values[condition]["Yes"] || values[condition]["In the Past"]) {
             return (
                 <SocialHistoryTableContent
                     mobile={this.props.mobile}
-                    tableHeaders={[
-                        fields.firstField,
-                        fields.secondField,
-                        fields.thirdField,
-                        '',
-                    ]}
-                    tableBodyPlaceholders={[
-                        fields.firstField,
-                        fields.secondField,
-                        fields.thirdField,
-                        'delete',
-                    ]}
-                    onTableBodyChange={this.context.onContextChange.bind(
-                        this.context,
-                        'Social History'
-                    )}
+                    tableHeaders={[fields.firstField, fields.secondField, fields.thirdField, '']}
+                    tableBodyPlaceholders={[fields.firstField, fields.secondField, fields.thirdField, 'delete']}
+                    onTableBodyChange={this.context.onContextChange.bind(this.context, 'Social History')}
                     name={condition}
                     values={values}
                     category={'Social History'}
                     addRow='drink type'
-                    prompt={
-                        values[condition]['In the Past']
-                            ? 'Please summarize what you used to drink:'
-                            : 'Please summarize your current drinking habits:'
-                    }
+                    prompt={values[condition]["In the Past"] ? 'Please summarize what you used to drink:' : 'Please summarize your current drinking habits:'}
                 />
-            );
+            )
         }
     }
 
@@ -66,8 +50,9 @@ class Alcohol extends React.Component {
                 values={this.props.values}
                 additionalFields={this.additionalFields}
             />
-        );
+        )
     }
+
 }
 
 export default Alcohol;

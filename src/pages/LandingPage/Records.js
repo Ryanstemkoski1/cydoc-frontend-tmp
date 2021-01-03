@@ -1,66 +1,58 @@
-import React, { Component, Fragment } from 'react';
-import { Redirect } from 'react-router';
-import { Segment, Button } from 'semantic-ui-react';
+import React, {Component, Fragment} from "react";
+import { Redirect } from "react-router"
+import {Grid, Segment, Button} from "semantic-ui-react";
 
 import HPIContext from 'contexts/HPIContext.js';
 import './LandingPage.css';
 
 class ConnectedRecords extends Component {
-    static contextType = HPIContext;
+
+    static contextType = HPIContext
 
     constructor(props) {
         super(props);
         this.state = {
-            redirect: false,
-        };
+            redirect: false
+        }
     }
 
-    handleLoad = () => {
+    handleLoad = (e, f) => {
         if (this.props.activeNote) {
-            this.context.loadNote(this.props.activeNote);
-            this.setState({ redirect: true });
+            this.context.loadNote(this.props.activeNote)
+            this.setState({redirect: true})
         }
-    };
+    }
 
-    handleDelete = () => {
+    handleDelete = (e, f) => {
         if (this.props.activeNote) {
-            this.context.deleteNote(this.props.activeNote);
-            this.props.setActive(null);
+            this.context.deleteNote(this.props.activeNote)
+            this.props.setActive(null)
         }
-    };
+    }
 
     render() {
+
         if (this.state.redirect === true) {
-            return <Redirect push to='/editnote' />;
+            return (
+                <Redirect push to= "/editnote" />
+            )
         }
 
         return (
             <Fragment>
-                <Button
-                    disabled={!this.props.activeNote}
-                    onClick={this.handleLoad}
-                    floated
-                >
+                <Button disabled={!this.props.activeNote} onClick={this.handleLoad} floated>
                     Load
                 </Button>
-                <Button
-                    disabled={!this.props.activeNote}
-                    onClick={this.handleDelete}
-                    floated
-                >
+                <Button disabled={!this.props.activeNote} onClick={this.handleDelete} floated>
                     Delete
                 </Button>
                 <Segment className='note-preview'>
-                    <pre>
-                        {this.props.activeNote
-                            ? JSON.stringify(this.props.activeNote, null, 2)
-                            : 'Select a Note!'}
-                    </pre>
+                    <pre>{this.props.activeNote ? JSON.stringify(this.props.activeNote, null, 2) : "Select a Note!"}</pre>
                 </Segment>
             </Fragment>
         );
     }
 }
 
-const Records = ConnectedRecords;
+const Records = ConnectedRecords
 export default Records;

@@ -14,28 +14,27 @@ export class CreateTemplateStore extends Component {
             '0000': [],
         },
         nodes: {
-            '0000': { id: 'root' },
+            '0000': {id: 'root'},
         },
         edges: {},
-    };
+    }
 
-    onContextChange = (attribute, value) => {
+    onContextChange = (attribute, value) => { 
         this.setState({
-            [attribute]: value,
+            [attribute]: value
         });
-    };
+    }
 
     render() {
-        return (
+        return(
             <CreateTemplateContext.Provider
                 value={{
                     state: this.state,
-                    onContextChange: this.onContextChange,
-                }}
+                    onContextChange: this.onContextChange}}
             >
                 {this.props.children}
             </CreateTemplateContext.Provider>
-        );
+        )
     }
 }
 

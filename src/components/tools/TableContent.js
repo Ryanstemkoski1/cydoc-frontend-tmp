@@ -1,14 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { Table, Input, Accordion, Form, Dropdown } from 'semantic-ui-react';
-import AddRowButton from 'components/tools/AddRowButton.js';
+import AddRowButton from 'components/tools/AddRowButton.js'
 import PropTypes from 'prop-types';
 import { TableBodyRow } from './TableContent/TableBodyRow/TableBodyRow';
 import HPIContext from 'contexts/HPIContext.js';
 import procedures from 'constants/procedures';
 import { sideEffects } from 'constants/sideEffects';
 import drug_names from 'constants/drugNames';
+import diseases from 'constants/diseases';
 import '../../css/components/tableContent.css';
-
+ 
 //Component for a table layout
 export default class TableContent extends Component {
     static contextType = HPIContext;
@@ -19,25 +20,21 @@ export default class TableContent extends Component {
             proceduresOptions: procedures,
             sideEffectsOptions: sideEffects,
             medicationOptions: drug_names,
-        };
+        }
         // TODO: add back addRow functionality
         this.addRow = this.addRow.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
-        this.handleAdditionSideEffects = this.handleAdditionSideEffects.bind(
-            this
-        );
-        this.handleAdditionMedication = this.handleAdditionMedication.bind(
-            this
-        );
+        this.handleAdditionSideEffects = this.handleAdditionSideEffects.bind(this);
+        this.handleAdditionMedication = this.handleAdditionMedication.bind(this);
         this.handleAdditionProcedure = this.handleAdditionProcedure.bind(this);
         this.handleAdditionDisease = this.handleAdditionDisease.bind(this);
     }
 
     //modify the current values in the table to reflect changes
     // and call the handler prop
-    handleTableBodyChange(event, data) {
+    handleTableBodyChange(event, data){ 
         let newState = this.props.values;
         newState[data.rowindex][data.placeholder] = data.value;
         this.props.onTableBodyChange(newState);
@@ -46,8 +43,8 @@ export default class TableContent extends Component {
     handleAdditionSideEffects(event, { value }) {
         this.setState((prevState) => ({
             sideEffectsOptions: [
-                { key: value, text: value, value },
-                ...prevState.sideEffectsOptions,
+                {key: value, text: value, value},
+                ...prevState.sideEffectsOptions
             ],
         }));
     }
@@ -55,8 +52,8 @@ export default class TableContent extends Component {
     handleAdditionMedication(event, { value }) {
         this.setState((prevState) => ({
             medicationOptions: [
-                { key: value, text: value, value },
-                ...prevState.medicationOptions,
+                {key: value, text: value, value},
+                ...prevState.medicationOptions
             ],
         }));
     }
@@ -64,8 +61,8 @@ export default class TableContent extends Component {
     handleAdditionProcedure(event, { value }) {
         this.setState((prevState) => ({
             proceduresOptions: [
-                { key: value, text: value, value },
-                ...prevState.proceduresOptions,
+                {key: value, text: value, value},
+                ...prevState.proceduresOptions
             ],
         }));
     }
@@ -73,15 +70,15 @@ export default class TableContent extends Component {
     handleAdditionDisease(event, { value }) {
         this.setState((prevState) => ({
             diseaseOptions: [
-                { key: value, text: value, value },
-                ...prevState.diseaseOptions,
+                {key: value, text: value, value},
+                ...prevState.diseaseOptions
             ],
         }));
     }
-
+    
     //method to generate an collection of rows
-    makeTableBodyRows(nums) {
-        return nums.map((rowindex, index) => (
+    makeTableBodyRows(nums){
+        return nums.map((rowindex, index) => 
             <TableBodyRow
                 key={index}
                 rowindex={parseInt(rowindex)}
@@ -97,16 +94,15 @@ export default class TableContent extends Component {
                 proceduresOptions={this.state.proceduresOptions}
                 diseaseOptions={this.state.diseaseOptions}
             />
-        ));
+        )
     }
 
     //Method to generate the table header row
-    makeHeader() {
-        return (
+    makeHeader(){
+        return(
             <Table.Row>
-                {this.props.tableHeaders.map((header, index) => (
-                    <Table.HeaderCell key={index}>{header}</Table.HeaderCell>
-                ))}
+                {this.props.tableHeaders.map((header, index) =>
+                    <Table.HeaderCell key={index}>{header}</Table.HeaderCell>)}
             </Table.Row>
         );
     }
@@ -114,19 +110,21 @@ export default class TableContent extends Component {
     addRow() {
         let values = this.context[this.props.category];
         const last_index = values.length.toString();
-        values[last_index] = { Procedure: '', Date: '', Comments: '' };
+        values[last_index] = {Procedure: '', Date: '', Comments: ''}
         this.context.onContextChange(this.props.category, values);
     }
 
     makeAccordionPanels(nums) {
         const { values, tableBodyPlaceholders, name } = this.props;
+
         const panels = [];
+        console.log(values);
 
         for (let i = 0; i < nums.length; i++) {
             let titleContent;
             const contentInputs = [];
 
-            switch (name) {
+            switch(name) {
                 case 'surgical history': {
                     titleContent = (
                         <Form className='inline-form'>
@@ -228,20 +226,12 @@ export default class TableContent extends Component {
             }
 
             for (let j = 1; j < tableBodyPlaceholders.length; j++) {
-                if (
-                    (name === 'medication' && j === 4) ||
-                    (name === 'allergy' && j === 1)
-                ) {
+                if ((name === 'medication' && j === 4) || (name === 'allergy' && j === 1)) {
                     // already in accordion title
                     continue;
                 } else if (tableBodyPlaceholders[j] === 'Side Effects') {
                     contentInputs.push(
-                        <Input
-                            key={j}
-                            fluid
-                            transparent
-                            className='content-input content-dropdown'
-                        >
+                        <Input key={j} fluid transparent className='content-input content-dropdown'>
                             <Dropdown
                                 fluid
                                 search
@@ -281,8 +271,12 @@ export default class TableContent extends Component {
                     content: titleContent,
                 },
                 content: {
-                    content: <Fragment>{contentInputs}</Fragment>,
-                },
+                    content: (
+                        <Fragment>
+                            {contentInputs}
+                        </Fragment>
+                    ),
+                }
             });
         }
 
@@ -290,7 +284,7 @@ export default class TableContent extends Component {
     }
 
     render() {
-        const { values, mobile } = this.props;
+        const {values, mobile } = this.props;
         const nums = Object.keys(values);
         const headerRow = this.makeHeader();
 
@@ -302,9 +296,11 @@ export default class TableContent extends Component {
                 styled
             />
         ) : (
-            <Table celled className='table-display'>
+            <Table
+                celled
+                className='table-display'
+            >
                 <Table.Header content={headerRow} />
-                {/* eslint-disable-next-line react/no-children-prop */}
                 <Table.Body children={this.makeTableBodyRows(nums)} />
             </Table>
         );
@@ -312,7 +308,10 @@ export default class TableContent extends Component {
         return (
             <Fragment>
                 {content}
-                <AddRowButton onClick={this.addRow} name={this.props.name} />
+                <AddRowButton
+                    onClick={this.addRow}
+                    name={this.props.name}
+                />
             </Fragment>
         );
     }
@@ -322,5 +321,5 @@ TableContent.propTypes = {
     tableHeaders: PropTypes.array.isRequired,
     tableBodyPlaceholders: PropTypes.array.isRequired,
     onTableBodyChange: PropTypes.func,
-    values: PropTypes.any.isRequired,
+    values: PropTypes.any.isRequired
 };

@@ -1,13 +1,14 @@
-import { Divider, Grid } from 'semantic-ui-react';
-import React, { Component, Fragment } from 'react';
+import { Divider, Grid } from "semantic-ui-react";
+import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import AddRowButton from 'components/tools/AddRowButton.js';
-import HPIContext from 'contexts/HPIContext.js';
+import HPIContext from 'contexts/HPIContext.js'
 
 //Basic Layout and functionality for note tabs that use a grid. Includes support to
 // add a row, but likely this state will be lifted in the future
 export default class GridContent extends Component {
-    static contextType = HPIContext;
+
+    static contextType = HPIContext
 
     constructor(props, context) {
         super(props, context);
@@ -16,56 +17,29 @@ export default class GridContent extends Component {
     }
 
     render() {
-        const {
-            numColumns,
-            contentHeader,
-            rows,
-            mobile,
-            isPreview,
-        } = this.props;
-        return mobile ? (
-            <Fragment>
-                <br />
+        const {numColumns, contentHeader, rows, mobile, isPreview} = this.props;
+        return mobile ?
+            (<Fragment>
+                <br/>
                 <Grid columns={1} verticalAlign='middle' divided='vertically'>
                     {rows}
                 </Grid>
                 <Divider />
-                {!isPreview && this.props.question_type === 'add_row' ? (
-                    <AddRowButton
-                        onClick={this.props.addRow}
-                        name={this.props.name}
-                    />
-                ) : (
-                    ''
-                )}
+                {!isPreview && this.props.question_type === "add_row" 
+                    ? <AddRowButton onClick={this.props.addRow} name={this.props.name}/> 
+                    : ""}
             </Fragment>
-        ) : (
+            ) : (
             <Fragment>
-                <br />
+                <br/>
                 {contentHeader}
-                {this.props.small ? (
-                    <Divider
-                        style={{
-                            width: '90%',
-                            margin: 'auto',
-                            marginTop: '5px',
-                            marginBottom: '5px',
-                        }}
-                    />
-                ) : (
-                    <Divider />
-                )}
+                {this.props.small ? <Divider style={{width: "90%", margin: "auto", marginTop: "5px", marginBottom: "5px"}}/> : <Divider/>}
                 <Grid columns={numColumns} verticalAlign='middle'>
                     {rows}
                 </Grid>
-                {!isPreview && this.props.question_type === 'add_row' ? (
-                    <AddRowButton
-                        onClick={this.addRow}
-                        name={this.props.name}
-                    />
-                ) : (
-                    ''
-                )}
+                {!isPreview && this.props.question_type === "add_row" 
+                    ? <AddRowButton onClick={this.addRow} name={this.props.name}/> 
+                    : ""}
             </Fragment>
         );
     }
@@ -76,3 +50,4 @@ GridContent.propTypes = {
     numColumns: PropTypes.number.isRequired, //Number of columns in the grid
     rows: PropTypes.array.isRequired, //The rows that will comprise the body of the note. Array of Grid.Row Components.
 };
+

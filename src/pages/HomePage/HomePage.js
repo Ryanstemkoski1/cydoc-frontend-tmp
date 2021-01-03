@@ -1,19 +1,20 @@
 import React, { Component, Fragment } from 'react';
-import NavMenu from '../../components/navigation/NavMenu';
-import HomePageContent from './HomePageContent';
-import './HomePageContent.css';
+import NavMenu from "../../components/navigation/NavMenu";
+import HomePageContent from "./HomePageContent";
+import "./HomePageContent.css";
 
 // Component that manages the layout of the landing page
 class HomePage extends Component {
     render() {
         return (
             <Fragment>
-                <div className='nav-menu-container'>
+                <div className="nav-menu-container">
                     <NavMenu />
                 </div>
-                <div className='home-page-content-container'>
+                <div className="home-page-content-container">
                     <HomePageContent mainText='meet cydoc.' />
                 </div>
+
             </Fragment>
         );
     }

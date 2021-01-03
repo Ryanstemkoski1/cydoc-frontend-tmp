@@ -1,33 +1,29 @@
-import React, { Component } from 'react';
-import {
-    Grid,
-    Input,
-    Header,
+import React, { Component } from 'react'
+import { 
+    Grid, 
+    Input, 
+    Header, 
     Dropdown,
     Accordion,
-    TextArea,
+    TextArea
 } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton';
 import { FORM_DEFAULTS } from './DiscussionPlanDefaults';
-import HPIContext from 'contexts/HPIContext.js';
+import HPIContext from 'contexts/HPIContext.js'
 import diseases from 'constants/diseases';
 import medications from 'constants/drugNames';
 import procedures from 'constants/procedures';
 import constants from 'constants/registration-constants.json';
-const specialtyOptions = constants.specialties.map((specialty) => ({
-    key: specialty,
-    text: specialty,
-    value: specialty,
-}));
+const specialtyOptions = constants.specialties.map((specialty) => ({ key: specialty, text: specialty, value: specialty }));
 
 const TYPE_TO_OPTIONS = {
-    differential_diagnosis: diseases,
-    prescriptions: medications,
-    procedures_and_services: procedures,
-    referrals: specialtyOptions,
+    "differential_diagnosis": diseases,
+    "prescriptions": medications,
+    "procedures_and_services": procedures,
+    "referrals": specialtyOptions,
 };
 
-export default class DiscussionPlanForm extends Component {
+export default class DiscussionPlanForm extends Component{
     static contextType = HPIContext;
     constructor(props) {
         super(props);
@@ -35,28 +31,23 @@ export default class DiscussionPlanForm extends Component {
             expandPanels: false,
             active: new Set(),
             mainOptions: TYPE_TO_OPTIONS[this.props.type],
-            whenOptions: this.generateOptions([
-                'today',
-                'this week',
-                'this month',
-                'this year',
-            ]),
-        };
+            whenOptions: this.generateOptions(['today', 'this week', 'this month', 'this year',]),
+        }
         this.handleOnChange = this.handleOnChange.bind(this);
     }
-
+    
     generateOptions = (values) => {
-        return values.map((value) => ({ value, key: value, text: value }));
-    };
+        return values.map(value => 
+            ({value, key: value, text: value})
+        );
+    }
 
     addRow = () => {
         const plan = { ...this.context.plan };
         const { index, type } = this.props;
-        plan['conditions'][index][type].push({
-            ...FORM_DEFAULTS[type]['default'],
-        });
+        plan['conditions'][index][type].push({ ...FORM_DEFAULTS[type]['default'] });
         this.context.onContextChange('plan', plan);
-    };
+    }
 
     handleAddOption = (e, { optiontype, value }) => {
         this.setState((prevState) => ({
@@ -65,7 +56,7 @@ export default class DiscussionPlanForm extends Component {
                 ...prevState[optiontype],
             ],
         }));
-    };
+    }
 
     handleOnChange = (e, { index, name, value }) => {
         if (name === 'diagnosis' && !this.state.active.has(index)) {
@@ -75,13 +66,13 @@ export default class DiscussionPlanForm extends Component {
         const data = plan['conditions'][this.props.index][this.props.type];
         data[index][name] = value;
         this.context.onContextChange('plan', plan);
-    };
+    }
 
     togglePanel = () => {
         this.setState({
-            expandPanels: !this.state.expandPanels,
+            expandPanels: !this.state.expandPanels
         });
-    };
+    }
 
     toggleAccordion = (idx) => {
         const { active } = this.state;
@@ -91,7 +82,7 @@ export default class DiscussionPlanForm extends Component {
             active.add(idx);
         }
         this.setState({ active });
-    };
+    }
 
     componentDidUpdate(prevProps) {
         if (prevProps.index !== this.props.index) {
@@ -102,181 +93,165 @@ export default class DiscussionPlanForm extends Component {
     convertToTitle = (type) => {
         return type
             .replace(/_/g, ' ')
-            .replace(/\w\S*/g, (text) =>
-                text === 'and'
-                    ? text
-                    : text.charAt(0).toUpperCase() + text.substr(1)
-            );
-    };
+            .replace(/\w\S*/g, text => text === 'and' ? text : text.charAt(0).toUpperCase() + text.substr(1));
+    }
 
     makeGridContent = (type, data) => {
         const gridBody = data.map((datum, idx) => {
-            switch (type) {
+            switch(type) {
                 case 'differential_diagnosis':
-                    return (
-                        <Grid.Row key={idx}>
-                            <Grid.Column width={6}>
-                                <Dropdown
-                                    fluid
-                                    search
-                                    selection
-                                    allowAdditions
-                                    icon=''
-                                    optiontype='mainOptions'
-                                    name='diagnosis'
+                    return <Grid.Row key={idx}>
+                        <Grid.Column width={6}>
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                allowAdditions
+                                icon=''
+                                optiontype='mainOptions'
+                                name='diagnosis'
+                                index={idx}
+                                value={datum['diagnosis']}
+                                options={this.state.mainOptions}
+                                onChange={this.handleOnChange}
+                                onAddItem={this.handleAddOption}
+                                placeholder={'diagnosis'}
+                            />
+                        </Grid.Column>
+                        <Grid.Column width={10}>
+                            <Input
+                                fluid
+                                placeholder='Comments'
+                                name='comment'
+                                index={idx}
+                                value={datum['comment']}
+                                onChange={this.handleOnChange}
+                            />
+                        </Grid.Column>
+                    </Grid.Row>
+                case 'prescriptions':
+                    return <Grid.Row key={idx}>
+                        <Grid.Column>
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                allowAdditions
+                                icon=''
+                                optiontype='mainOptions'
+                                name='recipe_type'
+                                index={idx}
+                                value={datum['recipe_type']}
+                                options={this.state.mainOptions}
+                                onChange={this.handleOnChange}
+                                onAddItem={this.handleAddOption}
+                                placeholder='Medication Name'
+                            />
+                            <Input
+                                fluid
+                                type='text'
+                                name='recipe_amount'
+                                index={idx}
+                                value={datum['recipe_amount']}
+                                onChange={this.handleOnChange}
+                                placeholder='e.g. 81 mg tablet'
+                                className='recipe-amount lg'
+                            />
+                        </Grid.Column>
+                        <Grid.Column>
+                            <div className='ui form'>
+                                <TextArea
+                                    name='signatura'
                                     index={idx}
-                                    value={datum['diagnosis']}
-                                    options={this.state.mainOptions}
+                                    value={datum['signatura']} 
                                     onChange={this.handleOnChange}
-                                    onAddItem={this.handleAddOption}
-                                    placeholder={'diagnosis'}
+                                    placeholder='e.g. 1 tablet every 8 hours'
                                 />
-                            </Grid.Column>
-                            <Grid.Column width={10}>
-                                <Input
-                                    fluid
-                                    placeholder='Comments'
+                            </div>
+                        </Grid.Column>
+                        <Grid.Column>
+                            <div className='ui form'>
+                                <TextArea 
                                     name='comment'
                                     index={idx}
-                                    value={datum['comment']}
+                                    value={datum['comment']} 
                                     onChange={this.handleOnChange}
+                                    placeholder='e.g. take with food'
                                 />
-                            </Grid.Column>
-                        </Grid.Row>
-                    );
-                case 'prescriptions':
-                    return (
-                        <Grid.Row key={idx}>
-                            <Grid.Column>
-                                <Dropdown
-                                    fluid
-                                    search
-                                    selection
-                                    allowAdditions
-                                    icon=''
-                                    optiontype='mainOptions'
-                                    name='recipe_type'
-                                    index={idx}
-                                    value={datum['recipe_type']}
-                                    options={this.state.mainOptions}
-                                    onChange={this.handleOnChange}
-                                    onAddItem={this.handleAddOption}
-                                    placeholder='Medication Name'
-                                />
-                                <Input
-                                    fluid
-                                    type='text'
-                                    name='recipe_amount'
-                                    index={idx}
-                                    value={datum['recipe_amount']}
-                                    onChange={this.handleOnChange}
-                                    placeholder='e.g. 81 mg tablet'
-                                    className='recipe-amount lg'
-                                />
-                            </Grid.Column>
-                            <Grid.Column>
-                                <div className='ui form'>
-                                    <TextArea
-                                        name='signatura'
-                                        index={idx}
-                                        value={datum['signatura']}
-                                        onChange={this.handleOnChange}
-                                        placeholder='e.g. 1 tablet every 8 hours'
-                                    />
-                                </div>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <div className='ui form'>
-                                    <TextArea
-                                        name='comment'
-                                        index={idx}
-                                        value={datum['comment']}
-                                        onChange={this.handleOnChange}
-                                        placeholder='e.g. take with food'
-                                    />
-                                </div>
-                            </Grid.Column>
-                        </Grid.Row>
-                    );
+                            </div>
+                        </Grid.Column>
+                    </Grid.Row>
                 default:
-                    return (
-                        <Grid.Row key={idx}>
-                            <Grid.Column>
-                                <Dropdown
-                                    fluid
-                                    search
-                                    selection
-                                    allowAdditions
-                                    icon=''
-                                    optiontype='mainOptions'
+                    return <Grid.Row key={idx}>
+                        <Grid.Column>
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                allowAdditions
+                                icon=''
+                                optiontype='mainOptions'
+                                index={idx}
+                                options={this.state.mainOptions}
+                                onChange={this.handleOnChange}
+                                onAddItem={this.handleAddOption}
+                                name={FORM_DEFAULTS[type]['main_value']}
+                                value={datum[FORM_DEFAULTS[type]['main_value']]}
+                                placeholder={FORM_DEFAULTS[type]['subheader']}
+                            />
+                        </Grid.Column>
+                        <Grid.Column>
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                allowAdditions
+                                icon=''
+                                optiontype='whenOptions'
+                                index={idx}
+                                options={this.state.whenOptions}
+                                onChange={this.handleOnChange}
+                                onAddItem={this.handleAddOption}
+                                name='when'
+                                value={datum['when']}
+                                placeholder='When'
+                            />
+                        </Grid.Column>
+                        <Grid.Column>
+                            <div className='ui form'>
+                                <TextArea 
+                                    name='comment'
                                     index={idx}
-                                    options={this.state.mainOptions}
+                                    value={datum['comment']} 
                                     onChange={this.handleOnChange}
-                                    onAddItem={this.handleAddOption}
-                                    name={FORM_DEFAULTS[type]['main_value']}
-                                    value={
-                                        datum[FORM_DEFAULTS[type]['main_value']]
-                                    }
-                                    placeholder={
-                                        FORM_DEFAULTS[type]['subheader']
-                                    }
+                                    placeholder='Comments'
                                 />
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Dropdown
-                                    fluid
-                                    search
-                                    selection
-                                    allowAdditions
-                                    icon=''
-                                    optiontype='whenOptions'
-                                    index={idx}
-                                    options={this.state.whenOptions}
-                                    onChange={this.handleOnChange}
-                                    onAddItem={this.handleAddOption}
-                                    name='when'
-                                    value={datum['when']}
-                                    placeholder='When'
-                                />
-                            </Grid.Column>
-                            <Grid.Column>
-                                <div className='ui form'>
-                                    <TextArea
-                                        name='comment'
-                                        index={idx}
-                                        value={datum['comment']}
-                                        onChange={this.handleOnChange}
-                                        placeholder='Comments'
-                                    />
-                                </div>
-                            </Grid.Column>
-                        </Grid.Row>
-                    );
+                            </div>
+                        </Grid.Column>
+                    </Grid.Row>
+
             }
         });
-        let subheaders;
+        let subheaders; 
         if (type === 'prescriptions') {
             subheaders = (
-                <Grid.Row>
+            <Grid.Row>
                     <Grid.Column> Rx </Grid.Column>
                     <Grid.Column> Signature (Sig) </Grid.Column>
                     <Grid.Column> Comments </Grid.Column>
-                </Grid.Row>
+            </Grid.Row>
             );
         } else if (type === 'procedures_and_services' || type === 'referrals') {
             subheaders = (
-                <Grid.Row>
-                    <Grid.Column>
-                        {' '}
-                        {FORM_DEFAULTS[type]['subheader']}{' '}
-                    </Grid.Column>
+            <Grid.Row>
+                    <Grid.Column> {FORM_DEFAULTS[type]['subheader']} </Grid.Column>
                     <Grid.Column> When </Grid.Column>
                     <Grid.Column> Comments </Grid.Column>
-                </Grid.Row>
+            </Grid.Row>
             );
         }
         return (
-            <Grid
+            <Grid 
                 stackable
                 columns={type === 'differential_diagnosis' ? 2 : 3}
                 className='section-body'
@@ -284,21 +259,19 @@ export default class DiscussionPlanForm extends Component {
                 {subheaders}
                 {gridBody}
             </Grid>
-        );
-    };
+        )
+    }
 
     makeAccordionPanels = (type, data) => {
         return data.map((datum, idx) => {
             let title;
             let content;
-            if (
-                type === 'differential_diagnosis' ||
-                type === 'procedures_and_services' ||
-                type === 'referrals'
-            ) {
+            if (type === 'differential_diagnosis'
+                || type === 'procedures_and_services'
+                || type === 'referrals') {
                 title = (
-                    <Input
-                        transparent
+                    <Input 
+                        transparent 
                         className='content-input-surgical content-dropdown medication plan-main-input'
                     >
                         <Dropdown
@@ -323,8 +296,8 @@ export default class DiscussionPlanForm extends Component {
                 title = (
                     <div className='recipe'>
                         Rx
-                        <Input
-                            transparent
+                        <Input 
+                            transparent 
                             className='content-input-surgical content-dropdown medication plan-main-input recipe'
                         >
                             <Dropdown
@@ -371,19 +344,19 @@ export default class DiscussionPlanForm extends Component {
                             placeholder='Comments'
                             className='plan-expanded-input'
                         />
-                    );
+                    )
                     break;
                 case 'prescriptions':
                     content = (
                         <>
                             Signatura (Sig)
-                            <Input
+                            <Input 
                                 fluid
                                 transparent
                                 type='text'
                                 name='signatura'
                                 index={idx}
-                                value={datum['signatura']}
+                                value={datum['signatura']} 
                                 onChange={this.handleOnChange}
                                 placeholder='e.g. 1 tablet every 8 hours'
                                 className='plan-expanded-input'
@@ -392,10 +365,10 @@ export default class DiscussionPlanForm extends Component {
                             <Input
                                 fluid
                                 transparent
-                                type='text'
+                                type='text' 
                                 name='comment'
                                 index={idx}
-                                value={datum['comment']}
+                                value={datum['comment']} 
                                 onChange={this.handleOnChange}
                                 placeholder='e.g. take with food'
                                 className='plan-expanded-input'
@@ -404,41 +377,40 @@ export default class DiscussionPlanForm extends Component {
                     );
                     break;
                 default:
-                    content = (
-                        <>
-                            <Input
-                                transparent
-                                className='content-input-surgical content-dropdown medication plan-main-input'
-                            >
-                                <Dropdown
-                                    fluid
-                                    search
-                                    selection
-                                    allowAdditions
-                                    icon=''
-                                    optiontype='whenOptions'
-                                    index={idx}
-                                    options={this.state.whenOptions}
-                                    onChange={this.handleOnChange}
-                                    onAddItem={this.handleAddOption}
-                                    name='when'
-                                    value={datum['when']}
-                                    placeholder='When'
-                                    className='side-effects'
-                                />
-                            </Input>
-                            <Input
+                    content = (<>
+                        <Input 
+                            transparent 
+                            className='content-input-surgical content-dropdown medication plan-main-input'
+                        >
+                            <Dropdown
                                 fluid
-                                transparent
-                                name='comment'
+                                search
+                                selection
+                                allowAdditions
+                                icon=''
+                                optiontype='whenOptions'
                                 index={idx}
-                                value={datum['comment']}
+                                options={this.state.whenOptions}
                                 onChange={this.handleOnChange}
-                                placeholder='Comments'
-                                className='plan-expanded-input'
+                                onAddItem={this.handleAddOption}
+                                name='when'
+                                value={datum['when']}
+                                placeholder='When'
+                                className='side-effects'
+
                             />
-                        </>
-                    );
+                        </Input>
+                        <Input
+                            fluid
+                            transparent
+                            name='comment'
+                            index={idx}
+                            value={datum['comment']} 
+                            onChange={this.handleOnChange}
+                            placeholder='Comments'
+                            className='plan-expanded-input'
+                        />
+                    </>)
             }
             return {
                 key: idx,
@@ -447,10 +419,10 @@ export default class DiscussionPlanForm extends Component {
                     content: title,
                 },
                 onTitleClick: () => this.toggleAccordion(idx),
-                content: { content },
+                content: { content, },
             };
         });
-    };
+    }
 
     render() {
         const { expandPanels } = this.state;
@@ -461,35 +433,27 @@ export default class DiscussionPlanForm extends Component {
             active = expandPanels;
         }
 
-        const content = mobile ? (
-            <Accordion
+        const content = mobile
+            ? <Accordion
                 panels={this.makeAccordionPanels(type, allData)}
                 exclusive={false}
                 fluid
                 styled
                 className={`plan-section_response ${type}`}
             />
-        ) : (
-            this.makeGridContent(type, allData)
-        );
+            : this.makeGridContent(type, allData);
 
         return (
             <Accordion styled fluid className='plan-section'>
                 <Accordion.Title
                     onClick={
-                        mobile && type !== 'differential_diagnosis'
-                            ? this.togglePanel
-                            : () => {}
-                    }
+                        mobile && type !== 'differential_diagnosis' 
+                        ? this.togglePanel 
+                        : () => {}}
                     active={active}
                     className='section-title'
                 >
-                    <Header
-                        as='h2'
-                        content={this.convertToTitle(type)}
-                        size='large'
-                        attached
-                    />
+                    <Header as='h2' content={this.convertToTitle(type)} size='large' attached/>
                 </Accordion.Title>
                 <Accordion.Content active={active}>
                     {content}
@@ -499,6 +463,6 @@ export default class DiscussionPlanForm extends Component {
                     />
                 </Accordion.Content>
             </Accordion>
-        );
+        )
     }
 }

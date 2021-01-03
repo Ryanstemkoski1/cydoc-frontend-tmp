@@ -1,11 +1,12 @@
 import React from 'react';
 import SocialHistoryNoteItem from './SocialHistoryNoteItem';
 import { SOCIAL_HISTORY } from 'constants/constants';
-import { Form, Grid, Input, Dropdown } from 'semantic-ui-react';
+import {Form, Grid, Input, Dropdown} from 'semantic-ui-react';
 import tobaccoProducts from 'constants/SocialHistory/tobaccoProducts';
 import '../familyhistory/FamilyHistory.css';
 
 class Tobacco extends React.Component {
+
     constructor(props) {
         super(props);
         this.tobaccoFields = SOCIAL_HISTORY.SUBSTANCE_USE_FIELDS.Tobacco;
@@ -22,61 +23,58 @@ class Tobacco extends React.Component {
 
     // asks for packs per day, number of years, and products used
     additionalFields() {
+
         const condition = this.tobaccoFields.condition;
         const fields = this.tobaccoFields;
         const values = this.props.values;
 
-        if (values[condition]['Yes'] || values[condition]['In the Past']) {
+        if (values[condition]["Yes"] || values[condition]["In the Past"]) {
             return (
                 <Grid stackable>
-                    <Grid.Row columns='equal'>
+                    <Grid.Row columns="equal">
                         <Grid.Column>
                             <Form.Field>
-                                {fields['firstField']}
+                                {fields["firstField"]}
                                 <Input
-                                    type='number'
-                                    field={fields['firstField']}
+                                    type="number"
+                                    field={fields["firstField"]}
                                     condition={condition}
-                                    value={
-                                        values[condition][fields['firstField']]
-                                    }
+                                    value={values[condition][fields["firstField"]]}
                                     onChange={this.props.onChange}
                                 />
-                            </Form.Field>
+                            </Form.Field> 
                         </Grid.Column>
                         <Grid.Column>
                             <Form.Field>
-                                {fields['secondField']}
+                                {fields["secondField"]}
                                 {/* TODO: require numerical value, type=number might not work on all browsers? */}
                                 <Input
-                                    type='number'
-                                    field={fields['secondField']}
+                                    type="number"
+                                    field={fields["secondField"]}
                                     condition={condition}
-                                    value={
-                                        values[condition][fields['secondField']]
-                                    }
+                                    value={values[condition][fields["secondField"]]}
                                     onChange={this.props.onChange}
                                 />
-                            </Form.Field>
+                            </Form.Field> 
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column>
-                            {fields['thirdField']}
+                            {fields["thirdField"]}
                             <Dropdown
-                                placeholder={fields['thirdField']}
+                                placeholder={fields["thirdField"]}
                                 fluid
                                 multiple
                                 search
                                 selection
                                 options={tobaccoProducts}
                                 onChange={this.handleDropdown}
-                                value={values[condition][fields['thirdField']]}
+                                value={values[condition][fields["thirdField"]]}
                             />
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-            );
+            )
         }
     }
 
@@ -93,8 +91,9 @@ class Tobacco extends React.Component {
                 values={this.props.values}
                 additionalFields={this.additionalFields}
             />
-        );
+        )
     }
+
 }
 
 export default Tobacco;

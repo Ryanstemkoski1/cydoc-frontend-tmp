@@ -17,13 +17,8 @@ export default class SurgicalHistoryContent extends Component {
                             category={category}
                             tableHeaders={surgicalHistory.fields}
                             tableBodyPlaceholders={surgicalHistory.fields}
-                            values={
-                                this.props.values || context['Surgical History']
-                            }
-                            onTableBodyChange={context.onContextChange.bind(
-                                context,
-                                'Surgical History'
-                            )}
+                            values={this.props.values || context['Surgical History']}
+                            onTableBodyChange={context.onContextChange.bind(context, 'Surgical History')}
                             mobile={this.props.mobile}
                             name='surgical history'
                         />

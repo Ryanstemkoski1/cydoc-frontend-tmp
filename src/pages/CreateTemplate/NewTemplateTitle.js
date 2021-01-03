@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { Button, Input, Header, Segment, Form } from 'semantic-ui-react';
+import {withRouter} from 'react-router-dom';
+import {Button, Input, Header, Segment, Form} from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import './NewTemplate.css';
 
@@ -19,7 +19,7 @@ class NewTemplateTitle extends Component {
 
     editGraph = () => {
         this.props.history.push('/editgraph');
-    };
+    }
 
     render() {
         return (

@@ -1,87 +1,67 @@
 {
-	"name": "cydoc-app",
-	"version": "0.1.0",
-	"private": true,
-	"dependencies": {
-		"axios": "^0.19.2",
-		"babel-jest": "^24.9.0",
-		"colors": "^1.4.0",
-		"eslint": "^6.8.0",
-		"firebase": "^7.15.1",
-		"gulp-chmod": "^3.0.0",
-		"history": "^1.17.0",
-		"jest": "^24.9.0",
-		"lodash": "^4.17.20",
-		"node": "^11.15.0",
-		"prop-types": "^15.7.2",
-		"react": "^16.13.1",
-		"react-cookie": "^4.0.3",
-		"react-date-picker": "^7.10.0",
-		"react-datepicker": "^3.1.3",
-		"react-dnd": "^10.0.2",
-		"react-dnd-touch-backend": "^10.0.2",
-		"react-dom": "^16.13.1",
-		"react-masonry-component": "^6.2.1",
-		"react-masonry-css": "^1.0.14",
-		"react-nestable": "^1.3.0",
-		"react-numeric-input": "^2.2.3",
-		"react-router": "^5.0.1",
-		"react-router-dom": "^5.0.1",
-		"react-scripts": "^3.4.1",
-		"react-time-picker": "^4.0.1",
-		"update": "^0.7.4",
-		"yarn": "^1.22.4",
-		"yup": "0.28.3"
-	},
-	"scripts": {
-		"build-semantic": "cd src/semantic && gulp build-css build-assets",
-		"watch-semantic": "cd src/semantic && yarn run build-semantic && gulp watch",
-		"start": "yarn run build-semantic && react-scripts start",
-		"build": "yarn run build-semantic && react-scripts build",
-		"test": "react-scripts test --watchAll=false --coverage --verbose",
-    "lint": "node lint.js",
-		"eject": "react-scripts eject"
-	},
-	"eslintConfig": {
-		"extends": "react-app"
-	},
-	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
-		"development": [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version"
-		]
-	},
-	"devDependencies": {
-		"babel-eslint": "^10.1.0",
-		"enzyme": "^3.11.0",
-		"enzyme-adapter-react-16": "^1.15.2",
-		"eslint-config-prettier": "^7.1.0",
-		"eslint-plugin-jest": "^24.1.3",
-		"eslint-plugin-prettier": "^3.3.0",
-		"eslint-plugin-react": "^7.19.0",
-		"gulp": "^3.9.1",
-		"jest-enzyme": "^7.1.2",
-		"prettier": "^2.2.1",
-		"prettier-eslint": "^12.0.0",
-		"react-redux": "^7.2.0",
-		"redux": "^4.0.5",
-		"redux-devtools-extension": "^2.13.8",
-		"redux-thunk": "^2.3.0",
-		"semantic-ui": "^2.4.2",
-		"semantic-ui-react": "^0.88.2",
-		"uuid": "^3.4.0"
-	},
-	"prettier": {
-		"tabWidth": 4,
-		"semi": true,
-		"singleQuote": true,
-		"bracketSpacing": true,
-		"trailingComma": "es5"
-	}
+  "name": "cydoc-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.19.2",
+    "firebase": "^7.15.1",
+    "gulp-chmod": "^3.0.0",
+    "history": "^1.17.0",
+    "lodash": "^4.17.20",
+    "node": "^11.15.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-cookie": "^4.0.3",
+    "react-date-picker": "^7.10.0",
+    "react-datepicker": "^3.1.3",
+    "react-dnd": "^10.0.2",
+    "react-dnd-touch-backend": "^10.0.2",
+    "react-dom": "^16.13.1",
+    "react-masonry-component": "^6.2.1",
+    "react-masonry-css": "^1.0.14",
+    "react-nestable": "^1.3.0",
+    "react-numeric-input": "^2.2.3",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.0.1",
+    "react-scripts": "^3.4.1",
+    "react-time-picker": "^4.0.1",
+    "yarn": "^1.22.4",
+    "yup": "0.28.3"
+  },
+  "scripts": {
+    "build-semantic": "cd src/semantic && gulp build-css build-assets",
+    "watch-semantic": "cd src/semantic && yarn run build-semantic && gulp watch",
+    "start": "yarn run build-semantic && react-scripts start",
+    "build": "yarn run build-semantic && react-scripts build",
+    "test": "react-scripts test --watchAll=false --coverage --verbose",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
+    "gulp": "^3.9.1",
+    "jest-enzyme": "^7.1.2",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
+    "semantic-ui": "^2.4.2",
+    "semantic-ui-react": "^0.88.2",
+    "uuid": "^3.4.0"
+  }
 }

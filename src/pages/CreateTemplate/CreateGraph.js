@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import NavMenu from '../../components/navigation/NavMenu';
+import NavMenu from "../../components/navigation/NavMenu";
 import NewTemplateTitle from './NewTemplateTitle';
 import './NewTemplate.css';
 

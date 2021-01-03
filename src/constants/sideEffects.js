@@ -198,5 +198,5 @@ const rawSideEffects = [
 ];
 
 export const sideEffects = rawSideEffects.map((se, index) => {
-    return { key: index, value: se, text: se };
+    return { key: index, value: se, text: se }
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Button, Grid, Header, Image, Segment } from 'semantic-ui-react';
 import { ABOUT_PAGE_MED_BP } from 'constants/breakpoints.js';
 import { aboutContent } from 'constants/aboutContent';
@@ -19,7 +19,9 @@ export const MeetCydocSection = (props) => {
                 content={aboutContent.meetCydoc.subheader}
                 className='about-sub-header'
             />
-            <p>{aboutContent.meetCydoc.description}</p>
+            <p>
+                {aboutContent.meetCydoc.description}
+            </p>
             <Button
                 primary
                 circular
@@ -58,7 +60,9 @@ export const MeetCydocSection = (props) => {
                         content={aboutContent.meetCydoc.subheader}
                         className='about-sub-header'
                     />
-                    <p>{aboutContent.meetCydoc.description}</p>
+                    <p>
+                        {aboutContent.meetCydoc.description}
+                    </p>
                     <Button
                         primary
                         circular

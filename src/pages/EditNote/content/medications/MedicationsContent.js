@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { medications } from 'constants/States';
 import HPIContext from 'contexts/HPIContext.js';
-import MedicationsTable from './MedicationsTable.js';
+import MedicationsTable from'./MedicationsTable.js';
 
 //Component that manages content for the Medications page
 export default class MedicationsContent extends Component {
@@ -16,12 +16,9 @@ export default class MedicationsContent extends Component {
                             isPreview={this.props.isPreview}
                             tableHeaders={medications.fields}
                             tableBodyPlaceholders={placeholders}
-                            category={category}
+                            category = {category}
                             values={this.props.values || context['Medications']}
-                            onTableBodyChange={context.onContextChange.bind(
-                                context,
-                                'Medications'
-                            )}
+                            onTableBodyChange={context.onContextChange.bind(context, 'Medications')}
                             pop={true}
                             mobile={this.props.mobile}
                             name='medication'

@@ -1,119 +1,58 @@
 import React, { Component, Fragment } from 'react';
-import { Form, Segment, Message, Container, Image } from 'semantic-ui-react';
-import * as yup from 'yup';
-import { Redirect } from 'react-router';
-import AuthContext from '../../contexts/AuthContext';
-import constants from 'constants/registration-constants.json';
+import { Form, Grid, Header, Segment, Message, Container, Image } from "semantic-ui-react";
+import * as yup from "yup"
+import { Redirect } from "react-router";
+import AuthContext from "../../contexts/AuthContext";
+import constants from "constants/registration-constants.json"
 import Logo from '../../assets/cydoc-logo.svg';
 import './UserForm.css';
 
-const degreeOptions = constants.degrees.map((degree) => ({
-    key: degree,
-    value: degree,
-    text: degree,
-}));
-const specialtyOptions = constants.specialties.map((specialty) => ({
-    key: specialty,
-    value: specialty,
-    text: specialty,
-}));
-const workfeatOptions = constants.workplaceFeatures.map((workfeat) => ({
-    key: workfeat,
-    value: workfeat,
-    text: workfeat,
-}));
+const degreeOptions = constants.degrees.map((degree) => ({ key: degree, value: degree, text: degree }))
+const specialtyOptions = constants.specialties.map((specialty) => ({ key: specialty, value: specialty, text: specialty }))
+const workfeatOptions = constants.workplaceFeatures.map((workfeat) => ({ key: workfeat, value: workfeat, text: workfeat }))
 const yasaSchema = yup.object().shape({
-    username: yup.string().required('username is required'),
-    password: yup.string().required('password is required'),
-    passwordConfirm: yup
-        .string()
-        .oneOf([yup.ref('password'), null], 'passwords must match'),
-    email: yup
-        .string()
-        .required('email is required')
-        .email('email must be valid'),
-    backupEmail: yup
-        .string()
-        .required('backup email is required')
-        .notOneOf([yup.ref('email')], 'backup email must not be the same')
-        .email('backup email must be valid'),
-    phoneNumber: yup
-        .string()
-        .required('phone number is required')
-        .matches(
-            /^[\\(]{0,1}([0-9]){3}[\\)]{0,1}[ ]?([^0-1]){1}([0-9]){2}[ ]?[-]?[ ]?([0-9]){4}[ ]*((x){0,1}([0-9]){1,5}){0,1}$/,
-            'phone number must be valid'
-        ),
-    firstName: yup.string().required('first name must not be blank'),
-    lastName: yup.string().required('last name must not be blank'),
-    role: yup.string().required('please specify your role'),
-    studentStatus: yup.string().when('role', {
-        is: 'healthcare professional',
-        then: yup.string().required('please specify your student status'),
-        otherwise: yup.string(),
-    }),
-    workplace: yup.string().when('role', {
-        is: 'healthcare professional',
-        then: yup.string().required('workplace is required'),
-        otherwise: yup.string(),
-    }),
-    degreesCompleted: yup
-        .array()
-        .of(yup.string())
-        .test(
-            'degreesCompleted-duplicates',
-            'Cannot put same degree twice under degrees completed',
-            (arr) => {
-                return (
-                    arr.filter((item, index) => {
-                        return item !== '' && arr.indexOf(item) !== index;
-                    }).length === 0
-                );
-            }
-        ),
-    degreesInProgress: yup
-        .array()
-        .of(
-            yup
-                .string()
-                .notOneOf(
-                    [
-                        yup.ref('$degreesCompleted[0]'),
-                        yup.ref('$degreesCompleted[1]'),
-                        yup.ref('$degreesCompleted[2]'),
-                    ],
-                    'Same degree cannot be both completed and in progress'
-                )
-        )
-        .test(
-            'degreesInProgress-duplicates',
-            'Cannot put same degree twice under degrees in progress',
-            (arr) => {
-                return (
-                    arr.filter((item, index) => {
-                        return item !== '' && arr.indexOf(item) !== index;
-                    }).length === 0
-                );
-            }
-        ),
-    specialties: yup
-        .array()
-        .test(
-            'specialty-duplicates',
-            'Cannot put same specialty twice',
-            (arr) => {
-                return (
-                    arr.filter((item, index) => {
-                        return item !== '' && arr.indexOf(item) !== index;
-                    }).length === 0
-                );
-            }
-        ),
-});
+    username: yup.string().required("username is required"),
+    password: yup.string().required("password is required"),
+    passwordConfirm: yup.string().oneOf([yup.ref('password'), null], "passwords must match"),
+    email: yup.string().required("email is required").email("email must be valid"),
+    backupEmail: yup.string().required("backup email is required").notOneOf([yup.ref('email')], "backup email must not be the same").email("backup email must be valid"),
+    phoneNumber: yup.string().required("phone number is required").matches(/^[\\(]{0,1}([0-9]){3}[\\)]{0,1}[ ]?([^0-1]){1}([0-9]){2}[ ]?[-]?[ ]?([0-9]){4}[ ]*((x){0,1}([0-9]){1,5}){0,1}$/, "phone number must be valid"),
+    firstName: yup.string().required("first name must not be blank"),
+    lastName: yup.string().required("last name must not be blank"),
+    role: yup.string().required("please specify your role"),
+    studentStatus: yup.string().when('role', {is: 'healthcare professional', then: yup.string().required("please specify your student status"), otherwise: yup.string()}),
+    workplace: yup.string().when('role', {is: 'healthcare professional', then: yup.string().required("workplace is required"), otherwise: yup.string()}),
+    degreesCompleted: yup.array().of(yup.string()).test(
+        'degreesCompleted-duplicates',
+        'Cannot put same degree twice under degrees completed',
+        arr => {
+            return arr.filter((item, index) => {
+                return item !== "" && arr.indexOf(item) != index
+            }).length === 0
+        }),
+    degreesInProgress: yup.array().of(yup.string().notOneOf([yup.ref('$degreesCompleted[0]'), yup.ref('$degreesCompleted[1]'), yup.ref('$degreesCompleted[2]')], 'Same degree cannot be both completed and in progress')).test(
+        'degreesInProgress-duplicates',
+        'Cannot put same degree twice under degrees in progress',
+        arr => {
+            return arr.filter((item, index) => {
+                return item !== "" && arr.indexOf(item) != index
+            }).length === 0
+        }),
+    specialties: yup.array().test(
+        'specialty-duplicates',
+        'Cannot put same specialty twice',
+        arr => {
+            return arr.filter((item, index) => {
+                return item !== "" && arr.indexOf(item) != index
+            }).length === 0
+        })
+})
+
 
 // component that manages the layout of the Register and EditProfile pages
 class UserForm extends Component {
-    static contextType = AuthContext;
+
+    static contextType = AuthContext
 
     // state gets initial values as props
     constructor(props) {
@@ -137,7 +76,7 @@ class UserForm extends Component {
                 degreesCompleted: this.props.degreesCompleted,
                 degreesInProgress: this.props.degreesInProgress,
                 specialties: this.props.specialties,
-                workplaceFeatures: this.props.workplaceFeatures,
+                workplaceFeatures: this.props.workplaceFeatures
             },
             errorMessages: [],
             redirect: false,
@@ -152,33 +91,31 @@ class UserForm extends Component {
     // if error -- display error
     // if no error -- put/save user in database
     handleSubmit = () => {
-        let user = this.state.formInfo;
 
-        yasaSchema
-            .validate(user, { abortEarly: false })
-            .then(() => {
-                this.props
-                    .handleSubmit(user)
-                    .then(() => {
-                        this.setState({ redirect: true });
-                    })
-                    .catch((err) => {
-                        // eslint-disable-next-line no-console
-                        console.log(err.response);
-                    });
-            })
-            .catch((v) => this.setState({ errorMessages: v.errors }));
-    };
+        let user = this.state.formInfo
+
+        yasaSchema.validate(user, { abortEarly: false }).then((v) => {
+            this.props.handleSubmit(user)
+                .then(res => {
+                    const user = res.data;
+                    console.log(JSON.stringify(user))
+                    this.setState({ redirect: true })
+                })
+                .catch(err => {
+                    console.log(err.response)
+                })
+        }).catch((v) => this.setState({ errorMessages: v.errors }))
+    }
 
     // handles change in a single field (updates states based on changed info)
-    handleChange(e, { name, value }) {
+    handleChange(e, {name, value}) {
         let newState = this.state;
         newState.formInfo[name] = value;
         this.setState(newState);
     }
 
     // handles change for array-based fieldss (also updates state)
-    handleArrayChange(e, { name, index, value }) {
+    handleArrayChange(e, {name, index, value}) {
         let newState = this.state;
         newState.formInfo[name][index] = value;
         this.setState(newState);
@@ -190,9 +127,11 @@ class UserForm extends Component {
         if (this.props.show) {
             return (
                 <Fragment>
-                    <label className='sign-up-font'>I am a:</label>
+                    <label className='sign-up-font'>
+                        I am a:
+                    </label>
                     <Form.Group>
-                        <Form.Radio
+                        <Form.Radio 
                             className='sign-up-font'
                             label='patient'
                             value='patient'
@@ -205,10 +144,7 @@ class UserForm extends Component {
                             label='healthcare professional'
                             value='healthcare professional'
                             name='role'
-                            checked={
-                                this.state.formInfo.role ===
-                                'healthcare professional'
-                            }
+                            checked={this.state.formInfo.role === 'healthcare professional'}
                             onChange={this.handleChange}
                         />
                         <Form.Radio
@@ -216,19 +152,17 @@ class UserForm extends Component {
                             label='administrator'
                             value='administrator'
                             name='role'
-                            checked={
-                                this.state.formInfo.role === 'administrator'
-                            }
+                            checked={this.state.formInfo.role === 'administrator'}
                             onChange={this.handleChange}
                         />
                     </Form.Group>
                 </Fragment>
-            );
+            )
         }
-    };
+    }
 
     // show additional fields if user clicks on/is a healthcare professional
-    // prompts user for more information
+    // prompts user for more information 
     additionalFields = () => {
         if (this.state.formInfo.role === 'healthcare professional') {
             return (
@@ -370,47 +304,32 @@ class UserForm extends Component {
                         onChange={this.handleChange}
                     />
                 </Fragment>
-            );
+            )
         }
-    };
+    }
 
     render() {
         // after submit redirect is set to true (if no errors) and user is redirected
         if (this.state.redirect) {
-            return <Redirect push to={this.props.pushTo} />;
+            return (<Redirect push to={this.props.pushTo}/>)
         }
 
         //renders a one-column grid centered in the middle of the screen with profile form
         return (
-            <Container className='sign-up'>
+            <Container className="sign-up">
                 <Container>
                     <Segment clearing raised className='sign-up-segment'>
                         <Container textAlign='center'>
-                            <Image size='tiny' href='/home' src={Logo} />
-                        </Container>{' '}
-                        {this.props.disableRegister && (
-                            <Container
-                                className='coming-soon'
-                                color='black'
-                                textAlign='center'
-                            >
+                            <Image size="tiny" href='/home' src={Logo} />
+                        </Container>                        {this.props.disableRegister && 
+                            <Container className='coming-soon' color='black' textAlign='center'>
                                 coming soon
                             </Container>
-                        )}
-                        <Container
-                            className={`sign-up-header ${
-                                this.props.disableRegister ? 'disabled' : ''
-                            }`}
-                            color='black'
-                            textAlign='center'
-                        >
+                        }
+                        <Container className={`sign-up-header ${this.props.disableRegister ? 'disabled' : ''}`} color='black' textAlign='center'>
                             {this.state.title}
                         </Container>
-                        <Form
-                            size='small'
-                            error={this.state.errorMessages.length > 0}
-                            onSubmit={this.handleSubmit}
-                        >
+                        <Form size='small' error={this.state.errorMessages.length>0} onSubmit={this.handleSubmit}>
                             <Form.Input
                                 fluid
                                 label='Username'
@@ -422,7 +341,7 @@ class UserForm extends Component {
                             />
                             <Form.Input
                                 fluid
-                                type={'password'}
+                                type={"password"}
                                 label='Password'
                                 placeholder='password'
                                 name='password'
@@ -432,7 +351,7 @@ class UserForm extends Component {
                             />
                             <Form.Input
                                 fluid
-                                type={'password'}
+                                type={"password"}
                                 label='Re-enter password'
                                 placeholder='re-enter password'
                                 name='passwordConfirm'
@@ -504,11 +423,7 @@ class UserForm extends Component {
                                     disabled
                                 />
                             </Form.Group>
-                            <label
-                                className={`label-font ${
-                                    this.props.disableRegister ? 'disabled' : ''
-                                }`}
-                            >
+                            <label className={`label-font ${this.props.disableRegister ? 'disabled' : ''}`}>
                                 I am a:
                             </label>
                             <Form.Group>
@@ -517,10 +432,7 @@ class UserForm extends Component {
                                     label='Healthcare Professional'
                                     value='healthcare professional'
                                     name='role'
-                                    checked={
-                                        this.state.formInfo.role ===
-                                        'healthcare professional'
-                                    }
+                                    checked={this.state.formInfo.role === 'healthcare professional'}
                                     onChange={this.handleChange}
                                     disabled
                                 />
@@ -529,9 +441,7 @@ class UserForm extends Component {
                                     label='Patient'
                                     value='patient'
                                     name='role'
-                                    checked={
-                                        this.state.formInfo.role === 'patient'
-                                    }
+                                    checked={this.state.formInfo.role === 'patient'}
                                     onChange={this.handleChange}
                                     disabled
                                 />
@@ -540,10 +450,7 @@ class UserForm extends Component {
                                     label='Administrator'
                                     value='administrator'
                                     name='role'
-                                    checked={
-                                        this.state.formInfo.role ===
-                                        'administrator'
-                                    }
+                                    checked={this.state.formInfo.role === 'administrator'}
                                     onChange={this.handleChange}
                                     disabled
                                 />
@@ -552,17 +459,10 @@ class UserForm extends Component {
                             <Message
                                 error
                                 header='Error!'
-                                content={this.state.errorMessages.map((m) => (
-                                    <Message.Item key={m}>{m}</Message.Item>
-                                ))}
+                                content={this.state.errorMessages.map(m => <Message.Item>{m}</Message.Item>)}
                             />
                             <>
-                                <Form.Button
-                                    color='teal'
-                                    size='small'
-                                    floated='right'
-                                    disabled={this.props.disableRegister}
-                                >
+                                <Form.Button color='teal' size='small' floated='right' disabled={this.props.disableRegister}>
                                     {this.props.buttonText}
                                 </Form.Button>
                             </>

@@ -12,40 +12,39 @@ export class MedicationTableBody extends Component {
     }
 
     handleCellClick = (e) => {
-        const innerInput = e.target.lastElementChild;
+        const innerInput = e.target.lastElementChild
         // Handles clicks outside of the "clickable area" (padding) of the input/textarea component within a cell
-        if (innerInput !== null) {
-            if (innerInput.type === 'textarea') {
+        if (innerInput != null) {
+            if (innerInput.type == "textarea") {
                 innerInput.focus();
-            } else {
+            }
+            else {
                 // for Inputs/dropdowns
                 innerInput.click();
             }
         }
-    };
+    }
 
     onYearChange = (e) => {
-        this.setState({
-            invalidYear:
-                e.target.value !== '' &&
-                !/^(19\d\d|20[0-2]\d)$/.test(e.target.value),
-        });
-    };
+        this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
+    }
 
     getCell(placeholder) {
         const {
-            values,
-            rowindex,
-            onTableBodyChange,
+            values, 
+            rowindex, 
+            onTableBodyChange, 
             onAddItem,
-            medicationOptions,
-            sideEffectsOptions,
+            medicationOptions, 
+            sideEffectsOptions, 
             diseaseOptions,
+            isPreview,
         } = this.props;
 
         let cell;
 
         switch (placeholder) {
+            
             case 'Side Effects': {
                 cell = (
                     <Input
@@ -62,7 +61,7 @@ export class MedicationTableBody extends Component {
                             icon=''
                             options={sideEffectsOptions}
                             optiontype='sideEffectsOptions'
-                            type={placeholder}
+                            type={placeholder}                    
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}
@@ -101,7 +100,9 @@ export class MedicationTableBody extends Component {
             }
             case 'Start Year':
                 cell = (
-                    <div className='table-year-input'>
+                    <div 
+                    className='table-year-input'
+                    >
                         <TextArea
                             rows={3}
                             type={placeholder}
@@ -111,13 +112,12 @@ export class MedicationTableBody extends Component {
                             value={values[rowindex][placeholder]}
                             className='table-row-text'
                         />
-                        {this.state.invalidYear && (
-                            <p className='error'>
-                                Please enter a year between 1900 and 2020
-                            </p>
+                        { this.state.invalidYear && (
+                            <p className='error'>Please enter a year between 1900 and 2020</p>
                         )}
                     </div>
-                );
+
+                )
                 break;
             case 'Reason for Taking':
                 cell = (
@@ -170,15 +170,20 @@ export class MedicationTableBody extends Component {
                 <Table.Cell key={index} onClick={this.handleCellClick}>
                     {this.getCell(placeholder)}
                 </Table.Cell>
-            );
+            )
         });
 
-        return <Table.Row>{tableRows}</Table.Row>;
+        return (
+            <Table.Row>
+                {tableRows}
+            </Table.Row>
+        );
     }
+
 }
 
 MedicationTableBody.propTypes = {
     tableBodyPlaceholders: PropTypes.arrayOf(PropTypes.any),
     onTableBodyChange: PropTypes.func,
-    rowindex: PropTypes.number,
+    rowindex: PropTypes.number
 };

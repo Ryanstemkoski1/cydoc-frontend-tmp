@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from 'semantic-ui-react';
+import {Input} from 'semantic-ui-react';
 import HPIContext from 'contexts/HPIContext.js';
 
 export default class PlanInput extends React.Component {
@@ -12,42 +12,34 @@ export default class PlanInput extends React.Component {
         };
     }
 
-    handleInputChange = (event) => {
+    handleInputChange = (event) => { 
         this.setState({
-            textInput: event.target.value,
+            textInput: event.target.value
         });
 
-        const plan = { ...this.context.plan };
+        const plan = {...this.context.plan};
         plan.conditions[this.props.index]['name'] = event.target.value;
         this.context.onContextChange('plan', plan);
-    };
+    }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         if (this.props.name !== this.state.textInput) {
             this.setState({ textInput: this.props.name });
         }
     }
 
     render() {
-        return (
+        return(
             <Input
                 fluid={this.props.fluid}
-                className={
-                    this.state.isTitleFocused === true
-                        ? 'ui input focus'
-                        : 'ui input transparent'
-                }
+                className={this.state.isTitleFocused === true ? 'ui input focus' : 'ui input transparent'}
                 type='text'
                 placeholder='Condition Name'
                 onChange={this.handleInputChange}
-                onFocus={() => {
-                    this.setState({ isTitleFocused: true });
-                }}
-                onBlur={() => {
-                    this.setState({ isTitleFocused: false });
-                }}
-                value={this.state.textInput}
+                onFocus={()=>{this.setState({isTitleFocused: true})}}
+                onBlur={()=>{this.setState({isTitleFocused: false})}}
+                value={this.state.textInput} 
             />
-        );
+        )
     }
 }

@@ -1,23 +1,26 @@
-import React from 'react';
-import NotesContext from './NotesContext';
-import { noteBody } from 'constants/noteBody.js';
+import React from 'react'
+import NotesContext from './NotesContext'
+import { noteBody } from 'constants/noteBody.js'
 
-const Context = React.createContext('yasa');
+
+const Context = React.createContext('yasa')
 
 export class HPIStore extends React.Component {
-    static contextType = NotesContext;
+
+    static contextType = NotesContext
 
     constructor(props) {
-        super(props);
+        super(props)
 
         this.state = {
-            title: 'Untitled Note',
+            title: "Untitled Note",
             _id: null,
             createdTime: 0,
             modifiedTime: 0,
             unsavedChanges: false,
             ...noteBody,
-        };
+
+        }
     }
 
     //Sets context[name] equal to values
@@ -25,93 +28,86 @@ export class HPIStore extends React.Component {
         this.setState(
             {
                 [name]: values,
-                unsavedChanges: true,
+                unsavedChanges: true
             }
             // ,
             // () => this.saveNote(true)
         );
-    };
+    }
 
     //Saves the current note, which updates the NotesContext's state
     saveNote = (localOnly = false) => {
-        let {
-            title: noteName,
-            _id,
-            createdTime,
-            unsavedChanges,
-            ...body
-        } = this.state;
-        let currentTime = Date.now();
+        let { title: noteName, _id, createdTime, modifiedTime, unsavedChanges, ...body  } = this.state
+        let currentTime = Date.now()
         let note = {
             noteName,
             _id,
             createdTime,
             modifiedTime: currentTime,
             unsavedChanges,
-            body,
-        };
-        if (localOnly === true) {
-            this.context.updateNoteLocally(note);
-        } else {
-            this.setState({ unsavedChanges: false });
-            this.context.updateNote(note);
+            body
         }
-    };
+        if (localOnly === true) {
+            this.context.updateNoteLocally(note)
+        } else {
+            this.setState({ unsavedChanges: false })
+            this.context.updateNote(note)
+        }
+    }
 
     //Converts the schema of the provided note and updates the HPIContext's state
     loadNote = (note) => {
-        this.context.loadNote(note);
+        this.context.loadNote(note)
         this.setState({
-            title: note.noteName,
+            "title": note.noteName,
             _id: note._id,
             unsavedChanges: note.unsavedChanges,
-            ...note.body,
-        });
-    };
+            ...note.body
+        })
+    }
 
     //Saves the current note, then loads the provided note.
     swapNote = (note) => {
-        this.saveNote(true);
-        this.loadNote(note);
-    };
+        this.saveNote(true)
+        this.loadNote(note)
+    }
 
     //Deletes a note from NotesContext based on the note's id
     deleteNote = (note) => {
         this.context.deleteNote(note);
-    };
+    }
 
     addNote = async () => {
         const note = await this.context.addNote();
         return note;
-    };
+    }
 
     loadAllNotes = () => {
         return this.context.loadNotes();
-    };
+    }
 
     getAllNotes = () => {
         return this.context.getNotes();
-    };
+    }
 
     render = () => {
         return (
-            <Context.Provider
-                value={{
-                    ...this.state,
-                    onContextChange: this.onContextChange,
-                    saveNote: this.saveNote,
-                    loadNote: this.loadNote,
-                    swapNote: this.swapNote,
-                    deleteNote: this.deleteNote,
-                    addNote: this.addNote,
-                    loadAllNotes: this.loadAllNotes,
-                    getAllNotes: this.getAllNotes,
-                }}
-            >
+            <Context.Provider value={{
+                ...this.state,
+                onContextChange: this.onContextChange,
+                saveNote: this.saveNote,
+                loadNote: this.loadNote,
+                swapNote: this.swapNote,
+                deleteNote: this.deleteNote,
+                addNote: this.addNote,
+                loadAllNotes: this.loadAllNotes,
+                getAllNotes: this.getAllNotes
+            }}>
                 {this.props.children}
             </Context.Provider>
-        );
-    };
+        )
+    }
+
 }
 
 export default Context;

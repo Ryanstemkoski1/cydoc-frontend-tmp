@@ -1,15 +1,7 @@
 import React, { Fragment } from 'react';
-import {
-    Table,
-    Accordion,
-    Form,
-    Input,
-    Dropdown,
-    Button,
-    Grid,
-} from 'semantic-ui-react';
+import { Table, Accordion, Form, Input, Dropdown, Button, Grid } from 'semantic-ui-react';
 import { TableBodyRow } from './TableContent/TableBodyRow';
-import AddRowButton from 'components/tools/AddRowButton.js';
+import AddRowButton from 'components/tools/AddRowButton.js'
 import HPIContext from 'contexts/HPIContext.js';
 import drinkTypes from 'constants/SocialHistory/drinkTypes';
 import drinkSizes from 'constants/SocialHistory/drinkSizes';
@@ -18,6 +10,7 @@ import modesOfDelviery from 'constants/SocialHistory/modesOfDelivery';
 import './TableContent/TableContent.css';
 
 class SocialHistoryTableContent extends React.Component {
+
     static contextType = HPIContext;
 
     constructor(props, context) {
@@ -26,8 +19,8 @@ class SocialHistoryTableContent extends React.Component {
             drinkOptions: drinkTypes,
             drinkSizes: drinkSizes,
             drugOptions: drugNames,
-            modesOfDelivery: modesOfDelviery,
-        };
+            modesOfDelivery: modesOfDelviery
+        }
         this.makeHeader = this.makeHeader.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.addRow = this.addRow.bind(this);
@@ -36,25 +29,18 @@ class SocialHistoryTableContent extends React.Component {
     }
 
     // handles change in table cell - updates context
-    handleTableBodyChange(event, data) {
+    handleTableBodyChange(event, data) { 
         let newState = this.props.values;
-        newState[this.props.name]['fields'][data.rowindex][data.placeholder] =
-            data.value;
+        newState[this.props.name]["fields"][data.rowindex][data.placeholder] = data.value;
         this.props.onTableBodyChange(newState);
     }
 
-    // makes header row with labels for table
+    // makes header row with labels for table 
     makeHeader() {
-        return (
+        return(
             <Table.Row>
-                {this.props.tableHeaders.map((header, index) => (
-                    <Table.HeaderCell
-                        key={index}
-                        style={header === '' ? { borderLeft: 0 } : null}
-                    >
-                        {header}
-                    </Table.HeaderCell>
-                ))}
+                {this.props.tableHeaders.map((header, index) =>
+                    <Table.HeaderCell key={index} style={header === '' ? { borderLeft: 0 } : null}>{header}</Table.HeaderCell>)}
             </Table.Row>
         );
     }
@@ -69,81 +55,51 @@ class SocialHistoryTableContent extends React.Component {
             let titleContent;
             const contentInputs = [];
 
-            switch (name) {
+            switch(name) {
                 case 'Alcohol': {
                     titleContent = (
                         <Form className='inline-form'>
-                            <Input
-                                transparent
-                                className='content-input-surgical content-dropdown medication'
-                            >
-                                <Dropdown
-                                    fluid
-                                    search
-                                    selection
+                            <Input transparent className='content-input-surgical content-dropdown medication'>
+                                <Dropdown fluid search selection 
                                     options={this.state.drinkOptions}
                                     placeholder={tableBodyPlaceholders[0]}
                                     onChange={this.handleTableBodyChange}
                                     rowindex={i}
-                                    value={
-                                        values[name]['fields'][i][
-                                            tableBodyPlaceholders[i]
-                                        ]
-                                    }
+                                    value={values[name]["fields"][i][tableBodyPlaceholders[i]]}
                                     className='side-effects'
                                     icon=''
                                 />
                             </Input>
                         </Form>
-                    );
+                    )
                     break;
                 }
                 case 'Recreational Drugs': {
                     titleContent = (
                         <Form className='inline-form'>
-                            <Input
-                                transparent
-                                className='content-input-surgical content-dropdown medication'
-                            >
-                                <Dropdown
-                                    fluid
-                                    search
-                                    selection
+                            <Input transparent className='content-input-surgical content-dropdown medication'>
+                                <Dropdown fluid search selection
                                     options={this.state.drugOptions}
                                     placeholder={tableBodyPlaceholders[0]}
                                     onChange={this.handleTableBodyChange}
                                     rowindex={i}
-                                    value={
-                                        values[name]['fields'][i][
-                                            tableBodyPlaceholders[i]
-                                        ]
-                                    }
+                                    value={values[name]["fields"][i][tableBodyPlaceholders[i]]}
                                     className='side-effects'
                                     icon=''
                                 />
                             </Input>
                         </Form>
-                    );
+                    )
                     break;
                 }
-                default:
-                    break;
             }
 
             for (let j = 0; j < tableBodyPlaceholders.length; j++) {
-                if (
-                    tableBodyPlaceholders[j] === 'Drink Type' ||
-                    tableBodyPlaceholders[j] === 'Drug Name'
-                ) {
+                if (tableBodyPlaceholders[j] === 'Drink Type' || tableBodyPlaceholders[j] === 'Drug Name') {
                     continue; // already created by first part of method
                 } else if (tableBodyPlaceholders[j] === 'Drink Size') {
                     contentInputs.push(
-                        <Input
-                            key={j}
-                            fluid
-                            transparent
-                            className='content-input content-dropdown'
-                        >
+                        <Input key={j} fluid transparent className='content-input content-dropdown'>
                             <Dropdown
                                 fluid
                                 search
@@ -153,23 +109,14 @@ class SocialHistoryTableContent extends React.Component {
                                 placeholder={tableBodyPlaceholders[j]}
                                 onChange={this.handleTableBodyChange}
                                 rowindex={i}
-                                value={
-                                    values[name]['fields'][
-                                        tableBodyPlaceholders[j]
-                                    ]
-                                }
+                                value={values[name]["fields"][tableBodyPlaceholders[j]]}
                                 className='side-effects'
                             />
                         </Input>
                     );
                 } else if (tableBodyPlaceholders[j] === 'Mode of Delivery') {
                     contentInputs.push(
-                        <Input
-                            key={j}
-                            fluid
-                            transparent
-                            className='content-input content-dropdown'
-                        >
+                        <Input key={j} fluid transparent className='content-input content-dropdown'>
                             <Dropdown
                                 fluid
                                 search
@@ -180,47 +127,36 @@ class SocialHistoryTableContent extends React.Component {
                                 placeholder={tableBodyPlaceholders[j]}
                                 onChange={this.handleTableBodyChange}
                                 rowindex={i}
-                                value={
-                                    values[name]['fields'][
-                                        tableBodyPlaceholders[j]
-                                    ]
-                                }
+                                value={values[name]["fields"][tableBodyPlaceholders[j]]}
                                 className='side-effects'
                             />
                         </Input>
                     );
                 } else if (tableBodyPlaceholders[j] === '# Per Week') {
                     contentInputs.push(
-                        <Input
-                            key={j}
-                            fluid
-                            transparent
-                            type='number'
+                        <Input key={j} fluid transparent 
+                            type="number"
                             className='content-input content-dropdown'
                             onChange={this.handleTableBodyChange}
                             placeholder={tableBodyPlaceholders[j]}
                             rowindex={i}
-                            value={
-                                values[name]['fields'][tableBodyPlaceholders[j]]
-                            }
+                            value={values[name]["fields"][tableBodyPlaceholders[j]]}
                         />
                     );
                 }
             }
 
             contentInputs.push(
-                <Grid
-                    style={{ marginTop: 8, marginBottom: 1, marginLeft: 200 }}
-                >
+                <Grid style={{ marginTop: 8, marginBottom: 1, marginLeft: 200 }}>
                     <Button
                         circular
-                        icon='close'
+                        icon='close' 
                         compact
                         basic
                         onClick={this.deleteRow}
                     />
                 </Grid>
-            );
+            )
 
             panels.push({
                 key: i,
@@ -228,36 +164,37 @@ class SocialHistoryTableContent extends React.Component {
                     content: titleContent,
                 },
                 content: {
-                    content: <Fragment>{contentInputs}</Fragment>,
-                },
+                    content: (
+                        <Fragment>
+                            {contentInputs}
+                        </Fragment>
+                    ),
+                }
             });
         }
         return panels;
     }
 
-    // add row functionality to add an additional drink, drug, etc.
+    // add row functionality to add an additional drink, drug, etc. 
     addRow() {
         let values = this.props.values;
-        let fields = values[this.props.name]['fields'];
+        let fields = values[this.props.name]["fields"];
         const last_index = fields.length.toString();
-        fields[last_index] =
-            this.props.name === 'Alcohol'
-                ? { 'Drink Type': '', 'Drink Size': '', '# Per Week': '' }
-                : { 'Drug Name': '', 'Mode of Delivery': '', '# Per Week': '' };
+        fields[last_index] = this.props.name === 'Alcohol' ? {'Drink Type': '', 'Drink Size': '', '# Per Week': ''} : {'Drug Name': '', 'Mode of Delivery': '', '# Per Week':''};
         this.context.onContextChange(this.props.category, values);
         // console.log(this.context);
     }
 
     deleteRow(event, data) {
         let values = this.props.values;
-        let fields = values[this.props.name]['fields'];
+        let fields = values[this.props.name]["fields"];
         fields.splice(data.rowindex, 1);
         this.context.onContextChange(this.props.category, values);
     }
 
     // builds the table out of TableBodyRow component
-    makeTableBodyRows(nums) {
-        return nums.map((rowindex, index) => (
+    makeTableBodyRows(nums){
+        return nums.map((rowindex, index) =>
             <TableBodyRow
                 key={index}
                 rowindex={parseInt(rowindex)}
@@ -272,32 +209,26 @@ class SocialHistoryTableContent extends React.Component {
                 modesOfDelivery={this.state.modesOfDelivery}
                 handleDelete={this.deleteRow}
             />
-        ));
+        )
     }
 
     // renders a table with each cell dedicated to specific information for social history
     // used specifically for Alcohol and RecreationalDrugs sections
     render() {
         const headerRow = this.makeHeader();
-        const nums = Object.keys(this.props.values[this.props.name]['fields']);
+        const nums = Object.keys(this.props.values[this.props.name]["fields"])
         const rows = this.makeTableBodyRows(nums);
 
         const content = this.props.mobile ? (
             <div>
                 <p>{this.props.prompt}</p>
-                <Accordion
-                    panels={this.makeAccordionPanels(nums)}
-                    exclusive={false}
-                    fluid
-                    styled
-                />
+                <Accordion panels={this.makeAccordionPanels(nums)} exclusive={false} fluid styled />
             </div>
         ) : (
             <div>
                 <p>{this.props.prompt}</p>
                 <Table celled>
                     <Table.Header content={headerRow} />
-                    {/* eslint-disable-next-line react/no-children-prop */}
                     <Table.Body children={rows} />
                 </Table>
             </div>
@@ -306,7 +237,10 @@ class SocialHistoryTableContent extends React.Component {
         return (
             <Fragment>
                 {content}
-                <AddRowButton onClick={this.addRow} name={this.props.addRow} />
+                <AddRowButton
+                    onClick={this.addRow}
+                    name={this.props.addRow}
+                />
             </Fragment>
         );
     }
