@@ -58,6 +58,14 @@ class GenerateNote extends React.Component {
                     <h3> Plan </h3>
                     <PlanNote plan={this.context.plan} />
                 </Segment>
+
+                <Button icon floated='left' onClick={this.previousFormClick} className='small-note-previous-button'>
+                <Icon name='arrow left'/>
+                </Button>
+                <Button icon labelPosition='left' floated='left' onClick={this.previousFormClick} className='note-previous-button'>
+                Previous Form
+                <Icon name='arrow left'/>
+                </Button>
             </div>
         )
     }

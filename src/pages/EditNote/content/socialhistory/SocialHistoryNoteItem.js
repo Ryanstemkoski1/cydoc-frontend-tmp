@@ -3,7 +3,7 @@ import ToggleButton from 'components/tools/ToggleButton.js';
 import React, {Component} from 'react'
 import PropTypes from 'prop-types';
 import HPIContext from 'contexts/HPIContext.js';
-import '../../../../components/tools/TableContent/TableContent.css';
+import '../../../../components/tools/TableContent.css';
 
 //Component that defines the layout for the Substance Use portion
 

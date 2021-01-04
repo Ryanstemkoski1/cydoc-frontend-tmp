@@ -1,3 +1,7 @@
 .home-page-content-container {
   margin-top: 35vh;
 }
+
+.ui.header.home-page-text {
+  color: #006b87;
+}

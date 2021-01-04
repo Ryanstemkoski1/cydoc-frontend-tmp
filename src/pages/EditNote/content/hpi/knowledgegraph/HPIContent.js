@@ -19,6 +19,7 @@ class HPIContent extends Component {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
+            headerHeight: 0,
             bodySystems: [],
             graphData: {},
             isLoaded: false,
@@ -28,6 +29,7 @@ class HPIContent extends Component {
         }
         this.updateDimensions = this.updateDimensions.bind(this);
         this.handleItemClick = this.handleItemClick.bind(this);
+        this.setMenuPosition = this.setMenuPosition.bind(this);
     }
 
     componentDidMount() {
@@ -53,31 +55,30 @@ class HPIContent extends Component {
         })
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
-        // Using timeout to ensure that tab/dropdown menu is rendered before setting 
-        // setTimeout((_event) => {
-        //     this.setMenuPosition();
-        // }, 0);
+        window.addEventListener("scroll", this.setMenuPosition);
     }
 
     componentWillUnmount() {
         window.removeEventListener("resize", this.updateDimensions);
+        window.removeEventListener("scroll", this.setMenuPosition);
     }
 
     updateDimensions() {
         let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
         let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+        let headerHeight = document.getElementById("stickyHeader")?.offsetHeight ?? 0;
 
-        this.setState({ windowWidth, windowHeight });
-        // this.setMenuPosition();
+        this.setState({ windowWidth, windowHeight, headerHeight });
+        this.setMenuPosition();
     }
 
     setMenuPosition() {
-        const stickyHeaderHeight = document.getElementById("stickyHeader").offsetHeight;
-         // Ensuring that the hpi tabs are rendered
-         while (this.fixedMenu == null || this.fixedMenu.length == 0) {
-             this.fixedMenu = document.getElementsByClassName("disease-menu");
-         }
-         this.fixedMenu[0].style.top = `${stickyHeaderHeight}px`;
+        let fixedMenu = document.getElementById("disease-menu");
+        // Ensuring that the hpi tabs are rendered
+        if (fixedMenu != null) {
+            fixedMenu.style.top = `${this.state.headerHeight}px`;
+            window.removeEventListener("scroll", this.setMenuPosition);
+        }
      }
 
     // Proceed to next step
@@ -95,14 +96,14 @@ class HPIContent extends Component {
     }
 
     // get to first page (change step = 1)
-    firstPage = () => this.context.onContextChange("step", 1)
+    // firstPage = () => this.context.onContextChange("step", 1)
 
-    // skip to last page (last category) [change step to be last]
-    lastPage = () => {
-        var currentStep = this.context['positivediseases'].length
-        this.context.onContextChange("step", currentStep+1)
-        this.context.onContextChange("activeHPI", this.context['positivediseases'][currentStep-1])
-    }
+    // // skip to last page (last category) [change step to be last]
+    // lastPage = () => {
+    //     var currentStep = this.context['positivediseases'].length
+    //     this.context.onContextChange("step", currentStep+1)
+    //     this.context.onContextChange("activeHPI", this.context['positivediseases'][currentStep-1])
+    // }
 
     // go to the next page (change step = step + 1)
     continue = e => {
@@ -124,9 +125,17 @@ class HPIContent extends Component {
     handleItemClick = (e, {name}) => { 
         this.context.onContextChange("step", this.context['positivediseases'].indexOf(diseaseCodes[name])+2) 
         this.context.onContextChange("activeHPI", name)
+        setTimeout((_event) => {
+            window.scrollTo(0,0)
+            this.setMenuPosition()
+        }, 0);
     }
 
-    nextFormClick = () => this.props.nextFormClick();
+    nextFormClick = () => {
+        this.props.nextFormClick();
+        window.localStorage.setItem('activeIndex', 0);
+        window.localStorage.setItem('activeTabName', 'Medical History')
+    }
 
     render() {
         const {graphData, isLoaded, windowWidth, bodySystems} = this.state;
@@ -203,21 +212,21 @@ class HPIContent extends Component {
                     {positiveLength > 0 ? 
                     <>
                     <Button icon floated='right' onClick={this.continue} className='hpi-small-next-button'>
-                    <Icon name='right arrow'/>
+                    <Icon name='arrow right'/>
                     </Button> 
                     <Button icon labelPosition='right' floated='right' onClick={this.continue} className='hpi-next-button'>
                     Next Form
-                    <Icon name='right arrow'/>
+                    <Icon name='arrow right'/>
                     </Button>
                     </>
                     :
                     <>
                     <Button icon floated='right' onClick={this.nextFormClick} className='hpi-small-next-button'>
-                    <Icon name='right arrow'/>
+                    <Icon name='arrow right'/>
                     </Button>
                     <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='hpi-next-button'>
                     Next Form
-                    <Icon name='right arrow'/>
+                    <Icon name='arrow right'/>
                     </Button>
                     </>
                     }
@@ -225,7 +234,7 @@ class HPIContent extends Component {
                     )
             default:
                 // if API data is loaded, render the DiseaseForm
-                if (isLoaded) { 
+                if (isLoaded) {
                     let categoryCode = this.context['positivediseases'][step-2]
                     let parentNode = categoryCode + "0001"
                     return (
@@ -234,10 +243,6 @@ class HPIContent extends Component {
                             key={parentNode}
                             parentNode = {parentNode}
                             graphData={graphData}
-                            nextStep = {this.nextStep}
-                            prevStep = {this.prevStep}
-                            firstPage = {this.firstPage}
-                            lastPage = {this.lastPage}
                             diseaseTabs = {diseaseTabs}
                             last = {true ? step === positiveLength+1 : false}
                             windowWidth={windowWidth}
@@ -245,37 +250,37 @@ class HPIContent extends Component {
                         {step === positiveLength+1 ?
                             <>
                             <Button icon floated='left' onClick={this.back} className='hpi-small-previous-button'>
-                            <Icon name='left arrow'/>
+                            <Icon name='arrow left'/>
                             </Button>
                             <Button icon labelPosition='left' floated='left' onClick={this.back} className='hpi-previous-button'>
                             Previous Form
-                            <Icon name='left arrow'/>
+                            <Icon name='arrow left'/>
                             </Button>
         
                             <Button icon floated='right' onClick={this.nextFormClick} className='hpi-small-next-button'>
-                            <Icon name='right arrow'/>
+                            <Icon name='arrow right'/>
                             </Button>
                             <Button icon labelPosition='right' floated='right' onClick={this.nextFormClick} className='hpi-next-button'>
                             Next Form
-                            <Icon name='right arrow'/>
+                            <Icon name='arrow right'/>
                             </Button>
                             </>
                             :
                             <>
                             <Button icon floated='left' onClick={this.back} className='hpi-small-previous-button'>
-                            <Icon name='left arrow'/>
+                            <Icon name='arrow left'/>
                             </Button>
                             <Button icon labelPosition='left' floated='left' onClick={this.back} className='hpi-previous-button'>
                             Previous Form
-                            <Icon name='left arrow'/>
+                            <Icon name='arrow left'/>
                             </Button>
         
                             <Button icon floated='right' onClick={this.continue} className='hpi-small-next-button'>
-                            <Icon name='right arrow'/>
+                            <Icon name='arrow right'/>
                             </Button>
                             <Button icon labelPosition='right' floated='right' onClick={this.continue} className='hpi-next-button'>
                             Next Form
-                            <Icon name='right arrow'/>
+                            <Icon name='arrow right'/>
                             </Button>
                             </>
                             }

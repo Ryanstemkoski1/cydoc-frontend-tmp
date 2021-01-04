@@ -43,6 +43,8 @@ export default class NotePage extends Component {
 
     nextFormClick = () => this.props.onNextClick();
 
+    previousFormClick = () => this.props.onPreviousClick();
+
 
     getTabToDisplay(activeItem) {
         //Instantiates and returns the correct content component based on the active tab
@@ -53,22 +55,22 @@ export default class NotePage extends Component {
                 tabToDisplay = (<HPIContent nextFormClick={this.nextFormClick}/>);
                 break;
             case "Patient History":
-                tabToDisplay = (<PatientHistoryContent />);
+                tabToDisplay = (<PatientHistoryContent nextFormClick={this.nextFormClick} previousFormClick={this.previousFormClick} />);
                 break;
             case "Physical Exam":
-                tabToDisplay = (<PhysicalExamContent />);
+                tabToDisplay = (<PhysicalExamContent nextFormClick={this.nextFormClick} previousFormClick={this.previousFormClick} />);
                 break;
             case "Review of Systems":
-                tabToDisplay = (<ReviewOfSystemsContent />);
+                tabToDisplay = (<ReviewOfSystemsContent nextFormClick={this.nextFormClick} previousFormClick={this.previousFormClick} />);
                 break;
             case "Generated Note":
-                tabToDisplay = (<GenerateNote />);
+                tabToDisplay = (<GenerateNote previousFormClick={this.previousFormClick} />);
                 break;
             case "Plan":
-                tabToDisplay = (<DiscussionPlan />)
+                tabToDisplay = (<DiscussionPlan nextFormClick={this.nextFormClick} previousFormClick={this.previousFormClick} />)
                 break;
             default:
-                tabToDisplay = (<HPIContent />);
+                tabToDisplay = (<HPIContent nextFormClick={this.nextFormClick} />);
                 break;
         }
         return tabToDisplay;

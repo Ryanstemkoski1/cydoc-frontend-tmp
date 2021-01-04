@@ -2,7 +2,9 @@
 /* Navigation Bar has a thicker drop shadow */
 .nav-menu {
     box-shadow: 0 0 20px 5px RGBA(0, 128, 159, 0.2) !important;
-    height: 10vh;
+    height: 100px;
+    padding-top: 40px;
+    padding-bottom: 70px;
 }
 
 /* Navigation button styles */
@@ -12,16 +14,8 @@
     font-weight: 400;
 }
 
-.nav-menu-logo img {
-    margin-right: 10px;
-    height: 8vh !important;
-    width: auto !important;
-}
-
-.nav-menu-brand img {
-    padding-bottom: 0.5vh;
-    height: 6vh !important;
-    width: auto !important;
+.ui.image img {
+    margin: 0 .5rem;
 }
 
 /* Make the divide between menu tabs seamless */
@@ -42,7 +36,10 @@
 
 
 .note-name-menu-item {
-    padding: 0 !important;
+    padding-top: 0 !important;
+    display: flex;
+    flex-wrap: wrap;
+    width: 450px;
 }
 
 
@@ -61,4 +58,101 @@
 .ui.menu.item.user-item {
     color: #6DA3B1;
     font-weight: normal;
+}
+
+.note-title {
+    flex: 80%
+}
+
+.save-button {
+    flex: 20%;
+}
+
+.patient-info {
+    flex: 60%;
+    padding: 0 !important;
+    margin-top: 20px !important;
+}
+
+.ui.tiny.modal {
+    width: 450px;
+}
+
+.ui.basic.button.patient-modal-button {
+    flex: 40%;
+    margin-top: 10px !important;
+    font-size: 13px !important;
+}
+
+.ui.modal > .content {
+    display: flex;
+    flex-direction: column;
+}
+
+.patient-info-input {
+    padding-bottom: 10px;
+}
+
+.ui.label {
+    width: 120px;
+    padding-right: 0;
+}
+
+.error {
+    position: relative;
+    z-index: 1 !important;
+    font-size: 13px;
+    margin: -10px !important;
+}
+
+.full-name {
+    display: flex;
+}
+
+#first-name, #middle-name, #last-name {
+    flex: 33%;
+}
+
+#first-name, #middle-name {
+    margin-right: 10px;
+}
+
+@media screen and (max-width: 500px) {
+    .ui.tiny.modal {
+        width: 250px;
+        left: 65px;
+        top: 100px;
+    }
+
+    .full-name {
+        display: block;
+        margin-bottom: 15px;
+    }
+    
+    #first-name, #middle-name {
+        margin-right: 0;
+    }
+
+    .note-name-menu-item {
+        width: 200px;
+    }
+
+    .note-title {
+        padding: 10px;
+        margin-top: 10px !important;
+    }
+
+    .ui.button.save-button {
+        margin-top: 5px !important;
+        padding: 8px !important;
+    }
+
+    .patient-info {
+        margin: 15px !important;
+    }
+
+    .ui.basic.button.patient-modal-button {
+        margin-top: 0 !important;
+    }
+    
 }

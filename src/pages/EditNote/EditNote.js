@@ -121,28 +121,7 @@ class EditNote extends Component {
                             attached
                         />
                     </Sticky>
-                    <NotePage activeItem={this.state.activeItem} onNextClick={this.onNextClick}/>
-                    {this.state.activeItem === 'HPI' ? 
-                    ""
-                    : (
-                    <>
-                        <Button icon floated='left' onClick={this.onPreviousClick} className='small-previous-button'>
-                        <Icon name='left arrow'/>
-                        </Button>
-                        <Button icon labelPosition='left' floated='left' onClick={this.onPreviousClick} className='previous-button'>
-                        Previous Form
-                        <Icon name='left arrow'/>
-                        </Button>
-
-                        <Button icon floated='right' onClick={this.onNextClick} className='small-next-button'>
-                        <Icon name='right arrow'/>
-                        </Button>
-                        <Button icon labelPosition='right' floated='right' onClick={this.onNextClick} className='next-button'>
-                        Next Form
-                        <Icon name='right arrow'/>
-                        </Button>
-                    </>
-                    )}
+                    <NotePage activeItem={this.state.activeItem} onNextClick={this.onNextClick} onPreviousClick={this.onPreviousClick} />
                 </div>
 
             </>
