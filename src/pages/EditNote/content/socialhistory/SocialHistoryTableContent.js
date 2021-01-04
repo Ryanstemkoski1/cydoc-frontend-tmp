@@ -1,13 +1,12 @@
 import React, { Fragment } from 'react';
 import { Table, Accordion, Form, Input, Dropdown, Button, Grid } from 'semantic-ui-react';
-import { TableBodyRow } from './TableContent/TableBodyRow';
+import { SocialHistoryTableBodyRow } from './SocialHistoryTableBodyRow'
 import AddRowButton from 'components/tools/AddRowButton.js'
 import HPIContext from 'contexts/HPIContext.js';
 import drinkTypes from 'constants/SocialHistory/drinkTypes';
 import drinkSizes from 'constants/SocialHistory/drinkSizes';
 import drugNames from 'constants/SocialHistory/drugNames';
 import modesOfDelviery from 'constants/SocialHistory/modesOfDelivery';
-import './TableContent/TableContent.css';
 
 class SocialHistoryTableContent extends React.Component {
 
@@ -68,6 +67,13 @@ class SocialHistoryTableContent extends React.Component {
                                     value={values[name]["fields"][i][tableBodyPlaceholders[i]]}
                                     className='side-effects'
                                     icon=''
+                                    onBlur={event => event.preventDefault()}
+                                />
+                                <Button style={{marginTop: 5, marginBottom: 5}}
+                                    icon='close' 
+                                    compact
+                                    basic
+                                    onClick={this.deleteRow}
                                 />
                             </Input>
                         </Form>
@@ -86,6 +92,12 @@ class SocialHistoryTableContent extends React.Component {
                                     value={values[name]["fields"][i][tableBodyPlaceholders[i]]}
                                     className='side-effects'
                                     icon=''
+                                />
+                                <Button style={{marginTop: 5, marginBottom: 5}}
+                                    icon='close' 
+                                    compact
+                                    basic
+                                    onClick={this.deleteRow}
                                 />
                             </Input>
                         </Form>
@@ -146,17 +158,17 @@ class SocialHistoryTableContent extends React.Component {
                 }
             }
 
-            contentInputs.push(
-                <Grid style={{ marginTop: 8, marginBottom: 1, marginLeft: 200 }}>
-                    <Button
-                        circular
-                        icon='close' 
-                        compact
-                        basic
-                        onClick={this.deleteRow}
-                    />
-                </Grid>
-            )
+            // contentInputs.push(
+            //     <Grid style={{ marginTop: 8, marginBottom: 1, marginLeft: 200 }}>
+            //         <Button
+            //             circular
+            //             icon='close' 
+            //             compact
+            //             basic
+            //             onClick={this.deleteRow}
+            //         />
+            //     </Grid>
+            // )
 
             panels.push({
                 key: i,
@@ -182,10 +194,9 @@ class SocialHistoryTableContent extends React.Component {
         const last_index = fields.length.toString();
         fields[last_index] = this.props.name === 'Alcohol' ? {'Drink Type': '', 'Drink Size': '', '# Per Week': ''} : {'Drug Name': '', 'Mode of Delivery': '', '# Per Week':''};
         this.context.onContextChange(this.props.category, values);
-        // console.log(this.context);
     }
 
-    deleteRow(event, data) {
+    deleteRow(_event, data) {
         let values = this.props.values;
         let fields = values[this.props.name]["fields"];
         fields.splice(data.rowindex, 1);
@@ -195,7 +206,7 @@ class SocialHistoryTableContent extends React.Component {
     // builds the table out of TableBodyRow component
     makeTableBodyRows(nums){
         return nums.map((rowindex, index) =>
-            <TableBodyRow
+            <SocialHistoryTableBodyRow
                 key={index}
                 rowindex={parseInt(rowindex)}
                 tableBodyPlaceholders={this.props.tableBodyPlaceholders}

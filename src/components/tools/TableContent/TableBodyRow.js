@@ -10,26 +10,10 @@ export class TableBodyRow extends Component {
         this.state = {
             invalidYear: false,
         };
-        this.onYearChange = this.onYearChange.bind(this)
     }
 
     onYearChange = (e) => {
-        const startYear = e.target.value;
-        this.setState({ invalidYear: startYear != '' && (isNaN(+startYear) || startYear < 1900 || startYear > this.props.currentYear) });
-    }
-
-    handleCellClick = (e) => {
-        const innerInput = e.target.lastElementChild
-        // Handles clicks outside of the "clickable area" (padding) of the input/textarea component within a cell
-        if (innerInput != null) {
-            if (innerInput.type == "textarea") {
-                innerInput.focus();
-            }
-            else {
-                // for Inputs/dropdowns
-                innerInput.click();
-            }
-        }
+        this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
     }
 
     getCell(placeholder) {
@@ -263,13 +247,12 @@ export class TableBodyRow extends Component {
                     );
                     break;
                 }
-                case 'Year':
                 case 'Start Year':
                     cell = (
                         <div className='table-year-input'>
                             <TextArea
                                 rows={3}
-                                type={placeholder}
+                                type='number'
                                 onChange={onTableBodyChange}
                                 onBlur={this.onYearChange}
                                 rowindex={rowindex}
@@ -304,7 +287,7 @@ export class TableBodyRow extends Component {
                             />
                         </Input>
                     );
-                    break;
+                break;
                 default: {
                     cell = (
                         <TextArea
@@ -329,12 +312,7 @@ export class TableBodyRow extends Component {
 
         const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
             return (
-                <Table.Cell
-                    key={index}
-                    collapsing={placeholder === 'delete' ? true : false}
-                    style={placeholder === 'delete' ? { borderTop: 0, borderLeft: 0 } : null}
-                    onClick={this.handleCellClick}
-                >
+                <Table.Cell key={index} collapsing={placeholder === 'delete' ? true : false} style={placeholder === 'delete' ? { borderLeft: 0 } : null}>
                     {this.getCell(placeholder)}
                 </Table.Cell>
             )
