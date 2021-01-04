@@ -1,6 +1,6 @@
 import  React from 'react';
 import HPIContext from '../../../../contexts/HPIContext';
-import { Button, Segment } from 'semantic-ui-react';
+import { Button, Segment, Icon } from 'semantic-ui-react';
 
 // import all the individual note sections
 import MedicalHistoryNote from './notesections/MedicalHistoryNote';
