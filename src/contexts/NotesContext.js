@@ -71,7 +71,7 @@ export class NotesStore extends React.Component {
             createdTime: currentTime,
             modifiedTime: currentTime,
             body: noteBody
-        }
+        }        
 
         //If notes map is not empty, takes most recent entry and autoloads static sections into new note
         if(this.state.notes.size) {

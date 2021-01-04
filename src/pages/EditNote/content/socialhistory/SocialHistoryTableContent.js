@@ -67,6 +67,13 @@ class SocialHistoryTableContent extends React.Component {
                                     value={values[name]["fields"][i][tableBodyPlaceholders[i]]}
                                     className='side-effects'
                                     icon=''
+                                    onBlur={event => event.preventDefault()}
+                                />
+                                <Button style={{marginTop: 5, marginBottom: 5}}
+                                    icon='close' 
+                                    compact
+                                    basic
+                                    onClick={this.deleteRow}
                                 />
                             </Input>
                         </Form>
@@ -85,6 +92,12 @@ class SocialHistoryTableContent extends React.Component {
                                     value={values[name]["fields"][i][tableBodyPlaceholders[i]]}
                                     className='side-effects'
                                     icon=''
+                                />
+                                <Button style={{marginTop: 5, marginBottom: 5}}
+                                    icon='close' 
+                                    compact
+                                    basic
+                                    onClick={this.deleteRow}
                                 />
                             </Input>
                         </Form>
@@ -145,17 +158,17 @@ class SocialHistoryTableContent extends React.Component {
                 }
             }
 
-            contentInputs.push(
-                <Grid style={{ marginTop: 8, marginBottom: 1, marginLeft: 200 }}>
-                    <Button
-                        circular
-                        icon='close' 
-                        compact
-                        basic
-                        onClick={this.deleteRow}
-                    />
-                </Grid>
-            )
+            // contentInputs.push(
+            //     <Grid style={{ marginTop: 8, marginBottom: 1, marginLeft: 200 }}>
+            //         <Button
+            //             circular
+            //             icon='close' 
+            //             compact
+            //             basic
+            //             onClick={this.deleteRow}
+            //         />
+            //     </Grid>
+            // )
 
             panels.push({
                 key: i,

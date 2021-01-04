@@ -51,7 +51,7 @@ export default class PhysicalExamContent extends React.Component {
                 style={{ width: "100px" }}
                 name={name}
                 value={this.context["Physical Exam"][category][name]}
-                onChange={(e, { name, value }) => this.handleChange(category, name, value)} />
+                onChange={(e, { name, value }) => this.handleChange(category, name, parseInt(value))} />
         )
     }
     
