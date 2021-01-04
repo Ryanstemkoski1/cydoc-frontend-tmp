@@ -1,7 +1,8 @@
 import React from 'react';
 import SocialHistoryNoteItem from './SocialHistoryNoteItem';
+import SocialHistoryTableContent from './SocialHistoryTableContent';
 import { SOCIAL_HISTORY } from 'constants/constants';
-import SocialHistoryTableContent from 'components/tools/SocialHistoryTableContent';
+
 import HPIContext from 'contexts/HPIContext';
 
 class RecreationalDrugs extends React.Component {
