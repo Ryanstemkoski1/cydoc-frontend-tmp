@@ -18,16 +18,16 @@ export class TableBodyRow extends Component {
 
     getCell(placeholder) {
         const {
-            values, 
+            values,
             name,
-            rowindex, 
-            onTableBodyChange, 
+            rowindex,
+            onTableBodyChange,
             onAddMedication,
             onAddSideEffect,
             onAddDrink,
             onAddItem,
-            medicationOptions, 
-            sideEffectsOptions, 
+            medicationOptions,
+            sideEffectsOptions,
             proceduresOptions,
             diseaseOptions,
             drinkOptions,
@@ -72,7 +72,7 @@ export class TableBodyRow extends Component {
                                 className='side-effects'
                             />
                         </Input>
-                    );  
+                    );
                     break;
                 }
                 case 'Drink Size': {
@@ -164,7 +164,7 @@ export class TableBodyRow extends Component {
                             size='mini'
                             basic
                             onClick={this.props.handleDelete}
-                        />      
+                        />
                     )
                 }
             }
@@ -291,8 +291,8 @@ export class TableBodyRow extends Component {
                 default: {
                     cell = (
                         <TextArea
-                            rows={3}
-                            placeholder={placeholder}
+                            rows={1}
+                            type={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
                             value={values[rowindex][placeholder]}

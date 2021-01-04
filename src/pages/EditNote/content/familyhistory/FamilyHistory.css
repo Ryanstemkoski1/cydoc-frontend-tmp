@@ -68,6 +68,10 @@
     margin-top: 25px;
 }
 
+.ui.grid .row+.ui.divider{
+  margin: 0.5rem 0.5rem;
+}
+
 .content-style {
     margin-top: 25px;
 }
@@ -80,7 +84,7 @@
     .ui.grid > .column:not(.row).family-member-input {
         padding-bottom: 0 !important;
     }
-    
+
     .ui.grid > .column:not(.row).cod-input {
         padding-top: .4rem !important;
         padding-bottom: 1.5rem !important;
@@ -114,4 +118,12 @@
 
 .delete-family-member-row-mobile {
     white-space: nowrap;
+}
+
+.ui.grid>.row {
+  padding-bottom: 0rem;
+}
+
+.ui.grid {
+  margin-bottom: 0rem;
 }

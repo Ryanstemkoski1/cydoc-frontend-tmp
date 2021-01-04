@@ -9,41 +9,32 @@ class ButtonTag extends React.Component {
         const answers = values["response"]
         this.state = {
             id: (answers !== null && answers.includes(this.props.name)) ? -1 :  1,
-            buttonColor: (answers !== null && answers.includes(this.props.name)) ? "lightslategrey": "whitesmoke",
-            fontColor: (answers !== null && answers.includes(this.props.name)) ? "white": "black",
+            buttonStyle: (answers !== null && answers.includes(this.props.name)) ? "violet": "basic",
         }
         this.handleClick = this.handleClick.bind(this)
     }
 
     handleClick() {
-        let newColor
-        let fontColor
+        let newStyle
         if (this.state.id === 1) {
-            newColor = "lightslategrey"
-            fontColor = "white"
+            newStyle = "violet"
         }
         else {
-            newColor = "whitesmoke"
-            fontColor = "black"
+            newStyle = "basic"
         }
-        this.setState({id: this.state.id*-1, buttonColor: newColor, fontColor: fontColor})
-        const values = this.context["hpi"] 
+        this.setState({id: this.state.id*-1, buttonStyle: newStyle})
+        const values = this.context["hpi"]
         values['nodes'][this.props.node]["response"] = values['nodes'][this.props.node]["response"].concat(this.props.name)
-        this.context.onContextChange("hpi", values) 
+        this.context.onContextChange("hpi", values)
     }
 
     render() {
         return (
             <button
-                className="button_question"
-                style={{
-                    display: !this.props.name && "none",
-                    backgroundColor: this.state.buttonColor,
-                    color: this.state.fontColor
-                }}
+                className= {`ui ${this.state.buttonStyle} button`}
                 onClick={this.handleClick}
             >
-                {this.props.name} 
+                {this.props.name}
             </button>
         )
     }

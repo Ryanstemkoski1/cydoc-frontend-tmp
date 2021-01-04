@@ -25,8 +25,8 @@ export default class GridContent extends Component {
                     {rows}
                 </Grid>
                 <Divider />
-                {!isPreview && this.props.question_type === "add_row" 
-                    ? <AddRowButton onClick={this.props.addRow} name={this.props.name}/> 
+                {!isPreview && this.props.question_type === "add_row"
+                    ? <AddRowButton onClick={this.props.addRow} name={this.props.name}/>
                     : ""}
             </Fragment>
             ) : (
@@ -38,7 +38,7 @@ export default class GridContent extends Component {
                     {rows}
                 </Grid>
                 {!isPreview && this.props.question_type === "add_row" 
-                    ? <AddRowButton onClick={this.addRow} name={this.props.name}/> 
+                    ? <AddRowButton onClick={this.props.addRow} name={this.props.name}/>
                     : ""}
             </Fragment>
         );
@@ -50,4 +50,3 @@ GridContent.propTypes = {
     numColumns: PropTypes.number.isRequired, //Number of columns in the grid
     rows: PropTypes.array.isRequired, //The rows that will comprise the body of the note. Array of Grid.Row Components.
 };
-

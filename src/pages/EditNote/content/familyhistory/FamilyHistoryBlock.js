@@ -26,8 +26,8 @@ export default class FamilyHistoryBlock extends Component {
 
   handlePlusClick() {
     /*
-            Allows user to add additional family member for a given condition. If the previous family member dropdown 
-            was left blank, the user cannot add an additional family member (until at least the previous dropdown was filled). 
+            Allows user to add additional family member for a given condition. If the previous family member dropdown
+            was left blank, the user cannot add an additional family member (until at least the previous dropdown was filled).
          */
     var values = this.context['Family History'];
     var members = values[this.props.index]['Family Member'];
@@ -67,6 +67,7 @@ export default class FamilyHistoryBlock extends Component {
       familyMember,
       isPreview,
     } = this.props;
+    
     // array of dropdowns displayed on Family History Family Member column
     let dropdown_list = [];
     // variable range that changes when the user clicks the + (add member) button
@@ -112,7 +113,7 @@ export default class FamilyHistoryBlock extends Component {
       <Grid.Row>
         <Grid.Column width={16} className='dropdown-container'>
           {dropdown_list}
-          <Fragment>
+          <Fragment style = {{paddingTop: '10px'}}>
             <Button
               basic
               circular
