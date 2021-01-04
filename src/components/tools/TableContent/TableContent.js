@@ -42,7 +42,6 @@ export default class TableContent extends Component {
     //modify the current values in the table to reflect changes
     // and call the handler prop
     handleTableBodyChange(event, data){
-        debugger;
         if (data.placeholder === 'Drug Name' && !this.state.active.has(data.rowindex)) {
             this.toggleAccordion(data.rowindex);
         } else {
@@ -381,7 +380,12 @@ export default class TableContent extends Component {
                         </Fragment>
                     ),
                 },
-                onTitleClick: () => this.toggleAccordion(i),
+                onTitleClick: (event) => {
+                    if(event.target.type !== "text" || (event.target.placeholder === "Inciting Incident" && event.target.value === "")){
+                      this.toggleAccordion(i);
+                    }
+                },
+                //onTitleClick: () => this.toggleAccordion(i),
             });
         }
 
