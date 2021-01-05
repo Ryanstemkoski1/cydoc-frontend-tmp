@@ -334,17 +334,10 @@ class TemplateQuestion extends Component {
     getQuestionTypes() {
         const { qId } = this.props;
 
-        const basicTypes = [];
-        const allTypes = [];
         let options = [];
 
         for (let qType in questionTypes.basic) {
-            basicTypes.push({
-                key: questionTypes.basic[qType],
-                text: questionTypes.basic[qType],
-                value: qType,
-            });
-            allTypes.push({
+            options.push({
                 key: questionTypes.basic[qType],
                 text: questionTypes.basic[qType],
                 value: qType,
@@ -352,31 +345,16 @@ class TemplateQuestion extends Component {
         }
 
         for (let qType in questionTypes.advanced) {
-            allTypes.push({
+            options.push({
                 key: questionTypes.advanced[qType],
                 text: questionTypes.advanced[qType],
                 value: qType,
             });
         }
 
-        basicTypes.push({
-            key: 'Advanced',
-            text: 'Advanced...',
-            value: 'Advanced...',
-            onClick: this.getAdvancedDropdown,
-        })
-
-        allTypes.push({
-            key: 'Less',
-            text: 'Less...',
-            value: 'Less...',
-            onClick: this.removeAdvancedDropdown,
-        })
-
         // Process the current response type since the value will not necessarily
         // match the option in the dropdown (i.e. NO-YES questions should be displayed
         // as YES-NO and advanced types should be stripped of POP and BLANK)
-        options = this.state.selectedMore ? allTypes : basicTypes;
         let responseType = this.context.state.nodes[qId].responseType;
         if (responseType === 'NO-YES') {
             responseType = 'YES-NO';
