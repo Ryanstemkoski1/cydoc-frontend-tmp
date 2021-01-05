@@ -113,7 +113,6 @@ class TemplateAnswer extends Component {
                     text: nodes[id].text,
                     responseType: nodes[id].responseType,
                     answerInfo: getAnswerInfo(nodes[id].responseType),
-                    order: numQuestions,
                     hasChanged: false,
                     originalId: id,
                 }
@@ -187,7 +186,6 @@ class TemplateAnswer extends Component {
             id: childId,
             text: '',
             responseType: '',
-            order: numQuestions,
             answerInfo: {},
             hasChanged: true,
         };

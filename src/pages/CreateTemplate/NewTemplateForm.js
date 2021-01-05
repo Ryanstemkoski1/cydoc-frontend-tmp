@@ -200,7 +200,6 @@ class NewTemplateForm extends Component {
             id: qId,
             text: '',
             responseType: '',
-            order: numQuestions,
             answerInfo: {},
             parent: '0000',
             hasChanged: true,
@@ -240,9 +239,9 @@ class NewTemplateForm extends Component {
                 continue;
             }
             let to;
-            // Otherwise, if the incoming node has changed, make sure to use the old ID.
-            // There'll never exist an edge of original -> new because adding a new child
-            // is considered altering the original. So hasChanged would be false.
+            // Otherwise, if the sink node has not changed, make sure to use the old ID.
+            // There'll never exist an edge from an old to new because adding a new child
+            // is considered altering the original, leading to `hasChanged = false`.
             if (edge.from !== '0000' && !nodes[edge.to].hasChanged) {
                 to  = nodes[edge.to].originalId;
             } else {
@@ -253,6 +252,7 @@ class NewTemplateForm extends Component {
         }
 
         // update all graph keys
+        let fromOrder = {'0000': 1};
         for (let [key, children] of Object.entries(graph)) {
             // Skip over unchanged nodes
             if (key !== "0000" && !nodes[key].hasChanged) {
@@ -260,14 +260,45 @@ class NewTemplateForm extends Component {
             }
             const id = key === '0000' || key.startsWith(diseaseCode) ? key : diseaseCode + key.slice(3);
             updatedGraph[id] = children; 
+            
+            // TODO (AL): Figure out if edges connecting different knowledge graphs should affect the count
+            // aka skip over its index or fill in the gaps
+            let skipped = 0;
+            children.forEach((edgeID, idx) => {
+                let edge = edges[edgeID];
+                if (edge.from !== '0000' && !nodes[edge.to].hasChanged) {
+                    skipped++;
+                    updatedEdges[edgeID].toQuestionOrder = -1;
+                    updatedEdges[edgeID].fromQuestionOrder = -1;
+                } else {
+                    updatedEdges[edgeID].toQuestionOrder = idx - skipped + 1;
+                    fromOrder[updatedEdges[edgeID].to] = idx - skipped + 1;
+                }
+            });
         }
+        // Set `fromOrderQuestion` of each node
+        Object.values(updatedEdges).forEach(edge => {
+            if (edge.toQuestionOrder !== -1) {
+                edge.fromOrderQuestion = fromOrder[edge.from];
+            }
+        });
 
         // update all node keys and object values
         for (let [key, data] of Object.entries(nodes)) {
-            if (key !== "0000" && !data.hasChanged) {
+            if (key !== '0000' && !data.hasChanged) {
                 continue;
             }
-            // If node has changed, the following data is now useless
+            data = {...data};
+            
+            // Encode answerInfo according to backend
+            if (data.responseType === 'CLICK-BOXES') {
+                data.text += ` CLICK[${data.answerInfo.options.join(', ')}]`;
+            } else if (data?.answerInfo?.startResponse) {
+                // TODO: When backend permits encode the fill in the blanks
+            }
+
+            // Keep required attributes
+            delete data.answerInfo;
             delete data.hasChanged;
             delete data.originalId;
             delete data.parent;
