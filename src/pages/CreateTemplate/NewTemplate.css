@@ -38,6 +38,16 @@
   border: 1px solid #d4d4d5;
 }
 
+.create-tmpl-msg {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  padding: 2rem 4rem;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0 0 15px rgba(0,0,0,0.05);
+}
+
 .add-question-msg {
   opacity: 60%;
   margin-top: 0.5rem;

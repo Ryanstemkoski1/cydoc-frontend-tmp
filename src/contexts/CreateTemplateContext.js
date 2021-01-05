@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import AuthContext from './AuthContext';
 
 const CreateTemplateContext = React.createContext({});
 
 export class CreateTemplateStore extends Component {
+    static contextType = AuthContext;
+
     // represents a knowledge graph
     state = {
         title: '',
@@ -14,7 +17,7 @@ export class CreateTemplateStore extends Component {
             '0000': [],
         },
         nodes: {
-            '0000': {id: 'root'},
+            '0000': {id: 'root', responseType: 'YES-NO', text: 'nan'},
         },
         edges: {},
     }
@@ -30,6 +33,7 @@ export class CreateTemplateStore extends Component {
             <CreateTemplateContext.Provider
                 value={{
                     state: this.state,
+                    doctorID: this.context.user._id,
                     onContextChange: this.onContextChange}}
             >
                 {this.props.children}

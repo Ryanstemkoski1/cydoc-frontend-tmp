@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { Button, Form, Header, Segment, Input, Grid, Dropdown, Message, Icon } from 'semantic-ui-react';
+import { Button, Form, Header, Segment, Input, Grid, Dropdown, Message, Icon, Portal } from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import './NewTemplate.css';
 import TemplateQuestion from './TemplateQuestion';
@@ -11,6 +11,8 @@ import { createNodeId, updateParent } from './util';
 
 const OTHER_TEXT = 'Other (specify below)';
 const MAX_NUM_QUESTIONS = 50;
+
+// TODO: replace all hardcoded roots with a more unique id
 
 class NewTemplateForm extends Component {
     static contextType = CreateTemplateContext;
@@ -26,7 +28,8 @@ class NewTemplateForm extends Component {
             showOtherDisease: false,
             diseaseEmpty: true,
             bodySystemEmpty: true,
-            oldTree: [],
+            showLoader: false,
+            createMessage: null,
         }
         this.saveTitle = this.saveTitle.bind(this);
         this.saveBodySystem = this.saveBodySystem.bind(this);
@@ -224,8 +227,10 @@ class NewTemplateForm extends Component {
      * and ensuring all new nodes start with the correct disease code, and send a request
      * to the backend
      */
-    createTemplate = () => {
-        const { disease, edges, nodes, graph } = this.context.state;
+    createTemplate = async () => {
+        const { title, disease, edges, nodes, graph, bodySystem } = this.context.state;
+        const { doctorID } = this.context;
+        this.setState({ showLoader: true });
 
         const updatedEdges = {};
         const updatedNodes = {};
@@ -283,7 +288,7 @@ class NewTemplateForm extends Component {
             }
         });
 
-        // update all node keys and object values
+        // update all node key and object values
         for (let [key, data] of Object.entries(nodes)) {
             if (key !== '0000' && !data.hasChanged) {
                 continue;
@@ -297,27 +302,53 @@ class NewTemplateForm extends Component {
                 // TODO: When backend permits encode the fill in the blanks
             }
 
-            // Keep required attributes
+            // Update node object to have only the required attributes
             delete data.answerInfo;
             delete data.hasChanged;
             delete data.originalId;
             delete data.parent;
 
-            if (key === '0000' || key.startsWith(diseaseCode)) {
-                updatedNodes[key] = data;
-            } else {
-                const id = diseaseCode + key.slice(3);
-                updatedNodes[id] = { ...data, id };
+            if (key !== '0000' && !key.startsWith(diseaseCode)) {
+                key = diseaseCode + key.slice(3);
             }
+            updatedNodes[key] = { 
+                ...data, 
+                bodySystem,
+                noteSection: 'HPI',
+                medID: key,
+                category: disease,
+                doctorView: disease,
+                patientView: disease,
+                doctorCreated: doctorID,
+            };
+            delete updatedNodes[key].id;
         }
 
-        // TODO: Send data to backend when the backend is set up
-        // TODO: Depending on how questionOrder is saved, we will need to reflect that
-        //       here as well
-        console.log(updatedNodes);
-        console.log(updatedEdges);
-        console.log(updatedGraph);
-        alert('Template created'); // for dev purposes 
+        // Send updated data to the backend
+        let createMessage, res;
+        try {
+            // // Dummy endpoint for testing successes until backend is fixed
+            // res = await fetch('https://httpbin.org/post', {
+            //     method:'POST',
+            //     headers: {'Content-Type': 'application/json'}
+            // });
+            res = await graphClient.post(`/doctor/${doctorID}`, {
+                graphName: title,
+                root: '0000', // TODO: do not hardcode the root ID
+                graph: updatedGraph,
+                nodes: updatedNodes,
+                edges: updatedEdges,
+            });
+            createMessage = 'Successfully created template!';
+        } catch (e) {
+            console.log(e);
+            createMessage = res?.data?.Message || 'Unable to create template';
+        } finally {
+            console.log(updatedNodes);
+            console.log(updatedEdges);
+            console.log(updatedGraph);
+            this.setState({ createMessage, showLoader:false });
+        }
     }
 
     /**
@@ -464,7 +495,14 @@ class NewTemplateForm extends Component {
 
 
     render() {
-        const { bodySystems, diseases, showOtherBodySystem, showOtherDisease, graphData } = this.state;
+        const { 
+            bodySystems, 
+            diseases, 
+            showOtherBodySystem, 
+            showOtherDisease, 
+            showLoader,
+            createMessage, 
+        } = this.state;
 
         const bodySystemOptions = [{
             value: OTHER_TEXT,
@@ -582,12 +620,19 @@ class NewTemplateForm extends Component {
                     className='create-tmpl-button'
                     onClick={this.createTemplate}
                     disabled={this.context.state.numQuestions === 1}
+                    loading={showLoader}
                 />
                 { this.context.state.numQuestions >= MAX_NUM_QUESTIONS + 1 && (
                     <p className='add-question-msg'>
                         * Reached maximum number of questions ({MAX_NUM_QUESTIONS})
                     </p>
                 )}
+                <Portal
+                    open={createMessage != null}
+                    onClose={() => this.setState({ createMessage: null })}
+                >
+                    <div className='create-tmpl-msg'>{createMessage}</div>
+                </Portal>
             </Segment>
         );
     }
