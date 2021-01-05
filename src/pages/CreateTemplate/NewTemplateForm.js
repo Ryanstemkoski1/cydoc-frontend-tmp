@@ -10,6 +10,7 @@ import Nestable from 'react-nestable';
 import { createNodeId, updateParent } from './util';
 
 const OTHER_TEXT = 'Other (specify below)';
+const MAX_NUM_QUESTIONS = 50;
 
 class NewTemplateForm extends Component {
     static contextType = CreateTemplateContext;
@@ -189,7 +190,7 @@ class NewTemplateForm extends Component {
         }
 
         let numQuestions = this.context.state.numQuestions;
-        let numEdges = this.context.state.numEdges;
+        let nextEdgeID = this.context.state.nextEdgeID;
         const disease = this.context.state.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
         const qId = createNodeId(diseaseCode, numQuestions);
@@ -205,18 +206,18 @@ class NewTemplateForm extends Component {
             hasChanged: true,
         };
 
-        this.context.state.edges[numEdges] = {
+        this.context.state.edges[nextEdgeID] = {
             from: '0000',
             to: qId,
         };
         this.context.state.graph[qId] = [];
-        this.context.state.graph['0000'].push(numEdges);
+        this.context.state.graph['0000'].push(nextEdgeID);
         
         this.context.onContextChange('nodes', this.context.state.nodes);
         this.context.onContextChange('graph', this.context.state.graph);
         this.context.onContextChange('edges', this.context.state.edges);
         this.context.onContextChange('numQuestions', numQuestions + 1);
-        this.context.onContextChange('numEdges', numEdges + 1);
+        this.context.onContextChange('nextEdgeID', nextEdgeID + 1);
     }
 
     /**
@@ -433,6 +434,7 @@ class NewTemplateForm extends Component {
 
     render() {
         const { bodySystems, diseases, showOtherBodySystem, showOtherDisease, graphData } = this.state;
+
         const bodySystemOptions = [{
             value: OTHER_TEXT,
             text: OTHER_TEXT,
@@ -540,6 +542,7 @@ class NewTemplateForm extends Component {
                     onClick={this.addQuestion}
                     content='Add question'
                     className='add-question-button'
+                    disabled={this.context.state.numQuestions >= MAX_NUM_QUESTIONS + 1}
                 />
                 <Button
                     circular
@@ -549,6 +552,11 @@ class NewTemplateForm extends Component {
                     onClick={this.createTemplate}
                     disabled={this.context.state.numQuestions === 1}
                 />
+                { this.context.state.numQuestions >= MAX_NUM_QUESTIONS + 1 && (
+                    <p className='add-question-msg'>
+                        * Reached maximum number of questions ({MAX_NUM_QUESTIONS})
+                    </p>
+                )}
             </Segment>
         );
     }

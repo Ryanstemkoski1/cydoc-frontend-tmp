@@ -9,7 +9,7 @@ export class CreateTemplateStore extends Component {
         disease: '',
         bodySystem: '',
         numQuestions: 1,
-        numEdges: 1,
+        nextEdgeID: 0,
         graph: {
             '0000': [],
         },

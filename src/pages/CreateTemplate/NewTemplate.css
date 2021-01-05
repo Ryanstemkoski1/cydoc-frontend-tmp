@@ -38,6 +38,11 @@
   border: 1px solid #d4d4d5;
 }
 
+.add-question-msg {
+  opacity: 60%;
+  margin-top: 0.5rem;
+}
+
 .ui.container.category-container {
   margin: 0 0 1rem !important;
 }

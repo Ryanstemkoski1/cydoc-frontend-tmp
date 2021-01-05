@@ -87,7 +87,7 @@ class TemplateAnswer extends Component {
      * @param {String} parent: qid of the nodes to connect the questions to
      */
     connectGraph = (e, { parent }) => {
-        let { numQuestions, numEdges } = this.context.state;
+        let { numQuestions, nextEdgeID } = this.context.state;
         const { otherGraph } = this.state;
         const { graph, edges, nodes } = this.props.graphData;
         
@@ -117,14 +117,14 @@ class TemplateAnswer extends Component {
                     hasChanged: false,
                     originalId: id,
                 }
-                contextEdges[numEdges] = {
+                contextEdges[nextEdgeID] = {
                     from: parent,
                     to: rootId,
                 }
                 contextGraph[rootId] = [];
-                contextGraph[parent].push(numEdges)
+                contextGraph[parent].push(nextEdgeID)
                 numQuestions++;
-                numEdges++;
+                nextEdgeID++;
                 questionParent = rootId;
             }
 
@@ -138,16 +138,16 @@ class TemplateAnswer extends Component {
                 otherGraph,
                 diseaseCode,
                 this.props.graphData,
-                { numQuestions, numEdges, contextNodes, contextGraph, contextEdges },
+                { numQuestions, nextEdgeID, contextNodes, contextGraph, contextEdges },
             );
             numQuestions = newCount.numQuestions;
-            numEdges = newCount.numEdges;
+            nextEdgeID = newCount.nextEdgeID;
 
 
             this.context.onContextChange('nodes', contextNodes);
             this.context.onContextChange('edges', contextEdges);
             this.context.onContextChange('graph', contextGraph);
-            this.context.onContextChange('numEdges', numEdges);
+            this.context.onContextChange('nextEdgeID', nextEdgeID);
             this.context.onContextChange('numQuestions', numQuestions);
             
             this.setState({
@@ -176,7 +176,7 @@ class TemplateAnswer extends Component {
      */
     addChildQuestion = (event, { parent }) => {
         let numQuestions = this.context.state.numQuestions;
-        let numEdges = this.context.state.numEdges;
+        let nextEdgeID = this.context.state.nextEdgeID;
         const disease = this.context.state.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
         const childId = createNodeId(diseaseCode, numQuestions);
@@ -192,18 +192,18 @@ class TemplateAnswer extends Component {
             hasChanged: true,
         };
 
-        this.context.state.edges[numEdges] = {
+        this.context.state.edges[nextEdgeID] = {
             from: parent,
             to: childId,
         };
         this.context.state.graph[childId] = [];
-        this.context.state.graph[parent].push(numEdges);
+        this.context.state.graph[parent].push(nextEdgeID);
 
         this.context.onContextChange('nodes', this.context.state.nodes);
         this.context.onContextChange('graph', this.context.state.graph);
         this.context.onContextChange('edges', this.context.state.edges);
         this.context.onContextChange('numQuestions', numQuestions + 1);
-        this.context.onContextChange('numEdges', numEdges + 1);
+        this.context.onContextChange('nextEdgeID', nextEdgeID + 1);
     }
 
     /**
@@ -423,7 +423,7 @@ class TemplateAnswer extends Component {
      * @param {String} qId 
      */
     editChildren = (qId) => {
-        let { numQuestions, numEdges } = this.context.state;
+        let { numQuestions, nextEdgeID } = this.context.state;
         const { graphData } = this.props;
         const { edges, nodes, graph } = graphData;
         
@@ -445,15 +445,15 @@ class TemplateAnswer extends Component {
                 "",
                 diseaseCode,
                 graphData,
-                { numQuestions, numEdges, contextNodes, contextGraph, contextEdges },
+                { numQuestions, nextEdgeID, contextNodes, contextGraph, contextEdges },
             );
             numQuestions = newCount.numQuestions;
-            numEdges = newCount.numEdges;
+            nextEdgeID = newCount.nextEdgeID;
 
             this.context.onContextChange('nodes', contextNodes);
             this.context.onContextChange('edges', contextEdges);
             this.context.onContextChange('graph', contextGraph);
-            this.context.onContextChange('numEdges', numEdges);
+            this.context.onContextChange('nextEdgeID', nextEdgeID);
             this.context.onContextChange('numQuestions', numQuestions);
         }
         delete contextNodes[qId].hasChildren;
