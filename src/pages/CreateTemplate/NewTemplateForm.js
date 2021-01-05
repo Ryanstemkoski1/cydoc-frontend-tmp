@@ -12,8 +12,6 @@ import { createNodeId, updateParent } from './util';
 const OTHER_TEXT = 'Other (specify below)';
 const MAX_NUM_QUESTIONS = 50;
 
-// TODO: replace all hardcoded roots with a more unique id
-
 class NewTemplateForm extends Component {
     static contextType = CreateTemplateContext;
     titleRef = createRef();
@@ -195,6 +193,7 @@ class NewTemplateForm extends Component {
         let numQuestions = this.context.state.numQuestions;
         let nextEdgeID = this.context.state.nextEdgeID;
         const disease = this.context.state.disease;
+        const root = this.context.state.root;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
         const qId = createNodeId(diseaseCode, numQuestions);
         
@@ -204,16 +203,16 @@ class NewTemplateForm extends Component {
             text: '',
             responseType: '',
             answerInfo: {},
-            parent: '0000',
+            parent: root,
             hasChanged: true,
         };
 
         this.context.state.edges[nextEdgeID] = {
-            from: '0000',
+            from: root,
             to: qId,
         };
         this.context.state.graph[qId] = [];
-        this.context.state.graph['0000'].push(nextEdgeID);
+        this.context.state.graph[root].push(nextEdgeID);
         
         this.context.onContextChange('nodes', this.context.state.nodes);
         this.context.onContextChange('graph', this.context.state.graph);
@@ -228,13 +227,14 @@ class NewTemplateForm extends Component {
      * to the backend
      */
     createTemplate = async () => {
-        const { title, disease, edges, nodes, graph, bodySystem } = this.context.state;
+        const { root, title, disease, edges, nodes, graph, bodySystem } = this.context.state;
         const { doctorID } = this.context;
         this.setState({ showLoader: true });
 
         const updatedEdges = {};
         const updatedNodes = {};
         const updatedGraph = {};
+        const rootSuffix = root.slice(3);
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
 
         // update all edge to/from to match current disease
@@ -247,31 +247,37 @@ class NewTemplateForm extends Component {
             // Otherwise, if the sink node has not changed, make sure to use the old ID.
             // There'll never exist an edge from an old to new because adding a new child
             // is considered altering the original, leading to `hasChanged = false`.
-            if (edge.from !== '0000' && !nodes[edge.to].hasChanged) {
+            if (!edge.from.endsWith(rootSuffix) && !nodes[edge.to].hasChanged) {
                 to  = nodes[edge.to].originalId;
             } else {
-                to = edge.to === '0000' || edge.to.startsWith(diseaseCode) ? edge.to : diseaseCode + edge.to.slice(3);
+                to = edge.to.startsWith(diseaseCode) 
+                    ? edge.to 
+                    : diseaseCode + edge.to.slice(edge.to.indexOf('-'));
             }
-            const from = edge.from === '0000' || edge.from.startsWith(diseaseCode) ? edge.from : diseaseCode + edge.from.slice(3);
+            const from = edge.from.startsWith(diseaseCode) 
+                ? edge.from 
+                : diseaseCode + edge.from.slice(edge.from.indexOf('-'));
             updatedEdges[key] = { from, to };
         }
 
         // update all graph keys
-        let fromOrder = {'0000': 1};
+        let fromOrder = {[root]: 1};
         for (let [key, children] of Object.entries(graph)) {
             // Skip over unchanged nodes
-            if (key !== "0000" && !nodes[key].hasChanged) {
+            if (!key.endsWith(rootSuffix) && !nodes[key].hasChanged) {
                 continue;
             }
-            const id = key === '0000' || key.startsWith(diseaseCode) ? key : diseaseCode + key.slice(3);
+            const id = key.startsWith(diseaseCode) 
+                ? key 
+                : diseaseCode + key.slice(key.indexOf('-'));
             updatedGraph[id] = children; 
             
-            // TODO (AL): Figure out if edges connecting different knowledge graphs should affect the count
-            // aka skip over its index or fill in the gaps
+            // TODO (AL): Figure out if edges connecting different knowledge graphs should
+            // affect the count aka skip over its index or fill in the gaps
             let skipped = 0;
             children.forEach((edgeID, idx) => {
                 let edge = edges[edgeID];
-                if (edge.from !== '0000' && !nodes[edge.to].hasChanged) {
+                if (!edge.from.endsWith(rootSuffix) && !nodes[edge.to].hasChanged) {
                     skipped++;
                     updatedEdges[edgeID].toQuestionOrder = -1;
                     updatedEdges[edgeID].fromQuestionOrder = -1;
@@ -290,7 +296,7 @@ class NewTemplateForm extends Component {
 
         // update all node key and object values
         for (let [key, data] of Object.entries(nodes)) {
-            if (key !== '0000' && !data.hasChanged) {
+            if (!key.endsWith(rootSuffix) && !data.hasChanged) {
                 continue;
             }
             data = {...data};
@@ -308,8 +314,8 @@ class NewTemplateForm extends Component {
             delete data.originalId;
             delete data.parent;
 
-            if (key !== '0000' && !key.startsWith(diseaseCode)) {
-                key = diseaseCode + key.slice(3);
+            if (!key.startsWith(diseaseCode)) {
+                key = diseaseCode + key.slice(key.indexOf('-'));
             }
             updatedNodes[key] = { 
                 ...data, 
@@ -327,14 +333,9 @@ class NewTemplateForm extends Component {
         // Send updated data to the backend
         let createMessage, res;
         try {
-            // // Dummy endpoint for testing successes until backend is fixed
-            // res = await fetch('https://httpbin.org/post', {
-            //     method:'POST',
-            //     headers: {'Content-Type': 'application/json'}
-            // });
             res = await graphClient.post(`/doctor/${doctorID}`, {
                 graphName: title,
-                root: '0000', // TODO: do not hardcode the root ID
+                root: diseaseCode + rootSuffix,
                 graph: updatedGraph,
                 nodes: updatedNodes,
                 edges: updatedEdges,
@@ -356,11 +357,11 @@ class NewTemplateForm extends Component {
      * for react-nestable to read
      */
     createTreeData = () => {
-        const { graph, edges, nodes } = this.context.state;
-        return graph['0000'].map(edge => {
+        const { graph, edges, root } = this.context.state;
+        return graph[root].map(edge => {
             // create treeNode for every root level question
             const qId = edges[edge].to;
-            return this.flattenGraph(qId, '0000', edge);
+            return this.flattenGraph(qId, root, edge);
         });
     }
     
@@ -428,9 +429,9 @@ class NewTemplateForm extends Component {
      * @param {*} item: the item that was dragged
      */
     updateOrder = (items, item) => {
-        const { graph, edges, nodes } = this.context.state;
+        const { graph, edges, nodes, root } = this.context.state;
 
-        const [newParent, subtree] = this.findParent(items, "0000", item.id);
+        const [newParent, subtree] = this.findParent(items, root, item.id);
         if (!newParent) {
             return; // Couldn't find parent, something went wrong
         }
