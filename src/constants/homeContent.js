@@ -1,4 +1,4 @@
-export const aboutContent = {
+export const homeContent = {
     meetCydoc: {
         header: 'Meet Cydoc.',
         subheader: 'A note-taking app for doctors that\'s so much better',
@@ -48,7 +48,6 @@ export const aboutContent = {
     },
     footer: {
         cydoc: 'Cydoc',
-        home: 'Home',
         about: 'About',
         login: 'Login',
         register: 'Register',

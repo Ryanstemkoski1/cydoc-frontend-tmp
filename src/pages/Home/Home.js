@@ -1,14 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Segment } from 'semantic-ui-react';
-import { aboutContent } from 'constants/aboutContent';
+import { homeContent } from 'constants/homeContent';
 import NavMenu from '../../components/navigation/NavMenu';
 import { MeetCydocSection } from './MeetCydocSection';
 import { BetterNotesIcons } from './BetterNotesIcons';
 import { FeaturesGrid } from './FeaturesGrid';
-import './AboutPage.css';
+import './Home.css';
 
-class AboutPage extends Component {
+class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -47,10 +47,10 @@ class AboutPage extends Component {
                         <div className='diagonal-content'>
                             <Header
                                 as='h1'
-                                content={aboutContent.betterNotes.header}
-                                className='about-header white'
+                                content={homeContent.betterNotes.header}
+                                className='home-header white'
                             />
-                            <p className='better-notes-description'>{aboutContent.betterNotes.description}</p>
+                            <p className='better-notes-description'>{homeContent.betterNotes.description}</p>
                             <BetterNotesIcons windowWidth={windowWidth} />
                         </div>
                     </div>
@@ -58,8 +58,8 @@ class AboutPage extends Component {
                 <Segment className='click-to-tell'>
                     <Header
                         as='h1'
-                        content={aboutContent.clickToTell.header}
-                        className='about-header white click-to-tell'
+                        content={homeContent.clickToTell.header}
+                        className='home-header white click-to-tell'
                         textAlign='center'
                     />
                 </Segment>
@@ -67,21 +67,21 @@ class AboutPage extends Component {
                     <div className='design-doctors-content'>
                         <Header
                             as='h1'
-                            content={aboutContent.forDoctors.header}
-                            className='about-header teal for-doctors'
+                            content={homeContent.forDoctors.header}
+                            className='home-header teal for-doctors'
                         />
                         <Header
                             as='h2'
-                            content={aboutContent.forDoctors.subheader}
-                            className='about-sub-header for-doctors-sub'
+                            content={homeContent.forDoctors.subheader}
+                            className='home-sub-header for-doctors-sub'
                         />
                     </div>
                 </Segment>
                 <Segment className='features'>
                     <Header
                         as='h1'
-                        content={aboutContent.features.header}
-                        className='about-header white'
+                        content={homeContent.features.header}
+                        className='home-header white'
                         textAlign='center'
                     />
                     <FeaturesGrid windowWidth={windowWidth} />
@@ -89,32 +89,16 @@ class AboutPage extends Component {
                 <Segment className='footer'>
                     <Header
                         as={Link}
-                        to='/home'
-                        content={aboutContent.footer.cydoc}
-                        className='about-header light-teal footer-header'
+                        onClick={window.scrollTo({ top: 0, behavior: 'smooth' })}
+                        content={homeContent.footer.cydoc}
+                        className='home-header light-teal footer-header'
                     />
                     <div className='footer-links'>
                         <div className='footer-link'>
                             <Header
                                 as={Link}
-                                to='/home'
-                                content={aboutContent.footer.home}
-                                className='light-teal '
-                            />
-                        </div>
-                        <div className='footer-link'>
-                            <Header
-                                as={Link}
-                                to='/about#'
-                                content={aboutContent.footer.about}
-                                className='light-teal '
-                            />
-                        </div>
-                        <div className='footer-link'>
-                            <Header
-                                as={Link}
                                 to='/login'
-                                content={aboutContent.footer.login}
+                                content={homeContent.footer.login}
                                 className='light-teal '
                             />
                         </div>
@@ -122,7 +106,7 @@ class AboutPage extends Component {
                             <Header
                                 as={Link}
                                 to='/register'
-                                content={aboutContent.footer.register}
+                                content={homeContent.footer.register}
                                 className='light-teal '
                             />
                         </div>
@@ -130,7 +114,7 @@ class AboutPage extends Component {
                             <Header
                                 as='a'
                                 href='https://aemail.com/lYPj'
-                                content={aboutContent.footer.contact}
+                                content={homeContent.footer.contact}
                                 className='light-teal '
                             />
                         </div>
@@ -141,4 +125,4 @@ class AboutPage extends Component {
     }
 }
 
-export default AboutPage;
+export default Home;

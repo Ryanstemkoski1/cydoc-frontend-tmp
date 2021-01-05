@@ -23,6 +23,13 @@
     padding: 1rem;
 }
 
+h1.logo-text {
+    font-family: Pompadour, Arial, Helvetica, sans-serif;
+    font-size: 2.7rem;
+    color: black;
+    margin: .5rem;
+}
+
 .login-header, .sign-up-header {
     padding: 1rem;
     font-size: 1.2rem;

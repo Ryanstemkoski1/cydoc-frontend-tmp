@@ -77,7 +77,7 @@ class LoginPage extends Component {
     };
 
     render() {
-        if (this.state.redirect) {
+        if (this.state.redirect || this.context.token) {
             return (
                 <NotesContext.Consumer>
                     {(context) => {
@@ -99,7 +99,8 @@ class LoginPage extends Component {
                 <Container className="login">
                     <Segment clearing>
                         <Container textAlign='center'>
-                            <Image size="tiny" href='/home' src={Logo} />
+                            <Image size="tiny" href='/' src={Logo} />
+                            <h1 className='logo-text'>Cydoc</h1>
                         </Container> 
                         <Container className={"login-header"} color='black' textAlign='center'>
                             Log in
