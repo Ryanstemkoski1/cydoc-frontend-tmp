@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { Button, Form, Header, Segment, Input, Grid, Dropdown, Message, Icon, Portal } from 'semantic-ui-react';
+import { Button, Form, Header, Segment, Input, Grid, Dropdown, Message, Icon, Portal, Dimmer, Loader } from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import './NewTemplate.css';
 import TemplateQuestion from './TemplateQuestion';
@@ -8,6 +8,7 @@ import diseaseAbbrevs from 'constants/diseaseAbbrevs.json';
 import diseaseCodes from 'constants/diseaseCodes';
 import Nestable from 'react-nestable';
 import { createNodeId, updateParent } from './util';
+import API from '../EditNote/content/hpi/knowledgegraph/src/API';
 
 const OTHER_TEXT = 'Other (specify below)';
 const MAX_NUM_QUESTIONS = 50;
@@ -26,8 +27,8 @@ class NewTemplateForm extends Component {
             showOtherDisease: false,
             diseaseEmpty: true,
             bodySystemEmpty: true,
-            showLoader: false,
-            createMessage: null,
+            showDimmer: false,
+            requestResult: null,
         }
         this.saveTitle = this.saveTitle.bind(this);
         this.saveBodySystem = this.saveBodySystem.bind(this);
@@ -37,12 +38,12 @@ class NewTemplateForm extends Component {
         this.createTreeData = this.createTreeData.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount = async () => {
         /**
          * Fetches the existing knowledge graphs from the backend to prepopulate the
          * available body systems and diseases. 
          */
-        graphClient.get('/graph').then(value => {
+        API.then(value => {
             const nodes = value.data.nodes;
             const allBodySystems = [];
             const allDiseases = [];
@@ -229,7 +230,7 @@ class NewTemplateForm extends Component {
     createTemplate = async () => {
         const { root, title, disease, edges, nodes, graph, bodySystem } = this.context.state;
         const { doctorID } = this.context;
-        this.setState({ showLoader: true });
+        this.setState({ showDimmer: true });
 
         const updatedEdges = {};
         const updatedNodes = {};
@@ -331,7 +332,7 @@ class NewTemplateForm extends Component {
         }
 
         // Send updated data to the backend
-        let createMessage, res;
+        let requestResult, resMessage, resIcon, res;
         try {
             res = await graphClient.post(`/doctor/${doctorID}`, {
                 graphName: title,
@@ -340,15 +341,27 @@ class NewTemplateForm extends Component {
                 nodes: updatedNodes,
                 edges: updatedEdges,
             });
-            createMessage = 'Successfully created template!';
+            resMessage = 'Successfully created template!';
+            resIcon = 'circle check outline'; 
         } catch (e) {
             console.log(e);
-            createMessage = res?.data?.Message || 'Unable to create template';
+            resMessage = e?.response?.data?.Message || 'Unable to create template';
+            resIcon = 'warning sign';
         } finally {
             console.log(updatedNodes);
             console.log(updatedEdges);
             console.log(updatedGraph);
-            this.setState({ createMessage, showLoader:false });
+            requestResult = (
+                <div className='create-tmpl-msg'>
+                    <Icon name={resIcon} size='big'/>
+                    <p>{resMessage}</p>
+                </div>
+            );
+            this.setState({ requestResult }, () => {
+                setTimeout(() => {
+                    this.setState({ showDimmer: false, requestResult: null });
+                }, 3000);
+            });
         }
     }
 
@@ -501,8 +514,8 @@ class NewTemplateForm extends Component {
             diseases, 
             showOtherBodySystem, 
             showOtherDisease, 
-            showLoader,
-            createMessage, 
+            showDimmer,
+            requestResult, 
         } = this.state;
 
         const bodySystemOptions = [{
@@ -528,113 +541,112 @@ class NewTemplateForm extends Component {
         });
 
         return (
-            <Segment className='container'>
-                <Form>
-                    <Header as='h2'>
-                        <Input
-                            placeholder='Template Title'
-                            ref={this.titleRef}
-                            id='input-title'
-                            value={this.context.state.title}
-                            onChange={this.saveTitle}
-                            transparent
-                            fluid
-                        />
-                    </Header>
-                    <Grid>
-                        <Grid.Column mobile={16} tablet={8} computer={8}>
-                            <div>Body System</div>
-                            <Dropdown
-                                fluid
-                                search
-                                selection
-                                clearable
-                                placeholder='e.g. Endocrine'
-                                value={showOtherBodySystem ? OTHER_TEXT : this.context.state.bodySystem}
-                                options={bodySystemOptions}
-                                onChange={this.saveBodySystem}
-                                className='info-dropdown'
-                            />
+            <Dimmer.Dimmable as={Segment} className='container' dimmed={showDimmer}>
+                <Dimmer active={showDimmer} inverted>
+                    { !requestResult
+                        ? (<Loader>Saving...</Loader>)
+                        : requestResult
+                    }
+                </Dimmer>
+                    <Form>
+                        <Header as='h2'>
                             <Input
+                                placeholder='Template Title'
+                                ref={this.titleRef}
+                                id='input-title'
+                                value={this.context.state.title}
+                                onChange={this.saveTitle}
+                                transparent
                                 fluid
-                                placeholder='Other Body System'
-                                value={this.context.state.bodySystem}
-                                onChange={this.saveBodySystem}
-                                id='other-body-system'
                             />
-                        </Grid.Column>
-                        <Grid.Column mobile={16} tablet={8} computer={8}>
-                            <div>Disease</div>
-                            <Dropdown
-                                fluid
-                                search
-                                selection
-                                clearable
-                                placeholder='e.g. Diabetes'
-                                value={showOtherDisease ? OTHER_TEXT : this.context.state.disease}
-                                options={diseaseOptions}
-                                onChange={this.saveDisease}
-                                className='info-dropdown'
-                            />
-                            <Input
-                                fluid
-                                placeholder='Other Disease'
-                                value={this.context.state.disease}
-                                onChange={this.saveDisease}
-                                id='other-disease'
-                            />
-                        </Grid.Column>
-                    </Grid>
-                </Form>
-                <Message
-                    compact
-                    negative
-                    content='Please choose a disease before adding questions.'
-                    id='disease-error-message'
-                />
-                <Message
-                    compact
-                    negative
-                    content='Please choose a body system before adding questions.'
-                    id='body-error-message'
-                />
-                <Nestable
-                    items={this.createTreeData()}
-                    handler={<Icon name='bars'/>}
-                    renderItem={this.renderItem}
-                    renderCollapseIcon={this.renderCollapseIcon}
-                    onChange={this.updateOrder}
-                    threshold={50}
-                />
-                <Button
-                    circular
-                    icon='add'
-                    onClick={this.addQuestion}
-                    content='Add question'
-                    className='add-question-button'
-                    disabled={this.context.state.numQuestions >= MAX_NUM_QUESTIONS + 1}
-                />
-                <Button
-                    circular
-                    floated='right'
-                    content='Create Template'
-                    className='create-tmpl-button'
-                    onClick={this.createTemplate}
-                    disabled={this.context.state.numQuestions === 1}
-                    loading={showLoader}
-                />
-                { this.context.state.numQuestions >= MAX_NUM_QUESTIONS + 1 && (
-                    <p className='add-question-msg'>
-                        * Reached maximum number of questions ({MAX_NUM_QUESTIONS})
-                    </p>
-                )}
-                <Portal
-                    open={createMessage != null}
-                    onClose={() => this.setState({ createMessage: null })}
-                >
-                    <div className='create-tmpl-msg'>{createMessage}</div>
-                </Portal>
-            </Segment>
+                        </Header>
+                        <Grid>
+                            <Grid.Column mobile={16} tablet={8} computer={8}>
+                                <div>Body System</div>
+                                <Dropdown
+                                    fluid
+                                    search
+                                    selection
+                                    clearable
+                                    placeholder='e.g. Endocrine'
+                                    value={showOtherBodySystem ? OTHER_TEXT : this.context.state.bodySystem}
+                                    options={bodySystemOptions}
+                                    onChange={this.saveBodySystem}
+                                    className='info-dropdown'
+                                />
+                                <Input
+                                    fluid
+                                    placeholder='Other Body System'
+                                    value={this.context.state.bodySystem}
+                                    onChange={this.saveBodySystem}
+                                    id='other-body-system'
+                                />
+                            </Grid.Column>
+                            <Grid.Column mobile={16} tablet={8} computer={8}>
+                                <div>Disease</div>
+                                <Dropdown
+                                    fluid
+                                    search
+                                    selection
+                                    clearable
+                                    placeholder='e.g. Diabetes'
+                                    value={showOtherDisease ? OTHER_TEXT : this.context.state.disease}
+                                    options={diseaseOptions}
+                                    onChange={this.saveDisease}
+                                    className='info-dropdown'
+                                />
+                                <Input
+                                    fluid
+                                    placeholder='Other Disease'
+                                    value={this.context.state.disease}
+                                    onChange={this.saveDisease}
+                                    id='other-disease'
+                                />
+                            </Grid.Column>
+                        </Grid>
+                    </Form>
+                    <Message
+                        compact
+                        negative
+                        content='Please choose a disease before adding questions.'
+                        id='disease-error-message'
+                    />
+                    <Message
+                        compact
+                        negative
+                        content='Please choose a body system before adding questions.'
+                        id='body-error-message'
+                    />
+                    <Nestable
+                        items={this.createTreeData()}
+                        handler={<Icon name='bars'/>}
+                        renderItem={this.renderItem}
+                        renderCollapseIcon={this.renderCollapseIcon}
+                        onChange={this.updateOrder}
+                        threshold={50}
+                    />
+                    <Button
+                        circular
+                        icon='add'
+                        onClick={this.addQuestion}
+                        content='Add question'
+                        className='add-question-button'
+                        disabled={this.context.state.numQuestions >= MAX_NUM_QUESTIONS + 1}
+                    />
+                    <Button
+                        circular
+                        floated='right'
+                        content='Create Template'
+                        className='create-tmpl-button'
+                        onClick={this.createTemplate}
+                        disabled={this.context.state.numQuestions === 1}
+                    />
+                    { this.context.state.numQuestions >= MAX_NUM_QUESTIONS + 1 && (
+                        <p className='add-question-msg'>
+                            * Reached maximum number of questions ({MAX_NUM_QUESTIONS})
+                        </p>
+                    )}
+            </Dimmer.Dimmable>
         );
     }
 }

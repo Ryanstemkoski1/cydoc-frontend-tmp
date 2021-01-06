@@ -30,13 +30,12 @@ export class CreateTemplateStore extends Component {
             [attribute]: value
         });
     }
-
     render() {
         return(
             <CreateTemplateContext.Provider
                 value={{
                     state: this.state,
-                    doctorID: this.context.user._id,
+                    doctorID: this.context?.user?._id,
                     onContextChange: this.onContextChange}}
             >
                 {this.props.children}
