@@ -353,11 +353,7 @@ class NewTemplateForm extends Component {
                     <p>{resMessage}</p>
                 </div>
             );
-            this.setState({ requestResult }, () => {
-                setTimeout(() => {
-                    this.setState({ showDimmer: false, requestResult: null });
-                }, 3000);
-            });
+            this.setState({ requestResult });
         }
     }
 
@@ -542,8 +538,18 @@ class NewTemplateForm extends Component {
             <Dimmer.Dimmable as={Segment} className='container' dimmed={showDimmer}>
                 <Dimmer active={showDimmer} inverted>
                     { !requestResult
-                        ? (<Loader>Saving...</Loader>)
-                        : requestResult
+                        ? <Loader>Saving...</Loader>
+                        : <React.Fragment>
+                            {requestResult}
+                            <Button 
+                                icon='close' 
+                                content='Dismiss'
+                                onClick={() => this.setState({ 
+                                    requestResult: null,
+                                    showDimmer: false,
+                                })}
+                            />
+                        </React.Fragment>
                     }
                 </Dimmer>
                 <Form>

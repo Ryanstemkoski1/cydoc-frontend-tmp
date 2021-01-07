@@ -42,6 +42,16 @@
   color: rgba(0,0,0,.95);
 }
 
+.create-tmpl-msg + .ui.button {
+  background: none;
+  color: black !important;
+  transition: color 0.1s ease-in-out;
+}
+
+.create-tmpl-msg + .ui.button:hover {
+  color: #707070 !important;
+}
+
 .add-question-msg {
   opacity: 60%;
   margin-top: 0.5rem;
