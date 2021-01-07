@@ -303,9 +303,9 @@ class NewTemplateForm extends Component {
             
             if (data.responseType === 'CLICK-BOXES' || data.responseType.endsWith('-POP')) {
                 data.text += ` CLICK[${data.answerInfo.options.join(', ')}]`;
-            } else if (data.answerInfo?.startResponse) {
+            } /* else if (data.answerInfo?.startResponse) {
                 // TODO: When backend permits encode the fill in the blanks
-            }
+            } */
 
             delete data.answerInfo;
             delete data.hasChanged;
@@ -536,6 +536,8 @@ class NewTemplateForm extends Component {
             });
         });
 
+        const reachedMax = this.context.state.numQuestions >= MAX_NUM_QUESTIONS + 1;
+
         return (
             <Dimmer.Dimmable as={Segment} className='container' dimmed={showDimmer}>
                 <Dimmer active={showDimmer} inverted>
@@ -627,7 +629,7 @@ class NewTemplateForm extends Component {
                     onClick={this.addQuestion}
                     content='Add question'
                     className='add-question-button'
-                    disabled={this.context.state.numQuestions >= MAX_NUM_QUESTIONS + 1}
+                    disabled={reachedMax}
                 />
                 <Button
                     circular
@@ -637,7 +639,7 @@ class NewTemplateForm extends Component {
                     onClick={this.createTemplate}
                     disabled={this.context.state.numQuestions === 1}
                 />
-                { this.context.state.numQuestions >= MAX_NUM_QUESTIONS + 1 && (
+                { reachedMax && (
                     <p className='add-question-msg'>
                         * Reached maximum number of questions ({MAX_NUM_QUESTIONS})
                     </p>
