@@ -9,7 +9,7 @@ class PositiveDiseases extends Component {
     static contextType = HPIContext
     constructor(props, context) {
         super(props, context)
-        this.handleClick = this.handleClick.bind(this) 
+        this.handleClick = this.handleClick.bind(this)
     }
 
     handleClick() {
@@ -21,14 +21,14 @@ class PositiveDiseases extends Component {
             plan['conditions'].splice(plan['conditions'].findIndex(disease => disease.name === diseaseCode), 1)
         }
         this.context.onContextChange("positivediseases", values)
-        this.context.onContextChange("plan", plan) 
+        this.context.onContextChange("plan", plan)
 
     }
 
     render() {
         return (
             <button
-                className="tag_text positive-disease"
+                className="ui compact violet button positive-disease"
                 onClick={this.handleClick}
             >
                 {this.props.name}

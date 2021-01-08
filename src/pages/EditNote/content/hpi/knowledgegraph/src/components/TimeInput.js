@@ -5,15 +5,15 @@ import HPIContext from 'contexts/HPIContext.js';
 import '../css/TimeInput.css';
 
 class TimeInput extends Component {
-    static contextType = HPIContext 
+    static contextType = HPIContext
     constructor(props, context) {
         super(props, context)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.handleToggleButtonClick = this.handleToggleButtonClick.bind(this)
     }
 
-    handleToggleButtonClick(event){
-        const values = this.context["hpi"]; 
+    handleToggleButtonClick = (event) => {
+        const values = this.context["hpi"];
         values['nodes'][this.props.node]["response"][1] = event.target.title
         this.context.onContextChange("hpi", values);
     }
@@ -33,11 +33,11 @@ class TimeInput extends Component {
         var buttonMap = []
         for (var timeIndex = 0; timeIndex < timeOptions.length; timeIndex += 3) {
             buttonMap.push(
-                <Grid.Row columns='equal' className='time-grid-row'> 
-                        {timeOptions.slice(timeIndex, timeIndex+3).map((timeItem) => 
+                <Grid.Row columns='equal' className='time-grid-row'>
+                        {timeOptions.slice(timeIndex, timeIndex+3).map((timeItem) =>
                         <Grid.Column className='time-grid-column'>
                             <Button
-                                color={timeValue === timeItem ? 'grey' : ''}
+                                color={timeValue === timeItem ? 'violet' : 'basic'}
                                 title={timeItem}
                                 onClick={this.handleToggleButtonClick}
                                 className='time-grid-button'> {timeItem} </Button>
@@ -46,26 +46,26 @@ class TimeInput extends Component {
                 </Grid.Row>)
         }
         return (
-            <div className='time-div'> 
-                <Grid columns={2}>
-                    <Grid.Row> 
-                        <Grid.Column width={3}>
-                            <div className='time-input'> 
+            <div className='time-div'>
+                <Grid container doubling columns={2}>
+                    <Grid.Row>
+                        <Grid.Column width = {5}>
+                            <div className='time-input'>
                                 <NumericInput
                                     size={10}
                                     key={question}
                                     value={value}
-                                    min={0} 
+                                    min={0}
                                     onChange={this.handleInputChange}
                                 />
                             </div>
                         </Grid.Column>
-                        <Grid.Column width={6}> 
-                            <Grid> 
+                        <Grid.Column width = {10}>
+                            <Grid>
                                 {buttonMap}
                             </Grid>
                         </Grid.Column>
-                    </Grid.Row> 
+                    </Grid.Row>
                 </Grid>
             </div>
         )

@@ -186,7 +186,7 @@ class ExpandMurmurs extends Component{
 
         if(this.context['Physical Exam'].widgets["Murmurs"][this.props.ind]["systdiast"] === "systolic"){
             var values = this.context['Physical Exam'].widgets[this.props.type]
-             var arr=[]
+            var arr=[]
             for(var pe_index=0; pe_index<values.length; pe_index++){
                 var block0= this.addMurmurG(pe_index, this.state.pe_rows0, "cresdecres")
                 var block1=this.addMurmurG(pe_index, this.state.pe_rows1, "pansystolic")

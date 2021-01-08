@@ -4,12 +4,12 @@ import HPIContext from 'contexts/HPIContext.js';
 import '../css/HandleInput.css';
 
 class HandleInput extends React.Component {
-    static contextType = HPIContext 
+    static contextType = HPIContext
     constructor(props, context) {
         super(props, context)
         const values = this.context["hpi"]['nodes'][this.props.node]
         var answers = ""
-        // Currently, every letter is saved into Context 
+        // Currently, every letter is saved into Context
         answers = this.props.type === "LIST-TEXT" ? values['response'][this.props.inputID] : values["response"]
         this.state = {
             textInput: answers !== null ? answers: ""
@@ -20,13 +20,13 @@ class HandleInput extends React.Component {
 
     handleClick() {
         var values = this.context['hpi']
-        delete values['nodes'][this.props.node]['response'][this.props.inputID] // fix error 
+        delete values['nodes'][this.props.node]['response'][this.props.inputID] // fix error
         this.context.onContextChange("hpi", values)
     }
 
-    handleInputChange = (event) => { 
+    handleInputChange = (event) => {
         this.setState({textInput: event.target.value})
-        const values = this.context["hpi"] 
+        const values = this.context["hpi"]
         if (this.props.type === 'LIST-TEXT') values['nodes'][this.props.node]["response"][this.props.inputID] = event.target.value
         else values['nodes'][this.props.node]["response"] = event.target.value
         this.context.onContextChange("hpi", values)
@@ -37,7 +37,8 @@ class HandleInput extends React.Component {
         if (type === 'SHORT-TEXT') {
             return (
                 <Form.TextArea
-                    // type='text'
+                    className = 'short-text'
+                    //type='text'
                     onChange={this.handleInputChange}
                     rows='2'
                     value={this.state.textInput}
@@ -46,7 +47,8 @@ class HandleInput extends React.Component {
         else if (type === 'LONG-TEXT') {
             return (
                 <Form.TextArea
-                    // type='text'
+                    className = 'long-text'
+                    //type='text'
                     onChange={this.handleInputChange}
                     rows='4'
                     value={this.state.textInput}
@@ -55,8 +57,8 @@ class HandleInput extends React.Component {
         }
         else if (type === 'LIST-TEXT') {
             return (
-                <Form> 
-                <Input class="ui input focus" 
+                <Form>
+                <Input class="ui input focus"
                     className='list-text'
                     type='text'
                     onChange={this.handleInputChange}

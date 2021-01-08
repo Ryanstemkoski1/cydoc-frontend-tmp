@@ -5,6 +5,7 @@ import constants from 'constants/physical-exam-constants.json'
 import HPIContext from 'contexts/HPIContext.js';
 import Segment from "semantic-ui-react/dist/commonjs/elements/Segment";
 import {PHYSICAL_EXAM_MOBILE_BP} from "constants/breakpoints.js";
+import './PhysicalExam.css';
 
 //Component that manages content for the Physical Exam tab
 export default class PhysicalExamContent extends React.Component {
@@ -32,7 +33,7 @@ export default class PhysicalExamContent extends React.Component {
     updateDimensions() {
         let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
         let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
- 
+
         this.setState({ windowWidth, windowHeight });
     }
 
@@ -51,17 +52,17 @@ export default class PhysicalExamContent extends React.Component {
                 style={{ width: "100px" }}
                 name={name}
                 value={this.context["Physical Exam"][category][name]}
-                onChange={(e, { name, value }) => this.handleChange(category, name, value)} />
+                onChange={(e, { name, value }) => this.handleChange(category, name, parseInt(value))} />
         )
     }
-    
+
     renderPanels = (groups) => {
         const isMobileView = this.state.windowWidth <= PHYSICAL_EXAM_MOBILE_BP
         const panels = [
             {
                 key: 'Vitals',
                 title: {
-                    className: "dropdown-title",
+                    className: "ui dropdown-title",
                     content: "Vitals",
                     icon: 'dropdown'
                 },
@@ -81,7 +82,7 @@ export default class PhysicalExamContent extends React.Component {
                                         {this.generateNumericInput("Vitals", "Diastolic Blood Pressure", "diastolic", "right")}
                                     </Form.Field>
                                 </Grid.Column>
-                                
+
                                     <Grid.Column>
                                     <Form.Field inline={isMobileView}>
                                         <label>
@@ -134,7 +135,7 @@ export default class PhysicalExamContent extends React.Component {
                 {
                     key: groups[i - 1].name,
                     title: {
-                        className: "dropdown-title",
+                        className: "ui dropdown-title",
                         content: groups[i - 1].name,
                         icon: 'dropdown'
                     },
@@ -179,5 +180,3 @@ export default class PhysicalExamContent extends React.Component {
     }
 
 }
-
-            

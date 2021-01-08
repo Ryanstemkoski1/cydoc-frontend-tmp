@@ -33,16 +33,16 @@ class HPIContent extends Component {
     }
 
     componentDidMount() {
-        // Loads Cydoc knowledge graph to populate HPI, 
+        // Loads Cydoc knowledge graph to populate HPI,
         // organizes parent nodes by their category code (medical condition) and body system
         const data = API;
         data.then(res => {
             var categoryCodes = new Set() // List of category codes (medical conditions) from nodes
             var bodySystems = {} // Dict of body system : list of category codes (medical conditions)
-            var nodes = res.data['nodes'] 
+            var nodes = res.data['nodes']
             for (var node in nodes) {
                 var code = node.substring(0, 3)
-                // get set of all categories 
+                // get set of all categories
                 if (!(categoryCodes.has(code))) {
                     categoryCodes.add(code)
                     var bodySystem = nodes[node]["bodySystem"];
@@ -50,11 +50,16 @@ class HPIContent extends Component {
                     if (!(bodySystem in bodySystems)) bodySystems[bodySystem] = {"diseases": [], "name": diseaseAbbrevs[bodySystem]}
                     bodySystems[bodySystem]["diseases"].push(code)
                 }}
-            delete bodySystems["GENERAL"]; // not using GENERAL 
+            delete bodySystems["GENERAL"]; // not using GENERAL
             this.setState({isLoaded: true, graphData: res.data, categoryCodes: categoryCodes, bodySystems: Object.values(bodySystems)})
         })
         this.updateDimensions();
         window.addEventListener("resize", this.updateDimensions);
+        // Using timeout to ensure that tab/dropdown menu is rendered before setting
+        // setTimeout((_event) => {
+        //     this.setMenuPosition();
+        // }, 0);
+
         window.addEventListener("scroll", this.setMenuPosition);
     }
 
@@ -119,12 +124,12 @@ class HPIContent extends Component {
         window.scrollTo(0,0);
     }
 
-    // responds to tabs - the clicked tab's name will be indexed from the list of positive diseases and 
+    // responds to tabs - the clicked tab's name will be indexed from the list of positive diseases and
     // corresponds to its step - 2. The page will then change to the clicked tab's corresponding disease
     // category and the active tab will change to that as well.
-    handleItemClick = (e, {name}) => { 
-        this.context.onContextChange("step", this.context['positivediseases'].indexOf(diseaseCodes[name])+2) 
-        this.context.onContextChange("activeHPI", name)
+    handleItemClick = (e, {name}) => {
+        this.context.onContextChange("step", this.context['positivediseases'].indexOf(diseaseCodes[name])+2)
+        this.context.onContextChange("activeHPI", Object.values(diseaseCodes).find(value => diseaseCodes[name] === value))
         setTimeout((_event) => {
             window.scrollTo(0,0)
             this.setMenuPosition()
@@ -141,44 +146,41 @@ class HPIContent extends Component {
         const {graphData, isLoaded, windowWidth, bodySystems} = this.state;
 
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
-        /* Creates list of body system buttons to add in the front page. 
+        /* Creates list of body system buttons to add in the front page.
            Loops through state variable, bodySystems, saved from the API */
         const diseaseComponents = bodySystems.map(item =>
             <ButtonItem
                 key={item['name']}                  // name of body system
-                name={item['name']}                 
+                name={item['name']}
                 diseasesList={item['diseases']}    // list of categories (diseases) associated with current body system
             />
         );
-
         // diseases that the user has chosen
-        // Creates list of category buttons clicked by the user (categories/diseases for which they are positive) 
-        // Loops through the HPI context storing which categories user clicked in the front page 
+        // Creates list of category buttons clicked by the user (categories/diseases for which they are positive)
+        // Loops through the HPI context storing which categories user clicked in the front page
         // (categories/diseases for which they are positive)
-        const positiveDiseases = this.context["positivediseases"].map(disease =>    
+        const positiveDiseases = this.context["positivediseases"].map(disease =>
             <PositiveDiseases
                 key={disease}
                 name={Object.keys(diseaseCodes).find(key => diseaseCodes[key] === disease)}
             />
         );
-
         // tabs with the diseases the user has chosen
         // Loops through HPI context storing which categories user clicked in front page
-        const diseaseTabs = this.context['positivediseases'].map((name, index) => 
+        const diseaseTabs = this.context['positivediseases'].map((name, index) =>
             <Menu.Item
                 key={index}
                 name={Object.keys(diseaseCodes).find(key => diseaseCodes[key] === name)}
-                /* if the current category in the for loop matches the active category (this.context['activeHPI']), 
+                /* if the current category in the for loop matches the active category (this.context['activeHPI']),
                 the menu item is marked as active, meaning it will be displayed as clicked (pressed down) */
-                active={this.context['activeHPI'] === Object.keys(diseaseCodes).find(key => diseaseCodes[key] === name)}  
+                active={this.context['activeHPI'] === name}
                 onClick={this.handleItemClick}
-                className='disease-tab'  // CSS 
+                className='disease-tab'  // CSS
             />
-        ); 
-        
+        );
         // each step correlates to a different tab
         var step = this.context['step'];
-        // number of positive diseases, which is also the nnumber of steps   
+        // number of positive diseases, which is also the nnumber of steps
         const positiveLength = this.context['positivediseases'].length;
 
         // window/screen responsiveness
@@ -191,7 +193,7 @@ class HPIContent extends Component {
             numColumns = 2;
         }
 
-        // depending on the current step, we switch to a different view 
+        // depending on the current step, we switch to a different view
         switch(step) {
             case 1:
                 return (
@@ -206,10 +208,10 @@ class HPIContent extends Component {
                             columnClassName='disease-column'
                         >
                             {diseaseComponents}
-                        </Masonry>      
+                        </Masonry>
                     </Segment>
 
-                    {positiveLength > 0 ? 
+                    {positiveLength > 0 ?
                     <>
                     <Button icon floated='right' onClick={this.continue} className='hpi-small-next-button'>
                     <Icon name='arrow right'/>
@@ -256,7 +258,7 @@ class HPIContent extends Component {
                             Previous Form
                             <Icon name='arrow left'/>
                             </Button>
-        
+
                             <Button icon floated='right' onClick={this.nextFormClick} className='hpi-small-next-button'>
                             <Icon name='arrow right'/>
                             </Button>
@@ -274,7 +276,7 @@ class HPIContent extends Component {
                             Previous Form
                             <Icon name='arrow left'/>
                             </Button>
-        
+
                             <Button icon floated='right' onClick={this.continue} className='hpi-small-next-button'>
                             <Icon name='arrow right'/>
                             </Button>
@@ -286,7 +288,7 @@ class HPIContent extends Component {
                             }
                             </div>
                             )}
-                // if API data is not yet loaded, show loading screen 
+                // if API data is not yet loaded, show loading screen
                 else {return <h1> Loading... </h1>}
         }
     }

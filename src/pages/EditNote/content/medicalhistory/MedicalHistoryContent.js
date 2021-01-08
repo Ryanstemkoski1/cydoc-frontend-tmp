@@ -24,7 +24,7 @@ export default class MedicalHistoryContent extends React.Component {
         if (!isPreview) {
             const values = this.context["Medical History"]
             var conditions = []
-            // Creates list of conditions present in Medical History context 
+            // Creates list of conditions present in Medical History context
             for (var value in values) {
                 let name = values[value]['Condition'].toLowerCase();
                 conditions.push(name);
@@ -47,9 +47,9 @@ export default class MedicalHistoryContent extends React.Component {
                 }
                 response_choice_list.push(condition_index)
             }
-            
+
             this.context.onContextChange("Medical History", values)
-            
+
         }
         this.state = {
             // seenConditions,
@@ -58,10 +58,10 @@ export default class MedicalHistoryContent extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleConditionToggleButtonClick = this.handleConditionToggleButtonClick.bind(this);
         this.handleResolvedToggleButtonClick = this.handleResolvedToggleButtonClick.bind(this);
-        this.generateListItems = this.generateListItems.bind(this); 
-        this.addSeenCondition = this.addSeenCondition.bind(this); 
+        this.generateListItems = this.generateListItems.bind(this);
+        this.addSeenCondition = this.addSeenCondition.bind(this);
         this.addRow = this.addRow.bind(this);
-    } 
+    }
 
     componentDidMount() {
         const values = this.context["Medical History"];
@@ -99,7 +99,7 @@ export default class MedicalHistoryContent extends React.Component {
 
         let textAreas = document.getElementsByClassName(`text-area-${index}`);
         for (let i = 0; i < textAreas.length; i++) {
-            data.title === responses[0] ? textAreas[i].style.display = "block" : textAreas[i].style.display = "none"; 
+            data.title === responses[0] ? textAreas[i].style.display = "block" : textAreas[i].style.display = "none";
         }
     }
     // handles button events for "Has Condition Resolved?"
@@ -111,18 +111,19 @@ export default class MedicalHistoryContent extends React.Component {
 
         // Clearing any entry in End Year
         values[index]["End Year"] = ""
-        
+
         this.context.onContextChange("Medical History", values)
     }
 
     addSeenCondition = (value, index) => {
         const { seenConditions } = this.state;
         seenConditions[value] = index;
-        this.setState({ seenConditions });   
+        this.setState({ seenConditions });
     }
 
     addRow() {
-        let values = this.context[this.props.value_type]
+        let values = this.context["Medical History"];
+        //let values = this.context[this.props.value_type]
         let last_index = Object.keys(values).length.toString()
         values[last_index] = {
             'Condition': "",
@@ -131,21 +132,26 @@ export default class MedicalHistoryContent extends React.Component {
             "Onset": "",
             "Comments": ""
         }
-        this.context.onContextChange(this.props.value_type, values);
+        this.context.onContextChange("Medical History", values);
+
+        let list_values = Object.keys(this.context['Medical History']);
+        let mob = this.props.mobile;
+        this.generateListItems(list_values, mob);
+        console.log(mob);
     }
 
-    render(){ 
+    render(){
         const mobile = this.props.mobile;
         // The second OR statement gets the list of Conditions in the "Medical History" context
         let list_values;
         if (this.props.isPreview) {
             list_values = this.props.values;
         } else {
-            list_values = this.props.response_choice 
-                ? this.state.response_choice 
+            list_values = this.props.response_choice
+                ? this.state.response_choice
                 : (Object.keys(this.context['Medical History'])) || CONDITIONS
         }
-        const rows = this.generateListItems(list_values, mobile); 
+        const rows = this.generateListItems(list_values, mobile);
 
         return(
             <GridContent
@@ -162,7 +168,7 @@ export default class MedicalHistoryContent extends React.Component {
         );
     }
 
-    generateListItems(conditions, mobile) { 
+    generateListItems(conditions, mobile) {
         const { isPreview } = this.props;
         const { seenConditions } = this.state;
         return mobile ?
@@ -172,8 +178,8 @@ export default class MedicalHistoryContent extends React.Component {
                         <MedicalHistoryNoteItem
                             key={index}
                             isPreview={isPreview}
-                            condition={<ConditionInput 
-                                key={index} 
+                            condition={<ConditionInput
+                                key={index}
                                 index={index}
                                 category={"Medical History"}
                                 isPreview={isPreview}
@@ -193,8 +199,8 @@ export default class MedicalHistoryContent extends React.Component {
                     return (
                         <MedicalHistoryNoteItem
                             key={index}
-                            condition={<ConditionInput 
-                                key={index} 
+                            condition={<ConditionInput
+                                key={index}
                                 index={index}
                                 category={"Medical History"}
                                 seenConditions={seenConditions}
@@ -220,11 +226,11 @@ export default class MedicalHistoryContent extends React.Component {
                         <MedicalHistoryNoteRow
                             key={index}
                             isPreview={isPreview}
-                            condition={<ConditionInput 
-                                key={index} 
+                            condition={<ConditionInput
+                                key={index}
                                 isPreview={isPreview}
-                                index={condition_index} 
-                                category={"Medical History"} 
+                                index={condition_index}
+                                category={"Medical History"}
                                 condition={condition_index}
                                 seenConditions={seenConditions}
                                 addSeenCondition={this.addSeenCondition}
@@ -242,10 +248,10 @@ export default class MedicalHistoryContent extends React.Component {
                     return (
                         <MedicalHistoryNoteRow
                             key={index}
-                            condition={<ConditionInput 
-                                key={index} 
-                                index={condition_index} 
-                                category={"Medical History"} 
+                            condition={<ConditionInput
+                                key={index}
+                                index={condition_index}
+                                category={"Medical History"}
                                 seenConditions={seenConditions}
                                 addSeenCondition={this.addSeenCondition}
                                 condition={this.context["Medical History"][condition_index]['Condition']}
@@ -266,4 +272,3 @@ export default class MedicalHistoryContent extends React.Component {
             });
     }
 }
-

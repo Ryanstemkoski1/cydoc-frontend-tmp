@@ -3,8 +3,7 @@ import React, { Component, Fragment } from 'react';
 import UserForm from './UserForm';
 import { client } from "constants/api.js";
 import "./Account.css";
-import LogoLight from "../../assets/logo-light.png";
-import LogoName from "../../assets/logo-name.png";
+import NavMenu from '../../components/navigation/NavMenu';
 
 class Register extends React.Component {
 
@@ -18,33 +17,38 @@ class Register extends React.Component {
     // additional fields (e.g. title, pushTo) that are passed as props
     render() {
         return (
-            <UserForm
-                username=""
-                password=""
-                passwordConfirm=""
-                email=""
-                phoneNumber=""
-                secondaryNumber=""
-                firstName=""
-                lastName=""
-                workplace=""
-                inPatient={null}
-                institutionType=""
-                address=""
-                backupEmail=""
-                role=""
-                studentStatus=""
-                degreesCompleted={["", "", ""]}
-                degreesInProgress={["", "", ""]}
-                specialties={["", "", ""]}
-                workplaceFeatures={[]}
-                title="sign up"
-                buttonText="Sign Up"
-                handleSubmit={this.handleSubmit}
-                show={true}
-                pushTo="/login"
-                disableRegister={true}
-            />
+            <Fragment>
+                <div className='nav-menu-container'>
+                    <NavMenu />
+                </div>
+                <UserForm
+                    username=""
+                    password=""
+                    passwordConfirm=""
+                    email=""
+                    phoneNumber=""
+                    secondaryNumber=""
+                    firstName=""
+                    lastName=""
+                    workplace=""
+                    inPatient={null}
+                    institutionType=""
+                    address=""
+                    backupEmail=""
+                    role=""
+                    studentStatus=""
+                    degreesCompleted={["", "", ""]}
+                    degreesInProgress={["", "", ""]}
+                    specialties={["", "", ""]}
+                    workplaceFeatures={[]}
+                    title="sign up"
+                    buttonText="Sign Up"
+                    handleSubmit={this.handleSubmit}
+                    show={true}
+                    pushTo="/login"
+                    disableRegister={true}
+                />
+            </Fragment>
         );
     }
 }

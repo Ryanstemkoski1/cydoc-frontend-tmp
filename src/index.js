@@ -11,7 +11,7 @@ import Register 				from "./pages/Account/Register"
 import LandingPage 			    from "./pages/LandingPage/LandingPage";
 import LandingPageOld 			    from "./pages/LandingPage/LandingPage-old";
 
-import ThemingLayout 			from "./pages/About/Theming";
+import AboutPage 			from "./pages/About/AboutPage";
 import { PrivateRoute } 		from "./components/navigation/PrivateRoute";
 import CreateGraph 				from "./pages/CreateTemplate/CreateGraph";
 import EditGraph 				from './pages/CreateTemplate/EditGraph'
@@ -39,7 +39,7 @@ ReactDOM.render(
                                 <PrivateRoute path="/creategraph" component={CreateGraph} />
                                 <PrivateRoute path="/editgraph" component={EditGraph} />
                                 <PrivateRoute path="/editprofile" component={EditProfile} />
-                                <Route path="/about" component={ThemingLayout} />
+                                <Route path="/about" component={AboutPage} />
                             </BrowserRouter>
                         </div>
                     </CreateTemplateStore>
@@ -47,4 +47,3 @@ ReactDOM.render(
             </NotesStore>
         </AuthStore>
     </CookiesProvider>, document.getElementById('root'));
-

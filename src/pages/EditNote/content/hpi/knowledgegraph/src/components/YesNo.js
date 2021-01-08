@@ -10,10 +10,8 @@ class YesNo extends React.Component {
             yesID: 0,
             noID: 0,
             // colors of the yes and no buttons depending on whether either are clicked
-            yesColor: (answers !== null && answers === "Yes") ? "lightslategrey": "whitesmoke",
-            yesFont: (answers !== null && answers === "Yes") ? "white": "black",
-            noColor: (answers !== null && answers === "No") ? "lightslategrey": "whitesmoke",
-            noFont: (answers !== null && answers === "No") ? "white": "black"
+            yesStyle: (answers !== null && answers === "Yes") ? "violet": "basic",
+            noStyle: (answers !== null && answers === "No") ? "violet": "basic",
         }
         this.handleYesClick = this.handleYesClick.bind(this)
         this.handleNoClick = this.handleNoClick.bind(this)
@@ -21,14 +19,14 @@ class YesNo extends React.Component {
     // eventually combine into one function.
 
     handleYesClick() {
-        this.setState({yesColor: "lightslategrey", yesID: 1, noID: -1, noColor: "whitesmoke", yesFont: "white", noFont: "black"})
+        this.setState({yesStyle: "violet", yesID: 1, noID: -1, noStyle: "basic"})
         const values = this.context["hpi"]
         values['nodes'][this.props.node]["response"] = "Yes"
         this.context.onContextChange("hpi", values)
     }
 
     handleNoClick() {
-        this.setState({yesColor: "whitesmoke", yesID: -1, noID: 1, noColor: "lightslategrey", yesFont: "black", noFont: "white"})
+        this.setState({yesStyle: "basic", yesID: -1, noID: 1, noStyle: "violet"})
         const values = this.context["hpi"]
         values['nodes'][this.props.node]["response"] = "No"
         this.context.onContextChange("hpi", values)
@@ -38,21 +36,13 @@ class YesNo extends React.Component {
         return (
             <div>
                 <button
-                    className="button_yesno"
-                    style={{
-                    backgroundColor: this.state.yesColor,
-                    color: this.state.yesFont
-                }}
+                    className= {`ui ${this.state.yesStyle} button`}
                     onClick={this.handleYesClick}
                 >
                     Yes
                 </button>
                 <button
-                    className="button_yesno"
-                    style={{
-                    backgroundColor: this.state.noColor,
-                    color: this.state.noFont
-                }}
+                    className= {`ui ${this.state.noStyle} button`}
                     onClick={this.handleNoClick}
                 >
                     No
@@ -63,4 +53,4 @@ class YesNo extends React.Component {
 
 }
 
-export default YesNo
+export default YesNo;

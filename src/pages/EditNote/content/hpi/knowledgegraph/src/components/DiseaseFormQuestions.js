@@ -7,8 +7,8 @@ import diseaseCodes from '../../../../../../../constants/diseaseCodes'
 class DiseaseFormQuestions extends React.Component {
     static contextType = HPIContext
 
-    // Can we change this so that it doesn't need to re-render each time the component is updated? 
-    render() { 
+    // Can we change this so that it doesn't need to re-render each time the component is updated?
+    render() {
         var values = this.context['hpi']
         var currNode = values['nodes'][this.props.node]
         var question = currNode['text']
@@ -25,7 +25,7 @@ class DiseaseFormQuestions extends React.Component {
             question = question.substring(0, disease) + diseaseName.toLowerCase() + question.substring(disease + 7)
         }
         let responseChoice = ''
-        // Create buttons for users to click as their answer 
+        // Create buttons for users to click as their answer
         if (responseType === "CLICK-BOXES" || responseType.slice(-3,responseType.length) === 'POP' || responseType === 'nan') {
             let click = question.search("CLICK")
             let select = question.search('\\[')

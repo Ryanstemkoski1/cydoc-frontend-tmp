@@ -14,17 +14,8 @@
     font-weight: 400;
 }
 
-.nav-menu-logo img {
-    margin-right: 10px;
-    margin-top: 25px;
-    height: 8vh !important;
-    width: auto !important;
-}
-
-.nav-menu-brand img {
-    padding-bottom: 0.5vh;
-    height: 6vh !important;
-    width: auto !important;
+.ui.image img {
+    margin: 0 .5rem;
 }
 
 /* Make the divide between menu tabs seamless */
@@ -145,11 +136,6 @@
 }
 
 @media screen and (max-width: 500px) {
-
-    .nav-menu {
-        height: 200px;
-    }
-
     .ui.tiny.modal {
         width: 250px;
         left: 65px;

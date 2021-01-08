@@ -9,7 +9,7 @@ import { sideEffects } from 'constants/sideEffects';
 import drug_names from 'constants/drugNames';
 import diseases from 'constants/diseases';
 import './TableContent.css';
- 
+
 //Component for a table layout
 export default class TableContent extends Component {
     static contextType = HPIContext;
@@ -41,7 +41,7 @@ export default class TableContent extends Component {
 
     //modify the current values in the table to reflect changes
     // and call the handler prop
-    handleTableBodyChange(event, data){ 
+    handleTableBodyChange(event, data){
         if (data.placeholder === 'Drug Name' && !this.state.active.has(data.rowindex)) {
             this.toggleAccordion(data.rowindex);
         } else {
@@ -83,14 +83,14 @@ export default class TableContent extends Component {
 
     //method to generate an collection of rows
     makeTableBodyRows(nums){
-        const { 
+        const {
             isPreview,
             tableBodyPlaceholders,
             values,
             name,
         } = this.props;
 
-        return nums.map((rowindex, index) => 
+        return nums.map((rowindex, index) =>
             <TableBodyRow
                 key={index}
                 rowindex={isPreview ? rowindex : parseInt(rowindex)}
@@ -140,7 +140,7 @@ export default class TableContent extends Component {
                     if (isPreview) {
                         mainInput = (
                             <Input
-                                disabled    
+                                disabled
                                 transparent
                                 className='content-input medication'
                                 value={nums[i]}
@@ -185,7 +185,7 @@ export default class TableContent extends Component {
                     if (isPreview) {
                         mainInput = (
                             <Input
-                                disabled    
+                                disabled
                                 transparent
                                 className='content-input content-dropdown medication'
                                 value={nums[i]}
@@ -260,6 +260,7 @@ export default class TableContent extends Component {
                                 rowindex={i}
                                 value={values[i][tableBodyPlaceholders[0]]}
                             />
+                          <div style={{marginLeft: '20px'}}>
                             {' causes '}
                             <Input
                                 transparent
@@ -269,6 +270,7 @@ export default class TableContent extends Component {
                                 rowindex={i}
                                 value={values[i][tableBodyPlaceholders[1]]}
                             />
+                          </div>
                         </Form>
                     );
                     break;
@@ -297,11 +299,11 @@ export default class TableContent extends Component {
                 } else if (tableBodyPlaceholders[j] === 'Side Effects') {
                     if (isPreview) {
                         contentInputs.push(
-                            <Input 
-                                fluid 
+                            <Input
+                                fluid
                                 disabled
-                                transparent 
-                                key={j} 
+                                transparent
+                                key={j}
                                 placeholder={tableBodyPlaceholders[j]}
                                 className='content-input content-dropdown'
                             />
@@ -331,10 +333,10 @@ export default class TableContent extends Component {
                 } else if (tableBodyPlaceholders[j] === 'Start Year') {
                     contentInputs.push(
                         <div className='table-year-input mobile' key={j}>
-                            <Input 
+                            <Input
                                 key={j}
-                                fluid 
-                                transparent 
+                                fluid
+                                transparent
                                 rowindex={i}
                                 type="number"
                                 placeholder={tableBodyPlaceholders[j]}
@@ -378,7 +380,12 @@ export default class TableContent extends Component {
                         </Fragment>
                     ),
                 },
-                onTitleClick: () => this.toggleAccordion(i),
+                onTitleClick: (event) => {
+                    if(event.target.type !== "text" || (event.target.placeholder === "Inciting Incident" && event.target.value === "")){
+                      this.toggleAccordion(i);
+                    }
+                },
+                //onTitleClick: () => this.toggleAccordion(i),
             });
         }
 
