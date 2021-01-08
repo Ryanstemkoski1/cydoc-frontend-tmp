@@ -541,7 +541,7 @@ class NoteNameMenuItem extends Component {
                             </Form.Group>
                             
                             <DemographicsForm 
-                                race=''
+                                race={[]}
                                 asian={[]}
                                 otherRace={[]}
                                 ethnicity=''

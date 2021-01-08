@@ -9,6 +9,8 @@ class IdentityQuestions extends Component {
         super(props);
         this.state = {
             race: this.props.race,
+            asianChecked: false,
+            otherRaceChecked: false,
             asian: this.props.asian,
             otherRace: this.props.otherRace,
             ethnicity: this.props.ethnicity,
@@ -17,6 +19,7 @@ class IdentityQuestions extends Component {
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSelect = this.handleSelect.bind(this);
+        this.handleRaceChecked = this.handleRaceChecked.bind(this);
     }
 
 
@@ -24,7 +27,6 @@ class IdentityQuestions extends Component {
         let newState = this.state;
         newState[name] = value;
         this.setState(newState);
-        console.log(newState);
     }
 
     handleSelect(e, {name, checked, value}) {
@@ -35,12 +37,21 @@ class IdentityQuestions extends Component {
             var index = newState[name].indexOf(value);
             newState[name].splice(index, 1);
         }
-        console.log(newState);
+    }
+
+    handleRaceChecked(e, {id}) {
+        if (id === 'asian') {
+            this.setState({ asianChecked: e.target.checked})
+        }
+
+        if (id === 'otherRace') {
+            this.setState({ otherRaceChecked: e.target.checked})
+        }
     }
 
     additionalAsianFields() {
         const additionalFields = asian
-        if (this.state.race === 'Asian') {
+        if (this.state.asianChecked) {
             return (
                 additionalFields.map(asian => (
                     <Form.Group grouped >
@@ -62,7 +73,7 @@ class IdentityQuestions extends Component {
     additionalOtherRaceFields() {
         const additionalFields = otherRace;
 
-        if (this.state.race === 'Native Hawaiian or Other Pacific Islander') {
+        if (this.state.otherRaceChecked) {
             return (
                 additionalFields.map(other => (
                 <Form.Group grouped >
@@ -109,46 +120,48 @@ class IdentityQuestions extends Component {
             <Form>
                 <Form.Group grouped className='identity-groups'>
                     <label>Race</label>
-                    <Form.Radio 
+                    <Form.Checkbox 
                         className='identity-fields' 
                         name='race' 
                         label='Prefer Not To Say' 
                         value='Prefer Not To Say' 
-                        checked={this.state.race === 'Prefer Not To Say'}
-                        onChange={this.handleChange} 
+                        checked={this.state.race['Prefer Not To Say']}
+                        onChange={this.handleSelect} 
                     />
-                    <Form.Radio 
+                    <Form.Checkbox 
                         className='identity-fields' 
                         name='race' 
                         label='White' 
                         value='White' 
-                        checked={this.state.race === 'White'}
-                        onChange={this.handleChange} 
+                        checked={this.state.race['White']}
+                        onChange={this.handleSelect} 
                     />
-                    <Form.Radio 
+                    <Form.Checkbox 
                         className='identity-fields' 
                         name='race' 
                         label='Black or African American' 
                         value='Black or African American'
-                        checked={this.state.race === 'Black or African American'} 
-                        onChange={this.handleChange} 
+                        checked={this.state.race['Black or African American']} 
+                        onChange={this.handleSelect} 
                     />
-                    <Form.Radio 
+                    <Form.Checkbox 
                         className='identity-fields' 
-                        name='race' 
+                        name='race'
+                        id='asian' 
                         label='Asian' 
                         value='Asian'
-                        checked={this.state.race === 'Asian'}
-                        onChange={this.handleChange} 
+                        checked={this.state.asianChecked}
+                        onChange={this.handleRaceChecked} 
                     />
                     {this.additionalAsianFields()}
-                    <Form.Radio 
+                    <Form.Checkbox 
                         className='identity-fields' 
-                        name='race' 
+                        name='race'
+                        id='otherRace' 
                         label='Native Hawaiian or Other Pacific Islander' 
                         value='Native Hawaiian or Other Pacific Islander'
-                        checked={this.state.race === 'Native Hawaiian or Other Pacific Islander'} 
-                        onChange={this.handleChange} 
+                        checked={this.state.otherRaceChecked} 
+                        onChange={this.handleRaceChecked} 
                     />
                     {this.additionalOtherRaceFields()}
                 </Form.Group>

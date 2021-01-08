@@ -367,7 +367,7 @@ class UserForm extends Component {
                                 name='username'
                                 value={this.state.formInfo.username}
                                 onChange={this.handleChange}
-                                // disabled
+                                disabled
                             />
                             <Form.Input
                                 fluid
@@ -377,7 +377,7 @@ class UserForm extends Component {
                                 name='password'
                                 value={this.state.formInfo.password}
                                 onChange={this.handleChange}
-                                // disabled
+                                disabled
                             />
                             <Form.Input
                                 fluid
@@ -387,7 +387,7 @@ class UserForm extends Component {
                                 name='passwordConfirm'
                                 value={this.state.formInfo.passwordConfirm}
                                 onChange={this.handleChange}
-                                // disabled
+                                disabled
                             />
                             <Form.Group>
                                 <Form.Input
@@ -397,7 +397,7 @@ class UserForm extends Component {
                                     name='firstName'
                                     value={this.state.formInfo.firstName}
                                     onChange={this.handleChange}
-                                    // disabled
+                                    disabled
                                 />
                                 <Form.Input
                                     fluid
@@ -406,7 +406,7 @@ class UserForm extends Component {
                                     name='middleName'
                                     value={this.state.formInfo.middleName}
                                     onChange={this.handleChange}
-                                    // disabled
+                                    disabled
                                 />
                             </Form.Group>
                             <Form.Group>
@@ -417,7 +417,7 @@ class UserForm extends Component {
                                     name='lastName'
                                     value={this.state.formInfo.lastName}
                                     onChange={this.handleChange}
-                                    // disabled
+                                    disabled
                                 />
                                 <Form.Input
                                     fluid
@@ -426,7 +426,7 @@ class UserForm extends Component {
                                     name='dob'
                                     value={this.state.formInfo.dob}
                                     onChange={this.handleChange}
-                                    // disabled
+                                    disabled
                                 />
                             </Form.Group>
 
@@ -439,7 +439,7 @@ class UserForm extends Component {
                                     name='email'
                                     value={this.state.formInfo.email}
                                     onChange={this.handleChange}
-                                    // disabled
+                                    disabled
                                 />
                                 <Form.Input
                                     fluid
@@ -449,7 +449,7 @@ class UserForm extends Component {
                                     name='backupEmail'
                                     value={this.state.formInfo.backupEmail}
                                     onChange={this.handleChange}
-                                    // disabled
+                                    disabled
                                 />
                             </Form.Group>
                             <Form.Group>
@@ -471,7 +471,7 @@ class UserForm extends Component {
                                     name='phoneNumber'
                                     value={this.state.formInfo.phoneNumber}
                                     onChange={this.handleChange}
-                                    // disabled
+                                    disabled
                                 />
                                 <Form.Field 
                                     width={2} 
@@ -482,7 +482,7 @@ class UserForm extends Component {
                                     name='primaryMobile'
                                     checked={this.state.primaryMobile}
                                     onChange={this.handleMobile} 
-                                    // disabled 
+                                    disabled 
                                 />
 
                                 <Form.Input
@@ -494,7 +494,7 @@ class UserForm extends Component {
                                     name='phoneNumber'
                                     value={this.state.formInfo.secondaryNumber}
                                     onChange={this.handleChange}
-                                    // disabled
+                                    disabled
                                 />
                                 <Form.Field 
                                     width={2} 
@@ -505,7 +505,7 @@ class UserForm extends Component {
                                     name='secondaryMobile'
                                     checked={this.state.secondaryMobile}
                                     onChange={this.handleMobile}
-                                    // disabled 
+                                    disabled 
                                 />
 
                             </Form.Group>
@@ -520,7 +520,7 @@ class UserForm extends Component {
                                     name='role'
                                     checked={this.state.formInfo.role === 'healthcare professional'}
                                     onChange={this.handleChange}
-                                    // disabled
+                                    disabled
                                 />
                                 <Form.Radio
                                     width={4}
@@ -529,7 +529,7 @@ class UserForm extends Component {
                                     name='role'
                                     checked={this.state.formInfo.role === 'patient'}
                                     onChange={this.handleChange}
-                                    // disabled
+                                    disabled
                                 />
                                 <Form.Radio
                                     width={7}
@@ -538,7 +538,7 @@ class UserForm extends Component {
                                     name='role'
                                     checked={this.state.formInfo.role === 'administrator'}
                                     onChange={this.handleChange}
-                                    // disabled
+                                    disabled
                                 />
                             </Form.Group>
                             {this.additionalFields()}
@@ -547,14 +547,16 @@ class UserForm extends Component {
                                 header='Error!'
                                 content={this.state.errorMessages.map(m => <Message.Item>{m}</Message.Item>)}
                             />
+                            {this.props.disableRegister ? '' :
                             <DemographicsForm
-                                race=''
+                                race={[]}
                                 asian={[]}
                                 otherRace={[]}
                                 ethnicity=''
                                 otherEthnicity={[]}
                                 gender=''
                             />
+                            }
                             <>
                                 <Form.Button color='teal' size='small' floated='right' disabled={this.props.disableRegister}>
                                     {this.props.buttonText}
