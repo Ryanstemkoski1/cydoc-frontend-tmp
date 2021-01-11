@@ -1,26 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button, Grid, Header, Image, Segment } from 'semantic-ui-react';
-import { ABOUT_PAGE_MED_BP } from 'constants/breakpoints.js';
-import { aboutContent } from 'constants/aboutContent';
-import './AboutPage.css';
-import PreviewHistory from '../../assets/about-page/patient-history.png';
-import PreviewROS from '../../assets/about-page/ros.png';
+import { HOME_MED_BP } from 'constants/breakpoints.js';
+import { homeContent } from 'constants/homeContent';
+import './Home.css';
+import PreviewHistory from '../../assets/home/patient-history.png';
+import PreviewROS from '../../assets/home/ros.png';
 
 export const MeetCydocSection = (props) => {
-    return props.windowWidth < ABOUT_PAGE_MED_BP ? (
+    return props.windowWidth < HOME_MED_BP ? (
         <Segment className='meet-cydoc'>
             <Header
                 as='h1'
-                content={aboutContent.meetCydoc.header}
-                className='about-header white'
+                content={homeContent.meetCydoc.header}
+                className='home-header white'
             />
             <Header
                 as='h2'
-                content={aboutContent.meetCydoc.subheader}
-                className='about-sub-header'
+                content={homeContent.meetCydoc.subheader}
+                className='home-sub-header'
             />
             <p>
-                {aboutContent.meetCydoc.description}
+                {homeContent.meetCydoc.description}
             </p>
             <Button
                 primary
@@ -29,7 +29,7 @@ export const MeetCydocSection = (props) => {
                 className='inquire-button'
                 as='a'
                 href='https://aemail.com/lYPj'
-                content={aboutContent.meetCydoc.inquireNow}
+                content={homeContent.meetCydoc.inquireNow}
             />
             <div className='preview-image-container'>
                 <Image
@@ -52,16 +52,16 @@ export const MeetCydocSection = (props) => {
                 <Grid.Column className='meet-cydoc-text'>
                     <Header
                         as='h1'
-                        content={aboutContent.meetCydoc.header}
-                        className='about-header white'
+                        content={homeContent.meetCydoc.header}
+                        className='home-header white'
                     />
                     <Header
                         as='h2'
-                        content={aboutContent.meetCydoc.subheader}
-                        className='about-sub-header'
+                        content={homeContent.meetCydoc.subheader}
+                        className='home-sub-header'
                     />
                     <p>
-                        {aboutContent.meetCydoc.description}
+                        {homeContent.meetCydoc.description}
                     </p>
                     <Button
                         primary
@@ -70,7 +70,7 @@ export const MeetCydocSection = (props) => {
                         className='inquire-button'
                         as='a'
                         href='https://aemail.com/lYPj'
-                        content={aboutContent.meetCydoc.inquireNow}
+                        content={homeContent.meetCydoc.inquireNow}
                     />
                 </Grid.Column>
                 <Grid.Column className='image-parent'>

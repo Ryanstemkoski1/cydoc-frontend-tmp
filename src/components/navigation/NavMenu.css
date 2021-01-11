@@ -1,10 +1,16 @@
+.ui.menu .item.logo-menu:hover {
+    background-color: transparent;
+}
+
+.ui.image.logo-circle {
+    width: 4.6rem;
+}
 
 /* Navigation Bar has a thicker drop shadow */
 .nav-menu {
     box-shadow: 0 0 20px 5px RGBA(0, 128, 159, 0.2) !important;
     height: 100px;
-    padding-top: 40px;
-    padding-bottom: 70px;
+    padding: 1.5rem 0;
 }
 
 /* Navigation button styles */

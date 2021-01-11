@@ -5,13 +5,12 @@ import ReactDOM from 'react-dom';
 import { Route, BrowserRouter } from 'react-router-dom';
 
 import EditNote 				from "./pages/EditNote/EditNote";
-import HomePage 				from "./pages/HomePage/HomePage";
 import Login 					from "./pages/Account/Login";
 import Register 				from "./pages/Account/Register"
 import LandingPage 			    from "./pages/LandingPage/LandingPage";
 import LandingPageOld 			    from "./pages/LandingPage/LandingPage-old";
 
-import AboutPage 			from "./pages/About/AboutPage";
+import Home 			from "./pages/Home/Home";
 import { PrivateRoute } 		from "./components/navigation/PrivateRoute";
 import CreateGraph 				from "./pages/CreateTemplate/CreateGraph";
 import EditGraph 				from './pages/CreateTemplate/EditGraph'
@@ -29,17 +28,15 @@ ReactDOM.render(
                 <HPIStore>
                     <CreateTemplateStore>
                         <div>
-                        {/* <div style={{backgroundColor:'#d5dfe1'}}> */}
                             <BrowserRouter>
-                                <Route path="/home" component={HomePage} />
-                                <Route path="/login" component={Login} />
-                                <Route path="/register" component={Register} />
-                                <PrivateRoute path="/editnote" component={EditNote} />
-                                <PrivateRoute path="/dashboard" component={LandingPage} />
-                                <PrivateRoute path="/creategraph" component={CreateGraph} />
-                                <PrivateRoute path="/editgraph" component={EditGraph} />
-                                <PrivateRoute path="/editprofile" component={EditProfile} />
-                                <Route path="/about" component={AboutPage} />
+                                <Route exact path="/" component={Home} />
+                                <Route exact path="/login" component={Login} />
+                                <Route exact path="/register" component={Register} />
+                                <PrivateRoute exact path="/editnote" component={EditNote} />
+                                <PrivateRoute exact path="/dashboard" component={LandingPage} />
+                                <PrivateRoute exact path="/creategraph" component={CreateGraph} />
+                                <PrivateRoute exact path="/editgraph" component={EditGraph} />
+                                <PrivateRoute exact path="/editprofile" component={EditProfile} />
                             </BrowserRouter>
                         </div>
                     </CreateTemplateStore>

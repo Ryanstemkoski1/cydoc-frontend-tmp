@@ -337,7 +337,7 @@ class UserForm extends Component {
 
     render() {
         // after submit redirect is set to true (if no errors) and user is redirected
-        if (this.state.redirect) {
+        if (this.state.redirect || this.context.token) {
             return (<Redirect push to={this.props.pushTo}/>)
         }
 
@@ -347,7 +347,8 @@ class UserForm extends Component {
                 <Container>
                     <Segment clearing raised className='sign-up-segment'>
                         <Container textAlign='center'>
-                            <Image size="tiny" href='/home' src={Logo} />
+                            <Image size="tiny" href='/' src={Logo} />
+                            <h1 className='logo-text'>Cydoc</h1>
                         </Container>                        {this.props.disableRegister && 
                             <Container className='coming-soon' color='black' textAlign='center'>
                                 coming soon

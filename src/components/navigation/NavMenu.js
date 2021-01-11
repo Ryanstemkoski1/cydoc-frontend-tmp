@@ -49,16 +49,15 @@ class ConnectedNavMenu extends Component {
         return (
             <div>
                 <Menu className={this.props.className + " nav-menu"} attached={this.props.attached}>
-
-                    <Menu.Item>
-                        {this.props.displayNoteName ?
-                            null :
-                            <Image as={Link} to='/home' size='tiny' src={Logo} />
+                    <Menu.Item as={Link} to='/' className='logo-menu'>
+                        <Image src={Logo} className='logo-circle' />
+                        {!this.props.displayNoteName &&
+                            <h1 className='logo-text'>Cydoc</h1>
                         } 
                     </Menu.Item>
 
                     {/* When parent is EditNote, then display the note name item */}
-                    {this.props.displayNoteName ?  <NoteNameMenuItem /> : null}
+                    {this.props.displayNoteName && <NoteNameMenuItem />}
 
                     {/* Navigation links */}
                     <Menu.Menu position="right">
@@ -561,23 +560,18 @@ function DefaultMenuItems(props) {
         (<Menu.Item>
                 <Dropdown icon="big bars" className='collapsed-dropdown'>
                     <Dropdown.Menu>
-                        <Dropdown.Item as={Link} name="about" to="/about" text="About" />
                         <Dropdown.Item as={Link} name="login" to="/login" text="Login" />
                         <Dropdown.Item as={Link} name="register" to="/register" text="Sign Up" />
                     </Dropdown.Menu>
                 </Dropdown>
             </Menu.Item>
         ) : (
-            <Fragment>
-                <Menu.Item as={Link} name="about" to="/about" text="About" />
-                <Menu.Item>
-                    <Button.Group>
-                        <Button as={Link} basic color="teal" name="login" to="/login" content="Login" />
-                        <Button as={Link} color="teal" name="register" to="/register" content="Sign Up" />
-                    </Button.Group>
-                </Menu.Item>
-
-            </Fragment>
+            <Menu.Item>
+                <Button.Group>
+                    <Button as={Link} basic color="teal" name="login" to="/login" content="Login" />
+                    <Button as={Link} color="teal" name="register" to="/register" content="Sign Up" />
+                </Button.Group>
+            </Menu.Item>
         );
 }
 
@@ -592,7 +586,7 @@ function LoggedInMenuItems(props) {
             //                 </Dropdown.Item>
             //                 <Dropdown.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
             //
-            //                 <Dropdown.Item name="logout" href="/home" text="Logout" onClick={props.handleLogout} />
+            //                 <Dropdown.Item name="logout" href="/" text="Logout" onClick={props.handleLogout} />
             //             </Dropdown.Menu>
             //         </Dropdown>
             //     </Menu.Item>
@@ -603,7 +597,7 @@ function LoggedInMenuItems(props) {
                         <Button as={Link} name="myNotes" to="/dashboard" text="My Notes" >
                             <Icon name="sticky note outline" className='collapsed-icon'/>
                         </Button>
-                        <Button name="logout" href="/home" text="Logout" onClick={props.handleLogout} className='logout-button'>
+                        <Button name="logout" href="/" text="Logout" onClick={props.handleLogout} className='logout-button'>
                             <Icon name="sign out alternate" className='collapsed-icon'/>
                         </Button>
                     </Button.Group>
@@ -614,7 +608,7 @@ function LoggedInMenuItems(props) {
                 <Menu.Item>
                     <Button.Group>
                         <Button as={Link} name="myNotes" to="/dashboard" text="My Notes" >My Notes</Button>
-                        <Button name="logout" href="/home" text="Logout" onClick={props.handleLogout} className="logout-button">Log Out</Button>
+                        <Button name="logout" href="/" text="Logout" onClick={props.handleLogout} className="logout-button">Log Out</Button>
                     </Button.Group>
                 </Menu.Item>
                 <Menu.Item name="welcome" style={{color: '#6DA3B1', fontWeight: 'normal'}}>

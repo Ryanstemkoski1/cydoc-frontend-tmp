@@ -3,6 +3,11 @@
     src: url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
 }
 
+@font-face {
+    font-family: 'Pompadour';
+    src: url('./assets/Pompadour.otf');
+}
+
 h1, h2, h3, h4 {
     color: #0d5e70;
 }
