@@ -27,6 +27,7 @@ class Register extends React.Component {
                     passwordConfirm=""
                     email=""
                     phoneNumber=""
+                    secondaryNumber=""
                     firstName=""
                     lastName=""
                     workplace=""

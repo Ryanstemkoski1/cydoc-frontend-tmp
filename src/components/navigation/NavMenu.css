@@ -100,21 +100,39 @@
 
 .error {
     position: relative;
-    z-index: 1 !important;
     font-size: 13px;
-    margin: -10px !important;
 }
 
-.full-name {
-    display: flex;
+.field.mobile-checkbox {
+    padding-top: 35px;
 }
 
-#first-name, #middle-name, #last-name {
-    flex: 33%;
+.error-div{
+    position: relative;
 }
 
-#first-name, #middle-name {
-    margin-right: 10px;
+#first-name-error, #last-name-error, #phone-error, #email-error {
+    border: 1px solid;
+    z-index: 1;
+    margin: -10px;
+    position: absolute;
+    background: white;
+    bottom: -10px;
+    left: 15px;
+    color: #ff3838;
+    font-weight: bold;
+}
+
+#dob-error {
+    border: 1px solid;
+    z-index: 1;
+    margin: -10px;
+    position: absolute;
+    background: white;
+    bottom: -10px;
+    right: 100px;
+    color: #ff3838;
+    font-weight: bold;
 }
 
 @media screen and (max-width: 500px) {
@@ -135,6 +153,7 @@
 
     .note-name-menu-item {
         width: 200px;
+        padding-left: 0 !important;
     }
 
     .note-title {
@@ -154,5 +173,40 @@
     .ui.basic.button.patient-modal-button {
         margin-top: 0 !important;
     }
+
+    .fields.error-div.phone-div, .fields.phone-div {
+        margin-bottom: 15px;
+    }
     
+    #first-name-error, #last-name-error, #email-error {
+        bottom: 70px;
+        padding: 2px;
+    }
+    
+    #dob-error {
+        bottom: 0;
+        left: 18px;
+        padding: 2px;
+        width: 120px;
+    }
+
+    #phone-error {
+        bottom: 40px;
+        padding: 2px;
+    }
+
+    .eight.wide.field.address, .three.wide.field.address, .five.wide.field.address {
+        margin-bottom: 15px;
+    }
+
+    .ui.form:not(.unstackable) .fields:not(.unstackable) > .three.wide.field.address,
+    .ui.form:not(.unstackable) .fields:not(.unstackable) > .four.wide.field.mobile-checkbox {
+        width: 40% !important;
+    }
+
+    .ui.form:not(.unstackable) .fields:not(.unstackable) > .five.wide.field.address,
+    .ui.form:not(.unstackable) .fields:not(.unstackable) > .required.eight.wide.field.patient-info-input,
+    .ui.form:not(.unstackable) .fields:not(.unstackable) > .eight.wide.field.patient-info-input {
+        width: 60% !important;
+    }
 }

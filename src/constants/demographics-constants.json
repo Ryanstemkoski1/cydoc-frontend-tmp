@@ -1,0 +1,23 @@
+{
+    "asian": [
+        "Asian Indian",
+        "Chinese",
+        "Filipino",
+        "Japanese",
+        "Korean",
+        "Vietnamese",
+        "Other Asian"
+    ],
+    "otherRace": [
+        "Native Hawaiian",
+        "Guamaian or Chamorro",
+        "Somoan",
+        "Other Pacific Islander"
+    ],
+    "otherEthnicity": [
+        "Mexican, Mexican American, Chicano/a",
+        "Puerto Rican",
+        "Cuban",
+        "Another Hispanic"
+    ]
+}

@@ -6,6 +6,7 @@ import AuthContext from "../../contexts/AuthContext";
 import constants from "constants/registration-constants.json"
 import Logo from '../../assets/cydoc-logo.svg';
 import './UserForm.css';
+import DemographicsForm from '../../components/tools/DemographicsForm';
 
 const degreeOptions = constants.degrees.map((degree) => ({ key: degree, value: degree, text: degree }))
 const specialtyOptions = constants.specialties.map((specialty) => ({ key: specialty, value: specialty, text: specialty }))
@@ -64,8 +65,11 @@ class UserForm extends Component {
                 passwordConfirm: this.props.passwordConfirm,
                 email: this.props.email,
                 phoneNumber: this.props.phoneNumber,
+                secondaryNumber: this.props.secondaryNumber,
                 firstName: this.props.firstName,
+                middleName: this.props.middleName,
                 lastName: this.props.lastName,
+                dob: this.props.dob,
                 workplace: this.props.workplace,
                 inPatient: this.props.inPatient,
                 institutionType: this.props.institutionType,
@@ -76,15 +80,19 @@ class UserForm extends Component {
                 degreesCompleted: this.props.degreesCompleted,
                 degreesInProgress: this.props.degreesInProgress,
                 specialties: this.props.specialties,
-                workplaceFeatures: this.props.workplaceFeatures
+                workplaceFeatures: this.props.workplaceFeatures,
+
             },
             errorMessages: [],
             redirect: false,
-            title: this.props.title,
+            title: this.props.title,                
+            primaryMobile: false,
+            secondaryMobile: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleArrayChange = this.handleArrayChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleMobile = this.handleMobile.bind(this);
     }
 
     // when user hits submit/save button, fields are validated
@@ -119,6 +127,25 @@ class UserForm extends Component {
         let newState = this.state;
         newState.formInfo[name][index] = value;
         this.setState(newState);
+    }
+
+    handleMobile = (e) => {
+        let mobile = e.target.name;
+        if (mobile === 'primaryMobile') {
+            if (!this.state.primaryMobile) {
+                this.setState({ primaryMobile: true})
+            } else {
+                this.setState({ primaryMobile: false})
+            }
+        }
+
+        if (mobile === 'secondaryMobile') {
+            if (!this.state.secondaryMobile) {
+                this.setState({ secondaryMobile: true})
+            } else {
+                this.setState({ secondaryMobile: false})
+            }
+        }
     }
 
     // helper function based on prop to determine if role field should be shown
@@ -371,6 +398,17 @@ class UserForm extends Component {
                                 />
                                 <Form.Input
                                     fluid
+                                    label='middle name'
+                                    placeholder='middle name'
+                                    name='middleName'
+                                    value={this.state.formInfo.middleName}
+                                    onChange={this.handleChange}
+                                    disabled
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Input
+                                    fluid
                                     label='Last name'
                                     placeholder='last name'
                                     name='lastName'
@@ -378,7 +416,17 @@ class UserForm extends Component {
                                     onChange={this.handleChange}
                                     disabled
                                 />
+                                <Form.Input
+                                    fluid
+                                    label='Date of Birth'
+                                    placeholder='Date of Birth'
+                                    name='dob'
+                                    value={this.state.formInfo.dob}
+                                    onChange={this.handleChange}
+                                    disabled
+                                />
                             </Form.Group>
+
                             <Form.Group>
                                 <Form.Input
                                     fluid
@@ -402,7 +450,7 @@ class UserForm extends Component {
                                 />
                             </Form.Group>
                             <Form.Group>
-                                <Form.Input
+                                {/* <Form.Input
                                     fluid
                                     label='address'
                                     placeholder='address'
@@ -410,7 +458,7 @@ class UserForm extends Component {
                                     value={this.state.formInfo.address}
                                     onChange={this.handleChange}
                                     disabled
-                                />
+                                /> */}
                                 <Form.Input
                                     fluid
                                     width={6}
@@ -422,6 +470,41 @@ class UserForm extends Component {
                                     onChange={this.handleChange}
                                     disabled
                                 />
+                                <Form.Field 
+                                    width={2} 
+                                    className='mobile-checkbox' 
+                                    label='Mobile' 
+                                    control='input' 
+                                    type='checkbox'
+                                    name='primaryMobile'
+                                    checked={this.state.primaryMobile}
+                                    onChange={this.handleMobile} 
+                                    disabled 
+                                />
+
+                                <Form.Input
+                                    fluid
+                                    width={6}
+                                    type='tel'
+                                    label='secondary phone number'
+                                    placeholder='secondary phone number'
+                                    name='phoneNumber'
+                                    value={this.state.formInfo.secondaryNumber}
+                                    onChange={this.handleChange}
+                                    disabled
+                                />
+                                <Form.Field 
+                                    width={2} 
+                                    className='mobile-checkbox' 
+                                    label='Mobile' 
+                                    control='input' 
+                                    type='checkbox' 
+                                    name='secondaryMobile'
+                                    checked={this.state.secondaryMobile}
+                                    onChange={this.handleMobile}
+                                    disabled 
+                                />
+
                             </Form.Group>
                             <label className={`label-font ${this.props.disableRegister ? 'disabled' : ''}`}>
                                 I am a:
@@ -461,6 +544,16 @@ class UserForm extends Component {
                                 header='Error!'
                                 content={this.state.errorMessages.map(m => <Message.Item>{m}</Message.Item>)}
                             />
+                            {this.props.disableRegister ? '' :
+                            <DemographicsForm
+                                race={[]}
+                                asian={[]}
+                                otherRace={[]}
+                                ethnicity=''
+                                otherEthnicity={[]}
+                                gender=''
+                            />
+                            }
                             <>
                                 <Form.Button color='teal' size='small' floated='right' disabled={this.props.disableRegister}>
                                     {this.props.buttonText}
