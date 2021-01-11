@@ -15,13 +15,7 @@ class TemplateQuestion extends Component {
     constructor(props, context) {
         super(props, context);
 
-        // Default to showing advanced options if node itself uses one
-        const {nodes} = this.context.state;
-        const responseType = nodes[this.props.qId].responseType;
-        const selectedMore = responseType !== '' && !(responseType in questionTypes.basic);
-        
         this.state = {
-            selectedMore,
             showDeleteQuestion: false,
             showChangeQuestion: false,
             active: false,
@@ -36,8 +30,6 @@ class TemplateQuestion extends Component {
         this.hideDeleteQuestion = this.hideDeleteQuestion.bind(this);
         this.editChildren = this.editChildren.bind(this);
         this.getQuestionTypes = this.getQuestionTypes.bind(this);
-        this.getAdvancedDropdown = this.getAdvancedDropdown.bind(this);
-        this.removeAdvancedDropdown = this.removeAdvancedDropdown.bind(this);
     }
 
     /**
@@ -102,6 +94,7 @@ class TemplateQuestion extends Component {
         const nodes = this.context.state.nodes;
         const graph = this.context.state.graph;
         const edges = this.context.state.edges;
+        let numQuestions = this.context.state.numQuestions;
 
         if ((nodes[qid].responseType !== 'YES-NO' && nodes[qid].responseType !== 'NO-YES') || graph[qid].length === 0) {
             // not Y/N question or Y/N question with no children
@@ -115,6 +108,7 @@ class TemplateQuestion extends Component {
             updateParent(nodes, qid);
             delete graph[qid];
             delete nodes[qid];
+            numQuestions--;
         } else {
             // Y/N question with children
             this.setState({ showDeleteQuestion: true, active: true });
@@ -123,6 +117,7 @@ class TemplateQuestion extends Component {
         this.context.onContextChange('nodes', nodes);
         this.context.onContextChange('graph', graph);
         this.context.onContextChange('edges', this.context.state.edges);
+        this.context.onContextChange('numQuestions', numQuestions);
     }
 
     /**
@@ -135,7 +130,8 @@ class TemplateQuestion extends Component {
         const nodes = this.context.state.nodes;
         const graph = this.context.state.graph;
         const edges = this.context.state.edges;
-        let numEdges = this.context.state.numEdges;
+        let nextEdgeID = this.context.state.nextEdgeID;
+        let numQuestions = this.context.state.numQuestions;
 
         updateParent(nodes, qid);
         switch (content) {
@@ -161,12 +157,12 @@ class TemplateQuestion extends Component {
                     if (edges[edge].from === qid) {
                         for (let i = 0; i < parents.length; i++) {
                             const parent = parents[i];
-                            edges[numEdges] = {
+                            edges[nextEdgeID] = {
                                 from: parent,
                                 to: edges[edge].to
                             }
-                            graph[parent].splice(parentRelatedIndexes[i], 0, numEdges);
-                            numEdges++;
+                            graph[parent].splice(parentRelatedIndexes[i], 0, nextEdgeID);
+                            nextEdgeID++;
                         }
                         delete edges[edge];
                     }
@@ -174,6 +170,7 @@ class TemplateQuestion extends Component {
 
                 delete graph[qid];
                 delete nodes[qid];
+                numQuestions--;
                 break;
             }
             case 'Delete': {
@@ -193,6 +190,7 @@ class TemplateQuestion extends Component {
                         delete graph[edges[edge].from];
                         delete nodes[edges[edge].from];
                         delete edges[edge];
+                        numQuestions--;
                     } else if (DELETED_IDS.includes(edges[edge].to)) {
                         for (let question in graph) {
                             const index = graph[question].indexOf(parseInt(edge));
@@ -203,6 +201,7 @@ class TemplateQuestion extends Component {
                         delete graph[edges[edge].to];
                         delete nodes[edges[edge].to];
                         delete edges[edge];
+                        numQuestions--;
                     }
                 }
                 DELETED_IDS = [];
@@ -216,7 +215,8 @@ class TemplateQuestion extends Component {
         this.context.onContextChange('nodes', nodes);
         this.context.onContextChange('graph', graph);
         this.context.onContextChange('edges', edges);
-        this.context.onContextChange('numEdges', numEdges);
+        this.context.onContextChange('nextEdgeID', nextEdgeID);
+        this.context.onContextChange('numQuestions', numQuestions);
     }
 
     /**
@@ -290,7 +290,7 @@ class TemplateQuestion extends Component {
      * @param {Object} contextNodes: the nodes object (not necessarily in sync with the context)
      */
     editChildren = (qId, contextNodes) => {
-        let { numQuestions, numEdges } = this.context.state;
+        let { numQuestions, nextEdgeID } = this.context.state;
         const { graphData } = this.props;
         const { edges, nodes, graph } = graphData;
         
@@ -310,14 +310,14 @@ class TemplateQuestion extends Component {
                 "",
                 diseaseCode,
                 graphData,
-                { numQuestions, numEdges, contextNodes, contextGraph, contextEdges },
+                { numQuestions, nextEdgeID, contextNodes, contextGraph, contextEdges },
             );
             numQuestions = newCount.numQuestions;
-            numEdges = newCount.numEdges;
+            nextEdgeID = newCount.nextEdgeID;
 
             this.context.onContextChange('edges', contextEdges);
             this.context.onContextChange('graph', contextGraph);
-            this.context.onContextChange('numEdges', numEdges);
+            this.context.onContextChange('nextEdgeID', nextEdgeID);
             this.context.onContextChange('numQuestions', numQuestions);
         }
         delete contextNodes[qId].hasChildren;
@@ -334,17 +334,10 @@ class TemplateQuestion extends Component {
     getQuestionTypes() {
         const { qId } = this.props;
 
-        const basicTypes = [];
-        const allTypes = [];
         let options = [];
 
         for (let qType in questionTypes.basic) {
-            basicTypes.push({
-                key: questionTypes.basic[qType],
-                text: questionTypes.basic[qType],
-                value: qType,
-            });
-            allTypes.push({
+            options.push({
                 key: questionTypes.basic[qType],
                 text: questionTypes.basic[qType],
                 value: qType,
@@ -352,31 +345,16 @@ class TemplateQuestion extends Component {
         }
 
         for (let qType in questionTypes.advanced) {
-            allTypes.push({
+            options.push({
                 key: questionTypes.advanced[qType],
                 text: questionTypes.advanced[qType],
                 value: qType,
             });
         }
 
-        basicTypes.push({
-            key: 'Advanced',
-            text: 'Advanced...',
-            value: 'Advanced...',
-            onClick: this.getAdvancedDropdown,
-        })
-
-        allTypes.push({
-            key: 'Less',
-            text: 'Less...',
-            value: 'Less...',
-            onClick: this.removeAdvancedDropdown,
-        })
-
         // Process the current response type since the value will not necessarily
         // match the option in the dropdown (i.e. NO-YES questions should be displayed
         // as YES-NO and advanced types should be stripped of POP and BLANK)
-        options = this.state.selectedMore ? allTypes : basicTypes;
         let responseType = this.context.state.nodes[qId].responseType;
         if (responseType === 'NO-YES') {
             responseType = 'YES-NO';
@@ -396,18 +374,6 @@ class TemplateQuestion extends Component {
                 onChange={this.saveQuestionType}
             />
         );
-    }
-
-    getAdvancedDropdown() {
-        this.setState({
-            selectedMore: true,
-        });
-    }
-
-    removeAdvancedDropdown() {
-        this.setState({
-            selectedMore: false,
-        });
     }
 
     /**

@@ -38,6 +38,25 @@
   border: 1px solid #d4d4d5;
 }
 
+.ui.inverted.dimmer>.content>.create-tmpl-msg {
+  color: rgba(0,0,0,.95);
+}
+
+.create-tmpl-msg + .ui.button {
+  background: none;
+  color: black !important;
+  transition: color 0.1s ease-in-out;
+}
+
+.create-tmpl-msg + .ui.button:hover {
+  color: #707070 !important;
+}
+
+.add-question-msg {
+  opacity: 60%;
+  margin-top: 0.5rem;
+}
+
 .ui.container.category-container {
   margin: 0 0 1rem !important;
 }

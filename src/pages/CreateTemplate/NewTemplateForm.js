@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { Button, Form, Header, Segment, Input, Grid, Dropdown, Message, Icon } from 'semantic-ui-react';
+import { Button, Form, Header, Segment, Input, Grid, Dropdown, Message, Icon, Portal, Dimmer, Loader } from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import './NewTemplate.css';
 import TemplateQuestion from './TemplateQuestion';
@@ -8,8 +8,10 @@ import diseaseAbbrevs from 'constants/diseaseAbbrevs.json';
 import diseaseCodes from 'constants/diseaseCodes';
 import Nestable from 'react-nestable';
 import { createNodeId, updateParent } from './util';
+import API from '../EditNote/content/hpi/knowledgegraph/src/API';
 
 const OTHER_TEXT = 'Other (specify below)';
+const MAX_NUM_QUESTIONS = 50;
 
 class NewTemplateForm extends Component {
     static contextType = CreateTemplateContext;
@@ -25,7 +27,8 @@ class NewTemplateForm extends Component {
             showOtherDisease: false,
             diseaseEmpty: true,
             bodySystemEmpty: true,
-            oldTree: [],
+            showDimmer: false,
+            requestResult: null,
         }
         this.saveTitle = this.saveTitle.bind(this);
         this.saveBodySystem = this.saveBodySystem.bind(this);
@@ -35,12 +38,12 @@ class NewTemplateForm extends Component {
         this.createTreeData = this.createTreeData.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount = async () => {
         /**
          * Fetches the existing knowledge graphs from the backend to prepopulate the
          * available body systems and diseases. 
          */
-        graphClient.get('/graph').then(value => {
+        API.then(value => {
             const nodes = value.data.nodes;
             const allBodySystems = [];
             const allDiseases = [];
@@ -189,8 +192,9 @@ class NewTemplateForm extends Component {
         }
 
         let numQuestions = this.context.state.numQuestions;
-        let numEdges = this.context.state.numEdges;
+        let nextEdgeID = this.context.state.nextEdgeID;
         const disease = this.context.state.disease;
+        const root = this.context.state.root;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
         const qId = createNodeId(diseaseCode, numQuestions);
         
@@ -199,24 +203,23 @@ class NewTemplateForm extends Component {
             id: qId,
             text: '',
             responseType: '',
-            order: numQuestions,
             answerInfo: {},
-            parent: '0000',
+            parent: root,
             hasChanged: true,
         };
 
-        this.context.state.edges[numEdges] = {
-            from: '0000',
+        this.context.state.edges[nextEdgeID] = {
+            from: root,
             to: qId,
         };
         this.context.state.graph[qId] = [];
-        this.context.state.graph['0000'].push(numEdges);
+        this.context.state.graph[root].push(nextEdgeID);
         
         this.context.onContextChange('nodes', this.context.state.nodes);
         this.context.onContextChange('graph', this.context.state.graph);
         this.context.onContextChange('edges', this.context.state.edges);
         this.context.onContextChange('numQuestions', numQuestions + 1);
-        this.context.onContextChange('numEdges', numEdges + 1);
+        this.context.onContextChange('nextEdgeID', nextEdgeID + 1);
     }
 
     /**
@@ -224,68 +227,134 @@ class NewTemplateForm extends Component {
      * and ensuring all new nodes start with the correct disease code, and send a request
      * to the backend
      */
-    createTemplate = () => {
-        const { disease, edges, nodes, graph } = this.context.state;
+    createTemplate = async () => {
+        const { root, title, disease, edges, nodes, graph, bodySystem } = this.context.state;
+        const { doctorID } = this.context;
+        this.setState({ showDimmer: true });
 
         const updatedEdges = {};
         const updatedNodes = {};
         const updatedGraph = {};
+        const rootSuffix = root.slice(3);
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
 
-        // update all edge to/from to match current disease
+        // Update all edge's `to`/`from` keys to match current disease
         for (let [key, edge] of Object.entries(edges)) {
             // If both nodes are unchanged imported nodes, then no need to create an edge
             if (!nodes[edge.from].hasChanged && !nodes[edge.to].hasChanged) {
                 continue;
             }
             let to;
-            // Otherwise, if the incoming node has changed, make sure to use the old ID.
-            // There'll never exist an edge of original -> new because adding a new child
-            // is considered altering the original. So hasChanged would be false.
-            if (edge.from !== '0000' && !nodes[edge.to].hasChanged) {
+            // Otherwise, if the sink node has not changed, make sure to use the old ID.
+            // There'll never exist an edge from an old to new because adding a new child
+            // is considered altering the original, leading to `hasChanged = false`.
+            if (!edge.from.endsWith(rootSuffix) && !nodes[edge.to].hasChanged) {
                 to  = nodes[edge.to].originalId;
             } else {
-                to = edge.to === '0000' || edge.to.startsWith(diseaseCode) ? edge.to : diseaseCode + edge.to.slice(3);
+                to = edge.to.startsWith(diseaseCode) 
+                    ? edge.to 
+                    : diseaseCode + edge.to.slice(edge.to.indexOf('-'));
             }
-            const from = edge.from === '0000' || edge.from.startsWith(diseaseCode) ? edge.from : diseaseCode + edge.from.slice(3);
+            const from = edge.from.startsWith(diseaseCode) 
+                ? edge.from 
+                : diseaseCode + edge.from.slice(edge.from.indexOf('-'));
             updatedEdges[key] = { from, to };
         }
 
-        // update all graph keys
+        // Update graph keys and assign order to edges
+        let fromOrder = {[root]: 1};
         for (let [key, children] of Object.entries(graph)) {
             // Skip over unchanged nodes
-            if (key !== "0000" && !nodes[key].hasChanged) {
+            if (!key.endsWith(rootSuffix) && !nodes[key].hasChanged) {
                 continue;
             }
-            const id = key === '0000' || key.startsWith(diseaseCode) ? key : diseaseCode + key.slice(3);
+            const id = key.startsWith(diseaseCode) 
+                ? key 
+                : diseaseCode + key.slice(key.indexOf('-'));
             updatedGraph[id] = children; 
+            
+            // TODO (AL): Figure out if edges connecting different knowledge graphs should
+            // affect the count aka skip over its index or fill in the gaps
+            let skipped = 0;
+            children.forEach((edgeID, idx) => {
+                let edge = edges[edgeID];
+                if (!edge.from.endsWith(rootSuffix) && !nodes[edge.to].hasChanged) {
+                    skipped++;
+                    updatedEdges[edgeID].toQuestionOrder = -1;
+                    updatedEdges[edgeID].fromQuestionOrder = -1;
+                } else {
+                    updatedEdges[edgeID].toQuestionOrder = idx - skipped + 1;
+                    fromOrder[updatedEdges[edgeID].to] = idx - skipped + 1;
+                }
+            });
         }
+        Object.values(updatedEdges).forEach(edge => {
+            if (edge.toQuestionOrder !== -1) {
+                edge.fromOrderQuestion = fromOrder[edge.from];
+            }
+        });
 
-        // update all node keys and object values
+        // Filter out unchanged nodes and update its attributes accordingly
         for (let [key, data] of Object.entries(nodes)) {
-            if (key !== "0000" && !data.hasChanged) {
+            if (!key.endsWith(rootSuffix) && !data.hasChanged) {
                 continue;
             }
-            // If node has changed, the following data is now useless
+            data = {...data};
+            
+            if (data.responseType === 'CLICK-BOXES' || data.responseType.endsWith('-POP')) {
+                data.text += ` CLICK[${data.answerInfo.options.join(', ')}]`;
+            } /* else if (data.answerInfo?.startResponse) {
+                // TODO: When backend permits encode the fill in the blanks
+            } */
+
+            delete data.answerInfo;
             delete data.hasChanged;
             delete data.originalId;
             delete data.parent;
 
-            if (key === '0000' || key.startsWith(diseaseCode)) {
-                updatedNodes[key] = data;
-            } else {
-                const id = diseaseCode + key.slice(3);
-                updatedNodes[id] = { ...data, id };
+            if (!key.startsWith(diseaseCode)) {
+                key = diseaseCode + key.slice(key.indexOf('-'));
             }
+            updatedNodes[key] = { 
+                ...data, 
+                bodySystem,
+                noteSection: 'HPI',
+                medID: key,
+                category: disease,
+                // doctorCreated: doctorID,
+                doctorCreated: "NOT A REAL DOCTOR" // disabled until backend is ready
+            };
+            delete updatedNodes[key].id;
         }
 
-        // TODO: Send data to backend when the backend is set up
-        // TODO: Depending on how questionOrder is saved, we will need to reflect that
-        //       here as well
-        console.log(updatedNodes);
-        console.log(updatedEdges);
-        console.log(updatedGraph);
-        alert('Template created'); // for dev purposes 
+        // Send updated data to the backend
+        let requestResult, resMessage, resIcon, res;
+        try {
+            res = await graphClient.post(`/doctor/${doctorID}`, {
+                graphName: title,
+                root: diseaseCode + rootSuffix,
+                graph: updatedGraph,
+                nodes: updatedNodes,
+                edges: updatedEdges,
+            });
+            resMessage = 'Successfully created template!';
+            resIcon = 'circle check outline'; 
+        } catch (err) {
+            console.log(err);
+            resMessage = err?.response?.data?.Message || 'Unable to create template';
+            resIcon = 'warning sign';
+        } finally {
+            console.log(updatedNodes);
+            console.log(updatedEdges);
+            console.log(updatedGraph);
+            requestResult = (
+                <div className='create-tmpl-msg'>
+                    <Icon name={resIcon} size='big'/>
+                    <p>{resMessage}</p>
+                </div>
+            );
+            this.setState({ requestResult });
+        }
     }
 
     /**
@@ -293,11 +362,11 @@ class NewTemplateForm extends Component {
      * for react-nestable to read
      */
     createTreeData = () => {
-        const { graph, edges, nodes } = this.context.state;
-        return graph['0000'].map(edge => {
+        const { graph, edges, root } = this.context.state;
+        return graph[root].map(edge => {
             // create treeNode for every root level question
             const qId = edges[edge].to;
-            return this.flattenGraph(qId, '0000', edge);
+            return this.flattenGraph(qId, root, edge);
         });
     }
     
@@ -365,9 +434,9 @@ class NewTemplateForm extends Component {
      * @param {*} item: the item that was dragged
      */
     updateOrder = (items, item) => {
-        const { graph, edges, nodes } = this.context.state;
+        const { graph, edges, nodes, root } = this.context.state;
 
-        const [newParent, subtree] = this.findParent(items, "0000", item.id);
+        const [newParent, subtree] = this.findParent(items, root, item.id);
         if (!newParent) {
             return; // Couldn't find parent, something went wrong
         }
@@ -432,7 +501,15 @@ class NewTemplateForm extends Component {
 
 
     render() {
-        const { bodySystems, diseases, showOtherBodySystem, showOtherDisease, graphData } = this.state;
+        const { 
+            bodySystems, 
+            diseases, 
+            showOtherBodySystem, 
+            showOtherDisease, 
+            showDimmer,
+            requestResult, 
+        } = this.state;
+
         const bodySystemOptions = [{
             value: OTHER_TEXT,
             text: OTHER_TEXT,
@@ -455,8 +532,26 @@ class NewTemplateForm extends Component {
             });
         });
 
+        const reachedMax = this.context.state.numQuestions >= MAX_NUM_QUESTIONS + 1;
+
         return (
-            <Segment className='container'>
+            <Dimmer.Dimmable as={Segment} className='container' dimmed={showDimmer}>
+                <Dimmer active={showDimmer} inverted>
+                    { !requestResult
+                        ? <Loader>Saving...</Loader>
+                        : <React.Fragment>
+                            {requestResult}
+                            <Button 
+                                icon='close' 
+                                content='Dismiss'
+                                onClick={() => this.setState({ 
+                                    requestResult: null,
+                                    showDimmer: false,
+                                })}
+                            />
+                        </React.Fragment>
+                    }
+                </Dimmer>
                 <Form>
                     <Header as='h2'>
                         <Input
@@ -540,6 +635,7 @@ class NewTemplateForm extends Component {
                     onClick={this.addQuestion}
                     content='Add question'
                     className='add-question-button'
+                    disabled={reachedMax}
                 />
                 <Button
                     circular
@@ -549,7 +645,12 @@ class NewTemplateForm extends Component {
                     onClick={this.createTemplate}
                     disabled={this.context.state.numQuestions === 1}
                 />
-            </Segment>
+                { reachedMax && (
+                    <p className='add-question-msg'>
+                        * Reached maximum number of questions ({MAX_NUM_QUESTIONS})
+                    </p>
+                )}
+            </Dimmer.Dimmable>
         );
     }
 }
