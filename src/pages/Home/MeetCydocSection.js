@@ -3,8 +3,10 @@ import { Button, Grid, Header, Image, Segment } from 'semantic-ui-react';
 import { HOME_MED_BP } from 'constants/breakpoints.js';
 import { homeContent } from 'constants/homeContent';
 import './Home.css';
-import PreviewHistory from '../../assets/home/patient-history.png';
-import PreviewROS from '../../assets/home/ros.png';
+
+const previewHistory =
+    'https://cydoc-static-files.s3.amazonaws.com/patient-history.png';
+const previewROS = 'https://cydoc-static-files.s3.amazonaws.com/ros.png';
 
 export const MeetCydocSection = (props) => {
     return props.windowWidth < HOME_MED_BP ? (
@@ -31,13 +33,13 @@ export const MeetCydocSection = (props) => {
             />
             <div className='preview-image-container'>
                 <Image
-                    src={PreviewROS}
+                    src={previewROS}
                     alt='cydoc preview page'
                     verticalAlign='bottom'
                     className='preview-image-small ros-small'
                 />
                 <Image
-                    src={PreviewHistory}
+                    src={previewHistory}
                     alt='cydoc preview page'
                     verticalAlign='bottom'
                     className='preview-image-small history-small'
@@ -71,13 +73,13 @@ export const MeetCydocSection = (props) => {
                 </Grid.Column>
                 <Grid.Column className='image-parent'>
                     <Image
-                        src={PreviewROS}
+                        src={previewROS}
                         alt='cydoc preview page'
                         verticalAlign='bottom'
                         className='preview-image ros'
                     />
                     <Image
-                        src={PreviewHistory}
+                        src={previewHistory}
                         alt='cydoc preview page'
                         verticalAlign='bottom'
                         className='preview-image history'
