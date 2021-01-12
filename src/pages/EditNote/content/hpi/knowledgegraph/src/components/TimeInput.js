@@ -30,12 +30,12 @@ class TimeInput extends Component {
         let timeValue = values['response'][1];
         let question = values['text'];
         const timeOptions = [
-            'minutes',
-            'hours',
-            'days',
-            'weeks',
-            'months',
             'years',
+            'months',
+            'weeks',
+            'days',
+            'hours',
+            'minutes',
         ];
         let buttonMap = [];
         for (

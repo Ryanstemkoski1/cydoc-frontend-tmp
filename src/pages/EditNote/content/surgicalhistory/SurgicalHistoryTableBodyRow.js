@@ -66,7 +66,6 @@ export class SurgicalHistoryTableBodyRow extends Component {
                             selection
                             clearable
                             allowAdditions
-                            icon=''
                             options={proceduresOptions}
                             optiontype='proceduresOptions'
                             type='Procedure'
@@ -126,7 +125,11 @@ export class SurgicalHistoryTableBodyRow extends Component {
 
         const tableRows = fields.map((field, index) => {
             return (
-                <Table.Cell key={index} onClick={this.handleCellClick}>
+                <Table.Cell
+                    key={index}
+                    onClick={this.handleCellClick}
+                    style={{padding:'0px'}}
+                >
                     {this.getCell(field)}
                 </Table.Cell>
             );

@@ -35,7 +35,7 @@ class ButtonTag extends React.Component {
     render() {
         return (
             <button
-                className={`ui ${this.state.buttonStyle} button`}
+                className= {`ui small ${this.state.buttonStyle} button`}
                 onClick={this.handleClick}
             >
                 {this.props.name}
