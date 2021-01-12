@@ -1,10 +1,22 @@
-import React, { Component, Fragment } from 'react';
-import { Input, Icon, Dropdown, Accordion, Button, Message } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import {
+    Input,
+    Icon,
+    Dropdown,
+    Accordion,
+    Button,
+    Message,
+} from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import TemplateAnswer from './TemplateAnswer';
 import questionTypes from 'constants/questionTypes';
 import diseaseCodes from 'constants/diseaseCodes';
-import { getAnswerInfo, sortEdges, addChildrenNodes, updateParent } from './util';
+import {
+    getAnswerInfo,
+    sortEdges,
+    addChildrenNodes,
+    updateParent,
+} from './util';
 import './NewTemplate.css';
 
 let DELETED_IDS = [];
@@ -24,8 +36,12 @@ class TemplateQuestion extends Component {
         this.saveQuestion = this.saveQuestion.bind(this);
         this.saveQuestionType = this.saveQuestionType.bind(this);
         this.deleteQuestion = this.deleteQuestion.bind(this);
-        this.deleteQuestionWithChildren = this.deleteQuestionWithChildren.bind(this);
-        this.deleteUnrenderedChildren = this.deleteUnrenderedChildren.bind(this);
+        this.deleteQuestionWithChildren = this.deleteQuestionWithChildren.bind(
+            this
+        );
+        this.deleteUnrenderedChildren = this.deleteUnrenderedChildren.bind(
+            this
+        );
         this.keepUnrenderedChildren = this.keepUnrenderedChildren.bind(this);
         this.hideDeleteQuestion = this.hideDeleteQuestion.bind(this);
         this.editChildren = this.editChildren.bind(this);
@@ -37,9 +53,9 @@ class TemplateQuestion extends Component {
      */
     changeActive = () => {
         this.setState((prevState) => ({
-            active: !(prevState.active)
+            active: !prevState.active,
         }));
-    }
+    };
 
     /**
      * Updates the question text of the node with the given `qid`.
@@ -54,7 +70,7 @@ class TemplateQuestion extends Component {
             this.setState({ active: true });
         }
         this.context.onContextChange('nodes', nodes);
-    }
+    };
 
     /**
      * Updates the response type of the question with given id.
@@ -63,7 +79,7 @@ class TemplateQuestion extends Component {
      */
     saveQuestionType = (event, { value, qid }) => {
         const { graph, nodes } = this.context.state;
-        
+
         // questions with children questions can NOT be converted to something other than yes/no
         if (value !== 'YES-NO' && graph[qid].length > 0) {
             this.setState({ showChangeQuestion: true });
@@ -72,18 +88,19 @@ class TemplateQuestion extends Component {
 
         nodes[qid].responseType = value;
         nodes[qid].answerInfo = getAnswerInfo(value);
-        
+
         // advanced response types default to BLANK
-        if (value === 'FH'
-            || value === 'PMH'
-            || value === 'PSH'
-            || value === 'MEDS'
+        if (
+            value === 'FH' ||
+            value === 'PMH' ||
+            value === 'PSH' ||
+            value === 'MEDS'
         ) {
             nodes[qid].responseType = value + '-BLANK';
         }
         updateParent(nodes, qid);
         this.context.onContextChange('nodes', nodes);
-    }
+    };
 
     /**
      * Removes question of given id from the context if it has no children. Otherwise, update the state
@@ -96,12 +113,18 @@ class TemplateQuestion extends Component {
         const edges = this.context.state.edges;
         let numQuestions = this.context.state.numQuestions;
 
-        if ((nodes[qid].responseType !== 'YES-NO' && nodes[qid].responseType !== 'NO-YES') || graph[qid].length === 0) {
+        if (
+            (nodes[qid].responseType !== 'YES-NO' &&
+                nodes[qid].responseType !== 'NO-YES') ||
+            graph[qid].length === 0
+        ) {
             // not Y/N question or Y/N question with no children
             for (let edge in edges) {
                 const eInfo = edges[edge];
-                if (eInfo.to === qid) {                   
-                    graph[eInfo.from] = graph[eInfo.from].filter(e => e !== parseInt(edge));
+                if (eInfo.to === qid) {
+                    graph[eInfo.from] = graph[eInfo.from].filter(
+                        (e) => e !== parseInt(edge)
+                    );
                     delete this.context.state.edges[edge];
                 }
             }
@@ -118,7 +141,7 @@ class TemplateQuestion extends Component {
         this.context.onContextChange('graph', graph);
         this.context.onContextChange('edges', this.context.state.edges);
         this.context.onContextChange('numQuestions', numQuestions);
-    }
+    };
 
     /**
      * Deletes the target question and all of the children in its subtree if the user decides on `Delete`.
@@ -159,9 +182,13 @@ class TemplateQuestion extends Component {
                             const parent = parents[i];
                             edges[nextEdgeID] = {
                                 from: parent,
-                                to: edges[edge].to
-                            }
-                            graph[parent].splice(parentRelatedIndexes[i], 0, nextEdgeID);
+                                to: edges[edge].to,
+                            };
+                            graph[parent].splice(
+                                parentRelatedIndexes[i],
+                                0,
+                                nextEdgeID
+                            );
                             nextEdgeID++;
                         }
                         delete edges[edge];
@@ -182,7 +209,9 @@ class TemplateQuestion extends Component {
                 for (let edge in edges) {
                     if (DELETED_IDS.includes(edges[edge].from)) {
                         for (let question in graph) {
-                            const index = graph[question].indexOf(parseInt(edge));
+                            const index = graph[question].indexOf(
+                                parseInt(edge)
+                            );
                             if (index > -1) {
                                 graph[question].splice(index, 1);
                             }
@@ -193,7 +222,9 @@ class TemplateQuestion extends Component {
                         numQuestions--;
                     } else if (DELETED_IDS.includes(edges[edge].to)) {
                         for (let question in graph) {
-                            const index = graph[question].indexOf(parseInt(edge));
+                            const index = graph[question].indexOf(
+                                parseInt(edge)
+                            );
                             if (index > -1) {
                                 graph[question].splice(index, 1);
                             }
@@ -211,13 +242,13 @@ class TemplateQuestion extends Component {
                 break;
             }
         }
-        
+
         this.context.onContextChange('nodes', nodes);
         this.context.onContextChange('graph', graph);
         this.context.onContextChange('edges', edges);
         this.context.onContextChange('nextEdgeID', nextEdgeID);
         this.context.onContextChange('numQuestions', numQuestions);
-    }
+    };
 
     /**
      * Deletes all children in the target subtree from the graph object and nodes object,
@@ -228,7 +259,7 @@ class TemplateQuestion extends Component {
         const edges = this.context.state.edges;
         const graph = this.context.state.graph;
 
-        while(graph[qid].length > 0) {
+        while (graph[qid].length > 0) {
             const e = graph[qid].shift();
             DELETED_IDS.push(qid);
             this.deleteChild(edges[e].to, edges, graph);
@@ -270,7 +301,7 @@ class TemplateQuestion extends Component {
         delete nodes[qId].hasChildren;
         this.editChildren(qId, nodes);
         this.context.onContextChange('nodes', nodes);
-    }
+    };
 
     /**
      * Remove the flag that indicates an imported question has children
@@ -281,10 +312,10 @@ class TemplateQuestion extends Component {
 
         delete nodes[qId].hasChildren;
         this.context.onContextChange('nodes', nodes);
-    }
+    };
 
     /**
-     * Import all direct children of node with qId from the knowledge graph 
+     * Import all direct children of node with qId from the knowledge graph
      * (The graph fetched from the backend, not the context).
      * @param {String} qId: the parent of the questions to import
      * @param {Object} contextNodes: the nodes object (not necessarily in sync with the context)
@@ -293,7 +324,7 @@ class TemplateQuestion extends Component {
         let { numQuestions, nextEdgeID } = this.context.state;
         const { graphData } = this.props;
         const { edges, nodes, graph } = graphData;
-        
+
         const disease = this.context.state.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
 
@@ -307,10 +338,16 @@ class TemplateQuestion extends Component {
             let newCount = addChildrenNodes(
                 qId,
                 graph[originalId],
-                "",
+                '',
                 diseaseCode,
                 graphData,
-                { numQuestions, nextEdgeID, contextNodes, contextGraph, contextEdges },
+                {
+                    numQuestions,
+                    nextEdgeID,
+                    contextNodes,
+                    contextGraph,
+                    contextEdges,
+                }
             );
             numQuestions = newCount.numQuestions;
             nextEdgeID = newCount.nextEdgeID;
@@ -322,11 +359,11 @@ class TemplateQuestion extends Component {
         }
         delete contextNodes[qId].hasChildren;
         this.context.onContextChange('nodes', contextNodes);
-    }
+    };
 
     hideDeleteQuestion = () => {
         this.setState({ showDeleteQuestion: false });
-    }
+    };
 
     /**
      * Returns the Dropdown component for selecting a response type
@@ -358,7 +395,10 @@ class TemplateQuestion extends Component {
         let responseType = this.context.state.nodes[qId].responseType;
         if (responseType === 'NO-YES') {
             responseType = 'YES-NO';
-        } else if (responseType.endsWith('POP') || responseType.endsWith('BLANK')) {
+        } else if (
+            responseType.endsWith('POP') ||
+            responseType.endsWith('BLANK')
+        ) {
             responseType = responseType.split('-')[0];
         }
 
@@ -377,17 +417,17 @@ class TemplateQuestion extends Component {
     }
 
     /**
-     * Returns the number of followup questions associates with the target qid in the 
+     * Returns the number of followup questions associates with the target qid in the
      * knowledge graph from the backend (not the context).
-     * @param {String} qId: id of the question 
-     */ 
+     * @param {String} qId: id of the question
+     */
     getNumberFollowup = (qId) => {
         const { nodes } = this.context.state;
         const { graph } = this.props.graphData;
-        
+
         const originalId = nodes[qId].originalId;
         return graph[originalId].length;
-    }
+    };
 
     render() {
         const { qId } = this.props;
@@ -397,144 +437,167 @@ class TemplateQuestion extends Component {
         // Due to JS's asynchronous nature, render a Fragment in case the current node was
         // deleted in a previous action
         if (!(qId in nodes)) {
-            return <Fragment></Fragment>
+            return <></>;
         }
 
         const questionTypeOptions = this.getQuestionTypes();
         const curIcon = active ? 'chevron down' : 'chevron right';
 
-        const panels = [{
-            key: qId,
-            title: {
-                icon: '',
-                content: (
-                    <Fragment>
-                        <div
-                            className='question-title'
-                            onClick={this.changeActive}
-                        >
-                            <Icon name={curIcon} />
-                            <Input
+        const panels = [
+            {
+                key: qId,
+                title: {
+                    icon: '',
+                    content: (
+                        <>
+                            <div
+                                className='question-title'
+                                onClick={this.changeActive}
+                            >
+                                <Icon name={curIcon} />
+                                <Input
+                                    qid={qId}
+                                    placeholder='Question'
+                                    value={this.context.state.nodes[qId].text}
+                                    onChange={this.saveQuestion}
+                                    transparent
+                                    size='large'
+                                    className='question-input'
+                                />
+                            </div>
+                            <Button
+                                basic
+                                icon='remove'
                                 qid={qId}
-                                placeholder='Question'
-                                value={this.context.state.nodes[qId].text}
-                                onChange={this.saveQuestion}
-                                transparent
-                                size='large'
-                                className='question-input'
+                                onClick={this.deleteQuestion}
+                                className='minus-button remove-question'
+                            />
+                        </>
+                    ),
+                },
+                content: {
+                    active: active,
+                    content: (
+                        <div className='question-content'>
+                            {showDeleteQuestion && (
+                                <>
+                                    <Message
+                                        compact
+                                        onDismiss={this.hideDeleteQuestion}
+                                        content={
+                                            <div className='delete-message'>
+                                                <div>
+                                                    Do you want to keep or
+                                                    delete follow-up questions?
+                                                </div>
+                                                <div>
+                                                    <Button
+                                                        compact
+                                                        qid={qId}
+                                                        content='Keep'
+                                                        onClick={
+                                                            this
+                                                                .deleteQuestionWithChildren
+                                                        }
+                                                        className='keep-button'
+                                                    />
+                                                    <Button
+                                                        compact
+                                                        qid={qId}
+                                                        content='Delete'
+                                                        onClick={
+                                                            this
+                                                                .deleteQuestionWithChildren
+                                                        }
+                                                    />
+                                                </div>
+                                            </div>
+                                        }
+                                    />
+                                    <br />
+                                </>
+                            )}
+                            {nodes[qId].hasChildren && nodes[qId].hasChanged && (
+                                <>
+                                    <Message
+                                        compact
+                                        content={
+                                            <>
+                                                <div>
+                                                    {`The original question had ${this.getNumberFollowup(
+                                                        qId
+                                                    )} follow-up question(s). Do you want to keep these follow-up questions?`}
+                                                </div>
+                                                <div>
+                                                    <Button
+                                                        compact
+                                                        qid={qId}
+                                                        content='Keep'
+                                                        onClick={
+                                                            this
+                                                                .keepUnrenderedChildren
+                                                        }
+                                                        className='keep-button'
+                                                    />
+                                                    <Button
+                                                        compact
+                                                        qid={qId}
+                                                        content='Delete'
+                                                        onClick={
+                                                            this
+                                                                .deleteUnrenderedChildren
+                                                        }
+                                                    />
+                                                </div>
+                                            </>
+                                        }
+                                    />
+                                    <br />
+                                </>
+                            )}
+                            {showChangeQuestion && (
+                                <>
+                                    <Message
+                                        compact
+                                        negative
+                                        header='Only Yes/No and No/Yes questions can have follow-up questions.'
+                                        onDismiss={() =>
+                                            this.setState({
+                                                showChangeQuestion: false,
+                                            })
+                                        }
+                                        content='Alternatively, you may
+                                        delete this question and create a new question of the desired type,
+                                        or move the follow-up questions to a different level before proceeding.'
+                                    />
+                                    <br />
+                                </>
+                            )}
+                            {questionTypeOptions}
+                            <TemplateAnswer
+                                qId={qId}
+                                type={
+                                    this.context.state.nodes[qId].responseType
+                                }
+                                editChildren={this.editChildren}
+                                graphData={this.props.graphData}
+                                allDiseases={this.props.allDiseases}
                             />
                         </div>
-                        <Button
-                            basic
-                            icon='remove'
-                            qid={qId}
-                            onClick={this.deleteQuestion}
-                            className='minus-button remove-question'
-                        />
-                    </Fragment>
-                ),
+                    ),
+                },
             },
-            content: {
-                active: active,
-                content: (
-                    <div className='question-content'>
-                        {showDeleteQuestion &&
-                            <Fragment>
-                                <Message
-                                    compact
-                                    onDismiss={this.hideDeleteQuestion}
-                                    content={
-                                        <div className='delete-message'>
-                                            <div>
-                                                Do you want to keep or delete follow-up questions?
-                                            </div>
-                                            <div>
-                                                <Button
-                                                    compact
-                                                    qid={qId}
-                                                    content='Keep'
-                                                    onClick={this.deleteQuestionWithChildren}
-                                                    className='keep-button'
-                                                />
-                                                <Button
-                                                    compact
-                                                    qid={qId}
-                                                    content='Delete'
-                                                    onClick={this.deleteQuestionWithChildren}
-                                                />
-                                            </div>
-                                        </div>
-                                    }
-                                />
-                                <br />
-                            </Fragment>
-                        } 
-                        {nodes[qId].hasChildren && nodes[qId].hasChanged &&
-                            <Fragment>
-                                <Message
-                                    compact
-                                    content={
-                                        <Fragment>
-                                            <div>
-                                            {`The original question had ${this.getNumberFollowup(qId)} follow-up question(s). Do you want to keep these follow-up questions?`}
-                                            </div>
-                                            <div>
-                                                <Button
-                                                    compact
-                                                    qid={qId}
-                                                    content='Keep'
-                                                    onClick={this.keepUnrenderedChildren}
-                                                    className='keep-button'
-                                                />
-                                                <Button
-                                                    compact
-                                                    qid={qId}
-                                                    content='Delete'
-                                                    onClick={this.deleteUnrenderedChildren}
-                                                />
-                                            </div>
-                                        </Fragment>
-                                    }
-                                />
-                                <br />
-                            </Fragment>
-                        } 
-                        {showChangeQuestion &&
-                            <Fragment>
-                            <Message
-                                compact
-                                negative
-                                header="Only Yes/No and No/Yes questions can have follow-up questions."
-                                onDismiss={() => this.setState({ showChangeQuestion: false })}
-                                content="Alternatively, you may
-                                        delete this question and create a new question of the desired type,
-                                        or move the follow-up questions to a different level before proceeding."
-                            />
-                            <br />
-                        </Fragment>
-                        }
-                        {questionTypeOptions}
-                        <TemplateAnswer 
-                            qId={qId} 
-                            type={this.context.state.nodes[qId].responseType} 
-                            editChildren={this.editChildren}
-                            graphData={this.props.graphData}
-                            allDiseases={this.props.allDiseases}
-                        />
-                    </div>
-                ),
-            }
-        }];
+        ];
 
         return (
-            <Fragment>
+            <>
                 <Accordion
                     fluid
                     key={qId}
                     panels={panels}
                     className='question-container'
                 />
-            </Fragment>
+            </>
         );
     }
 }

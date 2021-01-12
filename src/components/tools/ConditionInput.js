@@ -1,8 +1,8 @@
 import React from 'react';
-import {Input, Icon} from 'semantic-ui-react';
+import { Input, Icon } from 'semantic-ui-react';
 import HPIContext from 'contexts/HPIContext.js';
-import {adjustValue} from 'pages/EditNote/content/medicalhistory/util';
-import {medicalMapping} from 'constants/word-mappings';
+import { adjustValue } from 'pages/EditNote/content/medicalhistory/util';
+import { medicalMapping } from 'constants/word-mappings';
 
 class ConditionInput extends React.Component {
     static contextType = HPIContext;
@@ -12,7 +12,9 @@ class ConditionInput extends React.Component {
         let answer;
         let isTitleFocused = false;
         if (!this.props.isPreview) {
-            const condition = this.context[this.props.category][this.props.index]['Condition'];
+            const condition = this.context[this.props.category][
+                this.props.index
+            ]['Condition'];
             answer = condition.length === 0 ? '' : condition;
             isTitleFocused = condition.length === 0;
         }
@@ -25,49 +27,62 @@ class ConditionInput extends React.Component {
         this.handleOnBlur = this.handleOnBlur.bind(this);
     }
 
-    handleInputChange = (event) => { 
+    handleInputChange = (event) => {
         this.setState({
-            textInput: event.target.value
+            textInput: event.target.value,
         });
 
         const values = this.context[this.props.category];
         values[this.props.index]['Condition'] = event.target.value;
         this.context.onContextChange(this.props.category, values);
-    }
+    };
 
     handleOnBlur = (e) => {
-        this.setState({isTitleFocused: false});
+        this.setState({ isTitleFocused: false });
         const val = adjustValue(e.target.value, medicalMapping);
-        if (val in this.props.seenConditions && parseInt(this.props.index) !== this.props.seenConditions[val]) {
+        if (
+            val in this.props.seenConditions &&
+            parseInt(this.props.index) !== this.props.seenConditions[val]
+        ) {
             this.setState({ isRepeat: true });
         } else {
             this.setState({ isRepeat: false });
             this.props.addSeenCondition(val, this.props.index);
         }
-    }
+    };
 
     render() {
-        return(
+        return (
             <React.Fragment>
                 <Input
                     disabled={this.props.isPreview}
-                    className={this.state.isTitleFocused === true ? 'ui input focus' : 'ui input transparent'}
+                    className={
+                        this.state.isTitleFocused === true
+                            ? 'ui input focus'
+                            : 'ui input transparent'
+                    }
                     type='text'
                     placeholder='Condition'
                     onChange={this.handleInputChange}
-                    onFocus={()=>{this.setState({isTitleFocused: true})}}
+                    onFocus={() => {
+                        this.setState({ isTitleFocused: true });
+                    }}
                     onBlur={this.handleOnBlur}
-                    value={this.props.isPreview ? this.props.condition : this.state.textInput} 
+                    value={
+                        this.props.isPreview
+                            ? this.props.condition
+                            : this.state.textInput
+                    }
                 />
                 {this.state.isRepeat && (
                     <div className='condition-error'>
-                        <Icon color='red' name='warning circle'/>
+                        <Icon color='red' name='warning circle' />
                         Condition already included
                     </div>
                 )}
             </React.Fragment>
-        )
-        }
+        );
     }
+}
 
 export default ConditionInput;

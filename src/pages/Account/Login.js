@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
-import { Form, Grid, Segment, Button, Container, Image } from "semantic-ui-react";
-import { Redirect } from "react-router";
-import { Link } from "react-router-dom";
+import {
+    Form,
+    Grid,
+    Segment,
+    Button,
+    Container,
+    Image,
+} from 'semantic-ui-react';
+import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 
-import AuthContext from "../../contexts/AuthContext";
-import NotesContext from "../../contexts/NotesContext";
-import { client } from "constants/api.js"
+import AuthContext from '../../contexts/AuthContext';
+import NotesContext from '../../contexts/NotesContext';
+import { client } from 'constants/api.js';
 import Logo from '../../assets/cydoc-logo.svg';
 import NavMenu from '../../components/navigation/NavMenu';
-import "./Account.css"
+import './Account.css';
 
 // Component that manages the layout of the login page
 class LoginPage extends Component {
-
-    static contextType = AuthContext
+    static contextType = AuthContext;
 
     constructor(props) {
         super(props);
@@ -22,58 +28,58 @@ class LoginPage extends Component {
             password: '',
             submittedUsername: '',
             submittedPassword: '',
-            redirect: false
+            redirect: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(e, { name, value }) {
-        console.log(name + ": " + value);
         let newState = this.state;
         newState[name] = value;
-        console.log(newState);
         this.setState(newState);
-        console.log(this.state);
     }
-
 
     handleSubmit = async () => {
         const { username, password } = this.state;
-        this.setState({ submittedUsername: username, submittedPassword: password });
+        this.setState({
+            submittedUsername: username,
+            submittedPassword: password,
+        });
 
         const payload = {
             username: this.state.username,
-            password: this.state.password
+            password: this.state.password,
         };
 
-        const response = await client.post("/login", payload)
-            .then(res => {
+        const response = await client
+            .post('/login', payload)
+            .then((res) => {
                 const user = res;
-                console.log(user)
                 localStorage.setItem('user', JSON.stringify(user));
                 return user;
             })
             .then((user) => {
                 return user;
             })
-            .catch(err => {
+            .catch((err) => {
                 return err.response;
-            })
+            });
 
-        if (response == null) {
-            alert("null response")
-            return
+        if (response === null) {
+            alert('null response');
+            return;
         }
         if (response.status === 200) {
-            console.log(this)
-            this.context.storeLoginInfo(response.data.user, response.data.jwt.accessToken)
+            this.context.storeLoginInfo(
+                response.data.user,
+                response.data.jwt.accessToken
+            );
 
-            this.setState({ redirect: true })
+            this.setState({ redirect: true });
         } else {
-            alert(response.data.Message)
+            alert(response.data.Message);
         }
-
     };
 
     render() {
@@ -81,8 +87,8 @@ class LoginPage extends Component {
             return (
                 <NotesContext.Consumer>
                     {(context) => {
-                        context.loadNotes(this.context.user._id)
-                        return (<Redirect push to="/dashboard" />)
+                        context.loadNotes(this.context.user._id);
+                        return <Redirect push to='/dashboard' />;
                     }}
                 </NotesContext.Consumer>
             );
@@ -96,13 +102,17 @@ class LoginPage extends Component {
                 <div className='nav-menu-container'>
                     <NavMenu />
                 </div>
-                <Container className="login">
+                <Container className='login'>
                     <Segment clearing>
                         <Container textAlign='center'>
-                            <Image size="tiny" href='/' src={Logo} />
+                            <Image size='tiny' href='/' src={Logo} />
                             <h1 className='logo-text'>Cydoc</h1>
-                        </Container> 
-                        <Container className={"login-header"} color='black' textAlign='center'>
+                        </Container>
+                        <Container
+                            className={'login-header'}
+                            color='black'
+                            textAlign='center'
+                        >
                             Log in
                         </Container>
                         <Form size='mini' onSubmit={this.handleSubmit}>
@@ -115,21 +125,26 @@ class LoginPage extends Component {
                             />
                             <Form.Input
                                 fluid
-                                type={"password"}
+                                type={'password'}
                                 label='Password'
                                 name='password'
                                 value={password}
                                 onChange={this.handleChange}
                             />
-                            <Grid padded verticalAlign={"middle"} >
+                            <Grid padded verticalAlign={'middle'}>
                                 <Grid.Row columns={2}>
                                     <Grid.Column>
-                                        <Link style={{color:'#007db3'}}as={Button} to="/register" floated='left' className="make-an-account-button"
+                                        <Link
+                                            style={{ color: '#007db3' }}
+                                            as={Button}
+                                            to='/register'
+                                            floated='left'
+                                            className='make-an-account-button'
                                         >
                                             Sign Up
                                         </Link>
                                     </Grid.Column>
-                                    <Grid.Column textAlign={"right"}>
+                                    <Grid.Column textAlign={'right'}>
                                         <Button color='teal' size='small'>
                                             Log in
                                         </Button>

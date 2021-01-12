@@ -29,7 +29,8 @@ class Home extends Component {
 
     updateDimensions() {
         let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-        let windowHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
+        let windowHeight =
+            typeof window !== 'undefined' ? window.innerHeight : 0;
 
         this.setState({ windowWidth, windowHeight });
     }
@@ -50,7 +51,9 @@ class Home extends Component {
                                 content={homeContent.betterNotes.header}
                                 className='home-header white'
                             />
-                            <p className='better-notes-description'>{homeContent.betterNotes.description}</p>
+                            <p className='better-notes-description'>
+                                {homeContent.betterNotes.description}
+                            </p>
                             <BetterNotesIcons windowWidth={windowWidth} />
                         </div>
                     </div>
@@ -89,7 +92,10 @@ class Home extends Component {
                 <Segment className='footer'>
                     <Header
                         as={Link}
-                        onClick={window.scrollTo({ top: 0, behavior: 'smooth' })}
+                        onClick={window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth',
+                        })}
                         content={homeContent.footer.cydoc}
                         className='home-header light-teal footer-header'
                     />

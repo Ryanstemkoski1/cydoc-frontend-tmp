@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextArea, Table, Dropdown, Input, Form, Button } from 'semantic-ui-react';
+import { TextArea, Table, Dropdown, Input, Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import './TableContent.css';
 
@@ -13,8 +13,12 @@ export class TableBodyRow extends Component {
     }
 
     onYearChange = (e) => {
-        this.setState({ invalidYear: e.target.value !== "" && !/^(19\d\d|20[0-2]\d)$/.test(e.target.value) });
-    }
+        this.setState({
+            invalidYear:
+                e.target.value !== '' &&
+                !/^(19\d\d|20[0-2]\d)$/.test(e.target.value),
+        });
+    };
 
     getCell(placeholder) {
         const {
@@ -41,12 +45,10 @@ export class TableBodyRow extends Component {
 
         if (isPreview) {
             return (
-                <div className="content-preview">
-                    {
-                        placeholder === "Procedure" || placeholder === "Drug Name"
-                         ? rowindex
-                         : ""
-                    }
+                <div className='content-preview'>
+                    {placeholder === 'Procedure' || placeholder === 'Drug Name'
+                        ? rowindex
+                        : ''}
                 </div>
             );
         }
@@ -67,7 +69,11 @@ export class TableBodyRow extends Component {
                                 placeholder={placeholder}
                                 onChange={onTableBodyChange}
                                 rowindex={rowindex}
-                                value={values[name]["fields"][rowindex][placeholder]}
+                                value={
+                                    values[name]['fields'][rowindex][
+                                        placeholder
+                                    ]
+                                }
                                 onAddItem={onAddDrink}
                                 className='side-effects'
                             />
@@ -89,7 +95,11 @@ export class TableBodyRow extends Component {
                                 placeholder={placeholder}
                                 onChange={onTableBodyChange}
                                 rowindex={rowindex}
-                                value={values[name]["fields"][rowindex][placeholder]}
+                                value={
+                                    values[name]['fields'][rowindex][
+                                        placeholder
+                                    ]
+                                }
                                 className='side-effects'
                             />
                         </Input>
@@ -111,7 +121,11 @@ export class TableBodyRow extends Component {
                                 placeholder={placeholder}
                                 onChange={onTableBodyChange}
                                 rowindex={rowindex}
-                                value={values[name]["fields"][rowindex][placeholder]}
+                                value={
+                                    values[name]['fields'][rowindex][
+                                        placeholder
+                                    ]
+                                }
                                 className='side-effects'
                             />
                         </Input>
@@ -133,7 +147,11 @@ export class TableBodyRow extends Component {
                                 placeholder={placeholder}
                                 onChange={onTableBodyChange}
                                 rowindex={rowindex}
-                                value={values[name]["fields"][rowindex][placeholder]}
+                                value={
+                                    values[name]['fields'][rowindex][
+                                        placeholder
+                                    ]
+                                }
                                 className='side-effects'
                             />
                         </Input>
@@ -144,13 +162,14 @@ export class TableBodyRow extends Component {
                     cell = (
                         <Input
                             fluid
-                            type="number"
+                            type='number'
                             className='content-input-computer content-dropdown'
                             onChange={onTableBodyChange}
                             placeholder={placeholder}
                             rowindex={rowindex}
-                            onChange={onTableBodyChange}
-                            value={values[name]["fields"][rowindex][placeholder]}
+                            value={
+                                values[name]['fields'][rowindex][placeholder]
+                            }
                         />
                     );
                     break;
@@ -165,8 +184,11 @@ export class TableBodyRow extends Component {
                             basic
                             onClick={this.props.handleDelete}
                         />
-                    )
+                    );
+                    break;
                 }
+                default:
+                    break;
             }
         } else {
             switch (placeholder) {
@@ -259,11 +281,13 @@ export class TableBodyRow extends Component {
                                 value={values[rowindex][placeholder]}
                                 className='table-row-text'
                             />
-                            { this.state.invalidYear && (
-                                <p className='error'>Please enter a year between 1900 and 2020</p>
+                            {this.state.invalidYear && (
+                                <p className='error'>
+                                    Please enter a year between 1900 and 2020
+                                </p>
                             )}
                         </div>
-                    )
+                    );
                     break;
                 case 'Reason for Taking':
                     cell = (
@@ -287,7 +311,7 @@ export class TableBodyRow extends Component {
                             />
                         </Input>
                     );
-                break;
+                    break;
                 default: {
                     cell = (
                         <TextArea
@@ -312,22 +336,22 @@ export class TableBodyRow extends Component {
 
         const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
             return (
-                <Table.Cell key={index} collapsing={placeholder === 'delete' ? true : false} style={placeholder === 'delete' ? { borderLeft: 0 } : null}>
+                <Table.Cell
+                    key={index}
+                    collapsing={placeholder === 'delete' ? true : false}
+                    style={placeholder === 'delete' ? { borderLeft: 0 } : null}
+                >
                     {this.getCell(placeholder)}
                 </Table.Cell>
-            )
+            );
         });
 
-        return (
-            <Table.Row>
-                {tableRows}
-            </Table.Row>
-        );
+        return <Table.Row>{tableRows}</Table.Row>;
     }
 }
 
 TableBodyRow.propTypes = {
     tableBodyPlaceholders: PropTypes.arrayOf(PropTypes.any),
     onTableBodyChange: PropTypes.func,
-    rowindex: PropTypes.number
+    rowindex: PropTypes.number,
 };

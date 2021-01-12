@@ -2,20 +2,16 @@ import React, { Component } from 'react';
 import { Button, Dropdown, Input, Table, TextArea } from 'semantic-ui-react';
 
 export class SocialHistoryTableBodyRow extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     handleCellClick = (e) => {
-        const innerInput = e.target.lastElementChild
+        const innerInput = e.target.lastElementChild;
         // Handles clicks outside of the "clickable area" (padding) of the input component within a cell
-        if (innerInput != null) {
-            if (innerInput.type !== "submit") {
+        if (innerInput !== null) {
+            if (innerInput.type !== 'submit') {
                 // will ensure clicks near delete button will not automatically click
                 innerInput.click();
             }
         }
-    }
+    };
 
     getCell(placeholder) {
         const {
@@ -26,8 +22,8 @@ export class SocialHistoryTableBodyRow extends Component {
             onTableBodyChange,
             rowindex,
             drugOptions,
-            modesOfDelivery
-        } = this.props
+            modesOfDelivery,
+        } = this.props;
 
         let cell;
 
@@ -46,11 +42,13 @@ export class SocialHistoryTableBodyRow extends Component {
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
-                            value={values[name]["fields"][rowindex][placeholder]}
+                            value={
+                                values[name]['fields'][rowindex][placeholder]
+                            }
                             className='side-effects'
                         />
                     </Input>
-                );  
+                );
                 break;
             }
             case 'Drink Size': {
@@ -67,7 +65,9 @@ export class SocialHistoryTableBodyRow extends Component {
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
-                            value={values[name]["fields"][rowindex][placeholder]}
+                            value={
+                                values[name]['fields'][rowindex][placeholder]
+                            }
                             className='side-effects'
                         />
                     </Input>
@@ -89,7 +89,9 @@ export class SocialHistoryTableBodyRow extends Component {
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
-                            value={values[name]["fields"][rowindex][placeholder]}
+                            value={
+                                values[name]['fields'][rowindex][placeholder]
+                            }
                             className='side-effects'
                         />
                     </Input>
@@ -111,7 +113,9 @@ export class SocialHistoryTableBodyRow extends Component {
                             placeholder={placeholder}
                             onChange={onTableBodyChange}
                             rowindex={rowindex}
-                            value={values[name]["fields"][rowindex][placeholder]}
+                            value={
+                                values[name]['fields'][rowindex][placeholder]
+                            }
                             className='side-effects'
                         />
                     </Input>
@@ -122,13 +126,12 @@ export class SocialHistoryTableBodyRow extends Component {
                 cell = (
                     <Input
                         fluid
-                        type="numberPerWeek"
+                        type='numberPerWeek'
                         className='content-input-computer content-dropdown'
                         onChange={onTableBodyChange}
                         placeholder={placeholder}
                         rowindex={rowindex}
-                        onChange={onTableBodyChange}
-                        value={values[name]["fields"][rowindex][placeholder]}
+                        value={values[name]['fields'][rowindex][placeholder]}
                     />
                 );
                 break;
@@ -143,8 +146,8 @@ export class SocialHistoryTableBodyRow extends Component {
                         type='delete'
                         basic
                         onClick={this.props.handleDelete}
-                    />      
-                )
+                    />
+                );
                 break;
             }
             default: {
@@ -154,7 +157,7 @@ export class SocialHistoryTableBodyRow extends Component {
                         type={placeholder}
                         onChange={onTableBodyChange}
                         rowindex={rowindex}
-                        value={values[name]["fields"][rowindex][placeholder]}
+                        value={values[name]['fields'][rowindex][placeholder]}
                         className='table-row-text'
                     />
                 );
@@ -169,21 +172,21 @@ export class SocialHistoryTableBodyRow extends Component {
 
         const tableRows = tableBodyPlaceholders.map((placeholder, index) => {
             return (
-                <Table.Cell 
+                <Table.Cell
                     key={index}
-                    collapsing={placeholder === 'delete' ? true : false} 
-                    style={placeholder === 'delete' ? { borderTop: 0, borderLeft: 0 } : null}
+                    collapsing={placeholder === 'delete' ? true : false}
+                    style={
+                        placeholder === 'delete'
+                            ? { borderTop: 0, borderLeft: 0 }
+                            : null
+                    }
                     onClick={this.handleCellClick}
                 >
                     {this.getCell(placeholder)}
                 </Table.Cell>
-            )
+            );
         });
 
-        return (
-            <Table.Row>
-                {tableRows}
-            </Table.Row>
-        );
+        return <Table.Row>{tableRows}</Table.Row>;
     }
 }

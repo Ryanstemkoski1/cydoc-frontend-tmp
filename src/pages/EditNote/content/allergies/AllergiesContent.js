@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Accordion, Form, Input, Table } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton.js';
 import { allergies } from 'constants/States';
@@ -7,46 +7,51 @@ import { AllergiesTableBodyRow } from './AllergiesTableBodyRow';
 
 //Component that manages the layout for the allergies page
 export default class AllergiesContent extends Component {
-    static contextType = HPIContext
+    static contextType = HPIContext;
 
     constructor(props, context) {
-        super(props, context)
+        super(props, context);
         this.state = {
-            active: new Set()
-        }
-        this.addRow = this.addRow.bind(this)
-        this.handleTableBodyChange = this.handleTableBodyChange.bind(this)
+            active: new Set(),
+        };
+        this.addRow = this.addRow.bind(this);
+        this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
-        this.makeHeader = this.makeHeader.bind(this)
+        this.makeHeader = this.makeHeader.bind(this);
     }
 
     addRow() {
-        let values = this.context["Allergies"];
+        let values = this.context['Allergies'];
         const last_index = values.length.toString();
-        values[last_index] = { "Inciting Agent": "", "Reaction": "", "Comments": "" }
-        this.context.onContextChange("Allergies", values);
+        values[last_index] = {
+            'Inciting Agent': '',
+            Reaction: '',
+            Comments: '',
+        };
+        this.context.onContextChange('Allergies', values);
     }
 
     //modify the current values in the table to reflect changes
     // and call the handler prop
-    handleTableBodyChange(_event, data) { 
+    handleTableBodyChange(_event, data) {
         const { active } = this.state;
-        if(!active.has(data.rowindex)) {
+        if (!active.has(data.rowindex)) {
             active.add(data.rowindex);
-            this.setState({active});
+            this.setState({ active });
         }
 
-        let newState = this.context["Allergies"];
+        let newState = this.context['Allergies'];
         newState[data.rowindex][data.type] = data.value;
-        this.context.onContextChange("Allergies", newState);
+        this.context.onContextChange('Allergies', newState);
     }
 
     //Method to generate the table header row
     makeHeader() {
-        return(
+        return (
             <Table.Row>
-                {allergies.fields.map((header, index) =>
-                    <Table.HeaderCell key={index}>{header}</Table.HeaderCell>)}
+                {allergies.fields.map((header, index) => (
+                    <Table.HeaderCell key={index}>{header}</Table.HeaderCell>
+                ))}
             </Table.Row>
         );
     }
@@ -59,11 +64,11 @@ export default class AllergiesContent extends Component {
             active.add(idx);
         }
         this.setState({ active });
-    }
+    };
 
     //method to generate an collection of rows
     makeTableBodyRows(nums, values) {
-        return nums.map((rowindex, index) => 
+        return nums.map((rowindex, index) => (
             <AllergiesTableBodyRow
                 key={index}
                 rowindex={this.props.isPreview ? rowindex : parseInt(rowindex)}
@@ -72,7 +77,7 @@ export default class AllergiesContent extends Component {
                 values={values}
                 isPreview={this.props.isPreview}
             />
-        )
+        ));
     }
 
     makeAccordionPanels(nums, values) {
@@ -88,7 +93,7 @@ export default class AllergiesContent extends Component {
                         type='Inciting Agent'
                         onChange={this.handleTableBodyChange}
                         rowindex={i}
-                        value={isPreview ? "" : values[i]['Inciting Agent']}
+                        value={isPreview ? '' : values[i]['Inciting Agent']}
                     />
                     {' causes '}
                     <Input
@@ -97,7 +102,7 @@ export default class AllergiesContent extends Component {
                         type='Reaction'
                         onChange={this.handleTableBodyChange}
                         rowindex={i}
-                        value={isPreview ? "" : values[i]['Reaction']}
+                        value={isPreview ? '' : values[i]['Reaction']}
                     />
                 </Form>
             );
@@ -109,14 +114,18 @@ export default class AllergiesContent extends Component {
                     rowindex={i}
                     disabled={isPreview}
                     type='Comments'
-                    label={{basic: true, content: 'Comments: ', className: 'medications-content-input-label'}}
+                    label={{
+                        basic: true,
+                        content: 'Comments: ',
+                        className: 'medications-content-input-label',
+                    }}
                     placeholder='Comments'
                     onChange={this.handleTableBodyChange}
-                    value={isPreview ? "" : values[i]['Comments']}
+                    value={isPreview ? '' : values[i]['Comments']}
                     className='content-input'
                 />
-            )
-            
+            );
+
             panels.push({
                 key: i,
                 active: this.state.active.has(i),
@@ -124,17 +133,13 @@ export default class AllergiesContent extends Component {
                     content: titleContent,
                 },
                 content: {
-                    content: (
-                        <Fragment>
-                            {contentInputs}
-                        </Fragment>
-                    ),
+                    content: <>{contentInputs}</>,
                 },
                 onTitleClick: (event) => {
-                    if (event.target.type != "text") {
-                        this.toggleAccordion(i)
+                    if (event.target.type !== 'text') {
+                        this.toggleAccordion(i);
                     }
-                }
+                },
             });
         }
 
@@ -142,8 +147,8 @@ export default class AllergiesContent extends Component {
     }
 
     render() {
-       const values = this.props.values || this.context["Allergies"]
-        const nums = this.props.isPreview ? values : Object.keys(values)
+        const values = this.props.values || this.context['Allergies'];
+        const nums = this.props.isPreview ? values : Object.keys(values);
 
         const content = this.props.mobile ? (
             <Accordion
@@ -153,26 +158,20 @@ export default class AllergiesContent extends Component {
                 styled
             />
         ) : (
-            <Table
-                celled
-                className='table-display'
-            >
+            <Table celled className='table-display'>
                 <Table.Header content={this.makeHeader()} />
+                {/* eslint-disable-next-line react/no-children-prop */}
                 <Table.Body children={this.makeTableBodyRows(nums, values)} />
             </Table>
-        )
+        );
 
         return (
-            <Fragment>
+            <>
                 {content}
-                {!this.props.isPreview
-                    &&
-                    <AddRowButton
-                        onClick={this.addRow}
-                        name='allergy'
-                    />
-                }
-            </Fragment>
-        )
+                {!this.props.isPreview && (
+                    <AddRowButton onClick={this.addRow} name='allergy' />
+                )}
+            </>
+        );
     }
 }

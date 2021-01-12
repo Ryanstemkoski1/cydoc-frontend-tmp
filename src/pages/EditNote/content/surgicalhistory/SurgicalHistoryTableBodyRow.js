@@ -8,41 +8,46 @@ export class SurgicalHistoryTableBodyRow extends Component {
         this.state = {
             invalidYear: this.props.isInvalidYear,
         };
-        this.onYearChange = this.onYearChange.bind(this)
+        this.onYearChange = this.onYearChange.bind(this);
     }
 
     onYearChange = (e) => {
         const startYear = +e.target.value;
-        this.setState({ invalidYear: e.target.value != '' && (isNaN(startYear) || startYear < 1900 || startYear > this.props.currentYear) });
-    }
+        this.setState({
+            invalidYear:
+                e.target.value !== '' &&
+                (isNaN(startYear) ||
+                    startYear < 1900 ||
+                    startYear > this.props.currentYear),
+        });
+    };
 
     handleCellClick = (e) => {
-        const innerInput = e.target.lastElementChild
+        const innerInput = e.target.lastElementChild;
         // Handles clicks outside of the "clickable area" (padding) of the input/textarea component within a cell
-        if (innerInput != null) {
-            if (innerInput.type == "textarea") {
+        if (innerInput !== null) {
+            if (innerInput.type === 'textarea') {
                 innerInput.focus();
-            }
-            else {
+            } else {
                 // for Inputs/dropdowns
                 innerInput.click();
             }
         }
-    }
+    };
 
     getCell(field) {
         const {
-            values, 
-            rowindex, 
-            onTableBodyChange, 
+            values,
+            rowindex,
+            onTableBodyChange,
             onAddItem,
             proceduresOptions,
             isPreview,
         } = this.props;
         if (isPreview) {
             return (
-                <div className="content-preview">
-                    {field === "Procedure" ? rowindex : ""}
+                <div className='content-preview'>
+                    {field === 'Procedure' ? rowindex : ''}
                 </div>
             );
         }
@@ -87,11 +92,13 @@ export class SurgicalHistoryTableBodyRow extends Component {
                             value={values[rowindex]['Year']}
                             className='table-row-text'
                         />
-                        { this.state.invalidYear && (
-                            <p className='year-validation-error'>Please enter a valid year between 1900 and 2020</p>
+                        {this.state.invalidYear && (
+                            <p className='year-validation-error'>
+                                Please enter a valid year between 1900 and 2020
+                            </p>
                         )}
                     </div>
-                )
+                );
                 break;
             }
             // Comments
@@ -119,19 +126,12 @@ export class SurgicalHistoryTableBodyRow extends Component {
 
         const tableRows = fields.map((field, index) => {
             return (
-                <Table.Cell 
-                    key={index}
-                    onClick={this.handleCellClick}
-                >
+                <Table.Cell key={index} onClick={this.handleCellClick}>
                     {this.getCell(field)}
                 </Table.Cell>
-            )
+            );
         });
 
-        return (
-            <Table.Row>
-                {tableRows}
-            </Table.Row>
-        );
+        return <Table.Row>{tableRows}</Table.Row>;
     }
 }

@@ -20,27 +20,32 @@ export class CreateTemplateStore extends Component {
             [this.rootId]: [],
         },
         nodes: {
-            [this.rootId]: {id: this.rootId, responseType: 'YES-NO', text: 'nan'},
+            [this.rootId]: {
+                id: this.rootId,
+                responseType: 'YES-NO',
+                text: 'nan',
+            },
         },
         edges: {},
-    }
+    };
 
-    onContextChange = (attribute, value) => { 
+    onContextChange = (attribute, value) => {
         this.setState({
-            [attribute]: value
+            [attribute]: value,
         });
-    }
+    };
     render() {
-        return(
+        return (
             <CreateTemplateContext.Provider
                 value={{
                     state: this.state,
                     doctorID: this.context?.user?._id,
-                    onContextChange: this.onContextChange}}
+                    onContextChange: this.onContextChange,
+                }}
             >
                 {this.props.children}
             </CreateTemplateContext.Provider>
-        )
+        );
     }
 }
 

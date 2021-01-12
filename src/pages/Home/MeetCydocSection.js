@@ -19,9 +19,7 @@ export const MeetCydocSection = (props) => {
                 content={homeContent.meetCydoc.subheader}
                 className='home-sub-header'
             />
-            <p>
-                {homeContent.meetCydoc.description}
-            </p>
+            <p>{homeContent.meetCydoc.description}</p>
             <Button
                 primary
                 circular
@@ -60,9 +58,7 @@ export const MeetCydocSection = (props) => {
                         content={homeContent.meetCydoc.subheader}
                         className='home-sub-header'
                     />
-                    <p>
-                        {homeContent.meetCydoc.description}
-                    </p>
+                    <p>{homeContent.meetCydoc.description}</p>
                     <Button
                         primary
                         circular

@@ -1,40 +1,44 @@
-import React, {Component} from "react"
-import "./ButtonItem"
+import React, { Component } from 'react';
+import './ButtonItem';
 import HPIContext from 'contexts/HPIContext.js';
 import '../../HPI.css';
-import diseaseCodes from '../../../../../../../constants/diseaseCodes'
+import diseaseCodes from '../../../../../../../constants/diseaseCodes';
 
 class PositiveDiseases extends Component {
     // If you wrap <div> around the button, you can get the buttons to line up under each other.
-    static contextType = HPIContext
+    static contextType = HPIContext;
     constructor(props, context) {
-        super(props, context)
-        this.handleClick = this.handleClick.bind(this)
+        super(props, context);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick() {
-        const plan = {...this.context['plan']}
-        let values = this.context['positivediseases']
-        let diseaseCode = diseaseCodes[this.props.name]
+        const plan = { ...this.context['plan'] };
+        let values = this.context['positivediseases'];
+        let diseaseCode = diseaseCodes[this.props.name];
         if (values.indexOf(diseaseCode) > -1) {
-            values.splice(values.indexOf(diseaseCode), 1)
-            plan['conditions'].splice(plan['conditions'].findIndex(disease => disease.name === diseaseCode), 1)
+            values.splice(values.indexOf(diseaseCode), 1);
+            plan['conditions'].splice(
+                plan['conditions'].findIndex(
+                    (disease) => disease.name === diseaseCode
+                ),
+                1
+            );
         }
-        this.context.onContextChange("positivediseases", values)
-        this.context.onContextChange("plan", plan)
-
+        this.context.onContextChange('positivediseases', values);
+        this.context.onContextChange('plan', plan);
     }
 
     render() {
         return (
             <button
-                className="ui compact violet button positive-disease"
+                className='ui compact violet button positive-disease'
                 onClick={this.handleClick}
             >
                 {this.props.name}
             </button>
-        )
+        );
     }
 }
 
-export default PositiveDiseases
+export default PositiveDiseases;

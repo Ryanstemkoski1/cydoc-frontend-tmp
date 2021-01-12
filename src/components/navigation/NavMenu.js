@@ -1,20 +1,36 @@
-import React, { Component, Fragment } from 'react';
-import {Dropdown, Menu, Image, Icon, Button, Input, Modal, Form, Segment, Header} from 'semantic-ui-react';
-import { Link } from 'react-router-dom'
+import React, { Component } from 'react';
+import {
+    Dropdown,
+    Menu,
+    Image,
+    Icon,
+    Button,
+    Input,
+    Modal,
+    Form,
+    Header,
+} from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { DEFAULT_NAV_MENU_MOBILE_BP, LOGGEDIN_NAV_MENU_MOBILE_BP } from "constants/breakpoints.js";
+import {
+    DEFAULT_NAV_MENU_MOBILE_BP,
+    LOGGEDIN_NAV_MENU_MOBILE_BP,
+} from 'constants/breakpoints.js';
 import HPIContext from 'contexts/HPIContext.js';
-import AuthContext from "../../contexts/AuthContext";
+import AuthContext from '../../contexts/AuthContext';
 import Logo from '../../assets/cydoc-logo.svg';
 import './NavMenu.css';
 import states from 'constants/stateAbbreviations.json';
 import DemographicsForm from '../tools/DemographicsForm';
 
-const stateOptions = states.map((state) => ({key: state, value: state, text: state}));
+const stateOptions = states.map((state) => ({
+    key: state,
+    value: state,
+    text: state,
+}));
 
 // Navigation Bar component that will go at the top of most pages
 class ConnectedNavMenu extends Component {
-
     static contextType = AuthContext;
 
     constructor(props) {
@@ -28,16 +44,17 @@ class ConnectedNavMenu extends Component {
 
     componentDidMount() {
         this.updateDimensions();
-        window.addEventListener("resize", this.updateDimensions);
+        window.addEventListener('resize', this.updateDimensions);
     }
 
     componentWillUnmount() {
-        window.removeEventListener("resize", this.updateDimensions);
+        window.removeEventListener('resize', this.updateDimensions);
     }
 
     updateDimensions() {
-        let windowWidth = typeof window !== "undefined" ? window.innerWidth : 0;
-        let windowHeight = typeof window !== "undefined" ? window.innerHeight : 0;
+        let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
+        let windowHeight =
+            typeof window !== 'undefined' ? window.innerHeight : 0;
 
         this.setState({ windowWidth, windowHeight });
     }
@@ -46,52 +63,153 @@ class ConnectedNavMenu extends Component {
         const { windowWidth } = this.state;
         const collapseDefaultNav = windowWidth < DEFAULT_NAV_MENU_MOBILE_BP;
         const collapseLoggedInNav = windowWidth < LOGGEDIN_NAV_MENU_MOBILE_BP;
+
+        // Menu items when not logged in
+        const defaultMenuItems = collapseDefaultNav ? (
+            <Menu.Item>
+                <Dropdown icon='big bars' className='collapsed-dropdown'>
+                    <Dropdown.Menu>
+                        <Dropdown.Item
+                            as={Link}
+                            name='login'
+                            to='/login'
+                            text='Login'
+                        />
+                        <Dropdown.Item
+                            as={Link}
+                            name='register'
+                            to='/register'
+                            text='Sign Up'
+                        />
+                    </Dropdown.Menu>
+                </Dropdown>
+            </Menu.Item>
+        ) : (
+            <Menu.Item>
+                <Button.Group>
+                    <Button
+                        as={Link}
+                        basic
+                        color='teal'
+                        name='login'
+                        to='/login'
+                        content='Login'
+                    />
+                    <Button
+                        as={Link}
+                        color='teal'
+                        name='register'
+                        to='/register'
+                        content='Sign Up'
+                    />
+                </Button.Group>
+            </Menu.Item>
+        );
+
+        // Menu items when logged in
+        const loggedInMenuItems = collapseLoggedInNav ? (
+            <Menu.Item>
+                <Button.Group>
+                    <Button
+                        as={Link}
+                        name='myNotes'
+                        to='/dashboard'
+                        text='My Notes'
+                    >
+                        <Icon
+                            name='sticky note outline'
+                            className='collapsed-icon'
+                        />
+                    </Button>
+                    <Button
+                        name='logout'
+                        href='/'
+                        text='Logout'
+                        onClick={this.context.logOut}
+                        className='logout-button'
+                    >
+                        <Icon
+                            name='sign out alternate'
+                            className='collapsed-icon'
+                        />
+                    </Button>
+                </Button.Group>
+            </Menu.Item>
+        ) : (
+            <>
+                <Menu.Item>
+                    <Button.Group>
+                        <Button
+                            as={Link}
+                            name='myNotes'
+                            to='/dashboard'
+                            text='My Notes'
+                            content='My Notes'
+                        />
+                        <Button
+                            name='logout'
+                            href='/'
+                            text='Logout'
+                            onClick={this.context.logOut}
+                            className='logout-button'
+                            content='Log Out'
+                        />
+                    </Button.Group>
+                </Menu.Item>
+                <Menu.Item
+                    name='welcome'
+                    style={{ color: '#6DA3B1', fontWeight: 'normal' }}
+                >
+                    <Icon name='user outline' />
+                    {this.context.user && this.context.user.firstName}
+                </Menu.Item>
+            </>
+        );
+
         return (
             <div>
-                <Menu className={this.props.className + " nav-menu"} attached={this.props.attached}>
+                <Menu
+                    className={this.props.className + ' nav-menu'}
+                    attached={this.props.attached}
+                >
                     <Menu.Item as={Link} to='/' className='logo-menu'>
                         <Image src={Logo} className='logo-circle' />
-                        {!this.props.displayNoteName &&
+                        {!this.props.displayNoteName && (
                             <h1 className='logo-text'>Cydoc</h1>
-                        } 
+                        )}
                     </Menu.Item>
 
                     {/* When parent is EditNote, then display the note name item */}
                     {this.props.displayNoteName && <NoteNameMenuItem />}
 
                     {/* Navigation links */}
-                    <Menu.Menu position="right">
+                    <Menu.Menu position='right'>
                         {/* Menu will have different options depending on whether the user is logged in or not */}
-                        {this.context.token ?
-                            <LoggedInMenuItems
-                                handleLogout={this.context.logOut}
-                                name={this.context.user.firstName}
-                                collapseNav={collapseLoggedInNav} />
-                            :
-                            <DefaultMenuItems collapseNav={collapseDefaultNav} />}
+                        {this.context.token
+                            ? loggedInMenuItems
+                            : defaultMenuItems}
                     </Menu.Menu>
                 </Menu>
             </div>
-
         );
     }
+}
+
+ConnectedNavMenu.propTypes = {
+    className: PropTypes.string,
+    // optional prop for stacking another menu above/below
+    attached: PropTypes.string,
+    // optional prop for whether to display or hide hte note name menu item
+    displayNoteName: PropTypes.bool,
 };
 
 const NavMenu = ConnectedNavMenu;
 export default NavMenu;
 
-NavMenu.propTypes = {
-    // optional prop for stacking another menu above/below
-    attached: PropTypes.string,
-    // optional prop for whether to display or hide hte note name menu item
-    displayNoteName: PropTypes.bool
-};
-
 // class component that displays and changes note name
 // shown only if parent is EditNote.
 class NoteNameMenuItem extends Component {
-
-    static contextType = HPIContext
+    static contextType = HPIContext;
     constructor(props) {
         super(props);
         this.state = {
@@ -104,7 +222,7 @@ class NoteNameMenuItem extends Component {
                 street: this.street,
                 city: this.city,
                 state: this.state,
-                zip: this.zip
+                zip: this.zip,
             },
             primaryEmail: this.primaryEmail,
             secondaryEmail: this.secondaryEmail,
@@ -118,7 +236,7 @@ class NoteNameMenuItem extends Component {
             invalidPhone: false,
             invalidDate: false,
             primaryMobile: false,
-            secondaryMobile: false
+            secondaryMobile: false,
         };
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -135,45 +253,57 @@ class NoteNameMenuItem extends Component {
     }
 
     handleInputChange = (event) => {
-        this.setState({textInput: event.target.value})
-        this.context.onContextChange("title", event.target.value)
-    }
+        this.setState({ textInput: event.target.value });
+        this.context.onContextChange('title', event.target.value);
+    };
 
     closeModal() {
-        this.setState({open: false})
+        this.setState({ open: false });
     }
 
     openModal() {
-        this.setState({open: true})
+        this.setState({ open: true });
     }
 
     savePatientInfo() {
-        const { invalidDate, invalidEmail, invalidFirstName, invalidLastName, invalidPhone } = this.state
-        if (invalidFirstName || invalidLastName || invalidEmail || invalidPhone || invalidDate) {
-            alert('Please make sure all the required fields are completed')
+        const {
+            invalidDate,
+            invalidEmail,
+            invalidFirstName,
+            invalidLastName,
+            invalidPhone,
+        } = this.state;
+        if (
+            invalidFirstName ||
+            invalidLastName ||
+            invalidEmail ||
+            invalidPhone ||
+            invalidDate
+        ) {
+            alert('Please make sure all the required fields are completed');
         } else {
             alert('Patient information is saved!');
             this.getAge(this.state.dob);
-            this.closeModal();   
+            this.closeModal();
         }
-    };
+    }
 
     // validations
     onFirstNameChange = (e) => {
         if (!e.target.value) {
-            this.setState({ invalidFirstName: true})
+            this.setState({ invalidFirstName: true });
         } else {
-            this.setState({ invalidFirstName: false})
+            this.setState({ invalidFirstName: false });
         }
-    }
+    };
 
     onLastNameChange = (e) => {
         if (!e.target.value) {
-            this.setState({ invalidLastName: true})
+            this.setState({ invalidLastName: true });
         } else {
-            this.setState({ invalidLastName: false})
+            this.setState({ invalidLastName: false });
         }
-    }
+    };
 
     onPhoneChange = (e) => {
         // regex for digits with dashes
@@ -182,34 +312,36 @@ class NoteNameMenuItem extends Component {
         // regex for digits only
         const digits = /^[0-9]{10}$/;
 
-        if (e.target.value || dashes.test(e.target.value) || digits.test(e.target.value)) {
-            this.setState({ invalidPhone: false})
+        if (
+            e.target.value ||
+            dashes.test(e.target.value) ||
+            digits.test(e.target.value)
+        ) {
+            this.setState({ invalidPhone: false });
         } else {
-            this.setState({ invalidPhone: true})
+            this.setState({ invalidPhone: true });
         }
-
-    }
+    };
 
     onEmailChange = (e) => {
         const re = /^[0-9?A-z0-9?]+(\.)?[0-9?A-z0-9?]+@[A-z]+\.[A-z]{3}.?[A-z]{0,3}$/g;
         if (!e.target.value || !re.test(e.target.value)) {
-            this.setState({ invalidEmail: true})
+            this.setState({ invalidEmail: true });
         } else {
-            this.setState({ invalidEmail: false})
+            this.setState({ invalidEmail: false });
         }
-    }
+    };
 
     onDateChange = (e) => {
         const re = /^((0[1-9]|10|11|12)(-|\/)(([1-9])|(0[1-9])|([12])([0-9])|(3[01]))(-|\/)((19)([2-9])(\d{1})|(20)([012])(\d{1})|([8901])(\d{1})))$/gm;
         if (!e.target.value || !re.test(e.target.value)) {
-            this.setState({ invalidDate: true})
+            this.setState({ invalidDate: true });
         } else {
-            this.setState({ invalidDate: false})
+            this.setState({ invalidDate: false });
         }
-    }
+    };
 
-    setChange = (e, {id, value}) => {
-
+    setChange = (e, { id, value }) => {
         let newState = this.state;
         newState[id] = value;
         this.setState(newState);
@@ -227,140 +359,186 @@ class NoteNameMenuItem extends Component {
             newState.address[id] = value;
             this.setState(newState);
         }
-    }
+    };
 
-    setPrimaryMobile = (e, {value}) => {
+    setPrimaryMobile = (e, { value }) => {
         const digits = /^[0-9]{10}$/;
         if (value.match(digits)) {
-            let number = value.slice(0,3) + "-" + value.slice(3,6) + "-" + value.slice(6);
-            this.setState({ primaryPhone: number})
+            let number =
+                value.slice(0, 3) +
+                '-' +
+                value.slice(3, 6) +
+                '-' +
+                value.slice(6);
+            this.setState({ primaryPhone: number });
         } else {
-            this.setState({ primaryPhone: value})
+            this.setState({ primaryPhone: value });
         }
-    }
+    };
 
-    setSecondaryMobile = (e, {value}) => {
+    setSecondaryMobile = (_e, { value }) => {
         const digits = /^[0-9]{10}$/;
         if (value.match(digits)) {
-            let number = value.slice(0,3) + "-" + value.slice(3,6) + "-" + value.slice(6);
-            this.setState({ secondaryPhone: number})
+            let number =
+                value.slice(0, 3) +
+                '-' +
+                value.slice(3, 6) +
+                '-' +
+                value.slice(6);
+            this.setState({ secondaryPhone: number });
         } else {
-            this.setState({ secondaryPhone: value})
+            this.setState({ secondaryPhone: value });
         }
-    }
+    };
 
     getAge(dateString) {
-        var now = new Date();      
-        var yearNow = now.getYear();
-        var monthNow = now.getMonth();
-      
-        var dob = new Date(dateString.substring(6,10),
-                           dateString.substring(0,2)-1,                   
-                           dateString.substring(3,5)                  
-                           );
-      
-        var yearDob = dob.getYear();
-        var monthDob = dob.getMonth();
-        var age = {};
-            
+        let now = new Date();
+        let yearNow = now.getYear();
+        let monthNow = now.getMonth();
+
+        let dob = new Date(
+            dateString.substring(6, 10),
+            dateString.substring(0, 2) - 1,
+            dateString.substring(3, 5)
+        );
+
+        let yearDob = dob.getYear();
+        let monthDob = dob.getMonth();
+        let age = {};
+
         let yearAge = yearNow - yearDob;
-      
-        if (monthNow >= monthDob)
-          var monthAge = monthNow - monthDob;
-        else {
-          yearAge--;
-          var monthAge = 12 + monthNow -monthDob;
+        let monthAge;
+
+        if (monthNow >= monthDob) {
+            monthAge = monthNow - monthDob;
+        } else {
+            yearAge--;
+            monthAge = 12 + monthNow - monthDob;
         }
-      
+
         age = {
             years: yearAge,
             months: monthAge,
-            };
-      
-        this.setState({age: age.years});
-        this.setState({months: age.months});
-      }
-      
+        };
+
+        this.setState({ age: age.years });
+        this.setState({ months: age.months });
+    }
+
     handleMobile = (e) => {
         let mobile = e.target.name;
         if (mobile === 'primaryMobile') {
             if (!this.state.primaryMobile) {
-                this.setState({ primaryMobile: true})
+                this.setState({ primaryMobile: true });
             } else {
-                this.setState({ primaryMobile: false})
+                this.setState({ primaryMobile: false });
             }
         }
 
         if (mobile === 'secondaryMobile') {
             if (!this.state.secondaryMobile) {
-                this.setState({ secondaryMobile: true})
+                this.setState({ secondaryMobile: true });
             } else {
-                this.setState({ secondaryMobile: false})
+                this.setState({ secondaryMobile: false });
             }
         }
-    }
+    };
 
-    render () {
-        const { open } = this.state
+    render() {
+        const { open } = this.state;
         return (
-            <Menu.Item className="note-name-menu-item">
+            <Menu.Item className='note-name-menu-item'>
                 <HPIContext.Consumer>
-                    {value =>
+                    {() => (
                         <>
                             <Input
                                 className='note-title'
-                                size="huge"
+                                size='huge'
                                 transparent
-                                placeholder="Untitled Note"
+                                placeholder='Untitled Note'
                                 onChange={this.handleInputChange}
-                                onFocus={()=>{
-                                    if (this.context.title === "Untitled Note") {
-                                        this.context.onContextChange("title", "")
+                                onFocus={() => {
+                                    if (
+                                        this.context.title === 'Untitled Note'
+                                    ) {
+                                        this.context.onContextChange(
+                                            'title',
+                                            ''
+                                        );
                                     }
                                 }}
-                                onBlur={()=>{
-                                    this.setState({isTitleFocused: false})
+                                onBlur={() => {
+                                    this.setState({ isTitleFocused: false });
                                     if (this.context.title === '') {
-                                        this.context.onContextChange("title", "Untitled Note")
+                                        this.context.onContextChange(
+                                            'title',
+                                            'Untitled Note'
+                                        );
                                     }
                                 }}
                                 value={this.context.title}
                             />
-                            <Button mini onClick={this.context.saveNote} className="save-button">
+                            <Button
+                                size='mini'
+                                onClick={this.context.saveNote}
+                                className='save-button'
+                            >
                                 Save
                             </Button>
                         </>
-                    }
-                    </HPIContext.Consumer>
-                    <div className='patient-info'> 
-                    {this.state.age >= 1 && this.state.age < 11 ? 
-                        <h4>Patient: {this.state.firstName} {this.state.lastName}, {this.state.age} years and {this.state.months} months old</h4>
-                        : ""
-                    }
-                    {this.state.age >= 11 ?
-                        <h4>Patient: {this.state.firstName} {this.state.lastName}, {this.state.age} years old</h4>
-                        : ""
-                    }
-                    {this.state.age < 1 ?
-                        <h4>Patient: {this.state.firstName} {this.state.lastName}, {this.state.months} months old</h4>
-                        : ""
-                    }
-                    
-                    </div>
-                    <Modal
-                        className='patient-modal'
-                        onClose={this.closeModal}
-                        onOpen={this.openModal}
-                        open={open}
-                        size='tiny'
-                        dimmer='inverted'
-                        trigger={<Button className='patient-modal-button' tiny basic>Add/Edit Patient Info</Button>}
+                    )}
+                </HPIContext.Consumer>
+                <div className='patient-info'>
+                    {this.state.age >= 1 && this.state.age < 11 ? (
+                        <h4>
+                            Patient: {this.state.firstName}{' '}
+                            {this.state.lastName}, {this.state.age} years and{' '}
+                            {this.state.months} months old
+                        </h4>
+                    ) : (
+                        ''
+                    )}
+                    {this.state.age >= 11 ? (
+                        <h4>
+                            Patient: {this.state.firstName}{' '}
+                            {this.state.lastName}, {this.state.age} years old
+                        </h4>
+                    ) : (
+                        ''
+                    )}
+                    {this.state.age < 1 ? (
+                        <h4>
+                            Patient: {this.state.firstName}{' '}
+                            {this.state.lastName}, {this.state.months} months
+                            old
+                        </h4>
+                    ) : (
+                        ''
+                    )}
+                </div>
+                <Modal
+                    className='patient-modal'
+                    onClose={this.closeModal}
+                    onOpen={this.openModal}
+                    open={open}
+                    size='tiny'
+                    dimmer='inverted'
+                    trigger={
+                        <Button
+                            className='patient-modal-button'
+                            size='tiny'
+                            basic
                         >
-                        <Header>Patient Information</Header>
-                        <Modal.Content>
+                            Add/Edit Patient Info
+                        </Button>
+                    }
+                >
+                    <Header>Patient Information</Header>
+                    <Modal.Content>
                         <Form>
                             <Form.Group widths='equal' className='error-div'>
-                                <Form.Input required
+                                <Form.Input
+                                    required
                                     label='First Name'
                                     className='patient-info-input'
                                     id='firstName'
@@ -370,9 +548,11 @@ class NoteNameMenuItem extends Component {
                                     value={this.state.firstName}
                                     onBlur={this.onFirstNameChange}
                                     onChange={this.setChange}
-                                />                            
-                                { this.state.invalidFirstName && (
-                                    <p className='error' id='first-name-error'>First name must not be blank</p>
+                                />
+                                {this.state.invalidFirstName && (
+                                    <p className='error' id='first-name-error'>
+                                        First name must not be blank
+                                    </p>
                                 )}
 
                                 <Form.Input
@@ -389,7 +569,8 @@ class NoteNameMenuItem extends Component {
                             </Form.Group>
 
                             <Form.Group widths='equal' className='error-div'>
-                                <Form.Input required
+                                <Form.Input
+                                    required
                                     label='Last Name'
                                     className='patient-info-input'
                                     id='lastName'
@@ -400,22 +581,27 @@ class NoteNameMenuItem extends Component {
                                     onBlur={this.onLastNameChange}
                                     onChange={this.setChange}
                                 />
-                                { this.state.invalidLastName && (
-                                    <p className='error' id='last-name-error'>Last name must not be blank</p>
-                                )} 
+                                {this.state.invalidLastName && (
+                                    <p className='error' id='last-name-error'>
+                                        Last name must not be blank
+                                    </p>
+                                )}
 
-                                <Form.Input required
+                                <Form.Input
+                                    required
                                     label='Date Of Birth'
-                                    className='patient-info-input' 
-                                    id='dob' 
-                                    placeholder='MM/DD/YYYY' 
-                                    type='text' 
+                                    className='patient-info-input'
+                                    id='dob'
+                                    placeholder='MM/DD/YYYY'
+                                    type='text'
                                     value={this.state.dob}
-                                    onBlur={this.onDateChange} 
+                                    onBlur={this.onDateChange}
                                     onChange={this.setChange}
                                 />
-                                { this.state.invalidDate && (
-                                    <p className='error' id='dob-error'>Date must be valid</p>
+                                {this.state.invalidDate && (
+                                    <p className='error' id='dob-error'>
+                                        Date must be valid
+                                    </p>
                                 )}
                             </Form.Group>
 
@@ -429,7 +615,8 @@ class NoteNameMenuItem extends Component {
                             />
 
                             <Form.Group>
-                                <Form.Input width={8}
+                                <Form.Input
+                                    width={8}
                                     label='City'
                                     className='address'
                                     id='city'
@@ -438,7 +625,8 @@ class NoteNameMenuItem extends Component {
                                     onChange={this.setChange}
                                 />
 
-                                <Form.Select width={3}
+                                <Form.Select
+                                    width={3}
                                     fluid
                                     label='State'
                                     className='address'
@@ -448,7 +636,8 @@ class NoteNameMenuItem extends Component {
                                     onChange={this.setChange}
                                 />
 
-                                <Form.Input width={5}
+                                <Form.Input
+                                    width={5}
                                     label='Zip Code'
                                     className='address'
                                     id='zip'
@@ -459,26 +648,29 @@ class NoteNameMenuItem extends Component {
                             </Form.Group>
 
                             <Form.Group widths='equal' className='error-div'>
-                                <Form.Input required
+                                <Form.Input
+                                    required
                                     label='Primary Email'
-                                    className='patient-info-input' 
-                                    id='primaryEmail' 
-                                    placeholder='johndoe@email.com' 
-                                    type='text' 
+                                    className='patient-info-input'
+                                    id='primaryEmail'
+                                    placeholder='johndoe@email.com'
+                                    type='text'
                                     value={this.state.primaryEmail}
                                     onBlur={this.onEmailChange}
                                     onChange={this.setChange}
                                 />
-                                { this.state.invalidEmail && (
-                                    <p className='error' id='email-error'>Email must be valid</p>
+                                {this.state.invalidEmail && (
+                                    <p className='error' id='email-error'>
+                                        Email must be valid
+                                    </p>
                                 )}
 
                                 <Form.Input
                                     label='Secondary Email'
-                                    className='patient-info-input' 
-                                    id='secondaryEmail' 
-                                    placeholder='johndoe@email.com' 
-                                    type='text' 
+                                    className='patient-info-input'
+                                    id='secondaryEmail'
+                                    placeholder='johndoe@email.com'
+                                    type='text'
                                     value={this.state.secondaryEmail}
                                     // onBlur={this.onEmailChange}
                                     onChange={this.setChange}
@@ -486,24 +678,43 @@ class NoteNameMenuItem extends Component {
                             </Form.Group>
 
                             <Form.Group className='error-div phone-div'>
-                                <Form.Input required width={8}
+                                <Form.Input
+                                    required
+                                    width={8}
                                     label='Primary Phone'
-                                    className='patient-info-input' 
-                                    id='primaryPhone' 
-                                    type='text' 
+                                    className='patient-info-input'
+                                    id='primaryPhone'
+                                    type='text'
                                     value={this.state.primaryPhone}
                                     onBlur={this.onPhoneChange}
                                     onChange={this.setPrimaryMobile}
-                                    />
-                                { this.state.invalidPhone && (
-                                    <p className='error' id='phone-error'>Phone number must be valid</p>
+                                />
+                                {this.state.invalidPhone && (
+                                    <p className='error' id='phone-error'>
+                                        Phone number must be valid
+                                    </p>
                                 )}
-                                <Form.Field 
-                                    width={4} 
-                                    className='mobile-checkbox' 
-                                    label='Mobile' 
-                                    control='input' 
-                                    type='checkbox' 
+                                <Form.Field
+                                    width={4}
+                                    className='mobile-checkbox'
+                                    label='Mobile'
+                                    control='input'
+                                    type='checkbox'
+                                    name='primaryMobile'
+                                    checked={this.state.primaryMobile}
+                                    onChange={this.handleMobile}
+                                />
+                                {this.state.invalidPhone && (
+                                    <p className='error' id='phone-error'>
+                                        Phone number must be valid
+                                    </p>
+                                )}
+                                <Form.Field
+                                    width={4}
+                                    className='mobile-checkbox'
+                                    label='Mobile'
+                                    control='input'
+                                    type='checkbox'
                                     name='primaryMobile'
                                     checked={this.state.primaryMobile}
                                     onChange={this.handleMobile}
@@ -511,28 +722,29 @@ class NoteNameMenuItem extends Component {
                             </Form.Group>
 
                             <Form.Group className='phone-div'>
-                                <Form.Input width={8}
+                                <Form.Input
+                                    width={8}
                                     label='Secondary Phone'
-                                    className='patient-info-input' 
-                                    id='secondaryPhone' 
-                                    type='text' 
+                                    className='patient-info-input'
+                                    id='secondaryPhone'
+                                    type='text'
                                     value={this.state.secondaryPhone}
                                     // onBlur={this.onPhoneChange}
                                     onChange={this.setSecondaryMobile}
                                 />
-                                <Form.Field 
-                                    width={4} 
-                                    className='mobile-checkbox' 
-                                    label='Mobile' 
-                                    control='input' 
+                                <Form.Field
+                                    width={4}
+                                    className='mobile-checkbox'
+                                    label='Mobile'
+                                    control='input'
                                     type='checkbox'
                                     name='secondaryMobile'
                                     checked={this.state.secondaryMobile}
                                     onChange={this.handleMobile}
                                 />
                             </Form.Group>
-                            
-                            <DemographicsForm 
+
+                            <DemographicsForm
                                 race={[]}
                                 asian={[]}
                                 otherRace={[]}
@@ -540,81 +752,23 @@ class NoteNameMenuItem extends Component {
                                 otherEthnicity={[]}
                                 gender=''
                             />
-
                         </Form>
-                        </Modal.Content>
-                        <Modal.Actions>                    
-                            <Button color='blue' type='submit' onClick={this.savePatientInfo}>Save</Button>
-                            <Button color='black' onClick={this.closeModal}>Close</Button>
-                        </Modal.Actions>
-                    </Modal>
-            </Menu.Item>
-        )
-    }
-
-}
-
-// Functional component for menu items that show when user is not logged in
-function DefaultMenuItems(props) {
-    return props.collapseNav ?
-        (<Menu.Item>
-                <Dropdown icon="big bars" className='collapsed-dropdown'>
-                    <Dropdown.Menu>
-                        <Dropdown.Item as={Link} name="login" to="/login" text="Login" />
-                        <Dropdown.Item as={Link} name="register" to="/register" text="Sign Up" />
-                    </Dropdown.Menu>
-                </Dropdown>
-            </Menu.Item>
-        ) : (
-            <Menu.Item>
-                <Button.Group>
-                    <Button as={Link} basic color="teal" name="login" to="/login" content="Login" />
-                    <Button as={Link} color="teal" name="register" to="/register" content="Sign Up" />
-                </Button.Group>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button
+                            color='blue'
+                            type='submit'
+                            onClick={this.savePatientInfo}
+                            content='Save'
+                        />
+                        <Button
+                            color='black'
+                            onClick={this.closeModal}
+                            content='Close'
+                        />
+                    </Modal.Actions>
+                </Modal>
             </Menu.Item>
         );
-}
-
-//Functional component for menu items that show when user is logged in
-function LoggedInMenuItems(props) {
-    return (props.collapseNav ? (
-            // (<Menu.Item>
-            //         <Dropdown icon="large bars">
-            //             <Dropdown.Menu>
-            //                 <Dropdown.Item name="welcome" style={{color: '#6DA3B1', fontStyle: 'italic', fontWeight: 'light'}}>
-            //                     {props.name}
-            //                 </Dropdown.Item>
-            //                 <Dropdown.Item as={Link} name="myNotes" to="/dashboard" text="My Notes" />
-            //
-            //                 <Dropdown.Item name="logout" href="/" text="Logout" onClick={props.handleLogout} />
-            //             </Dropdown.Menu>
-            //         </Dropdown>
-            //     </Menu.Item>
-            <>
-                <Menu.Item>
-
-                    <Button.Group>
-                        <Button as={Link} name="myNotes" to="/dashboard" text="My Notes" >
-                            <Icon name="sticky note outline" className='collapsed-icon'/>
-                        </Button>
-                        <Button name="logout" href="/" text="Logout" onClick={props.handleLogout} className='logout-button'>
-                            <Icon name="sign out alternate" className='collapsed-icon'/>
-                        </Button>
-                    </Button.Group>
-                </Menu.Item>
-            </>
-        ) : (
-            <>
-                <Menu.Item>
-                    <Button.Group>
-                        <Button as={Link} name="myNotes" to="/dashboard" text="My Notes" >My Notes</Button>
-                        <Button name="logout" href="/" text="Logout" onClick={props.handleLogout} className="logout-button">Log Out</Button>
-                    </Button.Group>
-                </Menu.Item>
-                <Menu.Item name="welcome" style={{color: '#6DA3B1', fontWeight: 'normal'}}>
-                    <Icon name="user outline" /> {props.name}
-                </Menu.Item>
-            </>
-        )
-    );
+    }
 }

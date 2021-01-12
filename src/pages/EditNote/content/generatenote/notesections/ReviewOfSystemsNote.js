@@ -5,10 +5,10 @@ class ReviewOfSystemsNote extends React.Component {
         const review = this.props.reviewOfSystems;
 
         let components = [];
-        for (var key in review) {
+        for (let key in review) {
             let positives = [];
             let negatives = [];
-            for (var question in review[key]) {
+            for (let question in review[key]) {
                 if (review[key][question] === 'y') {
                     positives.push(question.toLowerCase());
                 } else if (review[key][question] === 'n') {
@@ -17,34 +17,48 @@ class ReviewOfSystemsNote extends React.Component {
             }
             components[key] = {
                 positives: positives,
-                negatives: negatives
-            }
+                negatives: negatives,
+            };
         }
 
         let isEmpty = true;
         for (const component in components) {
-            if (!(components[component].positives.length === 0 && components[component].negatives.length === 0)) {
+            if (
+                !(
+                    components[component].positives.length === 0 &&
+                    components[component].negatives.length === 0
+                )
+            ) {
                 isEmpty = false;
             }
         }
 
         if (isEmpty) {
-            return <div>No review of systems reported.</div>
+            return <div>No review of systems reported.</div>;
         }
-        
+
         return (
             <ul>
-                {Object.keys(components).map(key => (
-                    components[key].positives.length > 0 || components[key].negatives.length > 0 ?
+                {Object.keys(components).map((key) =>
+                    components[key].positives.length > 0 ||
+                    components[key].negatives.length > 0 ? (
                         <li>
                             <b>{key}: </b>
-                            {components[key].positives.length > 0 ? `Positive for ${components[key].positives.join(', ')}. `: null}
-                            {components[key].negatives.length > 0 ? `Negative for ${components[key].negatives.join(', ')}. ` : null}
+                            {components[key].positives.length > 0
+                                ? `Positive for ${components[
+                                      key
+                                  ].positives.join(', ')}. `
+                                : null}
+                            {components[key].negatives.length > 0
+                                ? `Negative for ${components[
+                                      key
+                                  ].negatives.join(', ')}. `
+                                : null}
                         </li>
-                    : null
-                ))}
+                    ) : null
+                )}
             </ul>
-        )
+        );
     }
 }
 

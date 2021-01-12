@@ -11,7 +11,7 @@ you can run `npm start` and the app will build and run.
 
 [Tutorial: How to Use Semantic UI with a Custom Theme](https://jsramblings.com/2018/03/04/how-to-use-semantic-ui-with-a-custom-theme-in-your-CRA-app.html)
 
-You will need to navigate to localhost:3000/home to see the app (or whichever port you are using).
+You will need to navigate to localhost:3000 to see the app (or whichever port you are using).
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -57,6 +57,23 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App Documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React Documentation](https://reactjs.org/).
+
+# Before Submitting a PR
+
+Before committing changes, please run `npm run lint` to lint.
+
+To fix the linting errors automatically, run `npm run lint fix`.
+
+Then, run `npm run lint` again and manually fix any remaining errors.
+
+Before submitting a PR, `npm run lint` should output the following:
+
+- 😄  No linting errors found for src/index.js
+- 😄  No linting errors found for src/contexts
+- 😄  No linting errors found for tests
+- 😄  No linting errors found for src/components
+- 😄  No linting errors found for src/constants
+- 😄  No linting errors found for src/pages
 
 # Context API Guide
 
