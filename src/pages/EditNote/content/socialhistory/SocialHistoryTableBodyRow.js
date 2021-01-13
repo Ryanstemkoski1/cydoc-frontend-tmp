@@ -126,7 +126,7 @@ export class SocialHistoryTableBodyRow extends Component {
                 cell = (
                     <Input
                         fluid
-                        type='numberPerWeek'
+                        type='number'
                         className='content-input-computer content-dropdown'
                         onChange={onTableBodyChange}
                         placeholder={placeholder}
@@ -175,11 +175,7 @@ export class SocialHistoryTableBodyRow extends Component {
                 <Table.Cell
                     key={index}
                     collapsing={placeholder === 'delete' ? true : false}
-                    style={
-                        placeholder === 'delete'
-                            ? { borderTop: 0, borderLeft: 0 }
-                            : null
-                    }
+                    style={placeholder === 'delete' ? { borderLeft: 0 } : null}
                     onClick={this.handleCellClick}
                 >
                     {this.getCell(placeholder)}

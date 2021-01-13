@@ -196,36 +196,28 @@ class PhysicalExamNote extends React.Component {
                             }
                         }
                         if (isNormal) {
-                            if (physical[key][question].active === true) {
+                            if (physical[key][question].center) {
                                 if (
-                                    physical[key][question].right === true &&
-                                    physical[key][question].left === true
+                                    physical[key][question].right &&
+                                    physical[key][question].left
                                 ) {
                                     active.push(question + ' (bilateral)');
-                                } else if (
-                                    physical[key][question].left === true
-                                ) {
+                                } else if (physical[key][question].left) {
                                     active.push(question + ' (left)');
-                                } else if (
-                                    physical[key][question].right === true
-                                ) {
+                                } else if (physical[key][question].right) {
                                     active.push(question + ' (right)');
                                 }
                             }
                         } else {
-                            if (physical[key][question].active === true) {
+                            if (physical[key][question].center) {
                                 if (
-                                    physical[key][question].right === true &&
-                                    physical[key][question].left === true
+                                    physical[key][question].right &&
+                                    physical[key][question].left
                                 ) {
                                     active.push('bilateral ' + question);
-                                } else if (
-                                    physical[key][question].left === true
-                                ) {
+                                } else if (physical[key][question].left) {
                                     active.push('left ' + question);
-                                } else if (
-                                    physical[key][question].right === true
-                                ) {
+                                } else if (physical[key][question].right) {
                                     active.push('right ' + question);
                                 }
                             }
