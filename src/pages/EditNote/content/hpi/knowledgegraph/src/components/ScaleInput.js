@@ -19,8 +19,8 @@ class ScaleInput extends React.Component {
     }
 
     handleVal() {
-        const values = this.context['hpi'];
-        values['nodes'][this.props.node]['response'] = this.state.val;
+        const values = this.context.hpi;
+        values[this.props.node].response = this.state.val;
         this.context.onContextChange('hpi', values);
     }
 
@@ -30,8 +30,8 @@ class ScaleInput extends React.Component {
         document.getElementById('scale-value').value = undefined;
         this.setState({ val: undefined });
 
-        const values = this.context['hpi'];
-        values['nodes'][this.props.node]['response'] = undefined;
+        const values = this.context.hpi;
+        values[this.props.node].response = undefined;
         this.context.onContextChange('hpi', values);
     }
 

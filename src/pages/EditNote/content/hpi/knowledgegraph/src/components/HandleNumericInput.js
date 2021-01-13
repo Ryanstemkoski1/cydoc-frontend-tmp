@@ -6,19 +6,18 @@ class HandleNumericInput extends React.Component {
     static contextType = HPIContext;
     constructor(props, context) {
         super(props, context);
-        this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange = (event) => {
-        const values = this.context['hpi'];
-        values['nodes'][this.props.node]['response'] = event;
+    handleChange = (value) => {
+        const values = this.context.hpi;
+        values[this.props.node].response = value;
         this.context.onContextChange('hpi', values);
     };
 
     render() {
-        const values = this.context['hpi']['nodes'][this.props.node];
-        let value = values['response'];
-        let question = values['text'];
+        const values = this.context.hpi[this.props.node];
+        let value = values.response;
+        let question = values.text;
         return (
             <NumericInput
                 key={question}

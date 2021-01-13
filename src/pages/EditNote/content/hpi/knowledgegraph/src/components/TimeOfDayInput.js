@@ -10,15 +10,13 @@ class TimeOfDayInput extends React.Component {
     }
 
     handleChange = (event) => {
-        const values = this.context['hpi'];
-        values['nodes'][this.props.node]['response'][0] = event;
+        const values = this.context.hpi;
+        values[this.props.node].response[0] = event;
         this.context.onContextChange('hpi', values);
     };
 
     render() {
-        const value = this.context['hpi']['nodes'][this.props.node][
-            'response'
-        ][0];
+        const value = this.context.hpi[this.props.node].response[0];
         return (
             <TimePicker
                 key={this.props.node}

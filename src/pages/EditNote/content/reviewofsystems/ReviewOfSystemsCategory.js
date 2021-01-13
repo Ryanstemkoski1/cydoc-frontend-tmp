@@ -17,15 +17,17 @@ export default class ReviewOfSystemsCategory extends Component {
     }
 
     handleChange = (option, value) => {
-        const values = this.context["Review of Systems"]
-        if (values[this.category][option] === value){
-          values[this.category][option] = ""
+        const values = this.context['Review of Systems'];
+        if (values[this.category][option] === value) {
+            values[this.category][option] = '';
+        } else if (
+            values[this.category][option] === '' ||
+            values[this.category][option] !== value
+        ) {
+            values[this.category][option] = value;
         }
-        else if (values[this.category][option] === "" || values[this.category][option] !== value){
-            values[this.category][option] = value
-        }
-        this.context.onContextChange("Review of Systems", values)
-    }
+        this.context.onContextChange('Review of Systems', values);
+    };
 
     render() {
         return (

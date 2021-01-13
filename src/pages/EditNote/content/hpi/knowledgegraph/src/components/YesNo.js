@@ -5,16 +5,10 @@ class YesNo extends React.Component {
     static contextType = HPIContext;
     constructor(props, context) {
         super(props, context);
-        const answers = this.context['hpi']['nodes'][this.props.node][
-            'response'
-        ];
+        const answers = this.context.hpi[this.props.node].response;
         this.state = {
-            yesID: 0,
-            noID: 0,
-            // colors of the yes and no buttons depending on whether either are clicked
-            yesStyle:
-                answers !== null && answers === 'Yes' ? 'violet' : 'basic',
-            noStyle: answers !== null && answers === 'No' ? 'violet' : 'basic',
+            yesToggle: answers === 'Yes' ? true : false,
+            noToggle: answers === 'No' ? true : false,
         };
         this.handleYesClick = this.handleYesClick.bind(this);
         this.handleNoClick = this.handleNoClick.bind(this);
@@ -23,42 +17,45 @@ class YesNo extends React.Component {
 
     handleYesClick() {
         this.setState({
-            yesStyle: 'violet',
-            yesID: 1,
-            noID: -1,
-            noStyle: 'basic',
+            yesToggle: !this.state.yesToggle,
+            noToggle: !this.state.yesToggle ? false : this.state.noToggle,
         });
-        const values = this.context['hpi'];
-        values['nodes'][this.props.node]['response'] = 'Yes';
+        const values = this.context.hpi;
+        values[this.props.node].response = !this.state.yesToggle ? 'Yes' : '';
         this.context.onContextChange('hpi', values);
     }
 
     handleNoClick() {
         this.setState({
-            yesStyle: 'basic',
-            yesID: -1,
-            noID: 1,
-            noStyle: 'violet',
+            noToggle: !this.state.noToggle,
+            yesToggle: !this.state.noToggle ? false : this.state.yesToggle,
         });
-        const values = this.context['hpi'];
-        values['nodes'][this.props.node]['response'] = 'No';
+        const values = this.context.hpi;
+        values[this.props.node].response = !this.state.noToggle ? 'No' : '';
         this.context.onContextChange('hpi', values);
     }
 
     render() {
+        const answer = this.context.hpi[this.props.node].response;
         return (
             <div>
                 <button
-                    className={`ui ${this.state.yesStyle} button`}
+                    className={`ui ${
+                        answer === 'Yes' ? 'violet' : 'basic'
+                    } button`}
                     onClick={this.handleYesClick}
                 >
-                    Yes
+                    {' '}
+                    Yes{' '}
                 </button>
                 <button
-                    className={`ui ${this.state.noStyle} button`}
+                    className={`ui ${
+                        answer === 'No' ? 'violet' : 'basic'
+                    } button`}
                     onClick={this.handleNoClick}
                 >
-                    No
+                    {' '}
+                    No{' '}
                 </button>
             </div>
         );

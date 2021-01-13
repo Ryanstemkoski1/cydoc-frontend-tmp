@@ -1,3 +1,5 @@
 import axios from 'axios';
 
-export default axios.get('https://cydocgraph.herokuapp.com/graph');
+export const hpiHeaders = axios.get(
+    'https://cydocgraph.herokuapp.com/hpi/CYDOC'
+);

@@ -69,14 +69,14 @@ export const bodyLocationDefaultState = (() => {
 export default class BodyLocation extends React.Component {
     static contextType = HPIContext;
 
-    handleToggle = (name, data) => {
-        const values = this.context['hpi'];
-        values['nodes'][this.props.node]['response'] = data;
+    handleToggle = (_name, data) => {
+        const values = this.context.hpi;
+        values[this.props.node].response = data;
         this.context.onContextChange('hpi', values);
     };
 
     generateButtons = (options) => {
-        const value = this.context['hpi']['nodes'][this.props.node]['response'];
+        const value = this.context.hpi[this.props.node].response;
         let buttons = options.map((option) => {
             if (options.needsRightLeft) {
                 return (

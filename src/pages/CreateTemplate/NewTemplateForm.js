@@ -20,7 +20,7 @@ import diseaseAbbrevs from 'constants/diseaseAbbrevs.json';
 import diseaseCodes from 'constants/diseaseCodes';
 import Nestable from 'react-nestable';
 import { createNodeId, updateParent } from './util';
-import API from '../EditNote/content/hpi/knowledgegraph/src/API';
+import {hpiHeaders} from '../EditNote/content/hpi/knowledgegraph/src/API';
 
 const OTHER_TEXT = 'Other (specify below)';
 const MAX_NUM_QUESTIONS = 50;
@@ -55,7 +55,7 @@ class NewTemplateForm extends Component {
          * Fetches the existing knowledge graphs from the backend to prepopulate the
          * available body systems and diseases.
          */
-        API.then((value) => {
+        hpiHeaders.then((value) => {
             const nodes = value.data.nodes;
             const allBodySystems = [];
             const allDiseases = [];

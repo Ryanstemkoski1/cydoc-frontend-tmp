@@ -4,21 +4,17 @@ import '../css/Button.css';
 import DiseaseTag from './DiseaseTag';
 import HPIContext from 'contexts/HPIContext.js';
 import '../../HPI.css';
-import diseaseCodes from '../../../../../../../constants/diseaseCodes';
 
 class ButtonItem extends React.Component {
     static contextType = HPIContext;
     constructor(props, context) {
         super(props, context);
         // create disease buttons based on user's chosen diseases
-        let diseaseButtons = this.props.diseasesList.map((disease) => (
-            <DiseaseTag
-                key={disease}
-                name={Object.keys(diseaseCodes).find(
-                    (key) => diseaseCodes[key] === disease
-                )}
-                handler={this.handler}
-            />
+        let diseaseList = this.props.diseasesList.filter(
+            (disease) => disease !== 'HIDDEN'
+        );
+        let diseaseButtons = diseaseList.map((disease) => (
+            <DiseaseTag key={disease} name={disease} />
         ));
         this.state = {
             diseaseButtons: diseaseButtons,

@@ -1,7 +1,6 @@
 import React from 'react';
 import QuestionAnswer from './QuestionAnswer';
 import HPIContext from 'contexts/HPIContext.js';
-import diseaseCodes from '../../../../../../../constants/diseaseCodes';
 
 class DiseaseFormQuestions extends React.Component {
     static contextType = HPIContext;
@@ -9,15 +8,13 @@ class DiseaseFormQuestions extends React.Component {
     // Can we change this so that it doesn't need to re-render each time the component is updated?
     render() {
         let values = this.context['hpi'];
-        let currNode = values['nodes'][this.props.node];
+        let currNode = values[this.props.node];
         let question = currNode['text'];
         let responseType = currNode['responseType'];
         let uid = currNode['uid'];
         let symptom = question.search('SYMPTOM');
         let disease = question.search('DISEASE');
-        let diseaseName = Object.keys(diseaseCodes).find(
-            (key) => diseaseCodes[key] === this.props.category
-        );
+        let diseaseName = this.props.category;
         // "SYMPTOM" and "DISEASE" should be replaced by the name of the current disease if it is part of the question text.
         if (symptom > -1) {
             question =

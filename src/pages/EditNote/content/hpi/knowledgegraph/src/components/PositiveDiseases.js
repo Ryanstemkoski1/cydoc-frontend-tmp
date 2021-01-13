@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './ButtonItem';
 import HPIContext from 'contexts/HPIContext.js';
 import '../../HPI.css';
-import diseaseCodes from '../../../../../../../constants/diseaseCodes';
 
 class PositiveDiseases extends Component {
     // If you wrap <div> around the button, you can get the buttons to line up under each other.
@@ -13,14 +12,14 @@ class PositiveDiseases extends Component {
     }
 
     handleClick() {
+        const { name } = this.props;
         const plan = { ...this.context['plan'] };
         let values = this.context['positivediseases'];
-        let diseaseCode = diseaseCodes[this.props.name];
-        if (values.indexOf(diseaseCode) > -1) {
-            values.splice(values.indexOf(diseaseCode), 1);
+        if (values.indexOf(name) > -1) {
+            values.splice(values.indexOf(name), 1);
             plan['conditions'].splice(
                 plan['conditions'].findIndex(
-                    (disease) => disease.name === diseaseCode
+                    (disease) => disease.name === name
                 ),
                 1
             );

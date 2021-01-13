@@ -128,7 +128,7 @@ export class SurgicalHistoryTableBodyRow extends Component {
                 <Table.Cell
                     key={index}
                     onClick={this.handleCellClick}
-                    style={{padding:'0px'}}
+                    style={{ padding: '0px' }}
                 >
                     {this.getCell(field)}
                 </Table.Cell>

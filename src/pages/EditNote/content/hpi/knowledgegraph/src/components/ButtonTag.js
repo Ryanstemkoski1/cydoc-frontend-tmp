@@ -5,8 +5,8 @@ class ButtonTag extends React.Component {
     static contextType = HPIContext;
     constructor(props, context) {
         super(props, context);
-        const values = this.context['hpi']['nodes'][this.props.node];
-        const answers = values['response'];
+        const values = this.context.hpi[this.props.node];
+        const answers = values.response;
         this.state = {
             id: answers !== null && answers.includes(this.props.name) ? -1 : 1,
             buttonStyle:
@@ -25,17 +25,17 @@ class ButtonTag extends React.Component {
             newStyle = 'basic';
         }
         this.setState({ id: this.state.id * -1, buttonStyle: newStyle });
-        const values = this.context['hpi'];
-        values['nodes'][this.props.node]['response'] = values['nodes'][
+        const values = this.context.hpi;
+        values[this.props.node].response = values[
             this.props.node
-        ]['response'].concat(this.props.name);
+        ].response.concat(this.props.name);
         this.context.onContextChange('hpi', values);
     }
 
     render() {
         return (
             <button
-                className= {`ui small ${this.state.buttonStyle} button`}
+                className={`ui small ${this.state.buttonStyle} button`}
                 onClick={this.handleClick}
             >
                 {this.props.name}

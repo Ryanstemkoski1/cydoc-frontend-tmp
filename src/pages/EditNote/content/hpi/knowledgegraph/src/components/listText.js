@@ -1,54 +1,58 @@
 import React from 'react';
 import HPIContext from 'contexts/HPIContext.js';
-import HandleInput from './HandleInput';
+import { Input } from 'semantic-ui-react';
 import '../css/listText.css';
 
 export default class ListText extends React.Component {
     static contextType = HPIContext;
-    constructor(props, context) {
-        super(props, context);
-        this.handlePlusClick = this.handlePlusClick.bind(this);
-    }
 
-    handlePlusClick() {
-        let values = this.context['hpi'];
-        let listKeys = Object.keys(
-            values['nodes'][this.props.node]['response']
-        );
-        let lastIndex = parseInt(listKeys[listKeys.length - 1]) + 1;
-        values['nodes'][this.props.node]['response'][lastIndex] = '';
+    handleListTextChange = (id) => (_e, data) => {
+        let values = this.context.hpi;
+        values[this.props.node].response = values.nodes[
+            this.props.node
+        ].response.map((input, listIndex) => {
+            if (id !== listIndex) return input;
+            return { ...input, name: data.value };
+        });
         this.context.onContextChange('hpi', values);
-    }
+    };
+
+    RemoveListInput = (id) => () => {
+        let values = this.context.hpi;
+        values[this.props.node].response = values.nodes[
+            this.props.node
+        ].response.filter((_input, listIndex) => listIndex != id);
+        this.context.onContextChange('hpi', values);
+    };
+
+    AddListInput = () => {
+        let values = this.context.hpi;
+        values[this.props.node].response.push({ name: '' });
+        this.context.onContextChange('hpi', values);
+    };
 
     render() {
-        let values = this.context['hpi'];
-        let buttonMap = [];
-        let inputRes = this.context['hpi']['nodes'][this.props.node];
-        let res = inputRes['response'];
-        for (let resIndex in res) {
-            buttonMap.push(
-                <HandleInput
-                    key={resIndex}
-                    type={values['nodes'][this.props.node]['responseType']}
-                    inputID={resIndex}
-                    category={'nodes'}
-                    node={this.props.node}
+        let listInputValues = this.context.hpi[this.props.node].response;
+        let listInputsArray = listInputValues.map((input, id) => (
+            <div key={input}>
+                <Input
+                    value={input.name}
+                    onChange={this.handleListTextChange(id)}
                 />
-            );
-        }
+                <button onClick={this.RemoveListInput(id)}> - </button>
+            </div>
+        ));
         return (
             <div>
-                <div> {buttonMap}</div>
-                <div>
+                {' '}
+                {listInputsArray}
+                <button
+                    className='button-plus-click'
+                    onClick={this.AddListInput}
+                >
                     {' '}
-                    <button
-                        onClick={this.handlePlusClick}
-                        className='button-plus-click'
-                    >
-                        {' '}
-                        +{' '}
-                    </button>{' '}
-                </div>
+                    +
+                </button>
             </div>
         );
     }
