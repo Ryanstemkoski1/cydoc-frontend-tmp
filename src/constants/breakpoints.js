@@ -28,3 +28,5 @@ export const DISCUSSION_PLAN_MENU_BP = 1000;
 export const DISCUSSION_PLAN_SECTION_BP = 850;
 
 export const PHYSICAL_EXAM_MOBILE_BP = 874;
+
+export const PROTIPS_BUTTON_BP = 1150;

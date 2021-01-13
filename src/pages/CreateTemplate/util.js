@@ -1,39 +1,43 @@
+import { questionTypes } from '../../constants/questionTypes';
+
 /**
- * Returns the answerInfo object associated with the given type
+ * Returns starting answerInfo object associated with the given type
  * @param {String} type: the question's response type
  */
 export const getAnswerInfo = (type) => {
-    if (type === 'YES-NO' || type === 'NO-YES') {
-        return {
-            yesResponse: '',
-            noResponse: '',
-        };
-    } else if (
-        type === 'SHORT-TEXT' ||
-        type === 'NUMBER' ||
-        type === 'TIME' ||
-        type === 'LIST-TEXT'
-    ) {
-        return {
-            startResponse: '',
-            endResponse: '',
-        };
-    } else if (type === 'CLICK-BOXES') {
-        return {
-            options: ['', '', ''],
-            startResponse: '',
-            endResponse: '',
-        };
-    } else if (
-        type.startsWith('FH') ||
-        type.startsWith('PMH') ||
-        type.startsWith('PSH') ||
-        type.startsWith('MEDS')
-    ) {
-        return {
-            options: [],
-        };
+    let answerInfo;
+    switch (type) {
+        case questionTypes.YES_NO:
+        case questionTypes.NO_YES:
+            answerInfo = {
+                yesResponse: '',
+                noResponse: '',
+            };
+            break;
+        case questionTypes.SHORT_TEXT:
+        case questionTypes.NUMBER:
+        case questionTypes.TIME:
+        case questionTypes.BODY_LOCATION:
+        case questionTypes.LIST_TEXT:
+            answerInfo = {
+                startResponse: '',
+                endResponse: '',
+            };
+            break;
+        case questionTypes.CLICK_BOXES:
+            answerInfo = {
+                startResponse: '',
+                endResponse: '',
+                options: ['', '', '', ''],
+            };
+            break;
+        default:
+            // Advanced type questions
+            answerInfo = {
+                options: [],
+            };
     }
+    return answerInfo;
 };
 
 /**
@@ -93,7 +97,7 @@ export const parseQuestionText = (responseType, text, answerInfo, category) => {
     }
 
     if (
-        responseType === 'CLICK-BOXES' ||
+        responseType === questionTypes.CLICK_BOXES ||
         responseType.endsWith('POP') ||
         responseType === 'nan'
     ) {

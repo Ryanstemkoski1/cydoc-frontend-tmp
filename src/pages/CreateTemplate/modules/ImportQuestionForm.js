@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CreateTemplateContext from '../../contexts/CreateTemplateContext';
+import CreateTemplateContext from '../../../contexts/CreateTemplateContext';
 import diseaseCodes from 'constants/diseaseCodes';
 import {
     sortEdges,
@@ -7,7 +7,7 @@ import {
     createNodeId,
     parseQuestionText,
     parsePlaceholder,
-} from './util';
+} from '../util';
 import { Button, Modal, List, Checkbox } from 'semantic-ui-react';
 class ImportQuestionForm extends Component {
     static contextType = CreateTemplateContext;

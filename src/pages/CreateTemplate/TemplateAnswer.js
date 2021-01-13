@@ -1,13 +1,14 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
-import questionTypes from 'constants/questionTypes';
+import { questionTypeMapping, questionTypes } from 'constants/questionTypes';
 import diseaseCodes from 'constants/diseaseCodes';
 import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
 import MedicalHistoryContent from 'pages/EditNote/content/medicalhistory/MedicalHistoryContent';
 import SurgicalHistoryContent from 'pages/EditNote/content/surgicalhistory/SurgicalHistoryContent';
 import MedicationsContent from 'pages/EditNote/content/medications/MedicationsContent';
 import FamilyHistoryContent from 'pages/EditNote/content/familyhistory/FamilyHistoryContent';
-import ImportQuestionForm from './ImportQuestionForm';
+import ImportQuestionForm from './modules/ImportQuestionForm';
+import GeneratedSentence from './modules/GeneratedSentence';
 import {
     getAnswerInfo,
     createNodeId,
@@ -15,14 +16,10 @@ import {
     updateParent,
     addChildrenNodes,
 } from './util';
-import {
-    Input,
-    Segment,
-    Button,
-    Dropdown,
-    Message,
-    List,
-} from 'semantic-ui-react';
+import { RESPONSE_PLACEHOLDER } from './placeholders';
+import { Input, Button, Dropdown, Message, List } from 'semantic-ui-react';
+
+const MIN_OPTIONS = 2;
 
 class TemplateAnswer extends Component {
     static contextType = CreateTemplateContext;
@@ -36,6 +33,7 @@ class TemplateAnswer extends Component {
             otherGraph: null,
             showPreview: false,
             showQuestionSelect: false,
+            showOptionError: false,
         };
         this.updateDimensions = this.updateDimensions.bind(this);
         this.connectGraph = this.connectGraph.bind(this);
@@ -53,6 +51,16 @@ class TemplateAnswer extends Component {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateDimensions);
+    }
+
+    componentDidUpdate(prevProps) {
+        // Reset error message state when question type changes
+        if (
+            prevProps.type !== this.props.type &&
+            prevProps.type === questionTypes.CLICK_BOXES
+        ) {
+            this.setState({ showOptionError: false });
+        }
     }
 
     updateDimensions = () => {
@@ -172,6 +180,7 @@ class TemplateAnswer extends Component {
         nodes[qId].answerInfo[answer] = value;
         updateParent(nodes, qId);
         this.context.onContextChange('nodes', nodes);
+        this.setState({ showOptionError: false });
     };
 
     /**
@@ -231,6 +240,7 @@ class TemplateAnswer extends Component {
         const nodes = { ...this.context.state.nodes };
         nodes[qId].answerInfo.options.push('');
         updateParent(nodes, qId);
+        this.setState({ showOptionError: false });
 
         // update response type from BLANK -> POP
         if (nodes[qId].responseType.endsWith('BLANK')) {
@@ -249,6 +259,13 @@ class TemplateAnswer extends Component {
     removeButtonOption = (event, { index }) => {
         const { qId } = this.props;
         const nodes = { ...this.context.state.nodes };
+        if (
+            nodes[qId].responseType in questionTypeMapping.basic &&
+            nodes[qId].answerInfo.options.length <= MIN_OPTIONS
+        ) {
+            this.setState({ showOptionError: true });
+            return;
+        }
         nodes[qId].answerInfo.options.splice(index, 1);
         updateParent(nodes, qId);
 
@@ -265,91 +282,6 @@ class TemplateAnswer extends Component {
     };
 
     /**
-     * Returns the placeholder text to be displayed in the answer info
-     */
-    getExampleTexts() {
-        const { type } = this.props;
-
-        let startEg;
-        let endEg;
-
-        switch (type) {
-            case 'SHORT-TEXT': {
-                startEg = 'e.g. The pain is located in the';
-                break;
-            }
-            case 'NUMBER': {
-                startEg = 'e.g. The patient rates the pain at';
-                endEg = 'e.g. out of 10.';
-                break;
-            }
-            case 'TIME': {
-                startEg = 'e.g. The pain started';
-                endEg = 'e.g. ago.';
-                break;
-            }
-            case 'LIST-TEXT': {
-                startEg = 'e.g. The patient visited';
-                endEg = 'e.g. while traveling.';
-                break;
-            }
-            case 'CLICK-BOXES': {
-                startEg = 'e.g. The patient has had a(n)';
-                endEg = 'e.g. exam this year.';
-                break;
-            }
-            default: {
-                startEg = '';
-                endEg = '';
-                break;
-            }
-        }
-
-        return { startEg, endEg };
-    }
-
-    /**
-     * Returns the label text for questions with options
-     */
-    getOptionsText() {
-        const { type } = this.props;
-        let optionsText;
-        let responseType = type.split('-')[0];
-        if (!(responseType in questionTypes.advanced)) {
-            responseType = type;
-        }
-
-        switch (responseType) {
-            case 'CLICK-BOXES': {
-                optionsText = 'Button options:';
-                break;
-            }
-            case 'FH': {
-                optionsText = 'Family history options:';
-                break;
-            }
-            case 'PMH': {
-                optionsText = 'Past medical history options:';
-                break;
-            }
-            case 'MEDS': {
-                optionsText = 'Medications options:';
-                break;
-            }
-            case 'PSH': {
-                optionsText = 'Past surgical history options:';
-                break;
-            }
-            default: {
-                optionsText = '';
-                break;
-            }
-        }
-
-        return optionsText;
-    }
-
-    /**
      * Returns a preview component for advanced typed questions that cannot be editted.
      * Its purpose is to give the user an idea of how the options will be rendered.
      * @param {String} type: the response type
@@ -361,13 +293,13 @@ class TemplateAnswer extends Component {
 
         let preview;
         let responseType = type.split('-')[0];
-        if (!(responseType in questionTypes.advanced)) {
+        if (!(responseType in questionTypeMapping.advanced)) {
             responseType = type;
         }
 
         const values = nodes[this.props.qId].answerInfo.options;
         switch (responseType) {
-            case 'FH':
+            case questionTypes.FH:
                 preview = (
                     <FamilyHistoryContent
                         isPreview={true}
@@ -376,7 +308,7 @@ class TemplateAnswer extends Component {
                     />
                 );
                 break;
-            case 'MEDS':
+            case questionTypes.MEDS:
                 preview = (
                     <MedicationsContent
                         isPreview={true}
@@ -385,7 +317,7 @@ class TemplateAnswer extends Component {
                     />
                 );
                 break;
-            case 'PMH':
+            case questionTypes.PMH:
                 preview = (
                     <MedicalHistoryContent
                         isPreview={true}
@@ -394,7 +326,7 @@ class TemplateAnswer extends Component {
                     />
                 );
                 break;
-            case 'PSH':
+            case questionTypes.PSH:
                 preview = (
                     <SurgicalHistoryContent
                         isPreview={true}
@@ -419,6 +351,7 @@ class TemplateAnswer extends Component {
         nodes[qId].responseType = value;
         updateParent(nodes, qId);
         this.context.onContextChange('nodes', nodes);
+        this.setState({ showOptionError: false });
     };
 
     /**
@@ -471,19 +404,22 @@ class TemplateAnswer extends Component {
         this.context.onContextChange('nodes', contextNodes);
     };
 
-    /**
-     * Returns the component for displaying the response information according to the type
-     * @param {String} startEg
-     * @param {String} endEg
-     * @param {String} optionsText
-     */
-    getAnswerTemplate(startEg, endEg, optionsText) {
+    /** Returns response form according to the response type */
+    getAnswerTemplate() {
         const { qId, type } = this.props;
         const { graph, nodes } = this.context.state;
-        let template;
-        let otherGraphs;
+        const placeholders = RESPONSE_PLACEHOLDER[nodes[qId].responseType];
+        let template, otherGraphs;
 
-        if (type === 'YES-NO' || type === 'NO-YES') {
+        let optionsText = '';
+        if (type.endsWith('POP') || type.endsWith('BLANK')) {
+            let typeKey = type.split('-')[0];
+            optionsText = questionTypeMapping.advanced[typeKey] + ' Options:';
+        } else {
+            optionsText = questionTypeMapping.basic[type] + ' Options:';
+        }
+
+        if (type === questionTypes.YES_NO || type === questionTypes.NO_YES) {
             let editChildren;
             if (this.state.showOtherGraphs) {
                 // List all possible graphs to import from
@@ -551,21 +487,13 @@ class TemplateAnswer extends Component {
                     />
                 );
             }
-            if (
-                this.context.state.nodes[qId].hasChildren &&
-                !this.context.state.nodes[qId].hasChanged
-            ) {
-                // If the question is an unchanged, imported question with children, display a button
-                // rather than actually displaying all of the children
+            if (nodes[qId].hasChildren && !nodes[qId].hasChanged) {
+                // If the question is an unchanged, imported question with children,
+                // display a button rather than actually displaying all of the children
                 editChildren = (
                     <List
                         className='edit-children'
-                        onClick={() =>
-                            this.props.editChildren(
-                                qId,
-                                this.context.state.nodes
-                            )
-                        }
+                        onClick={() => this.props.editChildren(qId, nodes)}
                     >
                         <List.Item>
                             <List.Icon name='triangle right' />
@@ -576,30 +504,25 @@ class TemplateAnswer extends Component {
             }
 
             template = (
-                <Segment className='yes-no-answer'>
+                <>
                     {['yes', 'no'].map((type, idx) => {
                         const answer = type + 'Response';
-                        const action = type === 'yes' ? 'has' : 'does not have';
-
                         return (
-                            <Fragment key={idx}>
+                            <>
                                 <span
                                     className={`answer-label answer-label-if-${type}`}
                                 >
                                     IF {type.toUpperCase()}:
                                 </span>
                                 <Input
-                                    placeholder={`e.g. The patient ${action} pain.`}
+                                    placeholder={placeholders[type]}
                                     answer={answer}
-                                    value={
-                                        this.context.state.nodes[qId]
-                                            .answerInfo[answer]
-                                    }
+                                    value={nodes[qId].answerInfo[answer]}
                                     onChange={this.saveAnswer}
                                     className='yes-no-input'
                                 />
                                 {idx === 0 && <br />}
-                            </Fragment>
+                            </>
                         );
                     })}
                     <div className='add-child-question'>
@@ -620,23 +543,25 @@ class TemplateAnswer extends Component {
                                 answers
                             </p>
                             <Button
-                                value='YES-NO'
+                                value={questionTypes.YES_NO}
                                 className='yes-no-btn'
                                 onClick={this.changeFollowupType}
                                 content='YES'
                                 color={
-                                    nodes[qId].responseType === 'YES-NO'
+                                    nodes[qId].responseType ===
+                                    questionTypes.YES_NO
                                         ? 'violet'
                                         : 'grey'
                                 }
                             />
                             <Button
-                                value='NO-YES'
+                                value={questionTypes.NO_YES}
                                 content='NO'
                                 className='yes-no-btn'
                                 onClick={this.changeFollowupType}
                                 color={
-                                    nodes[qId].responseType === 'NO-YES'
+                                    nodes[qId].responseType ===
+                                    questionTypes.NO_YES
                                         ? 'violet'
                                         : 'grey'
                                 }
@@ -644,45 +569,25 @@ class TemplateAnswer extends Component {
                         </div>
                     )}
                     {editChildren}
-                </Segment>
+                </>
             );
         } else if (
-            type === 'SHORT-TEXT' ||
-            type === 'NUMBER' ||
-            type === 'TIME' ||
-            type === 'LIST-TEXT'
+            type === questionTypes.SHORT_TEXT ||
+            type === questionTypes.NUMBER ||
+            type === questionTypes.TIME ||
+            type === questionTypes.BODY_LOCATION ||
+            type === questionTypes.LIST_TEXT
         ) {
             template = (
-                <Segment className='yes-no-answer'>
-                    <Input
-                        placeholder={startEg}
-                        answer='startResponse'
-                        value={
-                            this.context.state.nodes[qId].answerInfo
-                                .startResponse
-                        }
-                        onChange={this.saveAnswer}
-                        className='fill-in-the-blank-input'
-                    />
-                    <span className='answer-label'>RESPONSE</span>
-                    <Input
-                        placeholder={endEg}
-                        answer='endResponse'
-                        value={
-                            this.context.state.nodes[qId].answerInfo.endResponse
-                        }
-                        onChange={this.saveAnswer}
-                        className='fill-in-the-blank-input'
-                    />
-                </Segment>
+                <GeneratedSentence
+                    onChange={this.saveAnswer}
+                    answerInfo={nodes[qId].answerInfo}
+                    placeholders={placeholders}
+                />
             );
-        } else if (type === 'CLICK-BOXES') {
+        } else if (type === questionTypes.CLICK_BOXES) {
             const options = [];
-            for (
-                let i = 0;
-                i < this.context.state.nodes[qId].answerInfo.options.length;
-                i++
-            ) {
+            for (let i = 0; i < nodes[qId].answerInfo.options.length; i++) {
                 options.push(
                     <div className='button-option' key={i}>
                         <Button
@@ -696,22 +601,27 @@ class TemplateAnswer extends Component {
                         />
                         <Input
                             transparent
-                            placeholder='Option'
+                            placeholder={placeholders.options[i]}
                             index={i}
-                            value={
-                                this.context.state.nodes[qId].answerInfo
-                                    .options[i]
-                            }
+                            value={nodes[qId].answerInfo.options[i]}
                             onChange={this.saveButtonOption}
+                            onBlur={() =>
+                                this.setState({ showOptionError: false })
+                            }
                         />
                     </div>
                 );
             }
 
             template = (
-                <Segment className='yes-no-answer'>
-                    <div>{optionsText}</div>
+                <>
+                    <label>{optionsText}</label>
                     {options}
+                    {this.state.showOptionError && (
+                        <span className='form-error'>
+                            * Required to have at least {MIN_OPTIONS} options
+                        </span>
+                    )}
                     <Button
                         basic
                         icon='add'
@@ -721,40 +631,21 @@ class TemplateAnswer extends Component {
                         className='add-option'
                     />
                     <br />
-                    <Input
-                        placeholder={startEg}
-                        answer='startResponse'
-                        value={
-                            this.context.state.nodes[qId].answerInfo
-                                .startResponse
-                        }
+                    <GeneratedSentence
                         onChange={this.saveAnswer}
-                        className='fill-in-the-blank-input'
+                        answerInfo={nodes[qId].answerInfo}
+                        placeholders={placeholders}
                     />
-                    <span className='answer-label'>RESPONSE</span>
-                    <Input
-                        placeholder={endEg}
-                        answer='endResponse'
-                        value={
-                            this.context.state.nodes[qId].answerInfo.endResponse
-                        }
-                        onChange={this.saveAnswer}
-                        className='fill-in-the-blank-input'
-                    />
-                </Segment>
+                </>
             );
         } else if (
-            type.startsWith('FH') ||
-            type.startsWith('PMH') ||
-            type.startsWith('PSH') ||
-            type.startsWith('MEDS')
+            type.startsWith(questionTypes.FH) ||
+            type.startsWith(questionTypes.PMH) ||
+            type.startsWith(questionTypes.PSH) ||
+            type.startsWith(questionTypes.MEDS)
         ) {
             const options = [];
-            for (
-                let i = 0;
-                i < this.context.state.nodes[qId].answerInfo.options.length;
-                i++
-            ) {
+            for (let i = 0; i < nodes[qId].answerInfo.options.length; i++) {
                 options.push(
                     <div className='button-option' key={i}>
                         <Button
@@ -770,10 +661,7 @@ class TemplateAnswer extends Component {
                             transparent
                             placeholder='Option'
                             index={i}
-                            value={
-                                this.context.state.nodes[qId].answerInfo
-                                    .options[i]
-                            }
+                            value={nodes[qId].answerInfo.options[i]}
                             onChange={this.saveButtonOption}
                         />
                     </div>
@@ -787,8 +675,8 @@ class TemplateAnswer extends Component {
             }
 
             template = (
-                <Segment className='yes-no-answer'>
-                    <div>{optionsText}</div>
+                <>
+                    <label>{optionsText}</label>
                     {options}
                     <Button
                         basic
@@ -815,24 +703,16 @@ class TemplateAnswer extends Component {
                         className='preview-table-btn'
                     />
                     <span className='preview'>{preview}</span>
-                </Segment>
+                </>
             );
         } else {
-            template = <Fragment />;
+            template = <></>;
         }
-
-        return template;
+        return <div className='template-answer'>{template}</div>;
     }
 
     render() {
-        const exampleTexts = this.getExampleTexts();
-        const optionsText = this.getOptionsText();
-
-        return this.getAnswerTemplate(
-            exampleTexts.startEg,
-            exampleTexts.endEg,
-            optionsText
-        );
+        return this.getAnswerTemplate();
     }
 }
 

@@ -9,7 +9,7 @@ import {
 } from 'semantic-ui-react';
 import CreateTemplateContext from '../../contexts/CreateTemplateContext';
 import TemplateAnswer from './TemplateAnswer';
-import questionTypes from 'constants/questionTypes';
+import { questionTypeMapping, questionTypes } from 'constants/questionTypes';
 import diseaseCodes from 'constants/diseaseCodes';
 import {
     getAnswerInfo,
@@ -17,6 +17,7 @@ import {
     addChildrenNodes,
     updateParent,
 } from './util';
+import { QUESTION_PLACEHOLDER } from './placeholders';
 import './NewTemplate.css';
 
 let DELETED_IDS = [];
@@ -81,7 +82,7 @@ class TemplateQuestion extends Component {
         const { graph, nodes } = this.context.state;
 
         // questions with children questions can NOT be converted to something other than yes/no
-        if (value !== 'YES-NO' && graph[qid].length > 0) {
+        if (value !== questionTypes.YES_NO && graph[qid].length > 0) {
             this.setState({ showChangeQuestion: true });
             return;
         }
@@ -91,10 +92,10 @@ class TemplateQuestion extends Component {
 
         // advanced response types default to BLANK
         if (
-            value === 'FH' ||
-            value === 'PMH' ||
-            value === 'PSH' ||
-            value === 'MEDS'
+            value === questionTypes.FH ||
+            value === questionTypes.PMH ||
+            value === questionTypes.PSH ||
+            value === questionTypes.MEDS
         ) {
             nodes[qid].responseType = value + '-BLANK';
         }
@@ -114,8 +115,8 @@ class TemplateQuestion extends Component {
         let numQuestions = this.context.state.numQuestions;
 
         if (
-            (nodes[qid].responseType !== 'YES-NO' &&
-                nodes[qid].responseType !== 'NO-YES') ||
+            (nodes[qid].responseType !== questionTypes.YES_NO &&
+                nodes[qid].responseType !== questionTypes.NO_YES) ||
             graph[qid].length === 0
         ) {
             // not Y/N question or Y/N question with no children
@@ -371,30 +372,25 @@ class TemplateQuestion extends Component {
     getQuestionTypes() {
         const { qId } = this.props;
 
-        let options = [];
-
-        for (let qType in questionTypes.basic) {
-            options.push({
-                key: questionTypes.basic[qType],
-                text: questionTypes.basic[qType],
-                value: qType,
+        const options = Object.values(questionTypes)
+            .filter((qType) => qType !== questionTypes.NO_YES)
+            .map((qType) => {
+                const text =
+                    questionTypeMapping.basic?.[qType] ||
+                    questionTypeMapping.advanced?.[qType] + ' (sync)';
+                return {
+                    text,
+                    key: qType,
+                    value: qType,
+                };
             });
-        }
-
-        for (let qType in questionTypes.advanced) {
-            options.push({
-                key: questionTypes.advanced[qType],
-                text: questionTypes.advanced[qType],
-                value: qType,
-            });
-        }
 
         // Process the current response type since the value will not necessarily
         // match the option in the dropdown (i.e. NO-YES questions should be displayed
         // as YES-NO and advanced types should be stripped of POP and BLANK)
         let responseType = this.context.state.nodes[qId].responseType;
-        if (responseType === 'NO-YES') {
-            responseType = 'YES-NO';
+        if (responseType === questionTypes.NO_YES) {
+            responseType = questionTypes.YES_NO;
         } else if (
             responseType.endsWith('POP') ||
             responseType.endsWith('BLANK')
@@ -442,6 +438,7 @@ class TemplateQuestion extends Component {
 
         const questionTypeOptions = this.getQuestionTypes();
         const curIcon = active ? 'chevron down' : 'chevron right';
+        const node = nodes[qId];
 
         const panels = [
             {
@@ -457,8 +454,12 @@ class TemplateQuestion extends Component {
                                 <Icon name={curIcon} />
                                 <Input
                                     qid={qId}
-                                    placeholder='Question'
-                                    value={this.context.state.nodes[qId].text}
+                                    placeholder={
+                                        QUESTION_PLACEHOLDER[
+                                            node.responseType
+                                        ] || 'Question'
+                                    }
+                                    value={node.text}
                                     onChange={this.saveQuestion}
                                     transparent
                                     size='large'
@@ -476,7 +477,7 @@ class TemplateQuestion extends Component {
                     ),
                 },
                 content: {
-                    active: active,
+                    active,
                     content: (
                         <div className='question-content'>
                             {showDeleteQuestion && (
@@ -524,9 +525,13 @@ class TemplateQuestion extends Component {
                                         content={
                                             <>
                                                 <div>
-                                                    {`The original question had ${this.getNumberFollowup(
+                                                    The original question had{' '}
+                                                    {this.getNumberFollowup(
                                                         qId
-                                                    )} follow-up question(s). Do you want to keep these follow-up questions?`}
+                                                    )}
+                                                    follow-up question(s). Do
+                                                    you want to keep these
+                                                    follow-up questions?
                                                 </div>
                                                 <div>
                                                     <Button
@@ -560,15 +565,15 @@ class TemplateQuestion extends Component {
                                     <Message
                                         compact
                                         negative
-                                        header='Only Yes/No and No/Yes questions can have follow-up questions.'
+                                        header='Only Yes/No questions can have follow-up questions.'
                                         onDismiss={() =>
                                             this.setState({
                                                 showChangeQuestion: false,
                                             })
                                         }
                                         content='Alternatively, you may
-                                        delete this question and create a new question of the desired type,
-                                        or move the follow-up questions to a different level before proceeding.'
+                                            delete this question and create a new question of the desired type,
+                                            or move the follow-up questions to a different level before proceeding.'
                                     />
                                     <br />
                                 </>
@@ -576,9 +581,7 @@ class TemplateQuestion extends Component {
                             {questionTypeOptions}
                             <TemplateAnswer
                                 qId={qId}
-                                type={
-                                    this.context.state.nodes[qId].responseType
-                                }
+                                type={node.responseType}
                                 editChildren={this.editChildren}
                                 graphData={this.props.graphData}
                                 allDiseases={this.props.allDiseases}
@@ -590,14 +593,12 @@ class TemplateQuestion extends Component {
         ];
 
         return (
-            <>
-                <Accordion
-                    fluid
-                    key={qId}
-                    panels={panels}
-                    className='question-container'
-                />
-            </>
+            <Accordion
+                fluid
+                key={qId}
+                panels={panels}
+                className='question-container'
+            />
         );
     }
 }
