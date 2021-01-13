@@ -5,9 +5,7 @@ import HPIContext from 'contexts/HPIContext.js';
 TODO:
 Make custom labels besides healthy and sick
 Can that be passed down from props?
-
 The props are key and pop
-
 */
 class ScaleInput extends React.Component {
     static contextType = HPIContext;

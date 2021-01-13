@@ -36,7 +36,7 @@ export default class MedicalHistoryContent extends React.Component {
                 );
                 // seenConditions[adjustValue(response, medicalMapping)] = condition_index;
                 if (condition_index === -1) {
-                    let condition_index = Object.keys(values).length.toString();
+                    condition_index = Object.keys(values).length.toString();
                     values[condition_index] = {
                         index: condition_index,
                         Condition: response,
