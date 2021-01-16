@@ -86,9 +86,10 @@ export default class PhysicalExamContent extends React.Component {
                         <Form>
                             <Grid stackable columns='3'>
                                 <Grid.Column>
-                                    <Header as='h5'>
-                                        Blood Pressure (mmHg)
-                                    </Header>
+                                    <Header
+                                        as='h5'
+                                        content='Blood Pressure (mmHg)'
+                                    />
                                     <Form.Field>
                                         {this.generateNumericInput(
                                             'Vitals',
@@ -106,13 +107,56 @@ export default class PhysicalExamContent extends React.Component {
                                         )}
                                     </Form.Field>
                                 </Grid.Column>
-
                                 <Grid.Column>
                                     <Form.Field inline={isMobileView}>
                                         <label>
-                                            <Header as='h5'>
-                                                Oxygen Saturation
-                                            </Header>
+                                            <Header
+                                                as='h5'
+                                                content='Heart Rate'
+                                            />
+                                        </label>
+                                        {this.generateNumericInput(
+                                            'Vitals',
+                                            'Heart Rate',
+                                            'bpm',
+                                            'right'
+                                        )}
+                                    </Form.Field>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Form.Field inline={isMobileView}>
+                                        <label>
+                                            <Header as='h5' content='RR' />
+                                        </label>
+                                        {this.generateNumericInput(
+                                            'Vitals',
+                                            'RR'
+                                        )}
+                                    </Form.Field>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Form.Field inline={isMobileView}>
+                                        <label>
+                                            <Header
+                                                as='h5'
+                                                content='Temperature'
+                                            />
+                                        </label>
+                                        {this.generateNumericInput(
+                                            'Vitals',
+                                            'Temperature',
+                                            '℃',
+                                            'right'
+                                        )}
+                                    </Form.Field>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Form.Field inline={isMobileView}>
+                                        <label>
+                                            <Header
+                                                as='h5'
+                                                content='Oxygen Saturation'
+                                            />
                                         </label>
                                         {this.generateNumericInput(
                                             'Vitals',

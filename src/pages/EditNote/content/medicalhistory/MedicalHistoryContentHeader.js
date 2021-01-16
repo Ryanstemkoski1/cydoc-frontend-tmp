@@ -4,7 +4,7 @@ import { Grid, Header } from 'semantic-ui-react';
 //functional component for the Medical History header above the divider
 export default function MedicalHistoryContentHeader() {
     return (
-        <Grid columns={6} centered>
+        <Grid columns={6} centered className='sticky-header'>
             <Grid.Row>
                 <Grid.Column>
                     <Header as='h4'>Condition</Header>

@@ -50,7 +50,9 @@ export default class AllergiesContent extends Component {
         return (
             <Table.Row>
                 {allergies.fields.map((header, index) => (
-                    <Table.HeaderCell key={index}>{header}</Table.HeaderCell>
+                    <Table.HeaderCell key={index} className='sticky-header'>
+                        {header}
+                    </Table.HeaderCell>
                 ))}
             </Table.Row>
         );

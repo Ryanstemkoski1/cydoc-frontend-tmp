@@ -18,6 +18,7 @@ export default class PatientHistoryContent extends Component {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
+            headerHeight: 0,
             activeTabName: 'Medical History', // Default open pane is Medical History
             activeIndex: 0,
         };
@@ -34,15 +35,15 @@ export default class PatientHistoryContent extends Component {
         this.updateDimensions();
         window.addEventListener('resize', this.updateDimensions);
         this.updateIndex();
-        // Using timeout to ensure that tab/dropdown menu is rendered before setting
+        // Using timeout to ensure that tab/dropdown menu and any relevant headers are rendered before setting
         setTimeout(() => {
             this.setMenuPosition();
+            this.setStickyHeaders();
         }, 0);
     }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateDimensions);
-        window.removeEventListener('scroll', this.setMenuPosition);
     }
 
     updateDimensions() {
@@ -54,13 +55,32 @@ export default class PatientHistoryContent extends Component {
 
         this.setState({ windowWidth, windowHeight, headerHeight });
         this.setMenuPosition();
+        this.setStickyHeaders();
     }
 
     setMenuPosition() {
         const fixedMenu = document.getElementById('patient-history-menu');
         if (fixedMenu != null) {
             fixedMenu.style.top = `${this.state.headerHeight}px`;
-            window.removeEventListener('scroll', this.setMenuPosition);
+        }
+    }
+
+    setStickyHeaders() {
+        const stickyHeaders = document.getElementsByClassName('sticky-header');
+        const patientHistoryMenu = document.getElementById(
+            'patient-history-menu'
+        );
+        if (
+            stickyHeaders != null &&
+            stickyHeaders.length != 0 &&
+            patientHistoryMenu != null
+        ) {
+            for (let i = 0; i < stickyHeaders.length; i++) {
+                stickyHeaders[i].style.top = `${
+                    parseInt(patientHistoryMenu.style.top) +
+                    patientHistoryMenu.offsetHeight
+                }px`;
+            }
         }
     }
 
@@ -95,6 +115,9 @@ export default class PatientHistoryContent extends Component {
         } else {
             this.setState({ activeTabName: 'Medical History' });
         }
+        setTimeout((_e) => {
+            this.setStickyHeaders();
+        }, 0);
     };
 
     handlePrevTab = (e, { activeTabName }) => {
@@ -102,6 +125,9 @@ export default class PatientHistoryContent extends Component {
             activeIndex: e.target.value,
             activeTabName: activeTabName,
         });
+        setTimeout((_e) => {
+            this.setStickyHeaders();
+        }, 0);
     };
 
     handleNextTab = (e, { activeTabName }) => {
@@ -109,6 +135,9 @@ export default class PatientHistoryContent extends Component {
             activeIndex: e.target.value,
             activeTabName: activeTabName,
         });
+        setTimeout((_e) => {
+            this.setStickyHeaders();
+        }, 0);
     };
 
     // panes for mobile view
@@ -424,7 +453,7 @@ export default class PatientHistoryContent extends Component {
                         <Grid
                             stackable
                             centered
-                            className={'patient-history-menu'}
+                            id='patient-history-menu'
                             relaxed
                         >
                             {gridButtons}
@@ -508,7 +537,7 @@ export default class PatientHistoryContent extends Component {
                     <Tab
                         menu={{
                             pointing: true,
-                            className: 'patient-history-menu',
+                            id: 'patient-history-menu',
                         }}
                         id='tab-panes'
                         panes={panes}

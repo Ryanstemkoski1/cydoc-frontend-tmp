@@ -221,18 +221,6 @@ class SocialHistoryTableContent extends React.Component {
                 }
             }
 
-            // contentInputs.push(
-            //     <Grid style={{ marginTop: 8, marginBottom: 1, marginLeft: 200 }}>
-            //         <Button
-            //             circular
-            //             icon='close'
-            //             compact
-            //             basic
-            //             onClick={this.deleteRow}
-            //         />
-            //     </Grid>
-            // )
-
             panels.push({
                 key: i,
                 title: {

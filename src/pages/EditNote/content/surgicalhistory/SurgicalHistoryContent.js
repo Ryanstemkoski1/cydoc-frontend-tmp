@@ -131,7 +131,9 @@ export default class SurgicalHistoryContent extends Component {
         return (
             <Table.Row>
                 {surgicalHistory.fields.map((header, index) => (
-                    <Table.HeaderCell key={index}>{header}</Table.HeaderCell>
+                    <Table.HeaderCell key={index} className='sticky-header'>
+                        {header}
+                    </Table.HeaderCell>
                 ))}
             </Table.Row>
         );

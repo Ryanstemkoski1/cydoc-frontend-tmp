@@ -144,7 +144,7 @@ export class DiseaseForm extends React.Component {
                         id='disease-menu'
                     />
                 ) : (
-                    <Menu pointing items={diseaseTabs} />
+                    <Menu pointing items={diseaseTabs} id='disease-menu' />
                 )}
                 <div className='ui segment'>
                     <div className='question-map'>{questionArr} </div>

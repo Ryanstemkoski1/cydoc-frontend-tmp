@@ -142,6 +142,8 @@ export default class MedicalHistoryContent extends React.Component {
             Yes: false,
             No: false,
             Onset: '',
+            Resolved: '',
+            'End Year': '',
             Comments: '',
         };
         this.context.onContextChange('Medical History', values);

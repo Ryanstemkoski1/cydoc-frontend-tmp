@@ -27,6 +27,13 @@
   padding-bottom: 5px;
 }
 
+.sticky-header {
+  position: sticky;
+  z-index: 2;
+  background-color: white;
+  margin-bottom: -5px !important;
+}
+
 .year-validation-error {
   width: 12.5rem;
   background-color: #9f3a38;
