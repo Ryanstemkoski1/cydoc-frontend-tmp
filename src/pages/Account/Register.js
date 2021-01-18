@@ -42,7 +42,7 @@ class Register extends React.Component {
                     title='sign up'
                     buttonText='Sign Up'
                     handleSubmit={this.handleSubmit}
-                    show={true}
+                    formType='register'
                     pushTo='/login'
                     disableRegister={true}
                 />

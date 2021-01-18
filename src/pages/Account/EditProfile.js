@@ -57,7 +57,7 @@ class EditProfile extends React.Component {
                 title='edit profile'
                 buttonText='Save'
                 handleSubmit={this.handleSubmit}
-                show={false}
+                formType='editprofile'
                 pushTo='/dashboard'
             />
         );

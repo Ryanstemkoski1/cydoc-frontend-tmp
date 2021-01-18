@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Form, Segment, Message, Container, Image } from 'semantic-ui-react';
 import * as yup from 'yup';
 import { Redirect } from 'react-router';
@@ -210,24 +210,19 @@ class UserForm extends Component {
         }
     };
 
-    // helper function based on prop to determine if role field should be shown
-    // basically if Register page -- show, if EditProfile page -- don't show
+    // helper function to determine if role field should be shown
+    // if Register page: show, if EditProfile page: don't show
     showRole = () => {
-        if (this.props.show) {
+        const { formType, disableRegister } = this.props;
+
+        if (formType === 'register') {
             return (
-                <Fragment>
-                    <label className='sign-up-font'>I am a:</label>
+                <>
+                    <label className={disableRegister && 'disabled'}>
+                        I am a:
+                    </label>
                     <Form.Group>
                         <Form.Radio
-                            className='sign-up-font'
-                            label='patient'
-                            value='patient'
-                            name='role'
-                            checked={this.state.formInfo.role === 'patient'}
-                            onChange={this.handleChange}
-                        />
-                        <Form.Radio
-                            className='sign-up-font'
                             label='healthcare professional'
                             value='healthcare professional'
                             name='role'
@@ -236,9 +231,9 @@ class UserForm extends Component {
                                 'healthcare professional'
                             }
                             onChange={this.handleChange}
+                            disabled={disableRegister}
                         />
                         <Form.Radio
-                            className='sign-up-font'
                             label='administrator'
                             value='administrator'
                             name='role'
@@ -246,9 +241,10 @@ class UserForm extends Component {
                                 this.state.formInfo.role === 'administrator'
                             }
                             onChange={this.handleChange}
+                            disabled={disableRegister}
                         />
                     </Form.Group>
-                </Fragment>
+                </>
             );
         }
     };
@@ -258,11 +254,10 @@ class UserForm extends Component {
     additionalFields = () => {
         if (this.state.formInfo.role === 'healthcare professional') {
             return (
-                <Fragment>
-                    <label className='sign-up-font'>student status</label>
+                <>
+                    <label>Student status</label>
                     <Form.Group>
                         <Form.Radio
-                            className='sign-up-font'
                             label='student'
                             value='y'
                             name='studentStatus'
@@ -270,7 +265,6 @@ class UserForm extends Component {
                             onChange={this.handleChange}
                         />
                         <Form.Radio
-                            className='sign-up-font'
                             label='non-student'
                             value='n'
                             name='studentStatus'
@@ -278,7 +272,7 @@ class UserForm extends Component {
                             onChange={this.handleChange}
                         />
                     </Form.Group>
-                    <label className='sign-up-font'>degrees completed</label>
+                    <label>Degrees completed</label>
                     <Form.Group>
                         <Form.Dropdown
                             search
@@ -311,7 +305,7 @@ class UserForm extends Component {
                             onChange={this.handleArrayChange}
                         />
                     </Form.Group>
-                    <label className='sign-up-font'>degrees in progress</label>
+                    <label>Degrees in progress</label>
                     <Form.Group>
                         <Form.Dropdown
                             search
@@ -344,7 +338,7 @@ class UserForm extends Component {
                             onChange={this.handleArrayChange}
                         />
                     </Form.Group>
-                    <label className='sign-up-font'>specialties</label>
+                    <label>Specialties</label>
                     <Form.Group>
                         <Form.Dropdown
                             search
@@ -379,7 +373,7 @@ class UserForm extends Component {
                     </Form.Group>
                     <Form.Input
                         fluid
-                        label='workplace'
+                        label='Workplace'
                         placeholder='workplace'
                         name='workplace'
                         value={this.state.formInfo.workplace}
@@ -387,7 +381,7 @@ class UserForm extends Component {
                         required
                     />
                     <Form.Dropdown
-                        label='workplace features'
+                        label='Workplace features'
                         selection
                         multiple
                         options={workfeatOptions}
@@ -395,14 +389,17 @@ class UserForm extends Component {
                         name='workplaceFeatures'
                         onChange={this.handleChange}
                     />
-                </Fragment>
+                </>
             );
         }
     };
 
     render() {
         // after submit redirect is set to true (if no errors) and user is redirected
-        if (this.state.redirect || this.context.token) {
+        if (
+            this.state.redirect ||
+            (this.props.formType === 'register' && this.context.token)
+        ) {
             return <Redirect push to={this.props.pushTo} />;
         }
 
@@ -445,7 +442,7 @@ class UserForm extends Component {
                                 name='username'
                                 value={this.state.formInfo.username}
                                 onChange={this.handleChange}
-                                disabled
+                                disabled={this.props.disableRegister}
                             />
                             <Form.Input
                                 fluid
@@ -455,7 +452,7 @@ class UserForm extends Component {
                                 name='password'
                                 value={this.state.formInfo.password}
                                 onChange={this.handleChange}
-                                disabled
+                                disabled={this.props.disableRegister}
                             />
                             <Form.Input
                                 fluid
@@ -465,7 +462,7 @@ class UserForm extends Component {
                                 name='passwordConfirm'
                                 value={this.state.formInfo.passwordConfirm}
                                 onChange={this.handleChange}
-                                disabled
+                                disabled={this.props.disableRegister}
                             />
                             <Form.Group>
                                 <Form.Input
@@ -475,16 +472,16 @@ class UserForm extends Component {
                                     name='firstName'
                                     value={this.state.formInfo.firstName}
                                     onChange={this.handleChange}
-                                    disabled
+                                    disabled={this.props.disableRegister}
                                 />
                                 <Form.Input
                                     fluid
-                                    label='middle name'
+                                    label='Middle name'
                                     placeholder='middle name'
                                     name='middleName'
                                     value={this.state.formInfo.middleName}
                                     onChange={this.handleChange}
-                                    disabled
+                                    disabled={this.props.disableRegister}
                                 />
                             </Form.Group>
                             <Form.Group>
@@ -495,25 +492,16 @@ class UserForm extends Component {
                                     name='lastName'
                                     value={this.state.formInfo.lastName}
                                     onChange={this.handleChange}
-                                    disabled
+                                    disabled={this.props.disableRegister}
                                 />
                                 <Form.Input
                                     fluid
-                                    label='Date of Birth'
-                                    placeholder='Date of Birth'
+                                    label='Date of birth'
+                                    placeholder='date of birth'
                                     name='dob'
                                     value={this.state.formInfo.dob}
                                     onChange={this.handleChange}
-                                    disabled
-                                />
-                                <Form.Input
-                                    fluid
-                                    label='Date of Birth'
-                                    placeholder='Date of Birth'
-                                    name='dob'
-                                    value={this.state.formInfo.dob}
-                                    onChange={this.handleChange}
-                                    disabled
+                                    disabled={this.props.disableRegister}
                                 />
                             </Form.Group>
 
@@ -526,7 +514,7 @@ class UserForm extends Component {
                                     name='email'
                                     value={this.state.formInfo.email}
                                     onChange={this.handleChange}
-                                    disabled
+                                    disabled={this.props.disableRegister}
                                 />
                                 <Form.Input
                                     fluid
@@ -536,29 +524,29 @@ class UserForm extends Component {
                                     name='backupEmail'
                                     value={this.state.formInfo.backupEmail}
                                     onChange={this.handleChange}
-                                    disabled
+                                    disabled={this.props.disableRegister}
                                 />
                             </Form.Group>
                             <Form.Group>
                                 {/* <Form.Input
                                     fluid
-                                    label='address'
+                                    label='Address'
                                     placeholder='address'
                                     name='address'
                                     value={this.state.formInfo.address}
                                     onChange={this.handleChange}
-                                    disabled
+                                    disabled={this.props.disableRegister}
                                 /> */}
                                 <Form.Input
                                     fluid
                                     width={6}
                                     type='tel'
-                                    label='phone number'
+                                    label='Phone number'
                                     placeholder='phone number'
                                     name='phoneNumber'
                                     value={this.state.formInfo.phoneNumber}
                                     onChange={this.handleChange}
-                                    disabled
+                                    disabled={this.props.disableRegister}
                                 />
                                 <Form.Field
                                     width={2}
@@ -569,19 +557,19 @@ class UserForm extends Component {
                                     name='primaryMobile'
                                     checked={this.state.primaryMobile}
                                     onChange={this.handleMobile}
-                                    disabled
+                                    disabled={this.props.disableRegister}
                                 />
 
                                 <Form.Input
                                     fluid
                                     width={6}
                                     type='tel'
-                                    label='secondary phone number'
+                                    label='Secondary phone number'
                                     placeholder='secondary phone number'
-                                    name='phoneNumber'
+                                    name='secondaryNumber'
                                     value={this.state.formInfo.secondaryNumber}
                                     onChange={this.handleChange}
-                                    disabled
+                                    disabled={this.props.disableRegister}
                                 />
                                 <Form.Field
                                     width={2}
@@ -592,53 +580,10 @@ class UserForm extends Component {
                                     name='secondaryMobile'
                                     checked={this.state.secondaryMobile}
                                     onChange={this.handleMobile}
-                                    disabled
+                                    disabled={this.props.disableRegister}
                                 />
                             </Form.Group>
-                            <label
-                                className={`label-font ${
-                                    this.props.disableRegister ? 'disabled' : ''
-                                }`}
-                            >
-                                I am a:
-                            </label>
-                            <Form.Group>
-                                <Form.Radio
-                                    width={6}
-                                    label='Healthcare Professional'
-                                    value='healthcare professional'
-                                    name='role'
-                                    checked={
-                                        this.state.formInfo.role ===
-                                        'healthcare professional'
-                                    }
-                                    onChange={this.handleChange}
-                                    disabled
-                                />
-                                <Form.Radio
-                                    width={4}
-                                    label='Patient'
-                                    value='patient'
-                                    name='role'
-                                    checked={
-                                        this.state.formInfo.role === 'patient'
-                                    }
-                                    onChange={this.handleChange}
-                                    disabled
-                                />
-                                <Form.Radio
-                                    width={7}
-                                    label='Administrator'
-                                    value='administrator'
-                                    name='role'
-                                    checked={
-                                        this.state.formInfo.role ===
-                                        'administrator'
-                                    }
-                                    onChange={this.handleChange}
-                                    disabled
-                                />
-                            </Form.Group>
+                            {this.showRole()}
                             {this.additionalFields()}
                             <Message
                                 error
@@ -647,9 +592,7 @@ class UserForm extends Component {
                                     <Message.Item key={m}>{m}</Message.Item>
                                 ))}
                             />
-                            {this.props.disableRegister ? (
-                                ''
-                            ) : (
+                            {!this.props.disableRegister && (
                                 <DemographicsForm
                                     race={[]}
                                     asian={[]}
@@ -659,16 +602,13 @@ class UserForm extends Component {
                                     gender=''
                                 />
                             )}
-                            <>
-                                <Form.Button
-                                    color='teal'
-                                    size='small'
-                                    floated='right'
-                                    disabled={this.props.disableRegister}
-                                >
-                                    {this.props.buttonText}
-                                </Form.Button>
-                            </>
+                            <Form.Button
+                                color='teal'
+                                size='small'
+                                floated='right'
+                                disabled={this.props.disableRegister}
+                                content={this.props.buttonText}
+                            />
                         </Form>
                     </Segment>
                 </Container>
