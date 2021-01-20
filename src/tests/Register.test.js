@@ -1,8 +1,8 @@
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
-import Register from '../src/pages/Account/Register';
-import UserForm from '../src/pages/Account/UserForm';
+import Register from '../pages/Account/Register';
+import UserForm from '../pages/Account/UserForm';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 

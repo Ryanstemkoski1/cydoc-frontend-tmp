@@ -12,30 +12,36 @@ let failed = false;
 const indexPath = 'src/index.js';
 const contextsPath = 'src/contexts';
 const constantsPath = 'src/constants';
-const testsPath = 'tests';
+const testsPath = 'src/tests';
 const componentsPath = 'src/components';
 const pagesPath = 'src/pages';
 
 function runLint(path, args = []) {
-    const lintProcess = spawnSync('eslint', [path, fix, ...args]);
+    const lintProcess = spawnSync(
+        /^win/.test(process.platform) ? 'eslint.cmd' : 'eslint',
+        [path, fix, ...args]
+    );
 
     // print output
-    if (lintProcess.stdout.length > 0) {
-        console.log(
-            colors.bold.red(
-                `🥺 Please fix the following linting errors for ${path}: ${lintProcess.stdout}`
-            )
-        );
-    }
-    if (lintProcess.stderr.length > 0) {
-        console.log(colors.red(`😩 stderr for ${path}: ${lintProcess.stderr}`));
-    }
     if (lintProcess.error) {
         console.log(
             colors.bold.bgRed.black(
                 `😩 error for ${path}: ${lintProcess.error.message}`
             )
         );
+    } else {
+        if (lintProcess.stdout.length > 0) {
+            console.log(
+                colors.bold.red(
+                    `🥺 Please fix the following linting errors for ${path}: ${lintProcess.stdout}`
+                )
+            );
+        }
+        if (lintProcess.stderr.length > 0) {
+            console.log(
+                colors.red(`😩 stderr for ${path}: ${lintProcess.stderr}`)
+            );
+        }
     }
 
     if (lintProcess.status === 0) {
