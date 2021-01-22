@@ -45,7 +45,6 @@ export default class MedicalHistoryNoteRow extends Component {
                             value={onset}
                             onChange={onChange}
                             disabled={isPreview}
-                            rows={1}
                         />
                     </Form>
                     {onset !== '' &&
@@ -78,7 +77,6 @@ export default class MedicalHistoryNoteRow extends Component {
                             placeholder='End Year'
                             value={endYear}
                             onChange={onChange}
-                            rows={1}
                             disabled={isResolved !== 'Yes' || isPreview}
                         />
                     </Form>
@@ -97,7 +95,6 @@ export default class MedicalHistoryNoteRow extends Component {
                 <Grid.Column>
                     <Form>
                         <Form.TextArea
-                            rows={2}
                             condition={condition.props.condition}
                             value={comments}
                             onChange={onChange}

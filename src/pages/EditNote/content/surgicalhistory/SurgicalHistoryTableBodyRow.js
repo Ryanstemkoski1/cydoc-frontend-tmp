@@ -74,6 +74,7 @@ export class SurgicalHistoryTableBodyRow extends Component {
                             value={values[rowindex]['Procedure']}
                             onAddItem={onAddItem}
                             className='side-effects'
+                            aria-label='surgical-procedures'
                         />
                     </Input>
                 );
@@ -90,6 +91,7 @@ export class SurgicalHistoryTableBodyRow extends Component {
                             rowindex={rowindex}
                             value={values[rowindex]['Year']}
                             className='table-row-text'
+                            aria-label='surgical-year-input'
                         />
                         {this.state.invalidYear && (
                             <p className='year-validation-error'>
@@ -110,6 +112,7 @@ export class SurgicalHistoryTableBodyRow extends Component {
                         rowindex={rowindex}
                         value={values[rowindex][field]}
                         className='table-row-text'
+                        aria-label='surgical-comments'
                     />
                 );
                 break;

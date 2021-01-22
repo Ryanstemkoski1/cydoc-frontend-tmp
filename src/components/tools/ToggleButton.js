@@ -23,6 +23,7 @@ export default function ToggleButton(props) {
             size={size}
             compact={compact}
             title={title}
+            aria-label='toggle-button'
         >
             {title}
         </Button>

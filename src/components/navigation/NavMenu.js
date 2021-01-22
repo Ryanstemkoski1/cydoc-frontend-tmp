@@ -452,6 +452,7 @@ class NoteNameMenuItem extends Component {
                     {() => (
                         <>
                             <Input
+                                aria-label='Note-Title'
                                 className='note-title'
                                 size='huge'
                                 transparent

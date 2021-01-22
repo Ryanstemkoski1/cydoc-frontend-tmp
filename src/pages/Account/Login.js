@@ -105,7 +105,7 @@ class LoginPage extends Component {
                 <Container className='login'>
                     <Segment clearing>
                         <Container textAlign='center'>
-                            <Image size='tiny' href='/' src={Logo} />
+                            <Image size='tiny' href='/' src={Logo} alt='logo' />
                             <h1 className='logo-text'>Cydoc</h1>
                         </Container>
                         <Container
@@ -118,6 +118,7 @@ class LoginPage extends Component {
                         <Form size='mini' onSubmit={this.handleSubmit}>
                             <Form.Input
                                 fluid
+                                aria-label='username'
                                 label='Username'
                                 name='username'
                                 value={username}
@@ -125,6 +126,7 @@ class LoginPage extends Component {
                             />
                             <Form.Input
                                 fluid
+                                aria-label='password'
                                 type={'password'}
                                 label='Password'
                                 name='password'
@@ -145,7 +147,11 @@ class LoginPage extends Component {
                                         </Link>
                                     </Grid.Column>
                                     <Grid.Column textAlign={'right'}>
-                                        <Button color='teal' size='small'>
+                                        <Button
+                                            color='teal'
+                                            size='small'
+                                            aria-label='login-button'
+                                        >
                                             Log in
                                         </Button>
                                     </Grid.Column>

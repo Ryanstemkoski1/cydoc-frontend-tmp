@@ -41,6 +41,7 @@ export default class DiscussionPlanSurvey extends Component {
                             <Grid.Column floated='right'>
                                 <label> Healthy </label>
                                 <input
+                                    aria-label='range-for-sickness'
                                     type='range'
                                     min={0}
                                     max={10}

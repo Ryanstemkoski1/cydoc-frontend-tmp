@@ -41,8 +41,16 @@
 }
 
 .section-title > h2 {
-    background-color: #ecf3f5!important;
+    background-color: #006b87!important;
     font-weight: 400!important;
+}
+
+.accordion.styled.plan-section > .title.section-title > h2 {
+    color: white;
+}
+
+.ui.dropdown:not(.button)>.default.text {
+    color: #707575 !important;
 }
 
 .section-body {
@@ -67,11 +75,6 @@
 
 .delete-btn {
     cursor: pointer;
-}
-
-
-.ui.form > textarea {
-    height: 12rem !important;
 }
 
 .prescriptions .active.title {

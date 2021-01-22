@@ -31,6 +31,7 @@ export default class PlanInput extends React.Component {
     render() {
         return (
             <Input
+                aria-label='Condition-Name'
                 fluid={this.props.fluid}
                 className={
                     this.state.isTitleFocused === true

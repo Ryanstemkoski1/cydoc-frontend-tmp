@@ -108,6 +108,7 @@ export default class FamilyHistoryDropdown extends Component {
                                         options={familyOptions}
                                         onChange={this.handleChange}
                                         className='dropdown-inline-mobile'
+                                        aria-label='family-dropdown'
                                     />
                                 </Grid.Column>
                             </Grid.Row>
@@ -207,6 +208,7 @@ export default class FamilyHistoryDropdown extends Component {
                                             this.props.family_index
                                         )
                                     }
+                                    aria-label='delete-family-member'
                                 />
                                 delete family member
                             </Grid.Row>
@@ -231,6 +233,7 @@ export default class FamilyHistoryDropdown extends Component {
                                         this.props.family_index
                                     )
                                 }
+                                aria-label='delete-button'
                             />
                         </Grid.Column>
                         <Grid.Column width={3}>

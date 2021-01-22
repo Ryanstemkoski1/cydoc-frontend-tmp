@@ -113,6 +113,7 @@ export default class FamilyHistoryBlock extends Component {
                             icon='plus'
                             size='mini'
                             onClick={this.handlePlusClick}
+                            aria-label='add-family-member'
                         />
                         add family member
                     </Fragment>
@@ -164,6 +165,7 @@ export default class FamilyHistoryBlock extends Component {
                                         icon='plus'
                                         size='mini'
                                         onClick={this.handlePlusClick}
+                                        aria-label='add-family-member'
                                     />
                                     add family member
                                 </>

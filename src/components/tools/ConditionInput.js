@@ -63,6 +63,7 @@ class ConditionInput extends React.Component {
                     }
                     type='text'
                     placeholder='Condition'
+                    aria-label='Condition'
                     onChange={this.handleInputChange}
                     onFocus={() => {
                         this.setState({ isTitleFocused: true });

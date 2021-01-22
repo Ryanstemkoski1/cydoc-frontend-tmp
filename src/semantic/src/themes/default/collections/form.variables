@@ -52,11 +52,11 @@
 
 /* Text Area */
 @textAreaPadding: @inputVerticalPadding @inputHorizontalPadding;
-@textAreaHeight: 12em;
+@textAreaHeight: 3em;
 @textAreaResize: vertical;
 @textAreaLineHeight: 1.2857;
-@textAreaMinHeight: 8em;
-@textAreaMaxHeight: 24em;
+@textAreaMinHeight: 3em;
+@textAreaMaxHeight: 6em;
 @textAreaBackground: @inputBackground;
 @textAreaBorder: @inputBorder;
 @textAreaFontSize: @inputFontSize;

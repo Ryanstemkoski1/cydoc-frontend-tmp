@@ -170,6 +170,7 @@ class plan extends Component {
                     floated='left'
                     onClick={this.previousFormClick}
                     className='small-plan-previous-button'
+                    aria-label='previous-button'
                 >
                     <Icon name='arrow left' />
                 </Button>
@@ -179,6 +180,7 @@ class plan extends Component {
                     floated='left'
                     onClick={this.previousFormClick}
                     className='plan-previous-button'
+                    aria-label='previous-button'
                 >
                     Previous Form
                     <Icon name='arrow left' />
@@ -189,6 +191,7 @@ class plan extends Component {
                     floated='right'
                     onClick={this.nextFormClick}
                     className='small-plan-next-button'
+                    aria-label='next-button'
                 >
                     <Icon name='arrow right' />
                 </Button>
@@ -198,6 +201,7 @@ class plan extends Component {
                     floated='right'
                     onClick={this.nextFormClick}
                     className='plan-next-button'
+                    aria-label='next-button'
                 >
                     Next Form
                     <Icon name='arrow right' />

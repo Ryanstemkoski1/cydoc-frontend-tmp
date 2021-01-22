@@ -117,6 +117,7 @@ export default class DiscussionPlanForm extends Component {
                         <Grid.Row key={idx}>
                             <Grid.Column width={6}>
                                 <Dropdown
+                                    aria-label='Diagnosis-Dropdown'
                                     fluid
                                     search
                                     selection
@@ -134,6 +135,7 @@ export default class DiscussionPlanForm extends Component {
                             </Grid.Column>
                             <Grid.Column width={10}>
                                 <Input
+                                    aria-label='Diagnosis-Comment'
                                     fluid
                                     placeholder='Comments'
                                     name='comment'
@@ -149,6 +151,7 @@ export default class DiscussionPlanForm extends Component {
                         <Grid.Row key={idx}>
                             <Grid.Column>
                                 <Dropdown
+                                    aria-label='Prescrtiptions-Dropdown'
                                     fluid
                                     search
                                     selection
@@ -164,6 +167,7 @@ export default class DiscussionPlanForm extends Component {
                                     placeholder='Medication Name'
                                 />
                                 <Input
+                                    aria-label='Prescriptions-Amount'
                                     fluid
                                     type='text'
                                     name='recipe_amount'
@@ -177,6 +181,7 @@ export default class DiscussionPlanForm extends Component {
                             <Grid.Column>
                                 <div className='ui form'>
                                     <TextArea
+                                        aria-label='Prescription-Signature'
                                         name='signatura'
                                         index={idx}
                                         value={datum['signatura']}
@@ -188,6 +193,7 @@ export default class DiscussionPlanForm extends Component {
                             <Grid.Column>
                                 <div className='ui form'>
                                     <TextArea
+                                        aria-label='Prescription-Comment'
                                         name='comment'
                                         index={idx}
                                         value={datum['comment']}
@@ -203,6 +209,7 @@ export default class DiscussionPlanForm extends Component {
                         <Grid.Row key={idx}>
                             <Grid.Column>
                                 <Dropdown
+                                    aria-label='Procedures-Dropdown'
                                     fluid
                                     search
                                     selection
@@ -224,6 +231,7 @@ export default class DiscussionPlanForm extends Component {
                             </Grid.Column>
                             <Grid.Column>
                                 <Dropdown
+                                    aria-label='Procedures-When'
                                     fluid
                                     search
                                     selection
@@ -242,6 +250,7 @@ export default class DiscussionPlanForm extends Component {
                             <Grid.Column>
                                 <div className='ui form'>
                                     <TextArea
+                                        aria-label='Procedure-Comment'
                                         name='comment'
                                         index={idx}
                                         value={datum['comment']}
@@ -325,6 +334,7 @@ export default class DiscussionPlanForm extends Component {
                         Rx
                         <Input
                             transparent
+                            aria-label='Rx-Input'
                             className='content-input-surgical content-dropdown medication plan-main-input recipe'
                         >
                             <Dropdown
@@ -333,6 +343,7 @@ export default class DiscussionPlanForm extends Component {
                                 selection
                                 allowAdditions
                                 icon=''
+                                aria-label='Rx-Dropdown'
                                 name='recipe_type'
                                 optiontype='mainOptions'
                                 index={idx}
@@ -348,6 +359,7 @@ export default class DiscussionPlanForm extends Component {
                             fluid
                             transparent
                             type='text'
+                            aria-label='Rx-Amount'
                             name='recipe_amount'
                             className='recipe-amount'
                             placeholder={'e.g. 81 mg tablet'}
@@ -363,6 +375,7 @@ export default class DiscussionPlanForm extends Component {
                     content = (
                         <Input
                             fluid
+                            aria-label='Diagnosis-Input'
                             transparent
                             name='comment'
                             index={idx}
@@ -380,6 +393,7 @@ export default class DiscussionPlanForm extends Component {
                             <Input
                                 fluid
                                 transparent
+                                aria-label='Prescription-Signature'
                                 type='text'
                                 name='signatura'
                                 index={idx}
@@ -392,6 +406,7 @@ export default class DiscussionPlanForm extends Component {
                             <Input
                                 fluid
                                 transparent
+                                aria-label='Prescription-Comment'
                                 type='text'
                                 name='comment'
                                 index={idx}
@@ -408,12 +423,14 @@ export default class DiscussionPlanForm extends Component {
                         <>
                             <Input
                                 transparent
+                                aria-label='When-Input'
                                 className='content-input-surgical content-dropdown medication plan-main-input'
                             >
                                 <Dropdown
                                     fluid
                                     search
                                     selection
+                                    aria-label='When-Dropdown'
                                     allowAdditions
                                     icon=''
                                     optiontype='whenOptions'
@@ -430,6 +447,7 @@ export default class DiscussionPlanForm extends Component {
                             <Input
                                 fluid
                                 transparent
+                                aria-label='When-Comment'
                                 name='comment'
                                 index={idx}
                                 value={datum['comment']}

@@ -52,7 +52,11 @@ export default class NewNoteSegment extends Component {
                         <Icon name='file alternate outline' />
                         {template}
                     </Button>
-                    <Button basic style={{ position: 'absolute', right: '0' }}>
+                    <Button
+                        basic
+                        style={{ position: 'absolute', right: '0' }}
+                        aria-label='thumb-tack'
+                    >
                         <Icon name='thumb tack' />
                     </Button>
                 </ButtonGroup>
@@ -74,7 +78,11 @@ export default class NewNoteSegment extends Component {
                         <Icon name='file alternate outline' />
                         {template}
                     </Button>
-                    <Button basic style={{ position: 'absolute', right: '0' }}>
+                    <Button
+                        basic
+                        style={{ position: 'absolute', right: '0' }}
+                        aria-label='thumb-tack'
+                    >
                         <Icon
                             name='thumb tack'
                             color='grey'

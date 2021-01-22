@@ -278,6 +278,7 @@ class UserForm extends Component {
                             search
                             selection
                             clearable
+                            aria-label='Degrees-Completed'
                             options={degreeOptions}
                             value={this.state.formInfo.degreesCompleted[0]}
                             name='degreesCompleted'
@@ -288,6 +289,7 @@ class UserForm extends Component {
                             search
                             selection
                             clearable
+                            aria-label='Degrees-Completed'
                             options={degreeOptions}
                             value={this.state.formInfo.degreesCompleted[1]}
                             name='degreesCompleted'
@@ -298,6 +300,7 @@ class UserForm extends Component {
                             search
                             selection
                             clearable
+                            aria-label='Degrees-Completed'
                             options={degreeOptions}
                             value={this.state.formInfo.degreesCompleted[2]}
                             name='degreesCompleted'
@@ -311,6 +314,7 @@ class UserForm extends Component {
                             search
                             selection
                             clearable
+                            aria-label='Degrees-In-Progress'
                             options={degreeOptions}
                             value={this.state.formInfo.degreesInProgress[0]}
                             name='degreesInProgress'
@@ -321,6 +325,7 @@ class UserForm extends Component {
                             search
                             selection
                             clearable
+                            aria-label='Degrees-In-Progress'
                             options={degreeOptions}
                             value={this.state.formInfo.degreesInProgress[1]}
                             name='degreesInProgress'
@@ -331,6 +336,7 @@ class UserForm extends Component {
                             search
                             selection
                             clearable
+                            aria-label='Degrees-In-Progress'
                             options={degreeOptions}
                             value={this.state.formInfo.degreesInProgress[2]}
                             name='degreesInProgress'
@@ -344,6 +350,7 @@ class UserForm extends Component {
                             search
                             selection
                             clearable
+                            aria-label='Specialties'
                             options={specialtyOptions}
                             value={this.state.formInfo.specialties[0]}
                             name='specialties'
@@ -354,6 +361,7 @@ class UserForm extends Component {
                             search
                             selection
                             clearable
+                            aria-label='Specialties'
                             options={specialtyOptions}
                             value={this.state.formInfo.specialties[1]}
                             name='specialties'
@@ -364,6 +372,7 @@ class UserForm extends Component {
                             search
                             selection
                             clearable
+                            aria-label='Specialties'
                             options={specialtyOptions}
                             value={this.state.formInfo.specialties[2]}
                             name='specialties'
@@ -373,6 +382,7 @@ class UserForm extends Component {
                     </Form.Group>
                     <Form.Input
                         fluid
+                        aria-label='Workplace'
                         label='Workplace'
                         placeholder='workplace'
                         name='workplace'
@@ -381,6 +391,7 @@ class UserForm extends Component {
                         required
                     />
                     <Form.Dropdown
+                        aria-label='Workplace-Features'
                         label='Workplace features'
                         selection
                         multiple
@@ -409,7 +420,7 @@ class UserForm extends Component {
                 <Container>
                     <Segment clearing raised className='sign-up-segment'>
                         <Container textAlign='center'>
-                            <Image size='tiny' href='/' src={Logo} />
+                            <Image size='tiny' href='/' src={Logo} alt='logo' />
                             <h1 className='logo-text'>Cydoc</h1>
                         </Container>{' '}
                         {this.props.disableRegister && (
@@ -437,6 +448,7 @@ class UserForm extends Component {
                         >
                             <Form.Input
                                 fluid
+                                aria-label='Username'
                                 label='Username'
                                 placeholder='username'
                                 name='username'
@@ -446,6 +458,7 @@ class UserForm extends Component {
                             />
                             <Form.Input
                                 fluid
+                                aria-label='Password'
                                 type={'password'}
                                 label='Password'
                                 placeholder='password'
@@ -456,6 +469,7 @@ class UserForm extends Component {
                             />
                             <Form.Input
                                 fluid
+                                aria-label='Reenter-Password'
                                 type={'password'}
                                 label='Re-enter password'
                                 placeholder='re-enter password'
@@ -467,6 +481,7 @@ class UserForm extends Component {
                             <Form.Group>
                                 <Form.Input
                                     fluid
+                                    aria-label='First-Name'
                                     label='First name'
                                     placeholder='first name'
                                     name='firstName'
@@ -477,6 +492,7 @@ class UserForm extends Component {
                                 <Form.Input
                                     fluid
                                     label='Middle name'
+                                    aria-label='Middle-Name'
                                     placeholder='middle name'
                                     name='middleName'
                                     value={this.state.formInfo.middleName}
@@ -487,6 +503,7 @@ class UserForm extends Component {
                             <Form.Group>
                                 <Form.Input
                                     fluid
+                                    aria-label='Last-Name'
                                     label='Last name'
                                     placeholder='last name'
                                     name='lastName'
@@ -508,6 +525,7 @@ class UserForm extends Component {
                             <Form.Group>
                                 <Form.Input
                                     fluid
+                                    aria-label='Email'
                                     placeholder='name@example.com'
                                     type='email'
                                     label='Email'
@@ -518,6 +536,7 @@ class UserForm extends Component {
                                 />
                                 <Form.Input
                                     fluid
+                                    aria-label='Backup-Email'
                                     placeholder='name@example.com'
                                     type='email'
                                     label='Backup email'
@@ -530,6 +549,7 @@ class UserForm extends Component {
                             <Form.Group>
                                 {/* <Form.Input
                                     fluid
+                                    aria-label='Address'
                                     label='Address'
                                     placeholder='address'
                                     name='address'
@@ -541,6 +561,7 @@ class UserForm extends Component {
                                     fluid
                                     width={6}
                                     type='tel'
+                                    aria-label='Phone-Number'
                                     label='Phone number'
                                     placeholder='phone number'
                                     name='phoneNumber'

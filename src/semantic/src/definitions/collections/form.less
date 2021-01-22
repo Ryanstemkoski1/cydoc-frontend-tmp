@@ -146,12 +146,13 @@
   transition: @textAreaTransition;
   font-size: @textAreaFontSize;
   line-height: @textAreaLineHeight;
-  resize: @textAreaResize;
+  resize: none;
+  height: 3em;
 }
 .ui.form textarea:not([rows]) {
-  height: @textAreaHeight;
-  min-height: @textAreaMinHeight;
-  max-height: @textAreaMaxHeight;
+  height: 3em;
+  min-height: 3em;
+  max-height: 6em;
 }
 
 .ui.form textarea,

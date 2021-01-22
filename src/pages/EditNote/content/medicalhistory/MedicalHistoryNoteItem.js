@@ -113,7 +113,6 @@ export default class MedicalHistoryNoteItem extends Component {
                                 placeholder='Comments'
                                 value={comments}
                                 onChange={onChange}
-                                rows={2}
                             />
                         </div>
                     )}

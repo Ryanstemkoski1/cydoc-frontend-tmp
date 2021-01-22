@@ -71,6 +71,7 @@ export default class OpenRecentSegment extends Component {
                     note={note}
                     onClick={this.handleTrashClick}
                     style={{ position: 'absolute', right: '0' }}
+                    aria-label='delete-note'
                 >
                     <Icon name='trash' color='red' />
                 </Button>

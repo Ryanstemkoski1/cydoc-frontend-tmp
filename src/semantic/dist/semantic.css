@@ -20275,13 +20275,14 @@ ol.ui.horizontal.list li:before,
   transition: color 0.1s ease, border-color 0.1s ease;
   font-size: 1em;
   line-height: 1.2857;
-  resize: vertical;
+  resize: none;
+  height: 3em;
 }
 
 .ui.form textarea:not([rows]) {
-  height: 12em;
-  min-height: 8em;
-  max-height: 24em;
+  height: 3em;
+  min-height: 3em;
+  max-height: 6em;
 }
 
 .ui.form textarea,

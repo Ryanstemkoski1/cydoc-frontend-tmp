@@ -8,7 +8,13 @@ export default function AddRowButton(props) {
     const name = props.name;
     return (
         <div className='add-row'>
-            <Button basic circular icon='plus' onClick={props.onClick} />
+            <Button
+                basic
+                circular
+                icon='plus'
+                onClick={props.onClick}
+                aria-label='add-row'
+            />
             add {name}
         </div>
     );
