@@ -24,8 +24,6 @@ export default class PatientHistoryContent extends Component {
         };
         this.updateDimensions = this.updateDimensions.bind(this);
         this.handleItemClick = this.handleItemClick.bind(this);
-        this.onNextClick = this.onNextClick.bind(this);
-        this.onPreviousClick = this.onPreviousClick.bind(this);
         this.handleTabChange = this.handleTabChange.bind(this);
         this.updateIndex = this.updateIndex.bind(this);
         this.setMenuPosition = this.setMenuPosition.bind(this);
@@ -93,10 +91,6 @@ export default class PatientHistoryContent extends Component {
 
     handleItemClick = (e, { children }) =>
         this.setState({ activeTabName: children });
-
-    nextFormClick = () => this.props.nextFormClick();
-
-    previousFormClick = () => this.props.previousFormClick();
 
     handleTabChange = (e, { activeIndex }) => {
         this.setState({ activeIndex });
@@ -244,9 +238,9 @@ export default class PatientHistoryContent extends Component {
                             labelPosition='left'
                             floated='left'
                             className='patient-previous-button'
-                            onClick={this.previousFormClick}
+                            onClick={this.props.previousFormClick}
                         >
-                            Previous Form
+                            Previous
                             <Icon name='arrow left' />
                         </Button>
 
@@ -259,7 +253,7 @@ export default class PatientHistoryContent extends Component {
                             activeTabName='Surgical History'
                             onClick={this.handleNextTab}
                         >
-                            Next Form
+                            Next
                             <Icon name='arrow right' />
                         </Button>
                     </Tab.Pane>
@@ -279,7 +273,7 @@ export default class PatientHistoryContent extends Component {
                             activeTabName='Medical History'
                             onClick={this.handlePrevTab}
                         >
-                            Previous Form
+                            Previous
                             <Icon name='arrow left' />
                         </Button>
 
@@ -292,7 +286,7 @@ export default class PatientHistoryContent extends Component {
                             activeTabName='Medications'
                             onClick={this.handleNextTab}
                         >
-                            Next Form
+                            Next
                             <Icon name='arrow right' />
                         </Button>
                     </Tab.Pane>
@@ -312,7 +306,7 @@ export default class PatientHistoryContent extends Component {
                             activeTabName='Surgical History'
                             onClick={this.handlePrevTab}
                         >
-                            Previous Form
+                            Previous
                             <Icon name='arrow left' />
                         </Button>
 
@@ -325,7 +319,7 @@ export default class PatientHistoryContent extends Component {
                             activeTabName='Allergies'
                             onClick={this.handleNextTab}
                         >
-                            Next Form
+                            Next
                             <Icon name='arrow right' />
                         </Button>
                     </Tab.Pane>
@@ -345,7 +339,7 @@ export default class PatientHistoryContent extends Component {
                             activeTabName='Medications'
                             onClick={this.handlePrevTab}
                         >
-                            Previous Form
+                            Previous
                             <Icon name='arrow left' />
                         </Button>
 
@@ -358,7 +352,7 @@ export default class PatientHistoryContent extends Component {
                             activeTabName='Social History'
                             onClick={this.handleNextTab}
                         >
-                            Next Form
+                            Next
                             <Icon name='arrow right' />
                         </Button>
                     </Tab.Pane>
@@ -378,7 +372,7 @@ export default class PatientHistoryContent extends Component {
                             activeTabName='Allergies'
                             onClick={this.handlePrevTab}
                         >
-                            Previous Form
+                            Previous
                             <Icon name='arrow left' />
                         </Button>
 
@@ -391,7 +385,7 @@ export default class PatientHistoryContent extends Component {
                             activeTabName='Family History'
                             onClick={this.handleNextTab}
                         >
-                            Next Form
+                            Next
                             <Icon name='arrow right' />
                         </Button>
                     </Tab.Pane>
@@ -411,7 +405,7 @@ export default class PatientHistoryContent extends Component {
                             activeTabName='Social History'
                             onClick={this.handlePrevTab}
                         >
-                            Previous Form
+                            Previous
                             <Icon name='arrow left' />
                         </Button>
 
@@ -420,9 +414,9 @@ export default class PatientHistoryContent extends Component {
                             labelPosition='right'
                             floated='right'
                             className='patient-next-button'
-                            onClick={this.nextFormClick}
+                            onClick={this.props.nextFormClick}
                         >
-                            Next Form
+                            Next
                             <Icon name='arrow right' />
                         </Button>
                     </Tab.Pane>
@@ -464,7 +458,7 @@ export default class PatientHistoryContent extends Component {
                                 <Button
                                     icon
                                     floated='left'
-                                    onClick={this.previousFormClick}
+                                    onClick={this.props.previousFormClick}
                                     className='small-patient-previous-button'
                                 >
                                     <Icon name='arrow left' />
@@ -497,7 +491,7 @@ export default class PatientHistoryContent extends Component {
                                 <Button
                                     icon
                                     floated='right'
-                                    onClick={this.nextFormClick}
+                                    onClick={this.props.nextFormClick}
                                     className='small-patient-next-button'
                                 >
                                     <Icon name='arrow right' />

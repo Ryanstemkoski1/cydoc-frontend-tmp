@@ -1,6 +1,7 @@
 import React from 'react';
 import HPIContext from '../../../../contexts/HPIContext';
 import { Button, Segment, Icon } from 'semantic-ui-react';
+import './GenerateNote.css';
 
 // import all the individual note sections
 import MedicalHistoryNote from './notesections/MedicalHistoryNote';
@@ -86,7 +87,7 @@ class GenerateNote extends React.Component {
                 <Button
                     icon
                     floated='left'
-                    onClick={this.previousFormClick}
+                    onClick={this.props.previousFormClick}
                     className='small-note-previous-button'
                 >
                     <Icon name='arrow left' />
@@ -95,10 +96,10 @@ class GenerateNote extends React.Component {
                     icon
                     labelPosition='left'
                     floated='left'
-                    onClick={this.previousFormClick}
+                    onClick={this.props.previousFormClick}
                     className='note-previous-button'
                 >
-                    Previous Form
+                    Previous
                     <Icon name='arrow left' />
                 </Button>
             </div>

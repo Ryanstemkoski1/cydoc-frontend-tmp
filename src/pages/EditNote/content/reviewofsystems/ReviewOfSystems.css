@@ -27,42 +27,43 @@
 }
 
 .ui.icon.button.ros-previous-button, .ui.icon.button.ros-next-button {
-  position: sticky !important;
-  bottom: 0;
+  position: fixed;
+  bottom: 15px;
   opacity: 0.8;
   margin: 0;
   display: block;
   font-size: 13px;
-  background: #c8e2ea;
+  background: #006b87;
+  color: white;
 }
 
 .ui.icon.button.ros-previous-button:hover, .ui.icon.button.ros-next-button:hover {
-  opacity: 1;
-  background: #c8e2ea;
+  opacity: 0.6;
 }
 
 .ui.icon.button.ros-previous-button {
-  margin-left: -13em;
+  left: 20px;
 }
 
 .ui.icon.button.ros-next-button {
-  margin-right: -13em;
+  right: 20px;
 }
 
 .ui.icon.button.small-ros-previous-button, .ui.icon.button.small-ros-next-button {
   display: none;
-  position: sticky !important;
-  bottom: 0;
+  position: fixed;
+  bottom: 15px;
   opacity: 0.8;
   margin: 0;
-  background: #c8e2ea;
+  background: #006b87;
+  color: white;
 }
 
 .ui.container.active-tab-container {
   margin-bottom: 10px;
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1400px) {
   .ui.icon.button.ros-previous-button, .ui.icon.button.ros-next-button {
       display: none;
   }
@@ -72,20 +73,20 @@
   }
   
   .ui.icon.button.small-ros-previous-button {
-    margin-left: -2.8em;
+    left: 5px;
   }
 
   .ui.icon.button.small-ros-next-button {
-    margin-right: -2.8em;
+    right: 5px;
   }
 }
 
 @media screen and (max-width: 400px) {
   .ui.icon.button.small-ros-previous-button {
-    margin-left: 0;
+    left: 15px;
   }
 
   .ui.icon.button.small-ros-next-button {
-    margin-right: 0;
+    right: 15px;
   }
 }

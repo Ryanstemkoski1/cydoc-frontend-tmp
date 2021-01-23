@@ -59,14 +59,15 @@
     margin-top: -20px;
 }
 
-.ui.button.hpi-previous-button, .ui.button.hpi-next-button {
-    position: sticky !important;
-    bottom: 0;
+.ui.icon.button.hpi-previous-button, .ui.icon.button.hpi-next-button {
+    position: fixed;
+    bottom: 15px;
     margin: 0;
     opacity: 0.8;
     display: block;
     font-size: 13px;
-    background: #c8e2ea;
+    background: #006b87;
+    color: white;;
 }
 
 .hpi-disease-container {
@@ -74,44 +75,44 @@
     position: relative;
 }
 
-.ui.button.hpi-previous-button {
-    margin-left: -13em;
+.ui.icon.button.hpi-previous-button {
+    left: 20px;
 }
 
-.ui.button.hpi-next-button {
-    margin-right: -13em;
+.ui.icon.button.hpi-next-button {
+    right: 20px;
 }
 
-.ui.button.hpi-previous-button:hover, .ui.button.hpi-next-button:hover {
-    opacity: 1;
-    background: #c8e2ea;
+.ui.icon.button.hpi-previous-button:hover, .ui.icon.button.hpi-next-button:hover {
+    opacity: 0.6;
 }
 
-.ui.button.hpi-small-previous-button, .ui.button.hpi-small-next-button {
+.ui.icon.button.hpi-small-previous-button, .ui.icon.button.hpi-small-next-button {
     display: none;
-    position: sticky !important;
-    bottom: 0;
+    position: fixed;
+    bottom: 15px;
     opacity: 0.8;
     margin: 0;
-    background: #c8e2ea;
+    background: #006b87;
+    color: white;
 }
 
 
-@media screen and (max-width: 1300px) {
-    .ui.button.hpi-previous-button, .ui.button.hpi-next-button {
+@media screen and (max-width: 1400px) {
+    .ui.icon.button.hpi-previous-button, .ui.icon.button.hpi-next-button {
         display: none;
     }
 
-    .ui.button.hpi-small-previous-button, .ui.button.hpi-small-next-button {
+    .ui.icon.button.hpi-small-previous-button, .ui.icon.button.hpi-small-next-button {
         display: block;
     }
     
     .ui.icon.button.hpi-small-previous-button {
-        margin-left: -2.8em;
+        left: 5px;
     }
 
     .ui.icon.button.hpi-small-next-button {
-        margin-right: -2.8em;
+        right: 5px;
     }
     
 }
@@ -125,12 +126,15 @@
     .question-map {
         margin: auto .5rem;
     }
+}
+
+@media screen and (max-width: 400px) {
 
     .ui.icon.button.hpi-small-previous-button {
-        margin-left: 0;
+        left: 15px;
     }
 
     .ui.icon.button.hpi-small-next-button {
-        margin-right: 0;
+        right: 15px;
     }
 }

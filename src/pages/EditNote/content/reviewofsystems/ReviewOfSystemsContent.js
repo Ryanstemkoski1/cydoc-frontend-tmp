@@ -44,8 +44,6 @@ export default class ReviewOfSystemsContent extends Component {
         ));
     };
 
-    nextFormClick = () => this.props.nextFormClick();
-
     previousFormClick = () => {
         this.props.previousFormClick();
         window.localStorage.setItem('activeIndex', 5);
@@ -89,14 +87,14 @@ export default class ReviewOfSystemsContent extends Component {
                     onClick={this.previousFormClick}
                     className='ros-previous-button'
                 >
-                    Previous Form
+                    Previous
                     <Icon name='left arrow' />
                 </Button>
 
                 <Button
                     icon
                     floated='right'
-                    onClick={this.nextFormClick}
+                    onClick={this.props.nextFormClick}
                     className='small-ros-next-button'
                 >
                     <Icon name='right arrow' />
@@ -105,10 +103,10 @@ export default class ReviewOfSystemsContent extends Component {
                     icon
                     labelPosition='right'
                     floated='right'
-                    onClick={this.nextFormClick}
+                    onClick={this.props.nextFormClick}
                     className='ros-next-button'
                 >
-                    Next Form
+                    Next
                     <Icon name='right arrow' />
                 </Button>
             </>

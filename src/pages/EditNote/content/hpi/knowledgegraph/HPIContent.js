@@ -214,7 +214,7 @@ class HPIContent extends Component {
                                     onClick={this.continue}
                                     className='hpi-next-button'
                                 >
-                                    Next Form
+                                    Next
                                     <Icon name='arrow right' />
                                 </Button>
                             </>
@@ -235,7 +235,7 @@ class HPIContent extends Component {
                                     onClick={this.nextFormClick}
                                     className='hpi-next-button'
                                 >
-                                    Next Form
+                                    Next
                                     <Icon name='arrow right' />
                                 </Button>
                             </>
@@ -276,7 +276,7 @@ class HPIContent extends Component {
                                         onClick={this.back}
                                         className='hpi-previous-button'
                                     >
-                                        Previous Form
+                                        Previous
                                         <Icon name='arrow left' />
                                     </Button>
 
@@ -295,7 +295,7 @@ class HPIContent extends Component {
                                         onClick={this.nextFormClick}
                                         className='hpi-next-button'
                                     >
-                                        Next Form
+                                        Next
                                         <Icon name='arrow right' />
                                     </Button>
                                 </>
@@ -316,7 +316,7 @@ class HPIContent extends Component {
                                         onClick={this.back}
                                         className='hpi-previous-button'
                                     >
-                                        Previous Form
+                                        Previous
                                         <Icon name='arrow left' />
                                     </Button>
 
@@ -335,7 +335,7 @@ class HPIContent extends Component {
                                         onClick={this.continue}
                                         className='hpi-next-button'
                                     >
-                                        Next Form
+                                        Next
                                         <Icon name='arrow right' />
                                     </Button>
                                 </>

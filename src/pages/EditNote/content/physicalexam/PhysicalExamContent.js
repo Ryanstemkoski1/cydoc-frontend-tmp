@@ -191,10 +191,6 @@ export default class PhysicalExamContent extends React.Component {
         return panels;
     };
 
-    nextFormClick = () => this.props.nextFormClick();
-
-    previousFormClick = () => this.props.previousFormClick();
-
     render() {
         return (
             <>
@@ -207,7 +203,7 @@ export default class PhysicalExamContent extends React.Component {
                 <Button
                     icon
                     floated='left'
-                    onClick={this.previousFormClick}
+                    onClick={this.props.previousFormClick}
                     className='small-physical-previous-button'
                 >
                     <Icon name='arrow left' />
@@ -216,17 +212,17 @@ export default class PhysicalExamContent extends React.Component {
                     icon
                     labelPosition='left'
                     floated='left'
-                    onClick={this.previousFormClick}
+                    onClick={this.props.previousFormClick}
                     className='physical-previous-button'
                 >
-                    Previous Form
+                    Previous
                     <Icon name='arrow left' />
                 </Button>
 
                 <Button
                     icon
                     floated='right'
-                    onClick={this.nextFormClick}
+                    onClick={this.props.nextFormClick}
                     className='small-physical-next-button'
                 >
                     <Icon name='arrow right' />
@@ -235,10 +231,10 @@ export default class PhysicalExamContent extends React.Component {
                     icon
                     labelPosition='right'
                     floated='right'
-                    onClick={this.nextFormClick}
+                    onClick={this.props.nextFormClick}
                     className='physical-next-button'
                 >
-                    Next Form
+                    Next
                     <Icon name='arrow right' />
                 </Button>
             </>

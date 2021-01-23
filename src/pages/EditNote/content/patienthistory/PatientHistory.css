@@ -85,46 +85,72 @@
   border-color: transparent transparent #9f3a38 transparent;
 }
 
-.ui.icon.button.patient-previous-button, .ui.icon.button.patient-next-button {
-  position: sticky !important;
-  bottom: 0;
+.ui.icon.button.patient-previous-button, .ui.icon.button.patient-next-button,
+.ui.icon.button.social-previous-button, .ui.icon.button.social-next-button,
+.ui.icon.button.family-previous-button, .ui.icon.button.family-next-button,
+.ui.icon.button.surgical-previous-button, .ui.icon.button.surgical-next-button,
+.ui.icon.button.medications-previous-button, .ui.icon.button.medications-next-button,
+.ui.icon.button.allergies-previous-button, .ui.icon.button.allergies-next-button {
+  position: fixed;
+  bottom: 15px;
   margin: 0;
   opacity: 0.8;
-  display: block;
   font-size: 13px;
-  background: #c8e2ea;
+  background: #006b87;
+  color: white;
 }
 
-.ui.icon.button.patient-previous-button:hover, .ui.icon.button.patient-next-button:hover {
-  opacity: 1;
-  background: #c8e2ea;
+.ui.icon.button.patient-previous-button:hover, .ui.icon.button.patient-next-button:hover,
+.ui.icon.button.surgical-previous-button:hover, .ui.icon.button.surgical-next-button:hover,
+.ui.icon.button.medications-previous-button:hover, .ui.icon.button.medications-next-button:hover,
+.ui.icon.button.allergies-previous-button:hover, .ui.icon.button.allergies-next-button:hover,
+.ui.icon.button.social-previous-button:hover, .ui.icon.button.social-next-button:hover,
+.ui.icon.button.family-previous-button:hover, .ui.icon.button.family-next-button:hover {
+  opacity: 0.6;
 }
 
-.ui.icon.button.patient-previous-button {
-  margin-left: -13em;
+.ui.icon.button.patient-previous-button, .ui.icon.button.surgical-previous-button,
+.ui.icon.button.medications-previous-button, .ui.icon.button.allergies-previous-button,
+.ui.icon.button.social-previous-button, .ui.icon.button.family-previous-button {
+  left: 20px;
 }
 
-.ui.icon.button.patient-next-button {
-  margin-right: -13em;
+.ui.icon.button.patient-next-button, .ui.icon.button.surgical-next-button,
+.ui.icon.button.medications-next-button, .ui.icon.button.allergies-next-button,
+.ui.icon.button.social-next-button, .ui.icon.button.family-next-button {
+  right: 20px;
 }
+
 
 .ui.icon.button.small-patient-previous-button, .ui.icon.button.small-patient-next-button {
   display: block;
-  position: sticky !important;
-  bottom: 0;
+  position: fixed;
+  bottom: 15px;
   opacity: 0.8;
   margin: 0;
-  background: #c8e2ea;
+  background: #006b87;
+  color: white;
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1400px) {
 
   .ui.icon.button.small-patient-previous-button {
-    margin-left: -2.8em;
+    left: 5px;
   }
 
   .ui.icon.button.small-patient-next-button {
-    margin-right: -2.8em;
+    right: 5px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+
+  .ui.icon.button.small-patient-previous-button {
+    left: 15px;
+  }
+
+  .ui.icon.button.small-patient-next-button {
+    right: 15px;
   }
 }
 

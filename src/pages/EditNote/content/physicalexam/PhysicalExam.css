@@ -12,42 +12,44 @@ h5.ui.header{
 }
 
 .ui.icon.button.physical-previous-button, .ui.icon.button.physical-next-button {
-    position: sticky !important;
-    bottom: 0;
+    position: fixed;
+    bottom: 15px;
     opacity: 0.8;
     margin: 0;
     display: block;
     font-size: 13px;
-    background: #c8e2ea;
+    background: #006b87;
+    color: white;
   }
   
-.ui.icon.button.physical-previous-button:hover, .ui.icon.button.physical-next-button:hover {
-    opacity: 1;
-    background: #c8e2ea;
+.ui.icon.button.physical-previous-button:hover, .ui.icon.button.physical-next-button:hover,
+.ui.icon.button.small-physical-previous-button, .ui.icon.button.small-physical-next-button {
+    opacity: 0.6;
 }
 
 .ui.icon.button.physical-previous-button {
-    margin-left: -13em;
+    left: 20px;
 }
 
 .ui.icon.button.physical-next-button {
-    margin-right: -13em;
+    right: 20px;
 }
 
 .ui.icon.button.small-physical-previous-button, .ui.icon.button.small-physical-next-button {
     display: none;
-    position: sticky !important;
-    bottom: 0;
+    position: fixed;
+    bottom: 15px;
     opacity: 0.8;
     margin: 0;
-    background: #c8e2ea;
+    background: #006b87;
+    color: white;
 }
 
 .ui.container.active-tab-container {
-margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1400px) {
 
     .ui.icon.button.physical-previous-button, .ui.icon.button.physical-next-button {
         display: none;
@@ -58,21 +60,25 @@ margin-bottom: 10px;
     }
 
     .ui.icon.button.small-physical-previous-button {
-        margin-left: -2.8em;
+        left: 5px;
     }
 
     .ui.icon.button.small-physical-next-button {
-        margin-right: -2.8em;
+        right: 5px;
     }
 }
 
 @media screen and (max-width: 400px) {
 
+    .physical-accordion {
+        height: 350px;
+    }
+
     .ui.icon.button.small-physical-previous-button {
-        margin-left: 0;
+        left: 15px;
     }
 
     .ui.icon.button.small-physical-next-button {
-        margin-right: 0;
+        right: 15px;
     }
 }

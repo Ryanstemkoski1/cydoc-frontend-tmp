@@ -74,10 +74,6 @@ class plan extends Component {
         }
     };
 
-    nextFormClick = () => this.props.nextFormClick();
-
-    previousFormClick = () => this.props.previousFormClick();
-
     render() {
         const { plan } = this.context;
         const { current, windowWidth } = this.state;
@@ -168,7 +164,7 @@ class plan extends Component {
                 <Button
                     icon
                     floated='left'
-                    onClick={this.previousFormClick}
+                    onClick={this.props.previousFormClick}
                     className='small-plan-previous-button'
                     aria-label='previous-button'
                 >
@@ -178,18 +174,18 @@ class plan extends Component {
                     icon
                     labelPosition='left'
                     floated='left'
-                    onClick={this.previousFormClick}
+                    onClick={this.props.previousFormClick}
                     className='plan-previous-button'
                     aria-label='previous-button'
                 >
-                    Previous Form
+                    Previous
                     <Icon name='arrow left' />
                 </Button>
 
                 <Button
                     icon
                     floated='right'
-                    onClick={this.nextFormClick}
+                    onClick={this.props.nextFormClick}
                     className='small-plan-next-button'
                     aria-label='next-button'
                 >
@@ -199,11 +195,11 @@ class plan extends Component {
                     icon
                     labelPosition='right'
                     floated='right'
-                    onClick={this.nextFormClick}
+                    onClick={this.props.nextFormClick}
                     className='plan-next-button'
                     aria-label='next-button'
                 >
-                    Next Form
+                    Next
                     <Icon name='arrow right' />
                 </Button>
             </>
