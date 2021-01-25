@@ -71,7 +71,7 @@
   left: 0;
 }
 
-.ui.image.preview-image.history {
+.ui.image.preview-image.plan {
   bottom: 5.7rem;
   left: 2.4rem;
 }
@@ -94,7 +94,7 @@
   left: 1rem;
 }
 
-.ui.image.preview-image-small.history-small {
+.ui.image.preview-image-small.plan-small {
   top: -4rem;
   left: 3rem;
 }
@@ -403,7 +403,7 @@
     left: 4rem;
   }
 
-  .ui.image.preview-image.history {
+  .ui.image.preview-image.plan {
     top: 8rem;
     left: 7rem;
   }

@@ -4,9 +4,9 @@ import { HOME_MED_BP } from 'constants/breakpoints.js';
 import { homeContent } from 'constants/homeContent';
 import './Home.css';
 
-const previewHistory =
-    'https://cydoc-static-files.s3.amazonaws.com/patient-history.png';
-const previewROS = 'https://cydoc-static-files.s3.amazonaws.com/ros.png';
+const previewPlan =
+    'https://cydoc-static-files.s3.amazonaws.com/about-plan.png';
+const previewROS = 'https://cydoc-static-files.s3.amazonaws.com/about-ROS.png';
 
 export const MeetCydocSection = (props) => {
     return props.windowWidth < HOME_MED_BP ? (
@@ -39,10 +39,10 @@ export const MeetCydocSection = (props) => {
                     className='preview-image-small ros-small'
                 />
                 <Image
-                    src={previewHistory}
+                    src={previewPlan}
                     alt='cydoc preview page'
                     verticalAlign='bottom'
-                    className='preview-image-small history-small'
+                    className='preview-image-small plan-small'
                 />
             </div>
         </Segment>
@@ -79,10 +79,10 @@ export const MeetCydocSection = (props) => {
                         className='preview-image ros'
                     />
                     <Image
-                        src={previewHistory}
+                        src={previewPlan}
                         alt='cydoc preview page'
                         verticalAlign='bottom'
-                        className='preview-image history'
+                        className='preview-image plan'
                     />
                 </Grid.Column>
             </Grid>

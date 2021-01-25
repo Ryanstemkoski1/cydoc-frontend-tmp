@@ -92,10 +92,12 @@ class Home extends Component {
                 <Segment className='footer'>
                     <Header
                         as={Link}
-                        onClick={window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth',
-                        })}
+                        onClick={() =>
+                            window.scrollTo({
+                                top: 0,
+                                behavior: 'smooth',
+                            })
+                        }
                         content={homeContent.footer.cydoc}
                         className='home-header light-teal footer-header'
                     />
