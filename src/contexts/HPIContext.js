@@ -54,7 +54,7 @@ export class HPIStore extends React.Component {
             this.context.updateNoteLocally(note);
         } else {
             this.setState({ unsavedChanges: false });
-            this.context.updateNote(note);
+            return this.context.updateNote(note);
         }
     };
 

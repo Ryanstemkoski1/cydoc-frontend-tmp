@@ -237,6 +237,8 @@ class NoteNameMenuItem extends Component {
             invalidDate: false,
             primaryMobile: false,
             secondaryMobile: false,
+            saveButton: '',
+            buttonIcon: undefined,
         };
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -250,11 +252,62 @@ class NoteNameMenuItem extends Component {
         this.handleMobile = this.handleMobile.bind(this);
         this.setPrimaryMobile = this.setPrimaryMobile.bind(this);
         this.setSecondaryMobile = this.setSecondaryMobile.bind(this);
+        this.handleSave = this.handleSave.bind(this);
     }
 
     handleInputChange = (event) => {
         this.setState({ textInput: event.target.value });
         this.context.onContextChange('title', event.target.value);
+    };
+
+    handleSave = (event) => {
+        event.preventDefault();
+        this.setState({ saveButton: 'loading' });
+        this.context
+            .saveNote()
+            .then((message) => {
+                if (message === 'Save Success') {
+                    this.setState(
+                        { saveButton: 'positive icon', buttonIcon: 'check' },
+                        () => {
+                            setTimeout(() => {
+                                this.setState({
+                                    saveButton: '',
+                                    buttonIcon: undefined,
+                                });
+                            }, 1000);
+                        }
+                    );
+                } else if (message === 'Save Failure') {
+                    this.setState(
+                        { saveButton: 'negative icon', buttonIcon: 'close' },
+                        () => {
+                            setTimeout(() => {
+                                this.setState({
+                                    saveButton: '',
+                                    buttonIcon: undefined,
+                                });
+                            }, 1000);
+                        }
+                    );
+                } else {
+                    alert('No message');
+                }
+            })
+            .catch((error) => {
+                this.setState(
+                    { saveButton: 'negative icon', buttonIcon: 'close' },
+                    () => {
+                        setTimeout(() => {
+                            this.setState({
+                                saveButton: '',
+                                buttonIcon: undefined,
+                            });
+                        }, 1000);
+                    }
+                );
+                alert(error);
+            });
     };
 
     closeModal() {
@@ -480,11 +533,15 @@ class NoteNameMenuItem extends Component {
                                 value={this.context.title}
                             />
                             <Button
-                                size='mini'
-                                onClick={this.context.saveNote}
-                                className='save-button'
+                                mini
+                                onClick={this.handleSave}
+                                className={`save-button ${this.state.saveButton}`}
                             >
-                                Save
+                                {this.state.saveButton.includes('icon') ? (
+                                    <Icon className={this.state.buttonIcon} />
+                                ) : (
+                                    'Save'
+                                )}
                             </Button>
                         </>
                     )}

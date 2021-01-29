@@ -138,7 +138,7 @@ export class NotesStore extends React.Component {
 
         let response = await client.put(`/record/${note._id}`, note);
 
-        if (response === null) {
+        if (response == null) {
             alert('null response');
             return;
         }
@@ -152,9 +152,9 @@ export class NotesStore extends React.Component {
                 });
                 return { notes: prevNotes };
             });
-            alert('Save Success');
+            return 'Save Success';
         } else {
-            alert(response.data.Message);
+            return 'Save Failure';
         }
     };
 
