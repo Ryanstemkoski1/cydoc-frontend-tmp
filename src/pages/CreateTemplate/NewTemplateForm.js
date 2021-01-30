@@ -22,6 +22,7 @@ import Nestable from 'react-nestable';
 import { createNodeId, updateParent } from './util';
 import { hpiHeaders } from '../EditNote/content/hpi/knowledgegraph/src/API';
 import ProTips from './modules/ProTips';
+import { questionTypes } from 'constants/questionTypes';
 
 const OTHER_TEXT = 'Other (specify below)';
 const MAX_NUM_QUESTIONS = 50;
@@ -42,6 +43,7 @@ class NewTemplateForm extends Component {
             bodySystemEmpty: true,
             showDimmer: false,
             requestResult: null,
+            invalidUpdates: new Set(),
         };
         this.saveTitle = this.saveTitle.bind(this);
         this.saveBodySystem = this.saveBodySystem.bind(this);
@@ -119,6 +121,18 @@ class NewTemplateForm extends Component {
     saveTitle(event, { value }) {
         this.context.onContextChange('title', value);
     }
+
+    addInvalidUpdate = (qId) => {
+        const invalidUpdates = new Set(this.state.invalidUpdates);
+        invalidUpdates.add(qId);
+        this.setState({ invalidUpdates });
+    };
+
+    removeInvalidUpdate = (qId) => {
+        const invalidUpdates = new Set(this.state.invalidUpdates);
+        invalidUpdates.delete(qId);
+        this.setState({ invalidUpdates });
+    };
 
     /**
      * Updates the selected body system and display an input field for
@@ -441,6 +455,8 @@ class NewTemplateForm extends Component {
                     qId={item.id}
                     allDiseases={this.state.diseases}
                     graphData={this.state.graphData}
+                    invalidUpdates={this.state.invalidUpdates}
+                    removeInvalidUpdate={this.removeInvalidUpdate}
                 />
             </div>
         );
@@ -487,10 +503,15 @@ class NewTemplateForm extends Component {
             graph[newParent] = newEdges;
             updateParent(nodes, newParent);
         } else {
-            // Level changed, so remove edge from old parent
-            graph[item.parent] = graph[item.parent].filter(
-                (edge) => edge !== item.edge
-            );
+            // Otherwise, level/parent has changed. Enforce that only YES-NO
+            // questions are allowed followups.
+            if (
+                nodes[newParent].responseType !== questionTypes.YES_NO &&
+                nodes[newParent].responseType !== questionTypes.NO_YES
+            ) {
+                this.addInvalidUpdate(newParent);
+                return;
+            }
 
             // Update the parent and the graph with new edge
             edges[item.edge].from = newParent;
@@ -507,6 +528,12 @@ class NewTemplateForm extends Component {
                     newEdges.push(nodesToEdge[nodeId]);
                 }
             }
+
+            // Remove old edge from old parent
+            graph[item.parent] = graph[item.parent].filter(
+                (edge) => edge !== item.edge
+            );
+
             graph[newParent] = newEdges;
             updateParent(nodes, newParent);
             updateParent(nodes, item.parent);
@@ -615,6 +642,10 @@ class NewTemplateForm extends Component {
                         subheader='Create your own dynamic, interactive HPI questionnaire
                         to generate an HPI your way.'
                     />
+                    <Message
+                        hidden={!reachedMax}
+                        content={`You have reached the ${MAX_NUM_QUESTIONS} question limit. To expand this questionnaire further, you can connect it to another questionnaire.`}
+                    />
                     <Form>
                         <Header as='h3'>
                             <Input
@@ -717,12 +748,6 @@ class NewTemplateForm extends Component {
                         onClick={this.createTemplate}
                         disabled={this.context.state.numQuestions === 1}
                     />
-                    {reachedMax && (
-                        <p className='add-question-msg'>
-                            * Reached maximum number of questions (
-                            {MAX_NUM_QUESTIONS})
-                        </p>
-                    )}
                 </Dimmer.Dimmable>
             </>
         );

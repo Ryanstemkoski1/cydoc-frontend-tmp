@@ -32,6 +32,10 @@
   color: #707070;
 }
 
+.new-template-form > .ui.message {
+  margin-bottom: 2rem;
+}
+
 #body-error-message,
 #disease-error-message {
   margin: .25rem auto;
@@ -96,6 +100,11 @@
 
 .question-content > .ui.search.dropdown {
   min-width: 16em;
+}
+
+.question-content .ui.message.compact {
+  display: block;
+  width: fit-content;
 }
 
 .ui.basic.button.move-question {

@@ -58,6 +58,13 @@ class TemplateQuestion extends Component {
         }));
     };
 
+    componentDidUpdate(prevProps) {
+        const { qId, invalidUpdates } = this.props;
+        if (!prevProps.invalidUpdates.has(qId) && invalidUpdates.has(qId)) {
+            this.setState({ active: true });
+        }
+    }
+
     /**
      * Updates the question text of the node with the given `qid`.
      * @param {String} value: new question text
@@ -425,8 +432,13 @@ class TemplateQuestion extends Component {
         return graph[originalId].length;
     };
 
+    hideChangeQuestion = (_e, { qid }) => {
+        this.setState({ showChangeQuestion: false });
+        this.props.removeInvalidUpdate(qid);
+    };
+
     render() {
-        const { qId } = this.props;
+        const { qId, invalidUpdates } = this.props;
         const { nodes } = this.context.state;
         const { showChangeQuestion, showDeleteQuestion, active } = this.state;
 
@@ -439,6 +451,80 @@ class TemplateQuestion extends Component {
         const questionTypeOptions = this.getQuestionTypes();
         const curIcon = active ? 'chevron down' : 'chevron right';
         const node = nodes[qId];
+
+        const deleteWarning = showDeleteQuestion && (
+            <Message
+                compact
+                onDismiss={this.hideDeleteQuestion}
+                content={
+                    <div className='delete-message'>
+                        <div>
+                            Do you want to keep or delete follow-up questions?
+                        </div>
+                        <div>
+                            <Button
+                                compact
+                                qid={qId}
+                                content='Keep'
+                                onClick={this.deleteQuestionWithChildren}
+                                className='keep-button'
+                            />
+                            <Button
+                                compact
+                                qid={qId}
+                                content='Delete'
+                                onClick={this.deleteQuestionWithChildren}
+                            />
+                        </div>
+                    </div>
+                }
+            />
+        );
+
+        const followupQuestionsWarning = nodes[qId].hasChildren &&
+            nodes[qId].hasChanged && (
+                <Message
+                    compact
+                    content={
+                        <>
+                            <div>
+                                The original question had{' '}
+                                {this.getNumberFollowup(qId)}
+                                follow-up question(s). Do you want to keep these
+                                follow-up questions?
+                            </div>
+                            <div>
+                                <Button
+                                    compact
+                                    qid={qId}
+                                    content='Keep'
+                                    onClick={this.keepUnrenderedChildren}
+                                    className='keep-button'
+                                />
+                                <Button
+                                    compact
+                                    qid={qId}
+                                    content='Delete'
+                                    onClick={this.deleteUnrenderedChildren}
+                                />
+                            </div>
+                        </>
+                    }
+                />
+            );
+
+        const invalidTypeWarning = (showChangeQuestion ||
+            invalidUpdates.has(qId)) && (
+            <Message
+                negative
+                qid={qId}
+                header='Only Yes/No questions can have follow-up questions.'
+                onDismiss={this.hideChangeQuestion}
+                content='Alternatively, you may
+                    delete this question and create a new question of the desired type,
+                    or move the follow-up questions to a different level before proceeding.'
+            />
+        );
 
         const panels = [
             {
@@ -480,104 +566,9 @@ class TemplateQuestion extends Component {
                     active,
                     content: (
                         <div className='question-content'>
-                            {showDeleteQuestion && (
-                                <>
-                                    <Message
-                                        compact
-                                        onDismiss={this.hideDeleteQuestion}
-                                        content={
-                                            <div className='delete-message'>
-                                                <div>
-                                                    Do you want to keep or
-                                                    delete follow-up questions?
-                                                </div>
-                                                <div>
-                                                    <Button
-                                                        compact
-                                                        qid={qId}
-                                                        content='Keep'
-                                                        onClick={
-                                                            this
-                                                                .deleteQuestionWithChildren
-                                                        }
-                                                        className='keep-button'
-                                                    />
-                                                    <Button
-                                                        compact
-                                                        qid={qId}
-                                                        content='Delete'
-                                                        onClick={
-                                                            this
-                                                                .deleteQuestionWithChildren
-                                                        }
-                                                    />
-                                                </div>
-                                            </div>
-                                        }
-                                    />
-                                    <br />
-                                </>
-                            )}
-                            {nodes[qId].hasChildren && nodes[qId].hasChanged && (
-                                <>
-                                    <Message
-                                        compact
-                                        content={
-                                            <>
-                                                <div>
-                                                    The original question had{' '}
-                                                    {this.getNumberFollowup(
-                                                        qId
-                                                    )}
-                                                    follow-up question(s). Do
-                                                    you want to keep these
-                                                    follow-up questions?
-                                                </div>
-                                                <div>
-                                                    <Button
-                                                        compact
-                                                        qid={qId}
-                                                        content='Keep'
-                                                        onClick={
-                                                            this
-                                                                .keepUnrenderedChildren
-                                                        }
-                                                        className='keep-button'
-                                                    />
-                                                    <Button
-                                                        compact
-                                                        qid={qId}
-                                                        content='Delete'
-                                                        onClick={
-                                                            this
-                                                                .deleteUnrenderedChildren
-                                                        }
-                                                    />
-                                                </div>
-                                            </>
-                                        }
-                                    />
-                                    <br />
-                                </>
-                            )}
-                            {showChangeQuestion && (
-                                <>
-                                    <Message
-                                        compact
-                                        negative
-                                        header='Only Yes/No questions can have follow-up questions.'
-                                        onDismiss={() =>
-                                            this.setState({
-                                                showChangeQuestion: false,
-                                            })
-                                        }
-                                        content='Alternatively, you may
-                                            delete this question and create a new question of the desired type,
-                                            or move the follow-up questions to a different level before proceeding.'
-                                    />
-                                    <br />
-                                </>
-                            )}
+                            {deleteWarning}
+                            {followupQuestionsWarning}
+                            {invalidTypeWarning}
                             {questionTypeOptions}
                             <TemplateAnswer
                                 qId={qId}
