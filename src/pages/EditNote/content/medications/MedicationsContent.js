@@ -126,6 +126,9 @@ export default class MedicationsContent extends Component {
     }
 
     handleTakingToggleButtonClick(_event, data) {
+        // Preview components shouldn't mutate state
+        if (this.props.isPreview) return;
+
         let values = this.context['Medications'];
         values[data.condition]['Currently Taking'] =
             values[data.condition]['Currently Taking'] === data.title
@@ -165,15 +168,15 @@ export default class MedicationsContent extends Component {
         const panels = [];
         for (let i = 0; i < nums.length; i++) {
             let titleContent, contentInputs;
-
             const drugNameInput = (
                 <Input
                     disabled={isPreview}
                     transparent={isPreview}
                     className='content-input content-dropdown medication'
-                    value={isPreview ? nums[i] : nums[i]['Drug Name']}
                 >
-                    {!isPreview && (
+                    {isPreview ? (
+                        nums[i]
+                    ) : (
                         <Dropdown
                             fluid
                             search
@@ -238,7 +241,7 @@ export default class MedicationsContent extends Component {
                     }
                     placeholder='e.g. once a day'
                     onChange={this.handleTableBodyChange}
-                    value={isPreview ? '' : values[i]['Schedule']}
+                    value={values[i]?.['Schedule']}
                     className='content-input'
                 />
             );
@@ -259,7 +262,7 @@ export default class MedicationsContent extends Component {
                     }
                     placeholder='e.g. 81 mg tablet'
                     onChange={this.handleTableBodyChange}
-                    value={isPreview ? '' : values[i]['Dose']}
+                    value={values[i]?.['Dose']}
                     className='content-input'
                 />
             );
@@ -278,7 +281,7 @@ export default class MedicationsContent extends Component {
                             className: 'medications-content-input-label',
                         }}
                         placeholder='e.g. 2020'
-                        value={isPreview ? '' : values[i]['Start Year']}
+                        value={values[i]?.['Start Year']}
                         onChange={this.handleTableBodyChange}
                         className='content-input content-dropdown'
                     />
@@ -290,6 +293,7 @@ export default class MedicationsContent extends Component {
                     )}
                 </>
             );
+            const currentlyTaking = values[i]?.['Currently Taking'];
 
             const currentlyTakingInput = (
                 <div>
@@ -299,13 +303,13 @@ export default class MedicationsContent extends Component {
                         content='Currently Taking: '
                     ></Label>
                     <ToggleButton
-                        active={values[i]['Currently Taking'] === 'Yes'}
+                        active={currentlyTaking === 'Yes'}
                         condition={i}
                         title='Yes'
                         onToggleButtonClick={this.handleTakingToggleButtonClick}
                     />
                     <ToggleButton
-                        active={values[i]['Currently Taking'] === 'No'}
+                        active={currentlyTaking === 'No'}
                         condition={i}
                         title='No'
                         onToggleButtonClick={this.handleTakingToggleButtonClick}
@@ -315,7 +319,7 @@ export default class MedicationsContent extends Component {
 
             const endYearInput = (
                 <>
-                    {values[i]['Currently Taking'] === 'No' && (
+                    {currentlyTaking === 'No' && (
                         <div>
                             <Input
                                 fluid
@@ -330,7 +334,7 @@ export default class MedicationsContent extends Component {
                                         'medications-content-input-label',
                                 }}
                                 placeholder='e.g. 2020'
-                                value={isPreview ? '' : values[i]['End Year']}
+                                value={values[i]?.['End Year']}
                                 onChange={this.handleTableBodyChange}
                                 className='content-input content-dropdown'
                             />
@@ -389,7 +393,7 @@ export default class MedicationsContent extends Component {
                     }}
                     placeholder='e.g. take with food'
                     onChange={this.handleTableBodyChange}
-                    value={isPreview ? '' : values[i]['Comments']}
+                    value={values[i]?.['Comments']}
                     className='content-input'
                 />
             );
