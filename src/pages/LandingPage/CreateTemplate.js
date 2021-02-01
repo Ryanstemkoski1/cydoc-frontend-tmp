@@ -20,53 +20,57 @@ export default class CreateTemplateSegment extends Component {
     constructor(props) {
         super(props);
         this.handleItemClick = this.handleItemClick.bind(this);
-        // this.setActive = this.setActive.bind(this);
         this.state = {
             activeItem: 'Notes',
-            redirect: false,
+            redirect: null,
         };
-        this.templates = [
-            'History of Present Illness',
-            'Review of Systems',
-            'Physical Exam',
-        ];
+        this.templates = {
+            'Create New HPI Template': '/templates/new',
+            'Edit Existing HPI Template': '/templates/old',
+            /* Disabled until feature is implemented */
+            // 'Review of Systems',
+            // 'Physical Exam',
+        };
     }
 
-    handleItemClick(event, { content }) {
-        this.setState({ activeItem: content });
-        if (content === 'History of Present Illness') {
-            this.setState({ redirect: true });
-        }
+    handleItemClick(event, { content, endpoint }) {
+        this.setState({
+            activeItem: content,
+            redirect: endpoint,
+        });
     }
 
     displayTemplates = () => {
-        return this.templates.map((template, index) => {
-            return (
-                <Menu.Item key={index}>
-                    <ButtonGroup compact>
-                        <Button
-                            basic
-                            name={template}
-                            active={this.state.activeItem === template}
-                            content={template}
-                            onClick={this.handleItemClick}
-                        >
-                            <Icon name='file alternate outline' />
-                            {template}
-                        </Button>
-                    </ButtonGroup>
-                </Menu.Item>
-            );
-        });
+        return Object.entries(this.templates).map(
+            ([template, endpoint], index) => {
+                return (
+                    <Menu.Item key={index}>
+                        <ButtonGroup compact>
+                            <Button
+                                basic
+                                name={template}
+                                active={this.state.activeItem === template}
+                                content={template}
+                                endpoint={endpoint}
+                                onClick={this.handleItemClick}
+                            >
+                                <Icon name='file alternate outline' />
+                                {template}
+                            </Button>
+                        </ButtonGroup>
+                    </Menu.Item>
+                );
+            }
+        );
     };
 
     render() {
         if (this.state.redirect) {
-            return <Redirect to='/creategraph' />;
+            return <Redirect to={this.state.redirect} />;
         }
         return (
             <Segment className='landing-page-columns'>
-                <Header as='h2'>New Template</Header>
+                <Header as='h2'>Customize HPI Templates</Header>
                 <Divider />
                 <Menu text vertical>
                     {this.displayTemplates()}

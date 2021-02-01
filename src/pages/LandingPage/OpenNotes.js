@@ -93,7 +93,7 @@ export default class OpenRecentSegment extends Component {
                             : 'landing-page-columns'
                     }
                 >
-                    <Header as='h2'>Open Recent</Header>
+                    <Header as='h2'>Open Recent Note</Header>
                     <Divider />
                     <Menu text vertical style={{ width: '100%' }}>
                         {this.props.stack ? (

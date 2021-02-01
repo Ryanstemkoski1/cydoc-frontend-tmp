@@ -7,7 +7,7 @@ import {
     Button,
     Message,
 } from 'semantic-ui-react';
-import CreateTemplateContext from '../../contexts/CreateTemplateContext';
+import HPITemplateContext from '../../contexts/HPITemplateContext';
 import TemplateAnswer from './TemplateAnswer';
 import { questionTypeMapping, questionTypes } from 'constants/questionTypes';
 import diseaseCodes from 'constants/diseaseCodes';
@@ -18,12 +18,12 @@ import {
     updateParent,
 } from './util';
 import { QUESTION_PLACEHOLDER } from './placeholders';
-import './NewTemplate.css';
+import './TemplateForm.css';
 
 let DELETED_IDS = [];
 
 class TemplateQuestion extends Component {
-    static contextType = CreateTemplateContext;
+    static contextType = HPITemplateContext;
 
     constructor(props, context) {
         super(props, context);
@@ -71,13 +71,13 @@ class TemplateQuestion extends Component {
      * @param {String} qid: id of the question being changed
      */
     saveQuestion = (event, { value, qid }) => {
-        const { nodes } = this.context.state;
+        const { nodes } = this.context.template;
         nodes[qid].text = value;
         if (!nodes[qid].hasChanged) {
             updateParent(nodes, qid);
             this.setState({ active: true });
         }
-        this.context.onContextChange('nodes', nodes);
+        this.context.onTemplateChange('nodes', nodes);
     };
 
     /**
@@ -86,7 +86,7 @@ class TemplateQuestion extends Component {
      * @param {String} qid: id of the question being changed
      */
     saveQuestionType = (event, { value, qid }) => {
-        const { graph, nodes } = this.context.state;
+        const { graph, nodes } = this.context.template;
 
         // questions with children questions can NOT be converted to something other than yes/no
         if (value !== questionTypes.YES_NO && graph[qid].length > 0) {
@@ -107,7 +107,7 @@ class TemplateQuestion extends Component {
             nodes[qid].responseType = value + '-BLANK';
         }
         updateParent(nodes, qid);
-        this.context.onContextChange('nodes', nodes);
+        this.context.onTemplateChange('nodes', nodes);
     };
 
     /**
@@ -116,10 +116,8 @@ class TemplateQuestion extends Component {
      * @param {String} qid: id of question being deleted
      */
     deleteQuestion = (event, { qid }) => {
-        const nodes = this.context.state.nodes;
-        const graph = this.context.state.graph;
-        const edges = this.context.state.edges;
-        let numQuestions = this.context.state.numQuestions;
+        const { nodes, graph, edges } = this.context.template;
+        let { numQuestions } = this.context.template;
 
         if (
             (nodes[qid].responseType !== questionTypes.YES_NO &&
@@ -133,7 +131,7 @@ class TemplateQuestion extends Component {
                     graph[eInfo.from] = graph[eInfo.from].filter(
                         (e) => e !== parseInt(edge)
                     );
-                    delete this.context.state.edges[edge];
+                    delete edges[edge];
                 }
             }
             updateParent(nodes, qid);
@@ -145,10 +143,12 @@ class TemplateQuestion extends Component {
             this.setState({ showDeleteQuestion: true, active: true });
         }
 
-        this.context.onContextChange('nodes', nodes);
-        this.context.onContextChange('graph', graph);
-        this.context.onContextChange('edges', this.context.state.edges);
-        this.context.onContextChange('numQuestions', numQuestions);
+        this.context.updateTemplate({
+            nodes,
+            graph,
+            edges,
+            numQuestions,
+        });
     };
 
     /**
@@ -158,11 +158,8 @@ class TemplateQuestion extends Component {
      * @param {String} qid: id of the question being deleted
      */
     deleteQuestionWithChildren = (event, { content, qid }) => {
-        const nodes = this.context.state.nodes;
-        const graph = this.context.state.graph;
-        const edges = this.context.state.edges;
-        let nextEdgeID = this.context.state.nextEdgeID;
-        let numQuestions = this.context.state.numQuestions;
+        const { nodes, graph, edges } = this.context.template;
+        let { nextEdgeID, numQuestions } = this.context.template;
 
         updateParent(nodes, qid);
         switch (content) {
@@ -251,11 +248,13 @@ class TemplateQuestion extends Component {
             }
         }
 
-        this.context.onContextChange('nodes', nodes);
-        this.context.onContextChange('graph', graph);
-        this.context.onContextChange('edges', edges);
-        this.context.onContextChange('nextEdgeID', nextEdgeID);
-        this.context.onContextChange('numQuestions', numQuestions);
+        this.context.updateContext({
+            nodes,
+            graph,
+            edges,
+            nextEdgeID,
+            numQuestions,
+        });
     };
 
     /**
@@ -264,8 +263,7 @@ class TemplateQuestion extends Component {
      * @param {String} qid: id of the root of the subtree to delete
      */
     deleteChildren(qid) {
-        const edges = this.context.state.edges;
-        const graph = this.context.state.graph;
+        const { edges, graph } = this.context.template;
 
         while (graph[qid].length > 0) {
             const e = graph[qid].shift();
@@ -282,7 +280,7 @@ class TemplateQuestion extends Component {
      * @param {Object} graph: the graph object from the context
      */
     deleteChild(qid, edges, graph) {
-        const nodes = this.context.state.nodes;
+        const { nodes } = this.context.template;
 
         while (graph[qid].length > 0) {
             const e = graph[qid].shift();
@@ -293,9 +291,7 @@ class TemplateQuestion extends Component {
         delete graph[qid];
         delete nodes[qid];
 
-        this.context.onContextChange('nodes', nodes);
-        this.context.onContextChange('graph', graph);
-        this.context.onContextChange('edges', edges);
+        this.context.updateTemplate({ nodes, graph, edges });
     }
 
     /**
@@ -303,23 +299,23 @@ class TemplateQuestion extends Component {
      * direct children of the target question
      */
     keepUnrenderedChildren = () => {
-        const { nodes } = this.context.state;
+        const { nodes } = this.context.template;
         const { qId } = this.props;
 
         delete nodes[qId].hasChildren;
         this.editChildren(qId, nodes);
-        this.context.onContextChange('nodes', nodes);
+        this.context.onTemplateChange('nodes', nodes);
     };
 
     /**
      * Remove the flag that indicates an imported question has children
      */
     deleteUnrenderedChildren = () => {
-        const { nodes } = this.context.state;
+        const { nodes } = this.context.template;
         const { qId } = this.props;
 
         delete nodes[qId].hasChildren;
-        this.context.onContextChange('nodes', nodes);
+        this.context.onTemplateChange('nodes', nodes);
     };
 
     /**
@@ -329,15 +325,15 @@ class TemplateQuestion extends Component {
      * @param {Object} contextNodes: the nodes object (not necessarily in sync with the context)
      */
     editChildren = (qId, contextNodes) => {
-        let { numQuestions, nextEdgeID } = this.context.state;
+        let { numQuestions, nextEdgeID } = this.context.template;
         const { graphData } = this.props;
         const { edges, nodes, graph } = graphData;
 
-        const disease = this.context.state.disease;
+        const disease = this.context.template.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
 
-        const contextEdges = { ...this.context.state.edges };
-        const contextGraph = { ...this.context.state.graph };
+        const contextEdges = { ...this.context.template.edges };
+        const contextGraph = { ...this.context.template.graph };
 
         const originalId = contextNodes[qId].originalId;
         if (originalId in graph) {
@@ -360,13 +356,15 @@ class TemplateQuestion extends Component {
             numQuestions = newCount.numQuestions;
             nextEdgeID = newCount.nextEdgeID;
 
-            this.context.onContextChange('edges', contextEdges);
-            this.context.onContextChange('graph', contextGraph);
-            this.context.onContextChange('nextEdgeID', nextEdgeID);
-            this.context.onContextChange('numQuestions', numQuestions);
+            this.context.updateTemplate({
+                edges,
+                graph,
+                nextEdgeID,
+                numQuestions,
+            });
         }
         delete contextNodes[qId].hasChildren;
-        this.context.onContextChange('nodes', contextNodes);
+        this.context.onTemplateChange('nodes', contextNodes);
     };
 
     hideDeleteQuestion = () => {
@@ -395,7 +393,7 @@ class TemplateQuestion extends Component {
         // Process the current response type since the value will not necessarily
         // match the option in the dropdown (i.e. NO-YES questions should be displayed
         // as YES-NO and advanced types should be stripped of POP and BLANK)
-        let responseType = this.context.state.nodes[qId].responseType;
+        let responseType = this.context.template.nodes[qId].responseType;
         if (responseType === questionTypes.NO_YES) {
             responseType = questionTypes.YES_NO;
         } else if (
@@ -425,7 +423,7 @@ class TemplateQuestion extends Component {
      * @param {String} qId: id of the question
      */
     getNumberFollowup = (qId) => {
-        const { nodes } = this.context.state;
+        const { nodes } = this.context.template;
         const { graph } = this.props.graphData;
 
         const originalId = nodes[qId].originalId;
@@ -439,7 +437,7 @@ class TemplateQuestion extends Component {
 
     render() {
         const { qId, invalidUpdates } = this.props;
-        const { nodes } = this.context.state;
+        const { nodes } = this.context.template;
         const { showChangeQuestion, showDeleteQuestion, active } = this.state;
 
         // Due to JS's asynchronous nature, render a Fragment in case the current node was

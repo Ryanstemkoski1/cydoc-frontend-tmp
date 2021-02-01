@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CreateTemplateContext from '../../../contexts/CreateTemplateContext';
+import HPITemplateContext from '../../../contexts/HPITemplateContext';
 import diseaseCodes from 'constants/diseaseCodes';
 import {
     sortEdges,
@@ -10,7 +10,7 @@ import {
 } from '../util';
 import { Button, Modal, List, Checkbox } from 'semantic-ui-react';
 class ImportQuestionForm extends Component {
-    static contextType = CreateTemplateContext;
+    static contextType = HPITemplateContext;
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -74,10 +74,9 @@ class ImportQuestionForm extends Component {
      * Adds all of the selected questions to the context as a direct child of the parent
      */
     importQuestions = () => {
-        let { numQuestions, numEdges } = this.context.state;
-        const { graph, nodes, edges } = this.context.state;
+        let { numQuestions, nextEdgeId } = this.context.template;
+        const { graph, nodes, edges, disease } = this.context.template;
         const { parent } = this.props;
-        const disease = this.context.state.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
 
         let childId;
@@ -95,20 +94,22 @@ class ImportQuestionForm extends Component {
                     order: numQuestions,
                     hasChanged: false,
                 };
-                edges[numEdges] = {
+                edges[nextEdgeId] = {
                     from: parent,
                     to: childId,
                 };
                 graph[childId] = [];
-                graph[parent].push(numEdges);
-                numEdges++;
+                graph[parent].push(nextEdgeId);
+                nextEdgeId++;
                 numQuestions++;
             });
-        this.context.onContextChange('nodes', nodes);
-        this.context.onContextChange('edges', edges);
-        this.context.onContextChange('graph', graph);
-        this.context.onContextChange('numEdges', numEdges);
-        this.context.onContextChange('numQuestions', numQuestions);
+        this.context.updateTemplate({
+            nodes,
+            edges,
+            graph,
+            nextEdgeId,
+            numQuestions,
+        });
         this.props.closeModal();
     };
 

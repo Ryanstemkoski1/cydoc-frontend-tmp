@@ -12,8 +12,8 @@ import {
     Dimmer,
     Loader,
 } from 'semantic-ui-react';
-import CreateTemplateContext from '../../contexts/CreateTemplateContext';
-import './NewTemplate.css';
+import HPITemplateContext from '../../contexts/HPITemplateContext';
+import './TemplateForm.css';
 import TemplateQuestion from './TemplateQuestion';
 import { graphClient } from 'constants/api.js';
 import diseaseAbbrevs from 'constants/diseaseAbbrevs.json';
@@ -27,8 +27,8 @@ import { questionTypes } from 'constants/questionTypes';
 const OTHER_TEXT = 'Other (specify below)';
 const MAX_NUM_QUESTIONS = 50;
 
-class NewTemplateForm extends Component {
-    static contextType = CreateTemplateContext;
+class EditTemplateForm extends Component {
+    static contextType = HPITemplateContext;
     titleRef = createRef();
 
     constructor(props, context) {
@@ -119,7 +119,7 @@ class NewTemplateForm extends Component {
      * Updates the value of the title of the template in the context
      */
     saveTitle(event, { value }) {
-        this.context.onContextChange('title', value);
+        this.context.onTemplateChange('title', value);
     }
 
     addInvalidUpdate = (qId) => {
@@ -150,7 +150,7 @@ class NewTemplateForm extends Component {
                 showOtherBodySystem: true,
                 bodySystemEmpty: true,
             });
-            this.context.onContextChange('bodySystem', '');
+            this.context.onTemplateChange('bodySystem', '');
         } else if (this.state.bodySystems.includes(value)) {
             otherInput.style.display = 'none';
             errorMessage.style.display = 'none';
@@ -158,7 +158,7 @@ class NewTemplateForm extends Component {
                 showOtherBodySystem: false,
                 bodySystemEmpty: false,
             });
-            this.context.onContextChange('bodySystem', value);
+            this.context.onTemplateChange('bodySystem', value);
         } else {
             if (value === '') {
                 this.setState({ bodySystemEmpty: true });
@@ -166,7 +166,7 @@ class NewTemplateForm extends Component {
                 errorMessage.style.display = 'none';
                 this.setState({ bodySystemEmpty: false });
             }
-            this.context.onContextChange('bodySystem', value);
+            this.context.onTemplateChange('bodySystem', value);
         }
     }
 
@@ -187,7 +187,7 @@ class NewTemplateForm extends Component {
                 showOtherDisease: true,
                 diseaseEmpty: true,
             });
-            this.context.onContextChange('disease', '');
+            this.context.onTemplateChange('disease', '');
         } else if (this.state.diseases.includes(value)) {
             otherInput.style.display = 'none';
             errorMessage.style.display = 'none';
@@ -195,7 +195,7 @@ class NewTemplateForm extends Component {
                 showOtherDisease: false,
                 diseaseEmpty: false,
             });
-            this.context.onContextChange('disease', value);
+            this.context.onTemplateChange('disease', value);
         } else {
             if (value === '') {
                 this.setState({ diseaseEmpty: true });
@@ -203,7 +203,7 @@ class NewTemplateForm extends Component {
                 errorMessage.style.display = 'none';
                 this.setState({ diseaseEmpty: false });
             }
-            this.context.onContextChange('disease', value);
+            this.context.onTemplateChange('disease', value);
         }
     }
 
@@ -224,15 +224,13 @@ class NewTemplateForm extends Component {
             return;
         }
 
-        let numQuestions = this.context.state.numQuestions;
-        let nextEdgeID = this.context.state.nextEdgeID;
-        const disease = this.context.state.disease;
-        const root = this.context.state.root;
+        let { numQuestions, nextEdgeID } = this.context.template;
+        const { disease, root, nodes, edges, graph } = this.context.template;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
         const qId = createNodeId(diseaseCode, numQuestions);
 
         // Create a default node with the parent being the root
-        this.context.state.nodes[qId] = {
+        nodes[qId] = {
             id: qId,
             text: '',
             responseType: '',
@@ -241,18 +239,23 @@ class NewTemplateForm extends Component {
             hasChanged: true,
         };
 
-        this.context.state.edges[nextEdgeID] = {
+        edges[nextEdgeID] = {
             from: root,
             to: qId,
         };
-        this.context.state.graph[qId] = [];
-        this.context.state.graph[root].push(nextEdgeID);
+        graph[qId] = [];
+        graph[root].push(nextEdgeID);
 
-        this.context.onContextChange('nodes', this.context.state.nodes);
-        this.context.onContextChange('graph', this.context.state.graph);
-        this.context.onContextChange('edges', this.context.state.edges);
-        this.context.onContextChange('numQuestions', numQuestions + 1);
-        this.context.onContextChange('nextEdgeID', nextEdgeID + 1);
+        numQuestions++;
+        nextEdgeID++;
+
+        this.context.updateTemplate({
+            nodes,
+            graph,
+            edges,
+            numQuestions,
+            nextEdgeID,
+        });
     }
 
     /**
@@ -260,7 +263,7 @@ class NewTemplateForm extends Component {
      * and ensuring all new nodes start with the correct disease code, and send a request
      * to the backend
      */
-    createTemplate = async () => {
+    saveTemplate = async () => {
         const {
             root,
             title,
@@ -269,7 +272,8 @@ class NewTemplateForm extends Component {
             nodes,
             graph,
             bodySystem,
-        } = this.context.state;
+            graphID,
+        } = this.context.template;
         const { doctorID } = this.context;
         this.setState({ showDimmer: true });
 
@@ -377,15 +381,22 @@ class NewTemplateForm extends Component {
         // Send updated data to the backend
         let requestResult, resMessage, resIcon;
         try {
-            // eslint-disable-next-line no-unused-vars
-            let res = await graphClient.post(`/doctor/${doctorID}`, {
+            const body = {
                 graphName: title,
                 root: diseaseCode + rootSuffix,
                 graph: updatedGraph,
                 nodes: updatedNodes,
                 edges: updatedEdges,
-            });
-            resMessage = 'Successfully created template!';
+            };
+            const url = `/doctor/${doctorID}`;
+
+            if (graphID) {
+                await graphClient.put(`${url}/${graphID}`, body);
+            } else {
+                await graphClient.post(url, body);
+            }
+
+            resMessage = 'Successfully saved template!';
             resIcon = 'circle check outline';
         } catch (err) {
             resMessage =
@@ -407,7 +418,7 @@ class NewTemplateForm extends Component {
      * for react-nestable to read
      */
     createTreeData = () => {
-        const { graph, edges, root } = this.context.state;
+        const { graph, edges, root } = this.context.template;
         return graph[root].map((edge) => {
             // create treeNode for every root level question
             const qId = edges[edge].to;
@@ -423,7 +434,7 @@ class NewTemplateForm extends Component {
      * @param {*} edge: The ID of the edge connecting the parent to the root
      */
     flattenGraph = (root, parent, edge) => {
-        const { graph, edges } = this.context.state;
+        const { graph, edges } = this.context.template;
 
         // create the children recursively
         const children = graph[root].map((edge) => {
@@ -483,7 +494,7 @@ class NewTemplateForm extends Component {
      * @param {*} item: the item that was dragged
      */
     updateOrder = (items, item) => {
-        const { graph, edges, nodes, root } = this.context.state;
+        const { graph, edges, nodes, root } = this.context.template;
 
         const [newParent, subtree] = this.findParent(items, root, item.id);
         if (!newParent) {
@@ -538,8 +549,8 @@ class NewTemplateForm extends Component {
             updateParent(nodes, newParent);
             updateParent(nodes, item.parent);
         }
-        this.context.onContextChange('graph', graph);
-        this.context.onContextChange('edges', edges);
+        this.context.onTemplateChange('graph', graph);
+        this.context.onTemplateChange('edges', edges);
     };
 
     /**
@@ -578,6 +589,13 @@ class NewTemplateForm extends Component {
             requestResult,
         } = this.state;
 
+        const {
+            numQuestions,
+            title,
+            bodySystem,
+            disease,
+        } = this.context.template;
+
         const bodySystemOptions = [
             {
                 value: OTHER_TEXT,
@@ -604,15 +622,14 @@ class NewTemplateForm extends Component {
             });
         });
 
-        const reachedMax =
-            this.context.state.numQuestions >= MAX_NUM_QUESTIONS + 1;
+        const reachedMax = numQuestions >= MAX_NUM_QUESTIONS + 1;
 
         return (
             <>
                 <ProTips />
                 <Dimmer.Dimmable
                     as={Segment}
-                    className='container new-template-form'
+                    className='container template-form'
                     dimmed={showDimmer}
                 >
                     <Dimmer active={showDimmer} inverted>
@@ -642,17 +659,13 @@ class NewTemplateForm extends Component {
                         subheader='Create your own dynamic, interactive HPI questionnaire
                         to generate an HPI your way.'
                     />
-                    <Message
-                        hidden={!reachedMax}
-                        content={`You have reached the ${MAX_NUM_QUESTIONS} question limit. To expand this questionnaire further, you can connect it to another questionnaire.`}
-                    />
                     <Form>
                         <Header as='h3'>
                             <Input
                                 placeholder='Template Title'
                                 ref={this.titleRef}
                                 id='input-title'
-                                value={this.context.state.title}
+                                value={title}
                                 onChange={this.saveTitle}
                                 transparent
                                 fluid
@@ -670,7 +683,7 @@ class NewTemplateForm extends Component {
                                     value={
                                         showOtherBodySystem
                                             ? OTHER_TEXT
-                                            : this.context.state.bodySystem
+                                            : bodySystem
                                     }
                                     options={bodySystemOptions}
                                     onChange={this.saveBodySystem}
@@ -679,7 +692,7 @@ class NewTemplateForm extends Component {
                                 <Input
                                     fluid
                                     placeholder='Other Body System'
-                                    value={this.context.state.bodySystem}
+                                    value={bodySystem}
                                     onChange={this.saveBodySystem}
                                     id='other-body-system'
                                 />
@@ -693,9 +706,7 @@ class NewTemplateForm extends Component {
                                     clearable
                                     placeholder='e.g. Diabetes'
                                     value={
-                                        showOtherDisease
-                                            ? OTHER_TEXT
-                                            : this.context.state.disease
+                                        showOtherDisease ? OTHER_TEXT : disease
                                     }
                                     options={diseaseOptions}
                                     onChange={this.saveDisease}
@@ -704,7 +715,7 @@ class NewTemplateForm extends Component {
                                 <Input
                                     fluid
                                     placeholder='Other Disease'
-                                    value={this.context.state.disease}
+                                    value={disease}
                                     onChange={this.saveDisease}
                                     id='other-disease'
                                 />
@@ -731,6 +742,10 @@ class NewTemplateForm extends Component {
                         onChange={this.updateOrder}
                         threshold={50}
                     />
+                    <Message
+                        hidden={!reachedMax}
+                        content={`You have reached the ${MAX_NUM_QUESTIONS} question limit. To expand this questionnaire further, you can connect it to another questionnaire.`}
+                    />
                     <Button
                         circular
                         icon='add'
@@ -745,8 +760,8 @@ class NewTemplateForm extends Component {
                         floated='right'
                         content='Save'
                         className='create-tmpl-button'
-                        onClick={this.createTemplate}
-                        disabled={this.context.state.numQuestions === 1}
+                        onClick={this.saveTemplate}
+                        disabled={numQuestions === 1}
                     />
                 </Dimmer.Dimmable>
             </>
@@ -754,4 +769,4 @@ class NewTemplateForm extends Component {
     }
 }
 
-export default NewTemplateForm;
+export default EditTemplateForm;

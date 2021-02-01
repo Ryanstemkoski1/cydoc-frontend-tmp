@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CreateTemplateContext from '../../contexts/CreateTemplateContext';
+import HPITemplateContext from '../../contexts/HPITemplateContext';
 import { questionTypeMapping, questionTypes } from 'constants/questionTypes';
 import diseaseCodes from 'constants/diseaseCodes';
 import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
@@ -22,7 +22,7 @@ import { Input, Button, Dropdown, Message, List } from 'semantic-ui-react';
 const MIN_OPTIONS = 2;
 
 class TemplateAnswer extends Component {
-    static contextType = CreateTemplateContext;
+    static contextType = HPITemplateContext;
 
     constructor(props, context) {
         super(props, context);
@@ -95,16 +95,17 @@ class TemplateAnswer extends Component {
      * @param {String} parent: qid of the nodes to connect the questions to
      */
     connectGraph = (e, { parent }) => {
-        let { numQuestions, nextEdgeID } = this.context.state;
+        let { numQuestions, nextEdgeID } = this.context.template;
         const { otherGraph } = this.state;
         const { graph, edges, nodes } = this.props.graphData;
+        const {
+            disease,
+            nodes: contextNodes,
+            edges: contextEdges,
+            graph: contextGraph,
+        } = this.context.template;
 
-        const disease = this.context.state.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
-
-        const contextNodes = this.context.state.nodes;
-        const contextEdges = this.context.state.edges;
-        const contextGraph = this.context.state.graph;
 
         const id = diseaseCodes[otherGraph] + '0001';
         let questionParent = parent;
@@ -156,11 +157,13 @@ class TemplateAnswer extends Component {
             numQuestions = newCount.numQuestions;
             nextEdgeID = newCount.nextEdgeID;
 
-            this.context.onContextChange('nodes', contextNodes);
-            this.context.onContextChange('edges', contextEdges);
-            this.context.onContextChange('graph', contextGraph);
-            this.context.onContextChange('nextEdgeID', nextEdgeID);
-            this.context.onContextChange('numQuestions', numQuestions);
+            this.context.updateTemplate({
+                nextEdgeID,
+                numQuestions,
+                nodes: contextNodes,
+                edges: contextEdges,
+                graph: contextGraph,
+            });
 
             this.setState({
                 showOtherGraphs: false,
@@ -176,10 +179,10 @@ class TemplateAnswer extends Component {
      */
     saveAnswer = (event, { value, answer }) => {
         const { qId } = this.props;
-        const { nodes } = this.context.state;
+        const { nodes } = this.context.template;
         nodes[qId].answerInfo[answer] = value;
         updateParent(nodes, qId);
-        this.context.onContextChange('nodes', nodes);
+        this.context.onTemplateChange('nodes', nodes);
         this.setState({ showOptionError: false });
     };
 
@@ -188,15 +191,14 @@ class TemplateAnswer extends Component {
      * @param {String} parent: qid of the node to add the questions to
      */
     addChildQuestion = (event, { parent }) => {
-        let numQuestions = this.context.state.numQuestions;
-        let nextEdgeID = this.context.state.nextEdgeID;
-        const disease = this.context.state.disease;
+        let { numQuestions, nextEdgeID } = this.context.template;
+        const { graph, edges, nodes, disease } = this.context.template;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
         const childId = createNodeId(diseaseCode, numQuestions);
 
-        updateParent(this.context.state.nodes, parent);
+        updateParent(nodes, parent);
 
-        this.context.state.nodes[childId] = {
+        nodes[childId] = {
             id: childId,
             text: '',
             responseType: '',
@@ -204,18 +206,22 @@ class TemplateAnswer extends Component {
             hasChanged: true,
         };
 
-        this.context.state.edges[nextEdgeID] = {
+        edges[nextEdgeID] = {
             from: parent,
             to: childId,
         };
-        this.context.state.graph[childId] = [];
-        this.context.state.graph[parent].push(nextEdgeID);
+        graph[childId] = [];
+        graph[parent].push(nextEdgeID);
+        numQuestions++;
+        nextEdgeID++;
 
-        this.context.onContextChange('nodes', this.context.state.nodes);
-        this.context.onContextChange('graph', this.context.state.graph);
-        this.context.onContextChange('edges', this.context.state.edges);
-        this.context.onContextChange('numQuestions', numQuestions + 1);
-        this.context.onContextChange('nextEdgeID', nextEdgeID + 1);
+        this.context.updateTemplate({
+            nodes,
+            graph,
+            edges,
+            numQuestions,
+            nextEdgeID,
+        });
     };
 
     /**
@@ -225,10 +231,10 @@ class TemplateAnswer extends Component {
      */
     saveButtonOption = (event, { value, index }) => {
         const { qId } = this.props;
-        const { nodes } = this.context.state;
+        const { nodes } = this.context.template;
         nodes[qId].answerInfo.options[index] = value;
         updateParent(nodes, qId);
-        this.context.onContextChange('nodes', nodes);
+        this.context.onTemplateChange('nodes', nodes);
     };
 
     /**
@@ -237,7 +243,7 @@ class TemplateAnswer extends Component {
      */
     addButtonOption = () => {
         const { qId } = this.props;
-        const nodes = { ...this.context.state.nodes };
+        const nodes = { ...this.context.template.nodes };
         nodes[qId].answerInfo.options.push('');
         updateParent(nodes, qId);
         this.setState({ showOptionError: false });
@@ -248,7 +254,7 @@ class TemplateAnswer extends Component {
             nodes[qId].responseType = prefix + '-POP';
         }
 
-        this.context.onContextChange('nodes', nodes);
+        this.context.onTemplateChange('nodes', nodes);
     };
 
     /**
@@ -258,7 +264,7 @@ class TemplateAnswer extends Component {
      */
     removeButtonOption = (event, { index }) => {
         const { qId } = this.props;
-        const nodes = { ...this.context.state.nodes };
+        const nodes = { ...this.context.template.nodes };
         if (
             nodes[qId].responseType in questionTypeMapping.basic &&
             nodes[qId].answerInfo.options.length <= MIN_OPTIONS
@@ -278,7 +284,7 @@ class TemplateAnswer extends Component {
             nodes[qId].responseType = prefix + '-BLANK';
         }
 
-        this.context.onContextChange('nodes', nodes);
+        this.context.onTemplateChange('nodes', nodes);
     };
 
     /**
@@ -288,7 +294,7 @@ class TemplateAnswer extends Component {
      */
     getPreviewComponent = (type) => {
         const { windowWidth } = this.state;
-        const { nodes } = this.context.state;
+        const { nodes } = this.context.template;
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
 
         let preview;
@@ -347,10 +353,10 @@ class TemplateAnswer extends Component {
      */
     changeFollowupType = (e, { value }) => {
         const { qId } = this.props;
-        const nodes = { ...this.context.state.nodes };
+        const nodes = { ...this.context.template.nodes };
         nodes[qId].responseType = value;
         updateParent(nodes, qId);
-        this.context.onContextChange('nodes', nodes);
+        this.context.onTemplateChange('nodes', nodes);
         this.setState({ showOptionError: false });
     };
 
@@ -361,16 +367,16 @@ class TemplateAnswer extends Component {
      * @param {String} qId
      */
     editChildren = (qId) => {
-        let { numQuestions, nextEdgeID } = this.context.state;
+        let { numQuestions, nextEdgeID } = this.context.template;
         const { graphData } = this.props;
         const { edges, nodes, graph } = graphData;
 
-        const disease = this.context.state.disease;
+        const disease = this.context.template.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
 
-        const contextNodes = { ...this.context.state.nodes };
-        const contextEdges = { ...this.context.state.edges };
-        const contextGraph = { ...this.context.state.graph };
+        const contextNodes = { ...this.context.template.nodes };
+        const contextEdges = { ...this.context.template.edges };
+        const contextGraph = { ...this.context.template.graph };
 
         const originalId = contextNodes[qId].originalId;
         if (originalId in graph) {
@@ -394,20 +400,22 @@ class TemplateAnswer extends Component {
             numQuestions = newCount.numQuestions;
             nextEdgeID = newCount.nextEdgeID;
 
-            this.context.onContextChange('nodes', contextNodes);
-            this.context.onContextChange('edges', contextEdges);
-            this.context.onContextChange('graph', contextGraph);
-            this.context.onContextChange('nextEdgeID', nextEdgeID);
-            this.context.onContextChange('numQuestions', numQuestions);
+            this.context.updateTemplate({
+                nextEdgeID,
+                numQuestions,
+                nodes: contextNodes,
+                edges: contextEdges,
+                graph: contextGraph,
+            });
         }
         delete contextNodes[qId].hasChildren;
-        this.context.onContextChange('nodes', contextNodes);
+        this.context.onTemplateChange('nodes', contextNodes);
     };
 
     /** Returns response form according to the response type */
     getAnswerTemplate() {
         const { qId, type } = this.props;
-        const { graph, nodes } = this.context.state;
+        const { graph, nodes } = this.context.template;
         const placeholders = RESPONSE_PLACEHOLDER[nodes[qId].responseType];
         let template, otherGraphs;
 

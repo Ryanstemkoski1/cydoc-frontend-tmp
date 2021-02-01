@@ -12,10 +12,11 @@ import Home from './pages/Home/Home';
 import { PrivateRoute } from './components/navigation/PrivateRoute';
 import CreateGraph from './pages/CreateTemplate/CreateGraph';
 import EditGraph from './pages/CreateTemplate/EditGraph';
+import EditTemplate from './pages/CreateTemplate/EditTemplate';
 import { HPIStore } from './contexts/HPIContext';
 import { AuthStore } from './contexts/AuthContext';
 import { NotesStore } from './contexts/NotesContext';
-import { CreateTemplateStore } from './contexts/CreateTemplateContext';
+import { HPITemplateStore } from './contexts/HPITemplateContext';
 import EditProfile from './pages/Account/EditProfile';
 import './index.css';
 
@@ -24,7 +25,7 @@ ReactDOM.render(
         <AuthStore>
             <NotesStore>
                 <HPIStore>
-                    <CreateTemplateStore>
+                    <HPITemplateStore>
                         <div>
                             <BrowserRouter>
                                 <Route exact path='/' component={Home} />
@@ -46,13 +47,18 @@ ReactDOM.render(
                                 />
                                 <PrivateRoute
                                     exact
-                                    path='/creategraph'
+                                    path='/templates/new'
                                     component={CreateGraph}
                                 />
                                 <PrivateRoute
                                     exact
-                                    path='/editgraph'
+                                    path='/templates/old'
                                     component={EditGraph}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path='/templates/edit'
+                                    component={EditTemplate}
                                 />
                                 <PrivateRoute
                                     exact
@@ -61,7 +67,7 @@ ReactDOM.render(
                                 />
                             </BrowserRouter>
                         </div>
-                    </CreateTemplateStore>
+                    </HPITemplateStore>
                 </HPIStore>
             </NotesStore>
         </AuthStore>

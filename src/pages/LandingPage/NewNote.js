@@ -119,11 +119,11 @@ export default class NewNoteSegment extends Component {
                 <Divider />
                 <Menu secondary vertical style={{ width: '100%' }}>
                     <Menu.Item>
-                        <Header as={'h3'}>Pinned</Header>
+                        <Header as={'h3'}>Pinned Note Templates</Header>
                         {this.displayPinnedTemplates()}
                     </Menu.Item>
                     <Menu.Item>
-                        <Header as={'h3'}>Recent</Header>
+                        <Header as={'h3'}>Recent Note Templates</Header>
                         {this.displayRecentTemplates()}
                     </Menu.Item>
                 </Menu>

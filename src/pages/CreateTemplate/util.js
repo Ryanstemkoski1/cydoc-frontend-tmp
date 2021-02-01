@@ -218,3 +218,29 @@ export const updateParent = (nodes, qid) => {
         updateParent(nodes, nodes[qid].parent);
     }
 };
+
+// Returns blank template for HPITemplateContext
+export const getNewTemplate = () => {
+    const rootId = createNodeId('000', 0);
+    return {
+        // `null` graphID indicates this is a newly created graph
+        graphID: null,
+        title: '',
+        disease: '',
+        bodySystem: '',
+        numQuestions: 1,
+        nextEdgeID: 0,
+        root: rootId,
+        graph: {
+            [rootId]: [],
+        },
+        nodes: {
+            [rootId]: {
+                id: rootId,
+                responseType: 'YES-NO',
+                text: 'nan',
+            },
+        },
+        edges: {},
+    };
+};

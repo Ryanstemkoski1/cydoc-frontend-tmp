@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Popup, Button, Icon } from 'semantic-ui-react';
 import { PROTIPS_BUTTON_BP } from 'constants/breakpoints';
-import '../NewTemplate.css';
+
+import '../TemplateForm.css';
 
 const ProTips = () => {
     const [width, setWidth] = useState(0);
@@ -11,7 +12,7 @@ const ProTips = () => {
             let width = typeof window !== 'undefined' ? window.innerWidth : 0;
             setWidth(width);
         };
-
+        updateDimensions();
         window.addEventListener('resize', updateDimensions);
         return () => window.removeEventListener('resize', updateDimensions);
     }, []);
@@ -60,7 +61,8 @@ const ProTips = () => {
                     id='protips-btn'
                     circular
                     icon='lightbulb outline'
-                    content={width > PROTIPS_BUTTON_BP && 'Pro Tips'}
+                    // value must explicitly be null to be an icon button
+                    content={width > PROTIPS_BUTTON_BP ? 'Pro Tips' : null}
                 />
             }
         />

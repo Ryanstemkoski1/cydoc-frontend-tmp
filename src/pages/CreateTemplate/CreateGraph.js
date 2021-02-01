@@ -1,19 +1,42 @@
-import React, { Component, Fragment } from 'react';
-import NavMenu from '../../components/navigation/NavMenu';
-import NewTemplateTitle from './NewTemplateTitle';
-import './NewTemplate.css';
+import React, { useContext } from 'react';
+import TemplateTitlePage from './TemplateTitlePage';
+import HPITemplateContext from '../../contexts/HPITemplateContext';
+import { getNewTemplate } from './util';
+import { Link } from 'react-router-dom';
 
-export default class CreateGraph extends Component {
-    render() {
-        return (
-            <Fragment>
-                <div className='nav-menu-container'>
-                    <NavMenu />
-                </div>
-                <div className='new-template-form-container'>
-                    <NewTemplateTitle />
-                </div>
-            </Fragment>
-        );
-    }
-}
+import { Input } from 'semantic-ui-react';
+
+// Component for first step of creating new HPI template
+const CreateGraph = () => {
+    const { updateTemplate } = useContext(HPITemplateContext);
+
+    const inputComponent = (props) => (
+        <Input {...props} className='input-title' />
+    );
+
+    const onSubmit = (title) => {
+        updateTemplate({
+            ...getNewTemplate(),
+            title,
+        });
+    };
+
+    const redirectElement = (
+        <span className='template-redirect'>
+            Already have a template?{' '}
+            <Link to='/templates/old'>Edit it here.</Link>
+        </span>
+    );
+
+    return (
+        <TemplateTitlePage
+            header='New History of Present Illness Template'
+            label='Enter a short title for your new template.'
+            inputComponent={inputComponent}
+            onSubmit={onSubmit}
+            redirectElement={redirectElement}
+        />
+    );
+};
+
+export default CreateGraph;

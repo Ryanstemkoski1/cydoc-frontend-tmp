@@ -1,33 +1,51 @@
-.new-template-form-container {
-  margin: 2rem;
-}
-
 .ui.segment.container {
   padding: 2rem;
 }
 
+.container.template-form,
+.container.template-title {
+  margin: 2rem;
+}
+
+/* TEMPLATE TITLE STYLING */
 .center {
   text-align: center;
 }
 
-.ui.header.new-template-header {
+.ui.header.template-header {
+  margin-bottom: 0.5rem;
+}
+
+.template-instructions {
+  display: block;
   margin-bottom: 2rem;
 }
 
-.title-description {
-  margin-bottom: 1rem;
-}
-
 .input-title {
-  margin-right: 1rem;
-  margin-bottom: 1rem;
+  margin: 0 0.5rem 1rem 2.5rem;
 }
 
-.new-template-form > h2.ui.header {
+.template-redirect {
+  display: block;
+  margin-top: 1rem;
+}
+
+.template-redirect > a{
+  text-decoration: underline;
+}
+
+.template-title .ui.form .error {
+  color: #A62121;
+  font-style: italic;
+  margin-top: 0;
+}
+
+/* EDIT TEMPLATE FORM STYLING */
+.template-form > h2.ui.header {
   margin: 0 0 2rem 0;
 }
 
-.new-template-form > h2.ui.header .sub.header {
+.template-form > h2.ui.header .sub.header {
   font-size: 1rem;
   color: #707070;
 }

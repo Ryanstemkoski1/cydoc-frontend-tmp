@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input } from 'semantic-ui-react';
-import '../NewTemplate.css';
+import '../TemplateForm.css';
 
 const GeneratedSentence = ({ answerInfo, placeholders, onChange }) => {
     return (
