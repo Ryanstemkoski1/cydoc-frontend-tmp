@@ -15,6 +15,7 @@ const constantsPath = 'src/constants';
 const testsPath = 'src/tests';
 const componentsPath = 'src/components';
 const pagesPath = 'src/pages';
+const authPath = 'src/auth';
 
 function runLint(path, args = []) {
     const lintProcess = spawnSync(
@@ -59,6 +60,7 @@ runLint(constantsPath, ['--ignore-pattern', 'src/constants/drug_types.js']);
 runLint(testsPath);
 runLint(componentsPath);
 runLint(pagesPath);
+runLint(authPath);
 
 if (failed) {
     process.exit(1);

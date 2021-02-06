@@ -175,7 +175,11 @@ class ConnectedNavMenu extends Component {
                     <Menu.Item as={Link} to='/' className='logo-menu'>
                         <Image src={Logo} className='logo-circle' />
                         {!this.props.displayNoteName && (
-                            <h1 className='logo-text'>Cydoc</h1>
+                            <Header
+                                as='h1'
+                                className='logo-text'
+                                content='Cydoc'
+                            />
                         )}
                     </Menu.Item>
 

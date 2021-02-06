@@ -1,20 +1,20 @@
-.login {
-    padding-top: 10vh;
-    width: 400px !important;
+.ui.container.login {
+    padding: 10vh 0;
+    width: 450px;
 }
 
-.login .segment {
-    padding-right: 30px !important;
-    padding-left: 30px !important;
+.ui.container.login .segment {
+    padding-right: 30px;
+    padding-left: 30px;
 }
 
-.sign-up {
+.ui.container.sign-up {
     padding: 2rem 0;
-    width: 700px !important;
+    width: 700px;
 }
-.sign-up .segment {
-    padding-right: 30px !important;
-    padding-left: 30px !important;
+.ui.container.sign-up .segment {
+    padding-right: 30px;
+    padding-left: 30px;
 }
 
 
@@ -23,7 +23,7 @@
     padding: 1rem;
 }
 
-h1.logo-text {
+.ui.header.logo-text {
     font-family: Pompadour, Arial, Helvetica, sans-serif;
     font-size: 2.7rem;
     color: black;
@@ -33,11 +33,16 @@ h1.logo-text {
 .login-header, .sign-up-header {
     padding: 1rem;
     font-size: 1.2rem;
-    color: black !important;
+    color: black;
 }
 
 .make-an-account-button {
     font-size: 1rem;
     margin-top: 5px;
     color: teal;
+}
+
+.role-label {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, .85);
 }

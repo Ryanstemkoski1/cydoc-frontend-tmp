@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Form, Segment, Message, Container, Image } from 'semantic-ui-react';
+import {
+    Form,
+    Segment,
+    Message,
+    Container,
+    Image,
+    Header,
+} from 'semantic-ui-react';
 import * as yup from 'yup';
 import { Redirect } from 'react-router';
 import AuthContext from '../../contexts/AuthContext';
@@ -421,7 +428,11 @@ class UserForm extends Component {
                     <Segment clearing raised className='sign-up-segment'>
                         <Container textAlign='center'>
                             <Image size='tiny' href='/' src={Logo} alt='logo' />
-                            <h1 className='logo-text'>Cydoc</h1>
+                            <Header
+                                as='h1'
+                                className='logo-text'
+                                content='Cydoc'
+                            />
                         </Container>{' '}
                         {this.props.disableRegister && (
                             <Container

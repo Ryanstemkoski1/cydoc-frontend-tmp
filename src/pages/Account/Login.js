@@ -1,4 +1,10 @@
-import React, { Component } from 'react';
+import React, {
+    useContext,
+    useState,
+    useCallback,
+    useRef,
+    useEffect,
+} from 'react';
 import {
     Form,
     Grid,
@@ -6,165 +12,195 @@ import {
     Button,
     Container,
     Image,
+    Header,
 } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-
+import GetLogin from 'auth/login';
+import SetupAccount from 'auth/setupAccount';
 import AuthContext from '../../contexts/AuthContext';
 import NotesContext from '../../contexts/NotesContext';
-import { client } from 'constants/api.js';
 import Logo from '../../assets/cydoc-logo.svg';
 import NavMenu from '../../components/navigation/NavMenu';
+import FirstTimeLogin from './FirstTimeLogin';
 import './Account.css';
 
-// Component that manages the layout of the login page
-class LoginPage extends Component {
-    static contextType = AuthContext;
+const Login = () => {
+    const context = useContext(AuthContext);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [role, setRole] = useState('healthcare professional');
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
+    const [redirect, setRedirect] = useState(false);
+    const isMounted = useRef(true);
+    const [isFirstLogin, setIsFirstLogin] = useState(false);
+    const [sessionUserAttributes, setSessionUserAttributes] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-            submittedUsername: '',
-            submittedPassword: '',
-            redirect: false,
+    // set isMounted to false when component is unmounted
+    useEffect(() => {
+        return () => {
+            isMounted.current = false;
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+    }, []);
 
-    handleChange(e, { name, value }) {
-        let newState = this.state;
-        newState[name] = value;
-        this.setState(newState);
-    }
-
-    handleSubmit = async () => {
-        const { username, password } = this.state;
-        this.setState({
-            submittedUsername: username,
-            submittedPassword: password,
-        });
-
-        const payload = {
-            username: this.state.username,
-            password: this.state.password,
-        };
-
-        const response = await client
-            .post('/login', payload)
-            .then((res) => {
-                const user = res;
-                localStorage.setItem('user', JSON.stringify(user));
-                return user;
-            })
-            .then((user) => {
-                return user;
-            })
-            .catch((err) => {
-                return err.response;
-            });
-
-        if (response === null) {
-            alert('null response');
-            return;
-        }
-        if (response.status === 200) {
-            this.context.storeLoginInfo(
-                response.data.user,
-                response.data.jwt.accessToken
-            );
-
-            this.setState({ redirect: true });
-        } else {
-            alert(response.data.Message);
-        }
+    const handleUsernameChange = (e, { value }) => {
+        setUsername(value);
     };
 
-    render() {
-        if (this.state.redirect || this.context.token) {
-            return (
-                <NotesContext.Consumer>
-                    {(context) => {
-                        context.loadNotes(this.context.user._id);
-                        return <Redirect push to='/dashboard' />;
-                    }}
-                </NotesContext.Consumer>
-            );
+    const handlePasswordChange = (e, { value }) => {
+        setPassword(value);
+    };
+
+    const handleRoleChange = (e, { value }) => {
+        setRole(value);
+    };
+
+    const handleSubmit = useCallback(async () => {
+        // don't login again while logging in
+        if (isLoggingIn) {
+            return;
         }
 
-        const { username, password } = this.state;
+        // log user in
+        setIsLoggingIn(true);
+        const loginResponse = await GetLogin(username, password, role, context);
+
+        // only update if still mounted
+        if (isMounted.current) {
+            if (loginResponse) {
+                // update state after user has logged in
+                setCurrentUser(loginResponse.currentUser);
+                setSessionUserAttributes(loginResponse.userAttr);
+                setIsFirstLogin(loginResponse.isFirstLoginFlag);
+                setRedirect(loginResponse.redirectFlag);
+            }
+
+            // finished logging in
+            setIsLoggingIn(false);
+        }
+    }, [username, password, role, context, isLoggingIn]);
+
+    const onChangePasswordSubmit = useCallback(
+        async (newPassword, attributes) => {
+            const newUserAttr = {
+                ...sessionUserAttributes,
+                given_name: attributes.firstName,
+                middle_name: attributes.middleName,
+                family_name: attributes.lastName,
+                phone_number: attributes.phoneNumber,
+            };
+            setSessionUserAttributes(newUserAttr);
+
+            // update account password and other attributes
+            const setupAccountResponse = await SetupAccount(
+                currentUser,
+                newUserAttr,
+                username,
+                newPassword,
+                attributes
+            );
+
+            if (setupAccountResponse) {
+                // update state after user has setup account
+                setIsFirstLogin(setupAccountResponse.isFirstLoginFlag);
+            }
+        },
+        [currentUser, sessionUserAttributes, username]
+    );
+
+    if (redirect || context.token) {
         return (
-            // renders a one-column grid centered in the middle of the screen with login form
-            // TODO: Make this into a container or card
-            <>
-                <div className='nav-menu-container'>
-                    <NavMenu />
-                </div>
-                <Container className='login'>
-                    <Segment clearing>
-                        <Container textAlign='center'>
-                            <Image size='tiny' href='/' src={Logo} alt='logo' />
-                            <h1 className='logo-text'>Cydoc</h1>
-                        </Container>
-                        <Container
-                            className={'login-header'}
-                            color='black'
-                            textAlign='center'
-                        >
-                            Log in
-                        </Container>
-                        <Form size='mini' onSubmit={this.handleSubmit}>
-                            <Form.Input
-                                fluid
-                                aria-label='username'
-                                label='Username'
-                                name='username'
-                                value={username}
-                                onChange={this.handleChange}
-                            />
-                            <Form.Input
-                                fluid
-                                aria-label='password'
-                                type={'password'}
-                                label='Password'
-                                name='password'
-                                value={password}
-                                onChange={this.handleChange}
-                            />
-                            <Grid padded verticalAlign={'middle'}>
-                                <Grid.Row columns={2}>
-                                    <Grid.Column>
-                                        <Link
-                                            style={{ color: '#007db3' }}
-                                            as={Button}
-                                            to='/register'
-                                            floated='left'
-                                            className='make-an-account-button'
-                                        >
-                                            Sign Up
-                                        </Link>
-                                    </Grid.Column>
-                                    <Grid.Column textAlign={'right'}>
-                                        <Button
-                                            color='teal'
-                                            size='small'
-                                            aria-label='login-button'
-                                        >
-                                            Log in
-                                        </Button>
-                                    </Grid.Column>
-                                </Grid.Row>
-                            </Grid>
-                        </Form>
-                    </Segment>
-                </Container>
-            </>
+            <NotesContext.Consumer>
+                {(ctx) => {
+                    ctx.loadNotes(context.user._id);
+                    return <Redirect push to='/dashboard' />;
+                }}
+            </NotesContext.Consumer>
         );
     }
-}
 
-const Login = LoginPage;
+    if (isFirstLogin) {
+        return <FirstTimeLogin onSubmit={onChangePasswordSubmit} role={role} />;
+    }
+
+    return (
+        <>
+            <div className='nav-menu-container'>
+                <NavMenu />
+            </div>
+            <Container className='login'>
+                <Segment clearing>
+                    <Container textAlign='center'>
+                        <Image size='tiny' href='/' src={Logo} alt='logo' />
+                        <Header as='h1' className='logo-text' content='Cydoc' />
+                    </Container>
+                    <Container
+                        className='login-header'
+                        color='black'
+                        textAlign='center'
+                        content='Login'
+                    />
+                    <Form size='mini' onSubmit={handleSubmit}>
+                        <Form.Input
+                            fluid
+                            aria-label='username'
+                            label='Username'
+                            name='username'
+                            value={username}
+                            onChange={handleUsernameChange}
+                        />
+                        <Form.Input
+                            fluid
+                            aria-label='password'
+                            type='password'
+                            label='Password'
+                            name='password'
+                            value={password}
+                            onChange={handlePasswordChange}
+                        />
+                        <label className='role-label'>I am a:</label>
+                        <Form.Group>
+                            <Form.Radio
+                                label='healthcare professional'
+                                value='healthcare professional'
+                                checked={role === 'healthcare professional'}
+                                onChange={handleRoleChange}
+                            />
+                            <Form.Radio
+                                label='healthcare manager'
+                                value='healthcare manager'
+                                checked={role === 'healthcare manager'}
+                                onChange={handleRoleChange}
+                            />
+                        </Form.Group>
+                        <Grid padded verticalAlign='middle'>
+                            <Grid.Row columns={2}>
+                                <Grid.Column>
+                                    <Link
+                                        style={{ color: '#007db3' }}
+                                        to='/register'
+                                        floated='left'
+                                        className='make-an-account-button'
+                                    >
+                                        Sign Up
+                                    </Link>
+                                </Grid.Column>
+                                <Grid.Column textAlign='right'>
+                                    <Button
+                                        color='teal'
+                                        size='small'
+                                        aria-label='login-button'
+                                        content='Login'
+                                    />
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
+                    </Form>
+                </Segment>
+            </Container>
+        </>
+    );
+};
 
 export default Login;

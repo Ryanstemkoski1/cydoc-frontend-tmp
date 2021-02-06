@@ -74,6 +74,7 @@ Before submitting a PR, `npm run lint` should output the following:
 - 😄  No linting errors found for src/components
 - 😄  No linting errors found for src/constants
 - 😄  No linting errors found for src/pages
+- 😄 No linting errors found for src/auth
 
 # Context API Guide
 
