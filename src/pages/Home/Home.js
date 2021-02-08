@@ -39,9 +39,7 @@ class Home extends Component {
         const { windowWidth } = this.state;
         return (
             <Fragment>
-                <div className='nav-menu-container'>
-                    <NavMenu />
-                </div>
+                <NavMenu />
                 <MeetCydocSection windowWidth={windowWidth} />
                 <Segment className='better-notes'>
                     <div className='diagonal'>
@@ -92,6 +90,7 @@ class Home extends Component {
                 <Segment className='footer'>
                     <Header
                         as={Link}
+                        to='#'
                         onClick={() =>
                             window.scrollTo({
                                 top: 0,

@@ -13,6 +13,7 @@ import { PrivateRoute } from './components/navigation/PrivateRoute';
 import CreateGraph from './pages/CreateTemplate/CreateGraph';
 import EditGraph from './pages/CreateTemplate/EditGraph';
 import EditTemplate from './pages/CreateTemplate/EditTemplate';
+import ManagerDashboard from './pages/ManagerDashboard/ManagerDashboard';
 import { HPIStore } from './contexts/HPIContext';
 import { AuthStore } from './contexts/AuthContext';
 import { NotesStore } from './contexts/NotesContext';
@@ -64,6 +65,11 @@ ReactDOM.render(
                                     exact
                                     path='/editprofile'
                                     component={EditProfile}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path='/managerdashboard'
+                                    component={ManagerDashboard}
                                 />
                             </BrowserRouter>
                         </div>

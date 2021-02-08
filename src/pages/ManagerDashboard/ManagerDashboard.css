@@ -1,0 +1,27 @@
+.ui.container.manager-dashboard-container {
+	margin: 2rem;
+}
+
+.ui.cards.doctor-cards {
+	margin: 1rem 0;
+}
+
+.ui.cards > .ui.card {
+	border-radius: .28571429rem;
+	box-shadow: none;
+	border: 1px solid #d4d4d5;
+	transition: box-shadow 300ms;
+}
+
+.ui.cards > .ui.card:hover {
+	box-shadow: 0 0 11px rgba(33,33,33,.2); 
+}
+
+.description.extra-info {
+	display: none;
+}
+
+.ui.button.view-less, .ui.button.remove {
+	display: none;
+	margin-top: 1rem;
+}
