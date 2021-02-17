@@ -13,6 +13,7 @@ import {
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
+    HIDE_CYDOC_IN_NAV_MENU_BP,
     DEFAULT_NAV_MENU_MOBILE_BP,
     LOGGEDIN_NAV_MENU_MOBILE_BP,
 } from 'constants/breakpoints.js';
@@ -63,6 +64,38 @@ class ConnectedNavMenu extends Component {
         const { windowWidth } = this.state;
         const collapseDefaultNav = windowWidth < DEFAULT_NAV_MENU_MOBILE_BP;
         const collapseLoggedInNav = windowWidth < LOGGEDIN_NAV_MENU_MOBILE_BP;
+        const hideCydoc = windowWidth < HIDE_CYDOC_IN_NAV_MENU_BP;
+
+        const dropdownOptions = [
+            {
+                as: Link,
+                to: '/editprofile',
+                key: 'editProfile',
+                text: 'Edit Profile',
+                icon: 'setting',
+                selected: false,
+                active: window.location.href.includes('editprofile'),
+            },
+            {
+                as: Link,
+                to: '/profilesecurity',
+                key: 'profileSecurity',
+                text: 'Profile Security',
+                icon: 'lock',
+                selected: false,
+                active: window.location.href.includes('profilesecurity'),
+            },
+            {
+                as: Link,
+                to: '/',
+                key: 'logout',
+                text: 'Log Out',
+                icon: 'sign out',
+                onClick: this.context.logOut,
+                selected: false,
+                active: false,
+            },
+        ];
 
         // Menu items when not logged in
         const defaultMenuItems = collapseDefaultNav ? (
@@ -108,60 +141,67 @@ class ConnectedNavMenu extends Component {
 
         // Menu items when logged in
         const loggedInMenuItems = collapseLoggedInNav ? (
-            <Menu.Item>
-                <Button.Group>
+            <>
+                <Menu.Item>
                     <Button
+                        basic
+                        color='teal'
                         as={Link}
-                        name='myNotes'
                         to='/dashboard'
-                        text='My Notes'
-                    >
-                        <Icon
-                            name='sticky note outline'
-                            className='collapsed-icon'
-                        />
-                    </Button>
-                    <Button
-                        name='logout'
-                        href='/'
-                        text='Logout'
-                        onClick={this.context.logOut}
-                        className='logout-button'
-                    >
-                        <Icon
-                            name='sign out alternate'
-                            className='collapsed-icon'
-                        />
-                    </Button>
-                </Button.Group>
-            </Menu.Item>
+                        name='notes'
+                        icon='clipboard outline'
+                    />
+                </Menu.Item>
+                <Menu.Item>
+                    <Dropdown
+                        button
+                        basic
+                        color='teal'
+                        floating
+                        icon={null}
+                        name='profile'
+                        className='profile-button profile-mobile'
+                        options={dropdownOptions}
+                        trigger={
+                            <span>
+                                <Icon
+                                    name='user outline'
+                                    className='profile-mobile-icon'
+                                />
+                            </span>
+                        }
+                    />
+                </Menu.Item>
+            </>
         ) : (
             <>
                 <Menu.Item>
-                    <Button.Group>
-                        <Button
-                            as={Link}
-                            name='myNotes'
-                            to='/dashboard'
-                            text='My Notes'
-                            content='My Notes'
-                        />
-                        <Button
-                            name='logout'
-                            href='/'
-                            text='Logout'
-                            onClick={this.context.logOut}
-                            className='logout-button'
-                            content='Log Out'
-                        />
-                    </Button.Group>
+                    <Button
+                        basic
+                        color='teal'
+                        as={Link}
+                        name='notes'
+                        to='/dashboard'
+                        content='Notes'
+                        icon='clipboard outline'
+                    />
                 </Menu.Item>
-                <Menu.Item
-                    name='welcome'
-                    style={{ color: '#6DA3B1', fontWeight: 'normal' }}
-                >
-                    <Icon name='user outline' />
-                    {this.context.user && this.context.user.firstName}
+                <Menu.Item>
+                    <Dropdown
+                        button
+                        basic
+                        color='teal'
+                        floating
+                        name='profile'
+                        className='profile-button'
+                        options={dropdownOptions}
+                        trigger={
+                            <span>
+                                <Icon name='user outline' />{' '}
+                                {this.context.user?.firstName}
+                            </span>
+                        }
+                    />
                 </Menu.Item>
             </>
         );
@@ -174,7 +214,7 @@ class ConnectedNavMenu extends Component {
                 >
                     <Menu.Item as={Link} to='/' className='logo-menu'>
                         <Image src={Logo} className='logo-circle' />
-                        {!this.props.displayNoteName && (
+                        {!this.props.displayNoteName && !hideCydoc && (
                             <Header
                                 as='h1'
                                 className='logo-text'

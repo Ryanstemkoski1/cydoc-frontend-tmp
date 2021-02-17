@@ -38,7 +38,7 @@ const EditGraph = () => {
             }
         };
         fetchTemplates();
-    }, []);
+    }, [doctorID, setCreatedTemplates]);
 
     const inputComponent = (props) => {
         const options = Object.keys(createdTemplates).map((graphID) => ({

@@ -19,6 +19,7 @@ import { AuthStore } from './contexts/AuthContext';
 import { NotesStore } from './contexts/NotesContext';
 import { HPITemplateStore } from './contexts/HPITemplateContext';
 import EditProfile from './pages/Account/EditProfile';
+import ProfileSecurity from './pages/Account/ProfileSecurity';
 import './index.css';
 
 ReactDOM.render(
@@ -65,6 +66,11 @@ ReactDOM.render(
                                     exact
                                     path='/editprofile'
                                     component={EditProfile}
+                                />
+                                <PrivateRoute
+                                    exact
+                                    path='/profilesecurity'
+                                    component={ProfileSecurity}
                                 />
                                 <PrivateRoute
                                     exact

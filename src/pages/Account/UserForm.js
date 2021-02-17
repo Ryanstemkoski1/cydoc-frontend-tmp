@@ -467,28 +467,34 @@ class UserForm extends Component {
                                 onChange={this.handleChange}
                                 disabled={this.props.disableRegister}
                             />
-                            <Form.Input
-                                fluid
-                                aria-label='Password'
-                                type={'password'}
-                                label='Password'
-                                placeholder='password'
-                                name='password'
-                                value={this.state.formInfo.password}
-                                onChange={this.handleChange}
-                                disabled={this.props.disableRegister}
-                            />
-                            <Form.Input
-                                fluid
-                                aria-label='Reenter-Password'
-                                type={'password'}
-                                label='Re-enter password'
-                                placeholder='re-enter password'
-                                name='passwordConfirm'
-                                value={this.state.formInfo.passwordConfirm}
-                                onChange={this.handleChange}
-                                disabled={this.props.disableRegister}
-                            />
+                            {this.props.formType === 'register' && (
+                                <>
+                                    <Form.Input
+                                        fluid
+                                        aria-label='Password'
+                                        type={'password'}
+                                        label='Password'
+                                        placeholder='password'
+                                        name='password'
+                                        value={this.state.formInfo.password}
+                                        onChange={this.handleChange}
+                                        disabled={this.props.disableRegister}
+                                    />
+                                    <Form.Input
+                                        fluid
+                                        aria-label='Reenter-Password'
+                                        type={'password'}
+                                        label='Re-enter password'
+                                        placeholder='re-enter password'
+                                        name='passwordConfirm'
+                                        value={
+                                            this.state.formInfo.passwordConfirm
+                                        }
+                                        onChange={this.handleChange}
+                                        disabled={this.props.disableRegister}
+                                    />
+                                </>
+                            )}
                             <Form.Group>
                                 <Form.Input
                                     fluid

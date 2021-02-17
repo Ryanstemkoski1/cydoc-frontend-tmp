@@ -126,9 +126,7 @@ const Login = () => {
 
     return (
         <>
-            <div className='nav-menu-container'>
-                <NavMenu />
-            </div>
+            <NavMenu />
             <Container className='login'>
                 <Segment clearing>
                     <Container textAlign='center'>
@@ -164,12 +162,14 @@ const Login = () => {
                             <Form.Radio
                                 label='healthcare professional'
                                 value='healthcare professional'
+                                className='role'
                                 checked={role === 'healthcare professional'}
                                 onChange={handleRoleChange}
                             />
                             <Form.Radio
                                 label='healthcare manager'
                                 value='healthcare manager'
+                                className='role'
                                 checked={role === 'healthcare manager'}
                                 onChange={handleRoleChange}
                             />

@@ -46,3 +46,48 @@
     font-size: 1rem;
     color: rgba(0, 0, 0, .85);
 }
+
+.ui.card.password-reqs {
+    margin-top: 1rem;
+}
+
+.ui.card.password-reqs-not-met {
+    margin-top: 1rem;
+    border: 1px solid #9f3a38;
+    box-shadow: 0 1px 3px 0 #9f3a38, 0 0 0 1px #9f3a38;
+}
+
+.req-met {
+    color: green;
+}
+
+.req-not-met {
+    color: #9f3a38;
+}
+
+.ui.container.pass-match-error {
+    margin: -.5rem 0 .75rem;
+    color: #9f3a38;
+}
+
+.ui.form .fields > .field.role {
+    height: fit-content;
+    padding: 0.5em .5em;
+}
+
+.ui.form .fields.roles {
+    margin-bottom: 0;
+}
+
+.ui.container.pass-coming-soon {
+    color: black;
+    font-size: 1.5rem;
+}
+
+label.role-label-change-pass {
+    opacity: .2;
+}
+
+.ui.container.change-pass-button {
+    margin: .5rem 0 1.5rem;
+}
