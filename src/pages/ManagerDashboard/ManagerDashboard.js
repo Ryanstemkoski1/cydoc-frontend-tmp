@@ -10,6 +10,7 @@ import {
 } from 'semantic-ui-react';
 import NavMenu from 'components/navigation/NavMenu';
 import './ManagerDashboard.css';
+import managerCreateUser from 'auth/managerCreateUser';
 
 // manager dashboard view to view/add/remove doctor accounts
 const ManagerDashboard = () => {
@@ -17,6 +18,7 @@ const ManagerDashboard = () => {
     const [userToRemove, setUserToRemove] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+    const [duplicateUsername, setDuplicateUsername] = useState(false);
 
     const switchFullUserInfoView = (username, view) => {
         const show = view === 'show';
@@ -34,15 +36,23 @@ const ManagerDashboard = () => {
 
     const handleUsernameChange = (e, { value }) => {
         setUsername(value);
+        setDuplicateUsername(false);
     };
 
     const handleEmailChange = (e, { value }) => {
         setEmail(value);
     };
 
-    const createDoctor = () => {
-        setIsInviteDoctorOpen(false);
-        // TODO: call adminCreateUser API to create user/send email with temporary password
+    const createDoctor = async () => {
+        const createUserResponse = await managerCreateUser(username, email);
+        if (
+            createUserResponse?.status === 'ERROR' &&
+            createUserResponse?.message.includes('User account already exists')
+        ) {
+            setDuplicateUsername(true);
+        } else {
+            setIsInviteDoctorOpen(false);
+        }
     };
 
     const removeDoctor = () => {
@@ -204,15 +214,22 @@ const ManagerDashboard = () => {
                     >
                         <Modal.Header>Invite a doctor to Cydoc</Modal.Header>
                         <Modal.Content>
-                            <Form>
+                            <Form onSubmit={createDoctor}>
                                 <Form.Input
+                                    required
                                     label='Doctor username'
                                     name='username'
                                     placeholder='username'
                                     value={username}
+                                    className='username-input-container'
+                                    error={
+                                        duplicateUsername &&
+                                        'Username already exists'
+                                    }
                                     onChange={handleUsernameChange}
                                 />
                                 <Form.Input
+                                    required
                                     label='Doctor email'
                                     name='email'
                                     placeholder='name@example.com'
@@ -220,23 +237,24 @@ const ManagerDashboard = () => {
                                     value={email}
                                     onChange={handleEmailChange}
                                 />
+                                <Container className='modal-button-container'>
+                                    <Button
+                                        basic
+                                        color='teal'
+                                        content='Cancel'
+                                        type='button'
+                                        onClick={() =>
+                                            setIsInviteDoctorOpen(false)
+                                        }
+                                    />
+                                    <Button
+                                        color='teal'
+                                        content='Send invitation'
+                                        type='submit'
+                                    />
+                                </Container>
                             </Form>
                         </Modal.Content>
-                        <Modal.Actions>
-                            <Button
-                                basic
-                                color='teal'
-                                content='Cancel'
-                                type='button'
-                                onClick={() => setIsInviteDoctorOpen(false)}
-                            />
-                            <Button
-                                color='teal'
-                                content='Send invitation'
-                                type='button'
-                                onClick={createDoctor}
-                            />
-                        </Modal.Actions>
                     </Modal>
                     <Card.Group
                         centered

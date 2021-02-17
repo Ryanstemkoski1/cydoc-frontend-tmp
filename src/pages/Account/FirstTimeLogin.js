@@ -17,15 +17,6 @@ import DemographicsForm from '../../components/tools/DemographicsForm';
 import constants from 'constants/registration-constants.json';
 import './Account.css';
 
-const passwordErrors = {
-    containsNumber: 'Must contain at least one number.',
-    containsUpper: 'Must contain at least one uppercase character.',
-    containsLower: 'Must contain at least one lowercase character.',
-    containsSpecial:
-        'Must contain at least one of the following special characters: = + - ^ $ * . [ ] { } ( ) ? " ! @ # % & / \\ , > < \' : ; | _ ~ `',
-    passesMinLength: 'Must be at least 25 characters.',
-};
-
 const degreeOptions = constants.degrees.map((degree) => ({
     key: degree,
     value: degree,
@@ -147,6 +138,8 @@ const FirstTimeLogin = ({ onSubmit, role }) => {
     });
 
     const handleNewPasswordChange = (e, { value }) => {
+        const minLength =
+            role === 'manager' || role === 'healthcare manager' ? 25 : 16;
         setPasswordReqs({
             ...passwordReqs,
             containsNumber: value.match(/\d+/g) ? true : false,
@@ -157,7 +150,7 @@ const FirstTimeLogin = ({ onSubmit, role }) => {
             )
                 ? true
                 : false,
-            passesMinLength: value.length >= 25,
+            passesMinLength: value.length >= minLength,
         });
         setNewPassword(value);
     };
@@ -433,6 +426,17 @@ const FirstTimeLogin = ({ onSubmit, role }) => {
                 />
             );
         }
+    };
+
+    const passwordErrors = {
+        containsNumber: 'Must contain at least one number.',
+        containsUpper: 'Must contain at least one uppercase character.',
+        containsLower: 'Must contain at least one lowercase character.',
+        containsSpecial:
+            'Must contain at least one of the following special characters: = + - ^ $ * . [ ] { } ( ) ? " ! @ # % & / \\ , > < \' : ; | _ ~ `',
+        passesMinLength: `Must be at least ${
+            role === 'manager' || role === 'healthcare manager' ? '25' : '16'
+        } characters.`,
     };
 
     const passwordErrorMessages = () => {

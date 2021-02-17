@@ -12,3 +12,7 @@ export const graphClient = axios.create({
 export const poolDataClient = axios.create({
     baseURL: 'https://6i5pdwz3n5.execute-api.us-east-1.amazonaws.com/dev',
 });
+
+export const identityPoolClient = axios.create({
+    baseURL: 'https://yxp9hzv37a.execute-api.us-east-1.amazonaws.com/dev',
+});

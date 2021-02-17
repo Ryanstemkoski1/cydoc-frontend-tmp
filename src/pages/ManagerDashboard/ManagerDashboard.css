@@ -25,3 +25,13 @@
 	display: none;
 	margin-top: 1rem;
 }
+
+.field.username-input-container {
+	height: min-content;
+}
+
+.ui.container.modal-button-container {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 1rem;
+}
