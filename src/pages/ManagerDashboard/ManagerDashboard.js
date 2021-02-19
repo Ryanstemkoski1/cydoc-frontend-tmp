@@ -10,6 +10,7 @@ import {
 } from 'semantic-ui-react';
 import NavMenu from 'components/navigation/NavMenu';
 import './ManagerDashboard.css';
+import managerDeleteUser from 'auth/managerDeleteUser';
 import managerCreateUser from 'auth/managerCreateUser';
 
 // manager dashboard view to view/add/remove doctor accounts
@@ -57,7 +58,7 @@ const ManagerDashboard = () => {
 
     const removeDoctor = () => {
         setUserToRemove('');
-        // TODO: call deleteUser API to remove user
+        managerDeleteUser(username);
     };
 
     // TODO: remove placeholder doctor info, get doctors via managerID from user database

@@ -16,3 +16,7 @@ export const poolDataClient = axios.create({
 export const identityPoolClient = axios.create({
     baseURL: 'https://yxp9hzv37a.execute-api.us-east-1.amazonaws.com/dev',
 });
+
+export const deleteDoctorClient = axios.create({
+    baseURL: 'https://65b6ro7xk0.execute-api.us-east-1.amazonaws.com/prod',
+});
