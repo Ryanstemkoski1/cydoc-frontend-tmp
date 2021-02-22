@@ -1,5 +1,4 @@
 export const HIDE_CYDOC_IN_NAV_MENU_BP = 350;
-export const DEFAULT_NAV_MENU_MOBILE_BP = 550;
 export const LOGGEDIN_NAV_MENU_MOBILE_BP = 700;
 
 export const HOME_LARGE_BP = 974;

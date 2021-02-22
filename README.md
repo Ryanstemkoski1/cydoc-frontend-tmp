@@ -232,9 +232,9 @@ This state contains the currently logged-in user's id (```user```) and JWT token
 
 ### Methods
 
-#### ```storeLoginInfo(user: string, token: string): void```
+#### ```storeLoginInfo(user: string, role: string, token: string): void```
 
-Stores the given id and token into state and cookies.
+Stores the given id, role, and token into state and cookies.
 
 #### ```logOut(): void```
 
@@ -248,7 +248,7 @@ npm install --save-dev jest
 npm install --save-dev enzyme jest-enzyme enzyme-adapter-react-16
 ```
 
-In your test file (e.g. Register.test.js), include these imports:
+In your test file (e.g. EditProfile.test.js), include these imports:
 
 ```
 import React from 'react'

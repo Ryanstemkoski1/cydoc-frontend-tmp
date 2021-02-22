@@ -54,7 +54,6 @@ export const homeContent = {
         cydoc: 'Cydoc',
         about: 'About',
         login: 'Login',
-        register: 'Register',
         contact: 'Contact Us',
     },
 };

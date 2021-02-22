@@ -106,15 +106,7 @@ class Home extends Component {
                                 as={Link}
                                 to='/login'
                                 content={homeContent.footer.login}
-                                className='light-teal '
-                            />
-                        </div>
-                        <div className='footer-link'>
-                            <Header
-                                as={Link}
-                                to='/register'
-                                content={homeContent.footer.register}
-                                className='light-teal '
+                                className='light-teal'
                             />
                         </div>
                         <div className='footer-link'>
@@ -122,7 +114,7 @@ class Home extends Component {
                                 as='a'
                                 href='https://aemail.com/lYPj'
                                 content={homeContent.footer.contact}
-                                className='light-teal '
+                                className='light-teal'
                             />
                         </div>
                     </div>

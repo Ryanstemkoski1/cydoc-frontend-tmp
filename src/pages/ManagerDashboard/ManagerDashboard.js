@@ -86,14 +86,6 @@ const ManagerDashboard = () => {
                         Specialty 1, Specialty 2, Specialty 3
                     </Card.Description>
                     <Card.Description className={`extra-info ${docUsername}`}>
-                        <strong>Backup email: </strong>
-                        backup@example.com
-                    </Card.Description>
-                    <Card.Description className={`extra-info ${docUsername}`}>
-                        <strong>Backup phone: </strong>
-                        098-765-4321
-                    </Card.Description>
-                    <Card.Description className={`extra-info ${docUsername}`}>
                         <strong>Institutions: </strong>
                         Institution 1, Institution 2, Institution 3
                     </Card.Description>

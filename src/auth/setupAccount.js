@@ -12,10 +12,21 @@ const SetupAccount = async (
         currentUser.completeNewPasswordChallenge(newPassword, newUserAttr, {
             onSuccess: (_result) => {
                 // user successfully reset password and confirmed account
+
+                // TODO: add user to Dynamo and remove code below for adding to old database
                 const user = {
                     username,
                     password: newPassword,
                     email: newUserAttr.email,
+                    phoneNumber: attributes.phoneNumber,
+                    firstName: attributes.firstName,
+                    lastName: attributes.lastName,
+                    workplace: attributes.workplace,
+                    institutionType: '',
+                    inPatient: null,
+                    address: attributes.address,
+                    backupEmail: '',
+                    role: attributes.role,
                     ...attributes,
                 };
 

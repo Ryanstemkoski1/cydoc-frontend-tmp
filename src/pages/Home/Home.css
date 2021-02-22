@@ -225,7 +225,7 @@
   align-items: center;
   margin: 0;
   width: 50%;
-  max-width: 400px;
+  max-width: 250px;
 }
 
 .footer-link .ui.header {
@@ -278,20 +278,6 @@
   .design-doctors-content {
     max-width: none;
   }
-}
-
-@media screen and (max-width: 550px) {
-  .diagonal {
-    position: static;
-    background-color: rgba(0, 107, 135, 0.6);
-    transform: skewX(0);
-    max-width: 100%;
-  }
-
-  .diagonal-content {
-    transform: skewX(0);
-    padding: 3rem 4rem;
-  }
 
   .ui.segment.footer {
     display: block;
@@ -313,6 +299,20 @@
   }
 }
 
+@media screen and (max-width: 550px) {
+  .diagonal {
+    position: static;
+    background-color: rgba(0, 107, 135, 0.6);
+    transform: skewX(0);
+    max-width: 100%;
+  }
+
+  .diagonal-content {
+    transform: skewX(0);
+    padding: 3rem 4rem;
+  }
+}
+
 @media screen and (max-width: 836px) {
   .ui.segment.features {
     padding: 3rem;
@@ -327,7 +327,8 @@
   }
 
   .footer-links {
-    width: 60%;
+    width: 40%;
+    min-width: 175px;
   }
 
   .footer-link .ui.header {

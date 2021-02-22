@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
     Form,
     Segment,
@@ -9,19 +9,22 @@ import {
     Icon,
     Divider,
 } from 'semantic-ui-react';
-import NavMenu from '../../components/navigation/NavMenu';
+import AuthContext from 'contexts/AuthContext';
+import NavMenu from 'components/navigation/NavMenu';
 import { passwordErrors } from 'constants/passwordErrors';
 import changePassword from 'auth/changePassword';
 import './Account.css';
 
 const ProfileSecurity = () => {
+    const context = useContext(AuthContext);
+    const role = context.role;
+
     const [curPassword, setCurPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [showPasswordReqs, setShowPasswordReqs] = useState(false);
     const [retypeNewPassword, setRetypeNewPassword] = useState('');
     const [passwordMeetsReqs, setPasswordMeetsReqs] = useState(true);
     const [passwordsMatch, setPasswordsMatch] = useState(true);
-    const [role, setRole] = useState('healthcare professional');
     const [passwordReqs, setPasswordReqs] = useState({
         containsNumber: false,
         containsUpper: false,
@@ -53,10 +56,6 @@ const ProfileSecurity = () => {
 
     const handleRetypeNewPasswordChange = (e, { value }) => {
         setRetypeNewPassword(value);
-    };
-
-    const handleRoleChange = (e, { value }) => {
-        setRole(value);
     };
 
     const handleFocusNewPassword = (value) => {
@@ -92,7 +91,8 @@ const ProfileSecurity = () => {
 
     const passwordErrorMessages = () => {
         const errMsgs = [];
-        for (const err in passwordErrors) {
+        const passwordErrs = passwordErrors(role);
+        for (const err in passwordErrs) {
             if (passwordReqs[err]) {
                 errMsgs.push(
                     <Card.Content
@@ -100,7 +100,7 @@ const ProfileSecurity = () => {
                         className={passwordMeetsReqs ? 'req-met' : ''}
                     >
                         <Icon name='check' size='small' />
-                        {passwordErrors[err]}
+                        {passwordErrs[err]}
                     </Card.Content>
                 );
             } else {
@@ -110,7 +110,7 @@ const ProfileSecurity = () => {
                         className={!passwordMeetsReqs ? 'req-not-met' : ''}
                     >
                         <Icon name='times' size='small' />
-                        {passwordErrors[err]}
+                        {passwordErrs[err]}
                     </Card.Content>
                 );
             }
@@ -195,28 +195,6 @@ const ProfileSecurity = () => {
                                 Passwords do not match.
                             </Container>
                         )}
-                        {/* TODO: get role from username in database */}
-                        <label className='role-label role-label-change-pass'>
-                            I am a:
-                        </label>
-                        <Form.Group className='roles'>
-                            <Form.Radio
-                                disabled
-                                label='healthcare professional'
-                                value='healthcare professional'
-                                className='role'
-                                checked={role === 'healthcare professional'}
-                                onChange={handleRoleChange}
-                            />
-                            <Form.Radio
-                                disabled
-                                label='healthcare manager'
-                                value='healthcare manager'
-                                className='role'
-                                checked={role === 'healthcare manager'}
-                                onChange={handleRoleChange}
-                            />
-                        </Form.Group>
                         <Container
                             textAlign='right'
                             className='change-pass-button'

@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import {
     Form,
-    Grid,
     Segment,
     Button,
     Container,
@@ -15,7 +14,6 @@ import {
     Header,
 } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
-import { Link } from 'react-router-dom';
 import GetLogin from 'auth/login';
 import SetupAccount from 'auth/setupAccount';
 import AuthContext from '../../contexts/AuthContext';
@@ -88,7 +86,7 @@ const Login = () => {
                 given_name: attributes.firstName,
                 middle_name: attributes.middleName,
                 family_name: attributes.lastName,
-                phone_number: attributes.phoneNumber,
+                phone_number: attributes.fullPhoneNumber,
             };
             setSessionUserAttributes(newUserAttr);
 
@@ -121,7 +119,14 @@ const Login = () => {
     }
 
     if (isFirstLogin) {
-        return <FirstTimeLogin onSubmit={onChangePasswordSubmit} role={role} />;
+        return (
+            <FirstTimeLogin
+                onSubmit={onChangePasswordSubmit}
+                role={role}
+                username={username}
+                email={sessionUserAttributes?.email}
+            />
+        );
     }
 
     return (
@@ -167,35 +172,21 @@ const Login = () => {
                                 onChange={handleRoleChange}
                             />
                             <Form.Radio
-                                label='healthcare manager'
-                                value='healthcare manager'
+                                label='manager'
+                                value='manager'
                                 className='role'
-                                checked={role === 'healthcare manager'}
+                                checked={role === 'manager'}
                                 onChange={handleRoleChange}
                             />
                         </Form.Group>
-                        <Grid padded verticalAlign='middle'>
-                            <Grid.Row columns={2}>
-                                <Grid.Column>
-                                    <Link
-                                        style={{ color: '#007db3' }}
-                                        to='/register'
-                                        floated='left'
-                                        className='make-an-account-button'
-                                    >
-                                        Sign Up
-                                    </Link>
-                                </Grid.Column>
-                                <Grid.Column textAlign='right'>
-                                    <Button
-                                        color='teal'
-                                        size='small'
-                                        aria-label='login-button'
-                                        content='Login'
-                                    />
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
+                        <Container textAlign='right'>
+                            <Button
+                                color='teal'
+                                size='small'
+                                aria-label='login-button'
+                                content='Login'
+                            />
+                        </Container>
                     </Form>
                 </Segment>
             </Container>

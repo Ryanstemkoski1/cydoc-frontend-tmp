@@ -6,6 +6,7 @@ const Context = React.createContext('yasa');
 class AuthStore extends React.Component {
     state = {
         user: this.props.cookies.get('user') || null,
+        role: this.props.cookies.get('role') || null,
         token: this.props.cookies.get('token') || null,
     };
 
@@ -26,16 +27,18 @@ class AuthStore extends React.Component {
         };
     */
 
-    storeLoginInfo = (user, token) => {
+    storeLoginInfo = (user, role, token) => {
         this.props.cookies.set('user', user, { path: '/' });
+        this.props.cookies.set('role', role, { path: '/' });
         this.props.cookies.set('token', token, { path: '/' });
-        this.setState({ user: user, token: token });
+        this.setState({ user: user, role: role, token: token });
     };
 
     logOut = () => {
         this.props.cookies.remove('user');
+        this.props.cookies.remove('role');
         this.props.cookies.remove('token');
-        this.setState({ user: null, token: null });
+        this.setState({ user: null, role: null, token: null });
     };
 
     render = () => {

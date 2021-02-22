@@ -14,7 +14,6 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
     HIDE_CYDOC_IN_NAV_MENU_BP,
-    DEFAULT_NAV_MENU_MOBILE_BP,
     LOGGEDIN_NAV_MENU_MOBILE_BP,
 } from 'constants/breakpoints.js';
 import HPIContext from 'contexts/HPIContext.js';
@@ -62,7 +61,6 @@ class ConnectedNavMenu extends Component {
 
     render() {
         const { windowWidth } = this.state;
-        const collapseDefaultNav = windowWidth < DEFAULT_NAV_MENU_MOBILE_BP;
         const collapseLoggedInNav = windowWidth < LOGGEDIN_NAV_MENU_MOBILE_BP;
         const hideCydoc = windowWidth < HIDE_CYDOC_IN_NAV_MENU_BP;
 
@@ -98,44 +96,15 @@ class ConnectedNavMenu extends Component {
         ];
 
         // Menu items when not logged in
-        const defaultMenuItems = collapseDefaultNav ? (
+        const defaultMenuItems = (
             <Menu.Item>
-                <Dropdown icon='big bars' className='collapsed-dropdown'>
-                    <Dropdown.Menu>
-                        <Dropdown.Item
-                            as={Link}
-                            name='login'
-                            to='/login'
-                            text='Login'
-                        />
-                        <Dropdown.Item
-                            as={Link}
-                            name='register'
-                            to='/register'
-                            text='Sign Up'
-                        />
-                    </Dropdown.Menu>
-                </Dropdown>
-            </Menu.Item>
-        ) : (
-            <Menu.Item>
-                <Button.Group>
-                    <Button
-                        as={Link}
-                        basic
-                        color='teal'
-                        name='login'
-                        to='/login'
-                        content='Login'
-                    />
-                    <Button
-                        as={Link}
-                        color='teal'
-                        name='register'
-                        to='/register'
-                        content='Sign Up'
-                    />
-                </Button.Group>
+                <Button
+                    as={Link}
+                    color='teal'
+                    name='login'
+                    to='/login'
+                    content='Login'
+                />
             </Menu.Item>
         );
 
@@ -269,9 +238,8 @@ class NoteNameMenuItem extends Component {
                 zip: this.zip,
             },
             primaryEmail: this.primaryEmail,
-            secondaryEmail: this.secondaryEmail,
+            secondaryEmail: '', // TODO: remove this line when switching to AWS backend
             primaryPhone: this.primaryPhone,
-            secondaryPhone: this.secondaryPhone,
             age: this.age,
             months: this.months,
             invalidFirstName: false,
@@ -280,7 +248,6 @@ class NoteNameMenuItem extends Component {
             invalidPhone: false,
             invalidDate: false,
             primaryMobile: false,
-            secondaryMobile: false,
             saveButton: '',
             buttonIcon: undefined,
         };
@@ -295,7 +262,6 @@ class NoteNameMenuItem extends Component {
         this.setChange = this.setChange.bind(this);
         this.handleMobile = this.handleMobile.bind(this);
         this.setPrimaryMobile = this.setPrimaryMobile.bind(this);
-        this.setSecondaryMobile = this.setSecondaryMobile.bind(this);
         this.handleSave = this.handleSave.bind(this);
     }
 
@@ -473,21 +439,6 @@ class NoteNameMenuItem extends Component {
         }
     };
 
-    setSecondaryMobile = (_e, { value }) => {
-        const digits = /^[0-9]{10}$/;
-        if (value.match(digits)) {
-            let number =
-                value.slice(0, 3) +
-                '-' +
-                value.slice(3, 6) +
-                '-' +
-                value.slice(6);
-            this.setState({ secondaryPhone: number });
-        } else {
-            this.setState({ secondaryPhone: value });
-        }
-    };
-
     getAge(dateString) {
         let now = new Date();
         let yearNow = now.getYear();
@@ -522,23 +473,8 @@ class NoteNameMenuItem extends Component {
         this.setState({ months: age.months });
     }
 
-    handleMobile = (e) => {
-        let mobile = e.target.name;
-        if (mobile === 'primaryMobile') {
-            if (!this.state.primaryMobile) {
-                this.setState({ primaryMobile: true });
-            } else {
-                this.setState({ primaryMobile: false });
-            }
-        }
-
-        if (mobile === 'secondaryMobile') {
-            if (!this.state.secondaryMobile) {
-                this.setState({ secondaryMobile: true });
-            } else {
-                this.setState({ secondaryMobile: false });
-            }
-        }
+    handleMobile = () => {
+        this.setState({ primaryMobile: !this.state.primaryMobile });
     };
 
     render() {
@@ -766,23 +702,12 @@ class NoteNameMenuItem extends Component {
                                         Email must be valid
                                     </p>
                                 )}
-
-                                <Form.Input
-                                    label='Secondary Email'
-                                    className='patient-info-input'
-                                    id='secondaryEmail'
-                                    placeholder='johndoe@email.com'
-                                    type='text'
-                                    value={this.state.secondaryEmail}
-                                    // onBlur={this.onEmailChange}
-                                    onChange={this.setChange}
-                                />
                             </Form.Group>
 
                             <Form.Group className='error-div phone-div'>
                                 <Form.Input
                                     required
-                                    width={8}
+                                    width={12}
                                     label='Primary Phone'
                                     className='patient-info-input'
                                     id='primaryPhone'
@@ -811,41 +736,7 @@ class NoteNameMenuItem extends Component {
                                         Phone number must be valid
                                     </p>
                                 )}
-                                <Form.Field
-                                    width={4}
-                                    className='mobile-checkbox'
-                                    label='Mobile'
-                                    control='input'
-                                    type='checkbox'
-                                    name='primaryMobile'
-                                    checked={this.state.primaryMobile}
-                                    onChange={this.handleMobile}
-                                />
                             </Form.Group>
-
-                            <Form.Group className='phone-div'>
-                                <Form.Input
-                                    width={8}
-                                    label='Secondary Phone'
-                                    className='patient-info-input'
-                                    id='secondaryPhone'
-                                    type='text'
-                                    value={this.state.secondaryPhone}
-                                    // onBlur={this.onPhoneChange}
-                                    onChange={this.setSecondaryMobile}
-                                />
-                                <Form.Field
-                                    width={4}
-                                    className='mobile-checkbox'
-                                    label='Mobile'
-                                    control='input'
-                                    type='checkbox'
-                                    name='secondaryMobile'
-                                    checked={this.state.secondaryMobile}
-                                    onChange={this.handleMobile}
-                                />
-                            </Form.Group>
-
                             <DemographicsForm
                                 race={[]}
                                 asian={[]}

@@ -17,7 +17,6 @@
     padding-left: 30px;
 }
 
-
 .login > .container,
 .sign-up > .container{
     padding: 1rem;
@@ -36,10 +35,9 @@
     color: black;
 }
 
-.make-an-account-button {
-    font-size: 1rem;
-    margin-top: 5px;
-    color: teal;
+.label-font {
+    color: #262626;
+    font-size: 14px;
 }
 
 .role-label {
@@ -75,17 +73,9 @@
     padding: 0.5em .5em;
 }
 
-.ui.form .fields.roles {
-    margin-bottom: 0;
-}
-
 .ui.container.pass-coming-soon {
     color: black;
     font-size: 1.5rem;
-}
-
-label.role-label-change-pass {
-    opacity: .2;
 }
 
 .ui.container.change-pass-button {

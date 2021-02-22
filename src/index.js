@@ -6,7 +6,6 @@ import { Route, BrowserRouter } from 'react-router-dom';
 
 import EditNote from './pages/EditNote/EditNote';
 import Login from './pages/Account/Login';
-import Register from './pages/Account/Register';
 import LandingPage from './pages/LandingPage/LandingPage';
 import Home from './pages/Home/Home';
 import { PrivateRoute } from './components/navigation/PrivateRoute';
@@ -32,11 +31,6 @@ ReactDOM.render(
                             <BrowserRouter>
                                 <Route exact path='/' component={Home} />
                                 <Route exact path='/login' component={Login} />
-                                <Route
-                                    exact
-                                    path='/register'
-                                    component={Register}
-                                />
                                 <PrivateRoute
                                     exact
                                     path='/editnote'

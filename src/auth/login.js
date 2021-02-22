@@ -19,6 +19,9 @@ const GetLogin = async (username, password, role, context) => {
 
     // get user pool info and cognito user
     const userPool = await getUserPool(role);
+    if (!userPool) {
+        return;
+    }
     const userData = {
         Username: username,
         Pool: userPool,
@@ -61,6 +64,7 @@ const GetLogin = async (username, password, role, context) => {
                 } else if (response.status === 200) {
                     context.storeLoginInfo(
                         response.data.user,
+                        role,
                         response.data.jwt.accessToken
                     );
                     resolve({

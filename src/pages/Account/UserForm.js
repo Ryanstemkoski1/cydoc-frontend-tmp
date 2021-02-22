@@ -1,19 +1,9 @@
-import React, { Component } from 'react';
-import {
-    Form,
-    Segment,
-    Message,
-    Container,
-    Image,
-    Header,
-} from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react';
+import { Form, Message, Loader } from 'semantic-ui-react';
 import * as yup from 'yup';
-import { Redirect } from 'react-router';
-import AuthContext from '../../contexts/AuthContext';
 import constants from 'constants/registration-constants.json';
-import Logo from '../../assets/cydoc-logo.svg';
-import './UserForm.css';
-import DemographicsForm from '../../components/tools/DemographicsForm';
+import DemographicsForm from 'components/tools/DemographicsForm';
+import './Account.css';
 
 const degreeOptions = constants.degrees.map((degree) => ({
     key: degree,
@@ -30,39 +20,14 @@ const workfeatOptions = constants.workplaceFeatures.map((workfeat) => ({
     value: workfeat,
     text: workfeat,
 }));
-const yasaSchema = yup.object().shape({
-    username: yup.string().required('username is required'),
-    password: yup.string().required('password is required'),
-    passwordConfirm: yup
-        .string()
-        .oneOf([yup.ref('password'), null], 'passwords must match'),
-    email: yup
-        .string()
-        .required('email is required')
-        .email('email must be valid'),
-    backupEmail: yup
-        .string()
-        .required('backup email is required')
-        .notOneOf([yup.ref('email')], 'backup email must not be the same')
-        .email('backup email must be valid'),
+
+const schema = yup.object().shape({
     phoneNumber: yup
         .string()
-        .required('phone number is required')
-        .matches(
-            /^[\\(]{0,1}([0-9]){3}[\\)]{0,1}[ ]?([^0-1]){1}([0-9]){2}[ ]?[-]?[ ]?([0-9]){4}[ ]*((x){0,1}([0-9]){1,5}){0,1}$/,
-            'phone number must be valid'
-        ),
-    firstName: yup.string().required('first name must not be blank'),
-    lastName: yup.string().required('last name must not be blank'),
-    role: yup.string().required('please specify your role'),
+        .matches(/^\+\d{10,20}$/, 'phone number must be valid'),
     studentStatus: yup.string().when('role', {
         is: 'healthcare professional',
         then: yup.string().required('please specify your student status'),
-        otherwise: yup.string(),
-    }),
-    workplace: yup.string().when('role', {
-        is: 'healthcare professional',
-        then: yup.string().required('workplace is required'),
         otherwise: yup.string(),
     }),
     degreesCompleted: yup
@@ -119,273 +84,154 @@ const yasaSchema = yup.object().shape({
         ),
 });
 
-// component that manages the layout of the Register and EditProfile pages
-class UserForm extends Component {
-    static contextType = AuthContext;
+const UserForm = (props) => {
+    const [userInfo, setUserInfo] = useState(props.userInfo);
+    const [isSendingInfo, setIsSendingInfo] = useState(false);
+    const [formErrors, setFormErrors] = useState([]);
 
-    // state gets initial values as props
-    constructor(props) {
-        super(props);
-        this.state = {
-            formInfo: {
-                username: this.props.username,
-                password: this.props.password,
-                passwordConfirm: this.props.passwordConfirm,
-                email: this.props.email,
-                phoneNumber: this.props.phoneNumber,
-                secondaryNumber: this.props.secondaryNumber,
-                firstName: this.props.firstName,
-                middleName: this.props.middleName,
-                lastName: this.props.lastName,
-                dob: this.props.dob,
-                workplace: this.props.workplace,
-                inPatient: this.props.inPatient,
-                institutionType: this.props.institutionType,
-                address: this.props.address,
-                backupEmail: this.props.backupEmail,
-                role: this.props.role,
-                studentStatus: this.props.studentStatus,
-                degreesCompleted: this.props.degreesCompleted,
-                degreesInProgress: this.props.degreesInProgress,
-                specialties: this.props.specialties,
-                workplaceFeatures: this.props.workplaceFeatures,
-            },
-            errorMessages: [],
-            redirect: false,
-            title: this.props.title,
-            primaryMobile: false,
-            secondaryMobile: false,
+    useEffect(() => {
+        setUserInfo(props.userInfo);
+    }, [props]);
+
+    const handleChange = (e, { name, value }) => {
+        setUserInfo({
+            ...userInfo,
+            [name]: value,
+        });
+    };
+
+    const handleIsPhoneNumberMobileChange = () => {
+        setUserInfo({
+            ...userInfo,
+            isPhoneNumberMobile: !userInfo.isPhoneNumberMobile,
+        });
+    };
+
+    const handleArrayChange = (e, { name, index, value }) => {
+        const newArray = [...userInfo[name]];
+        newArray[index] = value;
+        setUserInfo({
+            ...userInfo,
+            [name]: newArray,
+        });
+    };
+
+    const handleSubmit = () => {
+        // dont send information to Cognito/Dynamo while currently sending
+        if (isSendingInfo) {
+            return;
+        }
+
+        setIsSendingInfo(true);
+        const infoToValidate = {
+            role: userInfo.role,
+            phoneNumber:
+                userInfo.countryCode +
+                userInfo.phoneNumber.replace(/-|\(|\)/gi, ''),
+            studentStatus: userInfo.studentStatus,
+            degreesCompleted: userInfo.degreesCompleted,
+            degreesInProgress: userInfo.degreesInProgress,
+            specialties: userInfo.specialties,
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleArrayChange = this.handleArrayChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleMobile = this.handleMobile.bind(this);
-    }
-
-    // when user hits submit/save button, fields are validated
-    // if error -- display error
-    // if no error -- put/save user in database
-    handleSubmit = () => {
-        let user = this.state.formInfo;
-
-        yasaSchema
-            .validate(user, { abortEarly: false })
+        schema
+            .validate(infoToValidate, { abortEarly: false })
             .then(() => {
-                this.props
-                    .handleSubmit(user)
-                    .then(() => {
-                        this.setState({ redirect: true });
-                    })
-                    .catch((err) => {
-                        // eslint-disable-next-line no-console
-                        console.log(err.response);
-                    });
+                setFormErrors([]);
+                props.handleSubmit(userInfo);
             })
-            .catch((v) => this.setState({ errorMessages: v.errors }));
+            .catch((err) => setFormErrors(err.errors));
+        setIsSendingInfo(false);
     };
 
-    // handles change in a single field (updates states based on changed info)
-    handleChange(e, { name, value }) {
-        let newState = this.state;
-        newState.formInfo[name] = value;
-        this.setState(newState);
-    }
-
-    // handles change for array-based fieldss (also updates state)
-    handleArrayChange(e, { name, index, value }) {
-        let newState = this.state;
-        newState.formInfo[name][index] = value;
-        this.setState(newState);
-    }
-
-    handleMobile = (e) => {
-        let mobile = e.target.name;
-        if (mobile === 'primaryMobile') {
-            if (!this.state.primaryMobile) {
-                this.setState({ primaryMobile: true });
-            } else {
-                this.setState({ primaryMobile: false });
-            }
-        }
-
-        if (mobile === 'secondaryMobile') {
-            if (!this.state.secondaryMobile) {
-                this.setState({ secondaryMobile: true });
-            } else {
-                this.setState({ secondaryMobile: false });
-            }
-        }
-    };
-
-    // helper function to determine if role field should be shown
-    // if Register page: show, if EditProfile page: don't show
-    showRole = () => {
-        const { formType, disableRegister } = this.props;
-
-        if (formType === 'register') {
+    const additionalFields = () => {
+        if (userInfo.role === 'patient') {
             return (
-                <>
-                    <label className={disableRegister && 'disabled'}>
-                        I am a:
-                    </label>
-                    <Form.Group>
-                        <Form.Radio
-                            label='healthcare professional'
-                            value='healthcare professional'
-                            name='role'
-                            checked={
-                                this.state.formInfo.role ===
-                                'healthcare professional'
-                            }
-                            onChange={this.handleChange}
-                            disabled={disableRegister}
-                        />
-                        <Form.Radio
-                            label='administrator'
-                            value='administrator'
-                            name='role'
-                            checked={
-                                this.state.formInfo.role === 'administrator'
-                            }
-                            onChange={this.handleChange}
-                            disabled={disableRegister}
-                        />
-                    </Form.Group>
-                </>
+                <DemographicsForm
+                    race={[]}
+                    asian={[]}
+                    otherRace={[]}
+                    ethnicity=''
+                    otherEthnicity={[]}
+                    gender=''
+                />
             );
         }
-    };
-
-    // show additional fields if user clicks on/is a healthcare professional
-    // prompts user for more information
-    additionalFields = () => {
-        if (this.state.formInfo.role === 'healthcare professional') {
+        if (userInfo.role === 'healthcare professional') {
             return (
                 <>
-                    <label>Student status</label>
-                    <Form.Group>
+                    <label className='label-font'>Student status</label>
+                    <Form.Group inline widths='equal'>
                         <Form.Radio
                             label='student'
                             value='y'
                             name='studentStatus'
-                            checked={this.state.formInfo.studentStatus === 'y'}
-                            onChange={this.handleChange}
+                            checked={userInfo.studentStatus === 'y'}
+                            onChange={handleChange}
                         />
                         <Form.Radio
                             label='non-student'
                             value='n'
                             name='studentStatus'
-                            checked={this.state.formInfo.studentStatus === 'n'}
-                            onChange={this.handleChange}
+                            checked={userInfo.studentStatus === 'n'}
+                            onChange={handleChange}
                         />
                     </Form.Group>
-                    <label>Degrees completed</label>
+                    <label className='label-font'>Degrees completed</label>
                     <Form.Group>
-                        <Form.Dropdown
-                            search
-                            selection
-                            clearable
-                            aria-label='Degrees-Completed'
-                            options={degreeOptions}
-                            value={this.state.formInfo.degreesCompleted[0]}
-                            name='degreesCompleted'
-                            index={0}
-                            onChange={this.handleArrayChange}
-                        />
-                        <Form.Dropdown
-                            search
-                            selection
-                            clearable
-                            aria-label='Degrees-Completed'
-                            options={degreeOptions}
-                            value={this.state.formInfo.degreesCompleted[1]}
-                            name='degreesCompleted'
-                            index={1}
-                            onChange={this.handleArrayChange}
-                        />
-                        <Form.Dropdown
-                            search
-                            selection
-                            clearable
-                            aria-label='Degrees-Completed'
-                            options={degreeOptions}
-                            value={this.state.formInfo.degreesCompleted[2]}
-                            name='degreesCompleted'
-                            index={2}
-                            onChange={this.handleArrayChange}
-                        />
+                        {[0, 1, 2].map((i) => {
+                            return (
+                                <Form.Dropdown
+                                    key={i}
+                                    search
+                                    selection
+                                    clearable
+                                    name='degreesCompleted'
+                                    aria-label='Degrees-Completed'
+                                    options={degreeOptions}
+                                    value={userInfo.degreesCompleted[i]}
+                                    index={i}
+                                    onChange={handleArrayChange}
+                                />
+                            );
+                        })}
                     </Form.Group>
-                    <label>Degrees in progress</label>
+                    <label className='label-font'>Degrees in progress</label>
                     <Form.Group>
-                        <Form.Dropdown
-                            search
-                            selection
-                            clearable
-                            aria-label='Degrees-In-Progress'
-                            options={degreeOptions}
-                            value={this.state.formInfo.degreesInProgress[0]}
-                            name='degreesInProgress'
-                            index={0}
-                            onChange={this.handleArrayChange}
-                        />
-                        <Form.Dropdown
-                            search
-                            selection
-                            clearable
-                            aria-label='Degrees-In-Progress'
-                            options={degreeOptions}
-                            value={this.state.formInfo.degreesInProgress[1]}
-                            name='degreesInProgress'
-                            index={1}
-                            onChange={this.handleArrayChange}
-                        />
-                        <Form.Dropdown
-                            search
-                            selection
-                            clearable
-                            aria-label='Degrees-In-Progress'
-                            options={degreeOptions}
-                            value={this.state.formInfo.degreesInProgress[2]}
-                            name='degreesInProgress'
-                            index={2}
-                            onChange={this.handleArrayChange}
-                        />
+                        {[0, 1, 2].map((i) => {
+                            return (
+                                <Form.Dropdown
+                                    key={i}
+                                    search
+                                    selection
+                                    clearable
+                                    name='degreesInProgress'
+                                    aria-label='Degrees-In-Progress'
+                                    options={degreeOptions}
+                                    value={userInfo.degreesInProgress[i]}
+                                    index={i}
+                                    onChange={handleArrayChange}
+                                />
+                            );
+                        })}
                     </Form.Group>
-                    <label>Specialties</label>
+                    <label className='label-font'>Specialties</label>
                     <Form.Group>
-                        <Form.Dropdown
-                            search
-                            selection
-                            clearable
-                            aria-label='Specialties'
-                            options={specialtyOptions}
-                            value={this.state.formInfo.specialties[0]}
-                            name='specialties'
-                            index={0}
-                            onChange={this.handleArrayChange}
-                        />
-                        <Form.Dropdown
-                            search
-                            selection
-                            clearable
-                            aria-label='Specialties'
-                            options={specialtyOptions}
-                            value={this.state.formInfo.specialties[1]}
-                            name='specialties'
-                            index={1}
-                            onChange={this.handleArrayChange}
-                        />
-                        <Form.Dropdown
-                            search
-                            selection
-                            clearable
-                            aria-label='Specialties'
-                            options={specialtyOptions}
-                            value={this.state.formInfo.specialties[2]}
-                            name='specialties'
-                            index={2}
-                            onChange={this.handleArrayChange}
-                        />
+                        {[0, 1, 2].map((i) => {
+                            return (
+                                <Form.Dropdown
+                                    key={i}
+                                    search
+                                    selection
+                                    clearable
+                                    name='specialties'
+                                    aria-label='Specialties'
+                                    options={specialtyOptions}
+                                    value={userInfo.specialties[i]}
+                                    index={i}
+                                    onChange={handleArrayChange}
+                                />
+                            );
+                        })}
                     </Form.Group>
                     <Form.Input
                         fluid
@@ -393,8 +239,8 @@ class UserForm extends Component {
                         label='Workplace'
                         placeholder='workplace'
                         name='workplace'
-                        value={this.state.formInfo.workplace}
-                        onChange={this.handleChange}
+                        value={userInfo.workplace}
+                        onChange={handleChange}
                         required
                     />
                     <Form.Dropdown
@@ -403,256 +249,145 @@ class UserForm extends Component {
                         selection
                         multiple
                         options={workfeatOptions}
-                        value={this.state.formInfo.workplaceFeatures}
+                        value={userInfo.workplaceFeatures}
                         name='workplaceFeatures'
-                        onChange={this.handleChange}
+                        onChange={handleChange}
                     />
                 </>
             );
         }
     };
 
-    render() {
-        // after submit redirect is set to true (if no errors) and user is redirected
-        if (
-            this.state.redirect ||
-            (this.props.formType === 'register' && this.context.token)
-        ) {
-            return <Redirect push to={this.props.pushTo} />;
-        }
-
-        //renders a one-column grid centered in the middle of the screen with profile form
-        return (
-            <Container className='sign-up'>
-                <Container>
-                    <Segment clearing raised className='sign-up-segment'>
-                        <Container textAlign='center'>
-                            <Image size='tiny' href='/' src={Logo} alt='logo' />
-                            <Header
-                                as='h1'
-                                className='logo-text'
-                                content='Cydoc'
-                            />
-                        </Container>{' '}
-                        {this.props.disableRegister && (
-                            <Container
-                                className='coming-soon'
-                                color='black'
-                                textAlign='center'
-                            >
-                                coming soon
-                            </Container>
-                        )}
-                        <Container
-                            className={`sign-up-header ${
-                                this.props.disableRegister ? 'disabled' : ''
-                            }`}
-                            color='black'
-                            textAlign='center'
-                        >
-                            {this.state.title}
-                        </Container>
-                        <Form
-                            size='small'
-                            error={this.state.errorMessages.length > 0}
-                            onSubmit={this.handleSubmit}
-                        >
-                            <Form.Input
-                                fluid
-                                aria-label='Username'
-                                label='Username'
-                                placeholder='username'
-                                name='username'
-                                value={this.state.formInfo.username}
-                                onChange={this.handleChange}
-                                disabled={this.props.disableRegister}
-                            />
-                            {this.props.formType === 'register' && (
-                                <>
-                                    <Form.Input
-                                        fluid
-                                        aria-label='Password'
-                                        type={'password'}
-                                        label='Password'
-                                        placeholder='password'
-                                        name='password'
-                                        value={this.state.formInfo.password}
-                                        onChange={this.handleChange}
-                                        disabled={this.props.disableRegister}
-                                    />
-                                    <Form.Input
-                                        fluid
-                                        aria-label='Reenter-Password'
-                                        type={'password'}
-                                        label='Re-enter password'
-                                        placeholder='re-enter password'
-                                        name='passwordConfirm'
-                                        value={
-                                            this.state.formInfo.passwordConfirm
-                                        }
-                                        onChange={this.handleChange}
-                                        disabled={this.props.disableRegister}
-                                    />
-                                </>
-                            )}
-                            <Form.Group>
-                                <Form.Input
-                                    fluid
-                                    aria-label='First-Name'
-                                    label='First name'
-                                    placeholder='first name'
-                                    name='firstName'
-                                    value={this.state.formInfo.firstName}
-                                    onChange={this.handleChange}
-                                    disabled={this.props.disableRegister}
-                                />
-                                <Form.Input
-                                    fluid
-                                    label='Middle name'
-                                    aria-label='Middle-Name'
-                                    placeholder='middle name'
-                                    name='middleName'
-                                    value={this.state.formInfo.middleName}
-                                    onChange={this.handleChange}
-                                    disabled={this.props.disableRegister}
-                                />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Input
-                                    fluid
-                                    aria-label='Last-Name'
-                                    label='Last name'
-                                    placeholder='last name'
-                                    name='lastName'
-                                    value={this.state.formInfo.lastName}
-                                    onChange={this.handleChange}
-                                    disabled={this.props.disableRegister}
-                                />
-                                <Form.Input
-                                    fluid
-                                    label='Date of birth'
-                                    placeholder='date of birth'
-                                    name='dob'
-                                    value={this.state.formInfo.dob}
-                                    onChange={this.handleChange}
-                                    disabled={this.props.disableRegister}
-                                />
-                            </Form.Group>
-
-                            <Form.Group>
-                                <Form.Input
-                                    fluid
-                                    aria-label='Email'
-                                    placeholder='name@example.com'
-                                    type='email'
-                                    label='Email'
-                                    name='email'
-                                    value={this.state.formInfo.email}
-                                    onChange={this.handleChange}
-                                    disabled={this.props.disableRegister}
-                                />
-                                <Form.Input
-                                    fluid
-                                    aria-label='Backup-Email'
-                                    placeholder='name@example.com'
-                                    type='email'
-                                    label='Backup email'
-                                    name='backupEmail'
-                                    value={this.state.formInfo.backupEmail}
-                                    onChange={this.handleChange}
-                                    disabled={this.props.disableRegister}
-                                />
-                            </Form.Group>
-                            <Form.Group>
-                                {/* <Form.Input
-                                    fluid
-                                    aria-label='Address'
-                                    label='Address'
-                                    placeholder='address'
-                                    name='address'
-                                    value={this.state.formInfo.address}
-                                    onChange={this.handleChange}
-                                    disabled={this.props.disableRegister}
-                                /> */}
-                                <Form.Input
-                                    fluid
-                                    width={6}
-                                    type='tel'
-                                    aria-label='Phone-Number'
-                                    label='Phone number'
-                                    placeholder='phone number'
-                                    name='phoneNumber'
-                                    value={this.state.formInfo.phoneNumber}
-                                    onChange={this.handleChange}
-                                    disabled={this.props.disableRegister}
-                                />
-                                <Form.Field
-                                    width={2}
-                                    className='mobile-checkbox'
-                                    label='Mobile'
-                                    control='input'
-                                    type='checkbox'
-                                    name='primaryMobile'
-                                    checked={this.state.primaryMobile}
-                                    onChange={this.handleMobile}
-                                    disabled={this.props.disableRegister}
-                                />
-
-                                <Form.Input
-                                    fluid
-                                    width={6}
-                                    type='tel'
-                                    label='Secondary phone number'
-                                    placeholder='secondary phone number'
-                                    name='secondaryNumber'
-                                    value={this.state.formInfo.secondaryNumber}
-                                    onChange={this.handleChange}
-                                    disabled={this.props.disableRegister}
-                                />
-                                <Form.Field
-                                    width={2}
-                                    className='mobile-checkbox'
-                                    label='Mobile'
-                                    control='input'
-                                    type='checkbox'
-                                    name='secondaryMobile'
-                                    checked={this.state.secondaryMobile}
-                                    onChange={this.handleMobile}
-                                    disabled={this.props.disableRegister}
-                                />
-                            </Form.Group>
-                            {this.showRole()}
-                            {this.additionalFields()}
-                            <Message
-                                error
-                                header='Error!'
-                                content={this.state.errorMessages.map((m) => (
-                                    <Message.Item key={m}>{m}</Message.Item>
-                                ))}
-                            />
-                            {!this.props.disableRegister && (
-                                <DemographicsForm
-                                    race={[]}
-                                    asian={[]}
-                                    otherRace={[]}
-                                    ethnicity=''
-                                    otherEthnicity={[]}
-                                    gender=''
-                                />
-                            )}
-                            <Form.Button
-                                color='teal'
-                                size='small'
-                                floated='right'
-                                disabled={this.props.disableRegister}
-                                content={this.props.buttonText}
-                            />
-                        </Form>
-                    </Segment>
-                </Container>
-            </Container>
-        );
+    // show loader while retrieving info from Cognito/database
+    if (!props.doneLoading) {
+        return <Loader active inline='centered' />;
     }
-}
+
+    return (
+        <Form
+            size='small'
+            onSubmit={handleSubmit}
+            error={formErrors.length > 0}
+        >
+            <Form.Input
+                fluid
+                readOnly
+                aria-label='Username'
+                label='Username'
+                placeholder='username'
+                value={userInfo.username}
+            />
+            <Form.Group widths='equal'>
+                <Form.Input
+                    required
+                    aria-label='First-Name'
+                    label='First name'
+                    placeholder='first name'
+                    name='firstName'
+                    value={userInfo.firstName}
+                    onChange={handleChange}
+                />
+                <Form.Input
+                    aria-label='Middle-Name'
+                    label='Middle name'
+                    placeholder='middle name'
+                    name='middleName'
+                    value={userInfo.middleName}
+                    onChange={handleChange}
+                />
+                <Form.Input
+                    required
+                    aria-label='Last-Name'
+                    label='Last name'
+                    placeholder='last name'
+                    name='lastName'
+                    value={userInfo.lastName}
+                    onChange={handleChange}
+                />
+            </Form.Group>
+            <Form.Group widths='equal'>
+                <Form.Input
+                    fluid
+                    readOnly
+                    width={6}
+                    aria-label='Email'
+                    type='email'
+                    label='Email'
+                    name='email'
+                    placeholder='name@example.com'
+                    value={userInfo.email}
+                />
+                <Form.Select
+                    fluid
+                    required
+                    width={2}
+                    label='Code'
+                    options={[{ key: 'US', text: '+1', value: '+1' }]}
+                    placeholder='+1'
+                    name='countryCode'
+                    value={userInfo.countryCode}
+                    onChange={handleChange}
+                />
+                <Form.Input
+                    fluid
+                    required
+                    width={6}
+                    type='tel'
+                    aria-label='Phone-Number'
+                    label='Phone number'
+                    placeholder='phone number'
+                    name='phoneNumber'
+                    value={userInfo.phoneNumber}
+                    onChange={handleChange}
+                />
+                <Form.Checkbox
+                    width={2}
+                    className='mobile-checkbox'
+                    label='Mobile'
+                    name='isPhoneNumberMobile'
+                    checked={userInfo.isPhoneNumberMobile}
+                    onChange={handleIsPhoneNumberMobileChange}
+                />
+            </Form.Group>
+            <Form.Group widths='equal'>
+                <Form.Input
+                    fluid
+                    type='date'
+                    name='dob'
+                    aria-label='Date-Of-Birth'
+                    label='Date of birth'
+                    placeholder='date of birth'
+                    value={userInfo.dob}
+                    onChange={handleChange}
+                />
+                <Form.Input
+                    fluid
+                    aria-label='Address'
+                    label='Address'
+                    placeholder='address'
+                    name='address'
+                    value={userInfo.address}
+                    onChange={handleChange}
+                />
+            </Form.Group>
+            {additionalFields()}
+            <Message
+                error
+                header='Error!'
+                content={formErrors.map((m) => (
+                    <Message.Item key={m}>{m}</Message.Item>
+                ))}
+            />
+            <Form.Button
+                type='submit'
+                color='teal'
+                size='small'
+                floated='right'
+                aria-label={props.buttonAriaLabel}
+                content={props.buttonText}
+            />
+        </Form>
+    );
+};
 
 export default UserForm;
