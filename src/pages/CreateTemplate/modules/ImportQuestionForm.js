@@ -8,7 +8,7 @@ import {
     parseQuestionText,
     parsePlaceholder,
 } from '../util';
-import { Button, Modal, List, Checkbox } from 'semantic-ui-react';
+import { Button, Modal, List, Checkbox, Loader } from 'semantic-ui-react';
 class ImportQuestionForm extends Component {
     static contextType = HPITemplateContext;
     constructor(props, context) {
@@ -20,41 +20,37 @@ class ImportQuestionForm extends Component {
         };
     }
 
-    /**
-     * Preprocess the question nodes (sort, process text, format options)
-     */
-    componentDidMount() {
-        const { otherGraph, graphData } = this.props;
-        const { graph, edges, nodes } = graphData;
+    /* Fetch and process children nodes of the selected root */
+    componentDidMount = async () => {
+        const { otherGraph, fetchCydocGraph } = this.props;
+        const medID = await fetchCydocGraph(otherGraph);
+        const { graph, edges, nodes } = this.context.template.cydocGraphs;
 
-        const id = diseaseCodes[otherGraph] + '0001';
-        if (id in graph) {
-            sortEdges(graph[id], edges, nodes);
-            const editedGraph = graph[id].map((edge) => {
-                const nodeId = edges[edge].from;
-                const responseType = nodes[nodeId].responseType;
-                let text = nodes[nodeId].text;
-                let answerInfo = getAnswerInfo(responseType);
+        sortEdges(graph[medID], edges);
+        const editedGraph = graph[medID].map((edge) => {
+            const nodeId = edges[edge].to;
 
-                text = parsePlaceholder(text, otherGraph);
-                text = parseQuestionText(
-                    responseType,
-                    text,
-                    answerInfo,
-                    nodes[nodeId].category
-                );
+            let node = { ...nodes[nodeId] };
+            delete node.doctorView;
+            delete node.patientView;
+            delete node.medID;
 
-                return {
-                    id: nodeId,
-                    text,
-                    responseType,
-                    answerInfo,
-                    hasChildren: graph[nodeId].length > 0,
-                };
-            });
-            this.setState({ graph: editedGraph });
-        }
-    }
+            const { responseType, category } = node;
+            let { text } = node;
+            let answerInfo = getAnswerInfo(responseType);
+            text = parsePlaceholder(text, otherGraph);
+            text = parseQuestionText(responseType, text, answerInfo, category);
+
+            return {
+                ...node,
+                text,
+                answerInfo,
+                id: nodeId,
+                hasChildren: graph[nodeId].length > 0,
+            };
+        });
+        this.setState({ graph: editedGraph });
+    };
 
     /**
      * Toggles checked state of question with id=nodeId
@@ -74,7 +70,7 @@ class ImportQuestionForm extends Component {
      * Adds all of the selected questions to the context as a direct child of the parent
      */
     importQuestions = () => {
-        let { numQuestions, nextEdgeId } = this.context.template;
+        let { numQuestions, nextEdgeID } = this.context.template;
         const { graph, nodes, edges, disease } = this.context.template;
         const { parent } = this.props;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
@@ -85,29 +81,25 @@ class ImportQuestionForm extends Component {
             .forEach((question) => {
                 childId = createNodeId(diseaseCode, numQuestions);
                 nodes[childId] = {
+                    ...question,
                     id: childId,
-                    text: question.text,
-                    answerInfo: question.answerInfo,
-                    responseType: question.responseType,
-                    hasChildren: question.hasChildren,
                     originalId: question.id,
-                    order: numQuestions,
                     hasChanged: false,
                 };
-                edges[nextEdgeId] = {
+                edges[nextEdgeID] = {
                     from: parent,
                     to: childId,
                 };
                 graph[childId] = [];
-                graph[parent].push(nextEdgeId);
-                nextEdgeId++;
+                graph[parent].push(nextEdgeID);
+                nextEdgeID++;
                 numQuestions++;
             });
         this.context.updateTemplate({
             nodes,
             edges,
             graph,
-            nextEdgeId,
+            nextEdgeID,
             numQuestions,
         });
         this.props.closeModal();
@@ -145,9 +137,13 @@ class ImportQuestionForm extends Component {
                 <Modal.Header>Select questions to import</Modal.Header>
                 <Modal.Content>
                     <div className='options-container'>
-                        <List divided relaxed>
-                            {this.getQuestions()}
-                        </List>
+                        {this.state.graph.length === 0 ? (
+                            <Loader />
+                        ) : (
+                            <List divided relaxed>
+                                {this.getQuestions()}
+                            </List>
+                        )}
                     </div>
                 </Modal.Content>
                 <Modal.Actions>

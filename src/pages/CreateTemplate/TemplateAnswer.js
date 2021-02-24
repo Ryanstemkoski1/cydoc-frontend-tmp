@@ -18,7 +18,7 @@ import {
 } from './util';
 import { RESPONSE_PLACEHOLDER } from './placeholders';
 import { Input, Button, Dropdown, Message, List } from 'semantic-ui-react';
-
+import { graphClient } from 'constants/api';
 const MIN_OPTIONS = 2;
 
 class TemplateAnswer extends Component {
@@ -34,6 +34,7 @@ class TemplateAnswer extends Component {
             showPreview: false,
             showQuestionSelect: false,
             showOptionError: false,
+            fetchingImport: false,
         };
         this.updateDimensions = this.updateDimensions.bind(this);
         this.connectGraph = this.connectGraph.bind(this);
@@ -90,14 +91,32 @@ class TemplateAnswer extends Component {
         this.setState({ showPreview: !this.state.showPreview });
     };
 
+    fetchCydocGraph = async (category) => {
+        const { parentNodes, cydocGraphs } = this.context.template;
+        const medID = Object.values(parentNodes[category])[0];
+        // Skip roots already cached in the context
+        if (!(medID in cydocGraphs.graph)) {
+            const res = await graphClient.get(
+                `/graph/connected/node/${medID}/4`
+            );
+            this.context.addCydocGraphs(res.data);
+        }
+        return medID;
+    };
+
     /**
      * Import top level questions from the selected `otherGraph` and its root if its text is not `nan`
      * @param {String} parent: qid of the nodes to connect the questions to
      */
-    connectGraph = (e, { parent }) => {
-        let { numQuestions, nextEdgeID } = this.context.template;
+    connectGraph = async (_e, { parent }) => {
+        this.setState({ fetchingImport: true });
+
         const { otherGraph } = this.state;
-        const { graph, edges, nodes } = this.props.graphData;
+        const id = await this.fetchCydocGraph(otherGraph);
+
+        let { numQuestions, nextEdgeID, cydocGraphs } = this.context.template;
+        const { graph, edges, nodes } = cydocGraphs;
+
         const {
             disease,
             nodes: contextNodes,
@@ -107,12 +126,11 @@ class TemplateAnswer extends Component {
 
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
 
-        const id = diseaseCodes[otherGraph] + '0001';
         let questionParent = parent;
         updateParent(contextNodes, parent);
 
         if (id in graph) {
-            // add the original root if the text is not "nan"
+            // Keep original root if it's an actual question
             if (nodes[id].text !== 'nan') {
                 const rootId = createNodeId(diseaseCode, numQuestions);
 
@@ -135,9 +153,7 @@ class TemplateAnswer extends Component {
                 nextEdgeID++;
                 questionParent = rootId;
             }
-
-            // sort edges by the node's question order
-            sortEdges(graph[id], edges, nodes);
+            sortEdges(graph[id], edges);
 
             // create edges and nodes for every new question
             let newCount = addChildrenNodes(
@@ -145,7 +161,7 @@ class TemplateAnswer extends Component {
                 graph[id],
                 otherGraph,
                 diseaseCode,
-                this.props.graphData,
+                cydocGraphs,
                 {
                     numQuestions,
                     nextEdgeID,
@@ -168,6 +184,7 @@ class TemplateAnswer extends Component {
             this.setState({
                 showOtherGraphs: false,
                 otherGraph: null,
+                fetchingImport: false,
             });
         }
     };
@@ -360,62 +377,10 @@ class TemplateAnswer extends Component {
         this.setState({ showOptionError: false });
     };
 
-    /**
-     * Import all direct children of node with qId from the knowledge graph
-     * (The graph fetched from the backend, not the context).
-     *
-     * @param {String} qId
-     */
-    editChildren = (qId) => {
-        let { numQuestions, nextEdgeID } = this.context.template;
-        const { graphData } = this.props;
-        const { edges, nodes, graph } = graphData;
-
-        const disease = this.context.template.disease;
-        const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
-
-        const contextNodes = { ...this.context.template.nodes };
-        const contextEdges = { ...this.context.template.edges };
-        const contextGraph = { ...this.context.template.graph };
-
-        const originalId = contextNodes[qId].originalId;
-        if (originalId in graph) {
-            sortEdges(graph[originalId], edges, nodes);
-
-            // create edges and nodes for every new question
-            let newCount = addChildrenNodes(
-                qId,
-                graph[originalId],
-                '',
-                diseaseCode,
-                graphData,
-                {
-                    numQuestions,
-                    nextEdgeID,
-                    contextNodes,
-                    contextGraph,
-                    contextEdges,
-                }
-            );
-            numQuestions = newCount.numQuestions;
-            nextEdgeID = newCount.nextEdgeID;
-
-            this.context.updateTemplate({
-                nextEdgeID,
-                numQuestions,
-                nodes: contextNodes,
-                edges: contextEdges,
-                graph: contextGraph,
-            });
-        }
-        delete contextNodes[qId].hasChildren;
-        this.context.onTemplateChange('nodes', contextNodes);
-    };
-
     /** Returns response form according to the response type */
     getAnswerTemplate() {
         const { qId, type } = this.props;
-        const { graph, nodes } = this.context.template;
+        const { graph, nodes, parentNodes = {} } = this.context.template;
         const placeholders = RESPONSE_PLACEHOLDER[nodes[qId].responseType];
         let template, otherGraphs;
 
@@ -428,10 +393,10 @@ class TemplateAnswer extends Component {
         }
 
         if (type === questionTypes.YES_NO || type === questionTypes.NO_YES) {
-            let editChildren;
+            let editChildrenPrompt;
             if (this.state.showOtherGraphs) {
                 // List all possible graphs to import from
-                const options = this.props.allDiseases.map((disease) => ({
+                const options = Object.keys(parentNodes).map((disease) => ({
                     key: disease,
                     text: disease,
                     value: disease,
@@ -453,6 +418,7 @@ class TemplateAnswer extends Component {
                         <div className='connect-graph-btns'>
                             <Button
                                 parent={qId}
+                                loading={this.state.fetchingImport}
                                 disabled={this.state.otherGraph === null}
                                 onClick={this.connectGraph}
                             >
@@ -476,8 +442,8 @@ class TemplateAnswer extends Component {
                                         });
                                         this.hideGraphOptions();
                                     }}
-                                    graphData={this.props.graphData}
                                     otherGraph={this.state.otherGraph}
+                                    fetchCydocGraph={this.fetchCydocGraph}
                                 />
                             )}
                         </div>
@@ -498,7 +464,7 @@ class TemplateAnswer extends Component {
             if (nodes[qId].hasChildren && !nodes[qId].hasChanged) {
                 // If the question is an unchanged, imported question with children,
                 // display a button rather than actually displaying all of the children
-                editChildren = (
+                editChildrenPrompt = (
                     <List
                         className='edit-children'
                         onClick={() => this.props.editChildren(qId, nodes)}
@@ -576,7 +542,7 @@ class TemplateAnswer extends Component {
                             />
                         </div>
                     )}
-                    {editChildren}
+                    {editChildrenPrompt}
                 </>
             );
         } else if (

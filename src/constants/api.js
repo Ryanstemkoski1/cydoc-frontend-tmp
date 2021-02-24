@@ -7,6 +7,7 @@ export const client = axios.create({
 
 export const graphClient = axios.create({
     baseURL: 'https://cydocgraph.herokuapp.com',
+    headers: { 'Access-Control-Allow-Origin': '*' },
 });
 
 export const poolDataClient = axios.create({

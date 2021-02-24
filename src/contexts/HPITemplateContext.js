@@ -18,12 +18,12 @@ export class HPITemplateStore extends Component {
 
     // Update a single key value pair in the template
     onTemplateChange = (attribute, value) => {
-        this.setState({
+        this.setState((prevState) => ({
             template: {
-                ...this.state.template,
+                ...prevState.template,
                 [attribute]: value,
             },
-        });
+        }));
     };
 
     // Update multiple key, value pairs in the template
@@ -41,6 +41,22 @@ export class HPITemplateStore extends Component {
         this.setState({ createdTemplates });
     };
 
+    addCydocGraphs = ({ graph, edges, nodes }) => {
+        this.setState((prevState) => {
+            const { cydocGraphs } = prevState.template;
+            return {
+                template: {
+                    ...prevState.template,
+                    cydocGraphs: {
+                        graph: { ...cydocGraphs.graph, ...graph },
+                        edges: { ...cydocGraphs.edges, ...edges },
+                        nodes: { ...cydocGraphs.nodes, ...nodes },
+                    },
+                },
+            };
+        });
+    };
+
     render() {
         return (
             <HPITemplateContext.Provider
@@ -50,6 +66,7 @@ export class HPITemplateStore extends Component {
                     setCreatedTemplates: this.setCreatedTemplates,
                     onTemplateChange: this.onTemplateChange,
                     updateTemplate: this.updateTemplate,
+                    addCydocGraphs: this.addCydocGraphs,
                 }}
             >
                 {this.props.children}

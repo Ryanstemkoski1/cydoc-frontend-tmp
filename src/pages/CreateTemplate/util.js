@@ -1,5 +1,9 @@
 import { questionTypes } from '../../constants/questionTypes';
 
+// Filler text for when the root is NaN
+export const NAN_QUESTION_TEXT =
+    '(This question has no text, only follow-up questions)';
+
 /**
  * Returns starting answerInfo object associated with the given type
  * @param {String} type: the question's response type
@@ -59,15 +63,14 @@ export const createNodeId = (diseaseCode, numQuestions) => {
 };
 
 /**
- * Sorts the list of edges in place, given a mapping of nodes
+ * Sorts the list of edges in place based on the edge's `toQuestionOrder`
  * @param {Array[Object]} edgeList
  * @param {Array[Object]} edges
- * @param {Object} nodes
  */
-export const sortEdges = (edgeList, edges, nodes) => {
+export const sortEdges = (edgeList, edges) => {
     edgeList.sort((a, b) => {
-        const nodeA = parseFloat(nodes[edges[a].from].questionOrder);
-        const nodeB = parseFloat(nodes[edges[b].from].questionOrder);
+        const nodeA = parseFloat(edges[a].toQuestionOrder);
+        const nodeB = parseFloat(edges[b].toQuestionOrder);
 
         if (nodeA < nodeB) {
             return -1;
@@ -93,7 +96,7 @@ export const parseQuestionText = (responseType, text, answerInfo, category) => {
     if (text === 'nan') {
         text = `Root for ${category
             .replace('_', ' ')
-            .toLowerCase()} (This question has no text, only follow-up questions)`;
+            .toLowerCase()} ${NAN_QUESTION_TEXT}`;
     }
 
     if (
@@ -143,7 +146,7 @@ export const parsePlaceholder = (text, category) => {
  * Adds all direct children question of the given parent directly
  * to the graph object itself.
  *
- * Returns the updated numQuestions and numEdges count.
+ * Returns the updated numQuestions and nextEdgeID count.
  */
 export const addChildrenNodes = (
     parentId,
@@ -155,7 +158,7 @@ export const addChildrenNodes = (
 ) => {
     let {
         numQuestions,
-        numEdges,
+        nextEdgeID,
         contextEdges,
         contextGraph,
         contextNodes,
@@ -165,8 +168,7 @@ export const addChildrenNodes = (
     // Create edges and nodes for every new question
     for (let edge of children) {
         const childId = createNodeId(diseaseCode, numQuestions);
-
-        const nodeId = edges[edge].from;
+        const nodeId = edges[edge].to;
         let responseType = nodes[nodeId].responseType;
         let text = nodes[nodeId].text;
         let answerInfo = getAnswerInfo(responseType);
@@ -192,17 +194,17 @@ export const addChildrenNodes = (
             parent: parentId,
         };
 
-        contextEdges[numEdges] = {
+        contextEdges[nextEdgeID] = {
             from: parentId,
             to: childId,
         };
 
         contextGraph[childId] = [];
-        contextGraph[parentId].push(numEdges);
-        numEdges++;
+        contextGraph[parentId].push(nextEdgeID);
+        nextEdgeID++;
         numQuestions++;
     }
-    return { numEdges, numQuestions };
+    return { nextEdgeID, numQuestions };
 };
 
 /**
@@ -242,5 +244,6 @@ export const getNewTemplate = () => {
             },
         },
         edges: {},
+        cydocGraphs: { graph: {}, edges: {}, nodes: {} },
     };
 };

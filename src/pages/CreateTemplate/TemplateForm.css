@@ -341,6 +341,14 @@
   overflow-y: auto;
 }
 
+.options-container .ui.loader:after {
+  border-color: #000000D9 transparent transparent !important;
+}
+
+.options-container .ui.loader:before {
+  border-color: rgba(0,0,0,0.15) !important;
+}
+
 .connect-graph-option {
   padding: 1rem 0 !important;
 }

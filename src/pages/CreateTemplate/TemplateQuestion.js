@@ -325,9 +325,8 @@ class TemplateQuestion extends Component {
      * @param {Object} contextNodes: the nodes object (not necessarily in sync with the context)
      */
     editChildren = (qId, contextNodes) => {
-        let { numQuestions, nextEdgeID } = this.context.template;
-        const { graphData } = this.props;
-        const { edges, nodes, graph } = graphData;
+        let { numQuestions, nextEdgeID, cydocGraphs } = this.context.template;
+        const { edges, graph } = cydocGraphs;
 
         const disease = this.context.template.disease;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
@@ -337,14 +336,14 @@ class TemplateQuestion extends Component {
 
         const originalId = contextNodes[qId].originalId;
         if (originalId in graph) {
-            sortEdges(graph[originalId], edges, nodes);
+            sortEdges(graph[originalId], edges);
             // create edges and nodes for every new question
             let newCount = addChildrenNodes(
                 qId,
                 graph[originalId],
                 '',
                 diseaseCode,
-                graphData,
+                cydocGraphs,
                 {
                     numQuestions,
                     nextEdgeID,
@@ -357,10 +356,10 @@ class TemplateQuestion extends Component {
             nextEdgeID = newCount.nextEdgeID;
 
             this.context.updateTemplate({
-                edges,
-                graph,
                 nextEdgeID,
                 numQuestions,
+                edges: contextEdges,
+                graph: contextGraph,
             });
         }
         delete contextNodes[qId].hasChildren;
@@ -423,11 +422,10 @@ class TemplateQuestion extends Component {
      * @param {String} qId: id of the question
      */
     getNumberFollowup = (qId) => {
-        const { nodes } = this.context.template;
-        const { graph } = this.props.graphData;
+        const { nodes, cydocGraphs } = this.context.template;
 
         const originalId = nodes[qId].originalId;
-        return graph[originalId].length;
+        return cydocGraphs.graph[originalId].length;
     };
 
     hideChangeQuestion = (_e, { qid }) => {

@@ -7,25 +7,23 @@ import {
     Input,
     Grid,
     Dropdown,
-    Message,
     Icon,
     Dimmer,
     Loader,
+    Message,
 } from 'semantic-ui-react';
 import HPITemplateContext from '../../contexts/HPITemplateContext';
 import './TemplateForm.css';
 import TemplateQuestion from './TemplateQuestion';
 import { graphClient } from 'constants/api.js';
-import diseaseAbbrevs from 'constants/diseaseAbbrevs.json';
 import diseaseCodes from 'constants/diseaseCodes';
 import Nestable from 'react-nestable';
-import { createNodeId, updateParent } from './util';
-import { hpiHeaders } from '../EditNote/content/hpi/knowledgegraph/src/API';
+import { createNodeId, updateParent, NAN_QUESTION_TEXT } from './util';
 import ProTips from './modules/ProTips';
 import { questionTypes } from 'constants/questionTypes';
 
-const OTHER_TEXT = 'Other (specify below)';
 const MAX_NUM_QUESTIONS = 50;
+const INIT_NUM_QUESTIONS = 6;
 
 class EditTemplateForm extends Component {
     static contextType = HPITemplateContext;
@@ -34,11 +32,11 @@ class EditTemplateForm extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            bodySystems: [],
-            diseases: [],
+            bodySystems: {},
+            categoryMap: {},
+            parentNodes: {},
             graphData: {},
-            showOtherBodySystem: false,
-            showOtherDisease: false,
+            fetching: true,
             diseaseEmpty: true,
             bodySystemEmpty: true,
             showDimmer: false,
@@ -48,71 +46,33 @@ class EditTemplateForm extends Component {
         this.saveTitle = this.saveTitle.bind(this);
         this.saveBodySystem = this.saveBodySystem.bind(this);
         this.saveDisease = this.saveDisease.bind(this);
-        this.addQuestion = this.addQuestion.bind(this);
         this.flattenGraph = this.flattenGraph.bind(this);
         this.createTreeData = this.createTreeData.bind(this);
     }
 
     componentDidMount = async () => {
-        /**
-         * Fetches the existing knowledge graphs from the backend to prepopulate the
-         * available body systems and diseases.
-         */
-        hpiHeaders.then((value) => {
-            const nodes = value.data.nodes;
-            const allBodySystems = [];
-            const allDiseases = [];
-            const allQuestionTypes = [];
-            let categories = new Set();
-            let bodySystems = {};
-            for (const node in nodes) {
-                const category = nodes[node].category;
-                const questionType = nodes[node].responseType;
+        this.addNQuestions(INIT_NUM_QUESTIONS);
+        try {
+            const res = await graphClient.get('/hpi/CYDOC');
+            const { bodySystems, parentNodes } = res.data;
 
-                // Maintain a mapping of body systems to the associated diseases
-                if (!categories.has(category)) {
-                    const bodySys = nodes[node].bodySystem;
-                    let key = category
-                        .split('_')
-                        .join(' ')
-                        .toLowerCase()
-                        .replace(/^\w| \w/gim, (c) => c.toUpperCase());
-
-                    categories.add(category);
-                    if (key === 'Shortbreath') {
-                        key = 'Shortness of Breath';
-                    } else if (key === 'Nausea-vomiting') {
-                        key = 'Nausea/Vomiting';
-                    }
-                    if (!(bodySys in bodySystems)) {
-                        bodySystems[bodySys] = {
-                            name: diseaseAbbrevs[bodySys],
-                            diseases: [],
-                        };
-                    }
-                    bodySystems[bodySys].diseases.push(key);
-                }
-
-                if (!allQuestionTypes.includes(questionType)) {
-                    allQuestionTypes.push(questionType);
-                }
-            }
-
-            // Merge all body system diseases into one cummulative list of diseases
-            for (let i = 0; i < Object.values(bodySystems).length; i++) {
-                const bodySys = Object.values(bodySystems)[i];
-                allBodySystems.push(bodySys.name);
-                for (let j = 0; j < bodySys.diseases.length; j++) {
-                    allDiseases.push(bodySys.diseases[j]);
-                }
-            }
-
-            this.setState({
-                bodySystems: allBodySystems,
-                diseases: allDiseases,
-                graphData: value.data,
+            const categoryMap = {};
+            Object.entries(parentNodes).forEach(([doctorView, mapping]) => {
+                let category = Object.keys(mapping)[0];
+                categoryMap[doctorView] = category;
             });
-        });
+
+            this.setState((prevState) => ({
+                bodySystems: { ...prevState.bodySystems, ...bodySystems },
+                categoryMap: { ...prevState.categoryMap, ...categoryMap },
+            }));
+            this.context.onTemplateChange('parentNodes', parentNodes);
+        } catch (e) {
+            // eslint-disable-next-line no-console
+            console.log(e);
+        } finally {
+            this.setState({ fetching: false });
+        }
     };
 
     /**
@@ -134,121 +94,58 @@ class EditTemplateForm extends Component {
         this.setState({ invalidUpdates });
     };
 
-    /**
-     * Updates the selected body system and display an input field for
-     * the user to type in their own if OTHER was selected.
-     *
-     * If the value is left empty, raise an error message that prevents
-     * the user from adding questions.
-     */
-    saveBodySystem(event, { value }) {
-        const otherInput = document.getElementById('other-body-system');
-        const errorMessage = document.getElementById('body-error-message');
-        if (value === OTHER_TEXT) {
-            otherInput.style.display = 'inline-block';
-            this.setState({
-                showOtherBodySystem: true,
-                bodySystemEmpty: true,
-            });
-            this.context.onTemplateChange('bodySystem', '');
-        } else if (this.state.bodySystems.includes(value)) {
-            otherInput.style.display = 'none';
-            errorMessage.style.display = 'none';
-            this.setState({
-                showOtherBodySystem: false,
-                bodySystemEmpty: false,
-            });
-            this.context.onTemplateChange('bodySystem', value);
-        } else {
-            if (value === '') {
-                this.setState({ bodySystemEmpty: true });
-            } else {
-                errorMessage.style.display = 'none';
-                this.setState({ bodySystemEmpty: false });
-            }
-            this.context.onTemplateChange('bodySystem', value);
+    saveBodySystem(_e, { value }) {
+        let { disease } = this.context.template;
+        const { bodySystems } = this.state;
+        if (!bodySystems[value] || !bodySystems[value].includes(disease)) {
+            disease = '';
         }
+        this.context.onTemplateChange('bodySystem', value);
+        this.context.onTemplateChange('disease', disease);
     }
 
-    /**
-     * Updates the selected disease and display an input field for
-     * the user to type in their own if OTHER was selected
-     *
-     * If the value is left empty, raise an error message that prevents
-     * the user from adding questions.
-     */
-    saveDisease(event, { value }) {
-        const otherInput = document.getElementById('other-disease');
-        const errorMessage = document.getElementById('disease-error-message');
-
-        if (value === OTHER_TEXT) {
-            otherInput.style.display = 'inline-block';
-            this.setState({
-                showOtherDisease: true,
-                diseaseEmpty: true,
-            });
-            this.context.onTemplateChange('disease', '');
-        } else if (this.state.diseases.includes(value)) {
-            otherInput.style.display = 'none';
-            errorMessage.style.display = 'none';
-            this.setState({
-                showOtherDisease: false,
-                diseaseEmpty: false,
-            });
-            this.context.onTemplateChange('disease', value);
-        } else {
-            if (value === '') {
-                this.setState({ diseaseEmpty: true });
-            } else {
-                errorMessage.style.display = 'none';
-                this.setState({ diseaseEmpty: false });
-            }
-            this.context.onTemplateChange('disease', value);
-        }
+    saveDisease(_e, { value }) {
+        this.context.onTemplateChange('disease', value);
     }
 
-    /**
-     * Adds a blank question to the form if a disease and body system was selected.
-     * Display an error message otherwise.
-     */
-    addQuestion() {
-        if (this.state.diseaseEmpty) {
-            document.getElementById('disease-error-message').style.display =
-                'inline-block';
-            return;
+    handleDiseaseAddition = (_e, { value }) => {
+        const bodySystems = { ...this.state.bodySystems };
+        const categoryMap = { ...this.state.categoryMap };
+        const { bodySystem } = this.context.template;
+
+        bodySystems[bodySystem] = bodySystems[bodySystem].concat(value);
+        if (!(value in categoryMap)) {
+            categoryMap[value] = value;
         }
 
-        if (this.state.bodySystemEmpty) {
-            document.getElementById('body-error-message').style.display =
-                'inline-block';
-            return;
-        }
+        this.setState({ categoryMap, bodySystems });
+    };
 
+    // Add N blank questions as direct children of the root
+    addNQuestions = (n) => {
         let { numQuestions, nextEdgeID } = this.context.template;
-        const { disease, root, nodes, edges, graph } = this.context.template;
+        const { disease, nodes, edges, graph, root } = this.context.template;
         const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
-        const qId = createNodeId(diseaseCode, numQuestions);
 
-        // Create a default node with the parent being the root
-        nodes[qId] = {
-            id: qId,
-            text: '',
-            responseType: '',
-            answerInfo: {},
-            parent: root,
-            hasChanged: true,
-        };
-
-        edges[nextEdgeID] = {
-            from: root,
-            to: qId,
-        };
-        graph[qId] = [];
-        graph[root].push(nextEdgeID);
-
-        numQuestions++;
-        nextEdgeID++;
-
+        for (let i = 0; i < n; i++) {
+            let qId = createNodeId(diseaseCode, numQuestions);
+            nodes[qId] = {
+                id: qId,
+                text: '',
+                responseType: '',
+                answerInfo: {},
+                parent: root,
+                hasChanged: true,
+            };
+            edges[nextEdgeID] = {
+                from: root,
+                to: qId,
+            };
+            graph[qId] = [];
+            graph[root].push(nextEdgeID);
+            numQuestions++;
+            nextEdgeID++;
+        }
         this.context.updateTemplate({
             nodes,
             graph,
@@ -256,7 +153,7 @@ class EditTemplateForm extends Component {
             numQuestions,
             nextEdgeID,
         });
-    }
+    };
 
     /**
      * Processes the graph data in the template by filtering out unchanged imported nodes
@@ -281,7 +178,7 @@ class EditTemplateForm extends Component {
         const updatedNodes = {};
         const updatedGraph = {};
         const rootSuffix = root.slice(3);
-        const diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
+        let diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
 
         // Update all edge's `to`/`from` keys to match current disease
         for (let [key, edge] of Object.entries(edges)) {
@@ -350,6 +247,13 @@ class EditTemplateForm extends Component {
             data = { ...data };
 
             if (
+                data.text.startsWith('Root') &&
+                data.text.endsWith(NAN_QUESTION_TEXT)
+            ) {
+                data.text = 'nan';
+            }
+
+            if (
                 data.responseType === 'CLICK-BOXES' ||
                 data.responseType.endsWith('-POP')
             ) {
@@ -358,22 +262,31 @@ class EditTemplateForm extends Component {
                 // TODO: When backend permits encode the fill in the blanks
             } */
 
+            const doctorCreated = data.hasChanged
+                ? doctorID
+                : data.doctorCreated;
+
+            if (data.category) {
+                diseaseCode =
+                    diseaseCodes[data.category] || data.category.slice(0, 3);
+            }
+
+            if (!key.startsWith(diseaseCode)) {
+                key = diseaseCode + key.slice(key.indexOf('-'));
+            }
+
             delete data.answerInfo;
             delete data.hasChanged;
             delete data.originalId;
             delete data.parent;
 
-            if (!key.startsWith(diseaseCode)) {
-                key = diseaseCode + key.slice(key.indexOf('-'));
-            }
             updatedNodes[key] = {
-                ...data,
                 bodySystem,
                 noteSection: 'HPI',
-                medID: key,
                 category: disease,
-                // doctorCreated: doctorID,
-                doctorCreated: 'NOT A REAL DOCTOR', // disabled until backend is ready
+                ...data, // original values of the above keys hold higher precedence
+                doctorCreated,
+                medID: key,
             };
             delete updatedNodes[key].id;
         }
@@ -464,8 +377,6 @@ class EditTemplateForm extends Component {
                 <TemplateQuestion
                     key={item.id}
                     qId={item.id}
-                    allDiseases={this.state.diseases}
-                    graphData={this.state.graphData}
                     invalidUpdates={this.state.invalidUpdates}
                     removeInvalidUpdate={this.removeInvalidUpdate}
                 />
@@ -580,14 +491,7 @@ class EditTemplateForm extends Component {
     };
 
     render() {
-        const {
-            bodySystems,
-            diseases,
-            showOtherBodySystem,
-            showOtherDisease,
-            showDimmer,
-            requestResult,
-        } = this.state;
+        const { bodySystems, showDimmer, requestResult, fetching } = this.state;
 
         const {
             numQuestions,
@@ -596,31 +500,18 @@ class EditTemplateForm extends Component {
             disease,
         } = this.context.template;
 
-        const bodySystemOptions = [
-            {
-                value: OTHER_TEXT,
-                text: OTHER_TEXT,
-            },
-        ];
-        bodySystems.forEach((bodySystem) => {
-            bodySystemOptions.push({
-                value: bodySystem,
-                text: bodySystem,
-            });
-        });
-
-        const diseaseOptions = [
-            {
-                value: OTHER_TEXT,
-                text: OTHER_TEXT,
-            },
-        ];
-        diseases.forEach((disease) => {
-            diseaseOptions.push({
-                value: disease,
-                text: disease,
-            });
-        });
+        const bodySystemOptions = Object.keys(bodySystems).map((bodySys) => ({
+            key: bodySys,
+            value: bodySys,
+            text: bodySys,
+        }));
+        const diseaseOptions = (bodySystems[bodySystem] || []).map(
+            (category) => ({
+                key: category,
+                value: category,
+                text: category,
+            })
+        );
 
         const reachedMax = numQuestions >= MAX_NUM_QUESTIONS + 1;
 
@@ -680,21 +571,11 @@ class EditTemplateForm extends Component {
                                     selection
                                     clearable
                                     placeholder='e.g. Endocrine'
-                                    value={
-                                        showOtherBodySystem
-                                            ? OTHER_TEXT
-                                            : bodySystem
-                                    }
+                                    loading={fetching}
+                                    value={bodySystem}
                                     options={bodySystemOptions}
                                     onChange={this.saveBodySystem}
                                     className='info-dropdown'
-                                />
-                                <Input
-                                    fluid
-                                    placeholder='Other Body System'
-                                    value={bodySystem}
-                                    onChange={this.saveBodySystem}
-                                    id='other-body-system'
                                 />
                             </Grid.Column>
                             <Grid.Column mobile={16} tablet={8} computer={8}>
@@ -704,36 +585,18 @@ class EditTemplateForm extends Component {
                                     search
                                     selection
                                     clearable
+                                    allowAdditions
                                     placeholder='e.g. Diabetes'
-                                    value={
-                                        showOtherDisease ? OTHER_TEXT : disease
-                                    }
-                                    options={diseaseOptions}
-                                    onChange={this.saveDisease}
-                                    className='info-dropdown'
-                                />
-                                <Input
-                                    fluid
-                                    placeholder='Other Disease'
                                     value={disease}
+                                    options={diseaseOptions}
+                                    disabled={bodySystem === ''}
                                     onChange={this.saveDisease}
-                                    id='other-disease'
+                                    onAddItem={this.handleDiseaseAddition}
+                                    className='info-dropdown'
                                 />
                             </Grid.Column>
                         </Grid>
                     </Form>
-                    <Message
-                        compact
-                        negative
-                        content='Please choose a disease before adding questions.'
-                        id='disease-error-message'
-                    />
-                    <Message
-                        compact
-                        negative
-                        content='Please choose a body system before adding questions.'
-                        id='body-error-message'
-                    />
                     <Nestable
                         items={this.createTreeData()}
                         handler={<Icon name='arrows alternate' />}
@@ -749,7 +612,7 @@ class EditTemplateForm extends Component {
                     <Button
                         circular
                         icon='add'
-                        onClick={this.addQuestion}
+                        onClick={() => this.addQuestion(1)}
                         content='Add question'
                         className='add-question-button'
                         disabled={reachedMax}
