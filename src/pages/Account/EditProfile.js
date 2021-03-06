@@ -48,6 +48,9 @@ const EditProfile = () => {
                     email: getUserAttributesResponse.email,
                     countryCode: '+1',
                     phoneNumber: getUserAttributesResponse.phoneNumber.slice(2),
+                    address: getUserAttributesResponse.address,
+                    // TODO: might need to change birthday to date type? must be yyyy-MM-dd; change in backend
+                    dob: getUserAttributesResponse.birthday,
                 });
             } catch (err) {
                 alert(

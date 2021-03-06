@@ -1,4 +1,5 @@
 import getUserPool from 'auth/getUserPool';
+import { doctorClient, managerClient, patientClient } from 'constants/api';
 
 const attributeMappings = {
     given_name: 'firstName',
@@ -36,9 +37,34 @@ const getUserAttributes = async (role) => {
         }
     });
 
-    const attributes = {};
+    let attributes = {};
 
-    // TODO: make call to Dynamo to retrieve user attributes stored in database
+    let url,
+        path = '';
+    if (role == 'manager') {
+        url = managerClient;
+        path = `/managers/${cognitoUser.username}`;
+    } else if (role == 'healthcare professional') {
+        // TODO: test this out with a valid doctor accounnt
+        url = doctorClient;
+        path = `/doctors/${cognitoUser.username}`;
+    } else if (role == 'patient') {
+        // TODO: test this out once login for patients has been created
+        url = patientClient;
+        path = `/doctors/${cognitoUser.username}`;
+    }
+
+    url.get(path)
+        .then((response) => {
+            attributes = JSON.parse(response.request.response).Item;
+        })
+        .catch((err) => {
+            alert(
+                `Error fetching attributes: ${
+                    err.message || JSON.stringify(err)
+                }`
+            );
+        });
 
     return new Promise((resolve) => {
         cognitoUser.getUserAttributes((err, result) => {
