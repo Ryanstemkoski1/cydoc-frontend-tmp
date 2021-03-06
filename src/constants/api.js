@@ -15,9 +15,17 @@ export const poolDataClient = axios.create({
 });
 
 export const identityPoolClient = axios.create({
-    baseURL: 'https://yxp9hzv37a.execute-api.us-east-1.amazonaws.com/dev',
+    baseURL: 'https://hvbrbpm9kh.execute-api.us-east-1.amazonaws.com/dev',
 });
 
-export const deleteDoctorClient = axios.create({
-    baseURL: 'https://65b6ro7xk0.execute-api.us-east-1.amazonaws.com/prod',
+export const doctorClient = axios.create({
+    baseURL: 'https://kr8au28zrb.execute-api.us-east-1.amazonaws.com/prod',
+});
+
+export const managerClient = axios.create({
+    baseURL: 'https://qhy22slpzb.execute-api.us-east-1.amazonaws.com/prod',
+});
+
+export const patientClient = axios.create({
+    baseURL: 'https://lz3hucl2ch.execute-api.us-east-1.amazonaws.com/prod',
 });

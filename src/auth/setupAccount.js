@@ -1,4 +1,4 @@
-import { client } from 'constants/api.js';
+import { doctorClient, managerClient, patientClient } from 'constants/api.js';
 
 const SetupAccount = async (
     currentUser,
@@ -13,26 +13,42 @@ const SetupAccount = async (
             onSuccess: (_result) => {
                 // user successfully reset password and confirmed account
 
-                // TODO: add user to Dynamo and remove code below for adding to old database
                 const user = {
                     username,
-                    password: newPassword,
                     email: newUserAttr.email,
-                    phoneNumber: attributes.phoneNumber,
-                    firstName: attributes.firstName,
-                    lastName: attributes.lastName,
-                    workplace: attributes.workplace,
-                    institutionType: '',
-                    inPatient: null,
-                    address: attributes.address,
-                    backupEmail: '',
-                    role: attributes.role,
+                    phoneNumberIsMobile: attributes.isPhoneNumberMobile,
+                    birthday: attributes.dob,
                     ...attributes,
                 };
 
-                // add user to database
-                client
-                    .post('/user/new', user)
+                // add user to DynamoDB
+                let url,
+                    path,
+                    payload = '';
+                if (user.role == 'manager') {
+                    url = managerClient;
+                    path = '/managers';
+                    payload = JSON.stringify({ manager: user });
+                } else if (user.role == 'healthcare professional') {
+                    url = doctorClient;
+                    path = '/doctors';
+                    // TODO: fix this with actual institutionUUIDs
+                    // TODO: workplace is `industry` and `academic` in dynamoDB -- should we change it for frontend?
+                    user.institutionUUIDs = [user.workplace];
+                    // TODO: remove once doctor validation has been edited
+                    user.role = 0;
+                    delete user.workplace;
+                    payload = JSON.stringify({ doctor: user });
+                }
+                // TODO: what is the role name for patients?
+                else if (user.role == 'patient') {
+                    url = patientClient;
+                    path = '/patients';
+                    payload = JSON.stringify({ patient: user });
+                }
+                // TODO: we may need to edit FirstTimeLogin.js so that attributes match those in DynamoDB?
+
+                url.post(path, payload)
                     .then(() => {
                         alert(
                             'Your account has been successfully set up. Please login to continue.'

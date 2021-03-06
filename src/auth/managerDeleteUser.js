@@ -5,7 +5,7 @@ import {
 import { CognitoIdentityClient } from '@aws-sdk/client-cognito-identity';
 import { fromCognitoIdentityPool } from '@aws-sdk/credential-provider-cognito-identity';
 import getUserPool from 'auth/getUserPool';
-import { identityPoolClient, deleteDoctorClient } from 'constants/api.js';
+import { identityPoolClient, doctorClient } from 'constants/api.js';
 
 const region = 'us-east-1';
 
@@ -86,7 +86,7 @@ const managerDeleteUser = async (username) => {
         await client.send(command);
         const doctorUsername = params.Username;
         try {
-            await deleteDoctorClient.delete('/doctors/' + doctorUsername);
+            await doctorClient.delete('/doctors/' + doctorUsername);
         } catch (err) {
             alert('Error deleting doctor from database.');
             return {
