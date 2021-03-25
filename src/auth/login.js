@@ -1,6 +1,5 @@
 import { AuthenticationDetails, CognitoUser } from 'amazon-cognito-identity-js';
 import getUserPool from 'auth/getUserPool';
-import { client } from 'constants/api.js';
 
 const GetLogin = async (username, password, role, context) => {
     // can't log user in without username, password, or role
@@ -38,43 +37,14 @@ const GetLogin = async (username, password, role, context) => {
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: async (_result) => {
                 // user authentication was successful
-                const payload = {
-                    username: username,
-                    password: password,
-                };
 
-                // login user from database
-                const response = await client
-                    .post('/login', payload)
-                    .then((res) => {
-                        const user = res;
-                        localStorage.setItem('user', JSON.stringify(user));
-                        return user;
-                    })
-                    .then((user) => {
-                        return user;
-                    })
-                    .catch((err) => {
-                        return err.response;
-                    });
-
-                if (!response) {
-                    alert('no response');
-                    return;
-                } else if (response.status === 200) {
-                    context.storeLoginInfo(
-                        response.data.user,
-                        role,
-                        response.data.jwt.accessToken
-                    );
-                    resolve({
-                        currentUser: cognitoUser,
-                        isFirstLoginFlag: false,
-                        redirectFlag: true,
-                    });
-                } else {
-                    alert(response.data.Message);
-                }
+                const accessToken = _result.getAccessToken().getJwtToken();
+                context.storeLoginInfo(cognitoUser, accessToken);
+                resolve({
+                    currentUser: cognitoUser,
+                    isFirstLoginFlag: false,
+                    redirectFlag: true,
+                });
             },
 
             onFailure: (err) => {

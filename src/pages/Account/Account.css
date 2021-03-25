@@ -17,8 +17,30 @@
     padding-left: 30px;
 }
 
+.ui.container.forgot-password-email {
+    padding: 10vh 0;
+    width: 450px;
+}
+
+.ui.container.forgot-password-email .segment {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+
+.ui.container.forgot-password {
+    padding: 10vh 0;
+    width: 450px;
+}
+
+.ui.container.forgot-password .segment {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
 .login > .container,
-.sign-up > .container{
+.sign-up > .container, 
+.forgot-password > .container {
     padding: 1rem;
 }
 
@@ -29,15 +51,16 @@
     margin: .5rem;
 }
 
-.login-header, .sign-up-header {
+.login-header, .sign-up-header, .forgot-password-header, .forgot-password-email-header{
     padding: 1rem;
     font-size: 1.2rem;
     color: black;
 }
 
-.label-font {
-    color: #262626;
-    font-size: 14px;
+.make-an-account-button, .forgot-password-button {
+    font-size: 0.9rem;
+    margin-top: 5px;
+    color: teal;
 }
 
 .role-label {

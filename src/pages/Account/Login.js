@@ -12,8 +12,10 @@ import {
     Container,
     Image,
     Header,
+    Grid,
 } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
 import GetLogin from 'auth/login';
 import SetupAccount from 'auth/setupAccount';
 import AuthContext from '../../contexts/AuthContext';
@@ -179,14 +181,28 @@ const Login = () => {
                                 onChange={handleRoleChange}
                             />
                         </Form.Group>
-                        <Container textAlign='right'>
-                            <Button
-                                color='teal'
-                                size='small'
-                                aria-label='login-button'
-                                content='Login'
-                            />
-                        </Container>
+                        <Grid padded verticalAlign='middle'>
+                            <Grid.Row columns={2}>
+                                <Grid.Column>
+                                    <Link
+                                        style={{ color: '#007db3' }}
+                                        to='/forgotpasswordemail'
+                                        floated='left'
+                                        className='forgot-password-button'
+                                    >
+                                        Forgot Password?
+                                    </Link>
+                                </Grid.Column>
+                                <Grid.Column textAlign='right'>
+                                    <Button
+                                        color='teal'
+                                        size='small'
+                                        aria-label='login-button'
+                                        content='Login'
+                                    />
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
                     </Form>
                 </Segment>
             </Container>
