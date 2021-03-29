@@ -1,5 +1,6 @@
 import { AuthenticationDetails, CognitoUser } from 'amazon-cognito-identity-js';
 import getUserPool from 'auth/getUserPool';
+import getUserAttributes from 'auth/getUserAttributes';
 
 const GetLogin = async (username, password, role, context) => {
     // can't log user in without username, password, or role
@@ -39,7 +40,12 @@ const GetLogin = async (username, password, role, context) => {
                 // user authentication was successful
 
                 const accessToken = _result.getAccessToken().getJwtToken();
-                context.storeLoginInfo(cognitoUser, accessToken);
+                const getUserAttributesResponse = await getUserAttributes(role);
+                context.storeLoginInfo(
+                    getUserAttributesResponse,
+                    role,
+                    accessToken
+                );
                 resolve({
                     currentUser: cognitoUser,
                     isFirstLoginFlag: false,
