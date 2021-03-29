@@ -13,6 +13,42 @@ import UserForm from './UserForm';
 import NavMenu from '../../components/navigation/NavMenu';
 import './Account.css';
 
+const initializeFormFields = (role, username, email) => {
+    if (role === 'healthcare professional') {
+        return {
+            username,
+            role,
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            email,
+            countryCode: '+1',
+            phoneNumber: '',
+            phoneNumberIsMobile: true,
+            birthday: '',
+            isStudent: '',
+            degreesCompleted: ['', '', ''],
+            degreesInProgress: ['', '', ''],
+            specialties: ['', '', ''],
+            workplace: '',
+        };
+    } else if (role === 'manager') {
+        return {
+            username,
+            role,
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            email,
+            countryCode: '+1',
+            phoneNumber: '',
+            phoneNumberIsMobile: true,
+            birthday: '',
+            workplace: '',
+        };
+    }
+};
+
 const FirstTimeLogin = ({ onSubmit, role, username, email }) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -24,25 +60,9 @@ const FirstTimeLogin = ({ onSubmit, role, username, email }) => {
         containsSpecial: false,
         passesMinLength: false,
     });
-    const [userInfo, setUserInfo] = useState({
-        username,
-        role,
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        email,
-        countryCode: '+1',
-        phoneNumber: '',
-        isPhoneNumberMobile: true,
-        dob: '',
-        address: '',
-        studentStatus: '',
-        degreesCompleted: ['', '', ''],
-        degreesInProgress: ['', '', ''],
-        specialties: ['', '', ''],
-        workplace: '',
-        workplaceFeatures: [],
-    });
+    const [userInfo, setUserInfo] = useState(
+        initializeFormFields(role, username, email)
+    );
 
     const handleNewPasswordChange = (e, { value }) => {
         const minLength =

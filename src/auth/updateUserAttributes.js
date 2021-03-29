@@ -1,5 +1,6 @@
 import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
 import getUserPool from 'auth/getUserPool';
+import { managerClient, doctorClient, patientClient } from 'constants/api';
 
 const updateUserAttributes = async (role, userInfo) => {
     const userPool = await getUserPool(role);
@@ -29,7 +30,40 @@ const updateUserAttributes = async (role, userInfo) => {
         }
     });
 
+    // these three variables need to be deleted in order to conform to backend's schema
+    delete userInfo.countryCode;
+    delete userInfo.username;
+    delete userInfo.role;
+
     // TODO: make call to update info in Dynamo
+    // TODO: test to see if the payload follows the model/schema in backend
+    let url,
+        path,
+        payload = '';
+    if (role == 'manager') {
+        url = managerClient;
+        path = `/managers/${cognitoUser.username}`;
+        payload = JSON.stringify({ manager: userInfo });
+    } else if (role == 'healthcare professional') {
+        url = doctorClient;
+        path = `/doctors/${cognitoUser.username}`;
+        payload = JSON.stringify({ doctor: userInfo });
+    }
+    // TODO: what is the role name for patients?
+    else if (role == 'patient') {
+        url = patientClient;
+        path = `/patients/${cognitoUser.username}`;
+        payload = JSON.stringify({ patient: userInfo });
+    }
+    url.put(path, payload)
+        .then(() => {
+            alert('Your profile has been updated successfully.');
+        })
+        .catch((err) => {
+            alert(
+                `Error updating profile: ${err.message || JSON.stringify(err)}`
+            );
+        });
 
     // update info in Cogntio
     const attributeList = [
@@ -51,7 +85,7 @@ const updateUserAttributes = async (role, userInfo) => {
         }),
         new CognitoUserAttribute({
             Name: 'phone_number',
-            Value: userInfo.fullPhoneNumber,
+            Value: userInfo.phoneNumber,
         }),
     ];
 

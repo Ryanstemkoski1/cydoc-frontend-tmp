@@ -16,10 +16,10 @@ const SetupAccount = async (
                 const user = {
                     username,
                     email: newUserAttr.email,
-                    phoneNumberIsMobile: attributes.isPhoneNumberMobile,
-                    birthday: attributes.dob,
+                    phoneNumber: attributes.fullPhoneNumber,
                     ...attributes,
                 };
+                delete user.fullPhoneNumber;
 
                 // add user to DynamoDB
                 let url,
@@ -32,12 +32,7 @@ const SetupAccount = async (
                 } else if (user.role == 'healthcare professional') {
                     url = doctorClient;
                     path = '/doctors';
-                    // TODO: fix this with actual institutionUUIDs
-                    // TODO: workplace is `industry` and `academic` in dynamoDB -- should we change it for frontend?
-                    user.institutionUUIDs = [user.workplace];
-                    // TODO: remove once doctor validation has been edited
-                    user.role = 0;
-                    delete user.workplace;
+                    // TODO: incorporate actual institutionUUIDs
                     payload = JSON.stringify({ doctor: user });
                 }
                 // TODO: what is the role name for patients?
@@ -46,7 +41,6 @@ const SetupAccount = async (
                     path = '/patients';
                     payload = JSON.stringify({ patient: user });
                 }
-                // TODO: we may need to edit FirstTimeLogin.js so that attributes match those in DynamoDB?
 
                 url.post(path, payload)
                     .then(() => {

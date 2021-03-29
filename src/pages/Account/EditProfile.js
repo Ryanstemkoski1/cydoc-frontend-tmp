@@ -7,38 +7,57 @@ import getUserAttributes from 'auth/getUserAttributes';
 import updateUserAttributes from 'auth/updateUserAttributes';
 import './Account.css';
 
+const initializeFormFields = (role, username, email) => {
+    if (role === 'healthcare professional') {
+        return {
+            username,
+            role,
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            email,
+            countryCode: '+1',
+            phoneNumber: '',
+            phoneNumberIsMobile: true,
+            birthday: '',
+            isStudent: '',
+            degreesCompleted: ['', '', ''],
+            degreesInProgress: ['', '', ''],
+            specialties: ['', '', ''],
+            workplace: '',
+        };
+    } else if (role === 'manager') {
+        return {
+            username,
+            role,
+            firstName: '',
+            middleName: '',
+            lastName: '',
+            email,
+            countryCode: '+1',
+            phoneNumber: '',
+            phoneNumberIsMobile: true,
+            birthday: '',
+            workplace: '',
+        };
+    }
+};
+
 const EditProfile = () => {
     const context = useContext(AuthContext);
     const user = context.user;
     const role = context.role;
 
     const [callFinished, setCallFinished] = useState(false);
-    const [userInfo, setUserInfo] = useState({
-        username: user.username,
-        role,
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        email: '',
-        countryCode: '+1',
-        phoneNumber: '',
-        isPhoneNumberMobile: true,
-        dob: '',
-        address: '',
-        studentStatus: '',
-        degreesCompleted: ['', '', ''],
-        degreesInProgress: ['', '', ''],
-        specialties: ['', '', ''],
-        workplace: '',
-        workplaceFeatures: [],
-    });
+    const [userInfo, setUserInfo] = useState(
+        initializeFormFields(role, user.username, user.email)
+    );
 
     // retrieve user attributes from Cognito and Dynamo when component is mounted
     useEffect(() => {
         const getAttributes = async (role) => {
             try {
                 const getUserAttributesResponse = await getUserAttributes(role);
-
                 setUserInfo({
                     ...userInfo,
                     username: getUserAttributesResponse.username,
@@ -48,9 +67,7 @@ const EditProfile = () => {
                     email: getUserAttributesResponse.email,
                     countryCode: '+1',
                     phoneNumber: getUserAttributesResponse.phoneNumber.slice(2),
-                    address: getUserAttributesResponse.address,
-                    // TODO: might need to change birthday to date type? must be yyyy-MM-dd; change in backend
-                    dob: getUserAttributesResponse.birthday,
+                    birthday: getUserAttributesResponse.birthday,
                 });
             } catch (err) {
                 alert(
@@ -72,15 +89,12 @@ const EditProfile = () => {
     const handleSubmit = useCallback(
         async (userInfo) => {
             try {
-                const fullPhoneNumber =
-                    userInfo.countryCode + userInfo.phoneNumber;
+                const phoneNumber = userInfo.countryCode + userInfo.phoneNumber;
                 // update info in Cognito and in Dynamo
                 await updateUserAttributes(role, {
                     ...userInfo,
-                    fullPhoneNumber,
+                    phoneNumber,
                 });
-
-                alert('Profile information successfully updated');
             } catch (err) {
                 alert(
                     `Error updating user information: ${

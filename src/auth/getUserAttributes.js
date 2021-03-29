@@ -54,9 +54,10 @@ const getUserAttributes = async (role) => {
         path = `/doctors/${cognitoUser.username}`;
     }
 
-    url.get(path)
+    await url
+        .get(path)
         .then((response) => {
-            attributes = JSON.parse(response.request.response).Item;
+            attributes = response.data.Item;
         })
         .catch((err) => {
             alert(
@@ -65,6 +66,8 @@ const getUserAttributes = async (role) => {
                 }`
             );
         });
+
+    // TODO: when calling the GET request to the backend, phoneNumberIsMobile is an int rather than a boolean because DynamoDB stores booleans as ints -- so Mobile isn't checked on the frontend edit profile page
 
     return new Promise((resolve) => {
         cognitoUser.getUserAttributes((err, result) => {

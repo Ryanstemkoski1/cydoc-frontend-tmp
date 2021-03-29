@@ -39,7 +39,7 @@ const managerCreateUser = async (username, email) => {
 
     // get manager identity pool id
     const identityPoolId = await identityPoolClient.get(
-        '/identity-pool?role=healthcare manager'
+        '/identity-pool-data?role=healthcare manager'
     );
 
     // userPoolLink is the key name of the credentials login map
