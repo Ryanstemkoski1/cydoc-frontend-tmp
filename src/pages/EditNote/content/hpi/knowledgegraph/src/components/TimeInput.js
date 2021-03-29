@@ -24,16 +24,16 @@ class TimeInput extends React.Component {
     render() {
         const currNodeInfo = this.context.hpi[this.props.node];
         const timeOptions = [
-            'minutes',
-            'hours',
-            'days',
-            'weeks',
-            'months',
             'years',
+            'months',
+            'weeks',
+            'days',
+            'hours',
+            'minutes',
         ];
         return (
             <div className='time-div'>
-                <Grid columns={2}>
+                <Grid columns={2} stackable doubling>
                     <Grid.Row>
                         <Grid.Column width={3}>
                             <div className='time-input'>
