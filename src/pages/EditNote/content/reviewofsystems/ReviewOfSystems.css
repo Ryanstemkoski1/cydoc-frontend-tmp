@@ -1,92 +1,105 @@
 .ui.card:first-child {
-  margin-top: 1rem;
+    margin-top: 1rem;
 }
 
 .ros-container {
-  text-align: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  margin-left: -2rem;
-  width: auto;
+    text-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-left: -2rem;
+    width: auto;
 }
 
 .ros-column {
-  padding-left: 2rem;
-  background-clip: padding-box;
+    padding-left: 2rem;
+    background-clip: padding-box;
 }
 
 .ros-system {
-  margin-bottom: 2rem !important;
-  width: auto !important;
-  overflow-wrap: break-word;
+    margin-bottom: 2rem !important;
+    width: auto !important;
+    overflow-wrap: break-word;
 }
 
 .ui.grid > .row > .column.no-padding {
-  padding: 0;
+    padding: 0;
 }
 
-.ui.icon.button.ros-previous-button, .ui.icon.button.ros-next-button {
-  position: fixed;
-  bottom: 15px;
-  opacity: 0.8;
-  margin: 0;
-  display: block;
-  font-size: 13px;
-  background: #006b87;
-  color: white;
+.ui.icon.button.ros-previous-button,
+.ui.icon.button.ros-next-button {
+    position: fixed;
+    bottom: 15px;
+    opacity: 0.8;
+    margin: 0;
+    display: block;
+    font-size: 13px;
+    background: #006b87;
+    color: white;
 }
 
-.ui.icon.button.ros-previous-button:hover, .ui.icon.button.ros-next-button:hover {
-  opacity: 0.6;
+.ui.icon.button.ros-previous-button:hover,
+.ui.icon.button.ros-next-button:hover {
+    opacity: 0.6;
 }
 
 .ui.icon.button.ros-previous-button {
-  left: 20px;
+    left: 20px;
 }
 
 .ui.icon.button.ros-next-button {
-  right: 20px;
+    right: 20px;
 }
 
-.ui.icon.button.small-ros-previous-button, .ui.icon.button.small-ros-next-button {
-  display: none;
-  position: fixed;
-  bottom: 15px;
-  opacity: 0.8;
-  margin: 0;
-  background: #006b87;
-  color: white;
+.ui.button.add-option-button {
+    margin-top: 10px;
+}
+
+.ui.icon.button.small-ros-previous-button,
+.ui.icon.button.small-ros-next-button {
+    display: none;
+    position: fixed;
+    bottom: 15px;
+    opacity: 0.8;
+    margin: 0;
+    background: #006b87;
+    color: white;
 }
 
 .ui.container.active-tab-container {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.ui.input.transparent.misc {
+    width: 100%;
 }
 
 @media screen and (max-width: 1400px) {
-  .ui.icon.button.ros-previous-button, .ui.icon.button.ros-next-button {
-      display: none;
-  }
+    .ui.icon.button.ros-previous-button,
+    .ui.icon.button.ros-next-button {
+        display: none;
+    }
 
-  .ui.icon.button.small-ros-previous-button, .ui.icon.button.small-ros-next-button {
-      display: block;
-  }
-  
-  .ui.icon.button.small-ros-previous-button {
-    left: 5px;
-  }
+    .ui.icon.button.small-ros-previous-button,
+    .ui.icon.button.small-ros-next-button {
+        display: block;
+    }
 
-  .ui.icon.button.small-ros-next-button {
-    right: 5px;
-  }
+    .ui.icon.button.small-ros-previous-button {
+        left: 5px;
+    }
+
+    .ui.icon.button.small-ros-next-button {
+        right: 5px;
+    }
 }
 
 @media screen and (max-width: 400px) {
-  .ui.icon.button.small-ros-previous-button {
-    left: 15px;
-  }
+    .ui.icon.button.small-ros-previous-button {
+        left: 15px;
+    }
 
-  .ui.icon.button.small-ros-next-button {
-    right: 15px;
-  }
+    .ui.icon.button.small-ros-next-button {
+        right: 15px;
+    }
 }

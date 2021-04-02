@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import Masonry from 'react-masonry-css';
 import './ReviewOfSystems.css';
 import ReviewOfSystemsCategory from './ReviewOfSystemsCategory';
+import ReviewOfSystemsCategoryMisc from './ReviewOfSystemsCategoryMisc';
 import { sections } from 'constants/review-of-systems-constants';
 import { ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP } from 'constants/breakpoints';
 import { Button, Icon } from 'semantic-ui-react';
+import HPIContext from 'contexts/HPIContext.js';
 
 //Component that manages the content for the Review of Systems section of the note
 export default class ReviewOfSystemsContent extends Component {
+    static contextType = HPIContext;
     constructor(props) {
         super(props);
         this.state = {
@@ -35,13 +38,31 @@ export default class ReviewOfSystemsContent extends Component {
     }
 
     generateList = (systemsCategories) => {
-        return Object.keys(systemsCategories).map((label) => (
+        //Generates the list for the original categories
+        const original = Object.keys(systemsCategories).map((label) => (
             <ReviewOfSystemsCategory
                 key={label}
                 category={label}
                 options={systemsCategories[label]}
             />
         ));
+
+        //Generates the list for the miscellaneous catgeories
+        const values = this.context['Review of Systems'];
+        if (!values['Misc']) {
+            values['Misc'] = {};
+            values['Misc'] = [{ name: '', options: [] }];
+        }
+        const misc = values['Misc'].map((misc, index) => (
+            <ReviewOfSystemsCategoryMisc key={index} index={index} />
+        ));
+        return misc.concat(original);
+    };
+
+    addMisc = () => {
+        const values = this.context['Review of Systems'];
+        values['Misc'].push({ name: '', options: [] });
+        this.context.onContextChange('Review of Systems', values);
     };
 
     previousFormClick = () => {
@@ -55,15 +76,15 @@ export default class ReviewOfSystemsContent extends Component {
 
         let numColumns = 1;
         if (windowWidth > ROS_LARGE_BP) {
-            numColumns = 4;
+            numColumns = 3;
         } else if (windowWidth > ROS_MED_BP) {
             numColumns = 3;
         } else if (windowWidth > ROS_SMALL_BP) {
             numColumns = 2;
         }
-
         return (
             <>
+                <Button onClick={this.addMisc}>Add Misc</Button>
                 <Masonry
                     className='ros-container'
                     breakpointCols={numColumns}
