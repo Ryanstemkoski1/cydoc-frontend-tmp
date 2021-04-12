@@ -1,6 +1,7 @@
 import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
 import getUserPool from 'auth/getUserPool';
 import { managerClient, doctorClient, patientClient } from 'constants/api';
+import getUUID from 'auth/getUUID';
 
 const updateUserAttributes = async (role, userInfo) => {
     const userPool = await getUserPool(role);
@@ -40,19 +41,20 @@ const updateUserAttributes = async (role, userInfo) => {
     let url,
         path,
         payload = '';
+    const uuid = await getUUID(role);
     if (role == 'manager') {
         url = managerClient;
-        path = `/managers/${cognitoUser.username}`;
+        path = `/managers/${uuid}`;
         payload = JSON.stringify({ manager: userInfo });
     } else if (role == 'healthcare professional') {
         url = doctorClient;
-        path = `/doctors/${cognitoUser.username}`;
+        path = `/doctors/${uuid}`;
         payload = JSON.stringify({ doctor: userInfo });
     }
     // TODO: what is the role name for patients?
     else if (role == 'patient') {
         url = patientClient;
-        path = `/patients/${cognitoUser.username}`;
+        path = `/patients/${uuid}`;
         payload = JSON.stringify({ patient: userInfo });
     }
     url.put(path, payload)

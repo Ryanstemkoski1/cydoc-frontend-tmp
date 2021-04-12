@@ -1,4 +1,5 @@
 import { doctorClient, managerClient, patientClient } from 'constants/api.js';
+import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
 
 const SetupAccount = async (
     currentUser,
@@ -15,11 +16,11 @@ const SetupAccount = async (
 
                 const user = {
                     username,
-                    email: newUserAttr.email,
-                    phoneNumber: attributes.fullPhoneNumber,
                     ...attributes,
+                    email: newUserAttr.email,
+                    phoneNumber: newUserAttr.phone_number,
                 };
-                delete user.fullPhoneNumber;
+                delete user.countryCode;
 
                 // add user to DynamoDB
                 let url,
@@ -32,7 +33,6 @@ const SetupAccount = async (
                 } else if (user.role == 'healthcare professional') {
                     url = doctorClient;
                     path = '/doctors';
-                    // TODO: incorporate actual institutionUUIDs
                     payload = JSON.stringify({ doctor: user });
                 }
                 // TODO: what is the role name for patients?
@@ -43,7 +43,27 @@ const SetupAccount = async (
                 }
 
                 url.post(path, payload)
-                    .then(() => {
+                    .then(async (response) => {
+                        const uuid = response.data[0];
+                        const attributeList = [
+                            new CognitoUserAttribute({
+                                Name: 'custom:uuid',
+                                Value: uuid,
+                            }),
+                        ];
+                        await currentUser.updateAttributes(
+                            attributeList,
+                            (err) => {
+                                if (err) {
+                                    alert(
+                                        `Error updating UUID: ${
+                                            err.message || JSON.stringify(err)
+                                        }`
+                                    );
+                                    return;
+                                }
+                            }
+                        );
                         alert(
                             'Your account has been successfully set up. Please login to continue.'
                         );

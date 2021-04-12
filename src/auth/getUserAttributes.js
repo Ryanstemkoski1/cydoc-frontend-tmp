@@ -1,5 +1,6 @@
 import getUserPool from 'auth/getUserPool';
 import { doctorClient, managerClient, patientClient } from 'constants/api';
+import getUUID from './getUUID';
 
 const attributeMappings = {
     given_name: 'firstName',
@@ -38,20 +39,21 @@ const getUserAttributes = async (role) => {
     });
 
     let attributes = {};
+    const uuid = await getUUID(role);
 
     let url,
         path = '';
     if (role == 'manager') {
         url = managerClient;
-        path = `/managers/${cognitoUser.username}`;
+        path = `/managers/${uuid}`;
     } else if (role == 'healthcare professional') {
         // TODO: test this out with a valid doctor accounnt
         url = doctorClient;
-        path = `/doctors/${cognitoUser.username}`;
+        path = `/doctors/${uuid}`;
     } else if (role == 'patient') {
         // TODO: test this out once login for patients has been created
         url = patientClient;
-        path = `/doctors/${cognitoUser.username}`;
+        path = `/doctors/${uuid}`;
     }
 
     await url

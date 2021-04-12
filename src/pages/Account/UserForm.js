@@ -199,16 +199,16 @@ const UserForm = (props) => {
                     <Form.Group inline widths='equal'>
                         <Form.Radio
                             label='student'
-                            value='y'
+                            value='Yes'
                             name='isStudent'
-                            checked={userInfo.isStudent === 'y'}
+                            checked={userInfo.isStudent === 'Yes'}
                             onChange={handleChange}
                         />
                         <Form.Radio
                             label='non-student'
-                            value='n'
+                            value='No'
                             name='isStudent'
-                            checked={userInfo.isStudent === 'n'}
+                            checked={userInfo.isStudent === 'No'}
                             onChange={handleChange}
                         />
                     </Form.Group>

@@ -88,7 +88,7 @@ const Login = () => {
                 given_name: attributes.firstName,
                 middle_name: attributes.middleName,
                 family_name: attributes.lastName,
-                phone_number: attributes.fullPhoneNumber,
+                phone_number: attributes.countryCode + attributes.phoneNumber,
             };
             setSessionUserAttributes(newUserAttr);
 

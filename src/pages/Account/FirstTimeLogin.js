@@ -30,7 +30,6 @@ const initializeFormFields = (role, username, email) => {
             degreesCompleted: ['', '', ''],
             degreesInProgress: ['', '', ''],
             specialties: ['', '', ''],
-            workplace: '',
         };
     } else if (role === 'manager') {
         return {
@@ -44,7 +43,6 @@ const initializeFormFields = (role, username, email) => {
             phoneNumber: '',
             phoneNumberIsMobile: true,
             birthday: '',
-            workplace: '',
         };
     }
 };
@@ -90,7 +88,6 @@ const FirstTimeLogin = ({ onSubmit, role, username, email }) => {
 
     const handleSubmit = (userInfo) => {
         setUserInfo(userInfo);
-        const fullPhoneNumber = userInfo.countryCode + userInfo.phoneNumber;
         setPasswordsMatch(newPassword === confirmNewPassword);
         if (
             newPassword !== confirmNewPassword ||
@@ -99,8 +96,8 @@ const FirstTimeLogin = ({ onSubmit, role, username, email }) => {
             return;
         }
         onSubmit(newPassword, {
+            phoneNumber: userInfo.countryCode + userInfo.phoneNumber,
             ...userInfo,
-            fullPhoneNumber,
         });
     };
 
