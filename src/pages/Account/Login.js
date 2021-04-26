@@ -90,6 +90,8 @@ const Login = () => {
                 family_name: attributes.lastName,
                 phone_number: attributes.countryCode + attributes.phoneNumber,
             };
+            attributes['custom:UUID'] = newUserAttr['custom:UUID'];
+            delete newUserAttr['custom:UUID'];
             setSessionUserAttributes(newUserAttr);
 
             // update account password and other attributes

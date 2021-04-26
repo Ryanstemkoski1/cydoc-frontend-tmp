@@ -12,6 +12,8 @@ import NavMenu from 'components/navigation/NavMenu';
 import './ManagerDashboard.css';
 import managerDeleteUser from 'auth/managerDeleteUser';
 import managerCreateUser from 'auth/managerCreateUser';
+import getDoctorsOfManager from 'auth/getDoctorsOfManager';
+import { doctorClient } from 'constants/api.js';
 
 // manager dashboard view to view/add/remove doctor accounts
 const ManagerDashboard = () => {
@@ -19,7 +21,10 @@ const ManagerDashboard = () => {
     const [userToRemove, setUserToRemove] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [duplicateUsername, setDuplicateUsername] = useState(false);
+    const [displayedDoctors, setDisplayedDoctors] = useState([]);
 
     const switchFullUserInfoView = (username, view) => {
         const show = view === 'show';
@@ -44,8 +49,21 @@ const ManagerDashboard = () => {
         setEmail(value);
     };
 
+    const handleFirstNameChange = (e, { value }) => {
+        setFirstName(value);
+    };
+
+    const handleLastNameChange = (e, { value }) => {
+        setLastName(value);
+    };
+
     const createDoctor = async () => {
-        const createUserResponse = await managerCreateUser(username, email);
+        const createUserResponse = await managerCreateUser(
+            username,
+            email,
+            firstName,
+            lastName
+        );
         if (
             createUserResponse?.status === 'ERROR' &&
             createUserResponse?.message.includes('User account already exists')
@@ -61,29 +79,73 @@ const ManagerDashboard = () => {
         managerDeleteUser(username);
     };
 
+    const getDoctors = async () => {
+        // TODO: don't hardcode 'manager' as input of getDoctorsOfManager -- find way to get actual role of current user
+        const docs = await getDoctorsOfManager('manager');
+        const docInfo = [];
+        for (let i = 0; i < docs.length; i++) {
+            // currDoctor is current doctor UUID
+            let currDoctor = docs[i];
+            await doctorClient
+                .get(`doctors/${currDoctor}`)
+                .then((response) => {
+                    let doctor = response.data.Item;
+                    docInfo.push(doctor);
+                })
+                .catch((err) => {
+                    alert(
+                        `Error retrieving doctor: ${
+                            err.message || JSON.stringify(err)
+                        }`
+                    );
+                });
+        }
+        setDisplayedDoctors(docInfo);
+    };
+
     // TODO: remove placeholder doctor info, get doctors via managerID from user database
     const doctors = [];
-    for (let i = 0; i < 15; i++) {
-        const isStudent = Math.random() * 2 > 1;
-        const docUsername = `username${i}`;
+    getDoctors();
+    for (let i = 0; i < displayedDoctors.length; i++) {
+        let currentDoctor = displayedDoctors[i];
+        const isStudent = currentDoctor.isStudent;
+        const docUsername = currentDoctor.username;
+        const docEmail = currentDoctor.email;
+        const docFirstName = currentDoctor.firstName;
+        const docMiddleName =
+            currentDoctor.middleName == undefined
+                ? ''
+                : currentDoctor.middleName;
+        const docLastName = currentDoctor.lastName;
+        const docPhoneNumber =
+            currentDoctor.phoneNumber == undefined
+                ? ''
+                : currentDoctor.phoneNumber;
+        const docBirthday =
+            currentDoctor.birthday == undefined ? '' : currentDoctor.birthday;
+        // source: https://www.w3docs.com/snippets/javascript/how-to-remove-empty-elements-from-an-array-in-javascript.html
+        const docSpecialties = currentDoctor.specialties.filter(Boolean);
+        const docDegreesInProgress = currentDoctor.degreesInProgress.filter(
+            Boolean
+        );
         doctors.push({
             header: (
                 <Card.Header
                     textAlign='left'
-                    content='First Middle Last, DDD, DDD, DDD'
+                    content={`${docFirstName} ${docMiddleName} ${docLastName}`}
                 />
             ),
             meta: (
                 <Card.Meta
                     textAlign='left'
-                    content='email@duke.edu, 123-456-7890'
+                    content={`${docEmail}, ${docPhoneNumber}`}
                 />
             ),
             description: (
                 <Card.Description textAlign='left'>
                     <Card.Description>
                         <strong>Specialties: </strong>
-                        Specialty 1, Specialty 2, Specialty 3
+                        {docSpecialties.join()}
                     </Card.Description>
                     <Card.Description className={`extra-info ${docUsername}`}>
                         <strong>Institutions: </strong>
@@ -91,19 +153,19 @@ const ManagerDashboard = () => {
                     </Card.Description>
                     <Card.Description className={`extra-info ${docUsername}`}>
                         <strong>Student? </strong>
-                        {isStudent ? 'Yes' : 'No'}
+                        {isStudent}
                     </Card.Description>
-                    {isStudent && (
+                    {isStudent === 'Yes' && (
                         <Card.Description
                             className={`extra-info ${docUsername}`}
                         >
                             <strong>Degrees in Progress: </strong>
-                            DDD, DDD, DDD
+                            {docDegreesInProgress.join()}
                         </Card.Description>
                     )}
                     <Card.Description className={`extra-info ${docUsername}`}>
                         <strong>Birthday: </strong>
-                        01/01/2021
+                        {docBirthday}
                     </Card.Description>
                     <Card.Description className={`extra-info ${docUsername}`}>
                         <strong>Username: </strong>
@@ -181,7 +243,7 @@ const ManagerDashboard = () => {
                     />
                 </>
             ),
-            key: `username${i}`,
+            key: docUsername,
         });
     }
 
@@ -220,6 +282,24 @@ const ManagerDashboard = () => {
                                         'Username already exists'
                                     }
                                     onChange={handleUsernameChange}
+                                />
+                                <Form.Input
+                                    required
+                                    label='First Name'
+                                    name='firstName'
+                                    placeholder='Jane'
+                                    type='firstName'
+                                    value={firstName}
+                                    onChange={handleFirstNameChange}
+                                />
+                                <Form.Input
+                                    required
+                                    label='Last Name'
+                                    name='lastName'
+                                    placeholder='Doe'
+                                    type='lastName'
+                                    value={lastName}
+                                    onChange={handleLastNameChange}
                                 />
                                 <Form.Input
                                     required

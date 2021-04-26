@@ -19,11 +19,11 @@ export const identityPoolClient = axios.create({
 });
 
 export const doctorClient = axios.create({
-    baseURL: 'https://kr8au28zrb.execute-api.us-east-1.amazonaws.com/prod',
+    baseURL: 'https://wb51en5rr1.execute-api.us-east-1.amazonaws.com/prod',
 });
 
 export const managerClient = axios.create({
-    baseURL: 'https://qhy22slpzb.execute-api.us-east-1.amazonaws.com/prod',
+    baseURL: 'https://739r03swxh.execute-api.us-east-1.amazonaws.com/prod',
 });
 
 export const patientClient = axios.create({

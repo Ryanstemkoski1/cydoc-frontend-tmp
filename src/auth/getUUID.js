@@ -28,8 +28,6 @@ const getUUID = async (role) => {
         }
     });
 
-    let uuid = '';
-
     return new Promise((resolve) => {
         cognitoUser.getUserAttributes((err, result) => {
             if (err) {
@@ -41,13 +39,22 @@ const getUUID = async (role) => {
                 return;
             }
 
-            for (let i = 0; i < result.length; i++) {
-                if (result[i].getName() === 'custom:uuid') {
-                    uuid = result[i].getValue();
+            if (role == 'healthcare professional') {
+                for (let i = 0; i < result.length; i++) {
+                    if (result[i].getName() == 'custom:UUID') {
+                        const uuid = result[i].getValue();
+                        resolve(uuid);
+                    }
+                }
+            } else if (role == 'manager') {
+                for (let i = 0; i < result.length; i++) {
+                    if (result[i].getName() == 'custom:uuid') {
+                        const uuid = result[i].getValue();
+                        resolve(uuid);
+                    }
                 }
             }
-
-            resolve(uuid);
+            resolve('no UUID');
         });
     });
 };
