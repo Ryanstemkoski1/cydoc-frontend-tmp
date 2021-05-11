@@ -137,14 +137,8 @@ const ProfileSecurity = () => {
                         as='h3'
                         content='Change Password'
                     />
-                    <Container
-                        className='pass-coming-soon'
-                        textAlign='center'
-                        content='coming soon'
-                    />
                     <Form onSubmit={handleChangePasswordSubmit}>
                         <Form.Input
-                            disabled
                             fluid
                             aria-label='current-password'
                             type='password'
@@ -154,7 +148,6 @@ const ProfileSecurity = () => {
                             onChange={handleCurPasswordChange}
                         />
                         <Form.Input
-                            disabled
                             fluid
                             error={!passwordMeetsReqs}
                             aria-label='new-password'
@@ -179,7 +172,6 @@ const ProfileSecurity = () => {
                             />
                         )}
                         <Form.Input
-                            disabled
                             fluid
                             error={!passwordsMatch}
                             aria-label='retype-new-password'
@@ -200,7 +192,6 @@ const ProfileSecurity = () => {
                             className='change-pass-button'
                         >
                             <Button
-                                disabled
                                 color='teal'
                                 size='small'
                                 aria-label='login-button'
