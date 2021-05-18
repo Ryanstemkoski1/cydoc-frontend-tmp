@@ -22,6 +22,7 @@ import Logo from '../../assets/cydoc-logo.svg';
 import './NavMenu.css';
 import states from 'constants/stateAbbreviations.json';
 import DemographicsForm from '../tools/DemographicsForm';
+import signout from '../../auth/signout.js';
 
 const stateOptions = states.map((state) => ({
     key: state,
@@ -59,6 +60,11 @@ class ConnectedNavMenu extends Component {
         this.setState({ windowWidth, windowHeight });
     }
 
+    localSignout = () => {
+        signout(this.context.role);
+        this.context.logOut();
+    };
+
     render() {
         const { windowWidth } = this.state;
         const collapseLoggedInNav = windowWidth < LOGGEDIN_NAV_MENU_MOBILE_BP;
@@ -89,7 +95,8 @@ class ConnectedNavMenu extends Component {
                 key: 'logout',
                 text: 'Log Out',
                 icon: 'sign out',
-                onClick: this.context.logOut,
+                onClick: this.localSignout,
+                //onClick: this.context.logOut,
                 selected: false,
                 active: false,
             },
