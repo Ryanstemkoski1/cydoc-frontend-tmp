@@ -19,6 +19,9 @@ const SetupAccount = async (
                     email: newUserAttr.email,
                     phoneNumber: newUserAttr.phone_number,
                 };
+
+                delete user.fullPhoneNumber;
+
                 delete user.countryCode;
                 delete user['custom:UUID'];
                 const role = user.role;
@@ -47,7 +50,6 @@ const SetupAccount = async (
                     path = '/patients';
                     payload = JSON.stringify({ patient: user });
                 }
-
                 if (role == 'manager') {
                     url.post(path, payload)
                         .then(async (response) => {

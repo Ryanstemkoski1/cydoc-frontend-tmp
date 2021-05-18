@@ -16,6 +16,7 @@ export const poolDataClient = axios.create({
 
 export const identityPoolClient = axios.create({
     baseURL: 'https://fpuwaa4x60.execute-api.us-east-1.amazonaws.com/dev',
+    //headers: { 'Access-Control-Allow-Origin': '*' },
 });
 
 export const doctorClient = axios.create({
@@ -27,5 +28,5 @@ export const managerClient = axios.create({
 });
 
 export const patientClient = axios.create({
-    baseURL: 'https://lz3hucl2ch.execute-api.us-east-1.amazonaws.com/prod',
+    baseURL: 'https://864lhmmkg9.execute-api.us-east-1.amazonaws.com/prod',
 });

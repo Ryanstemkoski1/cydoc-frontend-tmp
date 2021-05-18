@@ -18,6 +18,7 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import GetLogin from 'auth/login';
 import SetupAccount from 'auth/setupAccount';
+import verifyEmail from 'auth/verifyEmail';
 import AuthContext from '../../contexts/AuthContext';
 import NotesContext from '../../contexts/NotesContext';
 import Logo from '../../assets/cydoc-logo.svg';
@@ -36,6 +37,8 @@ const Login = () => {
     const [isFirstLogin, setIsFirstLogin] = useState(false);
     const [sessionUserAttributes, setSessionUserAttributes] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
+    // eslint-disable-next-line no-unused-vars
+    const [emailVerified, setEmailVerified] = useState(false);
 
     // set isMounted to false when component is unmounted
     useEffect(() => {
@@ -106,9 +109,17 @@ const Login = () => {
             if (setupAccountResponse) {
                 // update state after user has setup account
                 setIsFirstLogin(setupAccountResponse.isFirstLoginFlag);
+
+                const emailVerificationResponse = await verifyEmail(
+                    username,
+                    role
+                );
+                if (emailVerificationResponse) {
+                    setEmailVerified(true);
+                }
             }
         },
-        [currentUser, sessionUserAttributes, username]
+        [currentUser, sessionUserAttributes, username, role]
     );
 
     if (redirect || context.token) {

@@ -3,7 +3,6 @@ import { CookiesProvider } from 'react-cookie';
 import './semantic/dist/semantic.min.css';
 import ReactDOM from 'react-dom';
 import { Route, BrowserRouter } from 'react-router-dom';
-
 import EditNote from './pages/EditNote/EditNote';
 import Login from './pages/Account/Login';
 import ForgotPasswordEmail from './pages/Account/ForgotPasswordEmail';

@@ -38,7 +38,10 @@ const GetLogin = async (username, password, role, context) => {
         cognitoUser.authenticateUser(authenticationDetails, {
             onSuccess: async (_result) => {
                 // user authentication was successful
-
+                // const payload = {
+                //     username: username,
+                //     password: password,
+                // };
                 const accessToken = _result.getAccessToken().getJwtToken();
                 const getUserAttributesResponse = await getUserAttributes(role);
                 context.storeLoginInfo(
