@@ -1,7 +1,7 @@
 import { CognitoUser } from 'amazon-cognito-identity-js';
 import getUserPool from 'auth/getUserPool';
 
-const ResetPassword = async (username, role, email) => {
+const ResetPassword = async (username, role) => {
     if (!username) {
         alert('Please input your username to login.');
         return;
@@ -9,11 +9,6 @@ const ResetPassword = async (username, role, email) => {
 
     if (!role) {
         alert('Please select your role before resetting password');
-        return;
-    }
-
-    if (!email) {
-        alert('Please input your email before logging in.');
         return;
     }
 

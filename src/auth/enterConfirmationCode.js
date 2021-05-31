@@ -23,9 +23,6 @@ const EnterConfirmationCode = async (
         return;
     }
 
-    if (newPassword != confirmPassword) {
-        alert('Passwords do not match. Please re-enter password.');
-    }
     const userPool = await getUserPool(role);
     const userData = {
         Username: username,

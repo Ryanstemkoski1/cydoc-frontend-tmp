@@ -13,7 +13,8 @@ import {
     Container,
     Image,
     Header,
-    Message,
+    Card,
+    Icon,
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../contexts/AuthContext';
@@ -22,28 +23,23 @@ import NavMenu from '../../components/navigation/NavMenu';
 import './Account.css';
 import ResetPassword from 'auth/forgotPassword';
 import EnterConfirmationCode from 'auth/enterConfirmationCode';
-
-const passwordErrors = {
-    containsNumber: 'Must contain at least one number.',
-    containsUpper: 'Must contain at least one uppercase character.',
-    containsLower: 'Must contain at least one lowercase character.',
-    containsSpecial:
-        'Must contain at least one of the following special characters: = + - ^ $ * . [ ] { } ( ) ? " ! @ # % & / \\ , > < \' : ; | _ ~ `',
-    passesMinLength: 'Must be at least 25 characters.',
-};
+import { passwordErrors } from 'constants/passwordErrors';
 
 const ForgotPasswordEmail = () => {
     const context = useContext(AuthContext);
     const [username, setUserName] = useState('');
     const [role, setRole] = useState('healthcare professional');
-    const [email, setEmail] = useState('');
     const [confirmationCode, setConfirmationCode] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [isLoggingEmail, setIsLoggingEmail] = useState(false);
+    const [isLoggingUser, setIsLoggingUser] = useState(false);
     const [codeSent, setCodeSent] = useState(false);
     const [isConfirmed, setConfirmed] = useState(false);
     const [isConfirming, setIsConfirming] = useState(false);
+    const [passwordMeetsReqs, setPasswordMeetsReqs] = useState(true);
+    const [showPasswordReqs, setShowPasswordReqs] = useState(false);
+    const [passwordsMatch, setPasswordsMatch] = useState(true);
+    const [showPasswordsMatch, setShowPasswordsMatch] = useState(false);
     const isMounted = useRef(true);
     const [passwordReqs, setPasswordReqs] = useState({
         containsNumber: false,
@@ -52,12 +48,17 @@ const ForgotPasswordEmail = () => {
         containsSpecial: false,
         passesMinLength: false,
     });
+
     //set isMounted to false when component is unmounted
     useEffect(() => {
         return () => {
             isMounted.current = false;
         };
     }, []);
+
+    const handleConfirmPasswordChange = (e, { value }) => {
+        setConfirmPassword(value);
+    };
 
     const handleNewPasswordChange = (e, { value }) => {
         setPasswordReqs({
@@ -75,40 +76,57 @@ const ForgotPasswordEmail = () => {
         setNewPassword(value);
     };
 
-    const handleEmailChange = (e, { value }) => {
-        setEmail(value);
-    };
-
     const handleUsernameChange = (e, { value }) => {
         setUserName(value);
     };
-    const handleEmailSubmit = useCallback(async () => {
-        if (isLoggingEmail) {
+
+    const handleFocusNewPassword = (value) => {
+        setShowPasswordReqs(value);
+    };
+
+    const handleFocusConfirmPassword = (value) => {
+        setShowPasswordsMatch(value);
+    };
+
+    const handleUserSubmit = useCallback(async () => {
+        if (isLoggingUser) {
             return;
         }
 
         //enter email and send code
-        setIsLoggingEmail(true);
-        const emailResponse = await ResetPassword(
-            username,
-            role,
-            email,
-            context
-        );
+        setIsLoggingUser(true);
+        const emailResponse = await ResetPassword(username, role, context);
 
         if (isMounted.current) {
             if (emailResponse.success) {
                 setCodeSent(true);
             }
         }
-        setIsLoggingEmail(false);
-    }, [username, role, email, context, isLoggingEmail]);
+        setIsLoggingUser(false);
+    }, [username, role, context, isLoggingUser]);
 
     const handleCodeSubmit = useCallback(async () => {
         if (isConfirming) {
             return;
         }
         setIsConfirming(true);
+
+        for (const req in passwordReqs) {
+            if (!passwordReqs[req]) {
+                setShowPasswordReqs(true);
+                setPasswordMeetsReqs(false);
+                return;
+            }
+        }
+
+        setPasswordMeetsReqs(true);
+        setShowPasswordReqs(false);
+        setPasswordsMatch(newPassword === confirmPassword);
+        if (newPassword !== confirmPassword) {
+            setShowPasswordsMatch(true);
+            return;
+        }
+
         const confirmationCodeResponse = await EnterConfirmationCode(
             username,
             role,
@@ -119,9 +137,11 @@ const ForgotPasswordEmail = () => {
         if (isMounted.current) {
             if (confirmationCodeResponse.success) {
                 setConfirmed(true);
+                alert('Password successfully updated.');
             }
         }
         setIsConfirming(false);
+        return;
     }, [
         confirmationCode,
         newPassword,
@@ -129,14 +149,11 @@ const ForgotPasswordEmail = () => {
         isConfirming,
         role,
         username,
+        passwordReqs,
     ]);
 
     const handleConfirmationCodeChange = (e, { value }) => {
         setConfirmationCode(value);
-    };
-
-    const handleConfirmPasswordChange = (e, { value }) => {
-        setConfirmPassword(value);
     };
 
     const handleRoleChange = (e, { value }) => {
@@ -145,14 +162,46 @@ const ForgotPasswordEmail = () => {
 
     const passwordErrorMessages = () => {
         const errMsgs = [];
-        for (const err in passwordErrors) {
-            if (!passwordReqs[err]) {
+        const passwordErrs = passwordErrors(role);
+        for (const err in passwordErrs) {
+            if (passwordReqs[err]) {
                 errMsgs.push(
-                    <Message.Item key={err} content={passwordErrors[err]} />
+                    <Card.Content
+                        key={err}
+                        className={passwordMeetsReqs ? 'req-met' : ''}
+                    >
+                        <Icon name='check' size='small' />
+                        {passwordErrs[err]}
+                    </Card.Content>
+                );
+            } else {
+                errMsgs.push(
+                    <Card.Content
+                        key={err}
+                        className={!passwordMeetsReqs ? 'req-not-met' : ''}
+                    >
+                        <Icon name='times' size='small' />
+                        {passwordErrs[err]}
+                    </Card.Content>
                 );
             }
         }
+        return errMsgs;
+    };
 
+    const checkPasswordsMatch = () => {
+        const errMsgs = [];
+        if (newPassword !== confirmPassword) {
+            errMsgs.push(
+                <Card.Content
+                    key={'passwords-do-not-match'}
+                    className={'passwords-do-match'}
+                >
+                    <Icon name='exclamation' size='small' />
+                    {'Passwords do not match'}
+                </Card.Content>
+            );
+        }
         return errMsgs;
     };
 
@@ -170,15 +219,7 @@ const ForgotPasswordEmail = () => {
                         textAlign='center'
                         content='Forgot Password'
                     />
-                    <Form size='mini' onSubmit={handleEmailSubmit}>
-                        <Form.Input
-                            fluid
-                            aria-label='enter_email'
-                            label='Enter email:'
-                            name='enter_email'
-                            value={email}
-                            onChange={handleEmailChange}
-                        />
+                    <Form size='mini' onSubmit={handleUserSubmit}>
                         <Form.Input
                             fluid
                             aria-label='enter_username'
@@ -232,7 +273,7 @@ const ForgotPasswordEmail = () => {
                         textAlign='center'
                         content='Reset Password'
                     />
-                    <Form size='mini' onSubmit={handleCodeSubmit}>
+                    <Form size='mini'>
                         <Form.Input
                             fluid
                             aria-label='enterconfirmationcode'
@@ -243,28 +284,44 @@ const ForgotPasswordEmail = () => {
                         />
                         <Form.Input
                             fluid
+                            error={!passwordMeetsReqs}
                             aria-label='enternewpassword'
                             type='password'
                             label='Enter New Password:'
                             name='enternewpassword'
                             value={newPassword}
                             onChange={handleNewPasswordChange}
+                            onFocus={() => handleFocusNewPassword(true)}
+                            onBlur={() => handleFocusNewPassword(false)}
                         />
+                        {showPasswordReqs && (
+                            <Card
+                                fluid
+                                className={
+                                    passwordMeetsReqs
+                                        ? 'password-reqs'
+                                        : 'password-reqs-not-met'
+                                }
+                                header='New password requirements:'
+                                description={passwordErrorMessages()}
+                            />
+                        )}
                         <Form.Input
                             fluid
+                            error={!passwordsMatch}
                             aria-label='confirmpassword'
                             type='password'
                             label='Confirm New Password:'
                             name='confirmpassword'
                             value={confirmPassword}
                             onChange={handleConfirmPasswordChange}
+                            onFocus={() => handleFocusConfirmPassword(true)}
+                            onBlur={() => handleFocusConfirmPassword(false)}
                         />
-                        {passwordErrorMessages().length > 0 && (
-                            <Message
-                                error
-                                header='Password must satisfy the following requirements:'
-                                list={passwordErrorMessages()}
-                            />
+                        {showPasswordsMatch && (
+                            <Container className='pass-match-error'>
+                                {checkPasswordsMatch()}
+                            </Container>
                         )}
                         <Grid.Row columns={2}>
                             <Grid.Column textAlign='left'>
@@ -273,6 +330,7 @@ const ForgotPasswordEmail = () => {
                                     size='small'
                                     aria-label='submit'
                                     content='Submit'
+                                    onClick={handleCodeSubmit}
                                 />
                             </Grid.Column>
                         </Grid.Row>
