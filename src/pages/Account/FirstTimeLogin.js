@@ -13,14 +13,14 @@ import UserForm from './UserForm';
 import NavMenu from '../../components/navigation/NavMenu';
 import './Account.css';
 
-const initializeFormFields = (role, username, email) => {
+const initializeFormFields = (role, username, email, firstName, lastName) => {
     if (role === 'healthcare professional') {
         return {
             username,
             role,
-            firstName: '',
+            firstName,
             middleName: '',
-            lastName: '',
+            lastName,
             email,
             countryCode: '+1',
             phoneNumber: '',
@@ -35,9 +35,9 @@ const initializeFormFields = (role, username, email) => {
         return {
             username,
             role,
-            firstName: '',
+            firstName,
             middleName: '',
-            lastName: '',
+            lastName,
             email,
             countryCode: '+1',
             phoneNumber: '',
@@ -47,7 +47,14 @@ const initializeFormFields = (role, username, email) => {
     }
 };
 
-const FirstTimeLogin = ({ onSubmit, role, username, email }) => {
+const FirstTimeLogin = ({
+    onSubmit,
+    role,
+    username,
+    email,
+    firstName,
+    lastName,
+}) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [passwordsMatch, setPasswordsMatch] = useState(true);
@@ -59,7 +66,7 @@ const FirstTimeLogin = ({ onSubmit, role, username, email }) => {
         passesMinLength: false,
     });
     const [userInfo, setUserInfo] = useState(
-        initializeFormFields(role, username, email)
+        initializeFormFields(role, username, email, firstName, lastName)
     );
 
     const handleNewPasswordChange = (e, { value }) => {

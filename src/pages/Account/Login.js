@@ -133,13 +133,26 @@ const Login = () => {
         );
     }
 
-    if (isFirstLogin) {
+    if (isFirstLogin && role === 'manager') {
         return (
             <FirstTimeLogin
                 onSubmit={onChangePasswordSubmit}
                 role={role}
                 username={username}
-                email={sessionUserAttributes?.email}
+                email={sessionUserAttributes.email}
+                firstName=''
+                lastName=''
+            />
+        );
+    } else if (isFirstLogin && role === 'healthcare professional') {
+        return (
+            <FirstTimeLogin
+                onSubmit={onChangePasswordSubmit}
+                role={role}
+                username={username}
+                email={sessionUserAttributes.email}
+                firstName={sessionUserAttributes.given_name}
+                lastName={sessionUserAttributes.family_name}
             />
         );
     }

@@ -75,8 +75,10 @@ const ManagerDashboard = () => {
     };
 
     const removeDoctor = () => {
+        const deleteUsername = userToRemove[0];
+        const deleteUUID = userToRemove[1];
         setUserToRemove('');
-        managerDeleteUser(username);
+        managerDeleteUser(deleteUsername, deleteUUID);
     };
 
     const getDoctors = async () => {
@@ -103,11 +105,14 @@ const ManagerDashboard = () => {
         setDisplayedDoctors(docInfo);
     };
 
-    // TODO: remove placeholder doctor info, get doctors via managerID from user database
     const doctors = [];
     getDoctors();
     for (let i = 0; i < displayedDoctors.length; i++) {
         let currentDoctor = displayedDoctors[i];
+        if (currentDoctor == undefined) {
+            break;
+        }
+        const uuid = currentDoctor.doctorUUID;
         const isStudent = currentDoctor.isStudent;
         const docUsername = currentDoctor.username;
         const docEmail = currentDoctor.email;
@@ -124,10 +129,14 @@ const ManagerDashboard = () => {
         const docBirthday =
             currentDoctor.birthday == undefined ? '' : currentDoctor.birthday;
         // source: https://www.w3docs.com/snippets/javascript/how-to-remove-empty-elements-from-an-array-in-javascript.html
-        const docSpecialties = currentDoctor.specialties.filter(Boolean);
-        const docDegreesInProgress = currentDoctor.degreesInProgress.filter(
-            Boolean
-        );
+        const docSpecialties =
+            currentDoctor.specialties == undefined
+                ? []
+                : currentDoctor.specialties.filter(Boolean);
+        const docDegreesInProgress =
+            currentDoctor.degreesInProgress == undefined
+                ? []
+                : currentDoctor.degreesInProgress.filter(Boolean);
         doctors.push({
             header: (
                 <Card.Header
@@ -179,8 +188,8 @@ const ManagerDashboard = () => {
                             dimmer='inverted'
                             size='small'
                             onClose={() => setUserToRemove('')}
-                            onOpen={() => setUserToRemove(docUsername)}
-                            open={userToRemove === docUsername}
+                            onOpen={() => setUserToRemove([docUsername, uuid])}
+                            open={userToRemove[0] === docUsername}
                             trigger={
                                 <Button
                                     color='red'
@@ -193,8 +202,8 @@ const ManagerDashboard = () => {
                         >
                             <Modal.Header>Are you sure?</Modal.Header>
                             <Modal.Content>
-                                Are you sure you want to remove First Middle
-                                Last from Cydoc?
+                                Are you sure you want to remove {docFirstName}{' '}
+                                {docMiddleName} {docLastName} from Cydoc?
                             </Modal.Content>
                             <Modal.Actions>
                                 <Button

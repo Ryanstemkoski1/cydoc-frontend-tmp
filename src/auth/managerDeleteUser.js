@@ -9,7 +9,7 @@ import { identityPoolClient, doctorClient } from 'constants/api.js';
 
 const region = 'us-east-1';
 
-const managerDeleteUser = async (username) => {
+const managerDeleteUser = async (username, uuid) => {
     // userPool should contain the managers user pool data
     let userPool = await getUserPool('manager');
 
@@ -86,7 +86,7 @@ const managerDeleteUser = async (username) => {
         await client.send(command);
         const doctorUsername = params.Username;
         try {
-            await doctorClient.delete('/doctors/' + doctorUsername);
+            await doctorClient.delete('/doctors/' + uuid);
         } catch (err) {
             alert('Error deleting doctor from database.');
             return {
