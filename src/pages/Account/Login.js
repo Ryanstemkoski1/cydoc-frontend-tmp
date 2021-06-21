@@ -30,7 +30,7 @@ const Login = () => {
     const context = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('healthcare professional');
+    const [role, setRole] = useState('doctor');
     const [isLoggingIn, setIsLoggingIn] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const isMounted = useRef(true);
@@ -144,7 +144,7 @@ const Login = () => {
                 lastName=''
             />
         );
-    } else if (isFirstLogin && role === 'healthcare professional') {
+    } else if (isFirstLogin && role === 'doctor') {
         return (
             <FirstTimeLogin
                 onSubmit={onChangePasswordSubmit}
@@ -194,9 +194,9 @@ const Login = () => {
                         <Form.Group>
                             <Form.Radio
                                 label='healthcare professional'
-                                value='healthcare professional'
+                                value='doctor'
                                 className='role'
-                                checked={role === 'healthcare professional'}
+                                checked={role === 'doctor'}
                                 onChange={handleRoleChange}
                             />
                             <Form.Radio

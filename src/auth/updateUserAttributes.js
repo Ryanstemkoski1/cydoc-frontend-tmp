@@ -46,7 +46,7 @@ const updateUserAttributes = async (role, userInfo) => {
         url = managerClient;
         path = `/managers/${uuid}`;
         payload = JSON.stringify({ manager: userInfo });
-    } else if (role == 'healthcare professional') {
+    } else if (role == 'doctor') {
         url = doctorClient;
         path = `/doctors/${uuid}`;
         payload = JSON.stringify({ doctor: userInfo });

@@ -28,7 +28,7 @@ import { passwordErrors } from 'constants/passwordErrors';
 const ForgotPasswordEmail = () => {
     const context = useContext(AuthContext);
     const [username, setUserName] = useState('');
-    const [role, setRole] = useState('healthcare professional');
+    const [role, setRole] = useState('doctor');
     const [confirmationCode, setConfirmationCode] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -232,14 +232,14 @@ const ForgotPasswordEmail = () => {
                         <Form.Group>
                             <Form.Radio
                                 label='healthcare professional'
-                                value='healthcare professional'
-                                checked={role === 'healthcare professional'}
+                                value='doctor'
+                                checked={role === 'doctor'}
                                 onChange={handleRoleChange}
                             />
                             <Form.Radio
                                 label='healthcare manager'
-                                value='healthcare manager'
-                                checked={role === 'healthcare manager'}
+                                value='manager'
+                                checked={role === 'manager'}
                                 onChange={handleRoleChange}
                             />
                         </Form.Group>

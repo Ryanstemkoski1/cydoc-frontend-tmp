@@ -21,7 +21,7 @@ const testUser = {
         institutionType: 'Yasa',
         address: 'Yasa',
         backupEmail: 'yasab27@gmail.com',
-        role: 'healthcare professional',
+        role: 'doctor',
     },
 };
 

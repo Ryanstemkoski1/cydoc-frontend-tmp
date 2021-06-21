@@ -16,6 +16,18 @@ const specialtyOptions = constants.specialties.map((specialty) => ({
     text: specialty,
 }));
 
+const expirationMonthOptions = constants.expirationMonths.map((expMonth) => ({
+    key: expMonth,
+    value: expMonth,
+    text: expMonth,
+}));
+
+const expirationYearOptions = constants.expirationYears.map((expYear) => ({
+    key: expYear,
+    value: expYear,
+    text: expYear,
+}));
+
 const createSchema = async (role) => {
     if (role === 'doctor') {
         return yup.object().shape({
@@ -90,6 +102,7 @@ const createSchema = async (role) => {
                         );
                     }
                 ),
+            // TODO: validate credit card number and cvv length for doctors and managers
         });
     } else if (role === 'manager') {
         return yup.object().shape({
@@ -106,7 +119,7 @@ const createSchema = async (role) => {
     }
 };
 
-const UserForm = (props) => {
+const SignUpForm = (props) => {
     const [userInfo, setUserInfo] = useState(props.userInfo);
     const [isSendingInfo, setIsSendingInfo] = useState(false);
     const [formErrors, setFormErrors] = useState([]);
@@ -120,6 +133,10 @@ const UserForm = (props) => {
             ...userInfo,
             [name]: value,
         });
+    };
+
+    const handleCardChange = (e, { name, value }) => {
+        userInfo.card[name] = value;
     };
 
     const handleIsPhoneNumberMobileChange = () => {
@@ -272,6 +289,33 @@ const UserForm = (props) => {
                 </>
             );
         }
+        if (userInfo.role === 'manager') {
+            return (
+                <>
+                    <label className='label-font'>Select who pays:</label>
+                    <Form.Group inline widths='equal' required>
+                        <Form.Radio
+                            label='manager pays'
+                            value={true}
+                            name='managerResponsibleForPayment'
+                            checked={
+                                userInfo.managerResponsibleForPayment === true
+                            }
+                            onChange={handleChange}
+                        />
+                        <Form.Radio
+                            label='doctors pay'
+                            value={false}
+                            name='managerResponsibleForPayment'
+                            checked={
+                                userInfo.managerResponsibleForPayment === false
+                            }
+                            onChange={handleChange}
+                        />
+                    </Form.Group>
+                </>
+            );
+        }
     };
 
     // show loader while retrieving info from Cognito/database
@@ -376,6 +420,50 @@ const UserForm = (props) => {
                 />
             </Form.Group>
             {additionalFields()}
+            <Form.Input
+                required
+                aria-label='Card Number'
+                label='Card Number'
+                placeholder='card number'
+                name='cardNumber'
+                width={16}
+                value={userInfo.card.cardNumber}
+                onChange={handleCardChange}
+            />
+            <label className='label-font'>Expiration Date</label>
+            <Form.Group widths='equal' required>
+                <Form.Select
+                    fluid
+                    required
+                    width={2}
+                    options={expirationMonthOptions}
+                    placeholder='MM'
+                    name='expirationMonth'
+                    value={userInfo.card.expirationMonth}
+                    onChange={handleCardChange}
+                />
+                <Form.Select
+                    fluid
+                    required
+                    width={2}
+                    options={expirationYearOptions}
+                    placeholder='YY'
+                    name='expirationYear'
+                    value={userInfo.card.expirationYear}
+                    onChange={handleCardChange}
+                />
+            </Form.Group>
+            <Form.Input
+                fluid
+                required
+                width={3}
+                aria-label='CVV'
+                label='CVV'
+                name='cvv'
+                placeholder='111'
+                value={userInfo.card.cvv}
+                onChange={handleCardChange}
+            />
             <Message
                 error
                 header='Error!'
@@ -395,4 +483,4 @@ const UserForm = (props) => {
     );
 };
 
-export default UserForm;
+export default SignUpForm;

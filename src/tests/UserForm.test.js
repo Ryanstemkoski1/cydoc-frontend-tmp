@@ -51,7 +51,7 @@ const editProps = {
     institutionType: 'Yasa',
     address: 'Yasa',
     backupEmail: 'yasab27@gmail.com',
-    role: 'healthcare professional',
+    role: 'doctor',
     studentStatus: '',
     degreesCompleted: ['', '', ''],
     degreesInProgress: ['', '', ''],
@@ -80,7 +80,7 @@ describe('testing UserForm using default props for Register component', () => {
         const input = wrapper.find(Form.Radio).at(0);
         input.props().onChange('test', {
             name: 'role',
-            value: 'healthcare professional',
+            value: 'doctor',
         });
         wrapper.update();
         expect(wrapper.find(Form.Input)).toHaveLength(10);

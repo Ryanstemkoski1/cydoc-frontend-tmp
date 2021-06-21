@@ -39,7 +39,7 @@ const getUUID = async (role) => {
                 return;
             }
 
-            if (role == 'healthcare professional') {
+            if (role == 'doctor') {
                 for (let i = 0; i < result.length; i++) {
                     if (result[i].getName() == 'custom:UUID') {
                         const uuid = result[i].getValue();

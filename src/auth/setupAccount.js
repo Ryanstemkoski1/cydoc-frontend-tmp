@@ -1,4 +1,9 @@
-import { doctorClient, managerClient, patientClient } from 'constants/api.js';
+import {
+    doctorClient,
+    managerClient,
+    patientClient,
+    stripeClient,
+} from 'constants/api.js';
 import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
 
 const SetupAccount = async (
@@ -24,8 +29,30 @@ const SetupAccount = async (
 
                 delete user.countryCode;
                 delete user['custom:UUID'];
+                // assign `role` and `cardInfo` to corresponding user fields before deleting the user fields
                 const role = user.role;
                 delete user.role;
+                // the information below is needed for sending info to Stripe
+                const cardInfo = user.card;
+                delete user.card;
+                const email = user.email;
+                const name = `${user.firstName} ${user.lastName}`;
+                let customerInfo = {
+                    customer: {
+                        cardData: cardInfo,
+                        email,
+                        attributes: {
+                            customerUUID: '',
+                            name,
+                            role,
+                            plans: [
+                                { price: 'price_1IeoaLI5qo8H3FXUkFZRFvSr' },
+                            ],
+                        },
+                    },
+                };
+                // path to send info to Stripe
+                const stripe_path = '/subscription';
 
                 // add user to DynamoDB if manager, or update user in DynamoDB if doctor
                 let url,
@@ -38,11 +65,13 @@ const SetupAccount = async (
                     user.associatedDoctors = [];
                     user.joinedDoctors = [];
                     payload = JSON.stringify({ manager: user });
-                } else if (role == 'healthcare professional') {
+                } else if (role == 'doctor') {
+                    const doctor_uuid = attributes['custom:UUID'];
                     url = doctorClient;
-                    path = `/doctors/${attributes['custom:UUID']}`;
+                    path = `/doctors/${doctor_uuid}`;
                     delete user.username;
                     payload = JSON.stringify({ doctor: user });
+                    customerInfo.customer.attributes.customerUUID = doctor_uuid;
                 }
                 // TODO: what is the role name for patients?
                 else if (role == 'patient') {
@@ -60,6 +89,7 @@ const SetupAccount = async (
                                     Value: manager_uuid,
                                 }),
                             ];
+                            // update attributes in Cognito
                             await currentUser.updateAttributes(
                                 attributeList,
                                 (err) => {
@@ -74,6 +104,25 @@ const SetupAccount = async (
                                     }
                                 }
                             );
+                            // then, create customer and send card info to Stripe
+                            customerInfo.customer.attributes.customerUUID = manager_uuid;
+                            let stripe_payload = JSON.stringify(customerInfo);
+                            await stripeClient
+                                .post(stripe_path, stripe_payload)
+                                .then(() => {
+                                    alert(
+                                        'Payment info successfully sent to Stripe'
+                                    );
+                                })
+                                .catch((err) => {
+                                    alert(
+                                        `Error creating account: ${
+                                            err.message || JSON.stringify(err)
+                                        }`
+                                    );
+                                    return;
+                                });
+
                             alert(
                                 'Your account has been successfully set up. Please login to continue.'
                             );
@@ -89,7 +138,7 @@ const SetupAccount = async (
                             );
                             return;
                         });
-                } else if (role == 'healthcare professional') {
+                } else if (role == 'doctor') {
                     url.put(path, payload)
                         .then(async () => {
                             // next, update manager's joinedDoctors in DynamoDB
@@ -104,12 +153,7 @@ const SetupAccount = async (
                                     payload
                                 )
                                 .then(() => {
-                                    alert(
-                                        'Your account has been successfully set up. Please login to continue.'
-                                    );
-                                    resolve({
-                                        isFirstLoginFlag: false,
-                                    });
+                                    alert('Associated manager updated');
                                 })
                                 .catch((err) => {
                                     alert(
@@ -119,6 +163,29 @@ const SetupAccount = async (
                                     );
                                     return;
                                 });
+                            // then, send doctor's payment info to Stripe
+                            let stripe_payload = JSON.stringify(customerInfo);
+                            await stripeClient
+                                .post(stripe_path, stripe_payload)
+                                .then(() => {
+                                    alert(
+                                        'Payment info successfully sent to Stripe'
+                                    );
+                                })
+                                .catch((err) => {
+                                    alert(
+                                        `Error creating account: ${
+                                            err.message || JSON.stringify(err)
+                                        }`
+                                    );
+                                    return;
+                                });
+                            alert(
+                                'Your account has been successfully set up. Please login to continue.'
+                            );
+                            resolve({
+                                isFirstLoginFlag: false,
+                            });
                         })
                         .catch((err) => {
                             alert(

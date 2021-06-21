@@ -9,12 +9,12 @@ import {
     Header,
 } from 'semantic-ui-react';
 import { passwordErrors } from 'constants/passwordErrors';
-import UserForm from './UserForm';
 import NavMenu from '../../components/navigation/NavMenu';
 import './Account.css';
+import SignUpForm from './SignUpForm';
 
 const initializeFormFields = (role, username, email, firstName, lastName) => {
-    if (role === 'healthcare professional') {
+    if (role === 'doctor') {
         return {
             username,
             role,
@@ -30,6 +30,13 @@ const initializeFormFields = (role, username, email, firstName, lastName) => {
             degreesCompleted: ['', '', ''],
             degreesInProgress: ['', '', ''],
             specialties: ['', '', ''],
+            managerResponsibleForPayment: undefined,
+            card: {
+                cardNumber: undefined,
+                expirationMonth: undefined,
+                expirationYear: undefined,
+                cvv: undefined,
+            },
         };
     } else if (role === 'manager') {
         return {
@@ -43,6 +50,13 @@ const initializeFormFields = (role, username, email, firstName, lastName) => {
             phoneNumber: '',
             phoneNumberIsMobile: true,
             birthday: '',
+            managerResponsibleForPayment: undefined,
+            card: {
+                cardNumber: undefined,
+                expirationMonth: undefined,
+                expirationYear: undefined,
+                cvv: undefined,
+            },
         };
     }
 };
@@ -174,7 +188,7 @@ const FirstTimeLogin = ({
                         )}
                         <Divider section />
                     </Form>
-                    <UserForm
+                    <SignUpForm
                         userInfo={userInfo}
                         doneLoading={true}
                         handleSubmit={handleSubmit}

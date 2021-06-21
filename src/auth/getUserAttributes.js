@@ -46,7 +46,7 @@ const getUserAttributes = async (role) => {
     if (role == 'manager') {
         url = managerClient;
         path = `/managers/${uuid}`;
-    } else if (role == 'healthcare professional') {
+    } else if (role == 'doctor') {
         // TODO: test this out with a valid doctor accounnt
         url = doctorClient;
         path = `/doctors/${uuid}`;

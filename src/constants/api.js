@@ -30,3 +30,7 @@ export const managerClient = axios.create({
 export const patientClient = axios.create({
     baseURL: 'https://864lhmmkg9.execute-api.us-east-1.amazonaws.com/prod',
 });
+
+export const stripeClient = axios.create({
+    baseURL: 'https://f42bhadly5.execute-api.us-east-1.amazonaws.com/dev',
+});

@@ -8,7 +8,7 @@ import updateUserAttributes from 'auth/updateUserAttributes';
 import './Account.css';
 
 const initializeFormFields = (role, username, email) => {
-    if (role === 'healthcare professional') {
+    if (role === 'doctor') {
         return {
             username,
             role,
