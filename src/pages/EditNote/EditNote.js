@@ -5,7 +5,7 @@ import NotePage from './NotePage';
 import NavMenu from '../../components/navigation/NavMenu';
 import { TAB_NAMES } from 'constants/constants';
 import HPIContext from '../../contexts/HPIContext';
-import { Redirect } from 'react-router';
+// import { Redirect } from 'react-router';
 import './EditNote.css';
 
 // Component that manages the active state of the create note editor
@@ -102,9 +102,9 @@ class EditNote extends Component {
 
     render() {
         // Redirects to LandingPage if there is no valid note in constext
-        if (this.context._id === null) {
-            return <Redirect push to='/dashboard' />;
-        }
+        // if (this.context._id === null) {
+        //     return <Redirect push to='/dashboard' />;
+        // }
 
         return (
             <>

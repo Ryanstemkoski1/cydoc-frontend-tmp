@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import NavMenu from '../../components/navigation/NavMenu';
 import { Container, Grid } from 'semantic-ui-react';
 import { LANDING_PAGE_MOBLE_BP } from 'constants/breakpoints.js';
-import OpenRecentSegment from './OpenNotes';
+// import OpenRecentSegment from './OpenNotes';
 import CreateTemplateSegment from './CreateTemplate';
 import NewNoteSegment from './NewNote';
 import './LandingPage.css';
@@ -47,14 +47,15 @@ export default class LandingPageOld extends Component {
                 </div>
                 {stack ? (
                     <Container style={{ margin: '20px 0 0 0' }}>
-                        <OpenRecentSegment stack={stack} />
+                        {/* OpenRecentSegment is component for opening saved notes */}
+                        {/* <OpenRecentSegment stack={stack} /> */}
                         <NewNoteSegment stack={stack} />
                     </Container>
                 ) : (
                     <Grid columns={3} style={{ margin: '20px 0 40vh 0' }}>
-                        <Grid.Column>
+                        {/* <Grid.Column>
                             <OpenRecentSegment stack={stack} />
-                        </Grid.Column>
+                        </Grid.Column> */}
                         <Grid.Column>
                             <NewNoteSegment stack={stack} />
                         </Grid.Column>

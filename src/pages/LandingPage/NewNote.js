@@ -112,7 +112,12 @@ export default class NewNoteSegment extends Component {
                     basic
                     style={{ position: 'absolute', top: '10px', right: '10px' }}
                 >
-                    <Button color='teal' onClick={this.handleBlankNoteClick}>
+                    <Button
+                        color='teal'
+                        // use below onClick for saving notes
+                        // onClick={this.handleBlankNoteClick}
+                        onClick={() => this.setState({ redirect: true })}
+                    >
                         New Blank Note
                     </Button>
                 </ButtonGroup>
