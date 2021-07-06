@@ -20,6 +20,8 @@ import { HPITemplateStore } from './contexts/HPITemplateContext';
 import EditProfile from './pages/Account/EditProfile';
 import ProfileSecurity from './pages/Account/ProfileSecurity';
 import './index.css';
+import { Provider } from 'react-redux';
+import { currentNoteStore } from './redux/store';
 
 ReactDOM.render(
     <CookiesProvider>
@@ -27,57 +29,63 @@ ReactDOM.render(
             <NotesStore>
                 <HPIStore>
                     <HPITemplateStore>
-                        <div>
-                            <BrowserRouter>
-                                <Route exact path='/' component={Home} />
-                                <Route exact path='/login' component={Login} />
-                                <Route
-                                    exact
-                                    path='/forgotpasswordemail'
-                                    component={ForgotPasswordEmail}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path='/editnote'
-                                    component={EditNote}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path='/dashboard'
-                                    component={LandingPage}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path='/templates/new'
-                                    component={CreateGraph}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path='/templates/old'
-                                    component={EditGraph}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path='/templates/edit'
-                                    component={EditTemplate}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path='/editprofile'
-                                    component={EditProfile}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path='/profilesecurity'
-                                    component={ProfileSecurity}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path='/managerdashboard'
-                                    component={ManagerDashboard}
-                                />
-                            </BrowserRouter>
-                        </div>
+                        <Provider store={currentNoteStore}>
+                            <div>
+                                <BrowserRouter>
+                                    <Route exact path='/' component={Home} />
+                                    <Route
+                                        exact
+                                        path='/login'
+                                        component={Login}
+                                    />
+                                    <Route
+                                        exact
+                                        path='/forgotpasswordemail'
+                                        component={ForgotPasswordEmail}
+                                    />
+                                    <PrivateRoute
+                                        exact
+                                        path='/editnote'
+                                        component={EditNote}
+                                    />
+                                    <PrivateRoute
+                                        exact
+                                        path='/dashboard'
+                                        component={LandingPage}
+                                    />
+                                    <PrivateRoute
+                                        exact
+                                        path='/templates/new'
+                                        component={CreateGraph}
+                                    />
+                                    <PrivateRoute
+                                        exact
+                                        path='/templates/old'
+                                        component={EditGraph}
+                                    />
+                                    <PrivateRoute
+                                        exact
+                                        path='/templates/edit'
+                                        component={EditTemplate}
+                                    />
+                                    <PrivateRoute
+                                        exact
+                                        path='/editprofile'
+                                        component={EditProfile}
+                                    />
+                                    <PrivateRoute
+                                        exact
+                                        path='/profilesecurity'
+                                        component={ProfileSecurity}
+                                    />
+                                    <PrivateRoute
+                                        exact
+                                        path='/managerdashboard'
+                                        component={ManagerDashboard}
+                                    />
+                                </BrowserRouter>
+                            </div>
+                        </Provider>
                     </HPITemplateStore>
                 </HPIStore>
             </NotesStore>

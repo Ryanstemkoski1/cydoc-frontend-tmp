@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReviewOfSystems Note matches snapshot 1`] = `"<div>No review of systems reported.</div>"`;

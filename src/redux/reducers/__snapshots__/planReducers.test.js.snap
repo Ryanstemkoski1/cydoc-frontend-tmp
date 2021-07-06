@@ -1,0 +1,848 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`plan reducers differential diagnoses deletes differential diagnoses 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {},
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers differential diagnoses updates comments 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "foo",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers differential diagnoses updates diagnosis 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "foo",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers general condition reducers deletes initial condition 1`] = `
+Object {
+  "conditions": Object {},
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers general condition reducers updates initial condition name 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "foo",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers prescriptions deletes prescription 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {},
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers prescriptions updates prescription comments 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "foo",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers prescriptions updates prescription dose 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "foo",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers prescriptions updates prescription signature 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "foo",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers prescriptions updates prescription type 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "foo",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers procedure or service deletes procedure or services 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {},
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers procedure or service updates comments 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "foo",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers procedure or service updates procedure 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "foo",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers procedure or service updates when 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "THIS_MONTH",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers referrals deletes referral 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {},
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers referrals updates comments 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "foo",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers referrals updates department 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "foo",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers referrals updates when 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "THIS_MONTH",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers survey reducers updates admit to hospital 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "YES",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers survey reducers updates emergency 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "NO",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers survey reducers updates sickness 1`] = `
+Object {
+  "conditions": Object {
+    "condition": Object {
+      "differentialDiagnoses": Object {
+        "category": Object {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": Object {
+        "category": Object {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": Object {
+        "category": Object {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": Object {
+        "category": Object {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": Object {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 5,
+  },
+}
+`;

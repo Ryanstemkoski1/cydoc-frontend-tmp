@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Social History Generate Note matches snapshot 1`] = `"<div><div>No tobacco use reported.</div><div>No alcohol use reported.</div><div>No recreational drug use reported.</div><div>No living situation reported.</div><div>No employment reported.</div><div>No diet reported.</div><div>No exercise reported.</div></div>"`;

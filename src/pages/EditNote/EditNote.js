@@ -4,15 +4,15 @@ import MenuTabs from './MenuTabs';
 import NotePage from './NotePage';
 import NavMenu from '../../components/navigation/NavMenu';
 import { TAB_NAMES } from 'constants/constants';
-import HPIContext from '../../contexts/HPIContext';
-// import { Redirect } from 'react-router';
+import { Redirect } from 'react-router';
+import { connect } from 'react-redux';
+import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
+
 import './EditNote.css';
 
 // Component that manages the active state of the create note editor
 // and defines the layout of the editor
 class EditNote extends Component {
-    static contextType = HPIContext;
-
     constructor(props) {
         super(props);
         this.onTabChange = this.onTabChange.bind(this);
@@ -102,35 +102,33 @@ class EditNote extends Component {
 
     render() {
         // Redirects to LandingPage if there is no valid note in constext
-        // if (this.context._id === null) {
-        //     return <Redirect push to='/dashboard' />;
-        // }
+        if (this.props._id === '') {
+            return <Redirect push to='/dashboard' />;
+        }
 
         return (
-            <>
-                <div ref={this.noteContent}>
-                    {/* Top NavMenu and MenuTabs stay on top regardless of scroll*/}
-                    <Sticky context={this.noteContent} id='stickyHeader'>
-                        <NavMenu
-                            className='edit-note-nav-menu'
-                            displayNoteName={true}
-                        />
-                        <MenuTabs
-                            activeItem={this.state.activeItem}
-                            onTabChange={this.onTabChange}
-                            activeTabIndex={this.state.activeTabIndex}
-                            attached
-                        />
-                    </Sticky>
-                    <NotePage
-                        activeItem={this.state.activeItem}
-                        onNextClick={this.onNextClick}
-                        onPreviousClick={this.onPreviousClick}
+            <div ref={this.noteContent}>
+                {/* Top NavMenu and MenuTabs stay on top regardless of scroll*/}
+                <Sticky context={this.noteContent} id='stickyHeader'>
+                    <NavMenu
+                        className='edit-note-nav-menu'
+                        displayNoteName={true}
                     />
-                </div>
-            </>
+                    <MenuTabs
+                        activeItem={this.state.activeItem}
+                        onTabChange={this.onTabChange}
+                        activeTabIndex={this.state.activeTabIndex}
+                        attached
+                    />
+                </Sticky>
+                <NotePage
+                    activeItem={this.state.activeItem}
+                    onNextClick={this.onNextClick}
+                    onPreviousClick={this.onPreviousClick}
+                />
+            </div>
         );
     }
 }
 
-export default EditNote;
+export default connect((state) => ({ _id: selectNoteId(state) }))(EditNote);

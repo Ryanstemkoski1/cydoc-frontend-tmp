@@ -15,12 +15,13 @@ const constantsPath = 'src/constants';
 const testsPath = 'src/tests';
 const componentsPath = 'src/components';
 const pagesPath = 'src/pages';
+const reduxPath = 'src/redux';
 const authPath = 'src/auth';
 
 function runLint(path, args = []) {
     const lintProcess = spawnSync(
         /^win/.test(process.platform) ? 'eslint.cmd' : 'eslint',
-        [path, fix, ...args]
+        [path, fix, ...args, '--ext', '.js,.jsx,.ts,.tsx']
     );
 
     // print output
@@ -60,6 +61,7 @@ runLint(constantsPath, ['--ignore-pattern', 'src/constants/drug_types.js']);
 runLint(testsPath);
 runLint(componentsPath);
 runLint(pagesPath);
+runLint(reduxPath);
 runLint(authPath);
 
 if (failed) {

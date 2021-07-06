@@ -69,6 +69,7 @@ const managerCreateUser = async (username, email, firstName, lastName) => {
 
     // get doctor pool data
     const newUserPoolData = await getUserPool('doctor');
+
     if (!newUserPoolData) {
         alert(
             'Error retrieving new user pool information. Please try again later.'

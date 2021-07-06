@@ -30,7 +30,7 @@ const Login = () => {
     const context = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('doctor');
+    const [role, setRole] = useState('healthcare professional');
     const [isLoggingIn, setIsLoggingIn] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const isMounted = useRef(true);
@@ -109,7 +109,6 @@ const Login = () => {
             if (setupAccountResponse) {
                 // update state after user has setup account
                 setIsFirstLogin(setupAccountResponse.isFirstLoginFlag);
-
                 const emailVerificationResponse = await verifyEmail(
                     username,
                     role
@@ -156,7 +155,6 @@ const Login = () => {
             />
         );
     }
-
     return (
         <>
             <NavMenu />

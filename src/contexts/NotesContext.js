@@ -3,7 +3,7 @@ import AuthContext from './AuthContext';
 import { client } from 'constants/api';
 import { noteBody } from 'constants/noteBody.js';
 
-const Context = React.createContext('yasa');
+const Context = React.createContext({});
 
 export class NotesStore extends React.Component {
     static contextType = AuthContext;

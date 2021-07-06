@@ -29,6 +29,11 @@
     border: 0 !important;
 }
 
+.nav-menu .user {
+    color: '#6DA3B1';
+    font-weight: 'normal';
+}
+
 
 /* note name input box styles */
 .note-name-menu-item input {

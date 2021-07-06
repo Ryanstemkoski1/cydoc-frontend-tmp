@@ -1,0 +1,152 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AbdomenExamButtons matches snapshot 1`] = `
+<Provider
+  store={
+    Object {
+      "clearActions": [Function],
+      "dispatch": [Function],
+      "getActions": [Function],
+      "getState": [Function],
+      "replaceReducer": [Function],
+      "subscribe": [Function],
+    }
+  }
+>
+  <Connect(AbdomenExamButtons)
+    abdomenQuadrant="rightUpperQuadrant"
+  >
+    <AbdomenExamButtons
+      abdomenQuadrant="rightUpperQuadrant"
+      sections={
+        Object {
+          "guarding": false,
+          "rebound": false,
+          "tenderness": false,
+        }
+      }
+      toggleSection={[Function]}
+    >
+      <div>
+        <Button
+          as="button"
+          className="spaced-buttons"
+          content="tenderness"
+          key="tenderness"
+          onClick={[Function]}
+          size="small"
+        >
+          <Ref
+            innerRef={
+              Object {
+                "current": <button
+                  class="ui small button spaced-buttons"
+                >
+                  tenderness
+                </button>,
+              }
+            }
+          >
+            <RefFindNode
+              innerRef={
+                Object {
+                  "current": <button
+                    class="ui small button spaced-buttons"
+                  >
+                    tenderness
+                  </button>,
+                }
+              }
+            >
+              <button
+                className="ui small button spaced-buttons"
+                onClick={[Function]}
+              >
+                tenderness
+              </button>
+            </RefFindNode>
+          </Ref>
+        </Button>
+        <Button
+          as="button"
+          className="spaced-buttons"
+          content="rebound"
+          key="rebound"
+          onClick={[Function]}
+          size="small"
+        >
+          <Ref
+            innerRef={
+              Object {
+                "current": <button
+                  class="ui small button spaced-buttons"
+                >
+                  rebound
+                </button>,
+              }
+            }
+          >
+            <RefFindNode
+              innerRef={
+                Object {
+                  "current": <button
+                    class="ui small button spaced-buttons"
+                  >
+                    rebound
+                  </button>,
+                }
+              }
+            >
+              <button
+                className="ui small button spaced-buttons"
+                onClick={[Function]}
+              >
+                rebound
+              </button>
+            </RefFindNode>
+          </Ref>
+        </Button>
+        <Button
+          as="button"
+          className="spaced-buttons"
+          content="guarding"
+          key="guarding"
+          onClick={[Function]}
+          size="small"
+        >
+          <Ref
+            innerRef={
+              Object {
+                "current": <button
+                  class="ui small button spaced-buttons"
+                >
+                  guarding
+                </button>,
+              }
+            }
+          >
+            <RefFindNode
+              innerRef={
+                Object {
+                  "current": <button
+                    class="ui small button spaced-buttons"
+                  >
+                    guarding
+                  </button>,
+                }
+              }
+            >
+              <button
+                className="ui small button spaced-buttons"
+                onClick={[Function]}
+              >
+                guarding
+              </button>
+            </RefFindNode>
+          </Ref>
+        </Button>
+      </div>
+    </AbdomenExamButtons>
+  </Connect(AbdomenExamButtons)>
+</Provider>
+`;

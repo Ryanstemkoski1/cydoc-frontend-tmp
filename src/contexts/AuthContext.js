@@ -1,7 +1,7 @@
 import React from 'react';
 import { withCookies } from 'react-cookie';
 
-const Context = React.createContext('yasa');
+const Context = React.createContext({});
 
 class AuthStore extends React.Component {
     state = {

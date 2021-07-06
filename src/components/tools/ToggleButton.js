@@ -11,6 +11,8 @@ export default function ToggleButton(props) {
         compact,
         condition,
         onToggleButtonClick,
+        disabled,
+        ariaLabel,
     } = props;
 
     return (
@@ -23,7 +25,8 @@ export default function ToggleButton(props) {
             size={size}
             compact={compact}
             title={title}
-            aria-label='toggle-button'
+            disabled={disabled}
+            aria-label={ariaLabel}
         >
             {title}
         </Button>
@@ -33,8 +36,10 @@ export default function ToggleButton(props) {
 ToggleButton.propTypes = {
     active: PropTypes.bool,
     compact: PropTypes.bool,
-    condition: PropTypes.string,
+    condition: PropTypes.string | PropTypes.number,
+    disabled: PropTypes.bool,
     onToggleButtonClick: PropTypes.func.isRequired,
     size: PropTypes.string,
     title: PropTypes.string,
+    ariaLabel: PropTypes.string,
 };

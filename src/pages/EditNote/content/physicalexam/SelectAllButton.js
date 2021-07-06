@@ -15,9 +15,9 @@ export default class SelectAllButton extends React.Component {
                         (a, b) => a && b.props.active,
                         true
                     )}
-                    onClick={(e, { active }) => {
+                    onClick={() => {
                         React.Children.map(this.props.children, (child) =>
-                            this.props.handleClick(child.props.name, !active)
+                            this.props.handleClick(child)
                         );
                     }}
                     className={'spaced-buttons'}

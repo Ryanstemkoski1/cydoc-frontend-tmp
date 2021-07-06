@@ -1,59 +1,23 @@
-import constants from 'constants/constants';
-import {
-    allergies,
-    medications,
-    surgicalHistory,
-    reviewOfSystems,
-} from 'constants/States';
-import peConstants from 'constants/physical-exam-constants';
-
-let peState = {
-    Vitals: {
-        'Systolic Blood Pressure': 0,
-        'Diastolic Blood Pressure': 0,
-        'Heart Rate': 0,
-        RR: 0,
-        Temperature: 0,
-        'Oxygen Saturation': 0,
-    },
-    widgets: peConstants.widgets,
-};
-peConstants.sections.forEach((section) => {
-    let sectionState = { comments: '' };
-    section.rows.forEach((row) => {
-        if (row.needsRightLeft) {
-            row.findings.forEach((finding) => {
-                sectionState[finding] = {
-                    left: false,
-                    center: false,
-                    right: false,
-                };
-            });
-        } else {
-            row.findings.forEach((finding) => {
-                sectionState[finding] = false;
-            });
-        }
-    });
-    peState[section.name] = sectionState;
-});
+import { initialPlanState } from 'redux/reducers/planReducer';
+import { initialMedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
+import { initialPhysicalExamState } from 'redux/reducers/physicalExamReducer';
+import { initialAllergiesState } from 'redux/reducers/allergiesReducer';
+import { initialMedicationsState } from 'redux/reducers/medicationsReducer';
+import { initialSurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
+import { initialFamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
+import { initialSocialHistoryState } from 'redux/reducers/socialHistoryReducer';
+import { initialReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
 
 export const noteBody = {
-    Allergies: allergies.state,
-    Medications: medications.state,
-    'Surgical History': surgicalHistory.state,
-    'Medical History': constants.MEDICAL_HISTORY.STATE,
-    'Family History': constants.FAMILY_HISTORY.STATE,
-    'Social History': constants.SOCIAL_HISTORY.STATE,
-    'Review of Systems': reviewOfSystems.state,
-    'Physical Exam': peState,
-    positivediseases: [],
-    activeHPI: '',
-    positivecategories: [],
+    allergies: initialAllergiesState,
+    medications: initialMedicationsState,
+    surgicalHistory: initialSurgicalHistoryState,
+    medicalHistory: initialMedicalHistoryState,
+    familyHistory: initialFamilyHistoryState,
+    socialHistory: initialSocialHistoryState,
+    reviewOfSystems: initialReviewOfSystemsState,
+    physicalExam: initialPhysicalExamState,
     hpi: {},
-    plan: {
-        conditions: [],
-        survey: { sickness: 0, admit_to_hospital: '', emergency: '' },
-    },
-    step: 1,
+    plan: initialPlanState,
+    chiefComplaints: [],
 };

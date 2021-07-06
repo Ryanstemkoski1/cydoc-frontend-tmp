@@ -1,19 +1,22 @@
 # HPIContent
-Function: Load Cydoc knowledge graph and create the entire HPI form with questions and buttons based on the graph and other components listed in the outline.
+Function: Load Cydoc body systems and diseases and set up HPI form with questions and buttons based on graph and other components listed in outline.
 1. componentDidMount()
-    * Load up the [knowledge graph](https://cydocgraph.herokuapp.com/graph)
-    * Loop through the knowledge graph nodes to get each unique body system code and category code.
-    * For each body system code, save its associated body system name and diseases/categories.
-    * Set state with graphData (knowledge graph), category codes and body systems
+    * Load up the [hpi headers graph](https://cydocgraph.herokuapp.com/hpi/CYDOC)
+    * set isGraphLoaded to true so render occurs when front page components is ready
+    * Save bodySystems and parentNodes dictionaries to state
 2. handleItemClick() - responds to the disease tabs shown after page 1 (landing page)
-    * The clicked tab’s disease category name will first be translated into its three-letter category code from diseaseCodes.js (in constants).
-    * This category code will then be indexed from context and will correspond to its step, which will change the user’s page to that of the current disease.
-    * In addition, the active tab will change to be the current disease category, and will be pressed down.
-3. render() - each time something changes in the page (i.e. user clicks button), the following items are re-rendered.
-    * const diseaseComponents: creates list of body system buttons (<ButtonItem/>)
+    * Step will be changed to the index of the selected disease in state to change the user's page to that of the current disease.
+    * activeHPI, which represents the active tab, will be changed to the name of the clicked disease, and will be pressed down.
+3. selectDisease() - responds to user's selection of disease on landing page
+    * The index of the disease in the list of selected diseases is checked. 
+    * If the disease isn't found in the list of selected diseases, the user has not yet clicked it and the index is -1, so the disease is added to the list.
+    * Otherwise, the user has already clicked the disease and the user is un-clicking the disease, so the disease is removed from the list of selected diseases.
+4. removeDisease() - respond to user's selection of already selected diseases at the top of the page.
+    * The disease chosen is filtered out of the list of selected diseases.
+5. render() - each time something changes in the page (i.e. user clicks button), the following items are re-rendered.
+    * const diseaseComponents: creates list of body system buttons (<BodySystemDropdown/>)
         * Loops through the state variable body_systems saved after the API was loaded after componentDidMount
-        * item[‘name’] - name of the body system
-        * item[‘diseases’] - list of categories/diseases associated with the current body system
+        * diseasesList - list of diseases associated with body system
     * const positiveDiseases: creates list of category buttons that were clicked by user (different color, posted at the top) [<PositiveDiseases/>]
         * First translates chosen category name to its three-letter category prefix.
         * Loops through the HPI context storing which category codes user clicked in the front page 

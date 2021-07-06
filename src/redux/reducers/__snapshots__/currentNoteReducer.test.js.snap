@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`general note reducers updates note id 1`] = `null`;
+
+exports[`general note reducers updates note title 1`] = `"foo"`;

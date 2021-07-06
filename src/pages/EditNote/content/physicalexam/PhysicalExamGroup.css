@@ -1,0 +1,9 @@
+.pe-textarea textarea {
+    max-height: 75px;
+    display: inline-block;
+    width: 85% !important;
+}
+
+.ui.form.field {
+    padding-bottom: '100px',
+}

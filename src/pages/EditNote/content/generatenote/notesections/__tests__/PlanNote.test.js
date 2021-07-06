@@ -1,0 +1,167 @@
+import React from 'react';
+import Enzyme, { mount } from 'enzyme';
+import EnzymeAdapter from 'enzyme-adapter-react-16';
+import {
+    initialPlan,
+    conditionId,
+    categoryId,
+} from 'pages/EditNote/content/discussionplan/util';
+import PlanNote, { EMPTY_NOTE_TEXT } from '../PlanNote';
+
+Enzyme.configure({ adapter: new EnzymeAdapter() });
+
+const plan = {
+    conditions: {
+        [conditionId]: {
+            ...initialPlan.conditions[conditionId],
+            name: 'foo',
+        },
+    },
+};
+
+describe('Plan Generate Note', () => {
+    it('renders without crashing', () => {
+        const wrapper = mount(<PlanNote planState={plan} />);
+        expect(wrapper).toBeTruthy();
+    });
+
+    it('matches snapshot', () => {
+        const wrapper = mount(<PlanNote planState={plan} />);
+        expect(wrapper.html()).toMatchSnapshot();
+    });
+
+    it('renders filler text when plan empty', () => {
+        const wrapper = mount(<PlanNote planState={{ conditions: {} }} />);
+        expect(wrapper.text()).toContain(EMPTY_NOTE_TEXT);
+    });
+
+    it('renders correct number of sections', () => {
+        const wrapper = mount(
+            <PlanNote
+                planState={{
+                    conditions: {
+                        ...plan.conditions,
+                        foo: {
+                            ...plan.conditions[conditionId],
+                            name: 'bar',
+                        },
+                    },
+                }}
+            />
+        );
+        const findTypeByText = (wrapper, type, text) => {
+            return wrapper.findWhere(
+                (n) => n.type() === type && n.text() === text
+            );
+        };
+        expect(wrapper.find('.plan-note')).toHaveLength(2);
+        [
+            'Differential Diagnosis',
+            'Prescriptions',
+            'Procedures and Services',
+            'Referrals',
+        ].forEach((text) => {
+            expect(findTypeByText(wrapper, 'b', text)).toHaveLength(2);
+        });
+    });
+
+    it('renders differential diagnoses content correctly', () => {
+        const wrapper = mount(
+            <PlanNote
+                planState={{
+                    conditions: {
+                        [conditionId]: {
+                            name: 'title',
+                            differentialDiagnoses: {
+                                [categoryId]: {
+                                    comments: 'foo',
+                                    diagnosis: 'bar',
+                                },
+                            },
+                            prescriptions: {},
+                            proceduresAndServices: {},
+                            referrals: {},
+                        },
+                    },
+                }}
+            />
+        );
+        expect(wrapper.text()).toContain('bar: foo');
+    });
+
+    it('renders prescriptions content correctly', () => {
+        const wrapper = mount(
+            <PlanNote
+                planState={{
+                    conditions: {
+                        [conditionId]: {
+                            name: 'title',
+                            differentialDiagnoses: {},
+                            prescriptions: {
+                                [categoryId]: {
+                                    comments: '42',
+                                    dose: '24',
+                                    type: 'foo',
+                                    signature: 'bar',
+                                },
+                            },
+                            proceduresAndServices: {},
+                            referrals: {},
+                        },
+                    },
+                }}
+            />
+        );
+        expect(wrapper.text()).toContain('foo: 24. bar. 42');
+    });
+
+    it('renders procedures content correctly', () => {
+        const wrapper = mount(
+            <PlanNote
+                planState={{
+                    conditions: {
+                        [conditionId]: {
+                            name: 'title',
+                            differentialDiagnoses: {},
+                            prescriptions: {},
+                            proceduresAndServices: {
+                                [categoryId]: {
+                                    comments: '24',
+                                    procedure: '42',
+                                    when: 'foo',
+                                },
+                            },
+                            referrals: {},
+                        },
+                    },
+                }}
+            />
+        );
+        expect(wrapper.text()).toContain('42 foo. 24');
+    });
+
+    it('renders referrals content correctly', () => {
+        const wrapper = mount(
+            <PlanNote
+                planState={{
+                    conditions: {
+                        [conditionId]: {
+                            name: 'title',
+                            differentialDiagnoses: {},
+                            prescriptions: {},
+                            proceduresAndServices: {},
+                            referrals: {
+                                [categoryId]: {
+                                    comments: '24',
+                                    department: '42',
+                                    when: 'foo',
+                                },
+                            },
+                        },
+                    },
+                }}
+            />
+        );
+        expect(wrapper.text()).toContain('Referred to see 42 foo. 24');
+    });
+});

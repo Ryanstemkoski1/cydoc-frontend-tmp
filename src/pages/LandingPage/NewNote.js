@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import HPIContext from '../../contexts/HPIContext';
+import NotesContext from '../../contexts/NotesContext';
 import {
     Button,
     Divider,
@@ -15,9 +15,11 @@ import {
 import { Redirect } from 'react-router';
 import './LandingPage.css';
 import Form from 'semantic-ui-react/dist/commonjs/collections/Form';
+import { connect } from 'react-redux';
+import { loadNote } from 'redux/actions/currentNoteActions';
 
-export default class NewNoteSegment extends Component {
-    static contextType = HPIContext;
+class NewNoteSegment extends Component {
+    static contextType = NotesContext;
 
     constructor(props) {
         super(props);
@@ -33,7 +35,11 @@ export default class NewNoteSegment extends Component {
     handleBlankNoteClick = async () => {
         const note = await this.context.addNote();
         if (note !== null) {
-            this.context.loadNote(note);
+            // TODO: account for unsavedChanges
+            let { _id, noteName: title, ...newNote } = note;
+            newNote = { _id, title, ...newNote.body };
+            this.context.loadNote(newNote);
+            this.props.loadNote(newNote);
             this.setState({ redirect: true });
         }
     };
@@ -142,6 +148,8 @@ export default class NewNoteSegment extends Component {
         );
     }
 }
+
+export default connect(null, { loadNote })(NewNoteSegment);
 
 class BrowseTemplates extends Component {
     constructor(props) {

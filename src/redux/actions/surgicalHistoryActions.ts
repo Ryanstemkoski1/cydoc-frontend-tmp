@@ -1,0 +1,88 @@
+import { SURGICAL_HISTORY_ACTION } from './actionTypes';
+
+interface UpdateProcedureAction {
+    type: SURGICAL_HISTORY_ACTION.UPDATE_PROCEDURE;
+    payload: {
+        index: string;
+        newProcedure: string;
+    };
+}
+
+export function updateProcedure(index: string, newProcedure: string) {
+    return {
+        type: SURGICAL_HISTORY_ACTION.UPDATE_PROCEDURE,
+        payload: {
+            index,
+            newProcedure,
+        },
+    };
+}
+
+interface UpdateYearAction {
+    type: SURGICAL_HISTORY_ACTION.UPDATE_YEAR;
+    payload: {
+        index: string;
+        newYear: number;
+    };
+}
+
+export function updateYear(index: string, newYear: number) {
+    return {
+        type: SURGICAL_HISTORY_ACTION.UPDATE_YEAR,
+        payload: {
+            index,
+            newYear,
+        },
+    };
+}
+
+interface UpdateCommentsAction {
+    type: SURGICAL_HISTORY_ACTION.UPDATE_COMMENTS;
+    payload: {
+        index: string;
+        newComments: string;
+    };
+}
+
+export function updateComments(index: string, newComments: string) {
+    return {
+        type: SURGICAL_HISTORY_ACTION.UPDATE_COMMENTS,
+        payload: {
+            index,
+            newComments,
+        },
+    };
+}
+
+interface AddProcedureAction {
+    type: SURGICAL_HISTORY_ACTION.ADD_PROCEDURE;
+}
+
+export function addProcedure() {
+    return {
+        type: SURGICAL_HISTORY_ACTION.ADD_PROCEDURE,
+    };
+}
+
+interface DeleteProcedureAction {
+    type: SURGICAL_HISTORY_ACTION.DELETE_PROCEDURE;
+    payload: {
+        index: string;
+    };
+}
+
+export function deleteProcedure(index: string) {
+    return {
+        type: SURGICAL_HISTORY_ACTION.DELETE_PROCEDURE,
+        payload: {
+            index,
+        },
+    };
+}
+
+export type SurgicalHistoryActionTypes =
+    | UpdateProcedureAction
+    | UpdateYearAction
+    | UpdateCommentsAction
+    | AddProcedureAction
+    | DeleteProcedureAction;

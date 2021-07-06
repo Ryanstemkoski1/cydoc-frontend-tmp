@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseCategoryForm matches snapshot 1`] = `"<div class=\\"accordion ui fluid plan-section\\"><div class=\\"active title\\"><h2 class=\\"ui large attached header\\">Differential Diagnoses</h2></div><div class=\\"content active\\"><div class=\\"ui stackable two column grid section-body\\"></div><div class=\\"add-row\\"><button aria-label=\\"add-row\\" class=\\"ui basic circular icon button\\"><i aria-hidden=\\"true\\" class=\\"plus icon\\"></i></button>add </div></div></div>"`;

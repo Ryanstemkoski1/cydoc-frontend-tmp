@@ -7,6 +7,7 @@ import HPIContent from './content/hpi/knowledgegraph/HPIContent';
 import PatientHistoryContent from './content/patienthistory/PatientHistoryContent';
 import GenerateNote from './content/generatenote/GenerateNote';
 import DiscussionPlan from './content/discussionplan/DiscussionPlan';
+
 import './NotePage.css';
 
 //Component that manages the content displayed based on the activeItem prop
@@ -106,11 +107,9 @@ export default class NotePage extends Component {
         const tabToDisplay = this.getTabToDisplay(this.props.activeItem);
 
         return (
-            <>
-                <Container className='active-tab-container'>
-                    {tabToDisplay}
-                </Container>
-            </>
+            <Container className='active-tab-container'>
+                {tabToDisplay}
+            </Container>
         );
     }
 }

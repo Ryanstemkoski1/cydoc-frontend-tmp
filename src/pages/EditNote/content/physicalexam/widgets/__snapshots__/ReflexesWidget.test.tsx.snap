@@ -1,0 +1,788 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ReflexesWidget matches snapshot 1`] = `
+Object {
+  "store": Object {
+    "clearActions": [Function],
+    "dispatch": [Function],
+    "getActions": [Function],
+    "getState": [Function],
+    "replaceReducer": [Function],
+    "subscribe": [Function],
+  },
+  "wrapper": <Provider
+    store={
+      Object {
+        "clearActions": [Function],
+        "dispatch": [Function],
+        "getActions": [Function],
+        "getState": [Function],
+        "replaceReducer": [Function],
+        "subscribe": [Function],
+      }
+    }
+  >
+    <Connect(ReflexesWidget)>
+      <ReflexesWidget
+        addReflexesWidgetItem={[Function]}
+        reflexes={
+          Object {
+            "yasa": Object {
+              "intensity": -1,
+              "location": "",
+              "side": "",
+            },
+          }
+        }
+      >
+        <div
+          style={
+            Object {
+              "marginTop": 20,
+            }
+          }
+        >
+          <Connect(ReflexesWidgetItem)
+            id="yasa"
+            key="yasa"
+          >
+            <ReflexesWidgetItem
+              deleteReflexesWidgetItem={[Function]}
+              id="yasa"
+              itemState={
+                Object {
+                  "intensity": -1,
+                  "location": "",
+                  "side": "",
+                }
+              }
+              updateIntensity={[Function]}
+              updateLocation={[Function]}
+              updateSide={[Function]}
+            >
+              <Table
+                as="table"
+                collapsing={true}
+              >
+                <table
+                  className="ui collapsing table"
+                >
+                  <TableHeader
+                    as="thead"
+                  >
+                    <thead
+                      className=""
+                    >
+                      <div
+                        style={
+                          Object {
+                            "float": "right",
+                          }
+                        }
+                      >
+                        <Button
+                          as="button"
+                          basic={true}
+                          circular={true}
+                          icon="x"
+                          onClick={[Function]}
+                          size="mini"
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui mini basic circular icon button"
+                                >
+                                  <i
+                                    aria-hidden="true"
+                                    class="x icon"
+                                  />
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui mini basic circular icon button"
+                                  >
+                                    <i
+                                      aria-hidden="true"
+                                      class="x icon"
+                                    />
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui mini basic circular icon button"
+                                onClick={[Function]}
+                              >
+                                <Icon
+                                  as="i"
+                                  name="x"
+                                >
+                                  <i
+                                    aria-hidden="true"
+                                    className="x icon"
+                                    onClick={[Function]}
+                                  />
+                                </Icon>
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                      </div>
+                      <div
+                        style={
+                          Object {
+                            "margin": 10,
+                          }
+                        }
+                      >
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="biceps"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  biceps
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    biceps
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                biceps
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="brachioradialis"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  brachioradialis
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    brachioradialis
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                brachioradialis
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="triceps"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  triceps
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    triceps
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                triceps
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="patellar"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  patellar
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    patellar
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                patellar
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="ankle jerk"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  ankle jerk
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    ankle jerk
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                ankle jerk
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="plantar"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  plantar
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    plantar
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                plantar
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                      </div>
+                      <div
+                        style={
+                          Object {
+                            "margin": 10,
+                          }
+                        }
+                      >
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="right"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  right
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    right
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                right
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="left"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  left
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    left
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                left
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                      </div>
+                      <div
+                        style={
+                          Object {
+                            "margin": 10,
+                          }
+                        }
+                      >
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="0 no response"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  0 no response
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    0 no response
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                0 no response
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="1+ slight"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  1+ slight
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    1+ slight
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                1+ slight
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="2+ normal"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  2+ normal
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    2+ normal
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                2+ normal
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="3+ very brisk"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  3+ very brisk
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    3+ very brisk
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                3+ very brisk
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                        <Button
+                          as="button"
+                          className="spaced-buttons"
+                          key="4+ clonus"
+                          onClick={[Function]}
+                        >
+                          <Ref
+                            innerRef={
+                              Object {
+                                "current": <button
+                                  class="ui button spaced-buttons"
+                                >
+                                   
+                                  4+ clonus
+                                   
+                                </button>,
+                              }
+                            }
+                          >
+                            <RefFindNode
+                              innerRef={
+                                Object {
+                                  "current": <button
+                                    class="ui button spaced-buttons"
+                                  >
+                                     
+                                    4+ clonus
+                                     
+                                  </button>,
+                                }
+                              }
+                            >
+                              <button
+                                className="ui button spaced-buttons"
+                                onClick={[Function]}
+                              >
+                                 
+                                4+ clonus
+                                 
+                              </button>
+                            </RefFindNode>
+                          </Ref>
+                        </Button>
+                      </div>
+                    </thead>
+                  </TableHeader>
+                </table>
+              </Table>
+            </ReflexesWidgetItem>
+          </Connect(ReflexesWidgetItem)>
+          add abnormal reflexes
+           
+          <Button
+            as="button"
+            basic={true}
+            circular={true}
+            icon="plus"
+            onClick={[Function]}
+            size="mini"
+          >
+            <Ref
+              innerRef={
+                Object {
+                  "current": <button
+                    class="ui mini basic circular icon button"
+                  >
+                    <i
+                      aria-hidden="true"
+                      class="plus icon"
+                    />
+                  </button>,
+                }
+              }
+            >
+              <RefFindNode
+                innerRef={
+                  Object {
+                    "current": <button
+                      class="ui mini basic circular icon button"
+                    >
+                      <i
+                        aria-hidden="true"
+                        class="plus icon"
+                      />
+                    </button>,
+                  }
+                }
+              >
+                <button
+                  className="ui mini basic circular icon button"
+                  onClick={[Function]}
+                >
+                  <Icon
+                    as="i"
+                    name="plus"
+                  >
+                    <i
+                      aria-hidden="true"
+                      className="plus icon"
+                      onClick={[Function]}
+                    />
+                  </Icon>
+                </button>
+              </RefFindNode>
+            </Ref>
+          </Button>
+        </div>
+      </ReflexesWidget>
+    </Connect(ReflexesWidget)>
+  </Provider>,
+}
+`;

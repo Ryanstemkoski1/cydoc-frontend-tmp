@@ -49,6 +49,14 @@ h5.ui.header{
     margin-bottom: 10px;
 }
 
+.pe-input {
+    max-width: 100px;
+}
+
+.ui.label {
+    max-width: 100px;
+}
+
 @media screen and (max-width: 1400px) {
 
     .ui.icon.button.physical-previous-button, .ui.icon.button.physical-next-button {

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DiscussionPlanMenu matches snapshot 1`] = `"<div class=\\"ui stackable tabular menu\\"><a idx=\\"0\\" uuid=\\"condition\\" class=\\"active item\\"><div uuid=\\"condition\\" idx=\\"0\\" class=\\"ui transparent input\\"><input placeholder=\\"Condition Name\\" type=\\"text\\" value=\\"\\"></div></a><a id=\\"add-condition\\" class=\\"item\\"><i aria-hidden=\\"true\\" class=\\"plus icon\\"></i></a><div class=\\"right menu delete-btn-wrapper\\"><i aria-hidden=\\"true\\" class=\\"trash alternate outline icon delete-btn\\"></i></div></div>"`;

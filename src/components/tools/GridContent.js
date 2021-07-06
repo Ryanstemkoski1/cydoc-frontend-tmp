@@ -1,16 +1,13 @@
 import { Divider, Grid } from 'semantic-ui-react';
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import AddRowButton from 'components/tools/AddRowButton.js';
-import HPIContext from 'contexts/HPIContext.js';
+import AddRowButton from 'components/tools/AddRowButton';
 
 //Basic Layout and functionality for note tabs that use a grid. Includes support to
 // add a row, but likely this state will be lifted in the future
 export default class GridContent extends Component {
-    static contextType = HPIContext;
-
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.defaultRows = this.props.rows;
         this.onChange = this.props.onChange;
     }
@@ -30,7 +27,7 @@ export default class GridContent extends Component {
                     {rows}
                 </Grid>
                 <Divider />
-                {!isPreview && this.props.question_type === 'add_row' ? (
+                {!isPreview && !this.props.pop ? (
                     <AddRowButton
                         onClick={this.props.addRow}
                         name={this.props.name}
@@ -58,7 +55,7 @@ export default class GridContent extends Component {
                 <Grid columns={numColumns} verticalAlign='middle'>
                     {rows}
                 </Grid>
-                {!isPreview && this.props.question_type === 'add_row' ? (
+                {!isPreview && !this.props.pop ? (
                     <AddRowButton
                         onClick={this.props.addRow}
                         name={this.props.name}

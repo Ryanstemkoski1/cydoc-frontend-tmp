@@ -1,0 +1,879 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`social history reducers updates alcohol comments 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "new comments",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates alcohol consumption per week 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [
+      Object {
+        "numberPerWeek": 2,
+        "size": "",
+        "type": "",
+      },
+    ],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates alcohol consumption size 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [
+      Object {
+        "numberPerWeek": -1,
+        "size": "shot",
+        "type": "",
+      },
+    ],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates alcohol consumption type 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [
+      Object {
+        "numberPerWeek": -1,
+        "size": "",
+        "type": "beer",
+      },
+    ],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates alcohol interested in quitting 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "YES",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates alcohol quit year 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": 2020,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates alcohol tried to quit 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "YES",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates alcohol usage 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "YES",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates recreational drug comments 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "new comments",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates recreational drug consumption modes of delivery 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [
+      Object {
+        "modesOfDelivery": undefined,
+        "name": "",
+        "numberPerWeek": -1,
+      },
+    ],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates recreational drug consumption name 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [
+      Object {
+        "modesOfDelivery": Array [],
+        "name": "Benzodiazepine",
+        "numberPerWeek": -1,
+      },
+    ],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates recreational drug consumption per week 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [
+      Object {
+        "modesOfDelivery": Array [],
+        "name": "",
+        "numberPerWeek": 2,
+      },
+    ],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates recreational drug interested in quitting 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "YES",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates recreational drug quit year 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": 2020,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates recreational drug tried to quit 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "YES",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates recreational drug usage 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "YES",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates tobacco comments 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "new comments",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates tobacco interested in quitting 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "YES",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates tobacco number of years 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": 2,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates tobacco packs per day 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": 2,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates tobacco products used 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [
+      "bidi",
+    ],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates tobacco quit year 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": 2020,
+    "triedToQuit": "",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates tobacco tried to quit 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "YES",
+    "usage": "",
+  },
+}
+`;
+
+exports[`social history reducers updates tobacco usage 1`] = `
+Object {
+  "alcohol": Object {
+    "comments": "",
+    "drinksConsumed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "diet": "",
+  "employment": "",
+  "exercise": "",
+  "livingSituation": "",
+  "recreationalDrugs": Object {
+    "comments": "",
+    "drugsUsed": Array [],
+    "interestedInQuitting": "",
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "",
+  },
+  "tobacco": Object {
+    "comments": "",
+    "interestedInQuitting": "",
+    "numberOfYears": -1,
+    "packsPerDay": -1,
+    "productsUsed": Array [],
+    "quitYear": -1,
+    "triedToQuit": "",
+    "usage": "YES",
+  },
+}
+`;

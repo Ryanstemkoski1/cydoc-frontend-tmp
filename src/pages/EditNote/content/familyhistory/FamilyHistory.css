@@ -19,6 +19,7 @@
 
 .condition-info {
     margin: auto 2.3rem;
+    padding-bottom: 20px;
 }
 
 .dropdown-container {
@@ -69,6 +70,7 @@
 
 .ui.grid .row+.ui.divider{
   margin: 0.5rem 0.5rem;
+  padding-bottom: 10px;
 }
 
 .content-style {

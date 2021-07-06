@@ -2,6 +2,10 @@
     width: 650px;
 }
 
+.ui.celled.unstackable.table.div {
+    margin-bottom: 5;
+}
+
 
 @media only screen and (max-width: 768px) {
     .ui.celled.unstackable.table {

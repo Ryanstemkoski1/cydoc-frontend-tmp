@@ -1,12 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router';
 import { Segment, Button } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { deleteNote } from 'redux/actions/currentNoteActions';
 
-import HPIContext from 'contexts/HPIContext.js';
+import NotesContext from 'contexts/NotesContext';
 import './LandingPage.css';
 
 class ConnectedRecords extends Component {
-    static contextType = HPIContext;
+    static contextType = NotesContext;
 
     constructor(props) {
         super(props);
@@ -17,13 +19,16 @@ class ConnectedRecords extends Component {
 
     handleLoad = () => {
         if (this.props.activeNote) {
-            this.context.loadNote(this.props.activeNote);
+            // TODO: Account for unsaved changes
+            const { _id, noteName: title, ...note } = this.props.activeNote;
+            this.context.loadNote({ _id, title, ...note.body });
             this.setState({ redirect: true });
         }
     };
 
     handleDelete = () => {
         if (this.props.activeNote) {
+            this.props.deleteNote();
             this.context.deleteNote(this.props.activeNote);
             this.props.setActive(null);
         }
@@ -62,5 +67,4 @@ class ConnectedRecords extends Component {
     }
 }
 
-const Records = ConnectedRecords;
-export default Records;
+export default connect(null, { deleteNote })(ConnectedRecords);

@@ -1,0 +1,12 @@
+.ui.selection .dropdown.icon:not(.clear) {
+    visibility: hidden;
+}
+
+.ui.selection .dropdown.icon.clear {
+    font-family: Dropdown;
+    transform: none !important;
+}
+
+.ui.selection .dropdown.icon.clear::before {
+  content: "\f00d";
+}

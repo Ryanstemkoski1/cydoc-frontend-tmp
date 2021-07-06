@@ -1,0 +1,620 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hpi reducers add edge returns correct state with edge info 1`] = `
+Object {
+  "edges": Object {
+    "35ae0742-722f-4b8f-92ed-802e2ce9a4b3": Object {
+      "from": "foo2",
+      "fromQuestionOrder": -1,
+      "to": "foo1",
+      "toQuestionOrder": -1,
+    },
+  },
+  "graph": Object {
+    "medId": Array [
+      "35ae0742-722f-4b8f-92ed-802e2ce9a4b3",
+    ],
+  },
+  "nodes": Object {},
+}
+`;
+
+exports[`hpi reducers add node returns node with response 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "blankNo": undefined,
+      "blankTemplate": undefined,
+      "blankYes": undefined,
+      "response": undefined,
+      "responseType": "responseType",
+      "text": "text",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions adds body location responses 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "Ankle": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Chest": false,
+        "Ear": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Elbow": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Eye": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Finger": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Foot": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Groin": false,
+        "Hand": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Head": false,
+        "Hip": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Knee": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Arm": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Back": false,
+        "Lower Leg": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Mid Back": false,
+        "Mouth": false,
+        "Neck": false,
+        "Nose": false,
+        "Pelvis": false,
+        "Shoulder": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Stomach": false,
+        "Throat": false,
+        "Toe": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Arm": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Back": false,
+        "Upper Leg": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Wrist": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+      },
+      "responseType": "BODYLOCATION",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles body location toggle for LRButton 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "Ankle": Object {
+          "center": false,
+          "left": true,
+          "right": false,
+        },
+        "Chest": false,
+        "Ear": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Elbow": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Eye": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Finger": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Foot": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Groin": false,
+        "Hand": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Head": false,
+        "Hip": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Knee": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Arm": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Back": false,
+        "Lower Leg": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Mid Back": false,
+        "Mouth": false,
+        "Neck": false,
+        "Nose": false,
+        "Pelvis": false,
+        "Shoulder": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Stomach": false,
+        "Throat": false,
+        "Toe": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Arm": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Back": false,
+        "Upper Leg": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Wrist": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+      },
+      "responseType": "BODYLOCATION",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles body location toggle for regular button 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "Ankle": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Chest": false,
+        "Ear": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Elbow": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Eye": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Finger": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Foot": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Groin": false,
+        "Hand": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Head": false,
+        "Hip": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Knee": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Arm": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Back": false,
+        "Lower Leg": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Mid Back": false,
+        "Mouth": false,
+        "Neck": false,
+        "Nose": true,
+        "Pelvis": false,
+        "Shoulder": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Stomach": false,
+        "Throat": false,
+        "Toe": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Arm": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Back": false,
+        "Upper Leg": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Wrist": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+      },
+      "responseType": "BODYLOCATION",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles input change 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": "foo",
+      "responseType": "SHORT-TEXT",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles list text actions handles changing list text input 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "foo": "foo",
+      },
+      "responseType": "LIST-TEXT",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles list text actions handles removing list text input 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+      },
+      "responseType": "LIST-TEXT",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles multiple choice click 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Array [
+        "foo1",
+        "foo",
+      ],
+      "responseType": "CLICK-BOXES",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles numeric input change 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": 42,
+      "responseType": "NUMBER",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles scale input actions handles scale handle clear 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": undefined,
+      "responseType": "SCALE1TO10",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles scale input actions handles scale handle value 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": 3,
+      "responseType": "SCALE1TO10",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles time input actions handles time input change 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "numInput": 42,
+        "timeOption": "minutes",
+      },
+      "responseType": "TIME3DAYS",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles time input actions handles time option change 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "numInput": 0,
+        "timeOption": "days",
+      },
+      "responseType": "TIME3DAYS",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles yes no toggle 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": "Yes",
+      "responseType": "YES-NO",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;

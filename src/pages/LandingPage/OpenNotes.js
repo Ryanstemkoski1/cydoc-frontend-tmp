@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import NotesContext from '../../contexts/NotesContext';
-import HPIContext from '../../contexts/HPIContext';
 import {
     Button,
     Divider,
@@ -16,9 +15,11 @@ import {
 } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
 import './LandingPage.css';
+import { connect } from 'react-redux';
+import { loadNote, deleteNote } from 'redux/actions/currentNoteActions';
 
-export default class OpenRecentSegment extends Component {
-    static contextType = HPIContext;
+class OpenRecentSegment extends Component {
+    static contextType = NotesContext;
 
     constructor(props) {
         super(props);
@@ -32,22 +33,27 @@ export default class OpenRecentSegment extends Component {
     }
 
     componentDidMount = async () => {
-        await this.context.loadAllNotes();
+        await this.context.loadNotes();
         if (this.state.loadedNotes === false)
             this.setState({ loadedNotes: true });
     };
 
     handleItemClick(event, { note }) {
-        this.context.loadNote(note);
+        // TODO: Account for unsaved changes
+        let { _id, noteName: title, ...newNote } = note;
+        newNote = { title, _id, ...newNote.body };
+        this.context.loadNote(newNote);
+        this.props.loadNote(newNote);
         this.setState({ redirect: true });
     }
 
     async handleTrashClick(event, { note }) {
+        this.props.deleteNote();
         await this.context.deleteNote(note);
     }
 
     displayNotes = (number) => {
-        let sortedNotes = Array.from(this.context.getAllNotes())
+        let sortedNotes = Array.from(this.context.getNotes())
             .slice(0, number)
             .sort((a, b) => (a.modifiedTime > b.modifiedTime ? -1 : 1));
         return sortedNotes.map((note, index) => (
@@ -113,7 +119,9 @@ export default class OpenRecentSegment extends Component {
                                 {this.props.stack ? (
                                     <NotesBrowserMobile />
                                 ) : (
-                                    <NotesBrowser />
+                                    <NotesBrowser
+                                        loadNote={this.props.loadNote}
+                                    />
                                 )}
                             </Modal>
                         </ButtonGroup>
@@ -123,6 +131,8 @@ export default class OpenRecentSegment extends Component {
         );
     }
 }
+
+export default connect(null, { loadNote, deleteNote })(OpenRecentSegment);
 
 class NotesBrowser extends Component {
     static contextType = NotesContext;
@@ -138,8 +148,11 @@ class NotesBrowser extends Component {
     }
 
     handleClick = () => {
-        if (this.props.activeNote != null) {
-            this.context.loadNote(this.props.activeNote);
+        if (this.state.activeNote !== null) {
+            let { _id, noteName: title, ...note } = this.state.activeNote;
+            note = { _id, title, ...note.body };
+            this.context.loadNote(note);
+            this.props.loadNote(note);
             this.setState({ redirect: true });
         }
     };
