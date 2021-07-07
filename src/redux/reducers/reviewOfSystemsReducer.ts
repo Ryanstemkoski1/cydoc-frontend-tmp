@@ -178,7 +178,7 @@ export function reviewOfSystemsReducer(
     state = initialReviewOfSystemsState,
     action: ROSActionTypes
 ): ReviewOfSystemsState {
-    const { category, option, yesOrNo } = action.payload;
+    const { category, option, yesOrNo } = action.payload || {};
     switch (action.type) {
         case ROS_ACTION.TOGGLE_OPTION:
             return {

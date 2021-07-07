@@ -41,7 +41,7 @@ export function abdomenWidgetReducer(
     state = initialAbdomenWidgetState,
     action: AbdomenWidgetActionTypes
 ): AbdomenWidgetState {
-    const { section, field } = action.payload;
+    const { section, field } = action.payload || {};
     switch (action.type) {
         case ABDOMEN_WIDGET_ACTION.TOGGLE_ABDOMEN_WIDGET_SECTION:
             return {

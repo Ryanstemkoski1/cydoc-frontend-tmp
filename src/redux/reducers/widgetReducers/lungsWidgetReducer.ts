@@ -88,7 +88,7 @@ export function lungsWidgetReducer(
     state = initialLungsWidgetState,
     action: LungsWidgetActionTypes
 ): LungsWidgetState {
-    const { section, field } = action.payload;
+    const { section, field } = action.payload || {};
     switch (action.type) {
         case LUNGS_WIDGET_ACTION.TOGGLE_LUNGS_WIDGET_SECTION:
             return {
