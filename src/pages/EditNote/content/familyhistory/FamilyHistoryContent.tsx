@@ -27,8 +27,10 @@ import { medicalMapping } from 'constants/word-mappings';
 import { v4 } from 'uuid';
 import { ResponseTypes } from 'constants/hpiEnums';
 import {
-    BlankQuestionChange,
+    blankQuestionChange,
     BlankQuestionChangeAction,
+    PopResponseAction,
+    popResponse,
 } from 'redux/actions/hpiActions';
 
 //TODO: finish the styling for this page
@@ -78,7 +80,7 @@ class FamilyHistoryContent extends Component<Props, State> {
         ) {
             const newKey = v4();
             this.props.addFhPopOptions(newKey, '');
-            this.props.BlankQuestionChange(this.props.node, newKey);
+            this.props.blankQuestionChange(this.props.node, newKey);
         }
         this.props.addCondition();
     }
@@ -91,13 +93,19 @@ class FamilyHistoryContent extends Component<Props, State> {
 
     render() {
         const { windowWidth } = this.state;
-        const { responseChoice, addFhPopOptions, responseType } = this.props;
+        const {
+            responseChoice,
+            addFhPopOptions,
+            responseType,
+            popResponse,
+            node,
+        } = this.props;
         const mobile = windowWidth < FAMILY_HISTORY_MOBILE_BP;
         //Create collection of rows
         // Use second OR statement so that the information may be auto-populated in the Family History tab
         let listValues = Object.keys(this.props.familyHistory);
         if (responseType == ResponseTypes.FH_POP) {
-            // create map of condition: key to look for existing conditions
+            // create map of condition: key to look for existing conditions in family history
             const conditionKeyMap: { [condition: string]: string } = {};
             for (const key in this.props.familyHistory) {
                 const conditionName = this.props.familyHistory[key].condition;
@@ -115,6 +123,7 @@ class FamilyHistoryContent extends Component<Props, State> {
                 }
             }
             listValues = fhPopKeys;
+            if (node) popResponse(node, listValues);
         } else if (responseType == ResponseTypes.FH_BLANK) {
             listValues = responseChoice;
         }
@@ -224,10 +233,11 @@ interface DispatchProps {
         conditionIndex: string,
         conditionName: string
     ) => AddFhPopOptionsAction;
-    BlankQuestionChange: (
+    blankQuestionChange: (
         medId: string,
         conditionId: string
     ) => BlankQuestionChangeAction;
+    popResponse: (medId: string, conditionIds: string[]) => PopResponseAction;
 }
 
 interface State {
@@ -255,7 +265,8 @@ const mapDispatchToProps = {
     addCondition,
     updateCondition,
     addFhPopOptions,
-    BlankQuestionChange,
+    blankQuestionChange,
+    popResponse,
 };
 
 export default connect(

@@ -18,7 +18,7 @@ import {
     AddFhPopOptionsAction,
 } from 'redux/actions/familyHistoryActions';
 import {
-    BlankQuestionChange,
+    blankQuestionChange,
     BlankQuestionChangeAction,
 } from 'redux/actions/hpiActions';
 import { CurrentNoteState } from 'redux/reducers';
@@ -113,6 +113,7 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                         isPreview={false}
                         responseChoice={this.props.responseChoice}
                         responseType={this.props.responseType}
+                        node={node}
                     />
                 );
 
@@ -136,6 +137,7 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                         responseType={this.props.responseType}
                         mobile={collapseTabs}
                         currentYear={-1}
+                        node={node}
                     />
                 );
 
@@ -185,7 +187,7 @@ interface DispatchProps {
         conditionIndex: string,
         conditionName: string
     ) => AddFhPopOptionsAction;
-    BlankQuestionChange: (
+    blankQuestionChange: (
         medId: string,
         conditionId: string
     ) => BlankQuestionChangeAction;
@@ -199,7 +201,7 @@ type Props = HpiStateProps & DispatchProps & QuestionAnswerProps;
 
 const mapDispatchToProps = {
     addFhPopOptions,
-    BlankQuestionChange,
+    blankQuestionChange,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestionAnswer);

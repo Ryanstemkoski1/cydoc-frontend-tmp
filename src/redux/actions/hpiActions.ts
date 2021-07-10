@@ -331,7 +331,7 @@ export interface BlankQuestionChangeAction {
     };
 }
 
-export function BlankQuestionChange(
+export function blankQuestionChange(
     medId: string,
     conditionId: string
 ): BlankQuestionChangeAction {
@@ -341,6 +341,24 @@ export function BlankQuestionChange(
             medId,
             conditionId,
         },
+    };
+}
+
+export interface PopResponseAction {
+    type: HPI_ACTION.POP_RESPONSE;
+    payload: {
+        medId: string;
+        conditionIds: string[];
+    };
+}
+
+export function popResponse(
+    medId: string,
+    conditionIds: string[]
+): PopResponseAction {
+    return {
+        type: HPI_ACTION.POP_RESPONSE,
+        payload: { medId, conditionIds },
     };
 }
 
@@ -360,4 +378,5 @@ export type HpiActionTypes =
     | YesNoToggleOptionAction
     | ScaleHandleValueAction
     | ScaleHandleClearAction
-    | BlankQuestionChangeAction;
+    | BlankQuestionChangeAction
+    | PopResponseAction;

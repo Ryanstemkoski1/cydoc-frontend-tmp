@@ -367,9 +367,12 @@ export function hpiReducer(
             const { medId, conditionId } = action.payload;
             const response = state.nodes[medId].response;
             if (
-                [ResponseTypes.FH_BLANK, ResponseTypes.PMH_BLANK].includes(
-                    state.nodes[medId].responseType
-                ) &&
+                [
+                    ResponseTypes.FH_BLANK,
+                    ResponseTypes.PMH_BLANK,
+                    ResponseTypes.MEDS_BLANK,
+                    ResponseTypes.PSH_BLANK,
+                ].includes(state.nodes[medId].responseType) &&
                 isStringArray(response)
             ) {
                 if (response.includes(conditionId)) {
@@ -383,6 +386,23 @@ export function hpiReducer(
                         state
                     );
             } else throw new Error('Not a blank response');
+        }
+
+        case HPI_ACTION.POP_RESPONSE: {
+            const { medId, conditionIds } = action.payload;
+            const response = state.nodes[medId].response;
+            if (
+                [
+                    ResponseTypes.FH_POP,
+                    ResponseTypes.PMH_POP,
+                    ResponseTypes.MEDS_POP,
+                    ResponseTypes.PSH_POP,
+                ].includes(state.nodes[medId].responseType) &&
+                isStringArray(response) &&
+                !response.length
+            )
+                return updateResponse(medId, conditionIds, state);
+            else return state;
         }
 
         default:

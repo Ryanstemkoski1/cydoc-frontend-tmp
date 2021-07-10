@@ -26,8 +26,10 @@ import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelecto
 import { ResponseTypes } from 'constants/hpiEnums';
 import { v4 } from 'uuid';
 import {
-    BlankQuestionChange,
+    blankQuestionChange,
     BlankQuestionChangeAction,
+    PopResponseAction,
+    popResponse,
 } from 'redux/actions/hpiActions';
 import AddRowButton from 'components/tools/AddRowButton';
 
@@ -129,7 +131,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         ) {
             const newKey = v4();
             this.props.addPmhPopOptions(newKey, '');
-            this.props.BlankQuestionChange(this.props.node, newKey);
+            this.props.blankQuestionChange(this.props.node, newKey);
         }
         this.props.addDefaultCondition();
     }
@@ -140,6 +142,8 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
             responseChoice,
             responseType,
             addPmhPopOptions,
+            popResponse,
+            node,
         } = this.props;
         let listValues = Object.keys(this.props.medicalHistory) || CONDITIONS;
         // The second OR statement gets the list of Conditions in the "Medical History" context
@@ -161,6 +165,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                 }
             }
             listValues = MhPopKeys;
+            if (node) popResponse(node, listValues);
         }
         if (responseType == ResponseTypes.PMH_BLANK) {
             if (!this.props.responseChoice.length)
@@ -318,10 +323,11 @@ interface DispatchProps {
         conditionIndex: string,
         conditionName: string
     ) => AddPmhPopOptionsAction;
-    BlankQuestionChange: (
+    blankQuestionChange: (
         medId: string,
         conditionId: string
     ) => BlankQuestionChangeAction;
+    popResponse: (medId: string, conditionIds: string[]) => PopResponseAction;
 }
 
 type Props = MedicalHistoryProps & DispatchProps & ContentProps;
@@ -340,7 +346,8 @@ const mapDispatchToProps = {
     updateComments,
     updateConditionResolved,
     addPmhPopOptions,
-    BlankQuestionChange,
+    blankQuestionChange,
+    popResponse,
 };
 
 export default connect(
