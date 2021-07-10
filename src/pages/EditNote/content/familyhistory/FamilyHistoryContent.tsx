@@ -99,22 +99,23 @@ class FamilyHistoryContent extends Component<Props, State> {
             responseType,
             popResponse,
             node,
+            familyHistory,
         } = this.props;
         const mobile = windowWidth < FAMILY_HISTORY_MOBILE_BP;
         //Create collection of rows
         // Use second OR statement so that the information may be auto-populated in the Family History tab
-        let listValues = Object.keys(this.props.familyHistory);
-        if (responseType == ResponseTypes.FH_POP) {
+        let listValues = Object.keys(familyHistory);
+        if (responseType == ResponseTypes.FH_POP && responseChoice) {
             // create map of condition: key to look for existing conditions in family history
             const conditionKeyMap: { [condition: string]: string } = {};
-            for (const key in this.props.familyHistory) {
-                const conditionName = this.props.familyHistory[key].condition;
+            for (const key in familyHistory) {
+                const conditionName = familyHistory[key].condition;
                 conditionKeyMap[conditionName] = key;
             }
             const fhPopKeys = [];
             for (const conditionKey in responseChoice) {
                 const conditionName = responseChoice[conditionKey];
-                if (responseChoice[conditionKey] in conditionKeyMap)
+                if (conditionName in conditionKeyMap)
                     fhPopKeys.push(conditionKeyMap[conditionName]);
                 else {
                     const newKey = v4();
@@ -124,13 +125,12 @@ class FamilyHistoryContent extends Component<Props, State> {
             }
             listValues = fhPopKeys;
             if (node) popResponse(node, listValues);
-        } else if (responseType == ResponseTypes.FH_BLANK) {
+        } else if (responseType == ResponseTypes.FH_BLANK && responseChoice)
             listValues = responseChoice;
-        }
         const listItems = listValues.map((condition, index) => {
             let conditionName = '';
-            if (condition in this.props.familyHistory)
-                conditionName = this.props.familyHistory[condition].condition;
+            if (condition in familyHistory)
+                conditionName = familyHistory[condition].condition;
             if (this.props.isPreview) {
                 return (
                     <FamilyHistoryBlock
@@ -177,8 +177,9 @@ class FamilyHistoryContent extends Component<Props, State> {
         });
         // if FH-BLANK with no response-choice
         if (
-            this.props.responseType == ResponseTypes.FH_BLANK &&
-            !this.props.responseChoice.length
+            responseType == ResponseTypes.FH_BLANK &&
+            responseChoice &&
+            !responseChoice.length
         ) {
             return <AddRowButton onClick={this.addRow} name={'disease'} />;
         }
@@ -222,8 +223,8 @@ interface FamilyHistoryProps {
 
 interface ContentProps {
     isPreview: boolean;
-    responseChoice: string[];
-    responseType: ResponseTypes;
+    responseChoice?: string[];
+    responseType?: ResponseTypes;
     node?: string;
 }
 

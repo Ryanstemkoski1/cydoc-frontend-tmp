@@ -216,7 +216,6 @@ interface BlockProps {
     index: string;
     mobile: boolean;
     isPreview?: boolean;
-    // eslint-disable-next-line no-undef
     conditionInp: JSX.Element;
     pop: boolean;
 }

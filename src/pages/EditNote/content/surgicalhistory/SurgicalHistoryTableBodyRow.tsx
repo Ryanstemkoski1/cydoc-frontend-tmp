@@ -28,7 +28,6 @@ import {
     selectSurgicalHistoryItem,
 } from 'redux/selectors/surgicalHistorySelectors';
 import { OptionMapping } from '_processOptions';
-import { RouteProps, withRouter } from 'react-router';
 
 //Controlled component for a row in a TableContent component
 export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
@@ -40,7 +39,7 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
         this.onYearChange = this.onYearChange.bind(this);
     }
 
-    onYearChange = (e: React.FocusEvent, data: DropdownProps) => {
+    onYearChange = (e: React.FocusEvent) => {
         const target = e.target as HTMLTextAreaElement;
         const startYear = parseInt(target.value);
         this.setState({
@@ -97,7 +96,7 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
             proceduresOptions,
             isPreview,
         } = this.props;
-        const { procedure, year, comments } = this.props.surgicalHistoryItem!;
+        const { procedure, year, comments } = this.props.surgicalHistoryItem;
 
         if (isPreview) {
             return (
@@ -201,12 +200,9 @@ interface OwnState {
     invalidYear: boolean;
 }
 
-interface DispatchProps {
-    updateProcedure: (index: string, newProcedure: string) => void;
-    updateYear: (index: string, newYear: number) => void;
-    updateComments: (index: string, newComment: string) => void;
-    addProcedure: () => void;
-    deleteProcedure: (index: string) => void;
+interface SurgicalHistoryProps {
+    surgicalHistory: SurgicalHistoryState;
+    surgicalHistoryItem: SurgicalHistoryItem;
 }
 
 interface RowProps {
@@ -229,9 +225,12 @@ interface RowProps {
     ) => void;
 }
 
-interface SurgicalHistoryProps {
-    surgicalHistory: SurgicalHistoryState;
-    surgicalHistoryItem?: SurgicalHistoryItem;
+interface DispatchProps {
+    updateProcedure: (index: string, newProcedure: string) => void;
+    updateYear: (index: string, newYear: number) => void;
+    updateComments: (index: string, newComment: string) => void;
+    addProcedure: () => void;
+    deleteProcedure: (index: string) => void;
 }
 
 type Props = RowProps & SurgicalHistoryProps & DispatchProps;

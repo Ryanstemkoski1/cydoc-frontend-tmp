@@ -73,7 +73,7 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
 
     renderSwitch = () => {
         const { windowWidth } = this.state;
-        const { responseType, node } = this.props;
+        const { responseType, node, responseChoice } = this.props;
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
         const response = this.props.hpi.nodes[node].response;
         switch (responseType) {
@@ -91,12 +91,12 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                 return <ListText key={node} node={node} />;
 
             case ResponseTypes.CLICK_BOXES:
-                return this.props.responseChoice.map((item: string) => (
+                return responseChoice.map((item: string) => (
                     <MultipleChoice key={item} name={item} node={node} />
                 ));
 
             case ResponseTypes.MEDS_POP:
-                return this.props.responseChoice.map((item: string) => (
+                return responseChoice.map((item: string) => (
                     <MultipleChoice key={item} name={item} node={node} />
                 ));
 
@@ -107,49 +107,39 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                 return <BodyLocation key={node} node={node} />;
 
             case ResponseTypes.FH_POP:
-                return (
-                    <FamilyHistoryContent
-                        key={node}
-                        isPreview={false}
-                        responseChoice={this.props.responseChoice}
-                        responseType={this.props.responseType}
-                        node={node}
-                    />
-                );
-
             case ResponseTypes.FH_BLANK:
                 return (
                     <FamilyHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={isStringArray(response) ? response : []}
-                        responseType={this.props.responseType}
+                        responseChoice={
+                            responseType == ResponseTypes.FH_POP
+                                ? responseChoice
+                                : isStringArray(response)
+                                ? response
+                                : []
+                        }
+                        responseType={responseType}
                         node={node}
                     />
                 );
 
             case ResponseTypes.PMH_POP:
-                return (
-                    <MedicalHistoryContent
-                        key={node}
-                        isPreview={false}
-                        responseChoice={this.props.responseChoice}
-                        responseType={this.props.responseType}
-                        mobile={collapseTabs}
-                        currentYear={-1}
-                        node={node}
-                    />
-                );
-
             case ResponseTypes.PMH_BLANK:
                 return (
                     <MedicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={isStringArray(response) ? response : []}
-                        responseType={this.props.responseType}
+                        responseChoice={
+                            responseType == ResponseTypes.PMH_POP
+                                ? responseChoice
+                                : isStringArray(response)
+                                ? response
+                                : []
+                        }
+                        responseType={responseType}
                         mobile={collapseTabs}
-                        currentYear={0}
+                        currentYear={-1}
                         node={node}
                     />
                 );
@@ -157,14 +147,25 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
             case ResponseTypes.MEDS_BLANK:
                 return <MedicationsContent key={node} mobile={collapseTabs} />;
 
+            case ResponseTypes.PSH_POP:
             case ResponseTypes.PSH_BLANK:
                 return (
                     <SurgicalHistoryContent
                         key={node}
                         isPreview={false}
+                        responseChoice={
+                            responseType == ResponseTypes.PSH_POP
+                                ? responseChoice
+                                : isStringArray(response)
+                                ? response
+                                : []
+                        }
+                        responseType={responseType}
                         mobile={collapseTabs}
+                        node={node}
                     />
                 );
+
             default:
                 return;
         }

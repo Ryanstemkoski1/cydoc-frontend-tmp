@@ -80,9 +80,31 @@ export function deleteProcedure(index: string) {
     };
 }
 
+export interface AddPshPopOptionsAction {
+    type: SURGICAL_HISTORY_ACTION.ADD_PSH_POP_OPTIONS;
+    payload: {
+        conditionIndex: string;
+        conditionName: string;
+    };
+}
+
+export function addPshPopOptions(
+    conditionIndex: string,
+    conditionName: string
+): AddPshPopOptionsAction {
+    return {
+        type: SURGICAL_HISTORY_ACTION.ADD_PSH_POP_OPTIONS,
+        payload: {
+            conditionIndex,
+            conditionName,
+        },
+    };
+}
+
 export type SurgicalHistoryActionTypes =
     | UpdateProcedureAction
     | UpdateYearAction
     | UpdateCommentsAction
     | AddProcedureAction
-    | DeleteProcedureAction;
+    | DeleteProcedureAction
+    | AddPshPopOptionsAction;
