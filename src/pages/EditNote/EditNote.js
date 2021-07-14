@@ -4,7 +4,7 @@ import MenuTabs from './MenuTabs';
 import NotePage from './NotePage';
 import NavMenu from '../../components/navigation/NavMenu';
 import { TAB_NAMES } from 'constants/constants';
-import { Redirect } from 'react-router';
+// import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
 
@@ -102,9 +102,10 @@ class EditNote extends Component {
 
     render() {
         // Redirects to LandingPage if there is no valid note in constext
-        if (this.props._id === '') {
-            return <Redirect push to='/dashboard' />;
-        }
+        // re-implement once we start saving notes again
+        // if (this.props._id === '') {
+        //     return <Redirect push to='/dashboard' />;
+        // }
 
         return (
             <div ref={this.noteContent}>
