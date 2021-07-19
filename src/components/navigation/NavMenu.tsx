@@ -20,7 +20,9 @@ interface ConnectedNavMenuProps {
 }
 
 // Navigation Bar component that will go at the top of most pages
-const ConnectedNavMenu = (props: ConnectedNavMenuProps) => {
+const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
+    props: ConnectedNavMenuProps
+) => {
     const { className, attached, displayNoteName } = props;
 
     const context = useContext(AuthContext) as Context;
@@ -92,8 +94,8 @@ const ConnectedNavMenu = (props: ConnectedNavMenuProps) => {
                     color='teal'
                     as={Link}
                     to='/dashboard'
-                    name='notes'
-                    icon='clipboard outline'
+                    name='home'
+                    icon='hospital outline'
                 />
             </Menu.Item>
             <Menu.Item>
@@ -124,10 +126,10 @@ const ConnectedNavMenu = (props: ConnectedNavMenuProps) => {
                     basic
                     color='teal'
                     as={Link}
-                    name='notes'
+                    name='home'
                     to='/dashboard'
-                    content='Notes'
-                    icon='clipboard outline'
+                    content='Home'
+                    icon='hospital outline' // home icon??
                 />
             </Menu.Item>
             <Menu.Item>
@@ -149,15 +151,33 @@ const ConnectedNavMenu = (props: ConnectedNavMenuProps) => {
             </Menu.Item>
         </>
     );
+
     return (
         <div>
             <Menu className={`${className} nav-menu`} attached={attached}>
-                <Menu.Item as={Link} to='/' className='logo-menu'>
-                    <Image src={Logo} className='logo-circle' />
-                    {!displayNoteName && !hideCydoc && (
-                        <Header as='h1' className='logo-text' content='Cydoc' />
-                    )}
-                </Menu.Item>
+                {context.token ? (
+                    <Menu.Item as={Link} to='/dashboard' className='logo-menu'>
+                        <Image src={Logo} className='logo-circle' />
+                        {!displayNoteName && !hideCydoc && (
+                            <Header
+                                as='h1'
+                                className='logo-text'
+                                content='Cydoc'
+                            />
+                        )}
+                    </Menu.Item>
+                ) : (
+                    <Menu.Item as={Link} to='/' className='logo-menu'>
+                        <Image src={Logo} className='logo-circle' />
+                        {!displayNoteName && !hideCydoc && (
+                            <Header
+                                as='h1'
+                                className='logo-text'
+                                content='Cydoc'
+                            />
+                        )}
+                    </Menu.Item>
+                )}
 
                 {/* When parent is EditNote, then display the note name item */}
                 {displayNoteName && <NoteNameMenuItem />}

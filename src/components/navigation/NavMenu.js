@@ -124,8 +124,8 @@ class ConnectedNavMenu extends Component {
                         color='teal'
                         as={Link}
                         to='/dashboard'
-                        name='notes'
-                        icon='clipboard outline'
+                        name='home'
+                        icon='hospital outline'
                     />
                 </Menu.Item>
                 <Menu.Item>
@@ -156,10 +156,10 @@ class ConnectedNavMenu extends Component {
                         basic
                         color='teal'
                         as={Link}
-                        name='notes'
+                        name='home'
                         to='/dashboard'
-                        content='Notes'
-                        icon='clipboard outline'
+                        content='Home'
+                        icon='hospital outline' // home icon??
                     />
                 </Menu.Item>
                 <Menu.Item>
@@ -188,7 +188,7 @@ class ConnectedNavMenu extends Component {
                     className={this.props.className + ' nav-menu'}
                     attached={this.props.attached}
                 >
-                    <Menu.Item as={Link} to='/' className='logo-menu'>
+                    <Menu.Item as={Link} to='/dashboard' className='logo-menu'>
                         <Image src={Logo} className='logo-circle' />
                         {!this.props.displayNoteName && !hideCydoc && (
                             <Header
