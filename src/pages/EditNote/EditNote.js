@@ -7,6 +7,7 @@ import { TAB_NAMES } from 'constants/constants';
 // import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
+import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
 
 import './EditNote.css';
 
@@ -21,14 +22,30 @@ class EditNote extends Component {
         this.state = {
             activeItem: 'HPI',
             activeTabIndex: 0,
+            windowWidth: 0,
+            windowHeight: 0,
         };
+        this.updateDimensions = this.updateDimensions.bind(this);
     }
 
     componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener('resize', this.updateDimensions);
         // Setting view to top of the page upon loading a note
         setTimeout(() => {
             window.scrollTo(0, 0);
         }, 0);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateDimensions);
+    }
+
+    updateDimensions() {
+        let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
+        let windowHeight =
+            typeof window !== 'undefined' ? window.innerHeight : 0;
+        this.setState({ windowWidth, windowHeight });
     }
 
     onTabChange(name) {
@@ -106,27 +123,52 @@ class EditNote extends Component {
         // if (this.props._id === '') {
         //     return <Redirect push to='/dashboard' />;
         // }
+        const { windowWidth } = this.state;
+        const editNoteHeader = windowWidth < NOTE_PAGE_MOBILE_BP;
 
         return (
             <div ref={this.noteContent}>
+                {editNoteHeader ? (
+                    <>
+                        <div style={{ height: '260px' }} />
+                        <NotePage
+                            activeItem={this.state.activeItem}
+                            onNextClick={this.onNextClick}
+                            onPreviousClick={this.onPreviousClick}
+                        />
+                        <div className='container' style={{ height: '10px' }} />
+                    </>
+                ) : (
+                    <></>
+                )}
                 {/* Top NavMenu and MenuTabs stay on top regardless of scroll*/}
-                <Sticky context={this.noteContent} id='stickyHeader'>
+                <Sticky
+                    context={this.noteContent}
+                    id={editNoteHeader ? 'mobile-nav' : 'stickyHeader'}
+                >
                     <NavMenu
                         className='edit-note-nav-menu'
                         displayNoteName={true}
                     />
-                    <MenuTabs
-                        activeItem={this.state.activeItem}
-                        onTabChange={this.onTabChange}
-                        activeTabIndex={this.state.activeTabIndex}
-                        attached
-                    />
+                    <div className={editNoteHeader ? 'sticky-div' : ''}>
+                        <MenuTabs
+                            activeItem={this.state.activeItem}
+                            onTabChange={this.onTabChange}
+                            activeTabIndex={this.state.activeTabIndex}
+                            attached
+                        />
+                    </div>
                 </Sticky>
-                <NotePage
-                    activeItem={this.state.activeItem}
-                    onNextClick={this.onNextClick}
-                    onPreviousClick={this.onPreviousClick}
-                />
+
+                {editNoteHeader ? (
+                    <></>
+                ) : (
+                    <NotePage
+                        activeItem={this.state.activeItem}
+                        onNextClick={this.onNextClick}
+                        onPreviousClick={this.onPreviousClick}
+                    />
+                )}
             </div>
         );
     }

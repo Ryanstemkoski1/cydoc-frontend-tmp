@@ -161,7 +161,8 @@ export const BaseCategoryForm = <T extends { id: string }>(
         );
     }
 
-    const enableToggle = mobile && category !== 'differentialDiagnoses';
+    // const enableToggle = mobile && category !== 'differentialDiagnoses';
+    const enableToggle = mobile;
 
     return (
         <Accordion fluid className='plan-section'>

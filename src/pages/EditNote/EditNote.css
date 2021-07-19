@@ -46,4 +46,17 @@
         padding-top: 30px;
         height: 230px;
     }
+
+    .sticky-div {
+        background-color: transparent;
+        position: fixed;
+        top: 0px;
+        width: 100%;
+        margin-top: 230px;
+    }
+
+    #mobile-nav {
+        position: fixed;
+        top: 0;
+    }
 }

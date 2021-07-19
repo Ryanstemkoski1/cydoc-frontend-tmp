@@ -8,7 +8,7 @@ export const HOME_XS_BP = 425;
 
 export const LANDING_PAGE_MOBLE_BP = 1000;
 
-export const MENU_TABS_MOBILE_BP = 650;
+export const MENU_TABS_MOBILE_BP = 800;
 
 export const NOTE_PAGE_MOBILE_BP = 450;
 

@@ -27,10 +27,11 @@ import {
     BaseCategoryForm,
 } from './BaseCategoryForm';
 import { PlanAction, ConditionCategoryKey } from '../util';
-import { Grid, Input, TextArea } from 'semantic-ui-react';
+import { Grid, TextArea } from 'semantic-ui-react';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import { WhenResponse } from 'constants/enums';
 import _ from 'lodash';
+import UpdateDimensions from './UpdateDimensions';
 
 export const ProceduresAndServicesForm = connect(
     (state: CurrentNoteState, ownProps: CategoryFormOwnProps) => ({
@@ -124,6 +125,7 @@ export const MainWhenCommentsForm = <
         formatAction,
         ...actions
     } = props;
+    const { width } = UpdateDimensions();
 
     const gridHeaders = () => (
         <Grid.Row>
@@ -137,43 +139,77 @@ export const MainWhenCommentsForm = <
     );
 
     const mobileTitle: CategoryFormComponent<T> = (row, options, onAddItem) => (
-        <Dropdown
-            fluid
-            search
-            selection
-            allowAdditions
-            clearable
-            transparent={mobile}
-            optiontype='main'
-            uuid={row.id}
-            options={options?.main || {}}
-            onChange={formatAction(actions.mainOnChange)}
-            onAddItem={onAddItem}
-            value={categoryProps.getMainValue(row)}
-            placeholder={categoryProps.mainValueName}
-            aria-label={`${categoryProps.mainValueName}-Dropdown`}
-            className='main-input'
-        />
+        <div
+            className='container'
+            style={{
+                width: width < 800 ? '85%' : '',
+                margin: width < 800 ? 'auto' : '',
+                marginTop: width < 800 ? '10px' : '0px',
+                marginBottom: width < 800 ? '15px' : '0px',
+            }}
+        >
+            {width < 800 ? <label>{categoryProps.mainValueName}</label> : <></>}
+            <div
+                className='container'
+                style={{
+                    height: width < 800 ? '5px' : '',
+                }}
+            />
+            <Dropdown
+                fluid
+                search
+                selection
+                allowAdditions
+                clearable
+                transparent={mobile}
+                optiontype='main'
+                uuid={row.id}
+                options={options?.main || {}}
+                onChange={formatAction(actions.mainOnChange)}
+                onAddItem={onAddItem}
+                value={categoryProps.getMainValue(row)}
+                placeholder=''
+                aria-label={`${categoryProps.mainValueName}-Dropdown`}
+                className='main-input'
+            />
+        </div>
     );
 
     const whenInput: CategoryFormComponent<T> = (row, options, onAddItem) => (
-        <Dropdown
-            fluid
-            search
-            selection
-            allowAdditions
-            clearable
-            transparent={mobile}
-            optiontype='when'
-            uuid={row.id}
-            options={options?.when || {}}
-            onChange={formatAction(actions.whenOnChange)}
-            onAddItem={onAddItem}
-            value={row.when}
-            aria-label={`${categoryProps.mainValueName}-When`}
-            placeholder='when'
-            className='expanded-input'
-        />
+        <>
+            {width < 800 ? (
+                <div className='container'>
+                    <label>When</label>
+                </div>
+            ) : (
+                <></>
+            )}
+            <div
+                className='container'
+                style={{
+                    height: width < 800 ? '5px' : '',
+                }}
+            />
+            <div style={{ width: '95%' }}>
+                <Dropdown
+                    fluid
+                    search
+                    selection
+                    allowAdditions
+                    clearable
+                    transparent={mobile}
+                    optiontype='when'
+                    uuid={row.id}
+                    options={options?.when || {}}
+                    onChange={formatAction(actions.whenOnChange)}
+                    onAddItem={onAddItem}
+                    value={row.when}
+                    aria-label={`${categoryProps.mainValueName}-When`}
+                    placeholder=''
+                    className='expanded-input'
+                />
+            </div>
+        </>
     );
 
     const gridColumn: CategoryFormComponent<T> = (row, options, onAddItem) => (
@@ -204,16 +240,34 @@ export const MainWhenCommentsForm = <
     ) => (
         <>
             {whenInput(row, options, onAddItem)}
-            <Input
-                fluid
-                transparent
-                uuid={row.id}
-                value={row.comments}
-                onChange={formatAction(actions.commentsOnChange)}
-                placeholder='comments'
-                aria-label={`${categoryProps.mainValueName as string}-Comment`}
-                className='expanded-input'
+            <div
+                className='container'
+                style={{
+                    height: width < 800 ? '20px' : '',
+                }}
             />
+            <label>Comments</label>
+            <div
+                className='container'
+                style={{
+                    height: width < 800 ? '5px' : '',
+                }}
+            />
+            <div className='ui form' style={{ width: '95%' }}>
+                <TextArea
+                    fluid
+                    type='text'
+                    transparent
+                    uuid={row.id}
+                    value={row.comments}
+                    onChange={formatAction(actions.commentsOnChange)}
+                    placeholder='comments'
+                    aria-label={`${
+                        categoryProps.mainValueName as string
+                    }-Comment`}
+                    className='expanded-input'
+                />
+            </div>
         </>
     );
 

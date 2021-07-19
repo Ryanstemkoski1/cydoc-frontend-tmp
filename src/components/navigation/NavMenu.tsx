@@ -30,14 +30,15 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
 
     // Set event listeners for window resize to determine mobile vs web view
     useEffect(() => {
-        const updateDimensions = () => {
+        const updateDimensions = (): void => {
             setWindowWidth(
                 typeof window !== 'undefined' ? window.innerWidth : 0
             );
         };
         updateDimensions();
         window.addEventListener('resize', updateDimensions);
-        return () => window.removeEventListener('resize', updateDimensions);
+        return (): void =>
+            window.removeEventListener('resize', updateDimensions);
     }, []);
 
     const collapseLoggedInNav = windowWidth < LOGGEDIN_NAV_MENU_MOBILE_BP;

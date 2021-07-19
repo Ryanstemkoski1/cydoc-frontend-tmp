@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Input, TextArea } from 'semantic-ui-react';
+import { Grid, TextArea } from 'semantic-ui-react';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import { PlanAction } from '../util';
 import { connect } from 'react-redux';
@@ -21,6 +21,7 @@ import {
     CategoryFormOwnProps,
     BaseCategoryForm,
 } from './BaseCategoryForm';
+import UpdateDimensions from './UpdateDimensions';
 
 interface PrescriptionsDispatchProps {
     addPrescription: PlanAction;
@@ -36,6 +37,7 @@ const PrescriptionsForm = (
     props: CategoryFormProps<PlanPrescriptionFlat> & PrescriptionsDispatchProps
 ) => {
     const { mobile, categoryData, formatAction, ...actions } = props;
+    const { width } = UpdateDimensions();
 
     const gridHeaders = () => (
         <Grid.Row>
@@ -46,7 +48,14 @@ const PrescriptionsForm = (
     );
 
     const mainInput: ComponentFunction = (row, options, onAddItem) => (
-        <>
+        <div
+            className='container'
+            style={{
+                width: width < 800 ? '90%' : '',
+                marginTop: width < 800 ? '10px' : '0px',
+                marginBottom: '15px',
+            }}
+        >
             <Dropdown
                 fluid
                 search
@@ -64,18 +73,23 @@ const PrescriptionsForm = (
                 placeholder='medication name'
                 className='main-input recipe'
             />
-            <Input
-                fluid
-                type='text'
-                transparent={mobile}
-                uuid={row.id}
-                value={row.dose}
-                onChange={formatAction(actions.updatePrescriptionDose)}
-                aria-label='Prescription-Amount'
-                placeholder='e.g. 81 mg tablet'
-                className={`recipe-amount ${!mobile && 'lg'}`}
-            />
-        </>
+            <div className='container' style={{ height: '20px' }} />
+            <label>Prescription Dose</label>
+            <div className='container' style={{ height: '10px' }} />
+            <div className='ui form'>
+                <TextArea
+                    fluid
+                    type='text'
+                    transparent={mobile}
+                    uuid={row.id}
+                    value={row.dose}
+                    onChange={formatAction(actions.updatePrescriptionDose)}
+                    aria-label='Prescription-Amount'
+                    placeholder='e.g. 81 mg tablet'
+                    className={`recipe-amount ${!mobile && 'lg'}`}
+                />
+            </div>
+        </div>
     );
 
     const gridColumn: ComponentFunction = (row, options, onAddItem) => (
@@ -119,30 +133,37 @@ const PrescriptionsForm = (
 
     const mobileContent: ComponentFunction = (row) => (
         <>
-            <label> Signature (Sig) </label>
-            <Input
-                fluid
-                transparent
-                type='text'
-                uuid={row.id}
-                value={row.signature}
-                onChange={formatAction(actions.updatePrescriptionSignature)}
-                placeholder='e.g. 1 tablet every 8 hours'
-                aria-label='Prescription-Signature'
-                className='expanded-input'
-            />
-            <label> Comments </label>
-            <Input
-                fluid
-                transparent
-                type='text'
-                uuid={row.id}
-                value={row.comments}
-                onChange={formatAction(actions.updatePrescriptionComments)}
-                placeholder='e.g. take with food'
-                aria-label='Prescription-Comment'
-                className='expanded-input'
-            />
+            <label style={{ marginLeft: '15px' }}> Signature (Sig) </label>
+            <div className='container' style={{ height: '5px' }} />
+            <div className='ui form' style={{ width: '90%', margin: 'auto' }}>
+                <TextArea
+                    fluid
+                    transparent
+                    type='text'
+                    uuid={row.id}
+                    value={row.signature}
+                    onChange={formatAction(actions.updatePrescriptionSignature)}
+                    placeholder='e.g. 1 tablet every 8 hours'
+                    aria-label='Prescription-Signature'
+                    className='expanded-input'
+                />
+            </div>
+            <div className='container' style={{ height: '10px' }} />
+            <label style={{ marginLeft: '15px' }}> Comments </label>
+            <div className='container' style={{ height: '5px' }} />
+            <div className='ui form' style={{ width: '90%', margin: 'auto' }}>
+                <TextArea
+                    fluid
+                    transparent
+                    type='text'
+                    uuid={row.id}
+                    value={row.comments}
+                    onChange={formatAction(actions.updatePrescriptionComments)}
+                    placeholder='e.g. take with food'
+                    aria-label='Prescription-Comment'
+                    className='expanded-input'
+                />
+            </div>
         </>
     );
 

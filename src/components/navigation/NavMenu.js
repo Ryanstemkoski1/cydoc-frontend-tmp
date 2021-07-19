@@ -15,6 +15,7 @@ import PropTypes from 'prop-types';
 import {
     HIDE_CYDOC_IN_NAV_MENU_BP,
     LOGGEDIN_NAV_MENU_MOBILE_BP,
+    NOTE_PAGE_MOBILE_BP,
 } from 'constants/breakpoints.js';
 import HPIContext from 'contexts/HPIContext.js';
 import AuthContext from '../../contexts/AuthContext';
@@ -69,6 +70,7 @@ class ConnectedNavMenu extends Component {
         const { windowWidth } = this.state;
         const collapseLoggedInNav = windowWidth < LOGGEDIN_NAV_MENU_MOBILE_BP;
         const hideCydoc = windowWidth < HIDE_CYDOC_IN_NAV_MENU_BP;
+        const pathEqual = window.location.pathname === '/editnote';
 
         const dropdownOptions = [
             {
@@ -118,7 +120,20 @@ class ConnectedNavMenu extends Component {
         // Menu items when logged in
         const loggedInMenuItems = collapseLoggedInNav ? (
             <>
-                <Menu.Item>
+                <Menu.Item
+                    style={{
+                        width: pathEqual ? '0px' : '',
+                        height: pathEqual ? '20px' : '',
+                        marginTop:
+                            windowWidth < NOTE_PAGE_MOBILE_BP && pathEqual
+                                ? '70px'
+                                : '',
+                        marginLeft:
+                            windowWidth < NOTE_PAGE_MOBILE_BP && pathEqual
+                                ? '-75px'
+                                : '',
+                    }}
+                >
                     <Button
                         basic
                         color='teal'
@@ -128,7 +143,20 @@ class ConnectedNavMenu extends Component {
                         icon='hospital outline'
                     />
                 </Menu.Item>
-                <Menu.Item>
+                <Menu.Item
+                    style={{
+                        width: pathEqual ? '0px' : '',
+                        height: pathEqual ? '20px' : '',
+                        marginLeft:
+                            windowWidth < NOTE_PAGE_MOBILE_BP && pathEqual
+                                ? '-32px'
+                                : '',
+                        marginTop:
+                            windowWidth < NOTE_PAGE_MOBILE_BP && pathEqual
+                                ? '130px'
+                                : '',
+                    }}
+                >
                     <Dropdown
                         button
                         basic
@@ -169,12 +197,28 @@ class ConnectedNavMenu extends Component {
                         color='teal'
                         floating
                         name='profile'
-                        className='profile-button'
+                        className={
+                            windowWidth < 800
+                                ? 'profile-button'
+                                : 'profile-button profile-mobile'
+                        }
                         options={dropdownOptions}
+                        icon={windowWidth < 800 ? null : ''}
                         trigger={
                             <span>
-                                <Icon name='user outline' />{' '}
-                                {this.context.user?.firstName}
+                                <Icon
+                                    name='user outline'
+                                    className={
+                                        windowWidth < 800
+                                            ? 'profile-mobile-icon'
+                                            : ''
+                                    }
+                                />{' '}
+                                {windowWidth < 800 ? (
+                                    <></>
+                                ) : (
+                                    <>{this.context.user?.firstName}</>
+                                )}
                             </span>
                         }
                     />
@@ -185,8 +229,18 @@ class ConnectedNavMenu extends Component {
         return (
             <div>
                 <Menu
-                    className={this.props.className + ' nav-menu'}
+                    className={this.props.className + 'nav-menu'}
                     attached={this.props.attached}
+                    style={{
+                        width:
+                            windowWidth < NOTE_PAGE_MOBILE_BP && pathEqual
+                                ? windowWidth
+                                : '',
+                        height:
+                            windowWidth < NOTE_PAGE_MOBILE_BP && pathEqual
+                                ? '240px'
+                                : '100px',
+                    }}
                 >
                     <Menu.Item as={Link} to='/dashboard' className='logo-menu'>
                         <Image src={Logo} className='logo-circle' />
@@ -245,7 +299,7 @@ class NoteNameMenuItem extends Component {
                 zip: this.zip,
             },
             primaryEmail: this.primaryEmail,
-            secondaryEmail: '', // TODO: remove this line when switching to AWS backend
+            // secondaryEmail: '', // TODO: remove this line when switching to AWS backend
             primaryPhone: this.primaryPhone,
             age: this.age,
             months: this.months,
@@ -257,6 +311,8 @@ class NoteNameMenuItem extends Component {
             primaryMobile: false,
             saveButton: '',
             buttonIcon: undefined,
+            windowWidth: 0,
+            windowHeight: 0,
         };
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -270,6 +326,24 @@ class NoteNameMenuItem extends Component {
         this.handleMobile = this.handleMobile.bind(this);
         this.setPrimaryMobile = this.setPrimaryMobile.bind(this);
         this.handleSave = this.handleSave.bind(this);
+        this.updateDimensions = this.updateDimensions.bind(this);
+    }
+
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener('resize', this.updateDimensions);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateDimensions);
+    }
+
+    updateDimensions() {
+        let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
+        let windowHeight =
+            typeof window !== 'undefined' ? window.innerHeight : 0;
+
+        this.setState({ windowWidth, windowHeight });
     }
 
     handleInputChange = (event) => {
@@ -485,9 +559,17 @@ class NoteNameMenuItem extends Component {
     };
 
     render() {
-        const { open } = this.state;
+        const { open, windowWidth } = this.state;
+
         return (
-            <Menu.Item className='note-name-menu-item'>
+            <Menu.Item
+                className='note-name-menu-item'
+                style={{
+                    marginLeft: windowWidth < NOTE_PAGE_MOBILE_BP ? '5px' : '',
+                    marginTop:
+                        windowWidth < NOTE_PAGE_MOBILE_BP ? '20px' : '15px',
+                }}
+            >
                 <HPIContext.Consumer>
                     {() => (
                         <>
@@ -573,6 +655,12 @@ class NoteNameMenuItem extends Component {
                             className='patient-modal-button'
                             size='tiny'
                             basic
+                            style={{
+                                marginBottom:
+                                    windowWidth < NOTE_PAGE_MOBILE_BP
+                                        ? '70px'
+                                        : '',
+                            }}
                         >
                             Add/Edit Patient Info
                         </Button>

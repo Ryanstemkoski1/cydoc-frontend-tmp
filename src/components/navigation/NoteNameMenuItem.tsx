@@ -47,6 +47,7 @@ export interface Context {
     token: string | null;
     storeLoginInfo: (user: string, token: string) => void;
     logOut: () => void;
+    //eslint-disable-next-line
     updateNote: (note: any) => string;
 }
 
@@ -58,7 +59,9 @@ const stateOptions = states.map((state) => ({
 
 // TODO: Connect to backend
 // Component that displays and changes note name shown only if parent is EditNote.
-const NoteNameMenuItem = (props: NoteNameMenuItemProps) => {
+const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
+    props: NoteNameMenuItemProps
+) => {
     const { title, note, updateNoteTitle } = props;
     const context = useContext(NotesContext) as Context;
 
@@ -69,7 +72,7 @@ const NoteNameMenuItem = (props: NoteNameMenuItemProps) => {
     const [lastName, setLastName] = useState('');
     const [dob, setDob] = useState('');
     const [primaryEmail, setPrimaryEmail] = useState('');
-    const [secondaryEmail, setSecondaryEmail] = useState(''); // TODO: remove this line when switching to AWS backend
+    // const [secondaryEmail, setSecondaryEmail] = useState(''); // TODO: remove this line when switching to AWS backend
     const [primaryPhone, setPrimaryPhone] = useState('');
     const [primaryMobile, setPrimaryMobile] = useState(false);
     const [age, setAge] = useState({
@@ -92,6 +95,7 @@ const NoteNameMenuItem = (props: NoteNameMenuItemProps) => {
     const [buttonIcon, setButtonIcon] = useState<undefined | string>(undefined);
 
     // Update note in backend
+    /* eslint-disable */
     const handleSave = async (e: React.MouseEvent) => {
         e.preventDefault();
         setSaveButton('loading');
@@ -130,8 +134,8 @@ const NoteNameMenuItem = (props: NoteNameMenuItemProps) => {
     };
 
     // Modal event handlers
-    const openModal = () => setOpen(true);
-    const closeModal = () => setOpen(false);
+    const openModal = (): void => setOpen(true);
+    const closeModal = (): void => setOpen(false);
 
     // Patient Info form event handlers
     const processDob = (dateString: string) => {
