@@ -70,3 +70,49 @@
     right: 10px;
     bottom: 10px;
 }
+
+.landing-boxes {
+    display: flex;
+    margin: 2vh 2vw;
+}
+
+.landing-box {
+    background-color: white;
+    color: #0d5e70;
+    border: 2px solid #6DA3B1;
+    border-radius: 15px;
+    margin: 20vh 3vw;
+    padding: 10vh 5vw;
+    flex: 1 1 0px;
+    text-align: center;
+    transition: all .1s ease-in-out;
+}
+
+.landing-box:hover {
+    box-shadow: 0px 5px 15px -2px #0d5e70;
+    transform: scale(1.015);
+    border: 2px solid #0d5e70;
+}
+
+/* Colors used: 
+    #6DA3B1
+    #0d5e70
+    #CDE1E9
+    #034353
+    #007a9a
+*/
+
+.icons {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.text {
+    margin: 1vh 1vw;
+    color: #0d5e70
+}
+
+.smaller-text {
+    color: #6DA3B1
+}

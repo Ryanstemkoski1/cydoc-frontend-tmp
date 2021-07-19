@@ -138,7 +138,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                 <BodySystemDropdown
                     key={bodySystem} // name of body system
                     name={bodySystem as BodySystemNames}
-                    diseasesList={diseasesList} // list of categories (diseases) associated with current body system
+                    diseasesList={diseasesList.sort()} // list of categories (diseases) associated with current body system
                 />
             )
         );
