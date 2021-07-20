@@ -14,11 +14,15 @@ import { selectMedicationsEntries } from 'redux/selectors/medicationsSelectors';
 import './Medications.css';
 import { CurrentNoteState } from 'redux/reducers';
 import MedicationsPanel from './MedicationsPanel';
+import { ResponseTypes } from 'constants/hpiEnums';
+import MultipleChoice from '../hpi/knowledgegraph/src/components/responseComponents/MultipleChoice';
 
 interface OwnProps {
     mobile: boolean;
     isPreview?: boolean;
     values?: string[];
+    responseType?: ResponseTypes;
+    node?: string;
 }
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -105,6 +109,15 @@ export class MedicationsContent extends Component<Props, State> {
         const content = (
             <Accordion panels={panels} exclusive={false} fluid styled />
         );
+
+        const multipleChoiceButtons = this.props.values?.map((medication: string) => {
+            return (
+                <button 
+                    className='button_question'
+                > {medication} 
+                </button>
+                )
+            });
 
         return (
             <>
