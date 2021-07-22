@@ -179,8 +179,7 @@ export default class LandingPageOld extends Component {
                                     <h3 className='text'>Create New Note</h3>
                                     <br />
                                     <p className='smaller-text'>
-                                        Insert explanation here for creating a
-                                        new note
+                                        Write a note for a patient encounter
                                     </p>
                                 </div>
 
@@ -198,8 +197,8 @@ export default class LandingPageOld extends Component {
                                     </h3>
                                     <br />
                                     <p className='smaller-text'>
-                                        Insert explanation here for creating a
-                                        new template
+                                        Design a custom HPI questionnaire for
+                                        any chief complaint
                                     </p>
                                 </div>
 
@@ -217,8 +216,7 @@ export default class LandingPageOld extends Component {
                                     </h3>
                                     <br />
                                     <p className='smaller-text'>
-                                        Insert explanation for editing an
-                                        existing template
+                                        Edit an existing HPI questionnaire
                                     </p>
                                 </div>
                             </div>
