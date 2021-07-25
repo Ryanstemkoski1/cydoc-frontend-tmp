@@ -71,11 +71,25 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
         this.setState({ windowWidth, windowHeight });
     }
 
+    popResponseChoice(): string[] {
+        const { responseType, node, responseChoice, hpi } = this.props;
+        const response = hpi.nodes[node].response;
+        return [
+            ResponseTypes.MEDS_POP,
+            ResponseTypes.FH_POP,
+            ResponseTypes.PMH_POP,
+            ResponseTypes.PSH_POP,
+        ].includes(responseType)
+            ? responseChoice
+            : isStringArray(response)
+            ? response
+            : [];
+    }
+
     renderSwitch = () => {
         const { windowWidth } = this.state;
         const { responseType, node, responseChoice } = this.props;
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
-        const response = this.props.hpi.nodes[node].response;
         switch (responseType) {
             case ResponseTypes.YES_NO:
             case ResponseTypes.NO_YES:
@@ -95,26 +109,24 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                     <MultipleChoice key={item} name={item} node={node} />
                 ));
 
-            case ResponseTypes.MEDS_POP:
-                return (
-                    <MedicationsContent
-                        key={node}
-                        isPreview={false}
-                        mobile={collapseTabs}
-                        values={responseChoice}
-                        responseType={responseType}
-                        node={node}
-                    />
-                );
-            // return responseChoice.map((item: string) => (
-            //     <MultipleChoice key={item} name={item} node={node} />
-            // ));
-
             case ResponseTypes.NUMBER:
                 return <HandleNumericInput key={node} node={node} max={10} />;
 
             case ResponseTypes.BODYLOCATION:
                 return <BodyLocation key={node} node={node} />;
+
+            case ResponseTypes.MEDS_POP:
+            case ResponseTypes.MEDS_BLANK:
+                return (
+                    <MedicationsContent
+                        key={node}
+                        isPreview={false}
+                        mobile={collapseTabs}
+                        values={this.popResponseChoice()}
+                        responseType={responseType}
+                        node={node}
+                    />
+                );
 
             case ResponseTypes.FH_POP:
             case ResponseTypes.FH_BLANK:
@@ -122,13 +134,7 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                     <FamilyHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={
-                            responseType == ResponseTypes.FH_POP
-                                ? responseChoice
-                                : isStringArray(response)
-                                ? response
-                                : []
-                        }
+                        responseChoice={this.popResponseChoice()}
                         responseType={responseType}
                         node={node}
                     />
@@ -140,13 +146,7 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                     <MedicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={
-                            responseType == ResponseTypes.PMH_POP
-                                ? responseChoice
-                                : isStringArray(response)
-                                ? response
-                                : []
-                        }
+                        responseChoice={this.popResponseChoice()}
                         responseType={responseType}
                         mobile={collapseTabs}
                         currentYear={-1}
@@ -154,22 +154,13 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                     />
                 );
 
-            case ResponseTypes.MEDS_BLANK:
-                return <MedicationsContent key={node} mobile={collapseTabs} />;
-
             case ResponseTypes.PSH_POP:
             case ResponseTypes.PSH_BLANK:
                 return (
                     <SurgicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={
-                            responseType == ResponseTypes.PSH_POP
-                                ? responseChoice
-                                : isStringArray(response)
-                                ? response
-                                : []
-                        }
+                        responseChoice={this.popResponseChoice()}
                         responseType={responseType}
                         mobile={collapseTabs}
                         node={node}

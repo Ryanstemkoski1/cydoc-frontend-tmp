@@ -17,10 +17,7 @@ import { CurrentNoteState } from 'redux/reducers';
 import MedicationsPanel from './MedicationsPanel';
 import { ResponseTypes } from 'constants/hpiEnums';
 import { v4 } from 'uuid';
-import {
-    multipleChoiceHandleClick,
-    popResponse,
-} from 'redux/actions/hpiActions';
+import { multipleChoiceHandleClick } from 'redux/actions/hpiActions';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 
 interface OwnProps {
@@ -146,7 +143,7 @@ export class MedicationsContent extends Component<Props, State> {
         const content = (
             <Accordion panels={panels} exclusive={false} fluid styled />
         );
-
+            console.log(responseType)
         return (
             <>
                 {node &&
@@ -190,9 +187,7 @@ export class MedicationsContent extends Component<Props, State> {
                     })}
                 {content}
                 {!this.props.isPreview &&
-                    responseType == ResponseTypes.MEDS_BLANK &&
-                    values &&
-                    !values.length && (
+                    responseType == ResponseTypes.MEDS_BLANK && (
                         <AddRowButton
                             onClick={() => this.props.addMedication()}
                             ariaLabel='Add-Medication-Row-Button'
