@@ -139,7 +139,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         key={node}
                         isPreview={false}
                         mobile={collapseTabs}
-                        values={responseChoice}
+                        values={this.popResponseChoice()}
                         responseType={responseType}
                         node={node}
                     />
