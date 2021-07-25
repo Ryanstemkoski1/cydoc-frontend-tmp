@@ -175,6 +175,25 @@ export function medicationsReducer(
             const { [index]: deleted, ...newState } = state;
             return newState;
         }
+
+        case MEDICATIONS_ACTION.ADD_MEDS_POP_OPTION: {
+            const { medIndex, medName } = action.payload;
+            return {
+                ...state,
+                [medIndex]: {
+                    drugName: medName,
+                    startYear: -1,
+                    isCurrentlyTaking: YesNoResponse.None,
+                    endYear: -1,
+                    schedule: '',
+                    dose: '',
+                    reasonForTaking: '',
+                    sideEffects: [],
+                    comments: '',
+                },
+            };
+        }
+
         default:
             return state;
     }

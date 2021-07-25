@@ -96,17 +96,19 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                 ));
 
             case ResponseTypes.MEDS_POP:
-                return <MedicationsContent 
-                    key={node}
-                    isPreview={false}
-                    mobile={collapseTabs}
-                    values={responseChoice}
-                    responseType={responseType}
-                    node={node}
+                return (
+                    <MedicationsContent
+                        key={node}
+                        isPreview={false}
+                        mobile={collapseTabs}
+                        values={responseChoice}
+                        responseType={responseType}
+                        node={node}
                     />
-                // return responseChoice.map((item: string) => (
-                //     <MultipleChoice key={item} name={item} node={node} />
-                // ));
+                );
+            // return responseChoice.map((item: string) => (
+            //     <MultipleChoice key={item} name={item} node={node} />
+            // ));
 
             case ResponseTypes.NUMBER:
                 return <HandleNumericInput key={node} node={node} max={10} />;

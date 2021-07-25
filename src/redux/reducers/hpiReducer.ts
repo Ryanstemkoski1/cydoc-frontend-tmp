@@ -395,7 +395,6 @@ export function hpiReducer(
                 [
                     ResponseTypes.FH_POP,
                     ResponseTypes.PMH_POP,
-                    ResponseTypes.MEDS_POP,
                     ResponseTypes.PSH_POP,
                 ].includes(state.nodes[medId].responseType) &&
                 isStringArray(response) &&
