@@ -612,7 +612,7 @@ class EditTemplateForm extends Component {
                     <Button
                         circular
                         icon='add'
-                        onClick={() => this.addQuestion(1)}
+                        onClick={() => this.addNQuestions(1)}
                         content='Add question'
                         className='add-question-button'
                         disabled={reachedMax}
