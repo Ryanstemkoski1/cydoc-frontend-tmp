@@ -276,7 +276,7 @@ export function familyHistoryReducer(
                 ...state,
                 [v4()]: {
                     condition: '',
-                    hasAfflictedFamilyMember: YesNoResponse.None,
+                    hasAfflictedFamilyMember: YesNoResponse.Yes,
                     familyMembers: {
                         [v4()]: {
                             member: FamilyOption.None,
