@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Dropdown, Menu, Header, Image, Icon, Button } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
     HIDE_CYDOC_IN_NAV_MENU_BP,
     LOGGEDIN_NAV_MENU_MOBILE_BP,
@@ -74,6 +74,24 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
             active: false,
         },
     ];
+
+    // Use for redirecting
+    const history = useHistory();
+    // Check if currently editing note, then handle redirect
+    const checkEditNote = () => {
+        const path = '/dashboard';
+        if (window.location.href.includes('editnote')) {
+            const confirmBox = window.confirm(
+                'Are you sure you want to redirect? Your generated note will not be saved.'
+            );
+            if (confirmBox === true) {
+                history.push(path);
+            }
+        } else {
+            history.push(path);
+        }
+    };
+
     // Menu items when not logged in
     const defaultMenuItems = (
         <Menu.Item>
@@ -93,10 +111,9 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                 <Button
                     basic
                     color='teal'
-                    as={Link}
-                    to='/dashboard'
                     name='home'
                     icon='hospital outline'
+                    onClick={checkEditNote}
                 />
             </Menu.Item>
             <Menu.Item>
@@ -117,6 +134,13 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                             />
                         </span>
                     }
+                    onClick={() => {
+                        if (window.location.href.includes('editnote')) {
+                            alert(
+                                'If you redirect, your note will not be saved.'
+                            );
+                        }
+                    }}
                 />
             </Menu.Item>
         </>
@@ -126,11 +150,10 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                 <Button
                     basic
                     color='teal'
-                    as={Link}
                     name='home'
-                    to='/dashboard'
                     content='Home'
-                    icon='hospital outline' // home icon??
+                    icon='hospital outline'
+                    onClick={checkEditNote}
                 />
             </Menu.Item>
             <Menu.Item>
@@ -148,6 +171,13 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                             {context.user?.firstName}
                         </span>
                     }
+                    onClick={() => {
+                        if (window.location.href.includes('editnote')) {
+                            alert(
+                                'If you redirect, your note will not be saved.'
+                            );
+                        }
+                    }}
                 />
             </Menu.Item>
         </>
@@ -157,7 +187,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
         <div>
             <Menu className={`${className} nav-menu`} attached={attached}>
                 {context.token ? (
-                    <Menu.Item as={Link} to='/dashboard' className='logo-menu'>
+                    <Menu.Item className='logo-menu' onClick={checkEditNote}>
                         <Image src={Logo} className='logo-circle' />
                         {!displayNoteName && !hideCydoc && (
                             <Header
@@ -168,7 +198,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                         )}
                     </Menu.Item>
                 ) : (
-                    <Menu.Item as={Link} to='/' className='logo-menu'>
+                    <Menu.Item className='logo-menu' onClick={checkEditNote}>
                         <Image src={Logo} className='logo-circle' />
                         {!displayNoteName && !hideCydoc && (
                             <Header
