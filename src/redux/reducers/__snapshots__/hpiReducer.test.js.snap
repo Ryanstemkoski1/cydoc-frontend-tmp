@@ -3,7 +3,7 @@
 exports[`hpi reducers add edge returns correct state with edge info 1`] = `
 Object {
   "edges": Object {
-    "35ae0742-722f-4b8f-92ed-802e2ce9a4b3": Object {
+    "77bdf200-67b3-4edb-9aa4-5539d145e9e6": Object {
       "from": "foo2",
       "fromQuestionOrder": -1,
       "to": "foo1",
@@ -12,7 +12,7 @@ Object {
   },
   "graph": Object {
     "medId": Array [
-      "35ae0742-722f-4b8f-92ed-802e2ce9a4b3",
+      "77bdf200-67b3-4edb-9aa4-5539d145e9e6",
     ],
   },
   "nodes": Object {},
@@ -25,11 +25,11 @@ Object {
   "graph": Object {},
   "nodes": Object {
     "medId": Object {
-      "blankNo": undefined,
-      "blankTemplate": undefined,
-      "blankYes": undefined,
-      "response": undefined,
-      "responseType": "responseType",
+      "blankNo": "blankNo",
+      "blankTemplate": "blankTemplate",
+      "blankYes": "blankYes",
+      "response": Object {},
+      "responseType": "BODYLOCATION",
       "text": "text",
     },
   },
@@ -144,6 +144,30 @@ Object {
         },
       },
       "responseType": "BODYLOCATION",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles blank widget questions handles new blank response 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Array [
+        "foo",
+      ],
+      "responseType": "FH-BLANK",
       "text": "text",
       "uid": "uid",
     },
@@ -503,6 +527,31 @@ Object {
 }
 `;
 
+exports[`hpi reducers handle user actions handles pop response questions handles new pop response 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Array [
+        "foo1",
+        "foo2",
+      ],
+      "responseType": "FH-POP",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
 exports[`hpi reducers handle user actions handles scale input actions handles scale handle clear 1`] = `
 Object {
   "edges": Object {},
@@ -597,7 +646,7 @@ Object {
 }
 `;
 
-exports[`hpi reducers handle user actions handles yes no toggle 1`] = `
+exports[`hpi reducers handle user actions handles yes no actions handles yes no toggle 1`] = `
 Object {
   "edges": Object {},
   "graph": Object {},

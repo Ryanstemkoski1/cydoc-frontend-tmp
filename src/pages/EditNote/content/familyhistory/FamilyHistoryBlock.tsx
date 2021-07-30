@@ -218,6 +218,7 @@ interface BlockProps {
     isPreview?: boolean;
     conditionInp: JSX.Element;
     pop: boolean;
+    node?: string;
 }
 
 interface DispatchProps {

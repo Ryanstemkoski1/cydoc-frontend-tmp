@@ -36,14 +36,25 @@ describe('hpi reducers', () => {
                 medID: medId,
                 category: 'category',
                 text: 'text',
-                responseType: 'responseType',
+                responseType: 'BODYLOCATION',
                 bodySystem: 'bodySystem',
                 noteSection: 'noteSection',
-                DoctorView: 'DoctorView',
-                PatientView: 'PatientView',
+                doctorView: 'DoctorView',
+                patientView: 'PatientView',
                 doctorCreated: 'doctorCreated',
-                response: 'response',
+                response: ExpectedResponseDict['BODYLOCATION'],
+                blankTemplate: 'blankTemplate',
+                blankYes: 'blankYes',
+                blankNo: 'blankNo',
             };
+            const responseNode = {
+                response: node.response,
+                responseType: node.responseType,
+                text: node.text,
+                blankYes: node.blankYes,
+                blankNo: node.blankNo,
+                // blankode: blankNode.blankTemplate,
+            }
             const payload = {
                 medId: medId,
                 node: node,
@@ -54,6 +65,7 @@ describe('hpi reducers', () => {
             });
             expect(nextState).toMatchSnapshot();
             expect(nextState.nodes[medId]).toBeTruthy();
+            expect(nextState.nodes[medId]).toMatchObject(node);
         });
     });
     describe('add edge', () => {
@@ -256,15 +268,17 @@ describe('hpi reducers', () => {
                 ).toMatchSnapshot();
             });
         });
-        it('handles yes no toggle', () => {
-            payload.optionSelected = 'Yes';
-            nextState.nodes[medId].responseType = 'YES-NO';
-            expect(
-                hpiReducer(nextState, {
-                    type: HPI_ACTION.YES_NO_TOGGLE_OPTION,
-                    payload,
-                })
-            ).toMatchSnapshot();
+        describe('handles yes no actions', () => {
+            it('handles yes no toggle', () => {
+                payload.optionSelected = 'Yes';
+                nextState.nodes[medId].responseType = 'YES-NO';
+                expect(
+                    hpiReducer(nextState, {
+                        type: HPI_ACTION.YES_NO_TOGGLE_OPTION,
+                        payload,
+                    })
+                ).toMatchSnapshot();
+            });
         });
         describe('handles scale input actions', () => {
             beforeEach(() => {
@@ -283,6 +297,34 @@ describe('hpi reducers', () => {
                 expect(
                     hpiReducer(nextState, {
                         type: HPI_ACTION.SCALE_HANDLE_CLEAR,
+                        payload,
+                    })
+                ).toMatchSnapshot();
+            });
+        });
+        describe('handles blank widget questions', () => {
+            it('handles new blank response', () => {
+                nextState.nodes[medId].responseType = 'FH-BLANK';
+                nextState.nodes[medId].response =
+                    ExpectedResponseDict['FH_BLANK'];
+                payload = { medId: medId, conditionId: 'foo' };
+                expect(
+                    hpiReducer(nextState, {
+                        type: HPI_ACTION.HANDLE_BLANK_QUESTION_CHANGE,
+                        payload,
+                    })
+                ).toMatchSnapshot();
+            });
+        });
+        describe('handles pop response questions', () => {
+            it('handles new pop response', () => {
+                nextState.nodes[medId].responseType = 'FH-POP';
+                nextState.nodes[medId].response =
+                    ExpectedResponseDict['FH_POP'];
+                payload = { medId: medId, conditionIds: ['foo1', 'foo2'] };
+                expect(
+                    hpiReducer(nextState, {
+                        type: HPI_ACTION.POP_RESPONSE,
                         payload,
                     })
                 ).toMatchSnapshot();

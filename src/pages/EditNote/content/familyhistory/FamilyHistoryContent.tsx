@@ -74,15 +74,18 @@ class FamilyHistoryContent extends Component<Props, State> {
     }
 
     addRow() {
-        if (
-            this.props.responseType == ResponseTypes.FH_BLANK &&
-            this.props.node
-        ) {
+        const {
+            responseType,
+            node,
+            addFhPopOptions,
+            blankQuestionChange,
+            addCondition,
+        } = this.props;
+        if (responseType == ResponseTypes.FH_BLANK && node) {
             const newKey = v4();
-            this.props.addFhPopOptions(newKey, '');
-            this.props.blankQuestionChange(this.props.node, newKey);
-        }
-        this.props.addCondition();
+            addFhPopOptions(newKey, '');
+            blankQuestionChange(node, newKey);
+        } else addCondition();
     }
 
     addSeenCond = (value: string, index: string) => {

@@ -374,18 +374,9 @@ export function hpiReducer(
                     ResponseTypes.PSH_BLANK,
                 ].includes(state.nodes[medId].responseType) &&
                 isStringArray(response)
-            ) {
-                if (response.includes(conditionId)) {
-                    const [conditionId, ...res] = response;
-                    const responseArr = res;
-                    return updateResponse(medId, responseArr, state);
-                } else
-                    return updateResponse(
-                        medId,
-                        [...response, conditionId],
-                        state
-                    );
-            } else throw new Error('Not a blank response');
+            )
+                return updateResponse(medId, [...response, conditionId], state);
+            else throw new Error('Not a blank response');
         }
 
         case HPI_ACTION.POP_RESPONSE: {

@@ -17,7 +17,10 @@ import { CurrentNoteState } from 'redux/reducers';
 import MedicationsPanel from './MedicationsPanel';
 import { ResponseTypes } from 'constants/hpiEnums';
 import { v4 } from 'uuid';
-import { multipleChoiceHandleClick } from 'redux/actions/hpiActions';
+import {
+    multipleChoiceHandleClick,
+    blankQuestionChange,
+} from 'redux/actions/hpiActions';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 
 interface OwnProps {
@@ -67,6 +70,21 @@ export class MedicationsContent extends Component<Props, State> {
                 [value]: { value, label: value },
             },
         }));
+    };
+
+    addRow = () => {
+        const {
+            responseType,
+            node,
+            addMedsPopOption,
+            blankQuestionChange,
+            addMedication,
+        } = this.props;
+        if (responseType == ResponseTypes.MEDS_BLANK && node) {
+            const newKey = v4();
+            addMedsPopOption(newKey, '');
+            blankQuestionChange(node, newKey);
+        } else addMedication();
     };
 
     render() {
@@ -143,10 +161,10 @@ export class MedicationsContent extends Component<Props, State> {
         const content = (
             <Accordion panels={panels} exclusive={false} fluid styled />
         );
-            console.log(responseType)
         return (
             <>
                 {node &&
+                    responseType == ResponseTypes.MEDS_POP &&
                     values &&
                     values.map((medication: string) => {
                         const response = hpi.nodes[node].response;
@@ -187,9 +205,9 @@ export class MedicationsContent extends Component<Props, State> {
                     })}
                 {content}
                 {!this.props.isPreview &&
-                    responseType == ResponseTypes.MEDS_BLANK && (
+                    responseType != ResponseTypes.MEDS_POP && (
                         <AddRowButton
-                            onClick={() => this.props.addMedication()}
+                            onClick={this.addRow}
                             ariaLabel='Add-Medication-Row-Button'
                             name='medication'
                         />
@@ -209,6 +227,7 @@ const mapDispatchToProps = {
     deleteMedication,
     addMedsPopOption,
     multipleChoiceHandleClick,
+    blankQuestionChange,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

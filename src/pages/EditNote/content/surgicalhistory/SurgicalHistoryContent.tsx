@@ -81,8 +81,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             const newKey = v4();
             this.props.addPshPopOptions(newKey, '');
             this.props.blankQuestionChange(this.props.node, newKey);
-        }
-        this.props.addProcedure();
+        } else this.props.addProcedure();
     }
 
     //modify the current values in the table to reflect changes

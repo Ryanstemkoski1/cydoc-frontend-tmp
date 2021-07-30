@@ -132,8 +132,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
             const newKey = v4();
             this.props.addPmhPopOptions(newKey, '');
             this.props.blankQuestionChange(this.props.node, newKey);
-        }
-        this.props.addDefaultCondition();
+        } else this.props.addDefaultCondition();
     }
 
     render() {
