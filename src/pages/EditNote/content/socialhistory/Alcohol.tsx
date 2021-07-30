@@ -34,6 +34,7 @@ import {
     YesNoResponse,
 } from 'constants/enums';
 import { CurrentNoteState } from 'redux/reducers';
+import _ from 'lodash';
 
 type OwnProps = {
     mobile: boolean;
@@ -220,7 +221,11 @@ class Alcohol extends React.Component<Props, State> {
         );
     }
 
-    getCell(placeholder: string, rowindex: number) {
+    getCell(
+        placeholder: string,
+        rowindex: number,
+        availableDrinkTypes?: typeof drinkTypes
+    ) {
         const values = this.props.alcohol;
         let cell;
 
@@ -235,7 +240,7 @@ class Alcohol extends React.Component<Props, State> {
                             fluid
                             search
                             selection
-                            options={drinkTypes}
+                            options={availableDrinkTypes}
                             placeholder={placeholder}
                             onChange={(_, { value }) => {
                                 this.props.updateAlcoholConsumptionType(
@@ -449,11 +454,18 @@ class Alcohol extends React.Component<Props, State> {
     }
 
     makeTableBodyRows(drinksConsumed: AlcoholConsumption[]) {
+        const consumedDrinkTypes: string[] = [];
+
         return drinksConsumed.map((_consumption, index) => {
+            const availableDrinkTypes = drinkTypes.filter(
+                (drink) => _.indexOf(consumedDrinkTypes, drink.value) < 0
+            );
+            consumedDrinkTypes.push(_consumption.type);
+
             return (
                 <Table.Row key={index}>
                     <Table.Cell onClick={this.handleCellClick}>
-                        {this.getCell('Drink Type', index)}
+                        {this.getCell('Drink Type', index, availableDrinkTypes)}
                     </Table.Cell>
                     <Table.Cell onClick={this.handleCellClick}>
                         {this.getCell('Drink Size', index)}
@@ -517,7 +529,11 @@ class Alcohol extends React.Component<Props, State> {
                     <AddRowButton
                         ariaLabel='Add-Alcohol-Consumption-Button'
                         onClick={() => {
-                            this.props.addAlcoholConsumption();
+                            if (
+                                values.drinksConsumed.length < drinkTypes.length
+                            ) {
+                                this.props.addAlcoholConsumption();
+                            }
                         }}
                         name='drink type'
                     />
