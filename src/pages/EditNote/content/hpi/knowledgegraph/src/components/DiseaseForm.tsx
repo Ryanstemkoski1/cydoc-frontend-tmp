@@ -12,12 +12,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { HpiState, NodeInterface } from 'redux/reducers/hpiReducer';
 import { CurrentNoteState } from 'redux/reducers';
-import {
-    addNode,
-    addEdge,
-    AddNodeAction,
-    AddEdgeAction,
-} from 'redux/actions/hpiActions';
+import { addNode, AddNodeAction } from 'redux/actions/hpiActions';
 import { YesNoResponse } from 'constants/enums';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 
@@ -86,28 +81,31 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
             const currNode = queue.shift();
             if (!currNode || !(currNode in graph)) continue;
             const currEdges = graph[currNode]; // edges associated with current node
-            let questionOrderList: [string, number][] = currEdges.map(
-                (edge: number) => {
-                    // list of tuples (to node, toQuestionOrder)
-                    const edgeInfo = edges[edge.toString()];
-                    addEdge(currNode, edgeInfo);
-                    const to = edgeInfo.to;
-                    const toQuestionOrder = edgeInfo.toQuestionOrder;
-                    return [
-                        to,
-                        toQuestionOrder != -1
-                            ? toQuestionOrder
-                            : edge + currEdges.length,
-                    ];
-                }
-            );
+            let questionOrderList: [
+                string,
+                number,
+                EdgeInterface
+            ][] = currEdges.map((edge: number) => {
+                // list of tuples (to node, toQuestionOrder)
+                const edgeInfo = edges[edge.toString()];
+                const to = edgeInfo.to;
+                const toQuestionOrder = edgeInfo.toQuestionOrder;
+                return [
+                    to,
+                    toQuestionOrder != -1
+                        ? toQuestionOrder
+                        : edge + currEdges.length,
+                    edgeInfo,
+                ];
+            });
             questionOrderList = questionOrderList.sort(
                 (tup1, tup2) => tup1[1] - tup2[1]
             ); // sort by questionOrder
             const childNodes = questionOrderList.map((tup) => tup[0]); // child nodes in order
+            const edgesList = questionOrderList.map((tup) => tup[2]);
             parentToChildNodes[currNode] = childNodes;
             queue = queue.concat(childNodes);
-            addNode(currNode, nodes[currNode]);
+            addNode(currNode, nodes[currNode], edgesList);
         }
         this.setState({
             parentToChildNodes: parentToChildNodes,
@@ -152,8 +150,11 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
 }
 
 interface DispatchProps {
-    addNode: (medId: string, node: NodeInterface) => AddNodeAction;
-    addEdge: (medId: string, edge: EdgeInterface) => AddEdgeAction;
+    addNode: (
+        medId: string,
+        node: NodeInterface,
+        edges: EdgeInterface[]
+    ) => AddNodeAction;
 }
 
 const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
@@ -164,7 +165,6 @@ type Props = HpiStateProps & DispatchProps & DiseaseFormProps;
 
 const mapDispatchToProps = {
     addNode,
-    addEdge,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DiseaseForm);

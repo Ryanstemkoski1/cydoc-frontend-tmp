@@ -14,7 +14,6 @@ import {
     ClickBoxesInput,
     BodyLocationTotal,
     BodyLocationOptions,
-    BodyLocationLRItemType,
     EdgeInterface,
     BodyLocationToggle,
 } from '../../constants/hpiEnums';
@@ -133,10 +132,27 @@ export function hpiReducer(
 ): HpiState {
     switch (action.type) {
         case HPI_ACTION.ADD_NODE: {
-            const { medId, node } = action.payload;
+            /* 
+            This function adds a new node to the HPI state "nodes" attribute
+            by copying responseType, text, blankYes, blankNo and blankTemplate
+            attributes from the corresponding node information from the 
+            knowledge graph, while adding the response attribute. The response
+            attribute will have a value dependent on the expected response based
+            on the response type. A graph entry with the key being the medId and
+            value being the list of edges in order associated with the current
+            medId. The edge entry is added by copying the edge from the edge in
+            the knowledge graph.
+            */
+            const { medId, node, edges } = action.payload;
             const response = Object.keys(ResponseTypes)[
                 Object.values(ResponseTypes).indexOf(node.responseType)
             ] as keyof ExpectedResponseInterface;
+            const edgeDict: { [edgeKey: string]: EdgeInterface } = {};
+            const edgeKeys = edges.map((edge) => {
+                const edgeKey = 'to' + edge.to + 'from' + edge.from;
+                edgeDict[edgeKey] = edge;
+                return edgeKey;
+            });
             return {
                 ...state,
                 nodes: {
@@ -151,57 +167,53 @@ export function hpiReducer(
                         blankTemplate: node.blankTemplate,
                     },
                 },
-            };
-        }
-
-        case HPI_ACTION.ADD_EDGE: {
-            const { medId, edge } = action.payload;
-            const newKey = v4();
-            let newGraphResponse;
-            if (medId in state.graph)
-                newGraphResponse = [...state.graph[medId], newKey];
-            else newGraphResponse = [newKey];
-            return {
-                ...state,
                 graph: {
                     ...state.graph,
-                    [medId]: newGraphResponse,
+                    [medId]: edgeKeys,
                 },
                 edges: {
                     ...state.edges,
-                    [newKey]: edge,
+                    ...edgeDict,
                 },
             };
         }
 
         case HPI_ACTION.BODY_LOCATION_RESPONSE: {
+            /* 
+            Initializes body location response by adding new entries with each key 
+            being the body location name and value being a dictionary of left, center,
+            and right or true/false as the response for the given medId.
+            */
             const { medId, bodyOptions } = action.payload;
             const currResponse = state.nodes[medId].response;
-            let newResponse: BodyLocationTotal = {};
-            let bodyLocationOptions: BodyLocationLRItemType[] = [];
-            for (const i in bodyOptions)
-                bodyLocationOptions = bodyLocationOptions.concat(
-                    bodyOptions[i]
-                );
+            const newResponse: BodyLocationTotal = {};
+            // merge array of arrays to one array
             if (
                 state.nodes[medId].responseType == ResponseTypes.BODYLOCATION &&
                 isBodyLocationLRDict(currResponse) &&
                 !Object.keys(currResponse).length
             ) {
-                for (const i in bodyLocationOptions) {
-                    const bodyOptionItem = bodyLocationOptions[i];
-                    newResponse = {
-                        ...newResponse,
-                        [bodyOptionItem.name]: bodyOptionItem.needsRightLeft
+                bodyOptions
+                    .reduce(
+                        (prevValue, currValue) => prevValue.concat(currValue),
+                        []
+                    )
+                    .map((bodyOptionItem) => {
+                        newResponse[
+                            bodyOptionItem.name
+                        ] = bodyOptionItem.needsRightLeft
                             ? { left: false, center: false, right: false }
-                            : false,
-                    };
-                }
+                            : false;
+                    });
                 return updateResponse(medId, newResponse, state);
             } else return state;
         }
 
         case HPI_ACTION.BODY_LOCATION_HANDLE_TOGGLE: {
+            /*
+            Toggles either the left/center/right response attribute or the 
+            response itself between true or false.
+            */
             const { medId, bodyOption, toggle } = action.payload;
             const response = state.nodes[medId].response as BodyLocationTotal;
             if (
@@ -210,35 +222,36 @@ export function hpiReducer(
                 isBodyOption(bodyOption)
             ) {
                 const bodyOptionItem = response[bodyOption];
-                if (
-                    isBodyLocationToggleDict(bodyOptionItem) &&
+                return isBodyLocationToggleDict(bodyOptionItem) &&
                     isBodyLocationToggle(toggle) &&
                     toggle
-                ) {
-                    return updateResponse(
-                        medId,
-                        {
-                            ...response,
-                            [bodyOption]: {
-                                ...bodyOptionItem,
-                                [toggle]: !bodyOptionItem[toggle],
-                            },
-                        },
-                        state
-                    );
-                } else
-                    return updateResponse(
-                        medId,
-                        {
-                            ...response,
-                            [bodyOption]: !response[bodyOption],
-                        },
-                        state
-                    );
+                    ? updateResponse(
+                          medId,
+                          {
+                              ...response,
+                              [bodyOption]: {
+                                  ...bodyOptionItem,
+                                  [toggle]: !bodyOptionItem[toggle],
+                              },
+                          },
+                          state
+                      )
+                    : updateResponse(
+                          medId,
+                          {
+                              ...response,
+                              [bodyOption]: !response[bodyOption],
+                          },
+                          state
+                      );
             } else throw new Error('Not a body location response');
         }
 
         case HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK: {
+            /* 
+            Adds or removes multiple choice option based on whether it was 
+            already present in the list.
+            */
             const { medId, name } = action.payload;
             const response = state.nodes[medId].response;
             let responseArr: ClickBoxesInput = [];
@@ -258,6 +271,7 @@ export function hpiReducer(
         }
 
         case HPI_ACTION.HANDLE_INPUT_CHANGE: {
+            // Updates text input response
             const { medId, textInput } = action.payload;
             if (state.nodes[medId].responseType === ResponseTypes.SHORT_TEXT)
                 return updateResponse(medId, textInput, state);
@@ -265,6 +279,7 @@ export function hpiReducer(
         }
 
         case HPI_ACTION.HANDLE_NUMERIC_INPUT_CHANGE: {
+            // Updates numeric input response
             const { medId, input } = action.payload;
             if (state.nodes[medId].responseType === ResponseTypes.NUMBER)
                 return updateResponse(medId, input, state);
@@ -272,20 +287,28 @@ export function hpiReducer(
         }
 
         case HPI_ACTION.LIST_TEXT_HANDLE_CHANGE: {
+            /* 
+            updates list input response using unique ids corresponding 
+            to each list text response.
+            */
             const { uuid, medId, textInput } = action.payload;
             const response = state.nodes[medId].response;
             if (
                 state.nodes[medId].responseType === ResponseTypes.LIST_TEXT &&
                 isListTextDictionary(response)
             ) {
-                const newResponse = {
-                    ...response,
-                    [uuid]: textInput,
-                };
-                return updateResponse(medId, newResponse, state);
+                return updateResponse(
+                    medId,
+                    {
+                        ...response,
+                        [uuid]: textInput,
+                    },
+                    state
+                );
             } else throw new Error('Not a list text response');
         }
         case HPI_ACTION.REMOVE_LIST_INPUT: {
+            // removes list input response
             const { uuid, medId } = action.payload;
             const response = state.nodes[medId].response;
             if (
@@ -297,73 +320,104 @@ export function hpiReducer(
             } else throw new Error('Not a list text response');
         }
         case HPI_ACTION.ADD_LIST_INPUT: {
+            // adds new blank list input with unique id
             const { medId } = action.payload;
             const response = state.nodes[medId].response;
             if (
                 state.nodes[medId].responseType === ResponseTypes.LIST_TEXT &&
                 isListTextDictionary(response)
             ) {
-                const newResponse = {
-                    ...response,
-                    [v4()]: '',
-                };
-                return updateResponse(medId, newResponse, state);
+                return updateResponse(
+                    medId,
+                    {
+                        ...response,
+                        [v4()]: '',
+                    },
+                    state
+                );
             } else throw new Error('Not a list text response');
         }
         case HPI_ACTION.HANDLE_TIME_INPUT_CHANGE: {
+            // fixes number input for time input response
             const { medId, numInput } = action.payload;
             const response = state.nodes[medId].response;
             if (
                 state.nodes[medId].responseType === ResponseTypes.TIME3DAYS &&
                 isTimeInputDictionary(response)
             ) {
-                const newResponse = {
-                    ...response,
-                    numInput: numInput,
-                };
-                return updateResponse(medId, newResponse, state);
+                return updateResponse(
+                    medId,
+                    {
+                        ...response,
+                        numInput: numInput,
+                    },
+                    state
+                );
             } else throw new Error('Not a time input response');
         }
         case HPI_ACTION.HANDLE_TIME_OPTION_CHANGE: {
+            // fixes time option for time input response
             const { medId, timeOption } = action.payload;
             const response = state.nodes[medId].response;
             if (
                 state.nodes[medId].responseType === ResponseTypes.TIME3DAYS &&
                 isTimeInputDictionary(response)
             ) {
-                const newResponse = {
-                    ...response,
-                    timeOption: timeOption,
-                };
-                return updateResponse(medId, newResponse, state);
+                return updateResponse(
+                    medId,
+                    {
+                        ...response,
+                        timeOption: timeOption,
+                    },
+                    state
+                );
             } else throw new Error('Not a time input response');
         }
 
         case HPI_ACTION.YES_NO_TOGGLE_OPTION: {
+            /* 
+            Yes/no/none response function. If the current option is 
+            the same as the input option chosen by the user, the 
+            "None" option is the new response (in other words, a
+            double click of the same option is unclicked). Else, the 
+            new response is the input response.
+            */
             const { medId, optionSelected } = action.payload;
             if (
                 state.nodes[medId].responseType ===
                 (ResponseTypes.YES_NO || ResponseTypes.NO_YES)
             ) {
-                const response =
+                return updateResponse(
+                    medId,
                     state.nodes[medId].response === optionSelected
                         ? YesNoResponse.None
-                        : optionSelected;
-                return updateResponse(medId, response, state);
+                        : optionSelected,
+                    state
+                );
             } else throw new Error('Not a yes/no response');
         }
 
         case HPI_ACTION.SCALE_HANDLE_VALUE: {
+            // update scale value
             const { medId, value } = action.payload;
             return updateResponse(medId, value, state);
         }
 
         case HPI_ACTION.SCALE_HANDLE_CLEAR: {
+            // clear scale value
             const { medId } = action.payload;
             return updateResponse(medId, undefined, state);
         }
 
         case HPI_ACTION.HANDLE_BLANK_QUESTION_CHANGE: {
+            /* 
+            For BLANK patient history type questions, each new response ID is 
+            saved, which correspond to the keys in the corresponding patient 
+            history state. This ID can be used to reference the response in the 
+            other state.  
+            TODO: have an ability to remove response ID when the input is deleted
+            on HPI.  
+            */
             const { medId, conditionId } = action.payload;
             const response = state.nodes[medId].response;
             if (
@@ -380,6 +434,12 @@ export function hpiReducer(
         }
 
         case HPI_ACTION.POP_RESPONSE: {
+            /* 
+            For POP type patient history questions, save the list of condition
+            IDs corresponding to the keys in the corresponding patient history
+            type state. These IDs can be used to reference the responses in the 
+            other state.  
+            */
             const { medId, conditionIds } = action.payload;
             const response = state.nodes[medId].response;
             if (

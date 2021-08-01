@@ -15,33 +15,21 @@ export interface AddNodeAction {
     payload: {
         medId: string;
         node: NodeInterface;
+        edges: EdgeInterface[];
     };
 }
 
-export function addNode(medId: string, node: NodeInterface): AddNodeAction {
+export function addNode(
+    medId: string,
+    node: NodeInterface,
+    edges: EdgeInterface[]
+): AddNodeAction {
     return {
         type: HPI_ACTION.ADD_NODE,
         payload: {
             medId,
             node,
-        },
-    };
-}
-
-export interface AddEdgeAction {
-    type: HPI_ACTION.ADD_EDGE;
-    payload: {
-        medId: string;
-        edge: EdgeInterface;
-    };
-}
-
-export function addEdge(medId: string, edge: EdgeInterface): AddEdgeAction {
-    return {
-        type: HPI_ACTION.ADD_EDGE,
-        payload: {
-            medId,
-            edge,
+            edges,
         },
     };
 }
@@ -328,21 +316,18 @@ export interface BlankQuestionChangeAction {
     payload: {
         medId: string;
         conditionId: string;
-        x?: boolean;
     };
 }
 
 export function blankQuestionChange(
     medId: string,
-    conditionId: string,
-    x?: boolean
+    conditionId: string
 ): BlankQuestionChangeAction {
     return {
         type: HPI_ACTION.HANDLE_BLANK_QUESTION_CHANGE,
         payload: {
             medId,
             conditionId,
-            x,
         },
     };
 }
@@ -367,7 +352,6 @@ export function popResponse(
 
 export type HpiActionTypes =
     | AddNodeAction
-    | AddEdgeAction
     | BodyLocationResponseAction
     | BodyLocationHandleToggleAction
     | MultipleChoiceHandleClickAction

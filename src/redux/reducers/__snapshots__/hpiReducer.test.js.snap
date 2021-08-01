@@ -1,28 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`hpi reducers add edge returns correct state with edge info 1`] = `
+exports[`hpi reducers add node, graph and edge returns node with response 1`] = `
 Object {
   "edges": Object {
-    "77bdf200-67b3-4edb-9aa4-5539d145e9e6": Object {
+    "tofoo1fromfoo2": Object {
       "from": "foo2",
       "fromQuestionOrder": -1,
       "to": "foo1",
       "toQuestionOrder": -1,
     },
+    "tofoo3fromfoo2": Object {
+      "from": "foo2",
+      "fromQuestionOrder": -1,
+      "to": "foo3",
+      "toQuestionOrder": -1,
+    },
   },
   "graph": Object {
     "medId": Array [
-      "77bdf200-67b3-4edb-9aa4-5539d145e9e6",
+      "tofoo1fromfoo2",
+      "tofoo3fromfoo2",
     ],
   },
-  "nodes": Object {},
-}
-`;
-
-exports[`hpi reducers add node returns node with response 1`] = `
-Object {
-  "edges": Object {},
-  "graph": Object {},
   "nodes": Object {
     "medId": Object {
       "blankNo": "blankNo",
@@ -191,7 +190,7 @@ Object {
       "response": Object {
         "Ankle": Object {
           "center": false,
-          "left": true,
+          "left": false,
           "right": false,
         },
         "Chest": false,
@@ -304,98 +303,7 @@ Object {
       "medID": "medID",
       "noteSection": "noteSection",
       "response": Object {
-        "Ankle": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Chest": false,
-        "Ear": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Elbow": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Eye": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Finger": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Foot": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Groin": false,
-        "Hand": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Head": false,
-        "Hip": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Knee": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Lower Arm": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Lower Back": false,
-        "Lower Leg": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Mid Back": false,
-        "Mouth": false,
-        "Neck": false,
         "Nose": true,
-        "Pelvis": false,
-        "Shoulder": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Stomach": false,
-        "Throat": false,
-        "Toe": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Upper Arm": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Upper Back": false,
-        "Upper Leg": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
-        "Wrist": Object {
-          "center": false,
-          "left": false,
-          "right": false,
-        },
       },
       "responseType": "BODYLOCATION",
       "text": "text",
@@ -495,7 +403,6 @@ Object {
       "noteSection": "noteSection",
       "response": Array [
         "foo1",
-        "foo",
       ],
       "responseType": "CLICK-BOXES",
       "text": "text",
@@ -646,7 +553,7 @@ Object {
 }
 `;
 
-exports[`hpi reducers handle user actions handles yes no actions handles yes no toggle 1`] = `
+exports[`hpi reducers handle user actions handles yes no actions handles each toggle 1`] = `
 Object {
   "edges": Object {},
   "graph": Object {},
@@ -659,7 +566,7 @@ Object {
       "doctorCreated": "doctorCreated",
       "medID": "medID",
       "noteSection": "noteSection",
-      "response": "Yes",
+      "response": "",
       "responseType": "YES-NO",
       "text": "text",
       "uid": "uid",

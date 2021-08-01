@@ -29,7 +29,7 @@ describe('hpi reducers', () => {
             expect(hpiReducer(undefined, action)).toEqual(initialHpiState);
         });
     });
-    describe('add node', () => {
+    describe('add node, graph and edge', () => {
         it('returns node with response', () => {
             const node = {
                 uid: 'uid',
@@ -47,47 +47,49 @@ describe('hpi reducers', () => {
                 blankYes: 'blankYes',
                 blankNo: 'blankNo',
             };
+            const edges = [
+                {
+                    to: 'foo1',
+                    from: 'foo2',
+                    toQuestionOrder: -1,
+                    fromQuestionOrder: -1,
+                },
+                {
+                    to: 'foo3',
+                    from: 'foo2',
+                    toQuestionOrder: -1,
+                    fromQuestionOrder: -1,
+                },
+            ];
+            const edgeKeys = edges.map(
+                (edge) => 'to' + edge.to + 'from' + edge.from
+            );
             const responseNode = {
                 response: node.response,
                 responseType: node.responseType,
                 text: node.text,
                 blankYes: node.blankYes,
                 blankNo: node.blankNo,
-                // blankode: blankNode.blankTemplate,
-            }
+                blankTemplate: node.blankTemplate,
+            };
             const payload = {
                 medId: medId,
                 node: node,
+                edges: edges,
             };
             const nextState = hpiReducer(initialHpiState, {
                 type: HPI_ACTION.ADD_NODE,
                 payload,
             });
             expect(nextState).toMatchSnapshot();
-            expect(nextState.nodes[medId]).toBeTruthy();
-            expect(nextState.nodes[medId]).toMatchObject(node);
-        });
-    });
-    describe('add edge', () => {
-        it('returns correct state with edge info', () => {
-            const edge = {
-                to: 'foo1',
-                from: 'foo2',
-                toQuestionOrder: -1,
-                fromQuestionOrder: -1,
-            };
-            const payload = {
-                medId: medId,
-                edge: edge,
-            };
-            const nextState = hpiReducer(initialHpiState, {
-                type: HPI_ACTION.ADD_EDGE,
-                payload,
+            expect(nextState.nodes).toHaveProperty(medId);
+            expect(nextState.nodes[medId]).toMatchObject(responseNode);
+            expect(nextState.graph).toHaveProperty(medId);
+            expect(nextState.graph[medId]).toEqual(edgeKeys);
+            edgeKeys.map((edge, index) => {
+                expect(nextState.edges).toHaveProperty(edge);
+                expect(nextState.edges[edge]).toMatchObject(edges[index]);
             });
-            expect(nextState).toMatchSnapshot();
-            expect(nextState.graph[medId]).toBeTruthy();
-            const newEdge = Object.keys(nextState.edges)[0];
-            expect(nextState.graph[medId]).toContain(newEdge);
         });
     });
     describe('handle user actions', () => {
@@ -100,58 +102,63 @@ describe('hpi reducers', () => {
         it('adds body location responses', () => {
             payload.bodyOptions = options;
             nextState.nodes[medId].responseType = 'BODYLOCATION';
-            nextState.nodes[medId].response =
-                ExpectedResponseDict['BODYLOCATION'];
+            nextState.nodes[medId].response = ExpectedResponseDict.BODYLOCATION;
             nextState = hpiReducer(nextState, {
                 type: HPI_ACTION.BODY_LOCATION_RESPONSE,
                 payload,
             });
             expect(nextState).toMatchSnapshot();
+            options
+                .reduce((a, b) => a.concat(b), [])
+                .map((bodyOptionItem) => {
+                    expect(nextState.nodes[medId].response).toHaveProperty(
+                        bodyOptionItem.name
+                    );
+                    expect(
+                        nextState.nodes[medId].response[bodyOptionItem.name]
+                    ).toEqual(
+                        bodyOptionItem.needsRightLeft
+                            ? { left: false, center: false, right: false }
+                            : false
+                    );
+                });
         });
         it('handles body location toggle for LRButton', () => {
-            nextState.nodes[medId].responseType = 'BODYLOCATION';
-            nextState.nodes[medId].response =
-                ExpectedResponseDict['BODYLOCATION'];
             nextState = hpiReducer(nextState, {
                 type: HPI_ACTION.BODY_LOCATION_RESPONSE,
                 payload: {
                     medId: medId,
                     bodyOptions: options,
                 },
-            });
-            payload.bodyOption = BodyLocationOptions.ANKLE;
-            payload.toggle = 'left';
-            nextState = hpiReducer(nextState, {
-                type: HPI_ACTION.BODY_LOCATION_HANDLE_TOGGLE,
-                payload,
             });
             expect(nextState).toMatchSnapshot();
-            expect(
-                nextState.nodes[medId].response[payload.bodyOption][
-                    payload.toggle
-                ]
-            ).toBeTruthy();
-            nextState = hpiReducer(nextState, {
-                type: HPI_ACTION.BODY_LOCATION_HANDLE_TOGGLE,
-                payload,
+            payload.bodyOption = BodyLocationOptions.ANKLE;
+            ['left', 'center', 'right'].map((toggle) => {
+                payload.toggle = toggle;
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.BODY_LOCATION_HANDLE_TOGGLE,
+                    payload,
+                });
+                expect(
+                    nextState.nodes[medId].response[payload.bodyOption]
+                ).toHaveProperty(payload.toggle);
+                expect(
+                    nextState.nodes[medId].response[payload.bodyOption][
+                        payload.toggle
+                    ]
+                ).toEqual(true);
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.BODY_LOCATION_HANDLE_TOGGLE,
+                    payload,
+                });
+                expect(
+                    nextState.nodes[medId].response[payload.bodyOption][
+                        payload.toggle
+                    ]
+                ).toEqual(false);
             });
-            expect(
-                nextState.nodes[medId].response[payload.bodyOption][
-                    payload.toggle
-                ]
-            ).toBeFalsy();
         });
         it('handles body location toggle for regular button', () => {
-            nextState.nodes[medId].responseType = 'BODYLOCATION';
-            nextState.nodes[medId].response =
-                ExpectedResponseDict['BODYLOCATION'];
-            nextState = hpiReducer(nextState, {
-                type: HPI_ACTION.BODY_LOCATION_RESPONSE,
-                payload: {
-                    medId: medId,
-                    bodyOptions: options,
-                },
-            });
             payload.bodyOption = BodyLocationOptions.NOSE;
             payload.toggle = null;
             nextState = hpiReducer(nextState, {
@@ -159,147 +166,169 @@ describe('hpi reducers', () => {
                 payload,
             });
             expect(nextState).toMatchSnapshot();
-            expect(
-                nextState.nodes[medId].response[payload.bodyOption]
-            ).toBeTruthy();
+            expect(nextState.nodes[medId].response[payload.bodyOption]).toEqual(
+                true
+            );
             nextState = hpiReducer(nextState, {
                 type: HPI_ACTION.BODY_LOCATION_HANDLE_TOGGLE,
                 payload,
             });
-            expect(
-                nextState.nodes[medId].response[payload.bodyOption]
-            ).toBeFalsy();
+            expect(nextState.nodes[medId].response[payload.bodyOption]).toEqual(
+                false
+            );
         });
         it('handles multiple choice click', () => {
-            payload.name = 'foo';
-            nextState.nodes[medId].response = ['foo1'];
+            payload.name = 'foo1';
+            nextState.nodes[medId].response = ExpectedResponseDict.CLICK_BOXES;
             nextState.nodes[medId].responseType = 'CLICK-BOXES';
-            expect(
-                hpiReducer(nextState, {
-                    type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
-                    payload,
-                })
-            ).toMatchSnapshot();
+            nextState = hpiReducer(nextState, {
+                type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
+                payload,
+            });
+            expect(nextState).toMatchSnapshot();
+            expect(nextState.nodes[medId].response).toContain(payload.name);
+            nextState = hpiReducer(nextState, {
+                type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
+                payload,
+            });
+            expect(nextState.nodes[medId].response).not.toContain(payload.name);
         });
         it('handles input change', () => {
             payload.textInput = 'foo';
             nextState.nodes[medId].responseType = 'SHORT-TEXT';
-            expect(
-                hpiReducer(nextState, {
-                    type: HPI_ACTION.HANDLE_INPUT_CHANGE,
-                    payload,
-                })
-            ).toMatchSnapshot();
+            nextState = hpiReducer(nextState, {
+                type: HPI_ACTION.HANDLE_INPUT_CHANGE,
+                payload,
+            });
+            expect(nextState).toMatchSnapshot();
+            expect(nextState.nodes[medId].response).toEqual(payload.textInput);
         });
         it('handles numeric input change', () => {
             payload.input = 42;
             nextState.nodes[medId].responseType = 'NUMBER';
-            expect(
-                hpiReducer(nextState, {
-                    type: HPI_ACTION.HANDLE_NUMERIC_INPUT_CHANGE,
-                    payload,
-                })
-            ).toMatchSnapshot();
+            nextState = hpiReducer(nextState, {
+                type: HPI_ACTION.HANDLE_NUMERIC_INPUT_CHANGE,
+                payload,
+            });
+            expect(nextState).toMatchSnapshot();
+            expect(nextState.nodes[medId].response).toEqual(payload.input);
         });
         describe('handles list text actions', () => {
             const uuid = 'foo';
             const listTextResponse = {
-                foo: '',
                 1: '1',
                 2: '2',
                 3: '3',
             };
-            beforeEach(() => {
+            it('handles changing list text input', () => {
                 nextState.nodes[medId].responseType = 'LIST-TEXT';
                 nextState.nodes[medId].response = listTextResponse;
-            });
-            it('handles changing list text input', () => {
                 payload.uuid = uuid;
                 payload.textInput = 'foo';
-                expect(
-                    hpiReducer(nextState, {
-                        type: HPI_ACTION.LIST_TEXT_HANDLE_CHANGE,
-                        payload,
-                    })
-                ).toMatchSnapshot();
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.LIST_TEXT_HANDLE_CHANGE,
+                    payload,
+                });
+                expect(nextState).toMatchSnapshot();
+                expect(nextState.nodes[medId].response).toHaveProperty(
+                    payload.uuid
+                );
+                expect(nextState.nodes[medId].response[payload.uuid]).toEqual(
+                    payload.textInput
+                );
             });
             it('handles removing list text input', () => {
                 payload.uuid = uuid;
-                expect(
-                    hpiReducer(nextState, {
-                        type: HPI_ACTION.REMOVE_LIST_INPUT,
-                        payload,
-                    })
-                ).toMatchSnapshot();
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.REMOVE_LIST_INPUT,
+                    payload,
+                });
+                expect(nextState).toMatchSnapshot();
+                expect(nextState.nodes[medId].response).not.toHaveProperty(
+                    payload.uuid
+                );
+                expect(nextState.nodes[medId].response).toMatchObject(
+                    listTextResponse
+                );
             });
             it('handles adding list text input', () => {
-                const newResponse = hpiReducer(nextState, {
+                nextState = hpiReducer(nextState, {
                     type: HPI_ACTION.ADD_LIST_INPUT,
                     payload,
-                }).nodes[medId].response;
-                expect(Object.keys(newResponse).length).toEqual(5);
-                expect(uuid in newResponse).toBeTruthy();
+                });
+                expect(
+                    Object.keys(nextState.nodes[medId].response).length
+                ).toEqual(4);
             });
         });
         describe('handles time input actions', () => {
-            beforeEach(() => {
+            it('handles time input change', () => {
                 nextState.nodes[medId].responseType = 'TIME3DAYS';
                 nextState.nodes[medId].response = {
                     numInput: 0,
                     timeOption: 'minutes',
                 };
-            });
-            it('handles time input change', () => {
                 payload.numInput = 42;
-                expect(
-                    hpiReducer(nextState, {
-                        type: HPI_ACTION.HANDLE_TIME_INPUT_CHANGE,
-                        payload,
-                    })
-                ).toMatchSnapshot();
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.HANDLE_TIME_INPUT_CHANGE,
+                    payload,
+                });
+                expect(nextState).toMatchSnapshot();
+                expect(nextState.nodes[medId].response.numInput).toEqual(
+                    payload.numInput
+                );
             });
             it('handles time option change', () => {
                 payload.timeOption = 'days';
-                expect(
-                    hpiReducer(nextState, {
-                        type: HPI_ACTION.HANDLE_TIME_OPTION_CHANGE,
-                        payload,
-                    })
-                ).toMatchSnapshot();
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.HANDLE_TIME_OPTION_CHANGE,
+                    payload,
+                });
+                expect(nextState).toMatchSnapshot();
+                expect(nextState.nodes[medId].response.timeOption).toEqual(
+                    payload.timeOption
+                );
             });
         });
         describe('handles yes no actions', () => {
-            it('handles yes no toggle', () => {
-                payload.optionSelected = 'Yes';
+            it('handles each toggle', () => {
                 nextState.nodes[medId].responseType = 'YES-NO';
-                expect(
-                    hpiReducer(nextState, {
+                ['Yes', 'No'].map((option) => {
+                    payload.optionSelected = option;
+                    nextState = hpiReducer(nextState, {
                         type: HPI_ACTION.YES_NO_TOGGLE_OPTION,
                         payload,
-                    })
-                ).toMatchSnapshot();
+                    });
+                    expect(nextState.nodes[medId].response).toEqual(
+                        payload.optionSelected
+                    );
+                    nextState = hpiReducer(nextState, {
+                        type: HPI_ACTION.YES_NO_TOGGLE_OPTION,
+                        payload,
+                    });
+                    expect(nextState.nodes[medId].response).toEqual('');
+                });
+                expect(nextState).toMatchSnapshot();
             });
         });
         describe('handles scale input actions', () => {
-            beforeEach(() => {
-                nextState.nodes[medId].responseType = 'SCALE1TO10';
-            });
             it('handles scale handle value', () => {
+                nextState.nodes[medId].responseType = 'SCALE1TO10';
                 payload.value = 3;
-                expect(
-                    hpiReducer(nextState, {
-                        type: HPI_ACTION.SCALE_HANDLE_VALUE,
-                        payload,
-                    })
-                ).toMatchSnapshot();
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.SCALE_HANDLE_VALUE,
+                    payload,
+                });
+                expect(nextState).toMatchSnapshot();
+                expect(nextState.nodes[medId].response).toEqual(payload.value);
             });
             it('handles scale handle clear', () => {
-                expect(
-                    hpiReducer(nextState, {
-                        type: HPI_ACTION.SCALE_HANDLE_CLEAR,
-                        payload,
-                    })
-                ).toMatchSnapshot();
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.SCALE_HANDLE_CLEAR,
+                    payload,
+                });
+                expect(nextState).toMatchSnapshot();
+                expect(nextState.nodes[medId].response).toBeUndefined();
             });
         });
         describe('handles blank widget questions', () => {
@@ -308,12 +337,14 @@ describe('hpi reducers', () => {
                 nextState.nodes[medId].response =
                     ExpectedResponseDict['FH_BLANK'];
                 payload = { medId: medId, conditionId: 'foo' };
-                expect(
-                    hpiReducer(nextState, {
-                        type: HPI_ACTION.HANDLE_BLANK_QUESTION_CHANGE,
-                        payload,
-                    })
-                ).toMatchSnapshot();
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.HANDLE_BLANK_QUESTION_CHANGE,
+                    payload,
+                });
+                expect(nextState).toMatchSnapshot();
+                expect(nextState.nodes[medId].response).toContain(
+                    payload.conditionId
+                );
             });
         });
         describe('handles pop response questions', () => {
@@ -322,12 +353,14 @@ describe('hpi reducers', () => {
                 nextState.nodes[medId].response =
                     ExpectedResponseDict['FH_POP'];
                 payload = { medId: medId, conditionIds: ['foo1', 'foo2'] };
-                expect(
-                    hpiReducer(nextState, {
-                        type: HPI_ACTION.POP_RESPONSE,
-                        payload,
-                    })
-                ).toMatchSnapshot();
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.POP_RESPONSE,
+                    payload,
+                });
+                expect(nextState).toMatchSnapshot();
+                expect(nextState.nodes[medId].response).toMatchObject(
+                    payload.conditionIds
+                );
             });
         });
     });
