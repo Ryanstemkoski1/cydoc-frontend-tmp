@@ -316,21 +316,18 @@ export interface BlankQuestionChangeAction {
     payload: {
         medId: string;
         conditionId: string;
-        x?: boolean;
     };
 }
 
 export function blankQuestionChange(
     medId: string,
-    conditionId: string,
-    x?: boolean
+    conditionId: string
 ): BlankQuestionChangeAction {
     return {
         type: HPI_ACTION.HANDLE_BLANK_QUESTION_CHANGE,
         payload: {
             medId,
             conditionId,
-            x,
         },
     };
 }

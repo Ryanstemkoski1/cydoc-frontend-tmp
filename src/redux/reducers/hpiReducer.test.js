@@ -78,8 +78,8 @@ describe('hpi reducers', () => {
                 text: node.text,
                 blankYes: node.blankYes,
                 blankNo: node.blankNo,
-                // blankode: blankNode.blankTemplate,
-            }
+                blankTemplate: node.blankTemplate,
+            };
             const payload = {
                 medId: medId,
                 node: node,
@@ -377,12 +377,14 @@ describe('hpi reducers', () => {
                 nextState.nodes[medId].response =
                     ExpectedResponseDict['FH_BLANK'];
                 payload = { medId: medId, conditionId: 'foo' };
-                expect(
-                    hpiReducer(nextState, {
-                        type: HPI_ACTION.HANDLE_BLANK_QUESTION_CHANGE,
-                        payload,
-                    })
-                ).toMatchSnapshot();
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.HANDLE_BLANK_QUESTION_CHANGE,
+                    payload,
+                });
+                expect(nextState).toMatchSnapshot();
+                expect(nextState.nodes[medId].response).toContain(
+                    payload.conditionId
+                );
             });
         });
         describe('handles pop response questions', () => {
@@ -391,12 +393,14 @@ describe('hpi reducers', () => {
                 nextState.nodes[medId].response =
                     ExpectedResponseDict['FH_POP'];
                 payload = { medId: medId, conditionIds: ['foo1', 'foo2'] };
-                expect(
-                    hpiReducer(nextState, {
-                        type: HPI_ACTION.POP_RESPONSE,
-                        payload,
-                    })
-                ).toMatchSnapshot();
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.POP_RESPONSE,
+                    payload,
+                });
+                expect(nextState).toMatchSnapshot();
+                expect(nextState.nodes[medId].response).toMatchObject(
+                    payload.conditionIds
+                );
             });
         });
     });
