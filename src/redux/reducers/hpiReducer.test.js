@@ -371,33 +371,5 @@ describe('hpi reducers', () => {
                 );
             });
         });
-        describe('handles blank widget questions', () => {
-            it('handles new blank response', () => {
-                nextState.nodes[medId].responseType = 'FH-BLANK';
-                nextState.nodes[medId].response =
-                    ExpectedResponseDict['FH_BLANK'];
-                payload = { medId: medId, conditionId: 'foo' };
-                expect(
-                    hpiReducer(nextState, {
-                        type: HPI_ACTION.HANDLE_BLANK_QUESTION_CHANGE,
-                        payload,
-                    })
-                ).toMatchSnapshot();
-            });
-        });
-        describe('handles pop response questions', () => {
-            it('handles new pop response', () => {
-                nextState.nodes[medId].responseType = 'FH-POP';
-                nextState.nodes[medId].response =
-                    ExpectedResponseDict['FH_POP'];
-                payload = { medId: medId, conditionIds: ['foo1', 'foo2'] };
-                expect(
-                    hpiReducer(nextState, {
-                        type: HPI_ACTION.POP_RESPONSE,
-                        payload,
-                    })
-                ).toMatchSnapshot();
-            });
-        });
     });
 });
