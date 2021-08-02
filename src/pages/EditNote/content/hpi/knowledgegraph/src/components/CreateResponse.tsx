@@ -113,7 +113,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
     renderSwitch = () => {
         const { windowWidth, responseChoice } = this.state;
         const { node, hpi } = this.props;
-        const { responseType } = hpi.nodes[node];
+        let { responseType } = hpi.nodes[node];
         const blankTypes = [
             ResponseTypes.FH_BLANK,
             ResponseTypes.MEDS_BLANK,
@@ -123,6 +123,10 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         const choices = blankTypes.includes(responseType)
             ? (hpi.nodes[node].response as string[])
             : responseChoice;
+        responseType =
+            node.slice(0, 4) != 'IMAG'
+                ? hpi.nodes[node].responseType
+                : ResponseTypes.SHORT_TEXT;
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
         switch (responseType) {
             case ResponseTypes.YES_NO:

@@ -6,10 +6,11 @@ import {
     GraphData,
     HpiStateProps,
     EdgeInterface,
+    NodeInterface,
 } from 'constants/hpiEnums';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { HpiState, NodeInterface } from 'redux/reducers/hpiReducer';
+import { HpiState } from 'redux/reducers/hpiReducer';
 import { CurrentNoteState } from 'redux/reducers';
 import { addNode, AddNodeAction } from 'redux/actions/hpiActions';
 import { YesNoResponse } from 'constants/enums';

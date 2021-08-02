@@ -1,5 +1,5 @@
 import { YesNoMaybeResponse, YesNoResponse } from './enums';
-import { HpiState, NodeInterface } from 'redux/reducers/hpiReducer';
+import { HpiState } from 'redux/reducers/hpiReducer';
 
 export enum BodySystemNames {
     NEUROPSYCHIATRIC = 'Neuropsychiatric',
@@ -124,6 +124,7 @@ export enum DiseaseCategories {
     NAUSEA_VOMITING = 'NAUSEA_VOMITING',
     NUMBESS_TINGLING = 'NUMBESS_TINGLING',
     HAIR_LOSS = 'HAIR_LOSS',
+    IMAGING = 'IMAGING',
 }
 
 export enum DoctorView {
@@ -500,6 +501,22 @@ export enum BodyLocationOptions {
     ANKLE = 'Ankle',
     FOOT = 'Foot',
     TOE = 'Toe',
+}
+
+export interface NodeInterface {
+    uid: string;
+    medID: string;
+    category: DiseaseCategories;
+    text: string;
+    responseType: ResponseTypes;
+    bodySystem: BodySystemNames;
+    noteSection: string;
+    doctorView: DoctorView;
+    patientView: PatientView;
+    doctorCreated: string;
+    blankTemplate: string;
+    blankYes: string;
+    blankNo: string;
 }
 
 export interface GraphData {
