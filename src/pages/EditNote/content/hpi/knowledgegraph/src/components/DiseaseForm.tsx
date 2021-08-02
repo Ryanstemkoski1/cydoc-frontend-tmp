@@ -72,7 +72,7 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
 
     processKnowledgeGraph(): void {
         // TODO: does this also need a set to keep track of nodes like for traversal()
-        const { parentNode, addNode, addEdge } = this.props;
+        const { parentNode, addNode } = this.props;
         const { graphData } = this.state;
         const { graph, nodes, edges } = graphData;
         const parentToChildNodes: { [parentNode: string]: string[] } = {};

@@ -173,7 +173,7 @@ class FamilyHistoryContent extends Component<Props, State> {
                             />
                         }
                         index={condition}
-                        pop={this.props.responseType == ResponseTypes.FH_POP}
+                        pop={true}
                     />
                 );
             }
@@ -195,7 +195,6 @@ class FamilyHistoryContent extends Component<Props, State> {
                     contentHeader={<FamilyHistoryContentHeader />}
                     rows={listItems}
                     pop={this.props.responseType == ResponseTypes.FH_POP}
-                    value_type='Family History'
                     conditions={listValues}
                     mobile={mobile}
                     addRow={this.addRow}
