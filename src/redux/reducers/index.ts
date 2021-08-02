@@ -2,19 +2,31 @@ import { combineReducers } from 'redux';
 import { AllActionTypes } from '../actions';
 import { CURRENT_NOTE_ACTION } from '../actions/actionTypes';
 import { CurrentNoteActionTypes } from '../actions/currentNoteActions';
-import { medicalHistoryReducer, initialMedicalHistoryState } from './medicalHistoryReducer';
+import {
+    medicalHistoryReducer,
+    initialMedicalHistoryState,
+} from './medicalHistoryReducer';
 import {
     reviewOfSystemsReducer,
     initialReviewOfSystemsState,
 } from './reviewOfSystemsReducer';
-import { surgicalHistoryReducer, initialSurgicalHistoryState } from './surgicalHistoryReducer';
-import { medicationsReducer, initialMedicationsState } from './medicationsReducer';
+import {
+    surgicalHistoryReducer,
+    initialSurgicalHistoryState,
+} from './surgicalHistoryReducer';
+import {
+    medicationsReducer,
+    initialMedicationsState,
+} from './medicationsReducer';
 import { allergiesReducer, initialAllergiesState } from './allergiesReducer';
 import {
     initialSocialHistoryState,
     socialHistoryReducer,
 } from './socialHistoryReducer';
-import { familyHistoryReducer, initialFamilyHistoryState } from './familyHistoryReducer';
+import {
+    familyHistoryReducer,
+    initialFamilyHistoryState,
+} from './familyHistoryReducer';
 import { initialPlanState, planReducer } from './planReducer';
 import {
     initialPhysicalExamState,
