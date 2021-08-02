@@ -1,5 +1,4 @@
 import React from 'react';
-import DiseaseFormQuestions from './DiseaseFormQuestions';
 import '../css/App.css';
 import '../../HPI.css';
 import {
@@ -15,8 +14,9 @@ import { CurrentNoteState } from 'redux/reducers';
 import { addNode, AddNodeAction } from 'redux/actions/hpiActions';
 import { YesNoResponse } from 'constants/enums';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import CreateResponse from './CreateResponse';
 
-//The order goes DiseaseForm -> DiseaseFormQuestions -> QuestionAnswer -> ButtonTag
+//The order goes DiseaseForm -> CreateResponse -> ButtonTag
 
 interface DiseaseFormProps {
     nextStep: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -124,7 +124,7 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
             if (!currNode) continue;
             if (values.nodes[currNode].text != 'nan')
                 questionArr.push(
-                    <DiseaseFormQuestions
+                    <CreateResponse
                         key={graphData.nodes[currNode].uid}
                         node={currNode}
                         category={category}

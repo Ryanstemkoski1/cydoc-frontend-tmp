@@ -12,7 +12,7 @@ import MedicationsContent from '../../../../medications/MedicationsContent';
 import SurgicalHistoryContent from '../../../../surgicalhistory/SurgicalHistoryContent';
 import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
 import ListText from './responseComponents/ListText';
-import { ResponseTypes, HpiStateProps } from 'constants/hpiEnums';
+import { ResponseTypes, HpiStateProps, DoctorView } from 'constants/hpiEnums';
 import {
     addFhPopOptions,
     AddFhPopOptionsAction,
@@ -24,24 +24,23 @@ import {
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import { isStringArray } from 'redux/reducers/hpiReducer';
 
-interface QuestionAnswerProps {
-    responseType: ResponseTypes;
+interface CreateResponseProps {
     node: string;
-    responseChoice: string[];
-    question: string;
+    category: DoctorView;
 }
 
-interface QuestionAnswerState {
+interface CreateResponseState {
     windowWidth: number;
     windowHeight: number;
     startDate: Date;
     scale: number;
     input: string;
+    question: string;
+    responseChoice: string[];
 }
 
-class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
+class CreateResponse extends React.Component<Props, CreateResponseState> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -50,12 +49,15 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
             startDate: new Date(),
             scale: 0,
             input: '',
+            question: '',
+            responseChoice: [],
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
 
     componentDidMount() {
         this.updateDimensions();
+        this.cleanQuestionText();
         window.addEventListener('resize', this.updateDimensions);
     }
     componentWillUnmount() {
@@ -71,24 +73,39 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
         this.setState({ windowWidth, windowHeight });
     }
 
-    popResponseChoice(): string[] {
-        const { responseType, node, responseChoice, hpi } = this.props;
-        const response = hpi.nodes[node].response;
-        return [
-            ResponseTypes.MEDS_POP,
-            ResponseTypes.FH_POP,
-            ResponseTypes.PMH_POP,
-            ResponseTypes.PSH_POP,
-        ].includes(responseType)
-            ? responseChoice
-            : isStringArray(response)
-            ? response
-            : [];
-    }
+    cleanQuestionText = () => {
+        /*
+        Cleans a question text for any parts not to be seen by the user,
+        such as SYMPTOM or DISEASE, which should be replaced by the 
+        category name, or CLICK[] or any brackets [] that should not be
+        present.
+        */
+        const { node, hpi, category } = this.props;
+        const text = hpi.nodes[node].text
+            .replace('SYMPTOM', category.toLowerCase())
+            .replace('DISEASE', category.toLowerCase());
+        const click = text.search('CLICK'),
+            select = text.search('\\['),
+            endSelect = text.search('\\]'),
+            cleanText = select != -1 && endSelect != -1;
+        this.setState({
+            question: text.slice(
+                0,
+                click != -1 ? click : cleanText ? select : text.length
+            ),
+            responseChoice: cleanText
+                ? text
+                      .slice(select + 1, endSelect)
+                      .split(',')
+                      .map((response) => response.trim())
+                : [],
+        });
+    };
 
     renderSwitch = () => {
-        const { windowWidth } = this.state;
-        const { responseType, node, responseChoice } = this.props;
+        const { windowWidth, responseChoice } = this.state;
+        const { node, hpi } = this.props;
+        const { responseType } = hpi.nodes[node];
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
         switch (responseType) {
             case ResponseTypes.YES_NO:
@@ -122,7 +139,7 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                         key={node}
                         isPreview={false}
                         mobile={collapseTabs}
-                        values={this.popResponseChoice()}
+                        values={responseChoice}
                         responseType={responseType}
                         node={node}
                     />
@@ -134,7 +151,7 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                     <FamilyHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={this.popResponseChoice()}
+                        responseChoice={responseChoice}
                         responseType={responseType}
                         node={node}
                     />
@@ -146,7 +163,7 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                     <MedicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={this.popResponseChoice()}
+                        responseChoice={responseChoice}
                         responseType={responseType}
                         mobile={collapseTabs}
                         currentYear={-1}
@@ -160,7 +177,7 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                     <SurgicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={this.popResponseChoice()}
+                        responseChoice={responseChoice}
                         responseType={responseType}
                         mobile={collapseTabs}
                         node={node}
@@ -177,7 +194,7 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
             <div className='qa-div'>
                 <div>
                     {' '}
-                    {this.props.question}{' '}
+                    {this.state.question.trim()}{' '}
                     <div className='qa-button'>{this.renderSwitch()}</div>{' '}
                 </div>
             </div>
@@ -199,11 +216,11 @@ const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
     hpi: selectHpiState(state),
 });
 
-type Props = HpiStateProps & DispatchProps & QuestionAnswerProps;
+type Props = HpiStateProps & DispatchProps & CreateResponseProps;
 
 const mapDispatchToProps = {
     addFhPopOptions,
     blankQuestionChange,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(QuestionAnswer);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateResponse);
