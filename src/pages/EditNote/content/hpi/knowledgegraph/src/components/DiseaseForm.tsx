@@ -156,7 +156,8 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
                     ? parentToChildNodes[currNode].slice().reverse()
                     : [];
             stack = [...stack, ...childEdges];
-            nodeSet.add(currNode);
+            if (!['GEN', 'PAI'].includes(currNode.slice(0, 3)))
+                nodeSet.add(currNode);
         }
         return questionArr;
     }
