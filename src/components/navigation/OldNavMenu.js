@@ -20,9 +20,16 @@ import {
 import HPIContext from 'contexts/HPIContext.js';
 import AuthContext from '../../contexts/AuthContext';
 import Logo from '../../assets/cydoc-logo.svg';
-import './NavMenu.css';
+import './OldNavMenu.css';
+import states from 'constants/stateAbbreviations.json';
+import DemographicsForm from '../tools/DemographicsForm';
 import signout from '../../auth/signout.js';
-import DoctorSignUp from '../../pages/Account/DoctorSignUp';
+
+const stateOptions = states.map((state) => ({
+    key: state,
+    value: state,
+    text: state,
+}));
 
 // Navigation Bar component that will go at the top of most pages
 class ConnectedNavMenu extends Component {
@@ -107,7 +114,6 @@ class ConnectedNavMenu extends Component {
                     to='/login'
                     content='Login'
                 />
-                <DoctorSignUp />
             </Menu.Item>
         );
 
@@ -282,21 +288,27 @@ class NoteNameMenuItem extends Component {
         super(props);
         this.state = {
             open: false,
-            firstName: '',
-            lastName: '',
-            dob: '',
+            firstName: this.firstName,
+            middleName: this.middleName,
+            lastName: this.lastName,
+            dob: this.dob,
+            address: {
+                street: this.street,
+                city: this.city,
+                state: this.state,
+                zip: this.zip,
+            },
+            primaryEmail: this.primaryEmail,
+            // secondaryEmail: '', // TODO: remove this line when switching to AWS backend
+            primaryPhone: this.primaryPhone,
             age: this.age,
             months: this.months,
-            gender: '',
-            pronouns: '',
-            currentDay: new Date().getDate(),
-            currentMonth: new Date().getMonth(),
-            currentYear: new Date().getFullYear(),
+            invalidFirstName: false,
             invalidLastName: false,
-            invalidDate1: false,
-            invalidDate2: false,
-            invalidDate3: false,
-            saveInfo: false,
+            invalidEmail: false,
+            invalidPhone: false,
+            invalidDate: false,
+            primaryMobile: false,
             saveButton: '',
             buttonIcon: undefined,
             windowWidth: 0,
@@ -305,13 +317,16 @@ class NoteNameMenuItem extends Component {
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.savePatientInfo = this.savePatientInfo.bind(this);
+        this.onFirstNameChange = this.onFirstNameChange.bind(this);
         this.onLastNameChange = this.onLastNameChange.bind(this);
+        this.onPhoneChange = this.onPhoneChange.bind(this);
+        this.onEmailChange = this.onEmailChange.bind(this);
         this.onDateChange = this.onDateChange.bind(this);
         this.setChange = this.setChange.bind(this);
+        this.handleMobile = this.handleMobile.bind(this);
+        this.setPrimaryMobile = this.setPrimaryMobile.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.updateDimensions = this.updateDimensions.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.notSaveModal = this.notSaveModal.bind(this);
     }
 
     componentDidMount() {
@@ -394,55 +409,38 @@ class NoteNameMenuItem extends Component {
         this.setState({ open: true });
     }
 
-    notSaveModal() {
-        this.setState({
-            firstName: '',
-            lastName: '',
-            dob: '',
-            gender: '',
-            pronouns: '',
-            invalidLastName: false,
-            invalidDate1: false,
-            invalidDate2: false,
-            saveInfo: false,
-        });
-
-        this.closeModal();
-    }
-
     savePatientInfo() {
         const {
-            invalidDate1,
-            invalidDate2,
-            invalidDate3,
+            invalidDate,
+            invalidEmail,
+            invalidFirstName,
             invalidLastName,
-            lastName,
-            gender,
-            pronouns,
-            dob,
+            invalidPhone,
         } = this.state;
         if (
+            invalidFirstName ||
             invalidLastName ||
-            lastName === '' ||
-            gender === '' ||
-            pronouns === ''
+            invalidEmail ||
+            invalidPhone ||
+            invalidDate
         ) {
-            alert(
-                'Last name, gender, and preferred pronouns are required to generate a note.'
-            );
+            alert('Please make sure all the required fields are completed');
         } else {
-            if (dob !== '' && (invalidDate1 || invalidDate2 || invalidDate3)) {
-                alert('Date of birth is not valid.');
-            } else {
-                alert('Patient information is saved!');
-                if (this.state.dob !== '') this.getAge(this.state.dob);
-                this.setState({ saveInfo: true });
-                this.closeModal();
-            }
+            alert('Patient information is saved!');
+            this.getAge(this.state.dob);
+            this.closeModal();
         }
     }
 
     // validations
+    onFirstNameChange = (e) => {
+        if (!e.target.value) {
+            this.setState({ invalidFirstName: true });
+        } else {
+            this.setState({ invalidFirstName: false });
+        }
+    };
+
     onLastNameChange = (e) => {
         if (!e.target.value) {
             this.setState({ invalidLastName: true });
@@ -451,56 +449,39 @@ class NoteNameMenuItem extends Component {
         }
     };
 
-    onDateChange = (e) => {
-        if (!/^\d\d\/\d\d\/\d\d\d\d$/.test(e.target.value)) {
-            this.setState({
-                invalidDate1: true,
-                invalidDate2: false,
-                invalidDate3: false,
-            });
-        } else {
-            const parts = e.target.value.split('/').map((p) => parseInt(p, 10));
-            parts[0] -= 1;
-            const d = new Date(parts[2], parts[0], parts[1]);
+    onPhoneChange = (e) => {
+        // regex for digits with dashes
+        const dashes = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
 
-            if (
-                d.getMonth() === parts[0] &&
-                d.getDate() === parts[1] &&
-                d.getFullYear() === parts[2]
-            ) {
-                if (
-                    d.getFullYear() < this.state.currentYear &&
-                    d.getFullYear() >= 1900
-                ) {
-                    this.setState({
-                        invalidDate1: false,
-                        invalidDate2: false,
-                        invalidDate3: false,
-                    });
-                } else if (
-                    d.getFullYear() === this.state.currentYear &&
-                    d.getMonth() <= this.state.currentMonth &&
-                    d.getDate() <= this.state.currentDay
-                ) {
-                    this.setState({
-                        invalidDate1: false,
-                        invalidDate2: false,
-                        invalidDate3: false,
-                    });
-                } else {
-                    this.setState({
-                        invalidDate1: false,
-                        invalidDate2: false,
-                        invalidDate3: true,
-                    });
-                }
-            } else {
-                this.setState({
-                    invalidDate2: true,
-                    invalidDate1: false,
-                    invalidDate3: false,
-                });
-            }
+        // regex for digits only
+        const digits = /^[0-9]{10}$/;
+
+        if (
+            e.target.value ||
+            dashes.test(e.target.value) ||
+            digits.test(e.target.value)
+        ) {
+            this.setState({ invalidPhone: false });
+        } else {
+            this.setState({ invalidPhone: true });
+        }
+    };
+
+    onEmailChange = (e) => {
+        const re = /^[0-9?A-z0-9?]+(\.)?[0-9?A-z0-9?]+@[A-z]+\.[A-z]{3}.?[A-z]{0,3}$/g;
+        if (!e.target.value || !re.test(e.target.value)) {
+            this.setState({ invalidEmail: true });
+        } else {
+            this.setState({ invalidEmail: false });
+        }
+    };
+
+    onDateChange = (e) => {
+        const re = /^((0[1-9]|10|11|12)(-|\/)(([1-9])|(0[1-9])|([12])([0-9])|(3[01]))(-|\/)((19)([2-9])(\d{1})|(20)([012])(\d{1})|([8901])(\d{1})))$/gm;
+        if (!e.target.value || !re.test(e.target.value)) {
+            this.setState({ invalidDate: true });
+        } else {
+            this.setState({ invalidDate: false });
         }
     };
 
@@ -521,6 +502,21 @@ class NoteNameMenuItem extends Component {
         } else if (id === 'zip') {
             newState.address[id] = value;
             this.setState(newState);
+        }
+    };
+
+    setPrimaryMobile = (e, { value }) => {
+        const digits = /^[0-9]{10}$/;
+        if (value.match(digits)) {
+            let number =
+                value.slice(0, 3) +
+                '-' +
+                value.slice(3, 6) +
+                '-' +
+                value.slice(6);
+            this.setState({ primaryPhone: number });
+        } else {
+            this.setState({ primaryPhone: value });
         }
     };
 
@@ -558,11 +554,9 @@ class NoteNameMenuItem extends Component {
         this.setState({ months: age.months });
     }
 
-    handleChange(e, { name, value }) {
-        let newState = this.state;
-        newState[name] = value;
-        this.setState(newState);
-    }
+    handleMobile = () => {
+        this.setState({ primaryMobile: !this.state.primaryMobile });
+    };
 
     render() {
         const { open, windowWidth } = this.state;
@@ -622,85 +616,31 @@ class NoteNameMenuItem extends Component {
                     )}
                 </HPIContext.Consumer>
                 <div className='patient-info'>
-                    {this.state.lastName === '' && this.state.open === false ? (
-                        <></>
+                    {this.state.age >= 1 && this.state.age < 11 ? (
+                        <h4>
+                            Patient: {this.state.firstName}{' '}
+                            {this.state.lastName}, {this.state.age} years and{' '}
+                            {this.state.months} months old
+                        </h4>
                     ) : (
-                        <>
-                            {this.state.dob === '' &&
-                            this.state.open === false ? (
-                                <h4>Patient: {this.state.lastName}</h4>
-                            ) : (
-                                <>
-                                    {this.state.age >= 1 &&
-                                    this.state.age < 11 ? (
-                                        <>
-                                            {this.state.firstName === '' ? (
-                                                <h4>
-                                                    Patient:{' '}
-                                                    {this.state.lastName},{' '}
-                                                    {this.state.age} years and{' '}
-                                                    {this.state.months} months
-                                                    old
-                                                </h4>
-                                            ) : (
-                                                <h4>
-                                                    Patient:{' '}
-                                                    {this.state.firstName}{' '}
-                                                    {this.state.lastName},{' '}
-                                                    {this.state.age} years and{' '}
-                                                    {this.state.months} months
-                                                    old
-                                                </h4>
-                                            )}
-                                        </>
-                                    ) : (
-                                        ''
-                                    )}
-                                    {this.state.age >= 11 ? (
-                                        <>
-                                            {this.state.firstName === '' ? (
-                                                <h4>
-                                                    Patient:{' '}
-                                                    {this.state.lastName},{' '}
-                                                    {this.state.age} years old
-                                                </h4>
-                                            ) : (
-                                                <h4>
-                                                    Patient:{' '}
-                                                    {this.state.firstName}{' '}
-                                                    {this.state.lastName},{' '}
-                                                    {this.state.age} years old
-                                                </h4>
-                                            )}
-                                        </>
-                                    ) : (
-                                        ''
-                                    )}
-                                    {this.state.age < 1 ? (
-                                        <>
-                                            {this.state.firstName === '' ? (
-                                                <h4>
-                                                    Patient:{' '}
-                                                    {this.state.lastName},{' '}
-                                                    {this.state.months} months
-                                                    old
-                                                </h4>
-                                            ) : (
-                                                <h4>
-                                                    Patient:{' '}
-                                                    {this.state.firstName}{' '}
-                                                    {this.state.lastName},{' '}
-                                                    {this.state.months} months
-                                                    old
-                                                </h4>
-                                            )}
-                                        </>
-                                    ) : (
-                                        ''
-                                    )}
-                                </>
-                            )}
-                        </>
+                        ''
+                    )}
+                    {this.state.age >= 11 ? (
+                        <h4>
+                            Patient: {this.state.firstName}{' '}
+                            {this.state.lastName}, {this.state.age} years old
+                        </h4>
+                    ) : (
+                        ''
+                    )}
+                    {this.state.age < 1 ? (
+                        <h4>
+                            Patient: {this.state.firstName}{' '}
+                            {this.state.lastName}, {this.state.months} months
+                            old
+                        </h4>
+                    ) : (
+                        ''
                     )}
                 </div>
                 <Modal
@@ -731,6 +671,7 @@ class NoteNameMenuItem extends Component {
                         <Form>
                             <Form.Group widths='equal' className='error-div'>
                                 <Form.Input
+                                    required
                                     label='First Name'
                                     className='patient-info-input'
                                     id='firstName'
@@ -741,7 +682,26 @@ class NoteNameMenuItem extends Component {
                                     onBlur={this.onFirstNameChange}
                                     onChange={this.setChange}
                                 />
+                                {this.state.invalidFirstName && (
+                                    <p className='error' id='first-name-error'>
+                                        First name must not be blank
+                                    </p>
+                                )}
 
+                                <Form.Input
+                                    label='Middle Name'
+                                    className='patient-info-input'
+                                    id='middleName'
+                                    fluid
+                                    placeholder='Middle Name'
+                                    type='text'
+                                    value={this.state.middleName}
+                                    // onBlur={this.onLastNameChange}
+                                    onChange={this.setChange}
+                                />
+                            </Form.Group>
+
+                            <Form.Group widths='equal' className='error-div'>
                                 <Form.Input
                                     required
                                     label='Last Name'
@@ -759,10 +719,9 @@ class NoteNameMenuItem extends Component {
                                         Last name must not be blank
                                     </p>
                                 )}
-                            </Form.Group>
 
-                            <Form.Group widths='equal' className='error-div'>
                                 <Form.Input
+                                    required
                                     label='Date Of Birth'
                                     className='patient-info-input'
                                     id='dob'
@@ -772,134 +731,115 @@ class NoteNameMenuItem extends Component {
                                     onBlur={this.onDateChange}
                                     onChange={this.setChange}
                                 />
-
-                                {this.state.invalidDate1 &&
-                                    this.state.dob !== '' && (
-                                        <p className='error' id='dob-error'>
-                                            Date must be in MM/DD/YYYY format
-                                        </p>
-                                    )}
-
-                                {this.state.invalidDate2 &&
-                                    this.state.dob !== '' && (
-                                        <p className='error' id='dob-error'>
-                                            Month and/or day is outside of range
-                                        </p>
-                                    )}
-
-                                {this.state.invalidDate3 &&
-                                    this.state.dob !== '' && (
-                                        <p className='error' id='dob-error'>
-                                            Only dates from 01/01/1900 to today
-                                            are allowed
-                                        </p>
-                                    )}
+                                {this.state.invalidDate && (
+                                    <p className='error' id='dob-error'>
+                                        Date must be valid
+                                    </p>
+                                )}
                             </Form.Group>
 
-                            <Form.Group
-                                grouped
-                                className='identity-groups required field'
-                            >
-                                <label>Gender</label>
-                                <Form.Radio
-                                    className='identity-fields'
-                                    name='gender'
-                                    label='Prefer Not To Say'
-                                    value='Prefer Not To Say'
-                                    checked={
-                                        this.state.gender ===
-                                        'Prefer Not To Say'
-                                    }
-                                    onChange={this.handleChange}
+                            <Form.Input
+                                size='small'
+                                label='Street Address'
+                                id='street'
+                                type='text'
+                                value={this.state.address.street}
+                                onChange={this.setChange}
+                            />
+
+                            <Form.Group>
+                                <Form.Input
+                                    width={8}
+                                    label='City'
+                                    className='address'
+                                    id='city'
+                                    type='text'
+                                    value={this.state.address.city}
+                                    onChange={this.setChange}
                                 />
-                                <Form.Radio
-                                    className='identity-fields'
-                                    name='gender'
-                                    label='Male'
-                                    value='Male'
-                                    checked={this.state.gender === 'Male'}
-                                    onChange={this.handleChange}
+
+                                <Form.Select
+                                    width={3}
+                                    fluid
+                                    label='State'
+                                    className='address'
+                                    id='state'
+                                    options={stateOptions}
+                                    value={this.state.address.state}
+                                    onChange={this.setChange}
                                 />
-                                <Form.Radio
-                                    className='identity-fields'
-                                    name='gender'
-                                    label='Female'
-                                    value='Female'
-                                    checked={this.state.gender === 'Female'}
-                                    onChange={this.handleChange}
-                                />
-                                <Form.Radio
-                                    className='identity-fields'
-                                    name='gender'
-                                    label='Transgender Woman'
-                                    value='Transgender Woman'
-                                    checked={
-                                        this.state.gender ===
-                                        'Transgender Woman'
-                                    }
-                                    onChange={this.handleChange}
-                                />
-                                <Form.Radio
-                                    className='identity-fields'
-                                    name='gender'
-                                    label='Transgender Man'
-                                    value='Transgender Man'
-                                    checked={
-                                        this.state.gender === 'Transgender Man'
-                                    }
-                                    onChange={this.handleChange}
-                                />
-                                <Form.Radio
-                                    className='identity-fields'
-                                    name='gender'
-                                    label='Gender Queer'
-                                    value='Gender Queer'
-                                    checked={
-                                        this.state.gender === 'Gender Queer'
-                                    }
-                                    onChange={this.handleChange}
-                                />
-                                <Form.Radio
-                                    className='identity-fields'
-                                    name='gender'
-                                    label='Open-ended'
-                                    value='Open-ended'
-                                    checked={this.state.gender === 'Open-ended'}
-                                    onChange={this.handleChange}
+
+                                <Form.Input
+                                    width={5}
+                                    label='Zip Code'
+                                    className='address'
+                                    id='zip'
+                                    type='text'
+                                    value={this.state.address.zip}
+                                    onChange={this.setChange}
                                 />
                             </Form.Group>
-                            <Form.Group
-                                grouped
-                                className='identity-groups required field'
-                            >
-                                <label>Preferred Pronouns</label>
-                                <Form.Radio
-                                    className='identity-fields'
-                                    name='pronouns'
-                                    label='He/him'
-                                    value='He/him'
-                                    checked={this.state.pronouns === 'He/him'}
-                                    onChange={this.handleChange}
+
+                            <Form.Group widths='equal' className='error-div'>
+                                <Form.Input
+                                    required
+                                    label='Primary Email'
+                                    className='patient-info-input'
+                                    id='primaryEmail'
+                                    placeholder='johndoe@email.com'
+                                    type='text'
+                                    value={this.state.primaryEmail}
+                                    onBlur={this.onEmailChange}
+                                    onChange={this.setChange}
                                 />
-                                <Form.Radio
-                                    className='identity-fields'
-                                    name='pronouns'
-                                    label='She/her'
-                                    value='She/her'
-                                    checked={this.state.pronouns === 'She/her'}
-                                    onChange={this.handleChange}
-                                />
-                                <Form.Radio
-                                    className='identity-fields'
-                                    name='pronouns'
-                                    label='They/them'
-                                    value='They/them'
-                                    checked={
-                                        this.state.pronouns === 'They/them'
-                                    }
-                                    onChange={this.handleChange}
-                                />
+                                {this.state.invalidEmail && (
+                                    <p className='error' id='email-error'>
+                                        Email must be valid
+                                    </p>
+                                )}
                             </Form.Group>
+
+                            <Form.Group className='error-div phone-div'>
+                                <Form.Input
+                                    required
+                                    width={12}
+                                    label='Primary Phone'
+                                    className='patient-info-input'
+                                    id='primaryPhone'
+                                    type='text'
+                                    value={this.state.primaryPhone}
+                                    onBlur={this.onPhoneChange}
+                                    onChange={this.setPrimaryMobile}
+                                />
+                                {this.state.invalidPhone && (
+                                    <p className='error' id='phone-error'>
+                                        Phone number must be valid
+                                    </p>
+                                )}
+                                <Form.Field
+                                    width={4}
+                                    className='mobile-checkbox'
+                                    label='Mobile'
+                                    control='input'
+                                    type='checkbox'
+                                    name='primaryMobile'
+                                    checked={this.state.primaryMobile}
+                                    onChange={this.handleMobile}
+                                />
+                                {this.state.invalidPhone && (
+                                    <p className='error' id='phone-error'>
+                                        Phone number must be valid
+                                    </p>
+                                )}
+                            </Form.Group>
+                            <DemographicsForm
+                                race={[]}
+                                asian={[]}
+                                otherRace={[]}
+                                ethnicity=''
+                                otherEthnicity={[]}
+                                gender=''
+                            />
                         </Form>
                     </Modal.Content>
                     <Modal.Actions>
@@ -911,11 +851,7 @@ class NoteNameMenuItem extends Component {
                         />
                         <Button
                             color='black'
-                            onClick={
-                                this.state.saveInfo
-                                    ? this.closeModal
-                                    : this.notSaveModal
-                            }
+                            onClick={this.closeModal}
                             content='Close'
                         />
                     </Modal.Actions>
