@@ -24,6 +24,7 @@ import './NavMenu.css';
 import states from 'constants/stateAbbreviations.json';
 import DemographicsForm from '../tools/DemographicsForm';
 import signout from '../../auth/signout.js';
+import DoctorSignUp from '../../pages/Account/DoctorSignUp';
 
 const stateOptions = states.map((state) => ({
     key: state,
@@ -114,6 +115,7 @@ class ConnectedNavMenu extends Component {
                     to='/login'
                     content='Login'
                 />
+                <DoctorSignUp />
             </Menu.Item>
         );
 

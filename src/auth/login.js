@@ -77,7 +77,7 @@ const GetLogin = async (username, password, role, context) => {
             mfaRequired: function (_codeDeliveryDetails) {
                 // need MFA to complete user authentication
                 const verificationCode = prompt(
-                    'Please input verification code',
+                    'Please input verification code sent via text message to your phone.',
                     ''
                 );
                 cognitoUser.sendMFACode(verificationCode, this);

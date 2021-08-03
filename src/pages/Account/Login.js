@@ -30,7 +30,7 @@ const Login = () => {
     const context = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('healthcare professional');
+    const [role, setRole] = useState('doctor');
     const [isLoggingIn, setIsLoggingIn] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const isMounted = useRef(true);
@@ -67,6 +67,7 @@ const Login = () => {
 
         // log user in
         setIsLoggingIn(true);
+        setRole('doctor');
         const loginResponse = await GetLogin(username, password, role, context);
 
         // only update if still mounted
@@ -109,6 +110,7 @@ const Login = () => {
             if (setupAccountResponse) {
                 // update state after user has setup account
                 setIsFirstLogin(setupAccountResponse.isFirstLoginFlag);
+
                 const emailVerificationResponse = await verifyEmail(
                     username,
                     role
@@ -143,7 +145,7 @@ const Login = () => {
                 lastName=''
             />
         );
-    } else if (isFirstLogin && role === 'doctor') {
+    } else if (isFirstLogin && role === 'healthcare professional') {
         return (
             <FirstTimeLogin
                 onSubmit={onChangePasswordSubmit}
@@ -155,6 +157,7 @@ const Login = () => {
             />
         );
     }
+
     return (
         <>
             <NavMenu />
@@ -196,6 +199,7 @@ const Login = () => {
                                 className='role'
                                 checked={role === 'doctor'}
                                 onChange={handleRoleChange}
+                                defaultChecked
                             />
                             <Form.Radio
                                 label='manager'

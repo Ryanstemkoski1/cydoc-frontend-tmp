@@ -33,4 +33,5 @@ export const patientClient = axios.create({
 
 export const stripeClient = axios.create({
     baseURL: 'https://f42bhadly5.execute-api.us-east-1.amazonaws.com/dev',
+    headers: { 'Access-Control-Allow-Origin': '*' },
 });
