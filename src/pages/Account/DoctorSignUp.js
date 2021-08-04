@@ -248,6 +248,7 @@ const DoctorSignUp = () => {
     const cssLeftCheckBox =
         '.lCheckBox { float:left; padding-right:100px; padding-left:100px }';
     const cssRightCheckBox = ' .rCheckBox { float:right }';
+    const cssRedAsterisk = '.redAsterisk::after { color:red; content:"*" }';
     return (
         <Modal
             dimmer='inverted'
@@ -436,7 +437,10 @@ const DoctorSignUp = () => {
                                 Credit cards will not be billed until the start
                                 of the second month.
                             </p>
-                            <label className='label-font'>Card Number</label>
+                            <label className='redAsterisk'>
+                                <style> {cssRedAsterisk}</style>
+                                Card Number
+                            </label>
                             <Form.Input
                                 required
                                 aria-label='Card Number'
@@ -446,7 +450,7 @@ const DoctorSignUp = () => {
                                 value={cardNumber}
                                 onChange={handleCardNumberChange}
                             />
-                            <label className='label-font'>
+                            <label className='redAsterisk'>
                                 Expiration Date
                             </label>
                             <Form.Group widths='equal' required>
@@ -470,7 +474,7 @@ const DoctorSignUp = () => {
                                     value={expirationYear}
                                     onChange={handleExpirationYearChange}
                                 />
-                                <p>CVV</p>
+                                <div className='redAsterisk'>CVV</div>
                                 <Form.Input
                                     fluid
                                     required
