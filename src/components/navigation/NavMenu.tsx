@@ -92,6 +92,12 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
         }
     };
 
+    window.addEventListener('beforeunload', function(e) {
+        // alert('If you leave the page, your note will not be saved.');
+        e.preventDefault();
+        e.returnValue = '';
+    });
+
     // Menu items when not logged in
     const defaultMenuItems = (
         <Menu.Item>
