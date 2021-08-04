@@ -1,5 +1,5 @@
 import { getOptionMapping } from '_processOptions';
-const drugNames = [
+export const drugNames = [
     { key: 'Benzodiazepine', text: 'Benzodiazepine', value: 'Benzodiazepine' },
     { key: 'Ativan®', text: 'Ativan®', value: 'Ativan®' },
     { key: 'Halcion®', text: 'Halcion®', value: 'Halcion®' },

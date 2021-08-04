@@ -342,8 +342,14 @@ class Alcohol extends React.Component<Props, State> {
     makeAccordionPanels(drinksConsumed: AlcoholConsumption[]) {
         const values = this.props.alcohol;
         const panels = [];
+        const consumedDrinkTypes: string[] = [];
 
         for (let i = 0; i < drinksConsumed.length; i++) {
+            const availableDrinkTypes = drinkTypes.filter(
+                (drink) => _.indexOf(consumedDrinkTypes, drink.value) < 0
+            );
+            consumedDrinkTypes.push(drinksConsumed[i].type);
+
             const titleContent = (
                 <Form className='inline-form'>
                     <Input
@@ -354,7 +360,7 @@ class Alcohol extends React.Component<Props, State> {
                             fluid
                             search
                             selection
-                            options={drinkTypes}
+                            options={availableDrinkTypes}
                             placeholder='Drink Type'
                             onChange={(_, { value }) => {
                                 this.props.updateAlcoholConsumptionType(
