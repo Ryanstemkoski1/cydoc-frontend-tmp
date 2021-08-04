@@ -295,18 +295,39 @@ class SpecificMurmurs extends Component<SpecificMurmursProps & PropsFromRedux> {
                 <Table collapsing>
                     <Table.Header>
                         <div className='murmurs-x'>
-                            <Button
-                                basic
-                                circular
-                                icon='x'
-                                size='mini'
-                                onClick={() =>
-                                    this.props.toggleSpecificMurmurInfo(
-                                        this.props.id,
-                                        false
-                                    )
-                                }
-                            />
+                            {this.props.itemState.phase == '' ? (
+                                <div>
+                                    <Button
+                                        basic
+                                        circular
+                                        icon='x'
+                                        size='mini'
+                                        onClick={() =>
+                                            this.props.toggleSpecificMurmurInfo(
+                                                this.props.id,
+                                                false
+                                            )
+                                        }
+                                    />
+                                    <p>
+                                        Specific murmurs will expand <br />
+                                        after systolic or diastolic is selected
+                                    </p>
+                                </div>
+                            ) : (
+                                <Button
+                                    basic
+                                    circular
+                                    icon='x'
+                                    size='mini'
+                                    onClick={() =>
+                                        this.props.toggleSpecificMurmurInfo(
+                                            this.props.id,
+                                            false
+                                        )
+                                    }
+                                />
+                            )}
                         </div>
                     </Table.Header>
                     {murmurs}

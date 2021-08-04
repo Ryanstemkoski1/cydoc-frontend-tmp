@@ -191,6 +191,19 @@ class HeartMurmursItem extends Component<
     };
 
     render = () => {
+        const specificMurmursButton = (
+            <Button
+                basic
+                circular
+                icon='plus'
+                size='mini'
+                content='Expand Specific Murmurs'
+                onClick={() =>
+                    this.props.toggleSpecificMurmurInfo(this.props.id, true)
+                }
+            />
+        );
+
         return (
             <Table collapsing>
                 <Table.Header>
@@ -210,30 +223,21 @@ class HeartMurmursItem extends Component<
                 </Table.Header>
                 {this.generatePhaseRow()}
                 {this.generateCrescDecrescRow()}
-                Heard best at: {this.generateBestHeardAtRow()}
+                Heard Best At: {this.generateBestHeardAtRow()}
                 Intensity: {this.generateIntensityRow()}
                 Pitch: {this.generatePitchesRow()}
                 Quality: {this.generateQualityRow()}
+                Specific Murmurs:
                 {!this.props.itemState.specificMurmurInfo ? (
                     <div className='expand-specific'>
-                        Expand specific murmurs
-                        <Popup
-                            content='Please select systolic or diastolic before expanding'
-                            trigger={
-                                <Button
-                                    basic
-                                    circular
-                                    icon='plus'
-                                    size='mini'
-                                    onClick={() =>
-                                        this.props.toggleSpecificMurmurInfo(
-                                            this.props.id,
-                                            true
-                                        )
-                                    }
-                                />
-                            }
-                        />
+                        {this.props.itemState.phase == '' ? (
+                            <Popup
+                                content='Please select systolic or diastolic before expanding'
+                                trigger={specificMurmursButton}
+                            />
+                        ) : (
+                            specificMurmursButton
+                        )}
                     </div>
                 ) : (
                     <SpecificMurmurs id={this.props.id} />

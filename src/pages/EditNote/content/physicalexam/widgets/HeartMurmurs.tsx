@@ -16,12 +16,12 @@ class HeartMurmurs extends Component<PropsFromRedux> {
         return (
             <div className='murmurs'>
                 {murmurItems}
-                add murmurs
                 <Button
                     basic
                     circular
                     icon='plus'
                     size='mini'
+                    content='Add Murmurs'
                     onClick={this.props.addMurmursWidgetItem}
                 />
             </div>
