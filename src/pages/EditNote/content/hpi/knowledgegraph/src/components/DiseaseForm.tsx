@@ -117,20 +117,22 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
         const { parentToChildNodes, graphData } = this.state;
         const { parentNode, category, hpi } = this.props;
         const values: HpiState = hpi;
-        let nodeSet = new Set();
+        const nodeSet = new Set();
         let questionArr: JSX.Element[] = [];
         let stack = parentToChildNodes[parentNode].slice().reverse(); // add child nodes in reverse bc using stack
         while (stack.length) {
             const currNode = stack.pop();
             if (!currNode || nodeSet.has(currNode)) continue;
             if (values.nodes[currNode].text != 'nan')
-                questionArr = 
-                    [...questionArr, <CreateResponse
+                questionArr = [
+                    ...questionArr,
+                    <CreateResponse
                         key={graphData.nodes[currNode].uid}
                         node={currNode}
                         category={category}
-                    />];
-                
+                    />,
+                ];
+
             const childEdges =
                 values.nodes[currNode].response == YesNoResponse.Yes ||
                 values.nodes[currNode].text == 'nan'

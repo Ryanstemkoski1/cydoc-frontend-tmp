@@ -260,7 +260,13 @@ export function hpiReducer(
                 ) &&
                 isStringArray(response)
             ) {
-                return (!response.includes(name)) ? updateResponse(medId, [...response, name], state) : updateResponse(medId, response.filter((val) => val != name), state);
+                return !response.includes(name)
+                    ? updateResponse(medId, [...response, name], state)
+                    : updateResponse(
+                          medId,
+                          response.filter((val) => val != name),
+                          state
+                      );
             } else throw new Error('Not a string array');
         }
 

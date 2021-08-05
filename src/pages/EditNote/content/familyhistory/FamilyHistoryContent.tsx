@@ -128,7 +128,8 @@ class FamilyHistoryContent extends Component<Props, State> {
             }
             listValues = fhPopKeys;
             if (node) popResponse(node, listValues);
-        } else if (responseType == ResponseTypes.FH_BLANK && responseChoice) listValues = responseChoice;
+        } else if (responseType == ResponseTypes.FH_BLANK && responseChoice)
+            listValues = responseChoice;
         const listItems = listValues.map((condition, index) => {
             let conditionName = '';
             if (condition in familyHistory)

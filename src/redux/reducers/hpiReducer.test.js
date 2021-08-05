@@ -188,17 +188,19 @@ describe('hpi reducers', () => {
                     payload,
                 });
                 expect(nextState.nodes[medId].response).toContain(payload.name);
-            })
+            });
             expect(nextState).toMatchSnapshot();
             // opposite direction
             [...Array(10).keys()].map((i) => {
-                payload.name = 'foo' + (9-i).toString();
+                payload.name = 'foo' + (9 - i).toString();
                 nextState = hpiReducer(nextState, {
                     type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
                     payload,
                 });
-                expect(nextState.nodes[medId].response).not.toContain(payload.name);
-            })
+                expect(nextState.nodes[medId].response).not.toContain(
+                    payload.name
+                );
+            });
         });
         it('handles input change', () => {
             payload.textInput = 'foo';

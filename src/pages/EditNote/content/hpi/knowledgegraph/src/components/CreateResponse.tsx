@@ -97,12 +97,16 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 0,
                 click != -1 ? click : cleanText ? select : text.length
             ),
-            responseChoice: click != -1 || cleanText
-                ? text
-                      .slice(select + 1, endSelect != -1 ? endSelect : text.length)
-                      .split(',')
-                      .map((response) => response.trim())
-                : [],
+            responseChoice:
+                click != -1 || cleanText
+                    ? text
+                          .slice(
+                              select + 1,
+                              endSelect != -1 ? endSelect : text.length
+                          )
+                          .split(',')
+                          .map((response) => response.trim())
+                    : [],
         });
     };
 
@@ -110,8 +114,15 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         const { windowWidth, responseChoice } = this.state;
         const { node, hpi } = this.props;
         const { responseType } = hpi.nodes[node];
-        const blankTypes = [ResponseTypes.FH_BLANK, ResponseTypes.MEDS_BLANK, ResponseTypes.PMH_BLANK, ResponseTypes.PSH_BLANK];
-        const choices = blankTypes.includes(responseType) ? hpi.nodes[node].response as string[] : responseChoice;
+        const blankTypes = [
+            ResponseTypes.FH_BLANK,
+            ResponseTypes.MEDS_BLANK,
+            ResponseTypes.PMH_BLANK,
+            ResponseTypes.PSH_BLANK,
+        ];
+        const choices = blankTypes.includes(responseType)
+            ? (hpi.nodes[node].response as string[])
+            : responseChoice;
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
         switch (responseType) {
             case ResponseTypes.YES_NO:
