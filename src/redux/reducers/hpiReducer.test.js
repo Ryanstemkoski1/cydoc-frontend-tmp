@@ -2,7 +2,6 @@ import { initialHpiState, medId, hpiReducer } from './hpiReducer';
 import { HPI_ACTION } from '../actions/actionTypes';
 import { BodyLocationOptions, ExpectedResponseDict } from 'constants/hpiEnums';
 import { options } from 'pages/EditNote/content/hpi/knowledgegraph/src/components/responseComponents/BodyLocation';
-import { range } from 'lodash';
 
 describe('hpi reducers', () => {
     const processedState = {
@@ -338,38 +337,6 @@ describe('hpi reducers', () => {
                 });
                 expect(nextState).toMatchSnapshot();
                 expect(nextState.nodes[medId].response).toBeUndefined();
-            });
-        });
-        describe('handles blank widget questions', () => {
-            it('handles new blank response', () => {
-                nextState.nodes[medId].responseType = 'FH-BLANK';
-                nextState.nodes[medId].response =
-                    ExpectedResponseDict['FH_BLANK'];
-                payload = { medId: medId, conditionId: 'foo' };
-                nextState = hpiReducer(nextState, {
-                    type: HPI_ACTION.HANDLE_BLANK_QUESTION_CHANGE,
-                    payload,
-                });
-                expect(nextState).toMatchSnapshot();
-                expect(nextState.nodes[medId].response).toContain(
-                    payload.conditionId
-                );
-            });
-        });
-        describe('handles pop response questions', () => {
-            it('handles new pop response', () => {
-                nextState.nodes[medId].responseType = 'FH-POP';
-                nextState.nodes[medId].response =
-                    ExpectedResponseDict['FH_POP'];
-                payload = { medId: medId, conditionIds: ['foo1', 'foo2'] };
-                nextState = hpiReducer(nextState, {
-                    type: HPI_ACTION.POP_RESPONSE,
-                    payload,
-                });
-                expect(nextState).toMatchSnapshot();
-                expect(nextState.nodes[medId].response).toMatchObject(
-                    payload.conditionIds
-                );
             });
         });
         describe('handles blank widget questions', () => {

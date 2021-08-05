@@ -455,22 +455,6 @@ export function hpiReducer(
             else return state;
         }
 
-        case HPI_ACTION.POP_RESPONSE: {
-            const { medId, conditionIds } = action.payload;
-            const response = state.nodes[medId].response;
-            if (
-                [
-                    ResponseTypes.FH_POP,
-                    ResponseTypes.PMH_POP,
-                    ResponseTypes.PSH_POP,
-                ].includes(state.nodes[medId].responseType) &&
-                isStringArray(response) &&
-                !response.length
-            )
-                return updateResponse(medId, conditionIds, state);
-            else return state;
-        }
-
         default:
             return state;
     }
