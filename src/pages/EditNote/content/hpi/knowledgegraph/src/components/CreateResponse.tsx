@@ -78,7 +78,11 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         Cleans a question text for any parts not to be seen by the user,
         such as SYMPTOM or DISEASE, which should be replaced by the 
         category name, or CLICK[] or any brackets [] that should not be
-        present.
+        present. 
+
+        One random exception found was that BIP0002 has CLICK with no
+        closing bracket "]", so the corresponding changes were made so 
+        that the question can still pass through correctly.
         */
         const { node, hpi, category } = this.props;
         const text = hpi.nodes[node].text
@@ -93,9 +97,9 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 0,
                 click != -1 ? click : cleanText ? select : text.length
             ),
-            responseChoice: cleanText
+            responseChoice: click != -1 || cleanText
                 ? text
-                      .slice(select + 1, endSelect)
+                      .slice(select + 1, endSelect != -1 ? endSelect : text.length)
                       .split(',')
                       .map((response) => response.trim())
                 : [],
@@ -106,6 +110,8 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         const { windowWidth, responseChoice } = this.state;
         const { node, hpi } = this.props;
         const { responseType } = hpi.nodes[node];
+        const blankTypes = [ResponseTypes.FH_BLANK, ResponseTypes.MEDS_BLANK, ResponseTypes.PMH_BLANK, ResponseTypes.PSH_BLANK];
+        const choices = blankTypes.includes(responseType) ? hpi.nodes[node].response as string[] : responseChoice;
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
         switch (responseType) {
             case ResponseTypes.YES_NO:
@@ -151,7 +157,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     <FamilyHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={responseChoice}
+                        responseChoice={choices}
                         responseType={responseType}
                         node={node}
                     />

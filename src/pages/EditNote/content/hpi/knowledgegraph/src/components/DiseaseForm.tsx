@@ -104,7 +104,7 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
             const childNodes = questionOrderList.map((tup) => tup[0]); // child nodes in order
             const edgesList = questionOrderList.map((tup) => tup[2]);
             parentToChildNodes[currNode] = childNodes;
-            queue = queue.concat(childNodes);
+            queue = [...queue, ...childNodes];
             addNode(currNode, nodes[currNode], edgesList);
         }
         this.setState({
@@ -117,25 +117,27 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
         const { parentToChildNodes, graphData } = this.state;
         const { parentNode, category, hpi } = this.props;
         const values: HpiState = hpi;
-        const questionArr: JSX.Element[] = [];
-        let stack = parentToChildNodes[parentNode].slice().reverse(); // add child nodes in reverse
+        let nodeSet = new Set();
+        let questionArr: JSX.Element[] = [];
+        let stack = parentToChildNodes[parentNode].slice().reverse(); // add child nodes in reverse bc using stack
         while (stack.length) {
             const currNode = stack.pop();
-            if (!currNode) continue;
+            if (!currNode || nodeSet.has(currNode)) continue;
             if (values.nodes[currNode].text != 'nan')
-                questionArr.push(
-                    <CreateResponse
+                questionArr = 
+                    [...questionArr, <CreateResponse
                         key={graphData.nodes[currNode].uid}
                         node={currNode}
                         category={category}
-                    />
-                );
+                    />];
+                
             const childEdges =
                 values.nodes[currNode].response == YesNoResponse.Yes ||
                 values.nodes[currNode].text == 'nan'
-                    ? parentToChildNodes[currNode]
+                    ? parentToChildNodes[currNode].slice().reverse()
                     : [];
-            stack = stack.concat(childEdges);
+            stack = [...stack, ...childEdges];
+            nodeSet.add(currNode);
         }
         return questionArr;
     }

@@ -2,6 +2,7 @@ import { initialHpiState, medId, hpiReducer } from './hpiReducer';
 import { HPI_ACTION } from '../actions/actionTypes';
 import { BodyLocationOptions, ExpectedResponseDict } from 'constants/hpiEnums';
 import { options } from 'pages/EditNote/content/hpi/knowledgegraph/src/components/responseComponents/BodyLocation';
+import { range } from 'lodash';
 
 describe('hpi reducers', () => {
     const processedState = {
@@ -64,14 +65,6 @@ describe('hpi reducers', () => {
             const edgeKeys = edges.map(
                 (edge) => 'to' + edge.to + 'from' + edge.from
             );
-            const responseNode = {
-                response: node.response,
-                responseType: node.responseType,
-                text: node.text,
-                blankYes: node.blankYes,
-                blankNo: node.blankNo,
-                blankTemplate: node.blankTemplate,
-            };
             const responseNode = {
                 response: node.response,
                 responseType: node.responseType,
@@ -186,20 +179,26 @@ describe('hpi reducers', () => {
             );
         });
         it('handles multiple choice click', () => {
-            payload.name = 'foo1';
             nextState.nodes[medId].response = ExpectedResponseDict.CLICK_BOXES;
             nextState.nodes[medId].responseType = 'CLICK-BOXES';
-            nextState = hpiReducer(nextState, {
-                type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
-                payload,
-            });
+            [...Array(10).keys()].map((i) => {
+                payload.name = 'foo' + i.toString();
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
+                    payload,
+                });
+                expect(nextState.nodes[medId].response).toContain(payload.name);
+            })
             expect(nextState).toMatchSnapshot();
-            expect(nextState.nodes[medId].response).toContain(payload.name);
-            nextState = hpiReducer(nextState, {
-                type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
-                payload,
-            });
-            expect(nextState.nodes[medId].response).not.toContain(payload.name);
+            // opposite direction
+            [...Array(10).keys()].map((i) => {
+                payload.name = 'foo' + (9-i).toString();
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
+                    payload,
+                });
+                expect(nextState.nodes[medId].response).not.toContain(payload.name);
+            })
         });
         it('handles input change', () => {
             payload.textInput = 'foo';

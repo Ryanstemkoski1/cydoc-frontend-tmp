@@ -128,8 +128,7 @@ class FamilyHistoryContent extends Component<Props, State> {
             }
             listValues = fhPopKeys;
             if (node) popResponse(node, listValues);
-        } else if (responseType == ResponseTypes.FH_BLANK && responseChoice)
-            listValues = responseChoice;
+        } else if (responseType == ResponseTypes.FH_BLANK && responseChoice) listValues = responseChoice;
         const listItems = listValues.map((condition, index) => {
             let conditionName = '';
             if (condition in familyHistory)
@@ -178,14 +177,6 @@ class FamilyHistoryContent extends Component<Props, State> {
                 );
             }
         });
-        // if FH-BLANK with no response-choice
-        if (
-            responseType == ResponseTypes.FH_BLANK &&
-            responseChoice &&
-            !responseChoice.length
-        ) {
-            return <AddRowButton onClick={this.addRow} name={'disease'} />;
-        }
 
         return mobile ? (
             <>

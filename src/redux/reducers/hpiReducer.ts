@@ -11,7 +11,6 @@ import {
     TimeOption,
     ExpectedResponseDict,
     ExpectedResponseInterface,
-    ClickBoxesInput,
     BodyLocationTotal,
     BodyLocationOptions,
     EdgeInterface,
@@ -144,6 +143,7 @@ export function hpiReducer(
             the knowledge graph.
             */
             const { medId, node, edges } = action.payload;
+            if (medId in state.nodes) return state;
             const response = Object.keys(ResponseTypes)[
                 Object.values(ResponseTypes).indexOf(node.responseType)
             ] as keyof ExpectedResponseInterface;
@@ -254,19 +254,13 @@ export function hpiReducer(
             */
             const { medId, name } = action.payload;
             const response = state.nodes[medId].response;
-            let responseArr: ClickBoxesInput = [];
             if (
                 [ResponseTypes.CLICK_BOXES, ResponseTypes.MEDS_POP].includes(
                     state.nodes[medId].responseType
                 ) &&
                 isStringArray(response)
             ) {
-                if (!response.includes(name)) responseArr = [...response, name];
-                else {
-                    const [name, ...res] = response;
-                    responseArr = res;
-                }
-                return updateResponse(medId, responseArr, state);
+                return (!response.includes(name)) ? updateResponse(medId, [...response, name], state) : updateResponse(medId, response.filter((val) => val != name), state);
             } else throw new Error('Not a string array');
         }
 
