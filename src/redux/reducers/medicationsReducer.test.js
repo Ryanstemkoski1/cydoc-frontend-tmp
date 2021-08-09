@@ -1,4 +1,7 @@
-import { medicationsReducer, initialState } from './medicationsReducer';
+import {
+    medicationsReducer,
+    initialMedicationsState,
+} from './medicationsReducer';
 import { MEDICATIONS_ACTION } from 'redux/actions/actionTypes';
 import { YesNoResponse } from 'constants/enums';
 
@@ -18,7 +21,9 @@ const initialMedications = {
 
 describe('medications reducers', () => {
     it('returns the initial state', () => {
-        expect(medicationsReducer(undefined, {})).toEqual(initialState);
+        expect(medicationsReducer(undefined, {})).toEqual(
+            initialMedicationsState
+        );
     });
     it('updates drug name', () => {
         expect(
@@ -135,5 +140,17 @@ describe('medications reducers', () => {
                 },
             })
         ).toMatchSnapshot();
+    });
+    it('creates new entry with given condition id', () => {
+        const nextState = medicationsReducer(initialMedications, {
+            type: MEDICATIONS_ACTION.ADD_MEDS_POP_OPTION,
+            payload: {
+                medIndex: 'foo',
+                medName: 'foo',
+            },
+        });
+        expect(nextState).toMatchSnapshot();
+        expect(nextState).toHaveProperty('foo');
+        expect(nextState['foo'].drugName).toEqual('foo');
     });
 });

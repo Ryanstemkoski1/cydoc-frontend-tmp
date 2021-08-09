@@ -9,16 +9,26 @@ import { OptionMapping } from '_processOptions';
 import {
     addMedication,
     deleteMedication,
+    addMedsPopOption,
 } from 'redux/actions/medicationsActions';
 import { selectMedicationsEntries } from 'redux/selectors/medicationsSelectors';
 import './Medications.css';
 import { CurrentNoteState } from 'redux/reducers';
 import MedicationsPanel from './MedicationsPanel';
+import { ResponseTypes } from 'constants/hpiEnums';
+import { v4 } from 'uuid';
+import {
+    multipleChoiceHandleClick,
+    blankQuestionChange,
+} from 'redux/actions/hpiActions';
+import { selectHpiState } from 'redux/selectors/hpiSelectors';
 
 interface OwnProps {
     mobile: boolean;
     isPreview?: boolean;
     values?: string[];
+    responseType?: ResponseTypes;
+    node?: string;
 }
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -62,10 +72,46 @@ export class MedicationsContent extends Component<Props, State> {
         }));
     };
 
+    addRow = () => {
+        const {
+            responseType,
+            node,
+            addMedsPopOption,
+            blankQuestionChange,
+            addMedication,
+        } = this.props;
+        if (responseType == ResponseTypes.MEDS_BLANK && node) {
+            const newKey = v4();
+            addMedsPopOption(newKey, '');
+            blankQuestionChange(node, newKey);
+        } else addMedication();
+    };
+
     render() {
-        const { values, isPreview, medications, mobile } = this.props;
+        const {
+            values,
+            isPreview,
+            medications,
+            mobile,
+            responseType,
+            node,
+            deleteMedication,
+            addMedsPopOption,
+            hpi,
+            multipleChoiceHandleClick,
+        } = this.props;
 
         const panels = [];
+        const medicationsIndexMap: {
+            [medication: string]: { key: string; index: number };
+        } = {};
+        for (let i = 0; i < medications.length; i++) {
+            const medicationName = medications[i][1].drugName;
+            medicationsIndexMap[medicationName] = {
+                key: medications[i][0],
+                index: i,
+            };
+        }
 
         if (isPreview) {
             if (values != null) {
@@ -86,12 +132,22 @@ export class MedicationsContent extends Component<Props, State> {
                 }
             }
         } else {
-            for (let i = 0; i < medications.length; i++) {
+            // create map of condition: index to look for existing conditions in medications
+            let medIndices = [...Array(medications.length).keys()];
+            if (responseType == ResponseTypes.MEDS_POP && values) {
+                medIndices = values
+                    .filter((medName) => medName in medicationsIndexMap)
+                    .map((medName) => medicationsIndexMap[medName].index);
+            } else if (responseType == ResponseTypes.MEDS_BLANK && values)
+                medIndices = values.map((key) =>
+                    medications.findIndex((medItem) => medItem[0] == key)
+                );
+            for (let i = 0; i < medIndices.length; i++) {
                 panels.push(
                     <MedicationsPanel
                         mobile={mobile}
                         isPreview={false}
-                        rowIndex={i}
+                        rowIndex={medIndices[i]}
                         sideEffectsOptions={this.state.sideEffectsOptions}
                         medicationOptions={this.state.medicationOptions}
                         diseaseOptions={this.state.diseaseOptions}
@@ -105,17 +161,57 @@ export class MedicationsContent extends Component<Props, State> {
         const content = (
             <Accordion panels={panels} exclusive={false} fluid styled />
         );
-
         return (
             <>
+                {node &&
+                    responseType == ResponseTypes.MEDS_POP &&
+                    values &&
+                    values.map((medication: string) => {
+                        const response = hpi.nodes[node].response;
+                        const containsKey =
+                            Array.isArray(response) &&
+                            medication in medicationsIndexMap &&
+                            response.includes(
+                                medicationsIndexMap[medication].key
+                            );
+                        return (
+                            <button
+                                key={medication}
+                                className='button_question'
+                                style={{
+                                    backgroundColor: containsKey
+                                        ? 'lightslategrey'
+                                        : 'whitesmoke',
+                                }}
+                                onClick={(): void => {
+                                    if (containsKey) {
+                                        deleteMedication(
+                                            medicationsIndexMap[medication].key
+                                        );
+                                        multipleChoiceHandleClick(
+                                            node,
+                                            medicationsIndexMap[medication].key
+                                        );
+                                    } else {
+                                        const newKey = v4();
+                                        addMedsPopOption(newKey, medication);
+                                        multipleChoiceHandleClick(node, newKey);
+                                    }
+                                }}
+                            >
+                                {medication}
+                            </button>
+                        );
+                    })}
                 {content}
-                {!this.props.isPreview && (
-                    <AddRowButton
-                        onClick={() => this.props.addMedication()}
-                        ariaLabel='Add-Medication-Row-Button'
-                        name='medication'
-                    />
-                )}
+                {!this.props.isPreview &&
+                    responseType != ResponseTypes.MEDS_POP && (
+                        <AddRowButton
+                            onClick={this.addRow}
+                            ariaLabel='Add-Medication-Row-Button'
+                            name='medication'
+                        />
+                    )}
             </>
         );
     }
@@ -123,11 +219,15 @@ export class MedicationsContent extends Component<Props, State> {
 
 const mapStateToProps = (state: CurrentNoteState) => ({
     medications: selectMedicationsEntries(state),
+    hpi: selectHpiState(state),
 });
 
 const mapDispatchToProps = {
     addMedication,
     deleteMedication,
+    addMedsPopOption,
+    multipleChoiceHandleClick,
+    blankQuestionChange,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

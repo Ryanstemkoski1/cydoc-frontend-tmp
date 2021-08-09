@@ -27,8 +27,10 @@ import { medicalMapping } from 'constants/word-mappings';
 import { v4 } from 'uuid';
 import { ResponseTypes } from 'constants/hpiEnums';
 import {
-    BlankQuestionChange,
+    blankQuestionChange,
     BlankQuestionChangeAction,
+    PopResponseAction,
+    popResponse,
 } from 'redux/actions/hpiActions';
 
 //TODO: finish the styling for this page
@@ -72,15 +74,18 @@ class FamilyHistoryContent extends Component<Props, State> {
     }
 
     addRow() {
-        if (
-            this.props.responseType == ResponseTypes.FH_BLANK &&
-            this.props.node
-        ) {
+        const {
+            responseType,
+            node,
+            addFhPopOptions,
+            blankQuestionChange,
+            addCondition,
+        } = this.props;
+        if (responseType == ResponseTypes.FH_BLANK && node) {
             const newKey = v4();
-            this.props.addFhPopOptions(newKey, '');
-            this.props.BlankQuestionChange(this.props.node, newKey);
-        }
-        this.props.addCondition();
+            addFhPopOptions(newKey, '');
+            blankQuestionChange(node, newKey);
+        } else addCondition();
     }
 
     addSeenCond = (value: string, index: string) => {
@@ -91,22 +96,29 @@ class FamilyHistoryContent extends Component<Props, State> {
 
     render() {
         const { windowWidth } = this.state;
-        const { responseChoice, addFhPopOptions, responseType } = this.props;
+        const {
+            responseChoice,
+            addFhPopOptions,
+            responseType,
+            popResponse,
+            node,
+            familyHistory,
+        } = this.props;
         const mobile = windowWidth < FAMILY_HISTORY_MOBILE_BP;
         //Create collection of rows
         // Use second OR statement so that the information may be auto-populated in the Family History tab
-        let listValues = Object.keys(this.props.familyHistory);
-        if (responseType == ResponseTypes.FH_POP) {
-            // create map of condition: key to look for existing conditions
+        let listValues = Object.keys(familyHistory);
+        if (responseType == ResponseTypes.FH_POP && responseChoice) {
+            // create map of condition: key to look for existing conditions in family history
             const conditionKeyMap: { [condition: string]: string } = {};
-            for (const key in this.props.familyHistory) {
-                const conditionName = this.props.familyHistory[key].condition;
+            for (const key in familyHistory) {
+                const conditionName = familyHistory[key].condition;
                 conditionKeyMap[conditionName] = key;
             }
             const fhPopKeys = [];
             for (const conditionKey in responseChoice) {
                 const conditionName = responseChoice[conditionKey];
-                if (responseChoice[conditionKey] in conditionKeyMap)
+                if (conditionName in conditionKeyMap)
                     fhPopKeys.push(conditionKeyMap[conditionName]);
                 else {
                     const newKey = v4();
@@ -115,13 +127,13 @@ class FamilyHistoryContent extends Component<Props, State> {
                 }
             }
             listValues = fhPopKeys;
-        } else if (responseType == ResponseTypes.FH_BLANK) {
+            if (node) popResponse(node, listValues);
+        } else if (responseType == ResponseTypes.FH_BLANK && responseChoice)
             listValues = responseChoice;
-        }
         const listItems = listValues.map((condition, index) => {
             let conditionName = '';
-            if (condition in this.props.familyHistory)
-                conditionName = this.props.familyHistory[condition].condition;
+            if (condition in familyHistory)
+                conditionName = familyHistory[condition].condition;
             if (this.props.isPreview) {
                 return (
                     <FamilyHistoryBlock
@@ -161,18 +173,11 @@ class FamilyHistoryContent extends Component<Props, State> {
                             />
                         }
                         index={condition}
-                        pop={this.props.responseType == ResponseTypes.FH_POP}
+                        pop={true}
                     />
                 );
             }
         });
-        // if FH-BLANK with no response-choice
-        if (
-            this.props.responseType == ResponseTypes.FH_BLANK &&
-            !this.props.responseChoice.length
-        ) {
-            return <AddRowButton onClick={this.addRow} name={'disease'} />;
-        }
 
         return mobile ? (
             <>
@@ -182,7 +187,6 @@ class FamilyHistoryContent extends Component<Props, State> {
                     contentHeader={<FamilyHistoryContentHeader />}
                     rows={listItems}
                     pop={this.props.responseType == ResponseTypes.FH_POP}
-                    value_type='Family History'
                     conditions={listValues}
                     mobile={mobile}
                     addRow={this.addRow}
@@ -213,8 +217,8 @@ interface FamilyHistoryProps {
 
 interface ContentProps {
     isPreview: boolean;
-    responseChoice: string[];
-    responseType: ResponseTypes;
+    responseChoice?: string[];
+    responseType?: ResponseTypes;
     node?: string;
 }
 
@@ -224,10 +228,11 @@ interface DispatchProps {
         conditionIndex: string,
         conditionName: string
     ) => AddFhPopOptionsAction;
-    BlankQuestionChange: (
+    blankQuestionChange: (
         medId: string,
         conditionId: string
     ) => BlankQuestionChangeAction;
+    popResponse: (medId: string, conditionIds: string[]) => PopResponseAction;
 }
 
 interface State {
@@ -255,7 +260,8 @@ const mapDispatchToProps = {
     addCondition,
     updateCondition,
     addFhPopOptions,
-    BlankQuestionChange,
+    blankQuestionChange,
+    popResponse,
 };
 
 export default connect(

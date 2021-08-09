@@ -154,6 +154,13 @@ export function medicalHistoryReducer(
             };
         }
         case MEDICAL_HISTORY_ACTION.ADD_PMH_POP_OPTIONS: {
+            /*
+            For the POP component used in HPI. Since the response in 
+            the HPI state requires the condition ID/index to be saved, 
+            the ID is created in the component and saved to both the
+            medical history and HPI states at the same time. A new input
+            is saved with the new condition ID.
+            */
             const { conditionIndex, conditionName } = action.payload;
             return {
                 ...state,

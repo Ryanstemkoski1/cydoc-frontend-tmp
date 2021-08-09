@@ -195,6 +195,24 @@ export function deleteMedication(index: string) {
     };
 }
 
+export interface AddMedsPopOptionAction {
+    type: MEDICATIONS_ACTION.ADD_MEDS_POP_OPTION;
+    payload: {
+        medIndex: string;
+        medName: string;
+    };
+}
+
+export function addMedsPopOption(medIndex: string, medName: string) {
+    return {
+        type: MEDICATIONS_ACTION.ADD_MEDS_POP_OPTION,
+        payload: {
+            medIndex,
+            medName,
+        },
+    };
+}
+
 export type MedicationsActionTypes =
     | UpdateDrugNameAction
     | UpdateStartYearAction
@@ -206,4 +224,5 @@ export type MedicationsActionTypes =
     | UpdateSideEffectsAction
     | UpdateCommentsAction
     | AddMedicationAction
-    | DeleteMedicationAction;
+    | DeleteMedicationAction
+    | AddMedsPopOptionAction;

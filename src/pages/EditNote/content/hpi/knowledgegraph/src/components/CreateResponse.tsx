@@ -12,36 +12,35 @@ import MedicationsContent from '../../../../medications/MedicationsContent';
 import SurgicalHistoryContent from '../../../../surgicalhistory/SurgicalHistoryContent';
 import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
 import ListText from './responseComponents/ListText';
-import { ResponseTypes, HpiStateProps } from 'constants/hpiEnums';
+import { ResponseTypes, HpiStateProps, DoctorView } from 'constants/hpiEnums';
 import {
     addFhPopOptions,
     AddFhPopOptionsAction,
 } from 'redux/actions/familyHistoryActions';
 import {
-    BlankQuestionChange,
+    blankQuestionChange,
     BlankQuestionChangeAction,
 } from 'redux/actions/hpiActions';
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import { isStringArray } from 'redux/reducers/hpiReducer';
 
-interface QuestionAnswerProps {
-    responseType: ResponseTypes;
+interface CreateResponseProps {
     node: string;
-    responseChoice: string[];
-    question: string;
+    category: DoctorView;
 }
 
-interface QuestionAnswerState {
+interface CreateResponseState {
     windowWidth: number;
     windowHeight: number;
     startDate: Date;
     scale: number;
     input: string;
+    question: string;
+    responseChoice: string[];
 }
 
-class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
+class CreateResponse extends React.Component<Props, CreateResponseState> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -50,12 +49,15 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
             startDate: new Date(),
             scale: 0,
             input: '',
+            question: '',
+            responseChoice: [],
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
 
     componentDidMount() {
         this.updateDimensions();
+        this.cleanQuestionText();
         window.addEventListener('resize', this.updateDimensions);
     }
     componentWillUnmount() {
@@ -71,11 +73,57 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
         this.setState({ windowWidth, windowHeight });
     }
 
+    cleanQuestionText = () => {
+        /*
+        Cleans a question text for any parts not to be seen by the user,
+        such as SYMPTOM or DISEASE, which should be replaced by the 
+        category name, or CLICK[] or any brackets [] that should not be
+        present. 
+
+        One random exception found was that BIP0002 has CLICK with no
+        closing bracket "]", so the corresponding changes were made so 
+        that the question can still pass through correctly.
+        */
+        const { node, hpi, category } = this.props;
+        const text = hpi.nodes[node].text
+            .replace('SYMPTOM', category.toLowerCase())
+            .replace('DISEASE', category.toLowerCase());
+        const click = text.search('CLICK'),
+            select = text.search('\\['),
+            endSelect = text.search('\\]'),
+            cleanText = select != -1 && endSelect != -1;
+        this.setState({
+            question: text.slice(
+                0,
+                click != -1 ? click : cleanText ? select : text.length
+            ),
+            responseChoice:
+                click != -1 || cleanText
+                    ? text
+                          .slice(
+                              select + 1,
+                              endSelect != -1 ? endSelect : text.length
+                          )
+                          .split(',')
+                          .map((response) => response.trim())
+                    : [],
+        });
+    };
+
     renderSwitch = () => {
-        const { windowWidth } = this.state;
-        const { responseType, node } = this.props;
+        const { windowWidth, responseChoice } = this.state;
+        const { node, hpi } = this.props;
+        const { responseType } = hpi.nodes[node];
+        const blankTypes = [
+            ResponseTypes.FH_BLANK,
+            ResponseTypes.MEDS_BLANK,
+            ResponseTypes.PMH_BLANK,
+            ResponseTypes.PSH_BLANK,
+        ];
+        const choices = blankTypes.includes(responseType)
+            ? (hpi.nodes[node].response as string[])
+            : responseChoice;
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
-        const response = this.props.hpi.nodes[node].response;
         switch (responseType) {
             case ResponseTypes.YES_NO:
             case ResponseTypes.NO_YES:
@@ -91,12 +139,7 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
                 return <ListText key={node} node={node} />;
 
             case ResponseTypes.CLICK_BOXES:
-                return this.props.responseChoice.map((item: string) => (
-                    <MultipleChoice key={item} name={item} node={node} />
-                ));
-
-            case ResponseTypes.MEDS_POP:
-                return this.props.responseChoice.map((item: string) => (
+                return responseChoice.map((item: string) => (
                     <MultipleChoice key={item} name={item} node={node} />
                 ));
 
@@ -106,63 +149,58 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
             case ResponseTypes.BODYLOCATION:
                 return <BodyLocation key={node} node={node} />;
 
-            case ResponseTypes.FH_POP:
+            case ResponseTypes.MEDS_POP:
+            case ResponseTypes.MEDS_BLANK:
                 return (
-                    <FamilyHistoryContent
+                    <MedicationsContent
                         key={node}
                         isPreview={false}
-                        responseChoice={this.props.responseChoice}
-                        responseType={this.props.responseType}
+                        mobile={collapseTabs}
+                        values={responseChoice}
+                        responseType={responseType}
+                        node={node}
                     />
                 );
 
+            case ResponseTypes.FH_POP:
             case ResponseTypes.FH_BLANK:
                 return (
                     <FamilyHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={isStringArray(response) ? response : []}
-                        responseType={this.props.responseType}
+                        responseChoice={choices}
+                        responseType={responseType}
                         node={node}
                     />
                 );
 
             case ResponseTypes.PMH_POP:
-                return (
-                    <MedicalHistoryContent
-                        key={node}
-                        isPreview={false}
-                        responseChoice={this.props.responseChoice}
-                        responseType={this.props.responseType}
-                        mobile={collapseTabs}
-                        currentYear={-1}
-                    />
-                );
-
             case ResponseTypes.PMH_BLANK:
                 return (
                     <MedicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={isStringArray(response) ? response : []}
-                        responseType={this.props.responseType}
+                        responseChoice={responseChoice}
+                        responseType={responseType}
                         mobile={collapseTabs}
-                        currentYear={0}
+                        currentYear={-1}
                         node={node}
                     />
                 );
 
-            case ResponseTypes.MEDS_BLANK:
-                return <MedicationsContent key={node} mobile={collapseTabs} />;
-
+            case ResponseTypes.PSH_POP:
             case ResponseTypes.PSH_BLANK:
                 return (
                     <SurgicalHistoryContent
                         key={node}
                         isPreview={false}
+                        responseChoice={responseChoice}
+                        responseType={responseType}
                         mobile={collapseTabs}
+                        node={node}
                     />
                 );
+
             default:
                 return;
         }
@@ -173,7 +211,9 @@ class QuestionAnswer extends React.Component<Props, QuestionAnswerState> {
             <div className='qa-div'>
                 <div>
                     {' '}
-                    {this.props.question}{' '}
+                    {this.state.question.trim() == 'NAME'
+                        ? ''
+                        : this.state.question.trim()}{' '}
                     <div className='qa-button'>{this.renderSwitch()}</div>{' '}
                 </div>
             </div>
@@ -185,7 +225,7 @@ interface DispatchProps {
         conditionIndex: string,
         conditionName: string
     ) => AddFhPopOptionsAction;
-    BlankQuestionChange: (
+    blankQuestionChange: (
         medId: string,
         conditionId: string
     ) => BlankQuestionChangeAction;
@@ -195,11 +235,11 @@ const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
     hpi: selectHpiState(state),
 });
 
-type Props = HpiStateProps & DispatchProps & QuestionAnswerProps;
+type Props = HpiStateProps & DispatchProps & CreateResponseProps;
 
 const mapDispatchToProps = {
     addFhPopOptions,
-    BlankQuestionChange,
+    blankQuestionChange,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(QuestionAnswer);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateResponse);

@@ -175,6 +175,33 @@ export function medicationsReducer(
             const { [index]: deleted, ...newState } = state;
             return newState;
         }
+
+        case MEDICATIONS_ACTION.ADD_MEDS_POP_OPTION: {
+            /*
+            For the POP response type in the HPI section. 
+            HPI state saves the response for the node with 
+            the MEDS-POP question type, so the medications
+            ID must be first indicated in the component 
+            before being saved to the medications state as 
+            a new entry and the HPI state in a list of IDs.
+            */
+            const { medIndex, medName } = action.payload;
+            return {
+                ...state,
+                [medIndex]: {
+                    drugName: medName,
+                    startYear: -1,
+                    isCurrentlyTaking: YesNoResponse.None,
+                    endYear: -1,
+                    schedule: '',
+                    dose: '',
+                    reasonForTaking: '',
+                    sideEffects: [],
+                    comments: '',
+                },
+            };
+        }
+
         default:
             return state;
     }

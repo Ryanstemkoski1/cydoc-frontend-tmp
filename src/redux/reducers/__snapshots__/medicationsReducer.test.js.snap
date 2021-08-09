@@ -1,5 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`medications reducers creates new entry with given condition id 1`] = `
+Object {
+  "foo": Object {
+    "comments": "",
+    "dose": "",
+    "drugName": "foo",
+    "endYear": -1,
+    "isCurrentlyTaking": "",
+    "reasonForTaking": "",
+    "schedule": "",
+    "sideEffects": Array [],
+    "startYear": -1,
+  },
+  "uuid1": Object {
+    "comments": "",
+    "dose": "",
+    "drugName": "",
+    "endYear": -1,
+    "isCurrentlyTaking": "",
+    "reasonForTaking": "",
+    "schedule": "",
+    "sideEffects": Array [],
+    "startYear": -1,
+  },
+}
+`;
+
 exports[`medications reducers deletes medication entry 1`] = `Object {}`;
 
 exports[`medications reducers updates comments 1`] = `

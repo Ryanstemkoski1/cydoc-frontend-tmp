@@ -1,11 +1,13 @@
 import React, { Component, ComponentType } from 'react';
-import { SurgicalHistoryTableBodyRow } from './SurgicalHistoryTableBodyRow';
+import SurgicalHistoryTableBodyRow from './SurgicalHistoryTableBodyRow';
 import {
     updateProcedure,
     updateYear,
     updateComments,
     addProcedure,
     deleteProcedure,
+    AddPshPopOptionsAction,
+    addPshPopOptions,
 } from 'redux/actions/surgicalHistoryActions';
 import { procedures } from 'constants/procedures';
 import Dropdown from 'components/tools/OptimizedDropdown';
@@ -25,9 +27,17 @@ import {
     SurgicalHistoryItem,
 } from 'redux/reducers/surgicalHistoryReducer';
 import { CurrentNoteState } from 'redux/reducers';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect } from 'react-redux';
 import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
 import { OptionMapping } from '_processOptions';
+import { ResponseTypes } from 'constants/hpiEnums';
+import { v4 } from 'uuid';
+import {
+    BlankQuestionChangeAction,
+    blankQuestionChange,
+    PopResponseAction,
+    popResponse,
+} from 'redux/actions/hpiActions';
 
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
@@ -64,7 +74,14 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
     }
 
     addRow() {
-        this.props.addProcedure();
+        if (
+            this.props.responseType == ResponseTypes.PSH_BLANK &&
+            this.props.node
+        ) {
+            const newKey = v4();
+            this.props.addPshPopOptions(newKey, '');
+            this.props.blankQuestionChange(this.props.node, newKey);
+        } else this.props.addProcedure();
     }
 
     //modify the current values in the table to reflect changes
@@ -182,10 +199,17 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
 
     makeAccordionPanels(nums: string[], values: SurgicalHistoryState) {
         const { isPreview } = this.props;
-
         const panels: Panel[] = [];
         nums.map((i: string) => {
             const n = parseInt(i);
+            let procedureName = '';
+            let year = -1;
+            let comments = '';
+            if (i in values) {
+                procedureName = values[i].procedure;
+                year = values[i].year;
+                comments = values[i].comments;
+            }
             const titleContent = (
                 <Form className='inline-form'>
                     {isPreview ? (
@@ -212,7 +236,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                                 placeholder={'Procedure'}
                                 onChange={this.handleTableBodyChange}
                                 rowIndex={i}
-                                value={values[i].procedure}
+                                value={procedureName}
                                 onAddItem={this.handleAddition}
                                 aria-label='Surgical-Dropdown'
                                 className='content-input-surgical'
@@ -238,11 +262,11 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                         placeholder='e.g. 2020'
                         value={
                             isPreview ||
-                            values[i].year === -1 ||
-                            values[i].year.toString() === '-' ||
-                            isNaN(values[i].year)
+                            year === -1 ||
+                            year.toString() === '-' ||
+                            isNaN(year)
                                 ? ''
-                                : values[i].year
+                                : year
                         }
                         onChange={this.handleTableBodyChange}
                         className='content-input-surgical content-dropdown'
@@ -266,7 +290,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                         }}
                         placeholder='Comments'
                         onChange={this.handleTableBodyChange}
-                        value={isPreview ? '' : values[i].comments}
+                        value={isPreview ? '' : comments}
                         className='content-input-surgical'
                     />
                 </>
@@ -298,8 +322,35 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
 
     render() {
         const values = this.props.surgicalHistory;
-        const nums = Object.keys(values);
-
+        let nums = Object.keys(values);
+        const {
+            responseChoice,
+            addPshPopOptions,
+            responseType,
+            popResponse,
+            node,
+        } = this.props;
+        if (responseType == ResponseTypes.PSH_POP && responseChoice) {
+            const procedureKeyMap: { [procedure: string]: string } = {};
+            for (const key in values) {
+                const procedureName = values[key].procedure;
+                procedureKeyMap[procedureName] = key;
+            }
+            const pshPopKeys = [];
+            for (const procedureKey in responseChoice) {
+                const procedureName = responseChoice[procedureKey];
+                if (procedureName in procedureKeyMap)
+                    pshPopKeys.push(procedureKeyMap[procedureName]);
+                else {
+                    const newKey = v4();
+                    addPshPopOptions(newKey, procedureName);
+                    pshPopKeys.push(newKey);
+                }
+            }
+            nums = pshPopKeys;
+            if (node) popResponse(node, nums);
+        } else if (responseType == ResponseTypes.PSH_BLANK && responseChoice)
+            nums = responseChoice;
         const content = this.props.mobile ? (
             <Accordion
                 panels={this.makeAccordionPanels(nums, values)}
@@ -318,12 +369,13 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         return (
             <>
                 {content}
-                {!this.props.isPreview && (
-                    <AddRowButton
-                        onClick={this.addRow}
-                        name='surgical history'
-                    />
-                )}
+                {!this.props.isPreview &&
+                    this.props.responseType != ResponseTypes.PSH_POP && (
+                        <AddRowButton
+                            onClick={this.addRow}
+                            name='surgical history'
+                        />
+                    )}
             </>
         );
     }
@@ -357,6 +409,9 @@ interface SurgicalHistoryProps {
 interface ContentProps {
     isPreview: boolean;
     mobile: boolean;
+    responseChoice?: string[];
+    responseType?: ResponseTypes;
+    node?: string;
 }
 
 interface DispatchProps {
@@ -365,6 +420,15 @@ interface DispatchProps {
     updateComments: (index: string, newComment: string) => void;
     addProcedure: () => void;
     deleteProcedure: (index: string) => void;
+    addPshPopOptions: (
+        conditionIndex: string,
+        conditionName: string
+    ) => AddPshPopOptionsAction;
+    blankQuestionChange: (
+        medId: string,
+        conditionId: string
+    ) => BlankQuestionChangeAction;
+    popResponse: (medId: string, conditionIds: string[]) => PopResponseAction;
 }
 
 type Props = ContentProps & DispatchProps & SurgicalHistoryProps;
@@ -381,6 +445,9 @@ const mapDispatchToProps = {
     updateComments,
     addProcedure,
     deleteProcedure,
+    addPshPopOptions,
+    blankQuestionChange,
+    popResponse,
 };
 
 export default connect(

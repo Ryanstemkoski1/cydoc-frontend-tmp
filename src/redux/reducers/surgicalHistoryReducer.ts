@@ -1,6 +1,7 @@
 import { SURGICAL_HISTORY_ACTION } from '../actions/actionTypes';
 import { SurgicalHistoryActionTypes } from '../actions/surgicalHistoryActions';
 import { v4 } from 'uuid';
+import { number, string } from 'prop-types';
 
 export interface SurgicalHistoryState {
     [index: string]: SurgicalHistoryItem;
@@ -69,6 +70,23 @@ export function surgicalHistoryReducer(
             const { index } = action.payload;
             const { [index]: deleted, ...newState } = state;
             return newState;
+        }
+        case SURGICAL_HISTORY_ACTION.ADD_PSH_POP_OPTIONS: {
+            /* 
+            For the POP component in the HPI state. Since the HPI
+            state saves the condition IDs for the PSH POP inputs, the
+            condition ID must be created in the component before being
+            saved to the HPI and Surgical History states.
+            */
+            const { conditionIndex, conditionName } = action.payload;
+            return {
+                ...state,
+                [conditionIndex]: {
+                    procedure: conditionName,
+                    year: -1,
+                    comments: '',
+                },
+            };
         }
         default:
             return state;
