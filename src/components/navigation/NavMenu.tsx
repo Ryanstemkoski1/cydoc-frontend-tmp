@@ -92,7 +92,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
         }
     };
 
-    window.addEventListener('beforeunload', function(e) {
+    window.addEventListener('beforeunload', function (e) {
         // alert('If you leave the page, your note will not be saved.');
         e.preventDefault();
         e.returnValue = '';
