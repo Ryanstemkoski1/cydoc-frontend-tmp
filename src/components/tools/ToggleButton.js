@@ -13,6 +13,7 @@ export default function ToggleButton(props) {
         onToggleButtonClick,
         disabled,
         ariaLabel,
+        className,
     } = props;
 
     return (
@@ -27,6 +28,7 @@ export default function ToggleButton(props) {
             title={title}
             disabled={disabled}
             aria-label={ariaLabel}
+            className={className}
         >
             {title}
         </Button>
@@ -42,4 +44,5 @@ ToggleButton.propTypes = {
     size: PropTypes.string,
     title: PropTypes.string,
     ariaLabel: PropTypes.string,
+    className: PropTypes.string,
 };

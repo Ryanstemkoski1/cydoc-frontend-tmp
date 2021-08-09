@@ -14,6 +14,7 @@ import {
 } from 'redux/actions/hpiActions';
 import { isListTextDictionary } from 'redux/reducers/hpiReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import ToggleButton from 'components/tools/ToggleButton';
 
 interface ListTextProps {
     node: string;
@@ -41,15 +42,14 @@ class ListText extends React.Component<Props> {
                                 listTextHandleChange(id, node, data.value)
                             }
                         />
-                        <button
-                            className={'remove-list-text'}
-                            onClick={(): RemoveListInputAction =>
+                        <ToggleButton
+                            className='remove-list-text'
+                            condition='-'
+                            title='-'
+                            onToggleButtonClick={(): RemoveListInputAction =>
                                 removeListInput(id, node)
                             }
-                        >
-                            {' '}
-                            -{' '}
-                        </button>
+                        />
                     </div>
                 )
             );
@@ -59,13 +59,14 @@ class ListText extends React.Component<Props> {
             <div>
                 {' '}
                 {listInputsArray}
-                <button
+                <ToggleButton
                     className='button-plus-click'
-                    onClick={(): AddListInputAction => addListInput(node)}
-                >
-                    {' '}
-                    +
-                </button>
+                    condition='+'
+                    title='+'
+                    onToggleButtonClick={(): AddListInputAction =>
+                        addListInput(node)
+                    }
+                />
             </div>
         );
     }

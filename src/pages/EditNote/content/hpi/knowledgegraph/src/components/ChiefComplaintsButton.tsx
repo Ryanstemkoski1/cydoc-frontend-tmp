@@ -8,6 +8,8 @@ import {
 import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
+import ToggleButton from 'components/tools/ToggleButton';
+import '../css/DiseaseTag.css';
 
 interface ChiefComplaintsButtonProps {
     name: DoctorView;
@@ -16,20 +18,16 @@ interface ChiefComplaintsButtonProps {
 class ChiefComplaintsButton extends React.Component<Props> {
     render() {
         const { chiefComplaints, selectChiefComplaint, name } = this.props;
-        const selected = chiefComplaints.includes(name);
         return (
-            <button
+            <ToggleButton
                 className='tag_text'
-                style={{
-                    backgroundColor: selected ? 'lightslategrey' : 'whitesmoke',
-                    color: selected ? 'white' : 'black',
-                }}
-                onClick={(): SelectChiefComplaintAction =>
+                active={chiefComplaints.includes(name)}
+                condition={name}
+                title={name}
+                onToggleButtonClick={(): SelectChiefComplaintAction =>
                     selectChiefComplaint(name)
                 }
-            >
-                {name}
-            </button>
+            />
         );
     }
 }
