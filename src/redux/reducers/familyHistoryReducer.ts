@@ -276,7 +276,7 @@ export function familyHistoryReducer(
                 ...state,
                 [v4()]: {
                     condition: '',
-                    hasAfflictedFamilyMember: YesNoResponse.None,
+                    hasAfflictedFamilyMember: YesNoResponse.Yes,
                     familyMembers: {
                         [v4()]: {
                             member: FamilyOption.None,
@@ -300,6 +300,12 @@ export function familyHistoryReducer(
         }
 
         case FAMILY_HISTORY_ACTION.ADD_FH_POP_OPTIONS: {
+            /* 
+            For POP question type in the HPI section. The HPI state 
+            saves the condition indices for all of the FH POP inputs,
+            so the ID must be created in the component before being 
+            saved in both the HPI and Family History states. 
+            */
             const { conditionIndex, conditionName } = action.payload;
             return {
                 ...state,

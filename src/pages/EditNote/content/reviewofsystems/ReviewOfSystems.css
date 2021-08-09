@@ -22,6 +22,19 @@
     overflow-wrap: break-word;
 }
 
+.ui.segment.ros-segments {
+    padding: 1rem 1.6rem;
+    margin-top: 2rem;
+}
+
+.ros-segments .ui.grid>.row {
+    justify-content: space-between;
+}
+
+.ros-segments .header-titles {
+    margin-bottom: 0;;
+}
+
 .ui.grid > .row > .column.no-padding {
     padding: 0;
 }

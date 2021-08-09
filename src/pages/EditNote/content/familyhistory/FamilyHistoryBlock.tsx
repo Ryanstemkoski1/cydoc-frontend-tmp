@@ -186,12 +186,19 @@ class FamilyHistoryBlock extends Component<Props> {
 
                 <div className='condition-info-container'>
                     {yesActive ? (
+                        /*
+                        this.props.pop will always be true. This is 
+                        because the family history component already
+                        has a built in Add Row component, so when it
+                        uses the GridContent component, there are 2 
+                        Add buttons.
+                        */
                         <>
                             <GridContent
                                 numColumns={2}
                                 contentHeader={newContentHeader}
                                 rows={newRow}
-                                value_type='Family History'
+                                name='Family History'
                                 small={true}
                                 pop={this.props.pop}
                             />
@@ -216,9 +223,9 @@ interface BlockProps {
     index: string;
     mobile: boolean;
     isPreview?: boolean;
-    // eslint-disable-next-line no-undef
     conditionInp: JSX.Element;
     pop: boolean;
+    node?: string;
 }
 
 interface DispatchProps {

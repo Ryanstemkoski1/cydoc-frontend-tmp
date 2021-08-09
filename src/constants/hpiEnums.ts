@@ -432,12 +432,12 @@ export interface ExpectedResponseInterface {
     SHORT_TEXT: string;
     NUMBER: NumberInput;
     BODYLOCATION: BodyLocationTotal;
-    FH_POP: string;
-    PMH_POP: string;
+    FH_POP: string[];
+    PMH_POP: string[];
     MEDS_BLANK: string[];
     PSH_BLANK: string[];
     PMH_BLANK: string[];
-    PSH_POP: string;
+    PSH_POP: string[];
     FH_BLANK: string[];
     SCALE1TO10: ScaleInputType;
 }
@@ -452,12 +452,12 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     SHORT_TEXT: '',
     NUMBER: 0,
     BODYLOCATION: {},
-    FH_POP: '',
-    PMH_POP: '',
+    FH_POP: [],
+    PMH_POP: [],
     MEDS_BLANK: [],
     PSH_BLANK: [],
     PMH_BLANK: [],
-    PSH_POP: '',
+    PSH_POP: [],
     FH_BLANK: [],
     SCALE1TO10: undefined,
 };

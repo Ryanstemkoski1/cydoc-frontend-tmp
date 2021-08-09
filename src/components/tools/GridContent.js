@@ -19,6 +19,7 @@ export default class GridContent extends Component {
             rows,
             mobile,
             isPreview,
+            value_type,
         } = this.props;
         return mobile ? (
             <Fragment>
@@ -55,7 +56,9 @@ export default class GridContent extends Component {
                 <Grid columns={numColumns} verticalAlign='middle'>
                     {rows}
                 </Grid>
-                {!isPreview && !this.props.pop ? (
+                {!isPreview &&
+                !this.props.pop &&
+                value_type !== 'Family History' ? (
                     <AddRowButton
                         onClick={this.props.addRow}
                         name={this.props.name}

@@ -205,23 +205,23 @@ const SetupAccount = async (
             mfaRequired: function (_codeDeliveryDetails) {
                 // need MFA to complete user authentication
                 let verificationCode = prompt(
-                    'Please input verification code',
+                    'Please input verification code sent via text message to your phone.',
                     ''
                 );
 
                 // TODO: make a better UI for this
                 // if user incorrectly types in code, they will be confirmed in Cognito but will not exist in the databse, meaning they will be able to "login" with their new username/pass, but they will get and error saying they do not exist.
                 // to mitigate the risk of this happening, ask users to confirm what they typed in before submitting it.
-                while (
-                    !window.confirm(
-                        `You typed in ${verificationCode}. Is this the code you want to submit?`
-                    )
-                ) {
-                    verificationCode = prompt(
-                        'Please input verification code',
-                        ''
-                    );
-                }
+                // while (
+                //     !window.confirm(
+                //         `You typed in ${verificationCode}. Is this the code you want to submit?`
+                //     )
+                // ) {
+                //     verificationCode = prompt(
+                //         'Please input verification code',
+                //         ''
+                //     );
+                // }
 
                 currentUser.sendMFACode(verificationCode, this);
             },

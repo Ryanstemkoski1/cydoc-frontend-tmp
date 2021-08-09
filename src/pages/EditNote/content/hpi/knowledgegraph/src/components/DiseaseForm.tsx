@@ -1,5 +1,4 @@
 import React from 'react';
-import DiseaseFormQuestions from './DiseaseFormQuestions';
 import '../css/App.css';
 import '../../HPI.css';
 import {
@@ -12,16 +11,12 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { HpiState, NodeInterface } from 'redux/reducers/hpiReducer';
 import { CurrentNoteState } from 'redux/reducers';
-import {
-    addNode,
-    addEdge,
-    AddNodeAction,
-    AddEdgeAction,
-} from 'redux/actions/hpiActions';
+import { addNode, AddNodeAction } from 'redux/actions/hpiActions';
 import { YesNoResponse } from 'constants/enums';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import CreateResponse from './CreateResponse';
 
-//The order goes DiseaseForm -> DiseaseFormQuestions -> QuestionAnswer -> ButtonTag
+//The order goes DiseaseForm -> CreateResponse -> ButtonTag
 
 interface DiseaseFormProps {
     nextStep: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -77,7 +72,7 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
 
     processKnowledgeGraph(): void {
         // TODO: does this also need a set to keep track of nodes like for traversal()
-        const { parentNode, addNode, addEdge } = this.props;
+        const { parentNode, addNode } = this.props;
         const { graphData } = this.state;
         const { graph, nodes, edges } = graphData;
         const parentToChildNodes: { [parentNode: string]: string[] } = {};
@@ -86,28 +81,31 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
             const currNode = queue.shift();
             if (!currNode || !(currNode in graph)) continue;
             const currEdges = graph[currNode]; // edges associated with current node
-            let questionOrderList: [string, number][] = currEdges.map(
-                (edge: number) => {
-                    // list of tuples (to node, toQuestionOrder)
-                    const edgeInfo = edges[edge.toString()];
-                    addEdge(currNode, edgeInfo);
-                    const to = edgeInfo.to;
-                    const toQuestionOrder = edgeInfo.toQuestionOrder;
-                    return [
-                        to,
-                        toQuestionOrder != -1
-                            ? toQuestionOrder
-                            : edge + currEdges.length,
-                    ];
-                }
-            );
+            let questionOrderList: [
+                string,
+                number,
+                EdgeInterface
+            ][] = currEdges.map((edge: number) => {
+                // list of tuples (to node, toQuestionOrder)
+                const edgeInfo = edges[edge.toString()];
+                const to = edgeInfo.to;
+                const toQuestionOrder = edgeInfo.toQuestionOrder;
+                return [
+                    to,
+                    toQuestionOrder != -1
+                        ? toQuestionOrder
+                        : edge + currEdges.length,
+                    edgeInfo,
+                ];
+            });
             questionOrderList = questionOrderList.sort(
                 (tup1, tup2) => tup1[1] - tup2[1]
             ); // sort by questionOrder
             const childNodes = questionOrderList.map((tup) => tup[0]); // child nodes in order
+            const edgesList = questionOrderList.map((tup) => tup[2]);
             parentToChildNodes[currNode] = childNodes;
-            queue = queue.concat(childNodes);
-            addNode(currNode, nodes[currNode]);
+            queue = [...queue, ...childNodes];
+            addNode(currNode, nodes[currNode], edgesList);
         }
         this.setState({
             parentToChildNodes: parentToChildNodes,
@@ -119,25 +117,29 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
         const { parentToChildNodes, graphData } = this.state;
         const { parentNode, category, hpi } = this.props;
         const values: HpiState = hpi;
-        const questionArr: JSX.Element[] = [];
-        let stack = parentToChildNodes[parentNode].slice().reverse(); // add child nodes in reverse
+        const nodeSet = new Set();
+        let questionArr: JSX.Element[] = [];
+        let stack = parentToChildNodes[parentNode].slice().reverse(); // add child nodes in reverse bc using stack
         while (stack.length) {
             const currNode = stack.pop();
-            if (!currNode) continue;
+            if (!currNode || nodeSet.has(currNode)) continue;
             if (values.nodes[currNode].text != 'nan')
-                questionArr.push(
-                    <DiseaseFormQuestions
+                questionArr = [
+                    ...questionArr,
+                    <CreateResponse
                         key={graphData.nodes[currNode].uid}
                         node={currNode}
                         category={category}
-                    />
-                );
+                    />,
+                ];
+
             const childEdges =
                 values.nodes[currNode].response == YesNoResponse.Yes ||
                 values.nodes[currNode].text == 'nan'
-                    ? parentToChildNodes[currNode]
+                    ? parentToChildNodes[currNode].slice().reverse()
                     : [];
-            stack = stack.concat(childEdges);
+            stack = [...stack, ...childEdges];
+            nodeSet.add(currNode);
         }
         return questionArr;
     }
@@ -152,8 +154,11 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
 }
 
 interface DispatchProps {
-    addNode: (medId: string, node: NodeInterface) => AddNodeAction;
-    addEdge: (medId: string, edge: EdgeInterface) => AddEdgeAction;
+    addNode: (
+        medId: string,
+        node: NodeInterface,
+        edges: EdgeInterface[]
+    ) => AddNodeAction;
 }
 
 const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
@@ -164,7 +169,6 @@ type Props = HpiStateProps & DispatchProps & DiseaseFormProps;
 
 const mapDispatchToProps = {
     addNode,
-    addEdge,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DiseaseForm);

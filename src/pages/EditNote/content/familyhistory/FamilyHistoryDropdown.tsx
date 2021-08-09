@@ -346,7 +346,6 @@ class FamilyHistoryDropdown extends Component<Props> {
                             </Grid.Column>
                         </Grid.Row>
                     )}
-                    <Divider />
                 </Grid>
             </div>
         );

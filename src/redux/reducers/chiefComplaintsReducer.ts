@@ -12,14 +12,19 @@ export function chiefComplaintsReducer(
 ): ChiefComplaintsState {
     switch (action.type) {
         case CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS: {
+            /*
+            The chief complaints correspond to the disease picker
+            in the front page. If a disease is chosen by the user
+            and is not present in the current state, it is added 
+            to the state. If a disease is chosen by the user and
+            is already present in the current state, it is filtered
+            out (essentially: a double click is an unclick).s
+            */
             const { disease } = action.payload;
-            if (state.includes(disease)) {
-                const newState = state.filter((value) => value != disease);
-                return newState;
-            }
-            return [...state, disease];
+            return state.includes(disease)
+                ? state.filter((value) => value != disease)
+                : [...state, disease];
         }
-
         default:
             return state;
     }

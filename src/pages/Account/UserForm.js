@@ -337,7 +337,7 @@ const UserForm = (props) => {
                     required
                     width={2}
                     className='US-phone-checkbox'
-                    label='US phone number'
+                    label='U.S. phone number'
                     name='USphoneNumber'
                     checked={userInfo.countryCode}
                     onChange={handleUSphoneNumberChange}

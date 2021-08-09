@@ -9,26 +9,22 @@ describe('initial state', () => {
 });
 
 describe('select chief complaint', () => {
+    let payload = { disease: 'foo' };
+    let nextState = initialState;
     it('returns state with chief complaint newly selected', () => {
-        const payload = {
-            disease: 'foo',
-        };
-        expect(
-            chiefComplaintsReducer(initialState, {
-                type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
-                payload,
-            })
-        ).toMatchSnapshot();
+        nextState = chiefComplaintsReducer(nextState, {
+            type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
+            payload,
+        });
+        expect(nextState).toMatchSnapshot();
+        expect(nextState).toContain(payload.disease);
     });
     it('returns state with chief complaint deselected', () => {
-        const payload = {
-            disease: 'foo',
-        };
-        expect(
-            chiefComplaintsReducer(initialState, {
-                type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
-                payload,
-            })
-        ).toMatchSnapshot();
+        nextState = chiefComplaintsReducer(nextState, {
+            type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
+            payload,
+        });
+        expect(nextState).toMatchSnapshot();
+        expect(nextState).not.toContain(payload.disease);
     });
 });

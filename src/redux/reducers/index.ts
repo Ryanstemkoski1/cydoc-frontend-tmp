@@ -2,19 +2,31 @@ import { combineReducers } from 'redux';
 import { AllActionTypes } from '../actions';
 import { CURRENT_NOTE_ACTION } from '../actions/actionTypes';
 import { CurrentNoteActionTypes } from '../actions/currentNoteActions';
-import { medicalHistoryReducer } from './medicalHistoryReducer';
+import {
+    medicalHistoryReducer,
+    initialMedicalHistoryState,
+} from './medicalHistoryReducer';
 import {
     reviewOfSystemsReducer,
     initialReviewOfSystemsState,
 } from './reviewOfSystemsReducer';
-import { surgicalHistoryReducer } from './surgicalHistoryReducer';
-import { medicationsReducer } from './medicationsReducer';
-import { allergiesReducer } from './allergiesReducer';
+import {
+    surgicalHistoryReducer,
+    initialSurgicalHistoryState,
+} from './surgicalHistoryReducer';
+import {
+    medicationsReducer,
+    initialMedicationsState,
+} from './medicationsReducer';
+import { allergiesReducer, initialAllergiesState } from './allergiesReducer';
 import {
     initialSocialHistoryState,
     socialHistoryReducer,
 } from './socialHistoryReducer';
-import { familyHistoryReducer } from './familyHistoryReducer';
+import {
+    familyHistoryReducer,
+    initialFamilyHistoryState,
+} from './familyHistoryReducer';
 import { initialPlanState, planReducer } from './planReducer';
 import {
     initialPhysicalExamState,
@@ -49,12 +61,12 @@ export type CurrentNoteState = ReturnType<typeof currentNoteReducer>;
 const initialState: CurrentNoteState = {
     reviewOfSystems: initialReviewOfSystemsState,
     physicalExam: initialPhysicalExamState,
-    medicalHistory: {},
-    surgicalHistory: {},
-    medications: {},
-    allergies: {},
+    medicalHistory: initialMedicalHistoryState,
+    surgicalHistory: initialSurgicalHistoryState,
+    medications: initialMedicationsState,
+    allergies: initialAllergiesState,
     socialHistory: initialSocialHistoryState,
-    familyHistory: {},
+    familyHistory: initialFamilyHistoryState,
     discussionPlan: initialPlanState,
     hpi: initialHpiState,
     _id: initialNoteId,

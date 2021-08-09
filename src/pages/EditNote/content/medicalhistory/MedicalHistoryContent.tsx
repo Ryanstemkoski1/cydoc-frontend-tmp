@@ -26,8 +26,10 @@ import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelecto
 import { ResponseTypes } from 'constants/hpiEnums';
 import { v4 } from 'uuid';
 import {
-    BlankQuestionChange,
+    blankQuestionChange,
     BlankQuestionChangeAction,
+    PopResponseAction,
+    popResponse,
 } from 'redux/actions/hpiActions';
 import AddRowButton from 'components/tools/AddRowButton';
 
@@ -129,9 +131,8 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         ) {
             const newKey = v4();
             this.props.addPmhPopOptions(newKey, '');
-            this.props.BlankQuestionChange(this.props.node, newKey);
-        }
-        this.props.addDefaultCondition();
+            this.props.blankQuestionChange(this.props.node, newKey);
+        } else this.props.addDefaultCondition();
     }
 
     render() {
@@ -140,19 +141,22 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
             responseChoice,
             responseType,
             addPmhPopOptions,
+            popResponse,
+            node,
+            medicalHistory,
         } = this.props;
-        let listValues = Object.keys(this.props.medicalHistory) || CONDITIONS;
+        let listValues = Object.keys(medicalHistory) || CONDITIONS;
         // The second OR statement gets the list of Conditions in the "Medical History" context
-        if (responseType == ResponseTypes.PMH_POP) {
+        if (responseType == ResponseTypes.PMH_POP && responseChoice) {
             const conditionKeyMap: { [condition: string]: string } = {};
-            for (const key in this.props.medicalHistory) {
-                const conditionName = this.props.medicalHistory[key].condition;
+            for (const key in medicalHistory) {
+                const conditionName = medicalHistory[key].condition;
                 conditionKeyMap[conditionName] = key;
             }
             const MhPopKeys = [];
             for (const conditionKey in responseChoice) {
                 const conditionName = responseChoice[conditionKey];
-                if (responseChoice[conditionKey] in conditionKeyMap)
+                if (conditionName in conditionKeyMap)
                     MhPopKeys.push(conditionKeyMap[conditionName]);
                 else {
                     const newKey = v4();
@@ -161,9 +165,10 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                 }
             }
             listValues = MhPopKeys;
+            if (node) popResponse(node, listValues);
         }
-        if (responseType == ResponseTypes.PMH_BLANK) {
-            if (!this.props.responseChoice.length)
+        if (responseType == ResponseTypes.PMH_BLANK && responseChoice) {
+            if (!responseChoice.length)
                 return <AddRowButton onClick={this.addRow} name={'disease'} />;
             listValues = responseChoice;
         }
@@ -295,8 +300,8 @@ interface ContentProps {
     isPreview: boolean;
     mobile: boolean;
     currentYear: number;
-    responseChoice: string[];
-    responseType: ResponseTypes;
+    responseChoice?: string[];
+    responseType?: ResponseTypes;
     node?: string;
 }
 
@@ -318,10 +323,11 @@ interface DispatchProps {
         conditionIndex: string,
         conditionName: string
     ) => AddPmhPopOptionsAction;
-    BlankQuestionChange: (
+    blankQuestionChange: (
         medId: string,
         conditionId: string
     ) => BlankQuestionChangeAction;
+    popResponse: (medId: string, conditionIds: string[]) => PopResponseAction;
 }
 
 type Props = MedicalHistoryProps & DispatchProps & ContentProps;
@@ -340,7 +346,8 @@ const mapDispatchToProps = {
     updateComments,
     updateConditionResolved,
     addPmhPopOptions,
-    BlankQuestionChange,
+    blankQuestionChange,
+    popResponse,
 };
 
 export default connect(

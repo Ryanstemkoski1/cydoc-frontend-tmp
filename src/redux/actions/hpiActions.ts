@@ -15,33 +15,21 @@ export interface AddNodeAction {
     payload: {
         medId: string;
         node: NodeInterface;
+        edges: EdgeInterface[];
     };
 }
 
-export function addNode(medId: string, node: NodeInterface): AddNodeAction {
+export function addNode(
+    medId: string,
+    node: NodeInterface,
+    edges: EdgeInterface[]
+): AddNodeAction {
     return {
         type: HPI_ACTION.ADD_NODE,
         payload: {
             medId,
             node,
-        },
-    };
-}
-
-export interface AddEdgeAction {
-    type: HPI_ACTION.ADD_EDGE;
-    payload: {
-        medId: string;
-        edge: EdgeInterface;
-    };
-}
-
-export function addEdge(medId: string, edge: EdgeInterface): AddEdgeAction {
-    return {
-        type: HPI_ACTION.ADD_EDGE,
-        payload: {
-            medId,
-            edge,
+            edges,
         },
     };
 }
@@ -331,7 +319,7 @@ export interface BlankQuestionChangeAction {
     };
 }
 
-export function BlankQuestionChange(
+export function blankQuestionChange(
     medId: string,
     conditionId: string
 ): BlankQuestionChangeAction {
@@ -344,9 +332,26 @@ export function BlankQuestionChange(
     };
 }
 
+export interface PopResponseAction {
+    type: HPI_ACTION.POP_RESPONSE;
+    payload: {
+        medId: string;
+        conditionIds: string[];
+    };
+}
+
+export function popResponse(
+    medId: string,
+    conditionIds: string[]
+): PopResponseAction {
+    return {
+        type: HPI_ACTION.POP_RESPONSE,
+        payload: { medId, conditionIds },
+    };
+}
+
 export type HpiActionTypes =
     | AddNodeAction
-    | AddEdgeAction
     | BodyLocationResponseAction
     | BodyLocationHandleToggleAction
     | MultipleChoiceHandleClickAction
@@ -360,4 +365,5 @@ export type HpiActionTypes =
     | YesNoToggleOptionAction
     | ScaleHandleValueAction
     | ScaleHandleClearAction
-    | BlankQuestionChangeAction;
+    | BlankQuestionChangeAction
+    | PopResponseAction;

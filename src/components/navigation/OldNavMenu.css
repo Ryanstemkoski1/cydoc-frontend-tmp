@@ -118,7 +118,7 @@
     position: relative;
 }
 
-#first-name-error, #dob-error {
+#first-name-error, #last-name-error, #phone-error, #email-error {
     border: 1px solid;
     z-index: 1;
     margin: -10px;
@@ -130,14 +130,14 @@
     font-weight: bold;
 }
 
-#last-name-error {
+#dob-error {
     border: 1px solid;
     z-index: 1;
     margin: -10px;
     position: absolute;
     background: white;
     bottom: -10px;
-    right: 35px;
+    right: 100px;
     color: #ff3838;
     font-weight: bold;
 }

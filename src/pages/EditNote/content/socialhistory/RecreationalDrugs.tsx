@@ -1,17 +1,19 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import Dropdown from 'components/tools/OptimizedDropdown';
 import {
     Accordion,
     Button,
     Divider,
+    Dropdown,
     Form,
     Grid,
     Input,
     Table,
 } from 'semantic-ui-react';
-import drugNames from 'constants/SocialHistory/drugNames';
-import modesOfDelivery from 'constants/SocialHistory/modesOfDelivery';
+import { DrugName, drugNames } from 'constants/SocialHistory/drugNames';
+import modesOfDelivery, {
+    ModeOfDelivery,
+} from 'constants/SocialHistory/modesOfDelivery';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import AddRowButton from 'components/tools/AddRowButton';
 import {
@@ -34,6 +36,7 @@ import {
 } from 'constants/enums';
 import { DrugUsage } from 'redux/reducers/socialHistoryReducer';
 import { CurrentNoteState } from 'redux/reducers';
+import _ from 'lodash';
 
 type OwnProps = {
     mobile: boolean;
@@ -234,7 +237,11 @@ class RecreationalDrugs extends React.Component<Props, State> {
         };
     };
 
-    getCell(placeholder: string, rowindex: number) {
+    getCell(
+        placeholder: string,
+        rowindex: number,
+        availableDrugNames?: typeof drugNames
+    ) {
         const values = this.props.recreationalDrugs;
         let cell;
 
@@ -249,12 +256,14 @@ class RecreationalDrugs extends React.Component<Props, State> {
                             fluid
                             search
                             selection
-                            options={drugNames}
+                            options={availableDrugNames}
                             placeholder={placeholder}
-                            onChange={this.getOnChange(
-                                rowindex,
-                                this.props.updateRecreationalDrugUsedName
-                            )}
+                            onChange={(_, { value }) =>
+                                this.props.updateRecreationalDrugUsedName(
+                                    rowindex,
+                                    value as DrugName
+                                )
+                            }
                             rowindex={rowindex}
                             value={values.drugsUsed[rowindex].name}
                             aria-label='Recreational-Drug-Consumption-Name-Dropdown'
@@ -277,11 +286,12 @@ class RecreationalDrugs extends React.Component<Props, State> {
                             multiple
                             options={modesOfDelivery}
                             placeholder={placeholder}
-                            onChange={this.getOnChange(
-                                rowindex,
-                                this.props
-                                    .updateRecreationalDrugUsedModesOfDelivery
-                            )}
+                            onChange={(_, { value }) =>
+                                this.props.updateRecreationalDrugUsedModesOfDelivery(
+                                    rowindex,
+                                    value as ModeOfDelivery[]
+                                )
+                            }
                             rowindex={rowindex}
                             value={values.drugsUsed[rowindex].modesOfDelivery}
                             aria-label='Recreational-Drug-Consumption-Modes-Of-Delivery-Dropdown'
@@ -349,8 +359,14 @@ class RecreationalDrugs extends React.Component<Props, State> {
     makeAccordionPanels(drugsUsed: DrugUsage[]) {
         const values = this.props.recreationalDrugs;
         const panels = [];
+        const usedDrugNames: string[] = [];
 
         for (let i = 0; i < drugsUsed.length; i++) {
+            const availableDrugNames = drugNames.filter(
+                (drug) => _.indexOf(usedDrugNames, drug.value) < 0
+            );
+            usedDrugNames.push(drugsUsed[i].name);
+
             const titleContent = (
                 <Form className='inline-form'>
                     <Input
@@ -361,12 +377,14 @@ class RecreationalDrugs extends React.Component<Props, State> {
                             fluid
                             search
                             selection
-                            options={drugNames}
+                            options={availableDrugNames}
                             placeholder='Drug Name'
-                            onChange={this.getOnChange(
-                                i,
-                                this.props.updateRecreationalDrugUsedName
-                            )}
+                            onChange={(_, { value }) =>
+                                this.props.updateRecreationalDrugUsedName(
+                                    i,
+                                    value as DrugName
+                                )
+                            }
                             rowindex={i}
                             value={values.drugsUsed[i].name}
                             aria-label='Recreational-Drug-Consumption-Name-Dropdown'
@@ -397,17 +415,19 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         search
                         selection
                         multiple
-                        icon=''
                         options={modesOfDelivery}
                         placeholder='Mode of Delivery'
-                        onChange={this.getOnChange(
-                            i,
-                            this.props.updateRecreationalDrugUsedModesOfDelivery
-                        )}
+                        onChange={(_, { value }) =>
+                            this.props.updateRecreationalDrugUsedModesOfDelivery(
+                                i,
+                                value as ModeOfDelivery[]
+                            )
+                        }
                         rowindex={i}
                         value={values.drugsUsed[i].modesOfDelivery}
                         aria-label='Recreational-Drug-Consumption-Modes-Of-Delivery-Dropdown'
                         className='side-effects'
+                        icon=''
                     />
                 </Input>
             );
@@ -457,11 +477,18 @@ class RecreationalDrugs extends React.Component<Props, State> {
     }
 
     makeTableBodyRows(drugsUsed: DrugUsage[]) {
-        return drugsUsed.map((_consumption, index) => {
+        const usedDrugNames: string[] = [];
+
+        return drugsUsed.map((_used, index) => {
+            const availableDrugNames = drugNames.filter(
+                (drug) => _.indexOf(usedDrugNames, drug.value) < 0
+            );
+            usedDrugNames.push(_used.name);
+
             return (
                 <Table.Row key={index}>
                     <Table.Cell onClick={this.handleCellClick}>
-                        {this.getCell('Drug Name', index)}
+                        {this.getCell('Drug Name', index, availableDrugNames)}
                     </Table.Cell>
                     <Table.Cell onClick={this.handleCellClick}>
                         {this.getCell('Mode of Delivery', index)}
@@ -524,7 +551,9 @@ class RecreationalDrugs extends React.Component<Props, State> {
                     {content}
                     <AddRowButton
                         onClick={() => {
-                            this.props.addRecreationalDrugUsed();
+                            if (values.drugsUsed.length < drugNames.length) {
+                                this.props.addRecreationalDrugUsed();
+                            }
                         }}
                         name='drug'
                         ariaLabel='Add-Recreational-Drug-Consumption-Button'

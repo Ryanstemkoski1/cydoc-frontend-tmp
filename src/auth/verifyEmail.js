@@ -38,16 +38,16 @@ const verifyEmail = async (username, role) => {
                     'Please verify your email before logging in with the 6 digit verification code sent to your email. ',
                     ''
                 );
-                while (
-                    !window.confirm(
-                        `You typed in ${verificationCode}. Is this the code you want to submit?`
-                    )
-                ) {
-                    verificationCode = prompt(
-                        'Please input verification code',
-                        ''
-                    );
-                }
+                // while (
+                //     !window.confirm(
+                //         `You typed in ${verificationCode}. Is this the code you want to submit?`
+                //     )
+                // ) {
+                //     verificationCode = prompt(
+                //         'Please input verification code',
+                //         ''
+                //     );
+                // }
                 cognitoUser.verifyAttribute('email', verificationCode, {
                     onSuccess: async (_result) => {
                         alert(

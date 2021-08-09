@@ -42,6 +42,7 @@ export class SocialHistoryContent extends React.Component<Props, {}> {
                             value={this.props.secondaryFields.livingSituation}
                             field='Living Situation'
                             rows={2}
+                            style={{ height: 'auto' }} // height needs to be set as 'auto' to make rows prop work because the height is supposed to be 3em in css
                         />
                     </Form>
                 </Grid.Column>
@@ -55,6 +56,7 @@ export class SocialHistoryContent extends React.Component<Props, {}> {
                             value={this.props.secondaryFields.employment}
                             field='Employment'
                             rows={2}
+                            style={{ height: 'auto' }}
                         />
                     </Form>
                 </Grid.Column>
@@ -68,6 +70,7 @@ export class SocialHistoryContent extends React.Component<Props, {}> {
                             value={this.props.secondaryFields.diet}
                             field='Diet'
                             rows={2}
+                            style={{ height: 'auto' }}
                         />
                     </Form>
                 </Grid.Column>
@@ -81,6 +84,7 @@ export class SocialHistoryContent extends React.Component<Props, {}> {
                             value={this.props.secondaryFields.exercise}
                             field='Exercise'
                             rows={2}
+                            style={{ height: 'auto' }}
                         />
                     </Form>
                 </Grid.Column>

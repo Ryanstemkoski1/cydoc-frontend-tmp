@@ -66,6 +66,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
         labelPosition: any
     ) => {
         const { vitals } = this.props;
+        vitals[name] = vitals[name] == 0 ? null! : vitals[name];
         return (
             <Input
                 type='number'
@@ -75,6 +76,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                 name={name}
                 value={vitals[name]}
                 onChange={(e, data) => this.handleChange(e, data)}
+                placeholder='0'
             />
         );
     };
@@ -89,6 +91,9 @@ class PhysicalExamContent extends React.Component<Props, State> {
                     className: 'ui dropdown-title',
                     content: 'Vitals',
                     icon: 'dropdown',
+                    onClick: () => {
+                        void 0;
+                    },
                 },
                 content: {
                     content: (
@@ -177,6 +182,43 @@ class PhysicalExamContent extends React.Component<Props, State> {
                 },
             },
         ];
+        const mobileScrollMappings: { [key: string]: any } = {
+            '1': 40,
+            '2': 65,
+            '3': 90,
+            '4': 110,
+            '5': 135,
+            '6': 160,
+            '7': 185,
+            '8': 205,
+            '9': 725,
+            '10': 250,
+            '11': 275,
+            '12': 300,
+            '13': 725,
+            '14': 725,
+            '15': 725,
+            '16': 400,
+        };
+        const mobileOpened: { [key: string]: boolean } = {
+            '1': false,
+            '2': false,
+            '3': false,
+            '4': false,
+            '5': false,
+            '6': false,
+            '7': false,
+            '8': false,
+            '9': false,
+            '10': false,
+            '11': false,
+            '12': false,
+            '13': false,
+            '14': false,
+            '15': false,
+            '16': false,
+        };
+
         for (let i = 1; i < itemGroups.length + 1; i++) {
             panels.push({
                 key: itemGroups[i - 1].name,
@@ -184,6 +226,27 @@ class PhysicalExamContent extends React.Component<Props, State> {
                     className: 'ui dropdown-title',
                     content: itemGroups[i - 1].name,
                     icon: 'dropdown',
+                    onClick: () => {
+                        if (isMobileView && !mobileOpened[i.toString()]) {
+                            for (let j = 1; j < 17; j++) {
+                                if (
+                                    mobileOpened[j.toString()] == true &&
+                                    j != i
+                                ) {
+                                    mobileOpened[j.toString()] = false;
+                                }
+                            }
+                            setTimeout(() => {
+                                window.scrollTo(
+                                    0,
+                                    mobileScrollMappings[i.toString()]
+                                );
+                            }, 10);
+                            mobileOpened[i.toString()] = true;
+                        } else {
+                            mobileOpened[i.toString()] = false;
+                        }
+                    },
                 },
                 content: {
                     content: (
