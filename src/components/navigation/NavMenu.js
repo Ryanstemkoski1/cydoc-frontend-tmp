@@ -181,7 +181,7 @@ class ConnectedNavMenu extends Component {
                         name='home'
                         to='/dashboard'
                         content='Home'
-                        icon='hospital outline' // home icon??
+                        icon='hospital outline'
                     />
                 </Menu.Item>
                 <Menu.Item>
