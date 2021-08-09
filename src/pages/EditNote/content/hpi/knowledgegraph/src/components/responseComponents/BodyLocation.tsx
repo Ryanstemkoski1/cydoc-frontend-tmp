@@ -1,12 +1,13 @@
 import React from 'react';
 import { Grid, Button } from 'semantic-ui-react';
-import LRButton from 'components/tools/LRButton.js';
 import {
     HpiStateProps,
-    BodyLocationType,
     BodyLocationOptions,
-    BodyLocationToggle,
     BodyLocationLRItemType,
+    BodyLocationToggle,
+    BodyLocationLRType,
+    BodyLocationType,
+    leftRightCenter,
 } from 'constants/hpiEnums';
 import { CurrentNoteState } from 'redux/reducers';
 import {
@@ -18,6 +19,7 @@ import {
 import { connect } from 'react-redux';
 import { LRButtonState } from 'constants/enums';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import ToggleButton from 'components/tools/ToggleButton';
 
 export const options: BodyLocationLRItemType[][] = [
     [
@@ -112,33 +114,54 @@ class BodyLocation extends React.Component<Props, BodyLocationState> {
     ) => {
         const { hpi, node, bodyLocationHandleToggle } = this.props;
         const buttons = row.map((option) => {
-            const value = hpi.nodes[node].response as BodyLocationType;
-            if (option.needsRightLeft && Object.keys(value).length) {
+            if (option.needsRightLeft) {
+                const response = hpi.nodes[node].response as BodyLocationLRType,
+                    responseSide = response[option.name] as leftRightCenter;
                 return (
-                    <LRButton
+                    <Button.Group
                         key={option.name}
-                        className={'lr-button'}
-                        active={value[option.name]}
-                        content={option.name}
-                        name={option.name}
-                        toggle={value[option.name]}
-                        color={value[option.name] ? 'grey' : null}
-                        onClick={(toggle: BodyLocationToggle) =>
-                            bodyLocationHandleToggle(node, option.name, toggle)
-                        }
-                    />
+                        className={'spaced-buttons'}
+                    >
+                        <ToggleButton
+                            condition='L'
+                            active={responseSide.left as boolean}
+                            title='L'
+                            onToggleButtonClick={() =>
+                                bodyLocationHandleToggle(
+                                    node,
+                                    option.name,
+                                    'left'
+                                )
+                            }
+                        />
+                        <ToggleButton
+                            condition={option.name}
+                            title={option.name}
+                            active={false}
+                            onToggleButtonClick={(): null => null}
+                        />
+                        <ToggleButton
+                            condition='R'
+                            active={responseSide.right as boolean}
+                            title='R'
+                            onToggleButtonClick={() =>
+                                bodyLocationHandleToggle(
+                                    node,
+                                    option.name,
+                                    'right'
+                                )
+                            }
+                        />
+                    </Button.Group>
                 );
             } else {
+                const value = hpi.nodes[node].response as BodyLocationType;
                 return (
-                    <Button
-                        key={option.name}
-                        className={'regular-button'}
+                    <ToggleButton
+                        condition={option.name}
                         active={value[option.name]}
-                        content={option.name}
-                        toggle={false}
-                        name={option.name}
-                        color={value[option.name] ? 'grey' : undefined}
-                        onClick={(): BodyLocationHandleToggleAction =>
+                        title={option.name}
+                        onToggleButtonClick={(): BodyLocationHandleToggleAction =>
                             bodyLocationHandleToggle(node, option.name, null)
                         }
                     />

@@ -1,3 +1,4 @@
 .spaced-buttons {
-    margin: 0px 4px 4px 0px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset !important;
 }

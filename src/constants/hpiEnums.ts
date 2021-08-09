@@ -529,12 +529,14 @@ export type TimeInput = {
     numInput: NumberInput;
     timeOption: TimeOption | '';
 };
+
+export type leftRightCenter = {
+    left: boolean;
+    center: boolean;
+    right: boolean;
+};
 export type BodyLocationLRType = {
-    [bodyOption in BodyLocationOptions]?: {
-        left: boolean;
-        center: boolean;
-        right: boolean;
-    };
+    [bodyOption in BodyLocationOptions]?: leftRightCenter;
 };
 export type BodyLocationType = {
     [bodyOption in BodyLocationOptions]?: boolean;
