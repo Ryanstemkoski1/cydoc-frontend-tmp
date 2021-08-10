@@ -326,6 +326,7 @@ export enum ResponseTypes {
     BODYLOCATION = 'BODYLOCATION',
     FH_BLANK = 'FH-BLANK',
     SCALE1TO10 = 'SCALE1TO10',
+    RADIOLOGY = 'RADIOLOGY',
 }
 
 export const BodyResponseDict = {
@@ -441,6 +442,7 @@ export interface ExpectedResponseInterface {
     PSH_POP: string[];
     FH_BLANK: string[];
     SCALE1TO10: ScaleInputType;
+    RADIOLOGY: string;
 }
 
 export const ExpectedResponseDict: ExpectedResponseInterface = {
@@ -461,6 +463,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     PSH_POP: [],
     FH_BLANK: [],
     SCALE1TO10: undefined,
+    RADIOLOGY: '',
 };
 
 export enum TimeOption {
