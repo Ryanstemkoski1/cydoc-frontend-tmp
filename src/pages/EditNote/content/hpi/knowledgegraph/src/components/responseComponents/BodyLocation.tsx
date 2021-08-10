@@ -135,6 +135,7 @@ class BodyLocation extends React.Component<Props, BodyLocationState> {
                             }
                         />
                         <ToggleButton
+                            className={'not-a-real-button'}
                             condition={option.name}
                             title={option.name}
                             active={false}
