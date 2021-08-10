@@ -80,29 +80,45 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
         while (queue.length) {
             const currNode = queue.shift();
             if (!currNode || !(currNode in graph)) continue;
-            const currEdges = graph[currNode]; // edges associated with current node
-            let questionOrderList: [
-                string,
-                number,
-                EdgeInterface
-            ][] = currEdges.map((edge: number) => {
-                // list of tuples (to node, toQuestionOrder)
-                const edgeInfo = edges[edge.toString()];
-                const to = edgeInfo.to;
-                const toQuestionOrder = edgeInfo.toQuestionOrder;
-                return [
-                    to,
-                    toQuestionOrder != -1
-                        ? toQuestionOrder
-                        : edge + currEdges.length,
-                    edgeInfo,
+            const currEdges = graph[currNode],
+                currCategory = nodes[currNode].category,
+                arrayDict: {
+                    [category: string]: [string, number, EdgeInterface][];
+                } = {
+                    GENERAL: [],
+                    PAIN: [],
+                    [currCategory]: [],
+                    ELSE: [],
+                };
+            currEdges.map((edge: number) => {
+                const edgeInfo = edges[edge.toString()],
+                    to = edgeInfo.to,
+                    toQuestionOrder = edgeInfo.toQuestionOrder,
+                    category =
+                        nodes[to].category in arrayDict
+                            ? nodes[to].category
+                            : 'ELSE';
+                arrayDict[category] = [
+                    ...arrayDict[category],
+                    [to, toQuestionOrder, edgeInfo],
                 ];
             });
-            questionOrderList = questionOrderList.sort(
-                (tup1, tup2) => tup1[1] - tup2[1]
-            ); // sort by questionOrder
-            const childNodes = questionOrderList.map((tup) => tup[0]); // child nodes in order
-            const edgesList = questionOrderList.map((tup) => tup[2]);
+            Object.keys(arrayDict).map((key) => {
+                arrayDict[key] = arrayDict[key]
+                    .sort()
+                    .sort((tup1, tup2) => tup1[1] - tup2[1]);
+            }); // sort by lexicographic order and questionOrder
+            // child questions are in order of GENERAL, PAIN, current category, and other categories
+            let edgesList: EdgeInterface[] = [];
+            const childNodes = [
+                ...arrayDict.GENERAL,
+                ...arrayDict.PAIN,
+                ...arrayDict[currCategory],
+                ...arrayDict.ELSE,
+            ].map((tup) => {
+                edgesList = [...edgesList, tup[2]];
+                return tup[0];
+            }); // child nodes in order
             parentToChildNodes[currNode] = childNodes;
             queue = [...queue, ...childNodes];
             addNode(currNode, nodes[currNode], edgesList);
