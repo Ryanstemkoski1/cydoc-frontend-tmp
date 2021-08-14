@@ -81,11 +81,7 @@ export function isTimeInputDictionary(
 }
 
 export function isBodyLocationLRDict(value: any): value is BodyLocationTotal {
-    return (
-        typeof value === 'object' &&
-        !Array.isArray(value) &&
-        Object.keys(value).every((item: string) => item in BodyLocationOptions)
-    );
+    return typeof value === 'object' && !Array.isArray(value);
 }
 
 export function isBodyLocationToggleDict(
