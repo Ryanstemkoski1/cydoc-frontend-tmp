@@ -111,24 +111,25 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
     };
 
     renderSwitch = () => {
-        const { windowWidth, responseChoice } = this.state;
-        const { node, hpi } = this.props;
-        const { responseType } = hpi.nodes[node];
-        const blankTypes = [
-            ResponseTypes.FH_BLANK,
-            ResponseTypes.MEDS_BLANK,
-            ResponseTypes.PMH_BLANK,
-            ResponseTypes.PSH_BLANK,
-        ];
-        const choices = blankTypes.includes(responseType)
-            ? (hpi.nodes[node].response as string[])
-            : responseChoice;
-        const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
+        const { windowWidth, responseChoice } = this.state,
+            { node, hpi } = this.props,
+            { responseType } = hpi.nodes[node],
+            blankTypes = [
+                ResponseTypes.FH_BLANK,
+                ResponseTypes.MEDS_BLANK,
+                ResponseTypes.PMH_BLANK,
+                ResponseTypes.PSH_BLANK,
+            ],
+            choices = blankTypes.includes(responseType)
+                ? (hpi.nodes[node].response as string[])
+                : responseChoice,
+            collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
         switch (responseType) {
             case ResponseTypes.YES_NO:
             case ResponseTypes.NO_YES:
                 return <YesNo key={node} node={node} />;
 
+            case ResponseTypes.RADIOLOGY:
             case ResponseTypes.SHORT_TEXT:
                 return <HandleInput key={node} node={node} />;
 

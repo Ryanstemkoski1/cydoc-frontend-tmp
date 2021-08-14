@@ -7,8 +7,8 @@ import {
     BodyLocationToggle,
     BodyLocationLRItemType,
     EdgeInterface,
+    NodeInterface,
 } from 'constants/hpiEnums';
-import { NodeInterface } from 'redux/reducers/hpiReducer';
 
 export interface AddNodeAction {
     type: HPI_ACTION.ADD_NODE;

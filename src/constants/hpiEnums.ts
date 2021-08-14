@@ -1,5 +1,5 @@
 import { YesNoMaybeResponse, YesNoResponse } from './enums';
-import { HpiState, NodeInterface } from 'redux/reducers/hpiReducer';
+import { HpiState } from 'redux/reducers/hpiReducer';
 
 export enum BodySystemNames {
     NEUROPSYCHIATRIC = 'Neuropsychiatric',
@@ -124,6 +124,7 @@ export enum DiseaseCategories {
     NAUSEA_VOMITING = 'NAUSEA_VOMITING',
     NUMBESS_TINGLING = 'NUMBESS_TINGLING',
     HAIR_LOSS = 'HAIR_LOSS',
+    IMAGING = 'IMAGING',
 }
 
 export enum DoctorView {
@@ -325,6 +326,7 @@ export enum ResponseTypes {
     BODYLOCATION = 'BODYLOCATION',
     FH_BLANK = 'FH-BLANK',
     SCALE1TO10 = 'SCALE1TO10',
+    RADIOLOGY = 'RADIOLOGY',
 }
 
 export const BodyResponseDict = {
@@ -440,6 +442,7 @@ export interface ExpectedResponseInterface {
     PSH_POP: string[];
     FH_BLANK: string[];
     SCALE1TO10: ScaleInputType;
+    RADIOLOGY: string;
 }
 
 export const ExpectedResponseDict: ExpectedResponseInterface = {
@@ -460,6 +463,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     PSH_POP: [],
     FH_BLANK: [],
     SCALE1TO10: undefined,
+    RADIOLOGY: '',
 };
 
 export enum TimeOption {
@@ -500,6 +504,22 @@ export enum BodyLocationOptions {
     ANKLE = 'Ankle',
     FOOT = 'Foot',
     TOE = 'Toe',
+}
+
+export interface NodeInterface {
+    uid: string;
+    medID: string;
+    category: DiseaseCategories;
+    text: string;
+    responseType: ResponseTypes;
+    bodySystem: BodySystemNames;
+    noteSection: string;
+    doctorView: DoctorView;
+    patientView: PatientView;
+    doctorCreated: string;
+    blankTemplate: string;
+    blankYes: string;
+    blankNo: string;
 }
 
 export interface GraphData {
