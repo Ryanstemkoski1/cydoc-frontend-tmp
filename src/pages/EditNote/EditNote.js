@@ -4,7 +4,6 @@ import MenuTabs from './MenuTabs';
 import NotePage from './NotePage';
 import NavMenu from '../../components/navigation/NavMenu';
 import { TAB_NAMES } from 'constants/constants';
-// import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
 import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';

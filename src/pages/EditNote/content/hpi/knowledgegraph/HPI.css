@@ -11,6 +11,33 @@
 .hpi-disease-button {
     width: 100%;
     text-align: left !important;
+    font-size: 1rem !important;
+}
+
+.mobile-hpi-disease-button {
+    width: 100%;
+    text-align: left !important;
+    font-size: 1.25rem !important;
+}
+
+.hpi-icons {
+    height: 3vh;
+    width: 2vw; 
+    margin-right: 1vw; 
+} 
+
+.mobile-hpi-icons {
+    height: 4vh;
+    width: 8vw; 
+    margin-right: 2.5vw;
+}
+
+.cardiovascular-mobile {
+    font-size: 1.15rem !important;
+}
+
+.cardiovascular-normal {
+    font-size: .85rem !important;
 }
 
 .diseases-array {

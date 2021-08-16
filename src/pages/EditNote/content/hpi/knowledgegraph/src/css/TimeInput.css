@@ -11,12 +11,12 @@
     width: 100%;
 }
 
-.time-div {
-    margin-top: 30px;
-}
-
 .ui.grid > .row > .column > .time-input {
     position: relative;
     top: 30%;
     left: 30%;
+}
+
+.ui.input.time-input {
+    width: 50%
 }

@@ -8,6 +8,7 @@ import {
     YesNoToggleOptionAction,
 } from 'redux/actions/hpiActions';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import ToggleButton from 'components/tools/ToggleButton';
 
 interface YesNoProps {
     node: string;
@@ -19,38 +20,24 @@ class YesNo extends React.Component<Props> {
         const answer = hpi.nodes[node].response;
         return (
             <div>
-                <button
+                <ToggleButton
                     className='button_yesno'
-                    style={{
-                        backgroundColor:
-                            answer === YesNoResponse.Yes
-                                ? 'lightslategrey'
-                                : 'whitesmoke',
-                        color: answer === YesNoResponse.Yes ? 'white' : 'black',
-                    }}
-                    onClick={(_e): YesNoToggleOptionAction =>
+                    active={answer == YesNoResponse.Yes}
+                    condition='Yes'
+                    title='Yes'
+                    onToggleButtonClick={(_e): YesNoToggleOptionAction =>
                         yesNoToggleOption(node, YesNoResponse.Yes)
                     }
-                >
-                    {' '}
-                    Yes{' '}
-                </button>
-                <button
+                />
+                <ToggleButton
                     className='button_yesno'
-                    style={{
-                        backgroundColor:
-                            answer === YesNoResponse.No
-                                ? 'lightslategrey'
-                                : 'whitesmoke',
-                        color: answer === YesNoResponse.No ? 'white' : 'black',
-                    }}
-                    onClick={(): YesNoToggleOptionAction =>
+                    active={answer == YesNoResponse.No}
+                    condition='No'
+                    title='No'
+                    onToggleButtonClick={(_e): YesNoToggleOptionAction =>
                         yesNoToggleOption(node, YesNoResponse.No)
                     }
-                >
-                    {' '}
-                    No{' '}
-                </button>
+                />
             </div>
         );
     }

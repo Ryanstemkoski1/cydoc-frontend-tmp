@@ -2,11 +2,7 @@ import { HpiActionTypes } from 'redux/actions/hpiActions';
 import { HPI_ACTION } from '../actions/actionTypes';
 import { YesNoResponse } from '../../constants/enums';
 import {
-    BodySystemNames,
-    DiseaseCategories,
-    DoctorView,
     HpiResponseType,
-    PatientView,
     ResponseTypes,
     TimeOption,
     ExpectedResponseDict,
@@ -23,28 +19,18 @@ export interface HpiState {
         [node: string]: string[];
     };
     nodes: {
-        [node: string]: NodeInterface;
+        [node: string]: {
+            response: HpiResponseType;
+            responseType: ResponseTypes;
+            text: string;
+            blankYes: string;
+            blankNo: string;
+            blankTemplate: string;
+        };
     };
     edges: {
         [edge: string]: EdgeInterface;
     };
-}
-
-export interface NodeInterface {
-    uid: string;
-    medID: string;
-    category: DiseaseCategories;
-    text: string;
-    responseType: ResponseTypes;
-    bodySystem: BodySystemNames;
-    noteSection: string;
-    doctorView: DoctorView;
-    patientView: PatientView;
-    doctorCreated: string;
-    response: HpiResponseType;
-    blankTemplate: string;
-    blankYes: string;
-    blankNo: string;
 }
 
 export const initialHpiState: HpiState = { graph: {}, nodes: {}, edges: {} };
@@ -95,11 +81,7 @@ export function isTimeInputDictionary(
 }
 
 export function isBodyLocationLRDict(value: any): value is BodyLocationTotal {
-    return (
-        typeof value === 'object' &&
-        !Array.isArray(value) &&
-        Object.keys(value).every((item: string) => item in BodyLocationOptions)
-    );
+    return typeof value === 'object' && !Array.isArray(value);
 }
 
 export function isBodyLocationToggleDict(
@@ -273,7 +255,11 @@ export function hpiReducer(
         case HPI_ACTION.HANDLE_INPUT_CHANGE: {
             // Updates text input response
             const { medId, textInput } = action.payload;
-            if (state.nodes[medId].responseType === ResponseTypes.SHORT_TEXT)
+            if (
+                [ResponseTypes.SHORT_TEXT, ResponseTypes.RADIOLOGY].includes(
+                    state.nodes[medId].responseType
+                )
+            )
                 return updateResponse(medId, textInput, state);
             else throw new Error('Not a short text response');
         }

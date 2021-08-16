@@ -1,6 +1,3 @@
 .tag_text {
-    float: left;
-    background-color: #E6F1F6;
-    color: white;
-    font-size: 14px;
+    margin-top: 1% !important;
 }

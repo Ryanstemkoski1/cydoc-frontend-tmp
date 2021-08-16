@@ -8,6 +8,7 @@ import {
 } from 'redux/actions/hpiActions';
 import { isStringArray } from 'redux/reducers/hpiReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import ToggleButton from 'components/tools/ToggleButton';
 
 interface MultipleChoiceProps {
     node: string;
@@ -20,18 +21,15 @@ class MultipleChoice extends React.Component<Props> {
         const response = hpi.nodes[node].response;
         const included = isStringArray(response) && response.includes(name);
         return (
-            <button
+            <ToggleButton
                 className='button_question'
-                style={{
-                    backgroundColor: included ? 'lightslategrey' : 'whitesmoke',
-                    color: included ? 'white' : 'black',
-                }}
-                onClick={(): MultipleChoiceHandleClickAction =>
+                active={included}
+                condition={name}
+                title={name}
+                onToggleButtonClick={(): MultipleChoiceHandleClickAction =>
                     multipleChoiceHandleClick(node, name)
                 }
-            >
-                {name}
-            </button>
+            />
         );
     }
 }
