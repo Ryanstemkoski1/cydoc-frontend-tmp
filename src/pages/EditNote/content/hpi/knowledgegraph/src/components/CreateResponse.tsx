@@ -24,6 +24,7 @@ import {
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import ScaleInput from './responseComponents/ScaleInput';
 
 interface CreateResponseProps {
     node: string;
@@ -149,6 +150,8 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
 
             case ResponseTypes.BODYLOCATION:
                 return <BodyLocation key={node} node={node} />;
+            case ResponseTypes.SCALE1TO10:
+                return <ScaleInput key={node} node={node} />;
 
             case ResponseTypes.MEDS_POP:
             case ResponseTypes.MEDS_BLANK:

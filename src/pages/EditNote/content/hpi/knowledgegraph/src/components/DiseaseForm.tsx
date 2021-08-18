@@ -87,15 +87,10 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
         const { parentNode, addNode } = this.props,
             { graphData } = this.state,
             { graph, nodes, edges } = graphData,
-            parentToChildNodes: { [parentNode: string]: string[] } = {},
-            depthDict: {
-                [node: string]: { parent: string; depth: number };
-            } = {};
-        let queue = [parentNode],
-            queueDepth = [1];
+            parentToChildNodes: { [parentNode: string]: string[] } = {};
+        let queue = [parentNode];
         while (queue.length) {
-            const currNode = queue.shift(),
-                currDepth = queueDepth.shift();
+            const currNode = queue.shift();
             if (!currNode || !(currNode in graph)) continue;
             const currEdges = graph[currNode],
                 currCategory = nodes[currNode].category,
@@ -119,27 +114,6 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
                     ...arrayDict[category],
                     [to, toQuestionOrder, edgeInfo],
                 ];
-                if (
-                    to in depthDict &&
-                    !['GEN', 'PAI'].includes(to.slice(0, 3)) // GENERAL and PAIN questions may repeat for different subgraphs
-                ) {
-                    if (currDepth && depthDict[to].depth > currDepth) {
-                        // if the current node is shallower than the previously recorded one
-                        parentToChildNodes[
-                            depthDict[to].parent
-                        ] = parentToChildNodes[depthDict[to].parent].filter(
-                            (child) => child != to
-                        );
-                        depthDict[to] = {
-                            parent: currNode,
-                            depth: currDepth,
-                        };
-                    }
-                } else
-                    depthDict[to] = {
-                        parent: currNode,
-                        depth: currDepth || -1,
-                    };
             });
             Object.keys(arrayDict).map((key) => {
                 arrayDict[key] = arrayDict[key]
@@ -151,7 +125,9 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
             const childNodes = [
                 ...arrayDict.GENERAL,
                 ...arrayDict.PAIN,
-                ...arrayDict[currCategory],
+                ...(Object.keys(arrayDict).length == 4
+                    ? arrayDict[currCategory]
+                    : []),
                 ...arrayDict.ELSE,
             ].map((tup) => {
                 edgesList = [...edgesList, tup[2]];
@@ -159,10 +135,6 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
             }); // child nodes in order
             parentToChildNodes[currNode] = childNodes;
             queue = [...queue, ...childNodes];
-            queueDepth = [
-                ...queueDepth,
-                ...Array(childNodes.length).fill(currDepth),
-            ];
             addNode(currNode, nodes[currNode], edgesList);
         }
         this.setState({
