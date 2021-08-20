@@ -5,8 +5,8 @@ import PhysicalExamContent from './content/physicalexam/PhysicalExamContent';
 import ReviewOfSystemsContent from './content/reviewofsystems/ReviewOfSystemsContent';
 import HPIContent from './content/hpi/knowledgegraph/HPIContent';
 import PatientHistoryContent from './content/patienthistory/PatientHistoryContent';
-import GenerateNote from './content/generatenote/GenerateNote';
-import DiscussionPlan from './content/discussionplan/DiscussionPlan';
+import GenerateNote from './content/generatenote/GenerateNote.tsx';
+import DiscussionPlan from './content/discussionplan/DiscussionPlan.tsx';
 
 import './NotePage.css';
 
