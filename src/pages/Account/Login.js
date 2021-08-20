@@ -145,7 +145,7 @@ const Login = () => {
                 lastName=''
             />
         );
-    } else if (isFirstLogin && role === 'healthcare professional') {
+    } else if (isFirstLogin && role === 'doctor') {
         return (
             <FirstTimeLogin
                 onSubmit={onChangePasswordSubmit}
