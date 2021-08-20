@@ -1,4 +1,4 @@
-import React, { Component, ComponentType } from 'react';
+import React, { Component } from 'react';
 import {
     TextArea,
     Table,
@@ -28,6 +28,7 @@ import {
     selectSurgicalHistoryItem,
 } from 'redux/selectors/surgicalHistorySelectors';
 import { OptionMapping } from '_processOptions';
+import './SurgicalHistoryTableBodyRow.css';
 
 //Controlled component for a row in a TableContent component
 export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
@@ -47,7 +48,7 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
                 target.value !== '' &&
                 (isNaN(startYear) ||
                     startYear < 1900 ||
-                    startYear > this.props.currentYear),
+                    startYear > new Date().getFullYear()),
         });
     };
 
@@ -57,20 +58,6 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
     ) => {
         this.props.onTableBodyChange(event, data);
         this.props.updateYear(data.rowIndex, parseInt(data.value as string));
-    };
-
-    handleCellClick = (e: React.MouseEvent) => {
-        const innerInput = (e.target as HTMLTextAreaElement)
-            .lastElementChild as any;
-        // Handles clicks outside of the "clickable area" (padding) of the input/textarea component within a cell
-        if (innerInput !== null) {
-            if (innerInput.type === 'textarea') {
-                innerInput.focus();
-            } else {
-                // for Inputs/dropdowns
-                innerInput.click();
-            }
-        }
     };
 
     handleProcedureChange = (
@@ -96,7 +83,8 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
             proceduresOptions,
             isPreview,
         } = this.props;
-        const { procedure, year, comments } = this.props.surgicalHistoryItem;
+        const { procedure, year, comments } =
+            this.props.surgicalHistoryItem! || {};
 
         if (isPreview) {
             return (
@@ -112,24 +100,27 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
                 cell = (
                     <Input
                         fluid
+                        transparent
                         className='content-input-computer content-dropdown'
                     >
-                        <Dropdown
-                            fluid
-                            search
-                            selection
-                            clearable
-                            allowAdditions
-                            options={proceduresOptions}
-                            optiontype='proceduresOptions'
-                            type={field}
-                            onChange={this.handleProcedureChange}
-                            rowIndex={rowIndex}
-                            value={procedure}
-                            onAddItem={onAddItem}
-                            aria-label='Surgical-Dropdown'
-                            className='table-row-text'
-                        />
+                        <div id='procedure-div'>
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                clearable
+                                allowAdditions
+                                options={proceduresOptions}
+                                optiontype='proceduresOptions'
+                                type={field}
+                                onChange={this.handleProcedureChange}
+                                rowIndex={rowIndex}
+                                value={procedure}
+                                onAddItem={onAddItem}
+                                aria-label='Surgical-Dropdown'
+                                className='table-row-text'
+                            />
+                        </div>
                     </Input>
                 );
                 break;
@@ -139,20 +130,24 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
                     year === -1 || isNaN(year) ? '' : year.toString();
                 cell = (
                     <div className='table-year-input'>
-                        <TextArea
-                            rows={3}
-                            type={field}
-                            onChange={this.handleYearChange}
-                            onBlur={this.onYearChange}
-                            rowIndex={rowIndex}
-                            value={yearString}
-                            className='table-row-text'
-                        />
-                        {this.state.invalidYear && (
-                            <p className='year-validation-error'>
-                                Please enter a valid year between 1900 and 2020
-                            </p>
-                        )}
+                        <div className='ui form'>
+                            <TextArea
+                                rows={3}
+                                type={field}
+                                onChange={this.handleYearChange}
+                                onBlur={this.onYearChange}
+                                rowIndex={rowIndex}
+                                defaultValue={yearString}
+                                className='table-row-text'
+                                id='row'
+                            />
+                            {this.state.invalidYear && (
+                                <p className='year-validation-error'>
+                                    Please enter a valid year between 1900 and
+                                    today
+                                </p>
+                            )}
+                        </div>
                     </div>
                 );
                 break;
@@ -160,14 +155,17 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
             // Comments
             default: {
                 cell = (
-                    <TextArea
-                        rows={3}
-                        type={field}
-                        onChange={this.handleCommentsChange}
-                        rowIndex={rowIndex}
-                        value={comments}
-                        className='table-row-text'
-                    />
+                    <div className='ui form'>
+                        <TextArea
+                            rows={3}
+                            type={field}
+                            onChange={this.handleCommentsChange}
+                            rowIndex={rowIndex}
+                            value={comments}
+                            className='table-row-text'
+                            id='row'
+                        />
+                    </div>
                 );
                 break;
             }
@@ -182,11 +180,7 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
 
         const tableRows = fields.map((field: string, index: number) => {
             return (
-                <Table.Cell
-                    key={index}
-                    onClick={this.handleCellClick}
-                    style={{ padding: '0px' }}
-                >
+                <Table.Cell key={index} id='table-rows'>
                     {this.getCell(field)}
                 </Table.Cell>
             );

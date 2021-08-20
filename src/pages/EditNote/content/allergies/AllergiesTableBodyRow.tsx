@@ -7,6 +7,7 @@ import {
     selectAllergiesState,
     selectAllergiesItem,
 } from 'redux/selectors/allergiesSelectors';
+import './table.css';
 
 class AllergiesTableBodyRow extends Component<Props> {
     constructor(props: Props) {
@@ -33,14 +34,17 @@ class AllergiesTableBodyRow extends Component<Props> {
             (field: keyof AllergiesItem, index: number) => {
                 return (
                     <Table.Cell key={index} onClick={this.handleCellClick}>
-                        <TextArea
-                            rows={3}
-                            type={field}
-                            onChange={onTableBodyChange}
-                            rowIndex={rowIndex}
-                            value={eval(field)}
-                            className='table-row-text'
-                        />
+                        <div className='ui form'>
+                            <TextArea
+                                rows={3}
+                                type={field}
+                                onChange={onTableBodyChange}
+                                rowIndex={rowIndex}
+                                value={eval(field)}
+                                className='table-row-text'
+                                id='row'
+                            />
+                        </div>
                     </Table.Cell>
                 );
             }

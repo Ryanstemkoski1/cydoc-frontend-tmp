@@ -20,18 +20,37 @@ import {
 import { AllergiesState, AllergiesItem } from 'redux/reducers/allergiesReducer';
 import { CurrentNoteState } from 'redux/reducers';
 import { selectAllergiesState } from 'redux/selectors/allergiesSelectors';
+import './table.css';
 
 //Component that manages the layout for the allergies page
 class AllergiesContent extends Component<Props, OwnState> {
     constructor(props: Props) {
         super(props);
         this.state = {
+            windowWidth: 0,
             active: new Set(),
         };
         this.addRow = this.addRow.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
+        this.updateDimensions = this.updateDimensions.bind(this);
+    }
+
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener('resize', this.updateDimensions);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateDimensions);
+    }
+
+    updateDimensions() {
+        const windowWidth =
+            typeof window !== 'undefined' ? window.innerWidth : 0;
+
+        this.setState({ windowWidth });
     }
 
     addRow() {
@@ -154,6 +173,7 @@ class AllergiesContent extends Component<Props, OwnState> {
                     onChange={this.handleTableBodyChange}
                     value={isPreview ? '' : values[i].comments}
                     className='content-input'
+                    id='placeholder'
                 />
             );
 
@@ -181,19 +201,23 @@ class AllergiesContent extends Component<Props, OwnState> {
         const values = this.props.allergies;
         const nums = Object.keys(values);
 
-        const content = this.props.mobile ? (
-            <Accordion
-                panels={this.makeAccordionPanels(nums, values)}
-                exclusive={false}
-                fluid
-                styled
-            />
-        ) : (
-            <Table celled className='table-display'>
-                <Table.Header content={this.makeHeader()} />
-                {/* eslint-disable-next-line react/no-children-prop */}
-                <Table.Body children={this.makeTableBodyRows(nums)} />
-            </Table>
+        const content = (
+            <>
+                {this.state.windowWidth < 800 ? (
+                    <Accordion
+                        panels={this.makeAccordionPanels(nums, values)}
+                        exclusive={false}
+                        fluid
+                        styled
+                    />
+                ) : (
+                    <Table celled className='table-display'>
+                        <Table.Header content={this.makeHeader()} />
+                        {/* eslint-disable-next-line react/no-children-prop */}
+                        <Table.Body children={this.makeTableBodyRows(nums)} />
+                    </Table>
+                )}
+            </>
         );
 
         return (
@@ -233,6 +257,7 @@ interface ContentProps {
 }
 
 interface OwnState {
+    windowWidth: number;
     active: Set<string>;
 }
 

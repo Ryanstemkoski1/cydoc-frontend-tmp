@@ -10,3 +10,28 @@
 .ui.selection .dropdown.icon.clear::before {
   content: "\f00d";
 }
+
+#row {
+  border: none !important;
+  border-width: 0 !important;
+  border-color: transparent !important;
+}
+
+#add-row {
+  width: 50%;
+  padding: 10px;
+  margin-left: 10px;
+}
+
+#width-full {
+  width: 100%;
+}
+
+#procedure-div {
+  width: 100%;
+  margin: auto;
+}
+
+#table-rows {
+  padding: 10px;
+}

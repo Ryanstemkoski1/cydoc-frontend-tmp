@@ -162,6 +162,12 @@ export default class PatientHistoryContent extends Component {
             case 'Family History':
                 tabToDisplay = <FamilyHistoryContent mobile={collapseTabs} />;
                 break;
+            case null:
+                this.setState({
+                    activeTabName: 'Medical History',
+                    activeIndex: 0,
+                });
+                break;
             default:
                 tabToDisplay = <MedicalHistoryContent mobile={collapseTabs} />;
                 break;
@@ -224,7 +230,8 @@ export default class PatientHistoryContent extends Component {
 
     render() {
         const { windowWidth, activeTabName, activeIndex } = this.state;
-        const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
+        // const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
+        const collapseTabs = windowWidth < 750;
 
         // panes for desktop view
         const panes = [
