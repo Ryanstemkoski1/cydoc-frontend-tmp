@@ -25,10 +25,7 @@ class ScaleInput extends React.Component<Props> {
     render() {
         const { node, scaleHandleValue, scaleHandleClear, hpi } = this.props;
         const response = hpi.nodes[node].response;
-        const value =
-            typeof response == 'number' || typeof response == 'undefined'
-                ? response
-                : undefined;
+        const value = typeof response == 'number' ? response : '';
         return (
             <div className='scale-input'>
                 <label> 1 </label>

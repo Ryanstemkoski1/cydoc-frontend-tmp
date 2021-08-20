@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Accordion } from 'semantic-ui-react';
+import { Accordion, Table } from 'semantic-ui-react';
 import sideEffects from 'constants/sideEffects';
 import drugNames from 'constants/medications';
 import diseases from 'constants/diagnoses';
@@ -22,6 +22,7 @@ import {
     blankQuestionChange,
 } from 'redux/actions/hpiActions';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import { MEDICATIONS_PANEL_SCREEN_BP } from '../../../../constants/breakpoints';
 
 interface OwnProps {
     mobile: boolean;
@@ -40,6 +41,8 @@ interface State {
     medicationOptions: OptionMapping;
     diseaseOptions: OptionMapping;
     currentYear: number;
+    windowWidth: number;
+    windowHeight: number;
 }
 
 export enum DropdownType {
@@ -52,11 +55,32 @@ export class MedicationsContent extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
+            windowWidth: 0,
+            windowHeight: 0,
             sideEffectsOptions: sideEffects,
             medicationOptions: drugNames,
             diseaseOptions: diseases,
             currentYear: new Date(Date.now()).getFullYear(),
         };
+        this.updateDimensions = this.updateDimensions.bind(this);
+    }
+
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener('resize', this.updateDimensions);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateDimensions);
+    }
+
+    updateDimensions() {
+        const windowWidth =
+            typeof window !== 'undefined' ? window.innerWidth : 0;
+        const windowHeight =
+            typeof window !== 'undefined' ? window.innerHeight : 0;
+
+        this.setState({ windowWidth, windowHeight });
     }
 
     handleDropdownOptionAddition = (
@@ -87,6 +111,17 @@ export class MedicationsContent extends Component<Props, State> {
         } else addMedication();
     };
 
+    makeHeader() {
+        return (
+            <Table.Row>
+                <Table.HeaderCell>Medication Name</Table.HeaderCell>
+                <Table.HeaderCell>Dose</Table.HeaderCell>
+                <Table.HeaderCell>Schedule</Table.HeaderCell>
+                <Table.HeaderCell>Reason For Taking</Table.HeaderCell>
+            </Table.Row>
+        );
+    }
+
     render() {
         const {
             values,
@@ -101,6 +136,7 @@ export class MedicationsContent extends Component<Props, State> {
             multipleChoiceHandleClick,
         } = this.props;
 
+        const header = this.makeHeader();
         const panels = [];
         const medicationsIndexMap: {
             [medication: string]: { key: string; index: number };

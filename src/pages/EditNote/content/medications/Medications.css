@@ -98,10 +98,119 @@ a.ui.label, a.ui.active.label {
     position: fixed;
 }
 
+.margin {
+    margin-top: 10px;
+}
+
+.drug-input {
+    width: 200px;
+}
+
+#dose-input, #width-full {
+    width: 100%;
+}
+
+#dose-input-div, #schedule-input-div {
+    margin-left: 30px;
+    width: 135px;
+}
+
+#schedule-input {
+    margin-left: -40px;
+    width: 195px;
+}
+
+#reason-input {
+    margin-top: 0;
+    width: 100%;
+}
+
+#reason-input-div {
+    margin-left: -110px;
+}
+
+#reason-dropdown {
+    margin-left: 10px;
+}
+
+#currently-taking-btns {
+    text-align: left;
+    width: 100%;
+}
+
+#currently-taking {
+    margin-top: 10px !important;
+}
+
+.for-text {
+    margin-left: 40px;
+}
+
 /** For smaller screens e.g. iPhone 6/7/8 */
 @media (max-width: 425px) {
     .reason-wrapper {
         display: block;
         margin-left: 2em;
+    }
+}
+
+@media (max-width: 994px) {
+    .padding-bottom {
+        padding-bottom: 10px !important;
+    }
+
+    .drug-input {
+        margin-left: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    #dose-input, #schedule-input {
+        width: 100%;
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
+    #dose-input-div, #schedule-input-div {
+        margin-left: -10px;
+        width: 100%;
+    }
+
+    #reason-input {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    #reason-input-div {
+        margin-left: 0px;
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    #currently-taking {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 1199px) and (min-width: 995px) {
+    #dose-input-div {
+        margin-left: 5px;
+        width: 100px;
+    }
+
+    #schedule-input {
+        width: 150px;
+    }
+
+    #schedule-input-div {
+        width: 0;
+        margin-left: 15px;
+    }
+
+    #reason-input-div {
+        margin-left: -60px;
+        width: 100%;
     }
 }

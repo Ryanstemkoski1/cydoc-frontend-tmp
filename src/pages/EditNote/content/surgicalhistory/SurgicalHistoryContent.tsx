@@ -1,4 +1,4 @@
-import React, { Component, ComponentType } from 'react';
+import React, { Component } from 'react';
 import SurgicalHistoryTableBodyRow from './SurgicalHistoryTableBodyRow';
 import {
     updateProcedure,
@@ -14,7 +14,6 @@ import Dropdown from 'components/tools/OptimizedDropdown';
 import {
     Accordion,
     Form,
-    Icon,
     Input,
     Table,
     DropdownProps,
@@ -61,6 +60,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         }
 
         this.state = {
+            windowWidth: 0,
             proceduresOptions: procedures,
             active: new Set(),
             isInvalidYear: invalidYearSet,
@@ -71,6 +71,23 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
+        this.updateDimensions = this.updateDimensions.bind(this);
+    }
+
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener('resize', this.updateDimensions);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateDimensions);
+    }
+
+    updateDimensions() {
+        const windowWidth =
+            typeof window !== 'undefined' ? window.innerWidth : 0;
+
+        this.setState({ windowWidth });
     }
 
     addRow() {
@@ -221,26 +238,30 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                         />
                     ) : (
                         <Input
+                            fluid
                             transparent
                             className='content-input-surgical content-dropdown medication'
+                            id='add-row'
                         >
-                            <Dropdown
-                                clearable
-                                fluid
-                                search
-                                selection
-                                allowAdditions
-                                type='procedure'
-                                optiontype='proceduresOptions'
-                                options={this.state.proceduresOptions}
-                                placeholder={'Procedure'}
-                                onChange={this.handleTableBodyChange}
-                                rowIndex={i}
-                                value={procedureName}
-                                onAddItem={this.handleAddition}
-                                aria-label='Surgical-Dropdown'
-                                className='content-input-surgical'
-                            />
+                            <div id='width-full'>
+                                <Dropdown
+                                    clearable
+                                    fluid
+                                    search
+                                    selection
+                                    allowAdditions
+                                    type='procedure'
+                                    optiontype='proceduresOptions'
+                                    options={this.state.proceduresOptions}
+                                    placeholder={'Procedure'}
+                                    onChange={this.handleTableBodyChange}
+                                    rowIndex={i}
+                                    value={procedureName}
+                                    onAddItem={this.handleAddition}
+                                    aria-label='Surgical-Dropdown'
+                                    className='content-input-surgical'
+                                />
+                            </div>
                         </Input>
                     )}
                 </Form>
@@ -301,13 +322,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 active: this.state.active.has(i),
                 title: {
                     content: titleContent,
-                    icon: (
-                        <Icon
-                            name='dropdown'
-                            corner='top left'
-                            className='medications-desktop-accordion-dropdown-icon'
-                        />
-                    ),
+                    icon: <></>,
                 },
                 content: {
                     content: <>{contentInputs}</>,
@@ -351,19 +366,27 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             if (node) popResponse(node, nums);
         } else if (responseType == ResponseTypes.PSH_BLANK && responseChoice)
             nums = responseChoice;
-        const content = this.props.mobile ? (
-            <Accordion
-                panels={this.makeAccordionPanels(nums, values)}
-                exclusive={false}
-                fluid
-                styled
-            />
-        ) : (
-            <Table celled className='table-display'>
-                <Table.Header content={this.makeHeader()} />
-                {/* eslint-disable-next-line react/no-children-prop */}
-                <Table.Body children={this.makeTableBodyRows(nums, values)} />
-            </Table>
+
+        const content = (
+            <>
+                {this.state.windowWidth < 800 ? (
+                    <Accordion
+                        panels={this.makeAccordionPanels(nums, values)}
+                        exclusive={false}
+                        fluid
+                        styled
+                    />
+                ) : (
+                    <Table celled className='table-display'>
+                        <Table.Header content={this.makeHeader()} />
+                        {/* eslint-disable react/no-children-prop */}
+                        <Table.Body
+                            children={this.makeTableBodyRows(nums, values)}
+                        />
+                        {/* eslint-enable react/no-children-prop */}
+                    </Table>
+                )}
+            </>
         );
 
         return (
@@ -396,6 +419,7 @@ export type Procedure = {
 }[];
 
 type OwnState = {
+    windowWidth: number;
     proceduresOptions: OptionMapping;
     active: Set<string>;
     isInvalidYear: Set<unknown>;

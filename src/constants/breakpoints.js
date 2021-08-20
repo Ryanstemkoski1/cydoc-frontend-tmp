@@ -30,3 +30,5 @@ export const DISCUSSION_PLAN_SECTION_BP = 850;
 export const PHYSICAL_EXAM_MOBILE_BP = 874;
 
 export const PROTIPS_BUTTON_BP = 1150;
+
+export const MEDICATIONS_PANEL_SCREEN_BP = 995;

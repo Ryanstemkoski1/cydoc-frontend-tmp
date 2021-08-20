@@ -141,16 +141,19 @@ class MedicalHistoryNoteItem extends Component<Props> {
                         />
                     </Form.Group>
                     {hasBeenAfflicted === YesNoResponse.Yes && (
-                        <div className='condition-info'>
+                        <div
+                            className='condition-info'
+                            style={{ marginLeft: '0px' }}
+                        >
                             <Form.TextArea
                                 label='Onset'
-                                className={`text-area text-area-${index}`}
                                 index={index}
                                 condition={condition}
                                 placeholder='Onset'
                                 value={isPreview ? '2000' : onsetYearString}
                                 onChange={this.handleOnsetChange}
                                 rows={1}
+                                style={{ width: '100%' }}
                             />
                             {((isNaN(startYear) && onsetYearString !== '') ||
                                 (startYear < 1900 && startYear !== -1) ||
@@ -204,7 +207,6 @@ class MedicalHistoryNoteItem extends Component<Props> {
                                 <>
                                     <Form.TextArea
                                         label='End Year'
-                                        className={`text-area text-area-${index}`}
                                         index={index}
                                         condition={condition}
                                         placeholder='End Year'
@@ -213,6 +215,10 @@ class MedicalHistoryNoteItem extends Component<Props> {
                                         }
                                         onChange={this.handleEndYearChange}
                                         rows={1}
+                                        style={{
+                                            width: '100%',
+                                            marginBottom: '5px',
+                                        }}
                                     />
                                     {((isNaN(endYear) &&
                                         endYearString !== '') ||
@@ -229,13 +235,13 @@ class MedicalHistoryNoteItem extends Component<Props> {
 
                             <Form.TextArea
                                 label='Comments'
-                                className={`text-area text-area-${index}`}
                                 index={index}
                                 condition={condition}
                                 placeholder='Comments'
                                 value={isPreview ? '' : comments}
                                 onChange={this.handleCommentsChange}
                                 rows={2}
+                                style={{ width: '100%' }}
                             />
                         </div>
                     )}
