@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-    Menu,
-    Button,
-    Segment,
-    Icon,
-    MenuItemProps,
-    Dropdown,
-} from 'semantic-ui-react';
+import { Button, Segment, Icon, Tab, Container, Grid } from 'semantic-ui-react';
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
 import BodySystemDropdown from './src/components/BodySystemDropdown';
@@ -107,20 +100,26 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         window.scrollTo(0, 0);
     };
 
-    // responds to tabs - the clicked tab's name will be indexed from the list of selected diseases and
-    // corresponds to its step. The page will then change to the clicked tab's corresponding disease
-    // category and the active tab will change to that as well.
-    handleItemClick = (
-        _e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-        data: MenuItemProps
-    ) => {
-        this.setState({
-            step: this.props.chiefComplaints.indexOf(data.diseasecategory),
-            activeHPI: data.diseasecategory,
-        });
-    };
-
     nextFormClick = () => this.props.nextFormClick();
+
+    // setStickyHeaders() {
+    //     const stickyHeaders = document.getElementsByClassName('sticky-header');
+    //     const patientHistoryMenu = document.getElementById(
+    //         'patient-history-menu'
+    //     );
+    //     if (
+    //         stickyHeaders != null &&
+    //         stickyHeaders.length != 0 &&
+    //         patientHistoryMenu != null
+    //     ) {
+    //         for (let i = 0; i < stickyHeaders.length; i++) {
+    //             stickyHeaders[i].style.top = `${
+    //                 parseInt(patientHistoryMenu.style.top) +
+    //                 patientHistoryMenu.offsetHeight
+    //             }px`;
+    //         }
+    //     }
+    // }
 
     render() {
         const {
@@ -128,6 +127,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             windowWidth,
             bodySystems,
             parentNodes,
+            activeHPI,
         } = this.state;
         const { chiefComplaints } = this.props;
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
@@ -154,24 +154,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             )
         );
 
-        // tabs with the diseases the user has chosen
-        // Loops through HPI context storing which categories user clicked in front page
-        const diseaseTabs: JSX.Element[] = chiefComplaints.map(
-            (diseaseCategory: DoctorView) => (
-                <Menu.Item
-                    key={diseaseCategory}
-                    diseasecategory={diseaseCategory}
-                    /* if the current category in the for loop matches the active category, 
-                the menu item is marked as active, meaning it will be displayed as clicked (pressed down) */
-                    active={this.state.activeHPI === diseaseCategory}
-                    onClick={this.handleItemClick}
-                    className='disease-tab' // CSS
-                >
-                    {diseaseCategory}
-                </Menu.Item>
-            )
-        );
-
         // each step correlates to a different tab
         const step: number = this.state.step;
         // number of positive diseases, which is also the number of steps
@@ -186,6 +168,12 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         } else if (windowWidth > ROS_SMALL_BP) {
             numColumns = 2;
         }
+
+        const collapseTabs =
+            chiefComplaints.length >= 10 ||
+            (chiefComplaints.length >= 5 &&
+                windowWidth < DISEASE_TABS_MED_BP) ||
+            windowWidth < DISEASE_TABS_SMALL_BP;
 
         // depending on the current step, we switch to a different view
         switch (step) {
@@ -208,92 +196,89 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 {diseaseComponents}
                             </Masonry>
                         </Segment>
-
-                        {positiveLength > 0 ? (
-                            <>
-                                <Button
-                                    icon
-                                    floated='right'
-                                    onClick={this.continue}
-                                    className='hpi-small-next-button'
-                                >
-                                    <Icon name='angle right' />
-                                </Button>
-                                <Button
-                                    icon
-                                    labelPosition='right'
-                                    floated='right'
-                                    onClick={this.continue}
-                                    className='hpi-next-button'
-                                >
-                                    Next Form
-                                    <Icon name='angle right' />
-                                </Button>
-                            </>
-                        ) : (
-                            <>
-                                <Button
-                                    icon
-                                    floated='right'
-                                    onClick={this.nextFormClick}
-                                    className='hpi-small-next-button'
-                                >
-                                    <Icon name='angle right' />
-                                </Button>
-                                <Button
-                                    icon
-                                    labelPosition='right'
-                                    floated='right'
-                                    onClick={this.nextFormClick}
-                                    className='hpi-next-button'
-                                >
-                                    Next Form
-                                    <Icon name='angle right' />
-                                </Button>
-                            </>
-                        )}
+                        <>
+                            <Button
+                                icon
+                                floated='right'
+                                onClick={
+                                    positiveLength > 0
+                                        ? this.continue
+                                        : this.nextFormClick
+                                }
+                                className='hpi-small-next-button'
+                            >
+                                <Icon name='angle right' />
+                            </Button>
+                            <Button
+                                icon
+                                labelPosition='right'
+                                floated='right'
+                                onClick={
+                                    positiveLength > 0
+                                        ? this.continue
+                                        : this.nextFormClick
+                                }
+                                className='hpi-next-button'
+                            >
+                                Next Form
+                                <Icon name='angle right' />
+                            </Button>
+                        </>
                     </>
                 );
             default:
                 // if API data is loaded, render the DiseaseForm
                 if (isGraphLoaded) {
-                    const diseaseCategory = chiefComplaints[step];
-                    const parentNode: string =
-                        parentNodes[diseaseCategory][
-                            Object.keys(parentNodes[diseaseCategory])[0]
-                        ];
-                    const collapseTabs =
-                        diseaseTabs.length >= 10 ||
-                        (diseaseTabs.length >= 5 &&
-                            windowWidth < DISEASE_TABS_MED_BP) ||
-                        windowWidth < DISEASE_TABS_SMALL_BP;
                     return (
-                        <div className='hpi-disease-container'>
+                        <>
                             {collapseTabs ? (
-                                <Dropdown
-                                    text={diseaseCategory}
-                                    options={diseaseTabs}
-                                    selection
-                                    fluid
-                                    scrolling={false}
-                                />
-                            ) : (
-                                <Menu
-                                    tabular
-                                    borderless
-                                    items={diseaseTabs}
-                                    className='disease-menu'
-                                />
-                            )}
-                            <DiseaseForm
-                                key={parentNode}
-                                parentNode={parentNode}
-                                category={diseaseCategory}
-                                nextStep={this.continue}
-                                prevStep={this.back}
-                            />
-                            {step === positiveLength - 1 ? (
-                                <>
+                                <Container>
+                                    <Grid
+                                        stackable
+                                        centered
+                                        id='hpi-menu'
+                                        relaxed
+                                    >
+                                        {' '}
+                                        {chiefComplaints.map(
+                                            (menuItem: DoctorView) => (
+                                                <Button
+                                                    basic
+                                                    key={menuItem}
+                                                    menuItem={menuItem}
+                                                    onClick={(
+                                                        _e,
+                                                        { menuItem }
+                                                    ): void =>
+                                                        this.setState({
+                                                            activeHPI: menuItem as DoctorView,
+                                                        })
+                                                    }
+                                                    active={
+                                                        activeHPI === menuItem
+                                                    }
+                                                    style={{ marginBottom: 5 }}
+                                                >
+                                                    {menuItem}
+                                                </Button>
+                                            )
+                                        )}
+                                    </Grid>
+                                    <Segment>
+                                        <DiseaseForm
+                                            key={activeHPI}
+                                            parentNode={
+                                                parentNodes[activeHPI][
+                                                    Object.keys(
+                                                        parentNodes[activeHPI]
+                                                    )[0]
+                                                ]
+                                            }
+                                            category={activeHPI as DoctorView}
+                                            nextStep={this.continue}
+                                            prevStep={this.back}
+                                        />
+                                    </Segment>
                                     <Button
                                         icon
                                         floated='left'
@@ -316,7 +301,12 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                     <Button
                                         icon
                                         floated='right'
-                                        onClick={this.nextFormClick}
+                                        onClick={() =>
+                                            activeHPI ==
+                                            (chiefComplaints.pop() as DoctorView)
+                                                ? this.nextFormClick
+                                                : this.continue
+                                        }
                                         className='hpi-small-next-button'
                                     >
                                         <Icon name='angle right' />
@@ -325,55 +315,125 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         icon
                                         labelPosition='right'
                                         floated='right'
-                                        onClick={this.nextFormClick}
+                                        onClick={() =>
+                                            activeHPI ==
+                                            (chiefComplaints.pop() as DoctorView)
+                                                ? this.nextFormClick
+                                                : this.continue
+                                        }
                                         className='hpi-next-button'
                                     >
                                         Next Form
                                         <Icon name='angle right' />
                                     </Button>
-                                </>
+                                </Container>
                             ) : (
-                                <>
-                                    <Button
-                                        icon
-                                        floated='left'
-                                        onClick={this.back}
-                                        className='hpi-small-previous-button'
-                                    >
-                                        <Icon name='angle left' />
-                                    </Button>
-                                    <Button
-                                        icon
-                                        labelPosition='left'
-                                        floated='left'
-                                        onClick={this.back}
-                                        className='hpi-previous-button'
-                                    >
-                                        Previous Form
-                                        <Icon name='angle left' />
-                                    </Button>
+                                <Tab
+                                    menu={{
+                                        pointing: true,
+                                    }}
+                                    panes={chiefComplaints.map(
+                                        (
+                                            diseaseCategory: DoctorView,
+                                            index: number
+                                        ) => ({
+                                            menuItem: diseaseCategory,
+                                            render: () => (
+                                                <Tab.Pane>
+                                                    <DiseaseForm
+                                                        key={
+                                                            parentNodes[
+                                                                diseaseCategory
+                                                            ][
+                                                                Object.keys(
+                                                                    parentNodes[
+                                                                        diseaseCategory
+                                                                    ]
+                                                                )[0]
+                                                            ]
+                                                        }
+                                                        parentNode={
+                                                            parentNodes[
+                                                                diseaseCategory
+                                                            ][
+                                                                Object.keys(
+                                                                    parentNodes[
+                                                                        diseaseCategory
+                                                                    ]
+                                                                )[0]
+                                                            ]
+                                                        }
+                                                        category={
+                                                            diseaseCategory
+                                                        }
+                                                        nextStep={this.continue}
+                                                        prevStep={this.back}
+                                                    />
+                                                    <Button
+                                                        icon
+                                                        floated='left'
+                                                        onClick={this.back}
+                                                        className='hpi-small-previous-button'
+                                                    >
+                                                        <Icon name='angle left' />
+                                                    </Button>
+                                                    <Button
+                                                        icon
+                                                        labelPosition='left'
+                                                        floated='left'
+                                                        onClick={this.back}
+                                                        className='hpi-previous-button'
+                                                    >
+                                                        Previous Form
+                                                        <Icon name='angle left' />
+                                                    </Button>
 
-                                    <Button
-                                        icon
-                                        floated='right'
-                                        onClick={this.continue}
-                                        className='hpi-small-next-button'
-                                    >
-                                        <Icon name='angle right' />
-                                    </Button>
-                                    <Button
-                                        icon
-                                        labelPosition='right'
-                                        floated='right'
-                                        onClick={this.continue}
-                                        className='hpi-next-button'
-                                    >
-                                        Next Form
-                                        <Icon name='angle right' />
-                                    </Button>
-                                </>
-                            )}
-                        </div>
+                                                    <Button
+                                                        icon
+                                                        floated='right'
+                                                        onClick={
+                                                            index ==
+                                                            chiefComplaints.length -
+                                                                1
+                                                                ? this
+                                                                      .nextFormClick
+                                                                : this.continue
+                                                        }
+                                                        className='hpi-small-next-button'
+                                                    >
+                                                        <Icon name='angle right' />
+                                                    </Button>
+                                                    <Button
+                                                        icon
+                                                        labelPosition='right'
+                                                        floated='right'
+                                                        onClick={
+                                                            index ==
+                                                            chiefComplaints.length -
+                                                                1
+                                                                ? this
+                                                                      .nextFormClick
+                                                                : this.continue
+                                                        }
+                                                        className='hpi-next-button'
+                                                    >
+                                                        Next Form
+                                                        <Icon name='angle right' />
+                                                    </Button>
+                                                </Tab.Pane>
+                                            ),
+                                        })
+                                    )}
+                                    id='tab-panes'
+                                    activeIndex={step}
+                                    onTabChange={(_e, data) =>
+                                        this.setState({
+                                            step: data.activeIndex as number,
+                                        })
+                                    }
+                                />
+                            )}{' '}
+                        </>
                     );
                 }
                 // if API data is not yet loaded, show loading screen

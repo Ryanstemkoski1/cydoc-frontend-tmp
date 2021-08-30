@@ -2,6 +2,10 @@
     width: 50%;
 }
 
+.handle-input {
+  min-height: 100px;
+}
+
 .short-text textarea {
   margin: 0;
   -webkit-appearance: none;
@@ -35,4 +39,3 @@
   line-height: 1.2857;
   resize: vertical;
 }
-

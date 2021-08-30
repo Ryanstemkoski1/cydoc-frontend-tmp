@@ -175,7 +175,7 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
 
     render() {
         return this.state.isGraphProcessed ? (
-            <div className='question-map'> {this.traverseChildNodes()} </div>
+            <div> {this.traverseChildNodes()} </div>
         ) : (
             <h1>Loading...</h1>
         );
