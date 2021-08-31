@@ -251,7 +251,8 @@
 @media screen and (max-width: 420px) {
   .ui.segment {
     margin: 0;
-    padding: 2rem 3rem;
+    padding: 2rem 1rem;
+    margin-bottom: 1rem;
   }
 
   .ui.header.home-header {

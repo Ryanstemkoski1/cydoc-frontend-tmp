@@ -453,6 +453,7 @@ class Alcohol extends React.Component<Props, State> {
                             {drinkSizeContent} {numberPerWeekContent}
                         </>
                     ),
+                    active: !!values.drinksConsumed[i].type,
                 },
             });
         }
@@ -628,6 +629,8 @@ class Alcohol extends React.Component<Props, State> {
                         <Divider hidden />
                     ) : null}
                 </Form>
+
+                <Divider className='divider-style' />
             </Grid.Row>
         );
     }
