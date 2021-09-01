@@ -64,17 +64,17 @@
 }
 
 #disease-menu {
-    position: sticky !important;
-    background-color: whitesmoke !important;
-    z-index: 2;
+    position: sticky;
+    z-index: 1;
+    background-color: white;
+    border: 1px solid #c7c7c7;
+    border-radius: 5px;
+    padding-top: 10px;
+    padding-bottom: 5px;
 }
 
 .disease-tab {
     font-size: 13px;
-}
-
-.question-map {
-    margin-left: 3rem;
 }
 
 .arrow-buttons {
@@ -165,3 +165,4 @@
         right: 15px;
     }
 }
+

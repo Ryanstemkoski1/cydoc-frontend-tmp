@@ -643,6 +643,8 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         <Divider hidden />
                     ) : null}
                 </Form>
+
+                <Divider className='divider-style' />
             </Grid.Row>
         );
     }

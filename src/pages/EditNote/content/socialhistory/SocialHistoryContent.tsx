@@ -97,22 +97,14 @@ export class SocialHistoryContent extends React.Component<Props, {}> {
         const secondaryFieldRows = this.generateSecondaryFieldRows();
 
         return (
-            <Fragment>
-                <Segment>
-                    <Tobacco mobile={this.props.mobile} />
-                </Segment>
-                <Segment>
-                    <Alcohol mobile={this.props.mobile} />
-                </Segment>
-                <Segment>
-                    <RecreationalDrugs mobile={this.props.mobile} />
-                </Segment>
-                <Segment>
-                    <Grid columns={2} stackable>
-                        {secondaryFieldRows}
-                    </Grid>
-                </Segment>
-            </Fragment>
+            <div className='social-history-content'>
+                <Tobacco mobile={this.props.mobile} />
+                <Alcohol mobile={this.props.mobile} />
+                <RecreationalDrugs mobile={this.props.mobile} />
+                <Grid columns={2} stackable>
+                    {secondaryFieldRows}
+                </Grid>
+            </div>
         );
     }
 }

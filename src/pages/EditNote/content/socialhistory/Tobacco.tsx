@@ -350,6 +350,7 @@ class Tobacco extends React.Component<Props, State> {
                                     placeholder={
                                         this.props.mobile ? 'Comments' : null
                                     }
+                                    rows={3}
                                 />
                             </Grid.Row>
                         </div>
@@ -359,6 +360,7 @@ class Tobacco extends React.Component<Props, State> {
                         <Divider hidden />
                     ) : null}
                 </Form>
+                <Divider className='divider-style' />
             </Grid.Row>
         );
     }

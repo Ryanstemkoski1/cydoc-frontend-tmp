@@ -111,7 +111,6 @@ class FamilyHistoryDropdown extends Component<Props> {
             <div className='dropdown-component-container'>
                 <Grid>
                     <Grid.Row>
-                        <Grid.Column width={1} />
                         <Grid.Column>
                             <Grid.Row width={14}>
                                 <Grid.Column width={6}>
@@ -212,7 +211,7 @@ class FamilyHistoryDropdown extends Component<Props> {
                                     value={comments}
                                     placeholder='Comments'
                                     onChange={this.handleCommentsChange}
-                                    rows={1}
+                                    rows={3}
                                 />
                             </Grid.Row>
                             <Grid.Row

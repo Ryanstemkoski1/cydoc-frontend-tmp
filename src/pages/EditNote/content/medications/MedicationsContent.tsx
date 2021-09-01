@@ -22,7 +22,7 @@ import {
     blankQuestionChange,
 } from 'redux/actions/hpiActions';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import { MEDICATIONS_PANEL_SCREEN_BP } from '../../../../constants/breakpoints';
+import ToggleButton from 'components/tools/ToggleButton';
 
 interface OwnProps {
     mobile: boolean;
@@ -211,15 +211,13 @@ export class MedicationsContent extends Component<Props, State> {
                                 medicationsIndexMap[medication].key
                             );
                         return (
-                            <button
+                            <ToggleButton
                                 key={medication}
                                 className='button_question'
-                                style={{
-                                    backgroundColor: containsKey
-                                        ? 'lightslategrey'
-                                        : 'whitesmoke',
-                                }}
-                                onClick={(): void => {
+                                active={containsKey}
+                                condition={medication}
+                                title={medication}
+                                onToggleButtonClick={(): void => {
                                     if (containsKey) {
                                         deleteMedication(
                                             medicationsIndexMap[medication].key
@@ -234,9 +232,7 @@ export class MedicationsContent extends Component<Props, State> {
                                         multipleChoiceHandleClick(node, newKey);
                                     }
                                 }}
-                            >
-                                {medication}
-                            </button>
+                            />
                         );
                     })}
                 {content}
