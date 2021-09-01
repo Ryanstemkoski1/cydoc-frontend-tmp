@@ -27,9 +27,17 @@ Object {
       "blankNo": "blankNo",
       "blankTemplate": "blankTemplate",
       "blankYes": "blankYes",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "doctorView": "DoctorView",
+      "medID": "medId",
+      "noteSection": "noteSection",
+      "patientView": "PatientView",
       "response": Object {},
       "responseType": "BODYLOCATION",
       "text": "text",
+      "uid": "uid",
     },
   },
 }
@@ -151,30 +159,6 @@ Object {
 `;
 
 exports[`hpi reducers handle user actions handles blank widget questions handles new blank response 1`] = `
-Object {
-  "edges": Object {},
-  "graph": Object {},
-  "nodes": Object {
-    "medId": Object {
-      "DoctorView": "DoctorView",
-      "PatientView": "PatientView",
-      "bodySystem": "bodySystem",
-      "category": "category",
-      "doctorCreated": "doctorCreated",
-      "medID": "medID",
-      "noteSection": "noteSection",
-      "response": Array [
-        "foo",
-      ],
-      "responseType": "FH-BLANK",
-      "text": "text",
-      "uid": "uid",
-    },
-  },
-}
-`;
-
-exports[`hpi reducers handle user actions handles blank widget questions handles new blank response 2`] = `
 Object {
   "edges": Object {},
   "graph": Object {},
@@ -468,31 +452,6 @@ Object {
 `;
 
 exports[`hpi reducers handle user actions handles pop response questions handles new pop response 1`] = `
-Object {
-  "edges": Object {},
-  "graph": Object {},
-  "nodes": Object {
-    "medId": Object {
-      "DoctorView": "DoctorView",
-      "PatientView": "PatientView",
-      "bodySystem": "bodySystem",
-      "category": "category",
-      "doctorCreated": "doctorCreated",
-      "medID": "medID",
-      "noteSection": "noteSection",
-      "response": Array [
-        "foo1",
-        "foo2",
-      ],
-      "responseType": "FH-POP",
-      "text": "text",
-      "uid": "uid",
-    },
-  },
-}
-`;
-
-exports[`hpi reducers handle user actions handles pop response questions handles new pop response 2`] = `
 Object {
   "edges": Object {},
   "graph": Object {},
