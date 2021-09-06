@@ -11,6 +11,10 @@ import {
     BodyLocationOptions,
     EdgeInterface,
     BodyLocationToggle,
+    DiseaseCategories,
+    BodySystemNames,
+    DoctorView,
+    PatientView,
 } from '../../constants/hpiEnums';
 import { v4 } from 'uuid';
 
@@ -20,12 +24,20 @@ export interface HpiState {
     };
     nodes: {
         [node: string]: {
-            response: HpiResponseType;
-            responseType: ResponseTypes;
+            uid: string;
+            medID: string;
+            category: DiseaseCategories;
             text: string;
+            responseType: ResponseTypes;
+            bodySystem: BodySystemNames;
+            noteSection: string;
+            doctorView: DoctorView;
+            patientView: PatientView;
+            doctorCreated: string;
+            blankTemplate: string;
             blankYes: string;
             blankNo: string;
-            blankTemplate: string;
+            response: HpiResponseType;
         };
     };
     edges: {
@@ -140,13 +152,8 @@ export function hpiReducer(
                 nodes: {
                     ...state.nodes,
                     [medId]: {
-                        ...state.nodes[medId],
+                        ...node,
                         response: ExpectedResponseDict[response],
-                        responseType: node.responseType,
-                        text: node.text,
-                        blankYes: node.blankYes,
-                        blankNo: node.blankNo,
-                        blankTemplate: node.blankTemplate,
                     },
                 },
                 graph: {

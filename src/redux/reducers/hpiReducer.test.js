@@ -64,14 +64,6 @@ describe('hpi reducers', () => {
             const edgeKeys = edges.map(
                 (edge) => 'to' + edge.to + 'from' + edge.from
             );
-            const responseNode = {
-                response: node.response,
-                responseType: node.responseType,
-                text: node.text,
-                blankYes: node.blankYes,
-                blankNo: node.blankNo,
-                blankTemplate: node.blankTemplate,
-            };
             const payload = {
                 medId: medId,
                 node: node,
@@ -83,7 +75,7 @@ describe('hpi reducers', () => {
             });
             expect(nextState).toMatchSnapshot();
             expect(nextState.nodes).toHaveProperty(medId);
-            expect(nextState.nodes[medId]).toMatchObject(responseNode);
+            expect(nextState.nodes[medId]).toMatchObject(node);
             expect(nextState.graph).toHaveProperty(medId);
             expect(nextState.graph[medId]).toEqual(edgeKeys);
             edgeKeys.map((edge, index) => {
