@@ -19,7 +19,7 @@ export default function ToggleButton(props) {
     return (
         <Button
             condition={condition}
-            color={active ? 'violet' : null}
+            color={active ? 'violet' : '#0d5e70' } // violet
             active={active}
             onClick={onToggleButtonClick}
             basic={!active}
