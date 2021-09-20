@@ -35,3 +35,9 @@ export const stripeClient = axios.create({
     baseURL: 'https://f42bhadly5.execute-api.us-east-1.amazonaws.com/dev',
     headers: { 'Access-Control-Allow-Origin': '*' },
 });
+
+export const rosClient = axios.create({
+    baseURL:
+        'https://3euj91pn42.execute-api.us-east-1.amazonaws.com/dev/ros-data/get',
+    headers: { 'Content-Type': 'application/json' },
+});
