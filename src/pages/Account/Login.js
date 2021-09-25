@@ -199,7 +199,6 @@ const Login = () => {
                                 className='role'
                                 checked={role === 'doctor'}
                                 onChange={handleRoleChange}
-                                defaultChecked
                             />
                             <Form.Radio
                                 label='manager'
