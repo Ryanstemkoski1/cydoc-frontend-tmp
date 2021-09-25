@@ -17,6 +17,8 @@ import { doctorClient } from 'constants/api.js';
 
 // manager dashboard view to view/add/remove doctor accounts
 const ManagerDashboard = () => {
+    const [getDoctorsBoolean, setGetDoctorsBoolean] = useState(true);
+    const [doctorsCollected, setDoctorsCollected] = useState(false);
     const [isInviteDoctorOpen, setIsInviteDoctorOpen] = useState(false);
     const [userToRemove, setUserToRemove] = useState('');
     const [username, setUsername] = useState('');
@@ -103,159 +105,177 @@ const ManagerDashboard = () => {
                 });
         }
         setDisplayedDoctors(docInfo);
+        setDoctorsCollected(true);
     };
 
     const doctors = [];
-    getDoctors();
-    for (let i = 0; i < displayedDoctors.length; i++) {
-        let currentDoctor = displayedDoctors[i];
-        if (currentDoctor == undefined) {
-            break;
-        }
-        const uuid = currentDoctor.doctorUUID;
-        const isStudent = currentDoctor.isStudent;
-        const docUsername = currentDoctor.username;
-        const docEmail = currentDoctor.email;
-        const docFirstName = currentDoctor.firstName;
-        const docMiddleName =
-            currentDoctor.middleName == undefined
-                ? ''
-                : currentDoctor.middleName;
-        const docLastName = currentDoctor.lastName;
-        const docPhoneNumber =
-            currentDoctor.phoneNumber == undefined
-                ? ''
-                : currentDoctor.phoneNumber;
-        const docBirthday =
-            currentDoctor.birthday == undefined ? '' : currentDoctor.birthday;
-        // source: https://www.w3docs.com/snippets/javascript/how-to-remove-empty-elements-from-an-array-in-javascript.html
-        const docSpecialties =
-            currentDoctor.specialties == undefined
-                ? []
-                : currentDoctor.specialties.filter(Boolean);
-        const docDegreesInProgress =
-            currentDoctor.degreesInProgress == undefined
-                ? []
-                : currentDoctor.degreesInProgress.filter(Boolean);
-        doctors.push({
-            header: (
-                <Card.Header
-                    textAlign='left'
-                    content={`${docFirstName} ${docMiddleName} ${docLastName}`}
-                />
-            ),
-            meta: (
-                <Card.Meta
-                    textAlign='left'
-                    content={`${docEmail}, ${docPhoneNumber}`}
-                />
-            ),
-            description: (
-                <Card.Description textAlign='left'>
-                    <Card.Description>
-                        <strong>Specialties: </strong>
-                        {docSpecialties.join()}
-                    </Card.Description>
-                    <Card.Description className={`extra-info ${docUsername}`}>
-                        <strong>Institutions: </strong>
-                        Institution 1, Institution 2, Institution 3
-                    </Card.Description>
-                    <Card.Description className={`extra-info ${docUsername}`}>
-                        <strong>Student? </strong>
-                        {isStudent}
-                    </Card.Description>
-                    {isStudent === 'Yes' && (
+    if (getDoctorsBoolean) {
+        getDoctors();
+        setGetDoctorsBoolean(false);
+    }
+    if (doctorsCollected) {
+        for (let i = 0; i < displayedDoctors.length; i++) {
+            let currentDoctor = displayedDoctors[i];
+            if (currentDoctor == undefined) {
+                continue;
+            }
+            const uuid = currentDoctor.doctorUUID;
+            const isStudent = currentDoctor.isStudent;
+            const docUsername = currentDoctor.username;
+            const docEmail = currentDoctor.email;
+            const docFirstName = currentDoctor.firstName;
+            const docMiddleName =
+                currentDoctor.middleName == undefined
+                    ? ''
+                    : currentDoctor.middleName;
+            const docLastName = currentDoctor.lastName;
+            const docPhoneNumber =
+                currentDoctor.phoneNumber == undefined
+                    ? ''
+                    : currentDoctor.phoneNumber;
+            const docBirthday =
+                currentDoctor.birthday == undefined
+                    ? ''
+                    : currentDoctor.birthday;
+            // source: https://www.w3docs.com/snippets/javascript/how-to-remove-empty-elements-from-an-array-in-javascript.html
+            const docSpecialties =
+                currentDoctor.specialties == undefined
+                    ? []
+                    : currentDoctor.specialties.filter(Boolean);
+            const docDegreesInProgress =
+                currentDoctor.degreesInProgress == undefined
+                    ? []
+                    : currentDoctor.degreesInProgress.filter(Boolean);
+            doctors.push({
+                header: (
+                    <Card.Header
+                        textAlign='left'
+                        content={`${docFirstName} ${docMiddleName} ${docLastName}`}
+                    />
+                ),
+                meta: (
+                    <Card.Meta
+                        textAlign='left'
+                        content={`${docEmail}, ${docPhoneNumber}`}
+                    />
+                ),
+                description: (
+                    <Card.Description textAlign='left'>
+                        <Card.Description>
+                            <strong>Specialties: </strong>
+                            {docSpecialties.join()}
+                        </Card.Description>
                         <Card.Description
                             className={`extra-info ${docUsername}`}
                         >
-                            <strong>Degrees in Progress: </strong>
-                            {docDegreesInProgress.join()}
+                            <strong>Institutions: </strong>
+                            Institution 1, Institution 2, Institution 3
                         </Card.Description>
-                    )}
-                    <Card.Description className={`extra-info ${docUsername}`}>
-                        <strong>Birthday: </strong>
-                        {docBirthday}
-                    </Card.Description>
-                    <Card.Description className={`extra-info ${docUsername}`}>
-                        <strong>Username: </strong>
-                        {docUsername}
-                    </Card.Description>
-                    <Card.Description
-                        className={`extra-info ${docUsername}`}
-                        textAlign='center'
-                    >
-                        <Modal
-                            dimmer='inverted'
-                            size='small'
-                            onClose={() => setUserToRemove('')}
-                            onOpen={() => setUserToRemove([docUsername, uuid])}
-                            open={userToRemove[0] === docUsername}
-                            trigger={
-                                <Button
-                                    color='red'
-                                    icon='times'
-                                    content='Remove account'
-                                    size='tiny'
-                                    className={`${docUsername}-remove remove`}
-                                />
-                            }
+                        <Card.Description
+                            className={`extra-info ${docUsername}`}
                         >
-                            <Modal.Header>Are you sure?</Modal.Header>
-                            <Modal.Content>
-                                Are you sure you want to remove {docFirstName}{' '}
-                                {docMiddleName} {docLastName} from Cydoc?
-                            </Modal.Content>
-                            <Modal.Actions>
-                                <Button
-                                    basic
-                                    color='teal'
-                                    content='Cancel'
-                                    type='button'
-                                    onClick={() => setUserToRemove('')}
-                                />
-                                <Button
-                                    color='red'
-                                    content='Remove account'
-                                    type='button'
-                                    onClick={removeDoctor}
-                                />
-                            </Modal.Actions>
-                        </Modal>
+                            <strong>Student? </strong>
+                            {isStudent}
+                        </Card.Description>
+                        {isStudent === 'Yes' && (
+                            <Card.Description
+                                className={`extra-info ${docUsername}`}
+                            >
+                                <strong>Degrees in Progress: </strong>
+                                {docDegreesInProgress.join()}
+                            </Card.Description>
+                        )}
+                        <Card.Description
+                            className={`extra-info ${docUsername}`}
+                        >
+                            <strong>Birthday: </strong>
+                            {docBirthday}
+                        </Card.Description>
+                        <Card.Description
+                            className={`extra-info ${docUsername}`}
+                        >
+                            <strong>Username: </strong>
+                            {docUsername}
+                        </Card.Description>
+                        <Card.Description
+                            className={`extra-info ${docUsername}`}
+                            textAlign='center'
+                        >
+                            <Modal
+                                dimmer='inverted'
+                                size='small'
+                                onClose={() => setUserToRemove('')}
+                                onOpen={() =>
+                                    setUserToRemove([docUsername, uuid])
+                                }
+                                open={userToRemove[0] === docUsername}
+                                trigger={
+                                    <Button
+                                        color='red'
+                                        icon='times'
+                                        content='Remove account'
+                                        size='tiny'
+                                        className={`${docUsername}-remove remove`}
+                                    />
+                                }
+                            >
+                                <Modal.Header>Are you sure?</Modal.Header>
+                                <Modal.Content>
+                                    Are you sure you want to remove{' '}
+                                    {docFirstName} {docMiddleName} {docLastName}{' '}
+                                    from Cydoc?
+                                </Modal.Content>
+                                <Modal.Actions>
+                                    <Button
+                                        basic
+                                        color='teal'
+                                        content='Cancel'
+                                        type='button'
+                                        onClick={() => setUserToRemove('')}
+                                    />
+                                    <Button
+                                        color='red'
+                                        content='Remove account'
+                                        type='button'
+                                        onClick={removeDoctor}
+                                    />
+                                </Modal.Actions>
+                            </Modal>
+                        </Card.Description>
                     </Card.Description>
-                </Card.Description>
-            ),
-            extra: (
-                <>
-                    <Button
-                        basic
-                        color='teal'
-                        icon='plus'
-                        content='View more'
-                        size='small'
-                        type='button'
-                        className={`${docUsername}-view-more`}
-                        onClick={() =>
-                            switchFullUserInfoView(docUsername, 'show')
-                        }
-                    />
-                    <Button
-                        basic
-                        color='teal'
-                        icon='minus'
-                        content='View less'
-                        size='small'
-                        type='button'
-                        className={`${docUsername}-view-less view-less`}
-                        onClick={() =>
-                            switchFullUserInfoView(docUsername, 'hide')
-                        }
-                    />
-                </>
-            ),
-            key: docUsername,
-        });
+                ),
+                extra: (
+                    <>
+                        <Button
+                            basic
+                            color='teal'
+                            icon='plus'
+                            content='View more'
+                            size='small'
+                            type='button'
+                            className={`${docUsername}-view-more`}
+                            onClick={() =>
+                                switchFullUserInfoView(docUsername, 'show')
+                            }
+                        />
+                        <Button
+                            basic
+                            color='teal'
+                            icon='minus'
+                            content='View less'
+                            size='small'
+                            type='button'
+                            className={`${docUsername}-view-less view-less`}
+                            onClick={() =>
+                                switchFullUserInfoView(docUsername, 'hide')
+                            }
+                        />
+                    </>
+                ),
+                key: docUsername,
+            });
+        }
     }
-
     return (
         <>
             <NavMenu />
