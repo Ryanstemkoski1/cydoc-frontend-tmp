@@ -13,7 +13,6 @@ import {
     DISEASE_TABS_SMALL_BP,
     DISEASE_TABS_MED_BP,
 } from 'constants/breakpoints';
-import { BodySystemNames, DoctorView } from 'constants/hpiEnums';
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import ChiefComplaintsButton from './src/components/ChiefComplaintsButton';
@@ -26,10 +25,10 @@ interface HPIContentProps {
 interface HPIContentState {
     windowWidth: number;
     windowHeight: number;
-    bodySystems: { [bodySystem: string]: DoctorView[] };
+    bodySystems: { [bodySystem: string]: string[] };
     parentNodes: { [disease: string]: { [diseaseCode: string]: string } };
     isGraphLoaded: boolean;
-    activeHPI: DoctorView | '';
+    activeHPI: string;
     step: number;
 }
 
@@ -137,7 +136,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             ([bodySystem, diseasesList]) => (
                 <BodySystemDropdown
                     key={bodySystem} // name of body system
-                    name={bodySystem as BodySystemNames}
+                    name={bodySystem}
                     diseasesList={diseasesList.sort()} // list of categories (diseases) associated with current body system
                 />
             )
@@ -149,9 +148,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         // Loops through the HPI context storing which categories user clicked in the front page
         // (categories/diseases for which they are positive)
         const positiveDiseases: JSX.Element[] = chiefComplaints.map(
-            (name: DoctorView) => (
-                <ChiefComplaintsButton key={name} name={name} />
-            )
+            (name: string) => <ChiefComplaintsButton key={name} name={name} />
         );
 
         // each step correlates to a different tab
@@ -241,7 +238,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                     >
                                         {' '}
                                         {chiefComplaints.map(
-                                            (menuItem: DoctorView) => (
+                                            (menuItem: string) => (
                                                 <Button
                                                     basic
                                                     key={menuItem}
@@ -251,7 +248,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         { menuItem }
                                                     ): void =>
                                                         this.setState({
-                                                            activeHPI: menuItem as DoctorView,
+                                                            activeHPI: menuItem,
                                                         })
                                                     }
                                                     active={
@@ -274,7 +271,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                     )[0]
                                                 ]
                                             }
-                                            category={activeHPI as DoctorView}
+                                            category={activeHPI}
                                             nextStep={this.continue}
                                             prevStep={this.back}
                                         />
@@ -302,8 +299,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         icon
                                         floated='right'
                                         onClick={() =>
-                                            activeHPI ==
-                                            (chiefComplaints.pop() as DoctorView)
+                                            activeHPI == chiefComplaints.pop()
                                                 ? this.nextFormClick
                                                 : this.continue
                                         }
@@ -316,8 +312,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         labelPosition='right'
                                         floated='right'
                                         onClick={() =>
-                                            activeHPI ==
-                                            (chiefComplaints.pop() as DoctorView)
+                                            activeHPI == chiefComplaints.pop()
                                                 ? this.nextFormClick
                                                 : this.continue
                                         }
@@ -334,7 +329,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                     }}
                                     panes={chiefComplaints.map(
                                         (
-                                            diseaseCategory: DoctorView,
+                                            diseaseCategory: string,
                                             index: number
                                         ) => ({
                                             menuItem: diseaseCategory,

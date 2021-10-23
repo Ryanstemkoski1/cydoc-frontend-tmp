@@ -4,13 +4,12 @@ import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { Provider } from 'react-redux';
 import { createCurrentNoteStore } from 'redux/store';
 import ChiefComplaintsButton from '../ChiefComplaintsButton';
-import { DoctorView } from 'constants/hpiEnums';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const connectRealStore = () => {
     const store = createCurrentNoteStore();
-    const chiefComplaint = DoctorView.ABDOMINAL_PAIN;
+    const chiefComplaint = 'Abdominal Pain';
     return {
         store,
         wrapper: mount(

@@ -1,6 +1,5 @@
 import React from 'react';
 import './BodySystemDropdown';
-import { DoctorView } from 'constants/hpiEnums';
 import {
     selectChiefComplaint,
     SelectChiefComplaintAction,
@@ -12,7 +11,7 @@ import ToggleButton from 'components/tools/ToggleButton';
 import '../css/DiseaseTag.css';
 
 interface ChiefComplaintsButtonProps {
-    name: DoctorView;
+    name: string;
 }
 
 class ChiefComplaintsButton extends React.Component<Props> {
@@ -37,7 +36,7 @@ export interface ChiefComplaintsProps {
 }
 
 interface DispatchProps {
-    selectChiefComplaint: (disease: DoctorView) => SelectChiefComplaintAction;
+    selectChiefComplaint: (disease: string) => SelectChiefComplaintAction;
 }
 
 const mapStateToProps = (state: CurrentNoteState): ChiefComplaintsProps => ({

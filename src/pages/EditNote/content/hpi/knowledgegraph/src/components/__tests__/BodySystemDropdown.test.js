@@ -2,7 +2,6 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import BodySystemDropdown from '../BodySystemDropdown';
-import { BodySystemNames, DoctorView } from 'constants/hpiEnums';
 import ChiefComplaintsButton from '../ChiefComplaintsButton';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
@@ -10,11 +9,11 @@ Enzyme.configure({ adapter: new EnzymeAdapter() });
 describe('ChiefComplaintsButton', () => {
     const wrapper = shallow(
         <BodySystemDropdown
-            name={BodySystemNames.CARDIAC}
+            name='Cardiovascular'
             diseasesList={[
-                DoctorView.ABDOMINAL_PAIN,
-                DoctorView.AGING_CHALLENGES_AND_DEMENTIA,
-                DoctorView.ALCOHOL_USE,
+                'Abdominal Pain',
+                'Aging Challenges and Dementia',
+                'Alcohol Use',
             ]}
         />
     );

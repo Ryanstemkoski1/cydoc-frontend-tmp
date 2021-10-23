@@ -11,10 +11,6 @@ import {
     BodyLocationOptions,
     EdgeInterface,
     BodyLocationToggle,
-    DiseaseCategories,
-    BodySystemNames,
-    DoctorView,
-    PatientView,
 } from '../../constants/hpiEnums';
 import { v4 } from 'uuid';
 
@@ -26,13 +22,13 @@ export interface HpiState {
         [node: string]: {
             uid: string;
             medID: string;
-            category: DiseaseCategories;
+            category: string;
             text: string;
             responseType: ResponseTypes;
-            bodySystem: BodySystemNames;
+            bodySystem: string;
             noteSection: string;
-            doctorView: DoctorView;
-            patientView: PatientView;
+            doctorView: string;
+            patientView: string;
             doctorCreated: string;
             blankTemplate: string;
             blankYes: string;
