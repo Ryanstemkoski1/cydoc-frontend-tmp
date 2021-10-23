@@ -19,7 +19,6 @@ export default class LandingPageOld extends Component {
             windowWidth: 1000,
             windowHeight: 0,
             redirect: '',
-            // hidden: true,
         };
         this.updateDimensions = this.updateDimensions.bind(this);
 
@@ -61,8 +60,6 @@ export default class LandingPageOld extends Component {
         }
 
         */
-
-        // some saving here to the state maintained by redux??
 
         this.setState({
             redirect: 'NEW_NOTE',

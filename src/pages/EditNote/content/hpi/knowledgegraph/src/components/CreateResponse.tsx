@@ -12,7 +12,7 @@ import MedicationsContent from '../../../../medications/MedicationsContent';
 import SurgicalHistoryContent from '../../../../surgicalhistory/SurgicalHistoryContent';
 import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
 import ListText from './responseComponents/ListText';
-import { ResponseTypes, HpiStateProps, DoctorView } from 'constants/hpiEnums';
+import { ResponseTypes, HpiStateProps } from 'constants/hpiEnums';
 import {
     addFhPopOptions,
     AddFhPopOptionsAction,
@@ -28,7 +28,7 @@ import ScaleInput from './responseComponents/ScaleInput';
 
 interface CreateResponseProps {
     node: string;
-    category: DoctorView;
+    category: string;
 }
 
 interface CreateResponseState {
