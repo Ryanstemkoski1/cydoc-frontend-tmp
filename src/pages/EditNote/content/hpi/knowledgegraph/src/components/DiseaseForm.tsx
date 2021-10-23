@@ -2,7 +2,6 @@ import React from 'react';
 import '../css/App.css';
 import '../../HPI.css';
 import {
-    DoctorView,
     GraphData,
     HpiStateProps,
     EdgeInterface,
@@ -23,7 +22,7 @@ interface DiseaseFormProps {
     nextStep: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     prevStep: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     parentNode: string;
-    category: DoctorView;
+    category: string;
 }
 
 interface DiseaseFormState {

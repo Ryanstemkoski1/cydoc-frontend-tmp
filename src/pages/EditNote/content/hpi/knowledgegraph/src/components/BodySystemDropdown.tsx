@@ -3,7 +3,6 @@ import { Button } from 'semantic-ui-react';
 import '../css/Button.css';
 import ChiefComplaintsButton from './ChiefComplaintsButton';
 import '../../HPI.css';
-import { BodySystemNames, DoctorView } from 'constants/hpiEnums';
 import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
 import brain from '../icons/brain.png';
 import pain from '../icons/pain.png';
@@ -18,8 +17,8 @@ import kidneys from '../icons/kidneys.png';
 import genitourinary from '../icons/genitourinary.png';
 
 interface BodySystemDropdownProps {
-    diseasesList: DoctorView[];
-    name: BodySystemNames;
+    diseasesList: string[];
+    name: string;
 }
 
 interface BodySystemDropdownState {
