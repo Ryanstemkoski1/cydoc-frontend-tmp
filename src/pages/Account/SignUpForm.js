@@ -130,6 +130,10 @@ const SignUpForm = (props) => {
     const [userInfo, setUserInfo] = useState(props.userInfo);
     const [isSendingInfo, setIsSendingInfo] = useState(false);
     const [formErrors, setFormErrors] = useState([]);
+    const [expirationMonth, setExpirationMonth] = useState();
+    const [expirationYear, setExpirationYear] = useState();
+    const [cardNumber, setCardNumber] = useState();
+    const [cvv, setCVV] = useState();
 
     useEffect(() => {
         setUserInfo(props.userInfo);
@@ -142,8 +146,20 @@ const SignUpForm = (props) => {
         });
     };
 
-    const handleCardChange = (e, { name, value }) => {
-        userInfo.card[name] = value;
+    const handleCardChange = (e, { value }) => {
+        setCardNumber(value);
+    };
+
+    const handleCVVChange = (e, { value }) => {
+        setCVV(value);
+    };
+
+    const handleExpirationMonthChange = (e, { value }) => {
+        setExpirationMonth(value);
+    };
+
+    const handleExpirationYearChange = (e, { value }) => {
+        setExpirationYear(value);
     };
 
     const handleIsPhoneNumberMobileChange = () => {
@@ -181,6 +197,10 @@ const SignUpForm = (props) => {
         if (isSendingInfo) {
             return;
         }
+        userInfo.card['cardNumber'] = cardNumber;
+        userInfo.card['expirationMonth'] = expirationMonth;
+        userInfo.card['expirationYear'] = expirationYear;
+        userInfo.card['cvv'] = cvv;
 
         setIsSendingInfo(true);
         const infoToValidate = {
@@ -308,6 +328,7 @@ const SignUpForm = (props) => {
                             checked={
                                 userInfo.managerResponsibleForPayment === true
                             }
+                            defaultChecked
                             onChange={handleChange}
                         />
                         <Form.Radio
@@ -440,7 +461,7 @@ const SignUpForm = (props) => {
                 placeholder='card number'
                 name='cardNumber'
                 width={16}
-                value={userInfo.card.cardNumber}
+                value={cardNumber}
                 onChange={handleCardChange}
             />
             <label className='label-font'>Expiration Date</label>
@@ -452,8 +473,8 @@ const SignUpForm = (props) => {
                     options={expirationMonthOptions}
                     placeholder='MM'
                     name='expirationMonth'
-                    value={userInfo.card.expirationMonth}
-                    onChange={handleCardChange}
+                    value={expirationMonth}
+                    onChange={handleExpirationMonthChange}
                 />
                 <Form.Select
                     fluid
@@ -462,8 +483,8 @@ const SignUpForm = (props) => {
                     options={expirationYearOptions}
                     placeholder='YY'
                     name='expirationYear'
-                    value={userInfo.card.expirationYear}
-                    onChange={handleCardChange}
+                    value={expirationYear}
+                    onChange={handleExpirationYearChange}
                 />
             </Form.Group>
             <Form.Input
@@ -474,8 +495,8 @@ const SignUpForm = (props) => {
                 label='CVV'
                 name='cvv'
                 placeholder='111'
-                value={userInfo.card.cvv}
-                onChange={handleCardChange}
+                value={cvv}
+                onChange={handleCVVChange}
             />
             <Container>
                 <Header as='h5' textAlign='center' content='Terms of Use' />

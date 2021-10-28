@@ -13,12 +13,13 @@ import {
     Divider,
 } from 'semantic-ui-react';
 import emailsRegex from '../../auth/authorizedEmails';
+import emailRegexCheckFunc from '../../auth/emailRegexCheckFunc';
 
 const DoctorSignUp = () => {
     const phoneNumberRegex = new RegExp(
         '^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'
     );
-    const [emailRegexCheck, setEmailRegexCheck] = useState(true);
+    const [emailRegexCheck, setEmailRegexCheck] = useState(false);
     const [isInviteDoctorOpen, setIsInviteDoctorOpen] = useState(false);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -82,6 +83,12 @@ const DoctorSignUp = () => {
     };
 
     const createDoctor = async () => {
+        const check = await emailRegexCheckFunc(email);
+        setEmailRegexCheck(check);
+        if (continueButtonState == false) {
+            setContinueButtonState(true);
+            return;
+        }
         if (
             username === '' ||
             newPassword === '' ||
@@ -115,12 +122,26 @@ const DoctorSignUp = () => {
             };
         }
         setPasswordsMatch(newPassword === confirmNewPassword);
-        setEmailRegexCheck(false);
-        for (let val of emailsRegex) {
-            const regex = new RegExp(val);
-            if (!regex.test(email)) {
-                setEmailRegexCheck(true);
-                break;
+        if (emailRegexCheck == false) {
+            for (let val of emailsRegex) {
+                const regex = new RegExp(val);
+                if (!regex.test(email)) {
+                    setEmailRegexCheck(true);
+                } else if (regex.test(email)) {
+                    setEmailRegexCheck(false);
+                }
+            }
+            if (emailRegexCheck) {
+                let errorText = 'Error Unauthorized Email\nAllowed Addresses:';
+                for (let val of emailsRegex) {
+                    errorText += '\n' + val.replace('$', '');
+                }
+                alert(errorText);
+                setEmailRegexCheck(false);
+                setContinueButtonState(false);
+                return {
+                    status: 'ERROR',
+                };
             }
         }
         if (emailRegexCheck) {
@@ -129,6 +150,7 @@ const DoctorSignUp = () => {
                 errorText += '\n' + val.replace('$', '');
             }
             alert(errorText);
+            setEmailRegexCheck(false);
             setContinueButtonState(false);
             return {
                 status: 'ERROR',
@@ -500,12 +522,7 @@ const DoctorSignUp = () => {
                             }}
                         />
                         {!continueButtonState && (
-                            <Button
-                                color='teal'
-                                content='Next'
-                                type='submit'
-                                onClick={() => setContinueButtonState(true)}
-                            />
+                            <Button color='teal' content='Next' type='submit' />
                         )}
                         {continueButtonState && (
                             <Button
