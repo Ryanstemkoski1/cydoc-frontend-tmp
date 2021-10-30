@@ -73,7 +73,29 @@
 
 .landing-boxes {
     display: flex;
+    justify-content: space-between;
+}
+
+.landing-boxes.rows {
+    flex-direction: column;
+    margin: 4rem auto;
+    align-items: center;
+}
+
+.landing-boxes.columns {
+    flex-direction: row;
     margin: 2vh 2vw;
+}
+
+.landing-col {
+    width: 30%;
+    margin: 20vh auto;
+}
+
+.landing-col.multiple {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .landing-box {
@@ -81,9 +103,7 @@
     color: #0d5e70;
     border: 2px solid #6DA3B1;
     border-radius: 15px;
-    margin: 20vh 3vw;
     padding: 10vh 5vw;
-    flex: 1 1 0px;
     text-align: center;
     transition: all .1s ease-in-out;
 }
@@ -94,13 +114,23 @@
     border: 2px solid #0d5e70;
 }
 
-/* Colors used: 
-    #6DA3B1
-    #0d5e70
-    #CDE1E9
-    #034353
-    #007a9a
-*/
+.landing-box.top,
+.landing-box.bottom {
+    padding: 5vh 2.5vw;
+    flex: 1;
+}
+
+.landing-box.top {
+    margin-bottom: 0.5rem;
+}
+
+.landing-box.bottom {
+    margin-top: 0.5rem;
+}
+
+.ui.animated.button.landing {
+    margin: 4vh 1vw;
+}
 
 .icons {
     position: absolute;

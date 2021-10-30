@@ -5,6 +5,10 @@ import { LANDING_PAGE_MOBLE_BP } from 'constants/breakpoints.js';
 import './LandingPage.css';
 import { Button } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
+import { initialState } from 'redux/reducers';
+import { deleteNote } from '../../redux/actions/currentNoteActions';
+import { connect } from 'react-redux';
+import _ from 'lodash';
 
 // imports for old landing page with notes/data stored in context
 // import OpenRecentSegment from './OpenNotes';
@@ -12,7 +16,7 @@ import { Redirect } from 'react-router';
 // import NewNoteSegment from './NewNote';
 
 //Component that manages the layout of the dashboard page
-export default class LandingPageOld extends Component {
+class LandingPageOld extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,9 +26,9 @@ export default class LandingPageOld extends Component {
         };
         this.updateDimensions = this.updateDimensions.bind(this);
 
-        this.handleNewNoteClick = this.handleNewNoteClick.bind(this);
         this.handleNewHPIClick = this.handleNewHPIClick.bind(this);
         this.handleEditHPIClick = this.handleEditHPIClick.bind(this);
+        this.checkExistingNote = this.checkExistingNote.bind(this);
     }
 
     componentDidMount = () => {
@@ -44,27 +48,21 @@ export default class LandingPageOld extends Component {
         this.setState({ windowWidth, windowHeight });
     }
 
-    handleNewNoteClick() {
-        // const note = await this.context.addNote();
-
-        /* 
-        
-        if (note !== null) {
-            let { _id, noteName: title, ...newNote } = note;
-            newNote = { _id, title, ...newNote.body};
-            
-            this.context.loadNote(newNote);
-            this.props.loadNote(newNote);
-        
-            // this.setState({ redirect: true });
-        }
-
-        */
-
+    handleEditNoteClick = () => {
         this.setState({
             redirect: 'NEW_NOTE',
         });
-    }
+    };
+
+    // switches to new note under user's confirmation if prompt is true
+    handleNewNoteClick = (prompt) => {
+        const toDelete =
+            !prompt || window.confirm('Delete current note and make a new one');
+        if (toDelete) {
+            this.props.deleteNote();
+            this.handleEditNoteClick();
+        }
+    };
 
     handleNewHPIClick() {
         this.setState({
@@ -78,10 +76,72 @@ export default class LandingPageOld extends Component {
         });
     }
 
+    checkExistingNote() {
+        return !_.isEqual(initialState, this.props.currentNote);
+    }
+
     render() {
         const { windowWidth } = this.state;
 
         const stack = windowWidth < LANDING_PAGE_MOBLE_BP;
+        const noteExists = this.checkExistingNote();
+        const noteButtons = noteExists ? (
+            <div className='landing-col multiple'>
+                <div
+                    className='landing-box top'
+                    onClick={this.handleEditNoteClick}
+                >
+                    <Icon
+                        name='file alternate outline'
+                        size='large'
+                        class='icons'
+                    />
+                    <h3 className='text'>Return to Active Note</h3>
+                </div>
+                <div
+                    className='landing-box bottom'
+                    onClick={() => this.handleNewNoteClick(true)}
+                >
+                    <Icon name='file outline' size='large' class='icons' />
+                    <h3 className='text'>Create New Blank Note</h3>
+                </div>
+            </div>
+        ) : (
+            <div
+                className='landing-box landing-col'
+                onClick={() => this.handleNewNoteClick(false)}
+            >
+                <Icon
+                    name='file alternate outline'
+                    size='huge'
+                    class='icons'
+                ></Icon>
+                <h3 className='text'>Create New Note</h3>
+                <br />
+                <p className='smaller-text'>
+                    Write a note for a patient encounter
+                </p>
+            </div>
+        );
+
+        const mobileReturnButton = noteExists && (
+            <div
+                onClick={this.handleEditNoteClick}
+                className='ui animated fade button landing'
+                tabIndex='0'
+            >
+                <div className='visible content' size='massive'>
+                    <Button size='big'>Return to an Active Note</Button>
+                </div>
+                <div className='hidden content'>
+                    <Icon
+                        name='file alternate outline'
+                        size='large'
+                        class='icons'
+                    ></Icon>
+                </div>
+            </div>
+        );
 
         switch (this.state.redirect) {
             case 'NEW_NOTE':
@@ -99,127 +159,133 @@ export default class LandingPageOld extends Component {
                         <div>
                             <NavMenu className='landing-page-nav-menu' />
                         </div>
-                        {stack ? (
-                            <div style={{ margin: '12vh 15vw' }}>
-                                <div
-                                    onClick={() => this.handleNewNoteClick()}
-                                    style={{ margin: '4vh 1vw' }}
-                                    className='ui animated fade button'
-                                    tabIndex='0'
-                                >
+                        <div
+                            className={`landing-boxes ${
+                                stack ? 'rows' : 'columns'
+                            }`}
+                        >
+                            {stack ? (
+                                <>
+                                    {mobileReturnButton}
                                     <div
-                                        className='visible content'
-                                        size='massive'
+                                        onClick={() =>
+                                            this.handleNewNoteClick(noteExists)
+                                        }
+                                        className='ui animated fade button landing'
+                                        tabIndex='0'
                                     >
-                                        <Button size='big'>
-                                            Create New Blank Note
-                                        </Button>
+                                        <div
+                                            className='visible content'
+                                            size='massive'
+                                        >
+                                            <Button size='big'>
+                                                Create New Blank Note
+                                            </Button>
+                                        </div>
+                                        <div className='hidden content'>
+                                            <Icon
+                                                name={`file outline ${
+                                                    !noteExists
+                                                        ? 'alternate'
+                                                        : ''
+                                                }`}
+                                                size='large'
+                                                class='icons'
+                                            ></Icon>
+                                        </div>
                                     </div>
-                                    <div className='hidden content'>
-                                        <Icon
-                                            name='file alternate outline'
-                                            size='large'
-                                            class='icons'
-                                        ></Icon>
+                                    <div
+                                        onClick={() => this.handleNewHPIClick()}
+                                        className='ui animated fade button landing'
+                                        tabIndex='0'
+                                    >
+                                        <div className='visible content'>
+                                            <Button size='big'>
+                                                Create New HPI Template
+                                            </Button>
+                                        </div>
+                                        <div className='hidden content'>
+                                            <Icon
+                                                name='list alternate outline'
+                                                size='large'
+                                                class='icons'
+                                            ></Icon>
+                                        </div>
                                     </div>
-                                </div>
-                                <div
-                                    onClick={() => this.handleNewHPIClick()}
-                                    style={{ margin: '4vh auto' }}
-                                    className='ui animated fade button'
-                                    tabIndex='0'
-                                >
-                                    <div className='visible content'>
-                                        <Button size='big'>
-                                            Create New HPI Template
-                                        </Button>
+                                    <div
+                                        onClick={() =>
+                                            this.handleEditHPIClick()
+                                        }
+                                        className='ui animated fade button landing'
+                                        tabIndex='0'
+                                    >
+                                        <div className='visible content'>
+                                            <Button size='big'>
+                                                Edit Existing HPI Template
+                                            </Button>
+                                        </div>
+                                        <div className='hidden content'>
+                                            <Icon
+                                                name='edit outline'
+                                                size='large'
+                                                class='icons'
+                                            ></Icon>
+                                        </div>
                                     </div>
-                                    <div className='hidden content'>
+                                </>
+                            ) : (
+                                <>
+                                    {noteButtons}
+                                    <div
+                                        className='landing-box landing-col'
+                                        onClick={() => this.handleNewHPIClick()}
+                                    >
                                         <Icon
                                             name='list alternate outline'
-                                            size='large'
+                                            size='huge'
                                             class='icons'
                                         ></Icon>
+                                        <h3 className='text'>
+                                            Create New Template
+                                        </h3>
+                                        <br />
+                                        <p className='smaller-text'>
+                                            Design a custom HPI questionnaire
+                                            for any chief complaint
+                                        </p>
                                     </div>
-                                </div>
-                                <div
-                                    onClick={() => this.handleEditHPIClick()}
-                                    style={{ margin: '4vh auto' }}
-                                    className='ui animated fade button'
-                                    tabIndex='0'
-                                >
-                                    <div className='visible content'>
-                                        <Button size='big'>
-                                            Edit Existing HPI Template
-                                        </Button>
-                                    </div>
-                                    <div className='hidden content'>
+
+                                    <div
+                                        className='landing-box landing-col'
+                                        onClick={() =>
+                                            this.handleEditHPIClick()
+                                        }
+                                    >
                                         <Icon
                                             name='edit outline'
-                                            size='large'
+                                            size='huge'
                                             class='icons'
                                         ></Icon>
+                                        <h3 className='text'>
+                                            Edit Existing Template
+                                        </h3>
+                                        <br />
+                                        <p className='smaller-text'>
+                                            Edit an existing HPI questionnaire
+                                        </p>
                                     </div>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className='landing-boxes'>
-                                <div
-                                    className='landing-box'
-                                    onClick={() => this.handleNewNoteClick()}
-                                >
-                                    <Icon
-                                        name='file alternate outline'
-                                        size='huge'
-                                        class='icons'
-                                    ></Icon>
-                                    <h3 className='text'>Create New Note</h3>
-                                    <br />
-                                    <p className='smaller-text'>
-                                        Write a note for a patient encounter
-                                    </p>
-                                </div>
-
-                                <div
-                                    className='landing-box'
-                                    onClick={() => this.handleNewHPIClick()}
-                                >
-                                    <Icon
-                                        name='list alternate outline'
-                                        size='huge'
-                                        class='icons'
-                                    ></Icon>
-                                    <h3 className='text'>
-                                        Create New Template
-                                    </h3>
-                                    <br />
-                                    <p className='smaller-text'>
-                                        Design a custom HPI questionnaire for
-                                        any chief complaint
-                                    </p>
-                                </div>
-
-                                <div
-                                    className='landing-box'
-                                    onClick={() => this.handleEditHPIClick()}
-                                >
-                                    <Icon
-                                        name='edit outline'
-                                        size='huge'
-                                        class='icons'
-                                    ></Icon>
-                                    <h3 className='text'>
-                                        Edit Existing Template
-                                    </h3>
-                                    <br />
-                                    <p className='smaller-text'>
-                                        Edit an existing HPI questionnaire
-                                    </p>
-                                </div>
-                            </div>
-                        )}
+                                </>
+                            )}
+                        </div>
                     </>
                 );
         }
     }
 }
+const mapStatetoProps = (state) => ({ currentNote: state });
+
+const mapDispatchToProps = {
+    deleteNote,
+};
+
+export default connect(mapStatetoProps, mapDispatchToProps)(LandingPageOld);
