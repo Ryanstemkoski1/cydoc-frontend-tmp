@@ -101,7 +101,7 @@ const OptimizedDropdown = (props) => {
             maxMenuHeight={184}
             createOptionPosition='first'
             {...otherProps}
-            value={(value !== '' || value !== []) && parsedValue} // forces placeholder to show when value is empty string
+            value={value !== '' && value !== [] && parsedValue} // forces placeholder to show when value is empty string
             options={flatOptions}
             isClearable={clearable}
             isLoading={loading}
