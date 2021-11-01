@@ -24,7 +24,8 @@
 
 .ui.segment.ros-segments {
     padding: 1rem 1.6rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
 }
 
 .ros-segments .ui.grid>.row {
@@ -115,4 +116,8 @@
     .ui.icon.button.small-ros-next-button {
         right: 15px;
     }
+}
+
+.ui.button.select-all-negative {
+    margin: 0.5rem auto;
 }

@@ -58,7 +58,7 @@ const currentNoteReducer = combineReducers({
 });
 export type CurrentNoteState = ReturnType<typeof currentNoteReducer>;
 
-const initialState: CurrentNoteState = {
+export const initialState: CurrentNoteState = {
     reviewOfSystems: initialReviewOfSystemsState,
     physicalExam: initialPhysicalExamState,
     medicalHistory: initialMedicalHistoryState,

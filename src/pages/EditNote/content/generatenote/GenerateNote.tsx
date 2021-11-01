@@ -95,7 +95,11 @@ export class GenerateNote extends Component<Props, GenerateNoteState> {
                         Plain Text{' '}
                     </Button>
                     <Button.Or />
-                    <Button onClick={() => this.setState({ rich: true })}>
+                    <Button
+                        onClick={() => {
+                            this.setState({ rich: true });
+                        }}
+                    >
                         Rich Text
                     </Button>
                 </Button.Group>

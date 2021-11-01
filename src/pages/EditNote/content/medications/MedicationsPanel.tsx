@@ -196,7 +196,7 @@ class MedicationsPanel extends Component<Props, State> {
                             optiontype='medicationOptions'
                             type='Drug Name'
                             options={this.props.medicationOptions}
-                            placeholder='medication'
+                            placeholder='Medication name'
                             onChange={this.onChangeFormatter((value) =>
                                 this.props.updateDrugName(
                                     medicationEntry[0],

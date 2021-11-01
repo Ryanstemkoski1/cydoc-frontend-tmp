@@ -18,7 +18,7 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import GetLogin from 'auth/login';
 import SetupAccount from 'auth/setupAccount';
-import verifyEmail from 'auth/verifyEmail';
+//import verifyEmail from 'auth/verifyEmail';
 import AuthContext from '../../contexts/AuthContext';
 import NotesContext from '../../contexts/NotesContext';
 import Logo from '../../assets/cydoc-logo.svg';
@@ -67,7 +67,6 @@ const Login = () => {
 
         // log user in
         setIsLoggingIn(true);
-        setRole('doctor');
         const loginResponse = await GetLogin(username, password, role, context);
 
         // only update if still mounted
@@ -95,9 +94,10 @@ const Login = () => {
                 phone_number: attributes.countryCode + attributes.phoneNumber,
             };
             attributes['custom:UUID'] = newUserAttr['custom:UUID'];
+            attributes['custom:associatedManager'] =
+                newUserAttr['custom:associatedManager'];
             delete newUserAttr['custom:UUID'];
             setSessionUserAttributes(newUserAttr);
-
             // update account password and other attributes
             const setupAccountResponse = await SetupAccount(
                 currentUser,
@@ -106,18 +106,17 @@ const Login = () => {
                 newPassword,
                 attributes
             );
-
+            setSessionUserAttributes(attributes);
             if (setupAccountResponse) {
                 // update state after user has setup account
                 setIsFirstLogin(setupAccountResponse.isFirstLoginFlag);
-
-                const emailVerificationResponse = await verifyEmail(
-                    username,
-                    role
-                );
-                if (emailVerificationResponse) {
-                    setEmailVerified(true);
-                }
+                // const emailVerificationResponse = await verifyEmail(
+                //     username,
+                //     role
+                // );
+                // if (emailVerificationResponse) {
+                //     setEmailVerified(true);
+                // }
             }
         },
         [currentUser, sessionUserAttributes, username, role]
@@ -199,7 +198,6 @@ const Login = () => {
                                 className='role'
                                 checked={role === 'doctor'}
                                 onChange={handleRoleChange}
-                                defaultChecked
                             />
                             <Form.Radio
                                 label='manager'

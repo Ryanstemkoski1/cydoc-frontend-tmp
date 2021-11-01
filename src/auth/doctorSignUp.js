@@ -69,38 +69,35 @@ const doctorSignUp = async (
                 { Name: 'custom:UUID', Value: doctor_uuid },
                 { Name: 'custom:associatedManager', Value: 'v1' },
             ];
-            //send request to create new user
-            userPool.signUp(
-                username,
-                password.toString(),
-                UserAttributes,
-                null,
-                //eslint-disable-next-line
-                (err, data) => {
-                    if (err != null) {
-                        if (err.code === 'UsernameExistsException') {
-                            alert(`Error creating account: ${err.message}`);
-                            return;
-                        }
-                        return;
-                    }
-                }
-            );
 
             let stripe_payload = JSON.stringify(customerInfo);
             await stripeClient
                 .post('/subscription', stripe_payload)
                 .then(async () => {
-                    alert(
-                        'Account Successfully Created!\nIn order to complete the sign-up process, please click the confirmation link sent to the email provided.'
+                    //send request to create new user
+                    userPool.signUp(
+                        username,
+                        password.toString(),
+                        UserAttributes,
+                        null,
+                        //eslint-disable-next-line
+                        (err, data) => {
+                            if (err != null) {
+                                if (err.code === 'UsernameExistsException') {
+                                    alert(`Error: Username already taken.`);
+                                    return;
+                                }
+                                return;
+                            } else {
+                                alert(
+                                    'Account Successfully Created!\nIn order to complete the sign-up process, please click the confirmation link sent to the email provided.'
+                                );
+                            }
+                        }
                     );
                 })
-                .catch((err) => {
-                    alert(
-                        `Error creating account: ${
-                            err.message || JSON.stringify(err)
-                        }`
-                    );
+                .catch(() => {
+                    alert(`Payment Error\n Please verify card details`);
                     return;
                 });
         })

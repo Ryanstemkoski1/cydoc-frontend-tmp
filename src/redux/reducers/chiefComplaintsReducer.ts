@@ -1,8 +1,7 @@
 import { chiefComplaintsActionTypes } from '../actions/chiefComplaintsActions';
-import { DoctorView } from 'constants/hpiEnums';
 import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
 
-export type ChiefComplaintsState = DoctorView[];
+export type ChiefComplaintsState = string[];
 
 export const initialState: ChiefComplaintsState = [];
 

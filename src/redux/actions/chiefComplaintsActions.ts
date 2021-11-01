@@ -1,15 +1,14 @@
 import { CHIEF_COMPLAINTS } from './actionTypes';
-import { DoctorView } from 'constants/hpiEnums';
 
 export interface SelectChiefComplaintAction {
     type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS;
     payload: {
-        disease: DoctorView;
+        disease: string;
     };
 }
 
 export function selectChiefComplaint(
-    disease: DoctorView
+    disease: string
 ): SelectChiefComplaintAction {
     return {
         type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
