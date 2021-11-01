@@ -1,6 +1,94 @@
 import { YesNoMaybeResponse, YesNoResponse } from './enums';
 import { HpiState } from 'redux/reducers/hpiReducer';
 
+export enum BodyLocationOptions {
+    HEAD = 'Head',
+    EYE = 'Eye',
+    EAR = 'Ear',
+    NOSE = 'Nose',
+    MOUTH = 'Mouth',
+    THROAT = 'Throat',
+    NECK = 'Neck',
+    CHEST = 'Chest',
+    STOMACH = 'Stomach',
+    PELVIS = 'Pelvis',
+    GROIN = 'Groin',
+    SHOULDER = 'Shoulder',
+    UPPER_ARM = 'Upper Arm',
+    ELBOW = 'Elbow',
+    LOWER_ARM = 'Lower Arm',
+    WRIST = 'Wrist',
+    HAND = 'Hand',
+    FINGER = 'Finger',
+    UPPER_BACK = 'Upper Back',
+    MID_BACK = 'Mid Back',
+    LOWER_BACK = 'Lower Back',
+    HIP = 'Hip',
+    UPPER_LEG = 'Upper Leg',
+    KNEE = 'Knee',
+    LOWER_LEG = 'Lower Leg',
+    ANKLE = 'Ankle',
+    FOOT = 'Foot',
+    TOE = 'Toe',
+}
+
+export const options: BodyLocationLRItemType[][] = [
+    [
+        { name: BodyLocationOptions.HEAD, needsRightLeft: false },
+        { name: BodyLocationOptions.EYE, needsRightLeft: true },
+        { name: BodyLocationOptions.EAR, needsRightLeft: true },
+        { name: BodyLocationOptions.NOSE, needsRightLeft: false },
+        { name: BodyLocationOptions.MOUTH, needsRightLeft: false },
+        { name: BodyLocationOptions.THROAT, needsRightLeft: false },
+        { name: BodyLocationOptions.NECK, needsRightLeft: false },
+    ],
+    [
+        { name: BodyLocationOptions.CHEST, needsRightLeft: false },
+        { name: BodyLocationOptions.STOMACH, needsRightLeft: false },
+        { name: BodyLocationOptions.PELVIS, needsRightLeft: false },
+        { name: BodyLocationOptions.GROIN, needsRightLeft: false },
+    ],
+    [
+        { name: BodyLocationOptions.SHOULDER, needsRightLeft: true },
+        { name: BodyLocationOptions.UPPER_ARM, needsRightLeft: true },
+        { name: BodyLocationOptions.ELBOW, needsRightLeft: true },
+        { name: BodyLocationOptions.LOWER_ARM, needsRightLeft: true },
+    ],
+    [
+        { name: BodyLocationOptions.WRIST, needsRightLeft: true },
+        { name: BodyLocationOptions.HAND, needsRightLeft: true },
+        { name: BodyLocationOptions.FINGER, needsRightLeft: true },
+    ],
+    [
+        { name: BodyLocationOptions.UPPER_BACK, needsRightLeft: false },
+        { name: BodyLocationOptions.MID_BACK, needsRightLeft: false },
+        { name: BodyLocationOptions.LOWER_BACK, needsRightLeft: false },
+    ],
+    [
+        { name: BodyLocationOptions.HIP, needsRightLeft: true },
+        { name: BodyLocationOptions.UPPER_LEG, needsRightLeft: true },
+        { name: BodyLocationOptions.KNEE, needsRightLeft: true },
+        { name: BodyLocationOptions.LOWER_LEG, needsRightLeft: true },
+    ],
+    [
+        { name: BodyLocationOptions.ANKLE, needsRightLeft: true },
+        { name: BodyLocationOptions.FOOT, needsRightLeft: true },
+        { name: BodyLocationOptions.TOE, needsRightLeft: true },
+    ],
+];
+
+export function bodyLocationResponse(): BodyLocationType {
+    const responseDict: BodyLocationType = {};
+    options
+        .reduce((prevValue, currValue) => prevValue.concat(currValue), [])
+        .map((bodyOptionItem) => {
+            responseDict[bodyOptionItem.name] = bodyOptionItem.needsRightLeft
+                ? { left: false, center: false, right: false }
+                : false;
+        });
+    return responseDict;
+}
+
 export enum ResponseTypes {
     NUMBER = 'NUMBER',
     LIST_TEXT = 'LIST-TEXT',
@@ -126,7 +214,7 @@ export interface ExpectedResponseInterface {
     LIST_TEXT: ListTextInput;
     SHORT_TEXT: string;
     NUMBER: NumberInput;
-    BODYLOCATION: BodyLocationTotal;
+    BODYLOCATION: BodyLocationType;
     FH_POP: string[];
     PMH_POP: string[];
     MEDS_BLANK: string[];
@@ -147,7 +235,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     LIST_TEXT: { 1: '', 2: '', 3: '' },
     SHORT_TEXT: '',
     NUMBER: 0,
-    BODYLOCATION: {},
+    BODYLOCATION: bodyLocationResponse(),
     FH_POP: [],
     PMH_POP: [],
     MEDS_BLANK: [],
@@ -166,37 +254,6 @@ export enum TimeOption {
     WEEKS = 'weeks',
     MONTHS = 'months',
     YEARS = 'years',
-}
-
-export enum BodyLocationOptions {
-    HEAD = 'Head',
-    EYE = 'Eye',
-    EAR = 'Ear',
-    NOSE = 'Nose',
-    MOUTH = 'Mouth',
-    THROAT = 'Throat',
-    NECK = 'Neck',
-    CHEST = 'Chest',
-    STOMACH = 'Stomach',
-    PELVIS = 'Pelvis',
-    GROIN = 'Groin',
-    SHOULDER = 'Shoulder',
-    UPPER_ARM = 'Upper Arm',
-    ELBOW = 'Elbow',
-    LOWER_ARM = 'Lower Arm',
-    WRIST = 'Wrist',
-    HAND = 'Hand',
-    FINGER = 'Finger',
-    UPPER_BACK = 'Upper Back',
-    MID_BACK = 'Mid Back',
-    LOWER_BACK = 'Lower Back',
-    HIP = 'Hip',
-    UPPER_LEG = 'Upper Leg',
-    KNEE = 'Knee',
-    LOWER_LEG = 'Lower Leg',
-    ANKLE = 'Ankle',
-    FOOT = 'Foot',
-    TOE = 'Toe',
 }
 
 export interface NodeInterface {
@@ -248,18 +305,15 @@ export type leftRightCenter = {
     center: boolean;
     right: boolean;
 };
-export type BodyLocationLRType = {
-    [bodyOption in BodyLocationOptions]?: leftRightCenter;
-};
+
 export type BodyLocationType = {
-    [bodyOption in BodyLocationOptions]?: boolean;
+    [bodyOption: string]: leftRightCenter | boolean;
 };
+
 export type BodyLocationLRItemType = {
     name: BodyLocationOptions;
     needsRightLeft: boolean;
 };
-export type BodyLocationTotal = BodyLocationLRType | BodyLocationType;
-export type BodyLocationToggle = 'left' | 'center' | 'right' | null;
 
 export type ClickBoxesInput = string[];
 export type ScaleInputType = number | undefined;
@@ -275,6 +329,6 @@ export type HpiResponseType =
     | TimeInput
     | ClickBoxesInput
     | YesNoMaybeResponse
-    | BodyLocationTotal
+    | BodyLocationType
     | ScaleInputType
     | YesNoInput;

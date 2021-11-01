@@ -4,10 +4,9 @@ import {
     TimeOption,
     NumberInput,
     BodyLocationOptions,
-    BodyLocationToggle,
-    BodyLocationLRItemType,
     EdgeInterface,
     NodeInterface,
+    BodyLocationLRItemType,
 } from 'constants/hpiEnums';
 
 export interface AddNodeAction {
@@ -68,14 +67,14 @@ export interface BodyLocationHandleToggleAction {
     payload: {
         medId: string;
         bodyOption: BodyLocationOptions;
-        toggle: BodyLocationToggle;
+        toggle: 'left' | 'right' | 'center';
     };
 }
 
 export function bodyLocationHandleToggle(
     medId: string,
     bodyOption: BodyLocationOptions,
-    toggle: BodyLocationToggle
+    toggle: 'left' | 'right' | 'center'
 ): BodyLocationHandleToggleAction {
     return {
         type: HPI_ACTION.BODY_LOCATION_HANDLE_TOGGLE,

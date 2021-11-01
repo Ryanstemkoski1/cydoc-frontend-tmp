@@ -25,8 +25,10 @@ export default class LRButton extends React.Component {
                     />
                     <Button
                         content={this.props.content}
-                        active={this.props.active}
-                        color={this.props.color}
+                        active={this.props.toggle.center}
+                        color={
+                            this.props.toggle.center ? this.props.color : null
+                        }
                         onClick={(e, data) => {
                             this.props.onClick(group, content, e, data);
                             if (this.props.isDropdown) {
@@ -55,7 +57,9 @@ export default class LRButton extends React.Component {
                     <Button
                         content={this.props.content}
                         active={this.props.toggle.center}
-                        color={this.props.color}
+                        color={
+                            this.props.toggle.center ? this.props.color : null
+                        }
                         onClick={
                             //this.props.onClick(null, this.props.name, !active)
                             (e, data) => {
