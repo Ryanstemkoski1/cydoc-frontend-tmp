@@ -40,6 +40,25 @@ export const toggleFinding = (
     },
 });
 
+export interface RemoveFindingAction {
+    type: PHYSICAL_EXAM_ACTION.REMOVE_FINDING;
+    payload: {
+        section: string;
+        finding: string;
+    };
+}
+
+export const removeFinding = (
+    section: string,
+    finding: string
+): RemoveFindingAction => ({
+    type: PHYSICAL_EXAM_ACTION.REMOVE_FINDING,
+    payload: {
+        section,
+        finding,
+    },
+});
+
 export interface ToggleLeftRightFindingAction {
     type: PHYSICAL_EXAM_ACTION.TOGGLE_LEFT_RIGHT_FINDING;
     payload: {
@@ -85,4 +104,5 @@ export type PhysicalExamActionTypes =
     | UpdateVitalsAction
     | ToggleFindingAction
     | ToggleLeftRightFindingAction
+    | RemoveFindingAction
     | UpdateCommentsAction;

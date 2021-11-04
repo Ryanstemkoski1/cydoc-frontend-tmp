@@ -17,6 +17,7 @@ import './PhysicalExam.css';
 import { connect } from 'react-redux';
 import { selectSection } from 'redux/selectors/physicalExamSelectors';
 import {
+    removeFinding,
     toggleFinding,
     toggleLeftRightFinding,
 } from 'redux/actions/physicalExamActions';
@@ -43,10 +44,7 @@ class PhysicalExamRow extends React.Component<Props, State> {
     ) => {
         //for selecting buttons to appear only
         const value = data.value as string[];
-        const newValues = value.filter(
-            (v) => !this.state.dropdownSelected.includes(v)
-        );
-        newValues.forEach((v) => {
+        value.forEach((v) => {
             this.props.row.needsRightLeft
                 ? this.props.toggleLeftRightFinding(
                       this.props.group,
@@ -55,18 +53,13 @@ class PhysicalExamRow extends React.Component<Props, State> {
                   )
                 : this.props.toggleFinding(this.props.group, v);
         });
-        this.setState({ dropdownSelected: value });
     };
 
     handleDropdownButtonDeselect = (data: ButtonProps) => {
-        //prevent removing button when not active
+        // remove button only when active
         if (data.active) {
-            const buttonLabel = data.content as string;
-            //if is a regular button
-            const newDropdownValues = this.state.dropdownSelected.filter(
-                (str) => str !== buttonLabel
-            );
-            this.setState({ dropdownSelected: newDropdownValues });
+            const finding = data.content as string;
+            this.props.removeFinding(this.props.group, finding);
         }
     };
 
@@ -82,22 +75,14 @@ class PhysicalExamRow extends React.Component<Props, State> {
         }
     };
 
-    generateButtons = (
-        {
-            findings,
-            includeSelectAll,
-            normalOrAbnormal,
-            needsRightLeft,
-        }: {
-            findings: string[];
-            includeSelectAll: boolean;
-            normalOrAbnormal: 'normal' | 'abnormal';
-            needsRightLeft: boolean;
-        },
-        isDropdown?: boolean
-    ) => {
+    generateButtons = ({
+        findings,
+        includeSelectAll,
+        normalOrAbnormal,
+        needsRightLeft,
+    }: PhysicalExamSchemaRow) => {
         let buttons;
-        const { physicalExamSection } = this.props;
+        const { physicalExamSection, isDropdown } = this.props;
         if (needsRightLeft) {
             buttons = findings.map((finding: string, index: number) => {
                 const find = physicalExamSection.findings[
@@ -120,10 +105,7 @@ class PhysicalExamRow extends React.Component<Props, State> {
                         }
                         isDropdown={isDropdown}
                         onDropdownButtonClick={
-                            isDropdown
-                                ? this.handleDropdownButtonDeselect
-                                : // eslint-disable-next-line @typescript-eslint/no-empty-function
-                                  () => {}
+                            this.handleDropdownButtonDeselect
                         }
                         onClick={this.props.handleLRToggle}
                         className={'spaced-buttons'}
@@ -186,36 +168,19 @@ class PhysicalExamRow extends React.Component<Props, State> {
         includeSelectAll,
         normalOrAbnormal,
         needsRightLeft,
-    }: {
-        findings: string[];
-        includeSelectAll: boolean;
-        normalOrAbnormal: 'normal' | 'abnormal';
-        needsRightLeft: boolean;
-    }) => {
+    }: PhysicalExamSchemaRow) => {
         return (
-            <Fragment>
-                <Grid.Row>
-                    {this.generateButtons(
-                        {
-                            findings: this.state.dropdownSelected,
-                            includeSelectAll,
-                            normalOrAbnormal,
-                            needsRightLeft,
-                        },
-                        true
-                    )}
-                </Grid.Row>
-                <Grid.Row>
-                    <Dropdown
-                        search
-                        selection
-                        multiple
-                        options={this.generateOptions(findings)}
-                        value={this.state.dropdownSelected}
-                        onChange={this.handleDropdownChange}
-                    />
-                </Grid.Row>
-            </Fragment>
+            <Grid.Row>
+                <Dropdown
+                    search
+                    selection
+                    multiple
+                    placeholder='Search'
+                    options={this.generateOptions(findings)}
+                    value={this.state.dropdownSelected}
+                    onChange={this.handleDropdownChange}
+                />
+            </Grid.Row>
         );
     };
 
@@ -270,6 +235,7 @@ class PhysicalExamRow extends React.Component<Props, State> {
 interface RowProps {
     group: string;
     row: PhysicalExamSchemaRow;
+    isDropdown?: boolean;
     handleToggle: (
         section: string,
         e: React.MouseEvent<Element, MouseEvent>,
@@ -284,6 +250,7 @@ interface RowProps {
 }
 
 interface DispatchProps {
+    removeFinding: (section: string, finding: string) => void;
     toggleFinding: (section: string, finding: string) => void;
     toggleLeftRightFinding: (
         section: string,
@@ -306,6 +273,7 @@ const mapStatetoProps = (state: CurrentNoteState, props: RowProps) => {
 };
 
 const mapDispatchToProps = {
+    removeFinding,
     toggleFinding,
     toggleLeftRightFinding,
 };
