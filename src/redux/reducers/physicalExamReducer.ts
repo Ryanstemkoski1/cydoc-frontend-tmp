@@ -146,20 +146,19 @@ export function physicalExamReducer(
                     `Finding ${finding} in section ${section} is not an LRFinding; use toggleFinding instead.`
                 );
             }
-            const newFindingState = (() => {
-                if (buttonClicked === 'center') {
-                    return {
-                        left: currentFindingState.left,
-                        center: !currentFindingState.center,
-                        right: currentFindingState.right,
-                    };
-                } else {
-                    return {
-                        ...currentFindingState,
-                        [buttonClicked]: !currentFindingState[buttonClicked],
-                    };
-                }
-            })();
+            let newFindingState;
+            if (buttonClicked === 'center' && currentFindingState.center) {
+                newFindingState = {
+                    left: false,
+                    center: false,
+                    right: false,
+                };
+            } else {
+                newFindingState = {
+                    ...currentFindingState,
+                    [buttonClicked]: !currentFindingState[buttonClicked],
+                };
+            }
             return {
                 ...state,
                 sections: {
