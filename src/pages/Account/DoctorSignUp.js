@@ -36,6 +36,7 @@ const DoctorSignUp = () => {
     const [expirationYear, setExpirationYear] = useState();
     const [cardNumber, setCardNumber] = useState();
     const [cvv, setCVV] = useState();
+    const [zipCode, setZipCode] = useState('');
     const [continueButtonState, setContinueButtonState] = useState(false);
     const [showPasswordErrors, setShowPasswordErrors] = useState(false);
 
@@ -98,7 +99,8 @@ const DoctorSignUp = () => {
             cardNumber === undefined ||
             expirationYear === undefined ||
             expirationMonth === undefined ||
-            cvv === undefined
+            cvv === undefined ||
+            zipCode === undefined
         ) {
             alert('Enter Required Feilds');
             setContinueButtonState(false);
@@ -174,7 +176,8 @@ const DoctorSignUp = () => {
             cardNumber,
             expirationYear,
             expirationMonth,
-            cvv
+            cvv,
+            zipCode
         );
         if (
             createUserResponse?.status === 'ERROR' &&
@@ -209,6 +212,10 @@ const DoctorSignUp = () => {
 
     const handleCVVChange = (e, { value }) => {
         setCVV(value);
+    };
+
+    const handleZipCodeChange = (e, { value }) => {
+        setZipCode(value);
     };
 
     const handleExpirationMonthChange = (e, { value }) => {
@@ -506,6 +513,16 @@ const DoctorSignUp = () => {
                                     placeholder='111'
                                     value={cvv}
                                     onChange={handleCVVChange}
+                                />
+                                <div className='redAsterisk'>Zip Code</div>
+                                <Form.Input
+                                    fluid
+                                    required
+                                    width={5}
+                                    name='zipCode'
+                                    placeholder='00000'
+                                    value={zipCode}
+                                    onChange={handleZipCodeChange}
                                 />
                             </Form.Group>
                         </Container>

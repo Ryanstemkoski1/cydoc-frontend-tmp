@@ -10,6 +10,7 @@ import Logo from '../../assets/cydoc-logo.svg';
 import NoteNameMenuItem, { Context } from './NoteNameMenuItem';
 
 import './NavMenu.css';
+import DoctorSignUp from 'pages/Account/DoctorSignUp';
 
 interface ConnectedNavMenuProps {
     className: string;
@@ -108,6 +109,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                 to='/login'
                 content='Login'
             />
+            <DoctorSignUp />
         </Menu.Item>
     );
     // Menu items when logged in
