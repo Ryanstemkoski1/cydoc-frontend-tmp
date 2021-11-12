@@ -29,6 +29,8 @@ import ReviewOfSystemsNote from './notesections/ReviewOfSystemsNote';
 import PhysicalExamNote from './notesections/PhysicalExamNote';
 import PlanNote from './notesections/PlanNote';
 
+import './GenerateNote.css';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 // import HPINote from './notesections/HPINote';
 
 interface GenerateNoteProps {
@@ -91,14 +93,20 @@ export class GenerateNote extends Component<Props, GenerateNoteState> {
         return (
             <div>
                 <Button.Group>
-                    <Button onClick={() => this.setState({ rich: false })}>
+                    <Button
+                        onClick={() => this.setState({ rich: false })}
+                        className={`hpi-ph-button${
+                            this.state.rich === false ? '-selected' : ''
+                        }`}
+                    >
                         Plain Text{' '}
                     </Button>
                     <Button.Or />
                     <Button
-                        onClick={() => {
-                            this.setState({ rich: true });
-                        }}
+                        onClick={() => this.setState({ rich: true })}
+                        className={`hpi-ph-button${
+                            this.state.rich === true ? '-selected' : ''
+                        }`}
                     >
                         Rich Text
                     </Button>
@@ -142,25 +150,22 @@ export class GenerateNote extends Component<Props, GenerateNoteState> {
                     <h3> Plan </h3>
                     <PlanNote planState={planState} />
                 </Segment>
-
+                {/*<Button
+                icon='arrow left'
+                floated='left'
+                className='small-note-previous-button'
+                aria-label='previous-button'
+                onClick={previousFormClick}
+            />*/}
                 <Button
-                    icon
-                    floated='left'
-                    onClick={previousFormClick}
-                    className='small-note-previous-button'
-                >
-                    <Icon name='arrow left' />
-                </Button>
-                <Button
-                    icon
+                    icon='arrow left'
                     labelPosition='left'
                     floated='left'
                     onClick={previousFormClick}
                     className='note-previous-button'
-                >
-                    Previous Form
-                    <Icon name='arrow left' />
-                </Button>
+                    aria-label='previous-button'
+                    content='Previous'
+                />
             </div>
         );
     }

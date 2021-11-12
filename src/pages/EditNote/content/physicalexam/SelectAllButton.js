@@ -20,7 +20,7 @@ export default class SelectAllButton extends React.Component {
                             this.props.handleClick(child)
                         );
                     }}
-                    className={'spaced-buttons'}
+                    className={'pe-ros-button spaced-buttons'}
                 />
                 {this.props.children}
             </Fragment>

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Button } from 'semantic-ui-react';
 import { YesNoResponse } from 'constants/enums';
+import './ReviewOfSystems.css';
 
 //Component that triggers its handleClick function on all children when clicked
 const AllNegativeButton = (props) => {
@@ -31,7 +32,7 @@ const AllNegativeButton = (props) => {
                         }
                     })
                 }
-                className='select-all-negative'
+                className='select-all-negative pe-ros-button'
             />
             {children}
         </Fragment>

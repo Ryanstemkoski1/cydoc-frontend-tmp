@@ -42,8 +42,20 @@ class PhysicalExamRow extends React.Component<Props, State> {
         e: React.SyntheticEvent<HTMLElement, Event>,
         data: DropdownProps
     ) => {
-        //for selecting buttons to appear only
         const value = data.value as string[];
+
+        //first call is to add button to list of findings, then button is rendered
+        value.forEach((v) => {
+            this.props.row.needsRightLeft
+                ? this.props.toggleLeftRightFinding(
+                      this.props.group,
+                      v,
+                      'center'
+                  )
+                : this.props.toggleFinding(this.props.group, v);
+        });
+
+        //second call is to automatically select
         value.forEach((v) => {
             this.props.row.needsRightLeft
                 ? this.props.toggleLeftRightFinding(
@@ -96,6 +108,11 @@ class PhysicalExamRow extends React.Component<Props, State> {
                         group={this.props.group}
                         active={find.center}
                         toggle={physicalExamSection.findings[finding]}
+                        className={
+                            find.center
+                                ? 'pe-ros-button'
+                                : 'pe-ros-button spaced-buttons'
+                        }
                         color={
                             find.center
                                 ? normalOrAbnormal === 'normal'
@@ -108,7 +125,6 @@ class PhysicalExamRow extends React.Component<Props, State> {
                             this.handleDropdownButtonDeselect
                         }
                         onClick={this.props.handleLRToggle}
-                        className={'spaced-buttons'}
                     />
                 );
             });
@@ -125,6 +141,11 @@ class PhysicalExamRow extends React.Component<Props, State> {
                                 ? true
                                 : false
                         }
+                        className={
+                            physicalExamSection.findings[finding]
+                                ? 'pe-ros-button'
+                                : 'pe-ros-button spaced-buttons'
+                        }
                         color={
                             physicalExamSection.findings[finding]
                                 ? normalOrAbnormal === 'normal'
@@ -138,7 +159,6 @@ class PhysicalExamRow extends React.Component<Props, State> {
                                 this.handleDropdownButtonDeselect(data);
                             }
                         }}
-                        className={'spaced-buttons'}
                     />
                 );
             });

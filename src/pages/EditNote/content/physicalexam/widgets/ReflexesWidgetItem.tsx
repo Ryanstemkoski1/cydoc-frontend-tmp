@@ -11,6 +11,7 @@ import { CurrentNoteState } from 'redux/reducers';
 import { ReflexLocation } from 'redux/reducers/widgetReducers/reflexesWidgetReducer';
 import { selectReflexesWidgetItem } from 'redux/selectors/widgetSelectors/reflexesWidgetSelectors';
 import { Button, Table } from 'semantic-ui-react';
+import '../PhysicalExam.css';
 
 interface ReflexWidgetItemProps {
     id: string;
@@ -47,7 +48,7 @@ class ReflexesWidgetItem extends Component<
                 <Table.Header>
                     <div style={{ float: 'right' }}>
                         <Button
-                            basic
+                            className='pe-ros-button'
                             circular
                             icon='x'
                             size='mini'
@@ -66,6 +67,9 @@ class ReflexesWidgetItem extends Component<
                                         ? 'red'
                                         : undefined
                                 }
+                                active={
+                                    this.props.itemState.location === option
+                                }
                                 key={option}
                                 onClick={() =>
                                     this.props.updateLocation(
@@ -73,7 +77,7 @@ class ReflexesWidgetItem extends Component<
                                         option
                                     )
                                 }
-                                className={'spaced-buttons'}
+                                className={'pe-ros-button spaced-buttons'}
                             >
                                 {' '}
                                 {option}{' '}
@@ -88,11 +92,12 @@ class ReflexesWidgetItem extends Component<
                                         ? 'red'
                                         : undefined
                                 }
+                                active={this.props.itemState.side === value}
                                 key={text}
                                 onClick={() =>
                                     this.props.updateSide(this.props.id, value)
                                 }
-                                className={'spaced-buttons'}
+                                className={'pe-ros-button spaced-buttons'}
                             >
                                 {' '}
                                 {text}{' '}
@@ -107,6 +112,9 @@ class ReflexesWidgetItem extends Component<
                                         ? 'red'
                                         : undefined
                                 }
+                                active={
+                                    this.props.itemState.intensity === value
+                                }
                                 key={text}
                                 onClick={() =>
                                     this.props.updateIntensity(
@@ -114,7 +122,7 @@ class ReflexesWidgetItem extends Component<
                                         value
                                     )
                                 }
-                                className={'spaced-buttons'}
+                                className={'pe-ros-button spaced-buttons'}
                             >
                                 {' '}
                                 {text}{' '}

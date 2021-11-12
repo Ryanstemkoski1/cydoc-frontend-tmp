@@ -114,7 +114,7 @@ export default class RightLeftWidget extends Component {
                         <Table.Header>
                             <div style={{ float: 'right' }}>
                                 <Button
-                                    basic
+                                    className='pe-ros-button'
                                     circular
                                     icon='x'
                                     size='mini'
@@ -132,7 +132,7 @@ export default class RightLeftWidget extends Component {
                 {pes}
                 add abnormal {this.props.type.toLowerCase()}{' '}
                 <Button
-                    basic
+                    className='pe-ros-button'
                     circular
                     icon='plus'
                     size='mini'

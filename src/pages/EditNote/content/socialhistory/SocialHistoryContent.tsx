@@ -12,6 +12,7 @@ import {
     updateExercise,
 } from 'redux/actions/socialHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
+import '../hpi/knowledgegraph/src/css/Button.css';
 
 interface OwnProps {
     mobile: boolean;

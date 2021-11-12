@@ -279,7 +279,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 }
                                 className='hpi-next-button'
                             >
-                                Next Form
+                                Next
                                 <Icon name='angle right' />
                             </Button>
                         </>
@@ -380,7 +380,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         }
                                         className='hpi-next-button'
                                     >
-                                        Next Form
+                                        Next
                                         <Icon name='angle right' />
                                     </Button>
                                 </Container>
@@ -474,7 +474,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         }
                                                         className='hpi-next-button'
                                                     >
-                                                        Next Form
+                                                        Next
                                                         <Icon name='angle right' />
                                                     </Button>
                                                 </Tab.Pane>

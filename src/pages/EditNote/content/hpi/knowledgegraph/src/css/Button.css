@@ -3,53 +3,57 @@
     width: 100%
 }
 
-.button_yesno {
-    border-radius: 25px;
-    background-color: whitesmoke;
-    border: none;
-    padding: 3px 9px;
-    font-size: 14px;
-    transition: 0.3s;
-    cursor: pointer;
-    margin-right: 8px;
+.ui.button.hpi-ph-button {
+    background-color: #e0e1e3;
+    color: black;
+    border-radius: 20px;
+    box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
-.button_yesno:hover { 
-    background-color: lightslategrey !important;
+.ui.button.hpi-ph-button:hover:not(.active) { 
+    background-color: lightslategrey;
+    border-radius: 20px;
+    box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
-.button_question {
-    border-radius: 25px;
-    background-color: whitesmoke;
-    border: none;
-    padding: 3px 9px;
-    font-size: 14px;
-    transition: 0.3s;
-    cursor: pointer;
-    margin-right: 8px;
-    margin-bottom: 2px
+.ui.button.hpi-ph-button-selected.active:hover { 
+    background-color: #373b67;
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
-.button_question:hover {
-    background-color: lightslategrey !important;
+.ui.button.hpi-chiefcomplaint-button-selected.active:hover { 
+    background-color: #373b67;
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
-.tag_text {
-    border-radius: 25px;
-    background-color: whitesmoke;
-    border: none;
-    /* color: #8b8b8b; */
-    font-size: 14px;
-    padding: 3px 9px;
-    margin-right: 5px;
-    transition: 0.3s;
-    cursor: pointer;
-    margin-bottom: 5px;
-    margin-top: 10px;
+.ui.button.hpi-ph-button-selected { 
+    background-color: #373b67;
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
-.tag_text:hover {
-    background-color: lightslategrey !important;
+.ui.button.hpi-chiefcomplaint-button{
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 0 0 1px rgb(0 47 78 / 15%) inset;
+}
+
+.ui.button.hpi-chiefcomplaint-button:hover:not(.active) { 
+    background-color: lightslategrey;
+    border-radius: 20px;
+    box-shadow: 0 0 0 1px rgb(0 47 78 / 15%) inset;
+}
+
+.ui.button.hpi-chiefcomplaint-button-selected { 
+    background-color: #373b67;
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0 0 0 1px rgb(0 47 78 / 15%) inset;
 }
 
 .field {
@@ -67,7 +71,6 @@
 
 .qa-button {
     margin-top: 7px;
-
 }
 
 .qa-div {

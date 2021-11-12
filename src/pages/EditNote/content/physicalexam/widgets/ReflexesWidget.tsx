@@ -17,7 +17,7 @@ class ReflexesWidget extends Component<PropsFromRedux> {
                 {widgetItems}
                 add abnormal reflexes{' '}
                 <Button
-                    basic
+                    className='pe-ros-button'
                     circular
                     icon='plus'
                     size='mini'

@@ -112,7 +112,7 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
                     onClick={previousFormClick}
                     className='ros-previous-button'
                 >
-                    Previous Form
+                    Previous
                     <Icon name='arrow left' />
                 </Button>
 
@@ -131,7 +131,7 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
                     onClick={nextFormClick}
                     className='ros-next-button'
                 >
-                    Next Form
+                    Next
                     <Icon name='arrow right' />
                 </Button>
             </>

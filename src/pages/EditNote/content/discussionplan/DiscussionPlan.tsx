@@ -84,7 +84,7 @@ const DiscussionPlan = ({
                 onClick={previousFormClick}
                 className='plan-previous-button'
                 aria-label='previous-button'
-                content='Previous Form'
+                content='Previous'
             />
             <Button
                 icon='arrow right'
@@ -100,7 +100,7 @@ const DiscussionPlan = ({
                 floated='right'
                 onClick={nextFormClick}
                 className='plan-next-button'
-                content='Next Form'
+                content='Next'
             />
         </>
     );

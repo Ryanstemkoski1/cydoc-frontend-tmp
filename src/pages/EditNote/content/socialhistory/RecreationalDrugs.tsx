@@ -16,6 +16,7 @@ import modesOfDelivery, {
 } from 'constants/SocialHistory/modesOfDelivery';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import AddRowButton from 'components/tools/AddRowButton';
+import '../familyhistory/FamilyHistory.css';
 import {
     updateRecreationalDrugUsage,
     addRecreationalDrugUsed,
@@ -37,6 +38,7 @@ import {
 import { DrugUsage } from 'redux/reducers/socialHistoryReducer';
 import { CurrentNoteState } from 'redux/reducers';
 import _ from 'lodash';
+import '../hpi/knowledgegraph/src/css/Button.css';
 
 type OwnProps = {
     mobile: boolean;
@@ -132,8 +134,6 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         ? 'No'
                         : ''
                 }
-                size='small'
-                compact={true}
                 active={values.interestedInQuitting === response}
             />
         );
@@ -155,8 +155,6 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         ? 'No'
                         : ''
                 }
-                size='small'
-                compact={true}
                 active={values.triedToQuit === response}
             />
         );
@@ -341,10 +339,10 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         icon='close'
                         size='mini'
                         type='delete'
-                        basic
                         onClick={() => {
                             this.props.deleteRecreationalDrugUsed(rowindex);
                         }}
+                        className='hpi-ph-button'
                     />
                 );
                 break;
@@ -396,10 +394,10 @@ class RecreationalDrugs extends React.Component<Props, State> {
                             icon='close'
                             type='delete'
                             compact
-                            basic
                             onClick={() => {
                                 this.props.deleteRecreationalDrugUsed(i);
                             }}
+                            className='hpi-ph-button'
                         />
                     </Input>
                 </Form>
@@ -572,6 +570,7 @@ class RecreationalDrugs extends React.Component<Props, State> {
                     this.props.updateRecreationalDrugUsage(response);
                 }}
                 condition='Recreational Drugs'
+                className='social-hist-buttons hpi-ph-button'
                 title={
                     response === SubstanceUsageResponse.Yes
                         ? 'Yes'
@@ -581,8 +580,6 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         ? 'Never Used'
                         : ''
                 }
-                size='small'
-                compact={true}
                 active={values.usage === response}
             />
         );

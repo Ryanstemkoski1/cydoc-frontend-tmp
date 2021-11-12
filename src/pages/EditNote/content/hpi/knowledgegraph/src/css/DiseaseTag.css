@@ -1,3 +1,16 @@
-.tag_text {
-    margin-top: 1% !important;
+.ui.button.tag_text {
+    margin-top: 1%;
+    background-color: #e0e1e3;
+    color: black;
+}
+
+.ui.button.tag_text:hover:not(.active)  {
+    color: lightslategray;
+}
+
+
+.ui.button.tag_text-selected {
+    margin-top: 1%;
+    background-color: #373b67 ;
+    color: white ;
 }

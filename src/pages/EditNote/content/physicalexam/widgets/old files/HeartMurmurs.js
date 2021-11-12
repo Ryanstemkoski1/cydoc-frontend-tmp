@@ -176,7 +176,6 @@ class HeartMurmurs extends Component {
                         <Table.Header>
                             <div sle={{ float: 'right' }}>
                                 <Button
-                                    basic
                                     circular
                                     icon='x'
                                     size='mini'
@@ -202,7 +201,6 @@ class HeartMurmurs extends Component {
                 {arr}
                 add {this.props.type.toLowerCase()}{' '}
                 <Button
-                    basic
                     circular
                     icon='plus'
                     size='mini'

@@ -35,10 +35,11 @@ class AbdomenExamButtons extends Component<
         <Button
             size='small'
             key={option}
+            active={this.props.sections[option]}
             color={this.props.sections[option] ? 'red' : undefined}
             content={option}
             onClick={this.getHandleClick(option)}
-            className='spaced-buttons'
+            className='pe-ros-button spaced-buttons'
         />
     );
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import './LRButton.css';
+import 'pages/EditNote/content/physicalexam/PhysicalExam.css';
 //import PropTypes from 'prop-types';
 
 //Component that manages content for the Physical Exam tab
@@ -22,6 +23,7 @@ export default class LRButton extends React.Component {
                         onClick={(e, data) =>
                             this.props.onClick(group, content, e, data)
                         }
+                        className='pe-ros-button pe-ros-left'
                     />
                     <Button
                         content={this.props.content}
@@ -35,6 +37,7 @@ export default class LRButton extends React.Component {
                                 this.props.onDropdownButtonClick(data);
                             }
                         }}
+                        className='pe-ros-button pe-ros-middle'
                     />
                     <Button
                         attached='right'
@@ -48,6 +51,7 @@ export default class LRButton extends React.Component {
                         onClick={(e, data) =>
                             this.props.onClick(group, content, e, data)
                         }
+                        className='pe-ros-button pe-ros-right'
                     />
                 </Button.Group>
             );
@@ -69,6 +73,7 @@ export default class LRButton extends React.Component {
                                 }
                             }
                         }
+                        className='pe-ros-button pe-ros-button-lr spaced-buttons'
                     />
                 </Button.Group>
             );
