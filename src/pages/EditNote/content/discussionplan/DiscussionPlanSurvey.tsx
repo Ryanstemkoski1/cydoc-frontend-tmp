@@ -10,6 +10,7 @@ import {
 } from 'redux/actions/planActions';
 import { selectPlanSurvey } from 'redux/selectors/planSelectors';
 import { YesNoUncertainResponse } from 'constants/enums';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 const GRID_QUESTION_WIDTH = 7;
 
@@ -116,9 +117,10 @@ const AnswerButtons = ({ value, setResponse }: AnswerButtonsProps) => {
         .map(([name, val], i) => (
             <Button
                 key={i}
-                className={`button_yesno hpi-ph-button ${
-                    val === value && 'active'
+                className={`button_yesno hpi-ph-button${
+                    val === value ? '-selected' : ''
                 }`}
+                active={val === value}
                 onClick={() => setResponse(val)}
             >
                 {name}
