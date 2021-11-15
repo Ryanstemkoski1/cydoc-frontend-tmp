@@ -6,6 +6,10 @@
     width: 4.6rem;
 }
 
+.ui.image.logo-circle-mobile {
+    width: 3rem;
+}
+
 /* Navigation Bar has a thicker drop shadow */
 .nav-menu {
     box-shadow: 0 0 20px 5px RGBA(0, 128, 159, 0.2) !important;
@@ -184,7 +188,7 @@ i.icon.profile-mobile-icon {
 
     .note-title {
         padding: 10px;
-        margin-top: 10px !important;
+        margin-top: 10px;
     }
 
     .ui.button.save-button {
@@ -234,5 +238,14 @@ i.icon.profile-mobile-icon {
     .ui.form:not(.unstackable) .fields:not(.unstackable) > .required.eight.wide.field.patient-info-input,
     .ui.form:not(.unstackable) .fields:not(.unstackable) > .eight.wide.field.patient-info-input {
         width: 60% !important;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    div.item.profile-menu-item {
+        padding: 5px !important;
+    }
+    div.item.home-menu-item {
+        padding: 5px !important;
     }
 }

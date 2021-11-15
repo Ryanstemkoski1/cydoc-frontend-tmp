@@ -115,7 +115,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
     // Menu items when logged in
     const loggedInMenuItems = collapseLoggedInNav ? (
         <>
-            <Menu.Item>
+            <Menu.Item className='home-menu-item'>
                 <Button
                     basic
                     color='teal'
@@ -124,7 +124,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                     onClick={checkEditNote}
                 />
             </Menu.Item>
-            <Menu.Item>
+            <Menu.Item className='profile-menu-item'>
                 <Dropdown
                     button
                     basic
@@ -196,22 +196,44 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
             <Menu className={`${className} nav-menu`} attached={attached}>
                 {context.token ? (
                     <Menu.Item className='logo-menu' onClick={checkEditNote}>
-                        <Image src={Logo} className='logo-circle' />
+                        <Image
+                            src={Logo}
+                            className={
+                                collapseLoggedInNav
+                                    ? 'logo-circle-mobile'
+                                    : 'logo-circle'
+                            }
+                        />
                         {!displayNoteName && !hideCydoc && (
                             <Header
                                 as='h1'
-                                className='logo-text'
+                                className={`${
+                                    collapseLoggedInNav
+                                        ? 'logo-text-mobile'
+                                        : 'logo-text'
+                                }`}
                                 content='Cydoc'
                             />
                         )}
                     </Menu.Item>
                 ) : (
                     <Menu.Item className='logo-menu' onClick={checkEditNote}>
-                        <Image src={Logo} className='logo-circle' />
+                        <Image
+                            src={Logo}
+                            className={`${
+                                collapseLoggedInNav
+                                    ? 'logo-circle-mobile'
+                                    : 'logo-circle'
+                            }`}
+                        />
                         {!displayNoteName && !hideCydoc && (
                             <Header
                                 as='h1'
-                                className='logo-text'
+                                className={`${
+                                    collapseLoggedInNav
+                                        ? 'logo-text-mobile'
+                                        : 'logo-text'
+                                }`}
                                 content='Cydoc'
                             />
                         )}
@@ -219,7 +241,9 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                 )}
 
                 {/* When parent is EditNote, then display the note name item */}
-                {displayNoteName && <NoteNameMenuItem />}
+                {displayNoteName && (
+                    <NoteNameMenuItem mobile={collapseLoggedInNav} />
+                )}
 
                 {/* Navigation links */}
                 <Menu.Menu position='right'>
@@ -232,3 +256,10 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
 };
 
 export default ConnectedNavMenu;
+
+/*
+Image - logo-circle
+Note title and Edit Patient Info - NoteNameMenuItem
+loggedInMenu Items
+
+*/

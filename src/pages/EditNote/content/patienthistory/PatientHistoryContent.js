@@ -27,6 +27,8 @@ export default class PatientHistoryContent extends Component {
         this.handleTabChange = this.handleTabChange.bind(this);
         this.updateIndex = this.updateIndex.bind(this);
         this.setMenuPosition = this.setMenuPosition.bind(this);
+        this.onNextClick = this.onNextClick.bind(this);
+        this.onPreviousClick = this.onPreviousClick.bind(this);
     }
 
     componentDidMount() {

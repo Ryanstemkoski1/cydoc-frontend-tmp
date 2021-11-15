@@ -18,7 +18,6 @@
 }
 
 #patient-history-menu {
-  position: sticky;
   z-index: 1;
   background-color: white;
   border: 1px solid #c7c7c7;
@@ -26,6 +25,20 @@
   padding-top: 10px;
   padding-bottom: 5px;
 }
+
+@media screen and (max-width: 1400px) {
+  #patient-history-menu {
+    position: sticky;
+  }
+}
+
+@media screen and (max-width: 500px){
+  #patient-history-menu {
+    position: static;
+    margin-top: 100px;
+  }
+}
+
 
 .sticky-header {
   position: sticky;
