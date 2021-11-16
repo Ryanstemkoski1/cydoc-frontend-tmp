@@ -1,7 +1,10 @@
 import { initialHpiState, medId, hpiReducer } from './hpiReducer';
 import { HPI_ACTION } from '../actions/actionTypes';
-import { BodyLocationOptions, ExpectedResponseDict } from 'constants/hpiEnums';
-import { options } from 'pages/EditNote/content/hpi/knowledgegraph/src/components/responseComponents/BodyLocation';
+import {
+    BodyLocationOptions,
+    ExpectedResponseDict,
+    options,
+} from 'constants/hpiEnums';
 
 describe('hpi reducers', () => {
     const processedState = {
@@ -74,6 +77,20 @@ describe('hpi reducers', () => {
                 payload,
             });
             expect(nextState).toMatchSnapshot();
+            options
+                .reduce((a, b) => a.concat(b), [])
+                .map((bodyOptionItem) => {
+                    expect(nextState.nodes[medId].response).toHaveProperty(
+                        bodyOptionItem.name
+                    );
+                    expect(
+                        nextState.nodes[medId].response[bodyOptionItem.name]
+                    ).toEqual(
+                        bodyOptionItem.needsRightLeft
+                            ? { left: false, center: false, right: false }
+                            : false
+                    );
+                });
             expect(nextState.nodes).toHaveProperty(medId);
             expect(nextState.nodes[medId]).toMatchObject(node);
             expect(nextState.graph).toHaveProperty(medId);
@@ -91,31 +108,10 @@ describe('hpi reducers', () => {
             payload = { medId: medId };
             nextState = processedState;
         });
-        it('adds body location responses', () => {
-            payload.bodyOptions = options;
-            nextState.nodes[medId].responseType = 'BODYLOCATION';
-            nextState.nodes[medId].response = ExpectedResponseDict.BODYLOCATION;
-            nextState = hpiReducer(nextState, {
-                type: HPI_ACTION.BODY_LOCATION_RESPONSE,
-                payload,
-            });
-            expect(nextState).toMatchSnapshot();
-            options
-                .reduce((a, b) => a.concat(b), [])
-                .map((bodyOptionItem) => {
-                    expect(nextState.nodes[medId].response).toHaveProperty(
-                        bodyOptionItem.name
-                    );
-                    expect(
-                        nextState.nodes[medId].response[bodyOptionItem.name]
-                    ).toEqual(
-                        bodyOptionItem.needsRightLeft
-                            ? { left: false, center: false, right: false }
-                            : false
-                    );
-                });
-        });
         it('handles body location toggle for LRButton', () => {
+            nextState.nodes.medId.responseType = 'BODYLOCATION';
+            nextState.nodes.medId.response =
+                ExpectedResponseDict['BODYLOCATION'];
             nextState = hpiReducer(nextState, {
                 type: HPI_ACTION.BODY_LOCATION_RESPONSE,
                 payload: {
@@ -151,6 +147,9 @@ describe('hpi reducers', () => {
             });
         });
         it('handles body location toggle for regular button', () => {
+            nextState.nodes.medId.responseType = 'BODYLOCATION';
+            nextState.nodes.medId.response =
+                ExpectedResponseDict['BODYLOCATION'];
             payload.bodyOption = BodyLocationOptions.NOSE;
             payload.toggle = null;
             nextState = hpiReducer(nextState, {

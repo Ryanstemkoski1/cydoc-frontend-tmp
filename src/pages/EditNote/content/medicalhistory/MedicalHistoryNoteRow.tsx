@@ -28,6 +28,8 @@ import {
     updateConditionResolved,
 } from 'redux/actions/medicalHistoryActions';
 import { start } from 'repl';
+import '../hpi/knowledgegraph/src/css/Button.css';
+
 //Component for a row the Medical History GridContent
 class MedicalHistoryNoteRow extends Component<Props> {
     findIndex = (event: FindIndex, data: TextAreaProps) => {

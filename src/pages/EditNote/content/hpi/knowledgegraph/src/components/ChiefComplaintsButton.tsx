@@ -8,7 +8,6 @@ import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import ToggleButton from 'components/tools/ToggleButton';
-import '../css/DiseaseTag.css';
 
 interface ChiefComplaintsButtonProps {
     name: string;

@@ -1,5 +1,17 @@
+/*used the important flag here because Semantic's css for buttons uses the important flag.*/
+.ui.button.pe-ros-button {
+    background-color: #e0e1e3;
+    color: black;
+    box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset !important;
+}
+
+.ui.button.pe-ros-button:hover:not(.active) {
+    background-color: lightslategrey;
+}
+
 .spaced-buttons {
-    margin: 0px 4px 4px 0px !important;
+    border-radius: 20px;
+    box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
 .dropdown-title {
@@ -47,6 +59,12 @@ h5.ui.header{
 
 .ui.container.active-tab-container {
     margin-bottom: 10px;
+}
+
+@media screen and (max-width: 500px){
+    .ui.container.active-tab-container{
+        margin-top: 100px;
+    }
 }
 
 .pe-input {

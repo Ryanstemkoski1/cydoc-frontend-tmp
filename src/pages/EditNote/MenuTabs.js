@@ -85,7 +85,6 @@ class ConnectedMenuTabs extends Component {
 function CollapsedMenuTabs(props) {
     return (
         <>
-            <div></div>
             <Menu
                 tabular
                 attached={props.attached}

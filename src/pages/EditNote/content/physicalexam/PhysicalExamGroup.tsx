@@ -75,69 +75,96 @@ class PhysicalExamGroup extends Component<Props, State> {
         this.props.updateComments(this.props.name, data.value as string);
     };
 
-    generateRows = (rows: PhysicalExamSchemaRow[]) => {
-        return rows.map((row, index) => (
-            <PhysicalExamRow
-                row={row}
-                key={index}
-                group={this.props.name}
-                handleToggle={this.handleToggle}
-                handleLRToggle={this.handleLRToggle}
-            />
-        ));
+    generateRows = (
+        rows: PhysicalExamSchemaRow[],
+        physicalExamSection: PhysicalExamSection
+    ) => {
+        let dropdownSchemaRow: PhysicalExamSchemaRow | undefined;
+        const rowComponents = rows.map((row, index) => {
+            // for sections with dropdowns, track which values the user
+            // has selected, and update options accordingly
+            if (row.display === 'autocompletedropdown') {
+                dropdownSchemaRow = {
+                    ...row,
+                    display: 'buttons',
+                    findings: row.findings.filter(
+                        (finding) => finding in physicalExamSection.findings
+                    ),
+                };
+                row = {
+                    ...row,
+                    findings: row.findings.filter(
+                        (finding) => !(finding in physicalExamSection.findings)
+                    ),
+                };
+            }
+            return (
+                <PhysicalExamRow
+                    row={row}
+                    key={index}
+                    group={this.props.name}
+                    handleToggle={this.handleToggle}
+                    handleLRToggle={this.handleLRToggle}
+                />
+            );
+        });
+
+        // include user added findings
+        if (!!dropdownSchemaRow && dropdownSchemaRow.findings.length > 0) {
+            rowComponents.splice(
+                rowComponents.length - 1,
+                0,
+                <PhysicalExamRow
+                    row={dropdownSchemaRow}
+                    key={-1}
+                    group={this.props.name}
+                    handleToggle={this.handleToggle}
+                    handleLRToggle={this.handleLRToggle}
+                    isDropdown={true}
+                />
+            );
+        }
+        return rowComponents;
     };
 
     render() {
         const windowWidth = this.state.windowWidth;
         const { physicalExamSection } = this.props;
         const { comments } = physicalExamSection;
+        const rowComponents = this.generateRows(
+            this.props.rows,
+            physicalExamSection
+        );
+        const commentComponent = (
+            <Form.Field>
+                <label>Additional Comments</label>
+                <Form.TextArea
+                    value={comments}
+                    className='pe-textarea'
+                    onChange={(e, data) => {
+                        this.handleTextChange(e, data);
+                    }}
+                />
+            </Form.Field>
+        );
         return (
-            <Fragment>
+            <Form>
                 {windowWidth !== 0 && windowWidth < PHYSICAL_EXAM_MOBILE_BP ? (
                     <>
-                        <Form>
-                            {this.generateRows(this.props.rows)}
-                            <Form.Field>
-                                <label>Additional Comments</label>
-                                <Form.TextArea
-                                    className='pe-textarea'
-                                    value={comments}
-                                    onChange={(e, data) => {
-                                        this.handleTextChange(e, data);
-                                    }}
-                                />
-                            </Form.Field>
-                        </Form>
+                        {rowComponents}
+                        {commentComponent}
                     </>
                 ) : (
-                    <>
-                        <Form>
-                            <Grid columns='equal'>
-                                <Grid.Row>
-                                    <Grid.Column>
-                                        {this.generateRows(this.props.rows)}
-                                    </Grid.Column>
-                                    <Grid.Column floated='right' width={5}>
-                                        <Form.Field>
-                                            <label>Additional Comments</label>
-                                            <Form.TextArea
-                                                value={comments}
-                                                className='pe-textarea'
-                                                onChange={(e, data) => {
-                                                    this.handleTextChange(
-                                                        e,
-                                                        data
-                                                    );
-                                                }}
-                                            />
-                                        </Form.Field>
-                                    </Grid.Column>
-                                </Grid.Row>
-                            </Grid>
-                        </Form>
-                    </>
+                    <Grid columns='equal'>
+                        <Grid.Row>
+                            <Grid.Column>{rowComponents}</Grid.Column>
+                            <Grid.Column floated='right' width={5}>
+                                {commentComponent}
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
                 )}
-            </Fragment>
+            </Form>
         );
     }
 }

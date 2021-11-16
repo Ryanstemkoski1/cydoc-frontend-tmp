@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import { Header, Segment, Grid, Label } from 'semantic-ui-react';
+import { Header, Segment, Grid, Label, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { CurrentNoteState } from 'redux/reducers';
 import { PlanSurvey } from 'redux/reducers/planReducer';
@@ -10,6 +10,7 @@ import {
 } from 'redux/actions/planActions';
 import { selectPlanSurvey } from 'redux/selectors/planSelectors';
 import { YesNoUncertainResponse } from 'constants/enums';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 const GRID_QUESTION_WIDTH = 7;
 
@@ -114,13 +115,16 @@ const AnswerButtons = ({ value, setResponse }: AnswerButtonsProps) => {
     const buttons = Object.entries(YesNoUncertainResponse)
         .filter(([_, val]) => val !== YesNoUncertainResponse.None)
         .map(([name, val], i) => (
-            <button
+            <Button
                 key={i}
-                className={`button_yesno ${val === value && 'active'}`}
+                className={`button_yesno hpi-ph-button${
+                    val === value ? '-selected' : ''
+                }`}
+                active={val === value}
                 onClick={() => setResponse(val)}
             >
                 {name}
-            </button>
+            </Button>
         ));
     return <>{buttons}</>;
 };

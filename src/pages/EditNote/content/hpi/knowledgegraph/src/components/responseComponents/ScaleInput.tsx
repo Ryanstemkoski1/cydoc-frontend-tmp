@@ -9,6 +9,7 @@ import {
 } from 'redux/actions/hpiActions';
 import { connect } from 'react-redux';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 /*
 TODO:
@@ -53,7 +54,7 @@ class ScaleInput extends React.Component<Props> {
                     }
                 />
                 <button
-                    className='ui compact basic button scale-clear'
+                    className='ui hpi-ph-button compact button scale-clear'
                     style={{ marginLeft: 10 }}
                     onClick={(_e): void => {
                         scaleHandleClear(node);

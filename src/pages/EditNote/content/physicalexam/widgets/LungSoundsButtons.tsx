@@ -49,9 +49,10 @@ class LungSoundsButtons extends Component<
             size='small'
             key={option}
             color={this.props.sections[option] ? 'red' : undefined}
+            active={this.props.sections[option]}
             content={this.getDisplayName(option)}
             onClick={this.getHandleClick(option)}
-            className='spaced-buttons'
+            className='pe-ros-button spaced-buttons'
         />
     );
 
@@ -74,10 +75,9 @@ class LungSoundsButtons extends Component<
                     <Popup
                         trigger={
                             <Button
-                                basic
                                 circular
                                 icon='plus'
-                                className={'spaced-buttons'}
+                                className={'pe-ros-button spaced-buttons'}
                             />
                         }
                         position='bottom center'

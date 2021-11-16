@@ -7,10 +7,10 @@ import {
     TimeOption,
     ExpectedResponseDict,
     ExpectedResponseInterface,
-    BodyLocationTotal,
+    BodyLocationType,
     BodyLocationOptions,
     EdgeInterface,
-    BodyLocationToggle,
+    leftRightCenter,
 } from '../../constants/hpiEnums';
 import { v4 } from 'uuid';
 
@@ -88,31 +88,22 @@ export function isTimeInputDictionary(
     );
 }
 
-export function isBodyLocationLRDict(value: any): value is BodyLocationTotal {
-    return typeof value === 'object' && !Array.isArray(value);
-}
-
-export function isBodyLocationToggleDict(
-    value: any
-): value is { left: boolean; center: boolean; right: boolean } {
+export function isBodyLocationLRItem(value: any): value is leftRightCenter {
     return (
         typeof value === 'object' &&
         !Array.isArray(value) &&
         Object.keys(value).length == 3 &&
         Object.keys(value).every(
             (item: string) => typeof value[item] == 'boolean'
-        )
+        ) &&
+        Object.keys(value).includes('left') &&
+        Object.keys(value).includes('right') &&
+        Object.keys(value).includes('center')
     );
 }
 
 export function isBodyOption(value: any): value is BodyLocationOptions {
-    return Object.keys(BodyLocationOptions).every(
-        (item: string) => item != value
-    );
-}
-
-export function isBodyLocationToggle(value: any): value is BodyLocationToggle {
-    return ['left', 'center', 'right', null].includes(value);
+    return Object.values(BodyLocationOptions).includes(value);
 }
 
 export function hpiReducer(
@@ -163,72 +154,45 @@ export function hpiReducer(
             };
         }
 
-        case HPI_ACTION.BODY_LOCATION_RESPONSE: {
-            /* 
-            Initializes body location response by adding new entries with each key 
-            being the body location name and value being a dictionary of left, center,
-            and right or true/false as the response for the given medId.
-            */
-            const { medId, bodyOptions } = action.payload;
-            const currResponse = state.nodes[medId].response;
-            const newResponse: BodyLocationTotal = {};
-            // merge array of arrays to one array
-            if (
-                state.nodes[medId].responseType == ResponseTypes.BODYLOCATION &&
-                isBodyLocationLRDict(currResponse) &&
-                !Object.keys(currResponse).length
-            ) {
-                bodyOptions
-                    .reduce(
-                        (prevValue, currValue) => prevValue.concat(currValue),
-                        []
-                    )
-                    .map((bodyOptionItem) => {
-                        newResponse[
-                            bodyOptionItem.name
-                        ] = bodyOptionItem.needsRightLeft
-                            ? { left: false, center: false, right: false }
-                            : false;
-                    });
-                return updateResponse(medId, newResponse, state);
-            } else return state;
-        }
-
         case HPI_ACTION.BODY_LOCATION_HANDLE_TOGGLE: {
             /*
             Toggles either the left/center/right response attribute or the 
             response itself between true or false.
             */
             const { medId, bodyOption, toggle } = action.payload;
-            const response = state.nodes[medId].response as BodyLocationTotal;
             if (
-                state.nodes[medId].responseType ===
-                    ResponseTypes.BODYLOCATION &&
-                isBodyOption(bodyOption)
+                state.nodes[medId].responseType == ResponseTypes.BODYLOCATION &&
+                Object.values(BodyLocationOptions).includes(bodyOption)
             ) {
-                const bodyOptionItem = response[bodyOption];
-                return isBodyLocationToggleDict(bodyOptionItem) &&
-                    isBodyLocationToggle(toggle) &&
-                    toggle
-                    ? updateResponse(
-                          medId,
-                          {
-                              ...response,
-                              [bodyOption]: {
-                                  ...bodyOptionItem,
-                                  [toggle]: !bodyOptionItem[toggle],
-                              },
-                          },
-                          state
-                      )
-                    : updateResponse(
-                          medId,
-                          {
+                const response = state.nodes[medId]
+                    .response as BodyLocationType;
+                const bodyOptionItem = response[bodyOption] as leftRightCenter;
+                return updateResponse(
+                    medId,
+                    isBodyLocationLRItem(bodyOptionItem)
+                        ? toggle == 'center' && bodyOptionItem[toggle]
+                            ? {
+                                  ...response,
+                                  [bodyOption]: {
+                                      ...bodyOptionItem,
+                                      left: false,
+                                      center: false,
+                                      right: false,
+                                  },
+                              }
+                            : {
+                                  ...response,
+                                  [bodyOption]: {
+                                      ...bodyOptionItem,
+                                      [toggle]: !bodyOptionItem[toggle],
+                                  },
+                              }
+                        : {
                               ...response,
                               [bodyOption]: !response[bodyOption],
                           },
-                          state
-                      );
+                    state
+                );
             } else throw new Error('Not a body location response');
         }
 

@@ -11,7 +11,8 @@ const doctorSignUp = async (
     cardNumber,
     expirationYear,
     expirationMonth,
-    cvv
+    cvv,
+    zipCode
 ) => {
     //sanitize phoneNumber
     phoneNumber = phoneNumber.replace('(', '+1');
@@ -30,6 +31,7 @@ const doctorSignUp = async (
         customer: {
             cardData: card,
             email,
+            zipCode,
             attributes: {
                 customerUUID: '',
                 name,

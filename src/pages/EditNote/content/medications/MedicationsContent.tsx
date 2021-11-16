@@ -23,6 +23,7 @@ import {
 } from 'redux/actions/hpiActions';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
+import '../hpi/knowledgegraph/src/css/Button.css';
 
 interface OwnProps {
     mobile: boolean;

@@ -60,12 +60,13 @@ class HeartMurmursItem extends Component<
                                 ? 'red'
                                 : undefined
                         }
+                        active={this.props.itemState.phase === option}
                         key={option}
                         onClick={() =>
                             this.props.updatePhase(this.props.id, option)
                         }
                         content={option}
-                        className={'spaced-buttons'}
+                        className={'pe-ros-button spaced-buttons'}
                     />
                 ))}
             </div>
@@ -84,6 +85,10 @@ class HeartMurmursItem extends Component<
                                 ? 'red'
                                 : undefined
                         }
+                        active={
+                            this.props.itemState.crescendo === (index !== 1) &&
+                            this.props.itemState.decrescendo === index > 0
+                        }
                         key={option}
                         onClick={
                             //assumes crescendo == 0, decresendo == 1, cresc-decresc == 2
@@ -95,7 +100,7 @@ class HeartMurmursItem extends Component<
                                 )
                         }
                         content={option}
-                        className={'spaced-buttons'}
+                        className={'pe-ros-button spaced-buttons'}
                     />
                 ))}
             </div>
@@ -112,12 +117,13 @@ class HeartMurmursItem extends Component<
                                 ? 'red'
                                 : undefined
                         }
+                        active={this.props.itemState.bestHeardAt === option}
                         key={option}
                         onClick={() =>
                             this.props.updateBestHeardAt(this.props.id, option)
                         }
                         content={option}
-                        className={'spaced-buttons'}
+                        className={'pe-ros-button spaced-buttons'}
                     />
                 ))}
             </div>
@@ -134,12 +140,13 @@ class HeartMurmursItem extends Component<
                                 ? 'red'
                                 : undefined
                         }
+                        active={this.props.itemState.intensity === option}
                         key={option}
                         onClick={() =>
                             this.props.updateIntensity(this.props.id, option)
                         }
                         content={option}
-                        className={'spaced-buttons'}
+                        className={'pe-ros-button spaced-buttons'}
                     />
                 ))}
             </div>
@@ -156,12 +163,13 @@ class HeartMurmursItem extends Component<
                                 ? 'red'
                                 : undefined
                         }
+                        active={this.props.itemState.pitch === option}
                         key={option}
                         onClick={() =>
                             this.props.updatePitch(this.props.id, option)
                         }
                         content={option}
-                        className={'spaced-buttons'}
+                        className={'pe-ros-button spaced-buttons'}
                     />
                 ))}
             </div>
@@ -178,12 +186,13 @@ class HeartMurmursItem extends Component<
                                 ? 'red'
                                 : undefined
                         }
+                        active={this.props.itemState.quality[option]}
                         key={option}
                         onClick={() =>
                             this.props.toggleQuality(this.props.id, option)
                         }
                         content={option}
-                        className={'spaced-buttons'}
+                        className={'pe-ros-button spaced-buttons'}
                     />
                 ))}
             </div>
@@ -193,7 +202,6 @@ class HeartMurmursItem extends Component<
     render = () => {
         const specificMurmursButton = (
             <Button
-                basic
                 circular
                 icon='plus'
                 size='mini'
@@ -201,6 +209,7 @@ class HeartMurmursItem extends Component<
                 onClick={() =>
                     this.props.toggleSpecificMurmurInfo(this.props.id, true)
                 }
+                className='pe-ros-button'
             />
         );
 
@@ -209,7 +218,6 @@ class HeartMurmursItem extends Component<
                 <Table.Header>
                     <div className='murmurs-x'>
                         <Button
-                            basic
                             circular
                             icon='x'
                             size='mini'
@@ -218,6 +226,7 @@ class HeartMurmursItem extends Component<
                                     this.props.id
                                 )
                             }
+                            className='pe-ros-button'
                         />
                     </div>
                 </Table.Header>

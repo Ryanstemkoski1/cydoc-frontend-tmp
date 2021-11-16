@@ -24,6 +24,7 @@ import {
 } from 'redux/reducers/widgetReducers/murmurswidgetReducer';
 import _ from 'lodash';
 import './css/HeartMurmurs.css';
+import '../PhysicalExam.css';
 
 const getDisplayName = (fieldName: string) => {
     //If the fieldName is all caps
@@ -56,11 +57,13 @@ class SpecificMurmurs extends Component<SpecificMurmursProps & PropsFromRedux> {
     ) => {
         return (
             <Button
+                className='pe-ros-button spaced-buttons'
                 color={
                     this.props.specificInfo.specificMurmur === murmur
                         ? 'red'
                         : undefined
                 }
+                active={this.props.specificInfo.specificMurmur === murmur}
                 key={murmur}
                 content={murmur}
                 onClick={() => {
@@ -84,11 +87,13 @@ class SpecificMurmurs extends Component<SpecificMurmursProps & PropsFromRedux> {
     generateRadiationToButton = (radiationTo: MurmurRadiation) => {
         return (
             <Button
+                className='pe-ros-button spaced-buttons'
                 color={
                     this.props.specificInfo.radiationTo[radiationTo]
                         ? 'red'
                         : undefined
                 }
+                active={this.props.specificInfo.radiationTo[radiationTo]}
                 key={radiationTo}
                 content={`radiation to ${getDisplayName(radiationTo)}`}
                 onClick={() => {
@@ -112,11 +117,13 @@ class SpecificMurmurs extends Component<SpecificMurmursProps & PropsFromRedux> {
     generateAdditionalFeaturesButton = (feature: MurmurAdditionalFeature) => {
         return (
             <Button
+                className='pe-ros-button spaced-buttons'
                 color={
                     this.props.specificInfo.additionalFeatures[feature]
                         ? 'red'
                         : undefined
                 }
+                active={this.props.specificInfo.additionalFeatures[feature]}
                 key={feature}
                 content={getDisplayName(feature)}
                 onClick={() => {
@@ -140,11 +147,13 @@ class SpecificMurmurs extends Component<SpecificMurmursProps & PropsFromRedux> {
     generateBestHeardAtButton = (bestHeardAt: MurmurLocation) => {
         return (
             <Button
+                className='pe-ros-button spaced-buttons'
                 color={
                     this.props.itemState.bestHeardAt === bestHeardAt
                         ? 'red'
                         : undefined
                 }
+                active={this.props.itemState.bestHeardAt === bestHeardAt}
                 key={bestHeardAt}
                 content={`best heard at ${bestHeardAt}`}
                 onClick={() => {
@@ -298,7 +307,7 @@ class SpecificMurmurs extends Component<SpecificMurmursProps & PropsFromRedux> {
                             {this.props.itemState.phase == '' ? (
                                 <div>
                                     <Button
-                                        basic
+                                        className='pe-ros-button'
                                         circular
                                         icon='x'
                                         size='mini'

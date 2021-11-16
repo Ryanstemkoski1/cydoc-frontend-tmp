@@ -9,6 +9,7 @@ import {
 } from 'redux/actions/hpiActions';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 interface YesNoProps {
     node: string;

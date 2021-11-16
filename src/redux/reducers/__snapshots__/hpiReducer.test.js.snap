@@ -34,28 +34,6 @@ Object {
       "medID": "medId",
       "noteSection": "noteSection",
       "patientView": "PatientView",
-      "response": Object {},
-      "responseType": "BODYLOCATION",
-      "text": "text",
-      "uid": "uid",
-    },
-  },
-}
-`;
-
-exports[`hpi reducers handle user actions adds body location responses 1`] = `
-Object {
-  "edges": Object {},
-  "graph": Object {},
-  "nodes": Object {
-    "medId": Object {
-      "DoctorView": "DoctorView",
-      "PatientView": "PatientView",
-      "bodySystem": "bodySystem",
-      "category": "category",
-      "doctorCreated": "doctorCreated",
-      "medID": "medID",
-      "noteSection": "noteSection",
       "response": Object {
         "Ankle": Object {
           "center": false,
@@ -311,7 +289,98 @@ Object {
       "medID": "medID",
       "noteSection": "noteSection",
       "response": Object {
+        "Ankle": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Chest": false,
+        "Ear": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Elbow": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Eye": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Finger": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Foot": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Groin": false,
+        "Hand": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Head": false,
+        "Hip": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Knee": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Arm": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Back": false,
+        "Lower Leg": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Mid Back": false,
+        "Mouth": false,
+        "Neck": false,
         "Nose": true,
+        "Pelvis": false,
+        "Shoulder": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Stomach": false,
+        "Throat": false,
+        "Toe": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Arm": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Back": false,
+        "Upper Leg": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Wrist": Object {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
       },
       "responseType": "BODYLOCATION",
       "text": "text",

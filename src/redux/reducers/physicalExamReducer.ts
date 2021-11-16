@@ -75,18 +75,20 @@ export function processPhysicalExamSchema(
             comments: '',
         };
         section.rows.forEach((row) => {
-            if (row.needsRightLeft) {
-                row.findings.forEach((finding) => {
-                    sectionState.findings[finding] = {
-                        left: false,
-                        center: false,
-                        right: false,
-                    };
-                });
-            } else {
-                row.findings.forEach((finding) => {
-                    sectionState.findings[finding] = false;
-                });
+            if (row.display !== 'autocompletedropdown') {
+                if (row.needsRightLeft) {
+                    row.findings.forEach((finding) => {
+                        sectionState.findings[finding] = {
+                            left: false,
+                            center: false,
+                            right: false,
+                        };
+                    });
+                } else {
+                    row.findings.forEach((finding) => {
+                        sectionState.findings[finding] = false;
+                    });
+                }
             }
         });
         state[section.name] = sectionState;
@@ -112,8 +114,8 @@ export function physicalExamReducer(
         case PHYSICAL_EXAM_ACTION.TOGGLE_FINDING: {
             const { section, finding } = action.payload;
             const currentFindingState =
-                state.sections[section].findings[finding];
-            //Throw error if the finding is actually an LRFinding
+                state.sections[section].findings[finding] ?? true;
+            // Throw error if the finding is actually an LRFinding
             if (typeof currentFindingState !== 'boolean') {
                 throw Error(
                     `Finding ${finding} in section ${section} is an LRFinding; use toggleLeftRightFinding instead.`
@@ -135,28 +137,28 @@ export function physicalExamReducer(
         }
         case PHYSICAL_EXAM_ACTION.TOGGLE_LEFT_RIGHT_FINDING: {
             const { section, finding, buttonClicked } = action.payload;
-            const currentFindingState =
-                state.sections[section].findings[finding];
+            const currentFindingState = state.sections[section].findings[
+                finding
+            ] ?? { left: false, right: false, center: true };
             //Throw error if the finding is not actually an LRFinding
             if (typeof currentFindingState === 'boolean') {
                 throw Error(
                     `Finding ${finding} in section ${section} is not an LRFinding; use toggleFinding instead.`
                 );
             }
-            const newFindingState = (() => {
-                if (buttonClicked === 'center') {
-                    return {
-                        left: currentFindingState.left,
-                        center: !currentFindingState.center,
-                        right: currentFindingState.right,
-                    };
-                } else {
-                    return {
-                        ...currentFindingState,
-                        [buttonClicked]: !currentFindingState[buttonClicked],
-                    };
-                }
-            })();
+            let newFindingState;
+            if (buttonClicked === 'center' && currentFindingState.center) {
+                newFindingState = {
+                    left: false,
+                    center: false,
+                    right: false,
+                };
+            } else {
+                newFindingState = {
+                    ...currentFindingState,
+                    [buttonClicked]: !currentFindingState[buttonClicked],
+                };
+            }
             return {
                 ...state,
                 sections: {
@@ -167,6 +169,21 @@ export function physicalExamReducer(
                             ...state.sections[section].findings,
                             [finding]: newFindingState,
                         },
+                    },
+                },
+            };
+        }
+        case PHYSICAL_EXAM_ACTION.REMOVE_FINDING: {
+            const { section, finding } = action.payload;
+            const currentFindingsCopy = { ...state.sections[section].findings };
+            delete currentFindingsCopy[finding];
+            return {
+                ...state,
+                sections: {
+                    ...state.sections,
+                    [section]: {
+                        ...state.sections[section],
+                        findings: currentFindingsCopy,
                     },
                 },
             };

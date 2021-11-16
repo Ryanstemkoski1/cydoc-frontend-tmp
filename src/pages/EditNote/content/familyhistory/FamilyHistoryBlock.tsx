@@ -10,8 +10,9 @@ import {
 import ToggleButton from 'components/tools/ToggleButton.js';
 import FamilyHistoryDropdown from './FamilyHistoryDropdown';
 import GridContent from 'components/tools/GridContent.js';
-import './FamilyHistory.css';
+import '../hpi/knowledgegraph/src/css/Button.css';
 import '../reviewofsystems/ReviewOfSystems.css';
+import './FamilyHistory.css';
 import { connect } from 'react-redux';
 import {
     toggleConditionOption,
@@ -105,12 +106,12 @@ class FamilyHistoryBlock extends Component<Props> {
                     {dropdownList}
                     <Fragment>
                         <Button
-                            basic
                             circular
                             icon='plus'
                             size='mini'
                             onClick={this.handlePlusClick}
                             aria-label='add-family-member'
+                            className='hpi-ph-button'
                         />
                         add family member
                     </Fragment>
@@ -136,12 +137,14 @@ class FamilyHistoryBlock extends Component<Props> {
                                 active={yesActive}
                                 condition={condition}
                                 title='Yes'
+                                className='fam-hist-buttons'
                                 onToggleButtonClick={handleToggle}
                             />
                             <ToggleButton
                                 active={noActive}
                                 condition={condition}
                                 title='No'
+                                className='fam-hist-buttons'
                                 onToggleButtonClick={handleToggle}
                             />
                         </div>
@@ -152,12 +155,12 @@ class FamilyHistoryBlock extends Component<Props> {
                                 {dropdownList}
                                 <>
                                     <Button
-                                        basic
                                         circular
                                         icon='plus'
                                         size='mini'
                                         onClick={this.handlePlusClick}
                                         aria-label='add-family-member'
+                                        className='hpi-ph-button'
                                     />
                                     add family member
                                 </>
@@ -174,12 +177,14 @@ class FamilyHistoryBlock extends Component<Props> {
                 <ToggleButton
                     active={yesActive}
                     condition={condition}
+                    className='fam-hist-buttons'
                     title='Yes'
                     onToggleButtonClick={handleToggle}
                 />
                 <ToggleButton
                     active={noActive}
                     condition={condition}
+                    className='fam-hist-buttons'
                     title='No'
                     onToggleButtonClick={handleToggle}
                 />

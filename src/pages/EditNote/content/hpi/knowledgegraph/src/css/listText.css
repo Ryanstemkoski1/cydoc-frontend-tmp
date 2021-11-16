@@ -1,3 +1,8 @@
-.button-plus-click {
+.ui.button-plus-click {
     border-radius: 50%;
 }
+
+.ui.remove-list-text {
+    border-radius: 50%;
+}
+

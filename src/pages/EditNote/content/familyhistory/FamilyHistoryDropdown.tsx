@@ -32,6 +32,7 @@ import {
     FamilyHistoryMember,
 } from 'redux/reducers/familyHistoryReducer';
 import { CurrentNoteState } from 'redux/reducers';
+import '../hpi/knowledgegraph/src/css/Button.css';
 
 class FamilyHistoryDropdown extends Component<Props> {
     static contextType = HPIContext;
@@ -145,6 +146,7 @@ class FamilyHistoryDropdown extends Component<Props> {
                                             onToggleButtonClick={
                                                 this.handleCauseOfDeathToggle
                                             }
+                                            className='fam-hist-buttons'
                                         />
                                         <ToggleButton
                                             active={
@@ -156,6 +158,7 @@ class FamilyHistoryDropdown extends Component<Props> {
                                             onToggleButtonClick={
                                                 this.handleCauseOfDeathToggle
                                             }
+                                            className='fam-hist-buttons'
                                         />
                                     </div>
                                 </Grid.Column>
@@ -182,6 +185,7 @@ class FamilyHistoryDropdown extends Component<Props> {
                                                     onToggleButtonClick={
                                                         this.handleLivingToggle
                                                     }
+                                                    className='fam-hist-buttons'
                                                 />
                                                 <ToggleButton
                                                     active={
@@ -195,6 +199,7 @@ class FamilyHistoryDropdown extends Component<Props> {
                                                     onToggleButtonClick={
                                                         this.handleLivingToggle
                                                     }
+                                                    className='fam-hist-buttons'
                                                 />
                                             </div>
                                         </Fragment>
@@ -219,7 +224,6 @@ class FamilyHistoryDropdown extends Component<Props> {
                                 className='delete-family-member-row-mobile'
                             >
                                 <Button
-                                    basic
                                     circular
                                     icon='close'
                                     size='mini'
@@ -230,6 +234,7 @@ class FamilyHistoryDropdown extends Component<Props> {
                                         )
                                     }
                                     aria-label='delete-family-member'
+                                    className='hpi-ph-button'
                                 />
                                 delete family member
                             </Grid.Row>
@@ -244,7 +249,6 @@ class FamilyHistoryDropdown extends Component<Props> {
                     <Grid.Row>
                         <Grid.Column width={1}>
                             <Button
-                                basic
                                 circular
                                 icon='close'
                                 size='mini'
@@ -252,6 +256,7 @@ class FamilyHistoryDropdown extends Component<Props> {
                                     this.props.handleDelete(index, family_index)
                                 }
                                 aria-label='delete-button'
+                                className='hpi-ph-button'
                             />
                         </Grid.Column>
                         <Grid.Column width={3}>
@@ -278,6 +283,7 @@ class FamilyHistoryDropdown extends Component<Props> {
                                 onToggleButtonClick={
                                     this.handleCauseOfDeathToggle
                                 }
+                                className='fam-hist-buttons'
                             />
                             <ToggleButton
                                 active={
@@ -290,6 +296,7 @@ class FamilyHistoryDropdown extends Component<Props> {
                                 onToggleButtonClick={
                                     this.handleCauseOfDeathToggle
                                 }
+                                className='fam-hist-buttons'
                             />
                         </Grid.Column>
 
@@ -329,6 +336,7 @@ class FamilyHistoryDropdown extends Component<Props> {
                                     onToggleButtonClick={
                                         this.handleLivingToggle
                                     }
+                                    className='fam-hist-buttons'
                                 />
                                 <ToggleButton
                                     active={
@@ -341,6 +349,7 @@ class FamilyHistoryDropdown extends Component<Props> {
                                     onToggleButtonClick={
                                         this.handleLivingToggle
                                     }
+                                    className='fam-hist-buttons'
                                 />
                             </Grid.Column>
                         </Grid.Row>

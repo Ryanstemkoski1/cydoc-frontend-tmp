@@ -1,8 +1,25 @@
-.spaced-buttons {
-    border-radius: 20px !important;
-    box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset !important;
+.ui.button.spaced-buttons {
+    border-radius: 20px;
+    box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
 .not-a-real-button {
     pointer-events: none;
+}
+
+.ui.button.pe-ros-button-lr {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.ui.button.pe-ros-right{
+    margin-right: 4px;
+}
+
+.ui.button.pe-ros-middle {
+    margin: 0px 0px 0px 0px;
+}
+
+.ui.button.pe-ros-left{
+    margin-left: 4px;
 }

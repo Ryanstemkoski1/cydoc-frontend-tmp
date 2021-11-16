@@ -84,6 +84,12 @@
     margin-bottom: 10px;
 }
 
+@media screen and (max-width: 500px){
+    .ui.container.active-tab-container{
+        margin-top: 100px;
+    }
+}
+
 .ui.input.transparent.misc {
     width: 100%;
 }

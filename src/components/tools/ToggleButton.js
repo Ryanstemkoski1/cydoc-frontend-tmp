@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 //functional component for a basic button that toggles to purple when active
 export default function ToggleButton(props) {
@@ -16,19 +17,23 @@ export default function ToggleButton(props) {
         className,
     } = props;
 
+    const cn =
+        className === 'tag_text'
+            ? 'hpi-chiefcomplaint-button'
+            : 'hpi-ph-button';
+
     return (
         <Button
             condition={condition}
-            color={active ? 'violet' : '#0d5e70'} // violet
+            // color={active ? 'violet' : null}
             active={active}
             onClick={onToggleButtonClick}
-            basic={!active}
             size={size}
             compact={compact}
             title={title}
             disabled={disabled}
             aria-label={ariaLabel}
-            className={className}
+            className={`${cn}${active ? '-selected' : ''} ${className}`}
         >
             {title}
         </Button>

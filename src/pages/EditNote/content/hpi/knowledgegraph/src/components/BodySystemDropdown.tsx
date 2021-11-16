@@ -4,17 +4,18 @@ import '../css/Button.css';
 import ChiefComplaintsButton from './ChiefComplaintsButton';
 import '../../HPI.css';
 import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
-import brain from '../icons/brain.png';
-import pain from '../icons/pain.png';
-import heent from '../icons/heent.png';
-import respiratory from '../icons/respiratory.png';
-import heart from '../icons/heart.png';
-import yoga from '../icons/yoga.png';
-import intestines from '../icons/intestines.png';
-import immunology from '../icons/immunology.png';
-import dermatologic from '../icons/dermatologic.png';
-import kidneys from '../icons/kidneys.png';
-import genitourinary from '../icons/genitourinary.png';
+import brain from '../icons/brain.svg';
+import pain from '../icons/pain.svg';
+import heent from '../icons/heent.svg';
+import respiratory from '../icons/respiratory.svg';
+import heart from '../icons/heart.svg';
+import yoga from '../icons/yoga.svg';
+import intestines from '../icons/intestines.svg';
+import immunology from '../icons/immunology.svg';
+import dermatologic from '../icons/dermatologic.svg';
+import kidneys from '../icons/kidneys.svg';
+import genitourinary from '../icons/genitourinary.svg';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 interface BodySystemDropdownProps {
     diseasesList: string[];
@@ -53,8 +54,11 @@ class BodySystemDropdown extends React.Component<
     render(): React.ReactNode {
         const { name, diseasesList } = this.props;
         const isMobile = window.innerWidth < NOTE_PAGE_MOBILE_BP;
-        const mobileCardio = isMobile && imgToRender[name] == heart;
+        const mobileCardio =
+            isMobile &&
+            (imgToRender[name] == heart || imgToRender[name] == brain);
         const normalCardio = !isMobile && imgToRender[name] == heart;
+        const normalNeuro = !isMobile && imgToRender[name] == brain;
         let styleToRender = 'hpi-disease-button';
 
         if (isMobile) {
@@ -66,15 +70,18 @@ class BodySystemDropdown extends React.Component<
         if (normalCardio) {
             styleToRender = 'cardiovascular-normal';
         }
+        if (normalNeuro) {
+            styleToRender = 'neuro-normal';
+        }
 
         return (
             <div>
                 <Button
-                    basic
-                    className={styleToRender}
+                    className={`hpi-chiefcomplaint-button ${styleToRender}`}
                     onClick={() =>
                         this.setState({ selected: !this.state.selected })
                     }
+                    active={this.state.selected}
                 >
                     {/* <Icon name='dropdown' /> */}
                     <img

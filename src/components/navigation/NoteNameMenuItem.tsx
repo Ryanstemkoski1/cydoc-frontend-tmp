@@ -20,17 +20,22 @@ import {
     UpdateNoteTitleAction,
 } from 'redux/actions/currentNoteActions';
 import { selectNoteTitle } from 'redux/selectors/currentNoteSelectors';
+import './NoteNameMenuItem.css';
 
 interface StateProps {
     note: CurrentNoteState;
     title: string;
 }
 
+interface NavProps {
+    mobile: boolean;
+}
+
 interface DispatchProps {
     updateNoteTitle: (title: string) => UpdateNoteTitleAction;
 }
 
-type NoteNameMenuItemProps = StateProps & DispatchProps;
+type NoteNameMenuItemProps = StateProps & DispatchProps & NavProps;
 type FieldError = false | { content: string };
 type FormChangeHandler = (
     e: React.ChangeEvent,
@@ -62,7 +67,7 @@ const stateOptions = states.map((state) => ({
 const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
     props: NoteNameMenuItemProps
 ) => {
-    const { title, note, updateNoteTitle } = props;
+    const { title, note, updateNoteTitle, mobile } = props;
     const context = useContext(NotesContext) as Context;
 
     // Form fields
@@ -257,12 +262,13 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
     };
 
     return (
-        <Menu.Item className='note-name-menu-item'>
+        <Menu.Item className='note-name-menu-item' fitted> 
+            <>
             <Input
                 aria-label='Note-Title'
                 className='note-title'
-                size='huge'
                 transparent
+                size='huge'
                 placeholder={initialNoteTitle}
                 onChange={formatOnChange(updateNoteTitle)}
                 onFocus={() =>
@@ -271,18 +277,7 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
                 onBlur={() => title === '' && updateNoteTitle(initialNoteTitle)}
                 value={title}
             />
-            <Button
-                size='mini'
-                onClick={handleSave}
-                className={`save-button ${saveButton}`}
-            >
-                {saveButton.includes('icon') ? (
-                    <Icon className={buttonIcon} />
-                ) : (
-                    'Save'
-                )}
-            </Button>
-            <div className='patient-info'>
+            {!mobile && <div className='patient-info'>
                 {age.years >= 1 && age.years < 11 && (
                     <h4>
                         {`Patient: ${firstName} ${lastName}, \
@@ -302,7 +297,8 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
                         ${age.months} months old`}
                     </h4>
                 )}
-            </div>
+            </div>}
+            </>
             <Modal
                 className='patient-modal'
                 onClose={closeModal}
@@ -311,9 +307,16 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
                 size='tiny'
                 dimmer='inverted'
                 trigger={
+                    mobile ? 
+                    <Button
+                        basic
+                        color='teal'
+                        name='home'
+                        icon='info circle'
+                    />   :
                     <Button className='patient-modal-button' size='tiny' basic>
                         Add/Edit Patient Info
-                    </Button>
+                    </Button> 
                 }
             >
                 <Header>Patient Information</Header>

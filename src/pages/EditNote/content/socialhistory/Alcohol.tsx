@@ -14,6 +14,7 @@ import drinkTypes, { DrinkType } from 'constants/SocialHistory/drinkTypes';
 import drinkSizes, { DrinkSize } from 'constants/SocialHistory/drinkSizes';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import AddRowButton from 'components/tools/AddRowButton';
+import '../familyhistory/FamilyHistory.css';
 import {
     updateAlcoholUsage,
     addAlcoholConsumption,
@@ -35,6 +36,7 @@ import {
 } from 'constants/enums';
 import { CurrentNoteState } from 'redux/reducers';
 import _ from 'lodash';
+import '../hpi/knowledgegraph/src/css/Button.css';
 
 type OwnProps = {
     mobile: boolean;
@@ -125,8 +127,6 @@ class Alcohol extends React.Component<Props, State> {
                         ? 'No'
                         : ''
                 }
-                size='small'
-                compact={true}
                 active={values.interestedInQuitting === response}
             />
         );
@@ -148,8 +148,6 @@ class Alcohol extends React.Component<Props, State> {
                         ? 'No'
                         : ''
                 }
-                size='small'
-                compact={true}
                 active={values.triedToQuit === response}
             />
         );
@@ -320,11 +318,11 @@ class Alcohol extends React.Component<Props, State> {
                 cell = (
                     <Button
                         rowindex={rowindex}
+                        className='hpi-ph-button'
                         circular
                         icon='close'
                         size='mini'
                         type='delete'
-                        basic
                         onClick={() => {
                             this.props.deleteAlcoholConsumption(rowindex);
                         }}
@@ -380,10 +378,10 @@ class Alcohol extends React.Component<Props, State> {
                             icon='close'
                             type='delete'
                             compact
-                            basic
                             onClick={() => {
                                 this.props.deleteAlcoholConsumption(i);
                             }}
+                            className='hpi-ph-button'
                         />
                     </Input>
                 </Form>
@@ -558,6 +556,7 @@ class Alcohol extends React.Component<Props, State> {
                     this.props.updateAlcoholUsage(response);
                 }}
                 condition='Alcohol'
+                className='social-hist-buttons'
                 title={
                     response === SubstanceUsageResponse.Yes
                         ? 'Yes'
@@ -567,8 +566,6 @@ class Alcohol extends React.Component<Props, State> {
                         ? 'Never Used'
                         : ''
                 }
-                size='small'
-                compact={true}
                 active={values.usage === response}
             />
         );

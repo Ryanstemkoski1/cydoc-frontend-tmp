@@ -8,8 +8,9 @@
 }
 
 .ui.button.time-grid-button {
-    width: 100%;
+    width: 100%;;
 }
+
 
 .ui.grid > .row > .column > .time-input {
     position: relative;

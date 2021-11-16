@@ -81,6 +81,7 @@ class ReviewOfSystemsCategory extends Component<Props> {
                             <Grid.Row key={option}>
                                 <Grid.Column width={4} className='no-padding'>
                                     <Button
+                                        className={'pe-ros-button'}
                                         aria-label='no-button'
                                         compact
                                         floated='right'
@@ -99,7 +100,7 @@ class ReviewOfSystemsCategory extends Component<Props> {
                                             this.handleChange(option, value)
                                         }
                                     >
-                                        NO
+                                        No
                                     </Button>
                                 </Grid.Column>
                                 <Grid.Column
@@ -111,6 +112,7 @@ class ReviewOfSystemsCategory extends Component<Props> {
                                 </Grid.Column>
                                 <Grid.Column width={4} className='no-padding'>
                                     <Button
+                                        className={'pe-ros-button'}
                                         aria-label='yes-button'
                                         compact
                                         floated='left'
@@ -129,7 +131,7 @@ class ReviewOfSystemsCategory extends Component<Props> {
                                             this.handleChange(option, value)
                                         }
                                     >
-                                        YES
+                                        Yes
                                     </Button>
                                 </Grid.Column>
                             </Grid.Row>

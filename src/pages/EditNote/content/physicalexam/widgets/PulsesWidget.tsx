@@ -17,7 +17,7 @@ class PulsesWidget extends Component<PropsFromRedux> {
                 {widgetItems}
                 add abnormal pulses{' '}
                 <Button
-                    basic
+                    className='pe-ros-button'
                     circular
                     icon='plus'
                     size='mini'

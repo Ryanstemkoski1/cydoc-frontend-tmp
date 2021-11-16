@@ -38,25 +38,29 @@
     .ui.button.small-previous-button, .ui.button.small-next-button {
         display: block;
     }
+    
+    .edit-note-div {
+        height: 260px;
+    }
 }
 
 @media screen and (max-width: 500px) {
-    .edit-note-nav-menu {
-        padding-bottom: 100px;
-        padding-top: 30px;
-        height: 230px;
-    }
-
     .sticky-div {
         background-color: transparent;
         position: fixed;
         top: 0px;
         width: 100%;
-        margin-top: 230px;
+        margin-top: 102px;
     }
 
     #mobile-nav {
         position: fixed;
         top: 0;
+        width: 100%;
+        min-width: fit-content;
+    }
+
+    .edit-note-div {
+        height: 50px;
     }
 }

@@ -1,5 +1,16 @@
 import React from 'react';
-import { Button, Segment, Icon, Tab, Container, Grid } from 'semantic-ui-react';
+import {
+    Menu,
+    Button,
+    Segment,
+    Icon,
+    // MenuItemProps,
+    // Dropdown,
+    Search,
+    Container,
+    Grid,
+    Tab,
+} from 'semantic-ui-react';
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
 import BodySystemDropdown from './src/components/BodySystemDropdown';
@@ -17,6 +28,8 @@ import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import ChiefComplaintsButton from './src/components/ChiefComplaintsButton';
 import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
+import { CHIEF_COMPLAINTS } from '../../../../../redux/actions/actionTypes';
+import { currentNoteStore } from 'redux/store';
 
 interface HPIContentProps {
     nextFormClick: () => () => string; // this.props.nextFormClick => this.props.onNextClick => string
@@ -30,6 +43,7 @@ interface HPIContentState {
     isGraphLoaded: boolean;
     activeHPI: string;
     step: number;
+    searchVal: string;
 }
 
 class HPIContent extends React.Component<Props, HPIContentState> {
@@ -43,8 +57,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             isGraphLoaded: false,
             activeHPI: '', // active tab name
             step: -1, // step in the HPI interview form
+            searchVal: '',
         };
         this.updateDimensions = this.updateDimensions.bind(this);
+        // this.handleItemClick = this.handleItemClick.bind(this);
     }
 
     componentDidMount() {
@@ -151,6 +167,39 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             (name: string) => <ChiefComplaintsButton key={name} name={name} />
         );
 
+        // map through all complaints on the HPI and create search resuls
+        const getRes = () => {
+            const index = this.state.searchVal.length;
+            const filterResults: object[] = [];
+            Object.entries(bodySystems).forEach((grouping) => {
+                grouping[1].forEach((complaint) => {
+                    const toCompare = complaint
+                        .toString()
+                        .toLowerCase()
+                        .substring(0, index);
+                    if (
+                        complaint !== 'HIDDEN' &&
+                        toCompare == this.state.searchVal.toLowerCase()
+                    ) {
+                        const temp = {
+                            title: complaint,
+                            onClick: () => {
+                                currentNoteStore.dispatch({
+                                    type:
+                                        CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
+                                    payload: {
+                                        disease: complaint,
+                                    },
+                                });
+                            },
+                        };
+                        filterResults.push(temp);
+                    }
+                });
+            });
+            return filterResults;
+        };
+
         // each step correlates to a different tab
         const step: number = this.state.step;
         // number of positive diseases, which is also the number of steps
@@ -185,6 +234,19 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                             ) : (
                                 <div className='positive-diseases-placeholder' />
                             )}
+                            <Search
+                                size='large'
+                                placeholder='Type in a condition...'
+                                noResultsMessage
+                                className='hpi-search-bar'
+                                minCharacters={2}
+                                onSearchChange={(event) => {
+                                    const target = event.target as HTMLTextAreaElement;
+                                    this.setState({ searchVal: target.value });
+                                }}
+                                value={this.state.searchVal}
+                                results={getRes()}
+                            />
                             <Masonry
                                 className='disease-container'
                                 breakpointCols={numColumns}
@@ -217,7 +279,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 }
                                 className='hpi-next-button'
                             >
-                                Next Form
+                                Next
                                 <Icon name='angle right' />
                             </Button>
                         </>
@@ -318,7 +380,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         }
                                         className='hpi-next-button'
                                     >
-                                        Next Form
+                                        Next
                                         <Icon name='angle right' />
                                     </Button>
                                 </Container>
@@ -412,7 +474,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         }
                                                         className='hpi-next-button'
                                                     >
-                                                        Next Form
+                                                        Next
                                                         <Icon name='angle right' />
                                                     </Button>
                                                 </Tab.Pane>

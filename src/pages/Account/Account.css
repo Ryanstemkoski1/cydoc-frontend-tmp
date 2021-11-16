@@ -51,6 +51,13 @@
     margin: .5rem;
 }
 
+.ui.header.logo-text-mobile {
+    font-family: Pompadour, Arial, Helvetica, sans-serif;
+    font-size: 1.8rem;
+    color: black;
+    margin: .5rem;
+}
+
 .login-header, .sign-up-header, .forgot-password-header, .forgot-password-email-header{
     padding: 1rem;
     font-size: 1.2rem;

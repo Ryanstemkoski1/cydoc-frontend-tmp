@@ -4,6 +4,7 @@ import { Divider, Form, Grid, Input, Dropdown } from 'semantic-ui-react';
 import tobaccoProducts from 'constants/SocialHistory/tobaccoProducts';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import { selectTobaccoState } from 'redux/selectors/socialHistorySelectors';
+import '../familyhistory/FamilyHistory.css';
 import {
     updateTobaccoUsage,
     updateTobaccoPacksPerDay,
@@ -23,6 +24,7 @@ import { CurrentNoteState } from 'redux/reducers';
 import { TobaccoProduct } from 'constants/SocialHistory/tobaccoProducts';
 
 import '../familyhistory/FamilyHistory.css';
+import '../hpi/knowledgegraph/src/css/Button.css';
 
 type OwnProps = {
     mobile: boolean;
@@ -114,8 +116,6 @@ class Tobacco extends React.Component<Props, State> {
                         ? 'No'
                         : ''
                 }
-                size='small'
-                compact={true}
                 active={values.interestedInQuitting === response}
             />
         );
@@ -137,8 +137,6 @@ class Tobacco extends React.Component<Props, State> {
                         ? 'No'
                         : ''
                 }
-                size='small'
-                compact={true}
                 active={values.triedToQuit === response}
             />
         );
@@ -288,6 +286,7 @@ class Tobacco extends React.Component<Props, State> {
                     this.props.updateTobaccoUsage(response);
                 }}
                 condition='Tobacco'
+                className='social-hist-buttons'
                 title={
                     response === SubstanceUsageResponse.Yes
                         ? 'Yes'
@@ -297,8 +296,6 @@ class Tobacco extends React.Component<Props, State> {
                         ? 'Never Used'
                         : ''
                 }
-                size='small'
-                compact={true}
                 active={values.usage === response}
             />
         );

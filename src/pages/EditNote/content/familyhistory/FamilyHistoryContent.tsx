@@ -32,6 +32,7 @@ import {
     PopResponseAction,
     popResponse,
 } from 'redux/actions/hpiActions';
+import '../hpi/knowledgegraph/src/css/Button.css';
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.
