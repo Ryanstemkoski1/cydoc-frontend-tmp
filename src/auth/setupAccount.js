@@ -32,10 +32,12 @@ const SetupAccount = async (
     delete user.card;
     const email = user.email;
     const name = `${user.firstName} ${user.lastName}`;
+    const zipCode = '84088';
     let customerInfo = {
         customer: {
             cardData: cardInfo,
             email,
+            zipCode,
             attributes: {
                 customerUUID: '',
                 name,

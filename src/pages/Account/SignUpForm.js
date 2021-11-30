@@ -23,17 +23,17 @@ const specialtyOptions = constants.specialties.map((specialty) => ({
     text: specialty,
 }));
 
-const expirationMonthOptions = constants.expirationMonths.map((expMonth) => ({
-    key: expMonth,
-    value: expMonth,
-    text: expMonth,
-}));
+// const expirationMonthOptions = constants.expirationMonths.map((expMonth) => ({
+//     key: expMonth,
+//     value: expMonth,
+//     text: expMonth,
+// }));
 
-const expirationYearOptions = constants.expirationYears.map((expYear) => ({
-    key: expYear,
-    value: expYear,
-    text: expYear,
-}));
+// const expirationYearOptions = constants.expirationYears.map((expYear) => ({
+//     key: expYear,
+//     value: expYear,
+//     text: expYear,
+// }));
 
 const createSchema = async (role) => {
     if (role === 'doctor') {
@@ -130,10 +130,14 @@ const SignUpForm = (props) => {
     const [userInfo, setUserInfo] = useState(props.userInfo);
     const [isSendingInfo, setIsSendingInfo] = useState(false);
     const [formErrors, setFormErrors] = useState([]);
-    const [expirationMonth, setExpirationMonth] = useState();
-    const [expirationYear, setExpirationYear] = useState();
-    const [cardNumber, setCardNumber] = useState();
-    const [cvv, setCVV] = useState();
+    const expirationMonth = '12';
+    const expirationYear = '2025';
+    const cardNumber = '4242424242424242';
+    const cvv = '123';
+    // const [expirationMonth, setExpirationMonth] = useState('12');
+    // const [expirationYear, setExpirationYear] = useState('2025');
+    // const [cardNumber, setCardNumber] = useState('4242424242424242');
+    // const [cvv, setCVV] = useState('123');
 
     useEffect(() => {
         setUserInfo(props.userInfo);
@@ -146,21 +150,21 @@ const SignUpForm = (props) => {
         });
     };
 
-    const handleCardChange = (e, { value }) => {
-        setCardNumber(value);
-    };
+    // const handleCardChange = (e, { value }) => {
+    //     setCardNumber(value);
+    // };
 
-    const handleCVVChange = (e, { value }) => {
-        setCVV(value);
-    };
+    // const handleCVVChange = (e, { value }) => {
+    //     setCVV(value);
+    // };
 
-    const handleExpirationMonthChange = (e, { value }) => {
-        setExpirationMonth(value);
-    };
+    // const handleExpirationMonthChange = (e, { value }) => {
+    //     setExpirationMonth(value);
+    // };
 
-    const handleExpirationYearChange = (e, { value }) => {
-        setExpirationYear(value);
-    };
+    // const handleExpirationYearChange = (e, { value }) => {
+    //     setExpirationYear(value);
+    // };
 
     const handleIsPhoneNumberMobileChange = () => {
         setUserInfo({
@@ -454,7 +458,7 @@ const SignUpForm = (props) => {
                 />
             </Form.Group>
             {additionalFields()}
-            <Form.Input
+            {/* <Form.Input
                 required
                 aria-label='Card Number'
                 label='Card Number'
@@ -497,7 +501,7 @@ const SignUpForm = (props) => {
                 placeholder='111'
                 value={cvv}
                 onChange={handleCVVChange}
-            />
+            /> */}
             <Container>
                 <Header as='h5' textAlign='center' content='Terms of Use' />
                 <div className='scroll'>
