@@ -9,7 +9,7 @@
  * expands, we can account for more than just one synonym, and it will be easy to check whether
  * one of the synonyms was present.
  */
-const MEDICAL_TERM_TRANSLATOR = {
+export const MEDICAL_TERM_TRANSLATOR = {
     'heart attack': 'myocardial infarction',
     'high blood pressure': 'hypertension',
     'low blood pressure': 'hypotension',
@@ -33,7 +33,7 @@ const MEDICAL_TERM_TRANSLATOR = {
     'enlarged liver': 'hepatomegaly',
 };
 
-const ABBREVIFY = {
+export const ABBREVIFY = {
     'acute coronary syndrome': 'ACS',
     'chronic obstructive pulmonary disease': 'COPD',
     'myocardial infarction': 'MI',
