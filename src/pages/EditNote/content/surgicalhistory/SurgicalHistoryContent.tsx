@@ -9,7 +9,7 @@ import {
     AddPshPopOptionsAction,
     addPshPopOptions,
 } from 'redux/actions/surgicalHistoryActions';
-import { procedures } from 'constants/procedures';
+import procedures from 'constants/procedures';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import {
     Accordion,

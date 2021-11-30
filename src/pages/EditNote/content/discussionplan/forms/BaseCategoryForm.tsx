@@ -8,7 +8,7 @@ import AddRowButton from 'components/tools/AddRowButton';
 import { WhenResponse } from 'constants/enums';
 import diseases from 'constants/diagnoses';
 import medications from 'constants/medications';
-import { procedures } from 'constants/procedures';
+import procedures from 'constants/procedures';
 import registrationConstants from 'constants/registration-constants.json';
 import { getOptionMapping, OptionMapping } from '_processOptions';
 import {
