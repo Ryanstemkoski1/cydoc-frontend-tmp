@@ -14,6 +14,8 @@ import {
 } from 'semantic-ui-react';
 import emailsRegex from '../../auth/authorizedEmails';
 import emailRegexCheckFunc from '../../auth/emailRegexCheckFunc';
+import policy from '../../constants/Documents/policy';
+import terms_condition from '../../constants/Documents/t&c';
 
 const DoctorSignUp = () => {
     const phoneNumberRegex = new RegExp(
@@ -302,14 +304,7 @@ const DoctorSignUp = () => {
                             />
                             <div className='scroll'>
                                 <style> {cssScroll} </style>
-                                <p>
-                                    {/* eslint-disable */}
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla semper malesuada felis ut congue. Pellentesque volutpat dictum neque at eleifend. Ut blandit volutpat augue vitae aliquet. Fusce a elementum magna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse velit est, viverra nec imperdiet et, consectetur blandit leo. Vestibulum dignissim ipsum eget mauris porta, sed vehicula augue hendrerit. Donec et mauris in mi aliquet dignissim. Curabitur molestie feugiat neque volutpat condimentum. Ut accumsan, enim ac hendrerit pulvinar, sapien sapien mollis sem, sit amet laoreet lectus nisl congue ante. Curabitur non varius tellus, vitae fringilla lacus. Phasellus vel consequat ex. Aliquam eleifend, leo quis semper cursus, risus enim viverra purus, vel pellentesque nisl felis id purus. Praesent in sodales arcu. Quisque consequat mauris ac dui varius blandit.
-                                    Aliquam mi nunc, consequat nec aliquam nec, lacinia nec orci. Donec faucibus aliquam orci vitae bibendum. Cras eu ligula congue, imperdiet massa et, condimentum turpis. Donec eget iaculis elit. Proin rutrum, lectus sollicitudin gravida imperdiet, quam massa pretium est, sed commodo leo nunc vel nisl. Sed tristique vestibulum viverra. Sed commodo congue lorem, vitae finibus nibh rutrum quis. Donec nec vehicula odio. Aliquam commodo rutrum sapien ac molestie. Aenean at aliquet massa. Mauris dapibus erat nisi, id eleifend massa sodales quis. Donec vestibulum ipsum in arcu imperdiet, nec hendrerit quam iaculis. Praesent vehicula a augue a vehicula. Praesent maximus condimentum molestie. Vestibulum sem erat, finibus eu diam sit amet, fringilla commodo ipsum. Maecenas ac pretium nisl. Quisque quis quam urna. Proin et risus placerat, bibendum lacus a, maximus neque. Sed feugiat lobortis gravida. Vestibulum placerat commodo est, vel consequat est finibus quis. Vivamus quis velit metus. Pellentesque nec mattis quam. Suspendisse blandit sodales ipsum eget luctus. Duis varius ipsum eget odio bibendum, at porta mi luctus. Sed in dictum tortor.
-                                    Nam volutpat consequat iaculis. Nulla quis lacus tincidunt, gravida velit eu, gravida nisi. Donec tempus, neque at consequat placerat, velit nunc dictum mauris, quis lacinia sem dolor ac tortor. Vivamus sit amet dolor sollicitudin, tincidunt velit a, pretium est. Aliquam vel purus id mi tristique cursus. Vivamus a odio nec ex varius condimentum. Integer a leo velit.
-                                    Morbi quis viverra massa, ut molestie ante. Duis auctor augue fermentum vulputate malesuada. Suspendisse eget lorem lacus. Maecenas arcu ligula, vehicula a nunc eget, suscipit tempus dolor. Proin in hendrerit arcu. Suspendisse aliquet mollis laoreet. Sed tempus mauris bibendum sollicitudin volutpat. Nullam ullamcorper sem risus, in sagittis orci finibus et.
-                                    {/* eslint-enable */}
-                                </p>
+                                <p> {terms_condition} </p>
                             </div>
                             <Divider section />
                             <Header
@@ -319,12 +314,7 @@ const DoctorSignUp = () => {
                             />
                             <div className='scroll'>
                                 <style>{cssScroll}</style>
-                                {/* eslint-disable */}
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla semper malesuada felis ut congue. Pellentesque volutpat dictum neque at eleifend. Ut blandit volutpat augue vitae aliquet. Fusce a elementum magna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse velit est, viverra nec imperdiet et, consectetur blandit leo. Vestibulum dignissim ipsum eget mauris porta, sed vehicula augue hendrerit. Donec et mauris in mi aliquet dignissim. Curabitur molestie feugiat neque volutpat condimentum. Ut accumsan, enim ac hendrerit pulvinar, sapien sapien mollis sem, sit amet laoreet lectus nisl congue ante. Curabitur non varius tellus, vitae fringilla lacus. Phasellus vel consequat ex. Aliquam eleifend, leo quis semper cursus, risus enim viverra purus, vel pellentesque nisl felis id purus. Praesent in sodales arcu. Quisque consequat mauris ac dui varius blandit.
-                                Aliquam mi nunc, consequat nec aliquam nec, lacinia nec orci. Donec faucibus aliquam orci vitae bibendum. Cras eu ligula congue, imperdiet massa et, condimentum turpis. Donec eget iaculis elit. Proin rutrum, lectus sollicitudin gravida imperdiet, quam massa pretium est, sed commodo leo nunc vel nisl. Sed tristique vestibulum viverra. Sed commodo congue lorem, vitae finibus nibh rutrum quis. Donec nec vehicula odio. Aliquam commodo rutrum sapien ac molestie. Aenean at aliquet massa. Mauris dapibus erat nisi, id eleifend massa sodales quis. Donec vestibulum ipsum in arcu imperdiet, nec hendrerit quam iaculis. Praesent vehicula a augue a vehicula. Praesent maximus condimentum molestie. Vestibulum sem erat, finibus eu diam sit amet, fringilla commodo ipsum. Maecenas ac pretium nisl. Quisque quis quam urna. Proin et risus placerat, bibendum lacus a, maximus neque. Sed feugiat lobortis gravida. Vestibulum placerat commodo est, vel consequat est finibus quis. Vivamus quis velit metus. Pellentesque nec mattis quam. Suspendisse blandit sodales ipsum eget luctus. Duis varius ipsum eget odio bibendum, at porta mi luctus. Sed in dictum tortor.
-                                Nam volutpat consequat iaculis. Nulla quis lacus tincidunt, gravida velit eu, gravida nisi. Donec tempus, neque at consequat placerat, velit nunc dictum mauris, quis lacinia sem dolor ac tortor. Vivamus sit amet dolor sollicitudin, tincidunt velit a, pretium est. Aliquam vel purus id mi tristique cursus. Vivamus a odio nec ex varius condimentum. Integer a leo velit.
-                                Morbi quis viverra massa, ut molestie ante. Duis auctor augue fermentum vulputate malesuada. Suspendisse eget lorem lacus. Maecenas arcu ligula, vehicula a nunc eget, suscipit tempus dolor. Proin in hendrerit arcu. Suspendisse aliquet mollis laoreet. Sed tempus mauris bibendum sollicitudin volutpat. Nullam ullamcorper sem risus, in sagittis orci finibus et.
-                                {/* eslint-enable */}
+                                <p> {policy} </p>
                             </div>
                             <br />
                             <div className='checkBox'>
