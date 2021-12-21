@@ -19,7 +19,10 @@ import {
     AddPmhPopOptionsAction,
 } from 'redux/actions/medicalHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
-import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
+import {
+    MedicalHistoryItem,
+    MedicalHistoryState,
+} from 'redux/reducers/medicalHistoryReducer';
 import { YesNoResponse } from 'constants/enums';
 import { TextAreaProps, ButtonProps } from 'semantic-ui-react';
 import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
@@ -32,6 +35,8 @@ import {
     popResponse,
 } from 'redux/actions/hpiActions';
 import AddRowButton from 'components/tools/AddRowButton';
+import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
+import diseaseSynonyms from 'constants/diseaseSynonyms';
 
 //Component that manages the layout of the medical history tab content
 class MedicalHistoryContent extends React.Component<Props, OwnState> {
@@ -57,9 +62,37 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         const seenConditions: SeenCondition = {};
         Object.keys(values).forEach((val: string) => {
             const name: string = values[val]['condition'];
-            seenConditions[adjustValue(name, medicalMapping)] = val;
+            const standardName = this.standardizeMedicalName(name);
+            seenConditions[standardName] = val;
         });
         this.setState({ seenConditions });
+    }
+
+    standardizeMedicalName(name: string) {
+        const standardName = standardizeDiseaseNames(name);
+        let standardReplacedName = standardName;
+        if (standardName in diseaseSynonyms) {
+            standardReplacedName = diseaseSynonyms[standardName];
+        }
+        return standardReplacedName;
+    }
+
+    standardizeMedicalHistory(medHistState: MedicalHistoryState) {
+        const standardMedicalHistory = medHistState;
+
+        Object.entries(standardMedicalHistory).map(
+            (value: [string, MedicalHistoryItem]) => {
+                const disease = value[1]['condition'];
+                const standardDisease = standardizeDiseaseNames(disease);
+                let standardReplacedDisease = standardDisease;
+                if (standardDisease in diseaseSynonyms) {
+                    standardReplacedDisease = diseaseSynonyms[standardDisease];
+                }
+                value[1]['condition'] = standardReplacedDisease;
+            }
+        );
+
+        return standardMedicalHistory;
     }
 
     //handles input field events
@@ -96,7 +129,9 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         data: ButtonProps
     ) => {
         let index = '';
-        Object.entries(this.props.medicalHistory).forEach((disease) => {
+        Object.entries(
+            this.standardizeMedicalHistory(this.props.medicalHistory)
+        ).forEach((disease) => {
             if (disease[1]['condition'] === data.condition) {
                 index = disease[0];
             }
@@ -109,7 +144,9 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         data: ButtonProps
     ) => {
         let index = '';
-        Object.entries(this.props.medicalHistory).forEach((disease) => {
+        Object.entries(
+            this.standardizeMedicalHistory(this.props.medicalHistory)
+        ).forEach((disease) => {
             if (disease[1]['condition'] === data.condition) {
                 index = disease[0];
             }
@@ -145,12 +182,15 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
             node,
             medicalHistory,
         } = this.props;
-        let listValues = Object.keys(medicalHistory) || CONDITIONS;
+        const standardMedicalHistory = this.standardizeMedicalHistory(
+            this.props.medicalHistory
+        );
+        let listValues = Object.keys(standardMedicalHistory) || CONDITIONS;
         // The second OR statement gets the list of Conditions in the "Medical History" context
         if (responseType == ResponseTypes.PMH_POP && responseChoice) {
             const conditionKeyMap: { [condition: string]: string } = {};
-            for (const key in medicalHistory) {
-                const conditionName = medicalHistory[key].condition;
+            for (const key in standardMedicalHistory) {
+                const conditionName = standardMedicalHistory[key].condition;
                 conditionKeyMap[conditionName] = key;
             }
             const MhPopKeys = [];
@@ -193,6 +233,9 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
     generateListItems(conditions: string[], mobile: boolean) {
         const { isPreview } = this.props;
         const { seenConditions } = this.state;
+        const standardMedicalHistory = this.standardizeMedicalHistory(
+            this.props.medicalHistory
+        );
         return mobile
             ? conditions.map((condition: string, index: number) => {
                   if (isPreview) {
@@ -209,12 +252,15 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                                       seenConditions={seenConditions}
                                       addSeenCondition={this.addSeenCondition}
                                       condition={condition}
+                                      standardizeName={
+                                          this.standardizeMedicalName
+                                      }
                                   />
                               }
                               currentYear={this.props.currentYear}
                           />
                       );
-                  } else if (condition in this.props.medicalHistory) {
+                  } else if (condition in standardMedicalHistory) {
                       return (
                           <MedicalHistoryNoteItem
                               key={index}
@@ -229,8 +275,11 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                                       seenConditions={seenConditions}
                                       addSeenCondition={this.addSeenCondition}
                                       condition={
-                                          this.props.medicalHistory[condition]
+                                          standardMedicalHistory[condition]
                                               .condition
+                                      }
+                                      standardizeName={
+                                          this.standardizeMedicalName
                                       }
                                   />
                               }
@@ -255,11 +304,14 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                                       condition={conditionIndex}
                                       seenConditions={seenConditions}
                                       addSeenCondition={this.addSeenCondition}
+                                      standardizeName={
+                                          this.standardizeMedicalName
+                                      }
                                   />
                               }
                           />
                       );
-                  } else if (conditionIndex in this.props.medicalHistory) {
+                  } else if (conditionIndex in standardMedicalHistory) {
                       return (
                           <MedicalHistoryNoteRow
                               key={index}
@@ -274,11 +326,13 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                                       seenConditions={seenConditions}
                                       addSeenCondition={this.addSeenCondition}
                                       condition={
-                                          this.props.medicalHistory[
-                                              conditionIndex
-                                          ].condition
+                                          standardMedicalHistory[conditionIndex]
+                                              .condition
                                       }
                                       isPreview={isPreview}
+                                      standardizeName={
+                                          this.standardizeMedicalName
+                                      }
                                   />
                               }
                           />
