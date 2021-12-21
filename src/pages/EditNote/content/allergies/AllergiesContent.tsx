@@ -8,6 +8,9 @@ import {
     InputOnChangeData,
 } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton';
+import Dropdown from 'components/tools/OptimizedDropdown';
+import { PATIENT_HISTORY_ALLERGIES_MOBILE_BP } from 'constants/breakpoints';
+import allergens from 'constants/allergens';
 import AllergiesTableBodyRow from './AllergiesTableBodyRow';
 import { connect } from 'react-redux';
 import {
@@ -21,6 +24,7 @@ import { AllergiesState, AllergiesItem } from 'redux/reducers/allergiesReducer';
 import { CurrentNoteState } from 'redux/reducers';
 import { selectAllergiesState } from 'redux/selectors/allergiesSelectors';
 import './table.css';
+import { OptionMapping } from '_processOptions';
 
 //Component that manages the layout for the allergies page
 class AllergiesContent extends Component<Props, OwnState> {
@@ -29,6 +33,7 @@ class AllergiesContent extends Component<Props, OwnState> {
         this.state = {
             windowWidth: 0,
             active: new Set(),
+            options: allergens,
         };
         this.addRow = this.addRow.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
@@ -72,7 +77,8 @@ class AllergiesContent extends Component<Props, OwnState> {
         }
         const index = data.rowIndex;
         const type = data.type;
-        const val = (_event.target as HTMLTextAreaElement).value;
+        const val =
+            (_event?.target as HTMLTextAreaElement)?.value ?? data.value;
         switch (type) {
             case 'incitingAgent':
                 this.props.updateIncitingAgent(index, val);
@@ -126,9 +132,21 @@ class AllergiesContent extends Component<Props, OwnState> {
                 fields={cellField}
                 onTableBodyChange={this.handleTableBodyChange}
                 isPreview={this.props.isPreview}
+                options={this.state.options}
+                onAddItem={this.onAddItem}
             />
         ));
     }
+
+    onAddItem = (_e: any, data: { [key: string]: any }) => {
+        const { value } = data;
+        this.setState((state, _props) => ({
+            options: {
+                ...state.options,
+                [value]: { value, label: value },
+            },
+        }));
+    };
 
     makeAccordionPanels(nums: string[], values: AllergiesState) {
         const { isPreview } = this.props;
@@ -137,10 +155,18 @@ class AllergiesContent extends Component<Props, OwnState> {
         nums.map((i: string) => {
             const titleContent = (
                 <Form className='inline-form'>
-                    <Input
+                    <Dropdown
+                        fluid
+                        search
+                        selection
+                        clearable
                         transparent
+                        allowAdditions
+                        aria-label='incitingAgent'
                         placeholder='Inciting Agent'
                         type='incitingAgent'
+                        options={this.state.options}
+                        onAddItem={this.onAddItem}
                         onChange={this.handleTableBodyChange}
                         rowIndex={i}
                         value={isPreview ? '' : values[i].incitingAgent}
@@ -203,7 +229,8 @@ class AllergiesContent extends Component<Props, OwnState> {
 
         const content = (
             <>
-                {this.state.windowWidth < 800 ? (
+                {this.state.windowWidth <
+                PATIENT_HISTORY_ALLERGIES_MOBILE_BP ? (
                     <Accordion
                         panels={this.makeAccordionPanels(nums, values)}
                         exclusive={false}
@@ -259,6 +286,7 @@ interface ContentProps {
 interface OwnState {
     windowWidth: number;
     active: Set<string>;
+    options: OptionMapping;
 }
 
 type Props = AllergiesProps & ContentProps & DispatchProps;

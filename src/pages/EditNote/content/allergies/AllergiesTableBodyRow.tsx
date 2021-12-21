@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Dropdown from 'components/tools/OptimizedDropdown';
+import allergens from 'constants/allergens';
 import { Table, TextArea, TextAreaProps } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { AllergiesState, AllergiesItem } from 'redux/reducers/allergiesReducer';
@@ -8,6 +10,7 @@ import {
     selectAllergiesItem,
 } from 'redux/selectors/allergiesSelectors';
 import './table.css';
+import { OptionMapping } from '_processOptions';
 
 class AllergiesTableBodyRow extends Component<Props> {
     constructor(props: Props) {
@@ -27,11 +30,39 @@ class AllergiesTableBodyRow extends Component<Props> {
     };
 
     render() {
-        const { fields, onTableBodyChange, rowIndex } = this.props;
+        const {
+            options,
+            fields,
+            onTableBodyChange,
+            onAddItem,
+            rowIndex,
+        } = this.props;
         const { incitingAgent, reaction, comments } = this.props.allergiesItem;
 
         const tableRows = fields.map(
             (field: keyof AllergiesItem, index: number) => {
+                if (field === 'incitingAgent') {
+                    return (
+                        <Table.Cell key={index}>
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                clearable
+                                transparent
+                                allowAdditions
+                                aria-label='incitingAgent'
+                                placeholder='Inciting Agent'
+                                type='incitingAgent'
+                                options={options}
+                                onAddItem={onAddItem}
+                                onChange={onTableBodyChange}
+                                rowIndex={rowIndex}
+                                value={incitingAgent}
+                            />
+                        </Table.Cell>
+                    );
+                }
                 return (
                     <Table.Cell key={index} onClick={this.handleCellClick}>
                         <div className='ui form'>
@@ -67,6 +98,8 @@ interface RowProps {
     ) => void;
     rowIndex: keyof AllergiesState;
     isPreview: boolean;
+    options: OptionMapping;
+    onAddItem: (_e: any, data: { [key: string]: any }) => void;
 }
 
 type Props = AllergiesProps & RowProps;
