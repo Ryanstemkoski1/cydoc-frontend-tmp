@@ -25,6 +25,8 @@ const DoctorSignUp = () => {
     const [isInviteDoctorOpen, setIsInviteDoctorOpen] = useState(false);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+    const [confirmEmail, setConfirmEmail] = useState('');
+
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [duplicateUsername, setDuplicateUsername] = useState(false);
@@ -102,23 +104,31 @@ const DoctorSignUp = () => {
             expirationYear === undefined ||
             expirationMonth === undefined ||
             cvv === undefined ||
-            zipCode === undefined
+            zipCode === undefined ||
+            confirmEmail === undefined
         ) {
-            alert('Enter Required Feilds');
+            alert('Enter Required Fields');
+            setContinueButtonState(false);
+            return {
+                status: 'ERROR',
+            };
+        }
+        if (email != confirmEmail) {
+            alert('Error: emails do not match');
             setContinueButtonState(false);
             return {
                 status: 'ERROR',
             };
         }
         if (phoneNumberRegex.test(phoneNumber.toString()) === false) {
-            alert('Error Check Phone Number');
+            alert('Error: check phone number');
             setContinueButtonState(false);
             return {
                 status: 'ERROR',
             };
         }
         if (phoneNumber != confirmPhoneNumber) {
-            alert('Error Phone Number do not match');
+            alert('Error: phone numbers do not match');
             setPhoneNumberMatch(false);
             setContinueButtonState(false);
             return {
@@ -198,6 +208,10 @@ const DoctorSignUp = () => {
 
     const handleEmailChange = (e, { value }) => {
         setEmail(value);
+    };
+
+    const handleConfirmEmailChange = (e, { value }) => {
+        setConfirmEmail(value);
     };
 
     const handleFirstNameChange = (e, { value }) => {
@@ -381,6 +395,15 @@ const DoctorSignUp = () => {
                                 type='email'
                                 value={email}
                                 onChange={handleEmailChange}
+                            />
+                            <Form.Input
+                                required
+                                label='Confirm Email'
+                                name='confirmEmail'
+                                placeholder='name@example.com'
+                                type='email'
+                                value={confirmEmail}
+                                onChange={handleConfirmEmailChange}
                             />
                             <Form.Input
                                 required
