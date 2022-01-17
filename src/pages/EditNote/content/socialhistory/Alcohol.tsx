@@ -9,6 +9,7 @@ import {
     Grid,
     Input,
     Table,
+    TextArea,
 } from 'semantic-ui-react';
 import drinkTypes, { DrinkType } from 'constants/SocialHistory/drinkTypes';
 import drinkSizes, { DrinkSize } from 'constants/SocialHistory/drinkSizes';
@@ -232,6 +233,7 @@ class Alcohol extends React.Component<Props, State> {
                 cell = (
                     <Input
                         fluid
+                        transparent
                         className='content-input-computer content-dropdown'
                     >
                         <Dropdown
@@ -259,6 +261,7 @@ class Alcohol extends React.Component<Props, State> {
                 cell = (
                     <Input
                         fluid
+                        transparent
                         className='content-input-computer content-dropdown'
                     >
                         <Dropdown
@@ -284,12 +287,13 @@ class Alcohol extends React.Component<Props, State> {
             }
             case '# Per Week': {
                 cell = (
-                    <Input
+                    <TextArea
                         fluid
+                        transparent
                         type='number'
-                        className='content-input-computer content-dropdown'
+                        className='content-input content-dropdown'
                         onChange={(_, { value }) => {
-                            const numberInput = parseInt(value);
+                            const numberInput = parseInt(value as string);
                             if (!isNaN(numberInput)) {
                                 this.props.updateAlcoholConsumptionPerWeek(
                                     rowindex,
@@ -302,7 +306,7 @@ class Alcohol extends React.Component<Props, State> {
                                 );
                             }
                         }}
-                        placeholder={placeholder}
+                        placeholder='# Per Week'
                         rowindex={rowindex}
                         value={
                             values.drinksConsumed[rowindex].numberPerWeek == -1
@@ -387,11 +391,7 @@ class Alcohol extends React.Component<Props, State> {
                 </Form>
             );
             const drinkSizeContent = (
-                <Input
-                    fluid
-                    transparent
-                    className='content-input content-dropdown'
-                >
+                <Input className='content-input content-dropdown'>
                     <Dropdown
                         fluid
                         search
@@ -413,13 +413,12 @@ class Alcohol extends React.Component<Props, State> {
                 </Input>
             );
             const numberPerWeekContent = (
-                <Input
+                <TextArea
                     fluid
-                    transparent
                     type='number'
                     className='content-input content-dropdown'
                     onChange={(_, { value }) => {
-                        const numberInput = parseInt(value);
+                        const numberInput = parseInt(value as string);
                         if (!isNaN(numberInput)) {
                             this.props.updateAlcoholConsumptionPerWeek(
                                 i,
