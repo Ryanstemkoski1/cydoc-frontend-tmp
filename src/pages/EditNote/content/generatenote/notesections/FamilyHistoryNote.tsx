@@ -2,9 +2,11 @@ import { YesNoResponse } from 'constants/enums';
 import React, { Component } from 'react';
 import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
 import { FamilyHistoryConditionFlat } from 'redux/selectors/familyHistorySelectors';
+import { Table } from 'semantic-ui-react';
 
 interface FamilyHistoryProps {
     familyHistory: FamilyHistoryState;
+    isRich: boolean;
 }
 
 export class FamilyHistoryNote extends Component<FamilyHistoryProps> {
@@ -44,12 +46,12 @@ export class FamilyHistoryNote extends Component<FamilyHistoryProps> {
                         let status = '';
 
                         if (familyMember.causeOfDeath === YesNoResponse.Yes) {
-                            status = '(cause of death)';
+                            status = `(died of ${familyCondition.condition})`;
                         } else if (
                             familyMember.causeOfDeath === YesNoResponse.No &&
                             familyMember.living === YesNoResponse.Yes
                         ) {
-                            status = '(living)';
+                            status = '(still living)';
                         } else if (
                             familyMember.causeOfDeath === YesNoResponse.No &&
                             familyMember.living === YesNoResponse.No
@@ -57,7 +59,9 @@ export class FamilyHistoryNote extends Component<FamilyHistoryProps> {
                             status = '(not the cause of death)';
                         }
                         familyMembersArray.push(
-                            `${familyMember.member} ${status}, ${familyMember.comments}`
+                            `${familyMember.member} ${status}${
+                                familyMember.comments ? ', ' : ''
+                            }${familyMember.comments}`
                         );
                     }
                 }
@@ -70,19 +74,54 @@ export class FamilyHistoryNote extends Component<FamilyHistoryProps> {
         }
 
         if (this.checkEmpty()) {
-            return <div>No family history reported.</div>;
-        } else {
+            return <div />;
+        } else if (!this.props.isRich) {
             return (
                 <ul>
-                    {Object.keys(components).map((key, index) => (
-                        <li key={index}>
-                            <b>{components[key].condition}: </b>
-                            {components[key].family.length > 0
+                    {Object.keys(components).map((key, index) => {
+                        const conditionText =
+                            components[key].family.length > 0
                                 ? `${components[key].family.join(', ')}. `
-                                : null}
-                        </li>
-                    ))}
+                                : null;
+                        return (
+                            conditionText !== null && (
+                                <li key={index}>
+                                    <b>{components[key].condition}: </b>
+                                    {conditionText}
+                                </li>
+                            )
+                        );
+                    })}
                 </ul>
+            );
+        } else {
+            return (
+                <Table>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Condition</Table.HeaderCell>
+                            <Table.HeaderCell>Family History</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {Object.keys(components).map((key, index) => {
+                            const conditionText =
+                                components[key].family.length > 0
+                                    ? `${components[key].family.join('; ')}. `
+                                    : null;
+                            return (
+                                conditionText !== null && (
+                                    <Table.Row key={index}>
+                                        <Table.Cell>
+                                            {<b>{components[key].condition}</b>}
+                                        </Table.Cell>
+                                        <Table.Cell>{conditionText}</Table.Cell>
+                                    </Table.Row>
+                                )
+                            );
+                        })}
+                    </Table.Body>
+                </Table>
             );
         }
     }

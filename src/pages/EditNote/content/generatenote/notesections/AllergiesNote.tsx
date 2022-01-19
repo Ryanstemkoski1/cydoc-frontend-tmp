@@ -27,7 +27,7 @@ export class AllergiesNote extends Component<AllergiesProps> {
         const { isRich, allergies } = this.props;
 
         if (this.checkEmpty()) {
-            return <div>No allergies reported.</div>;
+            return <div />;
         } else if (isRich) {
             return (
                 <Table>

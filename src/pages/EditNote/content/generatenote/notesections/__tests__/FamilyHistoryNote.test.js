@@ -31,7 +31,7 @@ describe('Family History Note', () => {
     });
     it('renders correctly when completely empty', () => {
         const wrapper = mountWithProps();
-        expect(wrapper.text()).toContain('No family history reported');
+        expect(wrapper.text()).toContain('');
     });
     it('renders only non-empty entries', () => {
         const wrapper = mountWithProps({

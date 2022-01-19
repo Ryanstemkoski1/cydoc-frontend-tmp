@@ -14,7 +14,7 @@ import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelec
 import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
 import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
 import { PhysicalExamState } from 'redux/reducers/physicalExamReducer';
-import { Button, Segment, Icon } from 'semantic-ui-react';
+import { Button, Segment, Icon, Sticky } from 'semantic-ui-react';
 import { PlanState } from 'redux/reducers/planReducer';
 import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
 
@@ -28,10 +28,12 @@ import FamilyHistoryNote from './notesections/FamilyHistoryNote';
 import ReviewOfSystemsNote from './notesections/ReviewOfSystemsNote';
 import PhysicalExamNote from './notesections/PhysicalExamNote';
 import PlanNote from './notesections/PlanNote';
+import './GenerateNote.css';
 
 import './GenerateNote.css';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 // import HPINote from './notesections/HPINote';
+/// <reference types="./Clipboard.ts" />
 
 interface GenerateNoteProps {
     previousFormClick: () => void;
@@ -76,6 +78,15 @@ export class GenerateNote extends Component<Props, GenerateNoteState> {
         };
     }
 
+    copyNote = () => {
+        const note = document.querySelectorAll('.generate-note-text');
+        const blob = new Blob([note[0].innerHTML], { type: 'text/html' });
+        const clipboardItem = new ClipboardItem({
+            ['text/html']: blob,
+        });
+        navigator.clipboard.write([clipboardItem]);
+    };
+
     render() {
         const {
             previousFormClick,
@@ -92,26 +103,38 @@ export class GenerateNote extends Component<Props, GenerateNoteState> {
 
         return (
             <div>
-                <Button.Group>
-                    <Button
-                        onClick={() => this.setState({ rich: false })}
-                        className={`hpi-ph-button${
-                            this.state.rich === false ? '-selected' : ''
-                        }`}
-                    >
-                        Plain Text{' '}
-                    </Button>
-                    <Button.Or />
-                    <Button
-                        onClick={() => this.setState({ rich: true })}
-                        className={`hpi-ph-button${
-                            this.state.rich === true ? '-selected' : ''
-                        }`}
-                    >
-                        Rich Text
-                    </Button>
-                </Button.Group>
-                <Segment>
+                <div className='generate-note-buttons'>
+                    <Segment>
+                        <Button.Group>
+                            <Button
+                                onClick={() => this.setState({ rich: false })}
+                                className={`hpi-ph-button${
+                                    this.state.rich === false ? '-selected' : ''
+                                }`}
+                            >
+                                Plain Text{' '}
+                            </Button>
+                            <Button.Or />
+                            <Button
+                                onClick={() => this.setState({ rich: true })}
+                                className={`hpi-ph-button${
+                                    this.state.rich === true ? '-selected' : ''
+                                }`}
+                            >
+                                Rich Text
+                            </Button>
+                        </Button.Group>
+                        <Button.Group floated='right'>
+                            <Button
+                                className='copy-button'
+                                onClick={() => this.copyNote()}
+                            >
+                                Copy Note
+                            </Button>
+                        </Button.Group>
+                    </Segment>
+                </div>
+                <Segment className='generate-note-text'>
                     {/* <h1> {this.context.title} </h1> */}
                     {/* <h3> History of Present Illness </h3>
                     <HPINote /> */}
@@ -137,11 +160,20 @@ export class GenerateNote extends Component<Props, GenerateNoteState> {
                         allergies={allergiesState}
                     />
                     <h4> Social History </h4>
-                    <SocialHistoryNote socialHistory={socialHistoryState} />
+                    <SocialHistoryNote
+                        isRich={this.state.rich}
+                        socialHistory={socialHistoryState}
+                    />
                     <h4> Family History </h4>
-                    <FamilyHistoryNote familyHistory={familyHistoryState} />
+                    <FamilyHistoryNote
+                        isRich={this.state.rich}
+                        familyHistory={familyHistoryState}
+                    />
                     <h3> Review of Systems </h3>
-                    <ReviewOfSystemsNote ROSState={ROSState} />
+                    <ReviewOfSystemsNote
+                        isRich={this.state.rich}
+                        ROSState={ROSState}
+                    />
                     <h3> Physical Exam </h3>
                     <PhysicalExamNote
                         isRich={this.state.rich}

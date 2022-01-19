@@ -23,11 +23,15 @@ export class SurgicalHistoryNote extends Component<SurgicalHistoryProps> {
         return true;
     };
 
+    trimSurgicalProcedure = (procedure: string) => {
+        return procedure.split(' ').slice(1).join(' ');
+    };
+
     render() {
         const { isRich, surgicalHistory } = this.props;
 
         if (this.checkEmpty()) {
-            return <div>No surgical history reported.</div>;
+            return <div />;
         } else if (isRich) {
             return (
                 <Table>
@@ -43,10 +47,14 @@ export class SurgicalHistoryNote extends Component<SurgicalHistoryProps> {
                             surgical.procedure !== '' ? (
                                 <Table.Row>
                                     <Table.Cell>
-                                        {surgical.procedure}
+                                        {this.trimSurgicalProcedure(
+                                            surgical.procedure
+                                        )}
                                     </Table.Cell>
                                     <Table.Cell>
-                                        {surgical.year ? surgical.year : null}
+                                        {surgical.year !== -1
+                                            ? surgical.year
+                                            : null}
                                     </Table.Cell>
                                     <Table.Cell>
                                         {surgical.comments
@@ -65,8 +73,14 @@ export class SurgicalHistoryNote extends Component<SurgicalHistoryProps> {
                     {Object.values(surgicalHistory).map((surgical) =>
                         surgical.procedure !== '' ? (
                             <li>
-                                <b>{surgical.procedure} </b>
-                                {surgical.year ? `${surgical.year}. ` : null}
+                                <b>
+                                    {this.trimSurgicalProcedure(
+                                        surgical.procedure
+                                    )}{' '}
+                                </b>
+                                {surgical.year !== -1
+                                    ? `${surgical.year}. `
+                                    : null}
                                 {surgical.comments ? surgical.comments : null}
                             </li>
                         ) : null

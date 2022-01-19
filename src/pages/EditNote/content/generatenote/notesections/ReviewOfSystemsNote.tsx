@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
 import { YesNoResponse } from 'constants/enums';
+import { Table } from 'semantic-ui-react';
 
 interface ROSProps {
     ROSState: ReviewOfSystemsState;
+    isRich: boolean;
 }
 
 export class ReviewOfSystemsNote extends Component<ROSProps> {
@@ -45,10 +47,40 @@ export class ReviewOfSystemsNote extends Component<ROSProps> {
         }
 
         if (isEmpty) {
-            return <div>No review of systems reported.</div>;
+            return <div />;
         }
 
-        return (
+        return this.props.isRich ? (
+            <Table>
+                <Table.Header>
+                    <Table.HeaderCell>System</Table.HeaderCell>
+                    <Table.HeaderCell>Notes</Table.HeaderCell>
+                </Table.Header>
+                {Object.keys(components).map(
+                    (key) =>
+                        (components[key].positives.length > 0 ||
+                            components[key].negatives.length > 0) && (
+                            <Table.Row key={key}>
+                                <Table.Cell>
+                                    <b>{key}</b>
+                                </Table.Cell>
+                                <Table.Cell>
+                                    {components[key].positives.length > 0
+                                        ? `Positive for ${components[
+                                              key
+                                          ].positives.join(', ')}. `
+                                        : null}
+                                    {components[key].negatives.length > 0
+                                        ? `Negative for ${components[
+                                              key
+                                          ].negatives.join(', ')}. `
+                                        : null}
+                                </Table.Cell>
+                            </Table.Row>
+                        )
+                )}
+            </Table>
+        ) : (
             <ul>
                 {Object.keys(components).map((key) =>
                     components[key].positives.length > 0 ||

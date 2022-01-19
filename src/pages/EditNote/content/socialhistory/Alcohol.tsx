@@ -432,7 +432,7 @@ class Alcohol extends React.Component<Props, State> {
                     rowindex={i}
                     value={
                         values.drinksConsumed[i].numberPerWeek == -1
-                            ? ''
+                            ? 'test: -1 drinks consumed'
                             : values.drinksConsumed[i].numberPerWeek
                     }
                     aria-label='Alcohol-Number-Per-Week-Input'

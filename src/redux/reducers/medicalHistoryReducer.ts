@@ -145,7 +145,7 @@ export function medicalHistoryReducer(
                 ...state,
                 [v4()]: {
                     condition: '',
-                    hasBeenAfflicted: YesNoResponse.None,
+                    hasBeenAfflicted: YesNoResponse.Yes,
                     startYear: -1,
                     hasConditionResolved: YesNoResponse.None,
                     endYear: -1,
