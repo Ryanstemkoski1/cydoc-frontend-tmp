@@ -16,6 +16,16 @@
     transition: box-shadow 100ms;
 }
 
+.footer-copyright {
+    text-align: center;
+    font-size: medium;
+    align-items: center;
+    color: #147A9B;
+    position: static;
+    padding-bottom: 25px;
+    padding-top: 10px;
+}
+
 .ui.segment:hover {
     box-shadow: 0 10px 40px 5px RGBA(0, 128, 159, 0.2);;
 }

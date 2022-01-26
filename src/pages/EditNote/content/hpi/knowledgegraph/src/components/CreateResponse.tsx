@@ -25,6 +25,8 @@ import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ScaleInput from './responseComponents/ScaleInput';
+import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
+import diseaseSynonyms from 'constants/diseaseSynonyms';
 
 interface CreateResponseProps {
     node: string;
@@ -112,7 +114,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
     };
 
     renderSwitch = () => {
-        const { windowWidth, responseChoice } = this.state,
+        const { windowWidth } = this.state,
             { node, hpi } = this.props,
             { responseType } = hpi.nodes[node],
             blankTypes = [
@@ -121,10 +123,31 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 ResponseTypes.PMH_BLANK,
                 ResponseTypes.PSH_BLANK,
             ],
-            choices = blankTypes.includes(responseType)
-                ? (hpi.nodes[node].response as string[])
-                : responseChoice,
             collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
+
+        const responseChoice = this.state.responseChoice;
+        const synonymTypes = [
+            ResponseTypes.FH_POP,
+            ResponseTypes.FH_BLANK,
+            ResponseTypes.PMH_POP,
+            ResponseTypes.PMH_BLANK,
+        ];
+
+        if (synonymTypes.includes(responseType)) {
+            responseChoice.forEach((key: string, index: number) => {
+                responseChoice[index] = standardizeDiseaseNames(
+                    responseChoice[index]
+                );
+                if (key in diseaseSynonyms) {
+                    responseChoice[index] = diseaseSynonyms[key];
+                }
+            });
+        }
+
+        const choices = blankTypes.includes(responseType)
+            ? (hpi.nodes[node].response as string[])
+            : responseChoice;
+
         switch (responseType) {
             case ResponseTypes.YES_NO:
             case ResponseTypes.NO_YES:

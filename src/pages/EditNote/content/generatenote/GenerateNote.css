@@ -26,6 +26,11 @@
     background-color: #006b87;
     color: white;
   }
+
+  .generate-note-buttons {
+    position: sticky;
+    z-index:3;
+  }
   
   @media screen and (max-width: 1400px) {
     .ui.icon.button.note-previous-button {
@@ -39,6 +44,10 @@
     .ui.icon.button.small-note-previous-button {
       left: 5px;
     }
+
+    .generate-note-buttons {
+      top: 140px;
+    }
   
   }
   
@@ -46,5 +55,21 @@
     .ui.icon.button.small-note-previous-button {
       left: 15px;
     }
+
+    .generate-note-buttons {
+      top: 275px;
+    }
   }
   
+
+
+div.ui.segment.buttons-segment {
+  padding: 20px 20px 20px 20px;
+}
+
+.ui.button.copy-button{
+  background-color:gold;
+}
+.ui.button.copy-button:hover{
+  background-color:lemonchiffon;
+}

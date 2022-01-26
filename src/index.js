@@ -83,6 +83,10 @@ ReactDOM.render(
                                         path='/managerdashboard'
                                         component={ManagerDashboard}
                                     />
+                                    <div className='footer-copyright'>
+                                        Copyright© 2019-2022 Cydoc, LLC. All
+                                        rights reserved. Patent pending.
+                                    </div>
                                 </BrowserRouter>
                             </div>
                         </Provider>

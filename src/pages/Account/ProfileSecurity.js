@@ -14,6 +14,7 @@ import NavMenu from 'components/navigation/NavMenu';
 import { passwordErrors } from 'constants/passwordErrors';
 import changePassword from 'auth/changePassword';
 import './Account.css';
+import { passwordRequirments } from 'auth/passwordReqs';
 
 const ProfileSecurity = () => {
     const context = useContext(AuthContext);
@@ -38,19 +39,7 @@ const ProfileSecurity = () => {
     };
 
     const handleNewPasswordChange = (e, { value }) => {
-        setPasswordReqs({
-            ...passwordReqs,
-            containsNumber: value.match(/\d+/g) ? true : false,
-            containsUpper: value.toLowerCase() !== value,
-            containsLower: value.toUpperCase() !== value,
-            containsSpecial: value.match(
-                /=+|\++|-+|\^+|\$+|\*+|\.+|\[+|\]+|{+|}+|\(+|\)+|\?+|"+|!+|@+|#+|%+|&+|\/+|\\+|,+|>+|<+|'+|:+|;+|\|+|_+|~+|`+/g
-            )
-                ? true
-                : false,
-            passesMinLength: value.length >= 25,
-        });
-
+        setPasswordReqs(passwordRequirments(passwordReqs, value, role));
         setNewPassword(value);
     };
 

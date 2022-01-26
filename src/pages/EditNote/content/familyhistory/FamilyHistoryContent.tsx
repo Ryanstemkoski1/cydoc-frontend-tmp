@@ -21,7 +21,10 @@ import {
 } from 'redux/actions/familyHistoryActions';
 import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
 import { CurrentNoteState } from 'redux/reducers';
-import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
+import {
+    FamilyHistoryCondition,
+    FamilyHistoryState,
+} from 'redux/reducers/familyHistoryReducer';
 import { adjustValue } from '../medicalhistory/util';
 import { medicalMapping } from 'constants/word-mappings';
 import { v4 } from 'uuid';
@@ -32,6 +35,8 @@ import {
     PopResponseAction,
     popResponse,
 } from 'redux/actions/hpiActions';
+import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
+import diseaseSynonyms from 'constants/diseaseSynonyms';
 import '../hpi/knowledgegraph/src/css/Button.css';
 
 //TODO: finish the styling for this page
@@ -91,9 +96,36 @@ class FamilyHistoryContent extends Component<Props, State> {
 
     addSeenCond = (value: string, index: string) => {
         const seenConditions = this.state.seenConditions;
-        seenConditions[value] = index;
+        seenConditions[this.standardizeMedicalName(value)] = index;
         this.setState({ seenConditions });
     };
+
+    standardizeMedicalName(name: string) {
+        const standardName = standardizeDiseaseNames(name);
+        let standardReplacedName = standardName;
+        if (standardName in diseaseSynonyms) {
+            standardReplacedName = diseaseSynonyms[standardName];
+        }
+        return standardReplacedName;
+    }
+
+    standardizeFamilyHistory(famHistState: FamilyHistoryState) {
+        const standardFamilyHistory = famHistState;
+
+        Object.entries(standardFamilyHistory).map(
+            (value: [string, FamilyHistoryCondition], index: number) => {
+                const disease = value[1]['condition'];
+                const standardDisease = standardizeDiseaseNames(disease);
+                let standardReplacedDisease = standardDisease;
+                if (standardDisease in diseaseSynonyms) {
+                    standardReplacedDisease = diseaseSynonyms[standardDisease];
+                }
+                value[1]['condition'] = standardReplacedDisease;
+            }
+        );
+
+        return standardFamilyHistory;
+    }
 
     render() {
         const { windowWidth } = this.state;
@@ -105,15 +137,18 @@ class FamilyHistoryContent extends Component<Props, State> {
             node,
             familyHistory,
         } = this.props;
+        const standardFamilyHistory = this.standardizeFamilyHistory(
+            familyHistory
+        );
         const mobile = windowWidth < FAMILY_HISTORY_MOBILE_BP;
         //Create collection of rows
         // Use second OR statement so that the information may be auto-populated in the Family History tab
-        let listValues = Object.keys(familyHistory);
+        let listValues = Object.keys(standardFamilyHistory);
         if (responseType == ResponseTypes.FH_POP && responseChoice) {
             // create map of condition: key to look for existing conditions in family history
             const conditionKeyMap: { [condition: string]: string } = {};
-            for (const key in familyHistory) {
-                const conditionName = familyHistory[key].condition;
+            for (const key in standardFamilyHistory) {
+                const conditionName = standardFamilyHistory[key].condition;
                 conditionKeyMap[conditionName] = key;
             }
             const fhPopKeys = [];
@@ -133,8 +168,8 @@ class FamilyHistoryContent extends Component<Props, State> {
             listValues = responseChoice;
         const listItems = listValues.map((condition, index) => {
             let conditionName = '';
-            if (condition in familyHistory)
-                conditionName = familyHistory[condition].condition;
+            if (condition in standardFamilyHistory)
+                conditionName = standardFamilyHistory[condition].condition;
             if (this.props.isPreview) {
                 return (
                     <FamilyHistoryBlock
@@ -150,6 +185,7 @@ class FamilyHistoryContent extends Component<Props, State> {
                                 key={index}
                                 index={condition}
                                 category={'Family History'}
+                                standardizeName={this.standardizeMedicalName}
                             />
                         }
                         index={''}
@@ -171,6 +207,7 @@ class FamilyHistoryContent extends Component<Props, State> {
                                 key={index}
                                 index={condition}
                                 category={'Family History'}
+                                standardizeName={this.standardizeMedicalName}
                             />
                         }
                         index={condition}

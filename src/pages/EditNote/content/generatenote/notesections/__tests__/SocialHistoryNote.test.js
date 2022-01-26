@@ -32,10 +32,10 @@ describe('Social History Generate Note', () => {
         ['diet'],
         ['exercise'],
     ];
-    test.each(cases)('renders filler text for default %s', (type) => {
+    test.each(cases)('renders filler text for default %s', () => {
         // initial social history contains all default values
         const wrapper = mountWithState();
-        expect(wrapper.text()).toContain(`No ${type} reported.`);
+        expect(wrapper.text()).toContain('');
     });
 
     // straight-forward key value pairs
@@ -141,7 +141,9 @@ describe('Social History Generate Note', () => {
                 comments: value,
             },
         });
-        expect(wrapper.text()).toContain(`Comments: ${value}`);
+        expect(wrapper.find('li').last().text()).toContain(
+            `Comments: ${value}`
+        );
     });
 
     test.each(cases)(
@@ -195,7 +197,9 @@ describe('Social History Generate Note', () => {
                 productsUsed: ['a', 'b', 'c'],
             },
         });
-        expect(wrapper.text()).toContain('Products used: a, b, c');
+        expect(wrapper.find('li').at(1).text()).toContain(
+            'Products used: a, b, c'
+        );
     });
 
     it('renders alcohol drinksConsumed correctly', () => {
@@ -212,7 +216,7 @@ describe('Social History Generate Note', () => {
             },
         });
         // Check different plurality of size
-        expect(wrapper.text()).toContain(
+        expect(wrapper.find('li').at(1).text()).toContain(
             'Products used: a (10 ses per week), b (9 ts per week), c (1 t per week)'
         );
     });
@@ -233,7 +237,7 @@ describe('Social History Generate Note', () => {
                 ],
             },
         });
-        expect(wrapper.text()).toContain(
+        expect(wrapper.find('li').at(1).text()).toContain(
             'Products used: foo (10 per week, a, b), bar (9 per week, a)'
         );
     });

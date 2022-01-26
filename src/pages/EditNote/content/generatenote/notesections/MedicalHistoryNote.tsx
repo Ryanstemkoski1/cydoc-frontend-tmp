@@ -24,6 +24,8 @@ export class MedicalHistoryNote extends Component<MedicalHistoryProps> {
     render() {
         const { isRich, medicalHistory } = this.props;
 
+        // console.log("MedicalHistoryNote1 " + isRich);
+
         const conditions: {
             [index: string]: any;
         } = [];
@@ -35,8 +37,10 @@ export class MedicalHistoryNote extends Component<MedicalHistoryProps> {
         }
 
         if (this.checkEmpty()) {
-            return <div>No medical history reported.</div>;
+            // console.log("MedicalHistoryNote2 " + isRich);
+            return <div />;
         } else if (isRich) {
+            // console.log("MedicalHistoryNote3 " + isRich);
             return (
                 <Table>
                     <Table.Header>
@@ -86,13 +90,24 @@ export class MedicalHistoryNote extends Component<MedicalHistoryProps> {
                         <li key={i}>
                             <b>{condition.condition}. </b>
                             {condition.startYear !== -1
-                                ? `Condition started in ${condition.startYear}. `
-                                : null}
+                                ? `Condition started in ${condition.startYear.toString()}. `
+                                : ''}
                             {condition.hasConditionResolved ===
                             YesNoResponse.Yes
-                                ? `Condition was resolved in ${condition.endYear}. `
-                                : 'Condition has not been resolved. '}
-                            {condition.comments ? condition.comments : null}
+                                ? `Resolved${
+                                      condition.endYear !== -1
+                                          ? ' (' +
+                                            condition.endYear.toString() +
+                                            ')'
+                                          : ''
+                                  }. `
+                                : ''}
+                            {condition.comments
+                                ? condition.comments
+                                      .substring(0, 1)
+                                      .toUpperCase() +
+                                  condition.comments.substring(1)
+                                : null}
                         </li>
                     ))}
                 </ul>

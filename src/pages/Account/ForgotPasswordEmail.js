@@ -24,6 +24,7 @@ import './Account.css';
 import ResetPassword from 'auth/forgotPassword';
 import EnterConfirmationCode from 'auth/enterConfirmationCode';
 import { passwordErrors } from 'constants/passwordErrors';
+import { passwordRequirments } from 'auth/passwordReqs';
 
 const ForgotPasswordEmail = () => {
     const context = useContext(AuthContext);
@@ -59,20 +60,8 @@ const ForgotPasswordEmail = () => {
     const handleConfirmPasswordChange = (e, { value }) => {
         setConfirmPassword(value);
     };
-
     const handleNewPasswordChange = (e, { value }) => {
-        setPasswordReqs({
-            ...passwordReqs,
-            containsNumber: value.match(/\d+/g) ? true : false,
-            containsUpper: value.toLowerCase() !== value,
-            containsLower: value.toUpperCase() !== value,
-            containsSpecial: value.match(
-                /=+|\++|-+|\^+|\$+|\*+|\.+|\[+|\]+|{+|}+|\(+|\)+|\?+|"+|!+|@+|#+|%+|&+|\/+|\\+|,+|>+|<+|'+|:+|;+|\|+|_+|~+|`+/g
-            )
-                ? true
-                : false,
-            passesMinLength: value.length >= 25,
-        });
+        setPasswordReqs(passwordRequirments(passwordReqs, value, role));
         setNewPassword(value);
     };
 
@@ -115,6 +104,7 @@ const ForgotPasswordEmail = () => {
             if (!passwordReqs[req]) {
                 setShowPasswordReqs(true);
                 setPasswordMeetsReqs(false);
+                setIsConfirming(false);
                 return;
             }
         }
@@ -124,6 +114,7 @@ const ForgotPasswordEmail = () => {
         setPasswordsMatch(newPassword === confirmPassword);
         if (newPassword !== confirmPassword) {
             setShowPasswordsMatch(true);
+            setIsConfirming(false);
             return;
         }
 

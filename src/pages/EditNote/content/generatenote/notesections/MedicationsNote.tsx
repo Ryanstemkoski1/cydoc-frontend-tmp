@@ -26,11 +26,15 @@ export class MedicationsNote extends Component<MedicationsProps> {
         return true;
     };
 
+    trimDiseaseName = (procedure: string) => {
+        return procedure.split(' ').slice(1).join(' ');
+    };
+
     render() {
         const { isRich, medications } = this.props;
 
         if (this.checkEmpty()) {
-            return <div>No medications reported.</div>;
+            return <div />;
         } else if (isRich) {
             return (
                 <Table>
@@ -63,7 +67,9 @@ export class MedicationsNote extends Component<MedicationsProps> {
                                     </Table.Cell>
                                     <Table.Cell>{medication.dose}</Table.Cell>
                                     <Table.Cell>
-                                        {medication.reasonForTaking}
+                                        {this.trimDiseaseName(
+                                            medication.reasonForTaking
+                                        )}
                                     </Table.Cell>
                                     <Table.Cell>
                                         {medication.sideEffects.join(', ')}
@@ -83,37 +89,31 @@ export class MedicationsNote extends Component<MedicationsProps> {
                     {Object.values(medications).map((medication, i) =>
                         medication.drugName ? (
                             <div key={i}>
-                                <li>
-                                    <b>{medication.drugName}</b>
-                                </li>
-                                <ul>
-                                    {medication.startYear !== -1 ? (
-                                        <li>
-                                            Start Year: {medication.startYear}
-                                        </li>
-                                    ) : null}
-                                    {medication.schedule ? (
-                                        <li>Schedule: {medication.schedule}</li>
-                                    ) : null}
-                                    {medication.dose ? (
-                                        <li>Dose: {medication.dose}</li>
-                                    ) : null}
-                                    {medication.reasonForTaking ? (
-                                        <li>
-                                            Reason for Taking:{' '}
-                                            {medication.reasonForTaking}
-                                        </li>
-                                    ) : null}
-                                    {medication.sideEffects.length > 0 ? (
-                                        <li>
-                                            Side Effects:{' '}
-                                            {medication.sideEffects.join(', ')}
-                                        </li>
-                                    ) : null}
-                                    {medication.comments ? (
-                                        <li>Comments: {medication.comments}</li>
-                                    ) : null}
-                                </ul>
+                                <b>{medication.drugName}.</b>
+                                {medication.startYear !== -1
+                                    ? ` Start Year: ${medication.startYear.toString()}.`
+                                    : ''}
+                                {medication.schedule
+                                    ? ` Schedule: ${medication.schedule}.`
+                                    : ''}
+                                {medication.dose
+                                    ? ` Dose: ${medication.dose}.`
+                                    : ''}
+                                {medication.reasonForTaking
+                                    ? ` Reason for Taking:
+                                            ${this.trimDiseaseName(
+                                                medication.reasonForTaking
+                                            )}.`
+                                    : ''}
+                                {medication.sideEffects.length > 0
+                                    ? ` Side Effects:
+                                            ${medication.sideEffects.join(
+                                                ', '
+                                            )}. `
+                                    : ''}
+                                {medication.comments
+                                    ? ` Comments: ${medication.comments}.`
+                                    : ''}
                             </div>
                         ) : null
                     )}

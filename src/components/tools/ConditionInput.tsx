@@ -11,6 +11,7 @@ import { SeenCondition } from 'pages/EditNote/content/medicalhistory/MedicalHist
 import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
 import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
 import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
+import { standardizeDiseaseNamesOnBlur } from 'constants/standardizeDiseaseNames';
 
 class ConditionInput extends React.Component<Props, OwnState> {
     constructor(props: Props) {
@@ -30,26 +31,25 @@ class ConditionInput extends React.Component<Props, OwnState> {
     }
 
     handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.editInput(event.target.value);
+    };
+
+    editInput = (val: string) => {
         this.setState({
-            textInput: event.target.value,
+            textInput: val,
         });
         if (this.props.category === 'Medical History') {
-            this.props.updateMedicalHistoryCondition(
-                this.props.index,
-                event.target.value
-            );
+            this.props.updateMedicalHistoryCondition(this.props.index, val);
         }
         if (this.props.category === 'Family History') {
-            this.props.updateFamilyHistoryCondition(
-                this.props.index,
-                event.target.value
-            );
+            this.props.updateFamilyHistoryCondition(this.props.index, val);
         }
     };
 
     handleOnBlur = (e: React.FocusEvent<HTMLInputElement>) => {
         this.setState({ isTitleFocused: false });
-        const val = adjustValue(e.target.value, medicalMapping);
+        const val = standardizeDiseaseNamesOnBlur(e.target.value);
+        this.editInput(val);
         if (
             val in this.props.seenConditions &&
             this.props.index !== this.props.seenConditions[val]
@@ -121,6 +121,7 @@ interface InputProps {
     seenConditions: SeenCondition;
     addSeenCondition: (value: string, index: string) => void;
     condition: string;
+    standardizeName: (name: string) => string;
 }
 
 type Props = DispatchProps &

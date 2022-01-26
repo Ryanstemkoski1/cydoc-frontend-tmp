@@ -6,8 +6,9 @@ import { Provider } from 'react-redux';
 import AllergiesContent from '../AllergiesContent.tsx';
 import AllergiesTableBodyRow from '../AllergiesTableBodyRow';
 import AddRowButton from 'components/tools/AddRowButton';
-import { Button, Accordion } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import { ALLERGIES_ACTION } from 'redux/actions/actionTypes';
+import { PATIENT_HISTORY_ALLERGIES_MOBILE_BP } from 'constants/breakpoints';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
@@ -32,9 +33,14 @@ const connectStore = (state = initialState, props) => {
 };
 
 describe('AllergiesContent', () => {
+    const { innerWidth } = window;
     beforeEach(() => {
         const { store } = connectStore();
         store.clearActions();
+    });
+    afterEach(() => {
+        window.innerWidth = innerWidth;
+        window.dispatchEvent(new Event('resize'));
     });
 
     test('render', () => {
@@ -56,17 +62,21 @@ describe('AllergiesContent', () => {
 
     test('editing inciting agent dispatches correct action', () => {
         const { store, wrapper } = connectStore();
-        const input = wrapper
-            .find('.table-row-text[type="incitingAgent"]')
-            .first();
-        input.simulate('change', {
-            target: { value: 'pollen' },
-        });
+        wrapper
+            .find('input[aria-label="incitingAgent"]')
+            .first()
+            .simulate('focus');
+        wrapper
+            .find('.dropdown__control--is-focused')
+            .first()
+            .simulate('mousedown');
+        const option = wrapper.find('.option').first();
+        option.simulate('click');
         const expectedAction = [
             {
                 type: ALLERGIES_ACTION.UPDATE_INCITING_AGENT,
                 payload: {
-                    newIncitingAgent: 'pollen',
+                    newIncitingAgent: option.prop('value'),
                     index: 'foo',
                 },
             },
@@ -75,22 +85,27 @@ describe('AllergiesContent', () => {
     });
 
     test('editing inciting agent dispatches correct action - mobile', () => {
-        const { store, wrapper } = connectStore(initialState, {
-            mobile: true,
-            isPreview: false,
-        });
-        const input = wrapper
-            .find(Accordion)
-            .find('input[type="incitingAgent"]')
-            .first();
-        input.simulate('change', {
-            target: { value: 'pollen' },
-        });
+        const { store, wrapper } = connectStore(initialState);
+
+        window.innerWidth = PATIENT_HISTORY_ALLERGIES_MOBILE_BP - 10;
+        window.dispatchEvent(new Event('resize'));
+        wrapper.update();
+
+        wrapper
+            .find('input[aria-label="incitingAgent"]')
+            .first()
+            .simulate('focus');
+        wrapper
+            .find('.dropdown__control--is-focused')
+            .first()
+            .simulate('mousedown');
+        const option = wrapper.find('.option').first();
+        option.simulate('click');
         const expectedAction = [
             {
                 type: ALLERGIES_ACTION.UPDATE_INCITING_AGENT,
                 payload: {
-                    newIncitingAgent: 'pollen',
+                    newIncitingAgent: option.prop('value'),
                     index: 'foo',
                 },
             },
@@ -116,18 +131,19 @@ describe('AllergiesContent', () => {
         expect(store.getActions()).toEqual(expectedAction);
     });
 
-    test('editing reaction dispatches correct action - mobile', () => {
-        const { store, wrapper } = connectStore(initialState, {
-            mobile: true,
-            isPreview: false,
-        });
-        const input = wrapper
-            .find(Accordion)
+    it('editing reaction dispatches correct action - mobile', () => {
+        const { store, wrapper } = connectStore(initialState);
+
+        window.innerWidth = PATIENT_HISTORY_ALLERGIES_MOBILE_BP - 10;
+        window.dispatchEvent(new Event('resize'));
+        wrapper.update();
+        wrapper
             .find('input[type="reaction"]')
-            .first();
-        input.simulate('change', {
-            target: { value: 'hives' },
-        });
+            .first()
+            .simulate('change', {
+                target: { value: 'hives' },
+            });
+
         const expectedAction = [
             {
                 type: ALLERGIES_ACTION.UPDATE_REACTION,
@@ -158,18 +174,19 @@ describe('AllergiesContent', () => {
         expect(store.getActions()).toEqual(expectedAction);
     });
 
-    test('editing comments dispatches correct action - mobile', () => {
-        const { store, wrapper } = connectStore(initialState, {
-            mobile: true,
-            isPreview: false,
-        });
-        const input = wrapper
-            .find(Accordion)
+    it('editing comments dispatches correct action - mobile', () => {
+        const { store, wrapper } = connectStore(initialState);
+
+        window.innerWidth = PATIENT_HISTORY_ALLERGIES_MOBILE_BP - 10;
+        window.dispatchEvent(new Event('resize'));
+        wrapper.update();
+        wrapper
             .find('input[type="comments"]')
-            .first();
-        input.simulate('change', {
-            target: { value: 'Normal' },
-        });
+            .first()
+            .simulate('change', {
+                target: { value: 'Normal' },
+            });
+
         const expectedAction = [
             {
                 type: ALLERGIES_ACTION.UPDATE_COMMENTS,
@@ -184,18 +201,26 @@ describe('AllergiesContent', () => {
 
     test('handle cell click', () => {
         const { wrapper } = connectStore();
-        const input = wrapper.find('td').first();
+        const input = wrapper.find('td').last();
         input.simulate('click');
-        expect(input.find('textarea').first().getElement().rowindex).toEqual(
+        expect(wrapper.find('textarea').last().rowindex).toEqual(
             document.activeElement.rowIndex
         );
     });
 
     test('onTitleClick', () => {
-        const { wrapper } = connectStore(initialState, {
-            mobile: true,
-            isPreview: false,
-        });
+        const { wrapper } = connectStore(initialState);
+
+        window.innerWidth = PATIENT_HISTORY_ALLERGIES_MOBILE_BP - 10;
+        window.dispatchEvent(new Event('resize'));
+        wrapper.update();
+        wrapper
+            .find('input[type="comments"]')
+            .first()
+            .simulate('change', {
+                target: { value: 'Normal' },
+            });
+
         const input = wrapper.find('.title').first();
         input.simulate('click');
         expect(input.getElement().rowindex).toEqual(

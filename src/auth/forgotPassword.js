@@ -4,12 +4,20 @@ import getUserPool from 'auth/getUserPool';
 const ResetPassword = async (username, role) => {
     if (!username) {
         alert('Please input your username to login.');
-        return;
+        return new Promise((resolve) => {
+            resolve({
+                success: false,
+            });
+        });
     }
 
     if (!role) {
         alert('Please select your role before resetting password');
-        return;
+        return new Promise((resolve) => {
+            resolve({
+                success: false,
+            });
+        });
     }
 
     // get user pool info and cognito user
