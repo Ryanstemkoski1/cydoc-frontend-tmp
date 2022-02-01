@@ -11,6 +11,7 @@ import NoteNameMenuItem, { Context } from './NoteNameMenuItem';
 
 import './NavMenu.css';
 import DoctorSignUp from 'pages/Account/DoctorSignUp';
+import SignUpModal from 'pages/Account/SignUpModal';
 
 interface ConnectedNavMenuProps {
     className: string;
@@ -28,6 +29,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
 
     const context = useContext(AuthContext) as Context;
     const [windowWidth, setWindowWidth] = useState(0);
+    const [signUpActive, setSignUpActive] = useState(false);
 
     // Set event listeners for window resize to determine mobile vs web view
     useEffect(() => {
@@ -99,6 +101,8 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
         e.returnValue = '';
     });
 
+    const handleClickSignUp = () => setSignUpActive(true);
+
     // Menu items when not logged in
     const defaultMenuItems = (
         <Menu.Item>
@@ -109,7 +113,13 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                 to='/login'
                 content='Login'
             />
-            <DoctorSignUp />
+            <Button
+                icon='plus'
+                content='Sign Up'
+                size='small'
+                onClick={handleClickSignUp}
+            />
+            {signUpActive && <SignUpModal navToSignUp={signUpActive} />}
         </Menu.Item>
     );
     // Menu items when logged in
