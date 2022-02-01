@@ -11,6 +11,7 @@ import AddRowButton from 'components/tools/AddRowButton';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import { PATIENT_HISTORY_ALLERGIES_MOBILE_BP } from 'constants/breakpoints';
 import allergens from 'constants/allergens';
+import allergicReactions from 'constants/allergicReactions';
 import AllergiesTableBodyRow from './AllergiesTableBodyRow';
 import { connect } from 'react-redux';
 import {
@@ -33,7 +34,8 @@ class AllergiesContent extends Component<Props, OwnState> {
         this.state = {
             windowWidth: 0,
             active: new Set(),
-            options: allergens,
+            allergensOptions: allergens,
+            allergicReactionsOptions: allergicReactions,
         };
         this.addRow = this.addRow.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
@@ -132,7 +134,8 @@ class AllergiesContent extends Component<Props, OwnState> {
                 fields={cellField}
                 onTableBodyChange={this.handleTableBodyChange}
                 isPreview={this.props.isPreview}
-                options={this.state.options}
+                allergensOptions={this.state.allergensOptions}
+                allergicReactionsOptions={this.state.allergicReactionsOptions}
                 onAddItem={this.onAddItem}
             />
         ));
@@ -141,12 +144,29 @@ class AllergiesContent extends Component<Props, OwnState> {
     onAddItem = (_e: any, data: { [key: string]: any }) => {
         const { value } = data;
         this.setState((state, _props) => ({
-            options: {
-                ...state.options,
+            allergensOptions: {
+                ...state.allergensOptions,
+                [value]: { value, label: value },
+            },
+        }));
+        this.setState((state, _props) => ({
+            allergicReactionsOptions: {
+                ...state.allergicReactionsOptions,
                 [value]: { value, label: value },
             },
         }));
     };
+
+    // onAddItemFormatter = (
+    //     action: (type: DropdownType, value: string) => void
+    // ) => {
+    //     return (
+    //         _e: any,
+    //         { optiontype, value }: { optiontype: DropdownType; value: string }
+    //     ) => {
+    //         action(optiontype, value as string);
+    //     };
+    // };
 
     makeAccordionPanels(nums: string[], values: AllergiesState) {
         const { isPreview } = this.props;
@@ -165,21 +185,37 @@ class AllergiesContent extends Component<Props, OwnState> {
                         aria-label='incitingAgent'
                         placeholder='Inciting Agent'
                         type='incitingAgent'
-                        options={this.state.options}
+                        options={this.state.allergensOptions}
                         onAddItem={this.onAddItem}
                         onChange={this.handleTableBodyChange}
                         rowIndex={i}
                         value={isPreview ? '' : values[i].incitingAgent}
                     />
                     {' causes '}
-                    <Input
+                    <Dropdown
+                        fluid
+                        search
+                        selection
+                        clearable
+                        transparent
+                        allowAdditions
+                        aria-label='reaction'
+                        placeholder='Reaction'
+                        type='reaction'
+                        options={this.state.allergicReactionsOptions}
+                        onAddItem={this.onAddItem}
+                        onChange={this.handleTableBodyChange}
+                        rowIndex={i}
+                        value={isPreview ? '' : values[i].reaction}
+                    />
+                    {/* <Input
                         transparent
                         placeholder='Reaction'
                         type='reaction'
                         onChange={this.handleTableBodyChange}
                         rowIndex={i}
                         value={isPreview ? '' : values[i].reaction}
-                    />
+                    /> */}
                 </Form>
             );
 
@@ -291,7 +327,8 @@ interface ContentProps {
 interface OwnState {
     windowWidth: number;
     active: Set<string>;
-    options: OptionMapping;
+    allergensOptions: OptionMapping;
+    allergicReactionsOptions: OptionMapping;
 }
 
 type Props = AllergiesProps & ContentProps & DispatchProps;
