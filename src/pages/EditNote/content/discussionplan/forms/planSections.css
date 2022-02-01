@@ -1,0 +1,90 @@
+/* styling for DifferentialDiagnosesForm */
+.mobile-title {
+    margin-top: 10px;
+}
+
+#mobile-content-form {
+    width: 95%;
+}
+
+#main-input-div {
+    width: 270px;
+    height: 15px;
+}
+
+/* mobile screen */
+@media (max-width: 450px) {
+    #container-div {
+        height: 5px;
+    }
+}
+
+@media (max-width: 380px) {
+    #main-input-div {
+        width: 180px;
+        height: 15px;
+    }
+}
+
+/* styling for PrescriptionsForm */
+.prescriptions-label {
+    margin-left: 15px;
+}
+
+#prescriptions-main-input-container {
+    margin-top: 0px;
+    margin-bottom: 15px;
+}
+
+#prescriptions-container1 {
+    height: 5px;
+}
+
+#prescriptions-container2 {
+    height: 10px;
+}
+
+#prescriptions-container3 {
+    height: 20px;
+}
+
+#prescriptions-ui-form {
+    width: 90%;
+    margin: auto;
+}
+
+/* styling for MainWhenComments */
+#main-when-mobile-title {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#near-width {
+    width: 95%;
+}
+
+/* smaller/mobile screens */
+@media (max-width: 800px) {
+    /* MainWhenComments */
+    #main-when-mobile-title {
+        width: 85%;
+        margin: auto;
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
+    #main-when-mobile-title-inner {
+        height: 5px;
+    }
+
+    #main-when-mobile-content {
+        height: 20px;
+    }
+
+    /* prescriptions */
+    #prescriptions-main-input-container {
+        width: 90%;
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+}

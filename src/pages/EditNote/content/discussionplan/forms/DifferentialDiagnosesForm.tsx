@@ -21,6 +21,7 @@ import {
 } from './BaseCategoryForm';
 import UpdateDimensions from './UpdateDimensions';
 import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
+import './planSections.css';
 
 interface DifferentialDiagnosesDispatchProps {
     addDifferentialDiagnosis: PlanAction;
@@ -63,25 +64,14 @@ const DifferentialDiagnosesForm = (
                 placeholder='diagnosis'
                 className='main-input'
             />
-            <div
-                className='container'
-                style={{
-                    width: width < 380 ? '180px' : '270px',
-                    height: '15px',
-                }}
-            />
+            <div className='container' id='main-input-div' />
         </>
     );
 
     const mobileTitle: ComponentFunction = (row, options, onAddItem) => (
-        <div style={{ marginTop: '10px' }}>
+        <div className='mobile-title'>
             <label>Diagnosis</label>
-            <div
-                className='container'
-                style={{
-                    height: width < NOTE_PAGE_MOBILE_BP ? '5px' : '',
-                }}
-            />
+            <div className='container' id='container-div' />
             {mainInput(row, options, onAddItem)}
         </div>
     );
@@ -89,13 +79,8 @@ const DifferentialDiagnosesForm = (
     const mobileContent: ComponentFunction = (row) => (
         <>
             <label>Comments</label>
-            <div
-                className='container'
-                style={{
-                    height: width < NOTE_PAGE_MOBILE_BP ? '5px' : '',
-                }}
-            />
-            <div className='ui form' style={{ width: '95%' }}>
+            <div className='container' id='container-div' />
+            <div className='ui form' id='mobile-content-form'>
                 <TextArea
                     fluid
                     value={row.comments}

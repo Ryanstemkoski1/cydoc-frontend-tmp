@@ -32,6 +32,7 @@ import Dropdown from 'components/tools/OptimizedDropdown';
 import { WhenResponse } from 'constants/enums';
 import _ from 'lodash';
 import UpdateDimensions from './UpdateDimensions';
+import './planSections.css';
 
 export const ProceduresAndServicesForm = connect(
     (state: CurrentNoteState, ownProps: CategoryFormOwnProps) => ({
@@ -139,22 +140,9 @@ export const MainWhenCommentsForm = <
     );
 
     const mobileTitle: CategoryFormComponent<T> = (row, options, onAddItem) => (
-        <div
-            className='container'
-            style={{
-                width: width < 800 ? '85%' : '',
-                margin: width < 800 ? 'auto' : '',
-                marginTop: width < 800 ? '10px' : '0px',
-                marginBottom: width < 800 ? '15px' : '0px',
-            }}
-        >
+        <div className='container' id='main-when-mobile-title'>
             {width < 800 ? <label>{categoryProps.mainValueName}</label> : <></>}
-            <div
-                className='container'
-                style={{
-                    height: width < 800 ? '5px' : '',
-                }}
-            />
+            <div className='container' id='main-when-mobile-title-inner' />
             <Dropdown
                 fluid
                 search
@@ -184,13 +172,8 @@ export const MainWhenCommentsForm = <
             ) : (
                 <></>
             )}
-            <div
-                className='container'
-                style={{
-                    height: width < 800 ? '5px' : '',
-                }}
-            />
-            <div style={{ width: '95%' }}>
+            <div className='container' id='main-when-mobile-title-inner' />
+            <div id='near-width'>
                 <Dropdown
                     fluid
                     search
@@ -240,20 +223,10 @@ export const MainWhenCommentsForm = <
     ) => (
         <>
             {whenInput(row, options, onAddItem)}
-            <div
-                className='container'
-                style={{
-                    height: width < 800 ? '20px' : '',
-                }}
-            />
+            <div className='container' id='main-when-mobile-content' />
             <label>Comments</label>
-            <div
-                className='container'
-                style={{
-                    height: width < 800 ? '5px' : '',
-                }}
-            />
-            <div className='ui form' style={{ width: '95%' }}>
+            <div className='container' id='main-when-mobile-title-inner' />
+            <div className='ui form' id='near-width'>
                 <TextArea
                     fluid
                     type='text'
