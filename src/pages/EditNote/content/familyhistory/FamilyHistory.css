@@ -85,6 +85,10 @@
     margin-bottom: 25px;
 }
 
+#alcohol-header, #drugs-header {
+    border-left: 0;
+}
+
 @media screen and (max-width: 767px) {
     .ui.form.family-hx-note-item {
         padding-left: 1rem;
@@ -116,6 +120,44 @@
 
     .condition-header textarea {
         height: auto !important;
+    }
+
+    #title-div {
+        width: 85%;
+        white-space: nowrap;
+    }
+    
+    #dropdown-display {
+        display: inline-block;
+    }
+    
+    #btn-display {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        display: inline-block;
+    }
+    
+    #contents-div {
+        width: 100%;
+        white-space: nowrap;
+    }
+    
+    #contents-label {
+        display: inline-block;
+        margin-right: 15px;
+    }
+    
+    #num-per-week {
+        width: 50%;
+    }
+
+    #drink-size-contents {
+        display: inline-block;
+        width: 70%;
+    }
+
+    #mode-of-delivery {
+        width: 100%;
     }
 }
 

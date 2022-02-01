@@ -215,7 +215,7 @@ class Alcohol extends React.Component<Props, State> {
                 <Table.HeaderCell>Drink Type</Table.HeaderCell>
                 <Table.HeaderCell>Drink Size</Table.HeaderCell>
                 <Table.HeaderCell># Per Week</Table.HeaderCell>
-                <Table.HeaderCell style={{ borderLeft: 0 }} />
+                <Table.HeaderCell id='alcohol-header' />
             </Table.Row>
         );
     }
@@ -354,10 +354,11 @@ class Alcohol extends React.Component<Props, State> {
 
             const titleContent = (
                 <Form className='inline-form'>
-                    <Input
+                    {/* <Input
                         transparent
                         className='content-input-surgical content-dropdown medication'
-                    >
+                    > */}
+                    <div id='title-div'>
                         <Dropdown
                             fluid
                             search
@@ -376,9 +377,10 @@ class Alcohol extends React.Component<Props, State> {
                             icon=''
                             onBlur={(event) => event.preventDefault()}
                             aria-label='Alcohol-Consumption-Type-Dropdown'
+                            id='dropdown-display'
                         />
                         <Button
-                            style={{ marginTop: 5, marginBottom: 5 }}
+                            id='btn-display'
                             icon='close'
                             type='delete'
                             compact
@@ -387,56 +389,72 @@ class Alcohol extends React.Component<Props, State> {
                             }}
                             className='hpi-ph-button'
                         />
-                    </Input>
+                    </div>
+                    {/* </Input> */}
                 </Form>
             );
             const drinkSizeContent = (
-                <Input className='content-input content-dropdown'>
+                // <Input
+                //     fluid
+                //     transparent
+                //     className='content-input content-dropdown'
+                // >
+                <div id='contents-div'>
+                    <label id='contents-label'>Drink size:</label>
                     <Dropdown
                         fluid
                         search
                         selection
                         icon=''
                         options={drinkSizes}
-                        placeholder='Drink Size'
                         onChange={(_, { value }) => {
                             this.props.updateAlcoholConsumptionSize(
                                 i,
                                 value as DrinkSize
                             );
                         }}
+                        placeholder='Enter...'
                         rowindex={i}
                         value={values.drinksConsumed[i].size}
                         aria-label='Alcohol-Consumption-Size-Dropdown'
                         className='side-effects'
                     />
-                </Input>
+                </div>
+                // </Input>
             );
             const numberPerWeekContent = (
-                <TextArea
-                    fluid
-                    type='number'
-                    className='content-input content-dropdown'
-                    onChange={(_, { value }) => {
-                        const numberInput = parseInt(value as string);
-                        if (!isNaN(numberInput)) {
-                            this.props.updateAlcoholConsumptionPerWeek(
-                                i,
-                                numberInput
-                            );
-                        } else if (value == '') {
-                            this.props.updateAlcoholConsumptionPerWeek(i, -1);
+                <div id='contents-div'>
+                    <label id='contents-label'>Number Per Week:</label>
+                    <TextArea
+                        fluid
+                        transparent
+                        type='number'
+                        className='content-input content-dropdown'
+                        onChange={(_: any, { value }: any) => {
+                            const numberInput = parseInt(value);
+                            if (!isNaN(numberInput)) {
+                                this.props.updateAlcoholConsumptionPerWeek(
+                                    i,
+                                    numberInput
+                                );
+                            } else if (value == '') {
+                                this.props.updateAlcoholConsumptionPerWeek(
+                                    i,
+                                    -1
+                                );
+                            }
+                        }}
+                        placeholder='# Per Week'
+                        rowindex={i}
+                        value={
+                            values.drinksConsumed[i].numberPerWeek == -1
+                                ? ''
+                                : values.drinksConsumed[i].numberPerWeek
                         }
-                    }}
-                    placeholder='# Per Week'
-                    rowindex={i}
-                    value={
-                        values.drinksConsumed[i].numberPerWeek == -1
-                            ? 'test: -1 drinks consumed'
-                            : values.drinksConsumed[i].numberPerWeek
-                    }
-                    aria-label='Alcohol-Number-Per-Week-Input'
-                />
+                        aria-label='Alcohol-Number-Per-Week-Input'
+                        id='num-per-week'
+                    />
+                </div>
             );
 
             panels.push({
@@ -450,7 +468,7 @@ class Alcohol extends React.Component<Props, State> {
                             {drinkSizeContent} {numberPerWeekContent}
                         </>
                     ),
-                    active: !!values.drinksConsumed[i].type,
+                    // active: !!values.drinksConsumed[i].type,
                 },
             });
         }
@@ -479,7 +497,7 @@ class Alcohol extends React.Component<Props, State> {
                     </Table.Cell>
                     <Table.Cell
                         collapsing
-                        style={{ borderLeft: 0 }}
+                        id='alcohol-header'
                         onClick={this.handleCellClick}
                     >
                         {this.getCell('delete', index)}

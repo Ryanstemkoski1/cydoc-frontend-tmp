@@ -184,23 +184,28 @@ class AllergiesContent extends Component<Props, OwnState> {
             );
 
             const contentInputs = (
-                <Input
-                    fluid
-                    transparent
-                    rowIndex={i}
-                    disabled={isPreview}
-                    type='comments'
-                    label={{
-                        basic: true,
-                        content: 'Comments: ',
-                        className: 'medications-content-input-label',
-                    }}
-                    placeholder='Comments'
-                    onChange={this.handleTableBodyChange}
-                    value={isPreview ? '' : values[i].comments}
-                    className='content-input'
-                    id='placeholder'
-                />
+                <div id='contents-input-div'>
+                    <label
+                        className='medications-content-input-label'
+                        id='comments-label'
+                    >
+                        <b>Comments:</b>
+                    </label>
+                    <div id='contents-input-div-inline'>
+                        <Input
+                            fluid
+                            transparent
+                            rowIndex={i}
+                            disabled={isPreview}
+                            type='comments'
+                            placeholder='Comments'
+                            onChange={this.handleTableBodyChange}
+                            value={isPreview ? '' : values[i].comments}
+                            className='content-input'
+                            id='placeholder'
+                        />
+                    </div>
+                </div>
             );
 
             panels.push({

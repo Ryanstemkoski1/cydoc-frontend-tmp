@@ -37,6 +37,7 @@ import {
     PopResponseAction,
     popResponse,
 } from 'redux/actions/hpiActions';
+import './SurgicalHistoryContent.css';
 
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
@@ -237,83 +238,93 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                             value={nums[n]}
                         />
                     ) : (
-                        <Input
-                            fluid
-                            transparent
-                            className='content-input-surgical content-dropdown medication'
-                            id='add-row'
-                        >
-                            <div id='width-full'>
-                                <Dropdown
-                                    clearable
-                                    fluid
-                                    search
-                                    selection
-                                    allowAdditions
-                                    type='procedure'
-                                    optiontype='proceduresOptions'
-                                    options={this.state.proceduresOptions}
-                                    placeholder={'Procedure'}
-                                    onChange={this.handleTableBodyChange}
-                                    rowIndex={i}
-                                    value={procedureName}
-                                    onAddItem={this.handleAddition}
-                                    aria-label='Surgical-Dropdown'
-                                    className='content-input-surgical'
-                                />
-                            </div>
-                        </Input>
+                        // <Input
+                        //     fluid
+                        //     transparent
+                        //     className='content-input-surgical content-dropdown medication'
+                        //     id='add-row'
+                        // >
+                        <div id='width-full'>
+                            <Dropdown
+                                clearable
+                                fluid
+                                search
+                                selection
+                                allowAdditions
+                                type='procedure'
+                                optiontype='proceduresOptions'
+                                options={this.state.proceduresOptions}
+                                placeholder={'Procedure'}
+                                onChange={this.handleTableBodyChange}
+                                rowIndex={i}
+                                value={procedureName}
+                                onAddItem={this.handleAddition}
+                                aria-label='Surgical-Dropdown'
+                                className='content-input-surgical'
+                            />
+                        </div>
+                        // </Input>
                     )}
                 </Form>
             );
 
             const contentInputs = (
                 <>
-                    <Input
-                        fluid
-                        transparent
-                        rowIndex={i}
-                        disabled={isPreview}
-                        type='year'
-                        label={{
-                            basic: true,
-                            content: 'Year:',
-                            className: 'medications-content-input-label',
-                        }}
-                        placeholder='e.g. 2020'
-                        value={
-                            isPreview ||
-                            year === -1 ||
-                            year.toString() === '-' ||
-                            isNaN(year)
-                                ? ''
-                                : year
-                        }
-                        onChange={this.handleTableBodyChange}
-                        className='content-input-surgical content-dropdown'
-                    />
-                    {this.state.isInvalidYear.has(i) && (
-                        <p className='year-validation-mobile-error'>
-                            Please enter a valid year between 1900 and{' '}
-                            {this.state.currentYear}
-                        </p>
-                    )}
-                    <Input
-                        fluid
-                        transparent
-                        rowIndex={i}
-                        disabled={isPreview}
-                        type='comments'
-                        label={{
-                            basic: true,
-                            content: 'Comments: ',
-                            className: 'medications-content-input-label',
-                        }}
-                        placeholder='Comments'
-                        onChange={this.handleTableBodyChange}
-                        value={isPreview ? '' : comments}
-                        className='content-input-surgical'
-                    />
+                    <div id='contents-input-div'>
+                        <label
+                            className='medications-content-input-label'
+                            id='year-label'
+                        >
+                            <b>Year:</b>
+                        </label>
+                        <div id='contents-inner-input-div'>
+                            <Input
+                                fluid
+                                transparent
+                                rowIndex={i}
+                                disabled={isPreview}
+                                type='year'
+                                placeholder='e.g. 2020'
+                                value={
+                                    isPreview ||
+                                    year === -1 ||
+                                    year.toString() === '-' ||
+                                    isNaN(year)
+                                        ? ''
+                                        : year
+                                }
+                                onChange={this.handleTableBodyChange}
+                                className='content-input-surgical content-dropdown'
+                            />
+                            {this.state.isInvalidYear.has(i) && (
+                                <p className='year-validation-mobile-error'>
+                                    Please enter a valid year between 1900 and{' '}
+                                    {this.state.currentYear}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <div id='contents-input-div'>
+                        <label
+                            className='medications-content-input-label'
+                            id='comments-label'
+                        >
+                            <b>Comments:</b>
+                        </label>
+                        <div id='contents-inner-input-div'>
+                            <Input
+                                fluid
+                                transparent
+                                rowIndex={i}
+                                disabled={isPreview}
+                                type='comments'
+                                placeholder='Comments'
+                                onChange={this.handleTableBodyChange}
+                                value={isPreview ? '' : comments}
+                                className='content-input-surgical'
+                            />
+                        </div>
+                    </div>
                 </>
             );
 
@@ -353,7 +364,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             }
             const pshPopKeys = [];
             for (const procedureKey in responseChoice) {
-                const procedureName = responseChoice[procedureKey];
+                const procedureName: any = responseChoice[procedureKey];
                 if (procedureName in procedureKeyMap)
                     pshPopKeys.push(procedureKeyMap[procedureName]);
                 else {
