@@ -36,7 +36,7 @@ const doctorSignUp = async (
                 customerUUID: '',
                 name,
                 role,
-                plans: [{ price: 'price_1IeoaLI5qo8H3FXUkFZRFvSr' }],
+                plans: [{ price: 'price_1K3YAvI5qo8H3FXU8tRMTxMC' }],
             },
         },
     };
