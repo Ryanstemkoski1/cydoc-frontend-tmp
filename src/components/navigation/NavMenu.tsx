@@ -95,6 +95,11 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
         }
     };
 
+    const logoNotLoggedIn = () => {
+        const path = '/';
+        history.push(path);
+    };
+
     window.addEventListener('beforeunload', function (e) {
         // alert('If you leave the page, your note will not be saved.');
         e.preventDefault();
@@ -227,7 +232,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                         )}
                     </Menu.Item>
                 ) : (
-                    <Menu.Item className='logo-menu' onClick={checkEditNote}>
+                    <Menu.Item className='logo-menu' onClick={logoNotLoggedIn}>
                         <Image
                             src={Logo}
                             className={`${
