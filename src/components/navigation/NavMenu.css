@@ -49,14 +49,12 @@
     border-bottom: 0;
 }
 
-
 .note-name-menu-item {
     padding-top: 0 !important;
     display: flex;
     flex-wrap: wrap;
     width: 450px;
 }
-
 
 .ui.dropdown.collapsed-dropdown {
     color: black;
@@ -154,6 +152,10 @@ i.icon.profile-mobile-icon {
     margin: 0;
 }
 
+#menu-item {
+    margin-top: 15px;
+}
+
 /* Override the dropdown CSS for the profile button */
 .ui.button.profile-button {
     box-shadow: 0 0 0 1px #007a9a inset !important;
@@ -163,6 +165,17 @@ i.icon.profile-mobile-icon {
 .ui.button.profile-button:hover {
     box-shadow: 0 0 0 1px #0d5e70 inset !important;
     color: #0d5e70 !important;
+}
+
+@media (max-width: 450px) {
+    #menu-item {
+        margin-left: 5px;
+        margin-top: 20px;
+    }
+
+    #modal-btn {
+        margin-bottom: 70px;
+    }
 }
 
 @media screen and (max-width: 500px) {
@@ -209,15 +222,18 @@ i.icon.profile-mobile-icon {
     }
     
     #first-name-error, #last-name-error, #email-error {
-        bottom: 70px;
+        margin-right: 10px;
+        bottom: 0px;
         padding: 2px;
     }
     
     #dob-error {
-        bottom: 0;
+        bottom: 0px;
+        padding: 2px;
+        /* bottom: 0;
         left: 18px;
         padding: 2px;
-        width: 120px;
+        width: 120px; */
     }
 
     #phone-error {

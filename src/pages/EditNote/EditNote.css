@@ -30,6 +30,14 @@
     margin-bottom: 10px;
 }
 
+.mobile-header {
+    height: 260px;
+}
+
+#mobile-header-container {
+    height: 10px;
+}
+
 @media screen and (max-width: 1300px) {
     .ui.button.previous-button, .ui.button.next-button {
         display: none;

@@ -173,13 +173,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             const filterResults: object[] = [];
             Object.entries(bodySystems).forEach((grouping) => {
                 grouping[1].forEach((complaint) => {
-                    const toCompare = complaint
-                        .toString()
-                        .toLowerCase()
-                        .substring(0, index);
+                    const toCompare = complaint.toString().toLowerCase();
                     if (
                         complaint !== 'HIDDEN' &&
-                        toCompare == this.state.searchVal.toLowerCase()
+                        toCompare.includes(this.state.searchVal.toLowerCase())
                     ) {
                         const temp = {
                             title: complaint,

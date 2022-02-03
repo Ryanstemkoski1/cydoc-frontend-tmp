@@ -129,13 +129,16 @@ class EditNote extends Component {
             <div ref={this.noteContent}>
                 {editNoteHeader ? (
                     <>
-                        <div className='edit-note-div' />
+                        <div className='mobile-header' />
                         <NotePage
                             activeItem={this.state.activeItem}
                             onNextClick={this.onNextClick}
                             onPreviousClick={this.onPreviousClick}
                         />
-                        <div className='container' style={{ height: '10px' }} />
+                        <div
+                            className='container'
+                            id='mobile-header-container'
+                        />
                     </>
                 ) : (
                     <></>

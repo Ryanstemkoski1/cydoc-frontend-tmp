@@ -9,6 +9,7 @@ import {
     Grid,
     Input,
     Table,
+    TextArea,
 } from 'semantic-ui-react';
 import { DrugName, drugNames } from 'constants/SocialHistory/drugNames';
 import modesOfDelivery, {
@@ -221,7 +222,7 @@ class RecreationalDrugs extends React.Component<Props, State> {
                 <Table.HeaderCell>Drug Name</Table.HeaderCell>
                 <Table.HeaderCell>Mode of Delivery</Table.HeaderCell>
                 <Table.HeaderCell># Per Week</Table.HeaderCell>
-                <Table.HeaderCell style={{ borderLeft: 0 }} />
+                <Table.HeaderCell id='drugs-header' />
             </Table.Row>
         );
     }
@@ -367,10 +368,11 @@ class RecreationalDrugs extends React.Component<Props, State> {
 
             const titleContent = (
                 <Form className='inline-form'>
-                    <Input
+                    {/* <Input
                         transparent
                         className='content-input-surgical content-dropdown medication'
-                    >
+                    > */}
+                    <div id='title-div'>
                         <Dropdown
                             fluid
                             search
@@ -388,9 +390,10 @@ class RecreationalDrugs extends React.Component<Props, State> {
                             aria-label='Recreational-Drug-Consumption-Name-Dropdown'
                             className='side-effects'
                             icon=''
+                            id='dropdown-display'
                         />
                         <Button
-                            style={{ marginTop: 5, marginBottom: 5 }}
+                            id='btn-display'
                             icon='close'
                             type='delete'
                             compact
@@ -399,22 +402,26 @@ class RecreationalDrugs extends React.Component<Props, State> {
                             }}
                             className='hpi-ph-button'
                         />
-                    </Input>
+                    </div>
+                    {/* </Input> */}
                 </Form>
             );
             const modeOfDeliveryContent = (
-                <Input
-                    fluid
-                    transparent
-                    className='content-input content-dropdown'
-                >
+                // <Input
+                //     fluid
+                //     transparent
+                //     className='content-input content-dropdown'
+                // >
+                // <div style={{width: "100%", whiteSpace: "nowrap"}}>
+                <>
+                    <label>Mode of delivery:</label>
                     <Dropdown
                         fluid
                         search
                         selection
                         multiple
                         options={modesOfDelivery}
-                        placeholder='Mode of Delivery'
+                        placeholder='Enter...'
                         onChange={(_, { value }) =>
                             this.props.updateRecreationalDrugUsedModesOfDelivery(
                                 i,
@@ -426,35 +433,45 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         aria-label='Recreational-Drug-Consumption-Modes-Of-Delivery-Dropdown'
                         className='side-effects'
                         icon=''
+                        id='mode-of-delivery'
                     />
-                </Input>
+                </>
+                // </div>
+                // </Input>
             );
             const numberPerWeekContent = (
-                <Input
-                    fluid
-                    transparent
-                    type='number'
-                    className='content-input content-dropdown'
-                    onChange={(_, { value }) => {
-                        const numberInput = parseInt(value);
-                        if (!isNaN(numberInput)) {
-                            this.props.updateRecreationalDrugUsedPerWeek(
-                                i,
-                                numberInput
-                            );
-                        } else if (value == '') {
-                            this.props.updateRecreationalDrugUsedPerWeek(i, -1);
+                <div id='contents-div'>
+                    <label id='contents-label'>Number Per Week:</label>
+                    <TextArea
+                        fluid
+                        transparent
+                        type='number'
+                        className='content-input content-dropdown'
+                        onChange={(_: any, { value }: any) => {
+                            const numberInput = parseInt(value);
+                            if (!isNaN(numberInput)) {
+                                this.props.updateRecreationalDrugUsedPerWeek(
+                                    i,
+                                    numberInput
+                                );
+                            } else if (value == '') {
+                                this.props.updateRecreationalDrugUsedPerWeek(
+                                    i,
+                                    -1
+                                );
+                            }
+                        }}
+                        placeholder='# Per Week'
+                        rowindex={i}
+                        value={
+                            values.drugsUsed[i].numberPerWeek === -1
+                                ? ''
+                                : values.drugsUsed[i].numberPerWeek
                         }
-                    }}
-                    placeholder='# Per Week'
-                    rowindex={i}
-                    value={
-                        values.drugsUsed[i].numberPerWeek === -1
-                            ? ''
-                            : values.drugsUsed[i].numberPerWeek
-                    }
-                    aria-label='Recreational-Drug-Consumption-Number-Per-Week-Input'
-                />
+                        aria-label='Recreational-Drug-Consumption-Number-Per-Week-Input'
+                        id='num-per-week'
+                    />
+                </div>
             );
 
             panels.push({
@@ -496,7 +513,7 @@ class RecreationalDrugs extends React.Component<Props, State> {
                     </Table.Cell>
                     <Table.Cell
                         collapsing
-                        style={{ borderLeft: 0 }}
+                        id='drugs-header'
                         onClick={this.handleCellClick}
                     >
                         {this.getCell('delete', index)}

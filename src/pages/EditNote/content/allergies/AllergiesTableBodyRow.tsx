@@ -31,7 +31,8 @@ class AllergiesTableBodyRow extends Component<Props> {
 
     render() {
         const {
-            options,
+            allergensOptions,
+            allergicReactionsOptions,
             fields,
             onTableBodyChange,
             onAddItem,
@@ -54,7 +55,7 @@ class AllergiesTableBodyRow extends Component<Props> {
                                 aria-label='incitingAgent'
                                 placeholder='Inciting Agent'
                                 type='incitingAgent'
-                                options={options}
+                                options={allergensOptions}
                                 onAddItem={onAddItem}
                                 onChange={onTableBodyChange}
                                 rowIndex={rowIndex}
@@ -62,22 +63,44 @@ class AllergiesTableBodyRow extends Component<Props> {
                             />
                         </Table.Cell>
                     );
-                }
-                return (
-                    <Table.Cell key={index} onClick={this.handleCellClick}>
-                        <div className='ui form'>
-                            <TextArea
-                                rows={3}
-                                type={field}
+                } else if (field === 'reaction') {
+                    return (
+                        <Table.Cell key={index}>
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                clearable
+                                transparent
+                                allowAdditions
+                                aria-label='reaction'
+                                placeholder='Allergic Reaction'
+                                type='reaction'
+                                options={allergicReactionsOptions}
+                                onAddItem={onAddItem}
                                 onChange={onTableBodyChange}
                                 rowIndex={rowIndex}
-                                value={eval(field)}
-                                className='table-row-text'
-                                id='row'
+                                value={reaction}
                             />
-                        </div>
-                    </Table.Cell>
-                );
+                        </Table.Cell>
+                    );
+                } else {
+                    return (
+                        <Table.Cell key={index} onClick={this.handleCellClick}>
+                            <div className='ui form'>
+                                <TextArea
+                                    rows={3}
+                                    type={field}
+                                    onChange={onTableBodyChange}
+                                    rowIndex={rowIndex}
+                                    value={eval(field)}
+                                    className='table-row-text'
+                                    id='row'
+                                />
+                            </div>
+                        </Table.Cell>
+                    );
+                }
             }
         );
 
@@ -98,7 +121,8 @@ interface RowProps {
     ) => void;
     rowIndex: keyof AllergiesState;
     isPreview: boolean;
-    options: OptionMapping;
+    allergensOptions: OptionMapping;
+    allergicReactionsOptions: OptionMapping;
     onAddItem: (_e: any, data: { [key: string]: any }) => void;
 }
 

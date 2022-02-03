@@ -17,12 +17,14 @@ import emailRegexCheckFunc from '../../auth/emailRegexCheckFunc';
 import policy from '../../constants/Documents/policy';
 import terms_condition from '../../constants/Documents/t&c';
 
-const DoctorSignUp = () => {
+const DoctorSignUp = ({ continueIsActive }) => {
     const phoneNumberRegex = new RegExp(
         '^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'
     );
     const [emailRegexCheck, setEmailRegexCheck] = useState(false);
-    const [isInviteDoctorOpen, setIsInviteDoctorOpen] = useState(false);
+    const [isInviteDoctorOpen, setIsInviteDoctorOpen] = useState(
+        continueIsActive
+    );
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [confirmEmail, setConfirmEmail] = useState('');
@@ -287,6 +289,7 @@ const DoctorSignUp = () => {
 
         return errMsgs;
     };
+
     const cssScroll = '.scroll { max-height: 120px; overflow-y: scroll; }';
     const cssCheckBoxes =
         '.checkBox { vertical-align: middle; line-height: 5px; min-width: 5px; display:inline-block; align-content:middle }';
@@ -294,6 +297,7 @@ const DoctorSignUp = () => {
         '.lCheckBox { float:left; padding-right:100px; padding-left:100px }';
     const cssRightCheckBox = ' .rCheckBox { float:right }';
     const cssRedAsterisk = '.redAsterisk::after { color:red; content:"*" }';
+
     return (
         <Modal
             dimmer='inverted'
@@ -301,7 +305,6 @@ const DoctorSignUp = () => {
             onClose={() => setIsInviteDoctorOpen(false)}
             onOpen={() => setIsInviteDoctorOpen(true)}
             open={isInviteDoctorOpen}
-            trigger={<Button icon='plus' content='Sign Up' size='small' />}
         >
             <Modal.Header>Sign Up</Modal.Header>
             <Modal.Content>

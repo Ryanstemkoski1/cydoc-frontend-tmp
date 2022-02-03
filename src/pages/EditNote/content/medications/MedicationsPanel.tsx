@@ -174,53 +174,61 @@ class MedicationsPanel extends Component<Props, State> {
         const medicationEntry = this.props.medications[this.props.rowIndex];
 
         const drugNameInput = (
-            <Input
-                disabled={isPreview}
-                transparent={isPreview}
-                className='content-input content-dropdown medication drug-input padding-bottom'
-                value={
-                    isPreview
-                        ? this.props.previewValue
-                        : (medicationEntry[1] as MedicationsItem).drugName
-                }
-            >
-                <div id='width-full'>
-                    {!isPreview && (
-                        <Dropdown
-                            fluid
-                            search
-                            selection
-                            clearable
-                            allowAdditions
-                            icon=''
-                            optiontype='medicationOptions'
-                            type='Drug Name'
-                            options={this.props.medicationOptions}
-                            placeholder='Medication name'
-                            onChange={this.onChangeFormatter((value) =>
-                                this.props.updateDrugName(
-                                    medicationEntry[0],
-                                    value as string
-                                )
-                            )}
-                            rowindex={this.props.rowIndex}
-                            value={
-                                (medicationEntry[1] as MedicationsItem).drugName
-                            }
-                            onAddItem={this.onAddItemFormatter(
-                                (optiontype, value) =>
-                                    this.props.handleAddition(optiontype, value)
-                            )}
-                            aria-label='Drug-Name-Dropdown'
-                            className='side-effects'
-                        />
-                    )}
-                </div>
-            </Input>
+            // <Input
+            //     disabled={isPreview}
+            //     transparent={isPreview}
+            //     className='content-input content-dropdown medication drug-input padding-bottom'
+            //     value={
+            //         isPreview
+            //             ? this.props.previewValue
+            //             : (medicationEntry[1] as MedicationsItem).drugName
+            //     }
+            // >
+            <div id='width-full'>
+                {!isPreview && (
+                    <Dropdown
+                        fluid
+                        search
+                        selection
+                        clearable
+                        allowAdditions
+                        icon=''
+                        optiontype='medicationOptions'
+                        type='Drug Name'
+                        options={this.props.medicationOptions}
+                        placeholder='Medication name'
+                        onChange={this.onChangeFormatter((value) =>
+                            this.props.updateDrugName(
+                                medicationEntry[0],
+                                value as string
+                            )
+                        )}
+                        rowindex={this.props.rowIndex}
+                        value={(medicationEntry[1] as MedicationsItem).drugName}
+                        onAddItem={this.onAddItemFormatter(
+                            (optiontype, value) =>
+                                this.props.handleAddition(optiontype, value)
+                        )}
+                        aria-label='Drug-Name-Dropdown'
+                        className='side-effects'
+                    />
+                )}
+            </div>
+            // </Input>
         );
 
         const doseInput = (
             <div className='ui form' id='dose-input-div'>
+                {this.state.windowWidth < MEDICATIONS_PANEL_SCREEN_BP ? (
+                    <label
+                        className='medications-content-input-label'
+                        id='dose-input-label'
+                    >
+                        <b>Dose:</b>
+                    </label>
+                ) : (
+                    <></>
+                )}
                 <div id='dose-input'>
                     {this.state.windowWidth < MEDICATIONS_PANEL_SCREEN_BP ? (
                         <Input
@@ -229,11 +237,6 @@ class MedicationsPanel extends Component<Props, State> {
                             rowindex={this.props.rowIndex}
                             disabled={isPreview}
                             type='Dose'
-                            label={{
-                                basic: true,
-                                content: 'Dose: ',
-                                className: 'medications-content-input-label',
-                            }}
                             placeholder='e.g. 81 mg tablet'
                             onChange={this.onChangeFormatter((value) =>
                                 this.props.updateDose(medicationEntry[0], value)
@@ -283,6 +286,16 @@ class MedicationsPanel extends Component<Props, State> {
         const scheduleInput = (
             <>
                 <div className='ui form' id='schedule-input-div'>
+                    {this.state.windowWidth < MEDICATIONS_PANEL_SCREEN_BP ? (
+                        <label
+                            className='medications-content-input-label'
+                            id='schedule-input-label'
+                        >
+                            <b>Schedule:</b>
+                        </label>
+                    ) : (
+                        <></>
+                    )}
                     <div id='schedule-input'>
                         {this.state.windowWidth <
                         MEDICATIONS_PANEL_SCREEN_BP ? (
@@ -292,12 +305,6 @@ class MedicationsPanel extends Component<Props, State> {
                                 rowindex={this.props.rowIndex}
                                 disabled={isPreview}
                                 type='Schedule'
-                                label={{
-                                    basic: true,
-                                    content: 'Schedule: ',
-                                    className:
-                                        'medications-content-input-label',
-                                }}
                                 placeholder='e.g. once a day'
                                 onChange={this.onChangeFormatter((value) =>
                                     this.props.updateSchedule(
@@ -409,51 +416,59 @@ class MedicationsPanel extends Component<Props, State> {
         );
 
         const startYearInput = (
-            <div className='margin'>
-                <Input
-                    fluid
-                    transparent
-                    rowindex={this.props.rowIndex}
-                    disabled={isPreview}
-                    type='Start Year'
-                    label={{
-                        basic: true,
-                        content: 'Start Year:',
-                        className: 'medications-content-input-label',
-                    }}
-                    placeholder='e.g. 2020'
-                    value={
-                        isPreview ||
-                        (medicationEntry[1] as MedicationsItem).startYear == -1
-                            ? ''
-                            : (medicationEntry[1] as MedicationsItem).startYear
-                    }
-                    onBlur={(e: Event) => {
-                        this.handleYearChange(
-                            (e.target as HTMLInputElement).value,
-                            'Start Year'
-                        );
-                    }}
-                    onChange={(_event, { value }) => {
-                        const numberInput = parseInt(value);
-                        if (!isNaN(numberInput)) {
-                            this.props.updateStartYear(
-                                medicationEntry[0],
-                                numberInput
-                            );
-                        } else if (value == '') {
-                            this.props.updateStartYear(medicationEntry[0], -1);
+            <div className='margin' id='start-year-input'>
+                <label
+                    className='medications-content-input-label'
+                    id='start-year-label'
+                >
+                    <b>Start Year:</b>
+                </label>
+                <div id='width-full'>
+                    <Input
+                        fluid
+                        transparent
+                        rowindex={this.props.rowIndex}
+                        disabled={isPreview}
+                        type='Start Year'
+                        placeholder='e.g. 2020'
+                        value={
+                            isPreview ||
+                            (medicationEntry[1] as MedicationsItem).startYear ==
+                                -1
+                                ? ''
+                                : (medicationEntry[1] as MedicationsItem)
+                                      .startYear
                         }
-                    }}
-                    aria-label='Start-Year-Input'
-                    className='content-input content-dropdown'
-                />
-                {this.state.invalidStartYear && (
-                    <p className='year-validation-mobile-error'>
-                        Please enter a valid year between 1900 and{' '}
-                        {this.props.currentYear}
-                    </p>
-                )}
+                        onBlur={(e: Event) => {
+                            this.handleYearChange(
+                                (e.target as HTMLInputElement).value,
+                                'Start Year'
+                            );
+                        }}
+                        onChange={(_event, { value }) => {
+                            const numberInput = parseInt(value);
+                            if (!isNaN(numberInput)) {
+                                this.props.updateStartYear(
+                                    medicationEntry[0],
+                                    numberInput
+                                );
+                            } else if (value == '') {
+                                this.props.updateStartYear(
+                                    medicationEntry[0],
+                                    -1
+                                );
+                            }
+                        }}
+                        aria-label='Start-Year-Input'
+                        className='content-input content-dropdown'
+                    />
+                    {this.state.invalidStartYear && (
+                        <p className='year-validation-mobile-error'>
+                            Please enter a valid year between 1900 and{' '}
+                            {this.props.currentYear}
+                        </p>
+                    )}
+                </div>
             </div>
         );
 
@@ -543,142 +558,152 @@ class MedicationsPanel extends Component<Props, State> {
         );
 
         const endYearInput = (
-            <div className='margin'>
+            <div className='margin' id='end-year-input'>
                 {!isPreview &&
                     (medicationEntry[1] as MedicationsItem)
                         .isCurrentlyTaking === 'NO' && (
-                        <div>
-                            <Input
-                                fluid
-                                transparent
-                                rowindex={this.props.rowIndex}
-                                disabled={isPreview}
-                                type='End Year'
-                                label={{
-                                    basic: true,
-                                    content: 'End Year:',
-                                    className:
-                                        'medications-content-input-label',
-                                }}
-                                placeholder='e.g. 2020'
-                                value={
-                                    isPreview ||
-                                    (medicationEntry[1] as MedicationsItem)
-                                        .endYear == -1
-                                        ? ''
-                                        : (medicationEntry[1] as MedicationsItem)
-                                              .endYear
-                                }
-                                onBlur={(e: Event) => {
-                                    this.handleYearChange(
-                                        (e.target as HTMLInputElement).value,
-                                        'End Year'
-                                    );
-                                }}
-                                onChange={(_event, { value }) => {
-                                    const numberInput = parseInt(value);
-                                    if (!isNaN(numberInput)) {
-                                        this.props.updateEndYear(
-                                            medicationEntry[0],
-                                            numberInput
-                                        );
-                                    } else if (value == '') {
-                                        this.props.updateEndYear(
-                                            medicationEntry[0],
-                                            -1
-                                        );
+                        <>
+                            <label
+                                className='medications-content-input-label'
+                                id='end-year-label'
+                            >
+                                <b>End Year:</b>
+                            </label>
+                            <div id='width-full'>
+                                <Input
+                                    fluid
+                                    transparent
+                                    rowindex={this.props.rowIndex}
+                                    disabled={isPreview}
+                                    type='End Year'
+                                    // label={{
+                                    //     basic: true,
+                                    //     content: 'End Year:',
+                                    //     className:
+                                    //         'medications-content-input-label',
+                                    // }}
+                                    placeholder='e.g. 2020'
+                                    value={
+                                        isPreview ||
+                                        (medicationEntry[1] as MedicationsItem)
+                                            .endYear == -1
+                                            ? ''
+                                            : (medicationEntry[1] as MedicationsItem)
+                                                  .endYear
                                     }
-                                }}
-                                aria-label='End-Year-Input'
-                                className='content-input content-dropdown'
-                            />
-                            {this.state.invalidEndYear && (
-                                <p className='year-validation-mobile-error'>
-                                    Please enter a valid year between 1900 and{' '}
-                                    {this.props.currentYear}
-                                </p>
-                            )}
-                        </div>
+                                    onBlur={(e: Event) => {
+                                        this.handleYearChange(
+                                            (e.target as HTMLInputElement)
+                                                .value,
+                                            'End Year'
+                                        );
+                                    }}
+                                    onChange={(_event, { value }) => {
+                                        const numberInput = parseInt(value);
+                                        if (!isNaN(numberInput)) {
+                                            this.props.updateEndYear(
+                                                medicationEntry[0],
+                                                numberInput
+                                            );
+                                        } else if (value == '') {
+                                            this.props.updateEndYear(
+                                                medicationEntry[0],
+                                                -1
+                                            );
+                                        }
+                                    }}
+                                    aria-label='End-Year-Input'
+                                    className='content-input content-dropdown'
+                                />
+                                {this.state.invalidEndYear && (
+                                    <p className='year-validation-mobile-error'>
+                                        Please enter a valid year between 1900
+                                        and {this.props.currentYear}
+                                    </p>
+                                )}
+                            </div>
+                        </>
                     )}
             </div>
         );
 
         const sideEffectsInput = (
             <div className='margin'>
-                <Input fluid className='content-input content-dropdown'>
-                    <Label
-                        basic
-                        className={'medications-content-input-label'}
-                        content={'Side Effects: '}
-                    />
-                    <div id='width-full'>
-                        {!isPreview && (
-                            <Dropdown
-                                fluid
-                                search
-                                selection
-                                multiple
-                                allowAdditions
-                                icon=''
-                                options={this.props.sideEffectsOptions}
-                                optiontype='sideEffectsOptions'
-                                type='Side Effects'
-                                placeholder='Click here to select side effect(s)'
-                                onChange={this.onChangeFormatter((value) =>
-                                    this.props.updateSideEffects(
-                                        medicationEntry[0],
-                                        value as string[]
-                                    )
-                                )}
-                                rowindex={this.props.rowIndex}
-                                value={
-                                    (medicationEntry[1] as MedicationsItem)
-                                        .sideEffects
-                                }
-                                onAddItem={this.onAddItemFormatter(
-                                    (optiontype, value) =>
-                                        this.props.handleAddition(
-                                            optiontype,
-                                            value
-                                        )
-                                )}
-                                aria-label='Side-Effects-Dropdown'
-                                className='side-effects'
-                            />
-                        )}
-                    </div>
-                </Input>
+                {/* <Input fluid className='content-input content-dropdown'> */}
+                <Label
+                    basic
+                    className={'medications-content-input-label'}
+                    content={'Side Effects: '}
+                />
+                <div id='width-full reason-dropdown'>
+                    {!isPreview && (
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            multiple
+                            allowAdditions
+                            icon=''
+                            options={this.props.sideEffectsOptions}
+                            optiontype='sideEffectsOptions'
+                            type='Side Effects'
+                            placeholder='Click here to select side effect(s)'
+                            onChange={this.onChangeFormatter((value) =>
+                                this.props.updateSideEffects(
+                                    medicationEntry[0],
+                                    value as string[]
+                                )
+                            )}
+                            rowindex={this.props.rowIndex}
+                            value={
+                                (medicationEntry[1] as MedicationsItem)
+                                    .sideEffects
+                            }
+                            onAddItem={this.onAddItemFormatter(
+                                (optiontype, value) =>
+                                    this.props.handleAddition(optiontype, value)
+                            )}
+                            aria-label='Side-Effects-Dropdown'
+                            className='side-effects'
+                        />
+                    )}
+                </div>
+                {/* </Input> */}
             </div>
         );
 
         const commentsInput = (
-            <div className='margin'>
-                <Input
-                    fluid
-                    transparent
-                    rowindex={this.props.rowIndex}
-                    disabled={isPreview}
-                    type='Comments'
-                    label={{
-                        basic: true,
-                        content: 'Comments: ',
-                        className: 'medications-content-input-label',
-                    }}
-                    placeholder='e.g. take with food'
-                    onChange={(_event, data) => {
-                        this.props.updateComments(
-                            medicationEntry[0],
-                            data.value
-                        );
-                    }}
-                    value={
-                        isPreview
-                            ? ''
-                            : (medicationEntry[1] as MedicationsItem).comments
-                    }
-                    aria-label='Comments-Input'
-                    className='content-input'
-                />
+            <div className='margin' id='comments-input'>
+                <label
+                    className='medications-content-input-label'
+                    id='comments-label'
+                >
+                    <b>Comments:</b>
+                </label>
+                <div id='width-full'>
+                    <Input
+                        fluid
+                        transparent
+                        rowindex={this.props.rowIndex}
+                        disabled={isPreview}
+                        type='Comments'
+                        placeholder='e.g. take with food'
+                        onChange={(_event, data) => {
+                            this.props.updateComments(
+                                medicationEntry[0],
+                                data.value
+                            );
+                        }}
+                        value={
+                            isPreview
+                                ? ''
+                                : (medicationEntry[1] as MedicationsItem)
+                                      .comments
+                        }
+                        aria-label='Comments-Input'
+                        className='content-input'
+                    />
+                </div>
             </div>
         );
 

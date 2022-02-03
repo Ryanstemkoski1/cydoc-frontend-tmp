@@ -22,6 +22,7 @@ import {
     BaseCategoryForm,
 } from './BaseCategoryForm';
 import UpdateDimensions from './UpdateDimensions';
+import './planSections.css';
 
 interface PrescriptionsDispatchProps {
     addPrescription: PlanAction;
@@ -48,14 +49,7 @@ const PrescriptionsForm = (
     );
 
     const mainInput: ComponentFunction = (row, options, onAddItem) => (
-        <div
-            className='container'
-            style={{
-                width: width < 800 ? '90%' : '',
-                marginTop: width < 800 ? '10px' : '0px',
-                marginBottom: '15px',
-            }}
-        >
+        <div className='container' id='prescriptions-main-input-container'>
             <Dropdown
                 fluid
                 search
@@ -73,9 +67,9 @@ const PrescriptionsForm = (
                 placeholder='medication name'
                 className='main-input recipe'
             />
-            <div className='container' style={{ height: '20px' }} />
+            <div className='container' id='prescriptions-container3' />
             <label>Prescription Dose</label>
-            <div className='container' style={{ height: '10px' }} />
+            <div className='container' id='prescriptions-container2' />
             <div className='ui form'>
                 <TextArea
                     fluid
@@ -133,9 +127,9 @@ const PrescriptionsForm = (
 
     const mobileContent: ComponentFunction = (row) => (
         <>
-            <label style={{ marginLeft: '15px' }}> Signature (Sig) </label>
-            <div className='container' style={{ height: '5px' }} />
-            <div className='ui form' style={{ width: '90%', margin: 'auto' }}>
+            <label className='prescriptions-label'> Signature (Sig) </label>
+            <div className='container' id='prescriptions-container1' />
+            <div className='ui form' id='prescriptions-ui-form'>
                 <TextArea
                     fluid
                     transparent
@@ -148,10 +142,10 @@ const PrescriptionsForm = (
                     className='expanded-input'
                 />
             </div>
-            <div className='container' style={{ height: '10px' }} />
-            <label style={{ marginLeft: '15px' }}> Comments </label>
-            <div className='container' style={{ height: '5px' }} />
-            <div className='ui form' style={{ width: '90%', margin: 'auto' }}>
+            <div className='container' id='prescriptions-container2' />
+            <label className='prescriptions-label'> Comments </label>
+            <div className='container' id='prescriptions-container1' />
+            <div className='ui form' id='prescriptions-ui-form'>
                 <TextArea
                     fluid
                     transparent

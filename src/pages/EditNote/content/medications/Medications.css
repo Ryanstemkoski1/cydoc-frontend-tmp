@@ -106,7 +106,12 @@ a.ui.label, a.ui.active.label {
     width: 200px;
 }
 
-#dose-input, #width-full {
+#width-full {
+    width: 100%;
+    display: inline-block;
+}
+
+#dose-input {
     width: 100%;
 }
 
@@ -115,9 +120,16 @@ a.ui.label, a.ui.active.label {
     width: 135px;
 }
 
+#start-year-label, #end-year-label, #comments-label {
+    margin-right: 15px;
+    margin-left: 12px;
+    margin-top: 10px;
+}
+
 #schedule-input {
     margin-left: -40px;
     width: 195px;
+    /* display: inline-block; */
 }
 
 #reason-input {
@@ -169,11 +181,45 @@ a.ui.label, a.ui.active.label {
         width: 100%;
         margin-top: 10px;
         margin-left: 10px;
+        display: inline-block;
     }
 
     #dose-input-div, #schedule-input-div {
         margin-left: -10px;
+        width: 80%;
+        white-space: nowrap;
+    }
+
+    #dose-input-label {
+        margin-right: 15px;
+        margin-left: 22px;
+        margin-top: 15px;
+        display: inline-block;
+    }
+
+    #schedule-input-label {
+        margin-right: 65px;
+        margin-left: 22px;
+        margin-top: 15px;
+        display: inline-block;
+    }
+
+    #start-year-input, #end-year-input, #comments-input {
         width: 100%;
+        white-space: nowrap;
+    }
+    
+    #start-year-label, #end-year-label, #comments-label {
+        margin-right: 15px;
+        margin-left: 12px;
+        margin-top: 10px;
+        display: inline-block;
+    }
+    
+    #schedule-input {
+        margin-left: -40px;
+        width: 195px;
+        display: inline-block;
     }
 
     #reason-input {

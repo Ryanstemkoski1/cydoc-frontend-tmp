@@ -195,7 +195,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
             }
             const MhPopKeys = [];
             for (const conditionKey in responseChoice) {
-                const conditionName = responseChoice[conditionKey];
+                const conditionName: any = responseChoice[conditionKey];
                 if (conditionName in conditionKeyMap)
                     MhPopKeys.push(conditionKeyMap[conditionName]);
                 else {

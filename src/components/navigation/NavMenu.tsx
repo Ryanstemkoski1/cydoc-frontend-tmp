@@ -11,6 +11,7 @@ import NoteNameMenuItem, { Context } from './NoteNameMenuItem';
 
 import './NavMenu.css';
 import DoctorSignUp from 'pages/Account/DoctorSignUp';
+import SignUpModal from 'pages/Account/SignUpModal';
 
 interface ConnectedNavMenuProps {
     className: string;
@@ -28,6 +29,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
 
     const context = useContext(AuthContext) as Context;
     const [windowWidth, setWindowWidth] = useState(0);
+    const [signUpActive, setSignUpActive] = useState(false);
 
     // Set event listeners for window resize to determine mobile vs web view
     useEffect(() => {
@@ -93,11 +95,18 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
         }
     };
 
+    const logoNotLoggedIn = () => {
+        const path = '/';
+        history.push(path);
+    };
+
     window.addEventListener('beforeunload', function (e) {
         // alert('If you leave the page, your note will not be saved.');
         e.preventDefault();
         e.returnValue = '';
     });
+
+    const handleClickSignUp = () => setSignUpActive(true);
 
     // Menu items when not logged in
     const defaultMenuItems = (
@@ -109,7 +118,13 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                 to='/login'
                 content='Login'
             />
-            <DoctorSignUp />
+            <Button
+                icon='plus'
+                content='Sign Up'
+                size='small'
+                onClick={handleClickSignUp}
+            />
+            {signUpActive && <SignUpModal navToSignUp={signUpActive} />}
         </Menu.Item>
     );
     // Menu items when logged in
@@ -217,7 +232,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                         )}
                     </Menu.Item>
                 ) : (
-                    <Menu.Item className='logo-menu' onClick={checkEditNote}>
+                    <Menu.Item className='logo-menu' onClick={logoNotLoggedIn}>
                         <Image
                             src={Logo}
                             className={`${
