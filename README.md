@@ -1,5 +1,7 @@
 # cydoc-frontend
 
+The frontend works with Node.js version 10.1.0.
+
 # Installation
 Follow the tutorials linked to below to install Semantic UI. When you clone this repo and run `npm install` it will take you through 
 an interactive installer. Make sure you install in src/semantic when it asks you (both for semantic and dist). 
@@ -75,29 +77,6 @@ Before submitting a PR, `npm run lint` should output the following:
 - 😄  No linting errors found for src/constants
 - 😄  No linting errors found for src/pages
 - 😄 No linting errors found for src/auth
-
-## AuthContext (this docuentation section may be out of date)
-
-### State
-
-```
-  {
-      user: string
-      token: string
-  }  
-```
-
-This state contains the currently logged-in user's id (```user```) and JWT token (```token```).
-
-### Methods
-
-#### ```storeLoginInfo(user: string, role: string, token: string): void```
-
-Stores the given id, role, and token into state and cookies.
-
-#### ```logOut(): void```
-
-Removes the given id and token from state and cookies.
 
 # Testing with Jest and Enzyme
 
