@@ -11,12 +11,11 @@ import { selectHpiState } from 'redux/selectors/hpiSelectors';
 
 interface HandleNumericInputProps {
     node: string;
-    max: number;
 }
 
 class HandleNumericInput extends React.Component<Props> {
     render() {
-        const { hpi, node, max, handleNumericInputChange } = this.props;
+        const { hpi, node, handleNumericInputChange } = this.props;
         const values = hpi.nodes[node];
         const value = values.response;
         const question = values.text;
@@ -27,7 +26,6 @@ class HandleNumericInput extends React.Component<Props> {
                 type={'number'}
                 value={typeof value == 'number' ? value : undefined}
                 min={0}
-                max={max}
                 onChange={(_e, data) =>
                     handleNumericInputChange(node, parseInt(data.value))
                 }

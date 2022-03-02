@@ -169,7 +169,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 ));
 
             case ResponseTypes.NUMBER:
-                return <HandleNumericInput key={node} node={node} max={10} />;
+                return <HandleNumericInput key={node} node={node} />;
 
             case ResponseTypes.BODYLOCATION:
                 return <BodyLocation key={node} node={node} />;
