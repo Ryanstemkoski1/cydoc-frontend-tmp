@@ -1,5 +1,5 @@
-.ui.grid > .row.time-grid-row {
-    padding: 5px;
+.row.time-grid-row {
+    padding: 2px;
 }
 
 .ui.grid > .row > .column.time-grid-column {
@@ -8,7 +8,8 @@
 }
 
 .ui.button.time-grid-button {
-    width: 100%;;
+    width: 100%;
+    max-width: 200px;
 }
 
 
@@ -19,5 +20,5 @@
 }
 
 .ui.input.time-input {
-    width: 50%
+    width: 100%;
 }

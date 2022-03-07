@@ -1,12 +1,7 @@
 import React from 'react';
 import { Grid, Input } from 'semantic-ui-react';
 import '../../css/TimeInput.css';
-import {
-    TimeOption,
-    HpiStateProps,
-    NumberInput,
-    ResponseTypes,
-} from 'constants/hpiEnums';
+import { TimeOption, HpiStateProps, NumberInput } from 'constants/hpiEnums';
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import {
@@ -41,9 +36,9 @@ class TimeInput extends React.Component<Props> {
             'months',
             'years',
         ];
-        const gridButtons = [0, 2, 4].map((i) => {
-            const timeButtons = timeOptions.slice(i, i + 2).map((timeItem) => (
-                <Grid.Column className='time-grid-column' key={timeItem}>
+        const gridButtons = [0, 3].map((i) => {
+            const timeButtons = timeOptions.slice(i, i + 3).map((timeItem) => (
+                <Grid.Row className='time-grid-row' key={timeItem}>
                     <ToggleButton
                         className='time-grid-button'
                         active={
@@ -60,19 +55,15 @@ class TimeInput extends React.Component<Props> {
                             handleTimeOptionChange(node, data.condition)
                         }
                     />
-                </Grid.Column>
-            ));
-            return (
-                <Grid.Row key={i} columns='equal' className='time-grid-row'>
-                    {timeButtons}
                 </Grid.Row>
-            );
+            ));
+            return <Grid.Column key={i}>{timeButtons}</Grid.Column>;
         });
         return (
             <div className='time-div'>
-                <Grid columns={2}>
+                <Grid columns='equal'>
                     <Grid.Row>
-                        <Grid.Column width={3}>
+                        <Grid.Column width={4}>
                             <div className='time-input'>
                                 <Input
                                     className={'time-input'}
@@ -80,9 +71,10 @@ class TimeInput extends React.Component<Props> {
                                     key={this.props.node}
                                     type={'number'}
                                     value={
-                                        isTimeInputDictionary(currResponse)
+                                        isTimeInputDictionary(currResponse) &&
+                                        currResponse.numInput != 0
                                             ? currResponse.numInput
-                                            : 0
+                                            : null
                                     }
                                     min={0}
                                     onChange={(
@@ -97,8 +89,12 @@ class TimeInput extends React.Component<Props> {
                                 />
                             </div>
                         </Grid.Column>
-                        <Grid.Column width={6}>
-                            <Grid>{gridButtons}</Grid>
+                        <Grid.Column width={1}></Grid.Column>
+                        <Grid.Column width={8}>
+                            <Grid columns={2}>
+                                {gridButtons[0]}
+                                {gridButtons[1]}
+                            </Grid>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
