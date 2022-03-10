@@ -52,14 +52,19 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
     }
 
     async getData(): Promise<void> {
-        const response = await axios.get(
-            'https://cydocgraph.herokuapp.com/graph/subgraph/' +
-                this.props.parentNode +
-                '/4'
-        );
-        const { data } = response;
-        this.setState({ graphData: data, isGraphLoaded: true });
-        this.processKnowledgeGraph();
+        if (this.props.parentNode in this.props.hpi.graph) {
+            this.setState({ isGraphProcessed: true });
+            this.traverseChildNodes();
+        } else {
+            const response = await axios.get(
+                'https://cydocgraph.herokuapp.com/graph/subgraph/' +
+                    this.props.parentNode +
+                    '/4'
+            );
+            const { data } = response;
+            this.setState({ graphData: data, isGraphLoaded: true });
+            this.processKnowledgeGraph();
+        }
     }
 
     continue = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -143,8 +148,15 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
     }
 
     traverseChildNodes(): JSX.Element[] {
-        const { parentToChildNodes, graphData } = this.state;
+        const { graphData } = this.state;
         const { parentNode, category, hpi } = this.props;
+        const { nodes, graph } = hpi;
+        let parentToChildNodes;
+        if (Object.keys(graph).length > 0) {
+            parentToChildNodes = graph;
+        } else {
+            parentToChildNodes = this.state.parentToChildNodes;
+        }
         const values: HpiState = hpi,
             nodeToElementDict: { [node: string]: JSX.Element } = {};
         let questionArr: JSX.Element[] = [];
@@ -155,7 +167,11 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
             if (values.nodes[currNode].text != 'nan') {
                 nodeToElementDict[currNode] = (
                     <CreateResponse
-                        key={graphData.nodes[currNode].uid}
+                        key={
+                            Object.keys(nodes).length > 0
+                                ? nodes[currNode].uid
+                                : graphData.nodes[currNode].uid
+                        }
                         node={currNode}
                         category={category}
                     />

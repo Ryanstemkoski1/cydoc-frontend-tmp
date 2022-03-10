@@ -130,7 +130,7 @@ export function hpiReducer(
             ] as keyof ExpectedResponseInterface;
             const edgeDict: { [edgeKey: string]: EdgeInterface } = {};
             const edgeKeys = edges.map((edge) => {
-                const edgeKey = 'to' + edge.to + 'from' + edge.from;
+                const edgeKey = edge.to;
                 edgeDict[edgeKey] = edge;
                 return edgeKey;
             });
