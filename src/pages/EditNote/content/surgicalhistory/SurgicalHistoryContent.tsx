@@ -179,12 +179,27 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
     };
 
     //method to generate an collection of rows
-    makeTableBodyRows(nums: string[], values: SurgicalHistoryState) {
+    makeTableBodyRows(nums: string[]) {
         const cellField: (keyof SurgicalHistoryItem)[] = [
             'procedure',
             'year',
             'comments',
         ];
+        const addProceduresOptions: OptionMapping = {};
+        nums.map((index) => {
+            if (index in this.props.surgicalHistory) {
+                const procedure = this.props.surgicalHistory[index].procedure;
+                addProceduresOptions[procedure] = {
+                    value: procedure,
+                    label: procedure,
+                };
+            }
+        });
+        const updatedProceduresOptions = Object.assign(
+            {},
+            this.state.proceduresOptions,
+            addProceduresOptions
+        );
         return nums.map((rowindex: string, index: number) => (
             <SurgicalHistoryTableBodyRow
                 {...this.props}
@@ -193,7 +208,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 fields={cellField}
                 onTableBodyChange={this.handleTableBodyChange}
                 onAddItem={this.handleAddition}
-                proceduresOptions={this.state.proceduresOptions}
+                proceduresOptions={updatedProceduresOptions}
                 isPreview={this.props.isPreview}
                 currentYear={this.state.currentYear}
                 mobile={this.props.mobile}
@@ -356,26 +371,21 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             popResponse,
             node,
         } = this.props;
-        if (responseType == ResponseTypes.PSH_POP && responseChoice) {
+        if (responseType == ResponseTypes.PSH_POP && responseChoice && node) {
             const procedureKeyMap: { [procedure: string]: string } = {};
-            for (const key in values) {
-                const procedureName = values[key].procedure;
-                procedureKeyMap[procedureName] = key;
-            }
-            const pshPopKeys = [];
-            for (const procedureKey in responseChoice) {
-                const procedureName: any = responseChoice[procedureKey];
+            Object.keys(values).map(
+                (key) => (procedureKeyMap[values[key].procedure] = key)
+            );
+            nums = responseChoice.map((procedureName) => {
                 if (procedureName in procedureKeyMap)
-                    pshPopKeys.push(procedureKeyMap[procedureName]);
-                else {
-                    const newKey = v4();
-                    addPshPopOptions(newKey, procedureName);
-                    pshPopKeys.push(newKey);
-                }
-            }
-            nums = pshPopKeys;
-            if (node) popResponse(node, nums);
-        } else if (responseType == ResponseTypes.PSH_BLANK && responseChoice)
+                    return procedureKeyMap[procedureName];
+                const newKey = v4();
+                addPshPopOptions(newKey, procedureName);
+                return newKey;
+            });
+            popResponse(node, nums);
+        }
+        if (responseType == ResponseTypes.PSH_BLANK && responseChoice)
             nums = responseChoice;
 
         const content = (
@@ -391,9 +401,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                     <Table celled className='table-display'>
                         <Table.Header content={this.makeHeader()} />
                         {/* eslint-disable react/no-children-prop */}
-                        <Table.Body
-                            children={this.makeTableBodyRows(nums, values)}
-                        />
+                        <Table.Body children={this.makeTableBodyRows(nums)} />
                         {/* eslint-enable react/no-children-prop */}
                     </Table>
                 )}
