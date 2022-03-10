@@ -296,7 +296,6 @@ const DoctorSignUp = ({ continueIsActive }) => {
     const cssLeftCheckBox =
         '.lCheckBox { float:left; padding-right:100px; padding-left:100px }';
     const cssRightCheckBox = ' .rCheckBox { float:right }';
-    const cssRedAsterisk = '.redAsterisk::after { color:red; content:"*" }';
 
     return (
         <Modal
@@ -412,7 +411,7 @@ const DoctorSignUp = ({ continueIsActive }) => {
                                 required
                                 label='U.S. Phone Number'
                                 name='phoneNumber'
-                                placeholder=''
+                                placeholder='XXXXXXXXXX'
                                 type='tel'
                                 value={phoneNumber}
                                 onChange={handlePhoneNumber}
@@ -421,7 +420,7 @@ const DoctorSignUp = ({ continueIsActive }) => {
                                 required
                                 label='Confirm U.S. Phone Number'
                                 name='phoneNumber'
-                                placeholder=''
+                                placeholder='XXXXXXXXXX'
                                 type='tel'
                                 value={confirmPhoneNumber}
                                 onChange={handleConfirmPhoneNumber}
@@ -482,59 +481,56 @@ const DoctorSignUp = ({ continueIsActive }) => {
                                 Credit cards will not be billed until the start
                                 of the second month.
                             </p>
-                            <label className='redAsterisk'>
-                                <style> {cssRedAsterisk}</style>
-                                Card Number
-                            </label>
                             <Form.Input
                                 required
                                 aria-label='Card Number'
-                                placeholder='card number'
+                                fluid
+                                label='Card Number'
+                                placeholder='Card number'
                                 name='cardNumber'
                                 width={16}
                                 value={cardNumber}
                                 onChange={handleCardNumberChange}
                             />
-                            <label className='redAsterisk'>
-                                Expiration Date
-                            </label>
-                            <Form.Group widths='equal' required>
-                                <Form.Select
+
+                            <Form.Group widths='equal'>
+                                <Form.Input
                                     fluid
+                                    label='Expiration Month'
                                     required
-                                    width={2}
+                                    width={6}
                                     options={expirationMonthOptions}
                                     placeholder='MM'
                                     name='expirationMonth'
                                     value={expirationMonth}
                                     onChange={handleExpirationMonthChange}
                                 />
-                                <Form.Select
-                                    fluid
+                                <Form.Input
+                                    label='Expiration Year'
                                     required
-                                    width={2}
+                                    width={6}
                                     options={expirationYearOptions}
                                     placeholder='YY'
                                     name='expirationYear'
                                     value={expirationYear}
                                     onChange={handleExpirationYearChange}
                                 />
-                                <div className='redAsterisk'>CVV</div>
                                 <Form.Input
                                     fluid
+                                    label='CVV'
                                     required
-                                    width={3}
+                                    width={6}
                                     aria-label='CVV'
                                     name='cvv'
                                     placeholder='111'
                                     value={cvv}
                                     onChange={handleCVVChange}
                                 />
-                                <div className='redAsterisk'>Zip Code</div>
                                 <Form.Input
                                     fluid
+                                    label='Zip Code'
                                     required
-                                    width={5}
+                                    width={10}
                                     name='zipCode'
                                     placeholder='00000'
                                     value={zipCode}
