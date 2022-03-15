@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import {
     Menu,
-    Icon,
     Button,
     Input,
     Modal,
@@ -73,29 +72,11 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
     // Form fields
     const [open, setOpen] = useState(false);
     const [firstName, setFirstName] = useState('');
-    const [middleName, setMiddleName] = useState('');
     const [lastName, setLastName] = useState('');
-    const [dob, setDob] = useState('');
-    const [primaryEmail, setPrimaryEmail] = useState('');
-    // const [secondaryEmail, setSecondaryEmail] = useState(''); // TODO: remove this line when switching to AWS backend
-    const [primaryPhone, setPrimaryPhone] = useState('');
-    const [primaryMobile, setPrimaryMobile] = useState(false);
-    const [age, setAge] = useState({
-        years: 0,
-        months: 0,
-    });
-    const [address, setAddress] = useState({
-        street: '',
-        city: '',
-        state: '',
-        zip: '',
-    });
+    const [pronouns, setPronouns] = useState('');
     // Field error messages
     const [invalidFirstName, setInvalidFirstName] = useState<FieldError>(false);
     const [invalidLastName, setInvalidLastName] = useState<FieldError>(false);
-    const [invalidEmail, setInvalidEmail] = useState<FieldError>(false);
-    const [invalidPhone, setInvalidPhone] = useState<FieldError>(false);
-    const [invalidDate, setInvalidDate] = useState<FieldError>(false);
     const [saveButton, setSaveButton] = useState('');
     const [buttonIcon, setButtonIcon] = useState<undefined | string>(undefined);
 
@@ -143,45 +124,15 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
     const closeModal = (): void => setOpen(false);
 
     // Patient Info form event handlers
-    const processDob = (dateString: string) => {
-        const now = new Date();
-        const yearNow = now.getFullYear();
-        const monthNow = now.getMonth();
-
-        const dob = new Date(
-            parseInt(dateString.substring(6, 10)),
-            parseInt(dateString.substring(0, 2)) - 1,
-            parseInt(dateString.substring(3, 5))
-        );
-
-        const yearDob = dob.getFullYear();
-        const monthDob = dob.getMonth();
-
-        let years = yearNow - yearDob;
-        let months: number;
-
-        if (monthNow >= monthDob) {
-            months = monthNow - monthDob;
-        } else {
-            years--;
-            months = 12 + monthNow - monthDob;
-        }
-        setAge({ months, years });
-    };
 
     const savePatientInfo = () => {
         if (
             invalidFirstName ||
-            invalidLastName ||
-            invalidEmail ||
-            invalidPhone ||
-            invalidDate
+            invalidLastName
         ) {
-            alert('Please make sure all the required fields are completed');
+            alert('Please your name field is valid');
             return;
         }
-        alert('Patient information is saved!');
-        processDob(dob);
         closeModal();
     };
 
@@ -190,27 +141,12 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
     ): FormChangeHandler {
         return (_e, { value }) => action(value);
     };
-    const onAddressChange: FormChangeHandler = (_e, { value, id }) =>
-        setAddress({ ...address, [id]: value });
-
-    const onPrimaryMobileChange: FormChangeHandler = (e, { value }) => {
-        const digits = /^[0-9]{10}$/;
-        if (value.match(digits)) {
-            const number = `${value.slice(0, 3)}-${value.slice(
-                3,
-                6
-            )}-${value.slice(6)}`;
-            setPrimaryPhone(number);
-        } else {
-            setPrimaryPhone(value);
-        }
-    };
 
     // Form validators
     const validateFirstName = (e: React.FocusEvent) => {
         const target = e.target as HTMLInputElement;
         if (!target.value) {
-            setInvalidFirstName({ content: 'First name must not be blank' });
+            setInvalidFirstName({ content: 'First name must be valid' });
         } else {
             setInvalidFirstName(false);
         }
@@ -219,45 +155,9 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
     const validateLastName = (e: React.FocusEvent) => {
         const target = e.target as HTMLInputElement;
         if (!target.value) {
-            setInvalidLastName({ content: 'Last name must not be blank' });
+            setInvalidLastName({ content: 'Last name must be valid' });
         } else {
             setInvalidLastName(false);
-        }
-    };
-
-    const validatePhone = (e: React.FocusEvent) => {
-        const target = e.target as HTMLInputElement;
-        // regex for digits with dashes
-        const dashes = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
-        // regex for digits only
-        const digits = /^[0-9]{10}$/;
-        if (
-            !target.value ||
-            !(dashes.test(target.value) || digits.test(target.value))
-        ) {
-            setInvalidPhone({ content: 'Phone number must be valid' });
-        } else {
-            setInvalidPhone(false);
-        }
-    };
-
-    const validateEmail = (e: React.FocusEvent) => {
-        const target = e.target as HTMLInputElement;
-        const re = /^[0-9?A-z0-9?]+(\.)?[0-9?A-z0-9?]+@[A-z]+\.[A-z]{3}.?[A-z]{0,3}$/g;
-        if (!target.value || !re.test(target.value)) {
-            setInvalidEmail({ content: 'Email must be valid' });
-        } else {
-            setInvalidEmail(false);
-        }
-    };
-
-    const validateDate = (e: React.FocusEvent) => {
-        const target = e.target as HTMLInputElement;
-        const re = /^((0[1-9]|10|11|12)(-|\/)(([1-9])|(0[1-9])|([12])([0-9])|(3[01]))(-|\/)((19)([2-9])(\d{1})|(20)([012])(\d{1})|([8901])(\d{1})))$/gm;
-        if (!target.value || !re.test(target.value)) {
-            setInvalidDate({ content: 'Date must be valid ' });
-        } else {
-            setInvalidDate(false);
         }
     };
 
@@ -278,23 +178,9 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
                 value={title}
             />
             {!mobile && <div className='patient-info'>
-                {age.years >= 1 && age.years < 11 && (
+                {(lastName != '' || firstName != '') && (
                     <h4>
-                        {`Patient: ${firstName} ${lastName}, \
-                        ${age.years} years and \
-                        ${age.months} months old`}
-                    </h4>
-                )}
-                {age.years >= 11 && (
-                    <h4>
-                        {`Patient: ${firstName} ${lastName}, \
-                        ${age.years} years old`}
-                    </h4>
-                )}
-                {age.years < 1 && (
-                    <h4>
-                        {`Patient: ${firstName} ${lastName}, \
-                        ${age.months} months old`}
+                        {`${firstName} ${lastName}`}
                     </h4>
                 )}
             </div>}
@@ -322,10 +208,13 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
                 <Header>Patient Information</Header>
                 <Modal.Content>
                     <Form>
+                        <DemographicsForm
+                            pronouns={pronouns}
+                            onChange={formatOnChange(setPronouns)}
+                        />
                         <Form.Group widths='equal' className='error-div'>
                             <Form.Field
                                 fluid
-                                required
                                 id='firstName'
                                 type='text'
                                 label='First Name'
@@ -340,20 +229,6 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
                             <Form.Field
                                 fluid
                                 type='text'
-                                id='middleName'
-                                label='Middle Name'
-                                className='patient-info-input'
-                                placeholder='Middle Name'
-                                value={middleName}
-                                control={Input}
-                                onChange={formatOnChange(setMiddleName)}
-                            />
-                        </Form.Group>
-                        <Form.Group widths='equal' className='error-div'>
-                            <Form.Field
-                                fluid
-                                required
-                                type='text'
                                 label='Last Name'
                                 id='lastName'
                                 className='patient-info-input'
@@ -364,113 +239,7 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
                                 onBlur={validateLastName}
                                 onChange={formatOnChange(setLastName)}
                             />
-                            <Form.Field
-                                required
-                                id='dob'
-                                type='text'
-                                label='Date Of Birth'
-                                className='patient-info-input'
-                                placeholder='MM/DD/YYYY'
-                                control={Input}
-                                value={dob}
-                                error={invalidDate}
-                                onBlur={validateDate}
-                                onChange={formatOnChange(setDob)}
-                            />
                         </Form.Group>
-                        <Form.Input
-                            size='small'
-                            label='Street Address'
-                            id='street'
-                            type='text'
-                            value={address.street}
-                            onChange={onAddressChange}
-                        />
-                        <Form.Group>
-                            <Form.Input
-                                width={8}
-                                label='City'
-                                className='address'
-                                id='city'
-                                type='text'
-                                value={address.city}
-                                onChange={onAddressChange}
-                            />
-                            <Form.Select
-                                width={3}
-                                fluid
-                                label='State'
-                                className='address'
-                                id='state'
-                                options={stateOptions}
-                                value={address.state}
-                                onChange={(_e, { value }) =>
-                                    setAddress({
-                                        ...address,
-                                        state: value as string,
-                                    })
-                                }
-                            />
-                            <Form.Input
-                                width={5}
-                                label='Zip Code'
-                                className='address'
-                                id='zip'
-                                type='text'
-                                value={address.zip}
-                                onChange={onAddressChange}
-                            />
-                        </Form.Group>
-                        <Form.Group widths='equal' className='error-div'>
-                            <Form.Field
-                                required
-                                type='text'
-                                id='primaryEmail'
-                                label='Primary Email'
-                                className='patient-info-input'
-                                placeholder='johndoe@email.com'
-                                control={Input}
-                                error={invalidEmail}
-                                value={primaryEmail}
-                                onBlur={validateEmail}
-                                onChange={formatOnChange(setPrimaryEmail)}
-                            />
-                        </Form.Group>
-                        <Form.Group className='error-div phone-div'>
-                            <Form.Field
-                                required
-                                width={12}
-                                label='Primary Phone'
-                                className='patient-info-input'
-                                id='primaryPhone'
-                                type='text'
-                                control={Input}
-                                error={invalidPhone}
-                                value={primaryPhone}
-                                onBlur={validatePhone}
-                                onChange={onPrimaryMobileChange}
-                            />
-                            <Form.Field
-                                width={4}
-                                className='mobile-checkbox'
-                                label='Mobile'
-                                control='input'
-                                type='checkbox'
-                                name='primaryMobile'
-                                checked={primaryMobile}
-                                onChange={() =>
-                                    setPrimaryMobile(!primaryMobile)
-                                }
-                            />
-                        </Form.Group>
-                        <DemographicsForm
-                            race={[]}
-                            asian={[]}
-                            otherRace={[]}
-                            ethnicity=''
-                            otherEthnicity={[]}
-                            gender=''
-                        />
                     </Form>
                 </Modal.Content>
                 <Modal.Actions>
@@ -479,11 +248,6 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
                         type='submit'
                         onClick={savePatientInfo}
                         content='Save'
-                    />
-                    <Button
-                        color='black'
-                        onClick={closeModal}
-                        content='Close'
                     />
                 </Modal.Actions>
             </Modal>
