@@ -1,3 +1,4 @@
+import { CognitoUserSession } from 'amazon-cognito-identity-js';
 import { YesNoResponse } from 'constants/enums';
 import React, { Component } from 'react';
 import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
@@ -30,6 +31,7 @@ export class FamilyHistoryNote extends Component<FamilyHistoryProps> {
                 [condition: string]: any;
             };
         } = {};
+        const noHistory: string[] = [];
         for (const conditionIndex in familyHistory) {
             const familyMembersArray: string[] = [];
             const familyCondition = familyHistory[conditionIndex];
@@ -70,6 +72,10 @@ export class FamilyHistoryNote extends Component<FamilyHistoryProps> {
                     condition: familyCondition.condition,
                     family: familyMembersArray,
                 };
+            } else if (
+                familyCondition.hasAfflictedFamilyMember === YesNoResponse.No
+            ) {
+                noHistory.push(familyCondition.condition);
             }
         }
 
@@ -80,18 +86,31 @@ export class FamilyHistoryNote extends Component<FamilyHistoryProps> {
                 <ul>
                     {Object.keys(components).map((key, index) => {
                         const conditionText =
-                            components[key].family.length > 0
+                            components[key].family.length > 0 &&
+                            components[key].family[0] !== ' '
                                 ? `${components[key].family.join(', ')}. `
-                                : null;
+                                : '';
                         return (
-                            conditionText !== null && (
-                                <li key={index}>
-                                    <b>{components[key].condition}: </b>
-                                    {conditionText}
-                                </li>
-                            )
+                            <li key={index}>
+                                <b>
+                                    {components[key].condition}
+                                    {conditionText.length > 0 ? ':' : ''}{' '}
+                                </b>
+                                {conditionText}
+                            </li>
                         );
                     })}
+                    {noHistory ? (
+                        <li>
+                            No family history of{' '}
+                            {noHistory.length > 1
+                                ? noHistory.slice(0, -1).join(', ') +
+                                  ', or ' +
+                                  noHistory.slice(-1)
+                                : noHistory[0]}
+                            .
+                        </li>
+                    ) : null}
                 </ul>
             );
         } else {
@@ -106,20 +125,32 @@ export class FamilyHistoryNote extends Component<FamilyHistoryProps> {
                     <Table.Body>
                         {Object.keys(components).map((key, index) => {
                             const conditionText =
-                                components[key].family.length > 0
+                                components[key].family.length > 0 &&
+                                components[key].family[0] !== ' '
                                     ? `${components[key].family.join('; ')}. `
-                                    : null;
+                                    : '';
                             return (
-                                conditionText !== null && (
-                                    <Table.Row key={index}>
-                                        <Table.Cell>
-                                            {<b>{components[key].condition}</b>}
-                                        </Table.Cell>
-                                        <Table.Cell>{conditionText}</Table.Cell>
-                                    </Table.Row>
-                                )
+                                <Table.Row key={index}>
+                                    <Table.Cell>
+                                        {<b>{components[key].condition}</b>}
+                                    </Table.Cell>
+                                    <Table.Cell>{conditionText}</Table.Cell>
+                                </Table.Row>
                             );
                         })}
+                        {noHistory ? (
+                            <Table.Row>
+                                <Table.Cell>No family history of</Table.Cell>
+                                <Table.Cell>
+                                    {noHistory.length > 1
+                                        ? noHistory.slice(0, -1).join(', ') +
+                                          ', or ' +
+                                          noHistory.slice(-1)
+                                        : noHistory[0]}
+                                    .
+                                </Table.Cell>
+                            </Table.Row>
+                        ) : null}
                     </Table.Body>
                 </Table>
             );

@@ -21,6 +21,7 @@ import {
 } from './BaseCategoryForm';
 import UpdateDimensions from './UpdateDimensions';
 import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
+import './DiscussionPlanForms.css';
 import './planSections.css';
 
 interface DifferentialDiagnosesDispatchProps {
@@ -91,7 +92,7 @@ const DifferentialDiagnosesForm = (
                         actions.updateDifferentialDiagnosisComments
                     )}
                     aria-label='Diagnosis-Comment'
-                    placeholder='comments'
+                    placeholder='e.g. this diagnosis is more likely because...'
                     className='expanded-input'
                 />
             </div>
@@ -109,11 +110,11 @@ const DifferentialDiagnosesForm = (
                         <TextArea
                             uuid={row.id}
                             onChange={formatAction(
-                                actions.updateDifferentialDiagnosis
+                                actions.updateDifferentialDiagnosisComments
                             )}
                             value={row.comments}
                             aria-label='Diagnosis-Comment'
-                            placeholder='e.g. 1 tablet every 8 hours'
+                            placeholder='e.g. this diagnosis is more likely because...'
                         />
                     </div>
                 </Grid.Column>

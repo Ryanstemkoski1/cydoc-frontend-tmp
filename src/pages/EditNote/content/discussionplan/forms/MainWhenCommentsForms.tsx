@@ -32,6 +32,7 @@ import Dropdown from 'components/tools/OptimizedDropdown';
 import { WhenResponse } from 'constants/enums';
 import _ from 'lodash';
 import UpdateDimensions from './UpdateDimensions';
+import './DiscussionPlanForms.css';
 import './planSections.css';
 
 export const ProceduresAndServicesForm = connect(
@@ -156,7 +157,7 @@ export const MainWhenCommentsForm = <
                 onChange={formatAction(actions.mainOnChange)}
                 onAddItem={onAddItem}
                 value={categoryProps.getMainValue(row)}
-                placeholder=''
+                placeholder={categoryProps.mainValueName}
                 aria-label={`${categoryProps.mainValueName}-Dropdown`}
                 className='main-input'
             />
@@ -188,7 +189,7 @@ export const MainWhenCommentsForm = <
                     onAddItem={onAddItem}
                     value={row.when}
                     aria-label={`${categoryProps.mainValueName}-When`}
-                    placeholder=''
+                    placeholder='when'
                     className='expanded-input'
                 />
             </div>

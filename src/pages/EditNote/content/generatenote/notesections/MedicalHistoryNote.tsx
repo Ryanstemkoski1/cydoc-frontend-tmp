@@ -21,6 +21,10 @@ export class MedicalHistoryNote extends Component<MedicalHistoryProps> {
         return true;
     };
 
+    trimDiseaseName = (procedure: string) => {
+        return procedure.split(' ').slice(1).join(' ');
+    };
+
     render() {
         const { isRich, medicalHistory } = this.props;
 
@@ -88,13 +92,13 @@ export class MedicalHistoryNote extends Component<MedicalHistoryProps> {
                 <ul>
                     {Object.values(conditions).map((condition, i) => (
                         <li key={i}>
-                            <b>{condition.condition}. </b>
+                            <b>{condition.condition} </b>
                             {condition.startYear !== -1
-                                ? `Condition started in ${condition.startYear.toString()}. `
+                                ? `started in ${condition.startYear.toString()}. `
                                 : ''}
                             {condition.hasConditionResolved ===
                             YesNoResponse.Yes
-                                ? `Resolved${
+                                ? `resolved${
                                       condition.endYear !== -1
                                           ? ' (' +
                                             condition.endYear.toString() +

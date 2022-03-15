@@ -30,6 +30,11 @@ import ChiefComplaintsButton from './src/components/ChiefComplaintsButton';
 import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 import { CHIEF_COMPLAINTS } from '../../../../../redux/actions/actionTypes';
 import { currentNoteStore } from 'redux/store';
+import { addCondition } from 'redux/actions/planActions';
+import {
+    PlanConditionsFlat,
+    selectPlanConditions,
+} from 'redux/selectors/planSelectors';
 
 interface HPIContentProps {
     nextFormClick: () => () => string; // this.props.nextFormClick => this.props.onNextClick => string
@@ -163,6 +168,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         // Creates list of category buttons clicked by the user (categories/diseases for which they are positive)
         // Loops through the HPI context storing which categories user clicked in the front page
         // (categories/diseases for which they are positive)
+        const generateConditionPlanIDs = () => {
+            chiefComplaints.map(() => addCondition());
+        };
+
         const positiveDiseases: JSX.Element[] = chiefComplaints.map(
             (name: string) => <ChiefComplaintsButton key={name} name={name} />
         );
@@ -498,16 +507,23 @@ class HPIContent extends React.Component<Props, HPIContentState> {
     }
 }
 
-const mapStateToProps = (state: CurrentNoteState): ChiefComplaintsProps => {
+const mapStateToProps = (
+    state: CurrentNoteState
+): ChiefComplaintsProps & PlanProps => {
     return {
         chiefComplaints: state.chiefComplaints,
+        planConditions: selectPlanConditions(state),
     };
 };
+
+export interface PlanProps {
+    planConditions: PlanConditionsFlat[];
+}
 
 export interface ChiefComplaintsProps {
     chiefComplaints: ChiefComplaintsState;
 }
 
-type Props = ChiefComplaintsProps & HPIContentProps;
+type Props = ChiefComplaintsProps & HPIContentProps & PlanProps;
 
 export default connect(mapStateToProps)(HPIContent);

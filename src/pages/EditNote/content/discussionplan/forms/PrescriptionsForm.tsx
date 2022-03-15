@@ -22,6 +22,7 @@ import {
     BaseCategoryForm,
 } from './BaseCategoryForm';
 import UpdateDimensions from './UpdateDimensions';
+import './DiscussionPlanForms.css';
 import './planSections.css';
 
 interface PrescriptionsDispatchProps {

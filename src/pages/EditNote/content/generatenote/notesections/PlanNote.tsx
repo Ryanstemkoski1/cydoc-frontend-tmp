@@ -47,6 +47,14 @@ export class PlanNote extends Component<PlanProps> {
         };
     };
 
+    trimDiseaseName = (procedure: string) => {
+        return procedure.split(' ').slice(1).join(' ');
+    };
+
+    editWhen = (when: string) => {
+        return when.toLowerCase().split('_').join(' ');
+    };
+
     render(): React.ReactNode {
         const plan = this.props.planState;
         return Object.values(plan.conditions).map((condition, i) => {
@@ -73,7 +81,12 @@ export class PlanNote extends Component<PlanProps> {
                                 ).map((diagnoses, i) => (
                                     <li key={i}>
                                         {diagnoses.diagnosis ? (
-                                            <b>{diagnoses.diagnosis}: </b>
+                                            <b>
+                                                {this.trimDiseaseName(
+                                                    diagnoses.diagnosis
+                                                )}
+                                                :{' '}
+                                            </b>
                                         ) : null}
                                         {diagnoses.comments
                                             ? diagnoses.comments
@@ -118,8 +131,10 @@ export class PlanNote extends Component<PlanProps> {
                                     condition.proceduresAndServices
                                 ).map((procedure, i) => (
                                     <li key={i}>
-                                        <b>{`${procedure.procedure} `}</b>
-                                        {`${procedure.when}${
+                                        <b>{`${this.trimDiseaseName(
+                                            procedure.procedure
+                                        )} `}</b>
+                                        {`${this.editWhen(procedure.when)}${
                                             procedure.when ? '.' : ''
                                         } ${procedure.comments}`}
                                     </li>
@@ -140,7 +155,7 @@ export class PlanNote extends Component<PlanProps> {
                                                     ? `Referred to see ${referral.department}. `
                                                     : ''}
                                             </b>
-                                            {`${referral.when}${
+                                            {`${this.editWhen(referral.when)}${
                                                 referral.when ||
                                                 referral.department
                                                     ? '.'

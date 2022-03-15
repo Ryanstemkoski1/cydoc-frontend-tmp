@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import {
     Accordion,
+    DropdownProps,
     Input,
     Label,
     Table,
@@ -138,7 +139,7 @@ class MedicationsPanel extends Component<Props, State> {
 
     onDoseChange = (
         event: React.FormEvent<HTMLTextAreaElement>,
-        data: TextAreaProps
+        _data: TextAreaProps
     ) => {
         const medicationEntry = this.props.medications[this.props.rowIndex];
         const value = (event.target as HTMLTextAreaElement).value;
@@ -147,11 +148,22 @@ class MedicationsPanel extends Component<Props, State> {
 
     onScheduleChange = (
         event: React.FormEvent<HTMLTextAreaElement>,
-        data: TextAreaProps
+        _data: TextAreaProps
     ) => {
         const medicationEntry = this.props.medications[this.props.rowIndex];
         const value = (event.target as HTMLTextAreaElement).value;
         this.props.updateSchedule(medicationEntry[0], value);
+    };
+
+    onMedicationsBlur = (event: any) => {
+        const medicationEntry = this.props.medications[this.props.rowIndex];
+        if (event.target.value !== '') {
+            this.props.handleAddition(
+                DropdownType.Medications,
+                event.target.value
+            );
+            this.props.updateDrugName(medicationEntry[0], event.target.value);
+        }
     };
 
     onAddItemFormatter = (
@@ -174,47 +186,52 @@ class MedicationsPanel extends Component<Props, State> {
         const medicationEntry = this.props.medications[this.props.rowIndex];
 
         const drugNameInput = (
-            // <Input
-            //     disabled={isPreview}
-            //     transparent={isPreview}
-            //     className='content-input content-dropdown medication drug-input padding-bottom'
-            //     value={
-            //         isPreview
-            //             ? this.props.previewValue
-            //             : (medicationEntry[1] as MedicationsItem).drugName
-            //     }
-            // >
-            <div id='width-full'>
-                {!isPreview && (
-                    <Dropdown
-                        fluid
-                        search
-                        selection
-                        clearable
-                        allowAdditions
-                        icon=''
-                        optiontype='medicationOptions'
-                        type='Drug Name'
-                        options={this.props.medicationOptions}
-                        placeholder='Medication name'
-                        onChange={this.onChangeFormatter((value) =>
-                            this.props.updateDrugName(
-                                medicationEntry[0],
-                                value as string
-                            )
-                        )}
-                        rowindex={this.props.rowIndex}
-                        value={(medicationEntry[1] as MedicationsItem).drugName}
-                        onAddItem={this.onAddItemFormatter(
-                            (optiontype, value) =>
-                                this.props.handleAddition(optiontype, value)
-                        )}
-                        aria-label='Drug-Name-Dropdown'
-                        className='side-effects'
-                    />
-                )}
-            </div>
-            // </Input>
+            <Input
+                disabled={isPreview}
+                transparent={isPreview}
+                className='content-input content-dropdown medication drug-input padding-bottom'
+                value={
+                    isPreview
+                        ? this.props.previewValue
+                        : (medicationEntry[1] as MedicationsItem).drugName
+                }
+            >
+                <div id='width-full'>
+                    {!isPreview && (
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            clearable
+                            allowAdditions
+                            icon=''
+                            optiontype='medicationOptions'
+                            type='Drug Name'
+                            options={this.props.medicationOptions}
+                            placeholder='Medication name'
+                            onChange={this.onChangeFormatter((value) =>
+                                this.props.updateDrugName(
+                                    medicationEntry[0],
+                                    value as string
+                                )
+                            )}
+                            rowindex={this.props.rowIndex}
+                            value={
+                                (medicationEntry[1] as MedicationsItem).drugName
+                            }
+                            onBlur={(event: any) =>
+                                this.onMedicationsBlur(event)
+                            }
+                            onAddItem={this.onAddItemFormatter(
+                                (optiontype, value) =>
+                                    this.props.handleAddition(optiontype, value)
+                            )}
+                            aria-label='Drug-Name-Dropdown'
+                            className='side-effects'
+                        />
+                    )}
+                </div>
+            </Input>
         );
 
         const doseInput = (

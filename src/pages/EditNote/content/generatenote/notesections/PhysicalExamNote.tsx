@@ -282,7 +282,7 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
             } else if (widget === 'reflexes') {
                 let reflex: keyof WidgetsState['reflexes'];
                 const reflexIntensityButtonText = [
-                    '0 no response',
+                    'absent',
                     '1+ slight',
                     '2+ normal',
                     '3+ very brisk',
@@ -301,7 +301,10 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
                                 ? 'left '
                                 : 'right '
                             : '') +
-                        (reflexInfo.location !== '' ? reflexInfo.location : '');
+                        (reflexInfo.location !== ''
+                            ? reflexInfo.location
+                            : '') +
+                        ' reflex';
                     if (reflexNoteText != '') {
                         this.widgets.tendon_reflexes.push(
                             reflexNoteText.trim()

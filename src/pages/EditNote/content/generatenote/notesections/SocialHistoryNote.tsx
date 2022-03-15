@@ -97,7 +97,7 @@ export class SocialHistoryNote extends Component<Props> {
     };
 
     interestedInQuitting = (socialHistorySection: SocialHistorySection) => {
-        let str;
+        let str = '';
         socialHistorySection.interestedInQuitting === YesNoMaybeResponse.Yes
             ? (str = ' Patient is interested in quitting.')
             : socialHistorySection.interestedInQuitting ===
@@ -110,25 +110,20 @@ export class SocialHistoryNote extends Component<Props> {
         return str;
     };
 
-    checkEmptyAnswers = (socialHistorySection: SocialHistorySection) => {
-        if (socialHistorySection.triedToQuit === YesNoResponse.None) {
-            return true;
-        }
-        if (
-            socialHistorySection.interestedInQuitting ===
-            YesNoMaybeResponse.None
-        ) {
+    /*checkEmptyAnswers = (socialHistorySection: SocialHistorySection) => {
+        if (socialHistorySection.triedToQuit === YesNoResponse.None && socialHistorySection.interestedInQuitting ===
+            YesNoMaybeResponse.None) {
             return true;
         }
         return false;
-    };
+    };*/
 
     triedToQuit = (socialHistorySection: SocialHistorySection) => {
-        let str;
+        let str = '';
         if (socialHistorySection.triedToQuit === YesNoResponse.Yes) {
-            str = ' Patient has tried to quit.';
+            str = ' Patient has tried to quit before.';
         } else if (socialHistorySection.triedToQuit === YesNoResponse.No) {
-            str = ' Patient has not tried to quit.';
+            str = ' Patient has never tried to quit before.';
         }
         return str;
     };
@@ -162,16 +157,14 @@ export class SocialHistoryNote extends Component<Props> {
                   ? ` Products used: 
                         ${socialHistory.tobacco.productsUsed.join(', ')}.`
                   : '') +
-              ((socialHistory.tobacco.usage === SubstanceUsageResponse.Yes ||
-                  socialHistory.tobacco.usage ===
-                      SubstanceUsageResponse.InThePast) &&
-              !this.checkEmptyAnswers(socialHistory.tobacco)
+              (socialHistory.tobacco.interestedInQuitting ===
+                  YesNoMaybeResponse.Yes ||
+              socialHistory.tobacco.interestedInQuitting ===
+                  YesNoMaybeResponse.No
                   ? `${this.interestedInQuitting(socialHistory.tobacco)}`
                   : '') +
-              ((socialHistory.tobacco.usage === SubstanceUsageResponse.Yes ||
-                  socialHistory.tobacco.usage ===
-                      SubstanceUsageResponse.InThePast) &&
-              !this.checkEmptyAnswers(socialHistory.tobacco)
+              (socialHistory.tobacco.usage === SubstanceUsageResponse.Yes ||
+              socialHistory.tobacco.usage === SubstanceUsageResponse.InThePast
                   ? `${this.triedToQuit(socialHistory.tobacco)}`
                   : '') +
               (socialHistory.tobacco.comments
@@ -198,16 +191,14 @@ export class SocialHistoryNote extends Component<Props> {
                   ? ` Products used: 
                         ${this.alcoholProductsUsed(socialHistory)}.`
                   : '') +
-              ((socialHistory.alcohol.usage === SubstanceUsageResponse.Yes ||
-                  socialHistory.alcohol.usage ===
-                      SubstanceUsageResponse.InThePast) &&
-              !this.checkEmptyAnswers(socialHistory.alcohol)
+              (socialHistory.alcohol.interestedInQuitting ===
+                  YesNoMaybeResponse.Yes ||
+              socialHistory.alcohol.interestedInQuitting ===
+                  YesNoMaybeResponse.No
                   ? `${this.interestedInQuitting(socialHistory.alcohol)}`
                   : '') +
-              ((socialHistory.alcohol.usage === SubstanceUsageResponse.Yes ||
-                  socialHistory.alcohol.usage ===
-                      SubstanceUsageResponse.InThePast) &&
-              !this.checkEmptyAnswers(socialHistory.alcohol)
+              (socialHistory.alcohol.usage === SubstanceUsageResponse.Yes ||
+              socialHistory.alcohol.usage === SubstanceUsageResponse.InThePast
                   ? `${this.triedToQuit(socialHistory.alcohol)}`
                   : '') +
               (socialHistory.alcohol.comments
@@ -238,20 +229,18 @@ export class SocialHistoryNote extends Component<Props> {
                   ? ` Products used: 
                         ${this.recreationalDrugsProductsUsed(socialHistory)}.`
                   : '') +
-              ((socialHistory.recreationalDrugs.usage ===
-                  SubstanceUsageResponse.Yes ||
-                  socialHistory.recreationalDrugs.usage ===
-                      SubstanceUsageResponse.InThePast) &&
-              !this.checkEmptyAnswers(socialHistory.recreationalDrugs)
+              (socialHistory.recreationalDrugs.interestedInQuitting ===
+                  YesNoMaybeResponse.Yes ||
+              socialHistory.recreationalDrugs.interestedInQuitting ===
+                  YesNoMaybeResponse.No
                   ? `${this.interestedInQuitting(
                         socialHistory.recreationalDrugs
                     )}`
                   : '') +
-              ((socialHistory.recreationalDrugs.usage ===
+              (socialHistory.recreationalDrugs.usage ===
                   SubstanceUsageResponse.Yes ||
-                  socialHistory.recreationalDrugs.usage ===
-                      SubstanceUsageResponse.InThePast) &&
-              !this.checkEmptyAnswers(socialHistory.recreationalDrugs)
+              socialHistory.recreationalDrugs.usage ===
+                  SubstanceUsageResponse.InThePast
                   ? `${this.triedToQuit(socialHistory.recreationalDrugs)}`
                   : '') +
               (socialHistory.recreationalDrugs.comments

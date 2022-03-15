@@ -100,7 +100,7 @@ describe('DifferentialDiagnosesForm', () => {
 
         const value = 'foo';
         wrapper
-            .find('input[aria-label="Diagnosis-Comment"]')
+            .find('textarea[aria-label="Diagnosis-Comment"]')
             .simulate('change', {
                 target: { value },
             });
