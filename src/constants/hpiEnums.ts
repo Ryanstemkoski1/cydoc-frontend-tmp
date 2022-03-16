@@ -108,6 +108,7 @@ export enum ResponseTypes {
     FH_BLANK = 'FH-BLANK',
     SCALE1TO10 = 'SCALE1TO10',
     RADIOLOGY = 'RADIOLOGY',
+    LABORATORY_TEST = 'LABORATORY-TEST',
 }
 
 export const BodyResponseDict = {
@@ -224,6 +225,7 @@ export interface ExpectedResponseInterface {
     FH_BLANK: string[];
     SCALE1TO10: ScaleInputType;
     RADIOLOGY: string;
+    LABORATORY_TEST: LabTestType;
 }
 
 export const ExpectedResponseDict: ExpectedResponseInterface = {
@@ -245,6 +247,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     FH_BLANK: [],
     SCALE1TO10: undefined,
     RADIOLOGY: '',
+    LABORATORY_TEST: { name: '', snomed: '', components: {} },
 };
 
 export enum TimeOption {
@@ -315,6 +318,18 @@ export type BodyLocationLRItemType = {
     needsRightLeft: boolean;
 };
 
+export type LabTestType = {
+    name: string;
+    snomed: string;
+    components: {
+        [component: string]: {
+            unit: string;
+            value: string | number | undefined;
+            unitOptions: string[];
+        };
+    };
+};
+
 export type ClickBoxesInput = string[];
 export type ScaleInputType = number | undefined;
 export type YesNoInput =
@@ -331,4 +346,5 @@ export type HpiResponseType =
     | YesNoMaybeResponse
     | BodyLocationType
     | ScaleInputType
-    | YesNoInput;
+    | YesNoInput
+    | LabTestType;

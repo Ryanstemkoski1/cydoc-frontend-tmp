@@ -3,10 +3,10 @@ import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
 
 export type ChiefComplaintsState = string[];
 
-export const initialState: ChiefComplaintsState = [];
+export const initialChiefComplaintsState: ChiefComplaintsState = [];
 
 export function chiefComplaintsReducer(
-    state = initialState,
+    state = initialChiefComplaintsState,
     action: chiefComplaintsActionTypes
 ): ChiefComplaintsState {
     switch (action.type) {

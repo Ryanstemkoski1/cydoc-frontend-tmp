@@ -27,6 +27,8 @@ import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ScaleInput from './responseComponents/ScaleInput';
 import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
+import LaboratoryTest from './responseComponents/LaboratoryTest';
+import { isLabTestDictionary } from 'redux/reducers/hpiReducer';
 
 interface CreateResponseProps {
     node: string;
@@ -88,29 +90,39 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         that the question can still pass through correctly.
         */
         const { node, hpi, category } = this.props;
+        const { response, responseType } = hpi.nodes[node];
         const text = hpi.nodes[node].text
             .replace('SYMPTOM', category.toLowerCase())
             .replace('DISEASE', category.toLowerCase());
-        const click = text.search('CLICK'),
-            select = text.search('\\['),
-            endSelect = text.search('\\]'),
-            cleanText = select != -1 && endSelect != -1;
-        this.setState({
-            question: text.slice(
-                0,
-                click != -1 ? click : cleanText ? select : text.length
-            ),
-            responseChoice:
-                click != -1 || cleanText
-                    ? text
-                          .slice(
-                              select + 1,
-                              endSelect != -1 ? endSelect : text.length
-                          )
-                          .split(',')
-                          .map((response) => response.trim())
-                    : [],
-        });
+        if (
+            responseType == ResponseTypes.LABORATORY_TEST &&
+            isLabTestDictionary(response)
+        )
+            this.setState({
+                question: "What is the patient's " + response.name + '?',
+            });
+        else {
+            const click = text.search('CLICK'),
+                select = text.search('\\['),
+                endSelect = text.search('\\]'),
+                cleanText = select != -1 && endSelect != -1;
+            this.setState({
+                question: text.slice(
+                    0,
+                    click != -1 ? click : cleanText ? select : text.length
+                ),
+                responseChoice:
+                    click != -1 || cleanText
+                        ? text
+                              .slice(
+                                  select + 1,
+                                  endSelect != -1 ? endSelect : text.length
+                              )
+                              .split(',')
+                              .map((response) => response.trim())
+                        : [],
+            });
+        }
     };
 
     renderSwitch = () => {
@@ -227,7 +239,8 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         node={node}
                     />
                 );
-
+            case ResponseTypes.LABORATORY_TEST:
+                return <LaboratoryTest key={node} node={node} />;
             default:
                 return;
         }

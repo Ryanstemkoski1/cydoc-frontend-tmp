@@ -8,6 +8,7 @@ import { initialFamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
 import { initialSocialHistoryState } from 'redux/reducers/socialHistoryReducer';
 import { initialReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
 import { initialHpiState } from 'redux/reducers/hpiReducer';
+import { initialChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 
 export const noteBody = {
     allergies: initialAllergiesState,
@@ -20,5 +21,5 @@ export const noteBody = {
     physicalExam: initialPhysicalExamState,
     hpi: initialHpiState,
     plan: initialPlanState,
-    chiefComplaints: [],
+    chiefComplaints: initialChiefComplaintsState,
 };

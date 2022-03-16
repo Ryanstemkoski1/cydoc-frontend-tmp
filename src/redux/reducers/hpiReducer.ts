@@ -11,6 +11,8 @@ import {
     BodyLocationOptions,
     EdgeInterface,
     leftRightCenter,
+    LabTestType,
+    NodeInterface,
 } from '../../constants/hpiEnums';
 import { v4 } from 'uuid';
 
@@ -61,6 +63,46 @@ function updateResponse(
     };
 }
 
+function labTestResponse(
+    node: NodeInterface,
+    response: keyof ExpectedResponseInterface
+): HpiResponseType {
+    /* 
+    Passed from ADD_NODE - parses 'text' string to get each of 
+    name, snomed, components, and units and places them into a
+    key-value format for the LABORATORY_TEST response attribute
+    in state. User responses can then be saved in the 'components' 
+    object as either a change in 'unit', 'value', or 'unitOptions'.
+    This response format will then be easy to read in LaboratoryTest.tsx.
+    */
+    let specificResponse = ExpectedResponseDict[response];
+    if (node.responseType == ResponseTypes.LABORATORY_TEST) {
+        const name = node.text.split('NAME[')[1].split(']')[0],
+            snomed = node.text.split('SNOMED[')[1].split(']')[0],
+            components = node.text
+                .split('COMPONENTS_AND_UNITS[')[1]
+                .split(']')[0],
+            responseDict: LabTestType = {
+                name: name,
+                snomed: snomed,
+                components: {},
+            };
+        components.split(',').forEach((cu) => {
+            const compSplit = cu.split('HASUNITS');
+            responseDict.components[compSplit[0].trim()] = {
+                unit: compSplit[1].trim(),
+                value: undefined,
+                unitOptions: compSplit[1]
+                    .trim()
+                    .split('#')
+                    .map((str) => str.trim()),
+            };
+        });
+        specificResponse = responseDict;
+    }
+    return specificResponse;
+}
+
 export function isStringArray(value: any): value is string[] {
     return Array.isArray(value) &&
         value.every((item: any) => typeof item === 'string')
@@ -106,6 +148,30 @@ export function isBodyOption(value: any): value is BodyLocationOptions {
     return Object.values(BodyLocationOptions).includes(value);
 }
 
+export function isLabTestDictionary(value: any): value is LabTestType {
+    return (
+        typeof value == 'object' &&
+        !Array.isArray(value) &&
+        'name' in value &&
+        typeof value.name == 'string' &&
+        'snomed' in value &&
+        typeof value.snomed == 'string' &&
+        'components' in value &&
+        typeof value.components == 'object' &&
+        Object.keys(value.components).every(
+            (item: string) =>
+                'unit' in value.components[item] &&
+                'value' in value.components[item] &&
+                'unitOptions' in value.components[item] &&
+                typeof value.components[item].unit == 'string' &&
+                (typeof value.components[item].value == 'string' ||
+                    typeof value.components[item].value == 'number' ||
+                    typeof value.components[item].value == 'undefined') &&
+                typeof value.components[item].unitOptions == 'object'
+        )
+    );
+}
+
 export function hpiReducer(
     state = initialHpiState,
     action: HpiActionTypes
@@ -134,13 +200,14 @@ export function hpiReducer(
                 edgeDict[edgeKey] = edge;
                 return edgeKey;
             });
+            const updatedResponse = labTestResponse(node, response);
             return {
                 ...state,
                 nodes: {
                     ...state.nodes,
                     [medId]: {
                         ...node,
-                        response: ExpectedResponseDict[response],
+                        response: updatedResponse,
                     },
                 },
                 graph: {
@@ -406,6 +473,63 @@ export function hpiReducer(
             )
                 return updateResponse(medId, conditionIds, state);
             else return state;
+        }
+        case HPI_ACTION.LAB_TEST_HANDLE_CLICK: {
+            /*
+            For LABORATORY_TEST type questions, clicks or unclicks the user's choice
+            of unit.
+            */
+            const { medId, component, unit } = action.payload,
+                response = state.nodes[medId].response;
+            if (
+                state.nodes[medId].responseType ===
+                    ResponseTypes.LABORATORY_TEST &&
+                isLabTestDictionary(response)
+            )
+                return updateResponse(
+                    medId,
+                    {
+                        ...response,
+                        components: {
+                            ...response.components,
+                            [component]: {
+                                ...response.components[component],
+                                unit:
+                                    response.components[component].unit == unit
+                                        ? ''
+                                        : unit,
+                            },
+                        },
+                    },
+                    state
+                );
+            else throw new Error('Not a lab test response');
+        }
+
+        case HPI_ACTION.LAB_TEST_INPUT_CHANGE: {
+            /*
+            For LABORATORY_TEST type questions, updates the user's input,
+            which corresponds to the value attribute in the components object.
+            */
+            const { medId, component, value } = action.payload;
+            const response = state.nodes[medId].response;
+            if (
+                state.nodes[medId].responseType ===
+                    ResponseTypes.LABORATORY_TEST &&
+                isLabTestDictionary(response)
+            ) {
+                const newResponse = {
+                    ...response,
+                    components: {
+                        ...response.components,
+                        [component]: {
+                            ...response.components[component],
+                            value: value,
+                        },
+                    },
+                };
+                return updateResponse(medId, newResponse, state);
+            } else throw new Error('Not a lab test response');
         }
 
         default:

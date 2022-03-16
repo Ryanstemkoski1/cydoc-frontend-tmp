@@ -349,6 +349,54 @@ export function popResponse(
     };
 }
 
+export interface LabTestInputChangeAction {
+    type: HPI_ACTION.LAB_TEST_INPUT_CHANGE;
+    payload: {
+        medId: string;
+        component: string;
+        value: number | string;
+    };
+}
+
+export function labTestInputChange(
+    medId: string,
+    component: string,
+    value: number | string
+): LabTestInputChangeAction {
+    return {
+        type: HPI_ACTION.LAB_TEST_INPUT_CHANGE,
+        payload: {
+            medId,
+            component,
+            value,
+        },
+    };
+}
+
+export interface LabTestHandleClickAction {
+    type: HPI_ACTION.LAB_TEST_HANDLE_CLICK;
+    payload: {
+        medId: string;
+        component: string;
+        unit: string;
+    };
+}
+
+export function labTestHandleClick(
+    medId: string,
+    component: string,
+    unit: string
+): LabTestHandleClickAction {
+    return {
+        type: HPI_ACTION.LAB_TEST_HANDLE_CLICK,
+        payload: {
+            medId,
+            component,
+            unit,
+        },
+    };
+}
+
 export type HpiActionTypes =
     | AddNodeAction
     | BodyLocationResponseAction
@@ -365,4 +413,6 @@ export type HpiActionTypes =
     | ScaleHandleValueAction
     | ScaleHandleClearAction
     | BlankQuestionChangeAction
-    | PopResponseAction;
+    | PopResponseAction
+    | LabTestHandleClickAction
+    | LabTestInputChangeAction;

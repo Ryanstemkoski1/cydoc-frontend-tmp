@@ -1,0 +1,9 @@
+.unit-option {
+    width: 100%;
+}
+
+.ui.grid > .row > .column > .lab-test-input {
+    position: relative;
+    top: 30%;
+    left: 30%;
+}

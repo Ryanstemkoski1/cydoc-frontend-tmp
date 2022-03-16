@@ -412,6 +412,177 @@ Object {
 }
 `;
 
+exports[`hpi reducers handle user actions handles lab test input actions handles unit option change 1`] = `
+Object {
+  "edges": Object {
+    "tofoo1fromfoo2": Object {
+      "from": "foo2",
+      "fromQuestionOrder": -1,
+      "to": "foo1",
+      "toQuestionOrder": -1,
+    },
+    "tofoo3fromfoo2": Object {
+      "from": "foo2",
+      "fromQuestionOrder": -1,
+      "to": "foo3",
+      "toQuestionOrder": -1,
+    },
+  },
+  "graph": Object {
+    "medId": Array [
+      "tofoo1fromfoo2",
+      "tofoo3fromfoo2",
+    ],
+  },
+  "nodes": Object {
+    "medId": Object {
+      "blankNo": "blankNo",
+      "blankTemplate": "blankTemplate",
+      "blankYes": "blankYes",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "doctorView": "DoctorView",
+      "medID": "medId",
+      "noteSection": "noteSection",
+      "patientView": "PatientView",
+      "response": Object {
+        "components": Object {
+          "vitamin B12 level": Object {
+            "unit": "picogram/milliliter",
+            "unitOptions": Array [
+              "picogram/milliliter",
+              "picomole/liter",
+              "nanogram/liter",
+            ],
+            "value": "5",
+          },
+        },
+        "name": "vitamin B12 level",
+        "snomed": "14598005",
+      },
+      "responseType": "LABORATORY-TEST",
+      "text": "NAME[vitamin B12 level] SNOMED[14598005] COMPONENTS_AND_UNITS[vitamin B12 level HASUNITS picogram/milliliter # picomole/liter # nanogram/liter]",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles lab test input actions handles value input change 1`] = `
+Object {
+  "edges": Object {
+    "tofoo1fromfoo2": Object {
+      "from": "foo2",
+      "fromQuestionOrder": -1,
+      "to": "foo1",
+      "toQuestionOrder": -1,
+    },
+    "tofoo3fromfoo2": Object {
+      "from": "foo2",
+      "fromQuestionOrder": -1,
+      "to": "foo3",
+      "toQuestionOrder": -1,
+    },
+  },
+  "graph": Object {
+    "medId": Array [
+      "tofoo1fromfoo2",
+      "tofoo3fromfoo2",
+    ],
+  },
+  "nodes": Object {
+    "medId": Object {
+      "blankNo": "blankNo",
+      "blankTemplate": "blankTemplate",
+      "blankYes": "blankYes",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "doctorView": "DoctorView",
+      "medID": "medId",
+      "noteSection": "noteSection",
+      "patientView": "PatientView",
+      "response": Object {
+        "components": Object {
+          "vitamin B12 level": Object {
+            "unit": "picogram/milliliter # picomole/liter # nanogram/liter",
+            "unitOptions": Array [
+              "picogram/milliliter",
+              "picomole/liter",
+              "nanogram/liter",
+            ],
+            "value": "5",
+          },
+        },
+        "name": "vitamin B12 level",
+        "snomed": "14598005",
+      },
+      "responseType": "LABORATORY-TEST",
+      "text": "NAME[vitamin B12 level] SNOMED[14598005] COMPONENTS_AND_UNITS[vitamin B12 level HASUNITS picogram/milliliter # picomole/liter # nanogram/liter]",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles lab test input actions returns node with lab test 1`] = `
+Object {
+  "edges": Object {
+    "tofoo1fromfoo2": Object {
+      "from": "foo2",
+      "fromQuestionOrder": -1,
+      "to": "foo1",
+      "toQuestionOrder": -1,
+    },
+    "tofoo3fromfoo2": Object {
+      "from": "foo2",
+      "fromQuestionOrder": -1,
+      "to": "foo3",
+      "toQuestionOrder": -1,
+    },
+  },
+  "graph": Object {
+    "medId": Array [
+      "tofoo1fromfoo2",
+      "tofoo3fromfoo2",
+    ],
+  },
+  "nodes": Object {
+    "medId": Object {
+      "blankNo": "blankNo",
+      "blankTemplate": "blankTemplate",
+      "blankYes": "blankYes",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "doctorView": "DoctorView",
+      "medID": "medId",
+      "noteSection": "noteSection",
+      "patientView": "PatientView",
+      "response": Object {
+        "components": Object {
+          "vitamin B12 level": Object {
+            "unit": "picogram/milliliter # picomole/liter # nanogram/liter",
+            "unitOptions": Array [
+              "picogram/milliliter",
+              "picomole/liter",
+              "nanogram/liter",
+            ],
+            "value": undefined,
+          },
+        },
+        "name": "vitamin B12 level",
+        "snomed": "14598005",
+      },
+      "responseType": "LABORATORY-TEST",
+      "text": "NAME[vitamin B12 level] SNOMED[14598005] COMPONENTS_AND_UNITS[vitamin B12 level HASUNITS picogram/milliliter # picomole/liter # nanogram/liter]",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
 exports[`hpi reducers handle user actions handles list text actions handles changing list text input 1`] = `
 Object {
   "edges": Object {},

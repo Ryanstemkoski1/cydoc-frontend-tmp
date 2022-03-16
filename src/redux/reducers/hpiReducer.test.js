@@ -72,7 +72,7 @@ describe('hpi reducers', () => {
                 node: node,
                 edges: edges,
             };
-            const nextState = hpiReducer(initialHpiState, {
+            let nextState = hpiReducer(initialHpiState, {
                 type: HPI_ACTION.ADD_NODE,
                 payload,
             });
@@ -360,6 +360,104 @@ describe('hpi reducers', () => {
                 expect(nextState.nodes[medId].response).toMatchObject(
                     payload.conditionIds
                 );
+            });
+        });
+        describe('handles lab test input actions', () => {
+            let nextState = {};
+            it('returns node with lab test', () => {
+                const node = {
+                    uid: 'uid',
+                    medID: medId,
+                    category: 'category',
+                    text: 'text',
+                    responseType: 'BODYLOCATION',
+                    bodySystem: 'bodySystem',
+                    noteSection: 'noteSection',
+                    doctorView: 'DoctorView',
+                    patientView: 'PatientView',
+                    doctorCreated: 'doctorCreated',
+                    response: ExpectedResponseDict['BODYLOCATION'],
+                    blankTemplate: 'blankTemplate',
+                    blankYes: 'blankYes',
+                    blankNo: 'blankNo',
+                };
+                const edges = [
+                    {
+                        to: 'foo1',
+                        from: 'foo2',
+                        toQuestionOrder: -1,
+                        fromQuestionOrder: -1,
+                    },
+                    {
+                        to: 'foo3',
+                        from: 'foo2',
+                        toQuestionOrder: -1,
+                        fromQuestionOrder: -1,
+                    },
+                ];
+                node.responseType = 'LABORATORY-TEST';
+                node.text =
+                    'NAME[vitamin B12 level] SNOMED[14598005] COMPONENTS_AND_UNITS[vitamin B12 level HASUNITS picogram/milliliter # picomole/liter # nanogram/liter]';
+                const payload = {
+                    medId: medId,
+                    node: node,
+                    edges: edges,
+                };
+                nextState = hpiReducer(initialHpiState, {
+                    type: HPI_ACTION.ADD_NODE,
+                    payload,
+                });
+                const updatedResponse = nextState.nodes[medId].response;
+                expect(nextState).toMatchSnapshot();
+                expect(updatedResponse.name).toEqual('vitamin B12 level');
+                expect(updatedResponse.snomed).toEqual('14598005');
+                expect(updatedResponse.components).toHaveProperty(
+                    'vitamin B12 level'
+                );
+                expect(
+                    updatedResponse.components['vitamin B12 level'].unit
+                ).toEqual(
+                    'picogram/milliliter # picomole/liter # nanogram/liter'
+                );
+                expect(
+                    updatedResponse.components['vitamin B12 level'].unitOptions
+                ).toEqual([
+                    'picogram/milliliter',
+                    'picomole/liter',
+                    'nanogram/liter',
+                ]);
+            });
+            it('handles value input change', () => {
+                payload.component = 'vitamin B12 level';
+                payload.value = '5';
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.ADD_NODE,
+                    payload,
+                });
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.LAB_TEST_INPUT_CHANGE,
+                    payload,
+                });
+                expect(nextState).toMatchSnapshot();
+                expect(
+                    nextState.nodes[medId].response.components[
+                        'vitamin B12 level'
+                    ].value
+                ).toEqual(payload.value);
+            });
+            it('handles unit option change', () => {
+                payload.component = 'vitamin B12 level';
+                payload.unit = 'picogram/milliliter';
+                nextState = hpiReducer(nextState, {
+                    type: HPI_ACTION.LAB_TEST_HANDLE_CLICK,
+                    payload,
+                });
+                expect(nextState).toMatchSnapshot();
+                expect(
+                    nextState.nodes[medId].response.components[
+                        'vitamin B12 level'
+                    ].unit
+                ).toEqual(payload.unit);
             });
         });
     });
