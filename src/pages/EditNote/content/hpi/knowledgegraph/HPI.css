@@ -12,6 +12,7 @@
     width: 100%;
     text-align: left !important;
     font-size: 1.15rem !important;
+    height: 50px;
 }
 
 .mobile-hpi-disease-button {
@@ -34,18 +35,6 @@
 
 .hpi-search-bar {
     margin: 3vh 0vh 0vw 0vw;
-}
-
-.cardiovascular-mobile {
-    font-size: 1.15rem !important;
-}
-
-.cardiovascular-normal {
-    font-size: .85rem !important;
-}
-
-.neuro-normal {
-    font-size: 1rem !important
 }
 
 .diseases-array {

@@ -47,32 +47,31 @@ class BodySystemDropdown extends React.Component<
     constructor(props: BodySystemDropdownProps) {
         super(props);
         this.state = {
-            selected: true,
+            selected: false, //Set to false so that dropdown is closed by default
         };
     }
 
     render(): React.ReactNode {
         const { name, diseasesList } = this.props;
-        const isMobile = window.innerWidth < NOTE_PAGE_MOBILE_BP;
-        const mobileCardio =
-            isMobile &&
-            (imgToRender[name] == heart || imgToRender[name] == brain);
-        const normalCardio = !isMobile && imgToRender[name] == heart;
-        const normalNeuro = !isMobile && imgToRender[name] == brain;
-        let styleToRender = 'hpi-disease-button';
 
-        if (isMobile) {
-            styleToRender = 'mobile-hpi-disease-button';
-        }
-        if (mobileCardio) {
-            styleToRender = 'cardiovascular-mobile';
-        }
-        if (normalCardio) {
-            styleToRender = 'cardiovascular-normal';
-        }
-        if (normalNeuro) {
-            styleToRender = 'neuro-normal';
-        }
+        //Defining outlier conditions
+        //for styling body system dropdown buttons including ...
+        //if the screen size is mobile -> change button size and layout
+        //if the BodySystem is Cardiovascular/Hematologic -> abbreviate to Cards/Heme
+        //if the BodySystem is Neurologic/Psychiatric -> abbreviate to Neuro/Psych
+
+        const isMobile = window.innerWidth < NOTE_PAGE_MOBILE_BP;
+        const cardio = imgToRender[name] == heart;
+        const neuro = imgToRender[name] == brain;
+
+        //Setting name to default of name, but abbreviating if needed
+        let nameAbrev = name;
+        if (cardio) nameAbrev = 'Cards/Heme';
+        if (neuro) nameAbrev = 'Neuro/Psych';
+
+        //Setting default render style to computer but changing to mobile if needed
+        let styleToRender = 'hpi-disease-button';
+        if (isMobile) styleToRender = 'mobile-hpi-disease-button';
 
         return (
             <div>
@@ -88,7 +87,7 @@ class BodySystemDropdown extends React.Component<
                         className={isMobile ? 'mobile-hpi-icons' : 'hpi-icons'}
                         src={imgToRender[name]}
                     />
-                    {name}
+                    {nameAbrev}
                 </Button>
                 <div className='diseases-array'>
                     {this.state.selected
