@@ -5,12 +5,18 @@ import { Provider } from 'react-redux';
 import HandleNumericInput from '../HandleNumericInput';
 import { addNode } from 'redux/actions/hpiActions';
 import { createCurrentNoteStore } from 'redux/store';
+import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const connectRealStore = () => {
     const store = createCurrentNoteStore();
-    store.dispatch(addNode('node', 'NUMBER'));
+    const node = {
+        ...testNode,
+        responseType: 'NUMBER',
+        response: ExpectedResponseDict.NUMBER,
+    };
+    store.dispatch(addNode('node', node, testEdges));
     return {
         store,
         wrapper: mount(

@@ -5,12 +5,18 @@ import { Provider } from 'react-redux';
 import HandleInput from '../HandleInput';
 import { addNode } from 'redux/actions/hpiActions';
 import { createCurrentNoteStore } from 'redux/store';
+import { ExpectedResponseDict, testNode, testEdges } from 'constants/hpiEnums';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const connectRealStore = () => {
     const store = createCurrentNoteStore();
-    store.dispatch(addNode('node', 'SHORT-TEXT'));
+    const node = {
+        ...testNode,
+        responseType: 'SHORT-TEXT',
+        response: ExpectedResponseDict.SHORT_TEXT,
+    };
+    store.dispatch(addNode('node', node, testEdges));
     return {
         store,
         wrapper: mount(
@@ -29,15 +35,15 @@ describe('HandleInput', () => {
     test('changing input updates value', () => {
         const { wrapper } = connectRealStore();
         const foo = 'foo';
-        expect(wrapper.find('input[id="handle-input"]').prop('value')).toEqual(
-            ''
-        );
-        wrapper.find('input[id="handle-input"]').simulate('change', {
+        expect(
+            wrapper.find('textarea[id="handle-input"]').prop('value')
+        ).toEqual('');
+        wrapper.find('textarea[id="handle-input"]').simulate('change', {
             target: { value: foo },
         });
         wrapper.update();
-        expect(wrapper.find('input[id="handle-input"]').prop('value')).toEqual(
-            foo
-        );
+        expect(
+            wrapper.find('textarea[id="handle-input"]').prop('value')
+        ).toEqual(foo);
     });
 });

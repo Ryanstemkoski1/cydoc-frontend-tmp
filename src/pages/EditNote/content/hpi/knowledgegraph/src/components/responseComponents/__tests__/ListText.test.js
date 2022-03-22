@@ -5,12 +5,18 @@ import { Provider } from 'react-redux';
 import ListText from '../ListText';
 import { addNode } from 'redux/actions/hpiActions';
 import { createCurrentNoteStore } from 'redux/store';
+import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const connectRealStore = () => {
     const store = createCurrentNoteStore();
-    store.dispatch(addNode('node', 'LIST-TEXT'));
+    const node = {
+        ...testNode,
+        responseType: 'LIST-TEXT',
+        response: ExpectedResponseDict.LIST_TEXT,
+    };
+    store.dispatch(addNode('node', node, testEdges));
     return {
         store,
         wrapper: mount(
@@ -65,7 +71,7 @@ describe('ListText', () => {
         wrapper.update();
 
         // add list text
-        wrapper.find('.button-plus-click').simulate('click');
+        wrapper.find('button[title="+"]').simulate('click');
         wrapper.update();
         expect(wrapper.find('input[id="list-text-input"]').length).toEqual(
             numInputs + 1
@@ -82,7 +88,7 @@ describe('ListText', () => {
     });
 
     test('removing list input', () => {
-        const numInputs = wrapper.find('.remove-list-text').length;
+        const numInputs = wrapper.find('button[title="-"]').length;
         const foo = 'foo';
         let currInputs = numInputs;
         for (let i = 0; i < numInputs - 1; i++) {
@@ -100,18 +106,18 @@ describe('ListText', () => {
             ).toEqual(newFoo);
 
             // remove list text
-            wrapper.find('.remove-list-text').at(0).simulate('click');
+            wrapper.find('button[title="-"]').at(0).simulate('click');
             wrapper.update();
             expect(
                 wrapper.find('input[id="list-text-input"]').at(0).prop('value')
             ).not.toEqual(newFoo);
-            expect(wrapper.find('.remove-list-text').length).toEqual(
+            expect(wrapper.find('button[title="-"]').length).toEqual(
                 currInputs - 1
             );
-            currInputs = wrapper.find('.remove-list-text').length;
+            currInputs = wrapper.find('button[title="-"]').length;
         }
-        wrapper.find('.remove-list-text').simulate('click');
+        wrapper.find('button[title="-"]').simulate('click');
         wrapper.update();
-        expect(wrapper.find('.remove-list-text').length).toEqual(0);
+        expect(wrapper.find('button[title="-"]').length).toEqual(0);
     });
 });

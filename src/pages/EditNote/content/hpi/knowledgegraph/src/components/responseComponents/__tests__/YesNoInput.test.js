@@ -5,12 +5,18 @@ import { Provider } from 'react-redux';
 import YesNo from '../YesNo';
 import { addNode } from 'redux/actions/hpiActions';
 import { createCurrentNoteStore } from 'redux/store';
+import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const connectRealStore = () => {
     const store = createCurrentNoteStore();
-    store.dispatch(addNode('node', 'YES-NO'));
+    const node = {
+        ...testNode,
+        responseType: 'YES-NO',
+        response: ExpectedResponseDict.YES_NO,
+    };
+    store.dispatch(addNode('node', node, testEdges));
     return {
         store,
         wrapper: mount(
@@ -27,38 +33,40 @@ describe('YesNo', () => {
     test('renders', () => expect(wrapper).toBeTruthy());
 
     test('click yes button', () => {
-        wrapper.find('.button_yesno').first().simulate('click');
-        expect(wrapper.find('.button_yesno').first()).toBeTruthy();
-        expect(wrapper.find('.button_yesno').first().prop('style')).toEqual({
-            backgroundColor: 'lightslategrey',
-            color: 'white',
-        });
+        expect(wrapper.find('button').first().prop('className')).toEqual(
+            expect.not.stringContaining('active')
+        );
+        wrapper.find('button').first().simulate('click');
+        expect(wrapper.find('button').first()).toBeTruthy();
+        expect(wrapper.find('button').first().prop('className')).toEqual(
+            expect.stringContaining('active')
+        );
     });
 
     test('unclick yes button', () => {
-        wrapper.find('.button_yesno').first().simulate('click');
+        wrapper.find('button[title="Yes"]').simulate('click');
         wrapper.update();
-        expect(wrapper.find('.button_yesno').first().prop('style')).toEqual({
-            backgroundColor: 'whitesmoke',
-            color: 'black',
-        });
+        expect(wrapper.find('button[title="Yes"]').prop('className')).toEqual(
+            expect.not.stringContaining('active')
+        );
     });
 
     test('click no button', () => {
-        wrapper.find('.button_yesno').at(1).simulate('click');
+        expect(wrapper.find('button[title="No"]').prop('className')).toEqual(
+            expect.not.stringContaining('active')
+        );
+        wrapper.find('button[title="No"]').simulate('click');
         wrapper.update();
-        expect(wrapper.find('.button_yesno').at(1).prop('style')).toEqual({
-            backgroundColor: 'lightslategrey',
-            color: 'white',
-        });
+        expect(wrapper.find('button[title="No"]').prop('className')).toEqual(
+            expect.stringContaining('active')
+        );
     });
 
     test('unclick no button', () => {
-        wrapper.find('.button_yesno').at(1).simulate('click');
+        wrapper.find('button[title="No"]').simulate('click');
         wrapper.update();
-        expect(wrapper.find('.button_yesno').at(1).prop('style')).toEqual({
-            backgroundColor: 'whitesmoke',
-            color: 'black',
-        });
+        expect(wrapper.find('button[title="No"]').prop('className')).toEqual(
+            expect.not.stringContaining('active')
+        );
     });
 });

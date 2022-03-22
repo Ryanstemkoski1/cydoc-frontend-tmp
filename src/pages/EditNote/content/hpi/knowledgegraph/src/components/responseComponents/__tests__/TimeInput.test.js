@@ -5,12 +5,18 @@ import { Provider } from 'react-redux';
 import TimeInput from '../TimeInput';
 import { addNode } from 'redux/actions/hpiActions';
 import { createCurrentNoteStore } from 'redux/store';
+import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const connectRealStore = () => {
     const store = createCurrentNoteStore();
-    store.dispatch(addNode('node', 'TIME3DAYS'));
+    const node = {
+        ...testNode,
+        responseType: 'TIME3DAYS',
+        response: ExpectedResponseDict.TIME3DAYS,
+    };
+    store.dispatch(addNode('node', node, testEdges));
     return {
         store,
         wrapper: mount(
@@ -26,9 +32,9 @@ describe('TimeInput', () => {
     test('renders', () => expect(wrapper).toBeTruthy());
 
     test('numeric time input updates value', () => {
-        expect(wrapper.find('input[id="numeric-input"]').prop('value')).toEqual(
-            0
-        );
+        expect(
+            wrapper.find('input[id="numeric-input"]').prop('value')
+        ).toBeNull();
         wrapper.find('input[id="numeric-input"]').simulate('change', {
             target: { value: 8 },
         });
@@ -39,7 +45,7 @@ describe('TimeInput', () => {
     });
 
     test('time option buttons work', () => {
-        const numButtons = wrapper.find('.time-grid-button').length;
+        const numButtons = wrapper.find('button').length;
         const timeOptions = [
             'minutes',
             'hours',
@@ -50,17 +56,17 @@ describe('TimeInput', () => {
         ];
         expect(numButtons).toEqual(timeOptions.length);
         for (let i = 0; i < numButtons; i++) {
-            expect(
-                wrapper.find('.time-grid-button').at(i).prop('color')
-            ).toBeUndefined();
-            expect(
-                wrapper.find('.time-grid-button').at(i).prop('title')
-            ).toEqual(timeOptions[i]);
-            wrapper.find('.time-grid-button').at(i).simulate('click');
+            expect(wrapper.find('button').at(i).prop('className')).toEqual(
+                expect.not.stringContaining('active')
+            );
+            expect(wrapper.find('button').at(i).prop('title')).toEqual(
+                timeOptions[i]
+            );
+            wrapper.find('button').at(i).simulate('click');
             wrapper.update();
-            expect(
-                wrapper.find('.time-grid-button').at(i).prop('color')
-            ).toEqual('grey');
+            expect(wrapper.find('button').at(i).prop('className')).toEqual(
+                expect.stringContaining('active')
+            );
         }
     });
 });
