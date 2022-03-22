@@ -24,7 +24,7 @@ import './Account.css';
 import ResetPassword from 'auth/forgotPassword';
 import EnterConfirmationCode from 'auth/enterConfirmationCode';
 import { passwordErrors } from 'constants/passwordErrors';
-import { passwordRequirments } from 'auth/passwordReqs';
+import { passwordRequirements } from 'auth/passwordReqs';
 
 const ForgotPasswordEmail = () => {
     const context = useContext(AuthContext);
@@ -61,7 +61,7 @@ const ForgotPasswordEmail = () => {
         setConfirmPassword(value);
     };
     const handleNewPasswordChange = (e, { value }) => {
-        setPasswordReqs(passwordRequirments(passwordReqs, value, role));
+        setPasswordReqs(passwordRequirements(passwordReqs, value, role));
         setNewPassword(value);
     };
 

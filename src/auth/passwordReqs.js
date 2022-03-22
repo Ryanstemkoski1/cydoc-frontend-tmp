@@ -1,7 +1,7 @@
 const doctorPasswordLength = 16;
 const managerPasswordLength = 25;
 
-export function passwordRequirments(passwordReqs, value, role) {
+export function passwordRequirements(passwordReqs, value, role) {
     if (role === 'doctor') {
         return {
             ...passwordReqs,
