@@ -175,10 +175,12 @@ export class MedicationsContent extends Component<Props, State> {
                 medIndices = values
                     .filter((medName) => medName in medicationsIndexMap)
                     .map((medName) => medicationsIndexMap[medName].index);
-            } else if (responseType == ResponseTypes.MEDS_BLANK && values)
-                medIndices = values.map((key) =>
+            } else if (responseType == ResponseTypes.MEDS_BLANK && node) {
+                const response = hpi.nodes[node].response as string[];
+                medIndices = response.map((key) =>
                     medications.findIndex((medItem) => medItem[0] == key)
                 );
+            }
             for (let i = 0; i < medIndices.length; i++) {
                 panels.push(
                     <MedicationsPanel
