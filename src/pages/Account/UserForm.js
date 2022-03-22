@@ -334,7 +334,6 @@ const UserForm = (props) => {
                     value={userInfo.email}
                 />
                 <Form.Checkbox
-                    required
                     width={2}
                     className='US-phone-checkbox'
                     label='U.S. phone number'
