@@ -10,6 +10,10 @@ import {
     Container,
     Grid,
     Tab,
+    AccordionTitleProps,
+    Accordion,
+    Form,
+    TextArea,
 } from 'semantic-ui-react';
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
@@ -28,6 +32,11 @@ import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import ChiefComplaintsButton from './src/components/ChiefComplaintsButton';
 import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
+import {
+    setNotesChiefComplaint,
+    SetNotesChiefComplaintAction,
+} from 'redux/actions/chiefComplaintsActions';
+import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
 import { CHIEF_COMPLAINTS } from '../../../../../redux/actions/actionTypes';
 import { currentNoteStore } from 'redux/store';
 import { addCondition } from 'redux/actions/planActions';
@@ -49,6 +58,7 @@ interface HPIContentState {
     activeHPI: string;
     step: number;
     searchVal: string;
+    activeIndex: number;
 }
 
 class HPIContent extends React.Component<Props, HPIContentState> {
@@ -63,6 +73,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             activeHPI: '', // active tab name
             step: -1, // step in the HPI interview form
             searchVal: '',
+            activeIndex: 0, //misc notes box active
         };
         this.updateDimensions = this.updateDimensions.bind(this);
         // this.handleItemClick = this.handleItemClick.bind(this);
@@ -103,7 +114,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         const currentStep: number = step;
         this.setState({
             step: currentStep + 1,
-            activeHPI: this.props.chiefComplaints[currentStep + 1],
+            activeHPI: Object.keys(this.props.chiefComplaints)[
+                currentStep + 1
+            ] as string,
         });
         window.scrollTo(0, 0);
     };
@@ -115,7 +128,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         const currentStep: number = step;
         this.setState({
             step: currentStep - 1,
-            activeHPI: this.props.chiefComplaints[currentStep - 1],
+            activeHPI: Object.keys(this.props.chiefComplaints)[
+                currentStep - 1
+            ] as string,
         });
         window.scrollTo(0, 0);
     };
@@ -140,6 +155,17 @@ class HPIContent extends React.Component<Props, HPIContentState> {
     //         }
     //     }
     // }
+    miscNotesClick = (
+        _e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        titleProps: AccordionTitleProps
+    ) => {
+        const { activeIndex } = this.state;
+        const newIndex =
+            activeIndex === titleProps.index
+                ? -1
+                : (titleProps.index as number);
+        this.setState({ activeIndex: newIndex });
+    };
 
     render() {
         const {
@@ -149,7 +175,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             parentNodes,
             activeHPI,
         } = this.state;
-        const { chiefComplaints } = this.props;
+        const { chiefComplaints, setNotesChiefComplaint } = this.props;
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         /* Creates list of body system buttons to add in the front page. 
            Loops through state variable, bodySystems, saved from the API */
@@ -168,13 +194,11 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         // Creates list of category buttons clicked by the user (categories/diseases for which they are positive)
         // Loops through the HPI context storing which categories user clicked in the front page
         // (categories/diseases for which they are positive)
-        const generateConditionPlanIDs = () => {
-            chiefComplaints.map(() => addCondition());
-        };
-
-        const positiveDiseases: JSX.Element[] = chiefComplaints.map(
-            (name: string) => <ChiefComplaintsButton key={name} name={name} />
-        );
+        const positiveDiseases: JSX.Element[] = Object.keys(
+            chiefComplaints
+        ).map((disease) => (
+            <ChiefComplaintsButton key={disease} name={disease as string} />
+        ));
 
         // map through all complaints on the HPI and create search resuls
         const getRes = () => {
@@ -206,6 +230,41 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             return filterResults;
         };
 
+        // This is the abstraction of the misc box.
+        // It takes in a string because the two renders called the diseases that were active different things,
+        // one called it diseaseCategories and another called it activeHPI.
+
+        const miscBox = (activeThing: string) => {
+            return (
+                <Accordion className='hpi-text-drop'>
+                    <Accordion.Title
+                        className='white-important'
+                        active={this.state.activeIndex === 0}
+                        index={0}
+                        onClick={this.miscNotesClick}
+                    >
+                        <Icon className='white-important' name='dropdown' />
+                        Misc Notes&nbsp;&nbsp;&nbsp;&nbsp;
+                    </Accordion.Title>
+                    <Accordion.Content active={this.state.activeIndex === 0}>
+                        <Form>
+                            <TextArea
+                                className='misc-box'
+                                rows={3}
+                                onChange={(_e, { value }) => {
+                                    setNotesChiefComplaint(
+                                        activeThing as string,
+                                        value
+                                    );
+                                }}
+                                value={chiefComplaints[activeThing]}
+                            />
+                        </Form>
+                    </Accordion.Content>
+                </Accordion>
+            );
+        };
+
         // each step correlates to a different tab
         const step: number = this.state.step;
         // number of positive diseases, which is also the number of steps
@@ -222,8 +281,8 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         }
 
         const collapseTabs =
-            chiefComplaints.length >= 10 ||
-            (chiefComplaints.length >= 5 &&
+            Object.keys(chiefComplaints).length >= 10 ||
+            (Object.keys(chiefComplaints).length >= 5 &&
                 windowWidth < DISEASE_TABS_MED_BP) ||
             windowWidth < DISEASE_TABS_SMALL_BP;
 
@@ -305,7 +364,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         relaxed
                                     >
                                         {' '}
-                                        {chiefComplaints.map(
+                                        {Object.keys(chiefComplaints).map(
                                             (menuItem: string) => (
                                                 <Button
                                                     basic
@@ -330,6 +389,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         )}
                                     </Grid>
                                     <Segment>
+                                        {/*MISC BOX PLACEMENT*/}
+                                        {miscBox(activeHPI)}
+
                                         <DiseaseForm
                                             key={activeHPI}
                                             parentNode={
@@ -367,7 +429,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         icon
                                         floated='right'
                                         onClick={() =>
-                                            activeHPI == chiefComplaints.pop()
+                                            activeHPI ==
+                                            (Object.keys(
+                                                chiefComplaints
+                                            )[0] as string)
                                                 ? this.nextFormClick
                                                 : this.continue
                                         }
@@ -380,7 +445,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         labelPosition='right'
                                         floated='right'
                                         onClick={() =>
-                                            activeHPI == chiefComplaints.pop()
+                                            activeHPI ==
+                                            (Object.keys(
+                                                chiefComplaints
+                                            )[0] as string)
                                                 ? this.nextFormClick
                                                 : this.continue
                                         }
@@ -395,7 +463,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                     menu={{
                                         pointing: true,
                                     }}
-                                    panes={chiefComplaints.map(
+                                    panes={Object.keys(chiefComplaints).map(
                                         (
                                             diseaseCategory: string,
                                             index: number
@@ -403,6 +471,8 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                             menuItem: diseaseCategory,
                                             render: () => (
                                                 <Tab.Pane>
+                                                    {/*MISC BOX PLACEMENT*/}
+                                                    {miscBox(diseaseCategory)}
                                                     <DiseaseForm
                                                         key={
                                                             parentNodes[
@@ -427,7 +497,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                             ]
                                                         }
                                                         category={
-                                                            diseaseCategory
+                                                            diseaseCategory as string
                                                         }
                                                         nextStep={this.continue}
                                                         prevStep={this.back}
@@ -456,7 +526,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         floated='right'
                                                         onClick={
                                                             index ==
-                                                            chiefComplaints.length -
+                                                            Object.keys(
+                                                                chiefComplaints
+                                                            ).length -
                                                                 1
                                                                 ? this
                                                                       .nextFormClick
@@ -472,8 +544,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         floated='right'
                                                         onClick={
                                                             index ==
-                                                            chiefComplaints.length -
-                                                                1
+                                                            Object.keys(
+                                                                chiefComplaints
+                                                            ).length -
+                                                                -1
                                                                 ? this
                                                                       .nextFormClick
                                                                 : this.continue
@@ -524,6 +598,21 @@ export interface ChiefComplaintsProps {
     chiefComplaints: ChiefComplaintsState;
 }
 
-type Props = ChiefComplaintsProps & HPIContentProps & PlanProps;
+interface DispatchProps {
+    setNotesChiefComplaint: (
+        disease: string,
+        notes: string | number | undefined
+    ) => SetNotesChiefComplaintAction;
+}
 
-export default connect(mapStateToProps)(HPIContent);
+const mapDispatchToProps = {
+    setNotesChiefComplaint,
+};
+
+// const mapStateToProps = (state: CurrentNoteState): ChiefComplaintsProps => {
+//     return { chiefComplaints: selectChiefComplaintsState(state) };
+// };
+
+type Props = ChiefComplaintsProps & HPIContentProps & DispatchProps;
+
+export default connect(mapStateToProps, mapDispatchToProps)(HPIContent);

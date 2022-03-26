@@ -1,9 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`select chief complaint returns state with chief complaint deselected 1`] = `Array []`;
+exports[`select chief complaint returns state with chief complaint deselected 1`] = `Object {}`;
 
 exports[`select chief complaint returns state with chief complaint newly selected 1`] = `
-Array [
-  "foo",
-]
+Object {
+  "foo": "",
+}
+`;
+
+exports[`set notes chief complaints returns state with misc notes 1`] = `
+Object {
+  "foo": "foo1",
+}
 `;

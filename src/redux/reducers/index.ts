@@ -39,7 +39,10 @@ import {
     noteTitleReducer,
     noteIdReducer,
 } from './currentNoteReducer';
-import { chiefComplaintsReducer } from './chiefComplaintsReducer';
+import {
+    chiefComplaintsReducer,
+    initialChiefComplaintsState,
+} from './chiefComplaintsReducer';
 
 const currentNoteReducer = combineReducers({
     reviewOfSystems: reviewOfSystemsReducer,
@@ -71,7 +74,7 @@ export const initialState: CurrentNoteState = {
     hpi: initialHpiState,
     _id: initialNoteId,
     title: initialNoteTitle,
-    chiefComplaints: [],
+    chiefComplaints: initialChiefComplaintsState,
 };
 
 export function rootReducer(

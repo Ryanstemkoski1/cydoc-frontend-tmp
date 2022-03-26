@@ -121,6 +121,24 @@
     color: white;
 }
 
+.hpi-text-drop {
+    position: fixed;
+    bottom: 8%;
+    right: 20px;
+    background: #006b87;
+    padding: 20px;
+    border-radius: 20px;
+    z-index: 100;
+    opacity: 0.8;
+}
+
+.white-important {
+   color: white !important;
+}
+
+.misc-box{
+    height: 10vh !important;
+}
 
 @media screen and (max-width: 1400px) {
     .ui.icon.button.hpi-previous-button, .ui.icon.button.hpi-next-button {

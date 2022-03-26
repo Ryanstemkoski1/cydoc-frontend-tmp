@@ -1,9 +1,11 @@
 import { chiefComplaintsActionTypes } from '../actions/chiefComplaintsActions';
 import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
 
-export type ChiefComplaintsState = string[];
+export type ChiefComplaintsState = {
+    [disease: string]: string | number | undefined;
+};
 
-export const initialChiefComplaintsState: ChiefComplaintsState = [];
+export const initialChiefComplaintsState: ChiefComplaintsState = {};
 
 export function chiefComplaintsReducer(
     state = initialChiefComplaintsState,
@@ -17,12 +19,24 @@ export function chiefComplaintsReducer(
             and is not present in the current state, it is added 
             to the state. If a disease is chosen by the user and
             is already present in the current state, it is filtered
-            out (essentially: a double click is an unclick).s
+            out (essentially: a double click is an unclick).
             */
             const { disease } = action.payload;
-            return state.includes(disease)
-                ? state.filter((value) => value != disease)
-                : [...state, disease];
+            if (disease in state) {
+                const { [disease]: notes, ...res } = state;
+                return res;
+            } else
+                return {
+                    ...state,
+                    [disease]: '',
+                };
+        }
+        case CHIEF_COMPLAINTS.SET_NOTES_CHIEF_COMPLAINTS: {
+            const { disease, notes } = action.payload;
+            return {
+                ...state,
+                [disease]: notes,
+            };
         }
         default:
             return state;

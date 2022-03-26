@@ -4,10 +4,11 @@ import {
     selectChiefComplaint,
     SelectChiefComplaintAction,
 } from 'redux/actions/chiefComplaintsActions';
-import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import ToggleButton from 'components/tools/ToggleButton';
+import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
+import { ChiefComplaintsProps } from '../../HPIContent';
 
 interface ChiefComplaintsButtonProps {
     name: string;
@@ -15,11 +16,11 @@ interface ChiefComplaintsButtonProps {
 
 class ChiefComplaintsButton extends React.Component<Props> {
     render() {
-        const { chiefComplaints, selectChiefComplaint, name } = this.props;
+        const { selectChiefComplaint, name, chiefComplaints } = this.props;
         return (
             <ToggleButton
                 className='tag_text'
-                active={chiefComplaints.includes(name)}
+                active={name in chiefComplaints}
                 condition={name}
                 title={name}
                 onToggleButtonClick={(): SelectChiefComplaintAction =>
@@ -30,19 +31,15 @@ class ChiefComplaintsButton extends React.Component<Props> {
     }
 }
 
-export interface ChiefComplaintsProps {
-    chiefComplaints: ChiefComplaintsState;
-}
-
 interface DispatchProps {
     selectChiefComplaint: (disease: string) => SelectChiefComplaintAction;
 }
 
 const mapStateToProps = (state: CurrentNoteState): ChiefComplaintsProps => ({
-    chiefComplaints: state.chiefComplaints,
+    chiefComplaints: selectChiefComplaintsState(state),
 });
 
-type Props = ChiefComplaintsProps & DispatchProps & ChiefComplaintsButtonProps;
+type Props = DispatchProps & ChiefComplaintsButtonProps & ChiefComplaintsProps;
 
 const mapDispatchToProps = {
     selectChiefComplaint,

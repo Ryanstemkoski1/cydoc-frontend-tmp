@@ -18,4 +18,27 @@ export function selectChiefComplaint(
     };
 }
 
-export type chiefComplaintsActionTypes = SelectChiefComplaintAction;
+export interface SetNotesChiefComplaintAction {
+    type: CHIEF_COMPLAINTS.SET_NOTES_CHIEF_COMPLAINTS;
+    payload: {
+        disease: string;
+        notes: number | string | undefined;
+    };
+}
+
+export function setNotesChiefComplaint(
+    disease: string,
+    notes: number | string | undefined
+): SetNotesChiefComplaintAction {
+    return {
+        type: CHIEF_COMPLAINTS.SET_NOTES_CHIEF_COMPLAINTS,
+        payload: {
+            disease,
+            notes,
+        },
+    };
+}
+
+export type chiefComplaintsActionTypes =
+    | SelectChiefComplaintAction
+    | SetNotesChiefComplaintAction;
