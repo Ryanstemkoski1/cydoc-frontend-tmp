@@ -394,12 +394,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
                                         <DiseaseForm
                                             key={activeHPI}
-                                            parentNode={
-                                                parentNodes[activeHPI][
-                                                    Object.keys(
-                                                        parentNodes[activeHPI]
-                                                    )[0]
-                                                ]
+                                            categoryCode={
+                                                Object.keys(
+                                                    parentNodes[activeHPI]
+                                                )[0]
                                             }
                                             category={activeHPI}
                                             nextStep={this.continue}
@@ -475,26 +473,18 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                     {miscBox(diseaseCategory)}
                                                     <DiseaseForm
                                                         key={
-                                                            parentNodes[
-                                                                diseaseCategory
-                                                            ][
-                                                                Object.keys(
-                                                                    parentNodes[
-                                                                        diseaseCategory
-                                                                    ]
-                                                                )[0]
-                                                            ]
+                                                            Object.keys(
+                                                                parentNodes[
+                                                                    diseaseCategory
+                                                                ]
+                                                            )[0]
                                                         }
-                                                        parentNode={
-                                                            parentNodes[
-                                                                diseaseCategory
-                                                            ][
-                                                                Object.keys(
-                                                                    parentNodes[
-                                                                        diseaseCategory
-                                                                    ]
-                                                                )[0]
-                                                            ]
+                                                        categoryCode={
+                                                            Object.keys(
+                                                                parentNodes[
+                                                                    diseaseCategory
+                                                                ]
+                                                            )[0]
                                                         }
                                                         category={
                                                             diseaseCategory as string

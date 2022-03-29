@@ -21,7 +21,7 @@ import CreateResponse from './CreateResponse';
 interface DiseaseFormProps {
     nextStep: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     prevStep: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    parentNode: string;
+    categoryCode: string;
     category: string;
 }
 
@@ -39,7 +39,7 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
             isGraphLoaded: false,
             isGraphProcessed: false, // true when knowledge graph is processed
             parentToChildNodes: {},
-            graphData: { graph: {}, nodes: {}, edges: {} },
+            graphData: { graph: {}, nodes: {}, edges: {}, order: {} },
         };
     }
 
@@ -52,19 +52,14 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
     }
 
     async getData(): Promise<void> {
-        if (this.props.parentNode in this.props.hpi.graph) {
-            this.setState({ isGraphProcessed: true });
-            this.traverseChildNodes();
-        } else {
-            const response = await axios.get(
-                'https://cydocgraph.herokuapp.com/graph/subgraph/' +
-                    this.props.parentNode +
-                    '/4'
-            );
-            const { data } = response;
-            this.setState({ graphData: data, isGraphLoaded: true });
-            this.processKnowledgeGraph();
-        }
+        const response = await axios.get(
+            'https://cydocgraph.herokuapp.com/graph/category/' +
+                this.props.categoryCode +
+                '/4'
+        );
+        const { data } = response;
+        this.setState({ graphData: data, isGraphLoaded: true });
+        this.processKnowledgeGraph();
     }
 
     continue = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
@@ -77,7 +72,7 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
 
     processKnowledgeGraph(): void {
         /*
-            Uses a queue to go through each node, record their child nodes,
+            Uses a stack to go through each node, record their child nodes,
             and put them in order of: GENERAL type questions, PAIN type 
             questions, same category questions (in question order edge 
             attribute order) and different category questions (in 
@@ -88,58 +83,29 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
             then the shallower child node will replace the previously recorded
             version and it will be removed from its previous parent's record.
         */
-        const { parentNode, addNode } = this.props,
+        const { addNode } = this.props,
             { graphData } = this.state,
-            { graph, nodes, edges } = graphData,
+            { graph, nodes, edges, order } = graphData,
             parentToChildNodes: { [parentNode: string]: string[] } = {};
-        let queue = [parentNode];
-        while (queue.length) {
-            const currNode = queue.shift();
+        let stack = [order['1']];
+        while (stack.length) {
+            const currNode = stack.shift();
             if (!currNode || !(currNode in graph)) continue;
             const currEdges = graph[currNode],
-                currCategory = nodes[currNode].category,
-                arrayDict: {
-                    [category: string]: [string, number, EdgeInterface][];
-                } = {
-                    GENERAL: [],
-                    PAIN: [],
-                    [currCategory]: [],
-                    ELSE: [],
-                };
-            currEdges.map((edge: number) => {
-                const edgeInfo = edges[edge.toString()],
-                    to = edgeInfo.to,
-                    toQuestionOrder = edgeInfo.toQuestionOrder,
-                    category =
-                        nodes[to].category in arrayDict
-                            ? nodes[to].category
-                            : 'ELSE';
-                arrayDict[category] = [
-                    ...arrayDict[category],
-                    [to, toQuestionOrder, edgeInfo],
-                ];
-            });
-            Object.keys(arrayDict).map((key) => {
-                arrayDict[key] = arrayDict[key]
-                    .sort()
-                    .sort((tup1, tup2) => tup1[1] - tup2[1]);
-            }); // sort by lexicographic order and questionOrder
-            // child questions are in order of GENERAL, PAIN, current category, and other categories
-            let edgesList: EdgeInterface[] = [];
-            const childNodes = [
-                ...arrayDict.GENERAL,
-                ...arrayDict.PAIN,
-                ...(Object.keys(arrayDict).length == 4
-                    ? arrayDict[currCategory]
-                    : []),
-                ...arrayDict.ELSE,
-            ].map((tup) => {
-                edgesList = [...edgesList, tup[2]];
-                return tup[0];
-            }); // child nodes in order
+                childNodes = currEdges
+                    .map((edge: number) => [
+                        edges[edge.toString()].toQuestionOrder.toString(),
+                        edges[edge.toString()].to,
+                    ])
+                    .sort((tup1, tup2) => parseInt(tup1[0]) - parseInt(tup2[0]))
+                    .map(([_questionOrder, medId]) => medId);
             parentToChildNodes[currNode] = childNodes;
-            queue = [...queue, ...childNodes];
-            addNode(currNode, nodes[currNode], edgesList);
+            stack = [...childNodes, ...stack];
+            addNode(
+                currNode,
+                nodes[currNode],
+                currEdges.map((edge: number) => edges[edge.toString()])
+            );
         }
         this.setState({
             parentToChildNodes: parentToChildNodes,
@@ -148,19 +114,12 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
     }
 
     traverseChildNodes(): JSX.Element[] {
-        const { graphData } = this.state;
-        const { parentNode, category, hpi } = this.props;
-        const { nodes, graph } = hpi;
-        let parentToChildNodes;
-        if (Object.keys(graph).length > 0) {
-            parentToChildNodes = graph;
-        } else {
-            parentToChildNodes = this.state.parentToChildNodes;
-        }
+        const { parentToChildNodes, graphData } = this.state,
+            { category, hpi } = this.props;
         const values: HpiState = hpi,
             nodeToElementDict: { [node: string]: JSX.Element } = {};
         let questionArr: JSX.Element[] = [];
-        let stack = parentToChildNodes[parentNode].slice().reverse(); // add child nodes in reverse bc using stack
+        let stack = parentToChildNodes[graphData.order['1']].slice().reverse(); // add child nodes in reverse bc using stack
         while (stack.length) {
             const currNode = stack.pop();
             if (!currNode) continue;
@@ -168,8 +127,8 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
                 nodeToElementDict[currNode] = (
                     <CreateResponse
                         key={
-                            Object.keys(nodes).length > 0
-                                ? nodes[currNode].uid
+                            Object.keys(values.nodes).length > 0
+                                ? values.nodes[currNode].uid
                                 : graphData.nodes[currNode].uid
                         }
                         node={currNode}

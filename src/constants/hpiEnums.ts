@@ -283,6 +283,9 @@ export interface GraphData {
     edges: {
         [edge: string]: EdgeInterface;
     };
+    order: {
+        [orderIndex: string]: string;
+    };
 }
 
 export interface EdgeInterface {
