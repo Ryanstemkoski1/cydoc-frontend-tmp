@@ -150,17 +150,19 @@ export class SocialHistoryNote extends Component<Props> {
                   ? ` ${(
                         socialHistory.tobacco.numberOfYears *
                         socialHistory.tobacco.packsPerDay
-                    ).toString()}
-                        pack years.`
+                    ).toString()} pack years.`
                   : '') +
               (socialHistory.tobacco.productsUsed.length !== 0
-                  ? ` Products used: 
-                        ${socialHistory.tobacco.productsUsed.join(', ')}.`
+                  ? ` Products used: ${socialHistory.tobacco.productsUsed.join(
+                        ', '
+                    )}.`
                   : '') +
               (socialHistory.tobacco.interestedInQuitting ===
                   YesNoMaybeResponse.Yes ||
               socialHistory.tobacco.interestedInQuitting ===
-                  YesNoMaybeResponse.No
+                  YesNoMaybeResponse.No ||
+              socialHistory.tobacco.interestedInQuitting ===
+                  YesNoMaybeResponse.Maybe
                   ? `${this.interestedInQuitting(socialHistory.tobacco)}`
                   : '') +
               (socialHistory.tobacco.usage === SubstanceUsageResponse.Yes ||
@@ -188,13 +190,16 @@ export class SocialHistoryNote extends Component<Props> {
                   : '') +
               (socialHistory.alcohol.drinksConsumed.length > 0 &&
               this.alcoholProductsUsed(socialHistory).length > 0
-                  ? ` Products used: 
-                        ${this.alcoholProductsUsed(socialHistory)}.`
+                  ? ` Products used: ${this.alcoholProductsUsed(
+                        socialHistory
+                    )}.`
                   : '') +
               (socialHistory.alcohol.interestedInQuitting ===
                   YesNoMaybeResponse.Yes ||
               socialHistory.alcohol.interestedInQuitting ===
-                  YesNoMaybeResponse.No
+                  YesNoMaybeResponse.No ||
+              socialHistory.alcohol.interestedInQuitting ===
+                  YesNoMaybeResponse.Maybe
                   ? `${this.interestedInQuitting(socialHistory.alcohol)}`
                   : '') +
               (socialHistory.alcohol.usage === SubstanceUsageResponse.Yes ||
@@ -217,8 +222,7 @@ export class SocialHistoryNote extends Component<Props> {
               (socialHistory.recreationalDrugs.quitYear !== -1 &&
               socialHistory.recreationalDrugs.usage ===
                   SubstanceUsageResponse.InThePast
-                  ? ` Quit Year: 
-                        {socialHistory.recreationalDrugs.quitYear}.`
+                  ? ` Quit Year: ${socialHistory.recreationalDrugs.quitYear}.`
                   : '') +
               (socialHistory.recreationalDrugs.usage ===
               SubstanceUsageResponse.NeverUsed
@@ -226,13 +230,16 @@ export class SocialHistoryNote extends Component<Props> {
                   : '') +
               (socialHistory.recreationalDrugs.drugsUsed.length > 0 &&
               this.recreationalDrugsProductsUsed(socialHistory).length > 0
-                  ? ` Products used: 
-                        ${this.recreationalDrugsProductsUsed(socialHistory)}.`
+                  ? ` Products used: ${this.recreationalDrugsProductsUsed(
+                        socialHistory
+                    )}.`
                   : '') +
               (socialHistory.recreationalDrugs.interestedInQuitting ===
                   YesNoMaybeResponse.Yes ||
               socialHistory.recreationalDrugs.interestedInQuitting ===
-                  YesNoMaybeResponse.No
+                  YesNoMaybeResponse.No ||
+              socialHistory.recreationalDrugs.interestedInQuitting ===
+                  YesNoMaybeResponse.Maybe
                   ? `${this.interestedInQuitting(
                         socialHistory.recreationalDrugs
                     )}`
@@ -244,8 +251,7 @@ export class SocialHistoryNote extends Component<Props> {
                   ? `${this.triedToQuit(socialHistory.recreationalDrugs)}`
                   : '') +
               (socialHistory.recreationalDrugs.comments
-                  ? ` Comments: 
-                    ${socialHistory.recreationalDrugs.comments}`
+                  ? ` Comments: ${socialHistory.recreationalDrugs.comments}`
                   : '');
 
         return (

@@ -53,7 +53,7 @@ describe('Social History Generate Note', () => {
         // type, textRep, productsUsedField
         ['tobacco', 'tobacco', 'productsUsed'],
         ['alcohol', 'alcohol', 'drinksConsumed'],
-        ['recreationalDrugs', 'substances', 'drugsUsed'],
+        ['recreationalDrugs', 'recreational drugs', 'drugsUsed'],
     ];
     test.each(cases)(
         'renders %s usage, interestInQuitting, and triedToQuit and interest correctly when usage = Yes',
@@ -69,8 +69,12 @@ describe('Social History Generate Note', () => {
                 },
             });
             expect(wrapper.text()).toContain(`Currently uses ${textValue}`);
-            expect(wrapper.text()).toContain('Interested in quitting? Maybe');
-            expect(wrapper.text()).toContain('Tried to quit? No');
+            expect(wrapper.text()).toContain(
+                'Patient is maybe interested in quitting.'
+            );
+            expect(wrapper.text()).toContain(
+                'Patient has never tried to quit before.'
+            );
             // Do not render -1 quit year
             expect(wrapper.text()).not.toContain('Quit Year:');
         }
@@ -93,8 +97,12 @@ describe('Social History Generate Note', () => {
                 `Used to use ${textValue} but does not anymore`
             );
             expect(wrapper.text()).toContain('Quit Year: 2000');
-            expect(wrapper.text()).toContain('Interested in quitting? Yes');
-            expect(wrapper.text()).toContain('Tried to quit? Yes');
+            expect(wrapper.text()).toContain(
+                'Patient is interested in quitting.'
+            );
+            expect(wrapper.text()).toContain(
+                'Patient has tried to quit before.'
+            );
         }
     );
 
@@ -141,9 +149,7 @@ describe('Social History Generate Note', () => {
                 comments: value,
             },
         });
-        expect(wrapper.find('li').last().text()).toContain(
-            `Comments: ${value}`
-        );
+        expect(wrapper.text()).toContain(`Comments: ${value}`);
     });
 
     test.each(cases)(
@@ -197,9 +203,7 @@ describe('Social History Generate Note', () => {
                 productsUsed: ['a', 'b', 'c'],
             },
         });
-        expect(wrapper.find('li').at(1).text()).toContain(
-            'Products used: a, b, c'
-        );
+        expect(wrapper.text()).toContain('Products used: a, b, c');
     });
 
     it('renders alcohol drinksConsumed correctly', () => {
@@ -216,7 +220,7 @@ describe('Social History Generate Note', () => {
             },
         });
         // Check different plurality of size
-        expect(wrapper.find('li').at(1).text()).toContain(
+        expect(wrapper.text()).toContain(
             'Products used: a (10 ses per week), b (9 ts per week), c (1 t per week)'
         );
     });
@@ -237,8 +241,8 @@ describe('Social History Generate Note', () => {
                 ],
             },
         });
-        expect(wrapper.find('li').at(1).text()).toContain(
-            'Products used: foo (10 per week, a, b), bar (9 per week, a)'
+        expect(wrapper.text()).toContain(
+            'Products used: foo (10 per week, a,b), bar (9 per week, a)'
         );
     });
 });

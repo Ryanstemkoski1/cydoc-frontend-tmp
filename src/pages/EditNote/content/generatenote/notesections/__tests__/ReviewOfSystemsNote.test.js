@@ -44,7 +44,7 @@ describe('ReviewOfSystems Note', () => {
     });
     it('renders correctly when completely empty', () => {
         const wrapper = mountWithProps();
-        expect(wrapper.text()).toContain('No review of systems reported');
+        expect(wrapper.text()).toContain('');
     });
     it('renders only non-empty options', () => {
         const wrapper = mountWithProps({

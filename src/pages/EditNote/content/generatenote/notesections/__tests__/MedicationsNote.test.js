@@ -73,23 +73,23 @@ describe('Medications Note', () => {
 
     it('renders correctly when completely empty', () => {
         const wrapper = mountWithProps();
-        expect(wrapper.text()).toContain('No medications reported');
+        expect(wrapper.text()).toContain('');
     });
 
     it('renders only non-empty entries (non-rich)', () => {
         const wrapper = mountWithProps({ ...nonEmptyMeds });
         // 1 + numNonEmptyEntries
-        expect(wrapper.find('ul')).toHaveLength(3);
+        expect(wrapper.find('ul')).toHaveLength(1);
         expect(wrapper.find('div')).toHaveLength(2);
         const expected = [
             [
-                'foo',
+                'foo.',
                 'Start Year: 2000',
                 'Schedule: bar',
                 'Dose: 24',
                 'Side Effects: a, b',
             ],
-            ['test', 'Reason for Taking: 42', 'Comments: comment'],
+            ['test.', 'Reason for Taking: 42', 'Comments: comment'],
         ];
         wrapper.find('div').forEach((row, r) => {
             expect(row.find('b').text()).toEqual(expected[r][0]);
@@ -118,7 +118,7 @@ describe('Medications Note', () => {
                 'Comments',
             ],
             ['foo', '2000', 'bar', '24', '', 'a, b', ''],
-            ['test', '', '', '', '42', '', 'comment'],
+            ['test', '', '', '', '', '', 'comment'],
         ];
         wrapper
             .find('tr')

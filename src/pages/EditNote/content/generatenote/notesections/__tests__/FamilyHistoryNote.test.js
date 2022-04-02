@@ -85,12 +85,13 @@ describe('Family History Note', () => {
             },
         });
         const expected = [
-            'foo: mother (cause of death), comment, son (living), . ',
+            'foo: mother (died of foo), comment, son (still living). ',
             'bar: maternal aunt (not the cause of death), comment. ',
-            'lonely: ',
+            'lonely ',
+            'No family history of foo.',
         ];
         const items = wrapper.find('li');
-        expect(items).toHaveLength(3);
+        expect(items).toHaveLength(4);
         items.forEach((node, i) => expect(node.text()).toEqual(expected[i]));
     });
 });

@@ -1,3 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Plan Generate Note matches snapshot 1`] = `"<div class=\\"plan-note\\"><h4>foo</h4><b>Differential Diagnosis</b><ol><li><b>: </b></li></ol><b>Prescriptions</b><ul><li><b>: </b></li></ul><b>Procedures and Services</b><ul><li><b> </b>. </li></ul><b>Referrals</b><ul><li><b>Referred to see  </b>. </li></ul></div>"`;
+exports[`Plan Generate Note matches snapshot 1`] = `"<div class=\\"plan-note\\"><h4>foo</h4></div>"`;

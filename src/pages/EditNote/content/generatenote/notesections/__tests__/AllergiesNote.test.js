@@ -36,7 +36,7 @@ describe('AllergiesNote', () => {
 
     it('renders correctly when completely empty', () => {
         const wrapper = mountWithProps();
-        expect(wrapper.text()).toContain('No allergies reported');
+        expect(wrapper.text()).toContain('');
     });
 
     it('renders only non-empty entries (non-rich)', () => {

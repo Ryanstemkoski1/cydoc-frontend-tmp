@@ -98,12 +98,12 @@ export class MedicalHistoryNote extends Component<MedicalHistoryProps> {
                                 : ''}
                             {condition.hasConditionResolved ===
                             YesNoResponse.Yes
-                                ? `resolved${
+                                ? `(resolved${
                                       condition.endYear !== -1
-                                          ? ' (' +
+                                          ? ' ' +
                                             condition.endYear.toString() +
                                             ')'
-                                          : ''
+                                          : ')'
                                   }. `
                                 : ''}
                             {condition.comments

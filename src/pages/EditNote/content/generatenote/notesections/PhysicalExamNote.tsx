@@ -271,13 +271,15 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
                     }
                 }
                 for (const key in findings) {
-                    this.widgets.pulmonary.push(
-                        key +
-                            ' in the ' +
-                            findings[key]
-                                .join(', ')
-                                .replace(/, ([^,]*)$/, ' and $1')
-                    );
+                    if (findings[key].length > 0) {
+                        this.widgets.pulmonary.push(
+                            this.convertButtonTextToNoteText(key) +
+                                ' in the ' +
+                                findings[key]
+                                    .join(', ')
+                                    .replace(/, ([^,]*)$/, ' and $1')
+                        );
+                    }
                 }
             } else if (widget === 'reflexes') {
                 let reflex: keyof WidgetsState['reflexes'];
@@ -305,7 +307,7 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
                             ? reflexInfo.location
                             : '') +
                         ' reflex';
-                    if (reflexNoteText != '') {
+                    if (reflexNoteText !== '') {
                         this.widgets.tendon_reflexes.push(
                             reflexNoteText.trim()
                         );

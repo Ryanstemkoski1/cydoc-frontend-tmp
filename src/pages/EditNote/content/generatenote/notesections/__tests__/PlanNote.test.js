@@ -35,7 +35,7 @@ describe('Plan Generate Note', () => {
         expect(wrapper.text()).toContain(EMPTY_NOTE_TEXT);
     });
 
-    it('renders correct number of sections', () => {
+    it('renders correct number of sections with empty text', () => {
         const wrapper = mount(
             <PlanNote
                 planState={{
@@ -49,6 +49,7 @@ describe('Plan Generate Note', () => {
                 }}
             />
         );
+
         const findTypeByText = (wrapper, type, text) => {
             return wrapper.findWhere(
                 (n) => n.type() === type && n.text() === text
@@ -61,42 +62,19 @@ describe('Plan Generate Note', () => {
             'Procedures and Services',
             'Referrals',
         ].forEach((text) => {
-            expect(findTypeByText(wrapper, 'b', text)).toHaveLength(2);
+            expect(findTypeByText(wrapper, 'b', text)).toHaveLength(0);
         });
     });
 
-    it('renders differential diagnoses content correctly', () => {
+    it('renders correct number of sections with one section', () => {
         const wrapper = mount(
             <PlanNote
                 planState={{
                     conditions: {
-                        [conditionId]: {
-                            name: 'title',
-                            differentialDiagnoses: {
-                                [categoryId]: {
-                                    comments: 'foo',
-                                    diagnosis: 'bar',
-                                },
-                            },
-                            prescriptions: {},
-                            proceduresAndServices: {},
-                            referrals: {},
-                        },
-                    },
-                }}
-            />
-        );
-        expect(wrapper.text()).toContain('bar: foo');
-    });
-
-    it('renders prescriptions content correctly', () => {
-        const wrapper = mount(
-            <PlanNote
-                planState={{
-                    conditions: {
-                        [conditionId]: {
-                            name: 'title',
-                            differentialDiagnoses: {},
+                        ...plan.conditions,
+                        foo: {
+                            ...plan.conditions[conditionId],
+                            name: 'bar',
                             prescriptions: {
                                 [categoryId]: {
                                     comments: '42',
@@ -105,14 +83,75 @@ describe('Plan Generate Note', () => {
                                     signature: 'bar',
                                 },
                             },
-                            proceduresAndServices: {},
-                            referrals: {},
                         },
                     },
                 }}
             />
         );
-        expect(wrapper.text()).toContain('foo: 24. bar. 42');
+
+        const findTypeByText = (wrapper, type, text) => {
+            return wrapper.findWhere(
+                (n) => n.type() === type && n.text() === text
+            );
+        };
+        expect(wrapper.find('.plan-note')).toHaveLength(2);
+        [
+            'Differential Diagnosis',
+            'Procedures and Services',
+            'Referrals',
+        ].forEach((text) => {
+            expect(findTypeByText(wrapper, 'b', text)).toHaveLength(0);
+        });
+
+        expect(findTypeByText(wrapper, 'b', 'Prescriptions')).toHaveLength(1);
+    });
+
+    it('renders differential diagnoses content correctly', () => {
+        const wrapper = mount(
+            <PlanNote
+                planState={{
+                    conditions: {
+                        ...plan.conditions,
+                        foo: {
+                            ...plan.conditions[conditionId],
+                            name: 'bar',
+                            differentialDiagnoses: {
+                                [categoryId]: {
+                                    comments: 'foo',
+                                    diagnosis: 'bar',
+                                },
+                            },
+                        },
+                    },
+                }}
+            />
+        );
+        expect(wrapper.text()).toContain('foobarDifferential Diagnosis: foo');
+    });
+
+    it('renders prescriptions content correctly', () => {
+        const wrapper = mount(
+            <PlanNote
+                planState={{
+                    conditions: {
+                        ...plan.conditions,
+                        foo: {
+                            ...plan.conditions[conditionId],
+                            name: 'bar',
+                            prescriptions: {
+                                [categoryId]: {
+                                    comments: '42',
+                                    dose: '24',
+                                    type: 'foo',
+                                    signature: 'bar',
+                                },
+                            },
+                        },
+                    },
+                }}
+            />
+        );
+        expect(wrapper.text()).toContain('foobarPrescriptionsfoo: 24. bar. 42');
     });
 
     it('renders procedures content correctly', () => {
@@ -120,10 +159,10 @@ describe('Plan Generate Note', () => {
             <PlanNote
                 planState={{
                     conditions: {
-                        [conditionId]: {
-                            name: 'title',
-                            differentialDiagnoses: {},
-                            prescriptions: {},
+                        ...plan.conditions,
+                        foo: {
+                            ...plan.conditions[conditionId],
+                            name: 'bar',
                             proceduresAndServices: {
                                 [categoryId]: {
                                     comments: '24',
@@ -131,13 +170,14 @@ describe('Plan Generate Note', () => {
                                     when: 'foo',
                                 },
                             },
-                            referrals: {},
                         },
                     },
                 }}
             />
         );
-        expect(wrapper.text()).toContain('42 foo. 24');
+        expect(wrapper.text()).toContain(
+            'foobarProcedures and Services foo. 24'
+        );
     });
 
     it('renders referrals content correctly', () => {
@@ -145,11 +185,10 @@ describe('Plan Generate Note', () => {
             <PlanNote
                 planState={{
                     conditions: {
-                        [conditionId]: {
-                            name: 'title',
-                            differentialDiagnoses: {},
-                            prescriptions: {},
-                            proceduresAndServices: {},
+                        ...plan.conditions,
+                        foo: {
+                            ...plan.conditions[conditionId],
+                            name: 'bar',
                             referrals: {
                                 [categoryId]: {
                                     comments: '24',
@@ -162,6 +201,8 @@ describe('Plan Generate Note', () => {
                 }}
             />
         );
-        expect(wrapper.text()).toContain('Referred to see 42 foo. 24');
+        expect(wrapper.text()).toContain(
+            'foobarReferralsReferred to see 42. foo. 24'
+        );
     });
 });

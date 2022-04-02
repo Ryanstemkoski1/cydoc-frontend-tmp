@@ -70,14 +70,14 @@ describe('Medical History Note', () => {
 
     it('renders correctly when completely empty', () => {
         const wrapper = mountWithProps(emptyMedical);
-        expect(wrapper.text()).toContain('No medical history reported');
+        expect(wrapper.text()).toContain('');
     });
 
     it('renders only non-empty entries when hasBeenAfflicted=Yes (non-rich)', () => {
         const wrapper = mountWithProps(nonEmptyMedical);
         const expected = [
-            'foo. Condition started in 2000. Condition has not been resolved. comments',
-            'test. Condition was resolved in 2001. ',
+            'foo started in 2000. Comments',
+            'test (resolved 2001). ',
         ];
 
         wrapper
