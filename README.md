@@ -1,33 +1,22 @@
 # cydoc-frontend
 
-The frontend works with Node.js version 10.1.0.
-
 # Installation
-Follow the tutorials linked to below to install Semantic UI. When you clone this repo and run `npm install` it will take you through 
-an interactive installer. Make sure you install in src/semantic when it asks you (both for semantic and dist). 
 
-You will need to run `npm install` to install the dependencies for React and Semantic UI and then 
-you can run `npm start` and the app will build and run. 
+First, install Node. The frontend works with Node.js version 10.1.0. Be sure to use this version of Node; the frontend isn't guaranteed to work with other versions.
 
-[Tutorial: Theming Semantic UI with Create React App](http://nephewapps.com/2018/02/25/theming-semantic-ui-with-create-react-app/)
+Then navigate to the directory where the frontend code is stored, and run:
 
-[Tutorial: How to Use Semantic UI with a Custom Theme](https://jsramblings.com/2018/03/04/how-to-use-semantic-ui-with-a-custom-theme-in-your-CRA-app.html)
+### `npm install gulp`
 
-You will need to navigate to localhost:3000 to see the app (or whichever port you are using).
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-### Useful Commands
-
-To run the app in development mode, run the following command in the project directory:
+Next run
 
 ### `npm start`
 
-Open [http://localhost:3000](http://localhost:3000) to view the app in the browser.
-
+Finally, open [http://localhost:3000](http://localhost:3000) (or whichever port you are using) to view the app in the browser.
 The page will reload if you make edits.
-
 You will also see any lint errors in the console.
+
+### Additional Useful Commands
 
 ### `npm test`
 
