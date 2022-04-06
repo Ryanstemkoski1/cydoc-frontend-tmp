@@ -47,6 +47,11 @@ import {
 
 interface HPIContentProps {
     nextFormClick: () => () => string; // this.props.nextFormClick => this.props.onNextClick => string
+    step: number;
+    continue: (e: any) => void;
+    back: (e: any) => void;
+    activeTab: string;
+    onTabClick: (e: any, tabIndex: number) => void;
 }
 
 interface HPIContentState {
@@ -70,8 +75,8 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             bodySystems: {},
             parentNodes: {},
             isGraphLoaded: false,
-            activeHPI: '', // active tab name
-            step: -1, // step in the HPI interview form
+            activeHPI: this.props.activeTab, // active tab name
+            step: this.props.step, // step in the HPI interview form
             searchVal: '',
             activeIndex: 0, //misc notes box active
         };
@@ -107,33 +112,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         this.setState({ windowWidth, windowHeight });
     }
 
-    // go to the next page (change step = step + 1)
-    continue = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        const { step } = this.state;
-        e.preventDefault();
-        const currentStep: number = step;
-        this.setState({
-            step: currentStep + 1,
-            activeHPI: Object.keys(this.props.chiefComplaints)[
-                currentStep + 1
-            ] as string,
-        });
-        window.scrollTo(0, 0);
-    };
+    continue = (e: any) => this.props.continue(e);
 
-    // go to previous page (change step = step - 1)
-    back = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        const { step } = this.state;
-        e.preventDefault();
-        const currentStep: number = step;
-        this.setState({
-            step: currentStep - 1,
-            activeHPI: Object.keys(this.props.chiefComplaints)[
-                currentStep - 1
-            ] as string,
-        });
-        window.scrollTo(0, 0);
-    };
+    back = (e: any) => this.props.back(e);
 
     nextFormClick = () => this.props.nextFormClick();
 
@@ -266,7 +247,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         };
 
         // each step correlates to a different tab
-        const step: number = this.state.step;
+        const step: number = this.props.step;
         // number of positive diseases, which is also the number of steps
         const positiveLength: number = positiveDiseases.length;
 
@@ -432,7 +413,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                 chiefComplaints
                                             )[0] as string)
                                                 ? this.nextFormClick
-                                                : this.continue
+                                                : this.props.continue
                                         }
                                         className='hpi-small-next-button'
                                     >
@@ -448,7 +429,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                 chiefComplaints
                                             )[0] as string)
                                                 ? this.nextFormClick
-                                                : this.continue
+                                                : this.props.continue
                                         }
                                         className='hpi-next-button'
                                     >
@@ -554,9 +535,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                     id='tab-panes'
                                     activeIndex={step}
                                     onTabChange={(_e, data) =>
-                                        this.setState({
-                                            step: data.activeIndex as number,
-                                        })
+                                        this.props.onTabClick(
+                                            _e,
+                                            data.activeIndex as number
+                                        )
                                     }
                                 />
                             )}{' '}

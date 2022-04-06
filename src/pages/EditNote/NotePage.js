@@ -7,13 +7,14 @@ import HPIContent from './content/hpi/knowledgegraph/HPIContent';
 import PatientHistoryContent from './content/patienthistory/PatientHistoryContent';
 import GenerateNote from './content/generatenote/GenerateNote.tsx';
 import DiscussionPlan from './content/discussionplan/DiscussionPlan.tsx';
+import { connect } from 'react-redux';
 
 import './NotePage.css';
 
 //Component that manages the content displayed based on the activeItem prop
 // and records the information the user enters as state
 
-export default class NotePage extends Component {
+class NotePage extends Component {
     constructor(props) {
         super(props);
         //bind methods
@@ -22,8 +23,39 @@ export default class NotePage extends Component {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
+            hpiTab: -1,
+            activeHPI: '',
         };
     }
+
+    // go to the next page (change step = step + 1)
+    continueHPITab = (e) => {
+        e.preventDefault();
+        this.setState({
+            hpiTab: this.state.hpiTab + 1,
+            activeHPI: this.props.chiefComplaints[this.state.hpiTab + 1],
+        });
+        window.scrollTo(0, 0);
+    };
+
+    // go to previous page (change step = step - 1)
+    backHPITab = (e) => {
+        e.preventDefault();
+        this.setState({
+            hpiTab: this.state.hpiTab - 1,
+            activeHPI: this.props.chiefComplaints[this.state.hpiTab - 1],
+        });
+        window.scrollTo(0, 0);
+    };
+
+    setHPITab = (e, tabIndex) => {
+        e.preventDefault();
+        this.setState({
+            hpiTab: tabIndex,
+            activeHPI: this.props.chiefComplaints[tabIndex],
+        });
+        window.scrollTo(0, 0);
+    };
 
     componentDidMount() {
         this.updateDimensions();
@@ -53,7 +85,14 @@ export default class NotePage extends Component {
         switch (activeItem) {
             case 'HPI':
                 tabToDisplay = (
-                    <HPIContent nextFormClick={this.nextFormClick} />
+                    <HPIContent
+                        nextFormClick={this.nextFormClick}
+                        step={this.state.hpiTab}
+                        continue={this.continueHPITab}
+                        back={this.backHPITab}
+                        activeTab={this.state.activeTab}
+                        onTabClick={this.setHPITab}
+                    />
                 );
                 break;
             case 'Patient History':
@@ -95,7 +134,14 @@ export default class NotePage extends Component {
                 break;
             default:
                 tabToDisplay = (
-                    <HPIContent nextFormClick={this.nextFormClick} />
+                    <HPIContent
+                        nextFormClick={this.nextFormClick}
+                        step={this.state.hpiTab}
+                        continue={this.continueHPITab}
+                        back={this.backHPITab}
+                        activeTab={this.state.activeTab}
+                        onTabClick={this.setHPITab}
+                    />
                 );
                 break;
         }
@@ -117,3 +163,11 @@ export default class NotePage extends Component {
 NotePage.propTypes = {
     activeItem: PropTypes.string,
 };
+
+const mapStateToProps = (state) => {
+    return {
+        chiefComplaints: state.chiefComplaints,
+    };
+};
+
+export default connect(mapStateToProps)(NotePage);
