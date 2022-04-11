@@ -1,0 +1,294 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { createHPI, HPI } from '../generateHpiText';
+import { CurrentNoteState } from 'redux/reducers';
+import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import { HpiState } from 'redux/reducers/hpiReducer';
+import {
+    BodyLocationType,
+    ClickBoxesInput,
+    HpiResponseType,
+    LabTestType,
+    ListTextInput,
+    NodeInterface,
+    TimeInput,
+} from 'constants/hpiEnums';
+import { YesNoResponse } from 'constants/enums';
+import { ResponseTypes } from 'constants/hpiEnums';
+import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
+import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
+import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
+import { MedicationsState } from 'redux/reducers/medicationsReducer';
+import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
+import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
+import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
+import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
+
+interface HPINoteProps {
+    hpi: HpiState;
+    familyHistory: FamilyHistoryState;
+    medications: MedicationsState;
+    surgicalHistory: SurgicalHistoryState;
+    medicalHistory: MedicalHistoryState;
+}
+
+export type GraphNode = NodeInterface & { response: HpiResponseType };
+
+/* Returns whether the user has responded to this node or not */
+export const isEmpty = (node: GraphNode): boolean => {
+    switch (node.responseType) {
+        case ResponseTypes.YES_NO:
+        case ResponseTypes.NO_YES:
+            return node.response === YesNoResponse.None;
+
+        case ResponseTypes.SCALE1TO10:
+        case ResponseTypes.NUMBER:
+            return node.response === undefined;
+
+        case ResponseTypes.LIST_TEXT: {
+            return Object.entries(node.response as ListTextInput).every(
+                ([_key, value]) => value === ''
+            );
+        }
+
+        case ResponseTypes.BODYLOCATION:
+            return Object.keys(node.response as BodyLocationType).length === 0;
+
+        case ResponseTypes.TIME3DAYS: {
+            const timeRes = node.response as TimeInput;
+            return timeRes.numInput === undefined && timeRes.timeOption === '';
+        }
+        case ResponseTypes.LABORATORY_TEST:
+        case ResponseTypes.CBC: {
+            const response = node.response as LabTestType;
+            for (const comp in response.components) {
+                if (response.components[comp].value) return false;
+            }
+            return true;
+        }
+
+        case ResponseTypes.SHORT_TEXT:
+        case ResponseTypes.RADIOLOGY:
+            return node.response === '';
+
+        case ResponseTypes.CLICK_BOXES:
+        case ResponseTypes.MEDS_POP: {
+            const response = node.response as ClickBoxesInput;
+            return Object.keys(response).every((key) => !response[key]);
+        }
+
+        default:
+            return (node.response as string[]).length === 0;
+    }
+};
+
+/**
+ * Joins list of strings following English grammar
+ * e.g. A, B, and C
+ *      A and B
+ *      A
+ */
+export const joinLists = (items: string[], lastSeparator = 'and'): string => {
+    if (items.length > 1) {
+        const lastItem = items.pop();
+        items.push(`${lastSeparator} ${lastItem}`);
+    }
+    const separator = items.length > 2 ? ', ' : ' ';
+    return items.join(separator);
+};
+
+/**
+ * Extracts question and answer from the node, formatted for the HPI
+ * Pre-condition: node has non-empty response according to its type
+ */
+export const extractNode = (
+    state: HPINoteProps,
+    node: GraphNode
+): [string, string, string] => {
+    /* eslint-disable no-case-declarations, no-fallthrough */
+    if (
+        node.responseType === ResponseTypes.NO_YES ||
+        node.responseType === ResponseTypes.YES_NO
+    ) {
+        return node.response === YesNoResponse.Yes
+            ? [node.blankYes, '', '']
+            : [node.blankNo, '', ''];
+    }
+
+    // all other types utilize blankTemplate and the second string
+    const { response } = node;
+    let answer = '';
+    const negAnswer = node.blankTemplate.includes('NOTANSWER');
+    const lastSeparator = negAnswer ? 'or' : 'and';
+    let negRes = '';
+    switch (node.responseType) {
+        case ResponseTypes.NUMBER:
+        case ResponseTypes.SCALE1TO10:
+            answer = (response as number).toString();
+            break;
+
+        case ResponseTypes.TIME3DAYS:
+            const timeRes = response as TimeInput;
+            answer = [timeRes.numInput, timeRes.timeOption].join(' ');
+            break;
+
+        case ResponseTypes.SHORT_TEXT:
+        case ResponseTypes.RADIOLOGY:
+            answer = response as string;
+            break;
+
+        case ResponseTypes.LABORATORY_TEST:
+        case ResponseTypes.CBC:
+            const labRes = response as LabTestType;
+            for (const comp in labRes.components) {
+                if (labRes.components[comp].value)
+                    return [
+                        `The patient's ${labRes.name} showed ${comp} ${labRes.components[comp].value} ${labRes.components[comp].unit}`,
+                        '',
+                        '',
+                    ];
+            }
+            break;
+
+        // let it be handled like other string arrays
+        case ResponseTypes.LIST_TEXT:
+            answer = joinLists(
+                Object.values(response as ListTextInput),
+                lastSeparator
+            );
+            break;
+
+        case ResponseTypes.CLICK_BOXES:
+            const clickBoxesRes = response as ClickBoxesInput,
+                updatedResponse = Object.keys(clickBoxesRes).reduce(function (
+                    arr: string[],
+                    key
+                ) {
+                    if (clickBoxesRes[key]) arr.push(key);
+                    return arr;
+                },
+                []),
+                updatedNegRes = Object.keys(clickBoxesRes).reduce(function (
+                    arr: string[],
+                    key
+                ) {
+                    if (!clickBoxesRes[key] && negAnswer) arr.push(key);
+                    return arr;
+                },
+                []);
+            answer = joinLists(
+                updatedResponse.length > 0 ? (updatedResponse as string[]) : [],
+                lastSeparator
+            );
+            negRes = joinLists(
+                updatedNegRes.length > 0 ? (updatedNegRes as string[]) : [],
+                lastSeparator
+            );
+            break;
+
+        case ResponseTypes.FH_POP:
+        case ResponseTypes.FH_BLANK:
+            answer = joinLists(
+                (response as string[]).map(
+                    (key) => state.familyHistory[key].condition
+                ),
+                lastSeparator
+            );
+            break;
+
+        case ResponseTypes.MEDS_POP:
+        case ResponseTypes.MEDS_BLANK:
+            answer = joinLists(
+                (response as string[]).map(
+                    (key) => state.medications[key].drugName
+                ),
+                lastSeparator
+            );
+            break;
+
+        case ResponseTypes.PMH_POP:
+        case ResponseTypes.PMH_BLANK:
+            answer = joinLists(
+                (response as string[]).map(
+                    (key) => state.medicalHistory[key].condition
+                ),
+                lastSeparator
+            );
+            break;
+
+        case ResponseTypes.PSH_POP:
+        case ResponseTypes.PSH_BLANK:
+            answer = joinLists(
+                (response as string[]).map(
+                    (key) => state.surgicalHistory[key].procedure
+                ),
+                lastSeparator
+            );
+    }
+    return [node.blankTemplate, answer, negRes];
+};
+
+/**
+ * Extracts and formats all nodes connected to the source according to
+ * questionOrder
+ */
+export const extractNodes = (
+    source: string,
+    state: HPINoteProps
+): [string, string, string][] => {
+    const formattedHpi: [string, string, string][] = [],
+        order = state.hpi.order[source];
+    for (let i = 1; i < Object.keys(order).length; i++) {
+        const node = state.hpi.nodes[order[i.toString()]];
+        if (!isEmpty(node)) formattedHpi.push(extractNode(state, node));
+    }
+    return formattedHpi;
+};
+
+/**
+ * Returns array of HPI question and answer fields sorted according to
+ * question. Each list item represents a disjoint graph.
+ *
+ * Pre-condition: hpi.graph is already sorted according to edge order and
+ * there are no cycles
+ */
+export const extractHpi = (state: HPINoteProps): HPI[] => {
+    const formattedHpis: HPI[] = [];
+    for (const nodeId of Object.keys(state.hpi.order)) {
+        const allResponses = extractNodes(nodeId, state);
+        formattedHpis.push(
+            allResponses.reduce((prev, val, idx) => {
+                prev[idx] = val;
+                return prev;
+            }, {} as HPI)
+        );
+    }
+    return formattedHpis;
+};
+
+const HPINote = (state: HPINoteProps) => {
+    const formattedHpis = extractHpi(state);
+    if (formattedHpis.length === 0) {
+        return <div>No history of present illness reported.</div>;
+    }
+    const paragraphs = formattedHpis.map((formattedHpi) =>
+        // TODO: use actual patient info to populate fields
+        createHPI(formattedHpi, '', 'M', 'Dr.')
+    );
+    return (
+        <div>
+            {paragraphs.map((text, i) => (
+                <p key={i}>{text}</p>
+            ))}
+        </div>
+    );
+};
+
+const mapStateToProps = (state: CurrentNoteState) => ({
+    hpi: selectHpiState(state),
+    familyHistory: selectFamilyHistoryState(state),
+    medications: selectMedicationsState(state),
+    surgicalHistory: selectSurgicalHistoryState(state),
+    medicalHistory: selectMedicalHistoryState(state),
+});
+export default connect(mapStateToProps)(HPINote);

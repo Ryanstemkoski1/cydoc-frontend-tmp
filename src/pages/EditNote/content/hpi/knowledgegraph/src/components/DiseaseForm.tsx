@@ -6,12 +6,18 @@ import {
     HpiStateProps,
     EdgeInterface,
     NodeInterface,
+    OrderInterface,
 } from 'constants/hpiEnums';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { HpiState } from 'redux/reducers/hpiReducer';
 import { CurrentNoteState } from 'redux/reducers';
-import { addNode, AddNodeAction } from 'redux/actions/hpiActions';
+import {
+    addNode,
+    AddNodeAction,
+    addOrder,
+    AddOrderAction,
+} from 'redux/actions/hpiActions';
 import { YesNoResponse } from 'constants/enums';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import CreateResponse from './CreateResponse';
@@ -83,11 +89,12 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
             then the shallower child node will replace the previously recorded
             version and it will be removed from its previous parent's record.
         */
-        const { addNode } = this.props,
+        const { addNode, addOrder } = this.props,
             { graphData } = this.state,
             { graph, nodes, edges, order } = graphData,
             parentToChildNodes: { [parentNode: string]: string[] } = {};
         let stack = [order['1']];
+        addOrder(order['1'], order);
         while (stack.length) {
             const currNode = stack.shift();
             if (!currNode || !(currNode in graph)) continue;
@@ -162,6 +169,7 @@ interface DispatchProps {
         node: NodeInterface,
         edges: EdgeInterface[]
     ) => AddNodeAction;
+    addOrder: (medId: string, order: OrderInterface) => AddOrderAction;
 }
 
 const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
@@ -172,6 +180,7 @@ type Props = HpiStateProps & DispatchProps & DiseaseFormProps;
 
 const mapDispatchToProps = {
     addNode,
+    addOrder,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DiseaseForm);

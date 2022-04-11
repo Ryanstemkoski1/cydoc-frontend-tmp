@@ -6,7 +6,7 @@ import {
     multipleChoiceHandleClick,
     MultipleChoiceHandleClickAction,
 } from 'redux/actions/hpiActions';
-import { isStringArray } from 'redux/reducers/hpiReducer';
+import { isClickBoxesResponse } from 'redux/reducers/hpiReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
@@ -20,7 +20,7 @@ class MultipleChoice extends React.Component<Props> {
     render() {
         const { hpi, node, name, multipleChoiceHandleClick } = this.props;
         const response = hpi.nodes[node].response;
-        const included = isStringArray(response) && response.includes(name);
+        const included = isClickBoxesResponse(response) && response[name];
         return (
             <ToggleButton
                 className='button_question'

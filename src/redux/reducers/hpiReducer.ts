@@ -13,6 +13,8 @@ import {
     leftRightCenter,
     LabTestType,
     NodeInterface,
+    OrderInterface,
+    ClickBoxesInput,
 } from '../../constants/hpiEnums';
 import { v4 } from 'uuid';
 
@@ -41,9 +43,17 @@ export interface HpiState {
     edges: {
         [edge: string]: EdgeInterface;
     };
+    order: {
+        [medId: string]: OrderInterface;
+    };
 }
 
-export const initialHpiState: HpiState = { graph: {}, nodes: {}, edges: {} };
+export const initialHpiState: HpiState = {
+    graph: {},
+    nodes: {},
+    edges: {},
+    order: {},
+};
 export const medId = 'medId';
 
 function updateResponse(
@@ -76,7 +86,11 @@ function labTestResponse(
     This response format will then be easy to read in LaboratoryTest.tsx.
     */
     let specificResponse = ExpectedResponseDict[response];
-    if (node.responseType == ResponseTypes.LABORATORY_TEST) {
+    if (
+        [ResponseTypes.LABORATORY_TEST, ResponseTypes.CBC].includes(
+            node.responseType
+        )
+    ) {
         const name = node.text.split('NAME[')[1].split(']')[0],
             snomed = node.text.split('SNOMED[')[1].split(']')[0],
             components = node.text
@@ -99,6 +113,29 @@ function labTestResponse(
             };
         });
         specificResponse = responseDict;
+    } else if (
+        [ResponseTypes.CLICK_BOXES, ResponseTypes.MEDS_POP].includes(
+            node.responseType
+        )
+    ) {
+        const text = node.text,
+            click = text.search('CLICK'),
+            select = text.search('\\['),
+            endSelect = text.search('\\]'),
+            cleanText = select != -1 && endSelect != -1,
+            responses =
+                click != -1 || cleanText
+                    ? text
+                          .slice(
+                              select + 1,
+                              endSelect != -1 ? endSelect : text.length
+                          )
+                          .split(',')
+                          .map((response) => response.trim())
+                    : [],
+            newRes = {} as ClickBoxesInput;
+        responses.map((key) => (newRes[key] = false));
+        specificResponse = newRes;
     }
     return specificResponse;
 }
@@ -123,7 +160,8 @@ export function isTimeInputDictionary(
         typeof value === 'object' &&
         !Array.isArray(value) &&
         'numInput' in value &&
-        typeof value.numInput === 'number' &&
+        (typeof value.numInput === 'number' ||
+            typeof value.numInput === 'undefined') &&
         'timeOption' in value &&
         (Object.values(TimeOption).includes(value.timeOption) ||
             value.timeOption == '')
@@ -168,6 +206,16 @@ export function isLabTestDictionary(value: any): value is LabTestType {
                     typeof value.components[item].value == 'number' ||
                     typeof value.components[item].value == 'undefined') &&
                 typeof value.components[item].unitOptions == 'object'
+        )
+    );
+}
+
+export function isClickBoxesResponse(value: any): value is ClickBoxesInput {
+    return (
+        typeof value == 'object' &&
+        !Array.isArray(value) &&
+        Object.keys(value).every(
+            (item: string) => typeof value[item] == 'boolean'
         )
     );
 }
@@ -217,6 +265,17 @@ export function hpiReducer(
                 edges: {
                     ...state.edges,
                     ...edgeDict,
+                },
+            };
+        }
+
+        case HPI_ACTION.ADD_ORDER: {
+            const { medId, order } = action.payload;
+            return {
+                ...state,
+                order: {
+                    ...state.order,
+                    [medId]: order,
                 },
             };
         }
@@ -274,15 +333,16 @@ export function hpiReducer(
                 [ResponseTypes.CLICK_BOXES, ResponseTypes.MEDS_POP].includes(
                     state.nodes[medId].responseType
                 ) &&
-                isStringArray(response)
+                isClickBoxesResponse(response)
             ) {
-                return !response.includes(name)
-                    ? updateResponse(medId, [...response, name], state)
-                    : updateResponse(
-                          medId,
-                          response.filter((val) => val != name),
-                          state
-                      );
+                return updateResponse(
+                    medId,
+                    {
+                        ...response,
+                        [name]: !response[name],
+                    },
+                    state
+                );
             } else throw new Error('Not a string array');
         }
 
@@ -482,8 +542,9 @@ export function hpiReducer(
             const { medId, component, unit } = action.payload,
                 response = state.nodes[medId].response;
             if (
-                state.nodes[medId].responseType ===
-                    ResponseTypes.LABORATORY_TEST &&
+                [ResponseTypes.LABORATORY_TEST, ResponseTypes.CBC].includes(
+                    state.nodes[medId].responseType
+                ) &&
                 isLabTestDictionary(response)
             )
                 return updateResponse(
@@ -514,8 +575,9 @@ export function hpiReducer(
             const { medId, component, value } = action.payload;
             const response = state.nodes[medId].response;
             if (
-                state.nodes[medId].responseType ===
-                    ResponseTypes.LABORATORY_TEST &&
+                [ResponseTypes.LABORATORY_TEST, ResponseTypes.CBC].includes(
+                    state.nodes[medId].responseType
+                ) &&
                 isLabTestDictionary(response)
             ) {
                 const newResponse = {

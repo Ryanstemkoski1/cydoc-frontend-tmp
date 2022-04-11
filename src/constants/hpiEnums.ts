@@ -109,6 +109,7 @@ export enum ResponseTypes {
     SCALE1TO10 = 'SCALE1TO10',
     RADIOLOGY = 'RADIOLOGY',
     LABORATORY_TEST = 'LABORATORY-TEST',
+    CBC = 'CBC',
 }
 
 export const BodyResponseDict = {
@@ -210,7 +211,7 @@ export interface ExpectedResponseInterface {
     YES_NO: YesNoInput;
     NO_YES: YesNoInput;
     CLICK_BOXES: ClickBoxesInput;
-    MEDS_POP: string[];
+    MEDS_POP: ClickBoxesInput;
     TIME3DAYS: TimeInput;
     LIST_TEXT: ListTextInput;
     SHORT_TEXT: string;
@@ -226,17 +227,18 @@ export interface ExpectedResponseInterface {
     SCALE1TO10: ScaleInputType;
     RADIOLOGY: string;
     LABORATORY_TEST: LabTestType;
+    CBC: LabTestType;
 }
 
 export const ExpectedResponseDict: ExpectedResponseInterface = {
     YES_NO: YesNoResponse.None,
     NO_YES: YesNoResponse.None,
-    CLICK_BOXES: [],
-    MEDS_POP: [],
-    TIME3DAYS: { numInput: 0, timeOption: '' },
+    CLICK_BOXES: {},
+    MEDS_POP: {},
+    TIME3DAYS: { numInput: undefined, timeOption: '' },
     LIST_TEXT: { 1: '', 2: '', 3: '' },
     SHORT_TEXT: '',
-    NUMBER: 0,
+    NUMBER: undefined,
     BODYLOCATION: bodyLocationResponse(),
     FH_POP: [],
     PMH_POP: [],
@@ -248,6 +250,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     SCALE1TO10: undefined,
     RADIOLOGY: '',
     LABORATORY_TEST: { name: '', snomed: '', components: {} },
+    CBC: { name: '', snomed: '', components: {} },
 };
 
 export enum TimeOption {
@@ -283,9 +286,7 @@ export interface GraphData {
     edges: {
         [edge: string]: EdgeInterface;
     };
-    order: {
-        [orderIndex: string]: string;
-    };
+    order: OrderInterface;
 }
 
 export interface EdgeInterface {
@@ -295,11 +296,15 @@ export interface EdgeInterface {
     toQuestionOrder: number;
 }
 
+export interface OrderInterface {
+    [orderIndex: string]: string;
+}
+
 export interface HpiStateProps {
     hpi: HpiState;
 }
 
-export type NumberInput = number | null;
+export type NumberInput = number | undefined;
 export type ListTextInput = { [uuid: string]: string };
 export type TimeInput = {
     numInput: NumberInput;
@@ -333,7 +338,7 @@ export type LabTestType = {
     };
 };
 
-export type ClickBoxesInput = string[];
+export type ClickBoxesInput = { [name: string]: boolean };
 export type ScaleInputType = number | undefined;
 export type YesNoInput =
     | YesNoResponse.Yes
@@ -350,4 +355,5 @@ export type HpiResponseType =
     | BodyLocationType
     | ScaleInputType
     | YesNoInput
-    | LabTestType;
+    | LabTestType
+    | string[];

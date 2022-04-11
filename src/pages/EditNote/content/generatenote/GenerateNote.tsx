@@ -19,6 +19,7 @@ import { PlanState } from 'redux/reducers/planReducer';
 import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
 
 // import all the individual note sections
+import HPINote from './notesections/HPINote';
 import MedicalHistoryNote from './notesections/MedicalHistoryNote';
 import SurgicalHistoryNote from './notesections/SurgicalHistoryNote';
 import MedicationsNote from './notesections/MedicationsNote';
@@ -136,8 +137,8 @@ export class GenerateNote extends Component<Props, GenerateNoteState> {
                 </div>
                 <Segment className='generate-note-text'>
                     {/* <h1> {this.context.title} </h1> */}
-                    {/* <h3> History of Present Illness </h3>
-                    <HPINote /> */}
+                    <h3> History of Present Illness </h3>
+                    <HPINote />
                     <h3> Patient History </h3>
                     <h4> Medical History </h4>
                     <MedicalHistoryNote

@@ -77,9 +77,17 @@ describe('generateHpiText', () => {
 
         it('handles single short response question', () => {
             const hpi = {
-                22: ['stress level of 5 out of 10', ' 5! '],
+                22: ['stress level of ANSWER out of 10', ' 5! '],
             };
             const expected = 'stress level of 5 out of 10. ';
+            expect(fillAnswers(hpi)).toEqual(expected);
+        });
+
+        it('handles negative response question', () => {
+            const hpi = {
+                22: ['does not experience NOTANSWER', 'a, b, or c'],
+            };
+            const expected = 'does not experience a, b, or c. ';
             expect(fillAnswers(hpi)).toEqual(expected);
         });
 

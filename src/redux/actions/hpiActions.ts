@@ -7,6 +7,7 @@ import {
     EdgeInterface,
     NodeInterface,
     BodyLocationLRItemType,
+    OrderInterface,
 } from 'constants/hpiEnums';
 
 export interface AddNodeAction {
@@ -29,6 +30,24 @@ export function addNode(
             medId,
             node,
             edges,
+        },
+    };
+}
+
+export interface AddOrderAction {
+    type: HPI_ACTION.ADD_ORDER;
+    payload: {
+        medId: string;
+        order: OrderInterface;
+    };
+}
+
+export function addOrder(medId: string, order: OrderInterface): AddOrderAction {
+    return {
+        type: HPI_ACTION.ADD_ORDER,
+        payload: {
+            medId,
+            order,
         },
     };
 }
@@ -399,6 +418,7 @@ export function labTestHandleClick(
 
 export type HpiActionTypes =
     | AddNodeAction
+    | AddOrderAction
     | BodyLocationResponseAction
     | BodyLocationHandleToggleAction
     | MultipleChoiceHandleClickAction

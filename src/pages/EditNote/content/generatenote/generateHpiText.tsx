@@ -8,9 +8,9 @@ import { MEDICAL_TERM_TRANSLATOR, ABBREVIFY } from 'constants/word-mappings';
  * for yes/no questions, we only need the fill in the blank phrase for the
  * answer they gave, and the patient's answer can be the empty string
  */
-interface HPI {
-    [questionOrder: number]: [string, string];
-    [questionOrder: string]: [string, string];
+export interface HPI {
+    [questionOrder: number]: [string, string, string];
+    [questionOrder: string]: [string, string, string];
 }
 
 /**
@@ -56,11 +56,15 @@ export const fillAnswers = (hpi: HPI): string => {
 
     let hpiString = '';
     sortedKeys.forEach((key) => {
-        let [fillSentence, answer] = hpi[key] || hpi[key.toString()];
+        let [fillSentence, answer, negAnswer] = hpi[key] || hpi[key.toString()];
         fillSentence = fullClean(fillSentence);
         answer = fullClean(answer);
-        if (fillSentence.includes('answer')) {
-            fillSentence = fillSentence.replace('answer', answer);
+        negAnswer = fullClean(negAnswer);
+        if (fillSentence.match(/answer/)) {
+            fillSentence = fillSentence.replace(/answer/, answer);
+        }
+        if (fillSentence.match(/notanswer/)) {
+            fillSentence = fillSentence.replace(/notanswer/, negAnswer);
         }
         hpiString += fillSentence + '. ';
     });
@@ -87,9 +91,12 @@ export const definePatientNameAndPronouns = (
     if (gender === 'F') {
         objPronoun = 'she';
         posPronoun = 'her';
-    } else {
+    } else if (gender === 'M') {
         objPronoun = 'he';
         posPronoun = 'his';
+    } else {
+        objPronoun = 'they';
+        posPronoun = 'their';
     }
     return { name, objPronoun, posPronoun };
 };
