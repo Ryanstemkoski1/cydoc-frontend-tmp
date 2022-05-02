@@ -328,13 +328,13 @@ const SignUpForm = (props) => {
                     <label className='label-font'>Select who pays:</label>
                     <Form.Group inline widths='equal' required>
                         <Form.Radio
+                            disabled //managerResponsibleForPayment will always be false since managers are not allowed to pay for doctors
                             label='manager pays'
                             value={true}
                             name='managerResponsibleForPayment'
                             checked={
                                 userInfo.managerResponsibleForPayment === true
                             }
-                            defaultChecked
                             onChange={handleChange}
                         />
                         <Form.Radio
@@ -344,6 +344,7 @@ const SignUpForm = (props) => {
                             checked={
                                 userInfo.managerResponsibleForPayment === false
                             }
+                            defaultChecked
                             onChange={handleChange}
                         />
                     </Form.Group>
