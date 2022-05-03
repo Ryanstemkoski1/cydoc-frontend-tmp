@@ -92,6 +92,11 @@
     margin: 20vh auto;
 }
 
+.landing-feedback {
+    width: 30%;
+    margin: 3vh auto;
+}
+
 .landing-col.multiple {
     display: flex;
     flex-direction: column;

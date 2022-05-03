@@ -3,12 +3,13 @@ import NavMenu from '../../components/navigation/NavMenu';
 import { Icon } from 'semantic-ui-react';
 import { LANDING_PAGE_MOBLE_BP } from 'constants/breakpoints.js';
 import './LandingPage.css';
-import { Button } from 'semantic-ui-react';
+import { Button, Image } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
 import { initialState } from 'redux/reducers';
 import { deleteNote } from '../../redux/actions/currentNoteActions';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import Feedback from '../../assets/cydoc-feedback.svg';
 
 // imports for old landing page with notes/data stored in context
 // import OpenRecentSegment from './OpenNotes';
@@ -159,6 +160,9 @@ class LandingPageOld extends Component {
                         <div>
                             <NavMenu className='landing-page-nav-menu' />
                         </div>
+                        <div className='landing-feedback'>
+                            <Image src={Feedback} />
+                        </div>
                         <div
                             className={`landing-boxes ${
                                 stack ? 'rows' : 'columns'
@@ -194,7 +198,7 @@ class LandingPageOld extends Component {
                                             ></Icon>
                                         </div>
                                     </div>
-                                    <div
+                                    {/* <div
                                         onClick={() => this.handleNewHPIClick()}
                                         className='ui animated fade button landing'
                                         tabIndex='0'
@@ -211,8 +215,8 @@ class LandingPageOld extends Component {
                                                 class='icons'
                                             ></Icon>
                                         </div>
-                                    </div>
-                                    <div
+                                    </div> */}
+                                    {/* <div
                                         onClick={() =>
                                             this.handleEditHPIClick()
                                         }
@@ -231,12 +235,12 @@ class LandingPageOld extends Component {
                                                 class='icons'
                                             ></Icon>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </>
                             ) : (
                                 <>
                                     {noteButtons}
-                                    <div
+                                    {/* <div
                                         className='landing-box landing-col'
                                         onClick={() => this.handleNewHPIClick()}
                                     >
@@ -253,9 +257,9 @@ class LandingPageOld extends Component {
                                             Design a custom HPI questionnaire
                                             for any chief complaint
                                         </p>
-                                    </div>
+                                    </div> */}
 
-                                    <div
+                                    {/* <div
                                         className='landing-box landing-col'
                                         onClick={() =>
                                             this.handleEditHPIClick()
@@ -273,7 +277,7 @@ class LandingPageOld extends Component {
                                         <p className='smaller-text'>
                                             Edit an existing HPI questionnaire
                                         </p>
-                                    </div>
+                                    </div> */}
                                 </>
                             )}
                         </div>
