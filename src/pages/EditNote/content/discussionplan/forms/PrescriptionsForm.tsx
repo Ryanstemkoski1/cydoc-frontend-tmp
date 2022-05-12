@@ -120,7 +120,7 @@ const PrescriptionsForm = (
     );
 
     const mobileTitle: ComponentFunction = (row, options, onAddItem) => (
-        <div className='recipe'>
+        <div className='mobile-title'>
             <label> Rx </label>
             {mainInput(row, options, onAddItem)}
         </div>
