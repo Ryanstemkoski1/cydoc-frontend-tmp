@@ -196,9 +196,10 @@ export class MedicationsContent extends Component<Props, State> {
                 );
             }
         }
-
-        const content = (
+        const content = panels.length ? (
             <Accordion panels={panels} exclusive={false} fluid styled />
+        ) : (
+            []
         );
         return (
             <>

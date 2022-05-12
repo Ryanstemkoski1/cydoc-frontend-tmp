@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from 'semantic-ui-react';
+import { Button, Input } from 'semantic-ui-react';
 import '../../css/listText.css';
 import { CurrentNoteState } from 'redux/reducers';
 import { HpiStateProps } from 'constants/hpiEnums';
@@ -14,7 +14,6 @@ import {
 } from 'redux/actions/hpiActions';
 import { isListTextDictionary } from 'redux/reducers/hpiReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import ToggleButton from 'components/tools/ToggleButton';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 interface ListTextProps {
@@ -43,11 +42,13 @@ class ListText extends React.Component<Props> {
                                 listTextHandleChange(id, node, data.value)
                             }
                         />
-                        <ToggleButton
-                            className='remove-list-text'
+                        <Button
+                            circular
+                            icon='minus'
+                            className='hpi-ph-button'
                             condition='-'
                             title='-'
-                            onToggleButtonClick={(): RemoveListInputAction =>
+                            onClick={(): RemoveListInputAction =>
                                 removeListInput(id, node)
                             }
                         />
@@ -60,13 +61,13 @@ class ListText extends React.Component<Props> {
             <div>
                 {' '}
                 {listInputsArray}
-                <ToggleButton
-                    className='button-plus-click'
+                <Button
+                    circular
+                    icon='plus'
                     condition='+'
                     title='+'
-                    onToggleButtonClick={(): AddListInputAction =>
-                        addListInput(node)
-                    }
+                    onClick={(): AddListInputAction => addListInput(node)}
+                    className='hpi-ph-button'
                 />
             </div>
         );

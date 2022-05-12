@@ -197,7 +197,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         key={node}
                         isPreview={false}
                         mobile={collapseTabs}
-                        values={responseChoice}
+                        values={choices}
                         responseType={responseType}
                         node={node}
                     />
@@ -221,7 +221,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     <MedicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={responseChoice}
+                        responseChoice={choices}
                         responseType={responseType}
                         mobile={collapseTabs}
                         currentYear={-1}
@@ -235,7 +235,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     <SurgicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={responseChoice}
+                        responseChoice={choices}
                         responseType={responseType}
                         mobile={collapseTabs}
                         node={node}
