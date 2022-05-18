@@ -8,6 +8,18 @@ import PatientHistoryContent from './content/patienthistory/PatientHistoryConten
 import GenerateNote from './content/generatenote/GenerateNote.tsx';
 import DiscussionPlan from './content/discussionplan/DiscussionPlan.tsx';
 import { connect } from 'react-redux';
+import { PMH_TAB_NAMES } from 'constants/constants';
+import {
+    PATIENT_HISTORY_MOBILE_BP,
+    SOCIAL_HISTORY_MOBILE_BP,
+} from 'constants/breakpoints.js';
+import MedicalHistoryContent from './content/medicalhistory/MedicalHistoryContent';
+import SurgicalHistoryContent from './content/surgicalhistory/SurgicalHistoryContent';
+import MedicationsContent from './content/medications/MedicationsContent';
+import AllergiesContent from './content/allergies/AllergiesContent';
+import SocialHistoryContent from './content/socialhistory/SocialHistoryContent';
+import FamilyHistoryContent from './content/familyhistory/FamilyHistoryContent';
+import './content/patienthistory/PatientHistory.css';
 
 import './NotePage.css';
 
@@ -25,6 +37,8 @@ class NotePage extends Component {
             windowHeight: 0,
             hpiTab: -1,
             activeHPI: '',
+            activePMH: 'Medical History',
+            pmhTab: PMH_TAB_NAMES.indexOf('Medical History'),
         };
     }
 
@@ -56,6 +70,115 @@ class NotePage extends Component {
         });
         window.scrollTo(0, 0);
     };
+
+    handlePMHTabChange = (e, { activeIndex }) => {
+        this.setState({
+            pmhTab: activeIndex,
+            activePMH: PMH_TAB_NAMES[activeIndex],
+        });
+        setTimeout((_e) => {
+            this.setStickyHeaders();
+        }, 0);
+    };
+
+    handlePMHPrevTab = (e, { activeTabName }) => {
+        const index = PMH_TAB_NAMES.indexOf(activeTabName);
+        this.setState({
+            pmhTab: index,
+            activePMH: activeTabName,
+        });
+        setTimeout((_e) => {
+            this.setStickyHeaders();
+        }, 0);
+    };
+
+    handlePMHNextTab = (e, { activeTabName }) => {
+        e.preventDefault();
+        const index = PMH_TAB_NAMES.indexOf(activeTabName);
+        this.setState({
+            pmhTab: index,
+            activePMH: activeTabName,
+        });
+        setTimeout((_e) => {
+            this.setStickyHeaders();
+        }, 0);
+    };
+
+    // panes for mobile view
+    onPMHTabClick(activeTabName, windowWidth) {
+        const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
+        const socialHistoryMobile = windowWidth < SOCIAL_HISTORY_MOBILE_BP;
+
+        let tabToDisplay;
+        switch (activeTabName) {
+            case 'Medical History':
+                tabToDisplay = <MedicalHistoryContent mobile={collapseTabs} />;
+                break;
+            case 'Surgical History':
+                tabToDisplay = <SurgicalHistoryContent mobile={collapseTabs} />;
+                break;
+            case 'Medications':
+                tabToDisplay = <MedicationsContent mobile={collapseTabs} />;
+                break;
+            case 'Allergies':
+                tabToDisplay = <AllergiesContent mobile={collapseTabs} />;
+                break;
+            case 'Social History':
+                tabToDisplay = (
+                    <SocialHistoryContent mobile={socialHistoryMobile} />
+                );
+                break;
+            case 'Family History':
+                tabToDisplay = <FamilyHistoryContent mobile={collapseTabs} />;
+                break;
+            case null:
+                this.setState({
+                    activePMH: 'Medical History',
+                    pmhTab: 0,
+                });
+                break;
+            default:
+                tabToDisplay = <MedicalHistoryContent mobile={collapseTabs} />;
+                break;
+        }
+        return tabToDisplay;
+    }
+
+    onPMHNextClick(activeTabName) {
+        const index = PMH_TAB_NAMES.indexOf(activeTabName) + 1;
+        this.setState({
+            activePMH: PMH_TAB_NAMES[index],
+            activeIndex: index,
+        });
+    }
+
+    // brings users to the previous form when clicked
+    onPMHPreviousClick(activeTabName) {
+        const index = PMH_TAB_NAMES.indexOf(activeTabName) - 1;
+        this.setState({
+            activePMH: PMH_TAB_NAMES[index],
+            activeIndex: index,
+        });
+    }
+
+    setStickyHeaders() {
+        const stickyHeaders = document.getElementsByClassName('sticky-header');
+        const patientHistoryMenu = document.getElementById(
+            'patient-history-menu'
+        );
+        if (
+            stickyHeaders != null &&
+            stickyHeaders.length != 0 &&
+            patientHistoryMenu != null
+        ) {
+            for (let i = 0; i < stickyHeaders.length; i++) {
+                stickyHeaders[i].style.top = `${
+                    parseInt(patientHistoryMenu.style.top) +
+                    patientHistoryMenu.offsetHeight
+                }px`;
+            }
+        }
+    }
 
     componentDidMount() {
         this.updateDimensions();
@@ -100,6 +223,15 @@ class NotePage extends Component {
                     <PatientHistoryContent
                         nextFormClick={this.nextFormClick}
                         previousFormClick={this.previousFormClick}
+                        activePMH={this.state.activePMH}
+                        pmhIndex={this.state.pmhTab}
+                        handleTabChange={this.handlePMHTabChange}
+                        handleNextTab={this.handlePMHNextTab}
+                        handlePrevTab={this.handlePMHPrevTab}
+                        onNextClick={this.onPMHNextClick}
+                        onPreviousClick={this.onPMHPreviousClick}
+                        onTabClick={this.onPMHTabClick}
+                        setStickyHeaders={this.setStickyHeaders}
                     />
                 );
                 break;
@@ -151,7 +283,6 @@ class NotePage extends Component {
     render() {
         //get content based on which tab is active
         const tabToDisplay = this.getTabToDisplay(this.props.activeItem);
-
         return (
             <Container className='active-tab-container'>
                 {tabToDisplay}

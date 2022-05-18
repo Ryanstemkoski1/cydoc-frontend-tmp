@@ -7,6 +7,15 @@
     "Plan",
     "Generated Note"
   ],
+  "PMH_TAB_NAMES": [
+    "Medical History",
+    "Surgical History",
+    "Medications",
+    "Allergies",
+    "Social History",
+    "Family History",
+    "Medical History"
+  ],
   "CONDITIONS": [
     "Type II Diabetes",
     "Myocardial Infarction",
