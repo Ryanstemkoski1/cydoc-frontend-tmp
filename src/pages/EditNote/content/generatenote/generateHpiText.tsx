@@ -22,7 +22,7 @@ interface PatientDisplayName {
     posPronoun: string;
 }
 
-type Gender = 'F' | 'M';
+type Gender = 'He' | 'She' | 'They';
 
 const END_OF_SENTENCE_PUNC = '.!?';
 
@@ -82,16 +82,16 @@ export const definePatientNameAndPronouns = (
     // define patient name
     let prefix = title.trim();
     if (title === 'general') {
-        prefix = gender === 'F' ? 'Ms.' : 'Mr.';
+        prefix = gender === 'She' ? 'Ms.' : gender === 'He' ? 'Mr.' : 'They';
     }
-    const name = `${prefix} ${lastName.trim()}`;
+    const name = !title.length ? '' : `${prefix} ${lastName.trim()}`;
 
     // define pronouns
     let objPronoun, posPronoun: string;
-    if (gender === 'F') {
+    if (gender === 'She') {
         objPronoun = 'she';
         posPronoun = 'her';
-    } else if (gender === 'M') {
+    } else if (gender === 'He') {
         objPronoun = 'he';
         posPronoun = 'his';
     } else {
@@ -113,13 +113,18 @@ export const fillNameAndGender = (
     patientInfo: PatientDisplayName
 ): string => {
     const { name, objPronoun, posPronoun } = patientInfo;
-    hpiString = hpiString.replace(/the patient's|their/g, posPronoun);
+    hpiString = name.length
+        ? hpiString.replace(/the patient's|their/g, posPronoun)
+        : hpiString;
 
     let toggle = 0;
     // TODO: change this so that it gets replaced at random rather than
     // alternating
     const newHpiString = hpiString.split('. ').map((sentence) => {
-        if (sentence.includes('the patient')) {
+        if (
+            sentence.includes('the patient') &&
+            (name.length || objPronoun != 'they')
+        ) {
             const noun = toggle === 0 ? name : objPronoun;
             toggle = (toggle + 1) % 2;
             sentence = sentence.replace(/the patient/g, noun);
@@ -175,15 +180,17 @@ export const capitalize = (hpiString: string): string => {
     return capitalizedWords.join(' ');
 };
 
+export const createInitialHPI = (hpi: HPI): string => {
+    return fillAnswers(hpi);
+};
+
 export const createHPI = (
-    hpi: HPI,
+    hpiString: string,
     lastName: string,
     gender: Gender,
     title: string
 ): string => {
     const patientInfo = definePatientNameAndPronouns(title, lastName, gender);
-
-    let hpiString = fillAnswers(hpi);
     hpiString = fillNameAndGender(hpiString, patientInfo);
     hpiString = fillMedicalTerms(hpiString);
     hpiString = conjugateThirdPerson(hpiString);

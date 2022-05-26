@@ -87,9 +87,12 @@ function labTestResponse(
     */
     let specificResponse = ExpectedResponseDict[response];
     if (
-        [ResponseTypes.LABORATORY_TEST, ResponseTypes.CBC].includes(
-            node.responseType
-        )
+        [
+            ResponseTypes.LABORATORY_TEST,
+            ResponseTypes.CBC,
+            ResponseTypes.BMP,
+            ResponseTypes.LFT,
+        ].includes(node.responseType)
     ) {
         const name = node.text.split('NAME[')[1].split(']')[0],
             snomed = node.text.split('SNOMED[')[1].split(']')[0],
@@ -292,7 +295,7 @@ export function hpiReducer(
             ) {
                 const response = state.nodes[medId]
                     .response as BodyLocationType;
-                const bodyOptionItem = response[bodyOption] as leftRightCenter;
+                const bodyOptionItem = response[bodyOption];
                 return updateResponse(
                     medId,
                     isBodyLocationLRItem(bodyOptionItem)
@@ -542,9 +545,12 @@ export function hpiReducer(
             const { medId, component, unit } = action.payload,
                 response = state.nodes[medId].response;
             if (
-                [ResponseTypes.LABORATORY_TEST, ResponseTypes.CBC].includes(
-                    state.nodes[medId].responseType
-                ) &&
+                [
+                    ResponseTypes.LABORATORY_TEST,
+                    ResponseTypes.CBC,
+                    ResponseTypes.BMP,
+                    ResponseTypes.LFT,
+                ].includes(state.nodes[medId].responseType) &&
                 isLabTestDictionary(response)
             )
                 return updateResponse(
@@ -575,9 +581,12 @@ export function hpiReducer(
             const { medId, component, value } = action.payload;
             const response = state.nodes[medId].response;
             if (
-                [ResponseTypes.LABORATORY_TEST, ResponseTypes.CBC].includes(
-                    state.nodes[medId].responseType
-                ) &&
+                [
+                    ResponseTypes.LABORATORY_TEST,
+                    ResponseTypes.CBC,
+                    ResponseTypes.BMP,
+                    ResponseTypes.LFT,
+                ].includes(state.nodes[medId].responseType) &&
                 isLabTestDictionary(response)
             ) {
                 const newResponse = {

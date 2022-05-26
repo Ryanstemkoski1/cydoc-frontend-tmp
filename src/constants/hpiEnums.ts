@@ -110,6 +110,8 @@ export enum ResponseTypes {
     RADIOLOGY = 'RADIOLOGY',
     LABORATORY_TEST = 'LABORATORY-TEST',
     CBC = 'CBC',
+    BMP = 'BMP',
+    LFT = 'LFT',
 }
 
 export interface ExpectedResponseInterface {
@@ -133,6 +135,8 @@ export interface ExpectedResponseInterface {
     RADIOLOGY: string;
     LABORATORY_TEST: LabTestType;
     CBC: LabTestType;
+    BMP: LabTestType;
+    LFT: LabTestType;
 }
 
 export const ExpectedResponseDict: ExpectedResponseInterface = {
@@ -156,6 +160,8 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     RADIOLOGY: '',
     LABORATORY_TEST: { name: '', snomed: '', components: {} },
     CBC: { name: '', snomed: '', components: {} },
+    BMP: { name: '', snomed: '', components: {} },
+    LFT: { name: '', snomed: '', components: {} },
 };
 
 export enum TimeOption {

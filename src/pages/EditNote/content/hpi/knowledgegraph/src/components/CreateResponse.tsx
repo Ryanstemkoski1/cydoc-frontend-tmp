@@ -95,9 +95,12 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             .replace('SYMPTOM', category.toLowerCase())
             .replace('DISEASE', category.toLowerCase());
         if (
-            [ResponseTypes.LABORATORY_TEST, ResponseTypes.CBC].includes(
-                responseType
-            ) &&
+            [
+                ResponseTypes.LABORATORY_TEST,
+                ResponseTypes.CBC,
+                ResponseTypes.BMP,
+                ResponseTypes.LFT,
+            ].includes(responseType) &&
             isLabTestDictionary(response)
         )
             this.setState({
@@ -243,6 +246,8 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 );
             case ResponseTypes.LABORATORY_TEST:
             case ResponseTypes.CBC:
+            case ResponseTypes.BMP:
+            case ResponseTypes.LFT:
                 return <LaboratoryTest key={node} node={node} />;
             default:
                 return;

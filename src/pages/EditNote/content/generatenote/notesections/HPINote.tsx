@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createHPI, HPI } from '../generateHpiText';
+import { createHPI, createInitialHPI, HPI } from '../generateHpiText';
 import { CurrentNoteState } from 'redux/reducers';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import { HpiState } from 'redux/reducers/hpiReducer';
@@ -35,7 +35,7 @@ interface HPINoteProps {
 export type GraphNode = NodeInterface & { response: HpiResponseType };
 
 /* Returns whether the user has responded to this node or not */
-export const isEmpty = (node: GraphNode): boolean => {
+export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
     switch (node.responseType) {
         case ResponseTypes.YES_NO:
         case ResponseTypes.NO_YES:
@@ -52,14 +52,21 @@ export const isEmpty = (node: GraphNode): boolean => {
         }
 
         case ResponseTypes.BODYLOCATION:
-            return Object.keys(node.response as BodyLocationType).length === 0;
+            return Object.entries(node.response as BodyLocationType).every(
+                ([_key, value]) => {
+                    if (typeof value === 'boolean') return !value;
+                    else return Object.entries(value).every(([_k, v]) => !v);
+                }
+            );
 
         case ResponseTypes.TIME3DAYS: {
             const timeRes = node.response as TimeInput;
             return timeRes.numInput === undefined && timeRes.timeOption === '';
         }
         case ResponseTypes.LABORATORY_TEST:
-        case ResponseTypes.CBC: {
+        case ResponseTypes.CBC:
+        case ResponseTypes.BMP:
+        case ResponseTypes.LFT: {
             const response = node.response as LabTestType;
             for (const comp in response.components) {
                 if (response.components[comp].value) return false;
@@ -75,6 +82,32 @@ export const isEmpty = (node: GraphNode): boolean => {
         case ResponseTypes.MEDS_POP: {
             const response = node.response as ClickBoxesInput;
             return Object.keys(response).every((key) => !response[key]);
+        }
+
+        case ResponseTypes.FH_POP: {
+            const response = node.response as [];
+            return response.every(
+                (condition) =>
+                    state.familyHistory[condition].hasAfflictedFamilyMember ==
+                    ''
+            );
+        }
+
+        case ResponseTypes.PMH_POP: {
+            const response = node.response as [];
+            return response.every(
+                (condition) =>
+                    state.medicalHistory[condition].hasBeenAfflicted == ''
+            );
+        }
+
+        case ResponseTypes.PSH_POP: {
+            const response = node.response as [];
+            return response.every(
+                (surgery) =>
+                    state.surgicalHistory[surgery].year == -1 &&
+                    !state.surgicalHistory[surgery].comments
+            );
         }
 
         default:
@@ -137,8 +170,27 @@ export const extractNode = (
             answer = response as string;
             break;
 
+        case ResponseTypes.BODYLOCATION:
+            answer = joinLists(
+                Object.entries(response as BodyLocationType).reduce(
+                    (acc: string[], [key, value]) => {
+                        if (
+                            (typeof value === 'boolean' && value) ||
+                            Object.entries(value).some(([_k, v]) => v)
+                        )
+                            acc.push(key);
+                        return acc;
+                    },
+                    []
+                ),
+                lastSeparator
+            );
+            break;
+
         case ResponseTypes.LABORATORY_TEST:
         case ResponseTypes.CBC:
+        case ResponseTypes.BMP:
+        case ResponseTypes.LFT:
             const labRes = response as LabTestType;
             for (const comp in labRes.components) {
                 if (labRes.components[comp].value)
@@ -240,7 +292,7 @@ export const extractNodes = (
         order = state.hpi.order[source];
     for (let i = 1; i < Object.keys(order).length; i++) {
         const node = state.hpi.nodes[order[i.toString()]];
-        if (!isEmpty(node)) formattedHpi.push(extractNode(state, node));
+        if (!isEmpty(state, node)) formattedHpi.push(extractNode(state, node));
     }
     return formattedHpi;
 };
@@ -267,17 +319,33 @@ export const extractHpi = (state: HPINoteProps): HPI[] => {
 };
 
 const HPINote = (state: HPINoteProps) => {
+    /*
+    HPI note is generated into sentences, each element of the array
+    a paragraph for each chief complaint. The elements of the array 
+    are combined into one big string (across all chief complaints). 
+    If there are duplicates, all occurrences after the first instance 
+    are removed. The strings are then re-separated into an array of 
+    strings separated by chief complaint.
+    */
     const formattedHpis = extractHpi(state);
     if (formattedHpis.length === 0) {
         return <div>No history of present illness reported.</div>;
     }
-    const paragraphs = formattedHpis.map((formattedHpi) =>
+    const initialPara = formattedHpis.map((formattedHpi) =>
         // TODO: use actual patient info to populate fields
-        createHPI(formattedHpi, '', 'M', 'Dr.')
+        createInitialHPI(formattedHpi)
+    );
+    const paragraphs = [
+        ...new Set(initialPara.join('PARAGRAPH_BREAK. ').split('. ')),
+    ]
+        .join('. ')
+        .split('PARAGRAPH_BREAK. ');
+    const finalPara = paragraphs.map((hpiString) =>
+        createHPI(hpiString, '', 'They', '')
     );
     return (
         <div>
-            {paragraphs.map((text, i) => (
+            {finalPara.map((text, i) => (
                 <p key={i}>{text}</p>
             ))}
         </div>
