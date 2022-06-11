@@ -4,6 +4,7 @@ import {
     TextAreaProps,
     StrictInputProps,
     ButtonProps,
+    Button,
 } from 'semantic-ui-react';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import React, { Component } from 'react';
@@ -246,6 +247,13 @@ class MedicalHistoryNoteItem extends Component<Props> {
                         </div>
                     )}
                 </Form>
+                <Button
+                    circular
+                    icon='close'
+                    onClick={() => this.props.deleteRow(this.props.index)}
+                    aria-label='delete-conditon'
+                    className='hpi-ph-button'
+                />
             </Grid.Row>
         );
     };
@@ -272,6 +280,7 @@ interface ItemProps {
     conditionInput: JSX.Element;
     currentYear: number;
     isPreview?: boolean;
+    deleteRow: (index: string) => void;
 }
 
 type OwnProps = {

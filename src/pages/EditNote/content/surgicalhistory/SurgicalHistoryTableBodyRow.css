@@ -35,3 +35,9 @@
 #table-rows {
   padding: 10px;
 }
+
+.delete-surgery{
+  position: relative;
+  top: 50%;
+  left: 50%;
+}

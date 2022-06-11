@@ -324,6 +324,12 @@ export function familyHistoryReducer(
             };
         }
 
+        case FAMILY_HISTORY_ACTION.DELETE_CONDITION: {
+            const { conditionIndex } = action.payload;
+            const { [conditionIndex]: deleted, ...newState } = state;
+            return newState;
+        }
+
         default: {
             return state;
         }

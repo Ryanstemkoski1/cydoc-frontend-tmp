@@ -4,6 +4,7 @@ import {
     TextAreaProps,
     StrictInputProps,
     ButtonProps,
+    Button,
 } from 'semantic-ui-react';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import React, { Component } from 'react';
@@ -27,8 +28,8 @@ import {
     updateComments,
     updateConditionResolved,
 } from 'redux/actions/medicalHistoryActions';
-import { start } from 'repl';
 import '../hpi/knowledgegraph/src/css/Button.css';
+import './MedicalHistoryNoteRow.css';
 
 //Component for a row the Medical History GridContent
 class MedicalHistoryNoteRow extends Component<Props> {
@@ -105,9 +106,9 @@ class MedicalHistoryNoteRow extends Component<Props> {
             endYear === -1 || isNaN(endYear) ? '' : endYear.toString();
 
         return (
-            <Grid.Row>
+            <Grid.Row columns={7}>
                 <Grid.Column>{conditionInput}</Grid.Column>
-                <Grid.Column textAlign='center'>
+                <Grid.Column textAlign='center' className='toggle-button-row'>
                     <ToggleButton
                         active={
                             isPreview
@@ -161,7 +162,7 @@ class MedicalHistoryNoteRow extends Component<Props> {
                         </p>
                     )}
                 </Grid.Column>
-                <Grid.Column textAlign='center'>
+                <Grid.Column textAlign='center' className='toggle-button-row'>
                     <ToggleButton
                         active={
                             isPreview
@@ -232,6 +233,15 @@ class MedicalHistoryNoteRow extends Component<Props> {
                         />
                     </Form>
                 </Grid.Column>
+                <Grid.Column className='delete-row' textAlign='center'>
+                    <Button
+                        circular
+                        icon='close'
+                        onClick={() => this.props.deleteRow(this.props.index)}
+                        aria-label='delete-condition'
+                        className='hpi-ph-button'
+                    />
+                </Grid.Column>
             </Grid.Row>
         );
     };
@@ -263,6 +273,7 @@ interface DispatchProps {
 
 type OwnProps = {
     index: string;
+    deleteRow: (index: string) => void;
 };
 
 type FindIndex = React.MouseEvent | React.FormEvent<HTMLTextAreaElement>;

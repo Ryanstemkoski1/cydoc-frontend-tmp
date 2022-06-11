@@ -188,6 +188,15 @@ class FamilyHistoryBlock extends Component<Props> {
                     title='No'
                     onToggleButtonClick={handleToggle}
                 />
+                <Button
+                    circular
+                    icon='close'
+                    onClick={() => {
+                        this.props.deleteRow(this.props.index);
+                    }}
+                    aria-label='delete-condition'
+                    className='hpi-ph-button'
+                />
 
                 <div className='condition-info-container'>
                     {yesActive ? (
@@ -211,6 +220,7 @@ class FamilyHistoryBlock extends Component<Props> {
                     ) : (
                         ''
                     )}
+
                     <Divider className='divider-style' />
                 </div>
             </div>
@@ -231,6 +241,7 @@ interface BlockProps {
     conditionInp: JSX.Element;
     pop: boolean;
     node?: string;
+    deleteRow: (index: string) => void;
 }
 
 interface DispatchProps {

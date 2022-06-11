@@ -64,6 +64,10 @@ class AllergiesContent extends Component<Props, OwnState> {
         this.props.addAllergy();
     }
 
+    deleteRow = (index: string) => {
+        this.props.deleteAllergy(index);
+    };
+
     //modify the current values in the table to reflect changes
     // and call the handler prop
     handleTableBodyChange(
@@ -137,6 +141,7 @@ class AllergiesContent extends Component<Props, OwnState> {
                 allergensOptions={this.state.allergensOptions}
                 allergicReactionsOptions={this.state.allergicReactionsOptions}
                 onAddItem={this.onAddItem}
+                deleteRow={this.deleteRow}
             />
         ));
     }

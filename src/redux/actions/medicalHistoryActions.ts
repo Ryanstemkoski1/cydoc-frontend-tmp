@@ -1,5 +1,6 @@
 import { MEDICAL_HISTORY_ACTION } from './actionTypes';
 import { YesNoResponse } from '../../constants/enums';
+import { string } from 'prop-types';
 
 interface ToggleOptionAction {
     type: MEDICAL_HISTORY_ACTION.TOGGLE_OPTION;
@@ -143,6 +144,22 @@ export function addPmhPopOptions(
     };
 }
 
+interface DeleteConditionAction {
+    type: MEDICAL_HISTORY_ACTION.DELETE_CONDITION;
+    payload: {
+        conditionIndex: string;
+    };
+}
+
+export function deleteCondition(conditionIndex: string) {
+    return {
+        type: MEDICAL_HISTORY_ACTION.DELETE_CONDITION,
+        payload: {
+            conditionIndex,
+        },
+    };
+}
+
 export type MedicalHistoryActionTypes =
     | ToggleOptionAction
     | UpdateConditionNameAction
@@ -151,4 +168,5 @@ export type MedicalHistoryActionTypes =
     | UpdateEndYearAction
     | UpdateCommentsAction
     | AddDefaultConditonAction
-    | AddPmhPopOptionsAction;
+    | AddPmhPopOptionsAction
+    | DeleteConditionAction;

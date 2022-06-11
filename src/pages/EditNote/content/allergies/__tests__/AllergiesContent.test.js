@@ -60,6 +60,22 @@ describe('AllergiesContent', () => {
         expect(store.getActions()).toEqual(expectedActions);
     });
 
+    test('deleteRow works', () => {
+        const { wrapper, store } = connectStore();
+        const button = wrapper
+            .find('button[aria-label="delete-allergy"]')
+            .first();
+        expect(button).toBeTruthy();
+        button.simulate('click');
+        const expectedActions = [
+            {
+                type: ALLERGIES_ACTION.DELETE_ALLERGY,
+                payload: { index: 'foo' },
+            },
+        ];
+        expect(store.getActions()).toEqual(expectedActions);
+    });
+
     test('editing inciting agent dispatches correct action', () => {
         const { store, wrapper } = connectStore();
         wrapper

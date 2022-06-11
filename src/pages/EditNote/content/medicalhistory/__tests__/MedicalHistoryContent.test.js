@@ -409,6 +409,23 @@ describe('MedicalHistoryContent', () => {
         expect(store.getActions()).toEqual(expectedAction);
     });
 
+    test('deleting dispatches correct action', () => {
+        const { wrapper, store } = connectStore();
+        const input = wrapper
+            .find('button[aria-label="delete-condition"]')
+            .first();
+        input.simulate('click');
+        const expectedAction = [
+            {
+                type: MEDICAL_HISTORY_ACTION.DELETE_CONDITION,
+                payload: {
+                    conditionIndex: 'foo',
+                },
+            },
+        ];
+        expect(store.getActions()).toEqual(expectedAction);
+    });
+
     test('mobile condition', () => {
         const { wrapper, store } = connectStore(initialState, { mobile: true });
         const input = wrapper
@@ -424,7 +441,7 @@ describe('MedicalHistoryContent', () => {
                 type: MEDICAL_HISTORY_ACTION.UPDATE_CONDITION_NAME,
                 payload: {
                     newName: 'foobar',
-                    index: 'foo',
+                    conditionIndex: 'foo',
                 },
             },
         ];

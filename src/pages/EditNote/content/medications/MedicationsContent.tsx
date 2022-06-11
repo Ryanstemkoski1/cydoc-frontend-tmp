@@ -123,6 +123,11 @@ export class MedicationsContent extends Component<Props, State> {
         );
     }
 
+    deleteRow = (e: any, index: string) => {
+        e.preventDefault();
+        this.props.deleteMedication(index);
+    };
+
     render() {
         const {
             values,
@@ -158,12 +163,14 @@ export class MedicationsContent extends Component<Props, State> {
                             mobile={mobile}
                             isPreview={true}
                             previewValue={values[i]}
+                            medIndex={medications[i][0]}
                             rowIndex={i}
                             sideEffectsOptions={this.state.sideEffectsOptions}
                             medicationOptions={this.state.medicationOptions}
                             diseaseOptions={this.state.diseaseOptions}
                             currentYear={this.state.currentYear}
                             handleAddition={this.handleDropdownOptionAddition}
+                            deleteRow={this.deleteRow}
                         />
                     );
                 }
@@ -187,11 +194,13 @@ export class MedicationsContent extends Component<Props, State> {
                         mobile={mobile}
                         isPreview={false}
                         rowIndex={medIndices[i]}
+                        medIndex={medications[i][0]}
                         sideEffectsOptions={this.state.sideEffectsOptions}
                         medicationOptions={this.state.medicationOptions}
                         diseaseOptions={this.state.diseaseOptions}
                         currentYear={this.state.currentYear}
                         handleAddition={this.handleDropdownOptionAddition}
+                        deleteRow={this.deleteRow}
                     />
                 );
             }

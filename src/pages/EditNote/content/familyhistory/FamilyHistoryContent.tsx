@@ -18,6 +18,7 @@ import {
     updateCondition,
     AddFhPopOptionsAction,
     addFhPopOptions,
+    deleteCondition,
 } from 'redux/actions/familyHistoryActions';
 import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
 import { CurrentNoteState } from 'redux/reducers';
@@ -93,6 +94,10 @@ class FamilyHistoryContent extends Component<Props, State> {
             blankQuestionChange(node, newKey);
         } else addCondition();
     }
+
+    deleteRow = (index: string) => {
+        this.props.deleteCondition(index);
+    };
 
     addSeenCond = (value: string, index: string) => {
         const seenConditions = this.state.seenConditions;
@@ -190,6 +195,7 @@ class FamilyHistoryContent extends Component<Props, State> {
                         }
                         index={''}
                         pop={false}
+                        deleteRow={this.deleteRow}
                     />
                 );
             } else {
@@ -212,6 +218,7 @@ class FamilyHistoryContent extends Component<Props, State> {
                         }
                         index={condition}
                         pop={true}
+                        deleteRow={this.deleteRow}
                     />
                 );
             }
@@ -271,6 +278,7 @@ interface DispatchProps {
         conditionId: string
     ) => BlankQuestionChangeAction;
     popResponse: (medId: string, conditionIds: string[]) => PopResponseAction;
+    deleteCondition: (index: string) => void;
 }
 
 interface State {
@@ -300,6 +308,7 @@ const mapDispatchToProps = {
     addFhPopOptions,
     blankQuestionChange,
     popResponse,
+    deleteCondition,
 };
 
 export default connect(

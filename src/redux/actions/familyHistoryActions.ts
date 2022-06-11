@@ -1,6 +1,7 @@
 import { FAMILY_HISTORY_ACTION } from './actionTypes';
 import { YesNoResponse } from '../../constants/enums';
 import { FamilyOption } from 'constants/familyHistoryRelations';
+import { string } from 'prop-types';
 
 interface ToggleConditionOptionAction {
     type: FAMILY_HISTORY_ACTION.TOGGLE_CONDITION_OPTION;
@@ -205,6 +206,22 @@ export function addFhPopOptions(
     };
 }
 
+interface DeleteConditionAction {
+    type: FAMILY_HISTORY_ACTION.DELETE_CONDITION;
+    payload: {
+        conditionIndex: string;
+    };
+}
+
+export function deleteCondition(conditionIndex: string): DeleteConditionAction {
+    return {
+        type: FAMILY_HISTORY_ACTION.DELETE_CONDITION,
+        payload: {
+            conditionIndex,
+        },
+    };
+}
+
 export type FamilyHistoryActionTypes =
     | ToggleConditionOptionAction
     | AddFamilyMemberAction
@@ -215,4 +232,5 @@ export type FamilyHistoryActionTypes =
     | UpdateCommentsAction
     | AddConditionAction
     | UpdateConditionAction
-    | AddFhPopOptionsAction;
+    | AddFhPopOptionsAction
+    | DeleteConditionAction;

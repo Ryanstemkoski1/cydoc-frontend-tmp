@@ -57,6 +57,24 @@ describe('SurgicalHistoryContent', () => {
         expect(store.getActions()).toEqual(expectedActions);
     });
 
+    test('deleteRow works?', () => {
+        const { wrapper, store } = connectStore();
+        const button = wrapper
+            .find('button[aria-label="delete-surgery"]')
+            .first();
+        expect(button).toBeTruthy();
+        button.simulate('click');
+        const expectedActions = [
+            {
+                type: SURGICAL_HISTORY_ACTION.DELETE_PROCEDURE,
+                payload: {
+                    index: 'foo',
+                },
+            },
+        ];
+        expect(store.getActions()).toEqual(expectedActions);
+    });
+
     test('editing year dispatches correct action', () => {
         const { wrapper, store } = connectStore();
         const input = wrapper.find('.table-row-text[type="year"]').first();

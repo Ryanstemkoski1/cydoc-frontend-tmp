@@ -102,6 +102,10 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         } else this.props.addProcedure();
     }
 
+    deleteRow = (index: string) => {
+        this.props.deleteProcedure(index);
+    };
+
     //modify the current values in the table to reflect changes
     // and call the handler prop
     handleTableBodyChange(
@@ -212,6 +216,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 isPreview={this.props.isPreview}
                 currentYear={this.state.currentYear}
                 mobile={this.props.mobile}
+                deleteRow={this.deleteRow}
             />
         ));
     }

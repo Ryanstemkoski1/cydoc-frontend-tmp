@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import allergens from 'constants/allergens';
-import { Table, TextArea, TextAreaProps } from 'semantic-ui-react';
+import {
+    Button,
+    Table,
+    TableBody,
+    TextArea,
+    TextAreaProps,
+} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { AllergiesState, AllergiesItem } from 'redux/reducers/allergiesReducer';
 import { CurrentNoteState } from 'redux/reducers';
@@ -104,7 +110,20 @@ class AllergiesTableBodyRow extends Component<Props> {
             }
         );
 
-        return <Table.Row>{tableRows}</Table.Row>;
+        return (
+            <Table.Row>
+                {tableRows}
+                <Button
+                    circular
+                    icon='close'
+                    onClick={() => {
+                        this.props.deleteRow(rowIndex as string);
+                    }}
+                    aria-label='delete-allergy'
+                    className='hpi-ph-button delete-allergy'
+                />
+            </Table.Row>
+        );
     }
 }
 
@@ -124,6 +143,7 @@ interface RowProps {
     allergensOptions: OptionMapping;
     allergicReactionsOptions: OptionMapping;
     onAddItem: (_e: any, data: { [key: string]: any }) => void;
+    deleteRow: (index: string) => void;
 }
 
 type Props = AllergiesProps & RowProps;

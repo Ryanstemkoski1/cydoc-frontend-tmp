@@ -72,6 +72,11 @@ export function medicalHistoryReducer(
     action: MedicalHistoryActionTypes
 ): MedicalHistoryState {
     switch (action.type) {
+        case MEDICAL_HISTORY_ACTION.DELETE_CONDITION: {
+            const { conditionIndex } = action.payload;
+            const { [conditionIndex]: deleted, ...newState } = state;
+            return newState;
+        }
         case MEDICAL_HISTORY_ACTION.TOGGLE_OPTION: {
             const { index, optionSelected } = action.payload;
             return {

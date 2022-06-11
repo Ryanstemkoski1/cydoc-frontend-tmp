@@ -17,6 +17,7 @@ import {
     updateConditionResolved,
     addPmhPopOptions,
     AddPmhPopOptionsAction,
+    deleteCondition,
 } from 'redux/actions/medicalHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
@@ -79,7 +80,6 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
 
     standardizeMedicalHistory(medHistState: MedicalHistoryState) {
         const standardMedicalHistory = medHistState;
-
         Object.entries(standardMedicalHistory).map(
             (value: [string, MedicalHistoryItem]) => {
                 const disease = value[1]['condition'];
@@ -172,6 +172,10 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         } else this.props.addDefaultCondition();
     }
 
+    deleteRow = (index: string) => {
+        this.props.deleteCondition(index);
+    };
+
     render() {
         const {
             mobile,
@@ -258,6 +262,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                                   />
                               }
                               currentYear={this.props.currentYear}
+                              deleteRow={this.deleteRow}
                           />
                       );
                   } else if (condition in standardMedicalHistory) {
@@ -266,6 +271,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                               key={index}
                               index={condition}
                               currentYear={this.props.currentYear}
+                              deleteRow={this.deleteRow}
                               conditionInput={
                                   <ConditionInput
                                       key={index}
@@ -295,6 +301,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                               index={conditionIndex}
                               isPreview={isPreview}
                               currentYear={this.props.currentYear}
+                              deleteRow={this.deleteRow}
                               conditionInput={
                                   <ConditionInput
                                       key={index}
@@ -318,6 +325,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                               index={conditionIndex}
                               isPreview={isPreview}
                               currentYear={this.props.currentYear}
+                              deleteRow={this.deleteRow}
                               conditionInput={
                                   <ConditionInput
                                       key={index}
@@ -382,6 +390,7 @@ interface DispatchProps {
         conditionId: string
     ) => BlankQuestionChangeAction;
     popResponse: (medId: string, conditionIds: string[]) => PopResponseAction;
+    deleteCondition: (conditionIndex: string) => void;
 }
 
 type Props = MedicalHistoryProps & DispatchProps & ContentProps;
@@ -402,6 +411,7 @@ const mapDispatchToProps = {
     addPmhPopOptions,
     blankQuestionChange,
     popResponse,
+    deleteCondition,
 };
 
 export default connect(

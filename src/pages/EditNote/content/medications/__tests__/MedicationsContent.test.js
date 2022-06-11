@@ -390,4 +390,21 @@ describe('Medications Integration', () => {
             expect(store.getActions()).toEqual(expectedActions);
         }
     );
+
+    test.each(cases)(
+        '%s view dispatches correct action when deleting medication row',
+        (_type, mountMedicationsWithStore) => {
+            const { store, wrapper } = mountMedicationsWithStore();
+            wrapper
+                .find('button[aria-label="delete-medication"]')
+                .first()
+                .simulate('click');
+            const expectedActions = [
+                {
+                    type: MEDICATIONS_ACTION.DELETE_MEDICATION,
+                },
+            ];
+            expect(store.getActions()).toEqual(expectedActions);
+        }
+    );
 });
