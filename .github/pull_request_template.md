@@ -11,7 +11,6 @@ If this PR addresses any spreadsheet tasks, list the task numbers here.
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (WARNING: this PR will cause existing functionality to not work as expected!)
-- [ ] This change requires a documentation update
 
 # Purpose
 
@@ -36,11 +35,14 @@ If your PR changes the user interface, please include before and after screensho
 
 # Checklist
 
+Mandatory for all PRs (the PR will not be merged unless you have completed these items):
 - [ ] My code follows the style guidelines of this project.
 - [ ] I have performed a self-review of my own code.
+- [ ] My changes generate no new errors or warnings.
+- [ ] I have performed interactive testing via the UI to check that my fix is effective or that my feature works.
+- [ ] I have carefully resolved merge conflicts to avoid overwriting other people's recent work.
+
+Mandatory for most PRs (please provide a written reason below if you did not complete these items, e.g., "My PR is only 2 lines of code.")
 - [ ] I have commented my code, particularly in hard-to-understand areas.
 - [ ] I have made corresponding changes to the documentation.
-- [ ] My changes generate no new errors or warnings.
-- [ ] I have added tests that prove my fix is effective or that my feature works.
-- [ ] New and existing unit tests pass locally with my changes.
-- [ ] I have carefully resolved merge conflicts to avoid overwriting other people's recent work.
+- [ ] I have added programmatic tests that prove my fix is effective or that my feature works.
