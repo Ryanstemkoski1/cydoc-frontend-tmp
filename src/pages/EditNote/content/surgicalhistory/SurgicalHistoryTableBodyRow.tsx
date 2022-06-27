@@ -11,6 +11,7 @@ import {
 import { connect } from 'react-redux';
 import {
     updateProcedure,
+    toggleOption,
     updateYear,
     updateComments,
     addProcedure,
@@ -30,6 +31,8 @@ import {
 } from 'redux/selectors/surgicalHistorySelectors';
 import { OptionMapping } from '_processOptions';
 import './SurgicalHistoryTableBodyRow.css';
+import ToggleButton from 'components/tools/ToggleButton';
+import { YesNoResponse } from 'constants/enums';
 
 //Controlled component for a row in a TableContent component
 export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
@@ -84,7 +87,7 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
             proceduresOptions,
             isPreview,
         } = this.props;
-        const { procedure, year, comments } =
+        const { procedure, hasHadSurgery, year, comments } =
             this.props.surgicalHistoryItem! || {};
 
         if (isPreview) {
@@ -98,7 +101,9 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
 
         switch (field) {
             case 'procedure': {
-                cell = (
+                cell = this.props.pop ? (
+                    <> {procedure} </>
+                ) : (
                     <Input
                         fluid
                         transparent
@@ -123,6 +128,53 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
                             />
                         </div>
                     </Input>
+                );
+                break;
+            }
+            case 'hasHadSurgery': {
+                cell = (
+                    <>
+                        <ToggleButton
+                            active={
+                                isPreview
+                                    ? false
+                                    : hasHadSurgery == YesNoResponse.Yes
+                            }
+                            condition={procedure}
+                            title='Yes'
+                            onToggleButtonClick={
+                                isPreview
+                                    ? () => {
+                                          return undefined;
+                                      }
+                                    : () =>
+                                          this.props.toggleOption(
+                                              rowIndex.toString(),
+                                              YesNoResponse.Yes
+                                          )
+                            }
+                        />
+                        <ToggleButton
+                            active={
+                                isPreview
+                                    ? false
+                                    : hasHadSurgery == YesNoResponse.No
+                            }
+                            condition={procedure}
+                            title='No'
+                            onToggleButtonClick={
+                                isPreview
+                                    ? () => {
+                                          return undefined;
+                                      }
+                                    : () =>
+                                          this.props.toggleOption(
+                                              rowIndex.toString(),
+                                              YesNoResponse.No
+                                          )
+                            }
+                        />
+                    </>
                 );
                 break;
             }
@@ -180,8 +232,9 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
         const { fields } = this.props;
 
         const tableRows = fields.map((field: string, index: number) => {
+            const textAlign = field == 'hasHadSurgery' ? 'center' : 'left';
             return (
-                <Table.Cell key={index} id='table-rows'>
+                <Table.Cell key={index} id='table-rows' textAlign={textAlign}>
                     {this.getCell(field)}
                 </Table.Cell>
             );
@@ -232,10 +285,12 @@ interface RowProps {
         data: DropdownProps
     ) => void;
     deleteRow: (index: string) => void;
+    pop: boolean;
 }
 
 interface DispatchProps {
     updateProcedure: (index: string, newProcedure: string) => void;
+    toggleOption: (index: string, optionSelected: YesNoResponse) => void;
     updateYear: (index: string, newYear: number) => void;
     updateComments: (index: string, newComment: string) => void;
     addProcedure: () => void;
@@ -258,6 +313,7 @@ const mapStateToProps = (
 };
 const mapDispatchToProps = {
     updateProcedure,
+    toggleOption,
     updateYear,
     updateComments,
     addProcedure,

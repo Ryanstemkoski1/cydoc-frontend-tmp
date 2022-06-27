@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Accordion, Table } from 'semantic-ui-react';
+import { Accordion, Grid, Table } from 'semantic-ui-react';
 import sideEffects from 'constants/sideEffects';
 import drugNames from 'constants/medications';
 import diseases from 'constants/diagnoses';
@@ -10,20 +10,22 @@ import {
     addMedication,
     deleteMedication,
     addMedsPopOption,
+    updateCurrentlyTaking,
 } from 'redux/actions/medicationsActions';
-import { selectMedicationsEntries } from 'redux/selectors/medicationsSelectors';
+import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
 import './Medications.css';
 import { CurrentNoteState } from 'redux/reducers';
 import MedicationsPanel from './MedicationsPanel';
 import { ResponseTypes } from 'constants/hpiEnums';
 import { v4 } from 'uuid';
 import {
-    multipleChoiceHandleClick,
+    medsPopYesNoToggle,
     blankQuestionChange,
 } from 'redux/actions/hpiActions';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
 import '../hpi/knowledgegraph/src/css/Button.css';
+import { YesNoResponse } from 'constants/enums';
 
 interface OwnProps {
     mobile: boolean;
@@ -136,23 +138,30 @@ export class MedicationsContent extends Component<Props, State> {
             mobile,
             responseType,
             node,
-            deleteMedication,
             addMedsPopOption,
             hpi,
-            multipleChoiceHandleClick,
+            updateCurrentlyTaking,
+            medsPopYesNoToggle,
         } = this.props;
 
-        const header = this.makeHeader();
-        const panels = [];
-        const medicationsIndexMap: {
-            [medication: string]: { key: string; index: number };
-        } = {};
-        for (let i = 0; i < medications.length; i++) {
-            const medicationName = medications[i][1].drugName;
-            medicationsIndexMap[medicationName] = {
-                key: medications[i][0],
-                index: i,
-            };
+        const header = this.makeHeader(),
+            panels = [],
+            medicationsIndexMap: {
+                [medication: string]: string;
+            } = {},
+            medsEntries = Object.entries(medications);
+        for (let i = 0; i < medsEntries.length; i++) {
+            const medicationName = medsEntries[i][1].drugName;
+            medicationsIndexMap[medicationName] = medsEntries[i][0];
+        }
+        if (values) {
+            values.map((medication) => {
+                if (!(medication in medicationsIndexMap)) {
+                    const medKey = v4();
+                    addMedsPopOption(medKey, medication);
+                    medicationsIndexMap[medication] = medKey;
+                }
+            });
         }
 
         if (isPreview) {
@@ -163,7 +172,7 @@ export class MedicationsContent extends Component<Props, State> {
                             mobile={mobile}
                             isPreview={true}
                             previewValue={values[i]}
-                            medIndex={medications[i][0]}
+                            medIndex={medsEntries[i][0]}
                             rowIndex={i}
                             sideEffectsOptions={this.state.sideEffectsOptions}
                             medicationOptions={this.state.medicationOptions}
@@ -178,14 +187,10 @@ export class MedicationsContent extends Component<Props, State> {
         } else {
             // create map of condition: index to look for existing conditions in medications
             let medIndices = [...Array(medications.length).keys()];
-            if (responseType == ResponseTypes.MEDS_POP && values) {
-                medIndices = values
-                    .filter((medName) => medName in medicationsIndexMap)
-                    .map((medName) => medicationsIndexMap[medName].index);
-            } else if (responseType == ResponseTypes.MEDS_BLANK && node) {
+            if (responseType == ResponseTypes.MEDS_BLANK && node) {
                 const response = hpi.nodes[node].response as string[];
                 medIndices = response.map((key) =>
-                    medications.findIndex((medItem) => medItem[0] == key)
+                    medsEntries.findIndex((medItem) => medItem[0] == key)
                 );
             }
             for (let i = 0; i < medIndices.length; i++) {
@@ -194,7 +199,7 @@ export class MedicationsContent extends Component<Props, State> {
                         mobile={mobile}
                         isPreview={false}
                         rowIndex={medIndices[i]}
-                        medIndex={medications[i][0]}
+                        medIndex={medsEntries[i][0]}
                         sideEffectsOptions={this.state.sideEffectsOptions}
                         medicationOptions={this.state.medicationOptions}
                         diseaseOptions={this.state.diseaseOptions}
@@ -205,49 +210,73 @@ export class MedicationsContent extends Component<Props, State> {
                 );
             }
         }
-        const content = panels.length ? (
-            <Accordion panels={panels} exclusive={false} fluid styled />
-        ) : (
-            []
-        );
+        const content =
+            panels.length && responseType != ResponseTypes.MEDS_POP ? (
+                <Accordion panels={panels} exclusive={false} fluid styled />
+            ) : (
+                []
+            );
         return (
             <>
-                {node &&
-                    responseType == ResponseTypes.MEDS_POP &&
-                    values &&
-                    values.map((medication: string) => {
-                        const response = hpi.nodes[node].response;
-                        const containsKey =
-                            Array.isArray(response) &&
-                            medication in medicationsIndexMap &&
-                            response.includes(
-                                medicationsIndexMap[medication].key
+                <Grid columns={2} key={node}>
+                    {node &&
+                        responseType == ResponseTypes.MEDS_POP &&
+                        values &&
+                        values.map((medication: string) => {
+                            const medKey = medicationsIndexMap[medication];
+                            const yesActive =
+                                    medKey in medications &&
+                                    medications[medKey].isCurrentlyTaking ==
+                                        YesNoResponse.Yes,
+                                noActive =
+                                    medKey in medications &&
+                                    medications[medKey].isCurrentlyTaking ==
+                                        YesNoResponse.No;
+                            return (
+                                <Grid.Row key={medication}>
+                                    <Grid.Column width={3}>
+                                        {medication}
+                                    </Grid.Column>
+                                    <Grid.Column width={3}>
+                                        <ToggleButton
+                                            active={yesActive}
+                                            title='Yes'
+                                            onToggleButtonClick={(): void => {
+                                                updateCurrentlyTaking(
+                                                    medKey,
+                                                    yesActive
+                                                        ? YesNoResponse.None
+                                                        : YesNoResponse.Yes
+                                                );
+                                                medsPopYesNoToggle(
+                                                    node,
+                                                    medication,
+                                                    YesNoResponse.Yes
+                                                );
+                                            }}
+                                        />
+                                        <ToggleButton
+                                            active={noActive}
+                                            title='No'
+                                            onToggleButtonClick={(): void => {
+                                                updateCurrentlyTaking(
+                                                    medKey,
+                                                    noActive
+                                                        ? YesNoResponse.None
+                                                        : YesNoResponse.No
+                                                );
+                                                medsPopYesNoToggle(
+                                                    node,
+                                                    medication,
+                                                    YesNoResponse.No
+                                                );
+                                            }}
+                                        />
+                                    </Grid.Column>
+                                </Grid.Row>
                             );
-                        return (
-                            <ToggleButton
-                                key={medication}
-                                className='button_question'
-                                active={containsKey}
-                                condition={medication}
-                                title={medication}
-                                onToggleButtonClick={(): void => {
-                                    if (containsKey) {
-                                        deleteMedication(
-                                            medicationsIndexMap[medication].key
-                                        );
-                                        multipleChoiceHandleClick(
-                                            node,
-                                            medicationsIndexMap[medication].key
-                                        );
-                                    } else {
-                                        const newKey = v4();
-                                        addMedsPopOption(newKey, medication);
-                                        multipleChoiceHandleClick(node, newKey);
-                                    }
-                                }}
-                            />
-                        );
-                    })}
+                        })}
+                </Grid>
                 {content}
                 {!this.props.isPreview &&
                     responseType != ResponseTypes.MEDS_POP && (
@@ -263,15 +292,16 @@ export class MedicationsContent extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: CurrentNoteState) => ({
-    medications: selectMedicationsEntries(state),
+    medications: selectMedicationsState(state),
     hpi: selectHpiState(state),
 });
 
 const mapDispatchToProps = {
     addMedication,
     deleteMedication,
+    updateCurrentlyTaking,
     addMedsPopOption,
-    multipleChoiceHandleClick,
+    medsPopYesNoToggle,
     blankQuestionChange,
 };
 

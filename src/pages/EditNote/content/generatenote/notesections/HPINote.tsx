@@ -78,10 +78,16 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
         case ResponseTypes.RADIOLOGY:
             return node.response === '';
 
-        case ResponseTypes.CLICK_BOXES:
-        case ResponseTypes.MEDS_POP: {
+        case ResponseTypes.CLICK_BOXES: {
             const response = node.response as ClickBoxesInput;
             return Object.keys(response).every((key) => !response[key]);
+        }
+
+        case ResponseTypes.MEDS_POP: {
+            const response = node.response as { [med: string]: string };
+            return Object.keys(response).every(
+                (key) => response[key] == YesNoResponse.None
+            );
         }
 
         case ResponseTypes.FH_POP: {
@@ -104,9 +110,7 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
         case ResponseTypes.PSH_POP: {
             const response = node.response as [];
             return response.every(
-                (surgery) =>
-                    state.surgicalHistory[surgery].year == -1 &&
-                    !state.surgicalHistory[surgery].comments
+                (surgery) => state.surgicalHistory[surgery].hasHadSurgery == ''
             );
         }
 
@@ -150,10 +154,13 @@ export const extractNode = (
 
     // all other types utilize blankTemplate and the second string
     const { response } = node;
-    let answer = '';
     const negAnswer = node.blankTemplate.includes('NOTANSWER');
     const lastSeparator = negAnswer ? 'or' : 'and';
-    let negRes = '';
+    let answer = '',
+        negRes = '',
+        res,
+        updatedRes,
+        updatedNeg;
     switch (node.responseType) {
         case ResponseTypes.NUMBER:
         case ResponseTypes.SCALE1TO10:
@@ -211,71 +218,140 @@ export const extractNode = (
             break;
 
         case ResponseTypes.CLICK_BOXES:
-            const clickBoxesRes = response as ClickBoxesInput,
-                updatedResponse = Object.keys(clickBoxesRes).reduce(function (
-                    arr: string[],
-                    key
-                ) {
-                    if (clickBoxesRes[key]) arr.push(key);
-                    return arr;
-                },
-                []),
-                updatedNegRes = Object.keys(clickBoxesRes).reduce(function (
-                    arr: string[],
-                    key
-                ) {
-                    if (!clickBoxesRes[key] && negAnswer) arr.push(key);
-                    return arr;
-                },
-                []);
+            const clickBoxesRes = response as ClickBoxesInput;
+            updatedRes = Object.keys(clickBoxesRes).reduce(function (
+                arr: string[],
+                key
+            ) {
+                if (clickBoxesRes[key]) arr.push(key);
+                return arr;
+            },
+            []);
+            updatedNeg = Object.keys(clickBoxesRes).reduce(function (
+                arr: string[],
+                key
+            ) {
+                if (!clickBoxesRes[key] && negAnswer) arr.push(key);
+                return arr;
+            },
+            []);
             answer = joinLists(
-                updatedResponse.length > 0 ? (updatedResponse as string[]) : [],
-                lastSeparator
+                updatedRes.length > 0 ? (updatedRes as string[]) : [],
+                'and'
             );
             negRes = joinLists(
-                updatedNegRes.length > 0 ? (updatedNegRes as string[]) : [],
-                lastSeparator
+                updatedNeg.length > 0 ? (updatedNeg as string[]) : [],
+                'or'
             );
             break;
 
         case ResponseTypes.FH_POP:
         case ResponseTypes.FH_BLANK:
+            res = response as string[];
+            updatedRes = res.reduce(function (arr: string[], key) {
+                if (
+                    state.familyHistory[key].hasAfflictedFamilyMember ==
+                    YesNoResponse.Yes
+                )
+                    arr.push(state.familyHistory[key].condition);
+                return arr;
+            }, []);
+            updatedNeg = res.reduce(function (arr: string[], key) {
+                if (
+                    state.familyHistory[key].hasAfflictedFamilyMember ==
+                        YesNoResponse.No &&
+                    negAnswer
+                )
+                    arr.push(state.familyHistory[key].condition);
+                return arr;
+            }, []);
             answer = joinLists(
-                (response as string[]).map(
-                    (key) => state.familyHistory[key].condition
-                ),
+                updatedRes.length > 0 ? (updatedRes as string[]) : [],
+                'and'
+            );
+            negRes = joinLists(
+                updatedNeg.length > 0 ? (updatedNeg as string[]) : [],
+                'or'
+            );
+            break;
+
+        case ResponseTypes.MEDS_BLANK:
+            answer = joinLists(
+                Object.keys(response as ClickBoxesInput),
                 lastSeparator
             );
             break;
 
         case ResponseTypes.MEDS_POP:
-        case ResponseTypes.MEDS_BLANK:
+            const medsRes = response as { [meds: string]: string };
+            updatedRes = Object.keys(medsRes).reduce(function (
+                arr: string[],
+                key
+            ) {
+                if (medsRes[key] == YesNoResponse.Yes) arr.push(key);
+                return arr;
+            },
+            []);
+            updatedNeg = Object.keys(medsRes).reduce(function (
+                arr: string[],
+                key
+            ) {
+                if (medsRes[key] == YesNoResponse.No) arr.push(key);
+                return arr;
+            },
+            []);
             answer = joinLists(
-                (response as string[]).map(
-                    (key) => state.medications[key].drugName
-                ),
-                lastSeparator
+                updatedRes.length > 0 ? (updatedRes as string[]) : [],
+                'and'
+            );
+            negRes = joinLists(
+                updatedNeg.length > 0 ? (updatedNeg as string[]) : [],
+                'or'
             );
             break;
 
         case ResponseTypes.PMH_POP:
         case ResponseTypes.PMH_BLANK:
+            res = response as string[];
+            updatedRes = res.reduce(function (arr: string[], key) {
+                if (
+                    state.medicalHistory[key].hasBeenAfflicted ==
+                    YesNoResponse.Yes
+                )
+                    arr.push(state.medicalHistory[key].condition);
+                return arr;
+            }, []);
+            updatedNeg = res.reduce(function (arr: string[], key) {
+                if (
+                    state.medicalHistory[key].hasBeenAfflicted ==
+                        YesNoResponse.No &&
+                    negAnswer
+                )
+                    arr.push(state.medicalHistory[key].condition);
+                return arr;
+            }, []);
             answer = joinLists(
-                (response as string[]).map(
-                    (key) => state.medicalHistory[key].condition
-                ),
-                lastSeparator
+                updatedRes.length > 0 ? (updatedRes as string[]) : [],
+                'and'
+            );
+            negRes = joinLists(
+                updatedNeg.length > 0 ? (updatedNeg as string[]) : [],
+                'or'
             );
             break;
 
         case ResponseTypes.PSH_POP:
         case ResponseTypes.PSH_BLANK:
-            answer = joinLists(
-                (response as string[]).map(
-                    (key) => state.surgicalHistory[key].procedure
-                ),
-                lastSeparator
-            );
+            const posArr: string[] = [];
+            const negArr: string[] = [];
+            (response as string[]).map((key) => {
+                const { hasHadSurgery, procedure } = state.surgicalHistory[key];
+                if (hasHadSurgery == YesNoResponse.Yes) posArr.push(procedure);
+                else if (hasHadSurgery == YesNoResponse.No)
+                    negArr.push(procedure);
+            });
+            answer = joinLists(posArr, 'and');
+            negRes = joinLists(negArr, 'or');
     }
     return [node.blankTemplate, answer, negRes];
 };

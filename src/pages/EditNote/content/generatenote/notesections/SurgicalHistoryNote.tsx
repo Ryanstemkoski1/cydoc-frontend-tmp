@@ -1,3 +1,4 @@
+import { YesNoResponse } from 'constants/enums';
 import React, { Component } from 'react';
 import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
 import { Table } from 'semantic-ui-react';
@@ -11,11 +12,8 @@ export class SurgicalHistoryNote extends Component<SurgicalHistoryProps> {
     checkEmpty = () => {
         for (const id in this.props.surgicalHistory) {
             if (
-                !(
-                    this.props.surgicalHistory[id].procedure === '' &&
-                    this.props.surgicalHistory[id].year === -1 &&
-                    this.props.surgicalHistory[id].comments === ''
-                )
+                this.props.surgicalHistory[id].hasHadSurgery !=
+                YesNoResponse.None
             ) {
                 return false;
             }

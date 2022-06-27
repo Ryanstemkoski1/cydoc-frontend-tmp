@@ -416,6 +416,30 @@ export function labTestHandleClick(
     };
 }
 
+export interface MedsPopYesNoToggle {
+    type: HPI_ACTION.MEDS_POP_YES_NO_TOGGLE;
+    payload: {
+        medId: string;
+        medication: string;
+        optionSelected: YesNoResponse;
+    };
+}
+
+export function medsPopYesNoToggle(
+    medId: string,
+    medication: string,
+    optionSelected: YesNoResponse
+): MedsPopYesNoToggle {
+    return {
+        type: HPI_ACTION.MEDS_POP_YES_NO_TOGGLE,
+        payload: {
+            medId,
+            medication,
+            optionSelected,
+        },
+    };
+}
+
 export type HpiActionTypes =
     | AddNodeAction
     | AddOrderAction
@@ -435,4 +459,5 @@ export type HpiActionTypes =
     | BlankQuestionChangeAction
     | PopResponseAction
     | LabTestHandleClickAction
-    | LabTestInputChangeAction;
+    | LabTestInputChangeAction
+    | MedsPopYesNoToggle;

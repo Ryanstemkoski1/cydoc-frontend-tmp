@@ -17,6 +17,7 @@ import {
     ClickBoxesInput,
 } from '../../constants/hpiEnums';
 import { v4 } from 'uuid';
+import { addMedsPopOption } from 'redux/actions/medicationsActions';
 
 export interface HpiState {
     graph: {
@@ -333,9 +334,7 @@ export function hpiReducer(
             const { medId, name } = action.payload;
             const response = state.nodes[medId].response;
             if (
-                [ResponseTypes.CLICK_BOXES, ResponseTypes.MEDS_POP].includes(
-                    state.nodes[medId].responseType
-                ) &&
+                state.nodes[medId].responseType == ResponseTypes.CLICK_BOXES &&
                 isClickBoxesResponse(response)
             ) {
                 return updateResponse(
@@ -467,8 +466,9 @@ export function hpiReducer(
             */
             const { medId, optionSelected } = action.payload;
             if (
-                state.nodes[medId].responseType ===
-                (ResponseTypes.YES_NO || ResponseTypes.NO_YES)
+                [ResponseTypes.YES_NO, ResponseTypes.NO_YES].includes(
+                    state.nodes[medId].responseType
+                )
             ) {
                 return updateResponse(
                     medId,
@@ -601,6 +601,26 @@ export function hpiReducer(
                 };
                 return updateResponse(medId, newResponse, state);
             } else throw new Error('Not a lab test response');
+        }
+
+        case HPI_ACTION.MEDS_POP_YES_NO_TOGGLE: {
+            const { medId, medication, optionSelected } = action.payload,
+                response = state.nodes[medId].response as {
+                    [med: string]: string;
+                };
+            if (state.nodes[medId].responseType == ResponseTypes.MEDS_POP) {
+                return updateResponse(
+                    medId,
+                    {
+                        ...response,
+                        [medication]:
+                            response[medication] == optionSelected
+                                ? YesNoResponse.None
+                                : optionSelected,
+                    },
+                    state
+                );
+            } else throw new Error('Not a meds pop response');
         }
 
         default:

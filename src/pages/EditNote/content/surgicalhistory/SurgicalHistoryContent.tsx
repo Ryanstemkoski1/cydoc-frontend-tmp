@@ -186,6 +186,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
     makeTableBodyRows(nums: string[]) {
         const cellField: (keyof SurgicalHistoryItem)[] = [
             'procedure',
+            'hasHadSurgery',
             'year',
             'comments',
         ];
@@ -217,13 +218,14 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 currentYear={this.state.currentYear}
                 mobile={this.props.mobile}
                 deleteRow={this.deleteRow}
+                pop={this.props.responseType == ResponseTypes.PSH_POP}
             />
         ));
     }
 
     //Method to generate the table header row
     makeHeader() {
-        const fields = ['Procedure', 'Year', 'Comments'];
+        const fields = ['Procedure', '', 'Year', 'Comments'];
         return (
             <Table.Row>
                 {fields.map((header, index) => (

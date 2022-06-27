@@ -1,7 +1,7 @@
 import { SURGICAL_HISTORY_ACTION } from '../actions/actionTypes';
 import { SurgicalHistoryActionTypes } from '../actions/surgicalHistoryActions';
 import { v4 } from 'uuid';
-import { number, string } from 'prop-types';
+import { YesNoResponse } from 'constants/enums';
 
 export interface SurgicalHistoryState {
     [index: string]: SurgicalHistoryItem;
@@ -9,14 +9,30 @@ export interface SurgicalHistoryState {
 
 export interface SurgicalHistoryItem {
     procedure: string;
+    hasHadSurgery: YesNoResponse;
     year: number;
     comments: string;
 }
 
 export const initialSurgicalHistoryState: SurgicalHistoryState = {
-    [v4()]: { procedure: '', year: -1, comments: '' },
-    [v4()]: { procedure: '', year: -1, comments: '' },
-    [v4()]: { procedure: '', year: -1, comments: '' },
+    [v4()]: {
+        hasHadSurgery: YesNoResponse.None,
+        procedure: '',
+        year: -1,
+        comments: '',
+    },
+    [v4()]: {
+        hasHadSurgery: YesNoResponse.None,
+        procedure: '',
+        year: -1,
+        comments: '',
+    },
+    [v4()]: {
+        hasHadSurgery: YesNoResponse.None,
+        procedure: '',
+        year: -1,
+        comments: '',
+    },
 };
 
 export function surgicalHistoryReducer(
@@ -31,6 +47,19 @@ export function surgicalHistoryReducer(
                 [index]: {
                     ...state[index],
                     procedure: newProcedure,
+                },
+            };
+        }
+        case SURGICAL_HISTORY_ACTION.TOGGLE_OPTION: {
+            const { index, optionSelected } = action.payload;
+            return {
+                ...state,
+                [index]: {
+                    ...state[index],
+                    hasHadSurgery:
+                        state[index].hasHadSurgery == optionSelected
+                            ? YesNoResponse.None
+                            : optionSelected,
                 },
             };
         }
@@ -60,6 +89,7 @@ export function surgicalHistoryReducer(
             return {
                 ...state,
                 [v4()]: {
+                    hasHadSurgery: YesNoResponse.None,
                     procedure: '',
                     year: -1,
                     comments: '',
@@ -82,6 +112,7 @@ export function surgicalHistoryReducer(
             return {
                 ...state,
                 [conditionIndex]: {
+                    hasHadSurgery: YesNoResponse.None,
                     procedure: conditionName,
                     year: -1,
                     comments: '',

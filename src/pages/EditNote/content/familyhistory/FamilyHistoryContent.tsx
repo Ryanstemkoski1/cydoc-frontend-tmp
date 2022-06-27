@@ -158,7 +158,7 @@ class FamilyHistoryContent extends Component<Props, State> {
             }
             const fhPopKeys = [];
             for (const conditionKey in responseChoice) {
-                const conditionName = responseChoice[conditionKey];
+                const conditionName: string = responseChoice[conditionKey];
                 if (conditionName in conditionKeyMap)
                     fhPopKeys.push(conditionKeyMap[conditionName]);
                 else {

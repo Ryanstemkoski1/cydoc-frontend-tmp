@@ -1,3 +1,4 @@
+import { YesNoResponse } from 'constants/enums';
 import { SURGICAL_HISTORY_ACTION } from './actionTypes';
 
 interface UpdateProcedureAction {
@@ -14,6 +15,24 @@ export function updateProcedure(index: string, newProcedure: string) {
         payload: {
             index,
             newProcedure,
+        },
+    };
+}
+
+interface ToggleOptionAction {
+    type: SURGICAL_HISTORY_ACTION.TOGGLE_OPTION;
+    payload: {
+        index: string;
+        optionSelected: YesNoResponse;
+    };
+}
+
+export function toggleOption(index: string, optionSelected: YesNoResponse) {
+    return {
+        type: SURGICAL_HISTORY_ACTION.TOGGLE_OPTION,
+        payload: {
+            index,
+            optionSelected,
         },
     };
 }
@@ -103,6 +122,7 @@ export function addPshPopOptions(
 
 export type SurgicalHistoryActionTypes =
     | UpdateProcedureAction
+    | ToggleOptionAction
     | UpdateYearAction
     | UpdateCommentsAction
     | AddProcedureAction
