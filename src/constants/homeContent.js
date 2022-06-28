@@ -9,7 +9,7 @@ export const homeContent = {
     betterNotes: {
         header: 'Write better notes, faster.',
         description:
-            "With Cydoc's intuitive user interfaces, a complete medical note is only a few clicks away. Each section of the medical note has been optimized for lightspeed data collection. Our sophisticated rule-based process ensures 100% accuracy. Spend less time writing notes so you can spend more time with patients.",
+            "With Cydoc's intuitive user interface, a complete medical note is only a few clicks away. Each section of the medical note has been optimized for lightspeed data collection. Our trustworthy system for text generation ensures 100% accuracy. Spend less time writing notes so you can spend more time with patients.",
         intuitiveInterface: 'Intuitive interface',
         webBased: 'Web-based',
         mobileFriendly: 'Mobile-friendly',
@@ -25,13 +25,12 @@ export const homeContent = {
         header: 'Seamless features.',
         HPI: {
             header: 'Customizable HPI',
-            description:
-                'Design a questionnaire for any condition to take an HPI your way',
+            description: `Efficient user interface to collect key data for your patient's chief complaints`,
         },
         patientHistory: {
             header: 'Patient History',
             description:
-                'Patient history automatically loads from the previous note',
+                'Patient history automatically synchronizes with the HPI',
         },
         ROS: {
             header: 'Review of Systems',

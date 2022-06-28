@@ -117,6 +117,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                 name='login'
                 to='/login'
                 content='Login'
+                id='nav-menu__login-button'
             />
             <Button
                 icon='plus'

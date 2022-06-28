@@ -207,7 +207,7 @@ const Login = () => {
                                 onChange={handleRoleChange}
                             />
                         </Form.Group>
-                        <Grid padded verticalAlign='middle'>
+                        <Grid verticalAlign='middle'>
                             <Grid.Row columns={2}>
                                 <Grid.Column>
                                     <Link

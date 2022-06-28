@@ -24,6 +24,10 @@
     font-weight: 400;
 }
 
+#nav-menu__login-button {
+    margin-right: 10px;
+}
+
 .ui.image img {
     margin: 0 .5rem;
 }
