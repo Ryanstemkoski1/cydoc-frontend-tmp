@@ -101,9 +101,20 @@ class MedicationsPanel extends Component<Props, State> {
     }
 
     onTitleClick = (event: React.MouseEvent) => {
-        if ((event.target as HTMLInputElement).type !== 'text') {
+        if (
+            (event.target as HTMLAreaElement).className === 'three wide' ||
+            (event.target as HTMLAreaElement).className === '' ||
+            (event.target as HTMLAreaElement).className === 'for-text' ||
+            (event.target as HTMLAreaElement).className === 'close icon' ||
+            (event.target as HTMLAreaElement).className ===
+                'ui input content-input content-dropdown medication drug-input padding-bottom'
+        ) {
             this.setState({
                 active: !this.state.active,
+            });
+        } else {
+            this.setState({
+                active: true,
             });
         }
     };
