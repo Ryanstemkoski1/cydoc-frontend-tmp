@@ -47,7 +47,9 @@ class NotePage extends Component {
         e.preventDefault();
         this.setState({
             hpiTab: this.state.hpiTab + 1,
-            activeHPI: this.props.chiefComplaints[this.state.hpiTab + 1],
+            activeHPI: Object.keys(this.props.chiefComplaints)[
+                this.state.hpiTab + 1
+            ],
         });
         window.scrollTo(0, 0);
     };
@@ -57,7 +59,9 @@ class NotePage extends Component {
         e.preventDefault();
         this.setState({
             hpiTab: this.state.hpiTab - 1,
-            activeHPI: this.props.chiefComplaints[this.state.hpiTab - 1],
+            activeHPI: Object.keys(this.props.chiefComplaints)[
+                this.state.hpiTab - 1
+            ],
         });
         window.scrollTo(0, 0);
     };
@@ -66,7 +70,7 @@ class NotePage extends Component {
         e.preventDefault();
         this.setState({
             hpiTab: tabIndex,
-            activeHPI: this.props.chiefComplaints[tabIndex],
+            activeHPI: Object.keys(this.props.chiefComplaints)[tabIndex],
         });
         window.scrollTo(0, 0);
     };
@@ -213,7 +217,7 @@ class NotePage extends Component {
                         step={this.state.hpiTab}
                         continue={this.continueHPITab}
                         back={this.backHPITab}
-                        activeTab={this.state.activeTab}
+                        activeTab={this.state.activeHPI}
                         onTabClick={this.setHPITab}
                     />
                 );
@@ -271,7 +275,7 @@ class NotePage extends Component {
                         step={this.state.hpiTab}
                         continue={this.continueHPITab}
                         back={this.backHPITab}
-                        activeTab={this.state.activeTab}
+                        activeTab={this.state.activeHPI}
                         onTabClick={this.setHPITab}
                     />
                 );

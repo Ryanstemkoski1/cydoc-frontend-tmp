@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    Menu,
     Button,
     Segment,
     Icon,
@@ -36,14 +35,13 @@ import {
     setNotesChiefComplaint,
     SetNotesChiefComplaintAction,
 } from 'redux/actions/chiefComplaintsActions';
-import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
 import { CHIEF_COMPLAINTS } from '../../../../../redux/actions/actionTypes';
 import { currentNoteStore } from 'redux/store';
-import { addCondition } from 'redux/actions/planActions';
 import {
     PlanConditionsFlat,
     selectPlanConditions,
 } from 'redux/selectors/planSelectors';
+import ToggleButton from 'components/tools/ToggleButton';
 
 interface HPIContentProps {
     nextFormClick: () => () => string; // this.props.nextFormClick => this.props.onNextClick => string
@@ -60,8 +58,6 @@ interface HPIContentState {
     bodySystems: { [bodySystem: string]: string[] };
     parentNodes: { [disease: string]: { [diseaseCode: string]: string } };
     isGraphLoaded: boolean;
-    activeHPI: string;
-    step: number;
     searchVal: string;
     activeIndex: number;
 }
@@ -75,8 +71,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             bodySystems: {},
             parentNodes: {},
             isGraphLoaded: false,
-            activeHPI: this.props.activeTab, // active tab name
-            step: this.props.step, // step in the HPI interview form
             searchVal: '',
             activeIndex: 0, //misc notes box active
         };
@@ -154,7 +148,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             windowWidth,
             bodySystems,
             parentNodes,
-            activeHPI,
         } = this.state;
         const { chiefComplaints, setNotesChiefComplaint } = this.props;
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
@@ -346,41 +339,42 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                     >
                                         {' '}
                                         {Object.keys(chiefComplaints).map(
-                                            (menuItem: string) => (
-                                                <Button
-                                                    basic
+                                            (
+                                                menuItem: string,
+                                                index: number
+                                            ) => (
+                                                <ToggleButton
                                                     key={menuItem}
-                                                    menuItem={menuItem}
-                                                    onClick={(
-                                                        _e,
-                                                        { menuItem }
-                                                    ): void =>
-                                                        this.setState({
-                                                            activeHPI: menuItem,
-                                                        })
+                                                    condition={menuItem}
+                                                    title={menuItem}
+                                                    onToggleButtonClick={(_e) =>
+                                                        this.props.onTabClick(
+                                                            _e,
+                                                            index
+                                                        )
                                                     }
                                                     active={
-                                                        activeHPI === menuItem
+                                                        this.props.activeTab ==
+                                                        menuItem
                                                     }
-                                                    style={{ marginBottom: 5 }}
-                                                >
-                                                    {menuItem}
-                                                </Button>
+                                                />
                                             )
                                         )}
                                     </Grid>
                                     <Segment>
                                         {/*MISC BOX PLACEMENT*/}
-                                        {miscBox(activeHPI)}
+                                        {miscBox(this.props.activeTab)}
 
                                         <DiseaseForm
-                                            key={activeHPI}
+                                            key={this.props.activeTab}
                                             categoryCode={
                                                 Object.keys(
-                                                    parentNodes[activeHPI]
+                                                    parentNodes[
+                                                        this.props.activeTab
+                                                    ]
                                                 )[0]
                                             }
-                                            category={activeHPI}
+                                            category={this.props.activeTab}
                                             nextStep={this.continue}
                                             prevStep={this.back}
                                         />
@@ -408,7 +402,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         icon
                                         floated='right'
                                         onClick={() =>
-                                            activeHPI ==
+                                            this.props.activeTab ==
                                             (Object.keys(
                                                 chiefComplaints
                                             )[0] as string)
@@ -424,7 +418,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         labelPosition='right'
                                         floated='right'
                                         onClick={() =>
-                                            activeHPI ==
+                                            this.props.activeTab ==
                                             (Object.keys(
                                                 chiefComplaints
                                             )[0] as string)
