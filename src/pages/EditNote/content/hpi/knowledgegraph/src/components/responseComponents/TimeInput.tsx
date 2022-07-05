@@ -14,12 +14,41 @@ import { isTimeInputDictionary } from 'redux/reducers/hpiReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import { ROS_MED_BP, ROS_SMALL_BP } from 'constants/breakpoints';
 
 interface TimeInputProps {
     node: string;
 }
 
-class TimeInput extends React.Component<Props> {
+interface TimeInputState {
+    windowWidth: number;
+    windowHeight: number;
+}
+
+class TimeInput extends React.Component<Props, TimeInputState> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            windowWidth: 0,
+            windowHeight: 0,
+        };
+        this.updateDimensions = this.updateDimensions.bind(this);
+    }
+
+    componentDidMount() {
+        this.updateDimensions();
+        window.addEventListener('resize', this.updateDimensions);
+    }
+
+    updateDimensions() {
+        const windowWidth =
+            typeof window !== 'undefined' ? window.innerWidth : 0;
+        const windowHeight =
+            typeof window !== 'undefined' ? window.innerHeight : 0;
+
+        this.setState({ windowWidth, windowHeight });
+    }
+
     render() {
         const {
             node,
@@ -28,35 +57,41 @@ class TimeInput extends React.Component<Props> {
             handleTimeOptionChange,
         } = this.props;
         const currResponse = hpi.nodes[node].response;
-        const timeOptions = [
-            'minutes',
-            'hours',
-            'days',
-            'weeks',
-            'months',
-            'years',
-        ];
+        const timeDict: { [key: string]: string } = {
+            minutes: 'min',
+            hours: 'hr',
+            days: 'day',
+            weeks: 'wk',
+            months: 'mth',
+            years: 'yr',
+        };
         const gridButtons = [0, 3].map((i) => {
-            const timeButtons = timeOptions.slice(i, i + 3).map((timeItem) => (
-                <Grid.Row className='time-grid-row' key={timeItem}>
-                    <ToggleButton
-                        className='time-grid-button'
-                        active={
-                            isTimeInputDictionary(currResponse)
-                                ? currResponse.timeOption == timeItem
-                                : false
-                        }
-                        condition={timeItem}
-                        title={timeItem}
-                        onToggleButtonClick={(
-                            _e,
-                            data
-                        ): HandleTimeOptionChangeAction =>
-                            handleTimeOptionChange(node, data.condition)
-                        }
-                    />
-                </Grid.Row>
-            ));
+            const timeButtons = Object.keys(timeDict)
+                .slice(i, i + 3)
+                .map((timeItem) => (
+                    <Grid.Row className='time-grid-row' key={timeItem}>
+                        <ToggleButton
+                            className='time-grid-button'
+                            active={
+                                isTimeInputDictionary(currResponse)
+                                    ? currResponse.timeOption == timeItem
+                                    : false
+                            }
+                            condition={timeItem}
+                            title={
+                                this.state.windowWidth > ROS_SMALL_BP
+                                    ? timeItem
+                                    : timeDict[timeItem]
+                            }
+                            onToggleButtonClick={(
+                                _e,
+                                data
+                            ): HandleTimeOptionChangeAction =>
+                                handleTimeOptionChange(node, data.condition)
+                            }
+                        />
+                    </Grid.Row>
+                ));
             return <Grid.Column key={i}>{timeButtons}</Grid.Column>;
         });
         return (
@@ -90,7 +125,7 @@ class TimeInput extends React.Component<Props> {
                             </div>
                         </Grid.Column>
                         <Grid.Column width={1}></Grid.Column>
-                        <Grid.Column width={8}>
+                        <Grid.Column width={6}>
                             <Grid columns={2}>
                                 {gridButtons[0]}
                                 {gridButtons[1]}

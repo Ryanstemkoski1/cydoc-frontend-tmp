@@ -439,8 +439,8 @@ export function hpiReducer(
         }
         case HPI_ACTION.HANDLE_TIME_OPTION_CHANGE: {
             // fixes time option for time input response
-            const { medId, timeOption } = action.payload;
-            const response = state.nodes[medId].response;
+            const { medId, timeOption } = action.payload,
+                response = state.nodes[medId].response;
             if (
                 state.nodes[medId].responseType === ResponseTypes.TIME3DAYS &&
                 isTimeInputDictionary(response)
@@ -449,7 +449,8 @@ export function hpiReducer(
                     medId,
                     {
                         ...response,
-                        timeOption: timeOption,
+                        timeOption:
+                            response.timeOption == timeOption ? '' : timeOption,
                     },
                     state
                 );
