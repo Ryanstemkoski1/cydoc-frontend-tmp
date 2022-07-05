@@ -212,29 +212,21 @@ export const extractNode = (
         // let it be handled like other string arrays
         case ResponseTypes.LIST_TEXT:
             answer = joinLists(
-                Object.values(response as ListTextInput),
+                Object.values(response as ListTextInput).filter(
+                    (val: string) => val.length > 0
+                ),
                 lastSeparator
             );
             break;
 
         case ResponseTypes.CLICK_BOXES:
             const clickBoxesRes = response as ClickBoxesInput;
-            updatedRes = Object.keys(clickBoxesRes).reduce(function (
-                arr: string[],
-                key
-            ) {
-                if (clickBoxesRes[key]) arr.push(key);
-                return arr;
-            },
-            []);
-            updatedNeg = Object.keys(clickBoxesRes).reduce(function (
-                arr: string[],
-                key
-            ) {
-                if (!clickBoxesRes[key] && negAnswer) arr.push(key);
-                return arr;
-            },
-            []);
+            updatedRes = Object.keys(clickBoxesRes).filter(
+                (key) => clickBoxesRes[key]
+            );
+            updatedNeg = Object.keys(clickBoxesRes).filter(
+                (key) => !clickBoxesRes[key] && negAnswer
+            );
             answer = joinLists(
                 updatedRes.length > 0 ? (updatedRes as string[]) : [],
                 'and'
@@ -251,7 +243,8 @@ export const extractNode = (
             updatedRes = res.reduce(function (arr: string[], key) {
                 if (
                     state.familyHistory[key].hasAfflictedFamilyMember ==
-                    YesNoResponse.Yes
+                        YesNoResponse.Yes &&
+                    state.familyHistory[key].condition.length > 0
                 )
                     arr.push(state.familyHistory[key].condition);
                 return arr;
@@ -260,7 +253,8 @@ export const extractNode = (
                 if (
                     state.familyHistory[key].hasAfflictedFamilyMember ==
                         YesNoResponse.No &&
-                    negAnswer
+                    negAnswer &&
+                    state.familyHistory[key].condition.length > 0
                 )
                     arr.push(state.familyHistory[key].condition);
                 return arr;
@@ -277,29 +271,21 @@ export const extractNode = (
 
         case ResponseTypes.MEDS_BLANK:
             answer = joinLists(
-                Object.keys(response as ClickBoxesInput),
+                Object.keys(response as ClickBoxesInput).filter(
+                    (med) => med.length > 0
+                ),
                 lastSeparator
             );
             break;
 
         case ResponseTypes.MEDS_POP:
             const medsRes = response as { [meds: string]: string };
-            updatedRes = Object.keys(medsRes).reduce(function (
-                arr: string[],
-                key
-            ) {
-                if (medsRes[key] == YesNoResponse.Yes) arr.push(key);
-                return arr;
-            },
-            []);
-            updatedNeg = Object.keys(medsRes).reduce(function (
-                arr: string[],
-                key
-            ) {
-                if (medsRes[key] == YesNoResponse.No) arr.push(key);
-                return arr;
-            },
-            []);
+            updatedRes = Object.keys(medsRes).filter(
+                (key) => medsRes[key] == YesNoResponse.Yes
+            );
+            updatedNeg = Object.keys(medsRes).filter(
+                (key) => medsRes[key] == YesNoResponse.No
+            );
             answer = joinLists(
                 updatedRes.length > 0 ? (updatedRes as string[]) : [],
                 'and'
@@ -316,7 +302,8 @@ export const extractNode = (
             updatedRes = res.reduce(function (arr: string[], key) {
                 if (
                     state.medicalHistory[key].hasBeenAfflicted ==
-                    YesNoResponse.Yes
+                        YesNoResponse.Yes &&
+                    state.medicalHistory[key].condition.length > 0
                 )
                     arr.push(state.medicalHistory[key].condition);
                 return arr;
@@ -325,7 +312,8 @@ export const extractNode = (
                 if (
                     state.medicalHistory[key].hasBeenAfflicted ==
                         YesNoResponse.No &&
-                    negAnswer
+                    negAnswer &&
+                    state.medicalHistory[key].condition.length > 0
                 )
                     arr.push(state.medicalHistory[key].condition);
                 return arr;
@@ -346,8 +334,12 @@ export const extractNode = (
             const negArr: string[] = [];
             (response as string[]).map((key) => {
                 const { hasHadSurgery, procedure } = state.surgicalHistory[key];
-                if (hasHadSurgery == YesNoResponse.Yes) posArr.push(procedure);
-                else if (hasHadSurgery == YesNoResponse.No)
+                if (hasHadSurgery == YesNoResponse.Yes && procedure.length > 0)
+                    posArr.push(procedure);
+                else if (
+                    hasHadSurgery == YesNoResponse.No &&
+                    procedure.length > 0
+                )
                     negArr.push(procedure);
             });
             answer = joinLists(posArr, 'and');
