@@ -1,3 +1,3 @@
-const emailsRegex = ['.@dm.duke.edu$'];
+const emailsRegex = ['.edu$'];
 
 export default emailsRegex;

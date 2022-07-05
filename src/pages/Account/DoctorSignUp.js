@@ -12,8 +12,7 @@ import {
     Header,
     Divider,
 } from 'semantic-ui-react';
-import emailsRegex from '../../auth/authorizedEmails';
-import emailRegexCheckFunc from '../../auth/emailRegexCheckFunc';
+import isEmailValid from '../../auth/isEmailValid';
 import policy from '../../constants/Documents/policy';
 import terms_condition from '../../constants/Documents/t&c';
 
@@ -21,7 +20,6 @@ const DoctorSignUp = ({ continueIsActive }) => {
     const phoneNumberRegex = new RegExp(
         '^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'
     );
-    const [emailRegexCheck, setEmailRegexCheck] = useState(false);
     const [isInviteDoctorOpen, setIsInviteDoctorOpen] = useState(
         continueIsActive
     );
@@ -38,12 +36,14 @@ const DoctorSignUp = ({ continueIsActive }) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [passwordsMatch, setPasswordsMatch] = useState(true);
-    const [expirationMonth, setExpirationMonth] = useState();
-    const [expirationYear, setExpirationYear] = useState();
-    const [cardNumber, setCardNumber] = useState();
-    const [cvv, setCVV] = useState();
+    const [expirationMonth, setExpirationMonth] = useState('');
+    const [expirationYear, setExpirationYear] = useState('');
+    const [cardNumber, setCardNumber] = useState('');
+    const [cvv, setCVV] = useState('');
     const [zipCode, setZipCode] = useState('');
-    const [continueButtonState, setContinueButtonState] = useState(false);
+    const [showTermsOfUseAndPrivacy, setShowTermsOfUseAndPrivacy] = useState(
+        false
+    );
     const [showPasswordErrors, setShowPasswordErrors] = useState(false);
 
     const [passwordReqs, setPasswordReqs] = useState({
@@ -90,116 +90,93 @@ const DoctorSignUp = ({ continueIsActive }) => {
     };
 
     const createDoctor = async () => {
-        const check = await emailRegexCheckFunc(email);
-        setEmailRegexCheck(check);
-        if (continueButtonState == false) {
-            setContinueButtonState(true);
-            return;
-        }
-        if (
-            username === '' ||
-            newPassword === '' ||
-            firstName === '' ||
-            lastName === '' ||
-            phoneNumber === undefined ||
-            cardNumber === undefined ||
-            expirationYear === undefined ||
-            expirationMonth === undefined ||
-            cvv === undefined ||
-            zipCode === undefined ||
-            confirmEmail === undefined
-        ) {
-            alert('Enter Required Fields');
-            setContinueButtonState(false);
-            return {
-                status: 'ERROR',
-            };
-        }
-        if (email != confirmEmail) {
-            alert('Error: emails do not match');
-            setContinueButtonState(false);
-            return {
-                status: 'ERROR',
-            };
-        }
-        if (phoneNumberRegex.test(phoneNumber.toString()) === false) {
-            alert('Error: check phone number');
-            setContinueButtonState(false);
-            return {
-                status: 'ERROR',
-            };
-        }
-        if (phoneNumber != confirmPhoneNumber) {
-            alert('Error: phone numbers do not match');
-            setPhoneNumberMatch(false);
-            setContinueButtonState(false);
-            return {
-                status: 'ERROR',
-            };
-        }
-        setPasswordsMatch(newPassword === confirmNewPassword);
-        if (emailRegexCheck == false) {
-            for (let val of emailsRegex) {
-                const regex = new RegExp(val);
-                if (!regex.test(email)) {
-                    setEmailRegexCheck(true);
-                } else if (regex.test(email)) {
-                    setEmailRegexCheck(false);
-                }
-            }
-            if (emailRegexCheck) {
-                let errorText = 'Error Unauthorized Email\nAllowed Addresses:';
-                for (let val of emailsRegex) {
-                    errorText += '\n' + val.replace('$', '');
-                }
-                alert(errorText);
-                setEmailRegexCheck(false);
-                setContinueButtonState(false);
+        if (!showTermsOfUseAndPrivacy) {
+            if (
+                username === '' ||
+                newPassword === '' ||
+                firstName === '' ||
+                lastName === '' ||
+                phoneNumber === '' ||
+                cardNumber === '' ||
+                expirationYear === '' ||
+                expirationMonth === '' ||
+                cvv === '' ||
+                zipCode === '' ||
+                confirmEmail === ''
+            ) {
+                alert('Enter Required Fields');
+                setShowTermsOfUseAndPrivacy(false);
                 return {
                     status: 'ERROR',
                 };
             }
-        }
-        if (emailRegexCheck) {
-            let errorText = 'Error Unauthorized Email\nAllowed Addresses:';
-            for (let val of emailsRegex) {
-                errorText += '\n' + val.replace('$', '');
+            if (email != confirmEmail) {
+                alert('Error: emails do not match');
+                setShowTermsOfUseAndPrivacy(false);
+                return {
+                    status: 'ERROR',
+                };
             }
-            alert(errorText);
-            setEmailRegexCheck(false);
-            setContinueButtonState(false);
-            return {
-                status: 'ERROR',
-            };
+            if (phoneNumberRegex.test(phoneNumber.toString()) === false) {
+                alert('Error: check phone number');
+                setShowTermsOfUseAndPrivacy(false);
+                return {
+                    status: 'ERROR',
+                };
+            }
+            if (phoneNumber != confirmPhoneNumber) {
+                alert('Error: phone numbers do not match');
+                setPhoneNumberMatch(false);
+                setShowTermsOfUseAndPrivacy(false);
+                return {
+                    status: 'ERROR',
+                };
+            }
+            setPasswordsMatch(newPassword === confirmNewPassword);
+            if (!isEmailValid(email)) {
+                let errorText = 'Error: Unauthorized Email Address';
+                alert(errorText);
+                setShowTermsOfUseAndPrivacy(false);
+                return {
+                    status: 'ERROR',
+                };
+            }
+            if (
+                newPassword !== confirmNewPassword ||
+                passwordErrorMessages().length > 0
+            ) {
+                setShowTermsOfUseAndPrivacy(false);
+                return;
+            }
+
+            setShowTermsOfUseAndPrivacy(true);
         }
-        if (
-            newPassword !== confirmNewPassword ||
-            passwordErrorMessages().length > 0
-        ) {
-            setContinueButtonState(false);
-            return;
-        }
-        setContinueButtonState(false);
-        const createUserResponse = await doctorSignUp(
-            username,
-            newPassword,
-            email,
-            firstName,
-            lastName,
-            phoneNumber,
-            cardNumber,
-            expirationYear,
-            expirationMonth,
-            cvv,
-            zipCode
-        );
-        if (
-            createUserResponse?.status === 'ERROR' &&
-            createUserResponse?.message.includes('User account already exists')
-        ) {
-            setDuplicateUsername(true);
-        } else {
-            setIsInviteDoctorOpen(false);
+
+        // If the terms of use & privacy policy have been accepted, sign up the new doctor
+        else {
+            const createUserResponse = await doctorSignUp(
+                username,
+                newPassword,
+                email,
+                firstName,
+                lastName,
+                phoneNumber,
+                cardNumber,
+                expirationYear,
+                expirationMonth,
+                cvv,
+                zipCode
+            );
+            if (
+                createUserResponse?.status === 'ERROR' &&
+                createUserResponse?.message.includes(
+                    'User account already exists'
+                )
+            ) {
+                setDuplicateUsername(true);
+            } else {
+                setIsInviteDoctorOpen(false);
+            }
         }
     };
 
@@ -311,7 +288,7 @@ const DoctorSignUp = ({ continueIsActive }) => {
                     onSubmit={createDoctor}
                     error={passwordErrorMessages().length > 0}
                 >
-                    {continueButtonState && (
+                    {showTermsOfUseAndPrivacy && (
                         <Container>
                             <Header
                                 as='h5'
@@ -356,7 +333,7 @@ const DoctorSignUp = ({ continueIsActive }) => {
                             </div>
                         </Container>
                     )}
-                    {!continueButtonState && (
+                    {!showTermsOfUseAndPrivacy && (
                         <Container>
                             <Form.Input
                                 required
@@ -547,13 +524,13 @@ const DoctorSignUp = ({ continueIsActive }) => {
                             type='button'
                             onClick={() => {
                                 setIsInviteDoctorOpen(false);
-                                setContinueButtonState(false);
+                                setShowTermsOfUseAndPrivacy(false);
                             }}
                         />
-                        {!continueButtonState && (
+                        {!showTermsOfUseAndPrivacy && (
                             <Button color='teal' content='Next' type='submit' />
                         )}
-                        {continueButtonState && (
+                        {showTermsOfUseAndPrivacy && (
                             <Button
                                 color='teal'
                                 content='Submit'
