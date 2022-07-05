@@ -115,7 +115,7 @@ class LandingPageOld extends Component {
                 <Icon
                     name='file alternate outline'
                     size='huge'
-                    class='icons'
+                    className='icons'
                 ></Icon>
                 <h3 className='text'>Create New Note</h3>
                 <br />

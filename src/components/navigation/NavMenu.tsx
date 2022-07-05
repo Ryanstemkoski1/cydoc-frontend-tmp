@@ -10,7 +10,6 @@ import Logo from '../../assets/cydoc-logo.svg';
 import NoteNameMenuItem, { Context } from './NoteNameMenuItem';
 
 import './NavMenu.css';
-import DoctorSignUp from 'pages/Account/DoctorSignUp';
 import SignUpModal from 'pages/Account/SignUpModal';
 
 interface ConnectedNavMenuProps {
@@ -42,6 +41,23 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
         window.addEventListener('resize', updateDimensions);
         return (): void =>
             window.removeEventListener('resize', updateDimensions);
+    }, []);
+
+    // Display warning when user tries to close the tab
+    useEffect(() => {
+        const handleTabClose = (event: BeforeUnloadEvent) => {
+            event.preventDefault();
+            // Some browsers do not support overriding this message (ex: Chrome), so the custom message will not display
+            // in all browsers.
+            return (event.returnValue =
+                'Are you sure you want to exit? Your current note will not be saved.');
+        };
+
+        window.addEventListener('beforeunload', handleTabClose);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleTabClose);
+        };
     }, []);
 
     const collapseLoggedInNav = windowWidth < LOGGEDIN_NAV_MENU_MOBILE_BP;
@@ -80,31 +96,16 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
 
     // Use for redirecting
     const history = useHistory();
-    // Check if currently editing note, then handle redirect
-    const checkEditNote = () => {
+
+    const navigateToHome = () => {
         const path = '/dashboard';
-        if (window.location.href.includes('editnote')) {
-            const confirmBox = window.confirm(
-                'Are you sure you want to redirect? Your generated note will not be saved.'
-            );
-            if (confirmBox === true) {
-                history.push(path);
-            }
-        } else {
-            history.push(path);
-        }
+        history.push(path);
     };
 
     const logoNotLoggedIn = () => {
         const path = '/';
         history.push(path);
     };
-
-    window.addEventListener('beforeunload', function (e) {
-        // alert('If you leave the page, your note will not be saved.');
-        e.preventDefault();
-        e.returnValue = '';
-    });
 
     const handleClickSignUp = () => setSignUpActive(true);
 
@@ -137,7 +138,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                     color='teal'
                     name='home'
                     icon='hospital outline'
-                    onClick={checkEditNote}
+                    onClick={navigateToHome}
                 />
             </Menu.Item>
             <Menu.Item className='profile-menu-item'>
@@ -158,13 +159,6 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                             />
                         </span>
                     }
-                    onClick={() => {
-                        if (window.location.href.includes('editnote')) {
-                            alert(
-                                'If you redirect, your note will not be saved.'
-                            );
-                        }
-                    }}
                 />
             </Menu.Item>
         </>
@@ -177,7 +171,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                     name='home'
                     content='Home'
                     icon='hospital outline'
-                    onClick={checkEditNote}
+                    onClick={navigateToHome}
                 />
             </Menu.Item>
             <Menu.Item>
@@ -195,13 +189,6 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                             {context.user?.firstName}
                         </span>
                     }
-                    onClick={() => {
-                        if (window.location.href.includes('editnote')) {
-                            alert(
-                                'If you redirect, your note will not be saved.'
-                            );
-                        }
-                    }}
                 />
             </Menu.Item>
         </>
@@ -211,7 +198,7 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
         <div>
             <Menu className={`${className} nav-menu`} attached={attached}>
                 {context.token ? (
-                    <Menu.Item className='logo-menu' onClick={checkEditNote}>
+                    <Menu.Item className='logo-menu' onClick={navigateToHome}>
                         <Image
                             src={Logo}
                             className={
@@ -272,10 +259,3 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
 };
 
 export default ConnectedNavMenu;
-
-/*
-Image - logo-circle
-Note title and Edit Patient Info - NoteNameMenuItem
-loggedInMenu Items
-
-*/
