@@ -125,7 +125,11 @@ class TimeInput extends React.Component<Props, TimeInputState> {
                             </div>
                         </Grid.Column>
                         <Grid.Column width={1}></Grid.Column>
-                        <Grid.Column width={6}>
+                        <Grid.Column
+                            width={
+                                this.state.windowWidth > ROS_SMALL_BP ? 6 : 8
+                            }
+                        >
                             <Grid columns={2}>
                                 {gridButtons[0]}
                                 {gridButtons[1]}
