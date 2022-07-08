@@ -19,7 +19,7 @@ class EditNote extends Component {
         this.onNextClick = this.onNextClick.bind(this);
         this.onPreviousClick = this.onPreviousClick.bind(this);
         this.state = {
-            activeItem: 'HPI',
+            activeItem: 'CC',
             activeTabIndex: 0,
             windowWidth: 0,
             windowHeight: 0,
@@ -58,7 +58,11 @@ class EditNote extends Component {
     // brings users to the next form when clicked
     onNextClick() {
         this.setState((state) => {
-            if (state.activeItem === 'HPI') {
+            if (state.activeItem === 'CC') {
+                return {
+                    activeItem: 'HPI',
+                };
+            } else if (state.activeItem === 'HPI') {
                 return {
                     activeItem: 'Patient History',
                 };
@@ -87,7 +91,11 @@ class EditNote extends Component {
     // brings users to the previous form when clicked
     onPreviousClick() {
         this.setState((state) => {
-            if (state.activeItem === 'Patient History') {
+            if (state.activeItem === 'HPI') {
+                return {
+                    activeItem: 'CC',
+                };
+            } else if (state.activeItem === 'Patient History') {
                 return {
                     activeItem: 'HPI',
                 };

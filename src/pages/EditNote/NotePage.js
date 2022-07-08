@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container, Button, Icon } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import PhysicalExamContent from './content/physicalexam/PhysicalExamContent';
 import ReviewOfSystemsContent from './content/reviewofsystems/ReviewOfSystemsContent';
@@ -45,18 +45,26 @@ class NotePage extends Component {
     // go to the next page (change step = step + 1)
     continueHPITab = (e) => {
         e.preventDefault();
+        window.scrollTo(0, 0);
+        if (
+            this.state.hpiTab ==
+            Object.keys(this.props.chiefComplaints).length - 1
+        ) {
+            this.nextFormClick();
+            if (this.state.hpiTab != -1) return;
+        }
         this.setState({
             hpiTab: this.state.hpiTab + 1,
             activeHPI: Object.keys(this.props.chiefComplaints)[
                 this.state.hpiTab + 1
             ],
         });
-        window.scrollTo(0, 0);
     };
 
     // go to previous page (change step = step - 1)
     backHPITab = (e) => {
         e.preventDefault();
+        if (this.state.hpiTab <= 0) this.previousFormClick();
         this.setState({
             hpiTab: this.state.hpiTab - 1,
             activeHPI: Object.keys(this.props.chiefComplaints)[
@@ -201,17 +209,34 @@ class NotePage extends Component {
         this.setState({ windowWidth, windowHeight });
     }
 
-    nextFormClick = () => this.props.onNextClick();
+    nextFormClick = () => {
+        this.props.onNextClick();
+    };
 
-    previousFormClick = () => this.props.onPreviousClick();
+    previousFormClick = () => {
+        this.props.onPreviousClick();
+    };
 
     getTabToDisplay(activeItem) {
         //Instantiates and returns the correct content component based on the active tab
         //passes in the corresponding handler and values prop
         let tabToDisplay;
         switch (activeItem) {
-            case 'HPI':
+            case 'CC':
                 tabToDisplay = (
+                    <HPIContent
+                        nextFormClick={this.nextFormClick}
+                        step={-1}
+                        continue={this.continueHPITab}
+                        back={this.backHPITab}
+                        activeTab={this.state.activeHPI}
+                        onTabClick={this.setHPITab}
+                    />
+                );
+                break;
+            case 'HPI':
+                tabToDisplay = Object.keys(this.props.chiefComplaints)
+                    .length ? (
                     <HPIContent
                         nextFormClick={this.nextFormClick}
                         step={this.state.hpiTab}
@@ -220,6 +245,31 @@ class NotePage extends Component {
                         activeTab={this.state.activeHPI}
                         onTabClick={this.setHPITab}
                     />
+                ) : (
+                    <>
+                        Please select at least one Chief Complaint in the CC tab
+                        in order to view an HPI questionnaire.
+                        <Button
+                            icon
+                            labelPosition='left'
+                            floated='left'
+                            onClick={this.previousFormClick}
+                            className='hpi-previous-button'
+                        >
+                            Previous Form
+                            <Icon name='angle left' />
+                        </Button>
+                        <Button
+                            icon
+                            labelPosition='right'
+                            floated='right'
+                            onClick={this.nextFormClick}
+                            className='hpi-next-button'
+                        >
+                            Next Form
+                            <Icon name='angle right' />
+                        </Button>
+                    </>
                 );
                 break;
             case 'Patient History':
