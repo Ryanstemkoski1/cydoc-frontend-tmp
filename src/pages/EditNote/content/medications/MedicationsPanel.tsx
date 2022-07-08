@@ -767,18 +767,20 @@ class MedicationsPanel extends Component<Props, State> {
                             <Table.Cell width={3}>
                                 {reasonForTakingInput}
                             </Table.Cell>
-                            <Button
-                                circular
-                                icon='close'
-                                onClick={(e) => {
-                                    this.props.deleteRow(
-                                        e,
-                                        this.props.medIndex
-                                    );
-                                }}
-                                aria-label='delete-medication'
-                                className='hpi-ph-button'
-                            />
+                            <Table.Cell>
+                                <Button
+                                    circular
+                                    icon='close'
+                                    onClick={(e) => {
+                                        this.props.deleteRow(
+                                            e,
+                                            this.props.medIndex
+                                        );
+                                    }}
+                                    aria-label='delete-medication'
+                                    className='hpi-ph-button'
+                                />
+                            </Table.Cell>
                         </Table.Row>
                     </Table.Body>
                 </Table>
