@@ -151,7 +151,6 @@ export const extractNode = (
             ? [node.blankYes, '', '']
             : [node.blankNo, '', ''];
     }
-
     // all other types utilize blankTemplate and the second string
     const { response } = node;
     const negAnswer = node.blankTemplate.includes('NOTANSWER');
@@ -411,15 +410,41 @@ const HPINote = (state: HPINoteProps) => {
     const finalPara = paragraphs.map((hpiString) =>
         createHPI(hpiString, '', 'They', '')
     );
+
+    const title = [];
+    const miscText = [];
+    const actualNote = [];
+    /**
+     * Utilizes the miscNotes' information from redux state and
+     * pushes it into title and miscText array
+     */
+    for (const key in state.hpi.miscNotes) {
+        title.push(key);
+        miscText.push(state.hpi.miscNotes[key]);
+    }
+    //Creates actual note array with objects that contains title, text, miscText
+    for (let i = 0; i < finalPara.length; i++) {
+        actualNote[i] = {
+            chiefComplaint: title[i],
+            text: finalPara[i],
+            miscNote: miscText[i],
+        };
+    }
     return (
         <div>
-            {finalPara.map((text, i) => (
-                <p key={i}>{text}</p>
+            {actualNote.map((text, i) => (
+                <p key={i}>
+                    <b>{text.chiefComplaint}</b>
+                    <br />
+                    {text.text}
+                    <br />
+                    <br />
+                    {text.miscNote}
+                </p>
             ))}
         </div>
     );
 };
-
 const mapStateToProps = (state: CurrentNoteState) => ({
     hpi: selectHpiState(state),
     familyHistory: selectFamilyHistoryState(state),

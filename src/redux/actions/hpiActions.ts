@@ -1,4 +1,4 @@
-import { HPI_ACTION } from './actionTypes';
+import { HPI_ACTION, CHIEF_COMPLAINTS } from './actionTypes';
 import { YesNoResponse } from 'constants/enums';
 import {
     TimeOption,
@@ -30,6 +30,24 @@ export function addNode(
             medId,
             node,
             edges,
+        },
+    };
+}
+
+export interface AddMiscNoteAction {
+    type: CHIEF_COMPLAINTS.SET_NOTES_CHIEF_COMPLAINTS;
+    payload: {
+        disease: string;
+        notes: string;
+    };
+}
+
+export function addMiscNote(disease: string, notes: string): AddMiscNoteAction {
+    return {
+        type: CHIEF_COMPLAINTS.SET_NOTES_CHIEF_COMPLAINTS,
+        payload: {
+            disease,
+            notes,
         },
     };
 }
@@ -460,4 +478,5 @@ export type HpiActionTypes =
     | PopResponseAction
     | LabTestHandleClickAction
     | LabTestInputChangeAction
-    | MedsPopYesNoToggle;
+    | MedsPopYesNoToggle
+    | AddMiscNoteAction;

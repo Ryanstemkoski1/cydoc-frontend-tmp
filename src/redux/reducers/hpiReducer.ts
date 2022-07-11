@@ -1,5 +1,5 @@
 import { HpiActionTypes } from 'redux/actions/hpiActions';
-import { HPI_ACTION } from '../actions/actionTypes';
+import { CHIEF_COMPLAINTS, HPI_ACTION } from '../actions/actionTypes';
 import { YesNoResponse } from '../../constants/enums';
 import {
     HpiResponseType,
@@ -18,6 +18,8 @@ import {
 } from '../../constants/hpiEnums';
 import { v4 } from 'uuid';
 import { addMedsPopOption } from 'redux/actions/medicationsActions';
+import { MedicalHistoryActionTypes } from 'redux/actions/medicalHistoryActions';
+import { string } from 'prop-types';
 
 export interface HpiState {
     graph: {
@@ -47,6 +49,9 @@ export interface HpiState {
     order: {
         [medId: string]: OrderInterface;
     };
+    miscNotes: {
+        [disease: string]: string;
+    };
 }
 
 export const initialHpiState: HpiState = {
@@ -54,6 +59,7 @@ export const initialHpiState: HpiState = {
     nodes: {},
     edges: {},
     order: {},
+    miscNotes: {},
 };
 export const medId = 'medId';
 
@@ -272,6 +278,16 @@ export function hpiReducer(
                 },
             };
         }
+        case CHIEF_COMPLAINTS.SET_NOTES_CHIEF_COMPLAINTS: {
+            const { disease, notes } = action.payload;
+            return {
+                ...state,
+                miscNotes: {
+                    ...state.miscNotes,
+                    [disease]: notes,
+                },
+            };
+        }
 
         case HPI_ACTION.ADD_ORDER: {
             const { medId, order } = action.payload;
@@ -283,7 +299,6 @@ export function hpiReducer(
                 },
             };
         }
-
         case HPI_ACTION.BODY_LOCATION_HANDLE_TOGGLE: {
             /*
             Toggles either the left/center/right response attribute or the 
