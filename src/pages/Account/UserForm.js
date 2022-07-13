@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Form, Message, Loader } from 'semantic-ui-react';
 import * as yup from 'yup';
 import constants from 'constants/registration-constants.json';
-import DemographicsForm from 'components/tools/DemographicsForm';
 import './Account.css';
 
 const degreeOptions = constants.degrees.map((degree) => ({
@@ -180,18 +179,6 @@ const UserForm = (props) => {
     };
 
     const additionalFields = () => {
-        if (userInfo.role === 'patient') {
-            return (
-                <DemographicsForm
-                    race={[]}
-                    asian={[]}
-                    otherRace={[]}
-                    ethnicity=''
-                    otherEthnicity={[]}
-                    gender=''
-                />
-            );
-        }
         if (userInfo.role === 'doctor') {
             return (
                 <>

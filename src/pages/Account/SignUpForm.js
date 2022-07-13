@@ -9,7 +9,6 @@ import {
 } from 'semantic-ui-react';
 import * as yup from 'yup';
 import constants from 'constants/registration-constants.json';
-import DemographicsForm from 'components/tools/DemographicsForm';
 import './Account.css';
 import policy from '../../constants/Documents/policy';
 import terms_condition from '../../constants/Documents/t&c';
@@ -230,18 +229,6 @@ const SignUpForm = (props) => {
     };
 
     const additionalFields = () => {
-        if (userInfo.role === 'patient') {
-            return (
-                <DemographicsForm
-                    race={[]}
-                    asian={[]}
-                    otherRace={[]}
-                    ethnicity=''
-                    otherEthnicity={[]}
-                    gender=''
-                />
-            );
-        }
         if (userInfo.role === 'doctor') {
             return (
                 <>

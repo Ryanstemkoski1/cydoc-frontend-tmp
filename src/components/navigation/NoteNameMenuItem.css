@@ -1,19 +1,7 @@
-@media screen and (min-width: 701px) and (max-width: 850px) {
-    div.fitted.item.note-name-menu-item {
-        max-width: 400px;
-        min-width: 300px;
-    }
-
-    div.ui.huge.transparent.input.note-title {
-        margin-top: 0px;
-    }
-}
-
-
 @media screen and (min-width: 501px) and (max-width: 700px) {
     div.fitted.item.note-name-menu-item {
-        max-width: 300px;
-        min-width: 200px;
+        max-width: 350px;
+        min-width: 250px;
     }
 
     div.ui.huge.transparent.input.note-title {
@@ -26,12 +14,13 @@
     div.fitted.item.note-name-menu-item {
         max-width: 150px;
     }
-    /*div.ui.huge.transparent.input.note-title {
-        max-width: 100px;
-    }*/
     
     .input {
-        max-width: 100px;
+        max-width: 150px;
         overflow-x: hidden;
+    }
+
+    div.ui.huge.transparent.input.note-title {
+        margin-top: 0px;
     }
 }

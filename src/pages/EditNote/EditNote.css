@@ -31,7 +31,7 @@
 }
 
 .mobile-header {
-    height: 260px;
+    height: 120px;
 }
 
 #mobile-header-container {
@@ -52,13 +52,13 @@
     }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 700px) {
     .sticky-div {
         background-color: transparent;
         position: fixed;
         top: 0px;
         width: 100%;
-        margin-top: 102px;
+        margin-top: 70px;
     }
 
     #mobile-nav {

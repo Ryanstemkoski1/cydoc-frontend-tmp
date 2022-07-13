@@ -29,7 +29,14 @@
 
   .generate-note-buttons {
     position: sticky;
-    z-index:3;
+    z-index: 3;
+  }
+
+  #generateNoteButtonsContainer.generate-note-buttons__container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 40px;
   }
   
   @media screen and (max-width: 1400px) {

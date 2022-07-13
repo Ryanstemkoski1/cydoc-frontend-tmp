@@ -24,6 +24,18 @@ export function patientInformationReducer(
                 pronouns: action.payload.pronouns,
             };
         }
+        case PATIENT_INFORMATION_ACTION.UPDATE_NAME: {
+            return {
+                ...state,
+                patientName: action.payload.patientName,
+            };
+        }
+        case PATIENT_INFORMATION_ACTION.UPDATE_PRONOUNS: {
+            return {
+                ...state,
+                pronouns: action.payload.pronouns,
+            };
+        }
         default:
             return state;
     }

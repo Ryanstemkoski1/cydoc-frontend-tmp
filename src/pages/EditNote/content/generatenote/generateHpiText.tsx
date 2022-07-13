@@ -113,7 +113,7 @@ export const fillNameAndGender = (
     // TODO: change this so that it gets replaced at random rather than
     // alternating
     const newHpiString = hpiString.split('. ').map((sentence) => {
-        if (sentence.includes('the patient') && objPronoun != 'they') {
+        if (sentence.includes('the patient')) {
             if (name) {
                 const noun = toggle ? name : objPronoun;
                 sentence = sentence.replace(/the patient/g, noun);

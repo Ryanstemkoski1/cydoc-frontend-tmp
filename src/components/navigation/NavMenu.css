@@ -17,6 +17,12 @@
     padding: 1.5rem 0;
 }
 
+@media screen and (max-width: 700px) {
+    .nav-menu {
+        height: 70px;
+    }
+}
+
 /* Navigation button styles */
 .nav-menu .button {
     background-color: #CDE1E9;
@@ -201,11 +207,6 @@ i.icon.profile-mobile-icon {
     .note-name-menu-item {
         width: 200px;
         padding-left: 0 !important;
-    }
-
-    .note-title {
-        padding: 10px;
-        margin-top: 10px;
     }
 
     .ui.button.save-button {
