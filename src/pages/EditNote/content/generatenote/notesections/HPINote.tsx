@@ -21,8 +21,10 @@ import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
 import { MedicationsState } from 'redux/reducers/medicationsReducer';
 import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
 import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
+import { selectPatientInformationState } from 'redux/selectors/patientInformationSelector';
 import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
 import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
+import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
 
 interface HPINoteProps {
     hpi: HpiState;
@@ -30,6 +32,7 @@ interface HPINoteProps {
     medications: MedicationsState;
     surgicalHistory: SurgicalHistoryState;
     medicalHistory: MedicalHistoryState;
+    patientInformation: PatientInformationState;
 }
 
 export type GraphNode = NodeInterface & { response: HpiResponseType };
@@ -408,7 +411,11 @@ const HPINote = (state: HPINoteProps) => {
         .join('. ')
         .split('PARAGRAPH_BREAK. ');
     const finalPara = paragraphs.map((hpiString) =>
-        createHPI(hpiString, '', 'They', '')
+        createHPI(
+            hpiString,
+            state.patientInformation.patientName,
+            state.patientInformation.pronouns
+        )
     );
 
     const title = [];
@@ -451,5 +458,6 @@ const mapStateToProps = (state: CurrentNoteState) => ({
     medications: selectMedicationsState(state),
     surgicalHistory: selectSurgicalHistoryState(state),
     medicalHistory: selectMedicalHistoryState(state),
+    patientInformation: selectPatientInformationState(state),
 });
 export default connect(mapStateToProps)(HPINote);

@@ -33,6 +33,7 @@ import './GenerateNote.css';
 
 import './GenerateNote.css';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
 // import HPINote from './notesections/HPINote';
 /// <reference types="./Clipboard.ts" />
 
@@ -54,6 +55,7 @@ interface StateProps {
     surgicalHistoryState: SurgicalHistoryState;
     medicalHistoryState: MedicalHistoryState;
     physicalExamState: PhysicalExamState;
+    patientInformationState: PatientInformationState;
 }
 
 type Props = GenerateNoteProps & StateProps;
@@ -68,6 +70,7 @@ const mapStateToProps = (state: CurrentNoteState): StateProps => ({
     surgicalHistoryState: selectSurgicalHistoryState(state),
     medicalHistoryState: state.medicalHistory,
     physicalExamState: state.physicalExam,
+    patientInformationState: state.patientInformation,
 });
 
 // TODO: look into <li> keys -- throws a warning if duplicats, not a huge deal but probably fix

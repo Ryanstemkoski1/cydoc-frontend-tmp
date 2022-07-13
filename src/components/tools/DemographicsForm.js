@@ -1,3 +1,4 @@
+import { PatientPronouns } from 'constants/patientInformation';
 import React, { Component } from 'react';
 import { Form } from 'semantic-ui-react';
 import './DemographicsForm.css';
@@ -32,29 +33,29 @@ class IdentityQuestions extends Component {
         return (
             <Form>
                 <Form.Group grouped className='identity-groups field'>
-                    <label>Preferred Pronouns</label>
+                    <label>Pronouns</label>
                     <Form.Radio
                         className='identity-fields'
                         name='pronouns'
                         label='They/them'
-                        value='They/them'
-                        checked={this.state.pronouns === 'They/them'}
+                        value={PatientPronouns.They}
+                        checked={this.state.pronouns === PatientPronouns.They}
                         onChange={this.handleChange}
                     />
                     <Form.Radio
                         className='identity-fields'
                         name='pronouns'
                         label='She/her'
-                        value='She/her'
-                        checked={this.state.pronouns === 'She/her'}
+                        value={PatientPronouns.She}
+                        checked={this.state.pronouns === PatientPronouns.She}
                         onChange={this.handleChange}
                     />
                     <Form.Radio
                         className='identity-fields'
                         name='pronouns'
                         label='He/him'
-                        value='He/him'
-                        checked={this.state.pronouns === 'He/him'}
+                        value={PatientPronouns.He}
+                        checked={this.state.pronouns === PatientPronouns.He}
                         onChange={this.handleChange}
                     />
                 </Form.Group>

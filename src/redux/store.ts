@@ -1,5 +1,6 @@
 import { createStore } from 'redux';
 import { rootReducer } from './reducers';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
-export const currentNoteStore = createStore(rootReducer);
+export const currentNoteStore = createStore(rootReducer, composeWithDevTools());
 export const createCurrentNoteStore = () => createStore(rootReducer);

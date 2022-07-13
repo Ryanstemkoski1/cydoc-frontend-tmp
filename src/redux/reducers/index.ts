@@ -43,6 +43,10 @@ import {
     chiefComplaintsReducer,
     initialChiefComplaintsState,
 } from './chiefComplaintsReducer';
+import {
+    patientInformationReducer,
+    initialPatientInformationState,
+} from './patientInformationReducer';
 
 const currentNoteReducer = combineReducers({
     reviewOfSystems: reviewOfSystemsReducer,
@@ -58,7 +62,9 @@ const currentNoteReducer = combineReducers({
     _id: noteIdReducer,
     title: noteTitleReducer,
     chiefComplaints: chiefComplaintsReducer,
+    patientInformation: patientInformationReducer,
 });
+
 export type CurrentNoteState = ReturnType<typeof currentNoteReducer>;
 
 export const initialState: CurrentNoteState = {
@@ -75,6 +81,7 @@ export const initialState: CurrentNoteState = {
     _id: initialNoteId,
     title: initialNoteTitle,
     chiefComplaints: initialChiefComplaintsState,
+    patientInformation: initialPatientInformationState,
 };
 
 export function rootReducer(

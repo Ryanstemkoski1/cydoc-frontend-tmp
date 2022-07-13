@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
     Menu,
     Button,
@@ -8,8 +8,7 @@ import {
     Header,
     InputOnChangeData,
 } from 'semantic-ui-react';
-import NotesContext from '../../contexts/NotesContext';
-import states from 'constants/stateAbbreviations.json';
+import { PatientPronouns } from 'constants/patientInformation';
 import DemographicsForm from '../tools/DemographicsForm';
 import { connect } from 'react-redux';
 import { CurrentNoteState } from 'redux/reducers';
@@ -18,6 +17,10 @@ import {
     updateNoteTitle,
     UpdateNoteTitleAction,
 } from 'redux/actions/currentNoteActions';
+import {
+    UpdatePatientInformationAction,
+    updatePatientInformation,
+} from 'redux/actions/patientInformationActions';
 import { selectNoteTitle } from 'redux/selectors/currentNoteSelectors';
 import './NoteNameMenuItem.css';
 
@@ -32,10 +35,13 @@ interface NavProps {
 
 interface DispatchProps {
     updateNoteTitle: (title: string) => UpdateNoteTitleAction;
+    updatePatientInformation: (
+        patientName: string,
+        pronouns: PatientPronouns
+    ) => UpdatePatientInformationAction;
 }
 
 type NoteNameMenuItemProps = StateProps & DispatchProps & NavProps;
-type FieldError = false | { content: string };
 type FormChangeHandler = (
     e: React.ChangeEvent,
     data: InputOnChangeData
@@ -51,37 +57,23 @@ export interface Context {
     token: string | null;
     storeLoginInfo: (user: string, token: string) => void;
     logOut: () => void;
-    //eslint-disable-next-line
-    updateNote: (note: any) => string;
 }
-
-const stateOptions = states.map((state) => ({
-    key: state,
-    value: state,
-    text: state,
-}));
 
 // TODO: Connect to backend
 // Component that displays and changes note name shown only if parent is EditNote.
 const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
     props: NoteNameMenuItemProps
 ) => {
-    const { title, note, updateNoteTitle, mobile } = props;
-    const context = useContext(NotesContext) as Context;
+    const { title, updateNoteTitle, updatePatientInformation, mobile } = props;
 
     // Form fields
     const [open, setOpen] = useState(false);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [pronouns, setPronouns] = useState('');
-    // Field error messages
-    const [invalidFirstName, setInvalidFirstName] = useState<FieldError>(false);
-    const [invalidLastName, setInvalidLastName] = useState<FieldError>(false);
+    const [patientName, setPatientName] = useState('');
+    const [pronouns, setPronouns] = useState(PatientPronouns.They);
+
+    /** Updates note in backend
     const [saveButton, setSaveButton] = useState('');
     const [buttonIcon, setButtonIcon] = useState<undefined | string>(undefined);
-
-    // Update note in backend
-    /* eslint-disable */
     const handleSave = async (e: React.MouseEvent) => {
         e.preventDefault();
         setSaveButton('loading');
@@ -117,22 +109,15 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
                 setButtonIcon(undefined);
             }, 2000);
         }
-    };
+    }; */
 
     // Modal event handlers
     const openModal = (): void => setOpen(true);
     const closeModal = (): void => setOpen(false);
 
     // Patient Info form event handlers
-
     const savePatientInfo = () => {
-        if (
-            invalidFirstName ||
-            invalidLastName
-        ) {
-            alert('Please your name field is valid');
-            return;
-        }
+        updatePatientInformation(patientName, pronouns);
         closeModal();
     };
 
@@ -142,48 +127,29 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
         return (_e, { value }) => action(value);
     };
 
-    // Form validators
-    const validateFirstName = (e: React.FocusEvent) => {
-        const target = e.target as HTMLInputElement;
-        if (!target.value) {
-            setInvalidFirstName({ content: 'First name must be valid' });
-        } else {
-            setInvalidFirstName(false);
-        }
-    };
-
-    const validateLastName = (e: React.FocusEvent) => {
-        const target = e.target as HTMLInputElement;
-        if (!target.value) {
-            setInvalidLastName({ content: 'Last name must be valid' });
-        } else {
-            setInvalidLastName(false);
-        }
-    };
-
     return (
-        <Menu.Item className='note-name-menu-item' fitted> 
+        <Menu.Item className='note-name-menu-item' fitted>
             <>
-            <Input
-                aria-label='Note-Title'
-                className='note-title'
-                transparent
-                size='huge'
-                placeholder={initialNoteTitle}
-                onChange={formatOnChange(updateNoteTitle)}
-                onFocus={() =>
-                    title === initialNoteTitle && updateNoteTitle('')
-                }
-                onBlur={() => title === '' && updateNoteTitle(initialNoteTitle)}
-                value={title}
-            />
-            {!mobile && <div className='patient-info'>
-                {(lastName != '' || firstName != '') && (
-                    <h4>
-                        {`${firstName} ${lastName}`}
-                    </h4>
+                <Input
+                    aria-label='Note-Title'
+                    className='note-title'
+                    transparent
+                    size='huge'
+                    placeholder={initialNoteTitle}
+                    onChange={formatOnChange(updateNoteTitle)}
+                    onFocus={() =>
+                        title === initialNoteTitle && updateNoteTitle('')
+                    }
+                    onBlur={() =>
+                        title === '' && updateNoteTitle(initialNoteTitle)
+                    }
+                    value={title}
+                />
+                {!mobile && (
+                    <div className='patient-info'>
+                        {patientName != '' && <h4>{patientName}</h4>}
+                    </div>
                 )}
-            </div>}
             </>
             <Modal
                 className='patient-modal'
@@ -193,16 +159,22 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
                 size='tiny'
                 dimmer='inverted'
                 trigger={
-                    mobile ? 
-                    <Button
-                        basic
-                        color='teal'
-                        name='home'
-                        icon='info circle'
-                    />   :
-                    <Button className='patient-modal-button' size='tiny' basic>
-                        Add/Edit Patient Info
-                    </Button> 
+                    mobile ? (
+                        <Button
+                            basic
+                            color='teal'
+                            name='home'
+                            icon='info circle'
+                        />
+                    ) : (
+                        <Button
+                            className='patient-modal-button'
+                            size='tiny'
+                            basic
+                        >
+                            Add/Edit Patient Info
+                        </Button>
+                    )
                 }
             >
                 <Header>Patient Information</Header>
@@ -212,32 +184,17 @@ const NoteNameMenuItem: React.FunctionComponent<NoteNameMenuItemProps> = (
                             pronouns={pronouns}
                             onChange={formatOnChange(setPronouns)}
                         />
-                        <Form.Group widths='equal' className='error-div'>
+                        <Form.Group className='error-div'>
                             <Form.Field
                                 fluid
-                                id='firstName'
+                                id='patientName'
                                 type='text'
-                                label='First Name'
+                                label="Patient's Full Name"
                                 className='patient-info-input'
-                                placeholder='First Name'
+                                placeholder="Enter the patient's name, e.g. Ms. Lee (optional)"
                                 control={Input}
-                                value={firstName}
-                                error={invalidFirstName}
-                                onBlur={validateFirstName}
-                                onChange={formatOnChange(setFirstName)}
-                            />
-                            <Form.Field
-                                fluid
-                                type='text'
-                                label='Last Name'
-                                id='lastName'
-                                className='patient-info-input'
-                                placeholder='Last Name'
-                                control={Input}
-                                value={lastName}
-                                error={invalidLastName}
-                                onBlur={validateLastName}
-                                onChange={formatOnChange(setLastName)}
+                                value={patientName}
+                                onChange={formatOnChange(setPatientName)}
                             />
                         </Form.Group>
                     </Form>
@@ -260,5 +217,5 @@ export default connect(
         note: state,
         title: selectNoteTitle(state),
     }),
-    { updateNoteTitle }
+    { updateNoteTitle, updatePatientInformation }
 )(NoteNameMenuItem);

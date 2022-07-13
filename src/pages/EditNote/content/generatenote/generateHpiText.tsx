@@ -1,3 +1,5 @@
+import { YesNoUncertainResponse } from 'constants/enums';
+import { PatientPronouns } from 'constants/patientInformation';
 import { MEDICAL_TERM_TRANSLATOR, ABBREVIFY } from 'constants/word-mappings';
 
 /**
@@ -21,8 +23,6 @@ interface PatientDisplayName {
     objPronoun: string;
     posPronoun: string;
 }
-
-type Gender = 'He' | 'She' | 'They';
 
 const END_OF_SENTENCE_PUNC = '.!?';
 
@@ -75,30 +75,22 @@ export const fillAnswers = (hpi: HPI): string => {
  * Defines what string will be used as the patient's name in the note
  */
 export const definePatientNameAndPronouns = (
-    title: string,
-    lastName: string,
-    gender: Gender
+    patientName: string,
+    pronouns: PatientPronouns
 ): PatientDisplayName => {
-    // define patient name
-    let prefix = title.trim();
-    if (title === 'general') {
-        prefix = gender === 'She' ? 'Ms.' : gender === 'He' ? 'Mr.' : 'They';
-    }
-    const name = !title.length ? '' : `${prefix} ${lastName.trim()}`;
-
     // define pronouns
     let objPronoun, posPronoun: string;
-    if (gender === 'She') {
+    if (pronouns === PatientPronouns.She) {
         objPronoun = 'she';
         posPronoun = 'her';
-    } else if (gender === 'He') {
+    } else if (pronouns === PatientPronouns.He) {
         objPronoun = 'he';
         posPronoun = 'his';
     } else {
         objPronoun = 'they';
         posPronoun = 'their';
     }
-    return { name, objPronoun, posPronoun };
+    return { name: patientName, objPronoun, posPronoun };
 };
 
 /**
@@ -121,13 +113,16 @@ export const fillNameAndGender = (
     // TODO: change this so that it gets replaced at random rather than
     // alternating
     const newHpiString = hpiString.split('. ').map((sentence) => {
-        if (
-            sentence.includes('the patient') &&
-            (name.length || objPronoun != 'they')
-        ) {
-            const noun = toggle === 0 ? name : objPronoun;
+        if (sentence.includes('the patient') && objPronoun != 'they') {
+            if (name) {
+                const noun = toggle ? name : objPronoun;
+                sentence = sentence.replace(/the patient/g, noun);
+            } else {
+                sentence = toggle
+                    ? sentence
+                    : sentence.replace(/the patient/g, objPronoun);
+            }
             toggle = (toggle + 1) % 2;
-            sentence = sentence.replace(/the patient/g, noun);
         }
         return sentence;
     });
@@ -186,11 +181,10 @@ export const createInitialHPI = (hpi: HPI): string => {
 
 export const createHPI = (
     hpiString: string,
-    lastName: string,
-    gender: Gender,
-    title: string
+    patientName: string,
+    pronouns: PatientPronouns
 ): string => {
-    const patientInfo = definePatientNameAndPronouns(title, lastName, gender);
+    const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
     hpiString = fillNameAndGender(hpiString, patientInfo);
     hpiString = fillMedicalTerms(hpiString);
     hpiString = conjugateThirdPerson(hpiString);

@@ -1,3 +1,4 @@
+import { PatientPronouns } from 'constants/patientInformation';
 import {
     abbreviate,
     capitalize,
@@ -292,23 +293,21 @@ describe('generateHpiText', () => {
                     'so i work long hours',
                 ],
             };
-            const title = 'Dr.';
-            const lastname = 'Foo';
-            const gender = 'M';
+            const patientName = 'Dr. Foo';
             const expected =
                 'Dr. Foo has OA. ' +
                 'Additionally, his family has a history of hypertension. ' +
                 // TODO: need to account for direct object pronouns
                 'Barriers that make it difficult for he: so I work long hours. ';
-            expect(createHPI(hpi, lastname, gender, title)).toEqual(expected);
+            expect(createHPI(hpi, patientName, PatientPronouns.He)).toEqual(
+                expected
+            );
         });
 
         it('generates text for the example', () => {
-            const title = 'general';
-            const lastname = 'Lee';
-            const gender = 'F';
+            const patientName = 'Ms. Lee';
             expect(
-                createHPI(EXAMPLE, lastname, gender, title)
+                createHPI(EXAMPLE, patientName, PatientPronouns.She)
             ).toMatchSnapshot();
         });
     });

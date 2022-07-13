@@ -131,7 +131,7 @@ export class NotesStore extends React.Component {
         }
     };
 
-    //Updates a note in state and backend storage
+    // Updates a note in state and backend storage
     updateNote = async (note) => {
         note.doctorID = this.context.user._id;
         note.clinicID = this.context.user.workplace;
@@ -158,7 +158,7 @@ export class NotesStore extends React.Component {
         }
     };
 
-    //Updates a note in state ONLY
+    // Updates a note in state ONLY
     updateNoteLocally = (note) => {
         this.setState((state) => {
             let prevNotes = new Map(state.notes);
