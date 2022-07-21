@@ -13,8 +13,8 @@ import {
     Divider,
 } from 'semantic-ui-react';
 import isEmailValid from '../../auth/isEmailValid';
-import policy from '../../constants/Documents/policy';
-import terms_condition from '../../constants/Documents/t&c';
+import Policy from '../../constants/Documents/policy';
+import Terms_and_conditions from '../../constants/Documents/terms_and_conditions';
 
 const DoctorSignUp = ({ continueIsActive }) => {
     const phoneNumberRegex = new RegExp(
@@ -297,7 +297,7 @@ const DoctorSignUp = ({ continueIsActive }) => {
                             />
                             <div className='scroll'>
                                 <style> {cssScroll} </style>
-                                <p> {terms_condition} </p>
+                                <Terms_and_conditions title={true} />
                             </div>
                             <Divider section />
                             <Header
@@ -307,7 +307,7 @@ const DoctorSignUp = ({ continueIsActive }) => {
                             />
                             <div className='scroll'>
                                 <style>{cssScroll}</style>
-                                <p> {policy} </p>
+                                <Policy title={true} />
                             </div>
                             <br />
                             <div className='checkBox'>

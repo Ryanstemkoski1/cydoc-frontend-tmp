@@ -10,8 +10,8 @@ import {
 import * as yup from 'yup';
 import constants from 'constants/registration-constants.json';
 import './Account.css';
-import policy from '../../constants/Documents/policy';
-import terms_condition from '../../constants/Documents/t&c';
+import Policy from '../../constants/Documents/policy';
+import Terms_and_conditions from '../../constants/Documents/terms_and_conditions';
 
 const degreeOptions = constants.degrees.map((degree) => ({
     key: degree,
@@ -496,13 +496,13 @@ const SignUpForm = (props) => {
                 <Header as='h5' textAlign='center' content='Terms of Use' />
                 <div className='scroll'>
                     <style> {cssScroll} </style>
-                    <p> {terms_condition} </p>
+                    <Terms_and_conditions title={true} />
                 </div>
                 <Divider section />
                 <Header as='h5' textAlign='center' content='Privacy Policy' />
                 <div className='scroll'>
                     <style>{cssScroll}</style>
-                    <p> {policy} </p>
+                    <Policy title={true} />
                 </div>
                 <br />
                 <div className='checkBox'>

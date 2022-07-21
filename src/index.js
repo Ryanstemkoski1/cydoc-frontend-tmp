@@ -22,6 +22,8 @@ import ProfileSecurity from './pages/Account/ProfileSecurity';
 import './index.css';
 import { Provider } from 'react-redux';
 import { currentNoteStore } from './redux/store';
+import Policy from './constants/Documents/policy';
+import Terms_and_conditions from './constants/Documents/terms_and_conditions';
 
 ReactDOM.render(
     <CookiesProvider>
@@ -83,9 +85,33 @@ ReactDOM.render(
                                         path='/managerdashboard'
                                         component={ManagerDashboard}
                                     />
+                                    <Route
+                                        exact
+                                        path='/privacypolicy'
+                                        component={Policy}
+                                    />
+                                    <Route
+                                        exact
+                                        path='/termsandconditions'
+                                        component={Terms_and_conditions}
+                                    />
                                     <div className='footer-copyright'>
-                                        Copyright© 2019-2022 Cydoc, LLC. All
+                                        Copyright © 2019-2022 Cydoc, LLC. All
                                         rights reserved. Patent pending.
+                                        &emsp;•&emsp;
+                                        <a
+                                            href='/privacypolicy'
+                                            style={{ color: '#147A9B' }}
+                                        >
+                                            Privacy Policy
+                                        </a>
+                                        &emsp; • &emsp;
+                                        <a
+                                            href='/termsandconditions'
+                                            style={{ color: '#147A9B' }}
+                                        >
+                                            Terms and Conditions
+                                        </a>
                                     </div>
                                 </BrowserRouter>
                             </div>
