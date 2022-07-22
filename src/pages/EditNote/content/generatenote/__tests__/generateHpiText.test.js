@@ -6,7 +6,7 @@ import {
     definePatientNameAndPronouns,
     fillAnswers,
     fillMedicalTerms,
-    fillNameAndGender,
+    fillNameAndPronouns,
     fullClean,
 } from '../generateHpiText';
 
@@ -158,10 +158,10 @@ describe('generateHpiText', () => {
         });
     });
 
-    describe('fillNameAndGender', () => {
+    describe('fillNameAndPronouns', () => {
         it('handles empty empty', () => {
             expect(
-                fillNameAndGender('', {
+                fillNameAndPronouns('', {
                     name: '',
                     objPronoun: '',
                     posPronoun: '',
@@ -177,7 +177,7 @@ describe('generateHpiText', () => {
                 posPronoun: 'her',
             };
             const expected = 'her name? her age?';
-            expect(fillNameAndGender(inp, patient)).toEqual(expected);
+            expect(fillNameAndPronouns(inp, patient)).toEqual(expected);
         });
 
         it('replaces "the patient" with either name or pronoun', () => {
@@ -192,7 +192,7 @@ describe('generateHpiText', () => {
             const expected =
                 'foo is tired. she slept, and she feels better.' +
                 ' foo recovered';
-            expect(fillNameAndGender(inp, patient)).toEqual(expected);
+            expect(fillNameAndPronouns(inp, patient)).toEqual(expected);
         });
     });
 

@@ -1,4 +1,4 @@
-import { YesNoUncertainResponse } from 'constants/enums';
+import { PART_OF_SPEECH_CORRECTION_MAP } from 'constants/hpiTextGenerationMapping';
 import { PatientPronouns } from 'constants/patientInformation';
 import { MEDICAL_TERM_TRANSLATOR, ABBREVIFY } from 'constants/word-mappings';
 
@@ -20,6 +20,7 @@ export interface HPI {
  */
 interface PatientDisplayName {
     name: string;
+    pronouns: PatientPronouns;
     objPronoun: string;
     posPronoun: string;
 }
@@ -90,7 +91,7 @@ export const definePatientNameAndPronouns = (
         objPronoun = 'they';
         posPronoun = 'their';
     }
-    return { name: patientName, objPronoun, posPronoun };
+    return { name: patientName, pronouns, objPronoun, posPronoun };
 };
 
 /**
@@ -100,11 +101,11 @@ export const definePatientNameAndPronouns = (
  * -  "the patient" is replaced with patient's name (e.g. "Ms. Smith") or
  *    object pronoun (e.g. "she")
  */
-export const fillNameAndGender = (
+export const fillNameAndPronouns = (
     hpiString: string,
     patientInfo: PatientDisplayName
 ): string => {
-    const { name, objPronoun, posPronoun } = patientInfo;
+    const { name, pronouns, objPronoun, posPronoun } = patientInfo;
     hpiString = name.length
         ? hpiString.replace(/the patient's|their/g, posPronoun)
         : hpiString;
@@ -113,6 +114,7 @@ export const fillNameAndGender = (
     // TODO: change this so that it gets replaced at random rather than
     // alternating
     const newHpiString = hpiString.split('. ').map((sentence) => {
+        // Replace "the patient" with "she/he/they/name"
         if (sentence.includes('the patient')) {
             if (name) {
                 const noun = toggle ? name : objPronoun;
@@ -124,9 +126,32 @@ export const fillNameAndGender = (
             }
             toggle = (toggle + 1) % 2;
         }
+        // If patient's pronouns are not they/them, replace:
+        // 1) they with she/he 2) their with her/his 3) she's/he's with her/his
+        // 4) them with her/him 5) himselves/herselves with himself/herself
+        if (pronouns != PatientPronouns.They) {
+            sentence = sentence.replace(/they/g, objPronoun);
+            sentence = sentence.replace(/their/g, posPronoun);
+            sentence = sentence.replace(/she's|he's/g, posPronoun);
+            if (pronouns == PatientPronouns.She) {
+                sentence = sentence.replace(/them/g, posPronoun);
+            } else {
+                sentence = sentence.replace(/them/g, 'him');
+            }
+            sentence = sentence.replace(/himselves/g, 'himself');
+            sentence = sentence.replace(/herselves/g, 'herself');
+        }
         return sentence;
     });
     return newHpiString.join('. ');
+};
+
+const partOfSpeechCorrection = (hpiString: string): string => {
+    PART_OF_SPEECH_CORRECTION_MAP.forEach((value: string, key: string) => {
+        const regEx = new RegExp(`${key}`, 'g');
+        hpiString = hpiString.replace(regEx, value);
+    });
+    return hpiString;
 };
 
 const replaceMappedWords = (
@@ -185,7 +210,8 @@ export const createHPI = (
     pronouns: PatientPronouns
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
-    hpiString = fillNameAndGender(hpiString, patientInfo);
+    hpiString = fillNameAndPronouns(hpiString, patientInfo);
+    hpiString = partOfSpeechCorrection(hpiString);
     hpiString = fillMedicalTerms(hpiString);
     hpiString = conjugateThirdPerson(hpiString);
     hpiString = abbreviate(hpiString);
