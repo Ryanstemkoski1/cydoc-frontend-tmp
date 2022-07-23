@@ -1,7 +1,7 @@
 import { PART_OF_SPEECH_CORRECTION_MAP } from 'constants/hpiTextGenerationMapping';
 import { PatientPronouns } from 'constants/patientInformation';
 import { MEDICAL_TERM_TRANSLATOR, ABBREVIFY } from 'constants/word-mappings';
-
+import { combineHpiString } from './combineSentences';
 /**
  * keys: ints for the question order
  * value: list of length 2 in which the first element is the fill in the blank
@@ -113,6 +113,17 @@ export const fillNameAndPronouns = (
     let toggle = 0;
     // TODO: change this so that it gets replaced at random rather than
     // alternating
+
+    const sentenceHelper = (sentence: string): string => {
+        // removes period from end of sentence
+        if (sentence[sentence.length - 1] === '.') {
+            sentence = sentence.slice(0, -1);
+        }
+        // pads beginning and end with spaces
+        sentence = ' ' + sentence;
+        sentence = sentence + ' ';
+        return sentence;
+    };
     const newHpiString = hpiString.split('. ').map((sentence) => {
         // Replace "the patient" with "she/he/they/name"
         if (sentence.includes('the patient')) {
@@ -126,20 +137,26 @@ export const fillNameAndPronouns = (
             }
             toggle = (toggle + 1) % 2;
         }
+
         // If patient's pronouns are not they/them, replace:
         // 1) they with she/he 2) their with her/his 3) she's/he's with her/his
         // 4) them with her/him 5) himselves/herselves with himself/herself
         if (pronouns != PatientPronouns.They) {
-            sentence = sentence.replace(/they/g, objPronoun);
-            sentence = sentence.replace(/their/g, posPronoun);
-            sentence = sentence.replace(/she's|he's/g, posPronoun);
+            sentence = sentenceHelper(sentence);
+            sentence = sentence.replace(/ they /g, ' ' + objPronoun + ' ');
+            sentence = sentence.replace(/ their /g, ' ' + posPronoun + ' ');
+            sentence = sentence.replace(
+                / she's | he's /g,
+                ' ' + posPronoun + ' '
+            );
             if (pronouns == PatientPronouns.She) {
-                sentence = sentence.replace(/them/g, posPronoun);
+                sentence = sentence.replace(/ them /g, ' ' + posPronoun + ' ');
             } else {
-                sentence = sentence.replace(/them/g, 'him');
+                sentence = sentence.replace(/ them /g, ' him ');
             }
-            sentence = sentence.replace(/himselves/g, 'himself');
-            sentence = sentence.replace(/herselves/g, 'herself');
+            sentence = sentence.replace(/ himselves /g, ' himself ');
+            sentence = sentence.replace(/ herselves /g, ' herself ');
+            sentence = sentence.trim();
         }
         return sentence;
     });
@@ -210,6 +227,7 @@ export const createHPI = (
     pronouns: PatientPronouns
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
+    hpiString = combineHpiString(hpiString, 2);
     hpiString = fillNameAndPronouns(hpiString, patientInfo);
     hpiString = partOfSpeechCorrection(hpiString);
     hpiString = fillMedicalTerms(hpiString);
