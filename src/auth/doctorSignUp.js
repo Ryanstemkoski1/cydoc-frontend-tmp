@@ -1,6 +1,13 @@
-import { CognitoUserPool } from 'amazon-cognito-identity-js';
-import { doctorClient } from 'constants/api.js';
-import { stripeClient } from 'constants/api.js';
+import { doctorClient, stripeClient } from 'constants/api';
+import '@stripe/stripe-js';
+let cognito = require('amazon-cognito-identity-js');
+
+/* This file was reworked July 2022 to denest the functions related to DynamoDB, Cognito, 
+and Stripe. The function is asynchronous so the await function can be used to assure the uuid
+created by DynamoDB can be included in the creation of the user in Cognito */
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// define doctorSignUp object
 const doctorSignUp = async (
     username,
     password,
@@ -14,37 +21,15 @@ const doctorSignUp = async (
     cvv,
     zipCode
 ) => {
-    //sanitize phoneNumber
+    // format phone number
     phoneNumber = phoneNumber.replace('(', '+1');
     phoneNumber = phoneNumber.replace(/-|\(|\)/gi, '');
-    phoneNumber = phoneNumber.replace(' ', '');
 
-    const name = `${firstName} ${lastName}`;
-    const role = 'doctor';
-    const card = {
-        cardNumber: cardNumber,
-        expirationMonth: expirationMonth,
-        expirationYear: expirationYear,
-        cvv: cvv,
-    };
-    let customerInfo = {
-        customer: {
-            cardData: card,
-            email,
-            zipCode,
-            attributes: {
-                customerUUID: '',
-                name,
-                role,
-                plans: [{ price: 'price_1K3YAvI5qo8H3FXU8tRMTxMC' }],
-            },
-        },
-    };
-    const poolData = {
-        UserPoolId: 'us-east-1_B303pmcdz',
-        ClientId: '1g3vdqlpkpmse39veagh93hlih',
-    };
+    // declare uuid variable
+    let doctor_uuid = '';
 
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // ADD USER TO DYNAMO DB
     const doctor_payload = {
         doctor: {
             username,
@@ -55,57 +40,83 @@ const doctorSignUp = async (
             associatedManager: 'v1',
         },
     };
-    const userPool = new CognitoUserPool(poolData);
-    // TODO: check if doctor username already exists in Cognito -- if it does, then stop this process and throw error
-    doctorClient
+
+    // make DynamoDB request and store generated uuid
+    await doctorClient
         .post('/doctors', JSON.stringify(doctor_payload))
         .then(async (response) => {
-            const doctor_uuid = response.data[0];
-            customerInfo.customer.attributes.customerUUID = doctor_uuid;
-            // initialize command
-            const UserAttributes = [
-                { Name: 'email', Value: email },
-                { Name: 'phone_number', Value: phoneNumber },
-                { Name: 'given_name', Value: firstName },
-                { Name: 'family_name', Value: lastName },
-                { Name: 'custom:UUID', Value: doctor_uuid },
-                { Name: 'custom:associatedManager', Value: 'v1' },
-            ];
-
-            let stripe_payload = JSON.stringify(customerInfo);
-            await stripeClient
-                .post('/subscription', stripe_payload)
-                .then(async () => {
-                    //send request to create new user
-                    userPool.signUp(
-                        username,
-                        password.toString(),
-                        UserAttributes,
-                        null,
-                        //eslint-disable-next-line
-                        (err, data) => {
-                            if (err != null) {
-                                if (err.code === 'UsernameExistsException') {
-                                    alert(`Error: Username already taken.`);
-                                    return;
-                                }
-                                return;
-                            } else {
-                                alert(
-                                    'Account Successfully Created!\nIn order to complete the sign-up process, please click the confirmation link sent to the email provided.'
-                                );
-                            }
-                        }
-                    );
-                })
-                .catch(() => {
-                    alert(`Payment Error\n Please verify card details`);
-                    return;
-                });
-        })
-        .catch(() => {
-            alert(`Error creating account`);
+            doctor_uuid = response.data[0];
         });
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // ADD USER TO COGNITO USER POOL
+
+    // define attributes to send to Cognito
+    const CognitoUserAttributes = [
+        { Name: 'email', Value: email },
+        { Name: 'phone_number', Value: phoneNumber },
+        { Name: 'given_name', Value: firstName },
+        { Name: 'family_name', Value: lastName },
+        { Name: 'custom:UUID', Value: doctor_uuid },
+        //{Name: 'custom:doctor_uuid', Value: doctor_uuid}
+    ];
+
+    // identify user pool and app client
+    let poolData = {
+        UserPoolId: 'us-east-1_B303pmcdz', // old doctor user pool id
+        ClientId: '1g3vdqlpkpmse39veagh93hlih', // old pool app client id
+        //UserPoolId: 'us-east-1_eCwwmaBgU', // new user pool id
+        //ClientId: '45112llgc6j7gdpma1ovn8ls94' // new pool app client id
+    };
+
+    // make Cognito request
+    let userPool = new cognito.CognitoUserPool(poolData);
+    userPool.signUp(
+        username,
+        password,
+        CognitoUserAttributes,
+        null,
+        function (err) {
+            // error messaging
+            if (err) {
+                alert(err.message || JSON.stringify(err));
+                return;
+            }
+        }
+    );
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    // ADD USER TO STRIPE
+
+    // format credit card information
+    const card = {
+        cardNumber: cardNumber,
+        expirationMonth: expirationMonth,
+        expirationYear: expirationYear,
+        cvv: cvv,
+    };
+
+    // formatting user attributes and info
+    const attributes = {
+        customerUUID: doctor_uuid,
+        username: username,
+        role: 'doctor',
+        plans: [{ price: 'price_1IeoaLI5qo8H3FXUkFZRFvSr' }],
+        name: firstName + ' ' + lastName,
+    };
+    let customerInfo = {
+        customer: {
+            cardData: card,
+            email,
+            zipCode,
+            attributes,
+        },
+    };
+    let stripe_payload = JSON.stringify(customerInfo);
+
+    // send Stripe request
+    stripeClient.post('/subscription', stripe_payload);
+    alert('You have successfully registered.');
 };
 
 export default doctorSignUp;
