@@ -116,8 +116,8 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         data: TextAreaProps | DropdownProps | InputOnChangeData
     ) {
         const { active } = this.state;
-        if (!active.has(data.rowIndex)) {
-            active.add(data.rowIndex);
+        if (!active.has(data.rowindex)) {
+            active.add(data.rowindex);
             this.setState({ active });
         }
         const val = data.value as string;
@@ -303,7 +303,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                             <Input
                                 fluid
                                 transparent
-                                rowIndex={i}
+                                rowindex={i}
                                 disabled={isPreview}
                                 type='year'
                                 placeholder='e.g. 2020'
@@ -337,7 +337,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                             <Input
                                 fluid
                                 transparent
-                                rowIndex={i}
+                                rowindex={i}
                                 disabled={isPreview}
                                 type='comments'
                                 placeholder='Comments'

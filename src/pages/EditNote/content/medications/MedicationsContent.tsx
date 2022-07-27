@@ -196,6 +196,7 @@ export class MedicationsContent extends Component<Props, State> {
             for (let i = 0; i < medIndices.length; i++) {
                 panels.push(
                     <MedicationsPanel
+                        key={i}
                         mobile={mobile}
                         isPreview={false}
                         rowIndex={medIndices[i]}

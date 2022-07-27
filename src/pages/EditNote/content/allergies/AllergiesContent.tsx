@@ -236,7 +236,7 @@ class AllergiesContent extends Component<Props, OwnState> {
                         <Input
                             fluid
                             transparent
-                            rowIndex={i}
+                            rowindex={i}
                             disabled={isPreview}
                             type='comments'
                             placeholder='Comments'

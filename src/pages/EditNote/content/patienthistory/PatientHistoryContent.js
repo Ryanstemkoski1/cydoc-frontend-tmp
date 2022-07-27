@@ -7,6 +7,7 @@ import AllergiesContent from '../allergies/AllergiesContent';
 import SocialHistoryContent from '../socialhistory/SocialHistoryContent';
 import FamilyHistoryContent from '../familyhistory/FamilyHistoryContent';
 import './PatientHistory.css';
+import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
 
 export default class PatientHistoryContent extends Component {
     constructor(props) {
@@ -60,16 +61,15 @@ export default class PatientHistoryContent extends Component {
         }
     }
 
-    handleItemClick = (e, { children }) =>
+    handleItemClick = (e, { children }) => {
         this.setState({ activeTabName: children });
+    };
 
     render() {
         const { windowWidth } = this.state;
         const activeTabName = this.props.activePMH;
-        const activeIndex = this.props.pmhIndex;
-        // const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
-        const collapseTabs = windowWidth < 750;
-
+        const activeIndex = this.props.activeIndex;
+        const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
         // panes for desktop view
         const panes = [
             {
@@ -276,14 +276,15 @@ export default class PatientHistoryContent extends Component {
                     // eslint-disable-next-line react/no-children-prop
                     children={pane.menuItem}
                     onClick={this.handleItemClick}
-                    active={activeTabName === pane.menuItem}
+                    active={this.state.activeTabName === pane.menuItem}
                     style={{ marginBottom: 5 }}
                 />
             );
         });
-
-        const tabToDisplay = this.props.onTabClick(this.props.activePMH);
-
+        const tabToDisplay = this.props.onTabClick(
+            this.state.activeTabName,
+            this.state.windowWidth
+        );
         return (
             <>
                 {collapseTabs ? (
