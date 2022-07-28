@@ -46,6 +46,14 @@ export const fullClean = (sentence: string): string => {
     return sentence.replace(/\.\s?$/, '').trim();
 };
 
+// checks if string has I in it, if so, returns it with quotes around.
+const stringHasI = (str: string): string => {
+    str = ' ' + str + ' ';
+    return str.includes(' i ') || str.includes(' I ')
+        ? '"' + str.replace(/ i /, ' I ').trim() + '"'
+        : str.trim();
+};
+
 /**
  * Clean the fill sentences and the answers, and insert the answers int the
  * fill sentences
@@ -62,7 +70,7 @@ export const fillAnswers = (hpi: HPI): string => {
         answer = fullClean(answer);
         negAnswer = fullClean(negAnswer);
         if (fillSentence.match(/answer/)) {
-            fillSentence = fillSentence.replace(/answer/, answer);
+            fillSentence = fillSentence.replace(/answer/, stringHasI(answer));
         }
         if (fillSentence.match(/notanswer/)) {
             fillSentence = fillSentence.replace(/notanswer/, negAnswer);
@@ -146,7 +154,7 @@ export const fillNameAndPronouns = (
             sentence = sentence.replace(/ they /g, ' ' + objPronoun + ' ');
             sentence = sentence.replace(/ their /g, ' ' + posPronoun + ' ');
             sentence = sentence.replace(
-                / she's | he's /g,
+                / she's | he's | they's /g,
                 ' ' + posPronoun + ' '
             );
             if (pronouns == PatientPronouns.She) {
@@ -156,6 +164,7 @@ export const fillNameAndPronouns = (
             }
             sentence = sentence.replace(/ himselves /g, ' himself ');
             sentence = sentence.replace(/ herselves /g, ' herself ');
+            sentence = sentence.replace(/ your /g, ' ' + posPronoun + ' ');
             sentence = sentence.trim();
         }
         return sentence;

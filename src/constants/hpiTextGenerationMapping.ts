@@ -1,6 +1,7 @@
 export const PART_OF_SPEECH_CORRECTION_MAP: Map<string, string> = new Map([
     ['he sometimes drink', 'he sometimes drinks'],
     ['she sometimes drink', 'she sometimes drinks'],
+    ['they is', 'they are'],
     ['he have', 'he has'],
     ['she have', 'she has'],
     ['make he', 'make him'],
