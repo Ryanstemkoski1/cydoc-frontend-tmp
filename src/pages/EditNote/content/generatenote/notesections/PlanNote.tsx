@@ -85,11 +85,10 @@ export class PlanNote extends Component<PlanProps> {
                                                 {this.trimDiseaseName(
                                                     diagnoses.diagnosis
                                                 )}
-                                                :{' '}
                                             </b>
                                         ) : null}
                                         {diagnoses.comments
-                                            ? diagnoses.comments
+                                            ? ': ' + diagnoses.comments
                                             : null}
                                     </li>
                                 ))}

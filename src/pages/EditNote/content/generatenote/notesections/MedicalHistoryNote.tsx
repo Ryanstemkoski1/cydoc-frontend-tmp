@@ -94,17 +94,17 @@ export class MedicalHistoryNote extends Component<MedicalHistoryProps> {
                         <li key={i}>
                             <b>{condition.condition} </b>
                             {condition.startYear !== -1
-                                ? `started in ${condition.startYear.toString()}. `
+                                ? `started in ${condition.startYear.toString()}`
                                 : ''}
                             {condition.hasConditionResolved ===
                             YesNoResponse.Yes
-                                ? `(resolved${
+                                ? ` (resolved${
                                       condition.endYear !== -1
                                           ? ' ' +
                                             condition.endYear.toString() +
                                             ')'
                                           : ')'
-                                  }. `
+                                  }.`
                                 : ''}
                             {condition.comments
                                 ? condition.comments
