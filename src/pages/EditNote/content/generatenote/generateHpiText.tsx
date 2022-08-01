@@ -164,6 +164,14 @@ export const fillNameAndPronouns = (
             }
             sentence = sentence.replace(/ himselves /g, ' himself ');
             sentence = sentence.replace(/ herselves /g, ' herself ');
+            sentence = sentence.replace(
+                / themself /g,
+                ' ' + posPronoun + 'self '
+            );
+            sentence = sentence.replace(
+                / yourself /g,
+                ' ' + posPronoun + 'self '
+            );
             sentence = sentence.replace(/ your /g, ' ' + posPronoun + ' ');
             sentence = sentence.trim();
         }
