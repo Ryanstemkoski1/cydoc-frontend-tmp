@@ -118,7 +118,7 @@ export const fillNameAndPronouns = (
         ? hpiString.replace(/the patient's|their/g, posPronoun)
         : hpiString;
 
-    let toggle = 0;
+    let toggle = 1;
     // TODO: change this so that it gets replaced at random rather than
     // alternating
 
@@ -134,14 +134,17 @@ export const fillNameAndPronouns = (
     };
     const newHpiString = hpiString.split('. ').map((sentence) => {
         // Replace "the patient" with "she/he/they/name"
-        if (sentence.includes('the patient')) {
+        if (
+            sentence.includes('the patient') ||
+            sentence.includes('The patient')
+        ) {
             if (name) {
                 const noun = toggle ? name : objPronoun;
-                sentence = sentence.replace(/the patient/g, noun);
+                sentence = sentence.replace(/[Tt]he patient/g, noun);
             } else {
                 sentence = toggle
                     ? sentence
-                    : sentence.replace(/the patient/g, objPronoun);
+                    : sentence.replace(/[Tt]he patient/g, objPronoun);
             }
             toggle = (toggle + 1) % 2;
         }
@@ -219,6 +222,7 @@ const capitalizeWord = (word: string) =>
  * Capitalizes first word of every sentence and all ' i 's
  */
 export const capitalize = (hpiString: string): string => {
+    hpiString = hpiString.trim();
     hpiString = hpiString.replace(/\bi\b/g, 'I');
     const punctuation = new Set(END_OF_SENTENCE_PUNC);
     const words = hpiString.split(' ');
@@ -251,6 +255,5 @@ export const createHPI = (
     hpiString = conjugateThirdPerson(hpiString);
     hpiString = abbreviate(hpiString);
     hpiString = capitalize(hpiString);
-
     return hpiString;
 };
