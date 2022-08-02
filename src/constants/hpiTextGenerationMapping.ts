@@ -34,4 +34,8 @@ export const PART_OF_SPEECH_CORRECTION_MAP: Map<string, string> = new Map([
     [' they has ', ' they have '],
     [' they does ', ' they do '],
     [' hisself ', ' himself '],
+    [' ear pain adult ', ' ear pain '],
+    [' ear pain child ', ' ear pain '],
+    [' they denies ',' they deny '],
+    [' they reports ',' they report '],
 ]);
