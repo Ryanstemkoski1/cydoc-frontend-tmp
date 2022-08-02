@@ -248,7 +248,7 @@ export const createHPI = (
     pronouns: PatientPronouns
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
-    hpiString = combineHpiString(hpiString, 2);
+    hpiString = combineHpiString(hpiString, 3);
     hpiString = fillNameAndPronouns(hpiString, patientInfo);
     hpiString = partOfSpeechCorrection(hpiString);
     hpiString = fillMedicalTerms(hpiString);
