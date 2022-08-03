@@ -59,14 +59,14 @@ const doctorSignUp = async (
         { Name: 'family_name', Value: lastName },
         { Name: 'custom:UUID', Value: doctor_uuid },
         //{Name: 'custom:doctor_uuid', Value: doctor_uuid}
-        ];
+    ];
 
     // identify user pool and app client
     let poolData = {
-        //UserPoolId: 'us-east-1_B303pmcdz', // old doctor user pool id
-        //ClientId: '1g3vdqlpkpmse39veagh93hlih', // old pool app client id
-        UserPoolId: 'us-east-1_eCwwmaBgU', // new user pool id
-        ClientId: '45112llgc6j7gdpma1ovn8ls94', // new pool app client id
+        UserPoolId: 'us-east-1_B303pmcdz', // old doctor user pool id
+        ClientId: '1g3vdqlpkpmse39veagh93hlih', // old pool app client id
+        //UserPoolId: 'us-east-1_eCwwmaBgU', // new user pool id
+        //ClientId: '45112llgc6j7gdpma1ovn8ls94' // new pool app client id
     };
 
     // make Cognito request
