@@ -14,7 +14,7 @@ import intestines from '../icons/intestines.svg';
 import immunology from '../icons/immunology.svg';
 import dermatologic from '../icons/dermatologic.svg';
 import kidneys from '../icons/kidneys.svg';
-import genitourinary from '../icons/genitourinary.svg';
+import endocrine from '../icons/endocrine.svg';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 interface BodySystemDropdownProps {
@@ -36,8 +36,8 @@ const imgToRender: { [key: string]: any } = {
     Gastrointestinal: intestines,
     Immune: immunology,
     Dermatologic: dermatologic,
-    Genitourinary: kidneys,
-    Endocrine: genitourinary,
+    'ObGyn/GU': kidneys,
+    Endocrine: endocrine,
 };
 
 class BodySystemDropdown extends React.Component<
