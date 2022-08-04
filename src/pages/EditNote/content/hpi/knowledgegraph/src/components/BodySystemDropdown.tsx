@@ -5,7 +5,6 @@ import ChiefComplaintsButton from './ChiefComplaintsButton';
 import '../../HPI.css';
 import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
 import brain from '../icons/brain.svg';
-import pain from '../icons/pain.svg';
 import heent from '../icons/heent.svg';
 import respiratory from '../icons/respiratory.svg';
 import heart from '../icons/heart.svg';
@@ -15,6 +14,8 @@ import immunology from '../icons/immunology.svg';
 import dermatologic from '../icons/dermatologic.svg';
 import kidneys from '../icons/kidneys.svg';
 import endocrine from '../icons/endocrine.svg';
+import pediatrics from '../icons/pediatrics.svg';
+import musculoskeletal from '../icons/musculoskeletal.svg';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 interface BodySystemDropdownProps {
@@ -28,7 +29,6 @@ interface BodySystemDropdownState {
 
 const imgToRender: { [key: string]: any } = {
     'Neurologic/Psychiatric': brain,
-    Pain: pain,
     HEENT: heent,
     Respiratory: respiratory,
     'Cardiovascular/Hematologic': heart,
@@ -38,6 +38,8 @@ const imgToRender: { [key: string]: any } = {
     Dermatologic: dermatologic,
     'ObGyn/GU': kidneys,
     Endocrine: endocrine,
+    Pediatrics: pediatrics,
+    Musculoskeletal: musculoskeletal,
 };
 
 class BodySystemDropdown extends React.Component<
