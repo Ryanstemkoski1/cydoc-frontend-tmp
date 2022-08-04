@@ -108,6 +108,9 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
     };
 
     const handleClickSignUp = () => setSignUpActive(true);
+    const resetSignupState = () => {
+        setSignUpActive(false);
+    };
 
     // Menu items when not logged in
     const defaultMenuItems = (
@@ -126,7 +129,12 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                 size='small'
                 onClick={handleClickSignUp}
             />
-            {signUpActive && <SignUpModal navToSignUp={signUpActive} />}
+            {signUpActive && (
+                <SignUpModal
+                    navToSignUp={signUpActive}
+                    reloadModal={resetSignupState}
+                />
+            )}
         </Menu.Item>
     );
     // Menu items when logged in

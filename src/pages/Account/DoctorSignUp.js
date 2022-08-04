@@ -16,7 +16,7 @@ import isEmailValid from '../../auth/isEmailValid';
 import Policy from '../../constants/Documents/policy';
 import Terms_and_conditions from '../../constants/Documents/terms_and_conditions';
 
-const DoctorSignUp = ({ continueIsActive }) => {
+const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
     const phoneNumberRegex = new RegExp(
         '^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'
     );
@@ -74,7 +74,7 @@ const DoctorSignUp = ({ continueIsActive }) => {
             containsUpper: value.toLowerCase() !== value,
             containsLower: value.toUpperCase() !== value,
             containsSpecial: value.match(
-                /=+|\++|-+|\^+|\$+|\*+|\.+|\[+|\]+|{+|}+|\(+|\)+|\?+|"+|!+|@+|#+|%+|&+|\/+|\\+|,+|>+|<+|'+|:+|;+|\|+|_+|~+|`+/g
+                /=+|\++|-+|\^+|\$+|\*+|\.+|\[+|\]+|{+|}+|\(+|\)+|\?+|'+|!+|@+|#+|%+|&+|\/+|\\+|,+|>+|<+|'+|:+|;+|\|+|_+|~+|`+/g
             )
                 ? true
                 : false,
@@ -278,7 +278,10 @@ const DoctorSignUp = ({ continueIsActive }) => {
         <Modal
             dimmer='inverted'
             size='small'
-            onClose={() => setIsInviteDoctorOpen(false)}
+            onClose={() => {
+                setIsInviteDoctorOpen(false);
+                reloadModal();
+            }}
             onOpen={() => setIsInviteDoctorOpen(true)}
             open={isInviteDoctorOpen}
         >
@@ -295,7 +298,7 @@ const DoctorSignUp = ({ continueIsActive }) => {
                                 textAlign='center'
                                 content='Terms of Use'
                             />
-                            <div className='scroll'>
+                            <div className='scrol'>
                                 <style> {cssScroll} </style>
                                 <Terms_and_conditions title={true} />
                             </div>
@@ -525,6 +528,7 @@ const DoctorSignUp = ({ continueIsActive }) => {
                             onClick={() => {
                                 setIsInviteDoctorOpen(false);
                                 setShowTermsOfUseAndPrivacy(false);
+                                reloadModal();
                             }}
                         />
                         {!showTermsOfUseAndPrivacy && (
