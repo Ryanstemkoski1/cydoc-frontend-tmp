@@ -176,6 +176,7 @@ export const fillNameAndPronouns = (
                 ' ' + posPronoun + 'self '
             );
             sentence = sentence.replace(/ your /g, ' ' + posPronoun + ' ');
+            sentence = sentence.replace(/ you /g, ' ' + objPronoun + ' ');
             sentence = sentence.trim();
         }
         return sentence;
