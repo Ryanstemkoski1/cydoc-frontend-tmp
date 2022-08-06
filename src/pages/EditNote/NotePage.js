@@ -47,8 +47,9 @@ class NotePage extends Component {
         e.preventDefault();
         window.scrollTo(0, 0);
         if (
-            this.state.hpiTab ==
-            Object.keys(this.props.chiefComplaints).length - 1
+            [-1, Object.keys(this.props.chiefComplaints).length - 1].includes(
+                this.state.hpiTab
+            )
         ) {
             this.nextFormClick();
             if (this.state.hpiTab != -1) return;
