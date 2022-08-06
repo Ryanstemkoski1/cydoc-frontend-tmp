@@ -46,6 +46,7 @@ interface State {
     currentYear: number;
     windowWidth: number;
     windowHeight: number;
+    currMeds: string[];
 }
 
 export enum DropdownType {
@@ -64,6 +65,12 @@ export class MedicationsContent extends Component<Props, State> {
             medicationOptions: drugNames,
             diseaseOptions: diseases,
             currentYear: new Date(Date.now()).getFullYear(),
+            currMeds: Object.keys(this.props.medications).filter(
+                (med) =>
+                    this.props.medications[med].drugName.length &&
+                    this.props.medications[med].isCurrentlyTaking ==
+                        YesNoResponse.Yes
+            ),
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
@@ -144,25 +151,8 @@ export class MedicationsContent extends Component<Props, State> {
             medsPopYesNoToggle,
         } = this.props;
 
-        const header = this.makeHeader(),
-            panels = [],
-            medicationsIndexMap: {
-                [medication: string]: string;
-            } = {},
+        const panels = [],
             medsEntries = Object.entries(medications);
-        for (let i = 0; i < medsEntries.length; i++) {
-            const medicationName = medsEntries[i][1].drugName;
-            medicationsIndexMap[medicationName] = medsEntries[i][0];
-        }
-        if (values) {
-            values.map((medication) => {
-                if (!(medication in medicationsIndexMap)) {
-                    const medKey = v4();
-                    addMedsPopOption(medKey, medication);
-                    medicationsIndexMap[medication] = medKey;
-                }
-            });
-        }
 
         if (isPreview) {
             if (values != null) {
@@ -173,7 +163,6 @@ export class MedicationsContent extends Component<Props, State> {
                             isPreview={true}
                             previewValue={values[i]}
                             medIndex={medsEntries[i][0]}
-                            rowIndex={i}
                             sideEffectsOptions={this.state.sideEffectsOptions}
                             medicationOptions={this.state.medicationOptions}
                             diseaseOptions={this.state.diseaseOptions}
@@ -186,7 +175,7 @@ export class MedicationsContent extends Component<Props, State> {
             }
         } else {
             // create map of condition: index to look for existing conditions in medications
-            let medIndices = [...Array(medications.length).keys()];
+            let medIndices = [...Array(Object.keys(medications).length).keys()];
             if (responseType == ResponseTypes.MEDS_BLANK && node) {
                 const response = hpi.nodes[node].response as string[];
                 medIndices = response.map((key) =>
@@ -194,21 +183,29 @@ export class MedicationsContent extends Component<Props, State> {
                 );
             }
             for (let i = 0; i < medIndices.length; i++) {
-                panels.push(
-                    <MedicationsPanel
-                        key={i}
-                        mobile={mobile}
-                        isPreview={false}
-                        rowIndex={medIndices[i]}
-                        medIndex={medsEntries[i][0]}
-                        sideEffectsOptions={this.state.sideEffectsOptions}
-                        medicationOptions={this.state.medicationOptions}
-                        diseaseOptions={this.state.diseaseOptions}
-                        currentYear={this.state.currentYear}
-                        handleAddition={this.handleDropdownOptionAddition}
-                        deleteRow={this.deleteRow}
-                    />
-                );
+                if (
+                    medIndices[i] &&
+                    (responseType ||
+                        (medsEntries[medIndices[i]][1].drugName.length &&
+                            (this.state.currMeds.includes(
+                                medsEntries[medIndices[i]][0]
+                            ) ||
+                                medsEntries[medIndices[i]][1]
+                                    .isCurrentlyTaking == YesNoResponse.Yes)))
+                )
+                    panels.push(
+                        <MedicationsPanel
+                            mobile={mobile}
+                            isPreview={false}
+                            medIndex={medsEntries[medIndices[i]][0]}
+                            sideEffectsOptions={this.state.sideEffectsOptions}
+                            medicationOptions={this.state.medicationOptions}
+                            diseaseOptions={this.state.diseaseOptions}
+                            currentYear={this.state.currentYear}
+                            handleAddition={this.handleDropdownOptionAddition}
+                            deleteRow={this.deleteRow}
+                        />
+                    );
             }
         }
         const content =
@@ -223,8 +220,16 @@ export class MedicationsContent extends Component<Props, State> {
                     {node &&
                         responseType == ResponseTypes.MEDS_POP &&
                         values &&
-                        values.map((medication: string) => {
-                            const medKey = medicationsIndexMap[medication];
+                        values.reduce((acc: JSX.Element[], medication) => {
+                            const key = medsEntries.find(
+                                (entry) => entry[1].drugName == medication
+                            );
+                            let medKey = '';
+                            if (key) medKey = key[0];
+                            else {
+                                medKey = v4();
+                                addMedsPopOption(medKey, medication);
+                            }
                             const yesActive =
                                     medKey in medications &&
                                     medications[medKey].isCurrentlyTaking ==
@@ -233,7 +238,8 @@ export class MedicationsContent extends Component<Props, State> {
                                     medKey in medications &&
                                     medications[medKey].isCurrentlyTaking ==
                                         YesNoResponse.No;
-                            return (
+                            return [
+                                ...acc,
                                 <Grid.Row key={medication}>
                                     <Grid.Column width={3}>
                                         {medication}
@@ -274,9 +280,11 @@ export class MedicationsContent extends Component<Props, State> {
                                             }}
                                         />
                                     </Grid.Column>
-                                </Grid.Row>
-                            );
-                        })}
+                                </Grid.Row>,
+                            ];
+
+                            return acc;
+                        }, [])}
                 </Grid>
                 {content}
                 {!this.props.isPreview &&

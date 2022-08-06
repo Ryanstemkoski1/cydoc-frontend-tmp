@@ -1,3 +1,4 @@
+import { YesNoResponse } from 'constants/enums';
 import React, { Component } from 'react';
 import { MedicationsState } from 'redux/reducers/medicationsReducer';
 import { Table } from 'semantic-ui-react';
@@ -53,7 +54,9 @@ export class MedicationsNote extends Component<MedicationsProps> {
                     </Table.Header>
                     <Table.Body>
                         {Object.values(medications).map((medication, i) =>
-                            medication.drugName !== '' ? (
+                            medication.drugName !== '' &&
+                            medication.isCurrentlyTaking ==
+                                YesNoResponse.Yes ? (
                                 <Table.Row key={i}>
                                     <Table.Cell>
                                         {medication.drugName}
@@ -87,7 +90,8 @@ export class MedicationsNote extends Component<MedicationsProps> {
             return (
                 <ul>
                     {Object.values(medications).map((medication, i) =>
-                        medication.drugName ? (
+                        medication.drugName &&
+                        medication.isCurrentlyTaking == YesNoResponse.Yes ? (
                             <div key={i}>
                                 <b>{medication.drugName}.</b>
                                 {medication.startYear !== -1

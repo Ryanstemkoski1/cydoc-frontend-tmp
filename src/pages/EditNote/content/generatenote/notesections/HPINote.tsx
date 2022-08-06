@@ -273,9 +273,14 @@ export const extractNode = (
 
         case ResponseTypes.MEDS_BLANK:
             answer = joinLists(
-                Object.keys(response as ClickBoxesInput).filter(
-                    (med) => med.length > 0
-                ),
+                (response as string[]).reduce((acc: string[], key) => {
+                    if (
+                        state.medications[key].isCurrentlyTaking ==
+                        YesNoResponse.Yes
+                    )
+                        return [...acc, state.medications[key].drugName];
+                    return acc;
+                }, []) || [],
                 lastSeparator
             );
             break;
