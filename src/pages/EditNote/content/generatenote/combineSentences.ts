@@ -123,17 +123,16 @@ export const combineHpiString = (str: string, n: number) => {
     removeItem(stringArr, '');
     removeItem(stringArr, undefined);
 
-    for (let i = 0; i < stringArr.length - 1; i++) {
+    for (let i = 0; i < stringArr.length; i++) {
         // have to add space at beginning of first string to make comparison work.
-        if (i === 0) {
+        if (i == stringArr.length - 1) tempComb = stringArr[i] + '.';
+        else if (i === 0) {
             tempComb = compare(
                 ' ' + capitalizeFirstLetter(stringArr[0]),
                 stringArr[1],
                 n
             );
-        } else {
-            tempComb = compare(stringArr[i], stringArr[i + 1], n);
-        }
+        } else tempComb = compare(stringArr[i], stringArr[i + 1], n);
         if (Array.isArray(tempComb)) {
             newStr += tempComb[0];
             continue;

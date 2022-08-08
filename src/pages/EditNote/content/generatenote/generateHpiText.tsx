@@ -152,36 +152,28 @@ export const fillNameAndPronouns = (
         // If patient's pronouns are not they/them, replace:
         // 1) they with she/he 2) their with her/his 3) she's/he's with her/his
         // 4) them with her/him 5) himselves/herselves with himself/herself
-        if (pronouns != PatientPronouns.They) {
-            sentence = sentenceHelper(sentence);
-            sentence = sentence.replace(/ they /g, ' ' + objPronoun + ' ');
-            sentence = sentence.replace(/ their /g, ' ' + posPronoun + ' ');
-            sentence = sentence.replace(
-                / she's | he's | they's /g,
-                ' ' + posPronoun + ' '
-            );
-            if (pronouns == PatientPronouns.She) {
-                sentence = sentence.replace(/ them /g, ' ' + posPronoun + ' ');
-            } else {
-                sentence = sentence.replace(/ them /g, ' him ');
-            }
-            sentence = sentence.replace(/ himselves /g, ' himself ');
-            sentence = sentence.replace(/ herselves /g, ' herself ');
-            sentence = sentence.replace(
-                / themself /g,
-                ' ' + posPronoun + 'self '
-            );
-            sentence = sentence.replace(
-                / yourself /g,
-                ' ' + posPronoun + 'self '
-            );
-            sentence = sentence.replace(/ your /g, ' ' + posPronoun + ' ');
-            sentence = sentence.replace(/ you /g, ' ' + objPronoun + ' ');
-            sentence = sentence.trim();
+        sentence = sentenceHelper(sentence);
+        sentence = sentence.replace(/ they /g, ' ' + objPronoun + ' ');
+        sentence = sentence.replace(/ their /g, ' ' + posPronoun + ' ');
+        sentence = sentence.replace(
+            / she's | he's | they's /g,
+            ' ' + posPronoun + ' '
+        );
+        if (pronouns == PatientPronouns.She) {
+            sentence = sentence.replace(/ them /g, ' ' + posPronoun + ' ');
+        } else if (pronouns == PatientPronouns.He) {
+            sentence = sentence.replace(/ them /g, ' him ');
         }
+        sentence = sentence.replace(/ himselves /g, ' himself ');
+        sentence = sentence.replace(/ herselves /g, ' herself ');
+        sentence = sentence.replace(/ themself /g, ' ' + posPronoun + 'self ');
+        sentence = sentence.replace(/ yourself /g, ' ' + posPronoun + 'self ');
+        sentence = sentence.replace(/ your /g, ' ' + posPronoun + ' ');
+        sentence = sentence.replace(/ you /g, ' ' + objPronoun + ' ');
+        sentence = sentence.trim();
         return sentence;
     });
-    return newHpiString.join('. ');
+    return newHpiString.join('. ') + '.';
 };
 
 const partOfSpeechCorrection = (hpiString: string): string => {
