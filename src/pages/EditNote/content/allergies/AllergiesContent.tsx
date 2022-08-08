@@ -131,10 +131,10 @@ class AllergiesContent extends Component<Props, OwnState> {
             'reaction',
             'comments',
         ];
-        return nums.map((rowindex: string, index: number) => (
+        return nums.map((rowIndex: string, index: number) => (
             <AllergiesTableBodyRow
                 key={index}
-                rowIndex={rowindex as keyof AllergiesState}
+                rowIndex={rowIndex as keyof AllergiesState}
                 fields={cellField}
                 onTableBodyChange={this.handleTableBodyChange}
                 isPreview={this.props.isPreview}
@@ -236,7 +236,7 @@ class AllergiesContent extends Component<Props, OwnState> {
                         <Input
                             fluid
                             transparent
-                            rowindex={i}
+                            rowIndex={i}
                             disabled={isPreview}
                             type='comments'
                             placeholder='Comments'

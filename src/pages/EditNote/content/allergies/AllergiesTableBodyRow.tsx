@@ -113,15 +113,17 @@ class AllergiesTableBodyRow extends Component<Props> {
         return (
             <Table.Row>
                 {tableRows}
-                <Button
-                    circular
-                    icon='close'
-                    onClick={() => {
-                        this.props.deleteRow(rowIndex as string);
-                    }}
-                    aria-label='delete-allergy'
-                    className='hpi-ph-button delete-allergy'
-                />
+                <td>
+                    <Button
+                        circular
+                        icon='close'
+                        onClick={() => {
+                            this.props.deleteRow(rowIndex as string);
+                        }}
+                        aria-label='delete-allergy'
+                        className='hpi-ph-button delete-allergy'
+                    />
+                </td>
             </Table.Row>
         );
     }

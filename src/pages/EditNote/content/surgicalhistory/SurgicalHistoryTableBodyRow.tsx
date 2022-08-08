@@ -243,15 +243,17 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
         return (
             <Table.Row>
                 {tableRows}
-                <Button
-                    circular
-                    icon='close'
-                    onClick={() => {
-                        this.props.deleteRow(this.props.rowIndex as string);
-                    }}
-                    aria-label='delete-surgery'
-                    className='hpi-ph-button delete-surgery'
-                />
+                <td>
+                    <Button
+                        circular
+                        icon='close'
+                        onClick={() => {
+                            this.props.deleteRow(this.props.rowIndex as string);
+                        }}
+                        aria-label='delete-surgery'
+                        className='hpi-ph-button delete-surgery'
+                    />
+                </td>
             </Table.Row>
         );
     }

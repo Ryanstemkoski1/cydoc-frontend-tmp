@@ -280,13 +280,9 @@ class NotePage extends Component {
                         previousFormClick={this.previousFormClick}
                         activePMH={this.state.activePMH}
                         pmhIndex={this.state.pmhTab}
-                        handleTabChange={this.handlePMHTabChange}
-                        handleNextTab={this.handlePMHNextTab}
-                        handlePrevTab={this.handlePMHPrevTab}
-                        onNextClick={this.onPMHNextClick}
-                        onPreviousClick={this.onPMHPreviousClick}
                         onTabClick={this.onPMHTabClick}
                         setStickyHeaders={this.setStickyHeaders}
+                        handlePMHTabChange={this.handlePMHTabChange}
                     />
                 );
                 break;

@@ -116,8 +116,8 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         data: TextAreaProps | DropdownProps | InputOnChangeData
     ) {
         const { active } = this.state;
-        if (!active.has(data.rowindex)) {
-            active.add(data.rowindex);
+        if (!active.has(data.rowIndex)) {
+            active.add(data.rowIndex);
             this.setState({ active });
         }
         const val = data.value as string;
@@ -205,11 +205,11 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             this.state.proceduresOptions,
             addProceduresOptions
         );
-        return nums.map((rowindex: string, index: number) => (
+        return nums.map((rowIndex: string, index: number) => (
             <SurgicalHistoryTableBodyRow
                 {...this.props}
                 key={index}
-                rowIndex={rowindex}
+                rowIndex={rowIndex}
                 fields={cellField}
                 onTableBodyChange={this.handleTableBodyChange}
                 onAddItem={this.handleAddition}
@@ -303,7 +303,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                             <Input
                                 fluid
                                 transparent
-                                rowindex={i}
+                                rowIndex={i}
                                 disabled={isPreview}
                                 type='year'
                                 placeholder='e.g. 2020'
@@ -337,7 +337,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                             <Input
                                 fluid
                                 transparent
-                                rowindex={i}
+                                rowIndex={i}
                                 disabled={isPreview}
                                 type='comments'
                                 placeholder='Comments'
