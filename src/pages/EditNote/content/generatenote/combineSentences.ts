@@ -133,6 +133,16 @@ export const combineHpiString = (str: string, n: number) => {
                 n
             );
         } else tempComb = compare(stringArr[i], stringArr[i + 1], n);
+        // if the combination is on the final iteration and there isn't two strings to compare, add that string to the end of the current combined.
+        if (i === stringArr.length - 1) {
+            newStr += capitalizeFirstLetter(stringArr[i] + '.');
+            return newStr;
+        }
+        // if the combination is on the final iteration and compare(str1, str2) returns an array, combine both and return that str
+        if (Array.isArray(tempComb) && i === stringArr.length - 2) {
+            newStr += tempComb[0] + tempComb[1];
+            return newStr;
+        }
         if (Array.isArray(tempComb)) {
             newStr += tempComb[0];
             continue;
