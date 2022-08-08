@@ -19,41 +19,7 @@ export interface MedicationsItem {
     comments: string;
 }
 
-export const initialMedicationsState: MedicationsState = {
-    [v4()]: {
-        drugName: '',
-        startYear: -1,
-        isCurrentlyTaking: YesNoResponse.None,
-        endYear: -1,
-        schedule: '',
-        dose: '',
-        reasonForTaking: '',
-        sideEffects: [],
-        comments: '',
-    },
-    [v4()]: {
-        drugName: '',
-        startYear: -1,
-        isCurrentlyTaking: YesNoResponse.None,
-        endYear: -1,
-        schedule: '',
-        dose: '',
-        reasonForTaking: '',
-        sideEffects: [],
-        comments: '',
-    },
-    [v4()]: {
-        drugName: '',
-        startYear: -1,
-        isCurrentlyTaking: YesNoResponse.None,
-        endYear: -1,
-        schedule: '',
-        dose: '',
-        reasonForTaking: '',
-        sideEffects: [],
-        comments: '',
-    },
-};
+export const initialMedicationsState: MedicationsState = {};
 
 export function medicationsReducer(
     state = initialMedicationsState,
@@ -191,7 +157,8 @@ export function medicationsReducer(
                 [medIndex]: {
                     drugName: medName,
                     startYear: -1,
-                    isCurrentlyTaking: YesNoResponse.None,
+                    isCurrentlyTaking:
+                        medName == '' ? YesNoResponse.Yes : YesNoResponse.None,
                     endYear: -1,
                     schedule: '',
                     dose: '',

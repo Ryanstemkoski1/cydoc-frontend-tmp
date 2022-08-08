@@ -114,11 +114,11 @@ export class MedicationsContent extends Component<Props, State> {
             blankQuestionChange,
             addMedication,
         } = this.props;
-        if (responseType == ResponseTypes.MEDS_BLANK && node) {
-            const newKey = v4();
-            addMedsPopOption(newKey, '');
+        const newKey = v4();
+        addMedsPopOption(newKey, '');
+        if (responseType == ResponseTypes.MEDS_BLANK && node)
             blankQuestionChange(node, newKey);
-        } else addMedication();
+        else this.setState({ currMeds: [...this.state.currMeds, newKey] });
     };
 
     makeHeader() {
@@ -183,15 +183,23 @@ export class MedicationsContent extends Component<Props, State> {
                 );
             }
             for (let i = 0; i < medIndices.length; i++) {
+                /*
+                If we're in the HPI and are generated a MEDS-POP or MEDS-BLANK table,
+                we want all of the panels from medIndices to show.
+                If we're in the Medications tab under Patient History, we only want
+                panels corresponding to those in which the user clicked yes to show. 
+                We use local state so that if the user clicks no within the medications
+                table, the row isn't gotten rid of immediately but just displays on the table
+                as no while the user is looking at the page.
+                */
                 if (
                     medIndices[i] &&
                     (responseType ||
-                        (medsEntries[medIndices[i]][1].drugName.length &&
-                            (this.state.currMeds.includes(
-                                medsEntries[medIndices[i]][0]
-                            ) ||
-                                medsEntries[medIndices[i]][1]
-                                    .isCurrentlyTaking == YesNoResponse.Yes)))
+                        this.state.currMeds.includes(
+                            medsEntries[medIndices[i]][0]
+                        ) ||
+                        medsEntries[medIndices[i]][1].isCurrentlyTaking ==
+                            YesNoResponse.Yes)
                 )
                     panels.push(
                         <MedicationsPanel
