@@ -224,9 +224,7 @@ const SetupAccount = async (
                         `/managers/${attributes['custom:associatedManager']}`,
                         payload
                     )
-                    .then(() => {
-                        alert('Associated manager updated');
-                    })
+                    .then(() => {})
                     .catch((err) => {
                         alert(
                             `Error updating manager: ${
@@ -241,7 +239,6 @@ const SetupAccount = async (
                 await stripeClient
                     .post(stripe_path, stripe_payload)
                     .then(() => {
-                        alert('Payment info successfully sent to Stripe');
                         return new Promise((resolve) => {
                             currentUser.completeNewPasswordChallenge(
                                 newPassword,
