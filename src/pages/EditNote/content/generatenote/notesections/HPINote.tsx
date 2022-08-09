@@ -365,7 +365,7 @@ export const extractNodes = (
 ): [string, string, string][] => {
     const formattedHpi: [string, string, string][] = [],
         order = state.hpi.order[source];
-    for (let i = 1; i < Object.keys(order).length; i++) {
+    for (let i = 1; i < Object.keys(order).length + 1; i++) {
         const node = state.hpi.nodes[order[i.toString()]];
         if (!isEmpty(state, node)) formattedHpi.push(extractNode(state, node));
     }
@@ -379,15 +379,17 @@ export const extractNodes = (
  * Pre-condition: hpi.graph is already sorted according to edge order and
  * there are no cycles
  */
-export const extractHpi = (state: HPINoteProps): HPI[] => {
-    const formattedHpis: HPI[] = [];
+export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
+    const formattedHpis: { [key: string]: HPI } = {};
     for (const nodeId of Object.keys(state.hpi.order)) {
         const allResponses = extractNodes(nodeId, state);
-        formattedHpis.push(
-            allResponses.reduce((prev, val, idx) => {
+        const chiefComplaint = state.hpi.nodes[nodeId].doctorView;
+        formattedHpis[chiefComplaint] = allResponses.reduce(
+            (prev, val, idx) => {
                 prev[idx] = val;
                 return prev;
-            }, {} as HPI)
+            },
+            {} as HPI
         );
     }
     return formattedHpis;
@@ -395,35 +397,53 @@ export const extractHpi = (state: HPINoteProps): HPI[] => {
 
 const HPINote = (state: HPINoteProps) => {
     /*
-    HPI note is generated into sentences, each element of the array
-    a paragraph for each chief complaint. The elements of the array 
-    are combined into one big string (across all chief complaints). 
-    If there are duplicates, all occurrences after the first instance 
-    are removed. The strings are then re-separated into an array of 
-    strings separated by chief complaint.
+    formattedHpis is a dictionary in which each key is the chief complaint
+    and the value is an array of template sentences.
+    
+    The following will convert each CC's array of template sentences into a 
+    paragraph, which is then re-split into an array and converted into a Set
+    of sentences for de-duplication within the paragraph and comparison with 
+    latter chief complaints.
+    
+    Specifically, each chief complaint set will be compared with later chief
+    complaint sets to look for duplicate sentences (finding the complement of
+    the second set). The first instances of duplicate sentences are kept, 
+    while later ones are removed.
     */
     const formattedHpis = extractHpi(state);
-    if (formattedHpis.length === 0) {
+    if (Object.keys(formattedHpis).length === 0) {
         return <div>No history of present illness reported.</div>;
     }
-    const initialPara = formattedHpis.map((formattedHpi) =>
+    const initialPara = Object.keys(formattedHpis).map((key) => {
+        const formattedHpi = formattedHpis[key];
         // TODO: use actual patient info to populate fields
-        createInitialHPI(formattedHpi)
-    );
-    const paragraphs = [
-        ...new Set(initialPara.join('PARAGRAPH_BREAK. ').split('. ')),
-    ]
-        .join('. ')
-        .split('PARAGRAPH_BREAK. ');
-    const finalPara = paragraphs.map((hpiString) =>
-        createHPI(
-            hpiString,
-            state.patientInformation.patientName,
-            state.patientInformation.pronouns
-        )
-    );
-
+        return new Set(createInitialHPI(formattedHpi).split('. '));
+    });
+    for (let i = 0; i < initialPara.length - 1; i++) {
+        for (let j = i + 1; j < initialPara.length; j++) {
+            const setA = initialPara[i];
+            const setB = initialPara[j];
+            initialPara[j] = new Set([...setB].filter((x) => !setA.has(x)));
+        }
+    }
     const title = [];
+    const finalPara = initialPara.reduce((acc: string[], hpiStringSet, i) => {
+        if (hpiStringSet.size) {
+            title.push(Object.keys(formattedHpis)[i]);
+            return [
+                ...acc,
+                createHPI(
+                    [...hpiStringSet].join('. '),
+                    state.patientInformation.patientName,
+                    state.patientInformation.pronouns
+                ),
+            ];
+        }
+        // don't include chief complaint if it was a subset of another CC
+        // paragraph (i.e. set B is a subset of set A)
+        return acc;
+    }, []);
+
     const miscText = [];
     const actualNote = [];
     /**

@@ -290,8 +290,6 @@ export class MedicationsContent extends Component<Props, State> {
                                     </Grid.Column>
                                 </Grid.Row>,
                             ];
-
-                            return acc;
                         }, [])}
                 </Grid>
                 {content}
