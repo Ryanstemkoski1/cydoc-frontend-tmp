@@ -63,8 +63,8 @@ const doctorSignUp = async (
 
     // identify user pool and app client
     let poolData = {
-        UserPoolId: 'us-east-1_eCwwmaBgU', // new user pool id
-        ClientId: '45112llgc6j7gdpma1ovn8ls94', // new pool app client id
+        UserPoolId: 'us-east-1_B303pmcdz', // old doctor user pool id - WARNING! DO NOT DEPLOY THIS OLD POOL ID TO PRODUCTION!
+        ClientId: '1g3vdqlpkpmse39veagh93hlih', // old pool app client id - WARNING! DO NOT DEPLOY THIS OLD POOL ID TO PRODUCTION!
     };
 
     // make Cognito request
