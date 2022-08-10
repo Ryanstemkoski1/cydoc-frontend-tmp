@@ -25,6 +25,8 @@ import { selectPatientInformationState } from 'redux/selectors/patientInformatio
 import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
 import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
 import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
+import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
+import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 
 interface HPINoteProps {
     hpi: HpiState;
@@ -33,6 +35,7 @@ interface HPINoteProps {
     surgicalHistory: SurgicalHistoryState;
     medicalHistory: MedicalHistoryState;
     patientInformation: PatientInformationState;
+    chiefComplaints: ChiefComplaintsState;
 }
 
 export type GraphNode = NodeInterface & { response: HpiResponseType };
@@ -384,6 +387,7 @@ export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
     for (const nodeId of Object.keys(state.hpi.order)) {
         const allResponses = extractNodes(nodeId, state);
         const chiefComplaint = state.hpi.nodes[nodeId].doctorView;
+        if (!(chiefComplaint in state.chiefComplaints)) continue;
         formattedHpis[chiefComplaint] = allResponses.reduce(
             (prev, val, idx) => {
                 prev[idx] = val;
@@ -464,16 +468,28 @@ const HPINote = (state: HPINoteProps) => {
     }
     return (
         <div>
-            {actualNote.map((text, i) => (
-                <p key={i}>
-                    <b>{text.chiefComplaint}</b>
-                    <br />
-                    {text.text}
-                    <br />
-                    <br />
-                    {text.miscNote}
-                </p>
-            ))}
+            {actualNote.reduce((acc: JSX.Element[], text, i) => {
+                if (text.chiefComplaint in state.chiefComplaints)
+                    return [
+                        ...acc,
+                        <p key={i}>
+                            <b>{text.chiefComplaint}</b>
+                            <br />
+                            {text.text}
+                            {text.miscNote ? (
+                                <>
+                                    {' '}
+                                    <br />
+                                    <br />
+                                    {text.miscNote}
+                                </>
+                            ) : (
+                                ''
+                            )}
+                        </p>,
+                    ];
+                return acc;
+            }, [])}
         </div>
     );
 };
@@ -484,5 +500,6 @@ const mapStateToProps = (state: CurrentNoteState) => ({
     surgicalHistory: selectSurgicalHistoryState(state),
     medicalHistory: selectMedicalHistoryState(state),
     patientInformation: selectPatientInformationState(state),
+    chiefComplaints: selectChiefComplaintsState(state),
 });
 export default connect(mapStateToProps)(HPINote);
