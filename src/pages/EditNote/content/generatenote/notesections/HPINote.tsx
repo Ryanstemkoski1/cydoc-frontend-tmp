@@ -40,6 +40,23 @@ interface HPINoteProps {
 
 export type GraphNode = NodeInterface & { response: HpiResponseType };
 
+export type ReduxNodeInterface = {
+    uid: string;
+    medID: string;
+    category: string;
+    text: string;
+    responseType: ResponseTypes;
+    bodySystem: string;
+    noteSection: string;
+    doctorView: string;
+    patientView: string;
+    doctorCreated: string;
+    blankTemplate: string;
+    blankYes: string;
+    blankNo: string;
+    response: HpiResponseType;
+};
+
 /* Returns whether the user has responded to this node or not */
 export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
     switch (node.responseType) {
@@ -358,6 +375,24 @@ export const extractNode = (
     return [node.blankTemplate, answer, negRes];
 };
 
+/*
+    Checks if a given node has children nodes that should not be displayed 
+    (i.e. in the case if the user clicks "NO" to a YES/NO question or "YES"
+    to a NO/YES question)
+*/
+export const checkParent = (
+    node: ReduxNodeInterface,
+    state: HPINoteProps
+): string[] => {
+    const medId = node.medID;
+    return (node.responseType == ResponseTypes.YES_NO &&
+        node.response == YesNoResponse.No) ||
+        (node.responseType == ResponseTypes.NO_YES &&
+            node.response == YesNoResponse.Yes)
+        ? state.hpi.graph[medId]
+        : [];
+};
+
 /**
  * Extracts and formats all nodes connected to the source according to
  * questionOrder
@@ -368,9 +403,12 @@ export const extractNodes = (
 ): [string, string, string][] => {
     const formattedHpi: [string, string, string][] = [],
         order = state.hpi.order[source];
+    let hideChildren: string[] = [];
     for (let i = 1; i < Object.keys(order).length + 1; i++) {
         const node = state.hpi.nodes[order[i.toString()]];
-        if (!isEmpty(state, node)) formattedHpi.push(extractNode(state, node));
+        hideChildren = [...hideChildren, ...checkParent(node, state)];
+        if (!isEmpty(state, node) && !hideChildren.includes(node.medID))
+            formattedHpi.push(extractNode(state, node));
     }
     return formattedHpi;
 };
