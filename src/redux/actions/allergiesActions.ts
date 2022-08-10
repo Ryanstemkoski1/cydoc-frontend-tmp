@@ -54,6 +54,24 @@ export function updateComments(index: string, newComments: string) {
     };
 }
 
+interface UpdateIdAction {
+    type: ALLERGIES_ACTION.UPDATE_ID;
+    payload: {
+        index: string;
+        id: string;
+    };
+}
+
+export function updateId(index: string, id: string) {
+    return {
+        type: ALLERGIES_ACTION.UPDATE_ID,
+        payload: {
+            index,
+            id,
+        },
+    };
+}
+
 interface AddAllergyAction {
     type: ALLERGIES_ACTION.ADD_ALLERGY;
 }
@@ -84,5 +102,6 @@ export type AllergiesActionTypes =
     | UpdateIncitingAgentAction
     | UpdateReactionAction
     | UpdateCommentsAction
+    | UpdateIdAction
     | AddAllergyAction
     | DeleteAllergyAction;
