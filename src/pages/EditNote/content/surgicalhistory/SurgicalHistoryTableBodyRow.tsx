@@ -14,7 +14,6 @@ import {
     toggleOption,
     updateYear,
     updateComments,
-    addProcedure,
     deleteProcedure,
 } from 'redux/actions/surgicalHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
@@ -295,7 +294,6 @@ interface DispatchProps {
     toggleOption: (index: string, optionSelected: YesNoResponse) => void;
     updateYear: (index: string, newYear: number) => void;
     updateComments: (index: string, newComment: string) => void;
-    addProcedure: () => void;
     deleteProcedure: (index: string) => void;
 }
 
@@ -318,7 +316,6 @@ const mapDispatchToProps = {
     toggleOption,
     updateYear,
     updateComments,
-    addProcedure,
     deleteProcedure,
 };
 

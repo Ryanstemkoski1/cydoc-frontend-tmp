@@ -73,16 +73,6 @@ export function updateComments(index: string, newComments: string) {
     };
 }
 
-interface AddProcedureAction {
-    type: SURGICAL_HISTORY_ACTION.ADD_PROCEDURE;
-}
-
-export function addProcedure() {
-    return {
-        type: SURGICAL_HISTORY_ACTION.ADD_PROCEDURE,
-    };
-}
-
 interface DeleteProcedureAction {
     type: SURGICAL_HISTORY_ACTION.DELETE_PROCEDURE;
     payload: {
@@ -125,6 +115,5 @@ export type SurgicalHistoryActionTypes =
     | ToggleOptionAction
     | UpdateYearAction
     | UpdateCommentsAction
-    | AddProcedureAction
     | DeleteProcedureAction
     | AddPshPopOptionsAction;

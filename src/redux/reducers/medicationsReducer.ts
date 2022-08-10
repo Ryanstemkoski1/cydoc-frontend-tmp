@@ -120,22 +120,6 @@ export function medicationsReducer(
                 },
             };
         }
-        case MEDICATIONS_ACTION.ADD_MEDICATION: {
-            return {
-                ...state,
-                [v4()]: {
-                    drugName: '',
-                    startYear: -1,
-                    isCurrentlyTaking: YesNoResponse.None,
-                    endYear: -1,
-                    schedule: '',
-                    dose: '',
-                    reasonForTaking: '',
-                    sideEffects: [],
-                    comments: '',
-                },
-            };
-        }
         case MEDICATIONS_ACTION.DELETE_MEDICATION: {
             const { index } = action.payload;
             const { [index]: deleted, ...newState } = state;

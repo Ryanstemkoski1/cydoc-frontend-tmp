@@ -21,7 +21,6 @@ import {
     selectMedicalHistoryItem,
 } from 'redux/selectors/medicalHistorySelector';
 import {
-    addDefaultCondition,
     toggleOption,
     updateStartYear,
     updateEndYear,
@@ -260,7 +259,6 @@ class MedicalHistoryNoteItem extends Component<Props> {
 }
 
 interface DispatchProps {
-    addDefaultCondition: () => void;
     toggleOption: (index: string, optionSelected: YesNoResponse) => void;
     updateStartYear: (index: string, newStartYear: number) => void;
     updateEndYear: (index: string, newEndYear: number) => void;
@@ -302,7 +300,6 @@ const mapStateToProps = (
 };
 
 const mapDispatchToProps = {
-    addDefaultCondition,
     toggleOption,
     updateStartYear,
     updateEndYear,

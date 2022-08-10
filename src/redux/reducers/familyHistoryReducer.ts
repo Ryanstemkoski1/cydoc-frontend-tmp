@@ -271,23 +271,7 @@ export function familyHistoryReducer(
                 },
             };
         }
-        case FAMILY_HISTORY_ACTION.ADD_CONDITION: {
-            return {
-                ...state,
-                [v4()]: {
-                    condition: '',
-                    hasAfflictedFamilyMember: YesNoResponse.Yes,
-                    familyMembers: {
-                        [v4()]: {
-                            member: FamilyOption.None,
-                            causeOfDeath: YesNoResponse.None,
-                            living: YesNoResponse.None,
-                            comments: '',
-                        },
-                    },
-                },
-            };
-        }
+
         case FAMILY_HISTORY_ACTION.UPDATE_CONDITION_NAME: {
             const { conditionIndex, newCondition } = action.payload;
             return {
@@ -311,7 +295,10 @@ export function familyHistoryReducer(
                 ...state,
                 [conditionIndex]: {
                     condition: conditionName,
-                    hasAfflictedFamilyMember: YesNoResponse.None,
+                    hasAfflictedFamilyMember:
+                        conditionName == ''
+                            ? YesNoResponse.Yes
+                            : YesNoResponse.None,
                     familyMembers: {
                         [v4()]: {
                             member: FamilyOption.None,

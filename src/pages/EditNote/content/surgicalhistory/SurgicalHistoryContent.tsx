@@ -4,7 +4,6 @@ import {
     updateProcedure,
     updateYear,
     updateComments,
-    addProcedure,
     deleteProcedure,
     AddPshPopOptionsAction,
     addPshPopOptions,
@@ -38,6 +37,7 @@ import {
     popResponse,
 } from 'redux/actions/hpiActions';
 import './SurgicalHistoryContent.css';
+import { YesNoResponse } from 'constants/enums';
 
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
@@ -66,6 +66,12 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             active: new Set(),
             isInvalidYear: invalidYearSet,
             currentYear: currentYear,
+            currSurgeries: Object.keys(this.props.surgicalHistory).filter(
+                (surgery) =>
+                    this.props.surgicalHistory[surgery].procedure.length &&
+                    this.props.surgicalHistory[surgery].hasHadSurgery ==
+                        YesNoResponse.Yes
+            ),
         };
         this.addRow = this.addRow.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
@@ -92,14 +98,17 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
     }
 
     addRow() {
+        const newKey = v4();
+        this.props.addPshPopOptions(newKey, '');
         if (
             this.props.responseType == ResponseTypes.PSH_BLANK &&
             this.props.node
-        ) {
-            const newKey = v4();
-            this.props.addPshPopOptions(newKey, '');
+        )
             this.props.blankQuestionChange(this.props.node, newKey);
-        } else this.props.addProcedure();
+        else
+            this.setState({
+                currSurgeries: [...this.state.currSurgeries, newKey],
+            });
     }
 
     deleteRow = (index: string) => {
@@ -370,25 +379,31 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
 
     render() {
         const values = this.props.surgicalHistory;
-        let nums = Object.keys(values);
+        let nums = Object.keys(values).filter(
+            (key) =>
+                this.state.currSurgeries.includes(key) ||
+                values[key].hasHadSurgery == YesNoResponse.Yes
+        );
         const {
             responseChoice,
             addPshPopOptions,
             responseType,
             popResponse,
             node,
+            surgicalHistory,
         } = this.props;
         if (responseType == ResponseTypes.PSH_POP && responseChoice && node) {
-            const procedureKeyMap: { [procedure: string]: string } = {};
-            Object.keys(values).map(
-                (key) => (procedureKeyMap[values[key].procedure] = key)
-            );
             nums = responseChoice.map((procedureName) => {
-                if (procedureName in procedureKeyMap)
-                    return procedureKeyMap[procedureName];
-                const newKey = v4();
-                addPshPopOptions(newKey, procedureName);
-                return newKey;
+                const key = Object.keys(surgicalHistory).find(
+                    (entry) => surgicalHistory[entry].procedure == procedureName
+                );
+                let surgKey = '';
+                if (key) surgKey = key;
+                else {
+                    surgKey = v4();
+                    addPshPopOptions(surgKey, procedureName);
+                }
+                return surgKey;
             });
             popResponse(node, nums);
         }
@@ -406,7 +421,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                     />
                 ) : (
                     <Table celled className='table-display'>
-                        <Table.Header content={this.makeHeader()} />
+                        {<Table.Header content={this.makeHeader()} />}
                         {/* eslint-disable react/no-children-prop */}
                         <Table.Body children={this.makeTableBodyRows(nums)} />
                         {/* eslint-enable react/no-children-prop */}
@@ -417,7 +432,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
 
         return (
             <>
-                {content}
+                {nums.length ? content : ''}
                 {!this.props.isPreview &&
                     this.props.responseType != ResponseTypes.PSH_POP && (
                         <AddRowButton
@@ -450,6 +465,7 @@ type OwnState = {
     active: Set<string>;
     isInvalidYear: Set<unknown>;
     currentYear: number;
+    currSurgeries: string[];
 };
 
 interface SurgicalHistoryProps {
@@ -468,7 +484,6 @@ interface DispatchProps {
     updateProcedure: (index: string, newProcedure: string) => void;
     updateYear: (index: string, newYear: number) => void;
     updateComments: (index: string, newComment: string) => void;
-    addProcedure: () => void;
     deleteProcedure: (index: string) => void;
     addPshPopOptions: (
         conditionIndex: string,
@@ -493,7 +508,6 @@ const mapDispatchToProps = {
     updateProcedure,
     updateYear,
     updateComments,
-    addProcedure,
     deleteProcedure,
     addPshPopOptions,
     blankQuestionChange,

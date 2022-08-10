@@ -169,16 +169,6 @@ export function updateComments(index: string, newComments: string) {
     };
 }
 
-interface AddMedicationAction {
-    type: MEDICATIONS_ACTION.ADD_MEDICATION;
-}
-
-export function addMedication() {
-    return {
-        type: MEDICATIONS_ACTION.ADD_MEDICATION,
-    };
-}
-
 interface DeleteMedicationAction {
     type: MEDICATIONS_ACTION.DELETE_MEDICATION;
     payload: {
@@ -223,6 +213,5 @@ export type MedicationsActionTypes =
     | UpdateReasonForTakingAction
     | UpdateSideEffectsAction
     | UpdateCommentsAction
-    | AddMedicationAction
     | DeleteMedicationAction
     | AddMedsPopOptionAction;

@@ -2,7 +2,6 @@ import {
     Form,
     Grid,
     TextAreaProps,
-    StrictInputProps,
     ButtonProps,
     Button,
 } from 'semantic-ui-react';
@@ -21,7 +20,6 @@ import {
     selectMedicalHistoryItem,
 } from 'redux/selectors/medicalHistorySelector';
 import {
-    addDefaultCondition,
     toggleOption,
     updateStartYear,
     updateEndYear,
@@ -260,7 +258,6 @@ interface MedicalHistoryProps {
 }
 
 interface DispatchProps {
-    addDefaultCondition: () => void;
     toggleOption: (index: string, optionSelected: YesNoResponse) => void;
     updateStartYear: (index: string, newStartYear: number) => void;
     updateEndYear: (index: string, newEndYear: number) => void;
@@ -281,7 +278,6 @@ type FindIndex = React.MouseEvent | React.FormEvent<HTMLTextAreaElement>;
 type Props = MedicalHistoryProps & RowProps & OwnProps & DispatchProps;
 
 const mapDispatchToProps = {
-    addDefaultCondition,
     toggleOption,
     updateStartYear,
     updateEndYear,

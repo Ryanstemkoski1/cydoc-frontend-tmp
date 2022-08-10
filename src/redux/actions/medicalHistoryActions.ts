@@ -113,16 +113,6 @@ export function updateComments(index: string, newComments: string) {
     };
 }
 
-interface AddDefaultConditonAction {
-    type: MEDICAL_HISTORY_ACTION.ADD_CONDITION;
-}
-
-export function addDefaultCondition() {
-    return {
-        type: MEDICAL_HISTORY_ACTION.ADD_CONDITION,
-    };
-}
-
 export interface AddPmhPopOptionsAction {
     type: MEDICAL_HISTORY_ACTION.ADD_PMH_POP_OPTIONS;
     payload: {
@@ -167,6 +157,5 @@ export type MedicalHistoryActionTypes =
     | UpdateConditionResolvedAction
     | UpdateEndYearAction
     | UpdateCommentsAction
-    | AddDefaultConditonAction
     | AddPmhPopOptionsAction
     | DeleteConditionAction;

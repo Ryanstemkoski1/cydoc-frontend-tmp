@@ -22,7 +22,6 @@ import {
     toggleCauseOfDeathOption,
     toggleLivingOption,
     updateComments,
-    addCondition,
 } from 'redux/actions/familyHistoryActions';
 import {
     selectFamilyHistoryState,
@@ -277,7 +276,6 @@ const mapDispatchToProps = {
     toggleCauseOfDeathOption,
     toggleLivingOption,
     updateComments,
-    addCondition,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FamilyHistoryBlock);

@@ -14,7 +14,6 @@ import {
     toggleCauseOfDeathOption,
     toggleLivingOption,
     updateComments,
-    addCondition,
     updateCondition,
     AddFhPopOptionsAction,
     addFhPopOptions,
@@ -39,6 +38,8 @@ import {
 import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
 import '../hpi/knowledgegraph/src/css/Button.css';
+import { YesNoResponse } from 'constants/enums';
+import { CONDITIONS } from 'constants/constants.json';
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.
@@ -59,6 +60,11 @@ class FamilyHistoryContent extends Component<Props, State> {
             windowWidth: 0,
             windowHeight: 0,
             seenConditions: conditions,
+            currConditions: Object.keys(this.props.familyHistory).filter(
+                (condition) =>
+                    this.props.familyHistory[condition].condition.length &&
+                    this.props.familyHistory[condition].hasAfflictedFamilyMember
+            ),
         };
     }
 
@@ -86,13 +92,15 @@ class FamilyHistoryContent extends Component<Props, State> {
             node,
             addFhPopOptions,
             blankQuestionChange,
-            addCondition,
         } = this.props;
-        if (responseType == ResponseTypes.FH_BLANK && node) {
-            const newKey = v4();
-            addFhPopOptions(newKey, '');
+        const newKey = v4();
+        addFhPopOptions(newKey, '');
+        if (responseType == ResponseTypes.FH_BLANK && node)
             blankQuestionChange(node, newKey);
-        } else addCondition();
+        else
+            this.setState({
+                currConditions: [...this.state.currConditions, newKey],
+            });
     }
 
     deleteRow = (index: string) => {
@@ -145,32 +153,40 @@ class FamilyHistoryContent extends Component<Props, State> {
         const standardFamilyHistory = this.standardizeFamilyHistory(
             familyHistory
         );
+        const defaultConditions = CONDITIONS.map((condition) =>
+            this.standardizeMedicalName(condition)
+        );
         const mobile = windowWidth < FAMILY_HISTORY_MOBILE_BP;
         //Create collection of rows
         // Use second OR statement so that the information may be auto-populated in the Family History tab
-        let listValues = Object.keys(standardFamilyHistory);
-        if (responseType == ResponseTypes.FH_POP && responseChoice) {
+        let listValues = Object.keys(standardFamilyHistory).filter(
+            (condition) =>
+                defaultConditions.includes(
+                    standardFamilyHistory[condition].condition
+                ) ||
+                this.state.currConditions.includes(condition) ||
+                standardFamilyHistory[condition].hasAfflictedFamilyMember ==
+                    YesNoResponse.Yes
+        );
+        if (responseType == ResponseTypes.FH_POP && responseChoice && node) {
             // create map of condition: key to look for existing conditions in family history
-            const conditionKeyMap: { [condition: string]: string } = {};
-            for (const key in standardFamilyHistory) {
-                const conditionName = standardFamilyHistory[key].condition;
-                conditionKeyMap[conditionName] = key;
-            }
-            const fhPopKeys = [];
-            for (const conditionKey in responseChoice) {
-                const conditionName: string = responseChoice[conditionKey];
-                if (conditionName in conditionKeyMap)
-                    fhPopKeys.push(conditionKeyMap[conditionName]);
+            listValues = responseChoice.map((condition) => {
+                const key = Object.keys(standardFamilyHistory).find(
+                    (entry) =>
+                        standardFamilyHistory[entry].condition == condition
+                );
+                let conditionKey = '';
+                if (key) conditionKey = key;
                 else {
-                    const newKey = v4();
-                    addFhPopOptions(newKey, conditionName);
-                    fhPopKeys.push(newKey);
+                    conditionKey = v4();
+                    addFhPopOptions(conditionKey, condition);
                 }
-            }
-            listValues = fhPopKeys;
-            if (node) popResponse(node, listValues);
+                return conditionKey;
+            });
+            popResponse(node, listValues);
         } else if (responseType == ResponseTypes.FH_BLANK && responseChoice)
             listValues = responseChoice;
+
         const listItems = listValues.map((condition, index) => {
             let conditionName = '';
             if (condition in standardFamilyHistory)
@@ -268,7 +284,6 @@ interface ContentProps {
 }
 
 interface DispatchProps {
-    addCondition: () => void;
     addFhPopOptions: (
         conditionIndex: string,
         conditionName: string
@@ -285,6 +300,7 @@ interface State {
     seenConditions: SeenCondition;
     windowWidth: number;
     windowHeight: number;
+    currConditions: string[];
 }
 
 type Props = FamilyHistoryProps & ContentProps & DispatchProps;
@@ -303,7 +319,6 @@ const mapDispatchToProps = {
     toggleCauseOfDeathOption,
     toggleLivingOption,
     updateComments,
-    addCondition,
     updateCondition,
     addFhPopOptions,
     blankQuestionChange,

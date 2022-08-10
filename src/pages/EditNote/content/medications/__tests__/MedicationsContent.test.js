@@ -376,22 +376,6 @@ describe('Medications Integration', () => {
     );
 
     test.each(cases)(
-        '%s view dispatches correct action when adding new medication row',
-        (_type, mountMedicationsWithStore) => {
-            const { store, wrapper } = mountMedicationsWithStore();
-            wrapper
-                .find('button[aria-label="Add-Medication-Row-Button"]')
-                .simulate('click');
-            const expectedActions = [
-                {
-                    type: MEDICATIONS_ACTION.ADD_MEDICATION,
-                },
-            ];
-            expect(store.getActions()).toEqual(expectedActions);
-        }
-    );
-
-    test.each(cases)(
         '%s view dispatches correct action when deleting medication row',
         (_type, mountMedicationsWithStore) => {
             const { store, wrapper } = mountMedicationsWithStore();

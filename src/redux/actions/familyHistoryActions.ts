@@ -157,16 +157,6 @@ export function updateComments(
     };
 }
 
-export interface AddConditionAction {
-    type: FAMILY_HISTORY_ACTION.ADD_CONDITION;
-}
-
-export function addCondition() {
-    return {
-        type: FAMILY_HISTORY_ACTION.ADD_CONDITION,
-    };
-}
-
 interface UpdateConditionAction {
     type: FAMILY_HISTORY_ACTION.UPDATE_CONDITION_NAME;
     payload: {
@@ -230,7 +220,6 @@ export type FamilyHistoryActionTypes =
     | ToggleCauseOfDeathOptionAction
     | ToggleLivingOptionAction
     | UpdateCommentsAction
-    | AddConditionAction
     | UpdateConditionAction
     | AddFhPopOptionsAction
     | DeleteConditionAction;

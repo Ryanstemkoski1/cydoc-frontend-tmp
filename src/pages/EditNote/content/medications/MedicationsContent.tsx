@@ -7,7 +7,6 @@ import diseases from 'constants/diagnoses';
 import AddRowButton from 'components/tools/AddRowButton.js';
 import { OptionMapping } from '_processOptions';
 import {
-    addMedication,
     deleteMedication,
     addMedsPopOption,
     updateCurrentlyTaking,
@@ -112,7 +111,6 @@ export class MedicationsContent extends Component<Props, State> {
             node,
             addMedsPopOption,
             blankQuestionChange,
-            addMedication,
         } = this.props;
         const newKey = v4();
         addMedsPopOption(newKey, '');
@@ -312,7 +310,6 @@ const mapStateToProps = (state: CurrentNoteState) => ({
 });
 
 const mapDispatchToProps = {
-    addMedication,
     deleteMedication,
     updateCurrentlyTaking,
     addMedsPopOption,

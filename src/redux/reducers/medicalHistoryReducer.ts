@@ -143,21 +143,6 @@ export function medicalHistoryReducer(
                 },
             };
         }
-        case MEDICAL_HISTORY_ACTION.ADD_CONDITION: {
-            // Adds a default (blank, no buttons selected) condition
-            // NOTE: Must change default condition initialization accordingly here if Medical History state structure changes
-            return {
-                ...state,
-                [v4()]: {
-                    condition: '',
-                    hasBeenAfflicted: YesNoResponse.Yes,
-                    startYear: -1,
-                    hasConditionResolved: YesNoResponse.None,
-                    endYear: -1,
-                    comments: '',
-                },
-            };
-        }
         case MEDICAL_HISTORY_ACTION.ADD_PMH_POP_OPTIONS: {
             /*
             For the POP component used in HPI. Since the response in 
@@ -171,7 +156,10 @@ export function medicalHistoryReducer(
                 ...state,
                 [conditionIndex]: {
                     condition: conditionName,
-                    hasBeenAfflicted: YesNoResponse.None,
+                    hasBeenAfflicted:
+                        conditionName == ''
+                            ? YesNoResponse.Yes
+                            : YesNoResponse.None,
                     startYear: -1,
                     hasConditionResolved: YesNoResponse.None,
                     endYear: -1,
