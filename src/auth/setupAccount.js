@@ -137,7 +137,7 @@ const SetupAccount = async (
                                             isFirstLoginFlag: false,
                                         });
                                         alert(
-                                            'Your account has been successfully set up. Please login to continue.'
+                                            'Your account has been successfully set up. Please accept the following reload prompt and login to continue'
                                         );
                                         window.location.reload(false);
                                     },
@@ -249,7 +249,7 @@ const SetupAccount = async (
                                             isFirstLoginFlag: false,
                                         });
                                         alert(
-                                            'Your account has been successfully set up. Please login to continue.'
+                                            'Your account has been successfully set up. Please accept the following reload prompt and login to continue'
                                         );
                                         window.location.reload(false);
                                     },
