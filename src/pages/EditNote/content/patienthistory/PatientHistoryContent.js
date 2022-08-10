@@ -102,13 +102,9 @@ export default class PatientHistoryContent extends Component {
                 <>
                     <Button
                         icon
-                        labelPosition={collapseTabs ? undefined : 'left'}
+                        labelPosition='left'
                         floated='left'
-                        className={
-                            collapseTabs
-                                ? 'small-patient-previous-button'
-                                : 'patient-previous-button'
-                        }
+                        className='patient-previous-button'
                         activeTabName={
                             index == 0
                                 ? undefined
@@ -121,13 +117,31 @@ export default class PatientHistoryContent extends Component {
                         }
                         value={index == 0 ? undefined : index - 1}
                     >
-                        {collapseTabs ? '' : 'Previous'}
+                        Previous
+                        <Icon name='arrow left' />
+                    </Button>
+                    <Button
+                        icon
+                        floated='left'
+                        className='small-patient-previous-button'
+                        activeTabName={
+                            index == 0
+                                ? undefined
+                                : Object.keys(tabDict)[index - 1]
+                        }
+                        onClick={
+                            index == 0
+                                ? this.props.previousFormClick
+                                : this.handleTabChange
+                        }
+                        value={index == 0 ? undefined : index - 1}
+                    >
                         <Icon name='arrow left' />
                     </Button>
 
                     <Button
                         icon
-                        labelPosition={collapseTabs ? undefined : 'right'}
+                        labelPosition='right'
                         floated='right'
                         activeTabName={
                             index == Object.keys(tabDict).length - 1
@@ -144,13 +158,31 @@ export default class PatientHistoryContent extends Component {
                                 ? this.props.nextFormClick
                                 : this.handleTabChange
                         }
-                        className={
-                            collapseTabs
-                                ? 'small-patient-next-button'
-                                : 'patient-next-button'
-                        }
+                        className='patient-next-button'
                     >
-                        {collapseTabs ? '' : 'Next'}
+                        Next
+                        <Icon name='arrow right' />
+                    </Button>
+                    <Button
+                        icon
+                        floated='right'
+                        activeTabName={
+                            index == Object.keys(tabDict).length - 1
+                                ? undefined
+                                : Object.keys(tabDict)[index + 1]
+                        }
+                        value={
+                            index == Object.keys(tabDict).length - 1
+                                ? undefined
+                                : index + 1
+                        }
+                        onClick={
+                            index == Object.keys(tabDict).length - 1
+                                ? this.props.nextFormClick
+                                : this.handleTabChange
+                        }
+                        className='small-patient-next-button'
+                    >
                         <Icon name='arrow right' />
                     </Button>
                 </>

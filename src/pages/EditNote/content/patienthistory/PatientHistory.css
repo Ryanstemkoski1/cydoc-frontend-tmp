@@ -103,6 +103,7 @@
 .ui.icon.button.surgical-previous-button, .ui.icon.button.surgical-next-button,
 .ui.icon.button.medications-previous-button, .ui.icon.button.medications-next-button,
 .ui.icon.button.allergies-previous-button, .ui.icon.button.allergies-next-button {
+  display: block;
   position: fixed;
   bottom: 15px;
   margin: 0;
@@ -135,7 +136,7 @@
 
 
 .ui.icon.button.small-patient-previous-button, .ui.icon.button.small-patient-next-button {
-  display: block;
+  display: none;
   position: fixed;
   bottom: 15px;
   opacity: 0.8;
@@ -145,6 +146,14 @@
 }
 
 @media screen and (max-width: 1400px) {
+
+  .ui.icon.button.patient-previous-button, .ui.icon.button.patient-next-button {
+    display: none;
+  }
+
+  .ui.icon.button.small-patient-previous-button, .ui.icon.button.small-patient-next-button {
+    display: block;
+  }
 
   .ui.icon.button.small-patient-previous-button {
     left: 5px;

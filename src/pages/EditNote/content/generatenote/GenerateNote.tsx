@@ -22,7 +22,7 @@ import {
     Modal,
     Header,
     Form,
-    InputOnChangeData,
+    Icon,
 } from 'semantic-ui-react';
 import { PlanState } from 'redux/reducers/planReducer';
 import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
@@ -339,14 +339,24 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 <PlanNote planState={planState} />
             </Segment>
             <Button
-                icon='arrow left'
+                icon
                 labelPosition='left'
                 floated='left'
                 onClick={previousFormClick}
                 className='note-previous-button'
-                aria-label='previous-button'
-                content='Previous'
-            />
+            >
+                Previous
+                <Icon name='arrow left' />
+            </Button>
+            {/* mobile */}
+            <Button
+                icon
+                floated='left'
+                onClick={previousFormClick}
+                className='small-note-previous-button'
+            >
+                <Icon name='arrow left' />
+            </Button>
         </div>
     );
 };

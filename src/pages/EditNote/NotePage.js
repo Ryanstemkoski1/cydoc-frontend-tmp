@@ -35,7 +35,7 @@ class NotePage extends Component {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
-            hpiTab: -1,
+            hpiTab: 0,
             activeHPI: '',
             activePMH: 'Medical History',
             pmhTab: PMH_TAB_NAMES.indexOf('Medical History'),
@@ -46,19 +46,17 @@ class NotePage extends Component {
     continueHPITab = (e) => {
         e.preventDefault();
         window.scrollTo(0, 0);
+        let hpiTab = this.state.hpiTab;
         if (
-            [-1, Object.keys(this.props.chiefComplaints).length - 1].includes(
-                this.state.hpiTab
-            )
-        ) {
+            Object.keys(this.props.chiefComplaints).length - 1 <=
+                this.state.hpiTab ||
+            this.props.activeItem == 'CC'
+        )
             this.nextFormClick();
-            if (this.state.hpiTab != -1) return;
-        }
+        else hpiTab += 1;
         this.setState({
-            hpiTab: this.state.hpiTab + 1,
-            activeHPI: Object.keys(this.props.chiefComplaints)[
-                this.state.hpiTab + 1
-            ],
+            hpiTab: hpiTab,
+            activeHPI: Object.keys(this.props.chiefComplaints)[hpiTab],
         });
     };
 
@@ -88,29 +86,6 @@ class NotePage extends Component {
         this.setState({
             pmhTab: activeIndex,
             activePMH: PMH_TAB_NAMES[activeIndex],
-        });
-        setTimeout((_e) => {
-            this.setStickyHeaders();
-        }, 0);
-    };
-
-    handlePMHPrevTab = (e, { activeTabName }) => {
-        const index = PMH_TAB_NAMES.indexOf(activeTabName);
-        this.setState({
-            pmhTab: index,
-            activePMH: activeTabName,
-        });
-        setTimeout((_e) => {
-            this.setStickyHeaders();
-        }, 0);
-    };
-
-    handlePMHNextTab = (e, { activeTabName }) => {
-        e.preventDefault();
-        const index = PMH_TAB_NAMES.indexOf(activeTabName);
-        this.setState({
-            pmhTab: index,
-            activePMH: activeTabName,
         });
         setTimeout((_e) => {
             this.setStickyHeaders();
@@ -226,7 +201,6 @@ class NotePage extends Component {
             case 'CC':
                 tabToDisplay = (
                     <HPIContent
-                        nextFormClick={this.nextFormClick}
                         step={-1}
                         continue={this.continueHPITab}
                         back={this.backHPITab}
@@ -239,7 +213,6 @@ class NotePage extends Component {
                 tabToDisplay = Object.keys(this.props.chiefComplaints)
                     .length ? (
                     <HPIContent
-                        nextFormClick={this.nextFormClick}
                         step={this.state.hpiTab}
                         continue={this.continueHPITab}
                         back={this.backHPITab}
@@ -254,21 +227,37 @@ class NotePage extends Component {
                             icon
                             labelPosition='left'
                             floated='left'
-                            onClick={this.previousFormClick}
+                            onClick={this.backHPITab}
                             className='hpi-previous-button'
                         >
-                            Previous Form
-                            <Icon name='angle left' />
+                            Previous
+                            <Icon name='arrow left' />
+                        </Button>
+                        <Button
+                            icon
+                            floated='left'
+                            onClick={this.backHPITab}
+                            className='hpi-small-previous-button'
+                        >
+                            <Icon name='arrow left' />
                         </Button>
                         <Button
                             icon
                             labelPosition='right'
                             floated='right'
-                            onClick={this.nextFormClick}
+                            onClick={this.continueHPITab}
                             className='hpi-next-button'
                         >
-                            Next Form
-                            <Icon name='angle right' />
+                            Next
+                            <Icon name='arrow right' />
+                        </Button>
+                        <Button
+                            icon
+                            floated='right'
+                            onClick={this.continueHPITab}
+                            className='hpi-small-next-button'
+                        >
+                            <Icon name='arrow right' />
                         </Button>
                     </>
                 );
