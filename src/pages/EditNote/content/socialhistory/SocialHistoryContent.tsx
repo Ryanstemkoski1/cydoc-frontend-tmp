@@ -1,6 +1,7 @@
-import React, { Fragment } from 'react';
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Grid, TextArea, Form, Segment } from 'semantic-ui-react';
+import { Grid, TextArea, Form } from 'semantic-ui-react';
 import Tobacco from './Tobacco';
 import Alcohol from './Alcohol';
 import RecreationalDrugs from './RecreationalDrugs';

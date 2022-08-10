@@ -1,13 +1,7 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { Component } from 'react';
 import Dropdown from 'components/tools/OptimizedDropdown';
-import allergens from 'constants/allergens';
-import {
-    Button,
-    Table,
-    TableBody,
-    TextArea,
-    TextAreaProps,
-} from 'semantic-ui-react';
+import { Button, Table, TextArea, TextAreaProps } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { AllergiesState, AllergiesItem } from 'redux/reducers/allergiesReducer';
 import { CurrentNoteState } from 'redux/reducers';
