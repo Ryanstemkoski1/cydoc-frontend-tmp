@@ -35,7 +35,6 @@ class NotePage extends Component {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
-            hpiTab: 0,
             activeHPI: '',
             activePMH: 'Medical History',
             pmhTab: PMH_TAB_NAMES.indexOf('Medical History'),
@@ -46,16 +45,21 @@ class NotePage extends Component {
     continueHPITab = (e) => {
         e.preventDefault();
         window.scrollTo(0, 0);
-        let hpiTab = this.state.hpiTab;
+        let hpiTab =
+            this.state.activeHPI in this.props.chiefComplaints
+                ? Object.keys(this.props.chiefComplaints).findIndex(
+                      (cc) => cc == this.state.activeHPI
+                  )
+                : 0;
+        const lastIndex = Object.keys(this.props.chiefComplaints).length - 1;
         if (
-            Object.keys(this.props.chiefComplaints).length - 1 <=
-                this.state.hpiTab ||
+            !Object.keys(this.props.chiefComplaints).length ||
+            lastIndex == hpiTab ||
             this.props.activeItem == 'CC'
-        )
+        ) {
             this.nextFormClick();
-        else hpiTab += 1;
+        } else hpiTab += 1;
         this.setState({
-            hpiTab: hpiTab,
             activeHPI: Object.keys(this.props.chiefComplaints)[hpiTab],
         });
     };
@@ -63,20 +67,25 @@ class NotePage extends Component {
     // go to previous page (change step = step - 1)
     backHPITab = (e) => {
         e.preventDefault();
-        if (this.state.hpiTab <= 0) this.previousFormClick();
-        this.setState({
-            hpiTab: this.state.hpiTab - 1,
-            activeHPI: Object.keys(this.props.chiefComplaints)[
-                this.state.hpiTab - 1
-            ],
-        });
+        if (
+            !Object.keys(this.props.chiefComplaints).length ||
+            Object.keys(this.props.chiefComplaints)[0] == this.state.activeHPI
+        )
+            this.previousFormClick();
+        else
+            this.setState({
+                activeHPI: Object.keys(this.props.chiefComplaints)[
+                    Object.keys(this.props.chiefComplaints).findIndex(
+                        (cc) => cc == this.state.activeHPI
+                    ) - 1
+                ],
+            });
         window.scrollTo(0, 0);
     };
 
     setHPITab = (e, tabIndex) => {
         e.preventDefault();
         this.setState({
-            hpiTab: tabIndex,
             activeHPI: Object.keys(this.props.chiefComplaints)[tabIndex],
         });
         window.scrollTo(0, 0);
@@ -213,7 +222,15 @@ class NotePage extends Component {
                 tabToDisplay = Object.keys(this.props.chiefComplaints)
                     .length ? (
                     <HPIContent
-                        step={this.state.hpiTab}
+                        step={
+                            this.state.activeHPI in this.props.chiefComplaints
+                                ? Object.keys(
+                                      this.props.chiefComplaints
+                                  ).findIndex(
+                                      (cc) => cc == this.state.activeHPI
+                                  )
+                                : 0
+                        }
                         continue={this.continueHPITab}
                         back={this.backHPITab}
                         activeTab={this.state.activeHPI}
@@ -308,7 +325,15 @@ class NotePage extends Component {
                 tabToDisplay = (
                     <HPIContent
                         nextFormClick={this.nextFormClick}
-                        step={this.state.hpiTab}
+                        step={
+                            this.state.activeHPI in this.props.chiefComplaints
+                                ? Object.keys(
+                                      this.props.chiefComplaints
+                                  ).findIndex(
+                                      (cc) => cc == this.state.activeHPI
+                                  )
+                                : 0
+                        }
                         continue={this.continueHPITab}
                         back={this.backHPITab}
                         activeTab={this.state.activeHPI}
