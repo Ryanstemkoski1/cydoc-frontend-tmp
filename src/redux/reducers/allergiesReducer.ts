@@ -10,12 +10,13 @@ export interface AllergiesItem {
     incitingAgent: string;
     reaction: string;
     comments: string;
+    id: string;
 }
 
 export const initialAllergiesState: AllergiesState = {
-    [v4()]: { incitingAgent: '', reaction: '', comments: '' },
-    [v4()]: { incitingAgent: '', reaction: '', comments: '' },
-    [v4()]: { incitingAgent: '', reaction: '', comments: '' },
+    [v4()]: { incitingAgent: '', reaction: '', comments: '', id: '' },
+    [v4()]: { incitingAgent: '', reaction: '', comments: '', id: '' },
+    [v4()]: { incitingAgent: '', reaction: '', comments: '', id: '' },
 };
 
 export function allergiesReducer(
@@ -53,6 +54,16 @@ export function allergiesReducer(
                 },
             };
         }
+        case ALLERGIES_ACTION.UPDATE_ID: {
+            const { index, id } = action.payload;
+            return {
+                ...state,
+                [index]: {
+                    ...state[index],
+                    id: id,
+                },
+            };
+        }
         case ALLERGIES_ACTION.ADD_ALLERGY: {
             return {
                 ...state,
@@ -60,6 +71,7 @@ export function allergiesReducer(
                     incitingAgent: '',
                     reaction: '',
                     comments: '',
+                    id: '',
                 },
             };
         }

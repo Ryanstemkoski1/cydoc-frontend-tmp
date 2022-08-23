@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Divider, Form, Grid, Input, Dropdown } from 'semantic-ui-react';
-import tobaccoProducts from 'constants/SocialHistory/tobaccoProducts';
+import tobaccoProducts, {
+    TobaccoProduct,
+} from 'constants/SocialHistory/tobaccoProducts';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import { selectTobaccoState } from 'redux/selectors/socialHistorySelectors';
-import '../familyhistory/FamilyHistory.css';
 import {
     updateTobaccoUsage,
     updateTobaccoPacksPerDay,
@@ -21,8 +23,6 @@ import {
     YesNoResponse,
 } from 'constants/enums';
 import { CurrentNoteState } from 'redux/reducers';
-import { TobaccoProduct } from 'constants/SocialHistory/tobaccoProducts';
-
 import '../familyhistory/FamilyHistory.css';
 import '../hpi/knowledgegraph/src/css/Button.css';
 
@@ -89,7 +89,8 @@ class Tobacco extends React.Component<Props, State> {
                         />
                         {this.state.invalidYear && (
                             <p className='year-validation-error'>
-                                Please enter a year between 1900 and 2020
+                                Please enter a year between 1900 and{' '}
+                                {this.currentYear}
                             </p>
                         )}
                     </Form.Field>

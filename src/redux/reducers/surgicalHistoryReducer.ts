@@ -14,26 +14,7 @@ export interface SurgicalHistoryItem {
     comments: string;
 }
 
-export const initialSurgicalHistoryState: SurgicalHistoryState = {
-    [v4()]: {
-        hasHadSurgery: YesNoResponse.None,
-        procedure: '',
-        year: -1,
-        comments: '',
-    },
-    [v4()]: {
-        hasHadSurgery: YesNoResponse.None,
-        procedure: '',
-        year: -1,
-        comments: '',
-    },
-    [v4()]: {
-        hasHadSurgery: YesNoResponse.None,
-        procedure: '',
-        year: -1,
-        comments: '',
-    },
-};
+export const initialSurgicalHistoryState: SurgicalHistoryState = {};
 
 export function surgicalHistoryReducer(
     state = initialSurgicalHistoryState,
@@ -83,19 +64,6 @@ export function surgicalHistoryReducer(
                 },
             };
         }
-        case SURGICAL_HISTORY_ACTION.ADD_PROCEDURE: {
-            // Adds a default (blank, no buttons selected) procedure
-            // NOTE: Must change default condition initialization accordingly here if Surgical History state structure changes
-            return {
-                ...state,
-                [v4()]: {
-                    hasHadSurgery: YesNoResponse.None,
-                    procedure: '',
-                    year: -1,
-                    comments: '',
-                },
-            };
-        }
         case SURGICAL_HISTORY_ACTION.DELETE_PROCEDURE: {
             const { index } = action.payload;
             const { [index]: deleted, ...newState } = state;
@@ -112,7 +80,10 @@ export function surgicalHistoryReducer(
             return {
                 ...state,
                 [conditionIndex]: {
-                    hasHadSurgery: YesNoResponse.None,
+                    hasHadSurgery:
+                        conditionName == ''
+                            ? YesNoResponse.Yes
+                            : YesNoResponse.None,
                     procedure: conditionName,
                     year: -1,
                     comments: '',

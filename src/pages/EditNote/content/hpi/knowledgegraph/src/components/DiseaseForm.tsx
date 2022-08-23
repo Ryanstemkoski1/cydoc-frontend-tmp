@@ -7,6 +7,7 @@ import {
     EdgeInterface,
     NodeInterface,
     OrderInterface,
+    ResponseTypes,
 } from 'constants/hpiEnums';
 import axios from 'axios';
 import { connect } from 'react-redux';
@@ -145,7 +146,10 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
                 questionArr = [...questionArr, nodeToElementDict[currNode]];
             }
             const childEdges =
-                values.nodes[currNode].response == YesNoResponse.Yes ||
+                (values.nodes[currNode].responseType == ResponseTypes.YES_NO &&
+                    values.nodes[currNode].response == YesNoResponse.Yes) ||
+                (values.nodes[currNode].responseType == ResponseTypes.NO_YES &&
+                    values.nodes[currNode].response == YesNoResponse.No) ||
                 values.nodes[currNode].text == 'nan'
                     ? parentToChildNodes[currNode].slice().reverse()
                     : [];

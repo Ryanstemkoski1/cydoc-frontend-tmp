@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { Component } from 'react';
 import {
     TextArea,
@@ -14,7 +15,6 @@ import {
     toggleOption,
     updateYear,
     updateComments,
-    addProcedure,
     deleteProcedure,
 } from 'redux/actions/surgicalHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
@@ -30,7 +30,6 @@ import {
     selectSurgicalHistoryItem,
 } from 'redux/selectors/surgicalHistorySelectors';
 import { OptionMapping } from '_processOptions';
-import './SurgicalHistoryTableBodyRow.css';
 import ToggleButton from 'components/tools/ToggleButton';
 import { YesNoResponse } from 'constants/enums';
 
@@ -52,7 +51,7 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
                 target.value !== '' &&
                 (isNaN(startYear) ||
                     startYear < 1900 ||
-                    startYear > new Date().getFullYear()),
+                    startYear > new Date(Date.now()).getFullYear()),
         });
     };
 
@@ -192,12 +191,13 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
                                 rowIndex={rowIndex}
                                 defaultValue={yearString}
                                 className='table-row-text'
+                                placeHolder='e.g. 2020'
                                 id='row'
                             />
                             {this.state.invalidYear && (
                                 <p className='year-validation-error'>
-                                    Please enter a valid year between 1900 and
-                                    today
+                                    Please enter a year between 1900 and{' '}
+                                    {new Date(Date.now()).getFullYear()}
                                 </p>
                             )}
                         </div>
@@ -216,6 +216,7 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
                             rowIndex={rowIndex}
                             value={comments}
                             className='table-row-text'
+                            placeHolder='Comments'
                             id='row'
                         />
                     </div>
@@ -243,15 +244,17 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
         return (
             <Table.Row>
                 {tableRows}
-                <Button
-                    circular
-                    icon='close'
-                    onClick={() => {
-                        this.props.deleteRow(this.props.rowIndex as string);
-                    }}
-                    aria-label='delete-surgery'
-                    className='hpi-ph-button delete-surgery'
-                />
+                <td>
+                    <Button
+                        circular
+                        icon='close'
+                        onClick={() => {
+                            this.props.deleteRow(this.props.rowIndex as string);
+                        }}
+                        aria-label='delete-surgery'
+                        className='hpi-ph-button delete-surgery'
+                    />
+                </td>
             </Table.Row>
         );
     }
@@ -293,7 +296,6 @@ interface DispatchProps {
     toggleOption: (index: string, optionSelected: YesNoResponse) => void;
     updateYear: (index: string, newYear: number) => void;
     updateComments: (index: string, newComment: string) => void;
-    addProcedure: () => void;
     deleteProcedure: (index: string) => void;
 }
 
@@ -316,7 +318,6 @@ const mapDispatchToProps = {
     toggleOption,
     updateYear,
     updateComments,
-    addProcedure,
     deleteProcedure,
 };
 

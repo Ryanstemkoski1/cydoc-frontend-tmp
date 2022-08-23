@@ -8,6 +8,7 @@ import SocialHistoryContent from '../socialhistory/SocialHistoryContent';
 import FamilyHistoryContent from '../familyhistory/FamilyHistoryContent';
 import './PatientHistory.css';
 import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
+import { PMH_TAB_NAMES } from 'constants/constants';
 
 export default class PatientHistoryContent extends Component {
     constructor(props) {
@@ -21,10 +22,7 @@ export default class PatientHistoryContent extends Component {
         };
         this.updateDimensions = this.updateDimensions.bind(this);
         this.handleItemClick = this.handleItemClick.bind(this);
-        //this.updateIndex = this.updateIndex.bind(this);
         this.setMenuPosition = this.setMenuPosition.bind(this);
-        //this.onNextClick = this.onNextClick.bind(this);
-        //this.onPreviousClick = this.onPreviousClick.bind(this);
     }
 
     componentDidMount() {
@@ -60,213 +58,149 @@ export default class PatientHistoryContent extends Component {
             fixedMenu.style.top = `${this.state.headerHeight}px`;
         }
     }
+    /**This revised function accepts a mobile tab's button's children and value and changes the state.
+     * By changing the state, it will call upon the onTabClick function call changing the tab. */
+    handleItemClick = (e, { children, value }) => {
+        this.setState({ activeTabName: children, activeIndex: value });
+    };
 
-    handleItemClick = (e, { children }) => {
-        this.setState({ activeTabName: children });
+    /** This function accepts a button's activeTabName (whether it be the next/previous tabname) and value and changes
+     * the state. By changing the state, It will call upon the Tab component's activeIndex function call changing tabs */
+    handleTabChange = (e, { activeTabName, value }) => {
+        this.setState({
+            activeTabName: activeTabName,
+            activeIndex: value,
+        });
+        this.props.handlePMHTabChange(e, { activeIndex: value });
     };
 
     render() {
         const { windowWidth } = this.state;
-        const activeTabName = this.props.activePMH;
-        const activeIndex = this.props.activeIndex;
+        const activeTabName = this.state.activeTabName;
+        const activeIndex = this.state.activeIndex;
         const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
+
+        const tabDict = {
+            'Medical History': (
+                <MedicalHistoryContent activeTabName='Medical History' />
+            ),
+            'Surgical History': (
+                <SurgicalHistoryContent activeTabName='Surgical History' />
+            ),
+            Medications: <MedicationsContent activeTabName='Medications' />,
+            Allergies: <AllergiesContent activeTabName='Allergies' />,
+            'Social History': (
+                <SocialHistoryContent activeTabName='Social History' />
+            ),
+            'Family History': (
+                <FamilyHistoryContent activeTabName='Family History' />
+            ),
+        };
+
+        const buttons = Object.keys(tabDict).map((_name, index) => {
+            return (
+                <>
+                    <Button
+                        icon
+                        labelPosition='left'
+                        floated='left'
+                        className='patient-previous-button'
+                        activeTabName={
+                            index == 0
+                                ? undefined
+                                : Object.keys(tabDict)[index - 1]
+                        }
+                        onClick={
+                            index == 0
+                                ? this.props.previousFormClick
+                                : this.handleTabChange
+                        }
+                        value={index == 0 ? undefined : index - 1}
+                    >
+                        Previous
+                        <Icon name='arrow left' />
+                    </Button>
+                    <Button
+                        icon
+                        floated='left'
+                        className='small-patient-previous-button'
+                        activeTabName={
+                            index == 0
+                                ? undefined
+                                : Object.keys(tabDict)[index - 1]
+                        }
+                        onClick={
+                            index == 0
+                                ? this.props.previousFormClick
+                                : this.handleTabChange
+                        }
+                        value={index == 0 ? undefined : index - 1}
+                    >
+                        <Icon name='arrow left' />
+                    </Button>
+
+                    <Button
+                        icon
+                        labelPosition='right'
+                        floated='right'
+                        activeTabName={
+                            index == Object.keys(tabDict).length - 1
+                                ? undefined
+                                : Object.keys(tabDict)[index + 1]
+                        }
+                        value={
+                            index == Object.keys(tabDict).length - 1
+                                ? undefined
+                                : index + 1
+                        }
+                        onClick={
+                            index == Object.keys(tabDict).length - 1
+                                ? this.props.nextFormClick
+                                : this.handleTabChange
+                        }
+                        className='patient-next-button'
+                    >
+                        Next
+                        <Icon name='arrow right' />
+                    </Button>
+                    <Button
+                        icon
+                        floated='right'
+                        activeTabName={
+                            index == Object.keys(tabDict).length - 1
+                                ? undefined
+                                : Object.keys(tabDict)[index + 1]
+                        }
+                        value={
+                            index == Object.keys(tabDict).length - 1
+                                ? undefined
+                                : index + 1
+                        }
+                        onClick={
+                            index == Object.keys(tabDict).length - 1
+                                ? this.props.nextFormClick
+                                : this.handleTabChange
+                        }
+                        className='small-patient-next-button'
+                    >
+                        <Icon name='arrow right' />
+                    </Button>
+                </>
+            );
+        });
+
         // panes for desktop view
-        const panes = [
-            {
-                menuItem: 'Medical History',
+        const panes = Object.keys(tabDict).map((name, index) => {
+            return {
+                menuItem: name,
                 render: () => (
                     <Tab.Pane>
-                        <MedicalHistoryContent activeTabName='Medical History' />
-                        <Button
-                            icon
-                            labelPosition='left'
-                            floated='left'
-                            className='patient-previous-button'
-                            onClick={this.props.previousFormClick}
-                        >
-                            Previous
-                            <Icon name='arrow left' />
-                        </Button>
-
-                        <Button
-                            icon
-                            labelPosition='right'
-                            floated='right'
-                            className='patient-next-button'
-                            value={1}
-                            activeTabName='Surgical History'
-                            onClick={this.props.handleNextTab}
-                        >
-                            Next
-                            <Icon name='arrow right' />
-                        </Button>
+                        {tabDict[name]}
+                        {buttons[index]}
                     </Tab.Pane>
                 ),
-            },
-            {
-                menuItem: 'Surgical History',
-                render: () => (
-                    <Tab.Pane>
-                        <SurgicalHistoryContent activeTabName='Surgical History' />
-                        <Button
-                            icon
-                            labelPosition='left'
-                            floated='left'
-                            className='patient-previous-button'
-                            value={0}
-                            activeTabName='Medical History'
-                            onClick={this.props.handlePrevTab}
-                        >
-                            Previous
-                            <Icon name='arrow left' />
-                        </Button>
-
-                        <Button
-                            icon
-                            labelPosition='right'
-                            floated='right'
-                            className='patient-next-button'
-                            value={2}
-                            activeTabName='Medications'
-                            onClick={this.props.handleNextTab}
-                        >
-                            Next
-                            <Icon name='arrow right' />
-                        </Button>
-                    </Tab.Pane>
-                ),
-            },
-            {
-                menuItem: 'Medications',
-                render: () => (
-                    <Tab.Pane>
-                        <MedicationsContent activeTabName='Medications' />
-                        <Button
-                            icon
-                            labelPosition='left'
-                            floated='left'
-                            className='patient-previous-button'
-                            value={1}
-                            activeTabName='Surgical History'
-                            onClick={this.props.handlePrevTab}
-                        >
-                            Previous
-                            <Icon name='arrow left' />
-                        </Button>
-
-                        <Button
-                            icon
-                            labelPosition='right'
-                            floated='right'
-                            className='patient-next-button'
-                            value={3}
-                            activeTabName='Allergies'
-                            onClick={this.props.handleNextTab}
-                        >
-                            Next
-                            <Icon name='arrow right' />
-                        </Button>
-                    </Tab.Pane>
-                ),
-            },
-            {
-                menuItem: 'Allergies',
-                render: () => (
-                    <Tab.Pane>
-                        <AllergiesContent activeTabName='Allergies' />
-                        <Button
-                            icon
-                            labelPosition='left'
-                            floated='left'
-                            className='patient-previous-button'
-                            value={2}
-                            activeTabName='Medications'
-                            onClick={this.props.handlePrevTab}
-                        >
-                            Previous
-                            <Icon name='arrow left' />
-                        </Button>
-
-                        <Button
-                            icon
-                            labelPosition='right'
-                            floated='right'
-                            className='patient-next-button'
-                            value={4}
-                            activeTabName='Social History'
-                            onClick={this.props.handleNextTab}
-                        >
-                            Next
-                            <Icon name='arrow right' />
-                        </Button>
-                    </Tab.Pane>
-                ),
-            },
-            {
-                menuItem: 'Social History',
-                render: () => (
-                    <Tab.Pane>
-                        <SocialHistoryContent activeTabName='Social History' />
-                        <Button
-                            icon
-                            labelPosition='left'
-                            floated='left'
-                            className='patient-previous-button'
-                            value={3}
-                            activeTabName='Allergies'
-                            onClick={this.props.handlePrevTab}
-                        >
-                            Previous
-                            <Icon name='arrow left' />
-                        </Button>
-
-                        <Button
-                            icon
-                            labelPosition='right'
-                            floated='right'
-                            className='patient-next-button'
-                            value={5}
-                            activeTabName='Family History'
-                            onClick={this.props.handleNextTab}
-                        >
-                            Next
-                            <Icon name='arrow right' />
-                        </Button>
-                    </Tab.Pane>
-                ),
-            },
-            {
-                menuItem: 'Family History',
-                render: () => (
-                    <Tab.Pane>
-                        <FamilyHistoryContent activeTabName='Family History' />
-                        <Button
-                            icon
-                            labelPosition='left'
-                            floated='left'
-                            className='patient-previous-button'
-                            value={4}
-                            activeTabName='Social History'
-                            onClick={this.props.handlePrevTab}
-                        >
-                            Previous
-                            <Icon name='arrow left' />
-                        </Button>
-
-                        <Button
-                            icon
-                            labelPosition='right'
-                            floated='right'
-                            className='patient-next-button'
-                            onClick={this.props.nextFormClick}
-                        >
-                            Next
-                            <Icon name='arrow right' />
-                        </Button>
-                    </Tab.Pane>
-                ),
-            },
-        ];
+            };
+        });
 
         const gridButtons = panes.map((pane, index) => {
             return (
@@ -275,6 +209,7 @@ export default class PatientHistoryContent extends Component {
                     key={index}
                     // eslint-disable-next-line react/no-children-prop
                     children={pane.menuItem}
+                    value={index}
                     onClick={this.handleItemClick}
                     active={this.state.activeTabName === pane.menuItem}
                     style={{ marginBottom: 5 }}
@@ -298,91 +233,7 @@ export default class PatientHistoryContent extends Component {
                             {gridButtons}
                         </Grid>
                         <Segment>{tabToDisplay}</Segment>
-                        {activeTabName === 'Medical History' ? (
-                            <>
-                                <Button
-                                    icon
-                                    floated='left'
-                                    onClick={this.props.previousFormClick}
-                                    className='small-patient-previous-button'
-                                >
-                                    <Icon name='arrow left' />
-                                </Button>
-
-                                <Button
-                                    icon
-                                    floated='right'
-                                    onClick={(activeTabName) =>
-                                        this.props.onNextClick(activeTabName)
-                                    }
-                                    className='small-patient-next-button'
-                                >
-                                    <Icon name='arrow right' />
-                                </Button>
-                            </>
-                        ) : (
-                            ''
-                        )}
-
-                        {activeTabName === 'Family History' ? (
-                            <>
-                                <Button
-                                    icon
-                                    floated='left'
-                                    onClick={(activeTabName) =>
-                                        this.props.onPreviousClick(
-                                            activeTabName
-                                        )
-                                    }
-                                    className='small-patient-previous-button'
-                                >
-                                    <Icon name='arrow left' />
-                                </Button>
-
-                                <Button
-                                    icon
-                                    floated='right'
-                                    onClick={this.props.nextFormClick}
-                                    className='small-patient-next-button'
-                                >
-                                    <Icon name='arrow right' />
-                                </Button>
-                            </>
-                        ) : (
-                            ''
-                        )}
-                        {activeTabName === 'Social History' ||
-                        activeTabName === 'Allergies' ||
-                        activeTabName === 'Medications' ||
-                        activeTabName === 'Surgical History' ? (
-                            <>
-                                <Button
-                                    icon
-                                    floated='left'
-                                    onClick={(activeTabName) =>
-                                        this.props.onPreviousClick(
-                                            activeTabName
-                                        )
-                                    }
-                                    className='small-patient-previous-button'
-                                >
-                                    <Icon name='arrow left' />
-                                </Button>
-
-                                <Button
-                                    icon
-                                    floated='right'
-                                    onClick={(activeTabName) =>
-                                        this.props.onNextClick(activeTabName)
-                                    }
-                                    className='small-patient-next-button'
-                                >
-                                    <Icon name='arrow right' />
-                                </Button>
-                            </>
-                        ) : (
-                            ''
-                        )}
+                        {buttons[activeIndex]}
                     </Container>
                 ) : (
                     <Tab
@@ -392,8 +243,16 @@ export default class PatientHistoryContent extends Component {
                         }}
                         id='tab-panes'
                         panes={panes}
+                        activeTabName={activeTabName}
                         activeIndex={activeIndex}
-                        onTabChange={this.props.handleTabChange}
+                        index={activeIndex}
+                        onTabChange={(e, data) => {
+                            this.setState({
+                                activeTabName: PMH_TAB_NAMES[data.activeIndex],
+                                activeIndex: data.activeIndex,
+                            });
+                            this.props.handlePMHTabChange(e, data);
+                        }}
                     />
                 )}
             </>

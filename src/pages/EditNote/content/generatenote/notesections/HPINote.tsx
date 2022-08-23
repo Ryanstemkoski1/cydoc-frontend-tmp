@@ -25,6 +25,8 @@ import { selectPatientInformationState } from 'redux/selectors/patientInformatio
 import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
 import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
 import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
+import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
+import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 
 interface HPINoteProps {
     hpi: HpiState;
@@ -33,9 +35,27 @@ interface HPINoteProps {
     surgicalHistory: SurgicalHistoryState;
     medicalHistory: MedicalHistoryState;
     patientInformation: PatientInformationState;
+    chiefComplaints: ChiefComplaintsState;
 }
 
 export type GraphNode = NodeInterface & { response: HpiResponseType };
+
+export type ReduxNodeInterface = {
+    uid: string;
+    medID: string;
+    category: string;
+    text: string;
+    responseType: ResponseTypes;
+    bodySystem: string;
+    noteSection: string;
+    doctorView: string;
+    patientView: string;
+    doctorCreated: string;
+    blankTemplate: string;
+    blankYes: string;
+    blankNo: string;
+    response: HpiResponseType;
+};
 
 /* Returns whether the user has responded to this node or not */
 export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
@@ -355,6 +375,24 @@ export const extractNode = (
     return [node.blankTemplate, answer, negRes];
 };
 
+/*
+    Checks if a given node has children nodes that should not be displayed 
+    (i.e. in the case if the user clicks "NO" to a YES/NO question or "YES"
+    to a NO/YES question)
+*/
+export const checkParent = (
+    node: ReduxNodeInterface,
+    state: HPINoteProps
+): string[] => {
+    const medId = node.medID;
+    return (node.responseType == ResponseTypes.YES_NO &&
+        node.response == YesNoResponse.No) ||
+        (node.responseType == ResponseTypes.NO_YES &&
+            node.response == YesNoResponse.Yes)
+        ? state.hpi.graph[medId]
+        : [];
+};
+
 /**
  * Extracts and formats all nodes connected to the source according to
  * questionOrder
@@ -365,9 +403,12 @@ export const extractNodes = (
 ): [string, string, string][] => {
     const formattedHpi: [string, string, string][] = [],
         order = state.hpi.order[source];
-    for (let i = 1; i < Object.keys(order).length; i++) {
+    let hideChildren: string[] = [];
+    for (let i = 1; i < Object.keys(order).length + 1; i++) {
         const node = state.hpi.nodes[order[i.toString()]];
-        if (!isEmpty(state, node)) formattedHpi.push(extractNode(state, node));
+        hideChildren = [...hideChildren, ...checkParent(node, state)];
+        if (!isEmpty(state, node) && !hideChildren.includes(node.medID))
+            formattedHpi.push(extractNode(state, node));
     }
     return formattedHpi;
 };
@@ -379,15 +420,18 @@ export const extractNodes = (
  * Pre-condition: hpi.graph is already sorted according to edge order and
  * there are no cycles
  */
-export const extractHpi = (state: HPINoteProps): HPI[] => {
-    const formattedHpis: HPI[] = [];
+export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
+    const formattedHpis: { [key: string]: HPI } = {};
     for (const nodeId of Object.keys(state.hpi.order)) {
         const allResponses = extractNodes(nodeId, state);
-        formattedHpis.push(
-            allResponses.reduce((prev, val, idx) => {
+        const chiefComplaint = state.hpi.nodes[nodeId].doctorView;
+        if (!(chiefComplaint in state.chiefComplaints)) continue;
+        formattedHpis[chiefComplaint] = allResponses.reduce(
+            (prev, val, idx) => {
                 prev[idx] = val;
                 return prev;
-            }, {} as HPI)
+            },
+            {} as HPI
         );
     }
     return formattedHpis;
@@ -395,35 +439,53 @@ export const extractHpi = (state: HPINoteProps): HPI[] => {
 
 const HPINote = (state: HPINoteProps) => {
     /*
-    HPI note is generated into sentences, each element of the array
-    a paragraph for each chief complaint. The elements of the array 
-    are combined into one big string (across all chief complaints). 
-    If there are duplicates, all occurrences after the first instance 
-    are removed. The strings are then re-separated into an array of 
-    strings separated by chief complaint.
+    formattedHpis is a dictionary in which each key is the chief complaint
+    and the value is an array of template sentences.
+    
+    The following will convert each CC's array of template sentences into a 
+    paragraph, which is then re-split into an array and converted into a Set
+    of sentences for de-duplication within the paragraph and comparison with 
+    latter chief complaints.
+    
+    Specifically, each chief complaint set will be compared with later chief
+    complaint sets to look for duplicate sentences (finding the complement of
+    the second set). The first instances of duplicate sentences are kept, 
+    while later ones are removed.
     */
     const formattedHpis = extractHpi(state);
-    if (formattedHpis.length === 0) {
+    if (Object.keys(formattedHpis).length === 0) {
         return <div>No history of present illness reported.</div>;
     }
-    const initialPara = formattedHpis.map((formattedHpi) =>
+    const initialPara = Object.keys(formattedHpis).map((key) => {
+        const formattedHpi = formattedHpis[key];
         // TODO: use actual patient info to populate fields
-        createInitialHPI(formattedHpi)
-    );
-    const paragraphs = [
-        ...new Set(initialPara.join('PARAGRAPH_BREAK. ').split('. ')),
-    ]
-        .join('. ')
-        .split('PARAGRAPH_BREAK. ');
-    const finalPara = paragraphs.map((hpiString) =>
-        createHPI(
-            hpiString,
-            state.patientInformation.patientName,
-            state.patientInformation.pronouns
-        )
-    );
-
+        return new Set(createInitialHPI(formattedHpi).split('. '));
+    });
+    for (let i = 0; i < initialPara.length - 1; i++) {
+        for (let j = i + 1; j < initialPara.length; j++) {
+            const setA = initialPara[i];
+            const setB = initialPara[j];
+            initialPara[j] = new Set([...setB].filter((x) => !setA.has(x)));
+        }
+    }
     const title = [];
+    const finalPara = initialPara.reduce((acc: string[], hpiStringSet, i) => {
+        if (hpiStringSet.size) {
+            title.push(Object.keys(formattedHpis)[i]);
+            return [
+                ...acc,
+                createHPI(
+                    [...hpiStringSet].join('. '),
+                    state.patientInformation.patientName,
+                    state.patientInformation.pronouns
+                ),
+            ];
+        }
+        // don't include chief complaint if it was a subset of another CC
+        // paragraph (i.e. set B is a subset of set A)
+        return acc;
+    }, []);
+
     const miscText = [];
     const actualNote = [];
     /**
@@ -444,16 +506,28 @@ const HPINote = (state: HPINoteProps) => {
     }
     return (
         <div>
-            {actualNote.map((text, i) => (
-                <p key={i}>
-                    <b>{text.chiefComplaint}</b>
-                    <br />
-                    {text.text}
-                    <br />
-                    <br />
-                    {text.miscNote}
-                </p>
-            ))}
+            {actualNote.reduce((acc: JSX.Element[], text, i) => {
+                if (text.chiefComplaint in state.chiefComplaints)
+                    return [
+                        ...acc,
+                        <p key={i}>
+                            <b>{text.chiefComplaint}</b>
+                            <br />
+                            {text.text}
+                            {text.miscNote ? (
+                                <>
+                                    {' '}
+                                    <br />
+                                    <br />
+                                    {text.miscNote}
+                                </>
+                            ) : (
+                                ''
+                            )}
+                        </p>,
+                    ];
+                return acc;
+            }, [])}
         </div>
     );
 };
@@ -464,5 +538,6 @@ const mapStateToProps = (state: CurrentNoteState) => ({
     surgicalHistory: selectSurgicalHistoryState(state),
     medicalHistory: selectMedicalHistoryState(state),
     patientInformation: selectPatientInformationState(state),
+    chiefComplaints: selectChiefComplaintsState(state),
 });
 export default connect(mapStateToProps)(HPINote);

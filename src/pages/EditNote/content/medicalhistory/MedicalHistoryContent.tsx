@@ -5,11 +5,8 @@ import MedicalHistoryContentHeader from './MedicalHistoryContentHeader';
 import GridContent from 'components/tools/GridContent.js';
 import { CONDITIONS } from 'constants/constants.json';
 import ConditionInput from 'components/tools/ConditionInput';
-import { adjustValue } from './util';
-import { medicalMapping } from 'constants/word-mappings';
 import { connect } from 'react-redux';
 import {
-    addDefaultCondition,
     toggleOption,
     updateStartYear,
     updateEndYear,
@@ -45,6 +42,12 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         super(props);
         this.state = {
             seenConditions: {},
+            currConditions: Object.keys(this.props.medicalHistory).filter(
+                (condition) =>
+                    this.props.medicalHistory[condition].condition.length &&
+                    this.props.medicalHistory[condition].hasBeenAfflicted ==
+                        YesNoResponse.Yes
+            ),
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleConditionToggleButtonClick = this.handleConditionToggleButtonClick.bind(
@@ -162,14 +165,17 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
     };
 
     addRow() {
+        const newKey = v4();
+        this.props.addPmhPopOptions(newKey, '');
         if (
             this.props.responseType == ResponseTypes.PMH_BLANK &&
             this.props.node
         ) {
-            const newKey = v4();
-            this.props.addPmhPopOptions(newKey, '');
             this.props.blankQuestionChange(this.props.node, newKey);
-        } else this.props.addDefaultCondition();
+        } else
+            this.setState({
+                currConditions: [...this.state.currConditions, newKey],
+            });
     }
 
     deleteRow = (index: string) => {
@@ -189,27 +195,34 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         const standardMedicalHistory = this.standardizeMedicalHistory(
             this.props.medicalHistory
         );
-        let listValues = Object.keys(standardMedicalHistory) || CONDITIONS;
+        const standardConditions = CONDITIONS.map((condition) =>
+            this.standardizeMedicalName(condition)
+        );
+        let listValues =
+            Object.keys(standardMedicalHistory).filter(
+                (key) =>
+                    standardConditions.includes(
+                        standardMedicalHistory[key].condition
+                    ) ||
+                    this.state.currConditions.includes(key) ||
+                    standardMedicalHistory[key].hasBeenAfflicted ==
+                        YesNoResponse.Yes
+            ) || CONDITIONS;
         // The second OR statement gets the list of Conditions in the "Medical History" context
-        if (responseType == ResponseTypes.PMH_POP && responseChoice) {
-            const conditionKeyMap: { [condition: string]: string } = {};
-            for (const key in standardMedicalHistory) {
-                const conditionName = standardMedicalHistory[key].condition;
-                conditionKeyMap[conditionName] = key;
-            }
-            const MhPopKeys = [];
-            for (const conditionKey in responseChoice) {
-                const conditionName: any = responseChoice[conditionKey];
-                if (conditionName in conditionKeyMap)
-                    MhPopKeys.push(conditionKeyMap[conditionName]);
+        if (responseType == ResponseTypes.PMH_POP && responseChoice && node) {
+            listValues = responseChoice.map((condition) => {
+                const key = Object.keys(medicalHistory).find(
+                    (entry) => medicalHistory[entry].condition == condition
+                );
+                let conditionKey = '';
+                if (key) conditionKey = key;
                 else {
-                    const newKey = v4();
-                    addPmhPopOptions(newKey, conditionName);
-                    MhPopKeys.push(newKey);
+                    conditionKey = v4();
+                    addPmhPopOptions(conditionKey, condition);
                 }
-            }
-            listValues = MhPopKeys;
-            if (node) popResponse(node, listValues);
+                return conditionKey;
+            });
+            popResponse(node, listValues);
         }
         if (responseType == ResponseTypes.PMH_BLANK && responseChoice) {
             if (!responseChoice.length)
@@ -352,6 +365,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
 
 interface OwnState {
     seenConditions: SeenCondition;
+    currConditions: string[];
 }
 
 export type SeenCondition = {
@@ -372,7 +386,6 @@ interface MedicalHistoryProps {
 }
 
 interface DispatchProps {
-    addDefaultCondition: () => void;
     toggleOption: (index: string, optionSelected: YesNoResponse) => void;
     updateStartYear: (index: string, newStartYear: number) => void;
     updateEndYear: (index: string, newEndYear: number) => void;
@@ -402,7 +415,6 @@ const mapStateToProps = (state: CurrentNoteState): MedicalHistoryProps => {
 };
 
 const mapDispatchToProps = {
-    addDefaultCondition,
     toggleOption,
     updateStartYear,
     updateEndYear,

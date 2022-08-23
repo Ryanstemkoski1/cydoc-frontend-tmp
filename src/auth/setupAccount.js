@@ -137,7 +137,7 @@ const SetupAccount = async (
                                             isFirstLoginFlag: false,
                                         });
                                         alert(
-                                            'Your account has been successfully set up. Please login to continue.'
+                                            'Your account has been successfully set up. Please accept the following reload prompt and login to continue'
                                         );
                                         window.location.reload(false);
                                     },
@@ -224,9 +224,7 @@ const SetupAccount = async (
                         `/managers/${attributes['custom:associatedManager']}`,
                         payload
                     )
-                    .then(() => {
-                        alert('Associated manager updated');
-                    })
+                    .then(() => {})
                     .catch((err) => {
                         alert(
                             `Error updating manager: ${
@@ -241,7 +239,6 @@ const SetupAccount = async (
                 await stripeClient
                     .post(stripe_path, stripe_payload)
                     .then(() => {
-                        alert('Payment info successfully sent to Stripe');
                         return new Promise((resolve) => {
                             currentUser.completeNewPasswordChallenge(
                                 newPassword,
@@ -252,7 +249,7 @@ const SetupAccount = async (
                                             isFirstLoginFlag: false,
                                         });
                                         alert(
-                                            'Your account has been successfully set up. Please login to continue.'
+                                            'Your account has been successfully set up. Please accept the following reload prompt and login to continue'
                                         );
                                         window.location.reload(false);
                                     },

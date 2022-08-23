@@ -122,22 +122,20 @@ export const combineHpiString = (str: string, n: number) => {
     removeItem(stringArr, ' ');
     removeItem(stringArr, '');
     removeItem(stringArr, undefined);
-
     for (let i = 0; i < stringArr.length; i++) {
         // have to add space at beginning of first string to make comparison work.
-        if (i == stringArr.length - 1) tempComb = stringArr[i] + '.';
-        else if (i === 0) {
+        // if the combination is on the final iteration and there isn't two strings to compare, add that string to the end of the current combined.
+        if (i == stringArr.length - 1) {
+            tempComb = stringArr[i] + '.';
+            newStr += capitalizeFirstLetter(stringArr[i] + '.');
+            return newStr;
+        } else if (i === 0) {
             tempComb = compare(
                 ' ' + capitalizeFirstLetter(stringArr[0]),
                 stringArr[1],
                 n
             );
         } else tempComb = compare(stringArr[i], stringArr[i + 1], n);
-        // if the combination is on the final iteration and there isn't two strings to compare, add that string to the end of the current combined.
-        if (i === stringArr.length - 1) {
-            newStr += capitalizeFirstLetter(stringArr[i] + '.');
-            return newStr;
-        }
         // if the combination is on the final iteration and compare(str1, str2) returns an array, combine both and return that str
         if (Array.isArray(tempComb) && i === stringArr.length - 2) {
             newStr += tempComb[0] + tempComb[1];

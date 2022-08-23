@@ -3,8 +3,6 @@ import {
     Button,
     Segment,
     Icon,
-    // MenuItemProps,
-    // Dropdown,
     Search,
     Container,
     Grid,
@@ -44,7 +42,6 @@ import {
 import ToggleButton from 'components/tools/ToggleButton';
 
 interface HPIContentProps {
-    nextFormClick: () => () => string; // this.props.nextFormClick => this.props.onNextClick => string
     step: number;
     continue: (e: any) => void;
     back: (e: any) => void;
@@ -110,8 +107,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
     back = (e: any) => this.props.back(e);
 
-    nextFormClick = () => this.props.nextFormClick();
-
     // setStickyHeaders() {
     //     const stickyHeaders = document.getElementsByClassName('sticky-header');
     //     const patientHistoryMenu = document.getElementById(
@@ -176,7 +171,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
         // map through all complaints on the HPI and create search resuls
         const getRes = () => {
-            const index = this.state.searchVal.length;
             const filterResults: object[] = [];
             Object.entries(bodySystems).forEach((grouping) => {
                 grouping[1].forEach((complaint) => {
@@ -298,28 +292,20 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                             <Button
                                 icon
                                 floated='right'
-                                onClick={
-                                    positiveLength > 0
-                                        ? this.continue
-                                        : this.nextFormClick
-                                }
+                                onClick={this.continue}
                                 className='hpi-small-next-button'
                             >
-                                <Icon name='angle right' />
+                                <Icon name='arrow right' />
                             </Button>
                             <Button
                                 icon
                                 labelPosition='right'
                                 floated='right'
-                                onClick={
-                                    positiveLength > 0
-                                        ? this.continue
-                                        : this.nextFormClick
-                                }
+                                onClick={this.continue}
                                 className='hpi-next-button'
                             >
                                 Next
-                                <Icon name='angle right' />
+                                <Icon name='arrow right' />
                             </Button>
                         </>
                     </>
@@ -385,7 +371,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         onClick={this.back}
                                         className='hpi-small-previous-button'
                                     >
-                                        <Icon name='angle left' />
+                                        <Icon name='arrow left' />
                                     </Button>
                                     <Button
                                         icon
@@ -394,41 +380,27 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         onClick={this.back}
                                         className='hpi-previous-button'
                                     >
-                                        Previous Form
-                                        <Icon name='angle left' />
+                                        Previous
+                                        <Icon name='arrow left' />
                                     </Button>
 
                                     <Button
                                         icon
                                         floated='right'
-                                        onClick={() =>
-                                            this.props.activeTab ==
-                                            (Object.keys(
-                                                chiefComplaints
-                                            )[0] as string)
-                                                ? this.nextFormClick
-                                                : this.props.continue
-                                        }
+                                        onClick={this.continue}
                                         className='hpi-small-next-button'
                                     >
-                                        <Icon name='angle right' />
+                                        <Icon name='arrow right' />
                                     </Button>
                                     <Button
                                         icon
                                         labelPosition='right'
                                         floated='right'
-                                        onClick={() =>
-                                            this.props.activeTab ==
-                                            (Object.keys(
-                                                chiefComplaints
-                                            )[0] as string)
-                                                ? this.nextFormClick
-                                                : this.props.continue
-                                        }
+                                        onClick={this.continue}
                                         className='hpi-next-button'
                                     >
                                         Next
-                                        <Icon name='angle right' />
+                                        <Icon name='arrow right' />
                                     </Button>
                                 </Container>
                             ) : (
@@ -437,10 +409,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         pointing: true,
                                     }}
                                     panes={Object.keys(chiefComplaints).map(
-                                        (
-                                            diseaseCategory: string,
-                                            index: number
-                                        ) => ({
+                                        (diseaseCategory: string) => ({
                                             menuItem: diseaseCategory,
                                             render: () => (
                                                 <Tab.Pane>
@@ -473,7 +442,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         onClick={this.back}
                                                         className='hpi-small-previous-button'
                                                     >
-                                                        <Icon name='angle left' />
+                                                        <Icon name='arrow left' />
                                                     </Button>
                                                     <Button
                                                         icon
@@ -483,44 +452,26 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         className='hpi-previous-button'
                                                     >
                                                         Previous Form
-                                                        <Icon name='angle left' />
+                                                        <Icon name='arrow left' />
                                                     </Button>
 
                                                     <Button
                                                         icon
                                                         floated='right'
-                                                        onClick={
-                                                            index ==
-                                                            Object.keys(
-                                                                chiefComplaints
-                                                            ).length -
-                                                                1
-                                                                ? this
-                                                                      .nextFormClick
-                                                                : this.continue
-                                                        }
+                                                        onClick={this.continue}
                                                         className='hpi-small-next-button'
                                                     >
-                                                        <Icon name='angle right' />
+                                                        <Icon name='arrow right' />
                                                     </Button>
                                                     <Button
                                                         icon
                                                         labelPosition='right'
                                                         floated='right'
-                                                        onClick={
-                                                            index ==
-                                                            Object.keys(
-                                                                chiefComplaints
-                                                            ).length -
-                                                                -1
-                                                                ? this
-                                                                      .nextFormClick
-                                                                : this.continue
-                                                        }
+                                                        onClick={this.continue}
                                                         className='hpi-next-button'
                                                     >
                                                         Next
-                                                        <Icon name='angle right' />
+                                                        <Icon name='arrow right' />
                                                     </Button>
                                                 </Tab.Pane>
                                             ),

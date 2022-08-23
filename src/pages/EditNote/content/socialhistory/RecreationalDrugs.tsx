@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import {
@@ -106,7 +107,8 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         />
                         {this.state.invalidYear && (
                             <p className='year-validation-error'>
-                                Please enter a year between 1900 and 2020
+                                Please enter a year between 1900 and{' '}
+                                {this.state.currentYear}
                             </p>
                         )}
                     </Form.Field>

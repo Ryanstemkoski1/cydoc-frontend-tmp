@@ -1,13 +1,7 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { Component } from 'react';
 import Dropdown from 'components/tools/OptimizedDropdown';
-import allergens from 'constants/allergens';
-import {
-    Button,
-    Table,
-    TableBody,
-    TextArea,
-    TextAreaProps,
-} from 'semantic-ui-react';
+import { Button, Table, TextArea, TextAreaProps } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { AllergiesState, AllergiesItem } from 'redux/reducers/allergiesReducer';
 import { CurrentNoteState } from 'redux/reducers';
@@ -113,15 +107,17 @@ class AllergiesTableBodyRow extends Component<Props> {
         return (
             <Table.Row>
                 {tableRows}
-                <Button
-                    circular
-                    icon='close'
-                    onClick={() => {
-                        this.props.deleteRow(rowIndex as string);
-                    }}
-                    aria-label='delete-allergy'
-                    className='hpi-ph-button delete-allergy'
-                />
+                <td>
+                    <Button
+                        circular
+                        icon='close'
+                        onClick={() => {
+                            this.props.deleteRow(rowIndex as string);
+                        }}
+                        aria-label='delete-allergy'
+                        className='hpi-ph-button delete-allergy'
+                    />
+                </td>
             </Table.Row>
         );
     }

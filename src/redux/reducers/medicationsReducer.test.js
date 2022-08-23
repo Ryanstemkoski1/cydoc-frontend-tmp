@@ -124,13 +124,6 @@ describe('medications reducers', () => {
             })
         ).toMatchSnapshot();
     });
-    it('adds medication entry', () => {
-        const newMedications = medicationsReducer(initialMedications, {
-            type: MEDICATIONS_ACTION.ADD_MEDICATION,
-        });
-        expect(Object.keys(newMedications).length).toEqual(2);
-        expect('uuid1' in newMedications).toBeTruthy();
-    });
     it('deletes medication entry', () => {
         expect(
             medicationsReducer(initialMedications, {

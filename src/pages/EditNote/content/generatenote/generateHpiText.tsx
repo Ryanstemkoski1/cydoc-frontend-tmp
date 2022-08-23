@@ -54,6 +54,25 @@ const stringHasI = (str: string): string => {
         : str.trim();
 };
 
+/*
+Filter sentences so that only those that don't have the keyword are kept in 
+(unless both answer and notanswer are in it) 
+*/
+export const removeSentence = (
+    fillSentence: string,
+    keyword: string
+): string => {
+    const containsBoth = (sentence: string): boolean =>
+        sentence.includes('answer') && sentence.includes('notanswer');
+    return fillSentence
+        .split('. ')
+        .filter(
+            (sentence) =>
+                !sentence.match(new RegExp(keyword) || containsBoth(sentence))
+        )
+        .join('. ');
+};
+
 /**
  * Clean the fill sentences and the answers, and insert the answers int the
  * fill sentences
@@ -66,13 +85,17 @@ export const fillAnswers = (hpi: HPI): string => {
     let hpiString = '';
     sortedKeys.forEach((key) => {
         let [fillSentence, answer, negAnswer] = hpi[key] || hpi[key.toString()];
-        fillSentence = fullClean(fillSentence);
         answer = fullClean(answer);
         negAnswer = fullClean(negAnswer);
-        if (fillSentence.match(/answer/)) {
+        fillSentence = fullClean(fillSentence);
+        if (!answer.length)
+            fillSentence = removeSentence(fillSentence, 'answer');
+        else if (fillSentence.match(/answer/)) {
             fillSentence = fillSentence.replace(/answer/, stringHasI(answer));
         }
-        if (fillSentence.match(/notanswer/)) {
+        if (!negAnswer.length)
+            fillSentence = removeSentence(fillSentence, 'notanswer');
+        else if (fillSentence.match(/notanswer/)) {
             fillSentence = fillSentence.replace(/notanswer/, negAnswer);
         }
         hpiString += fillSentence + '. ';

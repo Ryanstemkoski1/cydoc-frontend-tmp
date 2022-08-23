@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
     Form,
     Grid,
     TextAreaProps,
-    StrictInputProps,
     ButtonProps,
     Button,
 } from 'semantic-ui-react';
@@ -21,7 +21,6 @@ import {
     selectMedicalHistoryItem,
 } from 'redux/selectors/medicalHistorySelector';
 import {
-    addDefaultCondition,
     toggleOption,
     updateStartYear,
     updateEndYear,
@@ -33,9 +32,9 @@ import './MedicalHistoryNoteRow.css';
 
 //Component for a row the Medical History GridContent
 class MedicalHistoryNoteRow extends Component<Props> {
-    findIndex = (event: FindIndex, data: TextAreaProps) => {
+    findIndex = (_event: FindIndex, data: TextAreaProps) => {
         let index = '';
-        Object.keys(this.props.medicalHistory).map((idx: string) => {
+        Object.keys(this.props.medicalHistory).forEach((idx: string) => {
             if (
                 this.props.medicalHistory[idx]['condition'] === data.condition
             ) {
@@ -89,7 +88,8 @@ class MedicalHistoryNoteRow extends Component<Props> {
     };
 
     render = () => {
-        const { conditionInput, currentYear, isPreview, index } = this.props;
+        const { conditionInput, isPreview, index } = this.props;
+        const currentYear = new Date(Date.now()).getFullYear();
 
         const {
             condition,
@@ -158,7 +158,7 @@ class MedicalHistoryNoteRow extends Component<Props> {
                         (startYear < 1900 && startYear !== -1) ||
                         startYear > currentYear) && (
                         <p className='year-validation-mobile-error'>
-                            Please enter a valid year after 1900
+                            Please enter a year between 1900 and {currentYear}
                         </p>
                     )}
                 </Grid.Column>
@@ -213,10 +213,11 @@ class MedicalHistoryNoteRow extends Component<Props> {
                     </Form>
                     {hasConditionResolved === YesNoResponse.Yes &&
                         ((isNaN(endYear) && endYearString !== '') ||
-                            (endYear < 1900 && endYear !== -1) ||
+                            (endYear < startYear && endYear !== -1) ||
                             endYear > currentYear) && (
                             <p className='year-validation-mobile-error'>
-                                Please enter a valid year after 1900
+                                Please enter a year between {startYear} and{' '}
+                                {currentYear}
                             </p>
                         )}
                 </Grid.Column>
@@ -260,7 +261,6 @@ interface MedicalHistoryProps {
 }
 
 interface DispatchProps {
-    addDefaultCondition: () => void;
     toggleOption: (index: string, optionSelected: YesNoResponse) => void;
     updateStartYear: (index: string, newStartYear: number) => void;
     updateEndYear: (index: string, newEndYear: number) => void;
@@ -281,7 +281,6 @@ type FindIndex = React.MouseEvent | React.FormEvent<HTMLTextAreaElement>;
 type Props = MedicalHistoryProps & RowProps & OwnProps & DispatchProps;
 
 const mapDispatchToProps = {
-    addDefaultCondition,
     toggleOption,
     updateStartYear,
     updateEndYear,
@@ -303,7 +302,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(MedicalHistoryNoteRow);
-
-/*MedicalHistoryNoteRow.propTypes = {
-    condition: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-};*/

@@ -20,6 +20,7 @@ import {
     updateComments,
     addAllergy,
     deleteAllergy,
+    updateId,
 } from 'redux/actions/allergiesActions';
 import { AllergiesState, AllergiesItem } from 'redux/reducers/allergiesReducer';
 import { CurrentNoteState } from 'redux/reducers';
@@ -85,12 +86,20 @@ class AllergiesContent extends Component<Props, OwnState> {
         const type = data.type;
         const val =
             (_event?.target as HTMLTextAreaElement)?.value ?? data.value;
+        const valArray = val.split(' ');
         switch (type) {
             case 'incitingAgent':
-                this.props.updateIncitingAgent(index, val);
+                this.props.updateIncitingAgent(
+                    index,
+                    val.split(' ').slice(1).join(' ')
+                );
+                this.props.updateId(index, val.split(' ')[0]);
                 break;
             case 'reaction':
-                this.props.updateReaction(index, val);
+                this.props.updateReaction(
+                    index,
+                    valArray.slice(valArray.length / 2).join(' ')
+                );
                 break;
             case 'comments':
                 this.props.updateComments(index, val);
@@ -131,10 +140,10 @@ class AllergiesContent extends Component<Props, OwnState> {
             'reaction',
             'comments',
         ];
-        return nums.map((rowindex: string, index: number) => (
+        return nums.map((rowIndex: string, index: number) => (
             <AllergiesTableBodyRow
                 key={index}
-                rowIndex={rowindex as keyof AllergiesState}
+                rowIndex={rowIndex as keyof AllergiesState}
                 fields={cellField}
                 onTableBodyChange={this.handleTableBodyChange}
                 isPreview={this.props.isPreview}
@@ -236,7 +245,7 @@ class AllergiesContent extends Component<Props, OwnState> {
                         <Input
                             fluid
                             transparent
-                            rowindex={i}
+                            rowIndex={i}
                             disabled={isPreview}
                             type='comments'
                             placeholder='Comments'
@@ -316,6 +325,7 @@ interface DispatchProps {
     updateIncitingAgent: (index: string, newIncitingAgent: string) => void;
     updateReaction: (index: string, newReaction: string) => void;
     updateComments: (index: string, newComment: string) => void;
+    updateId: (index: string, id: string) => void;
     addAllergy: () => void;
     deleteAllergy: (index: string) => void;
 }
@@ -348,6 +358,7 @@ const mapDispatchToProps = {
     updateIncitingAgent,
     updateReaction,
     updateComments,
+    updateId,
     addAllergy,
     deleteAllergy,
 };
