@@ -43,6 +43,7 @@ class ListText extends React.Component<Props> {
                             }
                         />
                         <Button
+                            tabIndex='-1'
                             circular
                             icon='minus'
                             className='hpi-ph-button'
