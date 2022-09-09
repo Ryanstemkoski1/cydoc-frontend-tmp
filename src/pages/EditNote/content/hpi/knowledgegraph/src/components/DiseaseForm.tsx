@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/App.css';
 import '../../HPI.css';
+import { Loader } from 'semantic-ui-react';
 import {
     GraphData,
     HpiStateProps,
@@ -162,7 +163,7 @@ export class DiseaseForm extends React.Component<Props, DiseaseFormState> {
         return this.state.isGraphProcessed ? (
             <div> {this.traverseChildNodes()} </div>
         ) : (
-            <h1>Loading...</h1>
+            <Loader active> </Loader>
         );
     }
 }
