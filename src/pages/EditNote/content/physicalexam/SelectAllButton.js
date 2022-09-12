@@ -16,8 +16,8 @@ export default class SelectAllButton extends React.Component {
                         true
                     )}
                     onClick={() => {
-                        React.Children.map(this.props.children, (child) =>
-                            this.props.handleClick(child)
+                        this.props.handleClick(
+                            this.props.children.map((child) => child.props.name)
                         );
                     }}
                     className={'pe-ros-button spaced-buttons'}

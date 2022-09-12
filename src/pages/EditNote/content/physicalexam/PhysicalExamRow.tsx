@@ -20,6 +20,7 @@ import {
     removeFinding,
     toggleFinding,
     toggleLeftRightFinding,
+    toggleChooseBooleanValue,
 } from 'redux/actions/physicalExamActions';
 import { LRButtonState } from 'constants/enums';
 import { PhysicalExamSection } from 'redux/reducers/physicalExamReducer';
@@ -75,16 +76,20 @@ class PhysicalExamRow extends React.Component<Props, State> {
         }
     };
 
-    handleSelectAll = (button: ButtonProps) => {
-        if ('toggle' in button.props) {
-            this.props.toggleLeftRightFinding(
+    handleSelectAll = (children: string[]) => {
+        const response = children.every((child) => {
+            const currFindings = this.props.physicalExamSection.findings[child];
+            return typeof currFindings == 'boolean'
+                ? currFindings
+                : currFindings.center;
+        });
+        children.map((child) =>
+            this.props.toggleChooseBooleanValue(
                 this.props.group,
-                button.props.name,
-                'center'
-            );
-        } else {
-            this.props.toggleFinding(this.props.group, button.props.name);
-        }
+                child,
+                !response
+            )
+        );
     };
 
     generateButtons = ({
@@ -278,6 +283,11 @@ interface DispatchProps {
         buttonClicked: keyof LRButtonState
     ) => void;
     physicalExamSection: PhysicalExamSection;
+    toggleChooseBooleanValue: (
+        section: string,
+        finding: string,
+        response: boolean
+    ) => void;
 }
 
 type Props = RowProps & DispatchProps;
@@ -296,6 +306,7 @@ const mapDispatchToProps = {
     removeFinding,
     toggleFinding,
     toggleLeftRightFinding,
+    toggleChooseBooleanValue,
 };
 
 export default connect(mapStatetoProps, mapDispatchToProps)(PhysicalExamRow);

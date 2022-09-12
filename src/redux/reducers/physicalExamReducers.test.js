@@ -234,4 +234,108 @@ describe('physicalExam reducers', () => {
             })
         ).toThrow();
     });
+    it('changes LR value to true', () => {
+        expect(
+            physicalExamReducer(initialPhysicalExam, {
+                type: PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE,
+                payload: {
+                    section: 'foo',
+                    finding: 'barLR',
+                    response: true,
+                },
+            })
+        ).toEqual({
+            ...initialPhysicalExam,
+            sections: {
+                ...initialPhysicalExam.sections,
+                foo: {
+                    ...initialPhysicalExam.sections['foo'],
+                    findings: {
+                        ...initialPhysicalExam.sections['foo'].findings,
+                        barLR: {
+                            left: true,
+                            center: true,
+                            right: false,
+                        },
+                    },
+                },
+            },
+        });
+    });
+    it('changes LR value to false', () => {
+        expect(
+            physicalExamReducer(initialPhysicalExam, {
+                type: PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE,
+                payload: {
+                    section: 'foo',
+                    finding: 'barLR',
+                    response: false,
+                },
+            })
+        ).toEqual({
+            ...initialPhysicalExam,
+            sections: {
+                ...initialPhysicalExam.sections,
+                foo: {
+                    ...initialPhysicalExam.sections['foo'],
+                    findings: {
+                        ...initialPhysicalExam.sections['foo'].findings,
+                        barLR: {
+                            left: true,
+                            center: false,
+                            right: false,
+                        },
+                    },
+                },
+            },
+        });
+    });
+    it('changes value to true', () => {
+        expect(
+            physicalExamReducer(initialPhysicalExam, {
+                type: PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE,
+                payload: {
+                    section: 'foo',
+                    finding: 'bar',
+                    response: true,
+                },
+            })
+        ).toEqual({
+            ...initialPhysicalExam,
+            sections: {
+                ...initialPhysicalExam.sections,
+                foo: {
+                    ...initialPhysicalExam.sections['foo'],
+                    findings: {
+                        ...initialPhysicalExam.sections['foo'].findings,
+                        bar: true,
+                    },
+                },
+            },
+        });
+    });
+    it('changes value to false', () => {
+        expect(
+            physicalExamReducer(initialPhysicalExam, {
+                type: PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE,
+                payload: {
+                    section: 'foo',
+                    finding: 'bar',
+                    response: false,
+                },
+            })
+        ).toEqual({
+            ...initialPhysicalExam,
+            sections: {
+                ...initialPhysicalExam.sections,
+                foo: {
+                    ...initialPhysicalExam.sections['foo'],
+                    findings: {
+                        ...initialPhysicalExam.sections['foo'].findings,
+                        bar: false,
+                    },
+                },
+            },
+        });
+    });
 });

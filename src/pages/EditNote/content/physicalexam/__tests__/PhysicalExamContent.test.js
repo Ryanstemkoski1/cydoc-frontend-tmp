@@ -220,24 +220,27 @@ describe('PhysicalExamContent', () => {
         wrapper.find(SelectAllButton).at(0).simulate('click');
         const expectedAction = [
             {
-                type: PHYSICAL_EXAM_ACTION.TOGGLE_FINDING,
+                type: PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE,
                 payload: {
                     section: 'General',
                     finding: 'well-appearing',
+                    response: true,
                 },
             },
             {
-                type: PHYSICAL_EXAM_ACTION.TOGGLE_FINDING,
+                type: PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE,
                 payload: {
                     section: 'General',
                     finding: 'well-nourished',
+                    response: true,
                 },
             },
             {
-                type: PHYSICAL_EXAM_ACTION.TOGGLE_FINDING,
+                type: PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE,
                 payload: {
                     section: 'General',
                     finding: 'no acute distress',
+                    response: true,
                 },
             },
         ];
@@ -256,27 +259,27 @@ describe('PhysicalExamContent', () => {
         wrapper.find(SelectAllButton).at(2).simulate('click');
         const expectedAction2 = [
             {
-                type: PHYSICAL_EXAM_ACTION.TOGGLE_LEFT_RIGHT_FINDING,
+                type: PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE,
                 payload: {
                     section: 'Eyes',
                     finding: 'sclera anicteric',
-                    buttonClicked: 'center',
+                    response: true,
                 },
             },
             {
-                type: PHYSICAL_EXAM_ACTION.TOGGLE_LEFT_RIGHT_FINDING,
+                type: PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE,
                 payload: {
                     section: 'Eyes',
                     finding: 'no redness',
-                    buttonClicked: 'center',
+                    response: true,
                 },
             },
             {
-                type: PHYSICAL_EXAM_ACTION.TOGGLE_LEFT_RIGHT_FINDING,
+                type: PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE,
                 payload: {
                     section: 'Eyes',
                     finding: 'no discharge',
-                    buttonClicked: 'center',
+                    response: true,
                 },
             },
         ];

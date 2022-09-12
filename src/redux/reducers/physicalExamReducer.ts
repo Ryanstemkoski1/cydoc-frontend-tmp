@@ -173,6 +173,32 @@ export function physicalExamReducer(
                 },
             };
         }
+
+        case PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE: {
+            const { section, finding, response } = action.payload;
+            const currentFindingState =
+                state.sections[section].findings[finding];
+            return {
+                ...state,
+                sections: {
+                    ...state.sections,
+                    [section]: {
+                        ...state.sections[section],
+                        findings: {
+                            ...state.sections[section].findings,
+                            [finding]:
+                                typeof currentFindingState == 'boolean'
+                                    ? response
+                                    : {
+                                          ...currentFindingState,
+                                          ['center']: response,
+                                      },
+                        },
+                    },
+                },
+            };
+        }
+
         case PHYSICAL_EXAM_ACTION.REMOVE_FINDING: {
             const { section, finding } = action.payload;
             const currentFindingsCopy = { ...state.sections[section].findings };
