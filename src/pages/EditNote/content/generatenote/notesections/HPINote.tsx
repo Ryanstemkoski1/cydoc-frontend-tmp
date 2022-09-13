@@ -422,17 +422,21 @@ export const extractNodes = (
  */
 export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
     const formattedHpis: { [key: string]: HPI } = {};
-    for (const nodeId of Object.keys(state.hpi.order)) {
-        const allResponses = extractNodes(nodeId, state);
-        const chiefComplaint = state.hpi.nodes[nodeId].doctorView;
-        if (!(chiefComplaint in state.chiefComplaints)) continue;
-        formattedHpis[chiefComplaint] = allResponses.reduce(
-            (prev, val, idx) => {
+    if (Object.keys(state.hpi.order).length) {
+        for (const nodeId of Object.keys(state.hpi.order)) {
+            const allResponses = extractNodes(nodeId, state);
+            const chiefComplaint =
+                nodeId in state.hpi.nodes
+                    ? state.hpi.nodes[nodeId].doctorView
+                    : undefined;
+            if (!chiefComplaint || !(chiefComplaint in state.chiefComplaints))
+                continue;
+            const val = allResponses.reduce((prev, val, idx) => {
                 prev[idx] = val;
                 return prev;
-            },
-            {} as HPI
-        );
+            }, {} as HPI);
+            if (Object.keys(val).length) formattedHpis[chiefComplaint] = val;
+        }
     }
     return formattedHpis;
 };
