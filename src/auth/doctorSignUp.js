@@ -24,6 +24,7 @@ const doctorSignUp = async (
     // format phone number
     phoneNumber = phoneNumber.replace('(', '+1');
     phoneNumber = phoneNumber.replace(/-|\(|\)/gi, '');
+    phoneNumber = phoneNumber.replace(' ', '');
 
     // declare uuid variable
     let doctor_uuid = '';

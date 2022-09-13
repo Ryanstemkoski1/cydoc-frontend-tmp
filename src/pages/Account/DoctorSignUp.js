@@ -21,7 +21,7 @@ import Terms_and_conditions from '../../constants/Documents/terms_and_conditions
 
 const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
     const phoneNumberRegex = new RegExp(
-        '^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'
+        '^[+]?[(]?[0-9]{3}[)]?[" "][-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'
     );
     const [isInviteDoctorOpen, setIsInviteDoctorOpen] = useState(
         continueIsActive
@@ -276,14 +276,18 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
         // if phoneNumberLength is greater than 4 and less the 7 we start to return
         // the formatted number
         if (phoneNumberLength < 7) {
-            return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+            return '(' + phoneNumber.slice(0, 3) + ') ' + phoneNumber.slice(3);
         }
         // finally, if the phoneNumberLength is greater then seven, we add the last
         // bit of formatting and return it.
-        return `(${phoneNumber.slice(0, 3)})${phoneNumber.slice(
-            3,
-            6
-        )}-${phoneNumber.slice(6, 10)}`;
+        return (
+            '(' +
+            phoneNumber.slice(0, 3) +
+            ') ' +
+            phoneNumber.slice(3, 6) +
+            '-' +
+            phoneNumber.slice(6, 10)
+        );
     }
 
     const passwordErrorMessages = () => {
@@ -724,6 +728,7 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
                                         <style>{cssScroll}</style>
                                         <Policy title={true} />
                                     </div>
+                                    <Divider section />
                                     <div className='checkBox'>
                                         <style> {cssCheckBoxes} </style>
                                         <div className='rCheckBox'>
