@@ -48,7 +48,7 @@ export class PlanNote extends Component<PlanProps> {
     };
 
     trimDiseaseName = (procedure: string) => {
-        return procedure.split(' ').slice(1).join(' ');
+        return procedure;
     };
 
     editWhen = (when: string) => {

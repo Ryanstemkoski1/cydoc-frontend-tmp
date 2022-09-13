@@ -1,3 +1,4 @@
+import { minDoctorPassword } from './accountRequirements';
 export const passwordErrors = (role) => {
     return {
         containsNumber: 'Must contain at least one number.',
@@ -6,7 +7,9 @@ export const passwordErrors = (role) => {
         containsSpecial:
             'Must contain at least one of the following special characters: = + - ^ $ * . [ ] { } ( ) ? " ! @ # % & / \\ , > < \' : ; | _ ~ `',
         passesMinLength: `Must be at least ${
-            role === 'manager' || role === 'healthcare manager' ? '25' : '16'
+            role === 'manager' || role === 'healthcare manager'
+                ? '25'
+                : minDoctorPassword
         } characters.`,
     };
 };

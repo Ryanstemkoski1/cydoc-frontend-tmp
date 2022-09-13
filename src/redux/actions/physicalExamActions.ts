@@ -81,6 +81,28 @@ export const toggleLeftRightFinding = (
     },
 });
 
+export interface ToggleChooseBooleanValueAction {
+    type: PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE;
+    payload: {
+        section: string;
+        finding: string;
+        response: boolean;
+    };
+}
+
+export const toggleChooseBooleanValue = (
+    section: string,
+    finding: string,
+    response: boolean
+): ToggleChooseBooleanValueAction => ({
+    type: PHYSICAL_EXAM_ACTION.TOGGLE_CHOOSE_BOOLEAN_VALUE,
+    payload: {
+        section,
+        finding,
+        response,
+    },
+});
+
 export interface UpdateCommentsAction {
     type: PHYSICAL_EXAM_ACTION.UPDATE_COMMENTS;
     payload: {
@@ -104,5 +126,6 @@ export type PhysicalExamActionTypes =
     | UpdateVitalsAction
     | ToggleFindingAction
     | ToggleLeftRightFindingAction
+    | ToggleChooseBooleanValueAction
     | RemoveFindingAction
     | UpdateCommentsAction;

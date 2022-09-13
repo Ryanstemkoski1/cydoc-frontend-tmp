@@ -6,6 +6,7 @@ import {
     Table,
     TextAreaProps,
     InputOnChangeData,
+    DropdownProps,
 } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton';
 import Dropdown from 'components/tools/OptimizedDropdown';
@@ -75,7 +76,7 @@ class AllergiesContent extends Component<Props, OwnState> {
         _event:
             | React.FormEvent<HTMLTextAreaElement>
             | React.ChangeEvent<HTMLInputElement>,
-        data: TextAreaProps | InputOnChangeData
+        data: TextAreaProps | InputOnChangeData | DropdownProps
     ) {
         const { active } = this.state;
         if (!active.has(data.rowIndex)) {
@@ -171,17 +172,6 @@ class AllergiesContent extends Component<Props, OwnState> {
         }));
     };
 
-    // onAddItemFormatter = (
-    //     action: (type: DropdownType, value: string) => void
-    // ) => {
-    //     return (
-    //         _e: any,
-    //         { optiontype, value }: { optiontype: DropdownType; value: string }
-    //     ) => {
-    //         action(optiontype, value as string);
-    //     };
-    // };
-
     makeAccordionPanels(nums: string[], values: AllergiesState) {
         const { isPreview } = this.props;
 
@@ -222,14 +212,6 @@ class AllergiesContent extends Component<Props, OwnState> {
                         rowIndex={i}
                         value={isPreview ? '' : values[i].reaction}
                     />
-                    {/* <Input
-                        transparent
-                        placeholder='Reaction'
-                        type='reaction'
-                        onChange={this.handleTableBodyChange}
-                        rowIndex={i}
-                        value={isPreview ? '' : values[i].reaction}
-                    /> */}
                 </Form>
             );
 
@@ -274,7 +256,6 @@ class AllergiesContent extends Component<Props, OwnState> {
                 },
             });
         });
-
         return panels;
     }
 

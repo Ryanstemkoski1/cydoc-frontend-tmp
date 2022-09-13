@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import { WindowedMenuList } from 'react-windowed-select';
 import Select, { createFilter, components } from 'react-select';
@@ -32,6 +32,8 @@ const MenuList = (props) => (
 );
 
 const OptimizedDropdown = (props) => {
+    const [val, setVal] = useState('');
+    const [show, setShow] = useState(false);
     // Pull out props that go by different names in Semantic
     let {
         fluid,
@@ -53,7 +55,7 @@ const OptimizedDropdown = (props) => {
     // Format onChange so that it has access to additional props similarly to
     // Semantic UI's Dropdowns
     const handleOnChange = (option) => {
-        let value = option?.value || '';
+        let value = option?.label || '';
         if (multiple) {
             Array.isArray(option)
                 ? (value = option.map((opt) => opt.value))
@@ -69,6 +71,24 @@ const OptimizedDropdown = (props) => {
         handleOnChange({ value, label: value });
     };
 
+    const handleInputChange = (value, action) => {
+        if (action.action !== 'input-blur' && action.action !== 'menu-close') {
+            setVal(value);
+        }
+        if (value.length > 4) {
+            setShow(true);
+        } else {
+            setShow(false);
+        }
+    };
+
+    const handleMenuClose = () => {
+        let inputVal = { val }.val;
+        if (inputVal !== '') {
+            onAddItem(null, { ...otherProps, inputVal });
+            handleOnChange({ value, label: inputVal });
+        }
+    };
     // When toggling between sections of note body, all options added by the
     // user disappear (because they only persist in local state). To prevent
     // the dropdown from looking as if it has no value, add it on load.
@@ -101,8 +121,10 @@ const OptimizedDropdown = (props) => {
             maxMenuHeight={184}
             createOptionPosition='first'
             {...otherProps}
+            inputValue={{ val }.val}
             value={value !== '' && value !== [] && parsedValue} // forces placeholder to show when value is empty string
-            options={flatOptions}
+            options={{ show }.show ? flatOptions : null}
+            noOptionsMessage={() => null}
             isClearable={clearable}
             isLoading={loading}
             isSearchable={search}
@@ -110,6 +132,8 @@ const OptimizedDropdown = (props) => {
             isDisabled={disabled}
             onCreateOption={handleOnCreateOption}
             onChange={handleOnChange}
+            onInputChange={handleInputChange}
+            onMenuClose={handleMenuClose}
         />
     );
 };
