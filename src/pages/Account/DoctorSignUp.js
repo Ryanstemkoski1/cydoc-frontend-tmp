@@ -1,4 +1,5 @@
 import doctorSignUp from 'auth/doctorSignUp';
+import { minDoctorPassword } from 'constants/accountRequirements';
 import React, { useState } from 'react';
 import { passwordErrors } from 'constants/passwordErrors';
 import constants from 'constants/registration-constants.json';
@@ -87,7 +88,6 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
         text: expYear,
     }));
     const handleNewPasswordChange = (e, { value }) => {
-        const minLength = 16;
         setShowPasswordErrors(true);
         setPasswordReqs({
             ...passwordReqs,
@@ -99,7 +99,7 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
             )
                 ? true
                 : false,
-            passesMinLength: value.length >= minLength,
+            passesMinLength: value.length >= minDoctorPassword,
         });
         setNewPassword(value);
     };
