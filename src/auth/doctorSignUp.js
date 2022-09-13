@@ -114,7 +114,6 @@ const doctorSignUp = async (
 
     // send Stripe request
     stripeClient.post('/subscription', stripe_payload);
-    alert('You have successfully registered.');
 };
 
 export default doctorSignUp;
