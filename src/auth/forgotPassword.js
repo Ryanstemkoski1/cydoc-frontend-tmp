@@ -30,8 +30,9 @@ const ResetPassword = async (username, role) => {
     let cognitoUser = new CognitoUser(userData);
     return new Promise((resolve) => {
         cognitoUser.forgotPassword({
-            onSuccess: async (_result) => {
+            onSuccess: async (result) => {
                 resolve({
+                    obfuscatedEmail: result.CodeDeliveryDetails.Destination,
                     success: true,
                 });
             },

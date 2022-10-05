@@ -6,6 +6,138 @@ import {
 } from 'constants/api.js';
 import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
 
+const completeNewPasswordChallengeDoctor = (
+    currentUser,
+    newPassword,
+    newUserCognitoAttribute
+) => {
+    return new Promise((resolve) => {
+        currentUser.completeNewPasswordChallenge(
+            newPassword,
+            newUserCognitoAttribute,
+            {
+                onSuccess: async (_result) => {
+                    resolve({
+                        isFirstLoginFlag: false,
+                    });
+                },
+                mfaSetup: function (_challengeName, _challengeParameters) {
+                    currentUser.associateSoftwareToken(this);
+                },
+                mfaRequired: function (_codeDeliveryDetails) {
+                    // need MFA to complete user authentication
+                    let verificationCode = prompt(
+                        'Please input verification code sent via text message to your phone.',
+                        ''
+                    );
+                    // TODO: make a better UI for this
+                    // if user incorrectly types in code, they will be confirmed in Cognito but will not exist in the databse, meaning they will be able to "login" with their new username/pass, but they will get and error saying they do not exist.
+                    // to mitigate the risk of this happening, ask users to confirm what they typed in before submitting it.
+                    // while (
+                    //     !window.confirm(
+                    //         `You typed in ${verificationCode}. Is this the code you want to submit?`
+                    //     )
+                    // ) {
+                    //     verificationCode = prompt(
+                    //         'Please input verification code',
+                    //         ''
+                    //     );
+                    // }
+                    currentUser.sendMFACode(verificationCode, this);
+                },
+                onFailure: function (err) {
+                    // setting new password was not successful
+                    alert(
+                        `Error setting up account: ${
+                            err.message || JSON.stringify(err)
+                        }`
+                    );
+                    resolve(err);
+                    resolve({
+                        isFirstLoginFlag: true,
+                    });
+                    return undefined;
+                },
+            }
+        );
+    });
+};
+
+const completeNewPasswordChallengeManager = (
+    currentUser,
+    newPassword,
+    newUserCognitoAttribute,
+    manager_uuid
+) => {
+    return new Promise((resolve) => {
+        currentUser.completeNewPasswordChallenge(
+            newPassword,
+            newUserCognitoAttribute,
+            {
+                onSuccess: async (_result) => {
+                    const attributeList = [
+                        new CognitoUserAttribute({
+                            Name: 'custom:uuid',
+                            Value: manager_uuid,
+                        }),
+                    ];
+                    // update attributes in Cognito
+                    await currentUser.updateAttributes(attributeList, (err) => {
+                        if (err) {
+                            alert(
+                                `Error updating UUID: ${
+                                    err.message || JSON.stringify(err)
+                                }`
+                            );
+                            return;
+                        }
+                    });
+                    resolve({
+                        isFirstLoginFlag: false,
+                    });
+                },
+                mfaSetup: function (_challengeName, _challengeParameters) {
+                    currentUser.associateSoftwareToken(this);
+                },
+                mfaRequired: function (_codeDeliveryDetails) {
+                    // need MFA to complete user authentication
+                    let verificationCode = prompt(
+                        'Please input verification code sent via text message to your phone.',
+                        ''
+                    );
+                    // TODO: make a better UI for this
+                    // if user incorrectly types in code, they will be confirmed in Cognito but will not exist in the databse, meaning they will be able to "login" with their new username/pass, but they will get and error saying they do not exist.
+                    // to mitigate the risk of this happening, ask users to confirm what they typed in before submitting it.
+                    // while (
+                    //     !window.confirm(
+                    //         `You typed in ${verificationCode}. Is this the code you want to submit?`
+                    //     )
+                    // ) {
+                    //     verificationCode = prompt(
+                    //         'Please input verification code',
+                    //         ''
+                    //     );
+                    // }
+                    currentUser.sendMFACode(verificationCode, this);
+                },
+                onFailure: function (err) {
+                    // setting new password was not successful
+                    alert(
+                        `Error setting up account: ${
+                            err.message || JSON.stringify(err)
+                        }`
+                    );
+                    resolve(err);
+                    resolve({
+                        isFirstLoginFlag: true,
+                    });
+                    return undefined;
+                },
+            }
+        );
+    });
+};
+
 const SetupAccount = async (
     currentUser,
     newUserAttr,
@@ -96,224 +228,70 @@ const SetupAccount = async (
         delete newUserCognitoAttribute['custom:associatedManager'];
         delete newUserCognitoAttribute['phone_number'];
 
-        url.post(path, payload)
-            .then(async (response) => {
-                const manager_uuid = response.data[0];
-                // then, create customer and send card info to Stripe
-                customerInfo.customer.attributes.customerUUID = manager_uuid;
-                let stripe_payload = JSON.stringify(customerInfo);
-                await stripeClient
-                    .post(stripe_path, stripe_payload)
-                    .then(() => {
-                        alert('Payment info successfully sent to Stripe');
-                        return new Promise((resolve) => {
-                            currentUser.completeNewPasswordChallenge(
-                                newPassword,
-                                newUserCognitoAttribute,
-                                {
-                                    onSuccess: async (_result) => {
-                                        const attributeList = [
-                                            new CognitoUserAttribute({
-                                                Name: 'custom:uuid',
-                                                Value: manager_uuid,
-                                            }),
-                                        ];
-                                        // update attributes in Cognito
-                                        await currentUser.updateAttributes(
-                                            attributeList,
-                                            (err) => {
-                                                if (err) {
-                                                    alert(
-                                                        `Error updating UUID: ${
-                                                            err.message ||
-                                                            JSON.stringify(err)
-                                                        }`
-                                                    );
-                                                    return;
-                                                }
-                                            }
-                                        );
-                                        resolve({
-                                            isFirstLoginFlag: false,
-                                        });
-                                        alert(
-                                            'Your account has been successfully set up. Please accept the following reload prompt and login to continue'
-                                        );
-                                        window.location.reload(false);
-                                    },
-                                    mfaSetup: function (
-                                        _challengeName,
-                                        _challengeParameters
-                                    ) {
-                                        currentUser.associateSoftwareToken(
-                                            this
-                                        );
-                                    },
-                                    mfaRequired: function (
-                                        _codeDeliveryDetails
-                                    ) {
-                                        // need MFA to complete user authentication
-                                        let verificationCode = prompt(
-                                            'Please input verification code sent via text message to your phone.',
-                                            ''
-                                        );
-                                        // TODO: make a better UI for this
-                                        // if user incorrectly types in code, they will be confirmed in Cognito but will not exist in the databse, meaning they will be able to "login" with their new username/pass, but they will get and error saying they do not exist.
-                                        // to mitigate the risk of this happening, ask users to confirm what they typed in before submitting it.
-                                        // while (
-                                        //     !window.confirm(
-                                        //         `You typed in ${verificationCode}. Is this the code you want to submit?`
-                                        //     )
-                                        // ) {
-                                        //     verificationCode = prompt(
-                                        //         'Please input verification code',
-                                        //         ''
-                                        //     );
-                                        // }
-                                        currentUser.sendMFACode(
-                                            verificationCode,
-                                            this
-                                        );
-                                    },
-                                    onFailure: function (err) {
-                                        // setting new password was not successful
-                                        alert(
-                                            `Error setting up account: ${
-                                                err.message ||
-                                                JSON.stringify(err)
-                                            }`
-                                        );
-                                        resolve(err);
-                                        resolve({
-                                            isFirstLoginFlag: true,
-                                        });
-                                        return undefined;
-                                    },
-                                }
-                            );
-                        });
-                    })
-                    .catch(() => {
-                        alert(`Error with Payment info`);
-                        return;
-                    });
-            })
-            .catch((err) => {
-                alert(
-                    `Error creating account: ${
-                        err.message || JSON.stringify(err)
-                    }`
+        try {
+            const response = await url.post(path, payload);
+            const manager_uuid = response.data[0];
+            // then, create customer and send card info to Stripe
+            customerInfo.customer.attributes.customerUUID = manager_uuid;
+            let stripe_payload = JSON.stringify(customerInfo);
+            try {
+                await stripeClient.post(stripe_path, stripe_payload);
+                alert('Payment info successfully sent to Stripe');
+                await completeNewPasswordChallengeManager(
+                    currentUser,
+                    newPassword,
+                    newUserCognitoAttribute,
+                    manager_uuid
                 );
+            } catch (e) {
+                alert(`Error with Payment info`);
                 return;
-            });
-
-        // alert(
-        //     'Your account has been successfully set up. Please login to continue.'
-        // );
+            }
+        } catch (e) {
+            alert(`Error creating account: ${e.message || JSON.stringify(e)}`);
+            return;
+        }
     } else if (role == 'doctor') {
-        url.put(path, payload)
-            .then(async () => {
-                // next, update manager's joinedDoctors in DynamoDB
-                const payload = JSON.stringify({
-                    manager: {
-                        joinedDoctors: [attributes['custom:UUID']],
-                    },
-                });
-                await managerClient
-                    .put(
-                        `/managers/${attributes['custom:associatedManager']}`,
-                        payload
-                    )
-                    .then(() => {})
-                    .catch((err) => {
-                        alert(
-                            `Error updating manager: ${
-                                err.message || JSON.stringify(err)
-                            }`
-                        );
-                        return;
-                    });
-                // then, send doctor's payment info to Stripe
-                let stripe_payload = JSON.stringify(customerInfo);
-                //console.log(stripe_payload);
-                await stripeClient
-                    .post(stripe_path, stripe_payload)
-                    .then(() => {
-                        return new Promise((resolve) => {
-                            currentUser.completeNewPasswordChallenge(
-                                newPassword,
-                                newUserCognitoAttribute,
-                                {
-                                    onSuccess: async (_result) => {
-                                        resolve({
-                                            isFirstLoginFlag: false,
-                                        });
-                                        alert(
-                                            'Your account has been successfully set up. Please accept the following reload prompt and login to continue'
-                                        );
-                                        window.location.reload(false);
-                                    },
-                                    mfaSetup: function (
-                                        _challengeName,
-                                        _challengeParameters
-                                    ) {
-                                        currentUser.associateSoftwareToken(
-                                            this
-                                        );
-                                    },
-                                    mfaRequired: function (
-                                        _codeDeliveryDetails
-                                    ) {
-                                        // need MFA to complete user authentication
-                                        let verificationCode = prompt(
-                                            'Please input verification code sent via text message to your phone.',
-                                            ''
-                                        );
-                                        // TODO: make a better UI for this
-                                        // if user incorrectly types in code, they will be confirmed in Cognito but will not exist in the databse, meaning they will be able to "login" with their new username/pass, but they will get and error saying they do not exist.
-                                        // to mitigate the risk of this happening, ask users to confirm what they typed in before submitting it.
-                                        // while (
-                                        //     !window.confirm(
-                                        //         `You typed in ${verificationCode}. Is this the code you want to submit?`
-                                        //     )
-                                        // ) {
-                                        //     verificationCode = prompt(
-                                        //         'Please input verification code',
-                                        //         ''
-                                        //     );
-                                        // }
-                                        currentUser.sendMFACode(
-                                            verificationCode,
-                                            this
-                                        );
-                                    },
-                                    onFailure: function (err) {
-                                        // setting new password was not successful
-                                        alert(
-                                            `Error setting up account: ${
-                                                err.message ||
-                                                JSON.stringify(err)
-                                            }`
-                                        );
-                                        resolve(err);
-                                        resolve({
-                                            isFirstLoginFlag: true,
-                                        });
-                                        return undefined;
-                                    },
-                                }
-                            );
-                        });
-                    })
-                    .catch(() => {
-                        alert(`Error with Payment info`);
-                        return;
-                    });
-            })
-            .catch(() => {
-                alert(`Error! Please check info`);
-                return;
-            });
+        try {
+            await url.put(path, payload);
+        } catch (e) {
+            alert(`Error! Please check info`);
+            return;
+        }
+
+        // next, update manager's joinedDoctors in DynamoDB
+        const mPayload = JSON.stringify({
+            manager: {
+                joinedDoctors: [attributes['custom:UUID']],
+            },
+        });
+        try {
+            await managerClient.put(
+                `/managers/${attributes['custom:associatedManager']}`,
+                mPayload
+            );
+        } catch (err) {
+            alert(
+                `Error updating manager: ${err.message || JSON.stringify(err)}`
+            );
+            return;
+        }
+
+        // then, send doctor's payment info to Stripe
+        let stripe_payload = JSON.stringify(customerInfo);
+
+        try {
+            await stripeClient.post(stripe_path, stripe_payload);
+        } catch (e) {
+            alert(`Error with Payment info`);
+        }
+
+        const res = await completeNewPasswordChallengeDoctor(
+            currentUser,
+            newPassword,
+            newUserCognitoAttribute
+        );
+        return res;
     }
 };
 

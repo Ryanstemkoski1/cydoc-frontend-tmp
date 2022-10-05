@@ -35,6 +35,7 @@ const ForgotPasswordEmail = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isLoggingUser, setIsLoggingUser] = useState(false);
     const [codeSent, setCodeSent] = useState(false);
+    const [obfuscatedEmail, setObfuscatedEmail] = useState('');
     const [isConfirmed, setConfirmed] = useState(false);
     const [isConfirming, setIsConfirming] = useState(false);
     const [passwordMeetsReqs, setPasswordMeetsReqs] = useState(true);
@@ -89,6 +90,7 @@ const ForgotPasswordEmail = () => {
         if (isMounted.current) {
             if (emailResponse.success) {
                 setCodeSent(true);
+                setObfuscatedEmail(emailResponse.obfuscatedEmail);
             }
         }
         setIsLoggingUser(false);
@@ -240,7 +242,7 @@ const ForgotPasswordEmail = () => {
                                     color='teal'
                                     size='small'
                                     aria-label='find-email'
-                                    content='Find Email'
+                                    content='Continue'
                                 />
                             </Grid.Column>
                         </Grid.Row>
@@ -268,7 +270,7 @@ const ForgotPasswordEmail = () => {
                         <Form.Input
                             fluid
                             aria-label='enterconfirmationcode'
-                            label='Enter Confirmation Code:'
+                            label={`Enter Confirmation Code Emailed to: ${obfuscatedEmail}`}
                             name='enterconfirmationcode'
                             value={confirmationCode}
                             onChange={handleConfirmationCodeChange}
@@ -370,7 +372,7 @@ const ForgotPasswordEmail = () => {
                 <NavMenu />
             </div>
             <div className='forgot-password-email'>
-                {!codeSent
+                {!codeSent || !obfuscatedEmail
                     ? renderEnterEmail()
                     : !isConfirmed
                     ? renderEnterConfirmation()
