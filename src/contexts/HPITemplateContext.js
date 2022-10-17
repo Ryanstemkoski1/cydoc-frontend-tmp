@@ -62,7 +62,7 @@ export class HPITemplateStore extends Component {
             <HPITemplateContext.Provider
                 value={{
                     ...this.state,
-                    doctorID: this.context?.user?._id,
+                    doctorID: this.context?.user?.doctorUUID,
                     setCreatedTemplates: this.setCreatedTemplates,
                     onTemplateChange: this.onTemplateChange,
                     updateTemplate: this.updateTemplate,

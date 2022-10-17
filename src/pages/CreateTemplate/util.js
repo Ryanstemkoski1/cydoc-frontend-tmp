@@ -232,6 +232,7 @@ export const getNewTemplate = () => {
         bodySystem: '',
         numQuestions: 1,
         nextEdgeID: 0,
+        hasChanged: true,
         root: rootId,
         graph: {
             [rootId]: [],
