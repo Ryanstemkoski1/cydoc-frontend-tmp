@@ -2,7 +2,6 @@ import doctorSignUp from 'auth/doctorSignUp';
 import { minDoctorPassword } from 'constants/accountRequirements';
 import React, { useState } from 'react';
 import { passwordErrors } from 'constants/passwordErrors';
-import constants from 'constants/registration-constants.json';
 import './Account.css';
 import {
     Button,
@@ -18,8 +17,11 @@ import {
 import isEmailValid from '../../auth/isEmailValid';
 import Policy from '../../constants/Documents/policy';
 import Terms_and_conditions from '../../constants/Documents/terms_and_conditions';
+import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
 const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
+    const stripe = useStripe();
+    const elements = useElements();
     const phoneNumberRegex = new RegExp(
         '^[+]?[(]?[0-9]{3}[)]?[" "][-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'
     );
@@ -39,12 +41,8 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [passwordsMatch, setPasswordsMatch] = useState(true);
-    const [expirationMonth, setExpirationMonth] = useState('');
-    const [expirationYear, setExpirationYear] = useState('');
-    const [cardNumber, setCardNumber] = useState('');
-    const [cvv, setCVV] = useState('');
-    const [zipCode, setZipCode] = useState('');
     const [showPasswordErrors, setShowPasswordErrors] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState(null);
 
     const [passwordReqs, setPasswordReqs] = useState({
         containsNumber: false,
@@ -62,10 +60,40 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
     const [isTermsChecked, setIsTermsChecked] = useState(false);
     const [isPrivacyChecked, setIsPrivacyChecked] = useState(false);
 
+    const createStripePaymentMethod = async () => {
+        const card = elements.getElement(CardElement);
+        if (card == null) {
+            return false;
+        }
+        const { error, paymentMethod } = await stripe.createPaymentMethod({
+            type: 'card',
+            card,
+            billing_details: {
+                name: `${firstName} ${lastName}`,
+            },
+        });
+
+        if (error) {
+            alert('Card Error', error);
+            return false;
+        }
+        setPaymentMethod(paymentMethod);
+        return true;
+    };
+
     // Navigation for the wizard: stops at page 3, starts at page 0
     // onNextClick increments the page by 1 unless we are already at page 3
-    const onNextClick = (e) => {
+    const onNextClick = async (e) => {
         e.preventDefault();
+
+        // handle stripe payment method creation
+        if (wizardPage === 1) {
+            const success = await createStripePaymentMethod();
+            if (!success) {
+                return;
+            }
+        }
+
         const nextPage = wizardPage > 2 ? 3 : wizardPage + 1;
         setWizardPage(nextPage);
     };
@@ -75,18 +103,6 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
         const prevPage = wizardPage < 1 ? 0 : wizardPage - 1;
         setWizardPage(prevPage);
     };
-    const expirationMonthOptions = constants.expirationMonths.map(
-        (expMonth) => ({
-            key: expMonth,
-            value: expMonth,
-            text: expMonth,
-        })
-    );
-    const expirationYearOptions = constants.expirationYears.map((expYear) => ({
-        key: expYear,
-        value: expYear,
-        text: expYear,
-    }));
     const handleNewPasswordChange = (e, { value }) => {
         setShowPasswordErrors(true);
         setPasswordReqs({
@@ -151,13 +167,15 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
             return true;
         }
         if (page === 1) {
-            if (
-                cardNumber === '' ||
-                expirationYear === '' ||
-                expirationMonth === '' ||
-                cvv === '' ||
-                zipCode === ''
-            ) {
+            const cardElementContainer = document.querySelector(
+                '#card-element'
+            );
+
+            const cardElementComplete = cardElementContainer.classList.contains(
+                'StripeElement--complete'
+            );
+
+            if (!cardElementComplete) {
                 alert('Enter Required Fields');
                 return false;
             } else {
@@ -182,20 +200,24 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
 
     const createDoctor = async () => {
         setWizardLoading(true);
+
         // If the terms of use & privacy policy have been accepted, sign up the new doctor
-        const createUserResponse = await doctorSignUp(
-            username,
-            newPassword,
-            email,
-            firstName,
-            lastName,
-            phoneNumber,
-            cardNumber,
-            expirationYear,
-            expirationMonth,
-            cvv,
-            zipCode
-        );
+        let createUserResponse;
+        try {
+            createUserResponse = await doctorSignUp(
+                username,
+                newPassword,
+                email,
+                firstName,
+                lastName,
+                phoneNumber,
+                paymentMethod.id
+            );
+        } catch (e) {
+            setWizardLoading(false);
+            return;
+        }
+
         if (
             createUserResponse?.status === 'ERROR' &&
             createUserResponse?.message.includes('User account already exists')
@@ -234,25 +256,6 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
         setLastName(value);
     };
 
-    const handleCardNumberChange = (e, { value }) => {
-        setCardNumber(value);
-    };
-
-    const handleCVVChange = (e, { value }) => {
-        setCVV(value);
-    };
-
-    const handleZipCodeChange = (e, { value }) => {
-        setZipCode(value);
-    };
-
-    const handleExpirationMonthChange = (e, { value }) => {
-        setExpirationMonth(value);
-    };
-
-    const handleExpirationYearChange = (e, { value }) => {
-        setExpirationYear(value);
-    };
     const handlePhoneNumber = (e, { value }) => {
         const formattedPhoneNumber = formatPhoneNumber(value);
         setPhoneNumber(formattedPhoneNumber);
@@ -526,66 +529,19 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
                                             may cancel anytime.
                                         </p>
                                     </div>
-                                    <Form.Input
-                                        required
-                                        aria-label='Card Number'
-                                        fluid
-                                        label='Card Number'
-                                        placeholder='Card number'
-                                        name='cardNumber'
-                                        width={16}
-                                        value={cardNumber}
-                                        onChange={handleCardNumberChange}
-                                    />
-
-                                    <Form.Group widths='equal'>
-                                        <Form.Input
-                                            fluid
-                                            label='Expiration Month'
-                                            required
-                                            width={6}
-                                            options={expirationMonthOptions}
-                                            placeholder='MM'
-                                            name='expirationMonth'
-                                            value={expirationMonth}
-                                            onChange={
-                                                handleExpirationMonthChange
-                                            }
-                                        />
-                                        <Form.Input
-                                            label='Expiration Year'
-                                            required
-                                            width={6}
-                                            options={expirationYearOptions}
-                                            placeholder='YY'
-                                            name='expirationYear'
-                                            value={expirationYear}
-                                            onChange={
-                                                handleExpirationYearChange
-                                            }
-                                        />
-                                        <Form.Input
-                                            fluid
-                                            label='CVV'
-                                            required
-                                            width={6}
-                                            aria-label='CVV'
-                                            name='cvv'
-                                            placeholder='111'
-                                            value={cvv}
-                                            onChange={handleCVVChange}
-                                        />
-                                        <Form.Input
-                                            fluid
-                                            label='Zip Code'
-                                            required
-                                            width={10}
-                                            name='zipCode'
-                                            placeholder='00000'
-                                            value={zipCode}
-                                            onChange={handleZipCodeChange}
-                                        />
-                                    </Form.Group>
+                                    <div
+                                        style={{
+                                            maxWidth: '350px',
+                                            marginTop: '15px',
+                                            marginBottom: '15px',
+                                            border: '1px solid grey',
+                                            borderRadius: '4px',
+                                            height: '40px',
+                                            padding: '10px 10px 0 10px',
+                                        }}
+                                    >
+                                        <CardElement id='card-element' />
+                                    </div>
                                 </Container>
                                 <Container className='modal-button-container'>
                                     <Button

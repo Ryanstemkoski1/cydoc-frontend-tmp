@@ -1,9 +1,4 @@
-import {
-    doctorClient,
-    managerClient,
-    patientClient,
-    stripeClient,
-} from 'constants/api.js';
+import { doctorClient, managerClient, patientClient } from 'constants/api.js';
 import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
 
 const completeNewPasswordChallengeDoctor = (
@@ -151,7 +146,7 @@ const SetupAccount = async (
         email: newUserAttr.email,
         phoneNumber: newUserAttr.phone_number,
     };
-    // assign `role` and `cardInfo` to corresponding user fields before deleting the user fields
+    // assign `role` to corresponding user fields before deleting the user fields
     const role = user.role;
 
     delete user.fullPhoneNumber;
@@ -159,22 +154,15 @@ const SetupAccount = async (
     delete user.countryCode;
     delete user['custom:UUID'];
     delete user.role;
-    // the information below is needed for sending info to Stripe
-    const cardInfo = user.card;
-    delete user.card;
     const email = user.email;
     const name = `${user.firstName} ${user.lastName}`;
-    const zipCode = '84088';
     let customerInfo = {
         customer: {
-            cardData: cardInfo,
             email,
-            zipCode,
             attributes: {
                 customerUUID: '',
                 name,
                 role,
-                plans: [{ price: 'price_1IeoaLI5qo8H3FXUkFZRFvSr' }],
             },
         },
     };
@@ -188,9 +176,6 @@ const SetupAccount = async (
         family_name: newUserAttr.family_name,
         phone_number: newUserAttr.phone_number,
     };
-
-    // path to send info to Stripe
-    const stripe_path = '/subscription';
 
     // user successfully reset password and confirmed account
     delete user.fullPhoneNumber;
@@ -231,22 +216,13 @@ const SetupAccount = async (
         try {
             const response = await url.post(path, payload);
             const manager_uuid = response.data[0];
-            // then, create customer and send card info to Stripe
             customerInfo.customer.attributes.customerUUID = manager_uuid;
-            let stripe_payload = JSON.stringify(customerInfo);
-            try {
-                await stripeClient.post(stripe_path, stripe_payload);
-                alert('Payment info successfully sent to Stripe');
-                await completeNewPasswordChallengeManager(
-                    currentUser,
-                    newPassword,
-                    newUserCognitoAttribute,
-                    manager_uuid
-                );
-            } catch (e) {
-                alert(`Error with Payment info`);
-                return;
-            }
+            await completeNewPasswordChallengeManager(
+                currentUser,
+                newPassword,
+                newUserCognitoAttribute,
+                manager_uuid
+            );
         } catch (e) {
             alert(`Error creating account: ${e.message || JSON.stringify(e)}`);
             return;
@@ -275,15 +251,6 @@ const SetupAccount = async (
                 `Error updating manager: ${err.message || JSON.stringify(err)}`
             );
             return;
-        }
-
-        // then, send doctor's payment info to Stripe
-        let stripe_payload = JSON.stringify(customerInfo);
-
-        try {
-            await stripeClient.post(stripe_path, stripe_payload);
-        } catch (e) {
-            alert(`Error with Payment info`);
         }
 
         const res = await completeNewPasswordChallengeDoctor(

@@ -35,12 +35,6 @@ const initializeFormFields = (role, username, email, firstName, lastName) => {
             degreesInProgress: ['', '', ''],
             specialties: ['', '', ''],
             managerResponsibleForPayment: undefined,
-            card: {
-                cardNumber: undefined,
-                expirationMonth: undefined,
-                expirationYear: undefined,
-                cvv: undefined,
-            },
         };
     } else if (role === 'manager') {
         return {
@@ -55,12 +49,6 @@ const initializeFormFields = (role, username, email, firstName, lastName) => {
             phoneNumberIsMobile: true,
             birthday: '',
             managerResponsibleForPayment: undefined,
-            card: {
-                cardNumber: undefined,
-                expirationMonth: undefined,
-                expirationYear: undefined,
-                cvv: undefined,
-            },
         };
     }
 };
