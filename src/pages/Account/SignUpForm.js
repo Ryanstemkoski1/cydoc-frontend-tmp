@@ -24,18 +24,6 @@ const specialtyOptions = constants.specialties.map((specialty) => ({
     text: specialty,
 }));
 
-// const expirationMonthOptions = constants.expirationMonths.map((expMonth) => ({
-//     key: expMonth,
-//     value: expMonth,
-//     text: expMonth,
-// }));
-
-// const expirationYearOptions = constants.expirationYears.map((expYear) => ({
-//     key: expYear,
-//     value: expYear,
-//     text: expYear,
-// }));
-
 const createSchema = async (role) => {
     if (role === 'doctor') {
         return yup.object().shape({
@@ -110,7 +98,6 @@ const createSchema = async (role) => {
                         );
                     }
                 ),
-            // TODO: validate credit card number and cvv length for doctors and managers
         });
     } else if (role === 'manager') {
         return yup.object().shape({
@@ -131,14 +118,6 @@ const SignUpForm = (props) => {
     const [userInfo, setUserInfo] = useState(props.userInfo);
     const [isSendingInfo, setIsSendingInfo] = useState(false);
     const [formErrors, setFormErrors] = useState([]);
-    const expirationMonth = '12';
-    const expirationYear = '2025';
-    const cardNumber = '4242424242424242';
-    const cvv = '123';
-    // const [expirationMonth, setExpirationMonth] = useState('12');
-    // const [expirationYear, setExpirationYear] = useState('2025');
-    // const [cardNumber, setCardNumber] = useState('4242424242424242');
-    // const [cvv, setCVV] = useState('123');
 
     useEffect(() => {
         setUserInfo(props.userInfo);
@@ -150,22 +129,6 @@ const SignUpForm = (props) => {
             [name]: value,
         });
     };
-
-    // const handleCardChange = (e, { value }) => {
-    //     setCardNumber(value);
-    // };
-
-    // const handleCVVChange = (e, { value }) => {
-    //     setCVV(value);
-    // };
-
-    // const handleExpirationMonthChange = (e, { value }) => {
-    //     setExpirationMonth(value);
-    // };
-
-    // const handleExpirationYearChange = (e, { value }) => {
-    //     setExpirationYear(value);
-    // };
 
     const handleIsPhoneNumberMobileChange = () => {
         setUserInfo({
@@ -202,10 +165,6 @@ const SignUpForm = (props) => {
         if (isSendingInfo) {
             return;
         }
-        userInfo.card['cardNumber'] = cardNumber;
-        userInfo.card['expirationMonth'] = expirationMonth;
-        userInfo.card['expirationYear'] = expirationYear;
-        userInfo.card['cvv'] = cvv;
 
         setIsSendingInfo(true);
         const infoToValidate = {
@@ -448,50 +407,6 @@ const SignUpForm = (props) => {
                 />
             </Form.Group>
             {additionalFields()}
-            {/* <Form.Input
-                required
-                aria-label='Card Number'
-                label='Card Number'
-                placeholder='card number'
-                name='cardNumber'
-                width={16}
-                value={cardNumber}
-                onChange={handleCardChange}
-            />
-            <label className='label-font'>Expiration Date</label>
-            <Form.Group widths='equal' required>
-                <Form.Select
-                    fluid
-                    required
-                    width={2}
-                    options={expirationMonthOptions}
-                    placeholder='MM'
-                    name='expirationMonth'
-                    value={expirationMonth}
-                    onChange={handleExpirationMonthChange}
-                />
-                <Form.Select
-                    fluid
-                    required
-                    width={2}
-                    options={expirationYearOptions}
-                    placeholder='YY'
-                    name='expirationYear'
-                    value={expirationYear}
-                    onChange={handleExpirationYearChange}
-                />
-            </Form.Group>
-            <Form.Input
-                fluid
-                required
-                width={3}
-                aria-label='CVV'
-                label='CVV'
-                name='cvv'
-                placeholder='111'
-                value={cvv}
-                onChange={handleCVVChange}
-            /> */}
             <Container>
                 <Header as='h5' textAlign='center' content='Terms of Use' />
                 <div className='scroll'>

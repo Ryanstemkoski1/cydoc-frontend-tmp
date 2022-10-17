@@ -12,6 +12,10 @@ import { passwordErrors } from 'constants/passwordErrors';
 import NavMenu from '../../components/navigation/NavMenu';
 import './Account.css';
 import SignUpForm from './SignUpForm';
+import {
+    minDoctorPassword,
+    minManagerPassword,
+} from 'constants/accountRequirements';
 
 const initializeFormFields = (role, username, email, firstName, lastName) => {
     if (role === 'doctor') {
@@ -31,12 +35,6 @@ const initializeFormFields = (role, username, email, firstName, lastName) => {
             degreesInProgress: ['', '', ''],
             specialties: ['', '', ''],
             managerResponsibleForPayment: undefined,
-            card: {
-                cardNumber: undefined,
-                expirationMonth: undefined,
-                expirationYear: undefined,
-                cvv: undefined,
-            },
         };
     } else if (role === 'manager') {
         return {
@@ -51,12 +49,6 @@ const initializeFormFields = (role, username, email, firstName, lastName) => {
             phoneNumberIsMobile: true,
             birthday: '',
             managerResponsibleForPayment: undefined,
-            card: {
-                cardNumber: undefined,
-                expirationMonth: undefined,
-                expirationYear: undefined,
-                cvv: undefined,
-            },
         };
     }
 };
@@ -85,7 +77,9 @@ const FirstTimeLogin = ({
 
     const handleNewPasswordChange = (e, { value }) => {
         const minLength =
-            role === 'manager' || role === 'healthcare manager' ? 25 : 16;
+            role === 'manager' || role === 'healthcare manager'
+                ? minManagerPassword
+                : minDoctorPassword;
         setPasswordReqs({
             ...passwordReqs,
             containsNumber: value.match(/\d+/g) ? true : false,

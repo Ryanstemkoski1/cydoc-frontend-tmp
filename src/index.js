@@ -24,6 +24,18 @@ import { Provider } from 'react-redux';
 import { currentNoteStore } from './redux/store';
 import Policy from './constants/Documents/policy';
 import Terms_and_conditions from './constants/Documents/terms_and_conditions';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
+const getStripePublishableKey = () => {
+    if (window.location.host.includes('cydoc.ai')) {
+        return 'pk_live_51I8WjzI5qo8H3FXU0K1gpndArcjAxLcGR3GWHyCaFsSxB6XckVoWeTH8rzkajlpdgQN1OTiWd4vEhnjKboqyks0g000p9or7In';
+    } else {
+        return 'pk_test_51I8WjzI5qo8H3FXUmqt1mnPq9onbLPQz3KhqYIpYHlMGP3y5KqKX2lcC7ky80DUIG6V7kFrWQpFe5UgnmE4AL0l900eCenDWSX';
+    }
+};
+
+const stripePromise = loadStripe(getStripePublishableKey());
 
 ReactDOM.render(
     <CookiesProvider>
@@ -31,91 +43,97 @@ ReactDOM.render(
             <NotesStore>
                 <HPIStore>
                     <HPITemplateStore>
-                        <Provider store={currentNoteStore}>
-                            <div>
-                                <BrowserRouter>
-                                    <Route exact path='/' component={Home} />
-                                    <Route
-                                        exact
-                                        path='/login'
-                                        component={Login}
-                                    />
-                                    <Route
-                                        exact
-                                        path='/forgotpasswordemail'
-                                        component={ForgotPasswordEmail}
-                                    />
-                                    <PrivateRoute
-                                        exact
-                                        path='/editnote'
-                                        component={EditNote}
-                                    />
-                                    <PrivateRoute
-                                        exact
-                                        path='/dashboard'
-                                        component={LandingPage}
-                                    />
-                                    <PrivateRoute
-                                        exact
-                                        path='/templates/new'
-                                        component={CreateGraph}
-                                    />
-                                    <PrivateRoute
-                                        exact
-                                        path='/templates/old'
-                                        component={EditGraph}
-                                    />
-                                    <PrivateRoute
-                                        exact
-                                        path='/templates/edit'
-                                        component={EditTemplate}
-                                    />
-                                    <PrivateRoute
-                                        exact
-                                        path='/editprofile'
-                                        component={EditProfile}
-                                    />
-                                    <PrivateRoute
-                                        exact
-                                        path='/profilesecurity'
-                                        component={ProfileSecurity}
-                                    />
-                                    <PrivateRoute
-                                        exact
-                                        path='/managerdashboard'
-                                        component={ManagerDashboard}
-                                    />
-                                    <Route
-                                        exact
-                                        path='/privacypolicy'
-                                        component={Policy}
-                                    />
-                                    <Route
-                                        exact
-                                        path='/termsandconditions'
-                                        component={Terms_and_conditions}
-                                    />
-                                    <div className='footer-copyright'>
-                                        Copyright © 2019-2022 Cydoc, LLC. All
-                                        rights reserved. Patent pending.
-                                        &emsp;•&emsp;
-                                        <a
-                                            href='/privacypolicy'
-                                            style={{ color: '#147A9B' }}
-                                        >
-                                            Privacy Policy
-                                        </a>
-                                        &emsp; • &emsp;
-                                        <a
-                                            href='/termsandconditions'
-                                            style={{ color: '#147A9B' }}
-                                        >
-                                            Terms and Conditions
-                                        </a>
-                                    </div>
-                                </BrowserRouter>
-                            </div>
-                        </Provider>
+                        <Elements stripe={stripePromise}>
+                            <Provider store={currentNoteStore}>
+                                <div>
+                                    <BrowserRouter>
+                                        <Route
+                                            exact
+                                            path='/'
+                                            component={Home}
+                                        />
+                                        <Route
+                                            exact
+                                            path='/login'
+                                            component={Login}
+                                        />
+                                        <Route
+                                            exact
+                                            path='/forgotpasswordemail'
+                                            component={ForgotPasswordEmail}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/editnote'
+                                            component={EditNote}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/dashboard'
+                                            component={LandingPage}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/templates/new'
+                                            component={CreateGraph}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/templates/old'
+                                            component={EditGraph}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/templates/edit'
+                                            component={EditTemplate}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/editprofile'
+                                            component={EditProfile}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/profilesecurity'
+                                            component={ProfileSecurity}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/managerdashboard'
+                                            component={ManagerDashboard}
+                                        />
+                                        <Route
+                                            exact
+                                            path='/privacypolicy'
+                                            component={Policy}
+                                        />
+                                        <Route
+                                            exact
+                                            path='/termsandconditions'
+                                            component={Terms_and_conditions}
+                                        />
+                                        <div className='footer-copyright'>
+                                            Copyright © 2019-2022 Cydoc, LLC.
+                                            All rights reserved. Patent pending.
+                                            &emsp;•&emsp;
+                                            <a
+                                                href='/privacypolicy'
+                                                style={{ color: '#147A9B' }}
+                                            >
+                                                Privacy Policy
+                                            </a>
+                                            &emsp; • &emsp;
+                                            <a
+                                                href='/termsandconditions'
+                                                style={{ color: '#147A9B' }}
+                                            >
+                                                Terms and Conditions
+                                            </a>
+                                        </div>
+                                    </BrowserRouter>
+                                </div>
+                            </Provider>
+                        </Elements>
                     </HPITemplateStore>
                 </HPIStore>
             </NotesStore>

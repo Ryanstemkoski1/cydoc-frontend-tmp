@@ -56,9 +56,10 @@
 
 #body-error-message,
 #disease-error-message {
-  margin: .25rem auto;
-  padding: .75rem;
-  display: none;
+  margin: 0 0 1rem 0;
+  color: #9f3a38;
+  font-style: italic;
+  font-weight: bold;
 }
 
 .ui.button.create-tmpl-button,

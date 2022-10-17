@@ -13,18 +13,21 @@ import {
     Image,
     Header,
     Grid,
+    Modal,
+    Input,
 } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import GetLogin from 'auth/login';
 import SetupAccount from 'auth/setupAccount';
-//import verifyEmail from 'auth/verifyEmail';
+import { triggerEmailVerification, verifyEmail } from 'auth/verifyEmail';
 import AuthContext from '../../contexts/AuthContext';
 import NotesContext from '../../contexts/NotesContext';
 import Logo from '../../assets/cydoc-logo.svg';
 import NavMenu from '../../components/navigation/NavMenu';
 import FirstTimeLogin from './FirstTimeLogin';
 import './Account.css';
+import isEmailVerified from 'auth/isEmailVerified';
 
 const Login = () => {
     const context = useContext(AuthContext);
@@ -32,13 +35,16 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('doctor');
     const [isLoggingIn, setIsLoggingIn] = useState(false);
-    const [redirect, setRedirect] = useState(false);
     const isMounted = useRef(true);
     const [isFirstLogin, setIsFirstLogin] = useState(false);
     const [sessionUserAttributes, setSessionUserAttributes] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
-    // eslint-disable-next-line no-unused-vars
-    const [emailVerified, setEmailVerified] = useState(false);
+    const [emailVerified, setIsEmailVerified] = useState(false);
+    const [cognitoUser, setCognitoUser] = useState(null);
+    const [emailVerificationCode, setEmailVerificationCode] = useState('');
+    const [emailVerificationChecked, setEmailVerificationChecked] = useState(
+        false
+    );
 
     // set isMounted to false when component is unmounted
     useEffect(() => {
@@ -76,7 +82,6 @@ const Login = () => {
                 setCurrentUser(loginResponse.currentUser);
                 setSessionUserAttributes(loginResponse.userAttr);
                 setIsFirstLogin(loginResponse.isFirstLoginFlag);
-                setRedirect(loginResponse.redirectFlag);
             }
 
             // finished logging in
@@ -110,19 +115,37 @@ const Login = () => {
             if (setupAccountResponse) {
                 // update state after user has setup account
                 setIsFirstLogin(setupAccountResponse.isFirstLoginFlag);
-                // const emailVerificationResponse = await verifyEmail(
-                //     username,
-                //     role
-                // );
-                // if (emailVerificationResponse) {
-                //     setEmailVerified(true);
-                // }
+
+                alert(
+                    'Your account has been successfully set up. Please accept the following reload prompt and login to continue'
+                );
+                window.location.reload(false);
             }
         },
-        [currentUser, sessionUserAttributes, username, role]
+        [currentUser, sessionUserAttributes, username]
     );
 
-    if (redirect || context.token) {
+    const authenticated = !!context.token;
+
+    const checkEmailVerification = useCallback(async () => {
+        const emailVerified = await isEmailVerified(role);
+        setIsEmailVerified(emailVerified);
+        setEmailVerificationChecked(true);
+        if (!emailVerified) {
+            const cognitoUser = await triggerEmailVerification(username, role);
+            if (cognitoUser) {
+                setCognitoUser(cognitoUser);
+            }
+        }
+    }, [role, username]);
+
+    useEffect(() => {
+        if (authenticated) {
+            checkEmailVerification();
+        }
+    }, [authenticated, checkEmailVerification]);
+
+    if (emailVerified && authenticated) {
         return (
             <NotesContext.Consumer>
                 {(ctx) => {
@@ -157,9 +180,48 @@ const Login = () => {
         );
     }
 
+    const showEmailVerificationModal =
+        !emailVerified && authenticated && emailVerificationChecked;
+
     return (
         <>
             <NavMenu />
+            <Modal open={showEmailVerificationModal}>
+                <Modal.Header>Verify Email</Modal.Header>
+                <Modal.Content>
+                    <Modal.Description>
+                        <p>
+                            Please check your email for a verification link.
+                            Once you have verified your email, please click the
+                            button below to continue.
+                        </p>
+                        <Input
+                            value={emailVerificationCode}
+                            onChange={(e) => {
+                                setEmailVerificationCode(e.target.value);
+                            }}
+                        />
+                        <Button
+                            style={{ marginLeft: '20px' }}
+                            onClick={async () => {
+                                try {
+                                    await verifyEmail(
+                                        emailVerificationCode,
+                                        cognitoUser
+                                    );
+                                    setIsEmailVerified(true);
+                                } catch (e) {
+                                    alert(
+                                        'Error verifying email. Please try again.'
+                                    );
+                                }
+                            }}
+                        >
+                            Continue
+                        </Button>
+                    </Modal.Description>
+                </Modal.Content>
+            </Modal>
             <Container className='login'>
                 <Segment clearing>
                     <Container textAlign='center'>

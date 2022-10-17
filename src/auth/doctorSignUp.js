@@ -1,8 +1,8 @@
-import { doctorClient, stripeClient } from 'constants/api';
+import { newDoctorCreateClient } from 'constants/api';
 import '@stripe/stripe-js';
 let cognito = require('amazon-cognito-identity-js');
 
-/* This file was reworked July 2022 to denest the functions related to DynamoDB, Cognito, 
+/* This file was reworked July 2022 to denest the functions related to DynamoDB, Cognito,
 and Stripe. The function is asynchronous so the await function can be used to assure the uuid
 created by DynamoDB can be included in the creation of the user in Cognito */
 
@@ -15,11 +15,7 @@ const doctorSignUp = async (
     firstName,
     lastName,
     phoneNumber,
-    cardNumber,
-    expirationYear,
-    expirationMonth,
-    cvv,
-    zipCode
+    paymentMethodID
 ) => {
     // format phone number
     phoneNumber = phoneNumber.replace('(', '+1');
@@ -32,6 +28,7 @@ const doctorSignUp = async (
     //////////////////////////////////////////////////////////////////////////////////////////
     // ADD USER TO DYNAMO DB
     const doctor_payload = {
+        paymentMethodID,
         doctor: {
             username,
             email,
@@ -43,8 +40,8 @@ const doctorSignUp = async (
     };
 
     // make DynamoDB request and store generated uuid
-    await doctorClient
-        .post('/doctors', JSON.stringify(doctor_payload))
+    await newDoctorCreateClient
+        .post('', JSON.stringify(doctor_payload))
         .then(async (response) => {
             doctor_uuid = response.data[0];
         });
@@ -83,38 +80,6 @@ const doctorSignUp = async (
             }
         }
     );
-
-    /////////////////////////////////////////////////////////////////////////////////////
-    // ADD USER TO STRIPE
-
-    // format credit card information
-    const card = {
-        cardNumber: cardNumber,
-        expirationMonth: expirationMonth,
-        expirationYear: expirationYear,
-        cvv: cvv,
-    };
-
-    // formatting user attributes and info
-    const attributes = {
-        customerUUID: doctor_uuid,
-        username: username,
-        role: 'doctor',
-        plans: [{ price: 'price_1IeoaLI5qo8H3FXUkFZRFvSr' }],
-        name: firstName + ' ' + lastName,
-    };
-    let customerInfo = {
-        customer: {
-            cardData: card,
-            email,
-            zipCode,
-            attributes,
-        },
-    };
-    let stripe_payload = JSON.stringify(customerInfo);
-
-    // send Stripe request
-    stripeClient.post('/subscription', stripe_payload);
 };
 
 export default doctorSignUp;

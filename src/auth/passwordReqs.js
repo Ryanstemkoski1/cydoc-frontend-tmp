@@ -1,5 +1,7 @@
-import { minDoctorPassword } from 'constants/accountRequirements';
-const managerPasswordLength = 25;
+import {
+    minDoctorPassword,
+    minManagerPassword,
+} from 'constants/accountRequirements';
 
 export function passwordRequirements(passwordReqs, value, role) {
     if (role === 'doctor') {
@@ -26,7 +28,7 @@ export function passwordRequirements(passwordReqs, value, role) {
             )
                 ? true
                 : false,
-            passesMinLength: value.length >= managerPasswordLength,
+            passesMinLength: value.length >= minManagerPassword,
         };
     }
 }

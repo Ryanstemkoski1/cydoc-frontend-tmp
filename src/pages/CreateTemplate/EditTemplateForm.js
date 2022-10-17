@@ -24,6 +24,11 @@ import { questionTypes } from 'constants/questionTypes';
 
 const MAX_NUM_QUESTIONS = 50;
 const INIT_NUM_QUESTIONS = 6;
+const ERROR_MESSAGES = {
+    bodySystemEmpty: 'A body system must be specified.',
+    diseaseEmpty: 'A disease must be specified.',
+    emptyQuestion: 'All questions must have a response type.',
+};
 
 class EditTemplateForm extends Component {
     static contextType = HPITemplateContext;
@@ -37,8 +42,11 @@ class EditTemplateForm extends Component {
             parentNodes: {},
             graphData: {},
             fetching: true,
-            diseaseEmpty: true,
-            bodySystemEmpty: true,
+            templateErrors: {
+                bodySystemEmpty: false,
+                diseaseEmpty: false,
+                emptyQuestion: false,
+            },
             showDimmer: false,
             requestResult: null,
             invalidUpdates: new Set(),
@@ -155,6 +163,18 @@ class EditTemplateForm extends Component {
         });
     };
 
+    getTemplateErrors = () => {
+        const errors = [];
+        for (const err in ERROR_MESSAGES) {
+            if (this.state.templateErrors[err]) {
+                errors.push(
+                    <Message.Item key={err} content={ERROR_MESSAGES[err]} />
+                );
+            }
+        }
+        return errors;
+    };
+
     /**
      * Processes the graph data in the template by filtering out unchanged imported nodes
      * and ensuring all new nodes start with the correct disease code, and send a request
@@ -162,7 +182,6 @@ class EditTemplateForm extends Component {
      */
     saveTemplate = async () => {
         const {
-            root,
             title,
             disease,
             edges,
@@ -171,6 +190,7 @@ class EditTemplateForm extends Component {
             bodySystem,
             graphID,
         } = this.context.template;
+        let { root } = this.context.template;
         const { doctorID } = this.context;
         this.setState({ showDimmer: true });
 
@@ -178,7 +198,13 @@ class EditTemplateForm extends Component {
         const updatedNodes = {};
         const updatedGraph = {};
         const rootSuffix = root.slice(3);
+        const templateErrors = {
+            bodySystemEmpty: bodySystem.length === 0,
+            diseaseEmpty: disease.length === 0,
+            emptyQuestion: false,
+        };
         let diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
+        root = diseaseCode + rootSuffix;
 
         // Update all edge's `to`/`from` keys to match current disease
         for (let [key, edge] of Object.entries(edges)) {
@@ -213,6 +239,7 @@ class EditTemplateForm extends Component {
             const id = key.startsWith(diseaseCode)
                 ? key
                 : diseaseCode + key.slice(key.indexOf('-'));
+
             updatedGraph[id] = children;
 
             // TODO (AL): Figure out if edges connecting different knowledge graphs should
@@ -228,14 +255,15 @@ class EditTemplateForm extends Component {
                     updatedEdges[edgeID].toQuestionOrder = -1;
                     updatedEdges[edgeID].fromQuestionOrder = -1;
                 } else {
-                    updatedEdges[edgeID].toQuestionOrder = idx - skipped + 1;
-                    fromOrder[updatedEdges[edgeID].to] = idx - skipped + 1;
+                    const absoluteIndex = idx - skipped + 1;
+                    updatedEdges[edgeID].toQuestionOrder = absoluteIndex;
+                    fromOrder[updatedEdges[edgeID].to] = absoluteIndex;
                 }
             });
         }
         Object.values(updatedEdges).forEach((edge) => {
             if (edge.toQuestionOrder !== -1) {
-                edge.fromOrderQuestion = fromOrder[edge.from];
+                edge.fromQuestionOrder = fromOrder[edge.from];
             }
         });
 
@@ -245,6 +273,10 @@ class EditTemplateForm extends Component {
                 continue;
             }
             data = { ...data };
+            if (data.responseType.length === 0) {
+                templateErrors.emptyQuestion = true;
+                break;
+            }
 
             if (
                 data.text.startsWith('Root') &&
@@ -284,6 +316,11 @@ class EditTemplateForm extends Component {
                 bodySystem,
                 noteSection: 'HPI',
                 category: disease,
+                doctorView: '',
+                patientView: '',
+                blankTemplate: '',
+                blankYes: '',
+                blankNo: '',
                 ...data, // original values of the above keys hold higher precedence
                 doctorCreated,
                 medID: key,
@@ -291,12 +328,20 @@ class EditTemplateForm extends Component {
             delete updatedNodes[key].id;
         }
 
+        if (Object.values(templateErrors).some((bool) => bool)) {
+            this.setState({
+                templateErrors,
+                showDimmer: false,
+            });
+            return;
+        }
+
         // Send updated data to the backend
         let requestResult, resMessage, resIcon;
         try {
             const body = {
+                root,
                 graphName: title,
-                root: diseaseCode + rootSuffix,
                 graph: updatedGraph,
                 nodes: updatedNodes,
                 edges: updatedEdges,
@@ -514,7 +559,7 @@ class EditTemplateForm extends Component {
         );
 
         const reachedMax = numQuestions >= MAX_NUM_QUESTIONS + 1;
-
+        const errors = this.getTemplateErrors();
         return (
             <>
                 <ProTips />
@@ -609,6 +654,13 @@ class EditTemplateForm extends Component {
                         hidden={!reachedMax}
                         content={`You have reached the ${MAX_NUM_QUESTIONS} question limit. To expand this questionnaire further, you can connect it to another questionnaire.`}
                     />
+                    {errors.length > 0 && (
+                        <Message
+                            error
+                            header='The template must meet the following requirements'
+                            list={errors}
+                        />
+                    )}
                     <Button
                         circular
                         icon='add'
