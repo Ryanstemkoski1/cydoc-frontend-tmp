@@ -17,9 +17,6 @@ import {
     ClickBoxesInput,
 } from '../../constants/hpiEnums';
 import { v4 } from 'uuid';
-import { addMedsPopOption } from 'redux/actions/medicationsActions';
-import { MedicalHistoryActionTypes } from 'redux/actions/medicalHistoryActions';
-import { string } from 'prop-types';
 
 export interface HpiState {
     graph: {
@@ -235,49 +232,57 @@ export function hpiReducer(
     action: HpiActionTypes
 ): HpiState {
     switch (action.type) {
-        case HPI_ACTION.ADD_NODE: {
-            /* 
-            This function adds a new node to the HPI state "nodes" attribute
-            by copying responseType, text, blankYes, blankNo and blankTemplate
-            attributes from the corresponding node information from the 
-            knowledge graph, while adding the response attribute. The response
-            attribute will have a value dependent on the expected response based
-            on the response type. A graph entry with the key being the medId and
-            value being the list of edges in order associated with the current
-            medId. The edge entry is added by copying the edge from the edge in
-            the knowledge graph.
-            */
-            const { medId, node, edges } = action.payload;
-            if (medId in state.nodes) return state;
-            const response = Object.keys(ResponseTypes)[
-                Object.values(ResponseTypes).indexOf(node.responseType)
-            ] as keyof ExpectedResponseInterface;
-            const edgeDict: { [edgeKey: string]: EdgeInterface } = {};
-            const edgeKeys = edges.map((edge) => {
-                const edgeKey = edge.to;
-                edgeDict[edgeKey] = edge;
-                return edgeKey;
-            });
-            const updatedResponse = labTestResponse(node, response);
-            return {
-                ...state,
-                nodes: {
-                    ...state.nodes,
-                    [medId]: {
-                        ...node,
-                        response: updatedResponse,
+        case HPI_ACTION.PROCESS_KNOWLEDGE_GRAPH: {
+            const { graph, nodes, edges, order } = action.payload.graphData,
+                parentNode = order['1'];
+            let newState = {
+                    ...state,
+                    order: {
+                        ...state.order,
+                        [parentNode]: order,
                     },
                 },
-                graph: {
-                    ...state.graph,
-                    [medId]: edgeKeys,
-                },
-                edges: {
-                    ...state.edges,
-                    ...edgeDict,
-                },
-            };
+                stack = [parentNode];
+            while (stack.length) {
+                const currNode = stack.shift();
+                if (!currNode || !(currNode in graph)) continue;
+                stack = [
+                    ...stack,
+                    ...graph[currNode].map((edge) => edges[edge.toString()].to),
+                ];
+                const childNodes = graph[currNode]
+                        .map((edge: number) => [
+                            edges[edge.toString()].toQuestionOrder.toString(),
+                            edges[edge.toString()].to,
+                        ])
+                        .sort(
+                            (tup1, tup2) =>
+                                parseInt(tup1[0]) - parseInt(tup2[0])
+                        )
+                        .map(([_questionOrder, medId]) => medId),
+                    node = nodes[currNode],
+                    response = Object.keys(ResponseTypes)[
+                        Object.values(ResponseTypes).indexOf(node.responseType)
+                    ] as keyof ExpectedResponseInterface;
+                newState = {
+                    ...newState,
+                    nodes: {
+                        ...newState.nodes,
+                        [currNode]: {
+                            ...nodes[currNode],
+                            response: labTestResponse(node, response),
+                        },
+                    },
+                    graph: {
+                        ...newState.graph,
+                        [currNode]: childNodes,
+                    },
+                };
+            }
+
+            return newState;
         }
+
         case CHIEF_COMPLAINTS.SET_NOTES_CHIEF_COMPLAINTS: {
             const { disease, notes } = action.payload;
             return {
@@ -289,16 +294,6 @@ export function hpiReducer(
             };
         }
 
-        case HPI_ACTION.ADD_ORDER: {
-            const { medId, order } = action.payload;
-            return {
-                ...state,
-                order: {
-                    ...state.order,
-                    [medId]: order,
-                },
-            };
-        }
         case HPI_ACTION.BODY_LOCATION_HANDLE_TOGGLE: {
             /*
             Toggles either the left/center/right response attribute or the 

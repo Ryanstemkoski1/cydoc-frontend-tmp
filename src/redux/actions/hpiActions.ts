@@ -4,32 +4,24 @@ import {
     TimeOption,
     NumberInput,
     BodyLocationOptions,
-    EdgeInterface,
-    NodeInterface,
     BodyLocationLRItemType,
-    OrderInterface,
+    GraphData,
 } from 'constants/hpiEnums';
 
-export interface AddNodeAction {
-    type: HPI_ACTION.ADD_NODE;
+export interface ProcessKnowledgeGraphAction {
+    type: HPI_ACTION.PROCESS_KNOWLEDGE_GRAPH;
     payload: {
-        medId: string;
-        node: NodeInterface;
-        edges: EdgeInterface[];
+        graphData: GraphData;
     };
 }
 
-export function addNode(
-    medId: string,
-    node: NodeInterface,
-    edges: EdgeInterface[]
-): AddNodeAction {
+export function processKnowledgeGraph(
+    graphData: GraphData
+): ProcessKnowledgeGraphAction {
     return {
-        type: HPI_ACTION.ADD_NODE,
+        type: HPI_ACTION.PROCESS_KNOWLEDGE_GRAPH,
         payload: {
-            medId,
-            node,
-            edges,
+            graphData,
         },
     };
 }
@@ -48,24 +40,6 @@ export function addMiscNote(disease: string, notes: string): AddMiscNoteAction {
         payload: {
             disease,
             notes,
-        },
-    };
-}
-
-export interface AddOrderAction {
-    type: HPI_ACTION.ADD_ORDER;
-    payload: {
-        medId: string;
-        order: OrderInterface;
-    };
-}
-
-export function addOrder(medId: string, order: OrderInterface): AddOrderAction {
-    return {
-        type: HPI_ACTION.ADD_ORDER,
-        payload: {
-            medId,
-            order,
         },
     };
 }
@@ -459,8 +433,7 @@ export function medsPopYesNoToggle(
 }
 
 export type HpiActionTypes =
-    | AddNodeAction
-    | AddOrderAction
+    | ProcessKnowledgeGraphAction
     | BodyLocationResponseAction
     | BodyLocationHandleToggleAction
     | MultipleChoiceHandleClickAction

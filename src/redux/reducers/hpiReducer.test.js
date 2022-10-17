@@ -32,48 +32,72 @@ describe('hpi reducers', () => {
             expect(hpiReducer(undefined, action)).toEqual(initialHpiState);
         });
     });
-    describe('add node, graph and edge', () => {
-        it('returns node with response', () => {
-            const node = {
-                uid: 'uid',
-                medID: medId,
-                category: 'category',
-                text: 'text',
-                responseType: 'BODYLOCATION',
-                bodySystem: 'bodySystem',
-                noteSection: 'noteSection',
-                doctorView: 'DoctorView',
-                patientView: 'PatientView',
-                doctorCreated: 'doctorCreated',
-                response: ExpectedResponseDict['BODYLOCATION'],
-                blankTemplate: 'blankTemplate',
-                blankYes: 'blankYes',
-                blankNo: 'blankNo',
+    describe('process knowledge graph', () => {
+        it('processes knowledge graph', () => {
+            const order = {
+                1: medId,
+                2: 'foo2',
+                3: 'foo1',
+                4: 'foo3',
             };
-            const edges = [
-                {
+            const graph = {
+                [medId]: [1, 2],
+                foo1: [3],
+                foo2: [],
+                foo3: [],
+            };
+            const nodes = {
+                [medId]: {
+                    uid: 'uid',
+                    medID: medId,
+                    category: 'category',
+                    text: 'text',
+                    responseType: 'BODYLOCATION',
+                    bodySystem: 'bodySystem',
+                    noteSection: 'noteSection',
+                    doctorView: 'DoctorView',
+                    patientView: 'PatientView',
+                    doctorCreated: 'doctorCreated',
+                    response: ExpectedResponseDict['BODYLOCATION'],
+                    blankTemplate: 'blankTemplate',
+                    blankYes: 'blankYes',
+                    blankNo: 'blankNo',
+                },
+                foo1: {},
+                foo2: {},
+                foo3: {},
+            };
+            const edges = {
+                1: {
                     to: 'foo1',
-                    from: 'foo2',
-                    toQuestionOrder: -1,
-                    fromQuestionOrder: -1,
+                    from: medId,
+                    toQuestionOrder: 3,
+                    fromQuestionOrder: 1,
                 },
-                {
+                2: {
+                    to: 'foo2',
+                    from: medId,
+                    toQuestionOrder: 2,
+                    fromQuestionOrder: 1,
+                },
+                3: {
                     to: 'foo3',
-                    from: 'foo2',
-                    toQuestionOrder: -1,
-                    fromQuestionOrder: -1,
+                    from: 'foo1',
+                    toQuestionOrder: 4,
+                    fromQuestionOrder: 3,
                 },
-            ];
-            const edgeKeys = edges.map(
-                (edge) => 'to' + edge.to + 'from' + edge.from
-            );
-            const payload = {
-                medId: medId,
-                node: node,
+            };
+            const graphData = {
+                order: order,
+                graph: graph,
+                nodes: nodes,
                 edges: edges,
             };
+            const payload = {
+                graphData: graphData,
+            };
             let nextState = hpiReducer(initialHpiState, {
-                type: HPI_ACTION.ADD_NODE,
+                type: HPI_ACTION.PROCESS_KNOWLEDGE_GRAPH,
                 payload,
             });
             expect(nextState).toMatchSnapshot();
@@ -91,13 +115,17 @@ describe('hpi reducers', () => {
                             : false
                     );
                 });
-            expect(nextState.nodes).toHaveProperty(medId);
-            expect(nextState.nodes[medId]).toMatchObject(node);
-            expect(nextState.graph).toHaveProperty(medId);
-            expect(nextState.graph[medId]).toEqual(edgeKeys);
-            edgeKeys.map((edge, index) => {
-                expect(nextState.edges).toHaveProperty(edge);
-                expect(nextState.edges[edge]).toMatchObject(edges[index]);
+            const edgeKeys = {
+                [medId]: ['foo2', 'foo1'],
+                foo1: ['foo3'],
+                foo2: [],
+                foo3: [],
+            };
+            Object.keys(graph).map((key) => {
+                expect(nextState.nodes).toHaveProperty(key);
+                expect(nextState.graph).toHaveProperty(key);
+                expect(nextState.nodes[key]).toMatchObject(nodes[key]);
+                expect(nextState.graph[key]).toEqual(edgeKeys[key]);
             });
         });
     });
@@ -177,7 +205,12 @@ describe('hpi reducers', () => {
                     type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
                     payload,
                 });
-                expect(nextState.nodes[medId].response).toContain(payload.name);
+                expect(nextState.nodes[medId].response).toHaveProperty(
+                    payload.name
+                );
+                expect(nextState.nodes[medId].response[payload.name]).toEqual(
+                    true
+                );
             });
             expect(nextState).toMatchSnapshot();
             // opposite direction
@@ -187,8 +220,8 @@ describe('hpi reducers', () => {
                     type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
                     payload,
                 });
-                expect(nextState.nodes[medId].response).not.toContain(
-                    payload.name
+                expect(nextState.nodes[medId].response[payload.name]).toEqual(
+                    false
                 );
             });
         });
@@ -365,46 +398,73 @@ describe('hpi reducers', () => {
         describe('handles lab test input actions', () => {
             let nextState = {};
             it('returns node with lab test', () => {
-                const node = {
-                    uid: 'uid',
-                    medID: medId,
-                    category: 'category',
-                    text: 'text',
-                    responseType: 'BODYLOCATION',
-                    bodySystem: 'bodySystem',
-                    noteSection: 'noteSection',
-                    doctorView: 'DoctorView',
-                    patientView: 'PatientView',
-                    doctorCreated: 'doctorCreated',
-                    response: ExpectedResponseDict['BODYLOCATION'],
-                    blankTemplate: 'blankTemplate',
-                    blankYes: 'blankYes',
-                    blankNo: 'blankNo',
+                const order = {
+                    1: medId,
+                    2: 'foo2',
+                    3: 'foo1',
+                    4: 'foo3',
                 };
-                const edges = [
-                    {
+                const graph = {
+                    [medId]: [1, 2],
+                    foo1: [3],
+                    foo2: [],
+                    foo3: [],
+                };
+                const nodes = {
+                    [medId]: {
+                        uid: 'uid',
+                        medID: medId,
+                        category: 'category',
+                        text: 'text',
+                        responseType: 'BODYLOCATION',
+                        bodySystem: 'bodySystem',
+                        noteSection: 'noteSection',
+                        doctorView: 'DoctorView',
+                        patientView: 'PatientView',
+                        doctorCreated: 'doctorCreated',
+                        response: ExpectedResponseDict['BODYLOCATION'],
+                        blankTemplate: 'blankTemplate',
+                        blankYes: 'blankYes',
+                        blankNo: 'blankNo',
+                    },
+                    foo1: {},
+                    foo2: {},
+                    foo3: {},
+                };
+                const edges = {
+                    1: {
                         to: 'foo1',
-                        from: 'foo2',
-                        toQuestionOrder: -1,
-                        fromQuestionOrder: -1,
+                        from: medId,
+                        toQuestionOrder: 3,
+                        fromQuestionOrder: 1,
                     },
-                    {
+                    2: {
+                        to: 'foo2',
+                        from: medId,
+                        toQuestionOrder: 2,
+                        fromQuestionOrder: 1,
+                    },
+                    3: {
                         to: 'foo3',
-                        from: 'foo2',
-                        toQuestionOrder: -1,
-                        fromQuestionOrder: -1,
+                        from: 'foo1',
+                        toQuestionOrder: 4,
+                        fromQuestionOrder: 3,
                     },
-                ];
-                node.responseType = 'LABORATORY-TEST';
-                node.text =
-                    'NAME[vitamin B12 level] SNOMED[14598005] COMPONENTS_AND_UNITS[vitamin B12 level HASUNITS picogram/milliliter # picomole/liter # nanogram/liter]';
-                const payload = {
-                    medId: medId,
-                    node: node,
+                };
+                const graphData = {
+                    order: order,
+                    graph: graph,
+                    nodes: nodes,
                     edges: edges,
                 };
+                const payload = {
+                    graphData: graphData,
+                };
+                nodes[medId].responseType = 'LABORATORY-TEST';
+                nodes[medId].text =
+                    'NAME[vitamin B12 level] SNOMED[14598005] COMPONENTS_AND_UNITS[vitamin B12 level HASUNITS picogram/milliliter # picomole/liter # nanogram/liter]';
                 nextState = hpiReducer(initialHpiState, {
-                    type: HPI_ACTION.ADD_NODE,
+                    type: HPI_ACTION.PROCESS_KNOWLEDGE_GRAPH,
                     payload,
                 });
                 const updatedResponse = nextState.nodes[medId].response;

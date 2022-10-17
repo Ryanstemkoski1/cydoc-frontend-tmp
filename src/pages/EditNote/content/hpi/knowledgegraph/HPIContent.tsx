@@ -40,6 +40,17 @@ import {
     selectPlanConditions,
 } from 'redux/selectors/planSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
+import axios from 'axios';
+import { GraphData } from 'constants/hpiEnums';
+import {
+    processKnowledgeGraph,
+    ProcessKnowledgeGraphAction,
+} from 'redux/actions/hpiActions';
+import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
+import {
+    saveHpiHeader,
+    SaveHpiHeaderAction,
+} from 'redux/actions/hpiHeadersActions';
 
 interface HPIContentProps {
     step: number;
@@ -52,9 +63,6 @@ interface HPIContentProps {
 interface HPIContentState {
     windowWidth: number;
     windowHeight: number;
-    bodySystems: { [bodySystem: string]: string[] };
-    parentNodes: { [disease: string]: { [diseaseCode: string]: string } };
-    isGraphLoaded: boolean;
     searchVal: string;
     activeIndex: number;
 }
@@ -65,9 +73,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
-            bodySystems: {},
-            parentNodes: {},
-            isGraphLoaded: false,
             searchVal: '',
             activeIndex: 0, //misc notes box active
         };
@@ -78,14 +83,15 @@ class HPIContent extends React.Component<Props, HPIContentState> {
     componentDidMount() {
         // Loads Cydoc knowledge graph to populate HPI,
         // organizes parent nodes by their category code (medical condition) and body system
-        const data = hpiHeaders;
-        data.then((res) =>
-            this.setState({
-                isGraphLoaded: true,
-                bodySystems: res.data.bodySystems,
-                parentNodes: res.data.parentNodes,
-            })
-        );
+        if (
+            !(
+                Object.keys(this.props.hpiHeaders.bodySystems).length &&
+                Object.keys(this.props.hpiHeaders.parentNodes).length
+            )
+        ) {
+            const data = hpiHeaders;
+            data.then((res) => this.props.saveHpiHeader(res.data));
+        }
         this.updateDimensions();
         window.addEventListener('resize', this.updateDimensions);
     }
@@ -102,6 +108,16 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
         this.setState({ windowWidth, windowHeight });
     }
+
+    getData = async (chiefComplaint: string) => {
+        const response = await axios.get(
+            'https://cydocgraph.herokuapp.com/graph/category/' +
+                chiefComplaint +
+                '/4'
+        );
+        const { data } = response;
+        this.props.processKnowledgeGraph(data);
+    };
 
     continue = (e: any) => this.props.continue(e);
 
@@ -138,13 +154,13 @@ class HPIContent extends React.Component<Props, HPIContentState> {
     };
 
     render() {
+        const { windowWidth } = this.state;
         const {
-            isGraphLoaded,
-            windowWidth,
-            bodySystems,
-            parentNodes,
-        } = this.state;
-        const { chiefComplaints, setNotesChiefComplaint } = this.props;
+            chiefComplaints,
+            setNotesChiefComplaint,
+            hpiHeaders,
+        } = this.props;
+        const { bodySystems, parentNodes } = hpiHeaders;
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         /* Creates list of body system buttons to add in the front page. 
            Loops through state variable, bodySystems, saved from the API */
@@ -189,6 +205,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         disease: complaint,
                                     },
                                 });
+                                this.getData(
+                                    Object.keys(parentNodes[complaint])[0]
+                                );
                             },
                         };
                         filterResults.push(temp);
@@ -312,7 +331,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                 );
             default:
                 // if API data is loaded, render the DiseaseForm
-                if (isGraphLoaded) {
+                if (
+                    Object.keys(bodySystems).length &&
+                    Object.keys(parentNodes).length
+                ) {
                     return (
                         <>
                             {collapseTabs ? (
@@ -353,14 +375,12 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
                                         <DiseaseForm
                                             key={this.props.activeTab}
-                                            categoryCode={
-                                                Object.keys(
+                                            CCInfo={{
+                                                [this.props.activeTab]:
                                                     parentNodes[
                                                         this.props.activeTab
-                                                    ]
-                                                )[0]
-                                            }
-                                            category={this.props.activeTab}
+                                                    ],
+                                            }}
                                             nextStep={this.continue}
                                             prevStep={this.back}
                                         />
@@ -423,16 +443,12 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                                 ]
                                                             )[0]
                                                         }
-                                                        categoryCode={
-                                                            Object.keys(
+                                                        CCInfo={{
+                                                            [diseaseCategory]:
                                                                 parentNodes[
                                                                     diseaseCategory
-                                                                ]
-                                                            )[0]
-                                                        }
-                                                        category={
-                                                            diseaseCategory as string
-                                                        }
+                                                                ],
+                                                        }}
                                                         nextStep={this.continue}
                                                         prevStep={this.back}
                                                     />
@@ -500,10 +516,11 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
 const mapStateToProps = (
     state: CurrentNoteState
-): ChiefComplaintsProps & PlanProps => {
+): ChiefComplaintsProps & PlanProps & HpiHeadersProps => {
     return {
         chiefComplaints: state.chiefComplaints,
         planConditions: selectPlanConditions(state),
+        hpiHeaders: state.hpiHeaders,
     };
 };
 
@@ -515,21 +532,34 @@ export interface ChiefComplaintsProps {
     chiefComplaints: ChiefComplaintsState;
 }
 
+export interface HpiHeadersProps {
+    hpiHeaders: HpiHeadersState;
+}
+
 interface DispatchProps {
     setNotesChiefComplaint: (
         disease: string,
         notes: string | number | undefined
     ) => SetNotesChiefComplaintAction;
+    processKnowledgeGraph: (
+        graphData: GraphData
+    ) => ProcessKnowledgeGraphAction;
+    saveHpiHeader: (data: HpiHeadersState) => SaveHpiHeaderAction;
 }
 
 const mapDispatchToProps = {
     setNotesChiefComplaint,
+    processKnowledgeGraph,
+    saveHpiHeader,
 };
 
 // const mapStateToProps = (state: CurrentNoteState): ChiefComplaintsProps => {
 //     return { chiefComplaints: selectChiefComplaintsState(state) };
 // };
 
-type Props = ChiefComplaintsProps & HPIContentProps & DispatchProps;
+type Props = ChiefComplaintsProps &
+    HpiHeadersProps &
+    HPIContentProps &
+    DispatchProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(HPIContent);

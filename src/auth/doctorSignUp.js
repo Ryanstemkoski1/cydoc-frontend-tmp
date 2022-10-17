@@ -2,7 +2,7 @@ import { doctorClient, stripeClient } from 'constants/api';
 import '@stripe/stripe-js';
 let cognito = require('amazon-cognito-identity-js');
 
-/* This file was reworked July 2022 to denest the functions related to DynamoDB, Cognito, 
+/* This file was reworked July 2022 to denest the functions related to DynamoDB, Cognito,
 and Stripe. The function is asynchronous so the await function can be used to assure the uuid
 created by DynamoDB can be included in the creation of the user in Cognito */
 
