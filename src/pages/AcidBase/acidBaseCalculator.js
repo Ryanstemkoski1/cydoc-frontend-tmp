@@ -1,3 +1,5 @@
+
+
 /**
  * The function simpleAcidBase describes acid base disorders for which the pH
  * is abnormal: either < 7.35 or > 7.45. This function does NOT produce any 
@@ -225,37 +227,34 @@ function runAnalysis(pH, HCO3, PCO2, Na, Cl, albumin=4.8){
     primary = answers[0];
     secondary = answers[1];
     secondary_chronic = answers[2];
-
+    
     gapSummary = anionGapWithDeltas(Na, Cl, HCO3, albumin=4.8);
 
-    // Check if there is ever a case where primary is anything other than
-    // metabolic acidosis or "" and we have a NAGMA or HAGMA (since that seems
-    // like it would be an error)
-    if (!["metabolic acidosis",""].includes(primary)){
-        if ( gapSummary != "" ) {
-            console.log("ERROR");
-        }
-    }
-    
-    // if the disorder is metabolic acidosis then we should specify specifically
-    // what kind. The ERROR logic above already captures the situation where
-    // primary disagrees with gapSummary.
-    if (gapSummary != "") {
-        primary = gapSummary;
-    }
-    
     // Construct the summary string
     // If there is a secondary_chronic specified then there is a secondary
     // specified
     var overallSummary = primary;
     if (secondary_chronic != "") {
-        overallSummary = overallSummary+" with "+secondary.toString()+" (acute respiratory) or "+secondary_chronic.toString()+" (chronic respiratory)";
+        if (secondary == secondary_chronic) {
+            overallSummary = overallSummary+" with "+secondary.toString();
+        } else {
+            // secondary and secondary_chronic disagree meaning there is
+            // a different secondary option depending on whether the
+            // respiratory issue is acute or chronic
+            overallSummary = overallSummary+" with "+secondary.toString()+" (acute respiratory) or "+secondary_chronic.toString()+" (chronic respiratory)";
+        }
     } else if (secondary != "") {
         overallSummary = overallSummary+" with "+secondary.toString();
     }
     
+    if (gapSummary != "") {
+        overallSummary = overallSummary+". The metabolic acidosis is "+gapSummary;
+    }
+    
     console.log(overallSummary);
 }
+
+// runAnalysis(pH = 7.40, HCO3 = 23, PCO2 = 40, Na = 150, Cl = 87, albumin = 4.8);
 
 runAnalysis(pH = 7.53, HCO3 = 12, PCO2 = 15, Na = 140, Cl = 108, albumin = 4.8);
 
@@ -264,5 +263,21 @@ runAnalysis(pH = 7.53, HCO3 = 12, PCO2 = 15, Na = 140, Cl = 108, albumin = 4.8);
 // to turn the case studies into an Excel table with the expected values of
 // the different variables along with the input values so it's easy to
 // write a bunch of unit tests.
+
+// TODO: change this so instead of console.log, instead strings are returned.
+// Do this so that the strings can be displayed on the site.
+
+// TODO: add a differential diagnosis function that detects the different
+// disorders specified in the summary string and then prints off the
+// differential diagnosis for each disorder.
+// So for example if HAGMA is in the string it lists off what causes
+// HAGMA.
+
+// in the UI: boxes to enter elements of the ABG, then below, the one-sentence
+// summary appears, and then there are 2 plus buttons one for "Show Calculations"
+// and another for "Show Differential Diagnosis" which will expand the
+// additional material.
+
+// add a footnote specifying what NAGMA and HAGMA stand for.
 
 // maybe check work with https://www.mdcalc.com/arterial-blood-gas-abg-analyzer  ???
