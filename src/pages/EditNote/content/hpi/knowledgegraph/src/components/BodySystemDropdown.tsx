@@ -85,11 +85,20 @@ class BodySystemDropdown extends React.Component<
                     active={this.state.selected}
                 >
                     {/* <Icon name='dropdown' /> */}
-                    <img
-                        className={isMobile ? 'mobile-hpi-icons' : 'hpi-icons'}
-                        src={imgToRender[name]}
-                    />
-                    {nameAbrev}
+
+                    <div className='hpi-disease-button-content-outer'>
+                        <div className='hpi-disease-button-content-icon'>
+                            <img
+                                className={
+                                    isMobile ? 'mobile-hpi-icons' : 'hpi-icons'
+                                }
+                                src={imgToRender[name]}
+                            />
+                        </div>
+                        <div className='hpi-disease-button-content-name'>
+                            {nameAbrev}
+                        </div>
+                    </div>
                 </Button>
                 <div className='diseases-array'>
                     {this.state.selected
