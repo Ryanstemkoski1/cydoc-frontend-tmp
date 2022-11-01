@@ -13,6 +13,8 @@
     "axios": "^0.19.2",
     "babel-jest": "^26.6.0",
     "colors": "^1.4.0",
+    "crypto": "npm:crypto-browserify",
+    "crypto-browserify": "^3.12.0",
     "del": "^6.1.1",
     "firebase": "^7.15.1",
     "gulp-chmod": "^3.0.0",
@@ -39,6 +41,7 @@
     "react-smooth-render": "^1.0.0",
     "react-time-picker": "^4.0.1",
     "react-windowed-select": "^3.1.2",
+    "stream": "^0.0.2",
     "update": "^0.7.4",
     "yarn": "^1.22.4",
     "yup": "0.28.3"
@@ -116,6 +119,9 @@
     "ts-jest": "^26.4.4",
     "typescript": "^3.8.3",
     "uuid": "^3.4.0"
+  },
+  "browser": {
+    "crypto": false
   },
   "prettier": {
     "tabWidth": 4,

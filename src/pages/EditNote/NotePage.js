@@ -8,7 +8,7 @@ import PatientHistoryContent from './content/patienthistory/PatientHistoryConten
 import GenerateNote from './content/generatenote/GenerateNote.tsx';
 import DiscussionPlan from './content/discussionplan/DiscussionPlan.tsx';
 import { connect } from 'react-redux';
-import { PMH_TAB_NAMES } from 'constants/constants';
+import constants from 'constants/constants';
 import {
     PATIENT_HISTORY_MOBILE_BP,
     SOCIAL_HISTORY_MOBILE_BP,
@@ -37,7 +37,7 @@ class NotePage extends Component {
             windowHeight: 0,
             activeHPI: '',
             activePMH: 'Medical History',
-            pmhTab: PMH_TAB_NAMES.indexOf('Medical History'),
+            pmhTab: constants.PMH_TAB_NAMES.indexOf('Medical History'),
         };
     }
 
@@ -94,7 +94,7 @@ class NotePage extends Component {
     handlePMHTabChange = (e, { activeIndex }) => {
         this.setState({
             pmhTab: activeIndex,
-            activePMH: PMH_TAB_NAMES[activeIndex],
+            activePMH: constants.PMH_TAB_NAMES[activeIndex],
         });
         setTimeout((_e) => {
             this.setStickyHeaders();
@@ -142,18 +142,18 @@ class NotePage extends Component {
     }
 
     onPMHNextClick(activeTabName) {
-        const index = PMH_TAB_NAMES.indexOf(activeTabName) + 1;
+        const index = constants.PMH_TAB_NAMES.indexOf(activeTabName) + 1;
         this.setState({
-            activePMH: PMH_TAB_NAMES[index],
+            activePMH: constants.PMH_TAB_NAMES[index],
             activeIndex: index,
         });
     }
 
     // brings users to the previous form when clicked
     onPMHPreviousClick(activeTabName) {
-        const index = PMH_TAB_NAMES.indexOf(activeTabName) - 1;
+        const index = constants.PMH_TAB_NAMES.indexOf(activeTabName) - 1;
         this.setState({
-            activePMH: PMH_TAB_NAMES[index],
+            activePMH: constants.PMH_TAB_NAMES[index],
             activeIndex: index,
         });
     }

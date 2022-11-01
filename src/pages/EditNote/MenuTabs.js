@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Menu, Container, Icon } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-import { TAB_NAMES } from 'constants/constants';
+import constants from 'constants/constants';
 import HPIContext from 'contexts/HPIContext.js';
 import { MENU_TABS_MOBILE_BP } from '../../constants/breakpoints.js';
 import './MenuTabs.css';
@@ -47,7 +47,7 @@ class ConnectedMenuTabs extends Component {
         const { windowWidth } = this.state;
 
         const collapseMenu = windowWidth < MENU_TABS_MOBILE_BP;
-        const tabMenuItems = TAB_NAMES.map((name, index) => (
+        const tabMenuItems = constants.TAB_NAMES.map((name, index) => (
             <Menu.Item
                 key={index}
                 name={name}

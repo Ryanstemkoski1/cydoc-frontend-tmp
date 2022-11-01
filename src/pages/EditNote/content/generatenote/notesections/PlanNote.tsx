@@ -66,7 +66,7 @@ export class PlanNote extends Component<PlanProps> {
                 empty.name &&
                 empty.referrals
             ) {
-                return <div>{EMPTY_NOTE_TEXT}</div>;
+                return <div key={i}>{EMPTY_NOTE_TEXT}</div>;
             }
             return (
                 <div className='plan-note' key={i}>

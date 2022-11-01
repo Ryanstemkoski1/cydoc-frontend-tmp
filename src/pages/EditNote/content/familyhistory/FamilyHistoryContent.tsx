@@ -39,7 +39,7 @@ import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
 import '../hpi/knowledgegraph/src/css/Button.css';
 import { YesNoResponse } from 'constants/enums';
-import { CONDITIONS } from 'constants/constants.json';
+import constants from 'constants/constants.json';
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.
@@ -153,7 +153,7 @@ class FamilyHistoryContent extends Component<Props, State> {
         const standardFamilyHistory = this.standardizeFamilyHistory(
             familyHistory
         );
-        const defaultConditions = CONDITIONS.map((condition) =>
+        const defaultConditions = constants.CONDITIONS.map((condition) =>
             this.standardizeMedicalName(condition)
         );
         const mobile = windowWidth < FAMILY_HISTORY_MOBILE_BP;
