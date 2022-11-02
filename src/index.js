@@ -26,9 +26,10 @@ import Policy from './constants/Documents/policy';
 import Terms_and_conditions from './constants/Documents/terms_and_conditions';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { isLivemode } from './auth/livemode';
 
 const getStripePublishableKey = () => {
-    if (window.location.host.includes('cydoc.ai')) {
+    if (isLivemode()) {
         return 'pk_live_51I8WjzI5qo8H3FXU0K1gpndArcjAxLcGR3GWHyCaFsSxB6XckVoWeTH8rzkajlpdgQN1OTiWd4vEhnjKboqyks0g000p9or7In';
     } else {
         return 'pk_test_51I8WjzI5qo8H3FXUmqt1mnPq9onbLPQz3KhqYIpYHlMGP3y5KqKX2lcC7ky80DUIG6V7kFrWQpFe5UgnmE4AL0l900eCenDWSX';

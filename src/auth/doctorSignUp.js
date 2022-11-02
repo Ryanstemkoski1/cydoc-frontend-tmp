@@ -1,5 +1,6 @@
-import { newDoctorCreateClient } from 'constants/api';
+import { doctorClient } from 'constants/api';
 import '@stripe/stripe-js';
+import { isLivemode } from './livemode';
 let cognito = require('amazon-cognito-identity-js');
 
 /* This file was reworked July 2022 to denest the functions related to DynamoDB, Cognito,
@@ -29,6 +30,7 @@ const doctorSignUp = async (
     // ADD USER TO DYNAMO DB
     const doctor_payload = {
         paymentMethodID,
+        stripeMode: isLivemode(),
         doctor: {
             username,
             email,
@@ -40,8 +42,8 @@ const doctorSignUp = async (
     };
 
     // make DynamoDB request and store generated uuid
-    await newDoctorCreateClient
-        .post('', JSON.stringify(doctor_payload))
+    await doctorClient
+        .post('/doctors', JSON.stringify(doctor_payload))
         .then(async (response) => {
             doctor_uuid = response.data[0];
         });
