@@ -23,6 +23,11 @@ export const doctorClient = axios.create({
     baseURL: 'https://wb51en5rr1.execute-api.us-east-1.amazonaws.com/prod',
 });
 
+export const newDoctorCreateClient = axios.create({
+    baseURL:
+        'https://wb51en5rr1.execute-api.us-east-1.amazonaws.com/prod/doctors-new-hari',
+});
+
 export const managerClient = axios.create({
     baseURL: 'https://739r03swxh.execute-api.us-east-1.amazonaws.com/prod',
 });
