@@ -53,18 +53,13 @@ const DeleteModal = ({ open, setOpen }) => {
     const [loading, setLoading] = useState(false);
 
     const deleteDoctors = async () => {
-        try {
-            const doctors = await getDoctorsOfManager('manager');
-            for (let i = 0; i < doctors.length; i++) {
-                await doctorClient.delete('/doctors/' + doctors[i].uuid, {
-                    data: JSON.stringify({
-                        stripeMode: isLivemode(),
-                    }),
-                });
-            }
-        } catch (err) {
-            alert('Error deleting doctor from database.');
-            setLoading(false);
+        const doctors = await getDoctorsOfManager('manager');
+        for (let i = 0; i < doctors.length; i++) {
+            await doctorClient.delete('/doctors/' + doctors[i], {
+                data: JSON.stringify({
+                    stripeMode: isLivemode(),
+                }),
+            });
         }
     };
 
@@ -94,6 +89,7 @@ const DeleteModal = ({ open, setOpen }) => {
         } catch (err) {
             alert('Error deleting from database.');
         }
+        setLoading(false);
     }, [deleteSelf]);
 
     return (
@@ -144,6 +140,7 @@ const DeleteModal = ({ open, setOpen }) => {
                             size={'small'}
                             loading={loading}
                             disabled={loading}
+                            style={{ marginTop: '10px' }}
                         />
                     )}
                 </div>
