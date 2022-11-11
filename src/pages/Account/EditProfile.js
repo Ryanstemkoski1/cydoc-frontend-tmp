@@ -64,6 +64,7 @@ const DeleteModal = ({ open, setOpen }) => {
             }
         } catch (err) {
             alert('Error deleting doctor from database.');
+            setLoading(false);
         }
     };
 
