@@ -120,9 +120,6 @@
     "typescript": "^3.8.3",
     "uuid": "^3.4.0"
   },
-  "browser": {
-    "crypto": false
-  },
   "prettier": {
     "tabWidth": 4,
     "semi": true,
