@@ -275,29 +275,26 @@ class EditTemplateForm extends Component {
                 break;
             }
 
+            // modify the blanks and text based on the response type
             const isRootNode =
                 (data.text.startsWith('Root') &&
                     data.text.endsWith(NAN_QUESTION_TEXT)) ||
                 key === originalRoot;
             if (isRootNode) {
                 data.text = 'nan';
-            }
-
-            if (
-                data.responseType === 'CLICK-BOXES' ||
-                data.responseType.endsWith('-POP')
-            ) {
+            } else if (data.answerInfo?.options?.length) {
                 data.text += ` CLICK[${data.answerInfo.options.join(', ')}]`;
-            } else if (
-                !isRootNode &&
-                (data.responseType === 'YES-NO' ||
-                    data.responseType === 'NO-YES')
-            ) {
-                data.blankYes = data.answerInfo['yesResponse'] || '';
-                data.blankNo = data.answerInfo['noResponse'] || '';
-            } /* else if (data.answerInfo?.startResponse) {
-                // TODO: When backend permits encode the fill in the blanks
-            } */
+            }
+            if (data.answerInfo?.yesResponse) {
+                const { yesResponse = '', noResponse = '' } =
+                    data.answerInfo || {};
+                data.blankYes = yesResponse;
+                data.blankNo = noResponse;
+            } else if (data.answerInfo?.startResponse) {
+                const { startResponse = '', endResponse = '' } =
+                    data.answerInfo || {};
+                data.blankTemplate = startResponse + ' ANSWER ' + endResponse;
+            }
 
             const doctorCreated = data.hasChanged
                 ? doctorID
