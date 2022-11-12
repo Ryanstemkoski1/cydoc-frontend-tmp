@@ -315,9 +315,9 @@ class EditTemplateForm extends Component {
             updatedNodes[key] = {
                 bodySystem,
                 noteSection: 'HPI',
-                category: disease,
-                doctorView: '',
-                patientView: '',
+                category: this.state.categoryMap[disease] || disease,
+                doctorView: disease,
+                patientView: disease,
                 blankTemplate: '',
                 blankYes: '',
                 blankNo: '',
