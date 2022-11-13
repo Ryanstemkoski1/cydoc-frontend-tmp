@@ -96,9 +96,7 @@ class TemplateAnswer extends Component {
         const medID = Object.values(parentNodes[category])[0];
         // Skip roots already cached in the context
         if (!(medID in cydocGraphs.graph)) {
-            const res = await graphClient.get(
-                `/graph/connected/node/${medID}/4`
-            );
+            const res = await graphClient.get(`/graph/subgraph/${medID}/4`);
             this.context.addCydocGraphs(res.data);
         }
         return medID;
