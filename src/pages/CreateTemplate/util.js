@@ -143,6 +143,24 @@ export const parsePlaceholder = (text, category) => {
 };
 
 /**
+ * Adds blank{Yes, No, Template} to the appropriate fields in answerInfo
+ */
+export const setAnswerInfo = (answerInfo, node) => {
+    if ('yesResponse' in answerInfo) {
+        answerInfo.yesResponse = node.blankYes || '';
+        answerInfo.noResponse = node.blankNo || '';
+    } else if ('startResponse' in answerInfo) {
+        const capturingRegex = /(?<startResponse>.*)\bANSWER\b(?<endResponse>.*)/;
+        const found = node.blankTemplate.match(capturingRegex);
+        if (found) {
+            answerInfo.startResponse = found.groups.startResponse || '';
+            answerInfo.endResponse = found.groups.endResponse || '';
+        }
+    }
+    return answerInfo;
+};
+
+/**
  * Adds all direct children question of the given parent directly
  * to the graph object itself.
  *

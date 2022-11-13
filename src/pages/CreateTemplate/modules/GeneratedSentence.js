@@ -9,7 +9,7 @@ const GeneratedSentence = ({ answerInfo, placeholders, onChange }) => {
             <Input
                 answer='startResponse'
                 className='fill-in-the-blank-input'
-                value={answerInfo.start}
+                value={answerInfo.startResponse}
                 placeholder={placeholders.startEg}
                 onChange={onChange}
             />
