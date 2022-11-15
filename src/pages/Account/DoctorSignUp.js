@@ -19,7 +19,53 @@ import Policy from '../../constants/Documents/policy';
 import Terms_and_conditions from '../../constants/Documents/terms_and_conditions';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
-const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
+const DoctorSignUp = ({
+    continueIsActive,
+    reloadModal,
+    userUsername = '',
+    userRole = '',
+    userEmail = '',
+    isInvited = false,
+    userFirstName = '',
+    userLastName = '',
+    onInviteSubmit = {},
+}) => {
+    const initializeFormFields = (
+        role,
+        username,
+        email,
+        firstName,
+        lastName
+    ) => {
+        if (role === 'doctor') {
+            return {
+                username,
+                role,
+                firstName,
+                middleName: '',
+                lastName,
+                email,
+                countryCode: '+1',
+                phoneNumber: '',
+                phoneNumberIsMobile: true,
+                managerResponsibleForPayment: false,
+            };
+        } else if (role === 'manager') {
+            return {
+                username,
+                role,
+                firstName,
+                middleName: '',
+                lastName,
+                email,
+                countryCode: '+1',
+                phoneNumber: '',
+                phoneNumberIsMobile: true,
+                managerResponsibleForPayment: false,
+            };
+        }
+    };
+
     const stripe = useStripe();
     const elements = useElements();
     const phoneNumberRegex = new RegExp(
@@ -28,12 +74,12 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
     const [isInviteDoctorOpen, setIsInviteDoctorOpen] = useState(
         continueIsActive
     );
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [confirmEmail, setConfirmEmail] = useState('');
+    const [username, setUsername] = useState(userUsername);
+    const [email, setEmail] = useState(userEmail);
+    const [confirmEmail, setConfirmEmail] = useState(userEmail);
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [firstName, setFirstName] = useState(userFirstName);
+    const [lastName, setLastName] = useState(userLastName);
     const [duplicateUsername, setDuplicateUsername] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState('');
     const [confirmPhoneNumber, setConfirmPhoneNumber] = useState('');
@@ -41,9 +87,18 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [passwordsMatch, setPasswordsMatch] = useState(true);
+    const [emailsMatch, setEmailsMatch] = useState(true);
     const [showPasswordErrors, setShowPasswordErrors] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState(null);
-
+    const [userInfo, setUserInfo] = useState(
+        initializeFormFields(
+            userRole,
+            userUsername,
+            userEmail,
+            userFirstName,
+            userLastName
+        )
+    );
     const [passwordReqs, setPasswordReqs] = useState({
         containsNumber: false,
         containsUpper: false,
@@ -95,12 +150,19 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
         }
 
         const nextPage = wizardPage > 2 ? 3 : wizardPage + 1;
-        setWizardPage(nextPage);
+        if (isInvited && nextPage === 1) {
+            setWizardPage(nextPage + 1);
+        } else {
+            setWizardPage(nextPage);
+        }
     };
     // onPrevClick decrements the page by 1 unless we are already at page 0
     const onPrevClick = (e) => {
         e.preventDefault();
         const prevPage = wizardPage < 1 ? 0 : wizardPage - 1;
+        if (isInvited && prevPage === 1) {
+            setWizardPage(prevPage - 1);
+        }
         setWizardPage(prevPage);
     };
     const handleNewPasswordChange = (e, { value }) => {
@@ -124,6 +186,25 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
         setConfirmNewPassword(value);
         // set this to remove error styling on confirmNewPassword input
         setPasswordsMatch(true);
+    };
+
+    const handleFormatPhoneForSubmit = (phoneNumber) => {
+        phoneNumber = phoneNumber.replace('(', '');
+        phoneNumber = phoneNumber.replace(/-|\(|\)/gi, '');
+        phoneNumber = phoneNumber.replace(' ', '');
+        return phoneNumber;
+    };
+
+    const handleSubmit = () => {
+        setUserInfo(userInfo);
+        userInfo.username = username;
+        userInfo.firstName = firstName;
+        userInfo.lastName = lastName;
+        userInfo.phoneNumber = handleFormatPhoneForSubmit(phoneNumber);
+
+        onInviteSubmit(newPassword, {
+            ...userInfo,
+        });
     };
 
     const isSubmitValid = (page) => {
@@ -152,8 +233,9 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
                 setPhoneNumberMatch(false);
                 return false;
             }
+            setEmailsMatch(email === confirmEmail);
             setPasswordsMatch(newPassword === confirmNewPassword);
-            if (!isEmailValid(email)) {
+            if (!isEmailValid(email) && !isInvited) {
                 let errorText = 'Error: Unauthorized Email Address';
                 alert(errorText);
                 return false;
@@ -236,23 +318,49 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
     };
 
     const handleUsernameChange = (e, { value }) => {
+        if (isInvited && userRole === 'doctor') {
+            alert(
+                'You cannot change the username of an invited healthcare professional.'
+            );
+            return;
+        }
         setUsername(value);
         setDuplicateUsername(false);
     };
 
     const handleEmailChange = (e, { value }) => {
+        if (isInvited && userRole === 'doctor') {
+            alert(
+                'You cannot change the email of an invited healthcare professional.'
+            );
+            return;
+        }
         setEmail(value);
+        setEmailsMatch(true);
     };
 
     const handleConfirmEmailChange = (e, { value }) => {
         setConfirmEmail(value);
+        setEmailsMatch(true);
     };
 
     const handleFirstNameChange = (e, { value }) => {
+        if (isInvited && userRole === 'doctor') {
+            alert(
+                'You cannot change the name of an invited healthcare professional.'
+            );
+            return;
+        }
         setFirstName(value);
     };
 
     const handleLastNameChange = (e, { value }) => {
+        if (isInvited && userRole === 'doctor') {
+            alert(
+                'You cannot change the name of an invited healthcare professional.'
+            );
+            return;
+        }
         setLastName(value);
     };
 
@@ -369,7 +477,7 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
                                     <Form.Group widths='equal'>
                                         <Form.Input
                                             required
-                                            label='Email'
+                                            label='Email (.edu or healthcare domain)'
                                             name='email'
                                             placeholder='name@example.com'
                                             type='email'
@@ -379,6 +487,7 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
                                         />
                                         <Form.Input
                                             required
+                                            error={!emailsMatch}
                                             label='Confirm Email'
                                             name='confirmEmail'
                                             placeholder='name@example.com'
@@ -389,6 +498,12 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
                                             onChange={handleConfirmEmailChange}
                                         />
                                     </Form.Group>
+                                    {!emailsMatch && (
+                                        <Container className='pass-match-error'>
+                                            <Icon name='exclamation circle' />
+                                            Emails do not match
+                                        </Container>
+                                    )}
                                     <Form.Group widths='equal'>
                                         <Form.Input
                                             required
@@ -723,11 +838,18 @@ const DoctorSignUp = ({ continueIsActive, reloadModal }) => {
                                             onPrevClick(e);
                                         }}
                                     />
-                                    {isPrivacyChecked && (
+                                    {isPrivacyChecked && !isInvited && (
                                         <Button
                                             color='teal'
                                             content='Submit'
                                             onClick={createDoctor}
+                                        />
+                                    )}
+                                    {isPrivacyChecked && isInvited && (
+                                        <Button
+                                            color='teal'
+                                            content='Submit'
+                                            onClick={handleSubmit}
                                         />
                                     )}
                                     {isWizardLoading && (

@@ -25,9 +25,9 @@ import AuthContext from '../../contexts/AuthContext';
 import NotesContext from '../../contexts/NotesContext';
 import Logo from '../../assets/cydoc-logo.svg';
 import NavMenu from '../../components/navigation/NavMenu';
-import FirstTimeLogin from './FirstTimeLogin';
 import './Account.css';
 import isEmailVerified from 'auth/isEmailVerified';
+import DoctorSignUp from './DoctorSignUp';
 
 const Login = () => {
     const context = useContext(AuthContext);
@@ -158,24 +158,30 @@ const Login = () => {
 
     if (isFirstLogin && role === 'manager') {
         return (
-            <FirstTimeLogin
-                onSubmit={onChangePasswordSubmit}
-                role={role}
-                username={username}
-                email={sessionUserAttributes.email}
-                firstName=''
-                lastName=''
+            <DoctorSignUp
+                continueIsActive={true}
+                reloadModal={() => {}}
+                onInviteSubmit={onChangePasswordSubmit}
+                userRole={role}
+                userUsername={username}
+                userEmail={sessionUserAttributes.email}
+                userFirstName=''
+                userLastName=''
+                isInvited={true}
             />
         );
     } else if (isFirstLogin && role === 'doctor') {
         return (
-            <FirstTimeLogin
-                onSubmit={onChangePasswordSubmit}
-                role={role}
-                username={username}
-                email={sessionUserAttributes.email}
-                firstName={sessionUserAttributes.given_name}
-                lastName={sessionUserAttributes.family_name}
+            <DoctorSignUp
+                continueIsActive={true}
+                reloadModal={() => {}}
+                onInviteSubmit={onChangePasswordSubmit}
+                userRole={role}
+                userUsername={username}
+                userEmail={sessionUserAttributes.email}
+                userFirstName={sessionUserAttributes.given_name}
+                userLastName={sessionUserAttributes.family_name}
+                isInvited={true}
             />
         );
     }
