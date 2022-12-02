@@ -87,20 +87,13 @@ class AllergiesContent extends Component<Props, OwnState> {
         const type = data.type;
         const val =
             (_event?.target as HTMLTextAreaElement)?.value ?? data.value;
-        const valArray = val.split(' ');
         switch (type) {
             case 'incitingAgent':
-                this.props.updateIncitingAgent(
-                    index,
-                    val.split(' ').slice(1).join(' ')
-                );
-                this.props.updateId(index, val.split(' ')[0]);
+                this.props.updateIncitingAgent(index, val);
+                this.props.updateId(index, val);
                 break;
             case 'reaction':
-                this.props.updateReaction(
-                    index,
-                    valArray.slice(valArray.length / 2).join(' ')
-                );
+                this.props.updateReaction(index, val);
                 break;
             case 'comments':
                 this.props.updateComments(index, val);
