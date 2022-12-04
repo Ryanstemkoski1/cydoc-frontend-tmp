@@ -14191,15 +14191,15 @@ img.ui.bordered.image {
 /* browsers require these rules separate */
 
 .ui.input > input::-webkit-input-placeholder {
-  color: #b0b0b0;
+  color: #ffffff;
 }
 
 .ui.input > input::-moz-placeholder {
-  color: #b0b0b0;
+  color: #ffffff;
 }
 
 .ui.input > input:-ms-input-placeholder {
-  color: #b0b0b0;
+  color: #ffffff;
 }
 
 /*******************************
@@ -14284,17 +14284,17 @@ img.ui.bordered.image {
 
 .ui.input.focus > input::-webkit-input-placeholder,
 .ui.input > input:focus::-webkit-input-placeholder {
-  color: #FFFFFF;
+  color: #e3e3e3;
 }
 
 .ui.input.focus > input::-moz-placeholder,
 .ui.input > input:focus::-moz-placeholder {
-  color: #FFFFFF;
+  color: #e3e3e3;
 }
 
 .ui.input.focus > input:-ms-input-placeholder,
 .ui.input > input:focus:-ms-input-placeholder {
-  color: #FFFFFF;
+  color: #e3e3e3;
 }
 
 /*--------------------
@@ -20467,27 +20467,27 @@ ol.ui.horizontal.list li:before,
 /* browsers require these rules separate */
 
 .ui.form ::-webkit-input-placeholder {
-  color: #b0b0b0;
+  color: #ffffff;
 }
 
 .ui.form :-ms-input-placeholder {
-  color: #b0b0b0 !important;
+  color: #ffffff !important;
 }
 
 .ui.form ::-moz-placeholder {
-  color: #b0b0b0;
+  color: #ffffff;
 }
 
 .ui.form :focus::-webkit-input-placeholder {
-  color: #FFFFFF;
+  color: #e3e3e3;
 }
 
 .ui.form :focus:-ms-input-placeholder {
-  color: #FFFFFF !important;
+  color: #e3e3e3 !important;
 }
 
 .ui.form :focus::-moz-placeholder {
-  color: #FFFFFF;
+  color: #e3e3e3;
 }
 
 /* Error Placeholder */
@@ -32790,7 +32790,7 @@ select.ui.dropdown {
 }
 
 .ui.active.search.dropdown input.search:focus + .text {
-  color: #FFFFFF !important;
+  color: #e3e3e3 !important;
 }
 
 /* Search Menu */
@@ -33058,12 +33058,12 @@ select.ui.dropdown {
 
 .ui.dropdown:not(.button) > .default.text,
 .ui.default.dropdown:not(.button) > .text {
-  color: #b0b0b0;
+  color: #ffffff;
 }
 
 .ui.dropdown:not(.button) > input:focus ~ .default.text,
 .ui.default.dropdown:not(.button) > input:focus ~ .text {
-  color: #FFFFFF;
+  color: #e3e3e3;
 }
 
 /*--------------------

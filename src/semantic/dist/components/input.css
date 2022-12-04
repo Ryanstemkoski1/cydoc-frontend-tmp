@@ -58,13 +58,13 @@
 
 /* browsers require these rules separate */
 .ui.input > input::-webkit-input-placeholder {
-  color: #b0b0b0;
+  color: #ffffff;
 }
 .ui.input > input::-moz-placeholder {
-  color: #b0b0b0;
+  color: #ffffff;
 }
 .ui.input > input:-ms-input-placeholder {
-  color: #b0b0b0;
+  color: #ffffff;
 }
 
 
@@ -148,15 +148,15 @@
 }
 .ui.input.focus > input::-webkit-input-placeholder,
 .ui.input > input:focus::-webkit-input-placeholder {
-  color: #FFFFFF;
+  color: #e3e3e3;
 }
 .ui.input.focus > input::-moz-placeholder,
 .ui.input > input:focus::-moz-placeholder {
-  color: #FFFFFF;
+  color: #e3e3e3;
 }
 .ui.input.focus > input:-ms-input-placeholder,
 .ui.input > input:focus:-ms-input-placeholder {
-  color: #FFFFFF;
+  color: #e3e3e3;
 }
 
 /*--------------------
