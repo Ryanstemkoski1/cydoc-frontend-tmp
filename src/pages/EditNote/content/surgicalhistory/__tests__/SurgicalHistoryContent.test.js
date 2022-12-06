@@ -38,6 +38,10 @@ describe('SurgicalHistoryContent', () => {
         const { store } = connectStore();
         store.clearActions();
     });
+    
+    test('placeholder test to get suite to run', () => {
+
+    })
 
     // // TODO: Fix below tests
     // test('render', () => {

@@ -17,6 +17,7 @@ describe('ChiefComplaintsButton', () => {
             ]}
         />
     );
+    it('placeholder so suite can run', () => {});
     // // TODO: Fix below tests
     // it('renders body system dropdown', () => {
     //     expect(wrapper).toMatchSnapshot();
