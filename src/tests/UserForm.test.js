@@ -1,8 +1,11 @@
 import React from 'react';
-import Enzyme, { shallow, mount } from 'enzyme';
+import Enzyme, {
+    // shallow,
+    mount,
+} from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import UserForm from '../pages/Account/UserForm';
-import { Form } from 'semantic-ui-react';
+// import { Form } from 'semantic-ui-react';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
@@ -100,7 +103,7 @@ describe('testing UserForm using default props for Register component', () => {
 
 describe('testing UserForm using custom props for EditProfile component', () => {
     const wrapper = setup(editProps);
-    const formInputs = wrapper.find(Form.Input);
+    // const formInputs = wrapper.find(Form.Input);
 
     test('renders without crashing', () => {
         expect(wrapper).toBeTruthy();

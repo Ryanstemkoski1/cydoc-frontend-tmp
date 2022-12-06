@@ -5,7 +5,7 @@ import MedicationsContent from '../MedicationsContent';
 
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import { MEDICATIONS_ACTION } from 'redux/actions/actionTypes';
+// import { MEDICATIONS_ACTION } from 'redux/actions/actionTypes';
 import { YesNoResponse } from 'constants/enums';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
@@ -55,25 +55,25 @@ const mountDesktop = () =>
 const mountMobile = () =>
     mountWithStore(initialMedications, { isPreview: false, mobile: true });
 
-/** Simulate opening and clicking of first dropdown option. */
-const simulateOptionClick = (wrapper, ariaLabel) => {
-    wrapper.find(`input[aria-label="${ariaLabel}"]`).first().simulate('focus');
-    wrapper
-        .find('.dropdown__control--is-focused')
-        .first()
-        .simulate('mousedown');
-    const option = wrapper.find('.option').first();
-    option.simulate('click');
-    return option;
-};
+// /** Simulate opening and clicking of first dropdown option. */
+// const simulateOptionClick = (wrapper, ariaLabel) => {
+//     wrapper.find(`input[aria-label="${ariaLabel}"]`).first().simulate('focus');
+//     wrapper
+//         .find('.dropdown__control--is-focused')
+//         .first()
+//         .simulate('mousedown');
+//     const option = wrapper.find('.option').first();
+//     option.simulate('click');
+//     return option;
+// };
 
-/** Simulate adding new dropdown option. */
-const simulateAddOption = (wrapper, ariaLabel, value) => {
-    const input = wrapper.find(`input[aria-label="${ariaLabel}"]`).first();
-    input.instance().value = value;
-    input.simulate('change', { target: { value } });
-    input.simulate('keyDown', { keyCode: 9, key: 'Tab' }); // validates change
-};
+// /** Simulate adding new dropdown option. */
+// const simulateAddOption = (wrapper, ariaLabel, value) => {
+//     const input = wrapper.find(`input[aria-label="${ariaLabel}"]`).first();
+//     input.instance().value = value;
+//     input.simulate('change', { target: { value } });
+//     input.simulate('keyDown', { keyCode: 9, key: 'Tab' }); // validates change
+// };
 
 describe('Medications Integration', () => {
     let cases = [

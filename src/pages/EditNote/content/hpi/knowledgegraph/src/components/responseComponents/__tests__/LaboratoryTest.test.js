@@ -2,40 +2,39 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { Provider } from 'react-redux';
-import LabTestInput from '../LaboratoryTest';
-import { addNode } from 'redux/actions/hpiActions';
+// import LabTestInput from '../LaboratoryTest';
 import { currentNoteStore } from 'redux/store';
-import { ExpectedResponseDict } from 'constants/hpiEnums';
+// import { ExpectedResponseDict } from 'constants/hpiEnums';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const connectRealStore = () => {
     const store = currentNoteStore;
-    const node = {
-        uid: 'uid',
-        medID: 'node',
-        category: 'category',
-        text:
-            'NAME[BNP] SNOMED[390917008] COMPONENTS_AND_UNITS[BNP HASUNITS picogram/milliliter]',
-        responseType: 'LABORATORY-TEST',
-        response: ExpectedResponseDict.LABORATORY_TEST,
-        bodySystem: 'bodySystem',
-        noteSection: 'noteSection',
-        DoctorView: 'DoctorView',
-        PatientView: 'PatientView',
-        doctorCreated: 'doctorCreated',
-        blankYes: 'blankYes',
-        blankNo: 'blankNo',
-        blankTemplate: 'blankTemplate',
-    };
-    const edges = [
-        {
-            from: 'foo1',
-            to: 'foo2',
-            fromQuestionOrder: -1,
-            toQuestionOrder: -1,
-        },
-    ];
+    // const node = {
+    //     uid: 'uid',
+    //     medID: 'node',
+    //     category: 'category',
+    //     text:
+    //         'NAME[BNP] SNOMED[390917008] COMPONENTS_AND_UNITS[BNP HASUNITS picogram/milliliter]',
+    //     responseType: 'LABORATORY-TEST',
+    //     response: ExpectedResponseDict.LABORATORY_TEST,
+    //     bodySystem: 'bodySystem',
+    //     noteSection: 'noteSection',
+    //     DoctorView: 'DoctorView',
+    //     PatientView: 'PatientView',
+    //     doctorCreated: 'doctorCreated',
+    //     blankYes: 'blankYes',
+    //     blankNo: 'blankNo',
+    //     blankTemplate: 'blankTemplate',
+    // };
+    // const edges = [
+    //     {
+    //         from: 'foo1',
+    //         to: 'foo2',
+    //         fromQuestionOrder: -1,
+    //         toQuestionOrder: -1,
+    //     },
+    // ];
     // TODO: Use processKnowledgeGraph as addNode was replaced
     // store.dispatch(addNode('node', node, edges));
     return {

@@ -1,65 +1,65 @@
-import { PatientPronouns } from 'constants/patientInformation';
+// import { PatientPronouns } from 'constants/patientInformation';
 import {
     abbreviate,
     capitalize,
-    createHPI,
-    definePatientNameAndPronouns,
+    // createHPI,
+    // definePatientNameAndPronouns,
     fillAnswers,
     fillMedicalTerms,
-    fillNameAndPronouns,
+    // fillNameAndPronouns,
     fullClean,
 } from '../generateHpiText';
 
-const EXAMPLE = {
-    1: ['the patient has hypertension', ''],
-    2: ['the patient has had hypertension for ANSWER', '10 years'],
-    3: [
-        'The patient suffers from the following comorbid conditions: ANSWER',
-        'diabetes, high cholesterol, heart attack',
-    ],
-    4: ['their usual blood pressure reading is ANSWER', '150/110'],
-    5: [
-        'the patient reports that recently their blood pressure has ANSWER',
-        'increased',
-    ],
-    6: ['the patient monitors their blood pressure from home', ''],
-    7: [
-        'the patient has the following questions about monitoring their blood pressure: ANSWER',
-        'how many times per day should I check my blood pressure',
-    ],
-    9: [
-        'the patient is taking antihypertensive medications',
-        'atenolol, torsemide',
-    ],
-    10: ['The patient is suffering from medication side effects', ''],
-    11: [
-        'the patient has experienced ANSWER.',
-        'dizziness and headaches sometimes in the morning',
-    ],
-    12: [
-        'The patient has the following questions about their medications: ANSWER',
-        'can I stop taking torsemide',
-    ],
-    13: ['The patient is actively trying to reduce their blood pressure.', ''],
-    14: [
-        'To reduce their blood pressure, the patient tries: ANSWER',
-        'I do yoga on Tuesdays and I try to stop eating salty foods',
-    ],
-    15: ['The patient reports a stress level of ANSWER out of 10', '5'],
-    16: ["The patient's sources of stress are ANSWER", 'my job'],
-    17: [
-        'Additionally, the patient has a family history of ANSWER',
-        'high blood pressure',
-    ],
-    18: [
-        'The following barriers make it difficult for the patient to reduce their blood pressure: ANSWER',
-        'I work really long hours',
-    ],
-    19: [
-        'The patient believes that the clinician can help them overcome these barriers by: ANSWER',
-        'giving me better medicine',
-    ],
-};
+// const EXAMPLE = {
+//     1: ['the patient has hypertension', ''],
+//     2: ['the patient has had hypertension for ANSWER', '10 years'],
+//     3: [
+//         'The patient suffers from the following comorbid conditions: ANSWER',
+//         'diabetes, high cholesterol, heart attack',
+//     ],
+//     4: ['their usual blood pressure reading is ANSWER', '150/110'],
+//     5: [
+//         'the patient reports that recently their blood pressure has ANSWER',
+//         'increased',
+//     ],
+//     6: ['the patient monitors their blood pressure from home', ''],
+//     7: [
+//         'the patient has the following questions about monitoring their blood pressure: ANSWER',
+//         'how many times per day should I check my blood pressure',
+//     ],
+//     9: [
+//         'the patient is taking antihypertensive medications',
+//         'atenolol, torsemide',
+//     ],
+//     10: ['The patient is suffering from medication side effects', ''],
+//     11: [
+//         'the patient has experienced ANSWER.',
+//         'dizziness and headaches sometimes in the morning',
+//     ],
+//     12: [
+//         'The patient has the following questions about their medications: ANSWER',
+//         'can I stop taking torsemide',
+//     ],
+//     13: ['The patient is actively trying to reduce their blood pressure.', ''],
+//     14: [
+//         'To reduce their blood pressure, the patient tries: ANSWER',
+//         'I do yoga on Tuesdays and I try to stop eating salty foods',
+//     ],
+//     15: ['The patient reports a stress level of ANSWER out of 10', '5'],
+//     16: ["The patient's sources of stress are ANSWER", 'my job'],
+//     17: [
+//         'Additionally, the patient has a family history of ANSWER',
+//         'high blood pressure',
+//     ],
+//     18: [
+//         'The following barriers make it difficult for the patient to reduce their blood pressure: ANSWER',
+//         'I work really long hours',
+//     ],
+//     19: [
+//         'The patient believes that the clinician can help them overcome these barriers by: ANSWER',
+//         'giving me better medicine',
+//     ],
+// };
 
 describe('generateHpiText', () => {
     describe('fillAnswers', () => {
@@ -130,7 +130,6 @@ describe('generateHpiText', () => {
         //         definePatientNameAndPronouns(title, lastname, gender)
         //     ).toEqual(expected);
         // });
-
         // it('handles general title, F', () => {
         //     const title = 'general';
         //     const lastname = 'Foo';
@@ -144,7 +143,6 @@ describe('generateHpiText', () => {
         //         definePatientNameAndPronouns(title, lastname, gender)
         //     ).toEqual(expected);
         // });
-
         // it('handles specified title', () => {
         //     const title = 'Dr.';
         //     const lastname = '  Foo  ';
@@ -171,7 +169,6 @@ describe('generateHpiText', () => {
         //         })
         //     ).toEqual('');
         // });
-
         // it('replaces possessives', () => {
         //     const inp = "their name? the patient's age?";
         //     const patient = {
@@ -182,7 +179,6 @@ describe('generateHpiText', () => {
         //     const expected = 'her name? her age?';
         //     expect(fillNameAndPronouns(inp, patient)).toEqual(expected);
         // });
-
         // it('replaces "the patient" with either name or pronoun', () => {
         //     const inp =
         //         'the patient is tired. the patient slept, and the ' +
@@ -308,7 +304,6 @@ describe('generateHpiText', () => {
         //         expected
         //     );
         // });
-
         // it('generates text for the example', () => {
         //     const patientName = 'Ms. Lee';
         //     expect(

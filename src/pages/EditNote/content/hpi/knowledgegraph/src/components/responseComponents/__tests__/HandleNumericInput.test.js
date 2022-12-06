@@ -2,21 +2,20 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { Provider } from 'react-redux';
-import HandleNumericInput from '../HandleNumericInput';
-import { addNode } from 'redux/actions/hpiActions';
+// import HandleNumericInput from '../HandleNumericInput';
 import { createCurrentNoteStore } from 'redux/store';
-import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
+// import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const connectRealStore = () => {
     const store = createCurrentNoteStore();
-    const node = {
-        ...testNode,
-        responseType: 'NUMBER',
-        response: ExpectedResponseDict.NUMBER,
-    };
-    // TODO: Use processKnowledgeGraph as addNode was replaced
+    // const node = {
+    //     ...testNode,
+    //     responseType: 'NUMBER',
+    //     response: ExpectedResponseDict.NUMBER,
+    // };
+    // // TODO: Use processKnowledgeGraph as addNode was replaced
     // store.dispatch(addNode('node', node, testEdges));
     return {
         store,

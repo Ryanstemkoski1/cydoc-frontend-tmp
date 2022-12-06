@@ -9,7 +9,7 @@ import configureStore from 'redux-mock-store';
 import { conditionId, categoryId, initialPlan } from '../util';
 import { Provider } from 'react-redux';
 import { PLAN_ACTION as TYPES } from 'redux/actions/actionTypes';
-import { WhenResponse } from 'constants/enums';
+// import { WhenResponse } from 'constants/enums';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 

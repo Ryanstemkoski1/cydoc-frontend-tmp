@@ -25,42 +25,42 @@ const mountWithProps = (medications = initMedications, isRich = false) => {
 };
 
 describe('Medications Note', () => {
-    const nonEmptyMeds = {
-        0: {
-            drugName: 'foo',
-            startYear: 2000,
-            isCurrentlyTaking: YesNoResponse.None,
-            endYear: -1,
-            schedule: 'bar',
-            dose: '24',
-            reasonForTaking: '',
-            sideEffects: ['a', 'b'],
-            comments: '',
-        },
-        1: {
-            // Should not render because of empty drugName
-            drugName: '',
-            startYear: 2000,
-            isCurrentlyTaking: YesNoResponse.None,
-            endYear: -1,
-            schedule: 'bar',
-            dose: '24',
-            reasonForTaking: '42',
-            sideEffects: ['a', 'b'],
-            comments: 'comment',
-        },
-        2: {
-            drugName: 'test',
-            startYear: -1,
-            isCurrentlyTaking: YesNoResponse.Yes,
-            endYear: 1555,
-            schedule: '',
-            dose: '',
-            reasonForTaking: '42',
-            sideEffects: [],
-            comments: 'comment',
-        },
-    };
+    // const nonEmptyMeds = {
+    //     0: {
+    //         drugName: 'foo',
+    //         startYear: 2000,
+    //         isCurrentlyTaking: YesNoResponse.None,
+    //         endYear: -1,
+    //         schedule: 'bar',
+    //         dose: '24',
+    //         reasonForTaking: '',
+    //         sideEffects: ['a', 'b'],
+    //         comments: '',
+    //     },
+    //     1: {
+    //         // Should not render because of empty drugName
+    //         drugName: '',
+    //         startYear: 2000,
+    //         isCurrentlyTaking: YesNoResponse.None,
+    //         endYear: -1,
+    //         schedule: 'bar',
+    //         dose: '24',
+    //         reasonForTaking: '42',
+    //         sideEffects: ['a', 'b'],
+    //         comments: 'comment',
+    //     },
+    //     2: {
+    //         drugName: 'test',
+    //         startYear: -1,
+    //         isCurrentlyTaking: YesNoResponse.Yes,
+    //         endYear: 1555,
+    //         schedule: '',
+    //         dose: '',
+    //         reasonForTaking: '42',
+    //         sideEffects: [],
+    //         comments: 'comment',
+    //     },
+    // };
     it('renders without crashing', () => {
         const wrapper = mountWithProps();
         expect(wrapper).toBeTruthy();

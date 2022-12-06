@@ -7,13 +7,16 @@ import PhysicalExamContent from '../PhysicalExamContent';
 import PhysicalExamGroup from '../PhysicalExamGroup';
 import { initialPhysicalExamState } from 'redux/reducers/physicalExamReducer';
 import { PHYSICAL_EXAM_ACTION } from 'redux/actions/actionTypes';
-import { Button, Dropdown } from 'semantic-ui-react';
+import {
+    Button,
+    // Dropdown,
+} from 'semantic-ui-react';
 import LRButton from 'components/tools/LRButtonRedux';
 import SelectAllButton from '../SelectAllButton';
 import { currentNoteStore } from 'redux/store';
 import { deleteNote } from 'redux/actions/currentNoteActions';
 import PhysicalExamRow from '../PhysicalExamRow';
-import _ from 'lodash';
+// import _ from 'lodash';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 

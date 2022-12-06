@@ -20,11 +20,11 @@ const mountWithProps = (surgicalHistory = surgical, isRich = false) => {
 };
 
 describe('Surgical History Note', () => {
-    const nonEmptySH = {
-        empty: { procedure: '', year: 1000, comments: 'bar' },
-        foo: { procedure: '1 aaa', year: -1, comments: 'xxx' },
-        test: { procedure: '2 bbb', year: 2000, comments: '' },
-    };
+    // const nonEmptySH = {
+    //     empty: { procedure: '', year: 1000, comments: 'bar' },
+    //     foo: { procedure: '1 aaa', year: -1, comments: 'xxx' },
+    //     test: { procedure: '2 bbb', year: 2000, comments: '' },
+    // };
 
     it('renders without crashing', () => {
         const wrapper = mountWithProps();

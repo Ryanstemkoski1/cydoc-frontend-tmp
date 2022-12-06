@@ -2,7 +2,7 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import BodySystemDropdown from '../BodySystemDropdown';
-import ChiefComplaintsButton from '../ChiefComplaintsButton';
+// import ChiefComplaintsButton from '../ChiefComplaintsButton';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
@@ -17,7 +17,9 @@ describe('ChiefComplaintsButton', () => {
             ]}
         />
     );
-    it('placeholder so suite can run', () => {});
+    it('placeholder so suite can run', () => {
+        expect(wrapper).toBeTruthy();
+    });
     // // TODO: Fix below tests
     // it('renders body system dropdown', () => {
     //     expect(wrapper).toMatchSnapshot();

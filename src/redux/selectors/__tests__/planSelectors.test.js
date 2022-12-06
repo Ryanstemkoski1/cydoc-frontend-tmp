@@ -1,12 +1,12 @@
 import {
     flattenConditionCategory,
-    selectPlanCondition,
+    // selectPlanCondition,
 } from '../planSelectors';
-import {
-    initialPlan,
-    conditionId,
-} from 'pages/EditNote/content/discussionplan/util';
-import { initialPlanState } from '../../reducers/planReducer';
+// import {
+//     initialPlan,
+//     conditionId,
+// } from 'pages/EditNote/content/discussionplan/util';
+// import { initialPlanState } from '../../reducers/planReducer';
 
 describe('plan selectors', () => {
     it('flattenConditionCategory includes id along with original keys', () => {

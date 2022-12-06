@@ -47,11 +47,10 @@ test('EditProfile renders one UserForm component', () => {
 });
 
 describe('testing props to UserForm based on current user', () => {
-    const wrapper = setup(testUser).find(UserForm);
-    const emptyString = '';
-    const stringArray = ['', '', ''];
-    const emptyArray = [];
-
+    // const wrapper = setup(testUser).find(UserForm);
+    // const emptyString = '';
+    // const stringArray = ['', '', ''];
+    // const emptyArray = [];
     // // TODO: Fix below tests
     // test('defined user props', () => {
     //     expect(wrapper.props().username).toEqual(testUser.user.username);
@@ -69,7 +68,6 @@ describe('testing props to UserForm based on current user', () => {
     //     expect(wrapper.props().backupEmail).toEqual(testUser.user.backupEmail);
     //     expect(wrapper.props().role).toEqual(testUser.user.role);
     // });
-
     // test('undefined user props set to default values', () => {
     //     expect(wrapper.props().studentStatus).toEqual(emptyString);
     //     expect(wrapper.props().degreesCompleted).toEqual(stringArray);

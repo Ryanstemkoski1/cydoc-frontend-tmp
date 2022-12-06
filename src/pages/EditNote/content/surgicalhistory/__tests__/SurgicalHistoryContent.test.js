@@ -4,12 +4,12 @@ import EnzymeAdapter from 'enzyme-adapter-react-16';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import SurgicalHistoryContent from '../SurgicalHistoryContent.tsx';
-import SurgicalHistoryTableBodyRow from '../SurgicalHistoryTableBodyRow';
-import AddRowButton from 'components/tools/AddRowButton';
-import { Button, Accordion } from 'semantic-ui-react';
-import { SURGICAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
-import { currentNoteStore } from 'redux/store';
-import { deleteNote } from 'redux/actions/currentNoteActions';
+// import SurgicalHistoryTableBodyRow from '../SurgicalHistoryTableBodyRow';
+// import AddRowButton from 'components/tools/AddRowButton';
+// import { Button, Accordion } from 'semantic-ui-react';
+// import { SURGICAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
+// import { currentNoteStore } from 'redux/store';
+// import { deleteNote } from 'redux/actions/currentNoteActions';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
@@ -38,10 +38,8 @@ describe('SurgicalHistoryContent', () => {
         const { store } = connectStore();
         store.clearActions();
     });
-    
-    test('placeholder test to get suite to run', () => {
 
-    })
+    test('placeholder test to get suite to run', () => {});
 
     // // TODO: Fix below tests
     // test('render', () => {

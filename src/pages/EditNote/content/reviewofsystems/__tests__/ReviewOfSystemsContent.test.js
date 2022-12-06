@@ -4,10 +4,10 @@ import EnzymeAdapter from 'enzyme-adapter-react-16';
 import ReviewOfSystemsContent from '../ReviewOfSystemsContent';
 import ReviewOfSystemsCategory from '../ReviewOfSystemsCategory';
 import configureStore from 'redux-mock-store';
-import { ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP } from 'constants/breakpoints';
+// import { ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP } from 'constants/breakpoints';
 import { initialStore } from '../utils';
 import { Provider } from 'react-redux';
-import Masonry from 'react-masonry-css';
+// import Masonry from 'react-masonry-css';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 

@@ -2,28 +2,25 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { Provider } from 'react-redux';
-import YesNo from '../YesNo';
-import { addNode } from 'redux/actions/hpiActions';
+// import YesNo from '../YesNo';
 import { createCurrentNoteStore } from 'redux/store';
-import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
+// import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const connectRealStore = () => {
     const store = createCurrentNoteStore();
-    const node = {
-        ...testNode,
-        responseType: 'YES-NO',
-        response: ExpectedResponseDict.YES_NO,
-    };
+    // const node = {
+    //     ...testNode,
+    //     responseType: 'YES-NO',
+    //     response: ExpectedResponseDict.YES_NO,
+    // };
     // TODO: Use processKnowledgeGraph as addNode was replaced
     // store.dispatch(addNode('node', node, testEdges));
     return {
         store,
         wrapper: mount(
-            <Provider store={store}>
-                {/* <YesNo node={'node'} /> */}
-            </Provider>
+            <Provider store={store}>{/* <YesNo node={'node'} /> */}</Provider>
         ),
     };
 };

@@ -1,9 +1,9 @@
 import HPINote, {
-    findRoots,
-    sortGraph,
+    // findRoots,
+    // sortGraph,
     joinLists,
-    isEmpty,
-    extractNode,
+    // isEmpty,
+    // extractNode,
 } from '../HPINote';
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
@@ -16,23 +16,23 @@ Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const mockStore = configureStore([]);
 
-const createGraphNode = (fields = {}) => ({
-    uid: '',
-    medID: '',
-    category: '',
-    text: '',
-    responseType: 'SHORT-TEXT',
-    bodySystem: '',
-    noteSection: '',
-    doctorView: '',
-    patientView: '',
-    doctorCreated: '',
-    blankTemplate: 'blankTemplate',
-    blankYes: 'blankYes',
-    blankNo: 'blankNo',
-    response: '',
-    ...fields,
-});
+// const createGraphNode = (fields = {}) => ({
+//     uid: '',
+//     medID: '',
+//     category: '',
+//     text: '',
+//     responseType: 'SHORT-TEXT',
+//     bodySystem: '',
+//     noteSection: '',
+//     doctorView: '',
+//     patientView: '',
+//     doctorCreated: '',
+//     blankTemplate: 'blankTemplate',
+//     blankYes: 'blankYes',
+//     blankNo: 'blankNo',
+//     response: '',
+//     ...fields,
+// });
 
 const mountWithStore = (hpi = initialHpiState) => {
     const store = mockStore({ hpi });

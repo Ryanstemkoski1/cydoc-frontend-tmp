@@ -2,20 +2,19 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { Provider } from 'react-redux';
-import TimeInput from '../TimeInput';
-import { addNode } from 'redux/actions/hpiActions';
+// import TimeInput from '../TimeInput';
 import { createCurrentNoteStore } from 'redux/store';
-import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
+// import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const connectRealStore = () => {
     const store = createCurrentNoteStore();
-    const node = {
-        ...testNode,
-        responseType: 'TIME3DAYS',
-        response: ExpectedResponseDict.TIME3DAYS,
-    };
+    // const node = {
+    //     ...testNode,
+    //     responseType: 'TIME3DAYS',
+    //     response: ExpectedResponseDict.TIME3DAYS,
+    // };
     // TODO: Use processKnowledgeGraph as addNode was replaced
     // store.dispatch(addNode('node', node, testEdges));
     return {
