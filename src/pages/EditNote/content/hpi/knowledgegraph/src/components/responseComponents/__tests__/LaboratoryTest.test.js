@@ -36,7 +36,8 @@ const connectRealStore = () => {
             toQuestionOrder: -1,
         },
     ];
-    store.dispatch(addNode('node', node, edges));
+    // TODO: Use processKnowledgeGraph as addNode was replaced
+    // store.dispatch(addNode('node', node, edges));
     return {
         store,
         wrapper: mount(

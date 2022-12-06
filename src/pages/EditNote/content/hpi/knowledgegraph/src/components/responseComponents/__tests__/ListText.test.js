@@ -16,7 +16,8 @@ const connectRealStore = () => {
         responseType: 'LIST-TEXT',
         response: ExpectedResponseDict.LIST_TEXT,
     };
-    store.dispatch(addNode('node', node, testEdges));
+    // TODO: Use processKnowledgeGraph as addNode was replaced
+    // store.dispatch(addNode('node', node, testEdges));
     return {
         store,
         wrapper: mount(

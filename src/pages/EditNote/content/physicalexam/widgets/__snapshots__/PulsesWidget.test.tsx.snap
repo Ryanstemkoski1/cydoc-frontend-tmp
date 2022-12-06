@@ -82,8 +82,8 @@ Object {
                       >
                         <Button
                           as="button"
-                          basic={true}
                           circular={true}
+                          className="pe-ros-button"
                           icon="x"
                           onClick={[Function]}
                           size="mini"
@@ -92,7 +92,7 @@ Object {
                             innerRef={
                               Object {
                                 "current": <button
-                                  class="ui mini basic circular icon button"
+                                  class="ui mini circular icon button pe-ros-button"
                                 >
                                   <i
                                     aria-hidden="true"
@@ -106,7 +106,7 @@ Object {
                               innerRef={
                                 Object {
                                   "current": <button
-                                    class="ui mini basic circular icon button"
+                                    class="ui mini circular icon button pe-ros-button"
                                   >
                                     <i
                                       aria-hidden="true"
@@ -117,7 +117,7 @@ Object {
                               }
                             >
                               <button
-                                className="ui mini basic circular icon button"
+                                className="ui mini circular icon button pe-ros-button"
                                 onClick={[Function]}
                               >
                                 <Icon
@@ -143,8 +143,9 @@ Object {
                         }
                       >
                         <Button
+                          active={false}
                           as="button"
-                          className="spaced-buttons"
+                          className="pe-ros-button spaced-buttons"
                           key="brachial"
                           onClick={[Function]}
                         >
@@ -152,7 +153,7 @@ Object {
                             innerRef={
                               Object {
                                 "current": <button
-                                  class="ui button spaced-buttons"
+                                  class="ui button pe-ros-button spaced-buttons"
                                 >
                                    
                                   brachial
@@ -165,7 +166,7 @@ Object {
                               innerRef={
                                 Object {
                                   "current": <button
-                                    class="ui button spaced-buttons"
+                                    class="ui button pe-ros-button spaced-buttons"
                                   >
                                      
                                     brachial
@@ -175,7 +176,7 @@ Object {
                               }
                             >
                               <button
-                                className="ui button spaced-buttons"
+                                className="ui button pe-ros-button spaced-buttons"
                                 onClick={[Function]}
                               >
                                  
@@ -186,8 +187,9 @@ Object {
                           </Ref>
                         </Button>
                         <Button
+                          active={false}
                           as="button"
-                          className="spaced-buttons"
+                          className="pe-ros-button spaced-buttons"
                           key="radial"
                           onClick={[Function]}
                         >
@@ -195,7 +197,7 @@ Object {
                             innerRef={
                               Object {
                                 "current": <button
-                                  class="ui button spaced-buttons"
+                                  class="ui button pe-ros-button spaced-buttons"
                                 >
                                    
                                   radial
@@ -208,7 +210,7 @@ Object {
                               innerRef={
                                 Object {
                                   "current": <button
-                                    class="ui button spaced-buttons"
+                                    class="ui button pe-ros-button spaced-buttons"
                                   >
                                      
                                     radial
@@ -218,7 +220,7 @@ Object {
                               }
                             >
                               <button
-                                className="ui button spaced-buttons"
+                                className="ui button pe-ros-button spaced-buttons"
                                 onClick={[Function]}
                               >
                                  
@@ -229,8 +231,9 @@ Object {
                           </Ref>
                         </Button>
                         <Button
+                          active={false}
                           as="button"
-                          className="spaced-buttons"
+                          className="pe-ros-button spaced-buttons"
                           key="ulnar"
                           onClick={[Function]}
                         >
@@ -238,7 +241,7 @@ Object {
                             innerRef={
                               Object {
                                 "current": <button
-                                  class="ui button spaced-buttons"
+                                  class="ui button pe-ros-button spaced-buttons"
                                 >
                                    
                                   ulnar
@@ -251,7 +254,7 @@ Object {
                               innerRef={
                                 Object {
                                   "current": <button
-                                    class="ui button spaced-buttons"
+                                    class="ui button pe-ros-button spaced-buttons"
                                   >
                                      
                                     ulnar
@@ -261,7 +264,7 @@ Object {
                               }
                             >
                               <button
-                                className="ui button spaced-buttons"
+                                className="ui button pe-ros-button spaced-buttons"
                                 onClick={[Function]}
                               >
                                  
@@ -272,8 +275,9 @@ Object {
                           </Ref>
                         </Button>
                         <Button
+                          active={false}
                           as="button"
-                          className="spaced-buttons"
+                          className="pe-ros-button spaced-buttons"
                           key="dorsalis pedis"
                           onClick={[Function]}
                         >
@@ -281,7 +285,7 @@ Object {
                             innerRef={
                               Object {
                                 "current": <button
-                                  class="ui button spaced-buttons"
+                                  class="ui button pe-ros-button spaced-buttons"
                                 >
                                    
                                   dorsalis pedis
@@ -294,7 +298,7 @@ Object {
                               innerRef={
                                 Object {
                                   "current": <button
-                                    class="ui button spaced-buttons"
+                                    class="ui button pe-ros-button spaced-buttons"
                                   >
                                      
                                     dorsalis pedis
@@ -304,7 +308,7 @@ Object {
                               }
                             >
                               <button
-                                className="ui button spaced-buttons"
+                                className="ui button pe-ros-button spaced-buttons"
                                 onClick={[Function]}
                               >
                                  
@@ -323,8 +327,9 @@ Object {
                         }
                       >
                         <Button
+                          active={false}
                           as="button"
-                          className="spaced-buttons"
+                          className="pe-ros-button spaced-buttons"
                           key="right"
                           onClick={[Function]}
                         >
@@ -332,7 +337,7 @@ Object {
                             innerRef={
                               Object {
                                 "current": <button
-                                  class="ui button spaced-buttons"
+                                  class="ui button pe-ros-button spaced-buttons"
                                 >
                                    
                                   right
@@ -345,7 +350,7 @@ Object {
                               innerRef={
                                 Object {
                                   "current": <button
-                                    class="ui button spaced-buttons"
+                                    class="ui button pe-ros-button spaced-buttons"
                                   >
                                      
                                     right
@@ -355,7 +360,7 @@ Object {
                               }
                             >
                               <button
-                                className="ui button spaced-buttons"
+                                className="ui button pe-ros-button spaced-buttons"
                                 onClick={[Function]}
                               >
                                  
@@ -366,8 +371,9 @@ Object {
                           </Ref>
                         </Button>
                         <Button
+                          active={false}
                           as="button"
-                          className="spaced-buttons"
+                          className="pe-ros-button spaced-buttons"
                           key="left"
                           onClick={[Function]}
                         >
@@ -375,7 +381,7 @@ Object {
                             innerRef={
                               Object {
                                 "current": <button
-                                  class="ui button spaced-buttons"
+                                  class="ui button pe-ros-button spaced-buttons"
                                 >
                                    
                                   left
@@ -388,7 +394,7 @@ Object {
                               innerRef={
                                 Object {
                                   "current": <button
-                                    class="ui button spaced-buttons"
+                                    class="ui button pe-ros-button spaced-buttons"
                                   >
                                      
                                     left
@@ -398,7 +404,7 @@ Object {
                               }
                             >
                               <button
-                                className="ui button spaced-buttons"
+                                className="ui button pe-ros-button spaced-buttons"
                                 onClick={[Function]}
                               >
                                  
@@ -417,8 +423,9 @@ Object {
                         }
                       >
                         <Button
+                          active={false}
                           as="button"
-                          className="spaced-buttons"
+                          className="pe-ros-button spaced-buttons"
                           key="0 absent"
                           onClick={[Function]}
                         >
@@ -426,7 +433,7 @@ Object {
                             innerRef={
                               Object {
                                 "current": <button
-                                  class="ui button spaced-buttons"
+                                  class="ui button pe-ros-button spaced-buttons"
                                 >
                                    
                                   0 absent
@@ -439,7 +446,7 @@ Object {
                               innerRef={
                                 Object {
                                   "current": <button
-                                    class="ui button spaced-buttons"
+                                    class="ui button pe-ros-button spaced-buttons"
                                   >
                                      
                                     0 absent
@@ -449,7 +456,7 @@ Object {
                               }
                             >
                               <button
-                                className="ui button spaced-buttons"
+                                className="ui button pe-ros-button spaced-buttons"
                                 onClick={[Function]}
                               >
                                  
@@ -460,8 +467,9 @@ Object {
                           </Ref>
                         </Button>
                         <Button
+                          active={false}
                           as="button"
-                          className="spaced-buttons"
+                          className="pe-ros-button spaced-buttons"
                           key="1+ weak"
                           onClick={[Function]}
                         >
@@ -469,7 +477,7 @@ Object {
                             innerRef={
                               Object {
                                 "current": <button
-                                  class="ui button spaced-buttons"
+                                  class="ui button pe-ros-button spaced-buttons"
                                 >
                                    
                                   1+ weak
@@ -482,7 +490,7 @@ Object {
                               innerRef={
                                 Object {
                                   "current": <button
-                                    class="ui button spaced-buttons"
+                                    class="ui button pe-ros-button spaced-buttons"
                                   >
                                      
                                     1+ weak
@@ -492,7 +500,7 @@ Object {
                               }
                             >
                               <button
-                                className="ui button spaced-buttons"
+                                className="ui button pe-ros-button spaced-buttons"
                                 onClick={[Function]}
                               >
                                  
@@ -503,8 +511,9 @@ Object {
                           </Ref>
                         </Button>
                         <Button
+                          active={false}
                           as="button"
-                          className="spaced-buttons"
+                          className="pe-ros-button spaced-buttons"
                           key="2+"
                           onClick={[Function]}
                         >
@@ -512,7 +521,7 @@ Object {
                             innerRef={
                               Object {
                                 "current": <button
-                                  class="ui button spaced-buttons"
+                                  class="ui button pe-ros-button spaced-buttons"
                                 >
                                    
                                   2+
@@ -525,7 +534,7 @@ Object {
                               innerRef={
                                 Object {
                                   "current": <button
-                                    class="ui button spaced-buttons"
+                                    class="ui button pe-ros-button spaced-buttons"
                                   >
                                      
                                     2+
@@ -535,7 +544,7 @@ Object {
                               }
                             >
                               <button
-                                className="ui button spaced-buttons"
+                                className="ui button pe-ros-button spaced-buttons"
                                 onClick={[Function]}
                               >
                                  
@@ -546,8 +555,9 @@ Object {
                           </Ref>
                         </Button>
                         <Button
+                          active={false}
                           as="button"
-                          className="spaced-buttons"
+                          className="pe-ros-button spaced-buttons"
                           key="3+ normal"
                           onClick={[Function]}
                         >
@@ -555,7 +565,7 @@ Object {
                             innerRef={
                               Object {
                                 "current": <button
-                                  class="ui button spaced-buttons"
+                                  class="ui button pe-ros-button spaced-buttons"
                                 >
                                    
                                   3+ normal
@@ -568,7 +578,7 @@ Object {
                               innerRef={
                                 Object {
                                   "current": <button
-                                    class="ui button spaced-buttons"
+                                    class="ui button pe-ros-button spaced-buttons"
                                   >
                                      
                                     3+ normal
@@ -578,7 +588,7 @@ Object {
                               }
                             >
                               <button
-                                className="ui button spaced-buttons"
+                                className="ui button pe-ros-button spaced-buttons"
                                 onClick={[Function]}
                               >
                                  
@@ -589,8 +599,9 @@ Object {
                           </Ref>
                         </Button>
                         <Button
+                          active={false}
                           as="button"
-                          className="spaced-buttons"
+                          className="pe-ros-button spaced-buttons"
                           key="4+ bounding"
                           onClick={[Function]}
                         >
@@ -598,7 +609,7 @@ Object {
                             innerRef={
                               Object {
                                 "current": <button
-                                  class="ui button spaced-buttons"
+                                  class="ui button pe-ros-button spaced-buttons"
                                 >
                                    
                                   4+ bounding
@@ -611,7 +622,7 @@ Object {
                               innerRef={
                                 Object {
                                   "current": <button
-                                    class="ui button spaced-buttons"
+                                    class="ui button pe-ros-button spaced-buttons"
                                   >
                                      
                                     4+ bounding
@@ -621,7 +632,7 @@ Object {
                               }
                             >
                               <button
-                                className="ui button spaced-buttons"
+                                className="ui button pe-ros-button spaced-buttons"
                                 onClick={[Function]}
                               >
                                  
@@ -642,8 +653,8 @@ Object {
            
           <Button
             as="button"
-            basic={true}
             circular={true}
+            className="pe-ros-button"
             icon="plus"
             onClick={[Function]}
             size="mini"
@@ -652,7 +663,7 @@ Object {
               innerRef={
                 Object {
                   "current": <button
-                    class="ui mini basic circular icon button"
+                    class="ui mini circular icon button pe-ros-button"
                   >
                     <i
                       aria-hidden="true"
@@ -666,7 +677,7 @@ Object {
                 innerRef={
                   Object {
                     "current": <button
-                      class="ui mini basic circular icon button"
+                      class="ui mini circular icon button pe-ros-button"
                     >
                       <i
                         aria-hidden="true"
@@ -677,7 +688,7 @@ Object {
                 }
               >
                 <button
-                  className="ui mini basic circular icon button"
+                  className="ui mini circular icon button pe-ros-button"
                   onClick={[Function]}
                 >
                   <Icon

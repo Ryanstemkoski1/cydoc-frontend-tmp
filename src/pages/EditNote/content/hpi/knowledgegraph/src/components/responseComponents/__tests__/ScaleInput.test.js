@@ -16,7 +16,8 @@ const connectRealStore = () => {
         responseType: 'SCALE1TO10',
         response: ExpectedResponseDict.SCALE1TO10,
     };
-    store.dispatch(addNode('node', node, testEdges));
+    // TODO: Use processKnowledgeGraph as addNode was replaced
+    // store.dispatch(addNode('node', node, testEdges));
     return {
         store,
         wrapper: mount(

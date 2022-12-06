@@ -16,7 +16,8 @@ const connectRealStore = () => {
         responseType: 'TIME3DAYS',
         response: ExpectedResponseDict.TIME3DAYS,
     };
-    store.dispatch(addNode('node', node, testEdges));
+    // TODO: Use processKnowledgeGraph as addNode was replaced
+    // store.dispatch(addNode('node', node, testEdges));
     return {
         store,
         wrapper: mount(

@@ -16,7 +16,8 @@ const connectRealStore = () => {
         responseType: 'NUMBER',
         response: ExpectedResponseDict.NUMBER,
     };
-    store.dispatch(addNode('node', node, testEdges));
+    // TODO: Use processKnowledgeGraph as addNode was replaced
+    // store.dispatch(addNode('node', node, testEdges));
     return {
         store,
         wrapper: mount(

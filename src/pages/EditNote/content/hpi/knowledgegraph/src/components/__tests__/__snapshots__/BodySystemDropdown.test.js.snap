@@ -3,32 +3,30 @@
 exports[`ChiefComplaintsButton renders body system dropdown 1`] = `
 <div>
   <Button
+    active={false}
     as="button"
-    basic={true}
-    className="hpi-disease-button"
+    className="hpi-chiefcomplaint-button hpi-disease-button"
     onClick={[Function]}
   >
-    <Icon
-      as="i"
-      name="dropdown"
-    />
-    Cardiac
+    <div
+      className="hpi-disease-button-content-outer"
+    >
+      <div
+        className="hpi-disease-button-content-icon"
+      >
+        <img
+          className="hpi-icons"
+        />
+      </div>
+      <div
+        className="hpi-disease-button-content-name"
+      >
+        Cardiovascular
+      </div>
+    </div>
   </Button>
   <div
     className="diseases-array"
-  >
-    <Connect(ChiefComplaintsButton)
-      key="Abdominal Pain"
-      name="Abdominal Pain"
-    />
-    <Connect(ChiefComplaintsButton)
-      key="Aging Challenges and Dementia"
-      name="Aging Challenges and Dementia"
-    />
-    <Connect(ChiefComplaintsButton)
-      key="Alcohol Use"
-      name="Alcohol Use"
-    />
-  </div>
+  />
 </div>
 `;

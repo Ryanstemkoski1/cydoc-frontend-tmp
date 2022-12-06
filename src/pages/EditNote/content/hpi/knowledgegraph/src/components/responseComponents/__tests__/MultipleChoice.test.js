@@ -16,7 +16,8 @@ const connectRealStore = () => {
         responseType: 'CLICK-BOXES',
         response: ExpectedResponseDict.CLICK_BOXES,
     };
-    store.dispatch(addNode('node', node, testEdges));
+    // TODO: Use processKnowledgeGraph as addNode was replaced
+    // store.dispatch(addNode('node', node, testEdges));
     const listNames = ['foo1', 'foo2', 'foo3'];
     return {
         store,
