@@ -4,7 +4,7 @@ import { PULSES_WIDGET_ACTION } from '../actionTypes';
 
 export interface AddPulsesWidgetItemAction {
     type: PULSES_WIDGET_ACTION.ADD_PULSES_WIDGET_ITEM;
-    payload: {};
+    payload: Record<string, never>;
 }
 
 export const addPulsesWidgetItem = (): AddPulsesWidgetItemAction => ({

@@ -4,7 +4,7 @@ import { REFLEXES_WIDGET_ACTION } from '../actionTypes';
 
 export interface AddReflexesWidgetItemAction {
     type: REFLEXES_WIDGET_ACTION.ADD_REFLEXES_WIDGET_ITEM;
-    payload: {};
+    payload: Record<string, never>;
 }
 
 export const addReflexesWidgetItem = (): AddReflexesWidgetItemAction => ({

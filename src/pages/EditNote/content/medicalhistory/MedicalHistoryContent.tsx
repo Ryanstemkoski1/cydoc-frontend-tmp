@@ -3,7 +3,7 @@ import MedicalHistoryNoteItem from './MedicalHistoryNoteItem';
 import React from 'react';
 import MedicalHistoryContentHeader from './MedicalHistoryContentHeader';
 import GridContent from 'components/tools/GridContent.js';
-import { CONDITIONS } from 'constants/constants.json';
+import constants from 'constants/constants.json';
 import ConditionInput from 'components/tools/ConditionInput';
 import { connect } from 'react-redux';
 import {
@@ -195,7 +195,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         const standardMedicalHistory = this.standardizeMedicalHistory(
             this.props.medicalHistory
         );
-        const standardConditions = CONDITIONS.map((condition) =>
+        const standardConditions = constants.CONDITIONS.map((condition) =>
             this.standardizeMedicalName(condition)
         );
         let listValues =
@@ -207,7 +207,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                     this.state.currConditions.includes(key) ||
                     standardMedicalHistory[key].hasBeenAfflicted ==
                         YesNoResponse.Yes
-            ) || CONDITIONS;
+            ) || constants.CONDITIONS;
         // The second OR statement gets the list of Conditions in the "Medical History" context
         if (responseType == ResponseTypes.PMH_POP && responseChoice && node) {
             listValues = responseChoice.map((condition) => {

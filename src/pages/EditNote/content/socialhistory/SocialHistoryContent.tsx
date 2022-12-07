@@ -23,7 +23,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = ReduxProps & OwnProps;
 
-export class SocialHistoryContent extends React.Component<Props, {}> {
+export class SocialHistoryContent extends React.Component<Props> {
     constructor(props: Props) {
         super(props);
     }
