@@ -8,7 +8,7 @@ import SocialHistoryContent from '../socialhistory/SocialHistoryContent';
 import FamilyHistoryContent from '../familyhistory/FamilyHistoryContent';
 import './PatientHistory.css';
 import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
-import { PMH_TAB_NAMES } from 'constants/constants';
+import constants from 'constants/constants';
 
 export default class PatientHistoryContent extends Component {
     constructor(props) {
@@ -248,7 +248,8 @@ export default class PatientHistoryContent extends Component {
                         index={activeIndex}
                         onTabChange={(e, data) => {
                             this.setState({
-                                activeTabName: PMH_TAB_NAMES[data.activeIndex],
+                                activeTabName:
+                                    constants.PMH_TAB_NAMES[data.activeIndex],
                                 activeIndex: data.activeIndex,
                             });
                             this.props.handlePMHTabChange(e, data);

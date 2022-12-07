@@ -2,9 +2,6 @@
 const { spawnSync } = require('child_process');
 const colors = require('colors');
 
-// flag for automatic fixing
-const fix = `${process.argv[2] && process.argv[2] === 'fix' ? '--fix' : ''}`;
-
 // flag for failure of lint checks
 let failed = false;
 
@@ -19,9 +16,13 @@ const reduxPath = 'src/redux';
 const authPath = 'src/auth';
 
 function runLint(path, args = []) {
+    const command = [path];
+    if (process.argv[2] && process.argv[2] === 'fix') {
+        command.push('--fix');
+    }
     const lintProcess = spawnSync(
         /^win/.test(process.platform) ? 'eslint.cmd' : 'eslint',
-        [path, fix, ...args, '--ext', '.js,.jsx,.ts,.tsx']
+        [...command, ...args, '--ext', '.js,.jsx,.ts,.tsx']
     );
 
     // print output

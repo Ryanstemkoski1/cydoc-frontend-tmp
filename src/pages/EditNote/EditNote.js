@@ -3,7 +3,7 @@ import { Sticky } from 'semantic-ui-react';
 import MenuTabs from './MenuTabs';
 import NotePage from './NotePage';
 import NavMenu from '../../components/navigation/NavMenu';
-import { TAB_NAMES } from 'constants/constants';
+import constants from 'constants/constants';
 import { connect } from 'react-redux';
 import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
 import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
@@ -49,7 +49,7 @@ class EditNote extends Component {
 
     onTabChange(name) {
         let activeItem = name;
-        let activeTabIndex = TAB_NAMES.indexOf(name);
+        let activeTabIndex = constants.TAB_NAMES.indexOf(name);
 
         this.setState({ activeItem, activeTabIndex });
         window.scrollTo(0, 0);

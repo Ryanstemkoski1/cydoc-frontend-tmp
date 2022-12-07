@@ -13,7 +13,7 @@ export const loadNote = (note: CurrentNoteState): LoadNoteAction => ({
 
 export interface DeleteNoteAction {
     type: CURRENT_NOTE_ACTION.DELETE_NOTE;
-    payload: {};
+    payload: Record<string, never>;
 }
 
 export const deleteNote = (): DeleteNoteAction => ({

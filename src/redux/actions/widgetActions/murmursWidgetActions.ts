@@ -12,7 +12,7 @@ import { MURMURS_WIDGET_ACTION } from '../actionTypes';
 
 export interface AddMurmursWidgetItemAction {
     type: MURMURS_WIDGET_ACTION.ADD_MURMURS_WIDGET_ITEM;
-    payload: {};
+    payload: Record<string, never>;
 }
 
 export const addMurmursWidgetItem = (): AddMurmursWidgetItemAction => ({
