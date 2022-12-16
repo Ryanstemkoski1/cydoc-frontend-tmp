@@ -19,6 +19,9 @@ import {
 import { RESPONSE_PLACEHOLDER } from './placeholders';
 import { Input, Button, Dropdown, Message, List } from 'semantic-ui-react';
 import { graphClient } from 'constants/api';
+import ToggleButton from 'components/tools/ToggleButton';
+import { joinLists } from 'pages/EditNote/content/generatenote/notesections/HPINote';
+import { fillAnswers } from 'pages/EditNote/content/generatenote/generateHpiText';
 const MIN_OPTIONS = 2;
 
 class TemplateAnswer extends Component {
@@ -398,7 +401,55 @@ class TemplateAnswer extends Component {
      * blanks were provided, nor answers were provided, the placeholder values
      * are used instead.
      */
-    getPreviewSentence = () => {};
+    getPreviewSentence = () => {
+        const { nodes } = this.context.template;
+        const { qId } = this.props;
+        const { answerInfo } = nodes[qId];
+        const options = nodes[qId].answerInfo.options;
+        const halfIndex = Math.ceil(options.length / 2);
+        const posOptions = options.slice(0, halfIndex);
+        const negOptions = options.slice(halfIndex);
+
+        let joinedTemplate = `${answerInfo.startResponse} ANSWER ${answerInfo.endResponse}`;
+        if ('negEndResponse' in answerInfo) {
+            joinedTemplate = `${joinedTemplate} NOTANSWER ${answerInfo.negEndResponse}`;
+        }
+        return (
+            <div className='preview-sentence'>
+                <h4>{nodes[qId].text}</h4>
+                {posOptions.map((option) => (
+                    <ToggleButton
+                        active={true}
+                        disabled={true}
+                        key={option}
+                        title={option}
+                        condition={option}
+                        aria-label={option}
+                    />
+                ))}
+                {negOptions.map((option) => (
+                    <ToggleButton
+                        active={false}
+                        disabled={true}
+                        key={option}
+                        title={option}
+                        condition={option}
+                        aria-label={option}
+                    />
+                ))}
+                <h4>Generated sentence:</h4>
+                <p>
+                    {fillAnswers({
+                        0: [
+                            joinedTemplate,
+                            joinLists(posOptions, 'and'),
+                            joinLists(negOptions, 'or'),
+                        ],
+                    })}
+                </p>
+            </div>
+        );
+    };
 
     /**
      * Changes whether the followup questions should be asked when YES or when NO
@@ -651,6 +702,7 @@ class TemplateAnswer extends Component {
                     <Button
                         basic
                         size='small'
+                        active={this.state.showNonanswer}
                         icon={
                             this.state.showNonanswer
                                 ? 'minus square outline'
@@ -667,6 +719,7 @@ class TemplateAnswer extends Component {
                     <Button
                         basic
                         size='small'
+                        active={this.state.showPreviewSentence}
                         icon={
                             this.state.showPreviewSentence
                                 ? 'search minus'
@@ -680,6 +733,8 @@ class TemplateAnswer extends Component {
                         onClick={this.toggleShowPreviewSentence}
                         className='add-option-pop'
                     />
+                    {this.state.showPreviewSentence &&
+                        this.getPreviewSentence()}
                 </>
             );
         } else if (
