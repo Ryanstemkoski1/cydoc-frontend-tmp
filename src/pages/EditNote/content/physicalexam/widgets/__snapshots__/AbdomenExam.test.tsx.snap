@@ -20,8 +20,7 @@ exports[`AbdomenExam matches snapshot 1`] = `
         >
            
           <div>
-             
-            Right Upper Quadrant
+             Right Upper Quadrant
           </div>
           <Connect(AbdomenExamButtons)
             abdomenQuadrant="rightUpperQuadrant"
@@ -33,8 +32,7 @@ exports[`AbdomenExam matches snapshot 1`] = `
         >
            
           <div>
-             
-            Left Upper Quadrant
+             Left Upper Quadrant
           </div>
           <Connect(AbdomenExamButtons)
             abdomenQuadrant="leftUpperQuadrant"
@@ -52,8 +50,7 @@ exports[`AbdomenExam matches snapshot 1`] = `
         >
            
           <div>
-             
-            Right Lower Quadrant
+             Right Lower Quadrant
           </div>
           <Connect(AbdomenExamButtons)
             abdomenQuadrant="rightLowerQuadrant"
@@ -65,8 +62,7 @@ exports[`AbdomenExam matches snapshot 1`] = `
         >
            
           <div>
-             
-            Left Lower Quadrant
+             Left Lower Quadrant
           </div>
           <Connect(AbdomenExamButtons)
             abdomenQuadrant="leftLowerQuadrant"

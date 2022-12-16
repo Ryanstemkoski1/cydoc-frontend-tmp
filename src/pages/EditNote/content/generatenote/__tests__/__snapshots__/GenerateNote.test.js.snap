@@ -173,7 +173,6 @@ exports[`Generate Note matches snapshot 1`] = `
       }
     }
     allergiesState={Object {}}
-    dispatch={[Function]}
     familyHistoryState={Object {}}
     medicalHistoryState={Object {}}
     medicationsState={Object {}}
@@ -322,62 +321,7 @@ exports[`Generate Note matches snapshot 1`] = `
                 "right": false,
               },
               "PERRLA": false,
-              "a-v nicking": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
               "ambylopia": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "arcus senilis": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "astigmatism": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "blepharitis": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "bruising": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "cataracts": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "chalazion": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "chemosis": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "copper wiring": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "crusting": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "diabetic retinopathy": Object {
                 "center": false,
                 "left": false,
                 "right": false,
@@ -387,32 +331,7 @@ exports[`Generate Note matches snapshot 1`] = `
                 "left": false,
                 "right": false,
               },
-              "drusen": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "ectropion": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "entropion": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "exophthalmos": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
               "fundoscopy unremarkable": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "hordeolum": Object {
                 "center": false,
                 "left": false,
                 "right": false,
@@ -423,16 +342,6 @@ exports[`Generate Note matches snapshot 1`] = `
                 "right": false,
               },
               "injected/red conjunctiva": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "laceration": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "macular degeneration": Object {
                 "center": false,
                 "left": false,
                 "right": false,
@@ -452,22 +361,7 @@ exports[`Generate Note matches snapshot 1`] = `
                 "left": false,
                 "right": false,
               },
-              "nystagmus": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "pain": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
               "pale conjunctiva": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "papilledema": Object {
                 "center": false,
                 "left": false,
                 "right": false,
@@ -477,27 +371,7 @@ exports[`Generate Note matches snapshot 1`] = `
                 "left": false,
                 "right": false,
               },
-              "pterygium": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "ptosis": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
               "purulent discharge": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "retinal detachment": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "retinal hemorrhage": Object {
                 "center": false,
                 "left": false,
                 "right": false,
@@ -508,26 +382,6 @@ exports[`Generate Note matches snapshot 1`] = `
                 "right": false,
               },
               "scleral icterus": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "silver wiring": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "strabismus": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "subconjunctival hemorrahge": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "swelling": Object {
                 "center": false,
                 "left": false,
                 "right": false,
@@ -543,11 +397,6 @@ exports[`Generate Note matches snapshot 1`] = `
                 "right": false,
               },
               "watery discharge": Object {
-                "center": false,
-                "left": false,
-                "right": false,
-              },
-              "xanthelasma": Object {
                 "center": false,
                 "left": false,
                 "right": false,
@@ -615,15 +464,9 @@ exports[`Generate Note matches snapshot 1`] = `
           "Neck": Object {
             "comments": "",
             "findings": Object {
-              "lymphadenopathy": false,
-              "mass": false,
               "no lymphadenopathy": false,
               "no thryomegaly": false,
-              "shotty lymph nodes": false,
               "supple": false,
-              "thyromegaly": false,
-              "trachea deviated left": false,
-              "trachea deviated right": false,
               "trachea midline": false,
             },
           },
@@ -718,10 +561,6 @@ exports[`Generate Note matches snapshot 1`] = `
             "comments": "",
             "findings": Object {
               "MMM": false,
-              "angular chelitis": false,
-              "blisters": false,
-              "erythematous gums": false,
-              "hoarse voice": false,
               "mucous membranes dry": false,
               "normal phonation": false,
               "normal swallowing": false,
@@ -734,9 +573,6 @@ exports[`Generate Note matches snapshot 1`] = `
               "tongue deviates right": false,
               "tongue pink and moist": false,
               "tongue protrudes midline": false,
-              "tooth decay": false,
-              "ulcerated gums": false,
-              "vesicles": false,
             },
           },
         },
@@ -851,6 +687,9 @@ exports[`Generate Note matches snapshot 1`] = `
       }
     }
     surgicalHistoryState={Object {}}
+    updatePatientInformation={[Function]}
+    updatePatientName={[Function]}
+    updatePatientPronouns={[Function]}
   />
 </ContextProvider>
 `;

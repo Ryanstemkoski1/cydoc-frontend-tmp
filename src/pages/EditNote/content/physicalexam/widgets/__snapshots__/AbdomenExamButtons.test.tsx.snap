@@ -29,8 +29,9 @@ exports[`AbdomenExamButtons matches snapshot 1`] = `
     >
       <div>
         <Button
+          active={false}
           as="button"
-          className="spaced-buttons"
+          className="pe-ros-button spaced-buttons"
           content="tenderness"
           key="tenderness"
           onClick={[Function]}
@@ -40,7 +41,7 @@ exports[`AbdomenExamButtons matches snapshot 1`] = `
             innerRef={
               Object {
                 "current": <button
-                  class="ui small button spaced-buttons"
+                  class="ui small button pe-ros-button spaced-buttons"
                 >
                   tenderness
                 </button>,
@@ -51,7 +52,7 @@ exports[`AbdomenExamButtons matches snapshot 1`] = `
               innerRef={
                 Object {
                   "current": <button
-                    class="ui small button spaced-buttons"
+                    class="ui small button pe-ros-button spaced-buttons"
                   >
                     tenderness
                   </button>,
@@ -59,7 +60,7 @@ exports[`AbdomenExamButtons matches snapshot 1`] = `
               }
             >
               <button
-                className="ui small button spaced-buttons"
+                className="ui small button pe-ros-button spaced-buttons"
                 onClick={[Function]}
               >
                 tenderness
@@ -68,8 +69,9 @@ exports[`AbdomenExamButtons matches snapshot 1`] = `
           </Ref>
         </Button>
         <Button
+          active={false}
           as="button"
-          className="spaced-buttons"
+          className="pe-ros-button spaced-buttons"
           content="rebound"
           key="rebound"
           onClick={[Function]}
@@ -79,7 +81,7 @@ exports[`AbdomenExamButtons matches snapshot 1`] = `
             innerRef={
               Object {
                 "current": <button
-                  class="ui small button spaced-buttons"
+                  class="ui small button pe-ros-button spaced-buttons"
                 >
                   rebound
                 </button>,
@@ -90,7 +92,7 @@ exports[`AbdomenExamButtons matches snapshot 1`] = `
               innerRef={
                 Object {
                   "current": <button
-                    class="ui small button spaced-buttons"
+                    class="ui small button pe-ros-button spaced-buttons"
                   >
                     rebound
                   </button>,
@@ -98,7 +100,7 @@ exports[`AbdomenExamButtons matches snapshot 1`] = `
               }
             >
               <button
-                className="ui small button spaced-buttons"
+                className="ui small button pe-ros-button spaced-buttons"
                 onClick={[Function]}
               >
                 rebound
@@ -107,8 +109,9 @@ exports[`AbdomenExamButtons matches snapshot 1`] = `
           </Ref>
         </Button>
         <Button
+          active={false}
           as="button"
-          className="spaced-buttons"
+          className="pe-ros-button spaced-buttons"
           content="guarding"
           key="guarding"
           onClick={[Function]}
@@ -118,7 +121,7 @@ exports[`AbdomenExamButtons matches snapshot 1`] = `
             innerRef={
               Object {
                 "current": <button
-                  class="ui small button spaced-buttons"
+                  class="ui small button pe-ros-button spaced-buttons"
                 >
                   guarding
                 </button>,
@@ -129,7 +132,7 @@ exports[`AbdomenExamButtons matches snapshot 1`] = `
               innerRef={
                 Object {
                   "current": <button
-                    class="ui small button spaced-buttons"
+                    class="ui small button pe-ros-button spaced-buttons"
                   >
                     guarding
                   </button>,
@@ -137,7 +140,7 @@ exports[`AbdomenExamButtons matches snapshot 1`] = `
               }
             >
               <button
-                className="ui small button spaced-buttons"
+                className="ui small button pe-ros-button spaced-buttons"
                 onClick={[Function]}
               >
                 guarding

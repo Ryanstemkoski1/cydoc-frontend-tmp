@@ -34,8 +34,9 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
     >
       <div>
         <Button
+          active={false}
           as="button"
-          className="spaced-buttons"
+          className="pe-ros-button spaced-buttons"
           content="wheezes"
           key="wheezes"
           onClick={[Function]}
@@ -45,7 +46,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
             innerRef={
               Object {
                 "current": <button
-                  class="ui small button spaced-buttons"
+                  class="ui small button pe-ros-button spaced-buttons"
                 >
                   wheezes
                 </button>,
@@ -56,7 +57,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
               innerRef={
                 Object {
                   "current": <button
-                    class="ui small button spaced-buttons"
+                    class="ui small button pe-ros-button spaced-buttons"
                   >
                     wheezes
                   </button>,
@@ -64,7 +65,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
               }
             >
               <button
-                className="ui small button spaced-buttons"
+                className="ui small button pe-ros-button spaced-buttons"
                 onClick={[Function]}
               >
                 wheezes
@@ -73,8 +74,9 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
           </Ref>
         </Button>
         <Button
+          active={false}
           as="button"
-          className="spaced-buttons"
+          className="pe-ros-button spaced-buttons"
           content="rales"
           key="rales"
           onClick={[Function]}
@@ -84,7 +86,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
             innerRef={
               Object {
                 "current": <button
-                  class="ui small button spaced-buttons"
+                  class="ui small button pe-ros-button spaced-buttons"
                 >
                   rales
                 </button>,
@@ -95,7 +97,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
               innerRef={
                 Object {
                   "current": <button
-                    class="ui small button spaced-buttons"
+                    class="ui small button pe-ros-button spaced-buttons"
                   >
                     rales
                   </button>,
@@ -103,7 +105,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
               }
             >
               <button
-                className="ui small button spaced-buttons"
+                className="ui small button pe-ros-button spaced-buttons"
                 onClick={[Function]}
               >
                 rales
@@ -112,8 +114,9 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
           </Ref>
         </Button>
         <Button
+          active={false}
           as="button"
-          className="spaced-buttons"
+          className="pe-ros-button spaced-buttons"
           content="rhonchi"
           key="rhonchi"
           onClick={[Function]}
@@ -123,7 +126,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
             innerRef={
               Object {
                 "current": <button
-                  class="ui small button spaced-buttons"
+                  class="ui small button pe-ros-button spaced-buttons"
                 >
                   rhonchi
                 </button>,
@@ -134,7 +137,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
               innerRef={
                 Object {
                   "current": <button
-                    class="ui small button spaced-buttons"
+                    class="ui small button pe-ros-button spaced-buttons"
                   >
                     rhonchi
                   </button>,
@@ -142,7 +145,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
               }
             >
               <button
-                className="ui small button spaced-buttons"
+                className="ui small button pe-ros-button spaced-buttons"
                 onClick={[Function]}
               >
                 rhonchi
@@ -167,9 +170,8 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
           trigger={
             <Button
               as="button"
-              basic={true}
               circular={true}
-              className="spaced-buttons"
+              className="pe-ros-button spaced-buttons"
               icon="plus"
             />
           }
@@ -192,16 +194,15 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
             trigger={
               <Button
                 as="button"
-                basic={true}
                 circular={true}
-                className="spaced-buttons"
+                className="pe-ros-button spaced-buttons"
                 icon="plus"
               />
             }
             triggerRef={
               Object {
                 "current": <button
-                  class="ui basic circular icon button spaced-buttons"
+                  class="ui circular icon button pe-ros-button spaced-buttons"
                 >
                   <i
                     aria-hidden="true"
@@ -219,9 +220,8 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
               >
                 <Button
                   as="button"
-                  basic={true}
                   circular={true}
-                  className="spaced-buttons"
+                  className="pe-ros-button spaced-buttons"
                   icon="plus"
                   onBlur={[Function]}
                   onClick={[Function]}
@@ -233,7 +233,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
                     innerRef={
                       Object {
                         "current": <button
-                          class="ui basic circular icon button spaced-buttons"
+                          class="ui circular icon button pe-ros-button spaced-buttons"
                         >
                           <i
                             aria-hidden="true"
@@ -247,7 +247,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
                       innerRef={
                         Object {
                           "current": <button
-                            class="ui basic circular icon button spaced-buttons"
+                            class="ui circular icon button pe-ros-button spaced-buttons"
                           >
                             <i
                               aria-hidden="true"
@@ -258,7 +258,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
                       }
                     >
                       <button
-                        className="ui basic circular icon button spaced-buttons"
+                        className="ui circular icon button pe-ros-button spaced-buttons"
                         onBlur={[Function]}
                         onClick={[Function]}
                         onFocus={[Function]}
