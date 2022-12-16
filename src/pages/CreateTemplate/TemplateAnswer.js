@@ -35,6 +35,8 @@ class TemplateAnswer extends Component {
             showQuestionSelect: false,
             showOptionError: false,
             fetchingImport: false,
+            showNonanswer: false,
+            showPreviewSentence: false,
         };
         this.updateDimensions = this.updateDimensions.bind(this);
         this.connectGraph = this.connectGraph.bind(this);
@@ -272,6 +274,36 @@ class TemplateAnswer extends Component {
         this.context.onTemplateChange('nodes', nodes);
     };
 
+    toggleShowNonanswer = () => {
+        const { nodes } = this.context.template;
+        const { qId } = this.props;
+        if (this.state.showNonanswer) {
+            delete nodes[qId].answerInfo.negEndResponse;
+        } else {
+            nodes[qId].answerInfo = {
+                ...nodes[qId].answerInfo,
+                negEndResponse: '',
+            };
+        }
+        this.setState({
+            showNonanswer: !this.state.showNonanswer,
+        });
+        this.context.onTemplateChange('nodes', nodes);
+    };
+
+    toggleShowPreviewSentence = () => {
+        this.setState({
+            showPreviewSentence: !this.state.showPreviewSentence,
+        });
+        const { nodes } = this.context.template;
+        const { qId } = this.props;
+        nodes[qId].answerInfo = {
+            ...nodes[qId].answerInfo,
+            negEndResponse: '',
+        };
+        this.context.onTemplateChange('nodes', nodes);
+    };
+
     /**
      * Deletes the target option from the node's `answerInfo` and updates the node's response
      * type to BLANK if it was the last remaining option
@@ -361,6 +393,17 @@ class TemplateAnswer extends Component {
         }
         return preview;
     };
+
+    /**
+     * Returns a string preview of the sentence that would be generated. Its
+     * purpose is to give the user an idea of how the options will be rendered,
+     * especially when NONANSWER is used.
+     *
+     * It randomly uses the first half of the options for ANSWER. If no
+     * blanks were provided, nor answers were provided, the placeholder values
+     * are used instead.
+     */
+    getPreviewSentence = () => {};
 
     /**
      * Changes whether the followup questions should be asked when YES or when NO
@@ -607,6 +650,40 @@ class TemplateAnswer extends Component {
                         onChange={this.saveAnswer}
                         answerInfo={nodes[qId].answerInfo}
                         placeholders={placeholders}
+                        responseText='SELECTED'
+                        useNonanswer={this.state.showNonanswer}
+                    />
+                    <Button
+                        basic
+                        size='small'
+                        icon={
+                            this.state.showNonanswer
+                                ? 'minus square outline'
+                                : 'plus square outline'
+                        }
+                        content={
+                            this.state.showNonanswer
+                                ? 'Hide unselected options'
+                                : 'Include unselected options'
+                        }
+                        onClick={this.toggleShowNonanswer}
+                        className='add-option-pop'
+                    />
+                    <Button
+                        basic
+                        size='small'
+                        icon={
+                            this.state.showPreviewSentence
+                                ? 'search minus'
+                                : 'search plus'
+                        }
+                        content={
+                            this.state.showPreviewSentence
+                                ? 'Hide sentence'
+                                : 'Preview sentence'
+                        }
+                        onClick={this.toggleShowPreviewSentence}
+                        className='add-option-pop'
                     />
                 </>
             );

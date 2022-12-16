@@ -14,6 +14,7 @@ export const RESPONSE_PLACEHOLDER = {
     },
     [questionTypes.CLICK_BOXES]: {
         startEg: 'The patient reports',
+        negStartEg: 'and does not report',
         options: ['changes in vision', 'numbness', 'weakness', 'fever'],
     },
     [questionTypes.TIME]: {

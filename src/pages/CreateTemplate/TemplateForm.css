@@ -230,8 +230,21 @@
   width: 80%;
 }
 
+.template-answer .blank-template {
+  display: flex;
+  align-items: center;
+  margin-right: 2rem;
+}
+
 .ui.input.fill-in-the-blank-input {
-  width: 40%;
+  flex-grow: 0.5;
+}
+
+@media (max-width: 600px) {
+  .template-answer .blank-template {
+    display: block;
+  }
+  
 }
 
 .button-option {
