@@ -35,7 +35,9 @@ class TemplateAnswer extends Component {
             showQuestionSelect: false,
             showOptionError: false,
             fetchingImport: false,
-            showNonanswer: false,
+            showNonanswer:
+                'negEndResponse' in
+                context.template.nodes[props.qId].answerInfo,
             showPreviewSentence: false,
         };
         this.updateDimensions = this.updateDimensions.bind(this);
@@ -133,7 +135,6 @@ class TemplateAnswer extends Component {
             // Keep original root if it's an actual question
             if (nodes[id].text !== 'nan') {
                 const rootId = createNodeId(diseaseCode, numQuestions);
-
                 contextNodes[rootId] = {
                     id: rootId,
                     parent,
@@ -288,6 +289,7 @@ class TemplateAnswer extends Component {
         this.setState({
             showNonanswer: !this.state.showNonanswer,
         });
+        updateParent(nodes, qId);
         this.context.onTemplateChange('nodes', nodes);
     };
 
@@ -295,13 +297,6 @@ class TemplateAnswer extends Component {
         this.setState({
             showPreviewSentence: !this.state.showPreviewSentence,
         });
-        const { nodes } = this.context.template;
-        const { qId } = this.props;
-        nodes[qId].answerInfo = {
-            ...nodes[qId].answerInfo,
-            negEndResponse: '',
-        };
-        this.context.onTemplateChange('nodes', nodes);
     };
 
     /**

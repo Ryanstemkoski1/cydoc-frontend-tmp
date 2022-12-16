@@ -37,9 +37,9 @@ const GeneratedSentence = ({
                     <>
                         <span className='answer-label'>UNSELECTED</span>
                         <Input
-                            answer='endResponse'
+                            answer='negEndResponse'
                             className='fill-in-the-blank-input'
-                            value={answerInfo.endResponse}
+                            value={answerInfo.negEndResponse}
                             placeholder={placeholders.negEndEg}
                             onChange={onChange}
                         />
