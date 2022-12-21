@@ -7,7 +7,7 @@ const GeneratedSentence = ({
     placeholders,
     onChange,
     useNonanswer,
-    label = 'Sentence to Generate',
+    label = 'Text to Generate',
     responseText = 'RESPONSE',
 }) => {
     return (
