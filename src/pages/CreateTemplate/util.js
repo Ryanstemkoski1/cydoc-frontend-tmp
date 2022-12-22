@@ -150,14 +150,16 @@ export const setAnswerInfo = (answerInfo, node) => {
         answerInfo.yesResponse = node.blankYes || '';
         answerInfo.noResponse = node.blankNo || '';
     } else if ('startResponse' in answerInfo) {
-        const capturingRegex = /(?<startResponse>.*)\bANSWER\b((?<negStartResponse>.*)(\bNOTANSWER\b(?<negEndResponse>.*))|(?<endResponse>.*))/;
+        const capturingRegex = /(?<startResponse>.*)\bANSWER\b((?<posEndResponse>.*\.)(?<negStartResponse>.*)(\bNOTANSWER\b(?<negEndResponse>.*))|(?<endResponse>.*))/;
         const found = node.blankTemplate.match(capturingRegex);
         if (found) {
             answerInfo.startResponse = found.groups.startResponse || '';
             if (found.groups.endResponse) {
                 answerInfo.endResponse = found.groups.endResponse || '';
             } else {
-                answerInfo.endResponse = found.groups.negStartResponse || '';
+                answerInfo.endResponse = found.groups.posEndResponse || '';
+                answerInfo.negStartResponse =
+                    found.groups.negStartResponse || '';
                 answerInfo.negEndResponse = found.groups.negEndResponse || '';
             }
         }
