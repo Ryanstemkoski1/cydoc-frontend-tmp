@@ -235,6 +235,7 @@
   align-items: center;
   flex-wrap: wrap;
   margin-right: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .template-answer .preview-sentence h4 {

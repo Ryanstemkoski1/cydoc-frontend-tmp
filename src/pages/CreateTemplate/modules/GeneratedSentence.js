@@ -26,26 +26,29 @@ const GeneratedSentence = ({
                     answer='endResponse'
                     className='fill-in-the-blank-input'
                     value={answerInfo.endResponse}
-                    placeholder={
-                        useNonanswer
-                            ? placeholders.negStartEg
-                            : placeholders.endEg
-                    }
+                    placeholder={placeholders.endEg}
                     onChange={onChange}
                 />
-                {useNonanswer && (
-                    <>
-                        <span className='answer-label'>UNSELECTED</span>
-                        <Input
-                            answer='negEndResponse'
-                            className='fill-in-the-blank-input'
-                            value={answerInfo.negEndResponse}
-                            placeholder={placeholders.negEndEg}
-                            onChange={onChange}
-                        />
-                    </>
-                )}
             </div>
+            {useNonanswer && (
+                <div className='blank-template'>
+                    <Input
+                        answer='negStartResponse'
+                        className='fill-in-the-blank-input'
+                        value={answerInfo.negStartResponse}
+                        placeholder={placeholders.negStartEg}
+                        onChange={onChange}
+                    />
+                    <span className='answer-label'>UNSELECTED</span>
+                    <Input
+                        answer='negEndResponse'
+                        className='fill-in-the-blank-input'
+                        value={answerInfo.negEndResponse}
+                        placeholder={placeholders.negEndEg}
+                        onChange={onChange}
+                    />
+                </div>
+            )}
         </>
     );
 };

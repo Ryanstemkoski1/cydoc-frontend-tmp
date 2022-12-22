@@ -283,9 +283,11 @@ class TemplateAnswer extends Component {
         const { qId } = this.props;
         if (this.state.showNonanswer) {
             delete nodes[qId].answerInfo.negEndResponse;
+            delete nodes[qId].answerInfo.negStartResponse;
         } else {
             nodes[qId].answerInfo = {
                 ...nodes[qId].answerInfo,
+                negStartResponse: '',
                 negEndResponse: '',
             };
         }
@@ -410,9 +412,16 @@ class TemplateAnswer extends Component {
         const posOptions = options.slice(0, halfIndex);
         const negOptions = options.slice(halfIndex);
 
-        let joinedTemplate = `${answerInfo.startResponse} ANSWER ${answerInfo.endResponse}`;
+        // Add whitespace and punctuation if missing
+        let joinedTemplate = `${answerInfo.startResponse} ANSWER`;
+        if (answerInfo.endResponse) {
+            joinedTemplate = `${joinedTemplate} ${answerInfo.endResponse}`;
+        }
         if ('negEndResponse' in answerInfo) {
-            joinedTemplate = `${joinedTemplate} NOTANSWER ${answerInfo.negEndResponse}`;
+            if (!joinedTemplate.endsWith('.')) {
+                joinedTemplate += '.';
+            }
+            joinedTemplate = `${joinedTemplate} ${answerInfo.negStartResponse} NOTANSWER ${answerInfo.negEndResponse}`;
         }
         return (
             <div className='preview-sentence'>
@@ -437,7 +446,7 @@ class TemplateAnswer extends Component {
                         aria-label={option}
                     />
                 ))}
-                <h4>Generated sentence:</h4>
+                <h4>Generated text:</h4>
                 <p>
                     {fillAnswers({
                         0: [
