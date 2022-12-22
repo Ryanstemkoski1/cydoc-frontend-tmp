@@ -17,11 +17,22 @@ import {
     addChildrenNodes,
 } from './util';
 import { RESPONSE_PLACEHOLDER } from './placeholders';
-import { Input, Button, Dropdown, Message, List } from 'semantic-ui-react';
+import {
+    Input,
+    Button,
+    Dropdown,
+    Message,
+    List,
+    Accordion,
+    Icon,
+} from 'semantic-ui-react';
 import { graphClient } from 'constants/api';
 import ToggleButton from 'components/tools/ToggleButton';
 import { joinLists } from 'pages/EditNote/content/generatenote/notesections/HPINote';
-import { fillAnswers } from 'pages/EditNote/content/generatenote/generateHpiText';
+import {
+    capitalize,
+    fillAnswers,
+} from 'pages/EditNote/content/generatenote/generateHpiText';
 const MIN_OPTIONS = 2;
 
 class TemplateAnswer extends Component {
@@ -423,38 +434,44 @@ class TemplateAnswer extends Component {
             }
             joinedTemplate = `${joinedTemplate} ${answerInfo.negStartResponse} NOTANSWER ${answerInfo.negEndResponse}`;
         }
+        const posButtons = posOptions.map((option, i) => (
+            <ToggleButton
+                active={true}
+                disabled={true}
+                key={i}
+                title={option}
+                condition={option}
+                aria-label={option}
+            />
+        ));
+        const negButtons = negOptions.map((option, i) => (
+            <ToggleButton
+                active={false}
+                disabled={true}
+                key={posOptions.length + i}
+                title={option}
+                condition={option}
+                aria-label={option}
+            />
+        ));
+        /* eslint-disable no-console */
+        console.log(posOptions, negOptions, posButtons, negButtons);
         return (
             <div className='preview-sentence'>
                 <h4>{nodes[qId].text}</h4>
-                {posOptions.map((option) => (
-                    <ToggleButton
-                        active={true}
-                        disabled={true}
-                        key={option}
-                        title={option}
-                        condition={option}
-                        aria-label={option}
-                    />
-                ))}
-                {negOptions.map((option) => (
-                    <ToggleButton
-                        active={false}
-                        disabled={true}
-                        key={option}
-                        title={option}
-                        condition={option}
-                        aria-label={option}
-                    />
-                ))}
+                {posButtons}
+                {negButtons}
                 <h4>Generated text:</h4>
                 <p>
-                    {fillAnswers({
-                        0: [
-                            joinedTemplate,
-                            joinLists(posOptions, 'and'),
-                            joinLists(negOptions, 'or'),
-                        ],
-                    })}
+                    {capitalize(
+                        fillAnswers({
+                            0: [
+                                joinedTemplate,
+                                joinLists(posOptions, 'and'),
+                                joinLists(negOptions, 'or'),
+                            ],
+                        })
+                    )}
                 </p>
             </div>
         );
@@ -725,25 +742,20 @@ class TemplateAnswer extends Component {
                         onClick={this.toggleShowNonanswer}
                         className='add-option-pop'
                     />
-                    <Button
-                        basic
-                        size='small'
-                        active={this.state.showPreviewSentence}
-                        icon={
-                            this.state.showPreviewSentence
-                                ? 'search minus'
-                                : 'search plus'
-                        }
-                        content={
-                            this.state.showPreviewSentence
-                                ? 'Hide sentence'
-                                : 'Preview sentence'
-                        }
-                        onClick={this.toggleShowPreviewSentence}
-                        className='add-option-pop'
-                    />
-                    {this.state.showPreviewSentence &&
-                        this.getPreviewSentence()}
+                    <Accordion className='preview-sentence'>
+                        <Accordion.Title
+                            active={this.state.showPreviewSentence}
+                            onClick={this.toggleShowPreviewSentence}
+                        >
+                            <Icon name='dropdown' />
+                            Preview
+                        </Accordion.Title>
+                        <Accordion.Content
+                            active={this.state.showPreviewSentence}
+                        >
+                            {this.getPreviewSentence()}
+                        </Accordion.Content>
+                    </Accordion>
                 </>
             );
         } else if (

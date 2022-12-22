@@ -226,6 +226,10 @@
   padding-right: 1.4rem;
 }
 
+.preview-sentence .title {
+  border-left: 0;
+}
+
 .ui.input.yes-no-input {
   width: 80%;
 }
