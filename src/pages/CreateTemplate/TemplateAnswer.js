@@ -422,9 +422,12 @@ class TemplateAnswer extends Component {
         const halfIndex = Math.ceil(options.length / 2);
         const posOptions = options.slice(0, halfIndex);
         const negOptions = options.slice(halfIndex);
+        const placeholders = RESPONSE_PLACEHOLDER[nodes[qId].responseType];
 
         // Add whitespace and punctuation if missing
-        let joinedTemplate = `${answerInfo.startResponse} ANSWER`;
+        let joinedTemplate = `${
+            answerInfo.startResponse || placeholders.startEg
+        } ANSWER`;
         if (answerInfo.endResponse) {
             joinedTemplate = `${joinedTemplate} ${answerInfo.endResponse}`;
         }
@@ -432,7 +435,9 @@ class TemplateAnswer extends Component {
             if (!joinedTemplate.endsWith('.')) {
                 joinedTemplate += '.';
             }
-            joinedTemplate = `${joinedTemplate} ${answerInfo.negStartResponse} NOTANSWER ${answerInfo.negEndResponse}`;
+            joinedTemplate = `${joinedTemplate} ${
+                answerInfo.negStartResponse || placeholders.negStartEg
+            } NOTANSWER ${answerInfo.negEndResponse}`;
         }
         const posButtons = posOptions.map((option, i) => (
             <ToggleButton
@@ -721,24 +726,8 @@ class TemplateAnswer extends Component {
                         answerInfo={nodes[qId].answerInfo}
                         placeholders={placeholders}
                         responseText='SELECTED'
+                        toggleNonanswer={this.toggleShowNonanswer}
                         useNonanswer={this.state.showNonanswer}
-                    />
-                    <Button
-                        basic
-                        size='small'
-                        active={this.state.showNonanswer}
-                        icon={
-                            this.state.showNonanswer
-                                ? 'minus square outline'
-                                : 'plus square outline'
-                        }
-                        content={
-                            this.state.showNonanswer
-                                ? 'Hide unselected options'
-                                : 'Include unselected options'
-                        }
-                        onClick={this.toggleShowNonanswer}
-                        className='add-option-pop'
                     />
                     <Accordion className='preview-sentence'>
                         <Accordion.Title

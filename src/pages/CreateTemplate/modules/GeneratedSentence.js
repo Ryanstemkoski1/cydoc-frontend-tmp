@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from 'semantic-ui-react';
+import { Input, Button } from 'semantic-ui-react';
 import '../TemplateForm.css';
 
 const GeneratedSentence = ({
@@ -7,6 +7,7 @@ const GeneratedSentence = ({
     placeholders,
     onChange,
     useNonanswer,
+    toggleNonanswer,
     label = 'Text to Generate',
     responseText = 'RESPONSE',
 }) => {
@@ -30,8 +31,8 @@ const GeneratedSentence = ({
                     onChange={onChange}
                 />
             </div>
-            {useNonanswer && (
-                <div className='blank-template'>
+            {useNonanswer ? (
+                <div className='blank-template compact'>
                     <Input
                         answer='negStartResponse'
                         className='fill-in-the-blank-input'
@@ -47,7 +48,22 @@ const GeneratedSentence = ({
                         placeholder={placeholders.negEndEg}
                         onChange={onChange}
                     />
+                    <Button
+                        basic
+                        circular
+                        size='small'
+                        icon='remove'
+                        onClick={toggleNonanswer}
+                    />
                 </div>
+            ) : (
+                <Button
+                    basic
+                    circular
+                    size='small'
+                    icon='add'
+                    onClick={toggleNonanswer}
+                />
             )}
         </>
     );
