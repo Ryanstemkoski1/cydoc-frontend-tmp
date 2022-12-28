@@ -454,8 +454,6 @@ class TemplateAnswer extends Component {
                 aria-label={option}
             />
         ));
-        /* eslint-disable no-console */
-        console.log(posOptions, negOptions, posButtons, negButtons);
         return (
             <div className='preview-sentence'>
                 <h4>{nodes[qId].text}</h4>

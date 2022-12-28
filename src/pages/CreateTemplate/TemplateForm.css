@@ -220,6 +220,8 @@
   border-radius: .5rem;
   letter-spacing: 0;
   font-weight: bold;
+  width: 124px;
+  text-align: center;
 }
 
 .answer-label-if-no {
