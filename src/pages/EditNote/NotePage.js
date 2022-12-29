@@ -213,7 +213,7 @@ class NotePage extends Component {
                         step={-1}
                         continue={this.continueHPITab}
                         back={this.backHPITab}
-                        activeTab={this.state.activeHPI}
+                        activeTab={this.state.activeHPI ? this.state.activeHPI : Object.keys(this.props.chiefComplaints)[0]}
                         onTabClick={this.setHPITab}
                     />
                 );
@@ -233,7 +233,7 @@ class NotePage extends Component {
                         }
                         continue={this.continueHPITab}
                         back={this.backHPITab}
-                        activeTab={this.state.activeHPI}
+                        activeTab={this.state.activeHPI ? this.state.activeHPI : Object.keys(this.props.chiefComplaints)[0]}
                         onTabClick={this.setHPITab}
                     />
                 ) : (
