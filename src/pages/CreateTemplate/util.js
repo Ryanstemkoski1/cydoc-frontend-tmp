@@ -143,6 +143,31 @@ export const parsePlaceholder = (text, category) => {
 };
 
 /**
+ * Adds blank{Yes, No, Template} to the appropriate fields in answerInfo
+ */
+export const setAnswerInfo = (answerInfo, node) => {
+    if ('yesResponse' in answerInfo) {
+        answerInfo.yesResponse = node.blankYes || '';
+        answerInfo.noResponse = node.blankNo || '';
+    } else if ('startResponse' in answerInfo) {
+        const capturingRegex = /(?<startResponse>.*)\bANSWER\b((?<posEndResponse>.*\.)(?<negStartResponse>.*)(\bNOTANSWER\b(?<negEndResponse>.*))|(?<endResponse>.*))/;
+        const found = node.blankTemplate.match(capturingRegex);
+        if (found) {
+            answerInfo.startResponse = found.groups.startResponse || '';
+            if (found.groups.endResponse) {
+                answerInfo.endResponse = found.groups.endResponse || '';
+            } else {
+                answerInfo.endResponse = found.groups.posEndResponse || '';
+                answerInfo.negStartResponse =
+                    found.groups.negStartResponse || '';
+                answerInfo.negEndResponse = found.groups.negEndResponse || '';
+            }
+        }
+    }
+    return answerInfo;
+};
+
+/**
  * Adds all direct children question of the given parent directly
  * to the graph object itself.
  *
@@ -172,6 +197,7 @@ export const addChildrenNodes = (
         let responseType = nodes[nodeId].responseType;
         let text = nodes[nodeId].text;
         let answerInfo = getAnswerInfo(responseType);
+        answerInfo = setAnswerInfo(answerInfo, nodes[nodeId]);
 
         // Preprocess the text to prepopulate the answerinfo if necessary
         // or replace instances of SYMPTOM and DISEASE

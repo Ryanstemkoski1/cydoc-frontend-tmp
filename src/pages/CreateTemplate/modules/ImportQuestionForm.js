@@ -7,6 +7,7 @@ import {
     createNodeId,
     parseQuestionText,
     parsePlaceholder,
+    setAnswerInfo,
 } from '../util';
 import { Button, Modal, List, Checkbox, Loader } from 'semantic-ui-react';
 class ImportQuestionForm extends Component {
@@ -40,6 +41,7 @@ class ImportQuestionForm extends Component {
             let answerInfo = getAnswerInfo(responseType);
             text = parsePlaceholder(text, otherGraph);
             text = parseQuestionText(responseType, text, answerInfo, category);
+            answerInfo = setAnswerInfo(answerInfo, node);
 
             return {
                 ...node,

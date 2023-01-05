@@ -220,18 +220,51 @@
   border-radius: .5rem;
   letter-spacing: 0;
   font-weight: bold;
+  width: 124px;
+  text-align: center;
 }
 
 .answer-label-if-no {
   padding-right: 1.4rem;
 }
 
+.preview-sentence .title {
+  border-left: 0;
+}
+
 .ui.input.yes-no-input {
   width: 80%;
 }
 
+.template-answer .blank-template {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-right: 2.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.template-answer .blank-template.compact {
+  margin-right: 0;
+}
+
+.blank-template .ui.button.icon {
+  margin-left: 4px;
+}
+
+.template-answer .preview-sentence h4 {
+  margin: 1rem 0 0.5rem 0;
+}
+
 .ui.input.fill-in-the-blank-input {
-  width: 40%;
+  flex-grow: 0.5;
+}
+
+@media (max-width: 600px) {
+  .template-answer .blank-template {
+    display: block;
+  }
+  
 }
 
 .button-option {
