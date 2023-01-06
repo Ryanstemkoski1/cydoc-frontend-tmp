@@ -17,8 +17,22 @@ import {
     addChildrenNodes,
 } from './util';
 import { RESPONSE_PLACEHOLDER } from './placeholders';
-import { Input, Button, Dropdown, Message, List } from 'semantic-ui-react';
+import {
+    Input,
+    Button,
+    Dropdown,
+    Message,
+    List,
+    Accordion,
+    Icon,
+} from 'semantic-ui-react';
 import { graphClient } from 'constants/api';
+import ToggleButton from 'components/tools/ToggleButton';
+import { joinLists } from 'pages/EditNote/content/generatenote/notesections/HPINote';
+import {
+    capitalize,
+    fillAnswers,
+} from 'pages/EditNote/content/generatenote/generateHpiText';
 const MIN_OPTIONS = 2;
 
 class TemplateAnswer extends Component {
@@ -35,6 +49,10 @@ class TemplateAnswer extends Component {
             showQuestionSelect: false,
             showOptionError: false,
             fetchingImport: false,
+            showNonanswer:
+                'negEndResponse' in
+                context.template.nodes[props.qId].answerInfo,
+            showPreviewSentence: false,
         };
         this.updateDimensions = this.updateDimensions.bind(this);
         this.connectGraph = this.connectGraph.bind(this);
@@ -96,9 +114,7 @@ class TemplateAnswer extends Component {
         const medID = Object.values(parentNodes[category])[0];
         // Skip roots already cached in the context
         if (!(medID in cydocGraphs.graph)) {
-            const res = await graphClient.get(
-                `/graph/connected/node/${medID}/4`
-            );
+            const res = await graphClient.get(`/graph/subgraph/${medID}/4`);
             this.context.addCydocGraphs(res.data);
         }
         return medID;
@@ -133,7 +149,6 @@ class TemplateAnswer extends Component {
             // Keep original root if it's an actual question
             if (nodes[id].text !== 'nan') {
                 const rootId = createNodeId(diseaseCode, numQuestions);
-
                 contextNodes[rootId] = {
                     id: rootId,
                     parent,
@@ -274,6 +289,32 @@ class TemplateAnswer extends Component {
         this.context.onTemplateChange('nodes', nodes);
     };
 
+    toggleShowNonanswer = () => {
+        const { nodes } = this.context.template;
+        const { qId } = this.props;
+        if (this.state.showNonanswer) {
+            delete nodes[qId].answerInfo.negEndResponse;
+            delete nodes[qId].answerInfo.negStartResponse;
+        } else {
+            nodes[qId].answerInfo = {
+                ...nodes[qId].answerInfo,
+                negStartResponse: '',
+                negEndResponse: '',
+            };
+        }
+        this.setState({
+            showNonanswer: !this.state.showNonanswer,
+        });
+        updateParent(nodes, qId);
+        this.context.onTemplateChange('nodes', nodes);
+    };
+
+    toggleShowPreviewSentence = () => {
+        this.setState({
+            showPreviewSentence: !this.state.showPreviewSentence,
+        });
+    };
+
     /**
      * Deletes the target option from the node's `answerInfo` and updates the node's response
      * type to BLANK if it was the last remaining option
@@ -362,6 +403,81 @@ class TemplateAnswer extends Component {
                 break;
         }
         return preview;
+    };
+
+    /**
+     * Returns a string preview of the sentence that would be generated. Its
+     * purpose is to give the user an idea of how the options will be rendered,
+     * especially when NONANSWER is used.
+     *
+     * It randomly uses the first half of the options for ANSWER. If no
+     * blanks were provided, nor answers were provided, the placeholder values
+     * are used instead.
+     */
+    getPreviewSentence = () => {
+        const { nodes } = this.context.template;
+        const { qId } = this.props;
+        const { answerInfo } = nodes[qId];
+        const options = nodes[qId].answerInfo.options;
+        const halfIndex = Math.ceil(options.length / 2);
+        const posOptions = options.slice(0, halfIndex);
+        const negOptions = options.slice(halfIndex);
+        const placeholders = RESPONSE_PLACEHOLDER[nodes[qId].responseType];
+
+        // Add whitespace and punctuation if missing
+        let joinedTemplate = `${
+            answerInfo.startResponse || placeholders.startEg
+        } ANSWER`;
+        if (answerInfo.endResponse) {
+            joinedTemplate = `${joinedTemplate} ${answerInfo.endResponse}`;
+        }
+        if ('negEndResponse' in answerInfo) {
+            if (!joinedTemplate.endsWith('.')) {
+                joinedTemplate += '.';
+            }
+            joinedTemplate = `${joinedTemplate} ${
+                answerInfo.negStartResponse || placeholders.negStartEg
+            } NOTANSWER ${answerInfo.negEndResponse}`;
+        }
+        const posButtons = posOptions.map((option, i) => (
+            <ToggleButton
+                active={true}
+                disabled={true}
+                key={i}
+                title={option}
+                condition={option}
+                aria-label={option}
+            />
+        ));
+        const negButtons = negOptions.map((option, i) => (
+            <ToggleButton
+                active={false}
+                disabled={true}
+                key={posOptions.length + i}
+                title={option}
+                condition={option}
+                aria-label={option}
+            />
+        ));
+        return (
+            <div className='preview-sentence'>
+                <h4>{nodes[qId].text}</h4>
+                {posButtons}
+                {negButtons}
+                <h4>Generated text:</h4>
+                <p>
+                    {capitalize(
+                        fillAnswers({
+                            0: [
+                                joinedTemplate,
+                                joinLists(posOptions, 'and'),
+                                joinLists(negOptions, 'or'),
+                            ],
+                        })
+                    )}
+                </p>
+            </div>
+        );
     };
 
     /**
@@ -609,7 +725,24 @@ class TemplateAnswer extends Component {
                         onChange={this.saveAnswer}
                         answerInfo={nodes[qId].answerInfo}
                         placeholders={placeholders}
+                        responseText='SELECTED'
+                        toggleNonanswer={this.toggleShowNonanswer}
+                        useNonanswer={this.state.showNonanswer}
                     />
+                    <Accordion className='preview-sentence'>
+                        <Accordion.Title
+                            active={this.state.showPreviewSentence}
+                            onClick={this.toggleShowPreviewSentence}
+                        >
+                            <Icon name='dropdown' />
+                            Preview
+                        </Accordion.Title>
+                        <Accordion.Content
+                            active={this.state.showPreviewSentence}
+                        >
+                            {this.getPreviewSentence()}
+                        </Accordion.Content>
+                    </Accordion>
                 </>
             );
         } else if (

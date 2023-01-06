@@ -23,4 +23,6 @@ jobs:
         CI: false
     - name: Run lint checks
       run: npm run lint
+    - name: Run unit tests
+      run: npm run test-ci
       
