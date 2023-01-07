@@ -36,7 +36,7 @@ export const initialReviewOfSystemsState: ReviewOfSystemsState = {
         Diarrhea: YesNoResponse.None,
         Constipation: YesNoResponse.None,
     },
-    Genitourinary: {
+    Urinary: {
         Dysuria: YesNoResponse.None,
         'Urinary frequency': YesNoResponse.None,
         Hematuria: YesNoResponse.None,
