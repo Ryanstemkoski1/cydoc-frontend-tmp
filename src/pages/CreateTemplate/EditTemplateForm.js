@@ -189,22 +189,22 @@ class EditTemplateForm extends Component {
             graph,
             bodySystem,
             graphID,
+            root: originalRoot,
         } = this.context.template;
-        let { root } = this.context.template;
         const { doctorID } = this.context;
         this.setState({ showDimmer: true });
 
         const updatedEdges = {};
         const updatedNodes = {};
         const updatedGraph = {};
-        const rootSuffix = root.slice(3);
         const templateErrors = {
             bodySystemEmpty: bodySystem.length === 0,
             diseaseEmpty: disease.length === 0,
             emptyQuestion: false,
         };
         let diseaseCode = diseaseCodes[disease] || disease.slice(0, 3);
-        root = diseaseCode + rootSuffix;
+        const rootSuffix = originalRoot.slice(3);
+        const root = diseaseCode + rootSuffix;
 
         // Update all edge's `to`/`from` keys to match current disease
         for (let [key, edge] of Object.entries(edges)) {
@@ -216,7 +216,7 @@ class EditTemplateForm extends Component {
             // Otherwise, if the sink node has not changed, make sure to use the old ID.
             // There'll never exist an edge from an old to new because adding a new child
             // is considered altering the original, leading to `hasChanged = false`.
-            if (!edge.from.endsWith(rootSuffix) && !nodes[edge.to].hasChanged) {
+            if (edge.from !== originalRoot && !nodes[edge.to].hasChanged) {
                 to = nodes[edge.to].originalId;
             } else {
                 to = edge.to.startsWith(diseaseCode)
@@ -233,7 +233,7 @@ class EditTemplateForm extends Component {
         let fromOrder = { [root]: 1 };
         for (let [key, children] of Object.entries(graph)) {
             // Skip over unchanged nodes
-            if (!key.endsWith(rootSuffix) && !nodes[key].hasChanged) {
+            if (key !== originalRoot && !nodes[key].hasChanged) {
                 continue;
             }
             const id = key.startsWith(diseaseCode)
@@ -247,10 +247,7 @@ class EditTemplateForm extends Component {
             let skipped = 0;
             children.forEach((edgeID, idx) => {
                 let edge = edges[edgeID];
-                if (
-                    !edge.from.endsWith(rootSuffix) &&
-                    !nodes[edge.to].hasChanged
-                ) {
+                if (edge.from !== originalRoot && !nodes[edge.to].hasChanged) {
                     skipped++;
                     updatedEdges[edgeID].toQuestionOrder = -1;
                     updatedEdges[edgeID].fromQuestionOrder = -1;
@@ -269,7 +266,7 @@ class EditTemplateForm extends Component {
 
         // Filter out unchanged nodes and update its attributes accordingly
         for (let [key, data] of Object.entries(nodes)) {
-            if (!key.endsWith(rootSuffix) && !data.hasChanged) {
+            if (key !== originalRoot && !data.hasChanged) {
                 continue;
             }
             data = { ...data };
@@ -278,21 +275,26 @@ class EditTemplateForm extends Component {
                 break;
             }
 
-            if (
-                data.text.startsWith('Root') &&
-                data.text.endsWith(NAN_QUESTION_TEXT)
-            ) {
+            // modify the blanks and text based on the response type
+            const isRootNode =
+                (data.text.startsWith('Root') &&
+                    data.text.endsWith(NAN_QUESTION_TEXT)) ||
+                key === originalRoot;
+            if (isRootNode) {
                 data.text = 'nan';
-            }
-
-            if (
-                data.responseType === 'CLICK-BOXES' ||
-                data.responseType.endsWith('-POP')
-            ) {
+            } else if (data.answerInfo?.options?.length) {
                 data.text += ` CLICK[${data.answerInfo.options.join(', ')}]`;
-            } /* else if (data.answerInfo?.startResponse) {
-                // TODO: When backend permits encode the fill in the blanks
-            } */
+            }
+            if (data.answerInfo?.yesResponse) {
+                const { yesResponse = '', noResponse = '' } =
+                    data.answerInfo || {};
+                data.blankYes = yesResponse;
+                data.blankNo = noResponse;
+            } else if (data.answerInfo?.startResponse) {
+                const { startResponse = '', endResponse = '' } =
+                    data.answerInfo || {};
+                data.blankTemplate = startResponse + ' ANSWER ' + endResponse;
+            }
 
             const doctorCreated = data.hasChanged
                 ? doctorID
@@ -315,13 +317,16 @@ class EditTemplateForm extends Component {
             updatedNodes[key] = {
                 bodySystem,
                 noteSection: 'HPI',
-                category: disease,
-                doctorView: '',
-                patientView: '',
+                category: this.state.categoryMap[disease] || disease,
+                doctorView: disease,
+                patientView: disease,
+                // backend requires the following default values. question
+                // types that use these fields will get the value from `data`
                 blankTemplate: '',
                 blankYes: '',
                 blankNo: '',
-                ...data, // original values of the above keys hold higher precedence
+                // original values of the above keys hold higher precedence
+                ...data,
                 doctorCreated,
                 medID: key,
             };
