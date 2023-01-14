@@ -549,24 +549,6 @@ describe('MedicalHistoryContent', () => {
     //     currentNoteStore.dispatch(deleteNote());
     // });
 
-    // test('disease name is standardized with synonym', () => {
-    //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
-    //             <MedicalHistoryContent />
-    //         </Provider>
-    //     );
-    //     wrapper
-    //         .find('input[placeholder="Condition"]')
-    //         .first()
-    //         .simulate('change', {
-    //             target: { value: 'heart attack' },
-    //         });
-    //     wrapper.update();
-    //     expect(
-    //         wrapper.find('input[placeholder="Condition"]').first().props().value
-    //     ).toEqual('myocardial infarction');
-    //     currentNoteStore.dispatch(deleteNote());
-    // });
 
     // // TODO: Fix below tests
     // test('desktop year validation', () => {
