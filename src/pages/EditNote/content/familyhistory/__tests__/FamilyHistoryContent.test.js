@@ -10,8 +10,6 @@ import FamilyHistoryDropdown from '../FamilyHistoryDropdown';
 import { FAMILY_HISTORY_ACTION } from 'redux/actions/actionTypes';
 import ConditionInput from 'components/tools/ConditionInput';
 import FamilyHistoryBlock from '../FamilyHistoryBlock';
-import { currentNoteStore } from 'redux/store';
-import { deleteNote } from 'redux/actions/currentNoteActions';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 

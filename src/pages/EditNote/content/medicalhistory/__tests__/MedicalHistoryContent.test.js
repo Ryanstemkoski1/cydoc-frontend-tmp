@@ -11,8 +11,6 @@ import { MEDICAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
 import ConditionInput from 'components/tools/ConditionInput';
 // import MedicalHistoryNoteItem from '../MedicalHistoryNoteItem';
 import MedicalHistoryNoteRow from '../MedicalHistoryNoteRow';
-import { currentNoteStore } from 'redux/store';
-import { deleteNote } from 'redux/actions/currentNoteActions';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
@@ -549,7 +547,6 @@ describe('MedicalHistoryContent', () => {
     //     currentNoteStore.dispatch(deleteNote());
     // });
 
-
     // // TODO: Fix below tests
     // test('desktop year validation', () => {
     //     const wrapper = mount(
@@ -557,7 +554,7 @@ describe('MedicalHistoryContent', () => {
     //             <MedicalHistoryContent />
     //         </Provider>
     //     );
-    //     expect(wrapper.find(MedicalHistoryNoteRow)).toHaveLength(0);
+    //     expect(wrapper.findF(MedicalHistoryNoteRow)).toHaveLength(0);
     //     wrapper.find('button').simulate('click');
     //     wrapper.update();
     //     expect(wrapper.find(MedicalHistoryNoteRow)).toHaveLength(1);

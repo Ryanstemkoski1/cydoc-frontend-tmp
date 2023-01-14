@@ -108,21 +108,38 @@ class LandingPageOld extends Component {
                 </div>
             </div>
         ) : (
-            <div
-                className='landing-box landing-col'
-                onClick={() => this.handleNewNoteClick(false)}
-            >
-                <Icon
-                    name='file alternate outline'
-                    size='huge'
-                    className='icons'
-                ></Icon>
-                <h3 className='text'>Create New Note</h3>
-                <br />
-                <p className='smaller-text'>
-                    Write a note for a patient encounter
-                </p>
-            </div>
+            <>
+                <div
+                    className='landing-box top'
+                    onClick={() => this.handleNewNoteClick(false)}
+                >
+                    <Icon
+                        name='file alternate outline'
+                        size='large'
+                        className='icons'
+                    ></Icon>
+                    <h3 className='text'>Create New Note</h3>
+                    <br />
+                    <p className='smaller-text'>
+                        Write a note for a patient encounter
+                    </p>
+                </div>
+                <div
+                    className='landing-box bottom'
+                    onClick={() => this.handleNewNoteClick(false)}
+                >
+                    <Icon
+                        name='file alternate outline'
+                        size='large'
+                        className='icons'
+                    ></Icon>
+                    <h3 className='text'>Create New Note</h3>
+                    <br />
+                    <p className='smaller-text'>
+                        Write a note for a patient encounter
+                    </p>
+                </div>
+            </>
         );
 
         const mobileReturnButton = noteExists && (
