@@ -11,7 +11,6 @@ import { MEDICAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
 import ConditionInput from 'components/tools/ConditionInput';
 // import MedicalHistoryNoteItem from '../MedicalHistoryNoteItem';
 import MedicalHistoryNoteRow from '../MedicalHistoryNoteRow';
-
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const mockStore = configureStore([]);
@@ -568,7 +567,7 @@ describe('MedicalHistoryContent', () => {
     //     ).toEqual('0');
     //     expect(wrapper.find('.year-validation-mobile-error')).toHaveLength(1);
     //     currentNoteStore.dispatch(deleteNote());
-    // });
+    // })
 
     // test('mobile year validation', () => {
     //     const props = {
