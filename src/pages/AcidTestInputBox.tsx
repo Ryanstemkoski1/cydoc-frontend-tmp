@@ -16,7 +16,7 @@ const AcidTestInputBox: React.FC<Props> = () => {
               type="number"
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              style={{ width: '100px'}}
+              style={{ width: '120px'}}
             />
             <div style={{ fontSize: '12px', color: 'grey', paddingLeft: '2px', paddingBottom: '12px', textAlign: 'start'}}>
               bro

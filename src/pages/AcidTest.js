@@ -14,17 +14,51 @@ const AcidTest = () => {
   return(
   <>
   <Menu className='nav-menu'>
-                    <Menu.Item className='logo-menu' onClick={navigateToHome}>
-                        <Image
-                            src={Logo}
-                            className='logo-circle'
-                        />
-                    </Menu.Item>
-            </Menu>
-  <div className="ui container">
-  <AcidTestInputBox label=''/>
-  <AcidTestInputBox label=''/>
-  </div>
+    <Menu.Item className='logo-menu' onClick={navigateToHome}>
+      <Image
+          src={Logo}
+          className='logo-circle'
+      />
+    </Menu.Item>
+  </Menu>
+  <div style={{
+      display: 'flex',
+      height: '100vh',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}>
+      <div style={{
+        width: '42%',
+        height: '94%',
+        backgroundColor: '#fff',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        float: 'left',
+      }}>
+        <div className="ui container" style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column'
+        }}>
+          <AcidTestInputBox label=''/>
+          <AcidTestInputBox label=''/>
+          <AcidTestInputBox label=''/>
+          <AcidTestInputBox label=''/>
+          <AcidTestInputBox label=''/>
+          <AcidTestInputBox label=''/>
+        </div>
+      </div>
+      <div style={{
+        width: '42%',
+        height: '94%',
+        backgroundColor: '#fff',
+        float: 'right'
+      }}>
+        Right Content
+      </div>
+    </div>
   </>
   );
 }
