@@ -55,6 +55,12 @@ class LandingPageOld extends Component {
         });
     };
 
+    handleAcidTestClick = () => {
+        this.setState({
+            redirect: 'ACID_TEST',
+        });
+    };
+
     // switches to new note under user's confirmation if prompt is true
     handleNewNoteClick = (prompt) => {
         const toDelete =
@@ -95,7 +101,7 @@ class LandingPageOld extends Component {
                     <Icon
                         name='file alternate outline'
                         size='large'
-                        class='icons'
+                        className='icons'
                     />
                     <h3 className='text'>Return to Active Note</h3>
                 </div>
@@ -106,22 +112,34 @@ class LandingPageOld extends Component {
                     <Icon name='file outline' size='large' class='icons' />
                     <h3 className='text'>Create New Blank Note</h3>
                 </div>
+                <div
+                    className='landing-box bottom'
+                    onClick={() => this.handleAcidTestClick()}
+                >
+                    <Icon name='file outline' size='large' class='icons' />
+                    <h3 className='text'>Do acid test!</h3>
+                </div>
             </div>
         ) : (
-            <div
-                className='landing-box landing-col'
-                onClick={() => this.handleNewNoteClick(false)}
-            >
-                <Icon
-                    name='file alternate outline'
-                    size='huge'
-                    className='icons'
-                ></Icon>
-                <h3 className='text'>Create New Note</h3>
-                <br />
-                <p className='smaller-text'>
-                    Write a note for a patient encounter
-                </p>
+            <div className='landing-col multiple'>
+                <div
+                    className='landing-box top'
+                    onClick={this.handleEditNoteClick}
+                >
+                    <Icon
+                        name='file alternate outline'
+                        size='large'
+                        class='icons'
+                    />
+                    <h3 className='text'>Return twaDSFo Active Note</h3>
+                </div>
+                <div
+                    className='landing-box bottom'
+                    onClick={() => this.handleNewNoteClick(true)}
+                >
+                    <Icon name='file outline' size='large' class='icons' />
+                    <h3 className='text'>Do an acid test!</h3>
+                </div>
             </div>
         );
 
@@ -153,6 +171,9 @@ class LandingPageOld extends Component {
 
             case 'EDIT_HPI':
                 return <Redirect to='/templates/old' />;
+
+            case 'ACID_TEST':
+                return <Redirect to='/acid-test' />;
 
             default:
                 return (
