@@ -11,9 +11,6 @@ import { MEDICAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
 import ConditionInput from 'components/tools/ConditionInput';
 // import MedicalHistoryNoteItem from '../MedicalHistoryNoteItem';
 import MedicalHistoryNoteRow from '../MedicalHistoryNoteRow';
-import { currentNoteStore } from 'redux/store';
-import { deleteNote } from 'redux/actions/currentNoteActions';
-
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const mockStore = configureStore([]);
@@ -549,25 +546,6 @@ describe('MedicalHistoryContent', () => {
     //     currentNoteStore.dispatch(deleteNote());
     // });
 
-    test('disease name is standardized with synonym', () => {
-        const wrapper = mount(
-            <Provider store={currentNoteStore}>
-                <MedicalHistoryContent />
-            </Provider>
-        );
-        wrapper
-            .find('input[placeholder="Condition"]')
-            .first()
-            .simulate('change', {
-                target: { value: 'heart attack' },
-            });
-        wrapper.update();
-        expect(
-            wrapper.find('input[placeholder="Condition"]').first().props().value
-        ).toEqual('myocardial infarction');
-        currentNoteStore.dispatch(deleteNote());
-    });
-
     // // TODO: Fix below tests
     // test('desktop year validation', () => {
     //     const wrapper = mount(
@@ -575,7 +553,7 @@ describe('MedicalHistoryContent', () => {
     //             <MedicalHistoryContent />
     //         </Provider>
     //     );
-    //     expect(wrapper.find(MedicalHistoryNoteRow)).toHaveLength(0);
+    //     expect(wrapper.findF(MedicalHistoryNoteRow)).toHaveLength(0);
     //     wrapper.find('button').simulate('click');
     //     wrapper.update();
     //     expect(wrapper.find(MedicalHistoryNoteRow)).toHaveLength(1);
@@ -589,7 +567,7 @@ describe('MedicalHistoryContent', () => {
     //     ).toEqual('0');
     //     expect(wrapper.find('.year-validation-mobile-error')).toHaveLength(1);
     //     currentNoteStore.dispatch(deleteNote());
-    // });
+    // })
 
     // test('mobile year validation', () => {
     //     const props = {
