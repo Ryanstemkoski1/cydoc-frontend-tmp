@@ -12,9 +12,9 @@
  * calculations if HCO3 is lower or PCO2 is higher than those values.
  */
  function simpleAcidBase(pH, HCO3, PCO2) {
-    var primary = "";
-    var secondary = ""; // for metabolic or acute respiratory process
-    var secondary_chronic = ""; // for chronic respiratory process
+    let primary = "";
+    let secondary = ""; // for metabolic or acute respiratory process
+    let secondary_chronic = ""; // for chronic respiratory process
 
     if (pH < 7.35) {
         console.log("pH of "+pH.toString()+" is < 7.35. Acidemia: primary disorder is acidosis.");
@@ -25,8 +25,8 @@
             primary = "metabolic acidosis";
 
             // Calculate expected compensation for metabolic acidosis
-            mtAcidPCO2ExpLow = (1.5*HCO3) + 8 - 2;
-            mtAcidPCO2ExpHigh = (1.5*HCO3) + 8 + 2;
+            let mtAcidPCO2ExpLow = (1.5*HCO3) + 8 - 2;
+            let mtAcidPCO2ExpHigh = (1.5*HCO3) + 8 + 2;
             console.log("For primary metabolic acidosis, expected PCO2 is (1.5*HCO3) + 8 +/- 2 = "+mtAcidPCO2ExpLow.toString()+" to "+mtAcidPCO2ExpHigh.toString());
 
             if (PCO2 < mtAcidPCO2ExpLow) {
@@ -47,7 +47,7 @@
             primary = "respiratory acidosis";
 
             // Calculate expected compensation for acute respiratory acidosis
-            rsAcidHCO3ExpAcute = 24 + (0.1*(PCO2 - 40));
+            let rsAcidHCO3ExpAcute = 24 + (0.1*(PCO2 - 40));
             console.log("For acute respiratory acidosis, expected HCO3 is 24 + (0.1*(PCO2-40)) = "+rsAcidHCO3ExpAcute.toString());
         
             if (HCO3 < rsAcidHCO3ExpAcute) {
@@ -62,7 +62,7 @@
             }
 
             // Calculate expected compensation for chronic respiratory acidosis
-            rsAcidHCO3ExpChronic = 24 + (0.35*(PCO2 - 40));
+            let rsAcidHCO3ExpChronic = 24 + (0.35*(PCO2 - 40));
             console.log("For chronic respiratory acidosis, expected HCO3 is 24 + (0.35*(PCO2-40)) = "+rsAcidHCO3ExpChronic.toString());
 
             if (HCO3 < rsAcidHCO3ExpChronic) {
@@ -85,8 +85,8 @@
             primary = "metabolic alkalosis";
 
             // Calculate expected compensation for metabolic alkalosis
-            mtAlkPCO2ExpLow = (0.7*(HCO3 - 24)) + 40 - 2;
-            mtAlkPCO2ExpHigh = (0.7*(HCO3 - 24)) + 40 + 2;
+            let mtAlkPCO2ExpLow = (0.7*(HCO3 - 24)) + 40 - 2;
+            let mtAlkPCO2ExpHigh = (0.7*(HCO3 - 24)) + 40 + 2;
             console.log("For primary metabolic alkalosis, expected PCO2 is (0.7*(HCO3-24)) + 40 +/- 2 = "+mtAlkPCO2ExpLow.toString()+" to "+mtAlkPCO2ExpHigh.toString());
 
             if (PCO2 < mtAlkPCO2ExpLow) {
@@ -107,7 +107,7 @@
             primary = "respiratory alkalosis";
 
             // Calculate expected compensation for acute respiratory alkalosis
-            rsAlkHCO3ExpAcute = 24 - (0.2*(40 - PCO2));
+            let rsAlkHCO3ExpAcute = 24 - (0.2*(40 - PCO2));
             console.log("For acute respiratory alkalosis, expected HCO3 is 24 - (0.2*(40-PCO2)) = "+rsAlkHCO3ExpAcute.toString());
 
             if (HCO3 < rsAlkHCO3ExpAcute) {
@@ -122,7 +122,7 @@
             }
 
             // Calculate expected compensation for chronic respiratory alkalosis
-            rsAlkHCO3ExpChronic = 24 - (0.4*(40 - PCO2));
+            let rsAlkHCO3ExpChronic = 24 - (0.4*(40 - PCO2));
             console.log("For chronic respiratory alkalosis, expected HCO3 is 24 - (0.4*(40-PCO2)) = "+rsAlkHCO3ExpChronic.toString());
 
             if (HCO3 < rsAlkHCO3ExpChronic) {
@@ -152,16 +152,16 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin) {
         console.log("Using albumin of "+albumin.toString());
     }
     
-    var gapSummary = "";
+    let gapSummary = "";
 
-    calculatedAnionGap = Na - Cl - HCO3;
+    let calculatedAnionGap = Na - Cl - HCO3;
     console.log("Calculated anion gap = Na "+Na.toString()+" - Cl "+Cl.toString()+" - HCO3 "+HCO3.toString()+" = "+calculatedAnionGap);
 
-    expectedAnionGap = 2.5*albumin;
+    let expectedAnionGap = 2.5*albumin;
     console.log("Expected anion gap = 2.5*albumin = 2.5*"+albumin.toString()+" = "+expectedAnionGap.toString());
     
     // Calculate the parts of the delta-delta (delta ratio) and the delta gap
-    deltaAG = calculatedAnionGap - expectedAnionGap;
+    let deltaAG = calculatedAnionGap - expectedAnionGap;
     console.log("\tdeltaAG = calculated anion gap - expected anion gap = "+calculatedAnionGap.toString()+" - "+expectedAnionGap.toString()+" = "+deltaAG.toString());
     if (calculatedAnionGap > expectedAnionGap) {
         console.log("\tHigh anion gap: calculated anion gap is higher than expected anion gap.")
@@ -169,14 +169,14 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin) {
         console.log("\tLow or normal anion gap: calculated anion gap is less than or equal to expected anion gap.")
     }
 
-    deltaHCO3 = 24 - HCO3;
+    let deltaHCO3 = 24 - HCO3;
     console.log("\tdeltaHCO3 = 24 - HCO3 = 24 - "+HCO3.toString()+" = "+deltaHCO3.toString());
 
     // Calculate the delta-delta (delta ratio)
     // See https://www.timeofcare.com/the-delta-anion-gap-delta-bicarb-ratio/
     // for the formulas.
     // See https://litfl.com/delta-ratio/ for the interpretation.
-    deltaDelta = deltaAG/deltaHCO3;
+    let deltaDelta = deltaAG/deltaHCO3;
     console.log("Delta-delta (aka delta ratio) = deltaAG / deltaHCO3 = "+deltaAG.toString()+" / "+deltaHCO3.toString()+" = "+deltaDelta.toString());
     if (deltaDelta < 0.4) {
         console.log("Delta-delta < 0.4: NAGMA");
@@ -223,17 +223,17 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin) {
  * choose albumin of 4.8 as the default value for albumin.
  */
 function runAnalysis(pH, HCO3, PCO2, Na, Cl, albumin=4.8){
-    answers = simpleAcidBase(pH, HCO3, PCO2);
-    primary = answers[0];
-    secondary = answers[1];
-    secondary_chronic = answers[2];
+    let answers = simpleAcidBase(pH, HCO3, PCO2);
+    let primary = answers[0];
+    let secondary = answers[1];
+    let secondary_chronic = answers[2];
     
-    gapSummary = anionGapWithDeltas(Na, Cl, HCO3, albumin=4.8);
+    let gapSummary = anionGapWithDeltas(Na, Cl, HCO3, albumin=4.8);
 
     // Construct the summary string
     // If there is a secondary_chronic specified then there is a secondary
     // specified
-    var overallSummary = primary;
+    let overallSummary = primary;
     if (secondary_chronic != "") {
         if (secondary == secondary_chronic) {
             overallSummary = overallSummary+" with "+secondary.toString();
@@ -254,9 +254,10 @@ function runAnalysis(pH, HCO3, PCO2, Na, Cl, albumin=4.8){
     console.log(overallSummary);
 }
 
+
 // runAnalysis(pH = 7.40, HCO3 = 23, PCO2 = 40, Na = 150, Cl = 87, albumin = 4.8);
 
-runAnalysis(pH = 7.53, HCO3 = 12, PCO2 = 15, Na = 140, Cl = 108, albumin = 4.8);
+// runAnalysis(pH = 7.53, HCO3 = 12, PCO2 = 15, Na = 140, Cl = 108, albumin = 4.8);
 
 // TODO - write unit tests that check the values of primary, secondary,
 // secondary_chronic, and gapSummary. Ask the medical interns 
@@ -281,3 +282,7 @@ runAnalysis(pH = 7.53, HCO3 = 12, PCO2 = 15, Na = 140, Cl = 108, albumin = 4.8);
 // add a footnote specifying what NAGMA and HAGMA stand for.
 
 // maybe check work with https://www.mdcalc.com/arterial-blood-gas-abg-analyzer  ???
+
+
+
+export default runAnalysis;

@@ -21,7 +21,7 @@ const AcidTestInputBox = ({ callback, label1, label2, subscript }) => {
           value={value}
           onChange={handleChange}
           style={{
-            width: "120px",
+            width: "140px",
             height: "30px",
             padding: "0px 10px",
             borderRadius: "5px",

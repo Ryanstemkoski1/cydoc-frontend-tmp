@@ -5,6 +5,8 @@ import { useHistory } from "react-router";
 import { Menu } from "semantic-ui-react";
 import { Image } from "semantic-ui-react";
 import { useState } from "react";
+import runAnalysis from "./AcidBase/acidBaseCalculator";
+
 
 const AcidTest = () => {
   const [pH, setPH] = useState(0);
@@ -13,6 +15,11 @@ const AcidTest = () => {
   const [nA, setNA] = useState(0);
   const [Cl, setCl] = useState(0);
   const [Albumin, setAlbumin] = useState(0);
+  const [text, setText] = useState('');
+
+  const handleClick = () => {
+    setText(runAnalysis(pH, HC, PC, nA, Cl, Albumin));
+  }
 
   const onPhChange = ( number ) => {
     setPH(number);
@@ -97,10 +104,12 @@ const AcidTest = () => {
           <AcidTestInputBox callback={onClChange} label1='Cl' label2='mEq/L' subscript='Normal Range 98-106 mEq/L'/>
           <AcidTestInputBox callback={onAlbuminChange} label1='Albumin' label2='mEq/L' subscript='Normal Range 3.5 - 5.5 meq/L'/>
           </div>
-          <button className="ui button" style={{
+          <button className="ui button" 
+          onClick={handleClick}
+          style={{
             color: 'white',
             backgroundColor: 'rgba(7,126,157,255)',
-            marginTop: '40px'
+            marginTop: '40px',
           }}>Calculate Results</button>
         </div>
       </div>
@@ -108,9 +117,18 @@ const AcidTest = () => {
         width: '42%',
         height: '94%',
         backgroundColor: '#fff',
-        float: 'right'
+        float: 'right',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
       }}>
-        Right Content
+        <h4 className="ui header" style={{
+            color: "rgba(7,126,157,255)",
+            position: "relative",
+            bottom: '315px'
+          }}>Interpretation</h4>
+          {text != '' && <h4>{text}</h4>}
       </div>
     </div>
   </>
