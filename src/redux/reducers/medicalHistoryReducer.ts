@@ -1,7 +1,6 @@
 import { MEDICAL_HISTORY_ACTION } from '../actions/actionTypes';
 import { MedicalHistoryActionTypes } from '../actions/medicalHistoryActions';
 import { YesNoResponse } from '../../constants/enums';
-import { v4 } from 'uuid';
 
 export interface MedicalHistoryState {
     [index: string]: MedicalHistoryItem;
@@ -16,56 +15,7 @@ export interface MedicalHistoryItem {
     comments: string;
 }
 
-export const initialMedicalHistoryState: MedicalHistoryState = {
-    [v4()]: {
-        condition: 'Type II Diabetes',
-        hasBeenAfflicted: YesNoResponse.None,
-        startYear: -1,
-        hasConditionResolved: YesNoResponse.None,
-        endYear: -1,
-        comments: '',
-    },
-    [v4()]: {
-        condition: 'Myocardial Infarction',
-        hasBeenAfflicted: YesNoResponse.None,
-        startYear: -1,
-        hasConditionResolved: YesNoResponse.None,
-        endYear: -1,
-        comments: '',
-    },
-    [v4()]: {
-        condition: 'Hypertension',
-        hasBeenAfflicted: YesNoResponse.None,
-        startYear: -1,
-        hasConditionResolved: YesNoResponse.None,
-        endYear: -1,
-        comments: '',
-    },
-    [v4()]: {
-        condition: 'Hypercholesteremia',
-        hasBeenAfflicted: YesNoResponse.None,
-        startYear: -1,
-        hasConditionResolved: YesNoResponse.None,
-        endYear: -1,
-        comments: '',
-    },
-    [v4()]: {
-        condition: 'Depression',
-        hasBeenAfflicted: YesNoResponse.None,
-        startYear: -1,
-        hasConditionResolved: YesNoResponse.None,
-        endYear: -1,
-        comments: '',
-    },
-    [v4()]: {
-        condition: 'HIV',
-        hasBeenAfflicted: YesNoResponse.None,
-        startYear: -1,
-        hasConditionResolved: YesNoResponse.None,
-        endYear: -1,
-        comments: '',
-    },
-};
+export const initialMedicalHistoryState: MedicalHistoryState = {};
 
 export function medicalHistoryReducer(
     state = initialMedicalHistoryState,
