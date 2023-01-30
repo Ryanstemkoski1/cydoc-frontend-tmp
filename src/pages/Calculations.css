@@ -1,0 +1,11 @@
+.triangle {
+    cursor: pointer;
+    width: 13px; 
+    height: 13px;
+    display: inline-block;
+    transition: transform .3s;
+    transform-origin: center bottom;
+}
+.rotate {
+    transform: rotate(180deg);
+}

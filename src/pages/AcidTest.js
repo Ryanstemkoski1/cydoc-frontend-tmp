@@ -6,6 +6,7 @@ import { Menu } from 'semantic-ui-react';
 import { Image } from 'semantic-ui-react';
 import { useState } from 'react';
 import runAnalysis from './AcidBase/acidBaseCalculator';
+import Calculations from './Calculations';
 
 const AcidTest = () => {
     const [pH, setPH] = useState(0);
@@ -14,10 +15,25 @@ const AcidTest = () => {
     const [nA, setNA] = useState(0);
     const [Cl, setCl] = useState(0);
     const [Albumin, setAlbumin] = useState(0);
-    const [text, setText] = useState('');
+    const [text, setText] = useState({});
+    const [primaryExp, setPrimaryExp] = useState("");
+    const [secondaryExp, setSecondaryExp] = useState('');
+    const [anionString, setAnionString] = useState('');
+
 
     const handleClick = () => {
-        setText(runAnalysis(pH, HC, PC, nA, Cl, Albumin));
+
+        console.log("testing  " + runAnalysis(pH, HC, PC, nA, Cl, Albumin));
+
+        let myObj = runAnalysis(pH, HC, PC, nA, Cl, Albumin);
+        let acidTest = myObj.acidTest;
+        let anionGap = myObj.anion;
+
+        setAnionString(anionGap.calculatedAnionGap + ' ' + anionGap.expectedAnionGap + ' ' + anionGap.deltaAG + ' \n' + anionGap.deltaDeltaExp + ' ' + anionGap.deltaDelta + ' \n' + anionGap.deltaHCO3);
+
+        setPrimaryExp(acidTest.primaryExp);
+        setSecondaryExp(acidTest.secondaryExp);
+        console.log(primaryExp + secondaryExp);
     };
 
     const onPhChange = (number) => {
@@ -172,18 +188,19 @@ const AcidTest = () => {
                         justifyContent: 'center',
                         flexDirection: 'column',
                     }}
-                >
+                > 
                     <h4
                         className='ui header'
                         style={{
                             color: 'rgba(7,126,157,255)',
-                            position: 'relative',
-                            bottom: '315px',
+                            position: 'absolute',
+                            marginTop: '-613px',
                         }}
                     >
                         Interpretation
                     </h4>
-                    {text != '' && <h4>{text}</h4>}
+
+                    <Calculations PrimaryDisorder={primaryExp} SecondaryDisorder={secondaryExp} AnionGap={anionString}/>
                 </div>
             </div>
         </>
