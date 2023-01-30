@@ -16,20 +16,30 @@ const AcidTest = () => {
     const [Cl, setCl] = useState(0);
     const [Albumin, setAlbumin] = useState(0);
     const [text, setText] = useState({});
-    const [primaryExp, setPrimaryExp] = useState("");
+    const [primaryExp, setPrimaryExp] = useState('');
     const [secondaryExp, setSecondaryExp] = useState('');
     const [anionString, setAnionString] = useState('');
 
-
     const handleClick = () => {
-
-        console.log("testing  " + runAnalysis(pH, HC, PC, nA, Cl, Albumin));
+        console.log('testing  ' + runAnalysis(pH, HC, PC, nA, Cl, Albumin));
 
         let myObj = runAnalysis(pH, HC, PC, nA, Cl, Albumin);
         let acidTest = myObj.acidTest;
         let anionGap = myObj.anion;
 
-        setAnionString(anionGap.calculatedAnionGap + ' ' + anionGap.expectedAnionGap + ' ' + anionGap.deltaAG + ' \n' + anionGap.deltaDeltaExp + ' ' + anionGap.deltaDelta + ' \n' + anionGap.deltaHCO3);
+        setAnionString(
+            anionGap.calculatedAnionGap +
+                ' ' +
+                anionGap.expectedAnionGap +
+                ' ' +
+                anionGap.deltaAG +
+                ' \n' +
+                anionGap.deltaDeltaExp +
+                ' ' +
+                anionGap.deltaDelta +
+                ' \n' +
+                anionGap.deltaHCO3
+        );
 
         setPrimaryExp(acidTest.primaryExp);
         setSecondaryExp(acidTest.secondaryExp);
@@ -188,7 +198,7 @@ const AcidTest = () => {
                         justifyContent: 'center',
                         flexDirection: 'column',
                     }}
-                > 
+                >
                     <h4
                         className='ui header'
                         style={{
@@ -200,7 +210,11 @@ const AcidTest = () => {
                         Interpretation
                     </h4>
 
-                    <Calculations PrimaryDisorder={primaryExp} SecondaryDisorder={secondaryExp} AnionGap={anionString}/>
+                    <Calculations
+                        PrimaryDisorder={primaryExp}
+                        SecondaryDisorder={secondaryExp}
+                        AnionGap={anionString}
+                    />
                 </div>
             </div>
         </>
