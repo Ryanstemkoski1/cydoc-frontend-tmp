@@ -5,6 +5,7 @@ import ChiefComplaintsButton from './ChiefComplaintsButton';
 import '../../HPI.css';
 import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
 import brain from '../icons/brain.svg';
+import psychiatry from '../icons/psychiatry.svg';
 import heent from '../icons/heent.svg';
 import respiratory from '../icons/respiratory.svg';
 import heart from '../icons/heart.svg';
@@ -28,7 +29,8 @@ interface BodySystemDropdownState {
 }
 
 const imgToRender: { [key: string]: any } = {
-    'Neurologic/Psychiatric': brain,
+    Neurologic: brain,
+    Psychiatric: psychiatry,
     HEENT: heent,
     Respiratory: respiratory,
     'Cardiovascular/Hematologic': heart,
@@ -69,7 +71,6 @@ class BodySystemDropdown extends React.Component<
         //Setting name to default of name, but abbreviating if needed
         let nameAbrev = name;
         if (cardio) nameAbrev = 'Cards/Heme';
-        if (neuro) nameAbrev = 'Neuro/Psych';
 
         //Setting default render style to computer but changing to mobile if needed
         let styleToRender = 'hpi-disease-button';
