@@ -26,6 +26,11 @@ export const MEDICAL_TERM_TRANSLATOR = {
     'heavy period': 'menorrhagia',
     'enlarged spleen': 'splenomegaly',
     'enlarged liver': 'hepatomegaly',
+    'pain with urination': 'dysuria',
+    'urgency with urination': 'urgency',
+    'frequent urination': 'frequency',
+    'blood in your urine': 'hematuria',
+    itching: 'pruritus',
 };
 
 export const ABBREVIFY = {
