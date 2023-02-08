@@ -31,6 +31,7 @@ export const MEDICAL_TERM_TRANSLATOR = {
     'frequent urination': 'frequency',
     'blood in your urine': 'hematuria',
     itching: 'pruritus',
+    'runny nose': 'rhinorrhea',
 };
 
 export const ABBREVIFY = {
