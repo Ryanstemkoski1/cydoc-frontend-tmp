@@ -7,6 +7,8 @@ import { Image } from 'semantic-ui-react';
 import { useState } from 'react';
 import runAnalysis from './AcidBase/acidBaseCalculator';
 import Calculations from './Calculations';
+import { Button } from 'semantic-ui-react';
+import DifferentialDiagnoses from './DifferentialDiagnoses';
 
 const AcidTest = () => {
     const [pH, setPH] = useState(0);
@@ -15,17 +17,24 @@ const AcidTest = () => {
     const [nA, setNA] = useState(0);
     const [Cl, setCl] = useState(0);
     const [Albumin, setAlbumin] = useState(0);
-    const [text, setText] = useState({});
     const [primaryExp, setPrimaryExp] = useState('');
     const [secondaryExp, setSecondaryExp] = useState('');
     const [anionString, setAnionString] = useState('');
+    const [summary, setSummary] = useState('');
+    const [description, setDescription] = useState('');
+    const [text, setText] = useState('');
+
+
+
+
+
 
     const handleClick = () => {
-        console.log('testing  ' + runAnalysis(pH, HC, PC, nA, Cl, Albumin));
-
         let myObj = runAnalysis(pH, HC, PC, nA, Cl, Albumin);
         let acidTest = myObj.acidTest;
         let anionGap = myObj.anion;
+        setText(myObj.acidTest.differentialDiagnoses.text);
+        setDescription(myObj.acidTest.differentialDiagnoses.description);
 
         setAnionString(
             anionGap.calculatedAnionGap +
@@ -43,8 +52,19 @@ const AcidTest = () => {
 
         setPrimaryExp(acidTest.primaryExp);
         setSecondaryExp(acidTest.secondaryExp);
-        console.log(primaryExp + secondaryExp);
+        myObj.summary = myObj.summary.charAt(0).toUpperCase() + myObj.summary.slice(1);
+        setSummary(myObj.summary);
     };
+
+
+    const handleCopyResultsClick = () => {
+        const note = document.querySelectorAll('.generate-note-text');
+        const blob = new Blob([note[0].innerHTML], { type: 'text/html' });
+        const clipboardItem = new ClipboardItem({
+            ['text/html']: blob,
+        });
+        navigator.clipboard.write([clipboardItem]);
+    }
 
     const onPhChange = (number) => {
         setPH(number);
@@ -104,7 +124,7 @@ const AcidTest = () => {
                             flexDirection: 'column',
                         }}
                     >
-                        <h4
+                        <h3
                             className='ui header'
                             style={{
                                 color: 'rgba(7,126,157,255)',
@@ -114,7 +134,7 @@ const AcidTest = () => {
                             }}
                         >
                             Laboratory Data
-                        </h4>
+                        </h3    >
                         <h6
                             className='ui header small'
                             style={{
@@ -122,7 +142,7 @@ const AcidTest = () => {
                                 position: 'relative',
                                 bottom: '130px',
                                 marginLeft: '20px',
-                                size: '30px',
+                                size: '20px',
                             }}
                         >
                             Please fill in the required fields below
@@ -137,6 +157,7 @@ const AcidTest = () => {
                                 marginTop: '-150px',
                             }}
                         >
+                            <br></br>
                             <AcidTestInputBox
                                 callback={onPhChange}
                                 label1='pH'
@@ -210,11 +231,51 @@ const AcidTest = () => {
                         Interpretation
                     </h4>
 
-                    <Calculations
+                    <h6 style={{
+                        color: 'rgba(130,130,130,255',
+                        position: 'absolute',
+                        marginTop: '-540px',
+                        fontSize: '14px'
+                    }}>See your results below</h6>
+
+                    {primaryExp != '' && 
+                    <>
+                    <h4 style={{color: 'rgba(7,126,157,255)', marginTop: '-100px'}}>Summary</h4>
+                    <span style={{color: 'rgba(7,126,157,255)'}}>{summary}</span>
+                    <br></br>
+                    <div style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                    <DifferentialDiagnoses 
+                        text={text}
+                        description={description}
+                        />
+                    <br></br>
+                    <Calculations style={{marginTop: '5px'}}
                         PrimaryDisorder={primaryExp}
                         SecondaryDisorder={secondaryExp}
                         AnionGap={anionString}
                     />
+                    </div>
+                    </>}
+                    {primaryExp == '' && 
+                    <h5 style={{color: 'rgba(7,126,157,255)'}}>Please fill in laboratory data to calculate results</h5>}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'flex-end',
+                        position: 'absolute',
+                        bottom: '97px'
+                    }}>
+                        <Button
+                            className='ui button'
+                            onClick={handleCopyResultsClick}
+                            style={{
+                                color: 'black',
+                                backgroundColor: 'gold',
+                                marginTop: '40px',
+                            }}
+                        >
+                            Copy Results
+                        </Button>
+                    </div>
                 </div>
             </div>
         </>
