@@ -24,11 +24,6 @@ const AcidTest = () => {
     const [description, setDescription] = useState('');
     const [text, setText] = useState('');
 
-
-
-
-
-
     const handleClick = () => {
         let myObj = runAnalysis(pH, HC, PC, nA, Cl, Albumin);
         let acidTest = myObj.acidTest;
@@ -52,10 +47,10 @@ const AcidTest = () => {
 
         setPrimaryExp(acidTest.primaryExp);
         setSecondaryExp(acidTest.secondaryExp);
-        myObj.summary = myObj.summary.charAt(0).toUpperCase() + myObj.summary.slice(1);
+        myObj.summary =
+            myObj.summary.charAt(0).toUpperCase() + myObj.summary.slice(1);
         setSummary(myObj.summary);
     };
-
 
     const handleCopyResultsClick = () => {
         const note = document.querySelectorAll('.generate-note-text');
@@ -64,7 +59,7 @@ const AcidTest = () => {
             ['text/html']: blob,
         });
         navigator.clipboard.write([clipboardItem]);
-    }
+    };
 
     const onPhChange = (number) => {
         setPH(number);
@@ -134,7 +129,7 @@ const AcidTest = () => {
                             }}
                         >
                             Laboratory Data
-                        </h3    >
+                        </h3>
                         <h6
                             className='ui header small'
                             style={{
@@ -231,39 +226,65 @@ const AcidTest = () => {
                         Interpretation
                     </h4>
 
-                    <h6 style={{
-                        color: 'rgba(130,130,130,255',
-                        position: 'absolute',
-                        marginTop: '-540px',
-                        fontSize: '14px'
-                    }}>See your results below</h6>
+                    <h6
+                        style={{
+                            color: 'rgba(130,130,130,255',
+                            position: 'absolute',
+                            marginTop: '-540px',
+                            fontSize: '14px',
+                        }}
+                    >
+                        See your results below
+                    </h6>
 
-                    {primaryExp != '' && 
-                    <>
-                    <h4 style={{color: 'rgba(7,126,157,255)', marginTop: '-100px'}}>Summary</h4>
-                    <span style={{color: 'rgba(7,126,157,255)'}}>{summary}</span>
-                    <br></br>
-                    <div style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                    <DifferentialDiagnoses 
-                        text={text}
-                        description={description}
-                        />
-                    <br></br>
-                    <Calculations style={{marginTop: '5px'}}
-                        PrimaryDisorder={primaryExp}
-                        SecondaryDisorder={secondaryExp}
-                        AnionGap={anionString}
-                    />
-                    </div>
-                    </>}
-                    {primaryExp == '' && 
-                    <h5 style={{color: 'rgba(7,126,157,255)'}}>Please fill in laboratory data to calculate results</h5>}
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'flex-end',
-                        position: 'absolute',
-                        bottom: '97px'
-                    }}>
+                    {primaryExp != '' && (
+                        <>
+                            <h4
+                                style={{
+                                    color: 'rgba(7,126,157,255)',
+                                    marginTop: '-100px',
+                                }}
+                            >
+                                Summary
+                            </h4>
+                            <span style={{ color: 'rgba(7,126,157,255)' }}>
+                                {summary}
+                            </span>
+                            <br></br>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    position: 'relative',
+                                }}
+                            >
+                                <DifferentialDiagnoses
+                                    text={text}
+                                    description={description}
+                                />
+                                <br></br>
+                                <Calculations
+                                    style={{ marginTop: '5px' }}
+                                    PrimaryDisorder={primaryExp}
+                                    SecondaryDisorder={secondaryExp}
+                                    AnionGap={anionString}
+                                />
+                            </div>
+                        </>
+                    )}
+                    {primaryExp == '' && (
+                        <h5 style={{ color: 'rgba(7,126,157,255)' }}>
+                            Please fill in laboratory data to calculate results
+                        </h5>
+                    )}
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'flex-end',
+                            position: 'absolute',
+                            bottom: '97px',
+                        }}
+                    >
                         <Button
                             className='ui button'
                             onClick={handleCopyResultsClick}

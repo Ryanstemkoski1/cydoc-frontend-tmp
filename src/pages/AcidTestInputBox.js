@@ -21,7 +21,7 @@ const AcidTestInputBox = ({ callback, label1, label2, subscript }) => {
                         fontSize: '14px',
                         minWidth: '58px',
                         textAlign: 'right',
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
                     }}
                 >
                     {label1}&nbsp;
@@ -45,7 +45,7 @@ const AcidTestInputBox = ({ callback, label1, label2, subscript }) => {
                         color: 'rgba(7,126,157,255)',
                         fontSize: '14px',
                         minWidth: '50px',
-                        fontWeight: 'bold'
+                        fontWeight: 'bold',
                     }}
                 >
                     &nbsp;{label2}

@@ -10,7 +10,7 @@ const Calculations = ({
     const handleClick = () => setIsOpen(!isOpen);
 
     return (
-        <div className='calculations'style={{ color: 'rgba(7,126,157,255)' }}>
+        <div className='calculations' style={{ color: 'rgba(7,126,157,255)' }}>
             <h5 style={{ fontWeight: 'bold' }}>
                 {'Calculations  '}
                 <span

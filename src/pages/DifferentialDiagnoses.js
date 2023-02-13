@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import './DifferentialDiagnoses.css';
 
-const DifferentialDiagnoses = ({
-    text = '',
-    description = '',
-}) => {
+const DifferentialDiagnoses = ({ text = '', description = '' }) => {
     const [isOpen, setIsOpen] = useState(false);
     const handleClick = () => setIsOpen(!isOpen);
 
     return (
-        <div className='differentialDiagnoses'style={{ color: 'rgba(7,126,157,255)' }}>
+        <div
+            className='differentialDiagnoses'
+            style={{ color: 'rgba(7,126,157,255)' }}
+        >
             <h5 style={{ fontWeight: 'bold' }}>
                 {'Differential Diagnoses:  '}
                 <span

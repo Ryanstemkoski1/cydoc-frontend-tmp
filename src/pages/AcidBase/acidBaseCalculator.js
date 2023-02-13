@@ -11,7 +11,13 @@
  */
 
 // no acid-base abnormalities detected
-import { HAGMADiff, metabolicAlkalosisDiff, respiratoryAcidosisDiff, respiratoryAlkalosisDiff, NAGMADiff} from './differentialDiagnoses';
+import {
+    HAGMADiff,
+    metabolicAlkalosisDiff,
+    respiratoryAcidosisDiff,
+    respiratoryAlkalosisDiff,
+    NAGMADiff,
+} from './differentialDiagnoses';
 
 function simpleAcidBase(pH, HCO3, PCO2) {
     let primary = '';
@@ -23,7 +29,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
         differentialDiagnoses: {
             description: '',
             text: '',
-        }
+        },
     };
     if (pH < 7.35) {
         returnObj.primaryExp =
@@ -78,7 +84,8 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 PCO2.toString() +
                 ' is > 45 so there is a respiratory acidosis.';
             primary = 'Respiratory acidosis';
-            returnObj.differentialDiagnoses.description = 'Respiratory Acidosis';
+            returnObj.differentialDiagnoses.description =
+                'Respiratory Acidosis';
             returnObj.differentialDiagnoses.text = respiratoryAcidosisDiff;
 
             // Calculate expected compensation for acute respiratory acidosis
@@ -207,7 +214,8 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 ' is < 33 so there is a respiratory alkalosis.';
             primary = 'respiratory alkalosis';
             returnObj.differentialDiagnoses.text = respiratoryAlkalosisDiff;
-            returnObj.differentialDiagnoses.description = "Respiratory Alkalosis";
+            returnObj.differentialDiagnoses.description =
+                'Respiratory Alkalosis';
 
             // Calculate expected compensation for acute respiratory alkalosis
             let rsAlkHCO3ExpAcute = 24 - 0.2 * (40 - PCO2);
@@ -295,7 +303,7 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin, returnObj) {
     // used (if the user did not specify the albumin we need to tell them the
     // default value that was used.)
     if (albumin == 4.8) {
-        // defaulted to 4.8 - 
+        // defaulted to 4.8 -
     }
 
     let gapSummary = '';
@@ -358,12 +366,12 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin, returnObj) {
         deltaDelta.toFixed(2).toString();
     if (deltaDelta < 0.4) {
         anionObj.deltaDeltaExp += 'Delta-delta < 0.4: NAGMA';
-        returnObj.differentialDiagnoses.text = 'Metabolic Acidosis: NAGMA'
+        returnObj.differentialDiagnoses.text = 'Metabolic Acidosis: NAGMA';
         returnObj.differentialDiagnoses.description = NAGMADiff;
         gapSummary = 'NAGMA';
-        diffDiagnoses.NAGMA = NAGMADiff;
     } else if (0.4 <= deltaDelta && deltaDelta <= 1) {
-        returnObj.differentialDiagnoses.description = 'Metabolic Acidosis: Consider combined HAGMA + NAGMA';
+        returnObj.differentialDiagnoses.description =
+            'Metabolic Acidosis: Consider combined HAGMA + NAGMA';
         returnObj.differentialDiagnoses.text = NAGMADiff + ' ' + HAGMADiff;
         anionObj.deltaDeltaExp +=
             'Delta-delta between 0.4 and 1.0: consider combined HAGMA + NAGMA';
@@ -372,7 +380,8 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin, returnObj) {
         anionObj.deltaDeltaExp += 'Delta-delta between 1 and 2: HAGMA';
         gapSummary = 'HAGMA';
         returnObj.differentialDiagnoses.text = HAGMADiff;
-        returnObj.differentialDiagnoses.description = 'Metabolic Acidosis: HAGMA';
+        returnObj.differentialDiagnoses.description =
+            'Metabolic Acidosis: HAGMA';
     } else if (deltaDelta >= 2) {
         anionObj.deltaDeltaExp +=
             'Delta-delta > 2: consider combined HAGMA + metabolic alkalosis, OR combined HAGMA + compensation for chronic respiratory acidosis';
@@ -411,9 +420,19 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin, returnObj) {
  * choose albumin of 4.8 as the default value for albumin.
  */
 function runAnalysis(pH, HCO3, PCO2, Na, Cl, albumin = 4.8) {
-    let [primary, secondary, secondary_chronic, returnObj] = simpleAcidBase(pH, HCO3, PCO2);
+    let [primary, secondary, secondary_chronic, returnObj] = simpleAcidBase(
+        pH,
+        HCO3,
+        PCO2
+    );
     let gapSummary, anionObj;
-    [gapSummary, anionObj, returnObj] = anionGapWithDeltas(Na, Cl, HCO3, albumin = 4.8, returnObj);
+    [gapSummary, anionObj, returnObj] = anionGapWithDeltas(
+        Na,
+        Cl,
+        HCO3,
+        albumin = 4.8,
+        returnObj
+    );
 
     // Construct the summary string
     // If there is a secondary_chronic specified then there is a secondary
@@ -442,7 +461,6 @@ function runAnalysis(pH, HCO3, PCO2, Na, Cl, albumin = 4.8) {
         overallSummary =
             overallSummary + '. The metabolic acidosis is ' + gapSummary;
     }
-
 
     let acidBaseResults = {
         acidTest: returnObj,
