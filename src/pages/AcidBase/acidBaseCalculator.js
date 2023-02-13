@@ -304,6 +304,7 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin, returnObj) {
     // default value that was used.)
     if (albumin == 4.8) {
         // defaulted to 4.8 -
+        anionObj.albuminDefault = 'Albumin defaulted to 4.8';
     }
 
     let gapSummary = '';
