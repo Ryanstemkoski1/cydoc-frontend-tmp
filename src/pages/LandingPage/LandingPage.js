@@ -97,7 +97,7 @@ class LandingPage extends Component {
                     <Icon
                         name='file alternate outline'
                         size='large'
-                        class='icons'
+                        className='icons'
                     />
                     <h3 className='text'>Return to Active Note</h3>
                 </div>
@@ -105,14 +105,14 @@ class LandingPage extends Component {
                     className='landing-box top bottom'
                     onClick={() => this.handleNewNoteClick(true)}
                 >
-                    <Icon name='file outline' size='large' class='icons' />
+                    <Icon name='file outline' size='large' className='icons' />
                     <h3 className='text'>Create New Blank Note</h3>
                 </div>
                 <div 
                     className='landing-box bottom'
                     onClick={() => this.handleNewInpatientPlanClick()}
                 >
-                    <Icon name='clipboard outline' size='large' class='icons' />
+                    <Icon name='tasks' size='large' className='icons' />
                     <h3 className='text'>Create New Inpatient Plan</h3>
                 </div>
             </div>
@@ -137,7 +137,7 @@ class LandingPage extends Component {
                     className='landing-box landing-col'
                     onClick={() => this.handleNewInpatientPlanClick()}
                 >
-                    <Icon name='clipboard outline' size='huge' class='icons' />
+                    <Icon name='tasks' size='huge' className='icons' />
                     <h3 className='text'>Create New Inpatient Plan</h3>
                     <br />
                     <p className='smaller-text'>
@@ -160,7 +160,7 @@ class LandingPage extends Component {
                     <Icon
                         name='file alternate outline'
                         size='large'
-                        class='icons'
+                        className='icons'
                     ></Icon>
                 </div>
             </div>
@@ -183,7 +183,7 @@ class LandingPage extends Component {
                                 : ''
                         }`}
                         size='large'
-                        class='icons'
+                        className='icons'
                     ></Icon>
                 </div>
             </div>
@@ -200,9 +200,9 @@ class LandingPage extends Component {
                 </div>
                 <div className='hidden content'>
                     <Icon
-                        name='clipboard outline'
+                        name='tasks'
                         size='large'
-                        class='icons'
+                        className='icons'
                     ></Icon>
                 </div>
             </div>
