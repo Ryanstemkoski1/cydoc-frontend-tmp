@@ -1,59 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 
-import { deleteNote } from '../../redux/actions/currentNoteActions';
-
-import { LANDING_PAGE_MOBLE_BP } from 'constants/breakpoints.js';
+import NavMenu from '../../components/navigation/NavMenu';
 
 class GenerateInpatientPlan extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            windowWidth: 1000,
-            windowHeight: 0,
-            redirect: '',
-        };
-        this.updateDimensions = this.updateDimensions.bind(this);
-    }
-
-    componentDidMount = () => {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    };
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-        let windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
     }
 
     render() {
-        const { windowWidth } = this.state;
-        const stack = windowWidth < LANDING_PAGE_MOBLE_BP;
-            
         return (
-            <>
-                {stack ? (
-                    <div>This is mobile</div>
-                ) : (
-                    <div>This is desktop</div>
-                )}
-            </>
+            <Fragment>
+                <div>
+                    <NavMenu className='landing-page-nav-menu' />
+                </div>
+                <div className="ui container active-tab-container">
+                    <div className="ui segment"></div>
+                </div>
+            </Fragment>
         );
     }
 }
 
 const mapStatetoProps = (state) => ({ currentNote: state });
 
-const mapDispatchToProps = {
-    deleteNote,
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStatetoProps, mapDispatchToProps)(GenerateInpatientPlan);
