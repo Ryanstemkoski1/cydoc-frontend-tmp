@@ -108,7 +108,7 @@ class LandingPage extends Component {
                     <Icon name='file outline' size='large' className='icons' />
                     <h3 className='text'>Create New Blank Note</h3>
                 </div>
-                <div 
+                <div
                     className='landing-box bottom'
                     onClick={() => this.handleNewInpatientPlanClick()}
                 >
@@ -133,7 +133,7 @@ class LandingPage extends Component {
                         Write a note for a patient encounter
                     </p>
                 </div>
-                <div 
+                <div
                     className='landing-box landing-col'
                     onClick={() => this.handleNewInpatientPlanClick()}
                 >
@@ -177,11 +177,7 @@ class LandingPage extends Component {
                 </div>
                 <div className='hidden content'>
                     <Icon
-                        name={`file outline ${
-                            !noteExists
-                                ? 'alternate'
-                                : ''
-                        }`}
+                        name={`file outline ${!noteExists ? 'alternate' : ''}`}
                         size='large'
                         className='icons'
                     ></Icon>
@@ -199,11 +195,7 @@ class LandingPage extends Component {
                     <Button size='big'>Create New Inpatient Plan</Button>
                 </div>
                 <div className='hidden content'>
-                    <Icon
-                        name='tasks'
-                        size='large'
-                        className='icons'
-                    ></Icon>
+                    <Icon name='tasks' size='large' className='icons'></Icon>
                 </div>
             </div>
         );
@@ -242,9 +234,7 @@ class LandingPage extends Component {
                                     {newInpatientPlanMobileButton}
                                 </>
                             ) : (
-                                <>
-                                    {desktopNoteButtons}
-                                </>
+                                <>{desktopNoteButtons}</>
                             )}
                         </div>
                     </>

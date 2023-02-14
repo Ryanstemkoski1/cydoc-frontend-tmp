@@ -14,8 +14,8 @@ class GenerateInpatientPlan extends Component {
                 <div>
                     <NavMenu className='landing-page-nav-menu' />
                 </div>
-                <div className="ui container active-tab-container">
-                    <div className="ui segment"></div>
+                <div className='ui container active-tab-container'>
+                    <div className='ui segment'></div>
                 </div>
             </Fragment>
         );
@@ -26,4 +26,7 @@ const mapStatetoProps = (state) => ({ currentNote: state });
 
 const mapDispatchToProps = {};
 
-export default connect(mapStatetoProps, mapDispatchToProps)(GenerateInpatientPlan);
+export default connect(
+    mapStatetoProps,
+    mapDispatchToProps
+)(GenerateInpatientPlan);
