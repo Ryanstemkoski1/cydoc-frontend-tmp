@@ -1,23 +1,19 @@
 import React, { Component, Fragment } from 'react';
-import NavMenu from '../../components/navigation/NavMenu';
-import { Icon } from 'semantic-ui-react';
-import { LANDING_PAGE_MOBLE_BP } from 'constants/breakpoints.js';
-import './LandingPage.css';
-import { Button, Image } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Icon, Button, Image } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
 import { initialState } from 'redux/reducers';
-import { deleteNote } from '../../redux/actions/currentNoteActions';
-import { connect } from 'react-redux';
 import _ from 'lodash';
+
+import { deleteNote } from '../../redux/actions/currentNoteActions';
+import NavMenu from '../../components/navigation/NavMenu';
+
+import { LANDING_PAGE_MOBLE_BP } from 'constants/breakpoints.js';
+import './LandingPage.css';
 import Feedback from '../../assets/cydoc-feedback.svg';
 
-// imports for old landing page with notes/data stored in context
-// import OpenRecentSegment from './OpenNotes';
-// import CreateTemplateSegment from './CreateTemplate';
-// import NewNoteSegment from './NewNote';
-
 //Component that manages the layout of the dashboard page
-class LandingPageOld extends Component {
+class LandingPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -77,6 +73,12 @@ class LandingPageOld extends Component {
         });
     }
 
+    handleNewInpatientPlanClick() {
+        this.setState({
+            redirect: 'NEW_INPATIENT_PLAN',
+        });
+    }
+
     checkExistingNote() {
         return !_.isEqual(initialState, this.props.currentNote);
     }
@@ -108,6 +110,7 @@ class LandingPageOld extends Component {
                 </div>
                 <div 
                     className='landing-box bottom'
+                    onClick={() => this.handleNewInpatientPlanClick()}
                 >
                     <Icon name='clipboard outline' size='large' class='icons' />
                     <h3 className='text'>Create New Inpatient Plan</h3>
@@ -132,6 +135,7 @@ class LandingPageOld extends Component {
                 </div>
                 <div 
                     className='landing-box landing-col'
+                    onClick={() => this.handleNewInpatientPlanClick()}
                 >
                     <Icon name='clipboard outline' size='huge' class='icons' />
                     <h3 className='text'>Create New Inpatient Plan</h3>
@@ -187,6 +191,7 @@ class LandingPageOld extends Component {
 
         const newInpatientPlanMobileButton = (
             <div
+                onClick={() => this.handleNewInpatientPlanClick()}
                 className='ui animated fade button landing'
                 tabIndex='0'
             >
@@ -212,6 +217,9 @@ class LandingPageOld extends Component {
 
             case 'EDIT_HPI':
                 return <Redirect to='/templates/old' />;
+
+            case 'NEW_INPATIENT_PLAN':
+                return <Redirect to='/generateinpatientplan' />;
 
             default:
                 return (
@@ -250,4 +258,4 @@ const mapDispatchToProps = {
     deleteNote,
 };
 
-export default connect(mapStatetoProps, mapDispatchToProps)(LandingPageOld);
+export default connect(mapStatetoProps, mapDispatchToProps)(LandingPage);

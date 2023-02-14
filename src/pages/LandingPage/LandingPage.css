@@ -104,6 +104,7 @@
 }
 
 .landing-box {
+    cursor: pointer;
     background-color: white;
     color: #0d5e70;
     border: 2px solid #6DA3B1;
