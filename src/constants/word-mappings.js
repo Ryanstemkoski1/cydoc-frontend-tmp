@@ -19,7 +19,9 @@ export const MEDICAL_TERM_TRANSLATOR = {
     'high triglycerides': 'hypertriglyceridemia',
     phlegm: 'sputum',
     'slow heart rate': 'bradycardia',
+    'slow heartbeat': 'bradycardia',
     'fast heart rate': 'tachycardia',
+    'fast heartbeat': 'tachycardia',
     gallstones: 'cholelithiasis',
     sweating: 'diaphoresis',
     'vomiting blood': 'hematemesis',
@@ -32,6 +34,17 @@ export const MEDICAL_TERM_TRANSLATOR = {
     'blood in your urine': 'hematuria',
     itching: 'pruritus',
     'runny nose': 'rhinorrhea',
+    pooping: 'defecation',
+    'heart palpitations': 'palpitations',
+    peeing: 'urinating',
+    'drinking a lot of beverages': 'polydipsia',
+    'peeing a lot': 'polyuria',
+    peeing: 'urinating',
+    'pus coming out of the eyes': 'purulent eye discharge',
+    'eyes uncomfortable in bright light': 'photophobia',
+    'cough with phlegm': 'productive cough',
+    'clot in the lung': 'pulmonary embolism',
+    'clot in the leg': 'DVT',
 };
 
 export const ABBREVIFY = {
