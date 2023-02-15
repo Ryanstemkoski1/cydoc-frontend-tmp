@@ -39,7 +39,6 @@ export const MEDICAL_TERM_TRANSLATOR = {
     peeing: 'urinating',
     'drinking a lot of beverages': 'polydipsia',
     'peeing a lot': 'polyuria',
-    peeing: 'urinating',
     'pus coming out of the eyes': 'purulent eye discharge',
     'eyes uncomfortable in bright light': 'photophobia',
     'cough with phlegm': 'productive cough',
