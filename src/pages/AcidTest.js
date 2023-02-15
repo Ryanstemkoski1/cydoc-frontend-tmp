@@ -55,15 +55,47 @@ const AcidTest = () => {
         setSummary(acidBaseCalcReturn.summary);
     };
 
+    const formatStringForCopy = () => {
+        let str =
+            'Summary: \n' +
+            summary +
+            '\n' +
+            'Differential Diagnoses: \n' +
+            text +
+            description +
+            '\n Calculations: \n' +
+            'Primary Disorder: ' +
+            primaryExp +
+            '\nSecondary Disorder: ' +
+            secondaryExp +
+            '\nAnion Gap: ' +
+            anionString;
+        return str;
+    };
+
     // todo: get CopyResultsClick to work as intended
     const handleCopyResultsClick = () => {
-        const note = document.querySelectorAll('span.acidBaseTest');
-        const blob1 = new Blob([note], { type: 'text/html' });
-        //const blob = new Blob([note[0].innerHTML], { type: 'text/html' });
-        const clipboardItem = new window.ClipboardItem({
-            ['text/html']: blob1,
-        });
-        navigator.clipboard.write([clipboardItem]);
+        const blob = new Blob([formatStringForCopy()], { type: 'text/plain' });
+
+        // check if the Clipboard API is supported
+        if (navigator.clipboard && navigator.clipboard.write) {
+            navigator.clipboard
+                .write([
+                    new window.ClipboardItem({
+                        [blob.type]: blob,
+                    }),
+                ])
+                .then(
+                    () => {
+                        alert('Successfully copied Acid-Base test');
+                    },
+                    (err) => {
+                        alert('Error writing to clipboard' + err);
+                    }
+                );
+        } else {
+            alert('Clipboard API not supported');
+        }
     };
 
     const onPhChange = (number) => {
