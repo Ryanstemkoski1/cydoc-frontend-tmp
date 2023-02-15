@@ -10,7 +10,7 @@ const DifferentialDiagnoses = ({ text = '', description = '' }) => {
             className='differentialDiagnoses'
             style={{ color: 'rgba(7,126,157,255)' }}
         >
-            <h5 style={{ fontWeight: 'bold' }}>
+            <h5 className='acidBaseTest' style={{ fontWeight: 'bold' }}>
                 {'Differential Diagnoses:  '}
                 <span
                     className={`triangle ${isOpen ? 'rotate' : ''}`}
@@ -23,8 +23,12 @@ const DifferentialDiagnoses = ({ text = '', description = '' }) => {
             </h5>
             {isOpen && (
                 <div>
-                    <span style={{ fontSize: '12px' }}>{description}</span>
-                    <span style={{ fontSize: '12px' }}>{text}</span>
+                    <span className='acidBaseTest' style={{ fontSize: '12px' }}>
+                        {description}
+                    </span>
+                    <span className='acidBaseTest' style={{ fontSize: '12px' }}>
+                        {text}
+                    </span>
                 </div>
             )}
         </div>

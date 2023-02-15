@@ -24,14 +24,24 @@ const Calculations = ({
             </h5>
             {isOpen && (
                 <div>
-                    <h5 style={{ fontWeight: 'bold' }}>Primary Disorder</h5>
-                    <span style={{ fontSize: '12px' }}>{PrimaryDisorder}</span>
-                    <h5 style={{ fontWeight: 'bold' }}>Secondary Disorder</h5>
-                    <span style={{ fontSize: '12px' }}>
+                    <h5 className='acidBaseTest' style={{ fontWeight: 'bold' }}>
+                        Primary Disorder
+                    </h5>
+                    <span className='acidBaseTest' style={{ fontSize: '12px' }}>
+                        {PrimaryDisorder}
+                    </span>
+                    <h5 className='acidBaseTest' style={{ fontWeight: 'bold' }}>
+                        Secondary Disorder
+                    </h5>
+                    <span className='acidBaseTest' style={{ fontSize: '12px' }}>
                         {SecondaryDisorder}
                     </span>
-                    <h5 style={{ fontWeight: 'bold' }}>Anion Gap</h5>
-                    <span style={{ fontSize: '12px' }}>{AnionGap}</span>
+                    <h5 className='acidBaseTest' style={{ fontWeight: 'bold' }}>
+                        Anion Gap
+                    </h5>
+                    <span className='acidBaseTest' style={{ fontSize: '12px' }}>
+                        {AnionGap}
+                    </span>
                 </div>
             )}
         </div>

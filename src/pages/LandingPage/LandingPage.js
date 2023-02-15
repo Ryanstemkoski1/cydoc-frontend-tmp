@@ -117,7 +117,7 @@ class LandingPageOld extends Component {
                     onClick={() => this.handleAcidTestClick()}
                 >
                     <Icon name='file outline' size='large' class='icons' />
-                    <h3 className='text'>Do acid test!</h3>
+                    <h3 className='text'>Create New Acid Base Analysis</h3>
                 </div>
             </div>
         ) : (
@@ -131,14 +131,21 @@ class LandingPageOld extends Component {
                         size='large'
                         class='icons'
                     />
-                    <h3 className='text'>Return twaDSFo Active Note</h3>
+                    <h3 className='text'>Create New Blank Note</h3>
                 </div>
                 <div
                     className='landing-box bottom'
                     onClick={() => this.handleNewNoteClick(true)}
                 >
                     <Icon name='file outline' size='large' class='icons' />
-                    <h3 className='text'>Do an acid test!</h3>
+                    <h3 className='text'>Return to Active Note</h3>
+                </div>
+                <div
+                    className='landing-box bottom'
+                    onClick={() => this.handleAcidTestClick()}
+                >
+                    <Icon name='file outline' size='large' class='icons' />
+                    <h3 className='text'>Create New Acid Base Analysis</h3>
                 </div>
             </div>
         );

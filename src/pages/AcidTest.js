@@ -25,11 +25,13 @@ const AcidTest = () => {
     const [text, setText] = useState('');
 
     const handleClick = () => {
-        let myObj = runAnalysis(pH, HC, PC, nA, Cl, Albumin);
-        let acidTest = myObj.acidTest;
-        let anionGap = myObj.anion;
-        setText(myObj.acidTest.differentialDiagnoses.text);
-        setDescription(myObj.acidTest.differentialDiagnoses.description);
+        let acidBaseCalcReturn = runAnalysis(pH, HC, PC, nA, Cl, Albumin);
+        let acidTest = acidBaseCalcReturn.acidTest;
+        let anionGap = acidBaseCalcReturn.anion;
+        setText(acidBaseCalcReturn.acidTest.differentialDiagnoses.text);
+        setDescription(
+            acidBaseCalcReturn.acidTest.differentialDiagnoses.description
+        );
 
         setAnionString(
             anionGap.calculatedAnionGap +
@@ -47,16 +49,19 @@ const AcidTest = () => {
 
         setPrimaryExp(acidTest.primaryExp);
         setSecondaryExp(acidTest.secondaryExp);
-        myObj.summary =
-            myObj.summary.charAt(0).toUpperCase() + myObj.summary.slice(1);
-        setSummary(myObj.summary);
+        acidBaseCalcReturn.summary =
+            acidBaseCalcReturn.summary.charAt(0).toUpperCase() +
+            acidBaseCalcReturn.summary.slice(1);
+        setSummary(acidBaseCalcReturn.summary);
     };
 
+    // todo: get CopyResultsClick to work as intended
     const handleCopyResultsClick = () => {
-        const note = document.querySelectorAll('.generate-note-text');
-        const blob = new Blob([note[0].innerHTML], { type: 'text/html' });
-        const clipboardItem = new ClipboardItem({
-            ['text/html']: blob,
+        const note = document.querySelectorAll('span.acidBaseTest');
+        const blob1 = new Blob([note], { type: 'text/html' });
+        //const blob = new Blob([note[0].innerHTML], { type: 'text/html' });
+        const clipboardItem = new window.ClipboardItem({
+            ['text/html']: blob1,
         });
         navigator.clipboard.write([clipboardItem]);
     };
@@ -204,6 +209,7 @@ const AcidTest = () => {
                     </div>
                 </div>
                 <div
+                    className='acidBaseTest'
                     style={{
                         width: '42%',
                         height: '94%',
@@ -240,6 +246,7 @@ const AcidTest = () => {
                     {primaryExp != '' && (
                         <>
                             <h4
+                                className='acidBaseTest'
                                 style={{
                                     color: 'rgba(7,126,157,255)',
                                     marginTop: '-100px',
@@ -247,11 +254,15 @@ const AcidTest = () => {
                             >
                                 Summary
                             </h4>
-                            <span style={{ color: 'rgba(7,126,157,255)' }}>
+                            <span
+                                className='acidBaseTest'
+                                style={{ color: 'rgba(7,126,157,255)' }}
+                            >
                                 {summary}
                             </span>
                             <br></br>
                             <div
+                                className='acidBaseTest'
                                 style={{
                                     display: 'flex',
                                     flexDirection: 'column',

@@ -289,7 +289,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
  * The function anionGapWithDeltas calculates the anion gap, the
  * delta-delta (delta ratio) and the delta gap.
  */
-function anionGapWithDeltas(Na, Cl, HCO3, albumin, returnObj) {
+function anionGapWithDeltas(Na, Cl, HCO3, albumin = 4.8, returnObj) {
     let anionObj = {
         calculatedAnionGap: '',
         expectedAnionGap: '',
@@ -420,7 +420,7 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin, returnObj) {
  * Solving for 2.5*albumin = 12 yields albumin = 4.8 so that is why we
  * choose albumin of 4.8 as the default value for albumin.
  */
-function runAnalysis(pH, HCO3, PCO2, Na, Cl, albumin = 4.8) {
+function runAnalysis(pH, HCO3, PCO2, Na, Cl, albumin) {
     let [primary, secondary, secondary_chronic, returnObj] = simpleAcidBase(
         pH,
         HCO3,
@@ -431,7 +431,7 @@ function runAnalysis(pH, HCO3, PCO2, Na, Cl, albumin = 4.8) {
         Na,
         Cl,
         HCO3,
-        albumin = 4.8,
+        albumin,
         returnObj
     );
 
