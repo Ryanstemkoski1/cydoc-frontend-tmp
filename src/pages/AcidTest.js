@@ -1,14 +1,11 @@
 import AcidTestInputBox from './AcidTestInputBox';
 import React from 'react';
-import Logo from '../assets/cydoc-logo.svg';
-import { useHistory } from 'react-router';
-import { Menu } from 'semantic-ui-react';
-import { Image } from 'semantic-ui-react';
 import { useState } from 'react';
 import runAnalysis from './AcidBase/acidBaseCalculator';
 import Calculations from './Calculations';
 import { Button } from 'semantic-ui-react';
 import DifferentialDiagnoses from './DifferentialDiagnoses';
+import NavMenu from './../components/navigation/NavMenu';
 
 const AcidTest = () => {
     const [pH, setPH] = useState(0);
@@ -116,18 +113,13 @@ const AcidTest = () => {
     const onAlbuminChange = (number) => {
         setAlbumin(number);
     };
-    const history = useHistory();
-    const navigateToHome = () => {
-        const path = '/dashboard';
-        history.push(path);
-    };
     return (
         <>
-            <Menu className='nav-menu'>
-                <Menu.Item className='logo-menu' onClick={navigateToHome}>
-                    <Image src={Logo} className='logo-circle' />
-                </Menu.Item>
-            </Menu>
+            <NavMenu
+                className='Acid Test'
+                attached='top'
+                displayNoteName={false}
+            />
             <div
                 style={{
                     display: 'flex',
@@ -160,8 +152,8 @@ const AcidTest = () => {
                             className='ui header'
                             style={{
                                 color: 'rgba(7,126,157,255)',
-                                position: 'relative',
-                                bottom: '100px',
+                                position: 'absolute',
+                                bottom: '70%',
                                 marginLeft: '20px',
                             }}
                         >
@@ -171,8 +163,8 @@ const AcidTest = () => {
                             className='ui header small'
                             style={{
                                 color: 'rgba(130,130,130,255',
-                                position: 'relative',
-                                bottom: '130px',
+                                position: 'absolute',
+                                bottom: '65%',
                                 marginLeft: '20px',
                                 size: '20px',
                             }}
@@ -182,11 +174,12 @@ const AcidTest = () => {
                         <div
                             className='ui container'
                             style={{
+                                position: 'absolute',
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 flexDirection: 'column',
-                                marginTop: '-150px',
+                                bottom: '15%',
                             }}
                         >
                             <br></br>
@@ -198,13 +191,13 @@ const AcidTest = () => {
                             />
                             <AcidTestInputBox
                                 callback={onHCChange}
-                                label1='HC03+'
+                                label1='HCO3+'
                                 label2='mEq/L'
                                 subscript='Normal Range 23-28 mEq/L'
                             />
                             <AcidTestInputBox
                                 callback={onPCChange}
-                                label1='pC02'
+                                label1='pCO2'
                                 label2='mmHg'
                                 subscript='Normal Range 38-42 mmHg'
                             />
@@ -233,7 +226,8 @@ const AcidTest = () => {
                             style={{
                                 color: 'white',
                                 backgroundColor: 'rgba(7,126,157,255)',
-                                marginTop: '40px',
+                                bottom: '5%',
+                                position: 'absolute',
                             }}
                         >
                             Calculate Results
@@ -258,7 +252,7 @@ const AcidTest = () => {
                         style={{
                             color: 'rgba(7,126,157,255)',
                             position: 'absolute',
-                            marginTop: '-613px',
+                            bottom: '70%',
                         }}
                     >
                         Interpretation
@@ -268,7 +262,7 @@ const AcidTest = () => {
                         style={{
                             color: 'rgba(130,130,130,255',
                             position: 'absolute',
-                            marginTop: '-540px',
+                            bottom: '63%',
                             fontSize: '14px',
                         }}
                     >
@@ -281,7 +275,7 @@ const AcidTest = () => {
                                 className='acidBaseTest'
                                 style={{
                                     color: 'rgba(7,126,157,255)',
-                                    marginTop: '-100px',
+                                    marginTop: '5vh',
                                 }}
                             >
                                 Summary
@@ -299,6 +293,7 @@ const AcidTest = () => {
                                     display: 'flex',
                                     flexDirection: 'column',
                                     position: 'relative',
+                                    bottom: '0vh',
                                 }}
                             >
                                 <DifferentialDiagnoses
@@ -316,7 +311,13 @@ const AcidTest = () => {
                         </>
                     )}
                     {primaryExp == '' && (
-                        <h5 style={{ color: 'rgba(7,126,157,255)' }}>
+                        <h5
+                            style={{
+                                color: 'rgba(7,126,157,255)',
+                                bottom: '40%',
+                                position: 'absolute',
+                            }}
+                        >
                             Please fill in laboratory data to calculate results
                         </h5>
                     )}
@@ -325,7 +326,7 @@ const AcidTest = () => {
                             display: 'flex',
                             alignItems: 'flex-end',
                             position: 'absolute',
-                            bottom: '97px',
+                            bottom: '5%',
                         }}
                     >
                         <Button
