@@ -1,0 +1,39 @@
+.ui.container.large-width {
+    width: 90%
+}
+
+.subheader {
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.label {
+    color: teal;
+    font-weight: bold;
+}
+
+/* The next two rules space "Glucose" vertically closer to the rows above and
+below it, so it resembles the classic 'fish' shape */
+.ui.four.column>.row.tight {
+    padding: 0px;
+}
+
+.row.tight>.column.short {
+    padding-top: 0px;
+}
+
+/* These three rules are needed because the CBC and Other double column table
+at the bottom of the form has it's values in rows instead of columns. This
+results in Semantic UI applying different margins and padding to those values 
+than the rest of the table. */
+.row.tall {
+    padding-top: 2rem;
+}
+
+.row.tall.padding-bottom {
+    padding-bottom: 10px;
+}
+
+.ui.header.row.padding-top {
+    padding-top: 5px;
+}
