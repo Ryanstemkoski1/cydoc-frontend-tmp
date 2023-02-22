@@ -244,7 +244,7 @@ class GenerateInpatientPlan extends Component {
                 <NavMenu className='landing-page-nav-menu' />
                 <Container className='active-tab-container large-width'>
                     <Segment>
-                        <Grid columns={2} divided relaxed>
+                        <Grid columns={2} divided relaxed stackable>
                             <Grid.Column width={`${isSmallBreakpoint ? 8 : 11}`}>
                                 <Grid.Row centered>
                                     <Header as='h2' textAlign='center'>
