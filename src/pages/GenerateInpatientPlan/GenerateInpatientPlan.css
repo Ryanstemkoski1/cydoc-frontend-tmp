@@ -5,11 +5,39 @@
 .subheader {
     font-size: 16px;
     margin-top: 20px;
+    text-align: center;
 }
 
 .label {
     color: teal;
     font-weight: bold;
+}
+
+.full-row-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.label-set {
+    margin-bottom: 15px;
+}
+
+.extra-small-input {
+    min-width: 120px;
+    height: fit-content;
+}
+
+.input-with-label-below {
+    display: flex;
+    flex-direction: column;
+}
+
+.data-header {
+    margin: 30px 0px;
+}
+
+.normal-range {
+    font-size: 12px;
 }
 
 /* The next two rules space "Glucose" vertically closer to the rows above and
