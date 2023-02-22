@@ -24,6 +24,7 @@
 .extra-small-input {
     min-width: 120px;
     height: fit-content;
+    max-width: fit-content;
 }
 
 .input-with-label-below {
@@ -38,4 +39,8 @@
 .middle-align {
     margin-top: auto;
     margin-bottom: auto;
+}
+
+.ui.grid.stack {
+    flex-direction: column;
 }

@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { Input, Grid, GridColumn, GridRow, Container, Segment, Header } from 'semantic-ui-react';
+import { Input, Grid, Container, Segment, Header } from 'semantic-ui-react';
 
 import NavMenu from '../../components/navigation/NavMenu';
 import './GenerateInpatientPlan.css';
@@ -8,11 +7,32 @@ import './GenerateInpatientPlan.css';
 class GenerateInpatientPlan extends Component {
     constructor(props) {
         super(props);
+        this.state =  {
+            isSmallBreakpoint: false
+        };
+        this.updateDimensions = this.updateDimensions.bind(this);
+    }
+
+    componentDidMount = () => {
+        this.updateDimensions();
+        window.addEventListener('resize', this.updateDimensions);
+    };
+
+    componentWillUnmount = () => {
+        window.removeEventListener('resize', this.updateDimensions);
+    };
+
+    updateDimensions() {
+        const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
+        const isSmallBreakpoint = windowWidth < 1610;
+        this.setState({ isSmallBreakpoint });
     }
 
     render() {
+        const { isSmallBreakpoint } = this.state;
+
         const vitalsSubGrid = (
-            <Grid columns={5} stackable>
+            <Grid columns={5} className={`${isSmallBreakpoint ? 'stack' : ''}`}>
                 <div className='label-set'>
                     <div className='label'>Temp</div>
                     <Input type='number' step='.1' size='mini' className='extra-small-input' />
@@ -41,73 +61,120 @@ class GenerateInpatientPlan extends Component {
             </Grid>
         );
 
+
+        // Variables for BMP
+        const Na = (
+            <div className='label-set'>
+                <div className='label'>Na</div>
+                <div className='input-with-label-below'>
+                    <Input type='number' size='mini' className='extra-small-input' />
+                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                </div>                                    
+            </div>
+        );
+
+        const Cl = (
+            <div className='label-set'>
+                <div className='label'>Cl</div>
+                <div className='input-with-label-below'>
+                    <Input type='number' size='mini' className='extra-small-input' />
+                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                </div>                                    
+            </div>            
+        );
+
+        const BUN = (
+            <div className='label-set'>
+                <div className='label'>BUN</div>
+                <div className='input-with-label-below'>
+                    <Input type='number' size='mini' className='extra-small-input' />
+                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                </div>                                    
+            </div>
+        );
+
+        const K = (
+            <div className='label-set'>
+                <div className='label'>K</div>
+                <div className='input-with-label-below'>
+                    <Input type='number' step='.1' size='mini' className='extra-small-input' />
+                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                </div>                                    
+            </div>    
+        );
+
+        const HCO3 = (
+            <div className='label-set'>
+                <div className='label'>HC03</div>
+                <div className='input-with-label-below'>
+                    <Input type='number' size='mini' className='extra-small-input' />
+                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                </div>                                    
+            </div>
+        );
+
+        const Cr = (
+            <div className='label-set'>
+                <div className='label'>Cr</div>
+                <div className='input-with-label-below'>
+                    <Input type='number' step='.01' size='mini' className='extra-small-input' />
+                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                </div>                                    
+            </div>  
+        );
+
+        const Glucose = (
+            <div className='label-set'>
+                <div className='label'>Glucose</div>
+                <div className='input-with-label-below'>
+                    <Input type='number' size='mini' className='extra-small-input' />
+                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                </div>                                    
+            </div>
+        );
+
+        /** 
+         * Since this grid should have a fishbone structure at the large
+         * breakpoint versus a single column structure at the small breakpoint, 
+         * there are different HTML structures for each breakpoint.
+         */
         const BMPSubGrid = (
-            <Grid columns={5} stackable>
+            isSmallBreakpoint ? (
+                <Grid columns={5} className='stack'>
+                    {Na}
+                    {Cl}
+                    {BUN}
+                    {Glucose}
+                    {K}
+                    {HCO3}
+                    {Cr}   
+                </Grid>
+            ) : (
+                <Grid columns={5} stackable>
                 <div>
-                    <div className='label-set'>
-                        <div className='label'>Na</div>
-                        <div className='input-with-label-below'>
-                            <Input type='number' size='mini' className='extra-small-input' />
-                            <div className='normal-range'>Normal 135 - 145 mEg/L</div>
-                        </div>                                    
-                    </div>
+                    {Na}
                     <br />
-                    <div className='label-set right'>
-                        <div className='label'>K</div>
-                        <div className='input-with-label-below'>
-                            <Input type='number' step='.1' size='mini' className='extra-small-input' />
-                            <div className='normal-range'>Normal 135 - 145 mEg/L</div>
-                        </div>                                    
-                    </div>
+                    {K}
                 </div>
                 <div>
-                    <div className='label-set'>
-                        <div className='label'>Cl</div>
-                        <div className='input-with-label-below'>
-                            <Input type='number' size='mini' className='extra-small-input' />
-                            <div className='normal-range'>Normal 135 - 145 mEg/L</div>
-                        </div>                                    
-                    </div>
+                    {Cl}
                     <br />
-                    <div className='label-set right'>
-                        <div className='label'>HC03</div>
-                        <div className='input-with-label-below'>
-                            <Input type='number' size='mini' className='extra-small-input' />
-                            <div className='normal-range'>Normal 135 - 145 mEg/L</div>
-                        </div>                                    
-                    </div>
+                    {HCO3}
                 </div>
                 <div>
-                    <div className='label-set'>
-                        <div className='label'>BUN</div>
-                        <div className='input-with-label-below'>
-                            <Input type='number' size='mini' className='extra-small-input' />
-                            <div className='normal-range'>Normal 135 - 145 mEg/L</div>
-                        </div>                                    
-                    </div>
+                    {BUN}
                     <br />
-                    <div className='label-set right'>
-                        <div className='label'>Cr</div>
-                        <div className='input-with-label-below'>
-                            <Input type='number' step='.01' size='mini' className='extra-small-input' />
-                            <div className='normal-range'>Normal 135 - 145 mEg/L</div>
-                        </div>                                    
-                    </div>    
+                    {Cr}    
                 </div>
                 <div className='middle-align'>
-                    <div className='label-set right'>
-                        <div className='label'>Glucose</div>
-                        <div className='input-with-label-below'>
-                            <Input type='number' size='mini' className='extra-small-input' />
-                            <div className='normal-range'>Normal 135 - 145 mEg/L</div>
-                        </div>                                    
-                    </div>
+                    {Glucose}
                 </div>
             </Grid>
+            )
         );
 
         const CBCSubGrid = (
-            <Grid columns={5} stackable>
+            <Grid columns={5} className={`${isSmallBreakpoint ? 'stack' : ''}`}>
                 <div className='label-set'>
                     <div className='label'>Hgb</div>
                     <div className='input-with-label-below'>
@@ -133,7 +200,7 @@ class GenerateInpatientPlan extends Component {
         );
 
         const otherSubGrid = (
-            <Grid columns={5} stackable>
+            <Grid columns={5} className={`${isSmallBreakpoint ? 'stack' : ''}`}>
                 <div className='label-set'>
                     <div className='label'>pH</div>
                     <div className='input-with-label-below'>
@@ -178,7 +245,7 @@ class GenerateInpatientPlan extends Component {
                 <Container className='active-tab-container large-width'>
                     <Segment>
                         <Grid columns={2} divided relaxed>
-                            <Grid.Column width={11}>
+                            <Grid.Column width={`${isSmallBreakpoint ? 8 : 11}`}>
                                 <Grid.Row centered>
                                     <Header as='h2' textAlign='center'>
                                         Laboratory Data
@@ -204,7 +271,7 @@ class GenerateInpatientPlan extends Component {
                                 </Grid.Row>
                                 {otherSubGrid}
                             </Grid.Column>
-                            <Grid.Column width={5}>
+                            <Grid.Column width={`${isSmallBreakpoint ? 8 : 5}`}>
                                 <h2 className='ui header row center'>
                                     Plan Outline
                                 </h2>
@@ -220,11 +287,4 @@ class GenerateInpatientPlan extends Component {
     }
 }
 
-const mapStatetoProps = (state) => ({ currentNote: state });
-
-const mapDispatchToProps = {};
-
-export default connect(
-    mapStatetoProps,
-    mapDispatchToProps
-)(GenerateInpatientPlan);
+export default GenerateInpatientPlan;
