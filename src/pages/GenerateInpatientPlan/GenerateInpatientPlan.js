@@ -56,7 +56,7 @@ class GenerateInpatientPlan extends Component {
                                     <Header as='h3'>BMP</Header>
                                 </Grid.Row>
                                 <Grid columns={5} stackable>
-                                    <Grid.Column>
+                                    <div>
                                         <div className='label-set'>
                                             <div className='label'>Na</div>
                                             <div className='input-with-label-below'>
@@ -72,8 +72,8 @@ class GenerateInpatientPlan extends Component {
                                                 <div className='normal-range'>Normal 135 - 145 mEg/L</div>
                                             </div>                                    
                                         </div>
-                                    </Grid.Column>
-                                    <Grid.Column>
+                                    </div>
+                                    <div>
                                         <div className='label-set'>
                                             <div className='label'>Cl</div>
                                             <div className='input-with-label-below'>
@@ -89,8 +89,8 @@ class GenerateInpatientPlan extends Component {
                                                 <div className='normal-range'>Normal 135 - 145 mEg/L</div>
                                             </div>                                    
                                         </div>
-                                    </Grid.Column>
-                                    <Grid.Column>
+                                    </div>
+                                    <div>
                                         <div className='label-set'>
                                             <div className='label'>BUN</div>
                                             <div className='input-with-label-below'>
@@ -106,8 +106,8 @@ class GenerateInpatientPlan extends Component {
                                                 <div className='normal-range'>Normal 135 - 145 mEg/L</div>
                                             </div>                                    
                                         </div>    
-                                    </Grid.Column>
-                                    <Grid.Column verticalAlign='middle'>
+                                    </div>
+                                    <div className='middle-align'>
                                         <div className='label-set right'>
                                             <div className='label'>Glucose</div>
                                             <div className='input-with-label-below'>
@@ -115,7 +115,7 @@ class GenerateInpatientPlan extends Component {
                                                 <div className='normal-range'>Normal 135 - 145 mEg/L</div>
                                             </div>                                    
                                         </div>
-                                    </Grid.Column>
+                                    </div>
                                 </Grid>
                                 <Grid.Row className='data-header'>
                                     <Header as='h3'>CBC</Header>
