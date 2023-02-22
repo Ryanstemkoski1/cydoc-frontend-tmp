@@ -144,10 +144,10 @@ class GenerateInpatientPlan extends Component {
                     {Na}
                     {Cl}
                     {BUN}
-                    {Glucose}
                     {K}
                     {HCO3}
-                    {Cr}   
+                    {Cr}
+                    {Glucose}
                 </Grid>
             ) : (
                 <Grid columns={5} stackable>
