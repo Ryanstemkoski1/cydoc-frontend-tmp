@@ -382,8 +382,8 @@ class GenerateInpatientPlan extends Component {
                                 </h2>
                                 <div className='row center subheader'>
                                     Fill in the laboratory data on the left,
-                                    then press 'Calculate Results' to see your
-                                    results.
+                                    then press &lsquo;Calculate Results&rsquo;
+                                    to see your results.
                                 </div>
                             </Grid.Column>
                         </Grid>
