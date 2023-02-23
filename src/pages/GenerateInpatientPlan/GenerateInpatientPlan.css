@@ -1,0 +1,46 @@
+.ui.container.large-width {
+    width: 90%
+}
+
+.subheader {
+    font-size: 16px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.data-header {
+    margin: 30px 0px;
+}
+
+.label {
+    color: teal;
+    font-weight: bold;
+}
+
+.label-set {
+    margin-bottom: 15px;
+}
+
+.extra-small-input {
+    min-width: 120px;
+    height: fit-content;
+    max-width: fit-content;
+}
+
+.input-with-label-below {
+    display: flex;
+    flex-direction: column;
+}
+
+.normal-range {
+    font-size: 12px;
+}
+
+.middle-align {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.ui.grid.stack {
+    flex-direction: column;
+}
