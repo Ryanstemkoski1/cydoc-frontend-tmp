@@ -19,3 +19,17 @@ h5 {
     margin-top: 5px;
     margin-bottom: 5px;
   }
+
+  .text{
+    overflow: overlay;
+  }
+
+  .no-outline:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  
+  
+  
+  
+  

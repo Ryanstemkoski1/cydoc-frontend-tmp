@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Accordion, Icon } from 'semantic-ui-react';
 import './Calculations.css';
 
 const Calculations = ({
@@ -7,22 +8,25 @@ const Calculations = ({
     AnionGap = '',
 }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const handleClick = () => setIsOpen(!isOpen);
-
+    const [activeIndex, setActiveIndex] = useState(0);
+    const handleClick = () => activeIndex === 0 ? setActiveIndex(1) : setActiveIndex(0);
     return (
-        <div className='calculations' style={{ color: 'rgba(7,126,157,255)' }}>
-            <h5 style={{ fontWeight: 'bold' }}>
-                {'Calculations  '}
-                <span
-                    className={`triangle ${isOpen ? 'rotate' : ''}`}
+            <Accordion>
+            <div className='calculations' style={{
+             color: 'rgba(7,126,157,255)',
+             textAlign: 'start',
+             outline: 'none' }}>
+                <br></br>
+                <Accordion.Title
+                    active={activeIndex == 1}
                     onClick={handleClick}
-                >
-                    <svg viewBox='0 0 20 20' fill='rgba(7,126,157,255)'>
-                        <path d='M10,0 L20,20 L0,20 Z' />
-                    </svg>
-                </span>
-            </h5>
-            {isOpen && (
+                    index={0}
+                    className='no-outline borderless'
+                    style={{color:'rgba(7,126,157,255)', fontWeight:'bold',}}>
+                        <Icon name='dropdown' />
+                        Calculations
+                    </Accordion.Title>
+            <Accordion.Content className='borderless' active={activeIndex === 1}>
                 <div>
                     <h5 className='acidBaseTest' style={{ fontWeight: 'bold' }}>
                         Primary Disorder
@@ -33,7 +37,7 @@ const Calculations = ({
                     <h5 className='acidBaseTest' style={{ fontWeight: 'bold' }}>
                         Secondary Disorder
                     </h5>
-                    <span className='acidBaseTest' style={{ fontSize: '12px' }}>
+                    <span className='acidBaseTest' style={{ fontSize: '12px' }}>    
                         {SecondaryDisorder}
                     </span>
                     <h5 className='acidBaseTest' style={{ fontWeight: 'bold' }}>
@@ -43,8 +47,10 @@ const Calculations = ({
                         {AnionGap}
                     </span>
                 </div>
-            )}
-        </div>
+                </Accordion.Content>
+                </div>
+            </Accordion>
+        
     );
 };
 

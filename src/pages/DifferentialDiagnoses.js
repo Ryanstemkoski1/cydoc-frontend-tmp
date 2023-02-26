@@ -1,37 +1,34 @@
 import React, { useState } from 'react';
+import { Accordion, Icon } from 'semantic-ui-react';
 import './DifferentialDiagnoses.css';
 
 const DifferentialDiagnoses = ({ text = '', description = '' }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const handleClick = () => setIsOpen(!isOpen);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const handleClick = () => activeIndex === 0 ? setActiveIndex(1) : setActiveIndex(0);
 
     return (
+        <Accordion>
         <div
             className='differentialDiagnoses'
-            style={{ color: 'rgba(7,126,157,255)' }}
+            style={{
+                 color: 'rgba(7,126,157,255)',
+                 textAlign: 'start',
+         }}
         >
-            <h5 className='acidBaseTest' style={{ fontWeight: 'bold' }}>
-                {'Differential Diagnoses:  '}
-                <span
-                    className={`triangle ${isOpen ? 'rotate' : ''}`}
+            <br></br>
+            <Accordion.Title active={activeIndex === 1}
                     onClick={handleClick}
-                >
-                    <svg viewBox='0 0 20 20' fill='rgba(7,126,157,255)'>
-                        <path d='M10,0 L20,20 L0,20 Z' />
-                    </svg>
-                </span>
-            </h5>
-            {isOpen && (
-                <div>
-                    <span className='acidBaseTest' style={{ fontSize: '12px' }}>
-                        {description}
-                    </span>
-                    <span className='acidBaseTest' style={{ fontSize: '12px' }}>
-                        {text}
-                    </span>
-                </div>
-            )}
+                    index={0}
+                    className='no-outline borderless'
+                    style={{fontWeight:'bold', color:'rgba(7,126,157,255)'}}>
+            <Icon name='dropdown' />
+            {'Differential Diagnoses:  '}
+            </Accordion.Title>
+            <Accordion.Content active ={activeIndex === 1}>
+                {description + '\n' + text}
+            </Accordion.Content>
         </div>
+        </Accordion>
     );
 };
 

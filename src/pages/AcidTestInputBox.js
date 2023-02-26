@@ -29,8 +29,7 @@ const AcidTestInputBox = ({ callback, label1, label2, subscript }) => {
                 <div style={{ flexGrow: 1 }} />
                 <input
                     type='number'
-                    step='0'
-                    value={value}
+                    step='0.1'
                     onChange={handleChange}
                     style={{
                         width: '140px',
