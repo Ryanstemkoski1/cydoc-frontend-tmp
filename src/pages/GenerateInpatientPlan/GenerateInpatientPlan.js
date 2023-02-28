@@ -11,6 +11,19 @@ const GenerateInpatientPlan = () => {
     const [isYesButtonPressed, setIsYesButtonPressed] = useState(false);
     const [isNoButtonPressed, setIsNoButtonPressed] = useState(false);
 
+    const [values, setValues] = useState({
+        temp: '',
+        hr: '',
+    });
+
+    function handleChange(event) {
+        const value = event.target.value;
+        setValues({
+            ...values,
+            [event.target.name]: value
+        });
+    }
+
     const handleResize = () => {
         const windowWidth =
             typeof window !== 'undefined' ? window.innerWidth : 0;
@@ -40,6 +53,9 @@ const GenerateInpatientPlan = () => {
                     step='.1'
                     size='mini'
                     className='extra-small-input'
+                    name='temp'
+                    value={values.temp}
+                    onChange={handleChange}
                 />
                 <div className='normal-range'>Normal 36.1 - 37.2 C</div>
             </div>
