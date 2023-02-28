@@ -42,7 +42,7 @@ class GenerateInpatientPlan extends Component {
                         size='mini'
                         className='extra-small-input'
                     />
-                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                    <div className='normal-range'>Normal 36.1 - 37.2 C</div>
                 </div>
                 <div className='label-set'>
                     <div className='label'>BP</div>
@@ -51,7 +51,7 @@ class GenerateInpatientPlan extends Component {
                         size='mini'
                         className='extra-small-input'
                     />
-                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                    <div className='normal-range'>Normal 120/80 mmHg</div>
                 </div>
                 <div className='label-set'>
                     <div className='label'>HR</div>
@@ -60,7 +60,7 @@ class GenerateInpatientPlan extends Component {
                         size='mini'
                         className='extra-small-input'
                     />
-                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                    <div className='normal-range'>Normal 60 - 100 bpm</div>
                 </div>
                 <div className='label-set'>
                     <div className='label'>RR</div>
@@ -69,7 +69,7 @@ class GenerateInpatientPlan extends Component {
                         size='mini'
                         className='extra-small-input'
                     />
-                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                    <div className='normal-range'>Normal 12 - 20 bpm</div>
                 </div>
                 <div className='label-set'>
                     <div className='label'>O2 Sat</div>
@@ -78,7 +78,7 @@ class GenerateInpatientPlan extends Component {
                         size='mini'
                         className='extra-small-input'
                     />
-                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                    <div className='normal-range'>Normal 98 - 100%</div>
                 </div>
             </Grid>
         );
@@ -93,7 +93,7 @@ class GenerateInpatientPlan extends Component {
                         size='mini'
                         className='extra-small-input'
                     />
-                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                    <div className='normal-range'>Normal 135 - 145 mmol/L</div>
                 </div>
             </div>
         );
@@ -107,7 +107,7 @@ class GenerateInpatientPlan extends Component {
                         size='mini'
                         className='extra-small-input'
                     />
-                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                    <div className='normal-range'>Normal 98 - 108 mmol/L</div>
                 </div>
             </div>
         );
@@ -121,7 +121,7 @@ class GenerateInpatientPlan extends Component {
                         size='mini'
                         className='extra-small-input'
                     />
-                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                    <div className='normal-range'>Normal 7 - 20 mg/dL</div>
                 </div>
             </div>
         );
@@ -136,7 +136,7 @@ class GenerateInpatientPlan extends Component {
                         size='mini'
                         className='extra-small-input'
                     />
-                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                    <div className='normal-range'>Normal 3.5 - 5 mmol/L</div>
                 </div>
             </div>
         );
@@ -150,7 +150,7 @@ class GenerateInpatientPlan extends Component {
                         size='mini'
                         className='extra-small-input'
                     />
-                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                    <div className='normal-range'>Normal 21 - 30 mmol/L</div>
                 </div>
             </div>
         );
@@ -165,7 +165,7 @@ class GenerateInpatientPlan extends Component {
                         size='mini'
                         className='extra-small-input'
                     />
-                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                    <div className='normal-range'>Normal 0.4 - 1 mg/dL</div>
                 </div>
             </div>
         );
@@ -179,7 +179,7 @@ class GenerateInpatientPlan extends Component {
                         size='mini'
                         className='extra-small-input'
                     />
-                    <div className='normal-range'>Normal 135 - 145 mEg/L</div>
+                    <div className='normal-range'>Normal 70 - 140 mg/dL</div>
                 </div>
             </div>
         );
@@ -232,7 +232,7 @@ class GenerateInpatientPlan extends Component {
                             className='extra-small-input'
                         />
                         <div className='normal-range'>
-                            Normal 135 - 145 mEg/L
+                            Normal 12 - 15.5 g/dL
                         </div>
                     </div>
                 </div>
@@ -246,7 +246,7 @@ class GenerateInpatientPlan extends Component {
                             className='extra-small-input'
                         />
                         <div className='normal-range'>
-                            Normal 135 - 145 mEg/L
+                            Normal 3.2 - 9.8 x10<sup>9</sup>/L
                         </div>
                     </div>
                 </div>
@@ -259,7 +259,7 @@ class GenerateInpatientPlan extends Component {
                             className='extra-small-input'
                         />
                         <div className='normal-range'>
-                            Normal 135 - 145 mEg/L
+                            Normal 150 - 450 x10<sup>9</sup>/L
                         </div>
                     </div>
                 </div>
@@ -278,7 +278,7 @@ class GenerateInpatientPlan extends Component {
                             className='extra-small-input'
                         />
                         <div className='normal-range'>
-                            Normal 135 - 145 mEg/L
+                            Normal 7.35 - 7.45
                         </div>
                     </div>
                 </div>
@@ -292,7 +292,7 @@ class GenerateInpatientPlan extends Component {
                             className='extra-small-input'
                         />
                         <div className='normal-range'>
-                            Normal 135 - 145 mEg/L
+                            Normal 35 - 45
                         </div>
                     </div>
                 </div>
@@ -306,7 +306,7 @@ class GenerateInpatientPlan extends Component {
                             className='extra-small-input'
                         />
                         <div className='normal-range'>
-                            Normal 135 - 145 mEg/L
+                            Normal 3.5 - 4.8 g/dL
                         </div>
                     </div>
                 </div>
@@ -320,7 +320,7 @@ class GenerateInpatientPlan extends Component {
                             className='extra-small-input'
                         />
                         <div className='normal-range'>
-                            Normal 135 - 145 mEg/L
+                            Normal 8.7 - 10.2 mg/dL
                         </div>
                     </div>
                 </div>
@@ -334,7 +334,7 @@ class GenerateInpatientPlan extends Component {
                             className='extra-small-input'
                         />
                         <div className='normal-range'>
-                            Normal 135 - 145 mEg/L
+                            Normal 2.8 - 4.5 mg/dL
                         </div>
                     </div>
                 </div>
