@@ -13,8 +13,45 @@ const GenerateInpatientPlan = () => {
 
     const [values, setValues] = useState({
         temp: '',
+        bp: '',
         hr: '',
+        rr: '',
+        o2sat: '',
+        na: '',
+        cl: '',
+        bun: '',
+        k: '',
+        hco3: '',
+        cr: '',
+        glucose: '',
+        hgb: '',
+        wbc: '',
+        plt: '',
+        ph: '',
+        pco2: '',
+        albumin: '',
+        ca: '',
+        phosphate: ''
     });
+
+    const [conditions, setConditions] = useState({
+        anemia: false,
+        hypercalcemia: false,
+        hyperchloremia: false,
+        hyperglycemia: false,
+        hyperkalemia: false,
+        hypernatremia: false,
+        hyperphosphatemia: false,
+        hypocalcemia: false,
+        hypochloremia: false,
+        hypokalemia: false,
+        hyponatremia: false,
+        hypophosphatemia: false,
+        thrombocytopenia: false,
+        sepsis: false,
+        hypoglycemia: false
+    });
+
 
     function handleChange(event) {
         const value = event.target.value;
@@ -22,6 +59,25 @@ const GenerateInpatientPlan = () => {
             ...values,
             [event.target.name]: value
         });
+    }
+
+    const anemia = (
+        <Fragment>
+            <h3>Anemia</h3>
+            <p>Transfuse for Hg &lt; 7</p>
+            <p>F/U labs: CBC w/ peripheral smear, CMP</p>
+        </Fragment>
+    );
+
+    function calculateResults() {
+        const { temp, bp, hr, rr, o2sat, na, cl, bun, k, hco3, cr, glucose, hgb, wbc, plt, ph, pco2, albumin, ca, phosphate } = values;
+        // Check for each condition
+        if (hgb.length != 0 && parseInt(hgb, 10) < 12) {
+            setConditions({
+                ...conditions,
+                anemia: true
+            });
+        }
     }
 
     const handleResize = () => {
@@ -65,6 +121,9 @@ const GenerateInpatientPlan = () => {
                     type='number'
                     size='mini'
                     className='extra-small-input'
+                    name='bp'
+                    value={values.bp}
+                    onChange={handleChange}
                 />
                 <div className='normal-range'>Normal 120/80 mmHg</div>
             </div>
@@ -74,6 +133,9 @@ const GenerateInpatientPlan = () => {
                     type='number'
                     size='mini'
                     className='extra-small-input'
+                    name='hr'
+                    value={values.hr}
+                    onChange={handleChange}
                 />
                 <div className='normal-range'>Normal 60 - 100 bpm</div>
             </div>
@@ -83,6 +145,9 @@ const GenerateInpatientPlan = () => {
                     type='number'
                     size='mini'
                     className='extra-small-input'
+                    name='rr'
+                    value={values.rr}
+                    onChange={handleChange}
                 />
                 <div className='normal-range'>Normal 12 - 20 bpm</div>
             </div>
@@ -92,6 +157,9 @@ const GenerateInpatientPlan = () => {
                     type='number'
                     size='mini'
                     className='extra-small-input'
+                    name='o2sat'
+                    value={values.o2sat}
+                    onChange={handleChange}
                 />
                 <div className='normal-range'>Normal 98 - 100%</div>
             </div>
@@ -107,6 +175,9 @@ const GenerateInpatientPlan = () => {
                     type='number'
                     size='mini'
                     className='extra-small-input'
+                    name='na'
+                    value={values.na}
+                    onChange={handleChange}
                 />
                 <div className='normal-range'>Normal 135 - 145 mmol/L</div>
             </div>
@@ -121,6 +192,9 @@ const GenerateInpatientPlan = () => {
                     type='number'
                     size='mini'
                     className='extra-small-input'
+                    name='cl'
+                    value={values.cl}
+                    onChange={handleChange}
                 />
                 <div className='normal-range'>Normal 98 - 108 mmol/L</div>
             </div>
@@ -135,6 +209,9 @@ const GenerateInpatientPlan = () => {
                     type='number'
                     size='mini'
                     className='extra-small-input'
+                    name='bun'
+                    value={values.bun}
+                    onChange={handleChange}
                 />
                 <div className='normal-range'>Normal 7 - 20 mg/dL</div>
             </div>
@@ -150,6 +227,9 @@ const GenerateInpatientPlan = () => {
                     step='.1'
                     size='mini'
                     className='extra-small-input'
+                    name='k'
+                    value={values.k}
+                    onChange={handleChange}
                 />
                 <div className='normal-range'>Normal 3.5 - 5 mmol/L</div>
             </div>
@@ -164,6 +244,9 @@ const GenerateInpatientPlan = () => {
                     type='number'
                     size='mini'
                     className='extra-small-input'
+                    name='hc03'
+                    value={values.hco3}
+                    onChange={handleChange}
                 />
                 <div className='normal-range'>Normal 21 - 30 mmol/L</div>
             </div>
@@ -179,6 +262,9 @@ const GenerateInpatientPlan = () => {
                     step='.01'
                     size='mini'
                     className='extra-small-input'
+                    name='cr'
+                    value={values.cr}
+                    onChange={handleChange}
                 />
                 <div className='normal-range'>Normal 0.4 - 1 mg/dL</div>
             </div>
@@ -193,6 +279,9 @@ const GenerateInpatientPlan = () => {
                     type='number'
                     size='mini'
                     className='extra-small-input'
+                    name='glucose'
+                    value={values.glucose}
+                    onChange={handleChange}
                 />
                 <div className='normal-range'>Normal 70 - 140 mg/dL</div>
             </div>
@@ -245,6 +334,9 @@ const GenerateInpatientPlan = () => {
                         step='.1'
                         size='mini'
                         className='extra-small-input'
+                        name='hgb'
+                        value={values.hgb}
+                        onChange={handleChange}
                     />
                     <div className='normal-range'>
                         Normal 12 - 15.5 g/dL
@@ -259,6 +351,9 @@ const GenerateInpatientPlan = () => {
                         step='.1'
                         size='mini'
                         className='extra-small-input'
+                        name='wbc'
+                        value={values.wbc}
+                        onChange={handleChange}
                     />
                     <div className='normal-range'>
                         Normal 3.2 - 9.8 x10<sup>9</sup>/L
@@ -272,6 +367,9 @@ const GenerateInpatientPlan = () => {
                         type='number'
                         size='mini'
                         className='extra-small-input'
+                        name='plt'
+                        value={values.plt}
+                        onChange={handleChange}
                     />
                     <div className='normal-range'>
                         Normal 150 - 450 x10<sup>9</sup>/L
@@ -291,6 +389,9 @@ const GenerateInpatientPlan = () => {
                         step='.01'
                         size='mini'
                         className='extra-small-input'
+                        name='ph'
+                        value={values.ph}
+                        onChange={handleChange}
                     />
                     <div className='normal-range'>
                         Normal 7.35 - 7.45
@@ -298,13 +399,16 @@ const GenerateInpatientPlan = () => {
                 </div>
             </div>
             <div className='label-set'>
-                <div className='label'>PC02</div>
+                <div className='label'>PCO2</div>
                 <div className='input-with-label-below'>
                     <Input
                         type='number'
                         step='.1'
                         size='mini'
                         className='extra-small-input'
+                        name='pco2'
+                        value={values.pco2}
+                        onChange={handleChange}
                     />
                     <div className='normal-range'>
                         Normal 35 - 45
@@ -319,6 +423,9 @@ const GenerateInpatientPlan = () => {
                         step='.1'
                         size='mini'
                         className='extra-small-input'
+                        name='albumin'
+                        value={values.albumin}
+                        onChange={handleChange}
                     />
                     <div className='normal-range'>
                         Normal 3.5 - 4.8 g/dL
@@ -333,6 +440,9 @@ const GenerateInpatientPlan = () => {
                         step='.1'
                         size='mini'
                         className='extra-small-input'
+                        name='ca'
+                        value={values.ca}
+                        onChange={handleChange}
                     />
                     <div className='normal-range'>
                         Normal 8.7 - 10.2 mg/dL
@@ -347,6 +457,9 @@ const GenerateInpatientPlan = () => {
                         step='.1'
                         size='mini'
                         className='extra-small-input'
+                        name='phosphate'
+                        value={values.phosphate}
+                        onChange={handleChange}
                     />
                     <div className='normal-range'>
                         Normal 2.8 - 4.5 mg/dL
@@ -379,13 +492,19 @@ const GenerateInpatientPlan = () => {
     const submitAndClearButtons = (
         <Fragment>
             <Grid.Row className='center calculate-button'>
-                <Button type='submit'>Calculate Results</Button>
+                <Button type='submit' onClick={calculateResults}>Calculate Results</Button>
             </Grid.Row>
             <Grid.Row className='center'>
                 <a role='button' href='#'>Clear data</a>
             </Grid.Row>
         </Fragment>
     );
+
+    const labResults = (
+        <Fragment>
+            {conditions.anemia && {anemia}}
+        </Fragment>
+    )
 
     return (
         <Fragment>
@@ -434,6 +553,9 @@ const GenerateInpatientPlan = () => {
                                 Fill in the laboratory data on the left,
                                 then press &lsquo;Calculate Results&rsquo;
                                 to see your results.
+                            </Grid.Row>
+                            <Grid.Row>
+                                {conditions.anemia && anemia}
                             </Grid.Row>
                         </Grid.Column>
                     </Grid>
