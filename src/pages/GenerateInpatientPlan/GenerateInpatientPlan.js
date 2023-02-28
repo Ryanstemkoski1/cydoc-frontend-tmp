@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Input, Grid, Container, Segment, Header, Button } from 'semantic-ui-react';
 
-import NavMenu from '../../components/navigation/NavMenu';
+import ToggleButton from 'components/tools/ToggleButton';
+import NavMenu from 'components/navigation/NavMenu';
 import './GenerateInpatientPlan.css';
 
 class GenerateInpatientPlan extends Component {
@@ -348,32 +349,35 @@ class GenerateInpatientPlan extends Component {
             this.setState({ isYesButtonPressed: infection });
         }
 
+        const conditionName = '';
         const infectionButtons = (
             <Grid.Row>
                 <p>Suspected or present source of infection?</p>
-                <Button
-                    className='no-button'
+                <ToggleButton
                     active={isNoButtonPressed}
-                    basic={!isNoButtonPressed}
-                    color={isNoButtonPressed ? 'blue': 'grey'}
-                    onClick={() => toggleInfectionButtons(false)}>
-                        No
-                </Button>
-                <Button
+                    condition={conditionName}
+                    title='No'
+                    onToggleButtonClick={() => toggleInfectionButtons(false)}
+                    className='no-button'>
+                </ToggleButton>
+                <ToggleButton
                     active={isYesButtonPressed}
-                    basic={!isYesButtonPressed}
-                    color={isYesButtonPressed ? 'blue': 'grey'}
-                    onClick={() => toggleInfectionButtons(true)}>
-                        Yes
-                </Button>
+                    condition={conditionName}
+                    title='Yes'
+                    onToggleButtonClick={() => toggleInfectionButtons(true)}>
+                </ToggleButton>
             </Grid.Row>
         );
 
         const submitAndClearButtons = (
-            <Grid.Row>
-                <Button>Calculate Results</Button>
-                <Button basic color='grey'>Clear data</Button>
-            </Grid.Row>
+            <Fragment>
+                <Grid.Row className='center calculate-button'>
+                    <Button>Calculate Results</Button>
+                </Grid.Row>
+                <Grid.Row className='center'>
+                    <a role='button' href='#'>Clear data</a>
+                </Grid.Row>
+            </Fragment>
         );
 
         return (

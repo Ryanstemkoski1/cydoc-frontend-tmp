@@ -25,7 +25,6 @@ export default function ToggleButton(props) {
     return (
         <Button
             condition={condition}
-            // color={active ? 'violet' : null}
             active={active}
             onClick={onToggleButtonClick}
             size={size}
@@ -43,7 +42,7 @@ export default function ToggleButton(props) {
 ToggleButton.propTypes = {
     active: PropTypes.bool,
     compact: PropTypes.bool,
-    condition: PropTypes.string | PropTypes.number,
+    condition: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
     disabled: PropTypes.bool,
     onToggleButtonClick: PropTypes.func.isRequired,
     size: PropTypes.string,
