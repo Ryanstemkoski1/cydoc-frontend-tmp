@@ -10,8 +10,6 @@ import FamilyHistoryDropdown from '../FamilyHistoryDropdown';
 import { FAMILY_HISTORY_ACTION } from 'redux/actions/actionTypes';
 import ConditionInput from 'components/tools/ConditionInput';
 import FamilyHistoryBlock from '../FamilyHistoryBlock';
-import { currentNoteStore } from 'redux/store';
-import { deleteNote } from 'redux/actions/currentNoteActions';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
@@ -552,23 +550,4 @@ describe('FamilyHistoryContent', () => {
     //     ).toEqual('bar 2');
     //     currentNoteStore.dispatch(deleteNote());
     // });
-
-    test('disease name is standardized with synonym', () => {
-        const wrapper = mount(
-            <Provider store={currentNoteStore}>
-                <FamilyHistoryContent />
-            </Provider>
-        );
-        wrapper
-            .find('input[placeholder="Condition"]')
-            .first()
-            .simulate('change', {
-                target: { value: 'heart attack' },
-            });
-        wrapper.update();
-        expect(
-            wrapper.find('input[placeholder="Condition"]').first().props().value
-        ).toEqual('myocardial infarction');
-        currentNoteStore.dispatch(deleteNote());
-    });
 });

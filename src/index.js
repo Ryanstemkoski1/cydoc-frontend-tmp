@@ -13,6 +13,7 @@ import CreateGraph from './pages/CreateTemplate/CreateGraph';
 import EditGraph from './pages/CreateTemplate/EditGraph';
 import EditTemplate from './pages/CreateTemplate/EditTemplate';
 import ManagerDashboard from './pages/ManagerDashboard/ManagerDashboard';
+import GenerateInpatientPlan from 'pages/GenerateInpatientPlan/GenerateInpatientPlan';
 import { HPIStore } from './contexts/HPIContext';
 import { AuthStore } from './contexts/AuthContext';
 import { NotesStore } from './contexts/NotesContext';
@@ -73,6 +74,11 @@ ReactDOM.render(
                                             exact
                                             path='/dashboard'
                                             component={LandingPage}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/generateinpatientplan'
+                                            component={GenerateInpatientPlan}
                                         />
                                         <PrivateRoute
                                             exact
