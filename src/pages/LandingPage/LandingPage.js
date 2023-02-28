@@ -94,7 +94,7 @@ class LandingPage extends Component {
 
         const stack = windowWidth < LANDING_PAGE_MOBLE_BP;
         const noteExists = this.checkExistingNote();
-        const noteButtons = noteExists ? (
+        const desktopNoteButtons = noteExists ? (
             <div className='landing-col multiple'>
                 <div
                     className='landing-box top'
@@ -125,8 +125,8 @@ class LandingPage extends Component {
                     className='landing-box bottom'
                     onClick={() => this.handleAcidTestClick()}
                 >
-                    <Icon name='file outline' size='large' class='icons' />
-                    <h3 className='text'>Create New Acid Base Analysis</h3>
+                    <Icon name='file outline' size='large' className='icons' />
+                    <h3 className='text'>Return to Active Note</h3>
                 </div>
                 <div
                     className='landing-box bottom'
@@ -165,11 +165,15 @@ class LandingPage extends Component {
                     </p>
                 </div>
                 <div
-                    className='landing-box bottom'
+                    className='landing-box landing-col'
                     onClick={() => this.handleAcidTestClick()}
                 >
-                    <Icon name='file outline' size='large' class='icons' />
+                    <Icon name='flask' size='huge' className='icons' />
                     <h3 className='text'>Create New Acid Base Analysis</h3>
+                    <br />
+                    <p className='smaller-text'>
+                        Generate analysis from laboratory values
+                    </p>
                 </div>
             </Fragment>
         );
@@ -208,6 +212,21 @@ class LandingPage extends Component {
                         size='large'
                         className='icons'
                     ></Icon>
+                </div>
+            </div>
+        );
+
+        const newAcidBaseAnalysisMobileButton = (
+            <div
+                onClick={() => this.handleAcidTestClick()}
+                className='ui animated fade button landing'
+                tabIndex='0'
+            >
+                <div className='visible content' size='massive'>
+                    <Button size='big'>Create New Acid Base Analysis</Button>
+                </div>
+                <div className='hidden content'>
+                    <Icon name='flask' size='large' className='icons'></Icon>
                 </div>
             </div>
         );
@@ -262,6 +281,7 @@ class LandingPage extends Component {
                                     {existingNoteMobileButton}
                                     {newNoteMobileButton}
                                     {newInpatientPlanMobileButton}
+                                    {newAcidBaseAnalysisMobileButton}
                                 </>
                             ) : (
                                 <>{desktopNoteButtons}</>
