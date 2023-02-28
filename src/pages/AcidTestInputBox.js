@@ -37,6 +37,7 @@ const AcidTestInputBox = ({ callback, label1, label2, subscript }) => {
                         padding: '0px 10px',
                         borderRadius: '5px',
                     }}
+                    value={value}
                 />
                 <div style={{ flexGrow: 1 }} />
                 <span

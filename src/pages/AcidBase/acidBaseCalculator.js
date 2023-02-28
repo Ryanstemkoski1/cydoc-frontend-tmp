@@ -96,7 +96,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
 
             if (HCO3 < rsAcidHCO3ExpAcute) {
                 returnObj.secondaryExp +=
-                    '\t HCO3 of ' +
+                    'HCO3 of ' +
                     HCO3.toString() +
                     ' is < expected HCO3 of ' +
                     rsAcidHCO3ExpAcute.toString() +
@@ -104,7 +104,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 secondary = 'metabolic acidosis';
             } else if (HCO3 > rsAcidHCO3ExpAcute) {
                 returnObj.secondaryExp +=
-                    '\t HCO3 of ' +
+                    'HCO3 of ' +
                     HCO3.toString() +
                     ' is > expected HCO3 of ' +
                     rsAcidHCO3ExpAcute.toString() +
@@ -112,7 +112,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 secondary = 'metabolic alkalosis';
             } else {
                 returnObj.secondaryExp +=
-                    '\t HCO3 of ' +
+                    'HCO3 of ' +
                     HCO3.toString() +
                     ' is equal to expected HCO3 of ' +
                     rsAcidHCO3ExpAcute.toString() +
@@ -127,7 +127,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 rsAcidHCO3ExpChronic.toString();
             if (HCO3 < rsAcidHCO3ExpChronic) {
                 returnObj.secondaryExp +=
-                    '\t HCO3 of ' +
+                    'HCO3 of ' +
                     HCO3.toString() +
                     ' is < expected HCO3 of ' +
                     rsAcidHCO3ExpChronic.toString() +
@@ -135,7 +135,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 secondary_chronic = 'metabolic acidosis';
             } else if (HCO3 > rsAcidHCO3ExpChronic) {
                 returnObj.secondaryExp +=
-                    '\t HCO3 of ' +
+                    'HCO3 of ' +
                     HCO3.toString() +
                     ' is > expected HCO3 of ' +
                     rsAcidHCO3ExpChronic.toString() +
@@ -143,7 +143,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 secondary_chronic = 'metabolic alkalosis';
             } else {
                 returnObj.secondaryExp +=
-                    '\t HCO3 of ' +
+                    'HCO3 of ' +
                     HCO3.toString() +
                     ' is equal to expected HCO3 of ' +
                     rsAcidHCO3ExpChronic.toString() +
@@ -226,7 +226,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
 
             if (HCO3 < rsAlkHCO3ExpAcute) {
                 returnObj.secondaryExp +=
-                    '\t HCO3 of ' +
+                    'HCO3 of ' +
                     HCO3.toString() +
                     ' is < expected HCO3 of ' +
                     rsAlkHCO3ExpAcute.toString() +
@@ -234,7 +234,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 secondary = 'metabolic acidosis';
             } else if (HCO3 > rsAlkHCO3ExpAcute) {
                 returnObj.secondaryExp +=
-                    '\t HCO3 of ' +
+                    'HCO3 of ' +
                     HCO3.toString() +
                     ' is > expected HCO3 of ' +
                     rsAlkHCO3ExpAcute.toString() +
@@ -242,7 +242,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 secondary = 'metabolic alkalosis';
             } else {
                 returnObj.secondaryExp +=
-                    '\t HCO3 of ' +
+                    'HCO3 of ' +
                     HCO3.toString() +
                     ' is equal to expected HCO3 of ' +
                     rsAlkHCO3ExpAcute.toString() +
@@ -257,7 +257,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 rsAlkHCO3ExpChronic.toString();
             if (HCO3 < rsAlkHCO3ExpChronic) {
                 returnObj.secondaryExp +=
-                    '\t HCO3 of ' +
+                    'HCO3 of ' +
                     HCO3.toString() +
                     ' is < expected HCO3 of ' +
                     rsAlkHCO3ExpChronic.toString() +
@@ -265,7 +265,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 secondary_chronic = 'metabolic acidosis';
             } else if (HCO3 > rsAlkHCO3ExpChronic) {
                 returnObj.secondaryExp +=
-                    '\t HCO3 of ' +
+                    'HCO3 of ' +
                     HCO3.toString() +
                     ' is > expected HCO3 of ' +
                     rsAlkHCO3ExpChronic.toString() +
@@ -273,7 +273,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 secondary_chronic = 'metabolic alkalosis';
             } else {
                 returnObj.secondaryExp +=
-                    '\t HCO3 of ' +
+                    'HCO3 of ' +
                     HCO3.toString() +
                     ' is equal to expected HCO3 of ' +
                     rsAlkHCO3ExpChronic.toString() +
@@ -332,7 +332,7 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin = 4.8, returnObj) {
     let deltaAG = calculatedAnionGap - expectedAnionGap;
 
     anionObj.deltaAG +=
-        '\tdeltaAG = calculated anion gap - expected anion gap = ' +
+        'deltaAG = calculated anion gap - expected anion gap = ' +
         calculatedAnionGap.toString() +
         ' - ' +
         expectedAnionGap.toString() +
@@ -340,15 +340,15 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin = 4.8, returnObj) {
         deltaAG.toString();
     if (calculatedAnionGap > expectedAnionGap) {
         anionObj.gap +=
-            '\tHigh anion gap: calculated anion gap is higher than expected anion gap.';
+            'High anion gap: calculated anion gap is higher than expected anion gap.';
     } else {
         anionObj.gap +=
-            '\tLow or normal anion gap: calculated anion gap is less than or equal to expected anion gap.';
+            'Low or normal anion gap: calculated anion gap is less than or equal to expected anion gap.';
     }
 
     let deltaHCO3 = 24 - HCO3;
     anionObj.deltaHCO3 +=
-        '\tdeltaHCO3 = 24 - HCO3 = 24 - ' +
+        'deltaHCO3 = 24 - HCO3 = 24 - ' +
         HCO3.toString() +
         ' = ' +
         deltaHCO3.toString();

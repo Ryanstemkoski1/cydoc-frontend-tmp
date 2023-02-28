@@ -3,6 +3,9 @@
     margin: 0;
     padding: 0;
 }
+.css-fix {
+  white-space: pre-wrap; /* or pre-line */
+}
 .triangle {
     cursor: pointer;
     width: 13px; 
