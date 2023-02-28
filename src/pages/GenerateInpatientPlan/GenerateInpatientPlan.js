@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Input, Grid, Container, Segment, Header } from 'semantic-ui-react';
+import { Input, Grid, Container, Segment, Header, Button } from 'semantic-ui-react';
 
 import NavMenu from '../../components/navigation/NavMenu';
 import './GenerateInpatientPlan.css';
@@ -9,6 +9,8 @@ class GenerateInpatientPlan extends Component {
         super(props);
         this.state = {
             isSmallBreakpoint: false,
+            isYesButtonPressed: false,
+            isNoButtonPressed: false,
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
@@ -30,7 +32,7 @@ class GenerateInpatientPlan extends Component {
     }
 
     render() {
-        const { isSmallBreakpoint } = this.state;
+        let { isSmallBreakpoint, isYesButtonPressed, isNoButtonPressed } = this.state;
 
         const vitalsSubGrid = (
             <Grid columns={5} className={`${isSmallBreakpoint ? 'stack' : ''}`}>
@@ -341,6 +343,39 @@ class GenerateInpatientPlan extends Component {
             </Grid>
         );
 
+        const toggleInfectionButtons = (infection) => {
+            this.setState({ isNoButtonPressed: !infection });
+            this.setState({ isYesButtonPressed: infection });
+        }
+
+        const infectionButtons = (
+            <Grid.Row>
+                <p>Suspected or present source of infection?</p>
+                <Button
+                    className='no-button'
+                    active={isNoButtonPressed}
+                    basic={!isNoButtonPressed}
+                    color={isNoButtonPressed ? 'blue': 'grey'}
+                    onClick={() => toggleInfectionButtons(false)}>
+                        No
+                </Button>
+                <Button
+                    active={isYesButtonPressed}
+                    basic={!isYesButtonPressed}
+                    color={isYesButtonPressed ? 'blue': 'grey'}
+                    onClick={() => toggleInfectionButtons(true)}>
+                        Yes
+                </Button>
+            </Grid.Row>
+        );
+
+        const submitAndClearButtons = (
+            <Grid.Row>
+                <Button>Calculate Results</Button>
+                <Button basic color='grey'>Clear data</Button>
+            </Grid.Row>
+        );
+
         return (
             <Fragment>
                 <NavMenu className='landing-page-nav-menu' />
@@ -363,6 +398,7 @@ class GenerateInpatientPlan extends Component {
                                     <Header as='h3'>Vitals</Header>
                                 </Grid.Row>
                                 {vitalsSubGrid}
+                                {infectionButtons}
                                 <Grid.Row className='data-header'>
                                     <Header as='h3'>BMP</Header>
                                 </Grid.Row>
@@ -375,6 +411,7 @@ class GenerateInpatientPlan extends Component {
                                     <Header as='h3'>Other</Header>
                                 </Grid.Row>
                                 {otherSubGrid}
+                                {submitAndClearButtons}
                             </Grid.Column>
                             <Grid.Column width={`${isSmallBreakpoint ? 8 : 5}`}>
                                 <h2 className='ui header row center'>

@@ -44,3 +44,7 @@
 .ui.grid.stack {
     flex-direction: column;
 }
+
+.ui.button.no-button {
+    margin-right: 20px;
+}
