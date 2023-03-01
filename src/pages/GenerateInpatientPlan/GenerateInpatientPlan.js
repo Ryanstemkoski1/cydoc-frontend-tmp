@@ -473,9 +473,11 @@ const GenerateInpatientPlan = () => {
         const note = document.querySelectorAll('.diagnosis-container > *');
         let text = '';
         for (let i = 0; i < note.length; i++) {
-            if (Object.prototype.hasOwnProperty.call(
-                note[i].dataset,
-                'clipboardHeader')
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    note[i].dataset,
+                    'clipboardHeader'
+                )
             ) {
                 text += '\n';
             }
