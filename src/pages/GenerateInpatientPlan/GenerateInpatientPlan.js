@@ -1,9 +1,19 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Input, Grid, Container, Segment, Header, Button } from 'semantic-ui-react';
+import {
+    Input,
+    Grid,
+    Container,
+    Segment,
+    Header,
+    Button,
+} from 'semantic-ui-react';
 
 import ToggleButton from 'components/tools/ToggleButton';
 import NavMenu from 'components/navigation/NavMenu';
-import { initialConditionsState, initialValuesState } from 'constants/generateInpatientPlan';
+import {
+    initialConditionsState,
+    initialValuesState,
+} from 'constants/generateInpatientPlan';
 import './GenerateInpatientPlan.css';
 
 const GenerateInpatientPlan = () => {
@@ -30,7 +40,7 @@ const GenerateInpatientPlan = () => {
             typeof window !== 'undefined' ? window.innerWidth : 0;
         const isSmallBreakpoint = windowWidth < 1610;
         setIsSmallBreakpoint(isSmallBreakpoint);
-    }
+    };
 
     useEffect(() => {
         window.addEventListener('resize', handleResize);
@@ -40,18 +50,17 @@ const GenerateInpatientPlan = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-/******************************************************************************
- * This section of code contains all the check functions for each condition
- * and the plan text to render for each condition.
- *****************************************************************************/
-    
+    /*************************************************************************
+     * This section of code contains all the check functions for each condition
+     * and the plan text to render for each condition.
+     *************************************************************************/
     // Updates the conditions state array when 'Calculate Results' is pressed
     function setCondition(conditionName) {
         setConditions((prevState) => {
             return {
                 ...prevState,
-                [conditionName]: true
-            }
+                [conditionName]: true,
+            };
         });
         setHasResults(true);
     }
@@ -61,266 +70,304 @@ const GenerateInpatientPlan = () => {
         if (hgb.length != 0 && hgb < 12) {
             setCondition('anemia');
         }
-    }
+    };
 
     const anemia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Anemia</div>
+            <div data-clipboard-header='1' className='label'>
+                Anemia
+            </div>
             <div>{`Transfuse for Hg < 7`}</div>
             <div>{`F/U labs: CBC w/ peripheral smear, CMP`}</div>
         </Fragment>
     );
 
     const correctedCalcium = (ca, albumin) => {
-        return ca + .8*(4 - albumin);
-    }
+        return ca + 0.8 * (4 - albumin);
+    };
 
     const checkHypocalcemia = () => {
-        const {albumin, ca} = values;
+        const { albumin, ca } = values;
 
-        if (ca.length != 0 && albumin.length != 0 && (correctedCalcium(ca, albumin) < 8)) {
+        if (
+            ca.length != 0 &&
+            albumin.length != 0 &&
+            correctedCalcium(ca, albumin) < 8
+        ) {
             setCondition('hypocalcemia');
         }
-    }
+    };
 
     const hypocalcemia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Hypocalcemia</div>
+            <div data-clipboard-header='1' className='label'>
+                Hypocalcemia
+            </div>
             <div>{`IV Ca if Ca < 7.5`}</div>
             <div>{`F/U labs: Mg, K+/BMP, PTH, albumin`}</div>
         </Fragment>
-    )
+    );
 
     const checkHyperchloremia = () => {
-        const {cl} = values;
+        const { cl } = values;
         if (cl.length != 0 && cl > 107) {
             setCondition('hyperchloremia');
         }
-    }
+    };
 
     const hyperchloremia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Hyperchloremia</div>
+            <div data-clipboard-header='1' className='label'>
+                Hyperchloremia
+            </div>
             <div>{`F/U labs: BMP, albumin, arterial blood gas`}</div>
         </Fragment>
-    )
+    );
 
     const checkHyperglycemia = () => {
-        const {glucose} = values;
+        const { glucose } = values;
         if (glucose.length != 0 && glucose > 200) {
             setCondition('hyperglycemia');
         }
-    }
+    };
 
     const hyperglycemia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Hyperglycemia</div>
+            <div data-clipboard-header='1' className='label'>
+                Hyperglycemia
+            </div>
             <div>{`IV fluids if DKA or HHS`}</div>
             <div>{`IV K if DKA or HHS`}</div>
             <div>{`Insulin if DKA or HHS`}</div>
             <div>{`F/U labs: A1C (if not emergent), BMP, CBC, urinalysis, ABG, ECG`}</div>
         </Fragment>
-    )
+    );
 
     const checkHyperkalemia = () => {
-        const {k} = values;
+        const { k } = values;
         if (k.length != 0 && k > 5) {
             setCondition('hyperkalemia');
         }
-    }
+    };
 
     const hyperkalemia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Hyperkalemia</div>
+            <div data-clipboard-header='1' className='label'>
+                Hyperkalemia
+            </div>
             <div>{`IV Ca if K > 6.5`}</div>
             <div>{`IV insulin and glucose if K > 6.5`}</div>
             <div>{`Loop diuretics if K > 6.5`}</div>
             <div>{`Serial ECG`}</div>
             <div>{`F/U labs: Cardiac monitoring/ serial ECG, serial serum glucose, BMP`}</div>
         </Fragment>
-    )
+    );
 
     const checkHypernatremia = () => {
-        const {na} = values;
+        const { na } = values;
         if (na.length != 0 && na > 145) {
             setCondition('hypernatremia');
         }
-    }
+    };
 
     const hypernatremia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Hypernatremia</div>
+            <div data-clipboard-header='1' className='label'>
+                Hypernatremia
+            </div>
             <div>{`IV D5W if Na > 145`}</div>
             <div>{`F/U labs: Serial Na/BMP`}</div>
         </Fragment>
-    )
+    );
 
     const checkHyperphosphatemia = () => {
         const { phosphate } = values;
         if (phosphate.length != 0 && phosphate > 4.5) {
             setCondition('hyperphosphatemia');
         }
-    }
+    };
 
     const hyperphosphatemia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>hyperphosphatemia</div>
+            <div data-clipboard-header='1' className='label'>
+                hyperphosphatemia
+            </div>
             <div>{`BMP`}</div>
         </Fragment>
-    )
+    );
 
     const checkHypercalcemia = () => {
-        const {albumin, ca} = values;
+        const { albumin, ca } = values;
 
-        if (ca.length != 0 && albumin.length != 0 && (correctedCalcium(ca, albumin) > 10.5)) {
+        if (
+            ca.length != 0 &&
+            albumin.length != 0 &&
+            correctedCalcium(ca, albumin) > 10.5
+        ) {
             setCondition('hypercalcemia');
         }
-    }
+    };
 
     const hypercalcemia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Hypercalcemia</div>
+            <div data-clipboard-header='1' className='label'>
+                Hypercalcemia
+            </div>
             <div>{`IV isotonic saline for Ca > 14`}</div>
             <div>{`F/U labs: Vitamin D, BMP`}</div>
         </Fragment>
-    )
+    );
 
     const checkHypochloremia = () => {
         const { cl } = values;
         if (cl.length != 0 && cl < 95) {
             setCondition('hypochloremia');
         }
-    }
+    };
 
     const hypochloremia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Hypochloremia</div>
+            <div data-clipboard-header='1' className='label'>
+                Hypochloremia
+            </div>
             <div>{`BMP`}</div>
         </Fragment>
-    )
-    
+    );
+
     const checkHypokalemia = () => {
         const { k } = values;
         if (k.length != 0 && k < 3.5) {
             setCondition('hypokalemia');
         }
-    }
+    };
 
     const hypokalemia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Hypokalemia</div>
+            <div data-clipboard-header='1' className='label'>
+                Hypokalemia
+            </div>
             <div>{`Check Mg`}</div>
             <div>{`IV KCI if K < 2.5`}</div>
             <div>{`F/U labs: Serial ECG, BMP`}</div>
         </Fragment>
-    )
+    );
 
     const checkHyponatremia = () => {
         const { na } = values;
         if (na.length != 0 && na < 135) {
             setCondition('hyponatremia');
         }
-    }
+    };
 
     const hyponatremia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Hyponatremia</div>
+            <div data-clipboard-header='1' className='label'>
+                Hyponatremia
+            </div>
             <div>{`3% saline if Na < 130`}</div>
             <div>{`F/U labs: Serial BMP/NA+, urine osmality`}</div>
         </Fragment>
-    )
+    );
 
     const checkHypophosphatemia = () => {
         const { phosphate } = values;
         if (phosphate.length != 0 && phosphate < 2.5) {
             setCondition('hypophosphatemia');
         }
-    }
+    };
 
     const hypophosphatemia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Hypophosphatemia</div>
+            <div data-clipboard-header='1' className='label'>
+                Hypophosphatemia
+            </div>
             <div>{`F/U labs: 24hr urine or FEPO4, BMP`}</div>
         </Fragment>
-    )
+    );
 
     const checkThrombocytopenia = () => {
         const { plt } = values;
         if (plt.length != 0 && plt < 150000) {
             setCondition('thrombocytopenia');
         }
-    }
+    };
 
     const thrombocytopenia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Thrombocytopenia</div>
+            <div data-clipboard-header='1' className='label'>
+                Thrombocytopenia
+            </div>
             <div>{`F/U labs: Repeat CBC w/ peripheral blood smear`}</div>
         </Fragment>
-    )
+    );
 
     const checkSepsis = () => {
         const { temp, hr, rr, pco2, wbc } = values;
         let trueCount = 0;
         if (temp.length != 0 && (temp < 36 || temp > 38)) {
-            trueCount+=1;
+            trueCount += 1;
         }
         if (hr.length != 0 && hr > 90) {
-            trueCount+=1;
+            trueCount += 1;
         }
         if ((rr.length != 0 && rr > 20) || (pco2.length != 0 && pco2 < 32)) {
-            trueCount+=1;
+            trueCount += 1;
         }
         if (wbc.length != 0 && (wbc > 12000 || wbc < 4000)) {
-            trueCount+=1;
+            trueCount += 1;
         }
         if (trueCount >= 2) {
             setCondition('sepsis');
         }
-    }
+    };
 
     const sepsis = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Sepsis</div>
+            <div data-clipboard-header='1' className='label'>
+                Sepsis
+            </div>
             <div>{`Antibiotics`}</div>
             <div>{`F/U blood cultures and urine cultures`}</div>
         </Fragment>
-    )
-    
+    );
+
     const checkHypoglycemia = () => {
         const { glucose } = values;
         if (glucose.length != 0 && glucose < 70) {
             setCondition('hypoglycemia');
         }
-    }
+    };
 
     const hypoglycemia = (
         <Fragment>
-            <div data-clipboard-header='1' className='label'>Hypoglycemia</div>
+            <div data-clipboard-header='1' className='label'>
+                Hypoglycemia
+            </div>
             <div>{`Juice`}</div>
             <div>{`IV dextrose`}</div>
         </Fragment>
-    )
+    );
 
-/******************************************************************************
- * Submit button & displaying plan
- *****************************************************************************/
+    /******************************************************************************
+     * Submit button & displaying plan
+     *****************************************************************************/
 
     const checkAndDisplay = [
-        {check: conditions.anemia, display: anemia},
-        {check: conditions.hypercalcemia, display: hypercalcemia},
-        {check: conditions.hyperchloremia, display: hyperchloremia},
-        {check: conditions.hyperglycemia, display: hyperglycemia},
-        {check: conditions.hyperkalemia, display: hyperkalemia},
-        {check: conditions.hypernatremia, display: hypernatremia},
-        {check: conditions.hyperphosphatemia, display: hyperphosphatemia},
-        {check: conditions.hypocalcemia, display: hypocalcemia},
-        {check: conditions.hypochloremia, display: hypochloremia},
-        {check: conditions.hypoglycemia, display: hypoglycemia},
-        {check: conditions.hypokalemia, display: hypokalemia},
-        {check: conditions.hyponatremia, display: hyponatremia},
-        {check: conditions.hypophosphatemia, display: hypophosphatemia},
-        {check: conditions.sepsis, display: sepsis},
-        {check: conditions.thrombocytopenia, display: thrombocytopenia}
+        { check: conditions.anemia, display: anemia },
+        { check: conditions.hypercalcemia, display: hypercalcemia },
+        { check: conditions.hyperchloremia, display: hyperchloremia },
+        { check: conditions.hyperglycemia, display: hyperglycemia },
+        { check: conditions.hyperkalemia, display: hyperkalemia },
+        { check: conditions.hypernatremia, display: hypernatremia },
+        { check: conditions.hyperphosphatemia, display: hyperphosphatemia },
+        { check: conditions.hypocalcemia, display: hypocalcemia },
+        { check: conditions.hypochloremia, display: hypochloremia },
+        { check: conditions.hypoglycemia, display: hypoglycemia },
+        { check: conditions.hypokalemia, display: hypokalemia },
+        { check: conditions.hyponatremia, display: hyponatremia },
+        { check: conditions.hypophosphatemia, display: hypophosphatemia },
+        { check: conditions.sepsis, display: sepsis },
+        { check: conditions.thrombocytopenia, display: thrombocytopenia },
     ];
 
     const checkConditions = [
@@ -338,7 +385,7 @@ const GenerateInpatientPlan = () => {
         checkHyponatremia,
         checkHypophosphatemia,
         checkSepsis,
-        checkThrombocytopenia
+        checkThrombocytopenia,
     ];
 
     function calculateResults() {
@@ -347,21 +394,21 @@ const GenerateInpatientPlan = () => {
         }
     }
 
-    const planDisplay = (
-        checkAndDisplay.map((checkAndDisplay, i) => {
-            if (checkAndDisplay.check) {
-                return (
-                    <div className='diagnosis-container' key={`planItem-${i}`}>
-                        {checkAndDisplay.display}
-                    </div>
-                );
-            }
-        })
-    );
+    const planDisplay = checkAndDisplay.map((checkAndDisplay, i) => {
+        if (checkAndDisplay.check) {
+            return (
+                <div className='diagnosis-container' key={`planItem-${i}`}>
+                    {checkAndDisplay.display}
+                </div>
+            );
+        }
+    });
 
     const submitButton = (
         <Grid.Row className='center calculate-button'>
-            <Button type='submit' onClick={calculateResults}>Calculate Results</Button>
+            <Button type='submit' onClick={calculateResults}>
+                Calculate Results
+            </Button>
         </Grid.Row>
     );
 
@@ -383,14 +430,14 @@ const GenerateInpatientPlan = () => {
                 condition={conditionName}
                 title='No'
                 onToggleButtonClick={() => toggleInfectionButtons(false)}
-                className='no-button'>
-            </ToggleButton>
+                className='no-button'
+            ></ToggleButton>
             <ToggleButton
                 active={isYesInfectionPressed}
                 condition={conditionName}
                 title='Yes'
-                onToggleButtonClick={() => toggleInfectionButtons(true)}>
-            </ToggleButton>
+                onToggleButtonClick={() => toggleInfectionButtons(true)}
+            ></ToggleButton>
         </Grid.Row>
     );
 
@@ -399,7 +446,9 @@ const GenerateInpatientPlan = () => {
      *************************************************************************/
     const clearButton = (
         <Grid.Row className='center'>
-            <a role='button' href='#' onClick={clearResults}>Clear data</a>
+            <a role='button' href='#' onClick={clearResults}>
+                Clear data
+            </a>
         </Grid.Row>
     );
 
@@ -410,7 +459,13 @@ const GenerateInpatientPlan = () => {
 
     const copyButton = (
         <Grid.Row className='center'>
-            <Button color='yellow' className='copy-button' onClick={copyResults}>Copy Plan</Button>
+            <Button
+                color='yellow'
+                className='copy-button'
+                onClick={copyResults}
+            >
+                Copy Plan
+            </Button>
         </Grid.Row>
     );
 
@@ -418,7 +473,10 @@ const GenerateInpatientPlan = () => {
         const note = document.querySelectorAll('.diagnosis-container > *');
         let text = '';
         for (let i = 0; i < note.length; i++) {
-            if (note[i].dataset.hasOwnProperty('clipboardHeader')) {
+            if (Object.prototype.hasOwnProperty.call(
+                note[i].dataset,
+                'clipboardHeader')
+            ) {
                 text += '\n';
             }
             text += `${note[i].innerText}\r\n`;
@@ -440,7 +498,7 @@ const GenerateInpatientPlan = () => {
         }
         setValues({
             ...values,
-            [event.target.name]: value
+            [event.target.name]: value,
         });
     }
 
@@ -681,9 +739,7 @@ const GenerateInpatientPlan = () => {
                         value={values.hgb}
                         onChange={handleInputChange}
                     />
-                    <div className='normal-range'>
-                        Normal 12 - 15.5 g/dL
-                    </div>
+                    <div className='normal-range'>Normal 12 - 15.5 g/dL</div>
                 </div>
             </div>
             <div className='label-set'>
@@ -736,9 +792,7 @@ const GenerateInpatientPlan = () => {
                         value={values.ph}
                         onChange={handleInputChange}
                     />
-                    <div className='normal-range'>
-                        Normal 7.35 - 7.45
-                    </div>
+                    <div className='normal-range'>Normal 7.35 - 7.45</div>
                 </div>
             </div>
             <div className='label-set'>
@@ -753,9 +807,7 @@ const GenerateInpatientPlan = () => {
                         value={values.pco2}
                         onChange={handleInputChange}
                     />
-                    <div className='normal-range'>
-                        Normal 35 - 45
-                    </div>
+                    <div className='normal-range'>Normal 35 - 45</div>
                 </div>
             </div>
             <div className='label-set'>
@@ -770,9 +822,7 @@ const GenerateInpatientPlan = () => {
                         value={values.albumin}
                         onChange={handleInputChange}
                     />
-                    <div className='normal-range'>
-                        Normal 3.5 - 4.8 g/dL
-                    </div>
+                    <div className='normal-range'>Normal 3.5 - 4.8 g/dL</div>
                 </div>
             </div>
             <div className='label-set'>
@@ -787,9 +837,7 @@ const GenerateInpatientPlan = () => {
                         value={values.ca}
                         onChange={handleInputChange}
                     />
-                    <div className='normal-range'>
-                        Normal 8.7 - 10.2 mg/dL
-                    </div>
+                    <div className='normal-range'>Normal 8.7 - 10.2 mg/dL</div>
                 </div>
             </div>
             <div className='label-set'>
@@ -804,9 +852,7 @@ const GenerateInpatientPlan = () => {
                         value={values.phosphate}
                         onChange={handleInputChange}
                     />
-                    <div className='normal-range'>
-                        Normal 2.8 - 4.5 mg/dL
-                    </div>
+                    <div className='normal-range'>Normal 2.8 - 4.5 mg/dL</div>
                 </div>
             </div>
         </Grid>
@@ -821,17 +867,15 @@ const GenerateInpatientPlan = () => {
             <Container className='active-tab-container large-width'>
                 <Segment>
                     <Grid columns={2} divided relaxed stackable>
-                        <Grid.Column
-                            width={`${isSmallBreakpoint ? 8 : 11}`}
-                        >
+                        <Grid.Column width={`${isSmallBreakpoint ? 8 : 11}`}>
                             <Grid.Row centered>
                                 <Header as='h2' textAlign='center'>
                                     Laboratory Data
                                 </Header>
                             </Grid.Row>
                             <Grid.Row className='subheader'>
-                                All values are optional. Including more
-                                values yields a more detailed plan.
+                                All values are optional. Including more values
+                                yields a more detailed plan.
                             </Grid.Row>
                             <Grid.Row className='data-header'>
                                 <Header as='h3'>Vitals</Header>
@@ -855,18 +899,16 @@ const GenerateInpatientPlan = () => {
                         </Grid.Column>
                         <Grid.Column width={`${isSmallBreakpoint ? 8 : 5}`}>
                             <Grid.Row centered>
-                                <Header as='h2' textAlign ='center'>
+                                <Header as='h2' textAlign='center'>
                                     Plan Outline
                                 </Header>
                             </Grid.Row>
                             <Grid.Row className='subheader'>
-                                Fill in the laboratory data on the left,
-                                then press &lsquo;Calculate Results&rsquo;
-                                to see your results.
+                                Fill in the laboratory data on the left, then
+                                press &lsquo;Calculate Results&rsquo; to see
+                                your results.
                             </Grid.Row>
-                            <Grid.Row>
-                                { planDisplay }
-                            </Grid.Row>
+                            <Grid.Row>{planDisplay}</Grid.Row>
                             {hasResults && copyButton}
                         </Grid.Column>
                     </Grid>
@@ -874,6 +916,6 @@ const GenerateInpatientPlan = () => {
             </Container>
         </Fragment>
     );
-}
+};
 
 export default GenerateInpatientPlan;

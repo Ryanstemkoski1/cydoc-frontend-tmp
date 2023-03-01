@@ -18,7 +18,7 @@ export const initialValuesState = {
     pco2: '',
     albumin: '',
     ca: '',
-    phosphate: ''
+    phosphate: '',
 };
 
 export const initialConditionsState = {
@@ -36,5 +36,5 @@ export const initialConditionsState = {
     hypophosphatemia: false,
     thrombocytopenia: false,
     sepsis: false,
-    hypoglycemia: false
+    hypoglycemia: false,
 };

@@ -42,7 +42,7 @@ export default function ToggleButton(props) {
 ToggleButton.propTypes = {
     active: PropTypes.bool,
     compact: PropTypes.bool,
-    condition: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
+    condition: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     disabled: PropTypes.bool,
     onToggleButtonClick: PropTypes.func.isRequired,
     size: PropTypes.string,
