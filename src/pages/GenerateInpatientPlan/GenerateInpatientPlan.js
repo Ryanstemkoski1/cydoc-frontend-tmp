@@ -11,7 +11,7 @@ const GenerateInpatientPlan = () => {
     const [isYesButtonPressed, setIsYesButtonPressed] = useState(false);
     const [isNoButtonPressed, setIsNoButtonPressed] = useState(false);
 
-    const [values, setValues] = useState({
+    const initialValuesState = {
         temp: '',
         bp: '',
         hr: '',
@@ -32,9 +32,11 @@ const GenerateInpatientPlan = () => {
         albumin: '',
         ca: '',
         phosphate: ''
-    });
+    };
 
-    const [conditions, setConditions] = useState({
+    const [values, setValues] = useState(initialValuesState);
+
+    const initialConditionsState = {
         anemia: false,
         hypercalcemia: false,
         hyperchloremia: false,
@@ -50,8 +52,9 @@ const GenerateInpatientPlan = () => {
         thrombocytopenia: false,
         sepsis: false,
         hypoglycemia: false
-    });
+    };
 
+    const [conditions, setConditions] = useState(initialConditionsState);
 
     // Stores updated values
     function handleChange(event) {
@@ -79,6 +82,11 @@ const GenerateInpatientPlan = () => {
         });
     }
 
+    function clearResults() {
+        setConditions(initialConditionsState);
+        setValues(initialValuesState);
+    }
+
     const checkAnemia = () => {
         const { hgb } = values;
         if (hgb.length != 0 && hgb < 12) {
@@ -88,7 +96,7 @@ const GenerateInpatientPlan = () => {
 
     const anemia = (
         <Fragment>
-            <div className='label'>Anemia</div>
+            <div data-clipboard-header='1' className='label'>Anemia</div>
             <div>{`Transfuse for Hg < 7`}</div>
             <div>{`F/U labs: CBC w/ peripheral smear, CMP`}</div>
         </Fragment>
@@ -108,7 +116,7 @@ const GenerateInpatientPlan = () => {
 
     const hypocalcemia = (
         <Fragment>
-            <div className='label'>Hypocalcemia</div>
+            <div data-clipboard-header='1' className='label'>Hypocalcemia</div>
             <div>{`IV Ca if Ca < 7.5`}</div>
             <div>{`F/U labs: Mg, K+/BMP, PTH, albumin`}</div>
         </Fragment>
@@ -123,7 +131,7 @@ const GenerateInpatientPlan = () => {
 
     const hyperchloremia = (
         <Fragment>
-            <div className='label'>Hyperchloremia</div>
+            <div data-clipboard-header='1' className='label'>Hyperchloremia</div>
             <div>{`F/U labs: BMP, albumin, arterial blood gas`}</div>
         </Fragment>
     )
@@ -137,7 +145,7 @@ const GenerateInpatientPlan = () => {
 
     const hyperglycemia = (
         <Fragment>
-            <div className='label'>Hyperglycemia</div>
+            <div data-clipboard-header='1' className='label'>Hyperglycemia</div>
             <div>{`IV fluids if DKA or HHS`}</div>
             <div>{`IV K if DKA or HHS`}</div>
             <div>{`Insulin if DKA or HHS`}</div>
@@ -154,7 +162,7 @@ const GenerateInpatientPlan = () => {
 
     const hyperkalemia = (
         <Fragment>
-            <div className='label'>Hyperkalemia</div>
+            <div data-clipboard-header='1' className='label'>Hyperkalemia</div>
             <div>{`IV Ca if K > 6.5`}</div>
             <div>{`IV insulin and glucose if K > 6.5`}</div>
             <div>{`Loop diuretics if K > 6.5`}</div>
@@ -172,7 +180,7 @@ const GenerateInpatientPlan = () => {
 
     const hypernatremia = (
         <Fragment>
-            <div className='label'>Hypernatremia</div>
+            <div data-clipboard-header='1' className='label'>Hypernatremia</div>
             <div>{`IV D5W if Na > 145`}</div>
             <div>{`F/U labs: Serial Na/BMP`}</div>
         </Fragment>
@@ -187,7 +195,7 @@ const GenerateInpatientPlan = () => {
 
     const hyperphosphatemia = (
         <Fragment>
-            <div className='label'>hyperphosphatemia</div>
+            <div data-clipboard-header='1' className='label'>hyperphosphatemia</div>
             <div>{`BMP`}</div>
         </Fragment>
     )
@@ -202,7 +210,7 @@ const GenerateInpatientPlan = () => {
 
     const hypercalcemia = (
         <Fragment>
-            <div className='label'>Hypercalcemia</div>
+            <div data-clipboard-header='1' className='label'>Hypercalcemia</div>
             <div>{`IV isotonic saline for Ca > 14`}</div>
             <div>{`F/U labs: Vitamin D, BMP`}</div>
         </Fragment>
@@ -217,7 +225,7 @@ const GenerateInpatientPlan = () => {
 
     const hypochloremia = (
         <Fragment>
-            <div className='label'>Hypochloremia</div>
+            <div data-clipboard-header='1' className='label'>Hypochloremia</div>
             <div>{`BMP`}</div>
         </Fragment>
     )
@@ -231,7 +239,7 @@ const GenerateInpatientPlan = () => {
 
     const hypokalemia = (
         <Fragment>
-            <div className='label'>Hypokalemia</div>
+            <div data-clipboard-header='1' className='label'>Hypokalemia</div>
             <div>{`Check Mg`}</div>
             <div>{`IV KCI if K < 2.5`}</div>
             <div>{`F/U labs: Serial ECG, BMP`}</div>
@@ -247,7 +255,7 @@ const GenerateInpatientPlan = () => {
 
     const hyponatremia = (
         <Fragment>
-            <div className='label'>Hyponatremia</div>
+            <div data-clipboard-header='1' className='label'>Hyponatremia</div>
             <div>{`3% saline if Na < 130`}</div>
             <div>{`F/U labs: Serial BMP/NA+, urine osmality`}</div>
         </Fragment>
@@ -262,7 +270,7 @@ const GenerateInpatientPlan = () => {
 
     const hypophosphatemia = (
         <Fragment>
-            <div className='label'>Hypophosphatemia</div>
+            <div data-clipboard-header='1' className='label'>Hypophosphatemia</div>
             <div>{`F/U labs: 24hr urine or FEPO4, BMP`}</div>
         </Fragment>
     )
@@ -276,7 +284,7 @@ const GenerateInpatientPlan = () => {
 
     const thrombocytopenia = (
         <Fragment>
-            <div className='label'>Thrombocytopenia</div>
+            <div data-clipboard-header='1' className='label'>Thrombocytopenia</div>
             <div>{`F/U labs: Repeat CBC w/ peripheral blood smear`}</div>
         </Fragment>
     )
@@ -303,7 +311,7 @@ const GenerateInpatientPlan = () => {
 
     const sepsis = (
         <Fragment>
-            <div className='label'>Sepsis</div>
+            <div data-clipboard-header='1' className='label'>Sepsis</div>
             <div>{`Antibiotics`}</div>
             <div>{`F/U blood cultures and urine cultures`}</div>
         </Fragment>
@@ -318,7 +326,7 @@ const GenerateInpatientPlan = () => {
 
     const hypoglycemia = (
         <Fragment>
-            <div className='label'>Hypoglycemia</div>
+            <div data-clipboard-header='1' className='label'>Hypoglycemia</div>
             <div>{`Juice`}</div>
             <div>{`IV dextrose`}</div>
         </Fragment>
@@ -348,6 +356,18 @@ const GenerateInpatientPlan = () => {
         for (let check of checkConditions) {
             check();
         }
+    }
+
+    function copyResults() {
+        const note = document.querySelectorAll('.diagnosis-container > *');
+        let text = '';
+        for (let i = 0; i < note.length; i++) {
+            if (note[i].dataset.hasOwnProperty('clipboardHeader')) {
+                text += '\n';
+            }
+            text += `${note[i].innerText}\r\n`;
+        }
+        navigator.clipboard.writeText(text);
     }
 
     const planDisplay = (
@@ -751,6 +771,8 @@ const GenerateInpatientPlan = () => {
         </Grid>
     );
 
+    // Infection buttons. ToggleButton requires a 'conditionName' but it can
+    // be left blank in this scenario. 
     const conditionName = '';
     const infectionButtons = (
         <Grid.Row>
@@ -777,15 +799,15 @@ const GenerateInpatientPlan = () => {
                 <Button type='submit' onClick={calculateResults}>Calculate Results</Button>
             </Grid.Row>
             <Grid.Row className='center'>
-                <a role='button' href='#'>Clear data</a>
+                <a role='button' href='#' onClick={clearResults}>Clear data</a>
             </Grid.Row>
         </Fragment>
     );
 
-    const labResults = (
-        <Fragment>
-            {conditions.anemia && {anemia}}
-        </Fragment>
+    const copyButton = (
+        <Grid.Row className='center'>
+            <Button color='yellow' onClick={copyResults}>Copy Plan</Button>
+        </Grid.Row>
     )
 
     return (
@@ -839,6 +861,7 @@ const GenerateInpatientPlan = () => {
                             <Grid.Row>
                                 { planDisplay }
                             </Grid.Row>
+                            {copyButton}
                         </Grid.Column>
                     </Grid>
                 </Segment>
