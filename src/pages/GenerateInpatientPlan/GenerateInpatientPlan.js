@@ -16,7 +16,7 @@ const GenerateInpatientPlan = () => {
     // Values tracks each input value
     const [values, setValues] = useState(initialValuesState);
 
-    // Conditions tracks which conditions the patient has
+    // Tracks which conditions the patient has
     const [conditions, setConditions] = useState(initialConditionsState);
 
     // Boolean that tracks if a patient has one or more condition
@@ -410,9 +410,9 @@ const GenerateInpatientPlan = () => {
 
     const copyButton = (
         <Grid.Row className='center'>
-            <Button color='yellow' className='copy-button' disabled={!hasResults} onClick={copyResults}>Copy Plan</Button>
+            <Button color='yellow' className='copy-button' onClick={copyResults}>Copy Plan</Button>
         </Grid.Row>
-    )
+    );
 
     function copyResults() {
         const note = document.querySelectorAll('.diagnosis-container > *');
@@ -867,7 +867,7 @@ const GenerateInpatientPlan = () => {
                             <Grid.Row>
                                 { planDisplay }
                             </Grid.Row>
-                            {copyButton}
+                            {hasResults && copyButton}
                         </Grid.Column>
                     </Grid>
                 </Segment>
