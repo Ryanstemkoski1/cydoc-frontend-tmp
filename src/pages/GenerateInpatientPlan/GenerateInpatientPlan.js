@@ -53,32 +53,314 @@ const GenerateInpatientPlan = () => {
     });
 
 
+    // Stores updated values
     function handleChange(event) {
-        const value = event.target.value;
+        let value = event.target.value;
+        // Since all inputs have type "number" we don't need to worry
+        // about non number inputs aside from an empty string
+        if (value.length > 0) {
+            value = parseFloat(value);
+        }
         setValues({
             ...values,
             [event.target.name]: value
         });
     }
 
+     // Since all of the checks will be run one after the other, we 
+    // use the updater function to avoid updates being batched and data
+    // lost (see case 3 in this article: https://dev.to/anantbahuguna/3-mistakes-to-avoid-when-updating-react-state-45gp )
+    function updateState(conditionName) {
+        setConditions((prevState) => {
+            return {
+                ...prevState,
+                [conditionName]: true
+            }
+        });
+    }
+
+    const checkAnemia = () => {
+        const { hgb } = values;
+        if (hgb.length != 0 && hgb < 12) {
+            updateState('anemia');
+        }
+    }
+
     const anemia = (
         <Fragment>
-            <h3>Anemia</h3>
-            <p>Transfuse for Hg &lt; 7</p>
-            <p>F/U labs: CBC w/ peripheral smear, CMP</p>
+            <div className='label'>Anemia</div>
+            <div>{`Transfuse for Hg < 7`}</div>
+            <div>{`F/U labs: CBC w/ peripheral smear, CMP`}</div>
         </Fragment>
     );
 
-    function calculateResults() {
-        const { temp, bp, hr, rr, o2sat, na, cl, bun, k, hco3, cr, glucose, hgb, wbc, plt, ph, pco2, albumin, ca, phosphate } = values;
-        // Check for each condition
-        if (hgb.length != 0 && parseInt(hgb, 10) < 12) {
-            setConditions({
-                ...conditions,
-                anemia: true
-            });
+    const correctedCalcium = (ca, albumin) => {
+        return ca + .8*(4 - albumin);
+    }
+
+    const checkHypocalcemia = () => {
+        const {albumin, ca} = values;
+
+        if (ca.length != 0 && albumin.length != 0 && (correctedCalcium(ca, albumin) < 8)) {
+            updateState('hypocalcemia');
         }
     }
+
+    const hypocalcemia = (
+        <Fragment>
+            <div className='label'>Hypocalcemia</div>
+            <div>{`IV Ca if Ca < 7.5`}</div>
+            <div>{`F/U labs: Mg, K+/BMP, PTH, albumin`}</div>
+        </Fragment>
+    )
+
+    const checkHyperchloremia = () => {
+        const {cl} = values;
+        if (cl.length != 0 && cl > 107) {
+            updateState('hyperchloremia');
+        }
+    }
+
+    const hyperchloremia = (
+        <Fragment>
+            <div className='label'>Hyperchloremia</div>
+            <div>{`F/U labs: BMP, albumin, arterial blood gas`}</div>
+        </Fragment>
+    )
+
+    const checkHyperglycemia = () => {
+        const {glucose} = values;
+        if (glucose.length != 0 && glucose > 200) {
+            updateState('hyperglycemia');
+        }
+    }
+
+    const hyperglycemia = (
+        <Fragment>
+            <div className='label'>Hyperglycemia</div>
+            <div>{`IV fluids if DKA or HHS`}</div>
+            <div>{`IV K if DKA or HHS`}</div>
+            <div>{`Insulin if DKA or HHS`}</div>
+            <div>{`F/U labs: A1C (if not emergent), BMP, CBC, urinalysis, ABG, ECG`}</div>
+        </Fragment>
+    )
+
+    const checkHyperkalemia = () => {
+        const {k} = values;
+        if (k.length != 0 && k > 5) {
+            updateState('hyperkalemia');
+        }
+    }
+
+    const hyperkalemia = (
+        <Fragment>
+            <div className='label'>Hyperkalemia</div>
+            <div>{`IV Ca if K > 6.5`}</div>
+            <div>{`IV insulin and glucose if K > 6.5`}</div>
+            <div>{`Loop diuretics if K > 6.5`}</div>
+            <div>{`Serial ECG`}</div>
+            <div>{`F/U labs: Cardiac monitoring/ serial ECG, serial serum glucose, BMP`}</div>
+        </Fragment>
+    )
+
+    const checkHypernatremia = () => {
+        const {na} = values;
+        if (na.length != 0 && na > 145) {
+            updateState('hypernatremia');
+        }
+    }
+
+    const hypernatremia = (
+        <Fragment>
+            <div className='label'>Hypernatremia</div>
+            <div>{`IV D5W if Na > 145`}</div>
+            <div>{`F/U labs: Serial Na/BMP`}</div>
+        </Fragment>
+    )
+
+    const checkHyperphosphatemia = () => {
+        const { phosphate } = values;
+        if (phosphate.length != 0 && phosphate > 4.5) {
+            updateState('hyperphosphatemia');
+        }
+    }
+
+    const hyperphosphatemia = (
+        <Fragment>
+            <div className='label'>hyperphosphatemia</div>
+            <div>{`BMP`}</div>
+        </Fragment>
+    )
+
+    const checkHypercalcemia = () => {
+        const {albumin, ca} = values;
+
+        if (ca.length != 0 && albumin.length != 0 && (correctedCalcium(ca, albumin) > 10.5)) {
+            updateState('hypercalcemia');
+        }
+    }
+
+    const hypercalcemia = (
+        <Fragment>
+            <div className='label'>Hypercalcemia</div>
+            <div>{`IV isotonic saline for Ca > 14`}</div>
+            <div>{`F/U labs: Vitamin D, BMP`}</div>
+        </Fragment>
+    )
+
+    const checkHypochloremia = () => {
+        const { cl } = values;
+        if (cl.length != 0 && cl < 95) {
+            updateState('hypochloremia');
+        }
+    }
+
+    const hypochloremia = (
+        <Fragment>
+            <div className='label'>Hypochloremia</div>
+            <div>{`BMP`}</div>
+        </Fragment>
+    )
+    
+    const checkHypokalemia = () => {
+        const { k } = values;
+        if (k.length != 0 && k < 3.5) {
+            updateState('hypokalemia');
+        }
+    }
+
+    const hypokalemia = (
+        <Fragment>
+            <div className='label'>Hypokalemia</div>
+            <div>{`Check Mg`}</div>
+            <div>{`IV KCI if K < 2.5`}</div>
+            <div>{`F/U labs: Serial ECG, BMP`}</div>
+        </Fragment>
+    )
+
+    const checkHyponatremia = () => {
+        const { na } = values;
+        if (na.length != 0 && na < 135) {
+            updateState('hyponatremia');
+        }
+    }
+
+    const hyponatremia = (
+        <Fragment>
+            <div className='label'>Hyponatremia</div>
+            <div>{`3% saline if Na < 130`}</div>
+            <div>{`F/U labs: Serial BMP/NA+, urine osmality`}</div>
+        </Fragment>
+    )
+
+    const checkHypophosphatemia = () => {
+        const { phosphate } = values;
+        if (phosphate.length != 0 && phosphate < 2.5) {
+            updateState('hypophosphatemia');
+        }
+    }
+
+    const hypophosphatemia = (
+        <Fragment>
+            <div className='label'>Hypophosphatemia</div>
+            <div>{`F/U labs: 24hr urine or FEPO4, BMP`}</div>
+        </Fragment>
+    )
+
+    const checkThrombocytopenia = () => {
+        const { plt } = values;
+        if (plt.length != 0 && plt < 150000) {
+            updateState('thrombocytopenia');
+        }
+    }
+
+    const thrombocytopenia = (
+        <Fragment>
+            <div className='label'>Thrombocytopenia</div>
+            <div>{`F/U labs: Repeat CBC w/ peripheral blood smear`}</div>
+        </Fragment>
+    )
+
+    const checkSepsis = () => {
+        const { temp, hr, rr, pco2, wbc } = values;
+        let trueCount = 0;
+        if (temp.length != 0 && (temp < 36 || temp > 38)) {
+            trueCount+=1;
+        }
+        if (hr.length != 0 && hr > 90) {
+            trueCount+=1;
+        }
+        if ((rr.length != 0 && rr > 20) || (pco2.length != 0 && pco2 < 32)) {
+            trueCount+=1;
+        }
+        if (wbc.length != 0 && (wbc > 12000 || wbc < 4000)) {
+            trueCount+=1;
+        }
+        if (trueCount >= 2) {
+            updateState('sepsis');
+        }
+    }
+
+    const sepsis = (
+        <Fragment>
+            <div className='label'>Sepsis</div>
+            <div>{`Antibiotics`}</div>
+            <div>{`F/U blood cultures and urine cultures`}</div>
+        </Fragment>
+    )
+    
+    const checkHypoglycemia = () => {
+        const { glucose } = values;
+        if (glucose.length != 0 && glucose < 70) {
+            updateState('hypoglycemia');
+        }
+    }
+
+    const hypoglycemia = (
+        <Fragment>
+            <div className='label'>Hypoglycemia</div>
+            <div>{`Juice`}</div>
+            <div>{`IV dextrose`}</div>
+        </Fragment>
+    )
+
+    const checkAndDisplay = [
+        {check: conditions.anemia, display: anemia},
+        {check: conditions.hypercalcemia, display: hypercalcemia},
+        {check: conditions.hyperchloremia, display: hyperchloremia},
+        {check: conditions.hyperglycemia, display: hyperglycemia},
+        {check: conditions.hyperkalemia, display: hyperkalemia},
+        {check: conditions.hypernatremia, display: hypernatremia},
+        {check: conditions.hyperphosphatemia, display: hyperphosphatemia},
+        {check: conditions.hypocalcemia, display: hypocalcemia},
+        {check: conditions.hypochloremia, display: hypochloremia},
+        {check: conditions.hypoglycemia, display: hypoglycemia},
+        {check: conditions.hypokalemia, display: hypokalemia},
+        {check: conditions.hyponatremia, display: hyponatremia},
+        {check: conditions.hypophosphatemia, display: hypophosphatemia},
+        {check: conditions.sepsis, display: sepsis},
+        {check: conditions.thrombocytopenia, display: thrombocytopenia}
+    ];
+
+    const checkConditions = [checkAnemia, checkHypercalcemia, checkHyperchloremia, checkHyperglycemia, checkHyperkalemia, checkHypernatremia, checkHyperphosphatemia, checkHypocalcemia, checkHypochloremia, checkHypoglycemia, checkHypokalemia, checkHyponatremia, checkHypophosphatemia, checkSepsis, checkThrombocytopenia];
+
+    function calculateResults() {
+        for (let check of checkConditions) {
+            check();
+        }
+    }
+
+    const planDisplay = (
+        checkAndDisplay.map((checkAndDisplay, i) => {
+            if (checkAndDisplay.check) {
+                return (
+                    <div className='diagnosis-container' key={`planItem-${i}`}>
+                        {checkAndDisplay.display}
+                    </div>
+                );
+            }
+        })
+    );
 
     const handleResize = () => {
         const windowWidth =
@@ -238,13 +520,13 @@ const GenerateInpatientPlan = () => {
 
     const HCO3 = (
         <div className='label-set'>
-            <div className='label'>HC03</div>
+            <div className='label'>HCO3</div>
             <div className='input-with-label-below'>
                 <Input
                     type='number'
                     size='mini'
                     className='extra-small-input'
-                    name='hc03'
+                    name='hco3'
                     value={values.hco3}
                     onChange={handleChange}
                 />
@@ -555,7 +837,7 @@ const GenerateInpatientPlan = () => {
                                 to see your results.
                             </Grid.Row>
                             <Grid.Row>
-                                {conditions.anemia && anemia}
+                                { planDisplay }
                             </Grid.Row>
                         </Grid.Column>
                     </Grid>
