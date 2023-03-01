@@ -1,0 +1,40 @@
+export const initialValuesState = {
+    temp: '',
+    bp: '',
+    hr: '',
+    rr: '',
+    o2sat: '',
+    na: '',
+    cl: '',
+    bun: '',
+    k: '',
+    hco3: '',
+    cr: '',
+    glucose: '',
+    hgb: '',
+    wbc: '',
+    plt: '',
+    ph: '',
+    pco2: '',
+    albumin: '',
+    ca: '',
+    phosphate: ''
+};
+
+export const initialConditionsState = {
+    anemia: false,
+    hypercalcemia: false,
+    hyperchloremia: false,
+    hyperglycemia: false,
+    hyperkalemia: false,
+    hypernatremia: false,
+    hyperphosphatemia: false,
+    hypocalcemia: false,
+    hypochloremia: false,
+    hypokalemia: false,
+    hyponatremia: false,
+    hypophosphatemia: false,
+    thrombocytopenia: false,
+    sepsis: false,
+    hypoglycemia: false
+};

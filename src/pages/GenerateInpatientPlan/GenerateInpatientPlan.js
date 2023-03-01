@@ -3,94 +3,63 @@ import { Input, Grid, Container, Segment, Header, Button } from 'semantic-ui-rea
 
 import ToggleButton from 'components/tools/ToggleButton';
 import NavMenu from 'components/navigation/NavMenu';
+import { initialConditionsState, initialValuesState } from 'constants/generateInpatientPlan';
 import './GenerateInpatientPlan.css';
 
 const GenerateInpatientPlan = () => {
-
     const [isSmallBreakpoint, setIsSmallBreakpoint] = useState(false);
-    const [isYesButtonPressed, setIsYesButtonPressed] = useState(false);
-    const [isNoButtonPressed, setIsNoButtonPressed] = useState(false);
 
-    const initialValuesState = {
-        temp: '',
-        bp: '',
-        hr: '',
-        rr: '',
-        o2sat: '',
-        na: '',
-        cl: '',
-        bun: '',
-        k: '',
-        hco3: '',
-        cr: '',
-        glucose: '',
-        hgb: '',
-        wbc: '',
-        plt: '',
-        ph: '',
-        pco2: '',
-        albumin: '',
-        ca: '',
-        phosphate: ''
-    };
+    // State for the Y/N infection toggle buttons
+    const [isYesInfectionPressed, setIsYesInfectionPressed] = useState(false);
+    const [isNoInfectionPressed, setIsNoInfectionPressed] = useState(false);
 
+    // Values tracks each input value
     const [values, setValues] = useState(initialValuesState);
 
-    const initialConditionsState = {
-        anemia: false,
-        hypercalcemia: false,
-        hyperchloremia: false,
-        hyperglycemia: false,
-        hyperkalemia: false,
-        hypernatremia: false,
-        hyperphosphatemia: false,
-        hypocalcemia: false,
-        hypochloremia: false,
-        hypokalemia: false,
-        hyponatremia: false,
-        hypophosphatemia: false,
-        thrombocytopenia: false,
-        sepsis: false,
-        hypoglycemia: false
-    };
-
+    // Conditions tracks which conditions the patient has
     const [conditions, setConditions] = useState(initialConditionsState);
 
-    // Stores updated values
-    function handleChange(event) {
-        let value = event.target.value;
-        // Since all inputs have type "number" we don't need to worry
-        // about non number inputs aside from an empty string
-        if (value.length > 0) {
-            value = parseFloat(value);
-        }
-        setValues({
-            ...values,
-            [event.target.name]: value
-        });
+    // Boolean that tracks if a patient has one or more condition
+    const [hasResults, setHasResults] = useState(false);
+
+    /************************************************************************
+     * Screen resize logic
+     ************************************************************************/
+    const handleResize = () => {
+        const windowWidth =
+            typeof window !== 'undefined' ? window.innerWidth : 0;
+        const isSmallBreakpoint = windowWidth < 1610;
+        setIsSmallBreakpoint(isSmallBreakpoint);
     }
 
-     // Since all of the checks will be run one after the other, we 
-    // use the updater function to avoid updates being batched and data
-    // lost (see case 3 in this article: https://dev.to/anantbahuguna/3-mistakes-to-avoid-when-updating-react-state-45gp )
-    function updateState(conditionName) {
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+        // Call handler right away so state is updated with initial window size
+        handleResize();
+        // Remove event listener on cleanup
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+/******************************************************************************
+ * This section of code contains all the check functions for each condition
+ * and the plan text to render for each condition.
+ *****************************************************************************/
+    
+    // Updates the conditions state array when 'Calculate Results' is pressed
+    function setCondition(conditionName) {
         setConditions((prevState) => {
             return {
                 ...prevState,
                 [conditionName]: true
             }
         });
-    }
-
-    function clearResults() {
-        setConditions(initialConditionsState);
-        setValues(initialValuesState);
+        setHasResults(true);
     }
 
     const checkAnemia = () => {
         const { hgb } = values;
         if (hgb.length != 0 && hgb < 12) {
-            updateState('anemia');
+            setCondition('anemia');
         }
     }
 
@@ -110,7 +79,7 @@ const GenerateInpatientPlan = () => {
         const {albumin, ca} = values;
 
         if (ca.length != 0 && albumin.length != 0 && (correctedCalcium(ca, albumin) < 8)) {
-            updateState('hypocalcemia');
+            setCondition('hypocalcemia');
         }
     }
 
@@ -125,7 +94,7 @@ const GenerateInpatientPlan = () => {
     const checkHyperchloremia = () => {
         const {cl} = values;
         if (cl.length != 0 && cl > 107) {
-            updateState('hyperchloremia');
+            setCondition('hyperchloremia');
         }
     }
 
@@ -139,7 +108,7 @@ const GenerateInpatientPlan = () => {
     const checkHyperglycemia = () => {
         const {glucose} = values;
         if (glucose.length != 0 && glucose > 200) {
-            updateState('hyperglycemia');
+            setCondition('hyperglycemia');
         }
     }
 
@@ -156,7 +125,7 @@ const GenerateInpatientPlan = () => {
     const checkHyperkalemia = () => {
         const {k} = values;
         if (k.length != 0 && k > 5) {
-            updateState('hyperkalemia');
+            setCondition('hyperkalemia');
         }
     }
 
@@ -174,7 +143,7 @@ const GenerateInpatientPlan = () => {
     const checkHypernatremia = () => {
         const {na} = values;
         if (na.length != 0 && na > 145) {
-            updateState('hypernatremia');
+            setCondition('hypernatremia');
         }
     }
 
@@ -189,7 +158,7 @@ const GenerateInpatientPlan = () => {
     const checkHyperphosphatemia = () => {
         const { phosphate } = values;
         if (phosphate.length != 0 && phosphate > 4.5) {
-            updateState('hyperphosphatemia');
+            setCondition('hyperphosphatemia');
         }
     }
 
@@ -204,7 +173,7 @@ const GenerateInpatientPlan = () => {
         const {albumin, ca} = values;
 
         if (ca.length != 0 && albumin.length != 0 && (correctedCalcium(ca, albumin) > 10.5)) {
-            updateState('hypercalcemia');
+            setCondition('hypercalcemia');
         }
     }
 
@@ -219,7 +188,7 @@ const GenerateInpatientPlan = () => {
     const checkHypochloremia = () => {
         const { cl } = values;
         if (cl.length != 0 && cl < 95) {
-            updateState('hypochloremia');
+            setCondition('hypochloremia');
         }
     }
 
@@ -233,7 +202,7 @@ const GenerateInpatientPlan = () => {
     const checkHypokalemia = () => {
         const { k } = values;
         if (k.length != 0 && k < 3.5) {
-            updateState('hypokalemia');
+            setCondition('hypokalemia');
         }
     }
 
@@ -249,7 +218,7 @@ const GenerateInpatientPlan = () => {
     const checkHyponatremia = () => {
         const { na } = values;
         if (na.length != 0 && na < 135) {
-            updateState('hyponatremia');
+            setCondition('hyponatremia');
         }
     }
 
@@ -264,7 +233,7 @@ const GenerateInpatientPlan = () => {
     const checkHypophosphatemia = () => {
         const { phosphate } = values;
         if (phosphate.length != 0 && phosphate < 2.5) {
-            updateState('hypophosphatemia');
+            setCondition('hypophosphatemia');
         }
     }
 
@@ -278,7 +247,7 @@ const GenerateInpatientPlan = () => {
     const checkThrombocytopenia = () => {
         const { plt } = values;
         if (plt.length != 0 && plt < 150000) {
-            updateState('thrombocytopenia');
+            setCondition('thrombocytopenia');
         }
     }
 
@@ -305,7 +274,7 @@ const GenerateInpatientPlan = () => {
             trueCount+=1;
         }
         if (trueCount >= 2) {
-            updateState('sepsis');
+            setCondition('sepsis');
         }
     }
 
@@ -320,7 +289,7 @@ const GenerateInpatientPlan = () => {
     const checkHypoglycemia = () => {
         const { glucose } = values;
         if (glucose.length != 0 && glucose < 70) {
-            updateState('hypoglycemia');
+            setCondition('hypoglycemia');
         }
     }
 
@@ -331,6 +300,10 @@ const GenerateInpatientPlan = () => {
             <div>{`IV dextrose`}</div>
         </Fragment>
     )
+
+/******************************************************************************
+ * Submit button & displaying plan
+ *****************************************************************************/
 
     const checkAndDisplay = [
         {check: conditions.anemia, display: anemia},
@@ -350,24 +323,28 @@ const GenerateInpatientPlan = () => {
         {check: conditions.thrombocytopenia, display: thrombocytopenia}
     ];
 
-    const checkConditions = [checkAnemia, checkHypercalcemia, checkHyperchloremia, checkHyperglycemia, checkHyperkalemia, checkHypernatremia, checkHyperphosphatemia, checkHypocalcemia, checkHypochloremia, checkHypoglycemia, checkHypokalemia, checkHyponatremia, checkHypophosphatemia, checkSepsis, checkThrombocytopenia];
+    const checkConditions = [
+        checkAnemia,
+        checkHypercalcemia,
+        checkHyperchloremia,
+        checkHyperglycemia,
+        checkHyperkalemia,
+        checkHypernatremia,
+        checkHyperphosphatemia,
+        checkHypocalcemia,
+        checkHypochloremia,
+        checkHypoglycemia,
+        checkHypokalemia,
+        checkHyponatremia,
+        checkHypophosphatemia,
+        checkSepsis,
+        checkThrombocytopenia
+    ];
 
     function calculateResults() {
         for (let check of checkConditions) {
             check();
         }
-    }
-
-    function copyResults() {
-        const note = document.querySelectorAll('.diagnosis-container > *');
-        let text = '';
-        for (let i = 0; i < note.length; i++) {
-            if (note[i].dataset.hasOwnProperty('clipboardHeader')) {
-                text += '\n';
-            }
-            text += `${note[i].innerText}\r\n`;
-        }
-        navigator.clipboard.writeText(text);
     }
 
     const planDisplay = (
@@ -382,25 +359,90 @@ const GenerateInpatientPlan = () => {
         })
     );
 
-    const handleResize = () => {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-        const isSmallBreakpoint = windowWidth < 1610;
-        setIsSmallBreakpoint(isSmallBreakpoint);
+    const submitButton = (
+        <Grid.Row className='center calculate-button'>
+            <Button type='submit' onClick={calculateResults}>Calculate Results</Button>
+        </Grid.Row>
+    );
+
+    /*************************************************************************
+     * Infection buttons
+     ************************************************************************/
+    const toggleInfectionButtons = (infection) => {
+        setIsYesInfectionPressed(infection);
+        setIsNoInfectionPressed(!infection);
+    };
+
+    // The ToggleButton requires a 'conditionName' variable
+    const conditionName = '';
+    const infectionButtons = (
+        <Grid.Row>
+            <p>Suspected or present source of infection?</p>
+            <ToggleButton
+                active={isNoInfectionPressed}
+                condition={conditionName}
+                title='No'
+                onToggleButtonClick={() => toggleInfectionButtons(false)}
+                className='no-button'>
+            </ToggleButton>
+            <ToggleButton
+                active={isYesInfectionPressed}
+                condition={conditionName}
+                title='Yes'
+                onToggleButtonClick={() => toggleInfectionButtons(true)}>
+            </ToggleButton>
+        </Grid.Row>
+    );
+
+    /*************************************************************************
+     * Clear and copy buttons
+     *************************************************************************/
+    const clearButton = (
+        <Grid.Row className='center'>
+            <a role='button' href='#' onClick={clearResults}>Clear data</a>
+        </Grid.Row>
+    );
+
+    function clearResults() {
+        setConditions(initialConditionsState);
+        setValues(initialValuesState);
     }
 
-    useEffect(() => {
-        window.addEventListener('resize', handleResize);
-        // Call handler right away so state is updated with initial window size
-        handleResize();
-        // Remove event listener on cleanup
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    const copyButton = (
+        <Grid.Row className='center'>
+            <Button color='yellow' className='copy-button' disabled={!hasResults} onClick={copyResults}>Copy Plan</Button>
+        </Grid.Row>
+    )
 
-    const toggleInfectionButtons = (infection) => {
-        setIsYesButtonPressed(infection);
-        setIsNoButtonPressed(!infection);
-    };
+    function copyResults() {
+        const note = document.querySelectorAll('.diagnosis-container > *');
+        let text = '';
+        for (let i = 0; i < note.length; i++) {
+            if (note[i].dataset.hasOwnProperty('clipboardHeader')) {
+                text += '\n';
+            }
+            text += `${note[i].innerText}\r\n`;
+        }
+        navigator.clipboard.writeText(text);
+    }
+
+    /*************************************************************************
+     * All grids shown in 'Laboratory Data' section, and code to update
+     * <input> controls
+     ************************************************************************/
+
+    function handleInputChange(event) {
+        let value = event.target.value;
+        // Since all inputs have type "number" we don't need to worry
+        // about non number inputs aside from the default empty string
+        if (value.length > 0) {
+            value = parseFloat(value);
+        }
+        setValues({
+            ...values,
+            [event.target.name]: value
+        });
+    }
 
     const vitalsSubGrid = (
         <Grid columns={5} className={`${isSmallBreakpoint ? 'stack' : ''}`}>
@@ -413,7 +455,7 @@ const GenerateInpatientPlan = () => {
                     className='extra-small-input'
                     name='temp'
                     value={values.temp}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
                 <div className='normal-range'>Normal 36.1 - 37.2 C</div>
             </div>
@@ -425,7 +467,7 @@ const GenerateInpatientPlan = () => {
                     className='extra-small-input'
                     name='bp'
                     value={values.bp}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
                 <div className='normal-range'>Normal 120/80 mmHg</div>
             </div>
@@ -437,7 +479,7 @@ const GenerateInpatientPlan = () => {
                     className='extra-small-input'
                     name='hr'
                     value={values.hr}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
                 <div className='normal-range'>Normal 60 - 100 bpm</div>
             </div>
@@ -449,7 +491,7 @@ const GenerateInpatientPlan = () => {
                     className='extra-small-input'
                     name='rr'
                     value={values.rr}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
                 <div className='normal-range'>Normal 12 - 20 bpm</div>
             </div>
@@ -461,14 +503,13 @@ const GenerateInpatientPlan = () => {
                     className='extra-small-input'
                     name='o2sat'
                     value={values.o2sat}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
                 <div className='normal-range'>Normal 98 - 100%</div>
             </div>
         </Grid>
     );
 
-    // Variables for BMP
     const Na = (
         <div className='label-set'>
             <div className='label'>Na</div>
@@ -479,7 +520,7 @@ const GenerateInpatientPlan = () => {
                     className='extra-small-input'
                     name='na'
                     value={values.na}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
                 <div className='normal-range'>Normal 135 - 145 mmol/L</div>
             </div>
@@ -496,7 +537,7 @@ const GenerateInpatientPlan = () => {
                     className='extra-small-input'
                     name='cl'
                     value={values.cl}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
                 <div className='normal-range'>Normal 98 - 108 mmol/L</div>
             </div>
@@ -513,7 +554,7 @@ const GenerateInpatientPlan = () => {
                     className='extra-small-input'
                     name='bun'
                     value={values.bun}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
                 <div className='normal-range'>Normal 7 - 20 mg/dL</div>
             </div>
@@ -531,7 +572,7 @@ const GenerateInpatientPlan = () => {
                     className='extra-small-input'
                     name='k'
                     value={values.k}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
                 <div className='normal-range'>Normal 3.5 - 5 mmol/L</div>
             </div>
@@ -548,7 +589,7 @@ const GenerateInpatientPlan = () => {
                     className='extra-small-input'
                     name='hco3'
                     value={values.hco3}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
                 <div className='normal-range'>Normal 21 - 30 mmol/L</div>
             </div>
@@ -566,7 +607,7 @@ const GenerateInpatientPlan = () => {
                     className='extra-small-input'
                     name='cr'
                     value={values.cr}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
                 <div className='normal-range'>Normal 0.4 - 1 mg/dL</div>
             </div>
@@ -583,7 +624,7 @@ const GenerateInpatientPlan = () => {
                     className='extra-small-input'
                     name='glucose'
                     value={values.glucose}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                 />
                 <div className='normal-range'>Normal 70 - 140 mg/dL</div>
             </div>
@@ -638,7 +679,7 @@ const GenerateInpatientPlan = () => {
                         className='extra-small-input'
                         name='hgb'
                         value={values.hgb}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                     />
                     <div className='normal-range'>
                         Normal 12 - 15.5 g/dL
@@ -655,7 +696,7 @@ const GenerateInpatientPlan = () => {
                         className='extra-small-input'
                         name='wbc'
                         value={values.wbc}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                     />
                     <div className='normal-range'>
                         Normal 3.2 - 9.8 x10<sup>9</sup>/L
@@ -671,7 +712,7 @@ const GenerateInpatientPlan = () => {
                         className='extra-small-input'
                         name='plt'
                         value={values.plt}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                     />
                     <div className='normal-range'>
                         Normal 150 - 450 x10<sup>9</sup>/L
@@ -693,7 +734,7 @@ const GenerateInpatientPlan = () => {
                         className='extra-small-input'
                         name='ph'
                         value={values.ph}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                     />
                     <div className='normal-range'>
                         Normal 7.35 - 7.45
@@ -710,7 +751,7 @@ const GenerateInpatientPlan = () => {
                         className='extra-small-input'
                         name='pco2'
                         value={values.pco2}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                     />
                     <div className='normal-range'>
                         Normal 35 - 45
@@ -727,7 +768,7 @@ const GenerateInpatientPlan = () => {
                         className='extra-small-input'
                         name='albumin'
                         value={values.albumin}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                     />
                     <div className='normal-range'>
                         Normal 3.5 - 4.8 g/dL
@@ -744,7 +785,7 @@ const GenerateInpatientPlan = () => {
                         className='extra-small-input'
                         name='ca'
                         value={values.ca}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                     />
                     <div className='normal-range'>
                         Normal 8.7 - 10.2 mg/dL
@@ -761,7 +802,7 @@ const GenerateInpatientPlan = () => {
                         className='extra-small-input'
                         name='phosphate'
                         value={values.phosphate}
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                     />
                     <div className='normal-range'>
                         Normal 2.8 - 4.5 mg/dL
@@ -771,45 +812,9 @@ const GenerateInpatientPlan = () => {
         </Grid>
     );
 
-    // Infection buttons. ToggleButton requires a 'conditionName' but it can
-    // be left blank in this scenario. 
-    const conditionName = '';
-    const infectionButtons = (
-        <Grid.Row>
-            <p>Suspected or present source of infection?</p>
-            <ToggleButton
-                active={isNoButtonPressed}
-                condition={conditionName}
-                title='No'
-                onToggleButtonClick={() => toggleInfectionButtons(false)}
-                className='no-button'>
-            </ToggleButton>
-            <ToggleButton
-                active={isYesButtonPressed}
-                condition={conditionName}
-                title='Yes'
-                onToggleButtonClick={() => toggleInfectionButtons(true)}>
-            </ToggleButton>
-        </Grid.Row>
-    );
-
-    const submitAndClearButtons = (
-        <Fragment>
-            <Grid.Row className='center calculate-button'>
-                <Button type='submit' onClick={calculateResults}>Calculate Results</Button>
-            </Grid.Row>
-            <Grid.Row className='center'>
-                <a role='button' href='#' onClick={clearResults}>Clear data</a>
-            </Grid.Row>
-        </Fragment>
-    );
-
-    const copyButton = (
-        <Grid.Row className='center'>
-            <Button color='yellow' onClick={copyResults}>Copy Plan</Button>
-        </Grid.Row>
-    )
-
+    /*************************************************************************
+     * The full layout
+     ************************************************************************/
     return (
         <Fragment>
             <NavMenu className='landing-page-nav-menu' />
@@ -845,7 +850,8 @@ const GenerateInpatientPlan = () => {
                                 <Header as='h3'>Other</Header>
                             </Grid.Row>
                             {otherSubGrid}
-                            {submitAndClearButtons}
+                            {submitButton}
+                            {clearButton}
                         </Grid.Column>
                         <Grid.Column width={`${isSmallBreakpoint ? 8 : 5}`}>
                             <Grid.Row centered>
