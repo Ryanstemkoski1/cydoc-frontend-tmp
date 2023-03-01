@@ -29,9 +29,6 @@ const GenerateInpatientPlan = () => {
     // Tracks which conditions the patient has
     const [conditions, setConditions] = useState(initialConditionsState);
 
-    // Boolean that tracks if a patient has one or more condition
-    const [hasResults, setHasResults] = useState(false);
-
     /************************************************************************
      * Screen resize logic
      ************************************************************************/
@@ -55,21 +52,19 @@ const GenerateInpatientPlan = () => {
      * and the plan text to render for each condition.
      *************************************************************************/
     // Updates the conditions state array when 'Calculate Results' is pressed
-    function setCondition(conditionName) {
+    function setCondition(conditionName, conditionStatus) {
         setConditions((prevState) => {
             return {
                 ...prevState,
-                [conditionName]: true,
+                [conditionName]: conditionStatus,
             };
         });
-        setHasResults(true);
     }
 
     const checkAnemia = () => {
         const { hgb } = values;
-        if (hgb.length != 0 && hgb < 12) {
-            setCondition('anemia');
-        }
+        const hasCondition = hgb.length != 0 && hgb < 12;
+        setCondition('anemia', hasCondition);
     };
 
     const anemia = (
@@ -88,14 +83,12 @@ const GenerateInpatientPlan = () => {
 
     const checkHypocalcemia = () => {
         const { albumin, ca } = values;
-
-        if (
+        const hasCondition = (
             ca.length != 0 &&
             albumin.length != 0 &&
             correctedCalcium(ca, albumin) < 8
-        ) {
-            setCondition('hypocalcemia');
-        }
+        );
+        setCondition('hypocalcemia', hasCondition);
     };
 
     const hypocalcemia = (
@@ -110,9 +103,8 @@ const GenerateInpatientPlan = () => {
 
     const checkHyperchloremia = () => {
         const { cl } = values;
-        if (cl.length != 0 && cl > 107) {
-            setCondition('hyperchloremia');
-        }
+        const hasCondition = cl.length != 0 && cl > 107;
+        setCondition('hyperchloremia', hasCondition);
     };
 
     const hyperchloremia = (
@@ -126,9 +118,8 @@ const GenerateInpatientPlan = () => {
 
     const checkHyperglycemia = () => {
         const { glucose } = values;
-        if (glucose.length != 0 && glucose > 200) {
-            setCondition('hyperglycemia');
-        }
+        const hasCondition = glucose.length != 0 && glucose > 200;
+        setCondition('hyperglycemia', hasCondition);
     };
 
     const hyperglycemia = (
@@ -145,9 +136,8 @@ const GenerateInpatientPlan = () => {
 
     const checkHyperkalemia = () => {
         const { k } = values;
-        if (k.length != 0 && k > 5) {
-            setCondition('hyperkalemia');
-        }
+        const hasCondition = k.length != 0 && k > 5;
+        setCondition('hyperkalemia', hasCondition);
     };
 
     const hyperkalemia = (
@@ -165,9 +155,8 @@ const GenerateInpatientPlan = () => {
 
     const checkHypernatremia = () => {
         const { na } = values;
-        if (na.length != 0 && na > 145) {
-            setCondition('hypernatremia');
-        }
+        const hasCondition = na.length != 0 && na > 145;
+        setCondition('hypernatremia', hasCondition);
     };
 
     const hypernatremia = (
@@ -182,15 +171,14 @@ const GenerateInpatientPlan = () => {
 
     const checkHyperphosphatemia = () => {
         const { phosphate } = values;
-        if (phosphate.length != 0 && phosphate > 4.5) {
-            setCondition('hyperphosphatemia');
-        }
+        const hasCondition = (phosphate.length != 0 && phosphate > 4.5)
+        setCondition('hyperphosphatemia', hasCondition);
     };
 
     const hyperphosphatemia = (
         <Fragment>
             <div data-clipboard-header='1' className='label'>
-                hyperphosphatemia
+                Hyperphosphatemia
             </div>
             <div>{`BMP`}</div>
         </Fragment>
@@ -199,13 +187,12 @@ const GenerateInpatientPlan = () => {
     const checkHypercalcemia = () => {
         const { albumin, ca } = values;
 
-        if (
+        const hasCondition = (
             ca.length != 0 &&
             albumin.length != 0 &&
             correctedCalcium(ca, albumin) > 10.5
-        ) {
-            setCondition('hypercalcemia');
-        }
+        );
+        setCondition('hypercalcemia', hasCondition);
     };
 
     const hypercalcemia = (
@@ -220,9 +207,8 @@ const GenerateInpatientPlan = () => {
 
     const checkHypochloremia = () => {
         const { cl } = values;
-        if (cl.length != 0 && cl < 95) {
-            setCondition('hypochloremia');
-        }
+        const hasCondition = (cl.length != 0 && cl < 95);
+        setCondition('hypochloremia', hasCondition);
     };
 
     const hypochloremia = (
@@ -236,9 +222,8 @@ const GenerateInpatientPlan = () => {
 
     const checkHypokalemia = () => {
         const { k } = values;
-        if (k.length != 0 && k < 3.5) {
-            setCondition('hypokalemia');
-        }
+        const hasCondition = (k.length != 0 && k < 3.5);
+        setCondition('hypokalemia', hasCondition);
     };
 
     const hypokalemia = (
@@ -254,9 +239,8 @@ const GenerateInpatientPlan = () => {
 
     const checkHyponatremia = () => {
         const { na } = values;
-        if (na.length != 0 && na < 135) {
-            setCondition('hyponatremia');
-        }
+        const hasCondition = (na.length != 0 && na < 135);
+        setCondition('hyponatremia', hasCondition);
     };
 
     const hyponatremia = (
@@ -271,9 +255,8 @@ const GenerateInpatientPlan = () => {
 
     const checkHypophosphatemia = () => {
         const { phosphate } = values;
-        if (phosphate.length != 0 && phosphate < 2.5) {
-            setCondition('hypophosphatemia');
-        }
+        const hasCondition = (phosphate.length != 0 && phosphate < 2.5);
+        setCondition('hypophosphatemia', hasCondition);
     };
 
     const hypophosphatemia = (
@@ -287,9 +270,8 @@ const GenerateInpatientPlan = () => {
 
     const checkThrombocytopenia = () => {
         const { plt } = values;
-        if (plt.length != 0 && plt < 150000) {
-            setCondition('thrombocytopenia');
-        }
+        const hasCondition = (plt.length != 0 && plt < 150000);
+        setCondition('thrombocytopenia', hasCondition);
     };
 
     const thrombocytopenia = (
@@ -317,7 +299,9 @@ const GenerateInpatientPlan = () => {
             trueCount += 1;
         }
         if (trueCount >= 2) {
-            setCondition('sepsis');
+            setCondition('sepsis', true);
+        } else {
+            setCondition('sepsis', false);
         }
     };
 
@@ -333,9 +317,8 @@ const GenerateInpatientPlan = () => {
 
     const checkHypoglycemia = () => {
         const { glucose } = values;
-        if (glucose.length != 0 && glucose < 70) {
-            setCondition('hypoglycemia');
-        }
+        const hasCondition = (glucose.length != 0 && glucose < 70);
+        setCondition('hypoglycemia', hasCondition);
     };
 
     const hypoglycemia = (
@@ -392,6 +375,14 @@ const GenerateInpatientPlan = () => {
         for (let check of checkConditions) {
             check();
         }
+    }
+
+    function checkHasResults()  {
+        let hasResults = false;
+        Object.values(conditions).map((val) => {
+            if (val) { hasResults = true; }
+        });
+        return hasResults;
     }
 
     const planDisplay = checkAndDisplay.map((checkAndDisplay, i) => {
@@ -458,14 +449,8 @@ const GenerateInpatientPlan = () => {
     }
 
     const copyButton = (
-        <Grid.Row className='center'>
-            <Button
-                color='yellow'
-                className='copy-button'
-                onClick={copyResults}
-            >
-                Copy Plan
-            </Button>
+        <Grid.Row className='center copy-button'>
+            <Button color='yellow' onClick={copyResults}>Copy Plan</Button>
         </Grid.Row>
     );
 
@@ -911,7 +896,7 @@ const GenerateInpatientPlan = () => {
                                 your results.
                             </Grid.Row>
                             <Grid.Row>{planDisplay}</Grid.Row>
-                            {hasResults && copyButton}
+                            {checkHasResults() && copyButton}
                         </Grid.Column>
                     </Grid>
                 </Segment>
