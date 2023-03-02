@@ -2,6 +2,8 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import BodySystemDropdown from '../BodySystemDropdown';
+import { hpiChiefComplaints } from 'constants/hpiChiefComplaints';
+import star from '../../icons/star.svg';
 // import ChiefComplaintsButton from '../ChiefComplaintsButton';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
@@ -39,3 +41,21 @@ describe('ChiefComplaintsButton', () => {
     //     ).toBeFalsy();
     // });
 });
+
+// Test the favorites bubble
+describe('ChiefComplaintsHeader', () => {
+    const wrapper = shallow(
+        <BodySystemDropdown
+            name='Favorites'
+            diseasesList={hpiChiefComplaints}
+        />
+    );
+
+    test('renders', () => expect(wrapper).toBeTruthy());
+
+    // Test that a body system with the 'Favorites' name has the correct star icon
+    test('render-star-icon', () => {
+        expect(wrapper.find("img").prop("src")).toEqual(star);
+    });
+});
+
