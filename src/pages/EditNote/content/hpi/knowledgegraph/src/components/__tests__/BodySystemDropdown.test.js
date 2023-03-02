@@ -55,7 +55,6 @@ describe('ChiefComplaintsHeader', () => {
 
     // Test that a body system with the 'Favorites' name has the correct star icon
     test('render-star-icon', () => {
-        expect(wrapper.find("img").prop("src")).toEqual(star);
+        expect(wrapper.find('img').prop('src')).toEqual(star);
     });
 });
-
