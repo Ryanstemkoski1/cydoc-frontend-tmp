@@ -176,14 +176,17 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             )
         );
 
-        // ensure that 'Favorites' appears as the first component
-        diseaseComponents.unshift(
+        // component for ChiefComplaintsHeader
+        const favoritesDiseaseComponent = (
             <BodySystemDropdown
                 key={'Favorites'}
                 name={'Favorites'}
                 diseasesList={hpiChiefComplaints}
             />
         );
+
+        // ensure that 'Favorites' ChiefComplaintsHeader appears as the first component displayed
+        diseaseComponents.unshift(favoritesDiseaseComponent);
 
         // try to deprecate
         // diseases that the user has chosen
