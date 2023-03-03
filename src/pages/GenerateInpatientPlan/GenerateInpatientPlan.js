@@ -268,7 +268,12 @@ const GenerateInpatientPlan = () => {
 
     const checkThrombocytopenia = () => {
         const { plt } = values;
-        const hasCondition = plt.length != 0 && plt < 150000;
+        let hasCondition = false;
+        if (plt.length != 0) {
+            // Plt is entered x10^9, convert for correct comparison
+            const actualCount = plt * 1000000000;
+            hasCondition = actualCount < 150000;
+        }
         setCondition('thrombocytopenia', hasCondition);
     };
 
@@ -293,10 +298,15 @@ const GenerateInpatientPlan = () => {
         if ((rr.length != 0 && rr > 20) || (pco2.length != 0 && pco2 < 32)) {
             trueCount += 1;
         }
-        if (wbc.length != 0 && (wbc > 12000 || wbc < 4000)) {
-            trueCount += 1;
+        if (wbc.length != 0) {
+            // WBC is entered with units X10^9 so we convert it
+            // before making the comparison
+            const actualCount = wbc * 1000000000;
+            if (actualCount > 12000 || wbc < 4000) {
+                trueCount += 1;
+            }
         }
-        if (trueCount >= 2) {
+        if (trueCount >= 2 && isYesInfectionPressed) {
             setCondition('sepsis', true);
         } else {
             setCondition('sepsis', false);
@@ -480,11 +490,13 @@ const GenerateInpatientPlan = () => {
 
     function handleInputChange(event) {
         let value = event.target.value;
-        // Since all inputs have type "number" we don't need to worry
-        // about non number inputs aside from the default empty string
-        if (value.length > 0) {
+
+        // Since all inputs other than blood pressure have type 'number', we
+        // should parse them into floats for ease of use.
+        if (event.target.name !== 'bp' && value.length > 0) {
             value = parseFloat(value);
         }
+
         setValues({
             ...values,
             [event.target.name]: value,
@@ -509,7 +521,7 @@ const GenerateInpatientPlan = () => {
             <div className='label-set'>
                 <div className='label'>BP</div>
                 <Input
-                    type='number'
+                    type='text'
                     size='mini'
                     className='extra-small-input'
                     name='bp'
