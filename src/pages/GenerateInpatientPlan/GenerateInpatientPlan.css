@@ -4,7 +4,7 @@
 
 .subheader {
     font-size: 16px;
-    margin-top: 20px;
+    margin: 20px 0px;
     text-align: center;
 }
 
@@ -43,4 +43,20 @@
 
 .ui.grid.stack {
     flex-direction: column;
+}
+
+.ui.button.no-button {
+    margin-right: 20px;
+}
+
+.calculate-button {
+    margin: 20px 0px;
+}
+
+.diagnosis-container {
+    margin-bottom: 10px;
+}
+
+.copy-button {
+    margin-top: 30px;
 }
