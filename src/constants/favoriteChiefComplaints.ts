@@ -1,4 +1,4 @@
-export const hpiChiefComplaints = [
+export const favChiefComplaints = [
     'Hypertension',
     'Diabetes',
     'Urinary Symptoms/UTI',
