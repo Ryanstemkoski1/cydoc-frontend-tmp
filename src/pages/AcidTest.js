@@ -1,6 +1,6 @@
 import AcidTestInputBox from './AcidTestInputBox';
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import runAnalysis from './AcidBase/acidBaseCalculator';
 import Calculations from './Calculations';
 import {
@@ -37,41 +37,45 @@ const AcidTest = () => {
         handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    }, [pH, HC, PC, nA, Cl, Albumin]);
 
     const handleAccordionClick = () => {
         activeIndex === 0 ? setActiveIndex(1) : setActiveIndex(0);
     };
-    const handleClick = () => {
-        let acidBaseCalcReturn = runAnalysis(pH, HC, PC, nA, Cl, Albumin);
-        let acidTest = acidBaseCalcReturn.acidTest;
-        let anionGap = acidBaseCalcReturn.anion;
+
+
+    const handleClick = useCallback(() => {
+        let acidBaseCalcReturn, acidTestResults, anionGap;
+        acidBaseCalcReturn = runAnalysis(pH, HC, PC, nA, Cl, Albumin);
+        acidTestResults = acidBaseCalcReturn.acidTest;
+        anionGap = acidBaseCalcReturn.anion;
         setText(acidBaseCalcReturn.acidTest.differentialDiagnoses.text);
         setDescription(
             acidBaseCalcReturn.acidTest.differentialDiagnoses.description
         );
-
+    
         setAnionString(
             anionGap.calculatedAnionGap +
-                '. \n' +
                 anionGap.expectedAnionGap +
-                '. \n' +
                 anionGap.deltaAG +
-                '. \n' +
+                '\n' +
                 anionGap.deltaDeltaExp +
-                '. \n' +
+                '\n' +
                 anionGap.deltaDelta +
-                '. \n' +
+                '\n' +
                 anionGap.deltaHCO3
         );
-
-        setPrimaryExp(acidTest.primaryExp);
-        setSecondaryExp(acidTest.secondaryExp);
+        setPrimaryExp(acidTestResults.primaryExp);
+        setSecondaryExp(acidTestResults.secondaryExp);
         acidBaseCalcReturn.summary =
             acidBaseCalcReturn.summary.charAt(0).toUpperCase() +
             acidBaseCalcReturn.summary.slice(1);
         setSummary(acidBaseCalcReturn.summary);
-    };
+    
+        console.log(pH);
+        console.log(acidBaseCalcReturn);
+        // Reset the state variables to their initial values
+    }, [pH, HC, PC, nA, Cl, Albumin]);
 
     const formatStringForCopy = () => {
         let str =
@@ -139,7 +143,7 @@ const AcidTest = () => {
     const acidBaseSubsection = () => {
         return (
             <>
-                <Grid columns={1} textAlign='center'>
+                <Grid columns={1} textAlign='center' flexDirection='column'>
                     <br></br>
                     <Grid.Row>
                         <h3
@@ -243,7 +247,7 @@ const AcidTest = () => {
                         </h4>
                     </Grid.Row>
                     <Grid.Row>
-                        {primaryExp == '' && (
+                        {text == '' && (
                             <h6
                                 style={{
                                     color: 'rgba(130,130,130,255',
@@ -255,7 +259,7 @@ const AcidTest = () => {
                         )}
                     </Grid.Row>
 
-                    {primaryExp != '' && (
+                    {text != '' && (
                         <>
                             <br></br>
                             <div
@@ -350,7 +354,7 @@ const AcidTest = () => {
                     attached='top'
                     displayNoteName={false}
                 />
-                <Container className='active-tab-container large-width'>
+                <Container className='active-tab-container large-width' style={{width: '90%'}}>
                     <Segment>
                         <Grid columns={2} divided relaxed stackable>
                             <Grid.Column width={`${!isMobile ? 8 : 11}`}>

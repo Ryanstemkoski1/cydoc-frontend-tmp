@@ -1,0 +1,9 @@
+.extra-small-input {
+    min-width: 120px;
+    height: fit-content;
+    max-width: fit-content;
+}
+
+.normal-range {
+    font-size: 12px;
+}
