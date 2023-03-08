@@ -2,7 +2,7 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import BodySystemDropdown from '../BodySystemDropdown';
-import { hpiChiefComplaints } from 'constants/hpiChiefComplaints';
+import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import star from '../../icons/star.svg';
 // import ChiefComplaintsButton from '../ChiefComplaintsButton';
 
@@ -47,7 +47,7 @@ describe('ChiefComplaintsHeader', () => {
     const wrapper = shallow(
         <BodySystemDropdown
             name='Favorites'
-            diseasesList={hpiChiefComplaints}
+            diseasesList={favChiefComplaints}
         />
     );
 

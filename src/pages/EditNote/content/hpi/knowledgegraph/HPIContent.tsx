@@ -42,7 +42,7 @@ import {
 import ToggleButton from 'components/tools/ToggleButton';
 import axios from 'axios';
 import { GraphData } from 'constants/hpiEnums';
-import { hpiChiefComplaints } from 'constants/hpiChiefComplaints';
+import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import {
     processKnowledgeGraph,
     ProcessKnowledgeGraphAction,
@@ -181,7 +181,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             <BodySystemDropdown
                 key={'Favorites'}
                 name={'Favorites'}
-                diseasesList={hpiChiefComplaints}
+                diseasesList={favChiefComplaints}
             />
         );
 
