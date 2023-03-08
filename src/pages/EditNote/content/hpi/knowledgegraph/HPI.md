@@ -8,9 +8,10 @@ Function: Load Cydoc body systems and diseases and set up HPI form with question
     * Step will be changed to the index of the selected disease in state to change the user's page to that of the current disease.
     * activeHPI, which represents the active tab, will be changed to the name of the clicked disease, and will be pressed down.
 3. render() - each time something changes in the page (i.e. user clicks button), the following items are re-rendered.
-    * const diseaseComponents: creates list of body system buttons (<BodySystemDropdown/>)
+    * const diseaseComponents: creates list of body system buttons (<BodySystemDropdown/>). 
         * Loops through the state variable body_systems saved after the API was loaded after componentDidMount
         * diseasesList - list of diseases associated with body system
+    * const favoritesDiseaseComponent: to be prepended to diseaseComponents (<BodySystemDropdown/>), to show ChiefComplaints
     * const positiveDiseases: creates list of category buttons that were clicked by user (different color, posted at the top) [<PositiveDiseases/>]
         * First translates chosen category name to its three-letter category prefix.
         * Loops through the HPI context storing which category codes user clicked in the front page 
