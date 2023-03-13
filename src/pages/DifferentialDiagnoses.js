@@ -25,10 +25,10 @@ const DifferentialDiagnoses = ({ text = '', description = '' }) => {
                     style={{ fontWeight: 'bold', color: 'rgba(7,126,157,255)' }}
                 >
                     <Icon name='dropdown' />
-                    {'Differential Diagnoses:  '}
+                    {'Differential Diagnosis  '}
                 </Accordion.Title>
                 <Accordion.Content active={activeIndex === 1}>
-                    {description + '\n' + text}
+                    {description + text}
                 </Accordion.Content>
             </div>
         </Accordion>

@@ -10,6 +10,7 @@ import {
     Grid,
     Icon,
     Segment,
+    Header,
 } from 'semantic-ui-react';
 import DifferentialDiagnoses from './DifferentialDiagnoses';
 import NavMenu from './../components/navigation/NavMenu';
@@ -43,7 +44,6 @@ const AcidTest = () => {
         activeIndex === 0 ? setActiveIndex(1) : setActiveIndex(0);
     };
 
-
     const handleClick = useCallback(() => {
         let acidBaseCalcReturn, acidTestResults, anionGap;
         acidBaseCalcReturn = runAnalysis(pH, HC, PC, nA, Cl, Albumin);
@@ -53,7 +53,7 @@ const AcidTest = () => {
         setDescription(
             acidBaseCalcReturn.acidTest.differentialDiagnoses.description
         );
-    
+
         setAnionString(
             anionGap.calculatedAnionGap +
                 anionGap.expectedAnionGap +
@@ -71,9 +71,6 @@ const AcidTest = () => {
             acidBaseCalcReturn.summary.charAt(0).toUpperCase() +
             acidBaseCalcReturn.summary.slice(1);
         setSummary(acidBaseCalcReturn.summary);
-    
-        console.log(pH);
-        console.log(acidBaseCalcReturn);
         // Reset the state variables to their initial values
     }, [pH, HC, PC, nA, Cl, Albumin]);
 
@@ -143,77 +140,68 @@ const AcidTest = () => {
     const acidBaseSubsection = () => {
         return (
             <>
-                <Grid columns={1} textAlign='center' flexDirection='column'>
+                <Grid
+                    columns={1}
+                    display='flex'
+                    justifyContent='center'
+                    flexDirection='column'
+                >
                     <br></br>
-                    <Grid.Row>
-                        <h3
-                            className='ui header'
-                            style={{
-                                color: 'rgba(7,126,157,255)',
-                                position: 'absolute',
-                            }}
+                    <Grid.Row centered>
+                        <Header
+                            as='h2'
+                            textAlign='center'
+                            color='rgba(7, 126, 157, 255)'
                         >
                             Laboratory Data
-                        </h3>
+                        </Header>
                     </Grid.Row>
-                    <br></br>
-                    <Grid.Row>
-                        <h6
-                            className='ui header small'
-                            style={{
-                                color: 'rgba(130,130,130,255',
-                                size: '20px',
-                            }}
-                        >
-                            Please fill in the required fields below
-                        </h6>
+                    <Grid.Row
+                        className='subheader'
+                        color='rgba(130,130,130,255)'
+                    >
+                        Please fill in the required fields below
                     </Grid.Row>
                     <Grid.Row>
                         <AcidTestInputBox
                             callback={onPhChange}
                             label1='pH'
-                            label2=''
-                            subscript='Normal Range 7.38-7.44'
+                            subscript='Normal Range 7.35-7.45'
                         />
                     </Grid.Row>
                     <Grid.Row>
                         <AcidTestInputBox
                             callback={onHCChange}
                             label1='HCO3+'
-                            label2='mEq/L'
-                            subscript='Normal Range 23-28 mEq/L'
+                            subscript='Normal Range 21-30 mEq/L'
                         />
                     </Grid.Row>
                     <Grid.Row>
                         <AcidTestInputBox
                             callback={onPCChange}
                             label1='pCO2'
-                            label2='mmHg'
-                            subscript='Normal Range 38-42 mmHg'
+                            subscript='Normal Range 35-45 mmHg'
                         />
                     </Grid.Row>
                     <Grid.Row>
                         <AcidTestInputBox
                             callback={onNaChange}
                             label1='Na'
-                            label2='mEq/L'
-                            subscript='Normal Range 126-145 mEq/L'
+                            subscript='Normal Range 135-145 mEq/L'
                         />
                     </Grid.Row>
                     <Grid.Row>
                         <AcidTestInputBox
                             callback={onClChange}
                             label1='Cl'
-                            label2='mEq/L'
-                            subscript='Normal Range 98-106 mEq/L'
+                            subscript='Normal Range 98-108 mEq/L'
                         />
                     </Grid.Row>
                     <Grid.Row>
                         <AcidTestInputBox
                             callback={onAlbuminChange}
                             label1='Albumin'
-                            label2='mEq/L'
-                            subscript='Normal Range 3.5 - 5.5 meq/L'
+                            subscript='Normal Range 3.5 - 4.8 meq/L'
                         />
                     </Grid.Row>
                     <Grid.Row>
@@ -236,26 +224,23 @@ const AcidTest = () => {
     const summarySubSection = () => {
         return (
             <>
-                <Grid columns={1} textAlign='center'>
-                    <Grid.Row>
-                        <h4
-                            style={{
-                                color: 'rgba(7,126,157,255)',
-                            }}
+                <Grid columns={1}>
+                    <Grid.Row centered>
+                        <Header
+                            as='h2'
+                            textAlign='center'
+                            color='rgba(7, 126, 157, 255)'
                         >
                             Interpretation
-                        </h4>
+                        </Header>
                     </Grid.Row>
-                    <Grid.Row>
+                    <Grid.Row textAlign='center'>
                         {text == '' && (
-                            <h6
-                                style={{
-                                    color: 'rgba(130,130,130,255',
-                                    fontSize: '14px',
-                                }}
-                            >
-                                See your results below
-                            </h6>
+                            <div className='row center subheader'>
+                                Fill in the laboratory data on the left, then
+                                press &lsquo;Calculate Results&rsquo; to see
+                                your results.
+                            </div>
                         )}
                     </Grid.Row>
 
@@ -296,7 +281,7 @@ const AcidTest = () => {
                                     </Accordion>
                                 </Grid.Row>
                                 <br></br>
-                                <Grid.Row>
+                                <Grid.Row className='css-fix'>
                                     <DifferentialDiagnoses
                                         text={text}
                                         description={description}
@@ -314,20 +299,8 @@ const AcidTest = () => {
                             </div>
                         </>
                     )}
-                    {primaryExp == '' && (
-                        <Grid.Row>
-                            <h5
-                                style={{
-                                    color: 'rgba(7,126,157,255)',
-                                }}
-                            >
-                                Please fill in laboratory data to calculate
-                                results
-                            </h5>
-                        </Grid.Row>
-                    )}
                     {primaryExp != '' && (
-                        <Grid.Row>
+                        <Grid.Row centered>
                             <Button
                                 className='ui button'
                                 onClick={handleCopyResultsClick}
@@ -354,19 +327,23 @@ const AcidTest = () => {
                     attached='top'
                     displayNoteName={false}
                 />
-                <Container className='active-tab-container large-width' style={{width: '90%'}}>
+                <Container
+                    className='active-tab-container large-width'
+                    style={{ width: '90%' }}
+                >
                     <Segment>
                         <Grid columns={2} divided relaxed stackable>
-                            <Grid.Column width={`${!isMobile ? 8 : 11}`}>
+                            <Grid.Column
+                                alignItems='center'
+                                justifyContent='center'
+                                width={`${!isMobile ? 8 : 11}`}
+                            >
                                 <div
                                     className='flexParent'
                                     style={{
                                         backgroundColor: '#fff',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        justifyContent: 'center',
-                                        float: 'left',
-                                        textAlign: 'center',
                                     }}
                                 >
                                     {acidBaseSubsection()}
@@ -377,13 +354,8 @@ const AcidTest = () => {
                                     className='acidBaseTest flexParent'
                                     style={{
                                         backgroundColor: '#fff',
-                                        float: 'left',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexDirection: 'column',
-                                        overflowY: 'hidden',
-                                        overflowX: 'hidden',
                                     }}
                                 >
                                     {summarySubSection()}
