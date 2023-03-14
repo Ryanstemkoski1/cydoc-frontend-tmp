@@ -3,7 +3,7 @@
 export const questionTypes = {
     YES_NO: 'YES-NO',
     NO_YES: 'NO-YES',
-    CLICK_BOXES: 'CLICK-BOXES',
+    SELECTONE: 'CLICK-BOXES',
     SHORT_TEXT: 'SHORT-TEXT',
     PMH: 'PMH',
     TIME: 'TIME',
@@ -23,7 +23,7 @@ export const questionTypeMapping = {
         [questionTypes.YES_NO]: 'Yes/No',
         [questionTypes.NO_YES]: 'No/Yes',
         [questionTypes.SHORT_TEXT]: 'Short Text',
-        [questionTypes.CLICK_BOXES]: 'Multiple Selection',
+        [questionTypes.SELECTONE]: 'Multiple Selection',
         [questionTypes.LIST_TEXT]: 'List',
     },
     advanced: {

@@ -12,7 +12,7 @@ export const RESPONSE_PLACEHOLDER = {
         startEg: 'The patient uses',
         endEg: 'pillows at night',
     },
-    [questionTypes.CLICK_BOXES]: {
+    [questionTypes.SELECTONE]: {
         startEg: 'The patient reports',
         negStartEg: 'The patient denies',
         options: ['changes in vision', 'numbness', 'weakness', 'fever'],
@@ -35,7 +35,7 @@ export const QUESTION_PLACEHOLDER = {
     [questionTypes.SHORT_TEXT]:
         'What concerns do you have about your diabetes?',
     [questionTypes.NUMBER]: 'How many pillows do you use at night?',
-    [questionTypes.CLICK_BOXES]: 'Do you have any of the following symptoms:',
+    [questionTypes.SELECTONE]: 'Do you have any of the following symptoms:',
     [questionTypes.TIME]: 'How long ago did the cough start?',
     [questionTypes.LIST_TEXT]: 'What do you normally eat for breakfast?',
     [questionTypes.BODY_LOCATION]: 'Where is the numbness?',

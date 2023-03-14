@@ -6,7 +6,7 @@ import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import { HpiState } from 'redux/reducers/hpiReducer';
 import {
     BodyLocationType,
-    ClickBoxesInput,
+    SelectOneInput,
     HpiResponseType,
     LabTestType,
     ListTextInput,
@@ -101,8 +101,8 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
         case ResponseTypes.RADIOLOGY:
             return node.response === '';
 
-        case ResponseTypes.CLICK_BOXES: {
-            const response = node.response as ClickBoxesInput;
+        case ResponseTypes.SELECTONE: {
+            const response = node.response as SelectOneInput;
             return Object.keys(response).every((key) => !response[key]);
         }
 
@@ -241,8 +241,8 @@ export const extractNode = (
             );
             break;
 
-        case ResponseTypes.CLICK_BOXES:
-            const clickBoxesRes = response as ClickBoxesInput;
+        case ResponseTypes.SELECTONE:
+            const clickBoxesRes = response as SelectOneInput;
             updatedRes = Object.keys(clickBoxesRes).filter(
                 (key) => clickBoxesRes[key]
             );

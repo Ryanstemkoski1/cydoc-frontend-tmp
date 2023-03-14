@@ -180,7 +180,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             case ResponseTypes.LIST_TEXT:
                 return <ListText key={node} node={node} />;
 
-            case ResponseTypes.CLICK_BOXES:
+            case ResponseTypes.SELECTONE:
                 return responseChoice.map((item: string) => (
                     <MultipleChoice key={item} name={item} node={node} />
                 ));
