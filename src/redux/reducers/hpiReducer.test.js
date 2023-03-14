@@ -213,7 +213,7 @@ describe('hpi reducers', () => {
                 );
                 let trueCount = 0;
                 // make sure that for any given click, only one is selected
-                for(let name in nextState.nodes[medId].response) {
+                for (let name in nextState.nodes[medId].response) {
                     if (nextState.nodes[medId].response[name]) {
                         trueCount++;
                     }
