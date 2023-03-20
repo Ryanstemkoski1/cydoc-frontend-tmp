@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input } from 'semantic-ui-react';
 
-const AcidTestInputBox = ({ callback, label1, subscript }) => {
+const AcidTestInputBox = ({ callback, label1, subscript, onKeyPress }) => {
     const [value, setValue] = useState('');
     const handleChange = (e) => {
         setValue(e.target.value);
@@ -29,6 +29,7 @@ const AcidTestInputBox = ({ callback, label1, subscript }) => {
                 className='extra-small-input'
                 onChange={handleChange}
                 value={value}
+                onKeyPress={onKeyPress}
             />
             <div className='normal-range'>{subscript}</div>
         </div>

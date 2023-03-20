@@ -3,7 +3,7 @@ import { Accordion, Icon } from 'semantic-ui-react';
 import './DifferentialDiagnoses.css';
 
 const DifferentialDiagnoses = ({ text = '', description = '' }) => {
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(1);
     const handleClick = () =>
         activeIndex === 0 ? setActiveIndex(1) : setActiveIndex(0);
 

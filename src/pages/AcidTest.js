@@ -27,8 +27,7 @@ const AcidTest = () => {
     const [anionString, setAnionString] = useState('');
     const [summary, setSummary] = useState('');
     const [description, setDescription] = useState('');
-    const [text, setText] = useState('');
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(1);
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -49,7 +48,6 @@ const AcidTest = () => {
         acidBaseCalcReturn = runAnalysis(pH, HC, PC, nA, Cl, Albumin);
         acidTestResults = acidBaseCalcReturn.acidTest;
         anionGap = acidBaseCalcReturn.anion;
-        setText(acidBaseCalcReturn.acidTest.differentialDiagnoses.text);
         setDescription(
             acidBaseCalcReturn.acidTest.differentialDiagnoses.description
         );
@@ -80,8 +78,6 @@ const AcidTest = () => {
             summary +
             '\n' +
             'Differential Diagnoses: \n' +
-            text +
-            '\n' +
             description +
             '\n Calculations: \n' +
             'Primary Disorder: ' +
@@ -91,6 +87,12 @@ const AcidTest = () => {
             '\nAnion Gap: ' +
             anionString;
         return str;
+    };
+
+    const onKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleClick();
+        }
     };
 
     // todo: get CopyResultsClick to work as intended
@@ -167,6 +169,7 @@ const AcidTest = () => {
                             callback={onPhChange}
                             label1='pH'
                             subscript='Normal Range 7.35-7.45'
+                            onKeyPress={onKeyPress}
                         />
                     </Grid.Row>
                     <Grid.Row>
@@ -174,6 +177,7 @@ const AcidTest = () => {
                             callback={onHCChange}
                             label1='HCO3+'
                             subscript='Normal Range 21-30 mEq/L'
+                            onKeyPress={onKeyPress}
                         />
                     </Grid.Row>
                     <Grid.Row>
@@ -181,6 +185,7 @@ const AcidTest = () => {
                             callback={onPCChange}
                             label1='pCO2'
                             subscript='Normal Range 35-45 mmHg'
+                            onKeyPress={onKeyPress}
                         />
                     </Grid.Row>
                     <Grid.Row>
@@ -188,6 +193,7 @@ const AcidTest = () => {
                             callback={onNaChange}
                             label1='Na'
                             subscript='Normal Range 135-145 mEq/L'
+                            onKeyPress={onKeyPress}
                         />
                     </Grid.Row>
                     <Grid.Row>
@@ -195,6 +201,7 @@ const AcidTest = () => {
                             callback={onClChange}
                             label1='Cl'
                             subscript='Normal Range 98-108 mEq/L'
+                            onKeyPress={onKeyPress}
                         />
                     </Grid.Row>
                     <Grid.Row>
@@ -202,12 +209,14 @@ const AcidTest = () => {
                             callback={onAlbuminChange}
                             label1='Albumin'
                             subscript='Normal Range 3.5 - 4.8 meq/L'
+                            onKeyPress={onKeyPress}
                         />
                     </Grid.Row>
                     <Grid.Row>
                         <button
                             className='ui button'
                             onClick={handleClick}
+                            type='submit'
                             style={{
                                 color: 'white',
                                 backgroundColor: 'rgba(7,126,157,255)',
@@ -235,7 +244,7 @@ const AcidTest = () => {
                         </Header>
                     </Grid.Row>
                     <Grid.Row textAlign='center'>
-                        {text == '' && (
+                        {description == '' && (
                             <div className='row center subheader'>
                                 Fill in the laboratory data on the left, then
                                 press &lsquo;Calculate Results&rsquo; to see
@@ -244,7 +253,7 @@ const AcidTest = () => {
                         )}
                     </Grid.Row>
 
-                    {text != '' && (
+                    {description != '' && (
                         <>
                             <br></br>
                             <div
@@ -283,7 +292,6 @@ const AcidTest = () => {
                                 <br></br>
                                 <Grid.Row className='css-fix'>
                                     <DifferentialDiagnoses
-                                        text={text}
                                         description={description}
                                     />
                                 </Grid.Row>

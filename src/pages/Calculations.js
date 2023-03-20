@@ -7,7 +7,7 @@ const Calculations = ({
     SecondaryDisorder = '',
     AnionGap = '',
 }) => {
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(1);
     const handleClick = () =>
         activeIndex === 0 ? setActiveIndex(1) : setActiveIndex(0);
     return (
@@ -42,10 +42,7 @@ const Calculations = ({
                         >
                             Primary Disorder
                         </h5>
-                        <span
-                            className='acidBaseTest css-fix'
-                            style={{ fontSize: '12px' }}
-                        >
+                        <span className='acidBaseTest css-fix'>
                             {PrimaryDisorder}
                         </span>
                         <h5
@@ -54,10 +51,7 @@ const Calculations = ({
                         >
                             Secondary Disorder
                         </h5>
-                        <span
-                            className='acidBaseTest css-fix'
-                            style={{ fontSize: '12px' }}
-                        >
+                        <span className='acidBaseTest css-fix'>
                             {SecondaryDisorder}
                         </span>
                         <h5
@@ -66,12 +60,7 @@ const Calculations = ({
                         >
                             Anion Gap
                         </h5>
-                        <span
-                            className='acidBaseTest css-fix'
-                            style={{ fontSize: '12px' }}
-                        >
-                            {AnionGap}
-                        </span>
+                        <span className='acidBaseTest css-fix'>{AnionGap}</span>
                     </div>
                 </Accordion.Content>
             </div>

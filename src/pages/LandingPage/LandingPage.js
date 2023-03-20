@@ -116,17 +116,10 @@ class LandingPage extends Component {
                 </div>
                 <div
                     className='landing-box bottom'
-                    onClick={() => this.handleNewNoteClick(true)}
-                >
-                    <Icon name='file outline' size='large' class='icons' />
-                    <h3 className='text'>Create New Blank Note</h3>
-                </div>
-                <div
-                    className='landing-box bottom'
                     onClick={() => this.handleAcidTestClick()}
                 >
-                    <Icon name='file outline' size='large' className='icons' />
-                    <h3 className='text'>Return to Active Note</h3>
+                    <Icon name='flask' size='large' className='icons' />
+                    <h3 className='text'>Create New Acid Base Analysis</h3>
                 </div>
                 <div
                     className='landing-box bottom'

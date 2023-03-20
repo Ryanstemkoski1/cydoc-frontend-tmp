@@ -28,9 +28,15 @@ function simpleAcidBase(pH, HCO3, PCO2) {
         secondaryExp: '',
         differentialDiagnoses: {
             description: '',
-            text: '',
         },
     };
+    const addIfUnique = (str) => {
+        if (!returnObj.differentialDiagnoses.description.includes(str)) {
+            returnObj.differentialDiagnoses.description += str;
+        }
+        return;
+    };
+
     if (pH < 7.35) {
         returnObj.primaryExp =
             'pH of ' +
@@ -56,9 +62,8 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                     mtAcidPCO2ExpLow.toString() +
                     ' so there is an additional respiratory alkalosis. \n';
                 secondary = 'respiratory alkalosis';
-                returnObj.differentialDiagnoses.description +=
-                    'Respiratory Alkalosis \n';
-                returnObj.differentialDiagnoses.text += respiratoryAlkalosisDiff;
+                addIfUnique('Respiratory Alkalosis \n');
+                addIfUnique(respiratoryAlkalosisDiff);
             } else if (PCO2 > mtAcidPCO2ExpHigh) {
                 returnObj.secondaryExp =
                     'PCO2 of ' +
@@ -67,9 +72,8 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                     mtAcidPCO2ExpHigh.toString() +
                     ' so there is an additional respiratory acidosis. \n';
                 secondary = 'respiratory acidosis';
-                returnObj.differentialDiagnoses.description +=
-                    'Respiratory Acidosis \n';
-                returnObj.differentialDiagnoses.text += respiratoryAcidosisDiff;
+                addIfUnique('Respiratory Acidosis \n');
+                addIfUnique(respiratoryAcidosisDiff);
             } else {
                 returnObj.secondaryExp =
                     'PCO2 of ' +
@@ -90,9 +94,10 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 PCO2.toString() +
                 ' is > 45 so there is a respiratory acidosis. \n';
             primary = 'Respiratory acidosis';
-            returnObj.differentialDiagnoses.description +=
-                'Respiratory Acidosis \n';
-            returnObj.differentialDiagnoses.text += respiratoryAcidosisDiff;
+            addIfUnique('Respiratory Acidosis \n');
+            addIfUnique(
+                (returnObj.differentialDiagnoses.description += respiratoryAcidosisDiff)
+            );
 
             // Calculate expected compensation for acute respiratory acidosis
             let rsAcidHCO3ExpAcute = 24 + 0.1 * (PCO2 - 40);
@@ -116,9 +121,8 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                     ' is > expected HCO3 of ' +
                     rsAcidHCO3ExpAcute.toString() +
                     ' so there is an additional metabolic alkalosis. \n';
-                returnObj.differentialDiagnoses.description +=
-                    'Metabolic Alkalosis \n';
-                returnObj.differentialDiagnoses.text += metabolicAlkalosisDiff;
+                addIfUnique('Metabolic Alkalosis \n');
+                addIfUnique(metabolicAlkalosisDiff);
                 secondary = 'metabolic alkalosis';
             } else {
                 returnObj.secondaryExp +=
@@ -151,9 +155,8 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                     ' is > expected HCO3 of ' +
                     rsAcidHCO3ExpChronic.toString() +
                     ' so there is an additional metabolic alkalosis. \n';
-                returnObj.differentialDiagnoses.description +=
-                    'Metabolic Alkalosis \n';
-                returnObj.differentialDiagnoses.text += metabolicAlkalosisDiff;
+                addIfUnique('Metabolic Alkalosis \n');
+                addIfUnique(metabolicAlkalosisDiff);
                 secondary_chronic = 'metabolic alkalosis';
             } else {
                 returnObj.secondaryExp +=
@@ -178,9 +181,8 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 HCO3.toString() +
                 ' is > 28 so there is a metabolic alkalosis. \n';
             primary = 'metabolic alkalosis';
-            returnObj.differentialDiagnoses.description +=
-                'Metabolic Alkalosis \n';
-            returnObj.differentialDiagnoses.text += metabolicAlkalosisDiff;
+            addIfUnique('Metabolic Alkalosis \n');
+            addIfUnique(metabolicAlkalosisDiff);
 
             // Calculate expected compensation for metabolic alkalosis
             let mtAlkPCO2ExpLow = 0.7 * (HCO3 - 24) + 40 - 2;
@@ -201,9 +203,8 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                     mtAlkPCO2ExpLow.toString() +
                     ' so there is an additional respiratory alkalosis. \n';
                 secondary = 'respiratory alkalosis';
-                returnObj.differentialDiagnoses.description +=
-                    'Respiratory Alkalosis \n';
-                returnObj.differentialDiagnoses.text += respiratoryAlkalosisDiff;
+                addIfUnique('Respiratory Alkalosis \n');
+                addIfUnique(respiratoryAlkalosisDiff);
             } else if (PCO2 > mtAlkPCO2ExpHigh) {
                 returnObj.secondaryExp +=
                     'PCO2 of ' +
@@ -212,9 +213,8 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                     mtAlkPCO2ExpHigh.toString() +
                     ' so there is an additional respiratory acidosis. \n';
                 secondary = 'respiratory acidosis';
-                returnObj.differentialDiagnoses.description +=
-                    'Respiratory Acidosis \n';
-                returnObj.differentialDiagnoses.text += respiratoryAcidosisDiff;
+                addIfUnique('Respiratory Acidosis \n');
+                addIfUnique(respiratoryAcidosisDiff);
             } else {
                 returnObj.secondaryExp +=
                     'PCO2 of ' +
@@ -235,9 +235,8 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 PCO2.toString() +
                 ' is < 33 so there is a respiratory alkalosis. \n';
             primary = 'respiratory alkalosis';
-            returnObj.differentialDiagnoses.text += respiratoryAlkalosisDiff;
-            returnObj.differentialDiagnoses.description +=
-                'Respiratory Alkalosis \n';
+            addIfUnique('Respiratory Alkalosis \n');
+            addIfUnique(respiratoryAlkalosisDiff);
 
             // Calculate expected compensation for acute respiratory alkalosis
             let rsAlkHCO3ExpAcute = 24 - 0.2 * (40 - PCO2);
@@ -263,9 +262,8 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                     rsAlkHCO3ExpAcute.toString() +
                     ' so there is an additional metabolic alkalosis. \n';
                 secondary = 'metabolic alkalosis';
-                returnObj.differentialDiagnoses.description +=
-                    'Metabolic Alkalosis \n';
-                returnObj.differentialDiagnoses.text += metabolicAlkalosisDiff;
+                addIfUnique('Metabolic Alkalosis \n');
+                addIfUnique(metabolicAlkalosisDiff);
                 secondary_chronic = 'metabolic alkalosis';
             } else {
                 returnObj.secondaryExp +=
@@ -299,9 +297,8 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                     rsAlkHCO3ExpChronic.toString() +
                     ' so there is an additional metabolic alkalosis. \n';
                 secondary_chronic = 'metabolic alkalosis';
-                returnObj.differentialDiagnoses.description +=
-                    'Metabolic Alkalosis \n';
-                returnObj.differentialDiagnoses.text += metabolicAlkalosisDiff;
+                addIfUnique('Metabolic Alkalosis \n');
+                addIfUnique(metabolicAlkalosisDiff);
                 secondary_chronic = 'metabolic alkalosis';
             } else {
                 returnObj.secondaryExp +=
@@ -330,6 +327,12 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin = 4.8, returnObj) {
         deltaDeltaExp: '',
         deltaHCO3: '',
         gap: '',
+    };
+    const addIfUnique = (str) => {
+        if (!returnObj.differentialDiagnoses.description.includes(str)) {
+            returnObj.differentialDiagnoses.description += str;
+        }
+        return;
     };
     // Since albumin has a default value of 4.8 specify if this value is being
     // used (if the user did not specify the albumin we need to tell them the
@@ -402,22 +405,20 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin = 4.8, returnObj) {
         deltaDelta.toFixed(2).toString();
     if (deltaDelta < 0.4) {
         anionObj.deltaDeltaExp += 'Delta-delta < 0.4: NAGMA';
-        returnObj.differentialDiagnoses.text += 'Metabolic Acidosis: NAGMA \n';
-        returnObj.differentialDiagnoses.description += NAGMADiff;
+        addIfUnique('Metabolic Acidosis: NAGMA \n');
+        addIfUnique(NAGMADiff);
         gapSummary = 'NAGMA';
     } else if (0.4 <= deltaDelta && deltaDelta <= 1) {
-        returnObj.differentialDiagnoses.description +=
-            'Metabolic Acidosis: Consider combined HAGMA + NAGMA \n';
-        returnObj.differentialDiagnoses.text += NAGMADiff + ' ' + HAGMADiff;
+        addIfUnique('Metabolic Acidosis: Consider combined HAGMA + NAGMA \n');
+        addIfUnique(NAGMADiff + ' ' + HAGMADiff);
         anionObj.deltaDeltaExp +=
             'Delta-delta between 0.4 and 1.0: consider combined HAGMA + NAGMA \n';
         gapSummary = 'HAGMA + NAGMA';
     } else if (1 < deltaDelta && deltaDelta < 2) {
         anionObj.deltaDeltaExp += 'Delta-delta between 1 and 2: HAGMA \n';
         gapSummary = 'HAGMA';
-        returnObj.differentialDiagnoses.text += HAGMADiff;
-        returnObj.differentialDiagnoses.description +=
-            'Metabolic Acidosis: HAGMA \n';
+        addIfUnique(HAGMADiff);
+        addIfUnique('Metabolic Acidosis: HAGMA \n');
     } else if (deltaDelta >= 2) {
         anionObj.deltaDeltaExp +=
             'Delta-delta > 2: consider combined HAGMA + metabolic alkalosis, OR combined HAGMA + compensation for chronic respiratory acidosis';
