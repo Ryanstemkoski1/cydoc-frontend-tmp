@@ -29,6 +29,7 @@ const AcidTest = () => {
     const [description, setDescription] = useState('');
     const [activeIndex, setActiveIndex] = useState(1);
     const [isMobile, setIsMobile] = useState(false);
+    const [arr, setArray] = useState([]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -42,14 +43,17 @@ const AcidTest = () => {
     const handleAccordionClick = () => {
         activeIndex === 0 ? setActiveIndex(1) : setActiveIndex(0);
     };
-
     const handleClick = useCallback(() => {
         let acidBaseCalcReturn, acidTestResults, anionGap;
         acidBaseCalcReturn = runAnalysis(pH, HC, PC, nA, Cl, Albumin);
+        setArray(acidBaseCalcReturn.acidTest.differentialDiagnoses.description);
         acidTestResults = acidBaseCalcReturn.acidTest;
         anionGap = acidBaseCalcReturn.anion;
-        setDescription(
-            acidBaseCalcReturn.acidTest.differentialDiagnoses.description
+
+        acidBaseCalcReturn.acidTest.differentialDiagnoses.description.forEach(
+            (str) => {
+                setDescription(description + str);
+            }
         );
 
         setAnionString(
@@ -291,9 +295,7 @@ const AcidTest = () => {
                                 </Grid.Row>
                                 <br></br>
                                 <Grid.Row className='css-fix'>
-                                    <DifferentialDiagnoses
-                                        description={description}
-                                    />
+                                    <DifferentialDiagnoses description={arr} />
                                 </Grid.Row>
                                 <br></br>
                                 <Grid.Row>

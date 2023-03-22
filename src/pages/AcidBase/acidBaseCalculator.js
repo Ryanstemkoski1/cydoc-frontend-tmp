@@ -27,13 +27,16 @@ function simpleAcidBase(pH, HCO3, PCO2) {
         primaryExp: '',
         secondaryExp: '',
         differentialDiagnoses: {
-            description: '',
+            description: [],
         },
     };
     const addIfUnique = (str) => {
-        if (!returnObj.differentialDiagnoses.description.includes(str)) {
-            returnObj.differentialDiagnoses.description += str;
-        }
+        returnObj.differentialDiagnoses.description.forEach((stri) => {
+            if (stri.includes(str)) {
+                return;
+            }
+        });
+        returnObj.differentialDiagnoses.description.push(str);
         return;
     };
 
@@ -95,9 +98,7 @@ function simpleAcidBase(pH, HCO3, PCO2) {
                 ' is > 45 so there is a respiratory acidosis. \n';
             primary = 'Respiratory acidosis';
             addIfUnique('Respiratory Acidosis \n');
-            addIfUnique(
-                (returnObj.differentialDiagnoses.description += respiratoryAcidosisDiff)
-            );
+            addIfUnique(respiratoryAcidosisDiff);
 
             // Calculate expected compensation for acute respiratory acidosis
             let rsAcidHCO3ExpAcute = 24 + 0.1 * (PCO2 - 40);
@@ -329,9 +330,12 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin = 4.8, returnObj) {
         gap: '',
     };
     const addIfUnique = (str) => {
-        if (!returnObj.differentialDiagnoses.description.includes(str)) {
-            returnObj.differentialDiagnoses.description += str;
-        }
+        returnObj.differentialDiagnoses.description.forEach((stri) => {
+            if (stri.includes(str)) {
+                return;
+            }
+        });
+        returnObj.differentialDiagnoses.description.push(str);
         return;
     };
     // Since albumin has a default value of 4.8 specify if this value is being
@@ -417,8 +421,8 @@ function anionGapWithDeltas(Na, Cl, HCO3, albumin = 4.8, returnObj) {
     } else if (1 < deltaDelta && deltaDelta < 2) {
         anionObj.deltaDeltaExp += 'Delta-delta between 1 and 2: HAGMA \n';
         gapSummary = 'HAGMA';
-        addIfUnique(HAGMADiff);
         addIfUnique('Metabolic Acidosis: HAGMA \n');
+        addIfUnique(HAGMADiff);
     } else if (deltaDelta >= 2) {
         anionObj.deltaDeltaExp +=
             'Delta-delta > 2: consider combined HAGMA + metabolic alkalosis, OR combined HAGMA + compensation for chronic respiratory acidosis';
