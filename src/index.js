@@ -28,6 +28,7 @@ import Terms_and_conditions from './constants/Documents/terms_and_conditions';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { isLivemode } from './auth/livemode';
+import AcidTest from 'pages/AcidTest';
 
 const getStripePublishableKey = () => {
     if (isLivemode()) {
@@ -78,6 +79,11 @@ ReactDOM.render(
                                             exact
                                             path='/generateinpatientplan'
                                             component={GenerateInpatientPlan}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/acid-test'
+                                            component={AcidTest}
                                         />
                                         <PrivateRoute
                                             exact

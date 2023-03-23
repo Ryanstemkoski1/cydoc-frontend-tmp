@@ -51,6 +51,12 @@ class LandingPage extends Component {
         });
     };
 
+    handleAcidTestClick = () => {
+        this.setState({
+            redirect: 'ACID_TEST',
+        });
+    };
+
     // switches to new note under user's confirmation if prompt is true
     handleNewNoteClick = (prompt) => {
         const toDelete =
@@ -97,16 +103,23 @@ class LandingPage extends Component {
                     <Icon
                         name='file alternate outline'
                         size='large'
-                        className='icons'
+                        class='icons'
                     />
+                    <h3 className='text'>Create New Blank Note</h3>
+                </div>
+                <div
+                    className='landing-box bottom'
+                    onClick={() => this.handleNewNoteClick(true)}
+                >
+                    <Icon name='file outline' size='large' class='icons' />
                     <h3 className='text'>Return to Active Note</h3>
                 </div>
                 <div
-                    className='landing-box top bottom'
-                    onClick={() => this.handleNewNoteClick(true)}
+                    className='landing-box bottom'
+                    onClick={() => this.handleAcidTestClick()}
                 >
-                    <Icon name='file outline' size='large' className='icons' />
-                    <h3 className='text'>Create New Blank Note</h3>
+                    <Icon name='flask' size='large' className='icons' />
+                    <h3 className='text'>Create New Acid Base Analysis</h3>
                 </div>
                 <div
                     className='landing-box bottom'
@@ -142,6 +155,17 @@ class LandingPage extends Component {
                     <br />
                     <p className='smaller-text'>
                         Generate a plan from labratory values
+                    </p>
+                </div>
+                <div
+                    className='landing-box landing-col'
+                    onClick={() => this.handleAcidTestClick()}
+                >
+                    <Icon name='flask' size='huge' className='icons' />
+                    <h3 className='text'>Create New Acid Base Analysis</h3>
+                    <br />
+                    <p className='smaller-text'>
+                        Generate analysis from laboratory values
                     </p>
                 </div>
             </Fragment>
@@ -185,6 +209,21 @@ class LandingPage extends Component {
             </div>
         );
 
+        const newAcidBaseAnalysisMobileButton = (
+            <div
+                onClick={() => this.handleAcidTestClick()}
+                className='ui animated fade button landing'
+                tabIndex='0'
+            >
+                <div className='visible content' size='massive'>
+                    <Button size='big'>Create New Acid Base Analysis</Button>
+                </div>
+                <div className='hidden content'>
+                    <Icon name='flask' size='large' className='icons'></Icon>
+                </div>
+            </div>
+        );
+
         const newInpatientPlanMobileButton = (
             <div
                 onClick={() => this.handleNewInpatientPlanClick()}
@@ -213,6 +252,9 @@ class LandingPage extends Component {
             case 'NEW_INPATIENT_PLAN':
                 return <Redirect to='/generateinpatientplan' />;
 
+            case 'ACID_TEST':
+                return <Redirect to='/acid-test' />;
+
             default:
                 return (
                     <>
@@ -232,6 +274,7 @@ class LandingPage extends Component {
                                     {existingNoteMobileButton}
                                     {newNoteMobileButton}
                                     {newInpatientPlanMobileButton}
+                                    {newAcidBaseAnalysisMobileButton}
                                 </>
                             ) : (
                                 <>{desktopNoteButtons}</>
