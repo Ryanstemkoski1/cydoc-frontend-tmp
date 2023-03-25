@@ -7,6 +7,7 @@ import EditNote from './pages/EditNote/EditNote';
 import Login from './pages/Account/Login';
 import ForgotPasswordEmail from './pages/Account/ForgotPasswordEmail';
 import LandingPage from './pages/LandingPage/LandingPage';
+import LandingPagePublic from 'pages/LandingPage/LandingPagePublic';
 import Home from './pages/Home/Home';
 import { PrivateRoute } from './components/navigation/PrivateRoute';
 import CreateGraph from './pages/CreateTemplate/CreateGraph';
@@ -72,8 +73,13 @@ ReactDOM.render(
                                         />
                                         <PrivateRoute
                                             exact
-                                            path='/dashboard'
+                                            path='/secretdashboard'
                                             component={LandingPage}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/dashboard'
+                                            component={LandingPagePublic}
                                         />
                                         <PrivateRoute
                                             exact
