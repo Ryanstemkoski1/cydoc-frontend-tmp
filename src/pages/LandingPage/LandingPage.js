@@ -98,7 +98,7 @@ class LandingPage extends Component {
             <div className='landing-col multiple'>
                 <div
                     className='landing-box top'
-                    onClick={this.handleEditNoteClick}
+                    onClick={() => this.handleNewNoteClick(true)}
                 >
                     <Icon
                         name='file alternate outline'
@@ -109,7 +109,7 @@ class LandingPage extends Component {
                 </div>
                 <div
                     className='landing-box bottom'
-                    onClick={() => this.handleNewNoteClick(true)}
+                    onClick={() => this.handleEditNoteClick()}
                 >
                     <Icon name='file outline' size='large' class='icons' />
                     <h3 className='text'>Return to Active Note</h3>
