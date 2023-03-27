@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import '../css/Button.css';
 import ChiefComplaintsButton from './ChiefComplaintsButton';
 import '../../HPI.css';
@@ -17,6 +17,7 @@ import kidneys from '../icons/kidneys.svg';
 import endocrine from '../icons/endocrine.svg';
 import pediatrics from '../icons/pediatrics.svg';
 import musculoskeletal from '../icons/musculoskeletal.svg';
+import star from '../icons/star.svg';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 interface BodySystemDropdownProps {
@@ -42,6 +43,7 @@ const imgToRender: { [key: string]: any } = {
     Endocrine: endocrine,
     Pediatrics: pediatrics,
     Musculoskeletal: musculoskeletal,
+    Favorites: star,
 };
 
 class BodySystemDropdown extends React.Component<

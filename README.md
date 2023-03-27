@@ -8,7 +8,7 @@
 
 2. Install nvm. Nvm is used to manage different versions of Node. Nvm for Windows can be found [here](https://github.com/coreybutler/nvm-windows/releases).
 
-3. Use nvm to install the appropriate version of Node by running **nvm install 16.18.0** in a terminal.
+3. Use nvm to install the appropriate version of Node by running **nvm install 16.18.0** in a terminal. Then run **nvm use 16.18.0**.
 
 4. Download the code to the directory you wish to use it from. We recommend "C:/src". One of the simplest ways to clone the codebase is to run **git clone https://github.com/cydoc-ai/cydoc_frontend.git**. You will be asked to set up authentication to GitHub as part of this process.
 

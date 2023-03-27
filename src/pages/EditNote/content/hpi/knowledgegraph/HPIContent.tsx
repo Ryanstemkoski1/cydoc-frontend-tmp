@@ -42,6 +42,7 @@ import {
 import ToggleButton from 'components/tools/ToggleButton';
 import axios from 'axios';
 import { GraphData } from 'constants/hpiEnums';
+import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import {
     processKnowledgeGraph,
     ProcessKnowledgeGraphAction,
@@ -164,6 +165,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         /* Creates list of body system buttons to add in the front page. 
            Loops through state variable, bodySystems, saved from the API */
+
         const diseaseComponents = Object.entries(bodySystems).map(
             ([bodySystem, diseasesList]) => (
                 <BodySystemDropdown
@@ -173,6 +175,18 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                 />
             )
         );
+
+        // component for ChiefComplaintsHeader
+        const favoritesDiseaseComponent = (
+            <BodySystemDropdown
+                key={'Favorites'}
+                name={'Favorites'}
+                diseasesList={favChiefComplaints}
+            />
+        );
+
+        // ensure that 'Favorites' ChiefComplaintsHeader appears as the first component displayed
+        diseaseComponents.unshift(favoritesDiseaseComponent);
 
         // try to deprecate
         // diseases that the user has chosen
