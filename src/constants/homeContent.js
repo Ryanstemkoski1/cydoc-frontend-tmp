@@ -4,7 +4,7 @@ export const homeContent = {
         subheader: "A note-taking app for doctors that's so much better",
         description:
             'Our customizable forms are powered by medical knowledge graphs that think the way you do. Cydoc can be used on any computer, tablet, or mobile device, and is compatible with every EHR system - the generated notes can simply be copy-pasted into your EHR.',
-        inquireNow: 'Inquire Now',
+        inquireNow: 'Sign Up Now',
     },
     betterNotes: {
         header: 'Write better notes, faster.',

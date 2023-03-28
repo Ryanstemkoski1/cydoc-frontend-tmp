@@ -3,14 +3,27 @@ import { Button, Grid, Header, Image, Segment } from 'semantic-ui-react';
 import { HOME_MED_BP } from 'constants/breakpoints.js';
 import { homeContent } from 'constants/homeContent';
 import './Home.css';
-
+import SignUpModal from 'pages/Account/SignUpModal';
+import { useState } from 'react';
 const previewPlan =
     'https://cydoc-static-files.s3.amazonaws.com/about-plan.png';
 const previewROS = 'https://cydoc-static-files.s3.amazonaws.com/about-ROS.png';
 
 export const MeetCydocSection = (props) => {
+    const [signUpActive, setSignUpActive] = useState(false);
+
+    const resetSignupState = () => {
+        setSignUpActive(false);
+    };
+
     return props.windowWidth < HOME_MED_BP ? (
         <Segment className='meet-cydoc'>
+            {signUpActive && (
+                <SignUpModal
+                    navToSignUp={signUpActive}
+                    reloadModal={resetSignupState}
+                />
+            )}
             <Header
                 as='h1'
                 content={homeContent.meetCydoc.header}
@@ -27,9 +40,8 @@ export const MeetCydocSection = (props) => {
                 circular
                 size='huge'
                 className='inquire-button'
-                as='a'
-                href='https://aemail.com/lYPj'
                 content={homeContent.meetCydoc.inquireNow}
+                onClick={() => setSignUpActive(true)}
             />
             <div className='preview-image-container'>
                 <Image
@@ -48,6 +60,12 @@ export const MeetCydocSection = (props) => {
         </Segment>
     ) : (
         <Segment className='meet-cydoc'>
+            {signUpActive && (
+                <SignUpModal
+                    navToSignUp={signUpActive}
+                    reloadModal={resetSignupState}
+                />
+            )}
             <Grid relaxed columns={2} centered>
                 <Grid.Column className='meet-cydoc-text'>
                     <Header
@@ -66,9 +84,8 @@ export const MeetCydocSection = (props) => {
                         circular
                         size='huge'
                         className='inquire-button'
-                        as='a'
-                        href='https://aemail.com/lYPj'
                         content={homeContent.meetCydoc.inquireNow}
+                        onClick={() => setSignUpActive(true)}
                     />
                 </Grid.Column>
                 <Grid.Column className='image-parent'>
