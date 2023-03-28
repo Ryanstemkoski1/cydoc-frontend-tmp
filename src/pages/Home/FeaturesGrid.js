@@ -48,10 +48,10 @@ export const FeaturesGrid = (props) => {
                     size='huge'
                 />
                 <p className='feature-title'>
-                    {homeContent.features.physcialExam.header}
+                    {homeContent.features.medicalKnowledge.header}
                 </p>
                 <p className='feature-description'>
-                    {homeContent.features.physcialExam.description}
+                    {homeContent.features.medicalKnowledge.description}
                 </p>
                 <Icon
                     name='chart line'
@@ -133,7 +133,7 @@ export const FeaturesGrid = (props) => {
                         <p>{homeContent.features.ROS.header}</p>
                     </Grid.Column>
                     <Grid.Column className='feature-title'>
-                        <p>{homeContent.features.physcialExam.header}</p>
+                        <p>{homeContent.features.medicalKnowledge.header}</p>
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row textAlign='center' className='features-row'>
@@ -144,7 +144,7 @@ export const FeaturesGrid = (props) => {
                     </Grid.Column>
                     <Grid.Column>
                         <p className='feature-description'>
-                            {homeContent.features.physcialExam.description}
+                            {homeContent.features.medicalKnowledge.description}
                         </p>
                     </Grid.Column>
                 </Grid.Row>
@@ -254,7 +254,7 @@ export const FeaturesGrid = (props) => {
             </Grid.Row>
             <Grid.Row textAlign='center' className='features-row'>
                 <Grid.Column className='feature-title'>
-                    <p>{homeContent.features.physcialExam.header}</p>
+                    <p>{homeContent.features.medicalKnowledge.header}</p>
                 </Grid.Column>
                 <Grid.Column className='feature-title'>
                     <p>{homeContent.features.plan.header}</p>
@@ -266,7 +266,7 @@ export const FeaturesGrid = (props) => {
             <Grid.Row textAlign='center' className='features-row'>
                 <Grid.Column>
                     <p className='feature-description'>
-                        {homeContent.features.physcialExam.description}
+                        {homeContent.features.medicalKnowledge.description}
                     </p>
                 </Grid.Column>
                 <Grid.Column>

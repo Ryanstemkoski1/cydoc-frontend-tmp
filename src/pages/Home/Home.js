@@ -59,7 +59,7 @@ class Home extends Component {
                 <Segment className='click-to-tell'>
                     <Header
                         as='h1'
-                        content={homeContent.clickToTell.header}
+                        content={homeContent.saveLives.header}
                         className='home-header white click-to-tell'
                         textAlign='center'
                     />
