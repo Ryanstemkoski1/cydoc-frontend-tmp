@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/Button.css';
 import MultipleChoice from './responseComponents/MultipleChoice';
+import ReviewOfSystemsCategory from '../../../../reviewofsystems/ReviewOfSystemsCategory';
 import YesNo from './responseComponents/YesNo';
 import HandleInput from './responseComponents/HandleInput';
 import HandleNumericInput from './responseComponents/HandleNumericInput';
@@ -13,6 +14,8 @@ import SurgicalHistoryContent from '../../../../surgicalhistory/SurgicalHistoryC
 import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
 import ListText from './responseComponents/ListText';
 import { ResponseTypes, HpiStateProps } from 'constants/hpiEnums';
+import { YesNoResponse } from 'constants/enums';
+import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
 import {
     addFhPopOptions,
     AddFhPopOptionsAction,
@@ -149,7 +152,6 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             ResponseTypes.PMH_POP,
             ResponseTypes.PMH_BLANK,
         ];
-
         if (synonymTypes.includes(responseType)) {
             responseChoice.forEach((key: string, index: number) => {
                 responseChoice[index] = standardizeDiseaseNames(
@@ -185,6 +187,26 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     <MultipleChoice key={item} name={item} node={node} />
                 ));
 
+            case ResponseTypes.SELECTMANY: {
+                const formattedResponseChoice: ReviewOfSystemsState = {
+                    '': {
+                        'sensitivity to loud sounds': YesNoResponse.None,
+                        'ear discomfort': YesNoResponse.None,
+                        'ringing in your ears': YesNoResponse.None,
+                        vertigo: YesNoResponse.None,
+                    },
+                };
+                const responseChoice = Object.keys(formattedResponseChoice);
+                return (
+                    <ReviewOfSystemsCategory
+                        key={''}
+                        category={''}
+                        selectManyState={formattedResponseChoice}
+                        selectManyOptions={responseChoice}
+                    />
+                );
+            }
+
             case ResponseTypes.NUMBER:
                 return <HandleNumericInput key={node} node={node} />;
 
@@ -205,7 +227,6 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         node={node}
                     />
                 );
-
             case ResponseTypes.FH_POP:
             case ResponseTypes.FH_BLANK:
                 return (

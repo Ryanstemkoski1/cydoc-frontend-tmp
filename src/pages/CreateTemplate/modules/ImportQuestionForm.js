@@ -114,7 +114,7 @@ class ImportQuestionForm extends Component {
         return this.state.graph.map((question, i) => {
             let text = question.text;
             if (
-                question.responseType === 'CLICK-BOXES' ||
+                question.responseType === 'SELECTONE' ||
                 question.responseType === 'nan' ||
                 question.responseType.endsWith('POP')
             ) {

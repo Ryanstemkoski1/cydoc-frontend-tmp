@@ -530,39 +530,6 @@ Object {
 }
 `;
 
-exports[`hpi reducers handle user actions handles multiple choice click 1`] = `
-Object {
-  "edges": Object {},
-  "graph": Object {},
-  "nodes": Object {
-    "medId": Object {
-      "DoctorView": "DoctorView",
-      "PatientView": "PatientView",
-      "bodySystem": "bodySystem",
-      "category": "category",
-      "doctorCreated": "doctorCreated",
-      "medID": "medID",
-      "noteSection": "noteSection",
-      "response": Object {
-        "foo0": true,
-        "foo1": true,
-        "foo2": true,
-        "foo3": true,
-        "foo4": true,
-        "foo5": true,
-        "foo6": true,
-        "foo7": true,
-        "foo8": true,
-        "foo9": true,
-      },
-      "responseType": "CLICK-BOXES",
-      "text": "text",
-      "uid": "uid",
-    },
-  },
-}
-`;
-
 exports[`hpi reducers handle user actions handles numeric input change 1`] = `
 Object {
   "edges": Object {},

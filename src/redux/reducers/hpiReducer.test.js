@@ -198,7 +198,7 @@ describe('hpi reducers', () => {
         });
         it('handles multiple choice click, but only one selectable', () => {
             nextState.nodes[medId].response = ExpectedResponseDict.SELECTONE;
-            nextState.nodes[medId].responseType = 'CLICK-BOXES';
+            nextState.nodes[medId].responseType = 'SELECTONE';
             [...Array(10).keys()].map((i) => {
                 payload.name = 'foo' + i.toString();
                 nextState = hpiReducer(nextState, {

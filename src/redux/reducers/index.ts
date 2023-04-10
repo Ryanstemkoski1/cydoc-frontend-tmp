@@ -6,10 +6,8 @@ import {
     medicalHistoryReducer,
     initialMedicalHistoryState,
 } from './medicalHistoryReducer';
-import {
-    reviewOfSystemsReducer,
-    initialReviewOfSystemsState,
-} from './reviewOfSystemsReducer';
+import { reviewOfSystemsReducer } from './reviewOfSystemsReducer';
+import { initialReviewOfSystemsState } from 'constants/reviewOfSystemsInitial';
 import {
     surgicalHistoryReducer,
     initialSurgicalHistoryState,
