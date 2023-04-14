@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Container, Button, Icon } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 import PhysicalExamContent from './content/physicalexam/PhysicalExamContent';
 import ReviewOfSystemsContent from './content/reviewofsystems/ReviewOfSystemsContent';
 import HPIContent from './content/hpi/knowledgegraph/HPIContent';
@@ -20,8 +19,11 @@ import AllergiesContent from './content/allergies/AllergiesContent';
 import SocialHistoryContent from './content/socialhistory/SocialHistoryContent';
 import FamilyHistoryContent from './content/familyhistory/FamilyHistoryContent';
 import './content/patienthistory/PatientHistory.css';
-
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 import './NotePage.css';
+import { updateActiveItem } from 'redux/actions/activeItemActions';
+import InitialSurvey from './patientview/InitialSurvey';
+import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 
 //Component that manages the content displayed based on the activeItem prop
 // and records the information the user enters as state
@@ -206,9 +208,13 @@ class NotePage extends Component {
         //Instantiates and returns the correct content component based on the active tab
         //passes in the corresponding handler and values prop
         let tabToDisplay;
+        const { patientView, chiefComplaints } = this.props,
+            defaultTab = <InitialSurvey continue={this.continueHPITab} />;
         switch (activeItem) {
             case 'CC':
-                tabToDisplay = (
+                tabToDisplay = patientView ? (
+                    defaultTab
+                ) : (
                     <HPIContent
                         step={-1}
                         continue={this.continueHPITab}
@@ -216,21 +222,18 @@ class NotePage extends Component {
                         activeTab={
                             this.state.activeHPI
                                 ? this.state.activeHPI
-                                : Object.keys(this.props.chiefComplaints)[0]
+                                : Object.keys(chiefComplaints)[0]
                         }
                         onTabClick={this.setHPITab}
                     />
                 );
                 break;
             case 'HPI':
-                tabToDisplay = Object.keys(this.props.chiefComplaints)
-                    .length ? (
+                tabToDisplay = Object.keys(chiefComplaints).length ? (
                     <HPIContent
                         step={
-                            this.state.activeHPI in this.props.chiefComplaints
-                                ? Object.keys(
-                                      this.props.chiefComplaints
-                                  ).findIndex(
+                            this.state.activeHPI in chiefComplaints
+                                ? Object.keys(chiefComplaints).findIndex(
                                       (cc) => cc == this.state.activeHPI
                                   )
                                 : 0
@@ -240,7 +243,7 @@ class NotePage extends Component {
                         activeTab={
                             this.state.activeHPI
                                 ? this.state.activeHPI
-                                : Object.keys(this.props.chiefComplaints)[0]
+                                : Object.keys(chiefComplaints)[0]
                         }
                         onTabClick={this.setHPITab}
                     />
@@ -288,7 +291,9 @@ class NotePage extends Component {
                 );
                 break;
             case 'Patient History':
-                tabToDisplay = (
+                tabToDisplay = patientView ? (
+                    defaultTab
+                ) : (
                     <PatientHistoryContent
                         nextFormClick={this.nextFormClick}
                         previousFormClick={this.previousFormClick}
@@ -317,12 +322,16 @@ class NotePage extends Component {
                 );
                 break;
             case 'Generated Note':
-                tabToDisplay = (
+                tabToDisplay = patientView ? (
+                    defaultTab
+                ) : (
                     <GenerateNote previousFormClick={this.previousFormClick} />
                 );
                 break;
             case 'Plan':
-                tabToDisplay = (
+                tabToDisplay = patientView ? (
+                    defaultTab
+                ) : (
                     <DiscussionPlan
                         nextFormClick={this.nextFormClick}
                         previousFormClick={this.previousFormClick}
@@ -364,14 +373,16 @@ class NotePage extends Component {
     }
 }
 
-NotePage.propTypes = {
-    activeItem: PropTypes.string,
-};
-
 const mapStateToProps = (state) => {
     return {
         chiefComplaints: state.chiefComplaints,
+        patientView: selectPatientViewState(state),
+        activeItem: selectActiveItem(state),
     };
 };
 
-export default connect(mapStateToProps)(NotePage);
+const mapDispatchToProps = {
+    updateActiveItem,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotePage);

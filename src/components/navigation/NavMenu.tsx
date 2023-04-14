@@ -8,9 +8,23 @@ import {
 import AuthContext from '../../contexts/AuthContext';
 import Logo from '../../assets/cydoc-logo.svg';
 import NoteNameMenuItem, { Context } from './NoteNameMenuItem';
-
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 import './NavMenu.css';
 import SignUpModal from 'pages/Account/SignUpModal';
+import {
+    selectDoctorViewState,
+    selectInitialPatientSurvey,
+    selectPatientViewState,
+} from 'redux/selectors/userViewSelectors';
+import { changeUserView, UserViewAction } from 'redux/actions/userViewActions';
+import { connect } from 'react-redux';
+import { CurrentNoteState } from 'redux/reducers';
+import {
+    updateActiveItem,
+    UpdateActiveItemAction,
+} from 'redux/actions/activeItemActions';
+import { YesNoResponse } from 'constants/enums';
+import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
 
 interface ConnectedNavMenuProps {
     className: string;
@@ -21,10 +35,16 @@ interface ConnectedNavMenuProps {
 }
 
 // Navigation Bar component that will go at the top of most pages
-const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
-    props: ConnectedNavMenuProps
-) => {
-    const { className, attached, displayNoteName } = props;
+const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
+    const {
+        className,
+        attached,
+        displayNoteName,
+        patientView,
+        doctorView,
+        changeUserView,
+        updateActiveItem,
+    } = props;
 
     const context = useContext(AuthContext) as Context;
     const [windowWidth, setWindowWidth] = useState(0);
@@ -202,6 +222,19 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
         </>
     );
 
+    const checkPatientView = () => {
+        const { userSurveyState } = props,
+            check1 = Object.keys(userSurveyState.graph['1']).every(
+                (key) =>
+                    userSurveyState.nodes[key].response != YesNoResponse.None
+            ),
+            check2 =
+                Object.keys(userSurveyState.nodes['6'].response).length +
+                    Object.keys(userSurveyState.nodes['7'].response).length >
+                0;
+        return check1 && check2;
+    };
+
     return (
         <div>
             <Menu className={`${className} nav-menu`} attached={attached}>
@@ -252,8 +285,36 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
                 )}
 
                 {/* When parent is EditNote, then display the note name item */}
-                {displayNoteName && (
+                {displayNoteName && doctorView && (
                     <NoteNameMenuItem mobile={collapseLoggedInNav} />
+                )}
+                {context.token && history.location.pathname.length > 1 ? (
+                    <Button.Group>
+                        <Button
+                            style={{ maxHeight: '75%' }}
+                            onClick={() => {
+                                changeUserView('Patient View');
+                                if (!checkPatientView()) updateActiveItem('CC');
+                            }}
+                            className={`hpi-ph-button${
+                                patientView ? '-selected' : ''
+                            }`}
+                        >
+                            Patient View
+                        </Button>
+                        <Button.Or />
+                        <Button
+                            style={{ maxHeight: '75%' }}
+                            onClick={() => changeUserView('Doctor View')}
+                            className={`hpi-ph-button${
+                                !patientView ? '-selected' : ''
+                            }`}
+                        >
+                            Doctor View
+                        </Button>
+                    </Button.Group>
+                ) : (
+                    ''
                 )}
 
                 {/* Navigation links */}
@@ -266,4 +327,34 @@ const ConnectedNavMenu: React.FunctionComponent<ConnectedNavMenuProps> = (
     );
 };
 
-export default ConnectedNavMenu;
+interface DispatchProps {
+    changeUserView: (userView: string) => UserViewAction;
+    updateActiveItem: (updatedItem: string) => UpdateActiveItemAction;
+}
+
+const mapDispatchToProps = {
+    changeUserView,
+    updateActiveItem,
+};
+
+export interface userViewProps {
+    patientView: boolean;
+    doctorView: boolean;
+}
+
+const mapStateToProps = (
+    state: CurrentNoteState
+): userViewProps & initialSurveyProps => {
+    return {
+        patientView: selectPatientViewState(state),
+        doctorView: selectDoctorViewState(state),
+        userSurveyState: selectInitialPatientSurvey(state),
+    };
+};
+
+type Props = ConnectedNavMenuProps &
+    userViewProps &
+    DispatchProps &
+    initialSurveyProps;
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectedNavMenu);

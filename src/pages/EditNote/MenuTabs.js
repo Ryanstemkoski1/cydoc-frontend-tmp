@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Menu, Container, Icon } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-
+import { connect } from 'react-redux';
 import constants from 'constants/constants';
 import HPIContext from 'contexts/HPIContext.js';
 import { MENU_TABS_MOBILE_BP } from '../../constants/breakpoints.js';
 import './MenuTabs.css';
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 
 //Component for the tabs that toggle the different sections of the Create Note editor
 class ConnectedMenuTabs extends Component {
@@ -43,11 +45,14 @@ class ConnectedMenuTabs extends Component {
     handleItemClick = (e, { name }) => this.props.onTabChange(name);
 
     render() {
-        const { activeItem, activeTabIndex } = this.props;
+        const { activeItem, activeTabIndex, patientView } = this.props;
         const { windowWidth } = this.state;
 
         const collapseMenu = windowWidth < MENU_TABS_MOBILE_BP;
-        const tabMenuItems = constants.TAB_NAMES.map((name, index) => (
+        const tabs = patientView
+            ? constants.PATIENT_VIEW_TAB_NAMES
+            : constants.TAB_NAMES;
+        const tabMenuItems = tabs.map((name, index) => (
             <Menu.Item
                 key={index}
                 name={name}
@@ -103,7 +108,10 @@ function CollapsedMenuTabs(props) {
 }
 
 const MenuTabs = ConnectedMenuTabs;
-export default MenuTabs;
+export default connect((state) => ({
+    patientView: selectPatientViewState(state),
+    activeItem: selectActiveItem(state),
+}))(MenuTabs);
 
 // Functional component to display when tabs are all shown
 function ExpandededMenuTabs(props) {
@@ -117,7 +125,6 @@ function ExpandededMenuTabs(props) {
 }
 
 ConnectedMenuTabs.propTypes = {
-    activeItem: PropTypes.string,
     attached: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     onTabChange: PropTypes.func,
 };
