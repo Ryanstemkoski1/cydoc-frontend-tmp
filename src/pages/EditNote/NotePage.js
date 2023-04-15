@@ -22,7 +22,7 @@ import './content/patienthistory/PatientHistory.css';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 import './NotePage.css';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
-import InitialSurvey from './patientview/InitialSurvey';
+import InitialSurvey from './content/patientview/InitialSurvey';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 
 //Component that manages the content displayed based on the activeItem prop
