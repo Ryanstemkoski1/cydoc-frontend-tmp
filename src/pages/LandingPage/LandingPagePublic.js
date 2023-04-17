@@ -11,6 +11,7 @@ import NavMenu from '../../components/navigation/NavMenu';
 import { LANDING_PAGE_MOBLE_BP } from 'constants/breakpoints.js';
 import './LandingPage.css';
 import Feedback from '../../assets/cydoc-feedback.svg';
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 
 //Component that manages the layout of the dashboard page
 class LandingPage extends Component {
@@ -79,28 +80,36 @@ class LandingPage extends Component {
 
     render() {
         const { windowWidth } = this.state;
-
+        const { patientView } = this.props;
         const stack = windowWidth < LANDING_PAGE_MOBLE_BP;
         const noteExists = this.checkExistingNote();
         const desktopNoteButtons = noteExists ? (
             <div className='landing-col multiple'>
-                <div
-                    className='landing-box top'
-                    onClick={() => this.handleNewNoteClick(true)}
-                >
-                    <Icon
-                        name='file alternate outline'
-                        size='large'
-                        class='icons'
-                    />
-                    <h3 className='text'>Create New Blank Note</h3>
-                </div>
+                {patientView ? (
+                    ''
+                ) : (
+                    <div
+                        className='landing-box top'
+                        onClick={() => this.handleNewNoteClick(true)}
+                    >
+                        <Icon
+                            name='file alternate outline'
+                            size='large'
+                            class='icons'
+                        />
+                        <h3 className='text'>Create New Blank Note</h3>
+                    </div>
+                )}
                 <div
                     className='landing-box bottom'
                     onClick={() => this.handleEditNoteClick()}
                 >
                     <Icon name='file outline' size='large' class='icons' />
-                    <h3 className='text'>Return to Active Note</h3>
+                    <h3 className='text'>
+                        {patientView
+                            ? 'Click here to begin your visit'
+                            : 'Return to Active Note'}
+                    </h3>
                 </div>
             </div>
         ) : (
@@ -113,12 +122,12 @@ class LandingPage extends Component {
                         name='file alternate outline'
                         size='huge'
                         className='icons'
-                    ></Icon>
-                    <h3 className='text'>Create New Note</h3>
-                    <br />
-                    <p className='smaller-text'>
-                        Write a note for a patient encounter
-                    </p>
+                    />
+                    <h3 className='text'>
+                        {patientView
+                            ? 'Click here to begin your visit'
+                            : 'Create New Note'}
+                    </h3>
                 </div>
             </Fragment>
         );
@@ -177,9 +186,13 @@ class LandingPage extends Component {
                         <div>
                             <NavMenu className='landing-page-nav-menu' />
                         </div>
-                        <div className='landing-feedback'>
-                            <Image src={Feedback} />
-                        </div>
+                        {!patientView ? (
+                            <div className='landing-feedback'>
+                                <Image src={Feedback} />
+                            </div>
+                        ) : (
+                            ''
+                        )}
                         <div
                             className={`landing-boxes ${
                                 stack ? 'rows' : 'columns'
@@ -199,7 +212,10 @@ class LandingPage extends Component {
         }
     }
 }
-const mapStatetoProps = (state) => ({ currentNote: state });
+const mapStatetoProps = (state) => ({
+    currentNote: state,
+    patientView: selectPatientViewState(state),
+});
 
 const mapDispatchToProps = {
     deleteNote,
