@@ -291,9 +291,7 @@ class NotePage extends Component {
                 );
                 break;
             case 'Patient History':
-                tabToDisplay = patientView ? (
-                    defaultTab
-                ) : (
+                tabToDisplay = (
                     <PatientHistoryContent
                         nextFormClick={this.nextFormClick}
                         previousFormClick={this.previousFormClick}

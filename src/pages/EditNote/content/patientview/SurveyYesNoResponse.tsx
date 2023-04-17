@@ -79,7 +79,8 @@ class SurveyYesNoResponse extends React.Component<Props> {
                     onToggleButtonClick={() => {
                         this.addChiefComplaint(YesNoResponse.Yes);
                         initialSurveyYesNo(id, YesNoResponse.Yes);
-                        this.getData(userSurveyState.nodes[id].category);
+                        const category = userSurveyState.nodes[id].category;
+                        if (category.length) this.getData(category);
                     }}
                 />
                 <ToggleButton
