@@ -87,7 +87,10 @@ class LandingPage extends Component {
     }
 
     checkExistingNote() {
-        return !_.isEqual(initialState, this.props.currentNote);
+        return !_.isEqual(initialState, {
+            ...this.props.currentNote,
+            userView: initialState.userView,
+        });
     }
 
     render() {

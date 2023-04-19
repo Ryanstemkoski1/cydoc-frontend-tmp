@@ -224,14 +224,21 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
 
     const checkPatientView = () => {
         const { userSurveyState } = props,
-            check1 = Object.keys(userSurveyState.graph['1']).every(
-                (key) =>
-                    userSurveyState.nodes[key].response != YesNoResponse.None
-            ),
+            check1 =
+                'graph' in userSurveyState &&
+                '1' in userSurveyState.graph &&
+                Object.keys(userSurveyState.graph['1']).every(
+                    (key) =>
+                        userSurveyState.nodes[key].response !=
+                        YesNoResponse.None
+                ),
             check2 =
+                'nodes' in userSurveyState &&
+                '6' in userSurveyState.nodes &&
+                '7' in userSurveyState.nodes &&
                 Object.keys(userSurveyState.nodes['6'].response).length +
                     Object.keys(userSurveyState.nodes['7'].response).length >
-                0;
+                    0;
         return check1 && check2;
     };
 
