@@ -75,10 +75,17 @@ class LandingPage extends Component {
     }
 
     checkExistingNote() {
-        return !_.isEqual(initialState, {
-            ...this.props.currentNote,
-            userView: initialState.userView,
-        });
+        return !_.isEqual(
+            {
+                ...initialState,
+                userView: {
+                    ...initialState.userView,
+                    patientView: this.props.patientView,
+                    doctorView: !this.props.patientView,
+                },
+            },
+            this.props.currentNote
+        );
     }
 
     render() {
