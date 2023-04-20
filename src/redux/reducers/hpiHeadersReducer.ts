@@ -8,6 +8,7 @@ export interface HpiHeadersState {
     parentNodes: {
         [chiefComplaint: string]: {
             [chiefComplaintCode: string]: string;
+            patientView: string;
         };
     };
 }

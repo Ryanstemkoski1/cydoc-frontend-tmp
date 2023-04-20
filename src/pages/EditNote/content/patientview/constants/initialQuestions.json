@@ -1,0 +1,64 @@
+{
+    "order": {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6",
+        "7": "7"
+    },
+    "graph": {
+        "1": ["2", "3", "4"],
+        "2": [],
+        "3": [],
+        "4": [],
+        "5": ["6", "7"],
+        "6": [],
+        "7": []
+    },
+    "nodes" : {
+            "1": {
+                "uid": "1",
+                "text": "",
+                "responseType": "",
+                "category": ""
+            },
+            "2": {
+                "uid": "2",
+                "text": "Are you here for an annual physical exam?",
+                "responseType": "YES-NO",
+                "category": "ANNUALVISIT"
+            },
+            "3": {
+                "uid": "3",
+                "text": "Are you here to follow up any previously diagnosed medical conditions?",
+                "responseType": "YES-NO",
+                "category": ""
+            },
+            "4": {
+                "uid": "4",
+                "text": "Do you have any new health concerns to discuss with the clinician today?",
+                "responseType": "YES-NO",
+                "category": ""
+            },
+            "5": {
+                "uid": "5",
+                "text": "",
+                "responseType": "",
+                "category": ""
+            },
+            "6": {
+                "uid": "6",
+                "text": "Please select the most important conditions or symptoms that you would like to discuss today, up to a maximum of 3. CLICK[Depression, Diabetes, Genital Symptoms/STI, Hypertension, Hyperlipidemia, Urinary Symptoms/UTI]",
+                "responseType": "CLICK-BOXES",
+                "category": ""
+            },
+            "7": {
+                "uid": "7",
+                "text": "If you’d like to discuss an additional condition or symptom not listed above, please search for it here:",
+                "responseType": "SEARCH",
+                "category": ""
+            }
+        }
+}

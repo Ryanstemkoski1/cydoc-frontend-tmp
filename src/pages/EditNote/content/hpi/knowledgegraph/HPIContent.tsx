@@ -27,7 +27,9 @@ import {
 } from 'constants/breakpoints';
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
-import ChiefComplaintsButton from './src/components/ChiefComplaintsButton';
+import ChiefComplaintsButton, {
+    PatientViewProps,
+} from './src/components/ChiefComplaintsButton';
 import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 import {
     setNotesChiefComplaint,
@@ -52,6 +54,7 @@ import {
     saveHpiHeader,
     SaveHpiHeaderAction,
 } from 'redux/actions/hpiHeadersActions';
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 
 interface HPIContentProps {
     step: number;
@@ -160,6 +163,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             chiefComplaints,
             setNotesChiefComplaint,
             hpiHeaders,
+            patientView,
         } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
@@ -444,7 +448,11 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                     }}
                                     panes={Object.keys(chiefComplaints).map(
                                         (diseaseCategory: string) => ({
-                                            menuItem: diseaseCategory,
+                                            menuItem: patientView
+                                                ? hpiHeaders.parentNodes[
+                                                      diseaseCategory
+                                                  ].patientView
+                                                : diseaseCategory,
                                             render: () => (
                                                 <Tab.Pane>
                                                     {/*MISC BOX PLACEMENT*/}
@@ -530,11 +538,12 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
 const mapStateToProps = (
     state: CurrentNoteState
-): ChiefComplaintsProps & PlanProps & HpiHeadersProps => {
+): ChiefComplaintsProps & PlanProps & HpiHeadersProps & PatientViewProps => {
     return {
         chiefComplaints: state.chiefComplaints,
         planConditions: selectPlanConditions(state),
         hpiHeaders: state.hpiHeaders,
+        patientView: selectPatientViewState(state),
     };
 };
 
@@ -567,13 +576,10 @@ const mapDispatchToProps = {
     saveHpiHeader,
 };
 
-// const mapStateToProps = (state: CurrentNoteState): ChiefComplaintsProps => {
-//     return { chiefComplaints: selectChiefComplaintsState(state) };
-// };
-
 type Props = ChiefComplaintsProps &
     HpiHeadersProps &
     HPIContentProps &
-    DispatchProps;
+    DispatchProps &
+    PatientViewProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(HPIContent);
