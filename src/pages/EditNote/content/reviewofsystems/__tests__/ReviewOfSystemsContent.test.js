@@ -11,10 +11,16 @@ import { Provider } from 'react-redux';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
+const initialState = {
+    patientView: true,
+    doctorView: false,
+    userSurvey: {},
+};
+
 const mockStore = configureStore([]);
 
 const mountWithStore = (reviewOfSystems = initialStore) => {
-    const store = mockStore({ reviewOfSystems });
+    const store = mockStore({ reviewOfSystems, userView: initialState });
     return mount(
         <Provider store={store}>
             <ReviewOfSystemsContent />

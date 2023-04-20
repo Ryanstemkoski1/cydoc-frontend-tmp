@@ -7,6 +7,8 @@ import ReviewOfSystemsCategory from './ReviewOfSystemsCategory';
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import { selectReviewOfSystemsCategories } from 'redux/selectors/reviewOfSystemsSelectors';
+import { PatientViewProps } from '../hpi/knowledgegraph/src/components/ChiefComplaintsButton';
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 
 interface ContentProps {
     nextFormClick: () => void;
@@ -27,10 +29,16 @@ interface SectionProps {
     [category: string]: string[];
 }
 
-type ROSContentProps = ContentProps & SectionProps & StateProps;
+type ROSContentProps = ContentProps &
+    SectionProps &
+    StateProps &
+    PatientViewProps;
 
-const mapStateToProps = (state: CurrentNoteState): StateProps => ({
+const mapStateToProps = (
+    state: CurrentNoteState
+): StateProps & PatientViewProps => ({
     ROSCategories: selectReviewOfSystemsCategories(state),
+    patientView: selectPatientViewState(state),
 });
 
 class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
@@ -67,7 +75,7 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
     };
 
     render() {
-        const { nextFormClick, previousFormClick } = this.props;
+        const { nextFormClick, previousFormClick, patientView } = this.props;
         const { windowWidth } = this.state;
 
         let numColumns: number;
@@ -116,24 +124,31 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
                     <Icon name='arrow left' />
                 </Button>
 
-                <Button
-                    icon
-                    floated='right'
-                    onClick={nextFormClick}
-                    className='small-ros-next-button'
-                >
-                    <Icon name='arrow right' />
-                </Button>
-                <Button
-                    icon
-                    labelPosition='right'
-                    floated='right'
-                    onClick={nextFormClick}
-                    className='ros-next-button'
-                >
-                    Next
-                    <Icon name='arrow right' />
-                </Button>
+                {patientView ? (
+                    ''
+                ) : (
+                    <>
+                        {' '}
+                        <Button
+                            icon
+                            floated='right'
+                            onClick={nextFormClick}
+                            className='small-ros-next-button'
+                        >
+                            <Icon name='arrow right' />
+                        </Button>
+                        <Button
+                            icon
+                            labelPosition='right'
+                            floated='right'
+                            onClick={nextFormClick}
+                            className='ros-next-button'
+                        >
+                            Next
+                            <Icon name='arrow right' />
+                        </Button>{' '}
+                    </>
+                )}
             </>
         );
     }

@@ -10,6 +10,8 @@ import { PlanActionTypes } from './planActions';
 import { HpiActionTypes } from './hpiActions';
 import { WidgetActionTypes } from './widgetActions';
 import { chiefComplaintsActionTypes } from './chiefComplaintsActions';
+import { userViewActionTypes } from './userViewActions';
+import { activeItemActionTypes } from './activeItemActions';
 
 export type AllActionTypes =
     | ROSActionTypes
@@ -23,4 +25,6 @@ export type AllActionTypes =
     | FamilyHistoryActionTypes
     | PlanActionTypes
     | HpiActionTypes
-    | chiefComplaintsActionTypes;
+    | chiefComplaintsActionTypes
+    | userViewActionTypes
+    | activeItemActionTypes;

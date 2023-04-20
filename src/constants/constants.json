@@ -8,6 +8,12 @@
     "Plan",
     "Generated Note"
   ],
+  "PATIENT_VIEW_TAB_NAMES": [
+    "CC",
+    "HPI",
+    "Patient History",
+    "Review of Systems"
+  ],
   "PMH_TAB_NAMES": [
     "Medical History",
     "Surgical History",
