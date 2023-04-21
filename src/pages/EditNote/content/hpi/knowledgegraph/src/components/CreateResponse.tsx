@@ -196,13 +196,16 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         vertigo: YesNoResponse.None,
                     },
                 };
-                const responseChoice = Object.keys(formattedResponseChoice);
+                const responseOptions = Object.keys(
+                    formattedResponseChoice['']
+                );
                 return (
                     <ReviewOfSystemsCategory
                         key={''}
                         category={''}
                         selectManyState={formattedResponseChoice}
                         selectManyOptions={responseChoice}
+                        node={node}
                     />
                 );
             }

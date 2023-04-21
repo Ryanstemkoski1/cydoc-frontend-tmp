@@ -15,6 +15,7 @@ import {
     NodeInterface,
     OrderInterface,
     SelectOneInput,
+    SelectManyInput,
 } from '../../constants/hpiEnums';
 import { v4 } from 'uuid';
 
@@ -494,6 +495,24 @@ export function hpiReducer(
                     state
                 );
             } else throw new Error('Not a yes/no response');
+        }
+
+        case HPI_ACTION.SELECT_MANY_HANDLE_CLICK: {
+            const { medId, yesOrNo, option } = action.payload;
+            const response = state.nodes[medId].response;
+            if (
+                state.nodes[medId].responseType === ResponseTypes.SELECTMANY &&
+                isSelectOneResponse(response)
+            ) {
+                return updateResponse(
+                    medId,
+                    {
+                        ...response,
+                        [option]: true,
+                    },
+                    state
+                );
+            } else throw new Error('Not a SELECTMANY response');
         }
 
         case HPI_ACTION.SCALE_HANDLE_VALUE: {

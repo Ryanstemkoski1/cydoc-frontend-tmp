@@ -120,6 +120,7 @@ export interface ExpectedResponseInterface {
     NO_YES: YesNoInput;
     SELECTONE: SelectOneInput;
     MEDS_POP: SelectOneInput;
+    SELECTMANY: SelectManyInput;
     TIME3DAYS: TimeInput;
     LIST_TEXT: ListTextInput;
     SHORT_TEXT: string;
@@ -145,6 +146,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     NO_YES: YesNoResponse.None,
     SELECTONE: {},
     MEDS_POP: {},
+    SELECTMANY: {},
     TIME3DAYS: { numInput: undefined, timeOption: '' },
     LIST_TEXT: { 1: '', 2: '', 3: '' },
     SHORT_TEXT: '',
@@ -251,6 +253,7 @@ export type LabTestType = {
 };
 
 export type SelectOneInput = { [name: string]: boolean };
+export type SelectManyInput = { [name: string]: YesNoResponse };
 export type ScaleInputType = number | undefined;
 export type YesNoInput =
     | YesNoResponse.Yes
@@ -263,6 +266,7 @@ export type HpiResponseType =
     | ListTextInput
     | TimeInput
     | SelectOneInput
+    | SelectManyInput
     | YesNoMaybeResponse
     | BodyLocationType
     | ScaleInputType

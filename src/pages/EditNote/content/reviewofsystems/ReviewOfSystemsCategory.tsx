@@ -6,6 +6,10 @@ import {
     ToggleROSOptionAction,
 } from 'redux/actions/reviewOfSystemsActions';
 import {
+    selectManyHandleClick,
+    SelectManyHandleClickAction,
+} from 'redux/actions/hpiActions';
+import {
     selectReviewOfSystemsState,
     selectReviewOfSystemsOptions,
 } from 'redux/selectors/reviewOfSystemsSelectors';
@@ -19,6 +23,7 @@ interface CategoryProps {
     key: string;
     category: string;
     selectManyState: ReviewOfSystemsState;
+    node: string;
 }
 
 interface StateProps {
@@ -38,6 +43,11 @@ interface DispatchProps {
         option: string,
         yesOrNo: YesNoResponse
     ) => ToggleROSOptionAction;
+    selectManyHandleClick: (
+        medId: string,
+        option: string,
+        yesOrNo: YesNoResponse
+    ) => SelectManyHandleClickAction;
 }
 
 interface OwnState {
@@ -60,6 +70,7 @@ const mapStateToProps = (
 
 const mapDispatchToProps = {
     toggleROSOption: toggleROSOption,
+    selectManyHandleClick: selectManyHandleClick,
 };
 
 type Props = CategoryProps & DispatchProps & StateProps;
@@ -75,6 +86,7 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
             this.props.toggleROSOption(this.props.category, option, value);
             this.setState({ ROSState: this.props.ROSState });
         } else {
+            this.props.selectManyHandleClick(this.props.node, option, value);
             this.setState((prevState) => ({
                 ROSState: {
                     ...prevState.ROSState,

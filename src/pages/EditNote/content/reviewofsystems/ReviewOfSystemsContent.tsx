@@ -95,6 +95,7 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
                                 category={categories}
                                 selectManyOptions={[]}
                                 selectManyState={{}}
+                                node={''}
                             />
                         );
                     })}

@@ -118,6 +118,30 @@ export function singleMultipleChoiceHandleClick(
     };
 }
 
+export interface SelectManyHandleClickAction {
+    type: HPI_ACTION.SELECT_MANY_HANDLE_CLICK;
+    payload: {
+        medId: string;
+        option: string;
+        yesOrNo: YesNoResponse;
+    };
+}
+
+export function selectManyHandleClick(
+    medId: string,
+    option: string,
+    yesOrNo: YesNoResponse
+): SelectManyHandleClickAction {
+    return {
+        type: HPI_ACTION.SELECT_MANY_HANDLE_CLICK,
+        payload: {
+            medId,
+            option,
+            yesOrNo,
+        },
+    };
+}
+
 export interface HandleInputChangeAction {
     type: HPI_ACTION.HANDLE_INPUT_CHANGE;
     payload: {
@@ -437,6 +461,7 @@ export type HpiActionTypes =
     | BodyLocationResponseAction
     | BodyLocationHandleToggleAction
     | SingleMultipleChoiceHandleClickAction
+    | SelectManyHandleClickAction
     | HandleInputChangeAction
     | ListTextHandleChangeAction
     | RemoveListInputAction
