@@ -508,7 +508,7 @@ export function hpiReducer(
                     medId,
                     {
                         ...response,
-                        [option]: true,
+                        [option]: yesOrNo === YesNoResponse.Yes ? true : false,
                     },
                     state
                 );
