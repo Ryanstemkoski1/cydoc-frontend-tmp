@@ -188,6 +188,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 ));
 
             case ResponseTypes.SELECTMANY: {
+                /*
                 const formattedResponseChoice: ReviewOfSystemsState = {
                     '': {
                         'sensitivity to loud sounds': YesNoResponse.None,
@@ -196,9 +197,15 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         vertigo: YesNoResponse.None,
                     },
                 };
-                const responseOptions = Object.keys(
-                    formattedResponseChoice['']
-                );
+                */
+                const formattedResponseChoice: ReviewOfSystemsState = {
+                    '': {},
+                };
+                responseChoice.forEach((key: string, index: number) => {
+                    formattedResponseChoice[''][key] = YesNoResponse.None;
+                });
+                // eslint-disable-next-line no-console
+                console.log(formattedResponseChoice);
                 return (
                     <ReviewOfSystemsCategory
                         key={''}
