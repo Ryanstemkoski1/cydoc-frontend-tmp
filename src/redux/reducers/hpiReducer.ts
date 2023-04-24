@@ -504,6 +504,12 @@ export function hpiReducer(
                 state.nodes[medId].responseType === ResponseTypes.SELECTMANY &&
                 isSelectOneResponse(response)
             ) {
+                if ((yesOrNo === YesNoResponse.Yes) === response[option]) {
+                    delete response[option];
+                    // eslint-disable-next-line no-console
+                    console.log(response);
+                    return updateResponse(medId, response, state);
+                }
                 return updateResponse(
                     medId,
                     {
