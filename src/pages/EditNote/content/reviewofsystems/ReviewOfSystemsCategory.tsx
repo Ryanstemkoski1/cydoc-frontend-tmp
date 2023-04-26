@@ -121,14 +121,12 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
         if (this.isSelectMany()) {
             ROSState = this.state.ROSState;
         }
-        // eslint-disable-next-line no-console
-        console.log(ROSState['']);
         return (
             <Segment className='ros-segments'>
                 <Header as={'h3'} className='header-titles'>
                     {this.breakWord(category)}
                 </Header>
-                <Divider />
+                {!this.isSelectMany() && <Divider />}
                 <Grid padded>
                     <AllNegativeButton handleClick={this.handleChange}>
                         {ROSOptions.map((option: string) => (
@@ -160,6 +158,7 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
                                 <Grid.Column
                                     width={7}
                                     verticalAlign='middle'
+                                    textAlign='center'
                                     className='ros-symptom no-padding'
                                 >
                                     {option.replace('Δ', 'Changes in')}

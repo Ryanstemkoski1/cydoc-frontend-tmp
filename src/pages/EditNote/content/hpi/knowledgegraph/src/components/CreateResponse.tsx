@@ -35,6 +35,7 @@ import {
     isLabTestDictionary,
     isSelectOneResponse,
 } from 'redux/reducers/hpiReducer';
+import Masonry from 'react-masonry-component';
 
 interface CreateResponseProps {
     node: string;
@@ -205,16 +206,16 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                                 : YesNoResponse.None;
                     });
                 }
-                // eslint-disable-next-line no-console
-                console.log(formattedResponseChoice);
                 return (
-                    <ReviewOfSystemsCategory
-                        key={''}
-                        category={''}
-                        selectManyState={formattedResponseChoice}
-                        selectManyOptions={responseChoice}
-                        node={node}
-                    />
+                    <Masonry className='ros-container' style={{ width: 357 }}>
+                        <ReviewOfSystemsCategory
+                            key={''}
+                            category={''}
+                            selectManyState={formattedResponseChoice}
+                            selectManyOptions={responseChoice}
+                            node={node}
+                        />
+                    </Masonry>
                 );
             }
 
