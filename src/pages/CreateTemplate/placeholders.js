@@ -15,7 +15,11 @@ export const RESPONSE_PLACEHOLDER = {
     [questionTypes.SELECTONE]: {
         startEg: 'The patient reports',
         negStartEg: 'The patient denies',
-        options: ['improved hearing', 'worsened hearing', 'no change in hearing'],
+        options: [
+            'improved hearing',
+            'worsened hearing',
+            'no change in hearing',
+        ],
     },
     [questionTypes.TIME]: {
         startEg: 'The cough started',
