@@ -506,8 +506,6 @@ export function hpiReducer(
             ) {
                 if ((yesOrNo === YesNoResponse.Yes) === response[option]) {
                     delete response[option];
-                    // eslint-disable-next-line no-console
-                    console.log(response);
                     return updateResponse(medId, response, state);
                 }
                 return updateResponse(

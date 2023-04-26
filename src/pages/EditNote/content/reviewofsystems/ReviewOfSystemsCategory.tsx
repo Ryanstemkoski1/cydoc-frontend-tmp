@@ -121,6 +121,8 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
         if (this.isSelectMany()) {
             ROSState = this.state.ROSState;
         }
+        // eslint-disable-next-line no-console
+        console.log(ROSState['']);
         return (
             <Segment className='ros-segments'>
                 <Header as={'h3'} className='header-titles'>

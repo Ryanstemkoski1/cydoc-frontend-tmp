@@ -31,7 +31,10 @@ import ScaleInput from './responseComponents/ScaleInput';
 import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
 import LaboratoryTest from './responseComponents/LaboratoryTest';
-import { isLabTestDictionary } from 'redux/reducers/hpiReducer';
+import {
+    isLabTestDictionary,
+    isSelectOneResponse,
+} from 'redux/reducers/hpiReducer';
 
 interface CreateResponseProps {
     node: string;
@@ -188,22 +191,20 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 ));
 
             case ResponseTypes.SELECTMANY: {
-                /*
-                const formattedResponseChoice: ReviewOfSystemsState = {
-                    '': {
-                        'sensitivity to loud sounds': YesNoResponse.None,
-                        'ear discomfort': YesNoResponse.None,
-                        'ringing in your ears': YesNoResponse.None,
-                        vertigo: YesNoResponse.None,
-                    },
-                };
-                */
+                const existingResponse = this.props.hpi.nodes[node].response;
                 const formattedResponseChoice: ReviewOfSystemsState = {
                     '': {},
                 };
-                responseChoice.forEach((key: string, index: number) => {
-                    formattedResponseChoice[''][key] = YesNoResponse.None;
-                });
+                if (isSelectOneResponse(existingResponse)) {
+                    responseChoice.forEach((key: string) => {
+                        formattedResponseChoice[''][key] =
+                            existingResponse[key] !== undefined
+                                ? existingResponse[key] === true
+                                    ? YesNoResponse.Yes
+                                    : YesNoResponse.No
+                                : YesNoResponse.None;
+                    });
+                }
                 // eslint-disable-next-line no-console
                 console.log(formattedResponseChoice);
                 return (
