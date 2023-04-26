@@ -7,6 +7,7 @@ import EditNote from './pages/EditNote/EditNote';
 import Login from './pages/Account/Login';
 import ForgotPasswordEmail from './pages/Account/ForgotPasswordEmail';
 import LandingPage from './pages/LandingPage/LandingPage';
+import LandingPagePublic from 'pages/LandingPage/LandingPagePublic';
 import Home from './pages/Home/Home';
 import { PrivateRoute } from './components/navigation/PrivateRoute';
 import CreateGraph from './pages/CreateTemplate/CreateGraph';
@@ -28,6 +29,7 @@ import Terms_and_conditions from './constants/Documents/terms_and_conditions';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { isLivemode } from './auth/livemode';
+import AcidTest from 'pages/AcidTest';
 
 const getStripePublishableKey = () => {
     if (isLivemode()) {
@@ -71,13 +73,23 @@ ReactDOM.render(
                                         />
                                         <PrivateRoute
                                             exact
-                                            path='/dashboard'
+                                            path='/secretdashboard'
                                             component={LandingPage}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/dashboard'
+                                            component={LandingPagePublic}
                                         />
                                         <PrivateRoute
                                             exact
                                             path='/generateinpatientplan'
                                             component={GenerateInpatientPlan}
+                                        />
+                                        <PrivateRoute
+                                            exact
+                                            path='/acid-test'
+                                            component={AcidTest}
                                         />
                                         <PrivateRoute
                                             exact

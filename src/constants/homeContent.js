@@ -1,31 +1,31 @@
 export const homeContent = {
     meetCydoc: {
-        header: 'Meet Cydoc.',
-        subheader: "A note-taking app for doctors that's so much better",
+        header: 'Write notes 3x faster',
+        subheader: 'Cydoc automatically generates notes from intake forms',
         description:
-            'Our customizable forms are powered by medical knowledge graphs that think the way you do. Cydoc can be used on any computer, tablet, or mobile device, and is compatible with every EHR system - the generated notes can simply be copy-pasted into your EHR.',
-        inquireNow: 'Inquire Now',
+            'Our smart intake form asks a patient targeted questions about their visit reasons, from diabetes and hypertension to asthma and headaches. Then, we transform the intake data into a medical note, available to you before the visit starts! Our trustworthy system for text generation ensures 100% accuracy. Spend less time writing notes so you can spend more time with your patients.',
+        inquireNow: 'Sign Up Now',
     },
     betterNotes: {
-        header: 'Write better notes, faster.',
+        header: 'Leverage medical AI',
         description:
-            "With Cydoc's intuitive user interface, a complete medical note is only a few clicks away. Each section of the medical note has been optimized for lightspeed data collection. Our trustworthy system for text generation ensures 100% accuracy. Spend less time writing notes so you can spend more time with patients.",
+            'We offer AI-powered questionnaires for over 130 visit reasons, spanning family medicine, pediatrics, subspecialty clinics, urgent care, and emergency medicine. Cydoc generated notes include a detailed history of present illness, past medical history, medications, allergies, surgical history, family history, social history, and review of systems. Streamline your workflows today!',
         intuitiveInterface: 'Intuitive interface',
         webBased: 'Web-based',
         mobileFriendly: 'Mobile-friendly',
     },
-    clickToTell: {
-        header: "Click to tell us the facts. We'll take care of the typing.",
+    saveLives: {
+        header: 'We save time, so you can save lives.',
     },
     forDoctors: {
-        header: 'Designed by doctors for doctors.',
+        header: 'Designed by clinicians for clinicians.',
         subheader: 'An excellent user experience is our top priority.',
     },
     features: {
-        header: 'Seamless features.',
+        header: 'Seamless features',
         HPI: {
             header: 'Customizable HPI',
-            description: `Efficient user interface to collect key data for your patient's chief complaints`,
+            description: `Our efficient user interface collects key data for your patient's chief complaints`,
         },
         patientHistory: {
             header: 'Patient History',
@@ -34,19 +34,19 @@ export const homeContent = {
         },
         ROS: {
             header: 'Review of Systems',
-            description: 'Record a comprehensive ROS with Yes/No clicks',
+            description: 'We complete a comprehensive ROS with Yes/No clicks',
         },
-        physcialExam: {
-            header: 'Physical Exam',
-            description: 'Findings organized for maximum efficiency',
+        medicalKnowledge: {
+            header: 'Medical Knowledge',
+            description: 'Our forms think the way you do',
         },
         plan: {
-            header: 'Plan',
-            description: 'You make the plan - we write it down',
+            header: 'Time Savings',
+            description: 'Finish notes up to 3x faster',
         },
         generatedNote: {
             header: 'Generated Note',
-            description: 'Compatible with any EHR',
+            description: 'Compatible with any EHR through copy-paste',
         },
     },
     footer: {

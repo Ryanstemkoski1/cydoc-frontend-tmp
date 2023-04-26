@@ -15,6 +15,7 @@ import {
     ProcessKnowledgeGraphAction,
 } from 'redux/actions/hpiActions';
 import axios from 'axios';
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 
 interface ChiefComplaintsButtonProps {
     name: string;
@@ -36,13 +37,18 @@ class ChiefComplaintsButton extends React.Component<Props> {
             name,
             chiefComplaints,
             hpiHeaders,
+            patientView,
         } = this.props;
         return (
             <ToggleButton
                 className='tag_text'
                 active={name in chiefComplaints}
                 condition={name}
-                title={name}
+                title={
+                    patientView && name in hpiHeaders.parentNodes
+                        ? hpiHeaders.parentNodes[name].patientView
+                        : name
+                }
                 onToggleButtonClick={() => {
                     selectChiefComplaint(name);
                     this.getData(Object.keys(hpiHeaders.parentNodes[name])[0]);
@@ -59,17 +65,23 @@ interface DispatchProps {
     ) => ProcessKnowledgeGraphAction;
 }
 
+export interface PatientViewProps {
+    patientView: boolean;
+}
+
 const mapStateToProps = (
     state: CurrentNoteState
-): ChiefComplaintsProps & HpiHeadersProps => ({
+): ChiefComplaintsProps & HpiHeadersProps & PatientViewProps => ({
     chiefComplaints: selectChiefComplaintsState(state),
     hpiHeaders: state.hpiHeaders,
+    patientView: selectPatientViewState(state),
 });
 
 type Props = DispatchProps &
     ChiefComplaintsButtonProps &
     ChiefComplaintsProps &
-    HpiHeadersProps;
+    HpiHeadersProps &
+    PatientViewProps;
 
 const mapDispatchToProps = {
     selectChiefComplaint,

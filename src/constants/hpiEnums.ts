@@ -113,6 +113,7 @@ export enum ResponseTypes {
     CBC = 'CBC',
     BMP = 'BMP',
     LFT = 'LFT',
+    SEARCH = 'SEARCH',
 }
 
 export interface ExpectedResponseInterface {
@@ -139,6 +140,9 @@ export interface ExpectedResponseInterface {
     CBC: LabTestType;
     BMP: LabTestType;
     LFT: LabTestType;
+    SEARCH: {
+        [CC: string]: string;
+    };
 }
 
 export const ExpectedResponseDict: ExpectedResponseInterface = {
@@ -165,6 +169,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     CBC: { name: '', snomed: '', components: {} },
     BMP: { name: '', snomed: '', components: {} },
     LFT: { name: '', snomed: '', components: {} },
+    SEARCH: {},
 };
 
 export enum TimeOption {

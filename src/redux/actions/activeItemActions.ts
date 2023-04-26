@@ -1,0 +1,19 @@
+import { ACTIVE_ITEM_ACTION } from './actionTypes';
+
+export interface UpdateActiveItemAction {
+    type: ACTIVE_ITEM_ACTION.ACTIVE_ITEM;
+    payload: {
+        updatedItem: string;
+    };
+}
+
+export function updateActiveItem(updatedItem: string): UpdateActiveItemAction {
+    return {
+        type: ACTIVE_ITEM_ACTION.ACTIVE_ITEM,
+        payload: {
+            updatedItem,
+        },
+    };
+}
+
+export type activeItemActionTypes = UpdateActiveItemAction;
