@@ -18,7 +18,7 @@ function getGraphClientURL() {
 }
 
 export const graphClient = axios.create({
-    baseURL: 'https://cydocgraph.herokuapp.com',
+    baseURL: getGraphClientURL(),
     headers: { 'Access-Control-Allow-Origin': '*' },
 });
 
