@@ -81,6 +81,13 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
         super(props);
         this.state = { ROSState: this.props.ROSState };
     }
+
+    componentDidUpdate(prevProps: Props) {
+        if (prevProps.ROSState !== this.props.ROSState) {
+            this.setState({ ROSState: this.props.ROSState });
+        }
+    }
+
     handleChange = (option: string, value: YesNoResponse) => {
         if (!this.isSelectMany()) {
             this.props.toggleROSOption(this.props.category, option, value);
@@ -115,6 +122,7 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
             return (header = category);
         }
     };
+
     render() {
         const { category, ROSOptions } = this.props;
         let { ROSState } = this.props;
