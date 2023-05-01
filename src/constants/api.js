@@ -10,8 +10,8 @@ function getGraphClientURL() {
     if (process.env.PRODUCTION_OR_DEV == 'production') {
         graphClientURL = 'https://cydocgraph.herokuapp.com';
     } else if (process.env.PRODUCTION_OR_DEV == 'dev') {
-        graphClientURL = 'https://doctorgraph.herokuapp.com'; // change later to cydocgraphdev
-    } else { // local development set to default
+        graphClientURL = 'https://doctorgraph.herokuapp.com';
+    } else {
         graphClientURL = 'https://cydocgraph.herokuapp.com';
     }
     return graphClientURL;
