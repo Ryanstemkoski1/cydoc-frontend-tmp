@@ -5,8 +5,20 @@ export const client = axios.create({
     baseURL: 'https://cydocbackend.herokuapp.com',
 });
 
+function getGraphClientURL() {
+    let graphClientURL;
+    if (process.env.PRODUCTION_OR_DEV == 'production') {
+        graphClientURL = 'https://cydocgraph.herokuapp.com';
+    } else if (process.env.PRODUCTION_OR_DEV == 'dev') {
+        graphClientURL = 'https://doctorgraph.herokuapp.com';
+    } else {
+        graphClientURL = 'https://cydocgraph.herokuapp.com';
+    }
+    return graphClientURL;
+}
+
 export const graphClient = axios.create({
-    baseURL: 'https://cydocgraph.herokuapp.com',
+    baseURL: getGraphClientURL(),
     headers: { 'Access-Control-Allow-Origin': '*' },
 });
 
