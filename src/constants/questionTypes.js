@@ -24,7 +24,7 @@ export const questionTypeMapping = {
         [questionTypes.YES_NO]: 'Yes/No',
         [questionTypes.NO_YES]: 'No/Yes',
         [questionTypes.SHORT_TEXT]: 'Short Text',
-        [questionTypes.SELECTONE]: 'Multiple Selection',
+        [questionTypes.SELECTONE]: 'Single Selection',
         [questionTypes.SELECTMANY]: 'Multiple Selection',
         [questionTypes.LIST_TEXT]: 'List',
     },
