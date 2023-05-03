@@ -217,7 +217,7 @@ const SetupAccount = async (
             const response = await url.post(path, payload);
             const manager_uuid = response.data[0];
             customerInfo.customer.attributes.customerUUID = manager_uuid;
-            await completeNewPasswordChallengeManager(
+            return completeNewPasswordChallengeManager(
                 currentUser,
                 newPassword,
                 newUserCognitoAttribute,
