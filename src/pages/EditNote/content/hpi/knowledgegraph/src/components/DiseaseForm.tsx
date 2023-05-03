@@ -2,12 +2,13 @@ import React from 'react';
 import '../css/App.css';
 import '../../HPI.css';
 import { Loader } from 'semantic-ui-react';
-import { HpiStateProps, ResponseTypes } from 'constants/hpiEnums';
+import { HpiStateProps } from 'constants/hpiEnums';
 import { connect } from 'react-redux';
 import { CurrentNoteState } from 'redux/reducers';
-import { YesNoResponse } from 'constants/enums';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import CreateResponse from './CreateResponse';
+import { displayedNodesProps } from 'redux/reducers/displayedNodesReducer';
+import { selectDisplayedNodes } from 'redux/selectors/displayedNodesSelectors';
 
 //The order goes DiseaseForm -> CreateResponse -> ButtonTag
 
@@ -54,14 +55,11 @@ export class DiseaseForm extends React.Component<Props> {
                 );
                 questionArr = [...questionArr, nodeToElementDict[currNode]];
             }
-            const childEdges =
-                (nodes[currNode].responseType == ResponseTypes.YES_NO &&
-                    nodes[currNode].response == YesNoResponse.Yes) ||
-                (nodes[currNode].responseType == ResponseTypes.NO_YES &&
-                    nodes[currNode].response == YesNoResponse.No) ||
-                nodes[currNode].text == 'nan'
-                    ? graph[currNode].slice().reverse()
-                    : [];
+            const { displayedNodes } = this.props,
+                childEdges = graph[currNode]
+                    .slice()
+                    .reverse()
+                    .filter((node) => displayedNodes.allNodes.includes(node));
             stack = [...stack, ...childEdges];
         }
         return questionArr;
@@ -78,10 +76,13 @@ export class DiseaseForm extends React.Component<Props> {
     }
 }
 
-const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
+const mapStateToProps = (
+    state: CurrentNoteState
+): HpiStateProps & displayedNodesProps => ({
     hpi: selectHpiState(state),
+    displayedNodes: selectDisplayedNodes(state),
 });
 
-type Props = HpiStateProps & DiseaseFormProps;
+type Props = HpiStateProps & DiseaseFormProps & displayedNodesProps;
 
 export default connect(mapStateToProps)(DiseaseForm);

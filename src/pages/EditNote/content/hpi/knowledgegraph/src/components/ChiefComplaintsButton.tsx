@@ -16,6 +16,12 @@ import {
 } from 'redux/actions/hpiActions';
 import axios from 'axios';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import {
+    addDisplayedNodes,
+    AddDisplayedNodesAction,
+    removeAllNodes,
+    RemoveAllNodesAction,
+} from 'redux/actions/displayedNodesActions';
 
 interface ChiefComplaintsButtonProps {
     name: string;
@@ -28,8 +34,20 @@ class ChiefComplaintsButton extends React.Component<Props> {
                 chiefComplaint +
                 '/4'
         );
-        const { data } = response;
+        const { data } = response,
+            { graph, nodes, edges, order } = data as GraphData,
+            firstOrderNodes = graph[order['1']].reduce((prevVal, edge) => {
+                const node = edges[edge.toString()].to;
+                let childNodes = [node];
+                if (['GENERAL', 'PAIN'].includes(nodes[node].category))
+                    childNodes = [
+                        ...childNodes,
+                        ...graph[node].map((edge) => edges[edge.toString()].to),
+                    ];
+                return [...prevVal, ...childNodes];
+            }, [] as string[]);
         this.props.processKnowledgeGraph(data);
+        this.props.addDisplayedNodes(chiefComplaint, firstOrderNodes);
     };
     render() {
         const {
@@ -38,6 +56,7 @@ class ChiefComplaintsButton extends React.Component<Props> {
             chiefComplaints,
             hpiHeaders,
             patientView,
+            removeAllNodes,
         } = this.props;
         return (
             <ToggleButton
@@ -51,6 +70,10 @@ class ChiefComplaintsButton extends React.Component<Props> {
                 }
                 onToggleButtonClick={() => {
                     selectChiefComplaint(name);
+                    if (name in chiefComplaints)
+                        removeAllNodes(
+                            Object.keys(hpiHeaders.parentNodes[name])[0]
+                        );
                     this.getData(Object.keys(hpiHeaders.parentNodes[name])[0]);
                 }}
             />
@@ -63,6 +86,11 @@ interface DispatchProps {
     processKnowledgeGraph: (
         graphData: GraphData
     ) => ProcessKnowledgeGraphAction;
+    addDisplayedNodes: (
+        category: string,
+        nodes: string[]
+    ) => AddDisplayedNodesAction;
+    removeAllNodes: (category: string) => RemoveAllNodesAction;
 }
 
 export interface PatientViewProps {
@@ -86,6 +114,8 @@ type Props = DispatchProps &
 const mapDispatchToProps = {
     selectChiefComplaint,
     processKnowledgeGraph,
+    addDisplayedNodes,
+    removeAllNodes,
 };
 
 export default connect(

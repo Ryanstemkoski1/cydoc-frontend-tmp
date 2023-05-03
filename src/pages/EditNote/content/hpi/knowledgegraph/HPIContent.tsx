@@ -55,6 +55,10 @@ import {
     SaveHpiHeaderAction,
 } from 'redux/actions/hpiHeadersActions';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import {
+    AddDisplayedNodesAction,
+    addDisplayedNodes,
+} from 'redux/actions/displayedNodesActions';
 
 interface HPIContentProps {
     step: number;
@@ -113,14 +117,28 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         this.setState({ windowWidth, windowHeight });
     }
 
-    getData = async (chiefComplaint: string) => {
+    getData = async (complaint: string) => {
+        const { parentNodes } = this.props.hpiHeaders;
+        const chiefComplaint = Object.keys(parentNodes[complaint])[0];
         const response = await axios.get(
             'https://cydocgraph.herokuapp.com/graph/category/' +
                 chiefComplaint +
                 '/4'
         );
-        const { data } = response;
+        const { data } = response,
+            { graph, nodes, edges, order } = data as GraphData,
+            firstOrderNodes = graph[order['1']].reduce((prevVal, edge) => {
+                const node = edges[edge.toString()].to;
+                let childNodes = [node];
+                if (['GENERAL', 'PAIN'].includes(nodes[node].category))
+                    childNodes = [
+                        ...childNodes,
+                        ...graph[node].map((edge) => edges[edge.toString()].to),
+                    ];
+                return [...prevVal, ...childNodes];
+            }, [] as string[]);
         this.props.processKnowledgeGraph(data);
+        this.props.addDisplayedNodes(chiefComplaint, firstOrderNodes);
     };
 
     continue = (e: any) => this.props.continue(e);
@@ -223,9 +241,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         disease: complaint,
                                     },
                                 });
-                                this.getData(
-                                    Object.keys(parentNodes[complaint])[0]
-                                );
+                                this.getData(complaint);
                             },
                         };
                         filterResults.push(temp);
@@ -568,12 +584,17 @@ interface DispatchProps {
         graphData: GraphData
     ) => ProcessKnowledgeGraphAction;
     saveHpiHeader: (data: HpiHeadersState) => SaveHpiHeaderAction;
+    addDisplayedNodes: (
+        category: string,
+        nodes: string[]
+    ) => AddDisplayedNodesAction;
 }
 
 const mapDispatchToProps = {
     setNotesChiefComplaint,
     processKnowledgeGraph,
     saveHpiHeader,
+    addDisplayedNodes,
 };
 
 type Props = ChiefComplaintsProps &

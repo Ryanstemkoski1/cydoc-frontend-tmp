@@ -50,6 +50,10 @@ import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
+import {
+    AddDisplayedNodesAction,
+    addDisplayedNodes,
+} from 'redux/actions/displayedNodesActions';
 
 interface InitialSurveyState {
     activeItem: number;
@@ -156,14 +160,26 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         }
     };
 
-    getData = async (chiefComplaint: string) => {
-        const response = await axios.get(
-            'https://cydocgraph.herokuapp.com/graph/category/' +
-                chiefComplaint +
-                '/4'
-        );
-        const { data } = response;
+    getData = async (complaint: string) => {
+        const { parentNodes } = this.props.hpiHeaders,
+            chiefComplaint = Object.keys(parentNodes[complaint])[0],
+            response = await axios.get(
+                'https://cydocgraph.herokuapp.com/graph/category/' +
+                    chiefComplaint +
+                    '/4'
+            ),
+            { data } = response,
+            { graph, edges } = data as GraphData,
+            parentNode = parentNodes[complaint][chiefComplaint];
         this.props.processKnowledgeGraph(data);
+        const childNodes = graph[parentNode]
+            .map((edge: number) => [
+                edges[edge.toString()].toQuestionOrder.toString(),
+                edges[edge.toString()].to,
+            ])
+            .sort((tup1, tup2) => parseInt(tup1[0]) - parseInt(tup2[0]))
+            .map(([_questionOrder, medId]) => medId);
+        this.props.addDisplayedNodes(chiefComplaint, childNodes);
     };
 
     renderSwitch = (id: string) => {
@@ -200,9 +216,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                                         disease: complaint,
                                     },
                                 });
-                                this.getData(
-                                    Object.keys(parentNodes[complaint])[0]
-                                );
+                                this.getData(complaint);
                                 initialSurveySearch(id, complaint);
                             },
                         };
@@ -383,6 +397,10 @@ interface DispatchProps {
         uid: string,
         chiefComplaint: string
     ) => InitialSurveySearchAction;
+    addDisplayedNodes: (
+        category: string,
+        nodes: string[]
+    ) => AddDisplayedNodesAction;
 }
 
 type Props = HpiHeadersProps &
@@ -398,6 +416,7 @@ const mapDispatchToProps = {
     saveHpiHeader,
     processKnowledgeGraph,
     initialSurveySearch,
+    addDisplayedNodes,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InitialSurvey);

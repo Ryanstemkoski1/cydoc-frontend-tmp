@@ -18,6 +18,7 @@ export interface initialQuestionsState {
             text: string;
             responseType: ResponseTypes;
             category: string;
+            name: string;
         };
     };
 }
@@ -35,6 +36,7 @@ export interface userSurveyState {
             text: string;
             responseType: ResponseTypes;
             category: string;
+            name: string;
             response:
                 | YesNoResponse
                 | ClickBoxesInput
