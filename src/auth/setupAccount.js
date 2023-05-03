@@ -211,7 +211,7 @@ const SetupAccount = async (
     }
     if (role == 'manager') {
         delete newUserCognitoAttribute['custom:associatedManager'];
-        delete newUserCognitoAttribute['phone_number'];
+        // delete newUserCognitoAttribute['phone_number'];
 
         try {
             const response = await url.post(path, payload);
