@@ -7,7 +7,7 @@ export interface displayedNodesState {
     notDisplayed: string[];
 }
 
-export const displayedNodesCutOff = 26;
+export const displayedNodesCutOff = 60;
 
 export const initialDisplayedNodesState: displayedNodesState = {
     allNodes: [],
