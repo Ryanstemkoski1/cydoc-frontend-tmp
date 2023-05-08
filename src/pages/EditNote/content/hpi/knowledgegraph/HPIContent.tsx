@@ -43,7 +43,7 @@ import {
 } from 'redux/selectors/planSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
 import axios from 'axios';
-import { GraphData } from 'constants/hpiEnums';
+import { GraphData, NodeInterface } from 'constants/hpiEnums';
 import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import {
     processKnowledgeGraph,
@@ -138,7 +138,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                 return [...prevVal, ...childNodes];
             }, [] as string[]);
         this.props.processKnowledgeGraph(data);
-        this.props.addDisplayedNodes(chiefComplaint, firstOrderNodes);
+        this.props.addDisplayedNodes(chiefComplaint, firstOrderNodes, nodes);
     };
 
     continue = (e: any) => this.props.continue(e);
@@ -586,7 +586,10 @@ interface DispatchProps {
     saveHpiHeader: (data: HpiHeadersState) => SaveHpiHeaderAction;
     addDisplayedNodes: (
         category: string,
-        nodes: string[]
+        nodesArr: string[],
+        nodes: {
+            [node: string]: NodeInterface;
+        }
     ) => AddDisplayedNodesAction;
 }
 

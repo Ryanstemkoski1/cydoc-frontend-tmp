@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import ToggleButton from 'components/tools/ToggleButton';
 import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
 import { ChiefComplaintsProps, HpiHeadersProps } from '../../HPIContent';
-import { GraphData } from 'constants/hpiEnums';
+import { GraphData, NodeInterface } from 'constants/hpiEnums';
 import {
     processKnowledgeGraph,
     ProcessKnowledgeGraphAction,
@@ -47,7 +47,7 @@ class ChiefComplaintsButton extends React.Component<Props> {
                 return [...prevVal, ...childNodes];
             }, [] as string[]);
         this.props.processKnowledgeGraph(data);
-        this.props.addDisplayedNodes(chiefComplaint, firstOrderNodes);
+        this.props.addDisplayedNodes(chiefComplaint, firstOrderNodes, nodes);
     };
     render() {
         const {
@@ -88,7 +88,10 @@ interface DispatchProps {
     ) => ProcessKnowledgeGraphAction;
     addDisplayedNodes: (
         category: string,
-        nodes: string[]
+        nodesArr: string[],
+        nodes: {
+            [node: string]: NodeInterface;
+        }
     ) => AddDisplayedNodesAction;
     removeAllNodes: (category: string) => RemoveAllNodesAction;
 }

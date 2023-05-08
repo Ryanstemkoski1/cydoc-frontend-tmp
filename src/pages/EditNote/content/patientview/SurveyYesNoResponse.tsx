@@ -19,7 +19,7 @@ import {
     HpiHeadersProps,
 } from '../hpi/knowledgegraph/HPIContent';
 import axios from 'axios';
-import { GraphData } from 'constants/hpiEnums';
+import { GraphData, NodeInterface } from 'constants/hpiEnums';
 import {
     processKnowledgeGraph,
     ProcessKnowledgeGraphAction,
@@ -47,7 +47,7 @@ class SurveyYesNoResponse extends React.Component<Props> {
                 '/4'
         );
         const { data } = response,
-            { graph, edges } = data as GraphData,
+            { graph, nodes, edges } = data as GraphData,
             name = this.props.userSurveyState.nodes[this.props.id].name,
             parentNode = this.props.hpiHeaders.parentNodes[name][
                 chiefComplaint
@@ -60,7 +60,7 @@ class SurveyYesNoResponse extends React.Component<Props> {
             ])
             .sort((tup1, tup2) => parseInt(tup1[0]) - parseInt(tup2[0]))
             .map(([_questionOrder, medId]) => medId);
-        this.props.addDisplayedNodes(chiefComplaint, childNodes);
+        this.props.addDisplayedNodes(chiefComplaint, childNodes, nodes);
     };
 
     addChiefComplaint(action: YesNoResponse) {
@@ -148,7 +148,10 @@ interface DispatchProps {
     ) => ProcessKnowledgeGraphAction;
     addDisplayedNodes: (
         category: string,
-        nodes: string[]
+        nodesArr: string[],
+        nodes: {
+            [node: string]: NodeInterface;
+        }
     ) => AddDisplayedNodesAction;
     removeAllNodes: (category: string) => RemoveAllNodesAction;
 }

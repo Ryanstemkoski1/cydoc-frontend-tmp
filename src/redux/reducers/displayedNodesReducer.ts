@@ -4,11 +4,15 @@ import { DisplayedNodesActionTypes } from 'redux/actions/displayedNodesActions';
 export interface displayedNodesState {
     [chiefComplaint: string]: string[];
     allNodes: string[];
+    notDisplayed: string[];
 }
 
 export const displayedNodesCutOff = 26;
 
-export const initialDisplayedNodesState: displayedNodesState = { allNodes: [] };
+export const initialDisplayedNodesState: displayedNodesState = {
+    allNodes: [],
+    notDisplayed: [],
+};
 
 export interface displayedNodesProps {
     displayedNodes: displayedNodesState;
@@ -20,15 +24,23 @@ export function displayedNodesReducer(
 ) {
     switch (action.type) {
         case DISPLAYED_NODES_ACTION.ADD_DISPLAYED_NODES: {
-            const { category, nodes } = action.payload,
+            const { category, nodesArr, nodes } = action.payload,
                 currNodes = category in state ? state[category] : [];
             return {
                 ...state,
                 [category]: [
                     ...currNodes,
-                    ...nodes.filter((node) => !currNodes.includes(node)),
+                    ...nodesArr.filter((node) => !currNodes.includes(node)),
                 ],
-                allNodes: [...new Set([...state.allNodes, ...nodes])],
+                allNodes: [...new Set([...state.allNodes, ...nodesArr])],
+                notDisplayed: [
+                    ...state.notDisplayed,
+                    ...nodesArr.filter(
+                        (node) =>
+                            !state.notDisplayed.includes(node) &&
+                            nodes[node].text == 'nan'
+                    ),
+                ],
             };
         }
 
@@ -37,6 +49,9 @@ export function displayedNodesReducer(
             return {
                 ...res,
                 allNodes: res.allNodes.filter((node) => !nodes.includes(node)),
+                notDisplayed: res.notDisplayed.filter(
+                    (node) => !nodes.includes(node)
+                ),
             };
         }
 
@@ -48,6 +63,9 @@ export function displayedNodesReducer(
                     (node) => !nodes.includes(node)
                 ),
                 allNodes: state.allNodes.filter(
+                    (node) => !nodes.includes(node)
+                ),
+                notDisplayed: state.notDisplayed.filter(
                     (node) => !nodes.includes(node)
                 ),
             };

@@ -1,21 +1,29 @@
+import { NodeInterface } from 'constants/hpiEnums';
 import { DISPLAYED_NODES_ACTION } from './actionTypes';
 
 export interface AddDisplayedNodesAction {
     type: DISPLAYED_NODES_ACTION.ADD_DISPLAYED_NODES;
     payload: {
         category: string;
-        nodes: string[];
+        nodesArr: string[];
+        nodes: {
+            [node: string]: NodeInterface;
+        };
     };
 }
 
 export function addDisplayedNodes(
     category: string,
-    nodes: string[]
+    nodesArr: string[],
+    nodes: {
+        [node: string]: NodeInterface;
+    }
 ): AddDisplayedNodesAction {
     return {
         type: DISPLAYED_NODES_ACTION.ADD_DISPLAYED_NODES,
         payload: {
             category,
+            nodesArr,
             nodes,
         },
     };

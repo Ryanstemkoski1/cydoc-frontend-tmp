@@ -1,7 +1,11 @@
 import React from 'react';
 import { YesNoResponse } from 'constants/enums';
 import { CurrentNoteState } from 'redux/reducers';
-import { HpiStateProps, ResponseTypes } from 'constants/hpiEnums';
+import {
+    HpiStateProps,
+    NodeInterface,
+    ResponseTypes,
+} from 'constants/hpiEnums';
 import { connect } from 'react-redux';
 import {
     yesNoToggleOption,
@@ -37,7 +41,9 @@ class YesNo extends React.Component<Props> {
                 removeDisplayedNodes,
             } = this.props,
             { graph, nodes } = hpi,
-            sumTotalQuestions = displayedNodes.allNodes.length;
+            sumTotalQuestions =
+                displayedNodes.allNodes.length -
+                displayedNodes.notDisplayed.length;
         yesNoToggleOption(node, response);
         const toggleChildQuestions =
             (nodes[node].responseType == ResponseTypes.YES_NO &&
@@ -52,7 +58,7 @@ class YesNo extends React.Component<Props> {
                       .slice(0, displayedNodesCutOff - sumTotalQuestions)
                 : [];
         if (childEdges.length)
-            addDisplayedNodes(nodes[node].category, childEdges);
+            addDisplayedNodes(nodes[node].category, childEdges, nodes);
         else if (!toggleChildQuestions)
             removeDisplayedNodes(nodes[node].category, graph[node]);
     };
@@ -90,7 +96,10 @@ interface DispatchProps {
     ) => YesNoToggleOptionAction;
     addDisplayedNodes: (
         category: string,
-        nodes: string[]
+        nodesArr: string[],
+        nodes: {
+            [node: string]: NodeInterface;
+        }
     ) => AddDisplayedNodesAction;
     removeDisplayedNodes: (
         category: string,
