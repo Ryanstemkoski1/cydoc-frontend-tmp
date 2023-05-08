@@ -211,13 +211,12 @@ const SetupAccount = async (
     }
     if (role == 'manager') {
         delete newUserCognitoAttribute['custom:associatedManager'];
-        delete newUserCognitoAttribute['phone_number'];
 
         try {
             const response = await url.post(path, payload);
             const manager_uuid = response.data[0];
             customerInfo.customer.attributes.customerUUID = manager_uuid;
-            await completeNewPasswordChallengeManager(
+            return completeNewPasswordChallengeManager(
                 currentUser,
                 newPassword,
                 newUserCognitoAttribute,

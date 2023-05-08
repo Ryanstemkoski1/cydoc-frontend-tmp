@@ -50,7 +50,7 @@
             },
             "6": {
                 "uid": "6",
-                "text": "Please select the most important conditions or symptoms that you would like to discuss today, up to a maximum of 3. CLICK[Depression, Diabetes, Genital Symptoms/STI, Hypertension, Hyperlipidemia, Urinary Symptoms/UTI]",
+                "text": "Please select the most important conditions or symptoms that you would like to discuss today, up to a maximum of 3. CLICK[ADHD, Depression, Diabetes, Genital Symptoms/STI, Hypertension, Hyperlipidemia, Urinary Symptoms/UTI]",
                 "responseType": "CLICK-BOXES",
                 "category": ""
             },
