@@ -7,10 +7,12 @@ export const client = axios.create({
 
 function getGraphClientURL() {
     let graphClientURL;
-    if (process.env.PRODUCTION_OR_DEV == 'production') {
+    if (location.hostname == 'cydoc.ai') {
         graphClientURL = 'https://cydocgraph.herokuapp.com';
-    } else if (process.env.PRODUCTION_OR_DEV == 'dev') {
-        graphClientURL = 'https://doctorgraph.herokuapp.com';
+    } else if (location.hostname == 'cyai.site') {
+        graphClientURL = 'https://cydocgraphdev.herokuapp.com';
+    } else if (location.hostname == 'localhost') {
+        graphClientURL = 'https://cydocgraph.herokuapp.com';
     } else {
         graphClientURL = 'https://cydocgraph.herokuapp.com';
     }
