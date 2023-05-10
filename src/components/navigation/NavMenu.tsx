@@ -296,30 +296,59 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                     <NoteNameMenuItem mobile={collapseLoggedInNav} />
                 )}
                 {context.token && history.location.pathname.length > 1 ? (
-                    <Button.Group>
-                        <Button
-                            style={{ maxHeight: '75%' }}
-                            onClick={() => {
-                                changeUserView('Patient View');
-                                if (!checkPatientView()) updateActiveItem('CC');
-                            }}
-                            className={`hpi-ph-button${
-                                patientView ? '-selected' : ''
-                            }`}
-                        >
-                            Patient View
-                        </Button>
-                        <Button.Or />
-                        <Button
-                            style={{ maxHeight: '75%' }}
-                            onClick={() => changeUserView('Doctor View')}
-                            className={`hpi-ph-button${
-                                !patientView ? '-selected' : ''
-                            }`}
-                        >
-                            Doctor View
-                        </Button>
-                    </Button.Group>
+                    collapseLoggedInNav ? (
+                        <Button.Group>
+                            <Button
+                                compact
+                                onClick={() => {
+                                    changeUserView('Patient View');
+                                    if (!checkPatientView())
+                                        updateActiveItem('CC');
+                                }}
+                                className={`hpi-ph-button${
+                                    patientView ? '-selected' : ''
+                                }`}
+                            >
+                                Patient
+                            </Button>
+                            <Button.Or />
+                            <Button
+                                compact
+                                onClick={() => changeUserView('Doctor View')}
+                                className={`hpi-ph-button${
+                                    !patientView ? '-selected' : ''
+                                }`}
+                            >
+                                Doctor
+                            </Button>
+                        </Button.Group>
+                    ) : (
+                        <Button.Group>
+                            <Button
+                                style={{ maxHeight: '75%' }}
+                                onClick={() => {
+                                    changeUserView('Patient View');
+                                    if (!checkPatientView())
+                                        updateActiveItem('CC');
+                                }}
+                                className={`hpi-ph-button${
+                                    patientView ? '-selected' : ''
+                                }`}
+                            >
+                                Patient View
+                            </Button>
+                            <Button.Or />
+                            <Button
+                                style={{ maxHeight: '75%' }}
+                                onClick={() => changeUserView('Doctor View')}
+                                className={`hpi-ph-button${
+                                    !patientView ? '-selected' : ''
+                                }`}
+                            >
+                                Doctor View
+                            </Button>
+                        </Button.Group>
+                    )
                 ) : (
                     ''
                 )}
