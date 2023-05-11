@@ -55,6 +55,7 @@ import {
     SaveHpiHeaderAction,
 } from 'redux/actions/hpiHeadersActions';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import { graphClientURL } from 'constants/api.js';
 
 interface HPIContentProps {
     step: number;
@@ -115,9 +116,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
     getData = async (chiefComplaint: string) => {
         const response = await axios.get(
-            'https://cydocgraph.herokuapp.com/graph/category/' +
-                chiefComplaint +
-                '/4'
+            graphClientURL + '/graph/category/' + chiefComplaint + '/4'
         );
         const { data } = response;
         this.props.processKnowledgeGraph(data);
