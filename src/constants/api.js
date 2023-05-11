@@ -19,8 +19,10 @@ function getGraphClientURL() {
     return graphClientURL;
 }
 
+export const graphClientURL = getGraphClientURL();
+
 export const graphClient = axios.create({
-    baseURL: getGraphClientURL(),
+    baseURL: graphClientURL,
     headers: { 'Access-Control-Allow-Origin': '*' },
 });
 
