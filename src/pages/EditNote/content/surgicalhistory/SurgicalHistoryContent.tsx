@@ -18,6 +18,7 @@ import {
     DropdownProps,
     TextAreaProps,
     InputOnChangeData,
+    Header,
 } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton';
 import {
@@ -38,6 +39,8 @@ import {
 } from 'redux/actions/hpiActions';
 import './SurgicalHistoryContent.css';
 import { YesNoResponse } from 'constants/enums';
+import ToggleButton from 'components/tools/ToggleButton.js';
+import { questionContainer, questionTextStyle } from './styles';
 
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
@@ -72,6 +75,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                     this.props.surgicalHistory[surgery].hasHadSurgery ==
                         YesNoResponse.Yes
             ),
+            isSurgicalHistory: null,
         };
         this.addRow = this.addRow.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
@@ -79,6 +83,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         this.handleAddition = this.handleAddition.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
         this.updateDimensions = this.updateDimensions.bind(this);
+        this.toggleYesNoButton = this.toggleYesNoButton.bind(this);
     }
 
     componentDidMount() {
@@ -376,6 +381,11 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         });
         return panels;
     }
+    toggleYesNoButton(state: boolean | null) {
+        this.setState({
+            isSurgicalHistory: state,
+        });
+    }
 
     render() {
         const values = this.props.surgicalHistory;
@@ -432,8 +442,35 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
 
         return (
             <>
-                {nums.length ? content : ''}
+                <div style={questionContainer}>
+                    <Header
+                        as='h2'
+                        textAlign='left'
+                        content='Have you had any surgeries?'
+                        style={questionTextStyle}
+                    />
+                    <ToggleButton
+                        className='button_yesno'
+                        title='Yes'
+                        active={this.state.isSurgicalHistory || false}
+                        onToggleButtonClick={() => this.toggleYesNoButton(true)}
+                    />
+                    <ToggleButton
+                        className='button_yesno'
+                        title='No'
+                        active={
+                            this.state.isSurgicalHistory !== null &&
+                            !this.state.isSurgicalHistory
+                        }
+                        onToggleButtonClick={() =>
+                            this.toggleYesNoButton(false)
+                        }
+                    />
+                </div>
+
+                {nums.length && this.state.isSurgicalHistory ? content : ''}
                 {!this.props.isPreview &&
+                    this.state.isSurgicalHistory &&
                     this.props.responseType != ResponseTypes.PSH_POP && (
                         <AddRowButton
                             onClick={this.addRow}
@@ -466,6 +503,7 @@ type OwnState = {
     isInvalidYear: Set<unknown>;
     currentYear: number;
     currSurgeries: string[];
+    isSurgicalHistory: boolean | null;
 };
 
 interface SurgicalHistoryProps {

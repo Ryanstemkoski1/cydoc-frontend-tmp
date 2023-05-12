@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import Masonry from 'react-masonry-css';
 import './ReviewOfSystems.css';
 import { ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP } from 'constants/breakpoints';
-import { Button, Icon } from 'semantic-ui-react';
+import { Button, Icon, Header } from 'semantic-ui-react';
 import ReviewOfSystemsCategory from './ReviewOfSystemsCategory';
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import { selectReviewOfSystemsCategories } from 'redux/selectors/reviewOfSystemsSelectors';
 import { PatientViewProps } from '../hpi/knowledgegraph/src/components/ChiefComplaintsButton';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import constants from '../../../../constants/review-of-systems-constants.json';
 
 interface ContentProps {
     nextFormClick: () => void;
@@ -91,6 +92,11 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
             <>
                 {/* Cannot use this.addMisc since it had used Context */}
                 {/* <Button onClick={this.addMisc}>Add Misc</Button> */}
+                <Header
+                    as='h2'
+                    textAlign='center'
+                    content={constants.sections.pageTitle}
+                />
                 <Masonry
                     className='ros-container'
                     breakpointCols={numColumns}
@@ -123,7 +129,6 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
                     Previous
                     <Icon name='arrow left' />
                 </Button>
-
                 {patientView ? (
                     ''
                 ) : (
