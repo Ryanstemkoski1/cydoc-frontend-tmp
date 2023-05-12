@@ -16,6 +16,7 @@ import {
 } from 'redux/actions/hpiActions';
 import axios from 'axios';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import { graphClientURL } from 'constants/api.js';
 
 interface ChiefComplaintsButtonProps {
     name: string;
@@ -24,9 +25,7 @@ interface ChiefComplaintsButtonProps {
 class ChiefComplaintsButton extends React.Component<Props> {
     getData = async (chiefComplaint: string) => {
         const response = await axios.get(
-            'https://cydocgraph.herokuapp.com/graph/category/' +
-                chiefComplaint +
-                '/4'
+            graphClientURL + '/graph/category/' + chiefComplaint + '/4'
         );
         const { data } = response;
         this.props.processKnowledgeGraph(data);
