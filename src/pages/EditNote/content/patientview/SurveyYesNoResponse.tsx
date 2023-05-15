@@ -48,7 +48,7 @@ class SurveyYesNoResponse extends React.Component<Props> {
         );
         const { data } = response,
             { graph, nodes, edges } = data as GraphData,
-            name = this.props.userSurveyState.nodes[this.props.id].name,
+            name = this.props.userSurveyState.nodes[this.props.id].doctorView,
             parentNode = this.props.hpiHeaders.parentNodes[name][
                 chiefComplaint
             ];
