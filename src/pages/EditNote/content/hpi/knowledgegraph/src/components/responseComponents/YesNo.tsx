@@ -20,11 +20,9 @@ import {
     addDisplayedNodes,
     removeDisplayedNodes,
 } from 'redux/actions/displayedNodesActions';
-import {
-    displayedNodesCutOff,
-    displayedNodesProps,
-} from 'redux/reducers/displayedNodesReducer';
+import { displayedNodesProps } from 'redux/reducers/displayedNodesReducer';
 import { selectDisplayedNodes } from 'redux/selectors/displayedNodesSelectors';
+import { displayedNodesCutOff } from 'constants/displayedNodesCutOff';
 
 interface YesNoProps {
     node: string;
