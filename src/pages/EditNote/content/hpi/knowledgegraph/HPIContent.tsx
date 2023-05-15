@@ -59,6 +59,7 @@ import {
     AddDisplayedNodesAction,
     addDisplayedNodes,
 } from 'redux/actions/displayedNodesActions';
+import { graphClientURL } from 'constants/api.js';
 
 interface HPIContentProps {
     step: number;
@@ -121,9 +122,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         const { parentNodes } = this.props.hpiHeaders;
         const chiefComplaint = Object.keys(parentNodes[complaint])[0];
         const response = await axios.get(
-            'https://cydocgraph.herokuapp.com/graph/category/' +
-                chiefComplaint +
-                '/4'
+            graphClientURL + '/graph/category/' + chiefComplaint + '/4'
         );
         const { data } = response,
             { graph, nodes, edges, order } = data as GraphData,
