@@ -90,8 +90,6 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
         }
         return (
             <>
-                {/* Cannot use this.addMisc since it had used Context */}
-                {/* <Button onClick={this.addMisc}>Add Misc</Button> */}
                 <Header
                     as='h2'
                     textAlign='center'
