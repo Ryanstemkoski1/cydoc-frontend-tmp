@@ -41,9 +41,7 @@ import './SurgicalHistoryContent.css';
 import { YesNoResponse } from 'constants/enums';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import { questionContainer, questionTextStyle } from './styles';
-// class App extends React.Component<{}, { value: string }> {
-//     ...
-// }
+
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
         super(props);
