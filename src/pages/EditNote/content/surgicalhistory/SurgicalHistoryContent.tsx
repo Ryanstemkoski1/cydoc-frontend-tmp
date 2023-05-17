@@ -553,7 +553,7 @@ const mapStateToProps = (
 ): SurgicalHistoryProps & UserViewProps => {
     return {
         surgicalHistory: selectSurgicalHistoryState(state),
-        patientView: state.userView.patientView,
+        patientView: state.userView.patientView || true,
     };
 };
 
