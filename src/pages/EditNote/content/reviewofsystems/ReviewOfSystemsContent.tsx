@@ -78,7 +78,6 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
     render() {
         const { nextFormClick, previousFormClick, patientView } = this.props;
         const { windowWidth } = this.state;
-
         let numColumns: number;
         numColumns = 1;
         if (windowWidth > ROS_LARGE_BP) {
@@ -88,15 +87,19 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
         } else if (windowWidth > ROS_SMALL_BP) {
             numColumns = 2;
         }
+
         return (
             <>
                 {/* Cannot use this.addMisc since it had used Context */}
                 {/* <Button onClick={this.addMisc}>Add Misc</Button> */}
-                <Header
-                    as='h2'
-                    textAlign='center'
-                    content={constants.sections.pageTitle}
-                />
+                {patientView && (
+                    <Header
+                        as='h2'
+                        textAlign='center'
+                        content={constants.sections.pageTitle}
+                    />
+                )}
+
                 <Masonry
                     className='ros-container'
                     breakpointCols={numColumns}
