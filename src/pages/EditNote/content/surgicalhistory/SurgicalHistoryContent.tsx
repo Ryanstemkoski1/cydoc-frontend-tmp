@@ -41,7 +41,9 @@ import './SurgicalHistoryContent.css';
 import { YesNoResponse } from 'constants/enums';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import { questionContainer, questionTextStyle } from './styles';
-
+// class App extends React.Component<{}, { value: string }> {
+//     ...
+// }
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
         super(props);
@@ -394,6 +396,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 this.state.currSurgeries.includes(key) ||
                 values[key].hasHadSurgery == YesNoResponse.Yes
         );
+        const { patientView } = this.props;
         const {
             responseChoice,
             addPshPopOptions,
@@ -442,35 +445,40 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
 
         return (
             <>
-                <div style={questionContainer}>
-                    <Header
-                        as='h2'
-                        textAlign='left'
-                        content='Have you had any surgeries?'
-                        style={questionTextStyle}
-                    />
-                    <ToggleButton
-                        className='button_yesno'
-                        title='Yes'
-                        active={this.state.isSurgicalHistory || false}
-                        onToggleButtonClick={() => this.toggleYesNoButton(true)}
-                    />
-                    <ToggleButton
-                        className='button_yesno'
-                        title='No'
-                        active={
-                            this.state.isSurgicalHistory !== null &&
-                            !this.state.isSurgicalHistory
-                        }
-                        onToggleButtonClick={() =>
-                            this.toggleYesNoButton(false)
-                        }
-                    />
-                </div>
-
-                {nums.length && this.state.isSurgicalHistory ? content : ''}
+                {patientView && (
+                    <div style={questionContainer}>
+                        <Header
+                            as='h2'
+                            textAlign='left'
+                            content='Have you had any surgeries?'
+                            style={questionTextStyle}
+                        />
+                        <ToggleButton
+                            className='button_yesno'
+                            title='Yes'
+                            active={this.state.isSurgicalHistory || false}
+                            onToggleButtonClick={() =>
+                                this.toggleYesNoButton(true)
+                            }
+                        />
+                        <ToggleButton
+                            className='button_yesno'
+                            title='No'
+                            active={
+                                this.state.isSurgicalHistory !== null &&
+                                !this.state.isSurgicalHistory
+                            }
+                            onToggleButtonClick={() =>
+                                this.toggleYesNoButton(false)
+                            }
+                        />
+                    </div>
+                )}
+                {nums.length && (this.state.isSurgicalHistory || !patientView)
+                    ? content
+                    : ''}
                 {!this.props.isPreview &&
-                    this.state.isSurgicalHistory &&
+                    (this.state.isSurgicalHistory || !patientView) &&
                     this.props.responseType != ResponseTypes.PSH_POP && (
                         <AddRowButton
                             onClick={this.addRow}
@@ -509,6 +517,9 @@ type OwnState = {
 interface SurgicalHistoryProps {
     surgicalHistory: SurgicalHistoryState;
 }
+interface UserViewProps {
+    patientView: boolean;
+}
 
 interface ContentProps {
     isPreview: boolean;
@@ -534,11 +545,17 @@ interface DispatchProps {
     popResponse: (medId: string, conditionIds: string[]) => PopResponseAction;
 }
 
-type Props = ContentProps & DispatchProps & SurgicalHistoryProps;
+type Props = ContentProps &
+    DispatchProps &
+    SurgicalHistoryProps &
+    UserViewProps;
 
-const mapStateToProps = (state: CurrentNoteState): SurgicalHistoryProps => {
+const mapStateToProps = (
+    state: CurrentNoteState
+): SurgicalHistoryProps & UserViewProps => {
     return {
         surgicalHistory: selectSurgicalHistoryState(state),
+        patientView: state.userView.patientView,
     };
 };
 
