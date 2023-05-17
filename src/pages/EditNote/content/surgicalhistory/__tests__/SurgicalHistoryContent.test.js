@@ -19,6 +19,7 @@ const initialState = {
     ['foo']: { procedure: '', year: -1, comments: '' },
     ['bar']: { procedure: '', year: -1, comments: '' },
     ['foobar']: { procedure: '', year: -1, comments: '' },
+    patientView: true,
 };
 
 const connectStore = (state = initialState, props) => {
