@@ -1,1 +1,1 @@
-export const displayedNodesCutOff = 100;
+export const displayedNodesCutOff = 70;
