@@ -21,8 +21,19 @@ const initialState = {
     ['foobar']: { procedure: '', year: -1, comments: '' },
 };
 
-const connectStore = (state = initialState, props) => {
-    const store = mockStore({ surgicalHistory: state, patientView: true });
+const initialStateUser = {
+    patientView: true,
+    doctorView: false,
+};
+const connectStore = (
+    state = initialState,
+    stateUser = initialStateUser,
+    props
+) => {
+    const store = mockStore({
+        surgicalHistory: state,
+        userView: stateUser,
+    });
     return {
         store,
         wrapper: mount(
