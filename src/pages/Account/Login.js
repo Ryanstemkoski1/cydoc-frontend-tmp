@@ -27,7 +27,7 @@ import Logo from '../../assets/cydoc-logo.svg';
 import NavMenu from '../../components/navigation/NavMenu';
 import './Account.css';
 import isEmailVerified from 'auth/isEmailVerified';
-import DoctorSignUp from './DoctorSignUp';
+import ClinicianSignUp from './ClinicianSignUp';
 
 const Login = () => {
     const context = useContext(AuthContext);
@@ -157,7 +157,7 @@ const Login = () => {
 
     if (isFirstLogin && role === 'manager') {
         return (
-            <DoctorSignUp
+            <ClinicianSignUp
                 continueIsActive={true}
                 reloadModal={() => {}}
                 onInviteSubmit={onChangePasswordSubmit}
@@ -171,7 +171,7 @@ const Login = () => {
         );
     } else if (isFirstLogin && role === 'doctor') {
         return (
-            <DoctorSignUp
+            <ClinicianSignUp
                 continueIsActive={true}
                 reloadModal={() => {}}
                 onInviteSubmit={onChangePasswordSubmit}

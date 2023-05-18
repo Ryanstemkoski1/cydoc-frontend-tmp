@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'semantic-ui-react';
 import './Account.css';
-import DoctorSignUp from './DoctorSignUp';
+import ClinicianSignUp from './ClinicianSignUp';
 
 interface SignupModalProps {
     navToSignUp: boolean;
@@ -15,7 +15,7 @@ const SignUpModal = (props: SignupModalProps) => {
     return (
         <>
             {continueActive ? (
-                <DoctorSignUp
+                <ClinicianSignUp
                     continueIsActive={continueActive}
                     reloadModal={props.reloadModal}
                 />
