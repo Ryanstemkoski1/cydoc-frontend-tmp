@@ -226,8 +226,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                             title: complaint,
                             onClick: () => {
                                 currentNoteStore.dispatch({
-                                    type:
-                                        CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
+                                    type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
                                     payload: {
                                         disease: complaint,
                                     },
@@ -283,7 +282,8 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 className='hpi-search-bar'
                                 minCharacters={2}
                                 onSearchChange={(event) => {
-                                    const target = event.target as HTMLTextAreaElement;
+                                    const target =
+                                        event.target as HTMLTextAreaElement;
                                     this.setState({ searchVal: target.value });
                                 }}
                                 value={this.state.searchVal}
