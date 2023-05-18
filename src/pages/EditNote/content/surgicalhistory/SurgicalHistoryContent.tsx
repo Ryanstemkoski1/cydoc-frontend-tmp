@@ -28,6 +28,8 @@ import {
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+
 import { OptionMapping } from '_processOptions';
 import { ResponseTypes } from 'constants/hpiEnums';
 import { v4 } from 'uuid';
@@ -553,7 +555,7 @@ const mapStateToProps = (
 ): SurgicalHistoryProps & UserViewProps => {
     return {
         surgicalHistory: selectSurgicalHistoryState(state),
-        patientView: state.userView.patientView || true,
+        patientView: selectPatientViewState(state),
     };
 };
 
