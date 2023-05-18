@@ -554,10 +554,7 @@ const mapStateToProps = (
 ): SurgicalHistoryProps & UserViewProps => {
     return {
         surgicalHistory: selectSurgicalHistoryState(state),
-        patientView:
-            typeof state.userView.patientView !== 'undefined'
-                ? state.userView.patientView
-                : true,
+        patientView: state.userView.patientView || true,
     };
 };
 
