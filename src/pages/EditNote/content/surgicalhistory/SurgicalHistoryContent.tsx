@@ -64,8 +64,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 }
             });
         }
-        // eslint-disable-next-line no-console
-        console.log('this.props', props);
 
         this.state = {
             windowWidth: 0,
