@@ -42,6 +42,7 @@ import './SurgicalHistoryContent.css';
 import { YesNoResponse } from 'constants/enums';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import { questionContainer, questionTextStyle } from './styles';
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
@@ -63,6 +64,8 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 }
             });
         }
+        // eslint-disable-next-line no-console
+        console.log('this.props', props);
 
         this.state = {
             windowWidth: 0,
@@ -395,7 +398,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 this.state.currSurgeries.includes(key) ||
                 values[key].hasHadSurgery == YesNoResponse.Yes
         );
-        const { patientView } = this.props;
+        const { patientView } = this.props.userView;
         const {
             responseChoice,
             addPshPopOptions,
@@ -512,12 +515,13 @@ type OwnState = {
     currSurgeries: string[];
     isSurgicalHistory: boolean | null;
 };
-
+export interface UserViewProps {
+    patientView: boolean;
+    doctorView: boolean;
+}
 interface SurgicalHistoryProps {
     surgicalHistory: SurgicalHistoryState;
-}
-interface UserViewProps {
-    patientView: boolean;
+    userView: UserViewProps;
 }
 
 interface ContentProps {
@@ -544,17 +548,12 @@ interface DispatchProps {
     popResponse: (medId: string, conditionIds: string[]) => PopResponseAction;
 }
 
-type Props = ContentProps &
-    DispatchProps &
-    SurgicalHistoryProps &
-    UserViewProps;
+type Props = ContentProps & DispatchProps & SurgicalHistoryProps;
 
-const mapStateToProps = (
-    state: CurrentNoteState
-): SurgicalHistoryProps & UserViewProps => {
+const mapStateToProps = (state: CurrentNoteState): SurgicalHistoryProps => {
     return {
         surgicalHistory: selectSurgicalHistoryState(state),
-        patientView: state.userView.patientView || true,
+        userView: state.userView,
     };
 };
 
