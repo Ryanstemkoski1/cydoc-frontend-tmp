@@ -1,7 +1,7 @@
 import React from 'react';
+import { createRoot } from 'react-dom/client';
 import { CookiesProvider } from 'react-cookie';
 import './semantic/dist/semantic.min.css';
-import ReactDOM from 'react-dom';
 import { Route, BrowserRouter } from 'react-router-dom';
 import EditNote from './pages/EditNote/EditNote';
 import Login from './pages/Account/Login';
@@ -31,6 +31,9 @@ import { loadStripe } from '@stripe/stripe-js';
 import { isLivemode } from './auth/livemode';
 import AcidTest from 'pages/AcidTest';
 
+const container = document.getElementById('root');
+const root = createRoot(container);
+
 const getStripePublishableKey = () => {
     if (isLivemode()) {
         return 'pk_live_51I8WjzI5qo8H3FXU0K1gpndArcjAxLcGR3GWHyCaFsSxB6XckVoWeTH8rzkajlpdgQN1OTiWd4vEhnjKboqyks0g000p9or7In';
@@ -41,7 +44,7 @@ const getStripePublishableKey = () => {
 
 const stripePromise = loadStripe(getStripePublishableKey());
 
-ReactDOM.render(
+root.render(
     <CookiesProvider>
         <AuthStore>
             <NotesStore>
@@ -158,5 +161,5 @@ ReactDOM.render(
             </NotesStore>
         </AuthStore>
     </CookiesProvider>,
-    document.getElementById('root')
+    container
 );
