@@ -76,9 +76,7 @@ export function userViewReducer(
         case USER_VIEW_ACTION.USER_VIEW: {
             return {
                 ...state,
-                patientView: action?.payload?.userView
-                    ? 'Patient View' == action.payload.userView
-                    : true,
+                patientView: 'Patient View' == action.payload.userView,
                 doctorView: 'Doctor View' == action.payload.userView,
             };
         }
