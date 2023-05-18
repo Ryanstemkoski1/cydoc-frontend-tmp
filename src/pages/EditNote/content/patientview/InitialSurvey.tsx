@@ -91,11 +91,8 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     }
 
     componentDidMount() {
-        const {
-            userSurveyState,
-            processSurveyGraph,
-            saveHpiHeader,
-        } = this.props;
+        const { userSurveyState, processSurveyGraph, saveHpiHeader } =
+            this.props;
         if (
             !Object.keys(userSurveyState.graph).length &&
             !Object.keys(userSurveyState.nodes).length &&
@@ -183,11 +180,8 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     };
 
     renderSwitch = (id: string) => {
-        const {
-                userSurveyState,
-                patientView,
-                initialSurveySearch,
-            } = this.props,
+        const { userSurveyState, patientView, initialSurveySearch } =
+                this.props,
             currEntry = userSurveyState.nodes[id],
             { bodySystems, parentNodes } = this.props.hpiHeaders;
         // map through all complaints on the HPI and create search resuls
@@ -210,8 +204,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             title: title,
                             onClick: () => {
                                 currentNoteStore.dispatch({
-                                    type:
-                                        CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
+                                    type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
                                     payload: {
                                         disease: complaint,
                                     },
@@ -248,21 +241,22 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             className='hpi-search-bar'
                             minCharacters={2}
                             onSearchChange={(event) => {
-                                const target = event.target as HTMLTextAreaElement;
+                                const target =
+                                    event.target as HTMLTextAreaElement;
                                 this.setState({ searchVal: target.value });
                             }}
                             value={this.state.searchVal}
                             results={getRes()}
                         />
                         {isChiefComplaintsResponse(currEntry.response)
-                            ? Object.keys(
-                                  currEntry.response
-                              ).map((complaint) => (
-                                  <ChiefComplaintsButton
-                                      key={complaint}
-                                      name={complaint}
-                                  />
-                              ))
+                            ? Object.keys(currEntry.response).map(
+                                  (complaint) => (
+                                      <ChiefComplaintsButton
+                                          key={complaint}
+                                          name={complaint}
+                                      />
+                                  )
+                              )
                             : ''}
                     </div>
                 );
