@@ -568,11 +568,6 @@ const mapDispatchToProps = {
     popResponse,
     toggleIsSurgicalHistory,
 };
-// function mapDispatchToProps(dispatch){
-//     return {
-//         updateProcedure: () => dispatch({type: 'update})
-//     }
-// }
 
 export default connect(
     mapStateToProps,
