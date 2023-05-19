@@ -42,7 +42,7 @@ import './SurgicalHistoryContent.css';
 import { YesNoResponse } from 'constants/enums';
 import ToggleButton from 'components/tools/ToggleButton.js';
 import { questionContainer, questionTextStyle } from './styles';
-import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import { toggleIsSurgicalHistory } from 'redux/actions/userViewActions';
 
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
@@ -77,7 +77,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                     this.props.surgicalHistory[surgery].hasHadSurgery ==
                         YesNoResponse.Yes
             ),
-            isSurgicalHistory: null,
         };
         this.addRow = this.addRow.bind(this);
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
@@ -384,9 +383,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         return panels;
     }
     toggleYesNoButton(state: boolean | null) {
-        this.setState({
-            isSurgicalHistory: state,
-        });
+        this.props.toggleIsSurgicalHistory(state as boolean);
     }
 
     render() {
@@ -445,7 +442,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
 
         return (
             <>
-                {patientView && (
+                {patientView && !nums.length && (
                     <div style={questionContainer}>
                         <Header
                             as='h2'
@@ -456,7 +453,9 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                         <ToggleButton
                             className='button_yesno'
                             title='Yes'
-                            active={this.state.isSurgicalHistory || false}
+                            active={
+                                this.props.userView.isSurgicalHistory || false
+                            }
                             onToggleButtonClick={() =>
                                 this.toggleYesNoButton(true)
                             }
@@ -465,8 +464,9 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                             className='button_yesno'
                             title='No'
                             active={
-                                this.state.isSurgicalHistory !== null &&
-                                !this.state.isSurgicalHistory
+                                this.props.userView.isSurgicalHistory !==
+                                    null &&
+                                !this.props.userView.isSurgicalHistory
                             }
                             onToggleButtonClick={() =>
                                 this.toggleYesNoButton(false)
@@ -474,11 +474,13 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                         />
                     </div>
                 )}
-                {nums.length && (this.state.isSurgicalHistory || !patientView)
+                {nums.length &&
+                ((nums.length && this.props.userView.isSurgicalHistory) ||
+                    !patientView)
                     ? content
                     : ''}
                 {!this.props.isPreview &&
-                    (this.state.isSurgicalHistory || !patientView) &&
+                    (this.props.userView.isSurgicalHistory || !patientView) &&
                     this.props.responseType != ResponseTypes.PSH_POP && (
                         <AddRowButton
                             onClick={this.addRow}
@@ -511,11 +513,11 @@ type OwnState = {
     isInvalidYear: Set<unknown>;
     currentYear: number;
     currSurgeries: string[];
-    isSurgicalHistory: boolean | null;
 };
 export interface UserViewProps {
     patientView: boolean;
     doctorView: boolean;
+    isSurgicalHistory?: boolean | null;
 }
 interface SurgicalHistoryProps {
     surgicalHistory: SurgicalHistoryState;
@@ -544,6 +546,7 @@ interface DispatchProps {
         conditionId: string
     ) => BlankQuestionChangeAction;
     popResponse: (medId: string, conditionIds: string[]) => PopResponseAction;
+    toggleIsSurgicalHistory: (state: boolean) => void;
 }
 
 type Props = ContentProps & DispatchProps & SurgicalHistoryProps;
@@ -563,7 +566,13 @@ const mapDispatchToProps = {
     addPshPopOptions,
     blankQuestionChange,
     popResponse,
+    toggleIsSurgicalHistory,
 };
+// function mapDispatchToProps(dispatch){
+//     return {
+//         updateProcedure: () => dispatch({type: 'update})
+//     }
+// }
 
 export default connect(
     mapStateToProps,
