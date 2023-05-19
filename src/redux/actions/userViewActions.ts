@@ -8,12 +8,27 @@ export interface UserViewAction {
         userView: string;
     };
 }
-
+export interface UserViewIsSurgicalHistoryAction {
+    type: USER_VIEW_ACTION.IS_SURGICAL_HISTORY;
+    payload: {
+        isSurgicalHistory: boolean;
+    };
+}
 export function changeUserView(userView: string): UserViewAction {
     return {
         type: USER_VIEW_ACTION.USER_VIEW,
         payload: {
             userView,
+        },
+    };
+}
+export function toggleIsSurgicalHistory(
+    state: boolean
+): UserViewIsSurgicalHistoryAction {
+    return {
+        type: USER_VIEW_ACTION.IS_SURGICAL_HISTORY,
+        payload: {
+            isSurgicalHistory: state,
         },
     };
 }
@@ -82,4 +97,5 @@ export type userViewActionTypes =
     | UserViewAction
     | ProcessSurveyGraphAction
     | InitialSurveyYesNoAction
-    | InitialSurveySearchAction;
+    | InitialSurveySearchAction
+    | UserViewIsSurgicalHistoryAction;
