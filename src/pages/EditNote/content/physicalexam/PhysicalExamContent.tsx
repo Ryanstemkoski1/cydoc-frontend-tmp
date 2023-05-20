@@ -16,13 +16,10 @@ import './PhysicalExam.css';
 import { updateVitals } from 'redux/actions/physicalExamActions';
 import { connect } from 'react-redux';
 import { selectVitals } from 'redux/selectors/physicalExamSelectors';
-import {
-    PhysicalExamState,
-    Vitals,
-    VitalsFields,
-} from 'redux/reducers/physicalExamReducer';
+import { Vitals, VitalsFields } from 'redux/reducers/physicalExamReducer';
 import { PhysicalExamSchemaItem } from 'constants/PhysicalExam/physicalExamSchema';
 import { CurrentNoteState } from 'redux/reducers';
+import ButtonGroupTemparature from './InputSelectableTemparature';
 
 //Component that manages content for the Physical Exam tab
 class PhysicalExamContent extends React.Component<Props, State> {
@@ -59,6 +56,9 @@ class PhysicalExamContent extends React.Component<Props, State> {
     ) => {
         this.props.updateVitals(data.name, parseInt(e.target.value));
     };
+    handleChangeTemparature = (val: string, data: InputOnChangeData) => {
+        this.props.updateVitals(data.name, parseInt(val));
+    };
 
     generateNumericInput = (
         name: VitalsFields,
@@ -77,6 +77,15 @@ class PhysicalExamContent extends React.Component<Props, State> {
                 value={vitals[name]}
                 onChange={(e, data) => this.handleChange(e, data)}
                 placeholder='0'
+            />
+        );
+    };
+    temparatureNumericInput = () => {
+        return (
+            <Input
+                label={{ basic: true, content: 'kg' }}
+                labelPosition='right'
+                placeholder='Enter weight...'
             />
         );
     };
@@ -154,11 +163,11 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                                 content='Temperature'
                                             />
                                         </label>
-                                        {this.generateNumericInput(
-                                            'temperature',
-                                            '℃',
-                                            'right'
-                                        )}
+                                        <ButtonGroupTemparature
+                                            handleChange={
+                                                this.handleChangeTemparature
+                                            }
+                                        />
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
