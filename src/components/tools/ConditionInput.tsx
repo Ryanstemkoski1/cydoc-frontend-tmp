@@ -79,6 +79,7 @@ class ConditionInput extends React.Component<Props, OwnState> {
                     }}
                     onBlur={this.handleOnBlur}
                     value={this.props.isPreview ? '' : this.props.condition}
+                    style={this.props.style && this.props.style}
                 />
                 {this.state.isRepeat && (
                     <div className='condition-error'>
@@ -122,6 +123,7 @@ interface InputProps {
     addSeenCondition: (value: string, index: string) => void;
     condition: string;
     standardizeName: (name: string) => string;
+    style?: React.CSSProperties;
 }
 
 type Props = DispatchProps &
