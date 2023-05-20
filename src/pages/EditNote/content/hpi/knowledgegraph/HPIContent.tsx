@@ -8,9 +8,6 @@ import {
     Grid,
     Tab,
     AccordionTitleProps,
-    Accordion,
-    Form,
-    TextArea,
 } from 'semantic-ui-react';
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
@@ -176,12 +173,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
     render() {
         const { windowWidth } = this.state;
-        const {
-            chiefComplaints,
-            setNotesChiefComplaint,
-            hpiHeaders,
-            patientView,
-        } = this.props;
+        const { chiefComplaints, hpiHeaders, patientView } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         /* Creates list of body system buttons to add in the front page. 
@@ -248,41 +240,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                 });
             });
             return filterResults;
-        };
-
-        // This is the abstraction of the misc box.
-        // It takes in a string because the two renders called the diseases that were active different things,
-        // one called it diseaseCategories and another called it activeHPI.
-
-        const miscBox = (activeThing: string) => {
-            return (
-                <Accordion className='hpi-text-drop'>
-                    <Accordion.Title
-                        className='white-important'
-                        active={this.state.activeIndex === 0}
-                        index={0}
-                        onClick={this.miscNotesClick}
-                    >
-                        <Icon className='white-important' name='dropdown' />
-                        Misc Notes&nbsp;&nbsp;&nbsp;&nbsp;
-                    </Accordion.Title>
-                    <Accordion.Content active={this.state.activeIndex === 0}>
-                        <Form>
-                            <TextArea
-                                className='misc-box'
-                                rows={3}
-                                onChange={(_e, { value }) => {
-                                    setNotesChiefComplaint(
-                                        activeThing as string,
-                                        value
-                                    );
-                                }}
-                                value={chiefComplaints[activeThing]}
-                            />
-                        </Form>
-                    </Accordion.Content>
-                </Accordion>
-            );
         };
 
         // each step correlates to a different tab
@@ -403,9 +360,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         )}
                                     </Grid>
                                     <Segment>
-                                        {/*MISC BOX PLACEMENT*/}
-                                        {miscBox(this.props.activeTab)}
-
                                         <DiseaseForm
                                             key={this.props.activeTab}
                                             CCInfo={{
@@ -470,8 +424,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                 : diseaseCategory,
                                             render: () => (
                                                 <Tab.Pane>
-                                                    {/*MISC BOX PLACEMENT*/}
-                                                    {miscBox(diseaseCategory)}
                                                     <DiseaseForm
                                                         key={
                                                             Object.keys(
@@ -507,7 +459,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         Previous Form
                                                         <Icon name='arrow left' />
                                                     </Button>
-
                                                     <Button
                                                         icon
                                                         floated='right'

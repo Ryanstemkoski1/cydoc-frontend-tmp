@@ -196,7 +196,6 @@ class FamilyHistoryBlock extends Component<Props> {
                     aria-label='delete-condition'
                     className='hpi-ph-button'
                 />
-
                 <div className='condition-info-container'>
                     {yesActive ? (
                         /*

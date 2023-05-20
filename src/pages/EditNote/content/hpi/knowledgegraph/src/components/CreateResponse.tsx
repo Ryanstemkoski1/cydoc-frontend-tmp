@@ -149,7 +149,8 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             ResponseTypes.PMH_POP,
             ResponseTypes.PMH_BLANK,
         ];
-
+        // eslint-disable-next-line no-console
+        console.log({ synonymTypes });
         if (synonymTypes.includes(responseType)) {
             responseChoice.forEach((key: string, index: number) => {
                 responseChoice[index] = standardizeDiseaseNames(
@@ -164,7 +165,8 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         const choices = blankTypes.includes(responseType)
             ? (hpi.nodes[node].response as string[])
             : responseChoice;
-
+        // eslint-disable-next-line no-console
+        console.log({ responseType });
         switch (responseType) {
             case ResponseTypes.YES_NO:
             case ResponseTypes.NO_YES:
@@ -255,13 +257,24 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
     };
 
     render() {
+        const textStyle = {
+            fontSize: '1.2rem',
+            color: 'black',
+        };
+        const marginBottom = {
+            marginBottom: 48,
+        };
         return (
-            <div className='qa-div'>
+            <div className='qa-div' style={marginBottom}>
                 <div>
                     {' '}
-                    {this.state.question.trim() == 'NAME'
-                        ? ''
-                        : this.state.question.trim()}{' '}
+                    {this.state.question.trim() == 'NAME' ? (
+                        ''
+                    ) : (
+                        <span style={textStyle}>
+                            {this.state.question.trim()}
+                        </span>
+                    )}{' '}
                     <div className='qa-button'>{this.renderSwitch()}</div>{' '}
                 </div>
             </div>

@@ -16,6 +16,7 @@ import {
 import './NotePage.css';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
+import MiscBox from 'components/global/MiscBox';
 
 // Component that manages the active state of the create note editor
 // and defines the layout of the editor
@@ -97,6 +98,7 @@ class EditNote extends Component {
 
         return (
             <div ref={this.noteContent}>
+                <MiscBox />
                 {editNoteHeader ? (
                     <>
                         <div className='mobile-header' />
