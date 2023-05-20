@@ -530,6 +530,291 @@ Object {
 }
 `;
 
+exports[`hpi reducers handle user actions handles multiple choice click, but only one selectable 1`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "foo0": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles multiple choice click, but only one selectable 2`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "foo0": false,
+        "foo1": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles multiple choice click, but only one selectable 3`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "foo0": false,
+        "foo1": false,
+        "foo2": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles multiple choice click, but only one selectable 4`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles multiple choice click, but only one selectable 5`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": false,
+        "foo4": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles multiple choice click, but only one selectable 6`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": false,
+        "foo4": false,
+        "foo5": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles multiple choice click, but only one selectable 7`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": false,
+        "foo4": false,
+        "foo5": false,
+        "foo6": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles multiple choice click, but only one selectable 8`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": false,
+        "foo4": false,
+        "foo5": false,
+        "foo6": false,
+        "foo7": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles multiple choice click, but only one selectable 9`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": false,
+        "foo4": false,
+        "foo5": false,
+        "foo6": false,
+        "foo7": false,
+        "foo8": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers handle user actions handles multiple choice click, but only one selectable 10`] = `
+Object {
+  "edges": Object {},
+  "graph": Object {},
+  "nodes": Object {
+    "medId": Object {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": Object {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": false,
+        "foo4": false,
+        "foo5": false,
+        "foo6": false,
+        "foo7": false,
+        "foo8": false,
+        "foo9": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
 exports[`hpi reducers handle user actions handles numeric input change 1`] = `
 Object {
   "edges": Object {},

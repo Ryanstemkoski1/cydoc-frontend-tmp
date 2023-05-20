@@ -219,6 +219,7 @@ describe('hpi reducers', () => {
                     }
                 }
                 expect(trueCount).toEqual(1);
+                expect(nextState).toMatchSnapshot();
             });
         });
         it('handles input change', () => {
