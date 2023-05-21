@@ -131,7 +131,7 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
         }
         return (
             <Segment className='ros-segments'>
-                <Header as={'h3'} className='header-titles'>
+                <Header as='h3' className='header-titles'>
                     {this.breakWord(category)}
                 </Header>
                 {!this.isSelectMany() && <Divider />}

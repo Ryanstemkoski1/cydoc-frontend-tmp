@@ -48,6 +48,10 @@ import {
 import { hpiHeadersReducer, initialHpiHeadersState } from './hpiHeadersReducer';
 import { initialUserViewState, userViewReducer } from './userViewReducer';
 import { activeItemReducer, initialActiveItemState } from './activeItemReducer';
+import {
+    displayedNodesReducer,
+    initialDisplayedNodesState,
+} from './displayedNodesReducer';
 
 const currentNoteReducer = combineReducers({
     reviewOfSystems: reviewOfSystemsReducer,
@@ -67,6 +71,7 @@ const currentNoteReducer = combineReducers({
     hpiHeaders: hpiHeadersReducer,
     userView: userViewReducer,
     activeItem: activeItemReducer,
+    displayedNodes: displayedNodesReducer,
 });
 
 export type CurrentNoteState = ReturnType<typeof currentNoteReducer>;
@@ -89,6 +94,7 @@ export const initialState: CurrentNoteState = {
     hpiHeaders: initialHpiHeadersState,
     userView: initialUserViewState,
     activeItem: initialActiveItemState,
+    displayedNodes: initialDisplayedNodesState,
 };
 
 export function rootReducer(

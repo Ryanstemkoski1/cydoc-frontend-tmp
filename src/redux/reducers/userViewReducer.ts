@@ -18,6 +18,7 @@ export interface initialQuestionsState {
             text: string;
             responseType: ResponseTypes;
             category: string;
+            doctorView: string;
         };
     };
 }
@@ -35,6 +36,7 @@ export interface userSurveyState {
             text: string;
             responseType: ResponseTypes;
             category: string;
+            doctorView: string;
             response:
                 | YesNoResponse
                 | SelectOneInput
@@ -48,12 +50,14 @@ export interface UserViewState {
     patientView: boolean;
     doctorView: boolean;
     userSurvey: userSurveyState;
+    isSurgicalHistory?: boolean | null;
 }
 
 export const initialUserViewState: UserViewState = {
     patientView: true,
     doctorView: false,
     userSurvey: { order: {}, graph: {}, nodes: {} },
+    isSurgicalHistory: null,
 };
 
 export function isChiefComplaintsResponse(
@@ -73,6 +77,12 @@ export function userViewReducer(
     action: userViewActionTypes
 ): UserViewState {
     switch (action.type) {
+        case USER_VIEW_ACTION.IS_SURGICAL_HISTORY: {
+            return {
+                ...state,
+                isSurgicalHistory: action.payload.isSurgicalHistory,
+            };
+        }
         case USER_VIEW_ACTION.USER_VIEW: {
             return {
                 ...state,
