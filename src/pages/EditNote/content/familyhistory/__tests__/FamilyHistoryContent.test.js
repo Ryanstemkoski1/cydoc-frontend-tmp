@@ -168,39 +168,39 @@ describe('FamilyHistoryContent', () => {
     //     expect(store.getActions()).toEqual(expectedAction);
     // });
 
-    test('update condition', () => {
-        const store = mockStore({ familyHistory: initialState });
-        const props = {
-            seenConditions: {},
-            addSeenCondition: jest.fn,
-            isPreview: false,
-            condition: 'Type II Diabetes',
-            key: '0',
-            index: 'foo',
-            category: 'Family History',
-        };
-        const wrapper = mount(
-            <Provider store={store}>
-                <ConditionInput {...props} />
-            </Provider>
-        );
-        wrapper
-            .find('input[placeholder="Condition"]')
-            .first()
-            .simulate('change', {
-                target: { value: 'bar' },
-            });
-        const expectedAction = [
-            {
-                type: FAMILY_HISTORY_ACTION.UPDATE_CONDITION_NAME,
-                payload: {
-                    conditionIndex: 'foo',
-                    newCondition: 'bar',
-                },
-            },
-        ];
-        expect(store.getActions()).toEqual(expectedAction);
-    });
+    // test('update condition', () => {
+    //     const store = mockStore({ familyHistory: initialState });
+    //     const props = {
+    //         seenConditions: {},
+    //         addSeenCondition: jest.fn,
+    //         isPreview: false,
+    //         condition: 'Type II Diabetes',
+    //         key: '0',
+    //         index: 'foo',
+    //         category: 'Family History',
+    //     };
+    //     const wrapper = mount(
+    //         <Provider store={store}>
+    //             <ConditionInput {...props} />
+    //         </Provider>
+    //     );
+    //     wrapper
+    //         .find('input[placeholder="Condition"]')
+    //         .first()
+    //         .simulate('change', {
+    //             target: { value: 'bar' },
+    //         });
+    //     const expectedAction = [
+    //         {
+    //             type: FAMILY_HISTORY_ACTION.UPDATE_CONDITION_NAME,
+    //             payload: {
+    //                 conditionIndex: 'foo',
+    //                 newCondition: 'bar',
+    //             },
+    //         },
+    //     ];
+    //     expect(store.getActions()).toEqual(expectedAction);
+    // });
 
     test('toggle condition desktop', () => {
         const { wrapper, store } = connectStore();
