@@ -8,7 +8,7 @@ import { FamilyOption } from 'constants/familyHistoryRelations';
 import FamilyHistoryContent from '../FamilyHistoryContent';
 import FamilyHistoryDropdown from '../FamilyHistoryDropdown';
 import { FAMILY_HISTORY_ACTION } from 'redux/actions/actionTypes';
-import ConditionInput from 'components/tools/ConditionInput';
+// import ConditionInput from 'components/tools/ConditionInput';
 import FamilyHistoryBlock from '../FamilyHistoryBlock';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
