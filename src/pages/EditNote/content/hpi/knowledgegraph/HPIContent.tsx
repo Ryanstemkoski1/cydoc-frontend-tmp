@@ -7,7 +7,7 @@ import {
     Container,
     Grid,
     Tab,
-    AccordionTitleProps,
+    // AccordionTitleProps,
 } from 'semantic-ui-react';
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
@@ -159,17 +159,17 @@ class HPIContent extends React.Component<Props, HPIContentState> {
     //         }
     //     }
     // }
-    miscNotesClick = (
-        _e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        titleProps: AccordionTitleProps
-    ) => {
-        const { activeIndex } = this.state;
-        const newIndex =
-            activeIndex === titleProps.index
-                ? -1
-                : (titleProps.index as number);
-        this.setState({ activeIndex: newIndex });
-    };
+    // miscNotesClick = (
+    //     _e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    //     titleProps: AccordionTitleProps
+    // ) => {
+    //     const { activeIndex } = this.state;
+    //     const newIndex =
+    //         activeIndex === titleProps.index
+    //             ? -1
+    //             : (titleProps.index as number);
+    //     this.setState({ activeIndex: newIndex });
+    // };
 
     render() {
         const { windowWidth } = this.state;

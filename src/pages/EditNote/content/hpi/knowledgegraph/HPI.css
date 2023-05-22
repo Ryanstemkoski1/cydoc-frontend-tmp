@@ -141,11 +141,23 @@
     position: fixed;
     bottom: 8%;
     right: 20px;
-    background: #006b87;
+    background: #222;
     padding: 20px;
     border-radius: 20px;
     z-index: 100;
-    opacity: 0.8;
+    opacity: 0.9;
+    width: calc(100% - 30px);
+}
+.hpi-text-drop-folded {
+    position: fixed;
+    bottom: 8%;
+    right: 20px;
+    background: #222;
+    padding: 20px;
+    border-radius: 20px;
+    z-index: 100;
+    opacity: 0.9;
+    width: auto;
 }
 
 .white-important {
@@ -155,6 +167,22 @@
 .misc-box {
     height: 10vh !important;
 }
+@media only screen and (min-width: 768px) and (max-width: 991px){
+    .hpi-text-drop {
+        width: 723px;
+    }
+}
+@media only screen and (min-width: 992px) and (max-width: 1199px){
+    .hpi-text-drop {
+        width: 933px;
+    }
+}
+@media only screen and (min-width: 1200px){
+    .hpi-text-drop {
+        width: 1127px;
+    }
+}
+
 
 @media screen and (max-width: 1400px) {
 

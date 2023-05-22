@@ -356,7 +356,7 @@ exports[`Generate Note matches snapshot 1`] = `
               "trachea midline": false,
             },
           },
-          "Neuro Additional": Object {
+          "Neuro": Object {
             "comments": "",
             "findings": Object {
               "no pronator drift": false,
