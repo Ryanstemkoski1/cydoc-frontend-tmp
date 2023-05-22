@@ -64,23 +64,30 @@ class ConditionInput extends React.Component<Props, OwnState> {
     render() {
         return (
             <React.Fragment>
-                <Input
-                    disabled={this.props.isPreview}
-                    className={
-                        this.state.isTitleFocused === true
-                            ? 'ui input focus'
-                            : 'ui input transparent'
-                    }
-                    type='text'
-                    placeholder='Condition'
-                    onChange={this.handleInputChange}
-                    onFocus={() => {
-                        this.setState({ isTitleFocused: true });
-                    }}
-                    onBlur={this.handleOnBlur}
-                    value={this.props.isPreview ? '' : this.props.condition}
-                    style={this.props.style && this.props.style}
-                />
+                {(this.props.category === 'Medical History' &&
+                    this.props.isPreview !== false) ||
+                (this.props.category === 'Family History' &&
+                    this.props.isPreview !== false) ? (
+                    <Input
+                        disabled={this.props.isPreview}
+                        className={
+                            this.state.isTitleFocused === true
+                                ? 'ui input focus'
+                                : 'ui input transparent'
+                        }
+                        type='text'
+                        placeholder='Condition'
+                        onChange={this.handleInputChange}
+                        onFocus={() => {
+                            this.setState({ isTitleFocused: true });
+                        }}
+                        onBlur={this.handleOnBlur}
+                        value={this.props.isPreview ? '' : this.props.condition}
+                        style={this.props.style && this.props.style}
+                    />
+                ) : (
+                    <p>{this.props.condition}</p>
+                )}
                 {this.state.isRepeat && (
                     <div className='condition-error'>
                         <Icon color='red' name='warning circle' />
