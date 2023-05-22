@@ -16,7 +16,7 @@ import {
 import './NotePage.css';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
-import MiscBox from 'components/global/MiscBox';
+import MiscBox from '../../components/global/MiscBox';
 
 // Component that manages the active state of the create note editor
 // and defines the layout of the editor
