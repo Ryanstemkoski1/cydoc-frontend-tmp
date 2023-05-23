@@ -1,15 +1,15 @@
 export const homeContent = {
     meetCydoc: {
-        header: 'Write notes 3x faster',
-        subheader: 'Cydoc automatically generates notes from intake forms',
+        header: 'Save time on notes',
+        subheader: 'Cydoc pre-interviews patients and generates notes',
         description:
-            'Our smart intake form asks a patient targeted questions about their visit reasons, from diabetes and hypertension to asthma and headaches. Then, we transform the intake data into a medical note, available to you before the visit starts! Our trustworthy system for text generation ensures 100% accuracy. Spend less time writing notes so you can spend more time with your patients.',
+            'Step 1: A patient receives a secure questionnaire link through their email or phone. Step 2: Our questionnaire software asks the patient clinically relevant questions about their visit reasons - for example, diabetes follow-up + new headaches. Step 3: Behind the scenes, our software transforms the intake Q&A into a medical note, available to you before the visit starts. Step 4: You begin the visit with a note ready to go and key information already collected. Sign up today and start saving time!',
         inquireNow: 'Sign Up Now',
     },
     betterNotes: {
-        header: 'Leverage medical AI',
+        header: 'Our software takes a history then writes it down',
         description:
-            'We offer AI-powered questionnaires for over 130 visit reasons, spanning family medicine, pediatrics, subspecialty clinics, urgent care, and emergency medicine. Cydoc generated notes include a detailed history of present illness, past medical history, medications, allergies, surgical history, family history, social history, and review of systems. Streamline your workflows today!',
+            'The most unique aspect of our software is the detailed HPI it produces. Our smart HPI questionnaires interview the patient using medical reasoning, then produce high-quality HPI text before the visit even starts. We offer smart HPI questionnaires for over 130 visit reasons that span family medicine, obstetrics and gynecology, pediatrics, urgent care, and emergency medicine. In addition to an HPI, our generated note includes updated medications, allergies, past medical history, surgical history, family history, social history, and review of systems.',
         intuitiveInterface: 'Intuitive interface',
         webBased: 'Web-based',
         mobileFriendly: 'Mobile-friendly',
@@ -22,31 +22,31 @@ export const homeContent = {
         subheader: 'An excellent user experience is our top priority.',
     },
     features: {
-        header: 'Seamless features',
+        header: 'Time-saving features',
         HPI: {
-            header: 'Customizable HPI',
-            description: `Our efficient user interface collects key data for your patient's chief complaints`,
+            header: 'We write the HPI',
+            description: `Cydoc leverages clinical reasoning to interview the patient and craft the HPI`,
         },
         patientHistory: {
-            header: 'Patient History',
+            header: 'We update the history',
             description:
-                'Patient history automatically synchronizes with the HPI',
+                'Cydoc collects updated medications, family history, and more',
         },
         ROS: {
-            header: 'Review of Systems',
-            description: 'We complete a comprehensive ROS with Yes/No clicks',
+            header: 'We take an ROS',
+            description: 'Cydoc carries out a comprehensive review of systems',
         },
         medicalKnowledge: {
-            header: 'Medical Knowledge',
-            description: 'Our forms think the way you do',
+            header: 'We streamline your workflow',
+            description: 'Our interface is built for clinical efficiency',
         },
         plan: {
-            header: 'Time Savings',
+            header: 'We save your time',
             description: 'Finish notes up to 3x faster',
         },
         generatedNote: {
-            header: 'Generated Note',
-            description: 'Compatible with any EHR through copy-paste',
+            header: 'Compatible with all EHRs',
+            description: 'Simply copy-paste the Cydoc note into any EHR',
         },
     },
     footer: {
