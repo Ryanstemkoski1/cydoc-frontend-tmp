@@ -30,7 +30,7 @@ interface ConnectedNavMenuProps {
     className: string;
     // For whether to stack another menu above/below
     attached: 'top' | 'bottom';
-    // Whether to display or hiee the note name
+    // Whether to display or hide the note name
     displayNoteName: boolean;
 }
 
