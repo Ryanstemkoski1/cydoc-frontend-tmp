@@ -13,6 +13,9 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { isLivemode } from './auth/livemode';
 import Routes from 'components/navigation/Routes';
+import { initializeSentry } from 'modules/logging';
+
+initializeSentry();
 
 const container = document.getElementById('root');
 // react's container is never null
