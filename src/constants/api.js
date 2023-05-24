@@ -7,15 +7,51 @@ export const client = axios.create({
 
 function getGraphClientURL() {
     let graphClientURL;
+    /* eslint-disable no-console */
+    console.log("printing location.hostname before if statement");
+    console.log(location.hostname);
+    /* eslint-enable no-console */
     if (location.hostname == 'cydoc.ai') {
+        /* eslint-disable no-console */
+        console.log("inside the cydoc.ai if statement");
+        /* eslint-enable no-console */
         graphClientURL = 'https://cydocgraph.herokuapp.com';
+        /* eslint-disable no-console */
+        console.log("printing graphClientURL inside cydoc.ai if statement");
+        console.log(graphClientURL);
+        /* eslint-enable no-console */
     } else if (location.hostname == 'cyai.site') {
+        /* eslint-disable no-console */
+        console.log("inside the cyai.site if statement");
+        /* eslint-enable no-console */
         graphClientURL = 'https://cydocgraphdev.herokuapp.com';
+        /* eslint-disable no-console */
+        console.log("printing graphClientURL inside cyai.site if statement");
+        console.log(graphClientURL);
+        /* eslint-enable no-console */
     } else if (location.hostname == 'localhost') {
+        /* eslint-disable no-console */
+        console.log("inside the localhost if statement");
+        /* eslint-enable no-console */
         graphClientURL = 'https://cydocgraph.herokuapp.com';
+        /* eslint-disable no-console */
+        console.log("printing graphClientURL inside localhost if statement");
+        console.log(graphClientURL);
+        /* eslint-enable no-console */
     } else {
+        /* eslint-disable no-console */
+        console.log("inside else statement");
+        /* eslint-enable no-console */
         graphClientURL = 'https://cydocgraph.herokuapp.com';
+        /* eslint-disable no-console */
+        console.log("printing graphClientURL inside else statement");
+        console.log(graphClientURL);
+        /* eslint-enable no-console */
     }
+    /* eslint-disable no-console */
+    console.log("printing graphClientURL right before return");
+    console.log(graphClientURL);
+    /* eslint-enable no-console */
     return graphClientURL;
 }
 
