@@ -341,7 +341,7 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         circular
                         icon='close'
                         size='mini'
-                        type='delete'
+                        // type='delete'
                         onClick={() => {
                             this.props.deleteRecreationalDrugUsed(rowindex);
                         }}
@@ -397,7 +397,7 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         <Button
                             id='btn-display'
                             icon='close'
-                            type='delete'
+                            // type='delete'
                             compact
                             onClick={() => {
                                 this.props.deleteRecreationalDrugUsed(i);
