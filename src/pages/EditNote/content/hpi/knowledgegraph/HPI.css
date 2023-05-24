@@ -139,9 +139,10 @@
 
 .hpi-text-drop {
     position: fixed;
-    bottom: 8%;
-    right: 20px;
-    background: #222;
+    bottom: 80px;
+    left: 50%;
+    transform: translate(-50%, 0px);
+    background: white;
     padding: 20px;
     border-radius: 20px;
     z-index: 100;
@@ -150,9 +151,10 @@
 }
 .hpi-text-drop-folded {
     position: fixed;
-    bottom: 8%;
-    right: 20px;
-    background: #222;
+    bottom: 80px;
+    left: 50%;
+    transform: translate(-50%, 0px);
+    background: white;
     padding: 20px;
     border-radius: 20px;
     z-index: 100;

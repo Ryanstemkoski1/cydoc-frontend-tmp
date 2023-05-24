@@ -54,10 +54,12 @@ class PhysicalExamContent extends React.Component<Props, State> {
         e: React.ChangeEvent<HTMLInputElement>,
         data: InputOnChangeData
     ) => {
-        this.props.updateVitals(data.name, parseInt(e.target.value));
+        const numeric = +e.target.value;
+        this.props.updateVitals(data.name, +numeric.toFixed(1));
     };
     handleChangeTemparature = (val: string, data: InputOnChangeData) => {
-        this.props.updateVitals(data.name, parseInt(val));
+        const num = +val;
+        this.props.updateVitals(data.name, +num.toFixed(1));
     };
 
     generateNumericInput = (

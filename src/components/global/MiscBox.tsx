@@ -42,12 +42,11 @@ const MiscBox = (props: Props) => {
                     }
                 >
                     <Accordion.Title
-                        className='white-important'
                         active={activeIndex === 0}
                         index={0}
                         onClick={miscNotesClick}
                     >
-                        <Icon className='white-important' name='dropdown' />
+                        <Icon name='dropdown' />
                         Misc Notes&nbsp;&nbsp;&nbsp;&nbsp;
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 0}>

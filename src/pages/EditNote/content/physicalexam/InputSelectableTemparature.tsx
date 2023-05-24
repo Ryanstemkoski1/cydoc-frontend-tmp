@@ -29,18 +29,19 @@ const InputSelectableTemparature = (props: Props) => {
     const celciusToForeignheight = () => {
         return Number(currentTemparature) * 1.8 + 32;
     };
-    const foreignheightToCelcius = () => {
-        return (Number(currentTemparature) - 32) * 0.5556;
+    const foreignheightToCelcius = (newVal: string) => {
+        return (Number(newVal) - 32) * 0.5556;
     };
     const handleChangeInput = (
         e: React.ChangeEvent<HTMLInputElement>,
         data: InputOnChangeData
     ) => {
-        setCurrentTemparature(data.value);
+        const newVal = data.value;
+        setCurrentTemparature(newVal);
         if (currentUnit === '°C') {
-            props.handleChange(currentTemparature, data);
+            props.handleChange(newVal, data);
         } else {
-            props.handleChange(foreignheightToCelcius + '', data);
+            props.handleChange(foreignheightToCelcius(newVal) + '', data);
         }
     };
     const toggleUnit = (
@@ -50,11 +51,11 @@ const InputSelectableTemparature = (props: Props) => {
         if (currentUnit !== data.value) {
             setCurrentUnit(data.value as string);
             if (data.value === '°C') {
-                const val = foreignheightToCelcius();
-                setCurrentTemparature(Math.round(val) + '');
+                const val = foreignheightToCelcius(currentTemparature);
+                setCurrentTemparature(+val.toFixed(1) + '');
             } else {
                 const val = celciusToForeignheight();
-                setCurrentTemparature(Math.round(val) + '');
+                setCurrentTemparature(+val.toFixed(1) + '');
             }
         }
     };
