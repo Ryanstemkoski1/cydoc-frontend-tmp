@@ -43,7 +43,8 @@ const SignUpModal = (props: SignupModalProps) => {
                                 Write better notes, faster.
                             </p>
                             <p>
-                                First month $0, then $9/month. Cancel any time.
+                                First month $0, then $50/account/month. Cancel
+                                any time.
                             </p>
                         </div>
                         <div id='signup-modal-btns'>
