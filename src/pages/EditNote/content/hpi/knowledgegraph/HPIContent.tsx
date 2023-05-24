@@ -7,7 +7,6 @@ import {
     Container,
     Grid,
     Tab,
-    // AccordionTitleProps,
 } from 'semantic-ui-react';
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
@@ -57,6 +56,7 @@ import {
     addDisplayedNodes,
 } from 'redux/actions/displayedNodesActions';
 import { graphClientURL } from 'constants/api.js';
+import MiscBox from './src/components/MiscBox';
 
 interface HPIContentProps {
     step: number;
@@ -360,6 +360,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         )}
                                     </Grid>
                                     <Segment>
+                                        <MiscBox
+                                            activeThing={this.props.activeTab}
+                                        />
                                         <DiseaseForm
                                             key={this.props.activeTab}
                                             CCInfo={{
