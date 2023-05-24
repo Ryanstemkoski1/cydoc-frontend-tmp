@@ -101,7 +101,9 @@ const Login = () => {
         };
     }, []);
 
-    const authenticated = !!context.token;
+    // TODO: add & verify types for auth context
+    // @ts-expect-error the AuthContext module doesn't have typescript types yet...
+    const authenticated = !!context?.token;
 
     const checkEmailVerification = useCallback(async () => {
         const emailVerified = await isEmailVerified(role);
@@ -125,6 +127,8 @@ const Login = () => {
         return (
             <NotesContext.Consumer>
                 {(ctx) => {
+                    // TODO: add & verify types for auth context
+                    // @ts-expect-error the AuthContext module doesn't have typescript types yet...
                     ctx.loadNotes(context.user._id);
                     return <Redirect push to='/dashboard' />;
                 }}
@@ -138,14 +142,18 @@ const Login = () => {
     if (isFirstLogin) {
         return (
             <ClinicianSignUpForm
-                userUsername={username}
                 cognitoUser={cognitoUser}
+                sessionUserAttributes={sessionUserAttributes}
             />
         );
     } else {
         return (
             <>
-                <NavMenu />
+                <NavMenu
+                    className={''}
+                    attached={'top'}
+                    displayNoteName={false}
+                />
                 <Modal open={showEmailVerificationModal}>
                     <VerifyEmailForm />
                 </Modal>

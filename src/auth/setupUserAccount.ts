@@ -9,7 +9,7 @@ import { createOrUpdateManager } from 'modules/dynamoDb';
 import invariant from 'tiny-invariant';
 
 const setupUserAccount = async (
-    cognitoUser: CognitoUser | null, // null when new users sign up
+    cognitoUser: CognitoUser, // null when new users sign up
     attributes: UserAttributes | null, // null when new users sign up
     newUserInfo: ClinicianSignUpData
 ) => {
@@ -104,7 +104,7 @@ const setupUserAccount = async (
 export default setupUserAccount;
 
 const completeNewPasswordChallengeManager = (
-    cognitoUser: CognitoUser | null,
+    cognitoUser: CognitoUser,
     newPassword: string,
     newUserCognitoAttributes: UserAttributes,
     manager_uuid: string
