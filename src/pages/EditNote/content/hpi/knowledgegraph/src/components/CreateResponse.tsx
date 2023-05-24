@@ -165,8 +165,6 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         const choices = blankTypes.includes(responseType)
             ? (hpi.nodes[node].response as string[])
             : responseChoice;
-        // eslint-disable-next-line no-console
-        console.log({ responseType });
         switch (responseType) {
             case ResponseTypes.YES_NO:
             case ResponseTypes.NO_YES:

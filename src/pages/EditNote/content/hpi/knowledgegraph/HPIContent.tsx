@@ -427,6 +427,11 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                 : diseaseCategory,
                                             render: () => (
                                                 <Tab.Pane>
+                                                    <MiscBox
+                                                        activeThing={
+                                                            diseaseCategory
+                                                        }
+                                                    />
                                                     <DiseaseForm
                                                         key={
                                                             Object.keys(
