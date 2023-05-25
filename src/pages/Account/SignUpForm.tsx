@@ -416,6 +416,7 @@ export default function SignUpForm({
                                 goToPrevStep={onPrevClick}
                             />
                             <NextBackButtonGroup
+                                step={wizardPage}
                                 onClose={() => {
                                     setModalOpen(false);
                                     // reloadModal();
