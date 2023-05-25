@@ -149,8 +149,6 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             ResponseTypes.PMH_POP,
             ResponseTypes.PMH_BLANK,
         ];
-        // eslint-disable-next-line no-console
-        console.log({ synonymTypes });
         if (synonymTypes.includes(responseType)) {
             responseChoice.forEach((key: string, index: number) => {
                 responseChoice[index] = standardizeDiseaseNames(

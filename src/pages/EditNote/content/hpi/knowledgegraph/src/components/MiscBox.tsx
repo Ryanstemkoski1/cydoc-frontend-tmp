@@ -8,7 +8,10 @@ import {
     TextArea,
     AccordionTitleProps,
 } from 'semantic-ui-react';
-import { setNotesChiefComplaint } from 'redux/actions/chiefComplaintsActions';
+import {
+    setNotesChiefComplaint,
+    SetNotesChiefComplaintAction,
+} from 'redux/actions/chiefComplaintsActions';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 import { CurrentNoteState } from 'redux/reducers';
 import { PatientViewProps } from './ChiefComplaintsButton';
@@ -54,7 +57,7 @@ const MiscBox = (props: Props) => {
                                 className='misc-box'
                                 rows={3}
                                 onChange={(_e, { value }) => {
-                                    setNotesChiefComplaint(
+                                    props.setNotesChiefComplaint(
                                         activeThing as string,
                                         value
                                     );
@@ -76,9 +79,18 @@ const mapStateToProps = (
         patientView: selectPatientViewState(state),
     };
 };
+const mapDispatchToProps = {
+    setNotesChiefComplaint,
+};
+interface DispatchProps {
+    setNotesChiefComplaint: (
+        disease: string,
+        notes: string | number | undefined
+    ) => SetNotesChiefComplaintAction;
+}
 interface IProps {
     activeThing: string;
 }
-type Props = ChiefComplaintsProps & PatientViewProps & IProps;
+type Props = ChiefComplaintsProps & PatientViewProps & DispatchProps & IProps;
 
-export default connect(mapStateToProps)(MiscBox);
+export default connect(mapStateToProps, mapDispatchToProps)(MiscBox);
