@@ -1,6 +1,6 @@
 import getUserPool from 'auth/getUserPool';
 
-export const triggerEmailVerification = (username, role) => {
+export const triggerEmailVerification = (role) => {
     return new Promise((resolve, reject) => {
         getUserPool(role).then((userPool) => {
             const cognitoUser = userPool.getCurrentUser();
