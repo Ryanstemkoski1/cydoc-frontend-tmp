@@ -101,7 +101,8 @@ export enum ResponseTypes {
     SHORT_TEXT = 'SHORT-TEXT',
     FH_POP = 'FH-POP',
     PMH_BLANK = 'PMH-BLANK',
-    CLICK_BOXES = 'CLICK-BOXES',
+    SELECTONE = 'SELECTONE',
+    SELECTMANY = 'SELECTMANY',
     PSH_POP = 'PSH-POP',
     MEDS_BLANK = 'MEDS-BLANK',
     BODYLOCATION = 'BODYLOCATION',
@@ -118,8 +119,9 @@ export enum ResponseTypes {
 export interface ExpectedResponseInterface {
     YES_NO: YesNoInput;
     NO_YES: YesNoInput;
-    CLICK_BOXES: ClickBoxesInput;
-    MEDS_POP: ClickBoxesInput;
+    SELECTONE: SelectOneInput;
+    MEDS_POP: SelectOneInput;
+    SELECTMANY: SelectManyInput;
     TIME3DAYS: TimeInput;
     LIST_TEXT: ListTextInput;
     SHORT_TEXT: string;
@@ -146,8 +148,9 @@ export interface ExpectedResponseInterface {
 export const ExpectedResponseDict: ExpectedResponseInterface = {
     YES_NO: YesNoResponse.None,
     NO_YES: YesNoResponse.None,
-    CLICK_BOXES: {},
+    SELECTONE: {},
     MEDS_POP: {},
+    SELECTMANY: {},
     TIME3DAYS: { numInput: undefined, timeOption: '' },
     LIST_TEXT: { 1: '', 2: '', 3: '' },
     SHORT_TEXT: '',
@@ -254,7 +257,8 @@ export type LabTestType = {
     };
 };
 
-export type ClickBoxesInput = { [name: string]: boolean };
+export type SelectOneInput = { [name: string]: boolean };
+export type SelectManyInput = { [name: string]: YesNoResponse };
 export type ScaleInputType = number | undefined;
 export type YesNoInput =
     | YesNoResponse.Yes
@@ -266,7 +270,8 @@ export type HpiResponseType =
     | NumberInput
     | ListTextInput
     | TimeInput
-    | ClickBoxesInput
+    | SelectOneInput
+    | SelectManyInput
     | YesNoMaybeResponse
     | BodyLocationType
     | ScaleInputType

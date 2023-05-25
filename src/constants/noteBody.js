@@ -6,7 +6,7 @@ import { initialMedicationsState } from 'redux/reducers/medicationsReducer';
 import { initialSurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
 import { initialFamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
 import { initialSocialHistoryState } from 'redux/reducers/socialHistoryReducer';
-import { initialReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
+import { initialReviewOfSystemsState } from './reviewOfSystemsInitial';
 import { initialHpiState } from 'redux/reducers/hpiReducer';
 import { initialChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 

@@ -14,7 +14,8 @@ import {
     LabTestType,
     NodeInterface,
     OrderInterface,
-    ClickBoxesInput,
+    SelectOneInput,
+    SelectManyInput,
 } from '../../constants/hpiEnums';
 import { v4 } from 'uuid';
 
@@ -121,7 +122,7 @@ function labTestResponse(
         });
         specificResponse = responseDict;
     } else if (
-        [ResponseTypes.CLICK_BOXES, ResponseTypes.MEDS_POP].includes(
+        [ResponseTypes.SELECTONE, ResponseTypes.MEDS_POP].includes(
             node.responseType
         )
     ) {
@@ -140,7 +141,7 @@ function labTestResponse(
                           .split(',')
                           .map((response) => response.trim())
                     : [],
-            newRes = {} as ClickBoxesInput;
+            newRes = {} as SelectOneInput;
         responses.map((key) => (newRes[key] = false));
         specificResponse = newRes;
     }
@@ -217,7 +218,7 @@ export function isLabTestDictionary(value: any): value is LabTestType {
     );
 }
 
-export function isClickBoxesResponse(value: any): value is ClickBoxesInput {
+export function isSelectOneResponse(value: any): value is SelectOneInput {
     return (
         typeof value == 'object' &&
         !Array.isArray(value) &&
@@ -336,7 +337,7 @@ export function hpiReducer(
             } else throw new Error('Not a body location response');
         }
 
-        case HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK: {
+        case HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK: {
             /* 
             Adds or removes multiple choice option based on whether it was 
             already present in the list.
@@ -344,9 +345,14 @@ export function hpiReducer(
             const { medId, name } = action.payload;
             const response = state.nodes[medId].response;
             if (
-                state.nodes[medId].responseType == ResponseTypes.CLICK_BOXES &&
-                isClickBoxesResponse(response)
+                state.nodes[medId].responseType == ResponseTypes.SELECTONE &&
+                isSelectOneResponse(response)
             ) {
+                Object.keys(response).forEach((otherName) => {
+                    if (otherName != name && response[otherName]) {
+                        response[otherName] = false;
+                    }
+                });
                 return updateResponse(
                     medId,
                     {
@@ -489,6 +495,28 @@ export function hpiReducer(
                     state
                 );
             } else throw new Error('Not a yes/no response');
+        }
+
+        case HPI_ACTION.SELECT_MANY_HANDLE_CLICK: {
+            const { medId, yesOrNo, option } = action.payload;
+            const response = state.nodes[medId].response;
+            if (
+                state.nodes[medId].responseType === ResponseTypes.SELECTMANY &&
+                isSelectOneResponse(response)
+            ) {
+                if ((yesOrNo === YesNoResponse.Yes) === response[option]) {
+                    delete response[option];
+                    return updateResponse(medId, response, state);
+                }
+                return updateResponse(
+                    medId,
+                    {
+                        ...response,
+                        [option]: yesOrNo === YesNoResponse.Yes ? true : false,
+                    },
+                    state
+                );
+            } else throw new Error('Not a SELECTMANY response');
         }
 
         case HPI_ACTION.SCALE_HANDLE_VALUE: {

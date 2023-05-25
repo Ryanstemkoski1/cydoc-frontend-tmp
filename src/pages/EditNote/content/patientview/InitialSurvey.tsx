@@ -20,7 +20,7 @@ import {
 } from 'redux/actions/userViewActions';
 import { CurrentNoteState } from 'redux/reducers';
 import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
-import { isClickBoxesResponse } from 'redux/reducers/hpiReducer';
+import { isSelectOneResponse } from 'redux/reducers/hpiReducer';
 import {
     initialQuestionsState,
     isChiefComplaintsResponse,
@@ -79,7 +79,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         const { userSurveyState, chiefComplaints } = this.props;
         const res1 = userSurveyState.nodes['6'],
             res2 = userSurveyState.nodes['7'],
-            q1_count = isClickBoxesResponse(res1.response)
+            q1_count = isSelectOneResponse(res1.response)
                 ? Object.keys(res1.response).filter((k) =>
                       Object.keys(chiefComplaints).includes(k)
                   ).length
@@ -229,8 +229,8 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         switch (currEntry.responseType) {
             case ResponseTypes.YES_NO:
                 return <SurveyYesNoResponse id={id} />;
-            case ResponseTypes.CLICK_BOXES:
-                return isClickBoxesResponse(currEntry.response)
+            case ResponseTypes.SELECTONE:
+                return isSelectOneResponse(currEntry.response)
                     ? Object.keys(currEntry.response).map((condition) => (
                           <ChiefComplaintsButton
                               key={condition}
