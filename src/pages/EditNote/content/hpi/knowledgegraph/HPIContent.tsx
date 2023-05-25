@@ -114,7 +114,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
         this.setState({ windowWidth, windowHeight });
     }
-    
+
     getData = async (complaint: string) => {
         const { parentNodes } = this.props.hpiHeaders;
         const chiefComplaint = Object.keys(parentNodes[complaint])[0];
