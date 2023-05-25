@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'semantic-ui-react';
 import './Account.css';
-import ClinicianSignUpForm from './ClinicianSignUpForm';
+import SignUpForm from './SignUpForm';
 
 interface SignupModalProps {
     navToSignUp: boolean;
@@ -15,10 +15,7 @@ const SignUpModal = (props: SignupModalProps) => {
     return (
         <>
             {continueActive ? (
-                <ClinicianSignUpForm
-                    sessionUserAttributes={null}
-                    cognitoUser={null}
-                />
+                <SignUpForm sessionUserAttributes={null} cognitoUser={null} />
             ) : (
                 <Modal
                     dimmer='inverted'

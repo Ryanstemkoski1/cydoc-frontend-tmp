@@ -36,7 +36,7 @@ interface Props {
     sessionUserAttributes: UserAttributes | null;
     cognitoUser: CognitoUser | null;
 }
-export default function ClinicianSignUpForm({
+export default function SignUpForm({
     // userUsername = '',
     // userRole = '',
     // userEmail = '',

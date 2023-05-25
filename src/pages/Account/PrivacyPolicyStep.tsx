@@ -4,7 +4,7 @@ import './Account.css';
 import { Container, Form, Modal, Header, Divider } from 'semantic-ui-react';
 import Policy from '../../constants/Documents/policy';
 import { useField } from 'formik';
-import { SignUpFormData } from './ClinicianSignUpForm';
+import { SignUpFormData } from './SignUpForm';
 const cssScroll = '.scroll { max-height: 240px; overflow-y: scroll; }';
 const cssCheckBoxes =
     '.checkBox { vertical-align: middle; line-height: 5px; min-width: 5px; display:flex; align-content:middle; flex:1; justify-content: center; }';

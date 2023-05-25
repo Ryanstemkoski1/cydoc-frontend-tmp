@@ -12,7 +12,7 @@ import GetLogin from 'auth/login';
 import AuthContext from '../../contexts/AuthContext';
 import NavMenu from '../../components/navigation/NavMenu';
 import './Account.css';
-import ClinicianSignUpForm from './ClinicianSignUpForm';
+import SignUpForm from './SignUpForm';
 import { VerifyEmailModalForm } from './VerifyEmailModalForm';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -111,7 +111,7 @@ const Login = () => {
 
     if (isFirstLogin) {
         return (
-            <ClinicianSignUpForm
+            <SignUpForm
                 cognitoUser={cognitoUser}
                 sessionUserAttributes={sessionUserAttributes}
             />
