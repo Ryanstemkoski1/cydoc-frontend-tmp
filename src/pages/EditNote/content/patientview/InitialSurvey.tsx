@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { YesNoResponse } from 'constants/enums';
-import { GraphData, ResponseTypes } from 'constants/hpiEnums';
+import { GraphData, NodeInterface, ResponseTypes } from 'constants/hpiEnums';
 import React from 'react';
 import { connect } from 'react-redux';
 import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
@@ -20,7 +20,7 @@ import {
 } from 'redux/actions/userViewActions';
 import { CurrentNoteState } from 'redux/reducers';
 import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
-import { isClickBoxesResponse } from 'redux/reducers/hpiReducer';
+import { isSelectOneResponse } from 'redux/reducers/hpiReducer';
 import {
     initialQuestionsState,
     isChiefComplaintsResponse,
@@ -50,6 +50,10 @@ import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
+import {
+    AddDisplayedNodesAction,
+    addDisplayedNodes,
+} from 'redux/actions/displayedNodesActions';
 
 interface InitialSurveyState {
     activeItem: number;
@@ -75,7 +79,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         const { userSurveyState, chiefComplaints } = this.props;
         const res1 = userSurveyState.nodes['6'],
             res2 = userSurveyState.nodes['7'],
-            q1_count = isClickBoxesResponse(res1.response)
+            q1_count = isSelectOneResponse(res1.response)
                 ? Object.keys(res1.response).filter((k) =>
                       Object.keys(chiefComplaints).includes(k)
                   ).length
@@ -156,14 +160,26 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         }
     };
 
-    getData = async (chiefComplaint: string) => {
-        const response = await axios.get(
-            'https://cydocgraph.herokuapp.com/graph/category/' +
-                chiefComplaint +
-                '/4'
-        );
-        const { data } = response;
+    getData = async (complaint: string) => {
+        const { parentNodes } = this.props.hpiHeaders,
+            chiefComplaint = Object.keys(parentNodes[complaint])[0],
+            response = await axios.get(
+                'https://cydocgraph.herokuapp.com/graph/category/' +
+                    chiefComplaint +
+                    '/4'
+            ),
+            { data } = response,
+            { graph, nodes, edges } = data as GraphData,
+            parentNode = parentNodes[complaint][chiefComplaint];
         this.props.processKnowledgeGraph(data);
+        const childNodes = graph[parentNode]
+            .map((edge: number) => [
+                edges[edge.toString()].toQuestionOrder.toString(),
+                edges[edge.toString()].to,
+            ])
+            .sort((tup1, tup2) => parseInt(tup1[0]) - parseInt(tup2[0]))
+            .map(([_questionOrder, medId]) => medId);
+        this.props.addDisplayedNodes(chiefComplaint, childNodes, nodes);
     };
 
     renderSwitch = (id: string) => {
@@ -200,9 +216,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                                         disease: complaint,
                                     },
                                 });
-                                this.getData(
-                                    Object.keys(parentNodes[complaint])[0]
-                                );
+                                this.getData(complaint);
                                 initialSurveySearch(id, complaint);
                             },
                         };
@@ -215,8 +229,8 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         switch (currEntry.responseType) {
             case ResponseTypes.YES_NO:
                 return <SurveyYesNoResponse id={id} />;
-            case ResponseTypes.CLICK_BOXES:
-                return isClickBoxesResponse(currEntry.response)
+            case ResponseTypes.SELECTONE:
+                return isSelectOneResponse(currEntry.response)
                     ? Object.keys(currEntry.response).map((condition) => (
                           <ChiefComplaintsButton
                               key={condition}
@@ -383,6 +397,13 @@ interface DispatchProps {
         uid: string,
         chiefComplaint: string
     ) => InitialSurveySearchAction;
+    addDisplayedNodes: (
+        category: string,
+        nodesArr: string[],
+        nodes: {
+            [node: string]: NodeInterface;
+        }
+    ) => AddDisplayedNodesAction;
 }
 
 type Props = HpiHeadersProps &
@@ -398,6 +419,7 @@ const mapDispatchToProps = {
     saveHpiHeader,
     processKnowledgeGraph,
     initialSurveySearch,
+    addDisplayedNodes,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InitialSurvey);

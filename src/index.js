@@ -132,7 +132,7 @@ ReactDOM.render(
                                             component={Terms_and_conditions}
                                         />
                                         <div className='footer-copyright'>
-                                            Copyright © 2019-2022 Cydoc, LLC.
+                                            Copyright © 2023 Cydoc Corporation.
                                             All rights reserved. Patent pending.
                                             &emsp;•&emsp;
                                             <a

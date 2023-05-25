@@ -3,10 +3,10 @@ import { CurrentNoteState } from 'redux/reducers';
 import { HpiStateProps } from 'constants/hpiEnums';
 import { connect } from 'react-redux';
 import {
-    multipleChoiceHandleClick,
-    MultipleChoiceHandleClickAction,
+    singleMultipleChoiceHandleClick,
+    SingleMultipleChoiceHandleClickAction,
 } from 'redux/actions/hpiActions';
-import { isClickBoxesResponse } from 'redux/reducers/hpiReducer';
+import { isSelectOneResponse } from 'redux/reducers/hpiReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
@@ -18,17 +18,17 @@ interface MultipleChoiceProps {
 
 class MultipleChoice extends React.Component<Props> {
     render() {
-        const { hpi, node, name, multipleChoiceHandleClick } = this.props;
+        const { hpi, node, name, singleMultipleChoiceHandleClick } = this.props;
         const response = hpi.nodes[node].response;
-        const included = isClickBoxesResponse(response) && response[name];
+        const included = isSelectOneResponse(response) && response[name];
         return (
             <ToggleButton
                 className='button_question'
                 active={included}
                 condition={name}
                 title={name}
-                onToggleButtonClick={(): MultipleChoiceHandleClickAction =>
-                    multipleChoiceHandleClick(node, name)
+                onToggleButtonClick={(): SingleMultipleChoiceHandleClickAction =>
+                    singleMultipleChoiceHandleClick(node, name)
                 }
             />
         );
@@ -36,10 +36,10 @@ class MultipleChoice extends React.Component<Props> {
 }
 
 interface DispatchProps {
-    multipleChoiceHandleClick: (
+    singleMultipleChoiceHandleClick: (
         medId: string,
         name: string
-    ) => MultipleChoiceHandleClickAction;
+    ) => SingleMultipleChoiceHandleClickAction;
 }
 
 const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
@@ -49,7 +49,7 @@ const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
 type Props = HpiStateProps & DispatchProps & MultipleChoiceProps;
 
 const mapDispatchToProps = {
-    multipleChoiceHandleClick,
+    singleMultipleChoiceHandleClick,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MultipleChoice);

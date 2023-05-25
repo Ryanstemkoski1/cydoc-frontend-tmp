@@ -22,43 +22,50 @@
                 "uid": "1",
                 "text": "",
                 "responseType": "",
-                "category": ""
+                "category": "",
+                "doctorView": ""
             },
             "2": {
                 "uid": "2",
                 "text": "Are you here for an annual physical exam?",
                 "responseType": "YES-NO",
-                "category": "ANNUALVISIT"
+                "category": "ANNUALVISIT",
+                "doctorView": "Annual Physical Exam"
             },
             "3": {
                 "uid": "3",
                 "text": "Are you here to follow up any previously diagnosed medical conditions?",
                 "responseType": "YES-NO",
-                "category": ""
+                "category": "",
+                "doctorView": ""
             },
             "4": {
                 "uid": "4",
                 "text": "Do you have any new health concerns to discuss with the clinician today?",
                 "responseType": "YES-NO",
-                "category": ""
+                "category": "",
+                "doctorView": ""
             },
             "5": {
                 "uid": "5",
                 "text": "",
                 "responseType": "",
-                "category": ""
+                "category": "",
+                "doctorView": ""
             },
             "6": {
                 "uid": "6",
                 "text": "Please select the most important conditions or symptoms that you would like to discuss today, up to a maximum of 3. CLICK[ADHD, Depression, Diabetes, Genital Symptoms/STI, Hypertension, Hyperlipidemia, Urinary Symptoms/UTI]",
-                "responseType": "CLICK-BOXES",
-                "category": ""
+                "responseType": "SELECTONE",
+                "category": "",
+                "doctorView": ""
             },
             "7": {
                 "uid": "7",
                 "text": "If you’d like to discuss an additional condition or symptom not listed above, please search for it here:",
                 "responseType": "SEARCH",
-                "category": ""
+                "category": "",
+                "doctorView": ""
             }
         }
 }

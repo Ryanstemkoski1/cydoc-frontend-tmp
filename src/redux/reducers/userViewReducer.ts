@@ -1,5 +1,5 @@
 import { YesNoResponse } from 'constants/enums';
-import { ClickBoxesInput, ResponseTypes } from 'constants/hpiEnums';
+import { SelectOneInput, ResponseTypes } from 'constants/hpiEnums';
 import { USER_VIEW_ACTION } from 'redux/actions/actionTypes';
 import { userViewActionTypes } from 'redux/actions/userViewActions';
 import { ChiefComplaintsState } from './chiefComplaintsReducer';
@@ -18,6 +18,7 @@ export interface initialQuestionsState {
             text: string;
             responseType: ResponseTypes;
             category: string;
+            doctorView: string;
         };
     };
 }
@@ -35,9 +36,10 @@ export interface userSurveyState {
             text: string;
             responseType: ResponseTypes;
             category: string;
+            doctorView: string;
             response:
                 | YesNoResponse
-                | ClickBoxesInput
+                | SelectOneInput
                 | string
                 | ChiefComplaintsState;
         };
@@ -48,12 +50,14 @@ export interface UserViewState {
     patientView: boolean;
     doctorView: boolean;
     userSurvey: userSurveyState;
+    isSurgicalHistory?: boolean | null;
 }
 
 export const initialUserViewState: UserViewState = {
     patientView: true,
     doctorView: false,
     userSurvey: { order: {}, graph: {}, nodes: {} },
+    isSurgicalHistory: null,
 };
 
 export function isChiefComplaintsResponse(
@@ -73,6 +77,12 @@ export function userViewReducer(
     action: userViewActionTypes
 ): UserViewState {
     switch (action.type) {
+        case USER_VIEW_ACTION.IS_SURGICAL_HISTORY: {
+            return {
+                ...state,
+                isSurgicalHistory: action.payload.isSurgicalHistory,
+            };
+        }
         case USER_VIEW_ACTION.USER_VIEW: {
             return {
                 ...state,
@@ -89,18 +99,18 @@ export function userViewReducer(
                 },
                 // default initial response
                 responseDict: {
-                    [id: string]: YesNoResponse | ClickBoxesInput | string;
+                    [id: string]: YesNoResponse | SelectOneInput | string;
                 } = {
                     [ResponseTypes.YES_NO]: YesNoResponse.None,
-                    [ResponseTypes.CLICK_BOXES]: {},
+                    [ResponseTypes.SELECTONE]: {},
                     [ResponseTypes.SHORT_TEXT]: '',
                 };
             Object.entries(graph.nodes).map(([node, v]) => {
                 let text = v.text,
                     response = responseDict[v.responseType];
-                if (v.responseType == ResponseTypes.CLICK_BOXES) {
+                if (v.responseType == ResponseTypes.SELECTONE) {
                     if ('response' in v) {
-                        response = v['response'] as ClickBoxesInput;
+                        response = v['response'] as SelectOneInput;
                     } else {
                         const click = text.search('CLICK'),
                             select = text.search('\\['),
@@ -112,7 +122,7 @@ export function userViewReducer(
                                 )
                                 .split(',')
                                 .map((response) => response.trim()),
-                            newRes = {} as ClickBoxesInput;
+                            newRes = {} as SelectOneInput;
                         responses.map((key) => (newRes[key] = false));
                         response = newRes;
                         text = text.slice(0, click);

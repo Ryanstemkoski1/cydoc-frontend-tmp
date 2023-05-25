@@ -6,7 +6,8 @@ import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import { HpiState } from 'redux/reducers/hpiReducer';
 import {
     BodyLocationType,
-    ClickBoxesInput,
+    SelectOneInput,
+    SelectManyInput,
     HpiResponseType,
     LabTestType,
     ListTextInput,
@@ -97,12 +98,13 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
             return true;
         }
 
+        case ResponseTypes.SELECTMANY:
         case ResponseTypes.SHORT_TEXT:
         case ResponseTypes.RADIOLOGY:
             return node.response === '';
 
-        case ResponseTypes.CLICK_BOXES: {
-            const response = node.response as ClickBoxesInput;
+        case ResponseTypes.SELECTONE: {
+            const response = node.response as SelectOneInput;
             return Object.keys(response).every((key) => !response[key]);
         }
 
@@ -241,8 +243,9 @@ export const extractNode = (
             );
             break;
 
-        case ResponseTypes.CLICK_BOXES:
-            const clickBoxesRes = response as ClickBoxesInput;
+        case ResponseTypes.SELECTMANY:
+        case ResponseTypes.SELECTONE:
+            const clickBoxesRes = response as SelectOneInput;
             updatedRes = Object.keys(clickBoxesRes).filter(
                 (key) => clickBoxesRes[key]
             );
@@ -407,8 +410,9 @@ export const extractNodes = (
     for (let i = 1; i < Object.keys(order).length + 1; i++) {
         const node = state.hpi.nodes[order[i.toString()]];
         hideChildren = [...hideChildren, ...checkParent(node, state)];
-        if (!isEmpty(state, node) && !hideChildren.includes(node.medID))
+        if (!isEmpty(state, node) && !hideChildren.includes(node.medID)) {
             formattedHpi.push(extractNode(state, node));
+        }
     }
     return formattedHpi;
 };

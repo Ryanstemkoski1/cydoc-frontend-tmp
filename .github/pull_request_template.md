@@ -41,6 +41,7 @@ Mandatory for all PRs (the PR will not be merged unless you have completed these
 - [ ] My changes generate no new errors or warnings.
 - [ ] I have performed interactive testing via the UI to check that my fix is effective or that my feature works.
 - [ ] I have carefully resolved merge conflicts to avoid overwriting other people's recent work.
+- [ ] I have double checked that my PR does NOT include changes to files in semantic/dist
 
 Mandatory for most PRs (please provide a written reason below if you did not complete these items, e.g., "My PR is only 2 lines of code.")
 - [ ] I have commented my code, particularly in hard-to-understand areas.
