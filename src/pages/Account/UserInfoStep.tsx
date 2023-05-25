@@ -3,7 +3,7 @@ import React from 'react';
 import './Account.css';
 import { Button, Container, Form, Modal, Divider } from 'semantic-ui-react';
 import { useField, Field } from 'formik';
-import { TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { StepProps } from './SignUpSteps';
 
 export function UserInfoStep({
@@ -17,16 +17,14 @@ export function UserInfoStep({
             <Modal.Content>
                 <Form>
                     {/* <Form error={passwordErrorMessages().length > 0}> */}
-                    <Container>
+                    <Box>
                         <Form.Group widths='equal'>
-                            <Field
-                                name='firstName'
+                            <Form.Input
+                                required
                                 label='First Name'
+                                name='firstName'
                                 placeholder='Jane'
                                 type='input'
-                                as={TextField}
-                                required
-                                variant='outlined'
                             />
                             <Form.Input
                                 required
@@ -76,25 +74,21 @@ export function UserInfoStep({
                             </Container>
                         )} */}
                         <Form.Group widths='equal'>
-                            <Field
+                            <Form.Input
                                 name='phoneNumber'
                                 label='U.S. Phone Number'
                                 placeholder='XXXXXXXXXX'
                                 type='tel'
-                                as={TextField}
                                 required
-                                variant='outlined'
                                 // TODO: put in yup
                                 // onChange={handlePhoneNumber}
                             />
-                            <Field
+                            <Form.Input
                                 name='confirmPhoneNumber'
                                 label='Confirm U.S. Phone Number'
                                 placeholder='XXXXXXXXXX'
                                 type='tel'
-                                as={TextField}
                                 required
-                                variant='outlined'
                                 // TODO: put in yup
                                 // onChange={handleConfirmPhoneNumber}
                             />
@@ -107,11 +101,10 @@ export function UserInfoStep({
                             </Container>
                         )} */}
                         <Form.Group widths='equal'>
-                            <Field
+                            <Form.Input
                                 label='New password'
                                 name='newPassword'
                                 type='password'
-                                as={TextField}
                                 variant='outlined'
                                 aria-label='New-Password'
                                 placeholder='new password'
@@ -120,11 +113,10 @@ export function UserInfoStep({
                                 // onChange={handleNewPasswordChange}
                                 required
                             />
-                            <Field
+                            <Form.Input
                                 label='Confirm new password'
                                 name='confirmNewPassword'
                                 type='password'
-                                as={TextField}
                                 variant='outlined'
                                 aria-label='New-Password'
                                 placeholder='confirm new password'
@@ -151,9 +143,9 @@ export function UserInfoStep({
                                 />
                             )}
                             */}
-                        <Divider section />
-                    </Container>
-                    <Container className='modal-button-container'>
+                        <Divider />
+                    </Box>
+                    {/* <Container className='modal-button-container'>
                         <Button
                             basic
                             color='teal'
@@ -172,7 +164,7 @@ export function UserInfoStep({
                             content='Next'
                             onClick={goToNextStep}
                         />
-                    </Container>
+                    </Container> */}
                 </Form>
             </Modal.Content>
         </>
