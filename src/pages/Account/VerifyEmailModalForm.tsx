@@ -4,7 +4,7 @@ import NotesContext from '../../contexts/NotesContext';
 import isEmailVerified from 'auth/isEmailVerified';
 import { triggerEmailVerification, verifyEmail } from 'auth/verifyEmail';
 import { Field, Formik, useField } from 'formik';
-import { SignUpFormData } from './ClinicianSignUpForm';
+import { SignUpFormData } from './SignUpForm';
 import { Redirect } from 'react-router';
 import { Button, TextField } from '@mui/material';
 import { CognitoUser } from 'amazon-cognito-identity-js';
