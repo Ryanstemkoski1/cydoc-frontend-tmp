@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/Button.css';
 import MultipleChoice from './responseComponents/MultipleChoice';
+import ReviewOfSystemsCategory from '../../../../reviewofsystems/ReviewOfSystemsCategory';
 import YesNo from './responseComponents/YesNo';
 import HandleInput from './responseComponents/HandleInput';
 import HandleNumericInput from './responseComponents/HandleNumericInput';
@@ -13,6 +14,8 @@ import SurgicalHistoryContent from '../../../../surgicalhistory/SurgicalHistoryC
 import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
 import ListText from './responseComponents/ListText';
 import { ResponseTypes, HpiStateProps } from 'constants/hpiEnums';
+import { YesNoResponse } from 'constants/enums';
+import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
 import {
     addFhPopOptions,
     AddFhPopOptionsAction,
@@ -28,7 +31,11 @@ import ScaleInput from './responseComponents/ScaleInput';
 import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
 import LaboratoryTest from './responseComponents/LaboratoryTest';
-import { isLabTestDictionary } from 'redux/reducers/hpiReducer';
+import {
+    isLabTestDictionary,
+    isSelectOneResponse,
+} from 'redux/reducers/hpiReducer';
+import Masonry from 'react-masonry-component';
 
 interface CreateResponseProps {
     node: string;
@@ -149,7 +156,6 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             ResponseTypes.PMH_POP,
             ResponseTypes.PMH_BLANK,
         ];
-
         if (synonymTypes.includes(responseType)) {
             responseChoice.forEach((key: string, index: number) => {
                 responseChoice[index] = standardizeDiseaseNames(
@@ -180,10 +186,38 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             case ResponseTypes.LIST_TEXT:
                 return <ListText key={node} node={node} />;
 
-            case ResponseTypes.CLICK_BOXES:
+            case ResponseTypes.SELECTONE:
                 return responseChoice.map((item: string) => (
                     <MultipleChoice key={item} name={item} node={node} />
                 ));
+
+            case ResponseTypes.SELECTMANY: {
+                const existingResponse = this.props.hpi.nodes[node].response;
+                const formattedResponseChoice: ReviewOfSystemsState = {
+                    '': {},
+                };
+                if (isSelectOneResponse(existingResponse)) {
+                    responseChoice.forEach((key: string) => {
+                        formattedResponseChoice[''][key] =
+                            existingResponse[key] !== undefined
+                                ? existingResponse[key] === true
+                                    ? YesNoResponse.Yes
+                                    : YesNoResponse.No
+                                : YesNoResponse.None;
+                    });
+                }
+                return (
+                    <Masonry className='ros-container' style={{ width: 357 }}>
+                        <ReviewOfSystemsCategory
+                            key={''}
+                            category={''}
+                            selectManyState={formattedResponseChoice}
+                            selectManyOptions={responseChoice}
+                            node={node}
+                        />
+                    </Masonry>
+                );
+            }
 
             case ResponseTypes.NUMBER:
                 return <HandleNumericInput key={node} node={node} />;
@@ -205,7 +239,6 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         node={node}
                     />
                 );
-
             case ResponseTypes.FH_POP:
             case ResponseTypes.FH_BLANK:
                 return (

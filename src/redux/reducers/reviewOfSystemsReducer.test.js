@@ -1,8 +1,6 @@
 import { ROS_ACTION } from 'redux/actions/actionTypes';
-import {
-    reviewOfSystemsReducer,
-    initialReviewOfSystemsState,
-} from './reviewOfSystemsReducer';
+import { reviewOfSystemsReducer } from './reviewOfSystemsReducer';
+import { initialReviewOfSystemsState } from 'constants/reviewOfSystemsInitial';
 import { YesNoResponse } from 'constants/enums';
 
 describe('reviewOfSystems reducer', () => {

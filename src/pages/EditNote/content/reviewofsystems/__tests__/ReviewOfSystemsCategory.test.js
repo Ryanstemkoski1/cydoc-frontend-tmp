@@ -14,7 +14,7 @@ const mockStore = configureStore([]);
 
 const mountWithStore = (
     initStore = { reviewOfSystems: initialStore },
-    props = { category: 'Eyes' }
+    props = { category: 'Eyes', selectManyOptions: [], selectManyState: {} }
 ) => {
     const store = mockStore(initStore);
     return {

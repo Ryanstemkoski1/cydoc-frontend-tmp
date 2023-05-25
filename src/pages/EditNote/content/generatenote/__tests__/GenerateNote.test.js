@@ -4,7 +4,7 @@ import GenerateNote from '../GenerateNote';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { initialPhysicalExamState } from 'redux/reducers/physicalExamReducer';
-import { initialReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
+import { initialReviewOfSystemsState } from 'constants/reviewOfSystemsInitial';
 
 const mockStore = configureMockStore([thunk]);
 

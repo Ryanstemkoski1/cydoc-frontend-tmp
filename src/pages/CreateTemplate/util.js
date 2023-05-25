@@ -28,7 +28,7 @@ export const getAnswerInfo = (type) => {
                 endResponse: '',
             };
             break;
-        case questionTypes.CLICK_BOXES:
+        case questionTypes.SELECTONE:
             answerInfo = {
                 startResponse: '',
                 endResponse: '',
@@ -100,7 +100,7 @@ export const parseQuestionText = (responseType, text, answerInfo, category) => {
     }
 
     if (
-        responseType === questionTypes.CLICK_BOXES ||
+        responseType === questionTypes.SELECTONE ||
         responseType.endsWith('POP') ||
         responseType === 'nan'
     ) {

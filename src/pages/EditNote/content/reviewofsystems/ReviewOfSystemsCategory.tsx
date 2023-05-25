@@ -1,10 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { connect } from 'react-redux';
 import { CurrentNoteState } from 'redux/reducers';
 import {
     toggleROSOption,
     ToggleROSOptionAction,
 } from 'redux/actions/reviewOfSystemsActions';
+import {
+    selectManyHandleClick,
+    SelectManyHandleClickAction,
+} from 'redux/actions/hpiActions';
 import {
     selectReviewOfSystemsState,
     selectReviewOfSystemsOptions,
@@ -18,6 +22,8 @@ import AllNegativeButton from './AllNegativeButton.js';
 interface CategoryProps {
     key: string;
     category: string;
+    selectManyState: ReviewOfSystemsState;
+    node: string;
 }
 
 interface StateProps {
@@ -27,6 +33,8 @@ interface StateProps {
 
 interface OwnProps {
     category: string;
+    selectManyState: ReviewOfSystemsState;
+    selectManyOptions: string[];
 }
 
 interface DispatchProps {
@@ -35,25 +43,74 @@ interface DispatchProps {
         option: string,
         yesOrNo: YesNoResponse
     ) => ToggleROSOptionAction;
+    selectManyHandleClick: (
+        medId: string,
+        option: string,
+        yesOrNo: YesNoResponse
+    ) => SelectManyHandleClickAction;
+}
+
+interface OwnState {
+    ROSState: ReviewOfSystemsState;
 }
 
 const mapStateToProps = (
     state: CurrentNoteState,
     ownProps: OwnProps
 ): StateProps => ({
-    ROSState: selectReviewOfSystemsState(state),
-    ROSOptions: selectReviewOfSystemsOptions(state, ownProps.category),
+    ROSState:
+        Object.keys(ownProps.selectManyState).length == 0
+            ? selectReviewOfSystemsState(state)
+            : ownProps.selectManyState,
+    ROSOptions:
+        Object.keys(ownProps.selectManyState).length == 0
+            ? selectReviewOfSystemsOptions(state, ownProps.category)
+            : ownProps.selectManyOptions,
 });
 
 const mapDispatchToProps = {
     toggleROSOption: toggleROSOption,
+    selectManyHandleClick: selectManyHandleClick,
 };
 
 type Props = CategoryProps & DispatchProps & StateProps;
+type State = OwnState;
 
-class ReviewOfSystemsCategory extends Component<Props> {
+class ReviewOfSystemsCategory extends Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+        this.state = { ROSState: this.props.ROSState };
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        if (prevProps.ROSState !== this.props.ROSState) {
+            this.setState({ ROSState: this.props.ROSState });
+        }
+    }
+
     handleChange = (option: string, value: YesNoResponse) => {
-        this.props.toggleROSOption(this.props.category, option, value);
+        if (!this.isSelectMany()) {
+            this.props.toggleROSOption(this.props.category, option, value);
+            this.setState({ ROSState: this.props.ROSState });
+        } else {
+            this.props.selectManyHandleClick(this.props.node, option, value);
+            this.setState((prevState) => ({
+                ROSState: {
+                    ...prevState.ROSState,
+                    ['']: {
+                        ...prevState.ROSState[''],
+                        [option]:
+                            value === prevState.ROSState[''][option]
+                                ? ''
+                                : value,
+                    },
+                },
+            }));
+        }
+    };
+
+    isSelectMany = () => {
+        return Object.keys(this.props.selectManyState).length != 0;
     };
 
     breakWord = (category: string): string | undefined => {
@@ -67,14 +124,17 @@ class ReviewOfSystemsCategory extends Component<Props> {
     };
 
     render() {
-        const { category, ROSOptions, ROSState } = this.props;
-
+        const { category, ROSOptions } = this.props;
+        let { ROSState } = this.props;
+        if (this.isSelectMany()) {
+            ROSState = this.state.ROSState;
+        }
         return (
             <Segment className='ros-segments'>
                 <Header as='h3' className='header-titles'>
                     {this.breakWord(category)}
                 </Header>
-                <Divider />
+                {!this.isSelectMany() && <Divider />}
                 <Grid padded>
                     <AllNegativeButton handleClick={this.handleChange}>
                         {ROSOptions.map((option: string) => (
@@ -106,6 +166,7 @@ class ReviewOfSystemsCategory extends Component<Props> {
                                 <Grid.Column
                                     width={7}
                                     verticalAlign='middle'
+                                    textAlign='center'
                                     className='ros-symptom no-padding'
                                 >
                                     {option.replace('Δ', 'Changes in')}

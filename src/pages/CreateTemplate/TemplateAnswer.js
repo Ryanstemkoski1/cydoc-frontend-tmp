@@ -76,7 +76,7 @@ class TemplateAnswer extends Component {
         // Reset error message state when question type changes
         if (
             prevProps.type !== this.props.type &&
-            prevProps.type === questionTypes.CLICK_BOXES
+            prevProps.type === questionTypes.SELECTONE
         ) {
             this.setState({ showOptionError: false });
         }
@@ -675,7 +675,7 @@ class TemplateAnswer extends Component {
                     placeholders={placeholders}
                 />
             );
-        } else if (type === questionTypes.CLICK_BOXES) {
+        } else if (type === questionTypes.SELECTONE) {
             const options = [];
             for (let i = 0; i < nodes[qId].answerInfo.options.length; i++) {
                 options.push(

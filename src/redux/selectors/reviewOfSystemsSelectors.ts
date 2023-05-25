@@ -19,7 +19,9 @@ export function selectReviewOfSystemsOptions(
 ): string[] {
     if (!state.reviewOfSystems[category]) {
         throw new Error(
-            `Category ${category} does not exist in Review of Systems!`
+            `Category ${category} does not exist in Review of Systems! ${JSON.stringify(
+                state.reviewOfSystems
+            )}`
         );
     }
     return Object.keys(state.reviewOfSystems[category]);

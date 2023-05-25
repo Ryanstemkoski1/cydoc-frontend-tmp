@@ -114,7 +114,8 @@ class ImportQuestionForm extends Component {
         return this.state.graph.map((question, i) => {
             let text = question.text;
             if (
-                question.responseType === 'CLICK-BOXES' ||
+                // Create HPI Template has not been fully updated to leverage SELECTONE vs SELECTMANY in place of CLICK-BOXES
+                question.responseType === 'SELECTONE' ||
                 question.responseType === 'nan' ||
                 question.responseType.endsWith('POP')
             ) {
