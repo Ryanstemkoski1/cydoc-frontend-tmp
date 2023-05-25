@@ -1,5 +1,5 @@
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
+import Enzyme, { mount, shallow } from 'enzyme';
 import EnzymeAdapter from 'enzyme-adapter-react-16';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
@@ -8,7 +8,7 @@ import { FamilyOption } from 'constants/familyHistoryRelations';
 import FamilyHistoryContent from '../FamilyHistoryContent';
 import FamilyHistoryDropdown from '../FamilyHistoryDropdown';
 import { FAMILY_HISTORY_ACTION } from 'redux/actions/actionTypes';
-// import ConditionInput from 'components/tools/ConditionInput';
+import ConditionInput from 'components/tools/ConditionInput';
 import FamilyHistoryBlock from '../FamilyHistoryBlock';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
@@ -168,39 +168,58 @@ describe('FamilyHistoryContent', () => {
     //     expect(store.getActions()).toEqual(expectedAction);
     // });
 
-    // test('update condition', () => {
-    //     const store = mockStore({ familyHistory: initialState });
-    //     const props = {
-    //         seenConditions: {},
-    //         addSeenCondition: jest.fn,
-    //         isPreview: false,
-    //         condition: 'Type II Diabetes',
-    //         key: '0',
-    //         index: 'foo',
-    //         category: 'Family History',
-    //     };
-    //     const wrapper = mount(
-    //         <Provider store={store}>
-    //             <ConditionInput {...props} />
-    //         </Provider>
-    //     );
-    //     wrapper
-    //         .find('input[placeholder="Condition"]')
-    //         .first()
-    //         .simulate('change', {
-    //             target: { value: 'bar' },
-    //         });
-    //     const expectedAction = [
-    //         {
-    //             type: FAMILY_HISTORY_ACTION.UPDATE_CONDITION_NAME,
-    //             payload: {
-    //                 conditionIndex: 'foo',
-    //                 newCondition: 'bar',
-    //             },
-    //         },
-    //     ];
-    //     expect(store.getActions()).toEqual(expectedAction);
-    // });
+    test('update condition', () => {
+        const store = mockStore({ familyHistory: initialState });
+        const props = {
+            seenConditions: {},
+            addSeenCondition: jest.fn,
+            isPreview: true,
+            condition: 'Type II Diabetes',
+            key: '0',
+            index: 'foo',
+            category: 'Family History',
+        };
+        const wrapper = mount(
+            <Provider store={store}>
+                <ConditionInput {...props} />
+            </Provider>
+        );
+
+        wrapper
+            .find('input[placeholder="Condition"]')
+            .first()
+            .simulate('change', {
+                target: { value: 'bar' },
+            });
+        const expectedAction = [
+            {
+                type: FAMILY_HISTORY_ACTION.UPDATE_CONDITION_NAME,
+                payload: {
+                    conditionIndex: 'foo',
+                    newCondition: 'bar',
+                },
+            },
+        ];
+        expect(store.getActions()).toEqual(expectedAction);
+    });
+    test('render paragraph element in Condition Input', () => {
+        const store = mockStore({ familyHistory: initialState });
+        const props = {
+            seenConditions: {},
+            addSeenCondition: jest.fn,
+            isPreview: false,
+            condition: 'Type II Diabetes',
+            key: '0',
+            index: 'foo',
+            category: 'Family History',
+        };
+        const wrapper = mount(
+            <Provider store={store}>
+                <ConditionInput {...props} />
+            </Provider>
+        );
+        expect(wrapper.find('p').text()).toEqual(props.condition);
+    });
 
     test('toggle condition desktop', () => {
         const { wrapper, store } = connectStore();

@@ -385,27 +385,27 @@ describe('MedicalHistoryContent', () => {
         expect(store.getActions()).toEqual(expectedAction2);
     });
 
-    // test('changing condition dispatches correct action', () => {
-    //     const { wrapper, store } = connectStore();
-    //     const input = wrapper
-    //         .find(MedicalHistoryNoteRow)
-    //         .find(ConditionInput)
-    //         .find('input[placeholder="Condition"]')
-    //         .first();
-    //     input.simulate('change', {
-    //         target: { value: 'foobar' },
-    //     });
-    //     const expectedAction = [
-    //         {
-    //             type: MEDICAL_HISTORY_ACTION.UPDATE_CONDITION_NAME,
-    //             payload: {
-    //                 newName: 'foobar',
-    //                 index: 'foo',
-    //             },
-    //         },
-    //     ];
-    //     expect(store.getActions()).toEqual(expectedAction);
-    // });
+    test('changing condition dispatches correct action', () => {
+        const { wrapper, store } = connectStore();
+        const input = wrapper
+            .find(MedicalHistoryNoteRow)
+            .find(ConditionInput)
+            .find('input[placeholder="Condition"]')
+            .first();
+        input.simulate('change', {
+            target: { value: 'foobar' },
+        });
+        const expectedAction = [
+            {
+                type: MEDICAL_HISTORY_ACTION.UPDATE_CONDITION_NAME,
+                payload: {
+                    newName: 'foobar',
+                    index: 'foo',
+                },
+            },
+        ];
+        expect(store.getActions()).toEqual(expectedAction);
+    });
 
     test('deleting dispatches correct action', () => {
         const { wrapper, store } = connectStore();
