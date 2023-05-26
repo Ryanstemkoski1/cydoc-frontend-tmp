@@ -26,6 +26,7 @@ const initialValues: SignUpFormData = {
     lastName: '',
     newPassword: '',
     confirmNewPassword: '',
+    confirmPhoneNumber: '+1',
     phoneNumber: '+1',
 };
 

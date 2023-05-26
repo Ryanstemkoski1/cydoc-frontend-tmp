@@ -7,7 +7,18 @@ export default function useEnableNext(step: number) {
     const { isValid, dirty, errors, touched } =
         useFormikContext<ClinicianSignUpData>();
 
-    const step0Fields: (keyof ClinicianSignUpData)[] = ['confirmNewPassword'];
+    const step0Fields: (keyof ClinicianSignUpData)[] = [
+        'username',
+        'firstName',
+        'middleName',
+        'lastName',
+        'email',
+        'phoneNumber',
+        'newPassword',
+        'confirmNewPassword',
+        'confirmEmail',
+        'confirmPhoneNumber',
+    ];
     const noErrorsForStep = (fields: (keyof ClinicianSignUpData)[]) =>
         !fields.some((f) => Object.keys(errors).includes(f));
 
