@@ -799,7 +799,7 @@
             ]
         },
         {
-            "name": "Neuro Additional",
+            "name": "Neuro",
             "rows": [
                 {
                     "normalOrAbnormal": "normal",
