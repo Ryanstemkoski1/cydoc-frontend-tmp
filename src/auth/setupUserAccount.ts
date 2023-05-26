@@ -13,15 +13,13 @@ const setupUserAccount = async (
     attributes: UserAttributes | null, // null when new users sign up
     newUserInfo: ClinicianSignUpData
 ) => {
-    const { firstName, username, lastName, middleName, phoneNumber } =
-        newUserInfo;
+    const { firstName, username, lastName, phoneNumber } = newUserInfo;
     const { email } = attributes || newUserInfo;
     const user: ApiEditUserBase = {
         username,
         phoneNumber,
         email,
         firstName,
-        middleName,
         lastName,
     };
     // assign `role` to corresponding user fields before deleting the user fields
@@ -37,7 +35,7 @@ const setupUserAccount = async (
             attributes?.['custom:associatedManager'] || '',
         email: attributes?.email || newUserInfo.email,
         given_name: attributes?.given_name || newUserInfo.firstName,
-        middle_name: attributes?.middle_name || newUserInfo.middleName,
+        // middle_name: attributes?.middle_name || newUserInfo.middleName, // TODO: do we use middle name?
         family_name: attributes?.family_name || newUserInfo.lastName,
         phone_number: attributes?.phone_number || newUserInfo.phoneNumber,
     };

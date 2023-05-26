@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { UserInfoStep } from './UserInfoStep';
 import { PrivacyPolicyStep } from './PrivacyPolicyStep';
 import { AddPaymentStep } from './AddPaymentStep';
@@ -16,7 +16,7 @@ export default function SignUpSteps(props: StepProps) {
 
     switch (step) {
         case 0:
-            stepContent = <UserInfoStep {...props} />;
+            stepContent = <UserInfoStep />;
             break;
         case 1:
             stepContent = <AddPaymentStep />;

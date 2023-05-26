@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import './Account.css';
 import { Modal, Divider } from 'semantic-ui-react';
 import { Grid } from '@mui/material';
-import { StepProps } from './SignUpSteps';
 import SignUpTextInput from './SignUpTextInput';
 import { PasswordErrorMessages } from './PasswordErrorMessage';
+import { useFormikContext } from 'formik';
+import { SignUpFormData } from './SignUpForm';
 
-export function UserInfoStep({
-    closeModal,
-    goToPrevStep,
-    goToNextStep,
-}: StepProps) {
-    // //     // TODO: preserve logic
+export function UserInfoStep() {
+    const { values, validateField } = useFormikContext<SignUpFormData>();
+    const { email, phoneNumber } = values;
+
+    // re-run matching validation on confirmEmail after email changes
+    useEffect(() => {
+        validateField('confirmEmail');
+    }, [email, validateField]);
+
+    // re-run matching validation on confirmPhoneNumber after phoneNumber changes
+    useEffect(() => {
+        validateField('confirmPhoneNumber');
+    }, [phoneNumber, validateField]);
+
+    // TODO: preserve logic
     // const handleConfirmPhoneNumber = (e, { value }) => {
     //     const formattedPhoneNumber = formatPhoneNumber(value);
     //     setConfirmPhoneNumber(formattedPhoneNumber);
@@ -128,8 +138,6 @@ export function UserInfoStep({
                             fieldName='newPassword'
                             type='password'
                             placeholder='new password'
-                            // TODO: put in yup
-                            // onChange={handleNewPasswordChange}
                         />
                     </Grid>
                     <Grid item xs={12} md={6}>

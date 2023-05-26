@@ -1,13 +1,13 @@
 import { useFormikContext } from 'formik';
 import { log } from 'modules/logging';
 import { useMemo } from 'react';
-import { ClinicianSignUpData } from 'types/users';
+import { SignUpFormData } from './SignUpForm';
 
 export default function useEnableNext(step: number) {
     const { isValid, dirty, errors, touched } =
-        useFormikContext<ClinicianSignUpData>();
+        useFormikContext<SignUpFormData>();
 
-    const step0Fields: (keyof ClinicianSignUpData)[] = [
+    const step0Fields: (keyof SignUpFormData)[] = [
         'username',
         'firstName',
         'middleName',
@@ -19,18 +19,18 @@ export default function useEnableNext(step: number) {
         'confirmEmail',
         'confirmPhoneNumber',
     ];
-    const noErrorsForStep = (fields: (keyof ClinicianSignUpData)[]) =>
+    const noErrorsForStep = (fields: (keyof SignUpFormData)[]) =>
         !fields.some((f) => Object.keys(errors).includes(f));
 
-    const someFieldTouched = (fields: (keyof ClinicianSignUpData)[]) =>
+    const someFieldTouched = (fields: (keyof SignUpFormData)[]) =>
         fields.some((f) => touched[f]);
 
-    // console.log(
-    //     `enabling next 0, touched: ${someFieldTouched(
-    //         step0Fields
-    //     )} no errors: ${noErrorsForStep(step0Fields)}`,
-    //     { touched, errors }
-    // );
+    console.log(
+        `enabling next 0, touched: ${someFieldTouched(
+            step0Fields
+        )} no errors: ${noErrorsForStep(step0Fields)}`,
+        { touched, errors }
+    );
 
     return useMemo(() => {
         switch (step) {
