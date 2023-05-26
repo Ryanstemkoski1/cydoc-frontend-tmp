@@ -4,13 +4,30 @@ import { useMemo } from 'react';
 import { ClinicianSignUpData } from 'types/users';
 
 export default function useEnableNext(step: number) {
-    const { values, isValid, dirty } = useFormikContext<ClinicianSignUpData>();
-    const { confirmNewPassword } = values;
+    const { isValid, dirty, errors, touched } =
+        useFormikContext<ClinicianSignUpData>();
+
+    const step0Fields: (keyof ClinicianSignUpData)[] = ['confirmNewPassword'];
+    const noErrorsForStep = (fields: (keyof ClinicianSignUpData)[]) =>
+        !fields.some((f) => Object.keys(errors).includes(f));
+
+    const someFieldTouched = (fields: (keyof ClinicianSignUpData)[]) =>
+        fields.some((f) => touched[f]);
+
+    // console.log(
+    //     `enabling next 0, touched: ${someFieldTouched(
+    //         step0Fields
+    //     )} no errors: ${noErrorsForStep(step0Fields)}`,
+    //     { touched, errors }
+    // );
 
     return useMemo(() => {
         switch (step) {
             case 0:
-                return isValid && dirty;
+                return (
+                    someFieldTouched(step0Fields) &&
+                    noErrorsForStep(step0Fields)
+                );
 
             case 1:
                 return isValid && dirty;

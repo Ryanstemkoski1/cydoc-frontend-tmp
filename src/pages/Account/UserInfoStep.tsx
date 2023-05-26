@@ -1,171 +1,149 @@
 import React from 'react';
 
 import './Account.css';
-import { Button, Container, Form, Modal, Divider } from 'semantic-ui-react';
-import { useField, Field } from 'formik';
-import { Box, TextField } from '@mui/material';
+import { Modal, Divider } from 'semantic-ui-react';
+import { Grid } from '@mui/material';
 import { StepProps } from './SignUpSteps';
+import SignUpTextInput from './SignUpTextInput';
+import { PasswordErrorMessages } from './PasswordErrorMessage';
 
 export function UserInfoStep({
     closeModal,
     goToPrevStep,
     goToNextStep,
 }: StepProps) {
+    // //     // TODO: preserve logic
+    // const handleConfirmPhoneNumber = (e, { value }) => {
+    //     const formattedPhoneNumber = formatPhoneNumber(value);
+    //     setConfirmPhoneNumber(formattedPhoneNumber);
+    //     setPhoneNumberMatch(true);
+    // };
+
+    // function formatPhoneNumber(value) {
+    //     // if input value is falsy eg if the user deletes the input, then just return
+    //     if (!value) return value;
+    //     // clean the input for any non-digit values.
+    //     const phoneNumber = value.replace(/[^\d]/g, '');
+    //     // phoneNumberLength is used to know when to apply our formatting for the phone number
+    //     const phoneNumberLength = phoneNumber.length;
+    //     // we need to return the value with no formatting if its less then four digits
+    //     // this is to avoid weird behavior that occurs if you  format the area code to early
+    //     if (phoneNumberLength < 4) return phoneNumber;
+    //     // if phoneNumberLength is greater than 4 and less the 7 we start to return
+    //     // the formatted number
+    //     if (phoneNumberLength < 7) {
+    //         return '(' + phoneNumber.slice(0, 3) + ') ' + phoneNumber.slice(3);
+    //     }
+    //     // finally, if the phoneNumberLength is greater then seven, we add the last
+    //     // bit of formatting and return it.
+    //     return (
+    //         '(' +
+    //         phoneNumber.slice(0, 3) +
+    //         ') ' +
+    //         phoneNumber.slice(3, 6) +
+    //         '-' +
+    //         phoneNumber.slice(6, 10)
+    //     );
+    // }
+
     return (
         <>
             <Modal.Header>Sign Up</Modal.Header>
             <Modal.Content>
-                <Form>
-                    {/* <Form error={passwordErrorMessages().length > 0}> */}
-                    <Box>
-                        <Form.Group widths='equal'>
-                            <Form.Input
-                                required
-                                label='First Name'
-                                name='firstName'
-                                placeholder='Jane'
-                                type='input'
-                            />
-                            <Form.Input
-                                required
-                                label='Last Name'
-                                name='lastName'
-                                placeholder='Doe'
-                                type='input'
-                            />
-                        </Form.Group>
-                        <Form.Input
-                            required
-                            label='Username'
-                            name='username'
-                            placeholder='username'
-                            type='input'
-                            // TODO: check for dupes in yup
-                            // error={
-                            //     duplicateUsername && 'Username already exists'
-                            // }
-                            className='username-input-container'
+                {/* <Form error={passwordErrorMessages().length > 0}> */}
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                        <SignUpTextInput
+                            label='First Name'
+                            fieldName='firstName'
+                            placeholder='Jane'
                         />
-                        <Form.Group widths='equal'>
-                            <Form.Input
-                                required
-                                label='Email'
-                                name='email'
-                                placeholder='name@example.com'
-                                type='email'
-                                // width={6}
-                            />
-                            <Form.Input
-                                required
-                                label='Confirm Email'
-                                name='confirmEmail'
-                                placeholder='name@example.com'
-                                type='email'
-                                // TODO: put in yup
-                                // error={!emailsMatch}
-                                // width={6}
-                            />
-                        </Form.Group>
-                        {/* // TODO: put in yup
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <SignUpTextInput
+                            label='Last Name'
+                            fieldName='lastName'
+                            placeholder='Doe'
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <SignUpTextInput
+                            label='Username'
+                            fieldName='username'
+                            placeholder='username'
+                            // height: min-content;
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <SignUpTextInput
+                            label='Email'
+                            fieldName='email'
+                            placeholder='name@example.com'
+                            type='email'
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <SignUpTextInput
+                            label='Confirm Email'
+                            fieldName='confirmEmail'
+                            placeholder='name@example.com'
+                            type='email'
+                        />
+                    </Grid>
+
+                    {/* // TODO: put in yup
                         {!emailsMatch && (
                             <Container className='pass-match-error'>
                                 <Icon name='exclamation circle' />
                                 Emails do not match
                             </Container>
                         )} */}
-                        <Form.Group widths='equal'>
-                            <Form.Input
-                                name='phoneNumber'
-                                label='U.S. Phone Number'
-                                placeholder='XXXXXXXXXX'
-                                type='tel'
-                                required
-                                // TODO: put in yup
-                                // onChange={handlePhoneNumber}
-                            />
-                            <Form.Input
-                                name='confirmPhoneNumber'
-                                label='Confirm U.S. Phone Number'
-                                placeholder='XXXXXXXXXX'
-                                type='tel'
-                                required
-                                // TODO: put in yup
-                                // onChange={handleConfirmPhoneNumber}
-                            />
-                        </Form.Group>
-                        {/* // TODO: pull from yup
+                    <Grid item xs={12} md={6}>
+                        <SignUpTextInput
+                            fieldName='phoneNumber'
+                            label='U.S. Phone Number'
+                            placeholder='XXXXXXXXXX'
+                            type='tel'
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <SignUpTextInput
+                            fieldName='confirmPhoneNumber'
+                            label='Confirm U.S. Phone Number'
+                            placeholder='XXXXXXXXXX'
+                            type='tel'
+                        />
+                    </Grid>
+
+                    {/* // TODO: pull from yup
                         {!phoneNumberMatch && (
                             <Container className='pass-match-error'>
                                 <Icon name='exclamation circle' />
                                 Phone Number do not match.
                             </Container>
                         )} */}
-                        <Form.Group widths='equal'>
-                            <Form.Input
-                                label='New password'
-                                name='newPassword'
-                                type='password'
-                                variant='outlined'
-                                aria-label='New-Password'
-                                placeholder='new password'
-                                autoComplete='new-password'
-                                // TODO: put in yup
-                                // onChange={handleNewPasswordChange}
-                                required
-                            />
-                            <Form.Input
-                                label='Confirm new password'
-                                name='confirmNewPassword'
-                                type='password'
-                                variant='outlined'
-                                aria-label='New-Password'
-                                placeholder='confirm new password'
-                                autoComplete='new-password'
-                                required
-                                // TODO: put in yup
-                                // error={!passwordsMatch}
-                                // onChange={handleNewPasswordChange}
-                            />
-                        </Form.Group>
-                        {/* // TODO: pull from yup
-                        {!passwordsMatch && (
-                            <Container className='pass-match-error'>
-                                <Icon name='exclamation circle' />
-                                Passwords do not match.
-                            </Container>
-                        )}
-                        {showPasswordErrors &&
-                            passwordErrorMessages().length > 0 && (
-                                <Message
-                                    error
-                                    header='Password must satisfy the following requirements:'
-                                    list={passwordErrorMessages()}
-                                />
-                            )}
-                            */}
-                        <Divider />
-                    </Box>
-                    {/* <Container className='modal-button-container'>
-                        <Button
-                            basic
-                            color='teal'
-                            content='Cancel'
-                            type='button'
-                            onClick={closeModal}
+                    <Grid item xs={12} md={6}>
+                        <SignUpTextInput
+                            label='New password'
+                            fieldName='newPassword'
+                            type='password'
+                            placeholder='new password'
+                            // TODO: put in yup
+                            // onChange={handleNewPasswordChange}
                         />
-                        <Button
-                            color='teal'
-                            content='Prev'
-                            type='button'
-                            onClick={goToPrevStep}
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <SignUpTextInput
+                            label='Confirm new password'
+                            fieldName='confirmNewPassword'
+                            type='password'
+                            placeholder='confirm new password'
                         />
-                        <Button
-                            color='teal'
-                            content='Next'
-                            onClick={goToNextStep}
-                        />
-                    </Container> */}
-                </Form>
+                    </Grid>
+
+                    <PasswordErrorMessages />
+                    <Divider />
+                </Grid>
             </Modal.Content>
         </>
     );
