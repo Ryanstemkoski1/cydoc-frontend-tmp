@@ -10,7 +10,6 @@ export default function useEnableNext(step: number) {
     const step0Fields: (keyof SignUpFormData)[] = [
         'username',
         'firstName',
-        'middleName',
         'lastName',
         'email',
         'phoneNumber',
