@@ -46,11 +46,25 @@ const validationSchema = Yup.object<ClinicianSignUpData>({
     phoneNumber: Yup.string()
         .label('phoneNumber')
         .required('Phone number is required')
-        .min(1, 'Phone number is required'),
+        .min(9, 'Phone number is required'),
     confirmPhoneNumber: Yup.string()
-        .label('phoneNumber')
+        .label('confirmPhoneNumber')
         .required('Phone number is required')
-        .min(1, 'Phone number is required'),
+        .min(9, 'Phone number is required')
+        .test({
+            name: 'phonenumber-match',
+            test: (value, context) => {
+                const existingValue = context.parent as ClinicianSignUpData;
+                invariant(
+                    existingValue,
+                    'invalid yup phone number object shape'
+                );
+
+                return existingValue?.phoneNumber === value;
+            },
+            message: 'Phone numbers must match',
+            exclusive: false,
+        }),
     newPassword: Yup.string()
         .label('newPassword')
         .required('password is required')

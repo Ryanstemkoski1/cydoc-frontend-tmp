@@ -19,7 +19,6 @@ export interface DynamoDbUser {
     middleName: string;
     lastName: string;
     email: string;
-    countryCode: string;
     phoneNumber: string;
     role: 'manager' | 'clinician';
     'custom:UUID'?: string;
@@ -37,6 +36,8 @@ export interface Doctor extends DynamoDbUser {
 export interface ClinicianSignUpData extends DynamoDbUser {
     newPassword: string;
     confirmNewPassword: string;
+    confirmEmail: string;
+    confirmPhoneNumber: string;
 }
 
 export interface UserAttributes {
