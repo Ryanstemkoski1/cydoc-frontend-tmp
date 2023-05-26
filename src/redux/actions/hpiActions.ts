@@ -97,23 +97,47 @@ export function bodyLocationHandleToggle(
     };
 }
 
-export interface MultipleChoiceHandleClickAction {
-    type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK;
+export interface SingleMultipleChoiceHandleClickAction {
+    type: HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK;
     payload: {
         medId: string;
         name: string;
     };
 }
 
-export function multipleChoiceHandleClick(
+export function singleMultipleChoiceHandleClick(
     medId: string,
     name: string
-): MultipleChoiceHandleClickAction {
+): SingleMultipleChoiceHandleClickAction {
     return {
-        type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
+        type: HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK,
         payload: {
             medId,
             name,
+        },
+    };
+}
+
+export interface SelectManyHandleClickAction {
+    type: HPI_ACTION.SELECT_MANY_HANDLE_CLICK;
+    payload: {
+        medId: string;
+        option: string;
+        yesOrNo: YesNoResponse;
+    };
+}
+
+export function selectManyHandleClick(
+    medId: string,
+    option: string,
+    yesOrNo: YesNoResponse
+): SelectManyHandleClickAction {
+    return {
+        type: HPI_ACTION.SELECT_MANY_HANDLE_CLICK,
+        payload: {
+            medId,
+            option,
+            yesOrNo,
         },
     };
 }
@@ -436,7 +460,8 @@ export type HpiActionTypes =
     | ProcessKnowledgeGraphAction
     | BodyLocationResponseAction
     | BodyLocationHandleToggleAction
-    | MultipleChoiceHandleClickAction
+    | SingleMultipleChoiceHandleClickAction
+    | SelectManyHandleClickAction
     | HandleInputChangeAction
     | ListTextHandleChangeAction
     | RemoveListInputAction

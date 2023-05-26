@@ -12,8 +12,8 @@ const connectRealStore = () => {
     const store = createCurrentNoteStore();
     // const node = {
     //     ...testNode,
-    //     responseType: 'CLICK-BOXES',
-    //     response: ExpectedResponseDict.CLICK_BOXES,
+    //     responseType: 'SELECTONE',
+    //     response: ExpectedResponseDict.SELECTONE,
     // };
     // // TODO: Use processKnowledgeGraph as addNode was replaced
     // store.dispatch(addNode('node', node, testEdges));

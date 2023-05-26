@@ -25,6 +25,8 @@ import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
 import '../hpi/knowledgegraph/src/css/Button.css';
 import { YesNoResponse } from 'constants/enums';
+import { MedicationsState } from 'redux/reducers/medicationsReducer';
+import { HpiState } from 'redux/reducers/hpiReducer';
 
 interface OwnProps {
     mobile: boolean;
@@ -46,6 +48,7 @@ interface State {
     windowWidth: number;
     windowHeight: number;
     currMeds: string[];
+    hpi: HpiState;
 }
 
 export enum DropdownType {
@@ -70,6 +73,7 @@ export class MedicationsContent extends Component<Props, State> {
                     this.props.medications[med].isCurrentlyTaking ==
                         YesNoResponse.Yes
             ),
+            hpi: this.props.hpi,
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
@@ -81,6 +85,16 @@ export class MedicationsContent extends Component<Props, State> {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateDimensions);
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        if (prevProps.hpi !== this.props.hpi) {
+            this.setState({ hpi: this.props.hpi });
+        }
+    }
+
+    getDerivedStateFromProps(nextProps: Props) {
+        this.setState({ hpi: nextProps.hpi });
     }
 
     updateDimensions() {
@@ -114,9 +128,12 @@ export class MedicationsContent extends Component<Props, State> {
         } = this.props;
         const newKey = v4();
         addMedsPopOption(newKey, '');
-        if (responseType == ResponseTypes.MEDS_BLANK && node)
+        if (responseType == ResponseTypes.MEDS_BLANK && node) {
             blankQuestionChange(node, newKey);
-        else this.setState({ currMeds: [...this.state.currMeds, newKey] });
+            this.forceUpdate();
+            /* eslint-disable-next-line no-console*/
+            console.log(this.props.medications);
+        } else this.setState({ currMeds: [...this.state.currMeds, newKey] });
     };
 
     makeHeader() {
@@ -297,6 +314,7 @@ export class MedicationsContent extends Component<Props, State> {
                             onClick={this.addRow}
                             ariaLabel='Add-Medication-Row-Button'
                             name='medication'
+                            key={JSON.stringify(this.props.hpi)}
                         />
                     )}
             </>

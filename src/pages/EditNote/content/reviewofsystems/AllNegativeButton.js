@@ -17,7 +17,7 @@ const AllNegativeButton = (props) => {
         <Fragment>
             <Button
                 toggle
-                content='Select All Negative'
+                content='Select All No'
                 active={allNegative}
                 onClick={() =>
                     React.Children.map(children, (child) => {

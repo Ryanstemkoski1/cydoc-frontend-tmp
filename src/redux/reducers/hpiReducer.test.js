@@ -196,13 +196,13 @@ describe('hpi reducers', () => {
                 false
             );
         });
-        it('handles multiple choice click', () => {
-            nextState.nodes[medId].response = ExpectedResponseDict.CLICK_BOXES;
-            nextState.nodes[medId].responseType = 'CLICK-BOXES';
+        it('handles multiple choice click, but only one selectable', () => {
+            nextState.nodes[medId].response = ExpectedResponseDict.SELECTONE;
+            nextState.nodes[medId].responseType = 'SELECTONE';
             [...Array(10).keys()].map((i) => {
                 payload.name = 'foo' + i.toString();
                 nextState = hpiReducer(nextState, {
-                    type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
+                    type: HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK,
                     payload,
                 });
                 expect(nextState.nodes[medId].response).toHaveProperty(
@@ -211,18 +211,15 @@ describe('hpi reducers', () => {
                 expect(nextState.nodes[medId].response[payload.name]).toEqual(
                     true
                 );
-            });
-            expect(nextState).toMatchSnapshot();
-            // opposite direction
-            [...Array(10).keys()].map((i) => {
-                payload.name = 'foo' + (9 - i).toString();
-                nextState = hpiReducer(nextState, {
-                    type: HPI_ACTION.MULTIPLE_CHOICE_HANDLE_CLICK,
-                    payload,
-                });
-                expect(nextState.nodes[medId].response[payload.name]).toEqual(
-                    false
-                );
+                let trueCount = 0;
+                // make sure that for any given click, only one is selected
+                for (let name in nextState.nodes[medId].response) {
+                    if (nextState.nodes[medId].response[name]) {
+                        trueCount++;
+                    }
+                }
+                expect(trueCount).toEqual(1);
+                expect(nextState).toMatchSnapshot();
             });
         });
         it('handles input change', () => {
