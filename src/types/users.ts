@@ -1,11 +1,6 @@
 export type ApiEditUserBase = Pick<
     DynamoDbUser,
-    | 'username'
-    | 'phoneNumber'
-    | 'email'
-    | 'firstName'
-    | 'middleName'
-    | 'lastName'
+    'username' | 'phoneNumber' | 'email' | 'firstName' | 'lastName'
 >;
 
 export interface ApiEditManager extends ApiEditUserBase {
@@ -16,7 +11,6 @@ export interface ApiEditManager extends ApiEditUserBase {
 export interface DynamoDbUser {
     username: string;
     firstName: string;
-    middleName: string;
     lastName: string;
     email: string;
     phoneNumber: string;
@@ -45,7 +39,7 @@ export interface UserAttributes {
     'custom:associatedManager': string;
     email: string;
     given_name: string;
-    middle_name: string;
+    // middle_name: string;
     family_name: string;
     phone_number: string;
 }
