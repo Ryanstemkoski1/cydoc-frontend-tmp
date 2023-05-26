@@ -69,7 +69,7 @@ export class DiseaseForm extends React.Component<Props> {
         const { hpi, CCInfo } = this.props,
             category = Object.keys(this.props.CCInfo)[0];
         return Object.values(CCInfo[category])[0] in hpi.graph ? (
-            <div> {this.traverseChildNodes()} </div>
+            <div>{this.traverseChildNodes()} </div>
         ) : (
             <Loader active> </Loader>
         );

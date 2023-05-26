@@ -173,7 +173,7 @@ describe('FamilyHistoryContent', () => {
         const props = {
             seenConditions: {},
             addSeenCondition: jest.fn,
-            isPreview: false,
+            isPreview: true,
             condition: 'Type II Diabetes',
             key: '0',
             index: 'foo',
@@ -184,6 +184,7 @@ describe('FamilyHistoryContent', () => {
                 <ConditionInput {...props} />
             </Provider>
         );
+
         wrapper
             .find('input[placeholder="Condition"]')
             .first()
@@ -200,6 +201,24 @@ describe('FamilyHistoryContent', () => {
             },
         ];
         expect(store.getActions()).toEqual(expectedAction);
+    });
+    test('render paragraph element in Condition Input', () => {
+        const store = mockStore({ familyHistory: initialState });
+        const props = {
+            seenConditions: {},
+            addSeenCondition: jest.fn,
+            isPreview: false,
+            condition: 'Type II Diabetes',
+            key: '0',
+            index: 'foo',
+            category: 'Family History',
+        };
+        const wrapper = mount(
+            <Provider store={store}>
+                <ConditionInput {...props} />
+            </Provider>
+        );
+        expect(wrapper.find('p').text()).toEqual(props.condition);
     });
 
     test('toggle condition desktop', () => {

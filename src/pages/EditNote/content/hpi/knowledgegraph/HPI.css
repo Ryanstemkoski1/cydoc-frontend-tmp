@@ -139,13 +139,28 @@
 
 .hpi-text-drop {
     position: fixed;
-    bottom: 8%;
-    right: 20px;
-    background: #006b87;
+    bottom: 80px;
+    left: 50%;
+    transform: translate(-50%, 0px);
+    background: white;
     padding: 20px;
     border-radius: 20px;
     z-index: 100;
-    opacity: 0.8;
+    opacity: 0.9;
+    width: calc(100% - 30px);
+    box-shadow: 0 0 12px rgb(0 0 0 / 30%);
+}
+.hpi-text-drop-folded {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    z-index: 100;
+    opacity: 0.9;
+    width: auto;
+    box-shadow: 0 0 12px rgb(0 0 0 / 30%);
 }
 
 .white-important {
@@ -155,6 +170,22 @@
 .misc-box {
     height: 10vh !important;
 }
+@media only screen and (min-width: 768px) and (max-width: 991px){
+    .hpi-text-drop {
+        width: 723px;
+    }
+}
+@media only screen and (min-width: 992px) and (max-width: 1199px){
+    .hpi-text-drop {
+        width: 933px;
+    }
+}
+@media only screen and (min-width: 1200px){
+    .hpi-text-drop {
+        width: 1127px;
+    }
+}
+
 
 @media screen and (max-width: 1400px) {
 

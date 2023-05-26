@@ -253,6 +253,9 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         const standardMedicalHistory = this.standardizeMedicalHistory(
             this.props.medicalHistory
         );
+        const inputStyle = {
+            maxWidth: '100%',
+        };
         return mobile
             ? conditions.map((condition: string, index: number) => {
                   if (isPreview) {
@@ -354,6 +357,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                                       standardizeName={
                                           this.standardizeMedicalName
                                       }
+                                      style={inputStyle}
                                   />
                               }
                           />

@@ -61,6 +61,15 @@ h5.ui.header{
     margin-bottom: 10px;
 }
 
+.selectable-temparature > .ui >.text  {
+    margin: 0;
+    overflow: hidden;
+    color: rgba(0,0,0,.6);
+}
+body ::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
 @media screen and (max-width: 700px){
     .ui.container.active-tab-container{
         margin-top: 30px;
