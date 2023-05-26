@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Account.css';
-import { Modal, Loader } from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
 import { Form, FormikProvider } from 'formik';
 
 import SignUpSteps from './SignUpSteps';
@@ -12,6 +12,7 @@ import invariant from 'tiny-invariant';
 
 export interface SignUpFormData extends ClinicianSignUpData {
     isPrivacyChecked: boolean;
+    paymentMethod?: string | any; // TODO: discuss moving this to manager's table?
 }
 // TODO: pull from session
 const initialValues: SignUpFormData = {
@@ -28,6 +29,7 @@ const initialValues: SignUpFormData = {
     confirmNewPassword: '',
     confirmPhoneNumber: '+1',
     phoneNumber: '+1',
+    paymentMethod: '',
 };
 
 interface Props {
@@ -35,20 +37,11 @@ interface Props {
     cognitoUser: CognitoUser | null;
 }
 export default function SignUpForm({
-    // userUsername = '',
-    // userRole = '',
-    // userEmail = '',
-    // isInvited = false,
-    // userFirstName = '',
-    // userLastName = '',
-    // onInviteSubmit = {},
     sessionUserAttributes,
     cognitoUser,
 }: Props) {
-    // const [formData, setFormData] = useState({});
     const [wizardPage, setWizardPage] = useState(0);
     const [modalOpen, setModalOpen] = useState(true);
-    const [loading, setLoading] = useState(false);
 
     const { form } = useSignUpFormController(
         initialValues,
@@ -56,8 +49,6 @@ export default function SignUpForm({
         cognitoUser
     );
 
-    // const stripe = useStripe();
-    // const elements = useElements();
     const phoneNumberRegex = new RegExp(
         '^[+]?[(]?[0-9]{3}[)]?[" "][-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'
     );
@@ -66,17 +57,11 @@ export default function SignUpForm({
     const [email, setEmail] = useState('userEmail');
     const [confirmEmail, setConfirmEmail] = useState('userEmail');
 
-    const [firstName, setFirstName] = useState('userFirstName');
-    const [lastName, setLastName] = useState('userLastName');
-    const [duplicateUsername, setDuplicateUsername] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState('');
     const [confirmPhoneNumber, setConfirmPhoneNumber] = useState('');
     const [phoneNumberMatch, setPhoneNumberMatch] = useState(true);
     const [newPassword, setNewPassword] = useState('');
     const [confirmNewPassword, setConfirmNewPassword] = useState('');
-    const [passwordsMatch, setPasswordsMatch] = useState(true);
-    const [emailsMatch, setEmailsMatch] = useState(true);
-    const [paymentMethod, setPaymentMethod] = useState(null);
 
     // handles Terms of Use - Privacy policy
     const [isTermsChecked, setIsTermsChecked] = useState(false);
@@ -123,8 +108,8 @@ export default function SignUpForm({
             if (
                 username === '' ||
                 newPassword === '' ||
-                firstName === '' ||
-                lastName === '' ||
+                // firstName === '' ||
+                // lastName === '' ||
                 phoneNumber === '' ||
                 confirmEmail === ''
             ) {
@@ -144,8 +129,8 @@ export default function SignUpForm({
                 setPhoneNumberMatch(false);
                 return false;
             }
-            setEmailsMatch(email === confirmEmail);
-            setPasswordsMatch(newPassword === confirmNewPassword);
+            // setEmailsMatch(email === confirmEmail);
+            // setPasswordsMatch(newPassword === confirmNewPassword);
 
             // if (
             //     newPassword !== confirmNewPassword ||
@@ -222,13 +207,9 @@ export default function SignUpForm({
                     onOpen={() => setModalOpen(true)}
                     open={modalOpen}
                 >
-                    {loading ? (
-                        <Loader active inline='centered' />
-                    ) : (
-                        <>
-                            <SignUpSteps
-                                step={wizardPage}
-                                goToNextStep={onNextClick}
+                    <SignUpSteps
+                        step={wizardPage}
+                        goToNextStep={onNextClick}
                                 closeModal={() => {
                                     setModalOpen(false);
                                 }}
@@ -245,11 +226,9 @@ export default function SignUpForm({
                                     // TODO: use yup for validation
                                     // if (isSubmitValid(wizardPage)) {
                                     onNextClick();
-                                    // }
-                                }}
-                            />
-                        </>
-                    )}
+                            // }
+                        }}
+                    />
                 </Modal>
             </Form>
         </FormikProvider>

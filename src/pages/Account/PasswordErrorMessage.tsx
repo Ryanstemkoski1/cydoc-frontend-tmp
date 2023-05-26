@@ -19,19 +19,20 @@ import {
 import { Stack } from '@mui/system';
 
 export function PasswordErrorMessages() {
-    const [{ value: password }, passwordMeta] = useField<string>('newPassword');
+    const [{ value: newPassword }, newPasswordMeta] =
+        useField<string>('newPassword');
     const [{ value: confirmPassword }, confirmPasswordMeta] =
         useField<string>('confirmNewPassword');
     const [{ value: role }, ,] = useField<SignUpFormData['role']>('role');
 
     const passwordsHaveBeenTouched = useMemo(
-        () => passwordMeta.touched && confirmPasswordMeta.touched,
-        [passwordMeta.touched, confirmPasswordMeta.touched]
+        () => newPasswordMeta.touched && confirmPasswordMeta.touched,
+        [newPasswordMeta.touched, confirmPasswordMeta.touched]
     );
 
     const showPasswordMatchError = useMemo(
-        () => passwordsHaveBeenTouched && password !== confirmPassword,
-        [passwordsHaveBeenTouched, password, confirmPassword]
+        () => passwordsHaveBeenTouched && newPassword !== confirmPassword,
+        [passwordsHaveBeenTouched, newPassword, confirmPassword]
     );
 
     const [passwordReqs, setPasswordReqs] = useState<PasswordErrorInfos>({
@@ -43,8 +44,8 @@ export function PasswordErrorMessages() {
     });
 
     const showPasswordRequirementsErrors = useMemo(
-        () => passwordsHaveBeenTouched && havePasswordError(passwordReqs),
-        [passwordsHaveBeenTouched, passwordReqs]
+        () => newPasswordMeta.touched && havePasswordError(passwordReqs),
+        [newPasswordMeta.touched, passwordReqs]
     );
 
     const passwordErrorMessages = useMemo(() => {
@@ -65,15 +66,10 @@ export function PasswordErrorMessages() {
     }, [passwordReqs, role]);
 
     useEffect(() => {
-        if (password.length && !passwordIsValid(password)) {
-            setPasswordReqs(getPasswordErrors(password));
-        } else if (confirmPassword?.length) {
-            setPasswordReqs(getPasswordErrors(confirmPassword));
-        } else {
-            // if the passwords don't match and one is valid, don't show enumerated error list
-            setPasswordReqs(getPasswordErrors(password));
+        if (newPasswordMeta.touched) {
+            setPasswordReqs(getPasswordErrors(newPassword));
         }
-    }, [password, confirmPassword]);
+    }, [newPassword, newPasswordMeta.touched]);
 
     return (
         <Stack sx={{ marginTop: '2rem' }}>

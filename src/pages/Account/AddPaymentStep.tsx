@@ -1,60 +1,81 @@
 import React, { useEffect, useState } from 'react';
 
 import './Account.css';
-import {
-    Button,
-    Container,
-    Form,
-    Modal,
-    Header,
-    Divider,
-    Loader,
-} from 'semantic-ui-react';
+import { Container, Modal, Header, Loader } from 'semantic-ui-react';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import { SignUpFormData } from './SignUpForm';
+import { useField } from 'formik';
+import { log } from 'modules/logging';
+import { stringFromError } from 'modules/error-utils';
 
 export function AddPaymentStep() {
     const stripe = useStripe();
     const elements = useElements();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState<any>();
+    const [{ value: firstName }] =
+        useField<SignUpFormData['firstName']>('firstName');
+    const [{ value: lastName }] =
+        useField<SignUpFormData['lastName']>('lastName');
+    const [, , paymentMethodHelpers] =
+        useField<SignUpFormData['paymentMethod']>('paymentMethod');
 
-    useEffect(() => {
-        const createStripePaymentMethod = async () => {
-            if (elements && stripe) {
+    // TODO: add onSubmit functionality
+    const createStripePaymentMethod = async () => {
+        if (elements && stripe && !loading && !paymentMethod) {
+            setLoading(true);
+            try {
                 const card = elements.getElement(CardElement);
                 if (card == null) {
                     return;
                 }
-                // TODO: put stripe lo
                 const { error, paymentMethod } =
                     await stripe.createPaymentMethod({
                         type: 'card',
                         card,
                         billing_details: {
-                            // TODO: use useField to get these values
-                            // name: `${firstName} ${lastName}`,
+                            name: `${firstName} ${lastName}`,
                         },
                     });
+                // .then((res) => {
+                //     console.log(`22got payment method`, res);
+                // });
 
                 if (error) {
-                    // alert('Card Error', error);
+                    log(`stripe setup error ${stringFromError(error)}`, error);
+                    paymentMethodHelpers.setError(
+                        `Try refreshing \nStripe error handled: ${stringFromError(
+                            error
+                        )}`
+                    );
                 }
-                // TODO: use useField to get these values
-                // setPaymentMethod(paymentMethod);
-                setLoading(true);
-            } else {
-                // TODO: log to sentry
+                if (paymentMethod) {
+                    console.log(`got payment method`, paymentMethod);
+
+                    setPaymentMethod(paymentMethod);
+                }
+            } catch (e) {
+                log(`[createStripePaymentMethod] ${stringFromError(e)}`, {
+                    e,
+                });
+                paymentMethodHelpers.setError(
+                    `Try refreshing \nStripe error encountered: ${stringFromError(
+                        e
+                    )}`
+                );
+            } finally {
+                setLoading(false);
             }
-        };
+        }
+    };
 
-        createStripePaymentMethod();
-    }, [elements, stripe]);
-
-    // TODO: show loading state
     return (
         <>
             <Modal.Header>Free Trial</Modal.Header>
             <Modal.Content>
-                {/* <Form error={passwordErrorMessages().length > 0}>
+                {loading ? (
+                    <Loader active inline='centered' />
+                ) : (
                     <Container>
                         <Header as='h5' textAlign='center' content='' />
                         <div id='signup-modal-div'>
@@ -62,10 +83,10 @@ export function AddPaymentStep() {
                                 style={{ textAlign: 'left' }}
                                 id='signup-modal-text'
                             >
-                                You have been given a one-month free trial. Your
-                                card will not be billed until the second month.
-                                The subscription is $100/clinician/month. You
-                                may cancel anytime.
+                                You have been given a 90 day free trial. Your
+                                card will not be billed until the 4th month. The
+                                subscription is $100/clinician/month. You may
+                                cancel anytime.
                             </p>
                         </div>
                         <div
@@ -75,43 +96,23 @@ export function AddPaymentStep() {
                                 marginBottom: '15px',
                                 border: '1px solid grey',
                                 borderRadius: '4px',
-                                height: '40px',
+                                height: '400px',
                                 padding: '10px 10px 0 10px',
                             }}
                         >
-                            <CardElement id='card-element' />
+                            <CardElement
+                                id='card-element'
+                                options={{
+                                    style: {
+                                        base: {
+                                            backgroundColor: 'white',
+                                        },
+                                    },
+                                }}
+                            />
                         </div>
                     </Container>
-                    <Container className='modal-button-container'>
-                        <Button
-                            basic
-                            color='teal'
-                            content='Cancel'
-                            type='button'
-                            onClick={() => {
-                                setIsInviteDoctorOpen(false);
-                                reloadModal();
-                            }}
-                        />
-                        <Button
-                            color='teal'
-                            content='Prev'
-                            type='button'
-                            onClick={(e) => {
-                                onPrevClick(e);
-                            }}
-                        />
-                        <Button
-                            color='teal'
-                            content='Next'
-                            onClick={(e) => {
-                                if (isSubmitValid(wizardPage)) {
-                                    onNextClick(e);
-                                }
-                            }}
-                        />
-                    </Container>
-                </Form> */}
+                )}
             </Modal.Content>
         </>
     );
