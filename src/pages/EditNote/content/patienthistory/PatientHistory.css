@@ -175,3 +175,8 @@
   }
 }
 
+@media (min-width: 600px){
+  .white-card {
+      height: calc(100vh - 360px);
+  }
+}
