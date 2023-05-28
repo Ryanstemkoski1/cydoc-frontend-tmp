@@ -161,7 +161,7 @@
     color: white;
   }
   
-  @media screen and (max-width: 1400px) {
+  @media screen and (max-width: 600px) {
     .ui.icon.button.plan-previous-button, .ui.icon.button.plan-next-button {
       display: none;
     }

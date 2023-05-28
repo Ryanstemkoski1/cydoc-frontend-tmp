@@ -39,7 +39,7 @@
     padding: 20px 40px;
   }
   
-  @media screen and (max-width: 1400px) {
+  @media screen and (max-width: 600px) {
     .ui.icon.button.note-previous-button {
         display: none;
     }

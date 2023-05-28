@@ -117,7 +117,7 @@ export default class PatientHistoryContent extends Component {
                         }
                         value={index == 0 ? undefined : index - 1}
                     >
-                        Previous
+                        Prev
                         <Icon name='arrow left' />
                     </Button>
                     <Button

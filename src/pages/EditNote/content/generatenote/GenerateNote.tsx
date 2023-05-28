@@ -345,7 +345,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 onClick={previousFormClick}
                 className='note-previous-button'
             >
-                Previous
+                Prev
                 <Icon name='arrow left' />
             </Button>
             {/* mobile */}

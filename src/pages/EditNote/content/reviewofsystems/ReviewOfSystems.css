@@ -94,7 +94,7 @@
     width: 100%;
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 600px) {
     .ui.icon.button.ros-previous-button,
     .ui.icon.button.ros-next-button {
         display: none;

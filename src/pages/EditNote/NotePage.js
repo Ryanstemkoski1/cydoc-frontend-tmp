@@ -258,7 +258,7 @@ class NotePage extends Component {
                             onClick={this.backHPITab}
                             className='hpi-previous-button'
                         >
-                            Previous
+                            Prev
                             <Icon name='arrow left' />
                         </Button>
                         <Button

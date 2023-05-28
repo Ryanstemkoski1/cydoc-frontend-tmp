@@ -390,7 +390,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         onClick={this.back}
                                         className='hpi-previous-button'
                                     >
-                                        Previous
+                                        Prev
                                         <Icon name='arrow left' />
                                     </Button>
 
@@ -464,7 +464,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         onClick={this.back}
                                                         className='hpi-previous-button'
                                                     >
-                                                        Previous Form
+                                                        Prev
                                                         <Icon name='arrow left' />
                                                     </Button>
                                                     <Button

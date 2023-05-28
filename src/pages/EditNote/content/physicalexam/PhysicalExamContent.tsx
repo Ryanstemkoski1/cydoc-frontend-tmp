@@ -357,7 +357,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                     onClick={this.props.previousFormClick}
                     className='physical-previous-button'
                 >
-                    Previous
+                    Prev
                     <Icon name='arrow left' />
                 </Button>
 

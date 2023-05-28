@@ -329,7 +329,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             className='hpi-previous-button'
                             onClick={this.onPrevClick}
                         >
-                            Previous
+                            Prev
                             <Icon name='arrow left' />
                         </Button>
                         <Button
