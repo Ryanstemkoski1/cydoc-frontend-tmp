@@ -145,7 +145,7 @@
   color: white;
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 600px) {
 
   .ui.icon.button.patient-previous-button, .ui.icon.button.patient-next-button {
     display: none;
@@ -158,7 +158,7 @@
   .ui.icon.button.small-patient-previous-button {
     left: 5px;
   }
-
+  
   .ui.icon.button.small-patient-next-button {
     right: 5px;
   }

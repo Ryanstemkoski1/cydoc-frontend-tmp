@@ -232,6 +232,7 @@ export default class PatientHistoryContent extends Component {
                         >
                             {gridButtons}
                         </Grid>
+
                         <Segment>{tabToDisplay}</Segment>
                         {buttons[activeIndex]}
                     </Container>
