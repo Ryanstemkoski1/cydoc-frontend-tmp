@@ -194,8 +194,9 @@ export class MedicationsContent extends Component<Props, State> {
             if (responseType == ResponseTypes.MEDS_BLANK && node) {
                 const response = hpi.nodes[node].response as string[];
                 medIndices = response.map((key) =>
-                    medsEntries.findIndex((medItem) => medItem[0] == key)
+                    medsEntries?.findIndex((medItem) => medItem[0] == key)
                 );
+                medIndices = medIndices.filter((data) => data != -1);
             }
             for (let i = 0; i < medIndices.length; i++) {
                 /*
@@ -208,7 +209,8 @@ export class MedicationsContent extends Component<Props, State> {
                 as no while the user is looking at the page.
                 */
                 if (
-                    medIndices[i] &&
+                    medIndices[i] !== undefined &&
+                    medIndices[i] !== null &&
                     (responseType ||
                         this.state.currMeds.includes(
                             medsEntries[medIndices[i]][0]

@@ -52,6 +52,9 @@ const OptimizedDropdown = (props) => {
 
     const flatOptions = useMemo(() => Object.values(options), [options]);
 
+    const sortedOptions = flatOptions.sort((a, b) =>
+        a?.label?.length > b?.label?.length ? 1 : -1
+    );
     // Format onChange so that it has access to additional props similarly to
     // Semantic UI's Dropdowns
     const handleOnChange = (option) => {
@@ -75,7 +78,7 @@ const OptimizedDropdown = (props) => {
         if (action.action !== 'input-blur' && action.action !== 'menu-close') {
             setVal(value);
         }
-        if (value.length > 4) {
+        if (value.length > 2) {
             setShow(true);
         } else {
             setShow(false);
@@ -123,7 +126,7 @@ const OptimizedDropdown = (props) => {
             {...otherProps}
             inputValue={{ val }.val}
             value={value !== '' && value !== [] && parsedValue} // forces placeholder to show when value is empty string
-            options={{ show }.show ? flatOptions : null}
+            options={{ show }.show ? sortedOptions : null}
             noOptionsMessage={() => null}
             isClearable={clearable}
             isLoading={loading}
@@ -134,6 +137,7 @@ const OptimizedDropdown = (props) => {
             onChange={handleOnChange}
             onInputChange={handleInputChange}
             onMenuClose={handleMenuClose}
+            formatCreateLabel={(userInput) => `${userInput}`}
         />
     );
 };

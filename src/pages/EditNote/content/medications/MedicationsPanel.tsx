@@ -219,7 +219,7 @@ class MedicationsPanel extends Component<Props, State> {
                         : (medicationEntry as MedicationsItem).drugName
                 }
             >
-                <div id='width-full'>
+                <div id='width-full' className='full-width'>
                     {!isPreview && (
                         <Dropdown
                             fluid
@@ -771,7 +771,7 @@ class MedicationsPanel extends Component<Props, State> {
                                     );
                                 }}
                                 aria-label='delete-medication'
-                                className='hpi-ph-button'
+                                className='hpi-ph-button button-space'
                             />
                         </Table.Row>
                     </Table.Body>
