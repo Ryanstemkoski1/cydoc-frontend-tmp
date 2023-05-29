@@ -40,7 +40,6 @@ import {
 import ToggleButton from 'components/tools/ToggleButton';
 import axios from 'axios';
 import { GraphData, NodeInterface } from 'constants/hpiEnums';
-import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import {
     processKnowledgeGraph,
     ProcessKnowledgeGraphAction,
@@ -57,6 +56,8 @@ import {
 } from 'redux/actions/displayedNodesActions';
 import { graphClientURL } from 'constants/api.js';
 import MiscBox from './src/components/MiscBox';
+import { userSurveyState } from 'redux/reducers/userViewReducer';
+import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
 
 interface HPIContentProps {
     step: number;
@@ -173,7 +174,12 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
     render() {
         const { windowWidth } = this.state;
-        const { chiefComplaints, hpiHeaders, patientView } = this.props;
+        const {
+            chiefComplaints,
+            hpiHeaders,
+            patientView,
+            userSurveyState,
+        } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         /* Creates list of body system buttons to add in the front page. 
@@ -194,7 +200,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             <BodySystemDropdown
                 key={'Favorites'}
                 name={'Favorites'}
-                diseasesList={favChiefComplaints}
+                diseasesList={Object.keys(userSurveyState.nodes['6'].response)}
             />
         );
 
@@ -510,14 +516,23 @@ class HPIContent extends React.Component<Props, HPIContentState> {
     }
 }
 
+export interface initialSurveyProps {
+    userSurveyState: userSurveyState;
+}
+
 const mapStateToProps = (
     state: CurrentNoteState
-): ChiefComplaintsProps & PlanProps & HpiHeadersProps & PatientViewProps => {
+): initialSurveyProps &
+    ChiefComplaintsProps &
+    PlanProps &
+    HpiHeadersProps &
+    PatientViewProps => {
     return {
         chiefComplaints: state.chiefComplaints,
         planConditions: selectPlanConditions(state),
         hpiHeaders: state.hpiHeaders,
         patientView: selectPatientViewState(state),
+        userSurveyState: selectInitialPatientSurvey(state),
     };
 };
 
@@ -558,7 +573,8 @@ const mapDispatchToProps = {
     addDisplayedNodes,
 };
 
-type Props = ChiefComplaintsProps &
+type Props = initialSurveyProps &
+    ChiefComplaintsProps &
     HpiHeadersProps &
     HPIContentProps &
     DispatchProps &
