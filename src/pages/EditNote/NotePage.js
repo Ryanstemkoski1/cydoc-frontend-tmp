@@ -117,7 +117,12 @@ class NotePage extends Component {
                 tabToDisplay = <SurgicalHistoryContent mobile={collapseTabs} />;
                 break;
             case 'Medications':
-                tabToDisplay = <MedicationsContent mobile={collapseTabs} />;
+                tabToDisplay = (
+                    <MedicationsContent
+                        mobile={collapseTabs}
+                        singleType={false}
+                    />
+                );
                 break;
             case 'Allergies':
                 tabToDisplay = <AllergiesContent mobile={collapseTabs} />;

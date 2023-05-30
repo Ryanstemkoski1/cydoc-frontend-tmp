@@ -236,6 +236,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         values={choices}
                         responseType={responseType}
                         node={node}
+                        singleType={true}
                     />
                 );
             case ResponseTypes.FH_POP:

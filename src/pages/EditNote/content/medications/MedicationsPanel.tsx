@@ -46,6 +46,7 @@ interface OwnProps {
     handleAddition: (optionType: DropdownType, value: string) => void;
     deleteRow: (e: any, index: string) => void;
     medIndex: string;
+    singleType?: boolean;
 }
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -749,18 +750,37 @@ class MedicationsPanel extends Component<Props, State> {
             );
         } else {
             titleContent = (
-                <Table className={'medications-desktop-accordion-title'}>
+                <Table
+                    className={`medications-desktop-accordion-title ${
+                        this.props.singleType && 'border-top'
+                    }`}
+                >
                     <Table.Body>
                         <Table.Row>
-                            <Table.Cell width={3}>{drugNameInput}</Table.Cell>
-                            <Table.Cell width={3}>{doseInput}</Table.Cell>
-                            <Table.Cell width={3}>{scheduleInput}</Table.Cell>
-                            <Table.Cell width={3}>
-                                <h3 className='for-text'>for</h3>
-                            </Table.Cell>
-                            <Table.Cell width={3}>
-                                {reasonForTakingInput}
-                            </Table.Cell>
+                            {this.props.singleType ? (
+                                <Table.Cell className='drug-name'>
+                                    {drugNameInput}
+                                </Table.Cell>
+                            ) : (
+                                <>
+                                    <Table.Cell width={3}>
+                                        {drugNameInput}
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
+                                        {doseInput}
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
+                                        {scheduleInput}
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
+                                        <h3 className='for-text'>for</h3>
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
+                                        {reasonForTakingInput}
+                                    </Table.Cell>
+                                </>
+                            )}
+
                             <Button
                                 circular
                                 icon='close'

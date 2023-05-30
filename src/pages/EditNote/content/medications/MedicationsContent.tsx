@@ -34,6 +34,7 @@ interface OwnProps {
     values?: string[];
     responseType?: ResponseTypes;
     node?: string;
+    singleType?: boolean;
 }
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -184,6 +185,7 @@ export class MedicationsContent extends Component<Props, State> {
                             currentYear={this.state.currentYear}
                             handleAddition={this.handleDropdownOptionAddition}
                             deleteRow={this.deleteRow}
+                            singleType={this.props.singleType}
                         />
                     );
                 }
@@ -229,6 +231,7 @@ export class MedicationsContent extends Component<Props, State> {
                             currentYear={this.state.currentYear}
                             handleAddition={this.handleDropdownOptionAddition}
                             deleteRow={this.deleteRow}
+                            singleType={this.props.singleType}
                         />
                     );
             }
