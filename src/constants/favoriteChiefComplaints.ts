@@ -8,4 +8,8 @@ export const favChiefComplaints = [
     'Hyperlipidemia',
     'Opiate Use',
     'Genital Symptoms/STI',
+    'ADHD',
+    'Urination or Bladder Concerns',
+    'High Cholesterol/Triglycerides',
+    'High Blood Pressure',
 ];
