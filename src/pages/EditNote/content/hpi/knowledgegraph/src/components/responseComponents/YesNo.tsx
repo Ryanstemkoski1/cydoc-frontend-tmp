@@ -44,10 +44,11 @@ class YesNo extends React.Component<Props> {
                 displayedNodes.notDisplayed.length;
         yesNoToggleOption(node, response);
         const toggleChildQuestions =
-            (nodes[node].responseType == ResponseTypes.YES_NO &&
-                nodes[node].response != YesNoResponse.Yes) ||
-            (nodes[node].responseType == ResponseTypes.NO_YES &&
-                nodes[node].response != YesNoResponse.No);
+            response !== '' &&
+            ((nodes[node].responseType == ResponseTypes.YES_NO &&
+                response == YesNoResponse.Yes) ||
+                (nodes[node].responseType == ResponseTypes.NO_YES &&
+                    response == YesNoResponse.No));
         const childEdges =
             sumTotalQuestions < displayedNodesCutOff && toggleChildQuestions
                 ? graph[node]
