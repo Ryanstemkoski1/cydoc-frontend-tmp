@@ -127,14 +127,14 @@
 .prescriptions .active.title {
     border-bottom: none !important;
 }
-
+/* 
 .ui.icon.button.plan-previous-button, .ui.icon.button.plan-next-button {
     position: fixed;
-    bottom: 15px;
+    bottom: 0;
     opacity: 0.8;
     margin: 0;
     display: block;
-    font-size: 13px;
+    font-size: 18px;
     background: #006b87;
     color: white;
   }
@@ -144,11 +144,11 @@
   }
   
   .ui.icon.button.plan-previous-button {
-    left: 20px;
+    left: 0;
   }
   
   .ui.icon.button.plan-next-button {
-    right: 20px;
+    right: 0;
   }
   
   .ui.icon.button.small-plan-previous-button, .ui.icon.button.small-plan-next-button {
@@ -188,4 +188,4 @@
       right: 15px;
     }
   }
-  
+   */

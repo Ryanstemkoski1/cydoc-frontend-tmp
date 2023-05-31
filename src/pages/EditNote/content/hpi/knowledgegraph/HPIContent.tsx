@@ -297,27 +297,27 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                             >
                                 {diseaseComponents}
                             </Masonry>
+                            <Container className='hpi-prev-next-btn-container'>
+                                <Button
+                                    icon
+                                    floated='right'
+                                    onClick={this.continue}
+                                    className='hpi-small-next-button'
+                                >
+                                    <Icon name='arrow right' className='big' />
+                                </Button>
+                                <Button
+                                    icon
+                                    labelPosition='right'
+                                    floated='right'
+                                    onClick={this.continue}
+                                    className='hpi-next-button'
+                                >
+                                    Next
+                                    <Icon name='arrow right' />
+                                </Button>
+                            </Container>
                         </Segment>
-                        <>
-                            <Button
-                                icon
-                                floated='right'
-                                onClick={this.continue}
-                                className='hpi-small-next-button'
-                            >
-                                <Icon name='arrow right' />
-                            </Button>
-                            <Button
-                                icon
-                                labelPosition='right'
-                                floated='right'
-                                onClick={this.continue}
-                                className='hpi-next-button'
-                            >
-                                Next
-                                <Icon name='arrow right' />
-                            </Button>
-                        </>
                     </>
                 );
             default:
@@ -377,43 +377,51 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                             prevStep={this.back}
                                         />
                                     </Segment>
-                                    <Button
-                                        icon
-                                        floated='left'
-                                        onClick={this.back}
-                                        className='hpi-small-previous-button'
-                                    >
-                                        <Icon name='arrow left' />
-                                    </Button>
-                                    <Button
-                                        icon
-                                        labelPosition='left'
-                                        floated='left'
-                                        onClick={this.back}
-                                        className='hpi-previous-button'
-                                    >
-                                        Prev
-                                        <Icon name='arrow left' />
-                                    </Button>
+                                    <Container>
+                                        <Button
+                                            icon
+                                            floated='left'
+                                            onClick={this.back}
+                                            className='hpi-small-previous-button'
+                                        >
+                                            <Icon
+                                                name='arrow left'
+                                                className='big'
+                                            />
+                                        </Button>
+                                        <Button
+                                            icon
+                                            labelPosition='left'
+                                            floated='left'
+                                            onClick={this.back}
+                                            className='hpi-previous-button'
+                                        >
+                                            Prev
+                                            <Icon name='arrow left' />
+                                        </Button>
 
-                                    <Button
-                                        icon
-                                        floated='right'
-                                        onClick={this.continue}
-                                        className='hpi-small-next-button'
-                                    >
-                                        <Icon name='arrow right' />
-                                    </Button>
-                                    <Button
-                                        icon
-                                        labelPosition='right'
-                                        floated='right'
-                                        onClick={this.continue}
-                                        className='hpi-next-button'
-                                    >
-                                        Next
-                                        <Icon name='arrow right' />
-                                    </Button>
+                                        <Button
+                                            icon
+                                            floated='right'
+                                            onClick={this.continue}
+                                            className='hpi-small-next-button'
+                                        >
+                                            <Icon
+                                                name='arrow right'
+                                                className='big'
+                                            />
+                                        </Button>
+                                        <Button
+                                            icon
+                                            labelPosition='right'
+                                            floated='right'
+                                            onClick={this.continue}
+                                            className='hpi-next-button'
+                                        >
+                                            Next
+                                            <Icon name='arrow right' />
+                                        </Button>
+                                    </Container>
                                 </Container>
                             ) : (
                                 <Tab
@@ -452,42 +460,54 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         nextStep={this.continue}
                                                         prevStep={this.back}
                                                     />
-                                                    <Button
-                                                        icon
-                                                        floated='left'
-                                                        onClick={this.back}
-                                                        className='hpi-small-previous-button'
-                                                    >
-                                                        <Icon name='arrow left' />
-                                                    </Button>
-                                                    <Button
-                                                        icon
-                                                        labelPosition='left'
-                                                        floated='left'
-                                                        onClick={this.back}
-                                                        className='hpi-previous-button'
-                                                    >
-                                                        Prev
-                                                        <Icon name='arrow left' />
-                                                    </Button>
-                                                    <Button
-                                                        icon
-                                                        floated='right'
-                                                        onClick={this.continue}
-                                                        className='hpi-small-next-button'
-                                                    >
-                                                        <Icon name='arrow right' />
-                                                    </Button>
-                                                    <Button
-                                                        icon
-                                                        labelPosition='right'
-                                                        floated='right'
-                                                        onClick={this.continue}
-                                                        className='hpi-next-button'
-                                                    >
-                                                        Next
-                                                        <Icon name='arrow right' />
-                                                    </Button>
+                                                    <Container>
+                                                        <Button
+                                                            icon
+                                                            floated='left'
+                                                            onClick={this.back}
+                                                            className='hpi-small-previous-button'
+                                                        >
+                                                            <Icon
+                                                                name='arrow left'
+                                                                className='big'
+                                                            />
+                                                        </Button>
+                                                        <Button
+                                                            icon
+                                                            labelPosition='left'
+                                                            floated='left'
+                                                            onClick={this.back}
+                                                            className='hpi-previous-button'
+                                                        >
+                                                            Prev
+                                                            <Icon name='arrow left' />
+                                                        </Button>
+                                                        <Button
+                                                            icon
+                                                            floated='right'
+                                                            onClick={
+                                                                this.continue
+                                                            }
+                                                            className='hpi-small-next-button'
+                                                        >
+                                                            <Icon
+                                                                name='arrow right'
+                                                                className='big'
+                                                            />
+                                                        </Button>
+                                                        <Button
+                                                            icon
+                                                            labelPosition='right'
+                                                            floated='right'
+                                                            onClick={
+                                                                this.continue
+                                                            }
+                                                            className='hpi-next-button'
+                                                        >
+                                                            Next
+                                                            <Icon name='arrow right' />
+                                                        </Button>
+                                                    </Container>
                                                 </Tab.Pane>
                                             ),
                                         })

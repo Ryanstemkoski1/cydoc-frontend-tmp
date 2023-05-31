@@ -319,49 +319,51 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                     )}
                     <Segment>{initialSurvey}</Segment>
                 </Container>
-                {this.state.activeItem > 0 ? (
-                    <div>
-                        {' '}
-                        <Button
-                            icon
-                            labelPosition='left'
-                            floated='left'
-                            className='hpi-previous-button'
-                            onClick={this.onPrevClick}
-                        >
-                            Prev
-                            <Icon name='arrow left' />
-                        </Button>
-                        <Button
-                            icon
-                            floated='left'
-                            className='hpi-small-previous-button'
-                            onClick={this.onPrevClick}
-                        >
-                            <Icon name='arrow left' />
-                        </Button>{' '}
-                    </div>
-                ) : (
-                    ''
-                )}
-                <Button
-                    icon
-                    labelPosition='right'
-                    floated='right'
-                    className='hpi-next-button'
-                    onClick={this.onNextClick}
-                >
-                    Next
-                    <Icon name='arrow right' />
-                </Button>
-                <Button
-                    icon
-                    floated='right'
-                    className='hpi-small-next-button'
-                    onClick={this.onNextClick}
-                >
-                    <Icon name='arrow right' />
-                </Button>
+                <Container className='prev-next-btn-container'>
+                    {this.state.activeItem > 0 ? (
+                        <>
+                            {' '}
+                            <Button
+                                icon
+                                labelPosition='left'
+                                floated='left'
+                                className='hpi-previous-button'
+                                onClick={this.onPrevClick}
+                            >
+                                Prev
+                                <Icon name='arrow left' />
+                            </Button>
+                            <Button
+                                icon
+                                floated='left'
+                                className='hpi-small-previous-button'
+                                onClick={this.onPrevClick}
+                            >
+                                <Icon name='arrow left' className='big' />
+                            </Button>{' '}
+                        </>
+                    ) : (
+                        ''
+                    )}
+                    <Button
+                        icon
+                        labelPosition='right'
+                        floated='right'
+                        className='hpi-next-button'
+                        onClick={this.onNextClick}
+                    >
+                        Next
+                        <Icon name='arrow right' />
+                    </Button>
+                    <Button
+                        icon
+                        floated='right'
+                        className='hpi-small-next-button'
+                        onClick={this.onNextClick}
+                    >
+                        <Icon name='arrow right' />
+                    </Button>
+                </Container>
             </div>
         );
     }

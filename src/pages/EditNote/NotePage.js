@@ -251,42 +251,44 @@ class NotePage extends Component {
                     <>
                         Please select at least one Chief Complaint in the CC tab
                         in order to view an HPI questionnaire.
-                        <Button
-                            icon
-                            labelPosition='left'
-                            floated='left'
-                            onClick={this.backHPITab}
-                            className='hpi-previous-button'
-                        >
-                            Prev
-                            <Icon name='arrow left' />
-                        </Button>
-                        <Button
-                            icon
-                            floated='left'
-                            onClick={this.backHPITab}
-                            className='hpi-small-previous-button'
-                        >
-                            <Icon name='arrow left' />
-                        </Button>
-                        <Button
-                            icon
-                            labelPosition='right'
-                            floated='right'
-                            onClick={this.continueHPITab}
-                            className='hpi-next-button'
-                        >
-                            Next
-                            <Icon name='arrow right' />
-                        </Button>
-                        <Button
-                            icon
-                            floated='right'
-                            onClick={this.continueHPITab}
-                            className='hpi-small-next-button'
-                        >
-                            <Icon name='arrow right' />
-                        </Button>
+                        <Container>
+                            <Button
+                                icon
+                                labelPosition='left'
+                                floated='left'
+                                onClick={this.backHPITab}
+                                className='hpi-previous-button'
+                            >
+                                Prev
+                                <Icon name='arrow left' />
+                            </Button>
+                            <Button
+                                icon
+                                floated='left'
+                                onClick={this.backHPITab}
+                                className='hpi-small-previous-button'
+                            >
+                                <Icon name='arrow left' className='big' />
+                            </Button>
+                            <Button
+                                icon
+                                labelPosition='right'
+                                floated='right'
+                                onClick={this.continueHPITab}
+                                className='hpi-next-button'
+                            >
+                                Next
+                                <Icon name='arrow right' />
+                            </Button>
+                            <Button
+                                icon
+                                floated='right'
+                                onClick={this.continueHPITab}
+                                className='hpi-small-next-button'
+                            >
+                                <Icon name='arrow right' className='big' />
+                            </Button>
+                        </Container>
                     </>
                 );
                 break;

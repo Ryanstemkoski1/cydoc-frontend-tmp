@@ -24,12 +24,10 @@ h5.ui.header{
 }
 
 .ui.icon.button.physical-previous-button, .ui.icon.button.physical-next-button {
-    position: fixed;
-    bottom: 15px;
     opacity: 0.8;
     margin: 0;
     display: block;
-    font-size: 13px;
+    font-size: 18px;
     background: #006b87;
     color: white;
   }
@@ -40,17 +38,15 @@ h5.ui.header{
 }
 
 .ui.icon.button.physical-previous-button {
-    left: 20px;
+    left: 0;
 }
 
 .ui.icon.button.physical-next-button {
-    right: 20px;
+    right: 0;
 }
 
 .ui.icon.button.small-physical-previous-button, .ui.icon.button.small-physical-next-button {
     display: none;
-    position: fixed;
-    bottom: 15px;
     opacity: 0.8;
     margin: 0;
     background: #006b87;

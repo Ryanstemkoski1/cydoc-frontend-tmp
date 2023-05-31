@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Segment } from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 import DiscussionPlanMenu from './DiscussionPlanMenu';
 import DifferentialDiagnosesForm from './forms/DifferentialDiagnosesForm';
 import PrescriptionsForm from './forms/PrescriptionsForm';
@@ -69,38 +69,9 @@ const DiscussionPlan = ({
                 />
                 {form}
             </Segment>
-            <DiscussionPlanSurvey />
-            <Button
-                icon='arrow left'
-                floated='left'
-                className='small-plan-previous-button'
-                aria-label='previous-button'
-                onClick={previousFormClick}
-            />
-            <Button
-                icon='arrow left'
-                labelPosition='left'
-                floated='left'
-                onClick={previousFormClick}
-                className='plan-previous-button'
-                aria-label='previous-button'
-                content='Prev'
-            />
-            <Button
-                icon='arrow right'
-                floated='right'
-                aria-label='next-button'
-                className='small-plan-next-button'
-                onClick={nextFormClick}
-            />
-            <Button
-                icon='arrow right'
-                labelPosition='right'
-                aria-label='next-button'
-                floated='right'
-                onClick={nextFormClick}
-                className='plan-next-button'
-                content='Next'
+            <DiscussionPlanSurvey
+                nextClick={nextFormClick}
+                previousClick={previousFormClick}
             />
         </>
     );
