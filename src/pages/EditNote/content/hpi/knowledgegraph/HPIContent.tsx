@@ -305,7 +305,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 onClick={this.continue}
                                 className='hpi-small-next-button'
                             >
-                                <Icon name='arrow right' />
+                                <Icon name='arrow right' className='big' />
                             </Button>
                             <Button
                                 icon
@@ -383,7 +383,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         onClick={this.back}
                                         className='hpi-small-previous-button'
                                     >
-                                        <Icon name='arrow left' />
+                                        <Icon
+                                            name='arrow left'
+                                            className='big'
+                                        />
                                     </Button>
                                     <Button
                                         icon
@@ -402,7 +405,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         onClick={this.continue}
                                         className='hpi-small-next-button'
                                     >
-                                        <Icon name='arrow right' />
+                                        <Icon
+                                            name='arrow right'
+                                            className='big'
+                                        />
                                     </Button>
                                     <Button
                                         icon
@@ -458,7 +464,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         onClick={this.back}
                                                         className='hpi-small-previous-button'
                                                     >
-                                                        <Icon name='arrow left' />
+                                                        <Icon
+                                                            name='arrow left'
+                                                            className='big'
+                                                        />
                                                     </Button>
                                                     <Button
                                                         icon
