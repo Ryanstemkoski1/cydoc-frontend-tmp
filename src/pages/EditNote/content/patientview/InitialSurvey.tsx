@@ -286,7 +286,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                                   className='qa-div'
                               >
                                   {questions.nodes[key].text}
-                                  <div>
+                                  <div className='survey-chips'>
                                       {Object.keys(
                                           this.props.userSurveyState.nodes
                                       ).length
