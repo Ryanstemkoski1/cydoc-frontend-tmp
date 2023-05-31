@@ -1,57 +1,61 @@
+import { initialReviewOfSystemsState } from 'constants/reviewOfSystemsInitial';
 import { combineReducers } from 'redux';
 import { AllActionTypes } from '../actions';
 import { CURRENT_NOTE_ACTION } from '../actions/actionTypes';
 import { CurrentNoteActionTypes } from '../actions/currentNoteActions';
+import { activeItemReducer, initialActiveItemState } from './activeItemReducer';
 import {
-    medicalHistoryReducer,
-    initialMedicalHistoryState,
-} from './medicalHistoryReducer';
-import { reviewOfSystemsReducer } from './reviewOfSystemsReducer';
-import { initialReviewOfSystemsState } from 'constants/reviewOfSystemsInitial';
-import {
-    surgicalHistoryReducer,
-    initialSurgicalHistoryState,
-} from './surgicalHistoryReducer';
-import {
-    medicationsReducer,
-    initialMedicationsState,
-} from './medicationsReducer';
+    additionalSurveyReducer,
+    initialAdditionalSurveyData,
+} from './additionalSurveyReducer';
 import { allergiesReducer, initialAllergiesState } from './allergiesReducer';
-import {
-    initialSocialHistoryState,
-    socialHistoryReducer,
-} from './socialHistoryReducer';
-import {
-    familyHistoryReducer,
-    initialFamilyHistoryState,
-} from './familyHistoryReducer';
-import { initialPlanState, planReducer } from './planReducer';
-import {
-    initialPhysicalExamState,
-    physicalExamReducer,
-} from './physicalExamReducer';
-import { hpiReducer, initialHpiState } from './hpiReducer';
-import {
-    initialNoteTitle,
-    initialNoteId,
-    noteTitleReducer,
-    noteIdReducer,
-} from './currentNoteReducer';
 import {
     chiefComplaintsReducer,
     initialChiefComplaintsState,
 } from './chiefComplaintsReducer';
 import {
-    patientInformationReducer,
-    initialPatientInformationState,
-} from './patientInformationReducer';
-import { hpiHeadersReducer, initialHpiHeadersState } from './hpiHeadersReducer';
-import { initialUserViewState, userViewReducer } from './userViewReducer';
-import { activeItemReducer, initialActiveItemState } from './activeItemReducer';
+    initialNoteId,
+    initialNoteTitle,
+    noteIdReducer,
+    noteTitleReducer,
+} from './currentNoteReducer';
 import {
     displayedNodesReducer,
     initialDisplayedNodesState,
 } from './displayedNodesReducer';
+import {
+    familyHistoryReducer,
+    initialFamilyHistoryState,
+} from './familyHistoryReducer';
+import { hpiHeadersReducer, initialHpiHeadersState } from './hpiHeadersReducer';
+import { hpiReducer, initialHpiState } from './hpiReducer';
+import {
+    initialMedicalHistoryState,
+    medicalHistoryReducer,
+} from './medicalHistoryReducer';
+import {
+    initialMedicationsState,
+    medicationsReducer,
+} from './medicationsReducer';
+import {
+    initialPatientInformationState,
+    patientInformationReducer,
+} from './patientInformationReducer';
+import {
+    initialPhysicalExamState,
+    physicalExamReducer,
+} from './physicalExamReducer';
+import { initialPlanState, planReducer } from './planReducer';
+import { reviewOfSystemsReducer } from './reviewOfSystemsReducer';
+import {
+    initialSocialHistoryState,
+    socialHistoryReducer,
+} from './socialHistoryReducer';
+import {
+    initialSurgicalHistoryState,
+    surgicalHistoryReducer,
+} from './surgicalHistoryReducer';
+import { initialUserViewState, userViewReducer } from './userViewReducer';
 
 const currentNoteReducer = combineReducers({
     reviewOfSystems: reviewOfSystemsReducer,
@@ -72,6 +76,7 @@ const currentNoteReducer = combineReducers({
     userView: userViewReducer,
     activeItem: activeItemReducer,
     displayedNodes: displayedNodesReducer,
+    additionalSurvey: additionalSurveyReducer,
 });
 
 export type CurrentNoteState = ReturnType<typeof currentNoteReducer>;
@@ -95,6 +100,7 @@ export const initialState: CurrentNoteState = {
     userView: initialUserViewState,
     activeItem: initialActiveItemState,
     displayedNodes: initialDisplayedNodesState,
+    additionalSurvey: initialAdditionalSurveyData,
 };
 
 export function rootReducer(
