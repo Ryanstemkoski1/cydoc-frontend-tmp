@@ -35,7 +35,6 @@ const setupUserAccount = async (
             attributes?.['custom:associatedManager'] || '',
         email: attributes?.email || newUserInfo.email,
         given_name: attributes?.given_name || newUserInfo.firstName,
-        // middle_name: attributes?.middle_name || newUserInfo.middleName, // TODO: do we use middle name?
         family_name: attributes?.family_name || newUserInfo.lastName,
         phone_number: attributes?.phone_number || newUserInfo.phoneNumber,
     };

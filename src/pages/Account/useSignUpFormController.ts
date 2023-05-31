@@ -5,8 +5,12 @@ import setupUserAccount from 'auth/setupUserAccount';
 import invariant from 'tiny-invariant';
 import { ClinicianSignUpData, UserAttributes } from 'types/users';
 import { passwordIsValid } from 'constants/passwordErrors';
+import { SignUpFormData } from './SignUpForm';
 
-const validationSchema = Yup.object<ClinicianSignUpData>({
+const validationSchema = Yup.object<SignUpFormData>({
+    isTermsChecked: Yup.bool()
+        .label('isTermsChecked')
+        .oneOf([true], 'You must agree to terms before continuing'),
     username: Yup.string()
         .label('userName')
         .required('Username is required')
@@ -15,11 +19,6 @@ const validationSchema = Yup.object<ClinicianSignUpData>({
         .label('firstName')
         .required('First Name is required')
         .min(1, 'Username is required'),
-    // TODO: are we using middle name?
-    // middleName: Yup.string()
-    //     .label('middleName')
-    //     .required('Middle Name is required')
-    //     .min(1, 'middleName is required'),
     lastName: Yup.string()
         .label('lastName')
         .required('Last Name is required')

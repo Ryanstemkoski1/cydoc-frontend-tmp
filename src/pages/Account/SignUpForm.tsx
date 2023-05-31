@@ -12,10 +12,12 @@ import invariant from 'tiny-invariant';
 
 export interface SignUpFormData extends ClinicianSignUpData {
     isPrivacyChecked: boolean;
+    isTermsChecked: boolean;
     paymentMethod?: string | any; // TODO: discuss moving this to manager's table?
 }
 // TODO: pull from session
 const initialValues: SignUpFormData = {
+    isTermsChecked: false,
     isPrivacyChecked: false,
     username: '',
     role: 'manager',
@@ -210,22 +212,22 @@ export default function SignUpForm({
                     <SignUpSteps
                         step={wizardPage}
                         goToNextStep={onNextClick}
-                                closeModal={() => {
-                                    setModalOpen(false);
-                                }}
-                                goToPrevStep={onPrevClick}
-                            />
-                            <NextBackButtonGroup
-                                step={wizardPage}
-                                onClose={() => {
-                                    setModalOpen(false);
-                                    // reloadModal();
-                                }}
-                                onPrevClick={onPrevClick}
-                                onNextClick={() => {
-                                    // TODO: use yup for validation
-                                    // if (isSubmitValid(wizardPage)) {
-                                    onNextClick();
+                        closeModal={() => {
+                            setModalOpen(false);
+                        }}
+                        goToPrevStep={onPrevClick}
+                    />
+                    <NextBackButtonGroup
+                        step={wizardPage}
+                        onClose={() => {
+                            setModalOpen(false);
+                            // reloadModal();
+                        }}
+                        onPrevClick={onPrevClick}
+                        onNextClick={() => {
+                            // TODO: use yup for validation
+                            // if (isSubmitValid(wizardPage)) {
+                            onNextClick();
                             // }
                         }}
                     />

@@ -3,6 +3,7 @@ import { UserInfoStep } from './UserInfoStep';
 import { PrivacyPolicyStep } from './PrivacyPolicyStep';
 import { AddPaymentStep } from './AddPaymentStep';
 import { TermsStep } from './TermsStep';
+import { InstitutionPickerStep } from './InstitutionPickerStep';
 
 export interface StepProps {
     step: number;
@@ -19,12 +20,15 @@ export default function SignUpSteps(props: StepProps) {
             stepContent = <UserInfoStep />;
             break;
         case 1:
-            stepContent = <AddPaymentStep />;
+            stepContent = <InstitutionPickerStep />;
             break;
         case 2:
-            stepContent = <TermsStep />;
+            stepContent = <AddPaymentStep />;
             break;
         case 3:
+            stepContent = <TermsStep />;
+            break;
+        case 4:
             stepContent = <PrivacyPolicyStep />;
             break;
         default:
