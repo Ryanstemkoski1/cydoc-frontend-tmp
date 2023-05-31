@@ -3,33 +3,23 @@ import { log } from 'modules/logging';
 import { useCallback, useMemo } from 'react';
 import { SignUpFormData } from './SignUpForm';
 
-export default function useEnableNext(step: number) {
-    const { isValid, dirty, errors, touched } =
-        useFormikContext<SignUpFormData>();
-
-    const userInfoFields: (keyof SignUpFormData)[] = useMemo(
-        () => [
-            'username',
-            'firstName',
-            'lastName',
+const userInfoFields: (keyof SignUpFormData)[] = [
+    'username',
+    'firstName',
+    'lastName',
             'email',
             'phoneNumber',
             'newPassword',
-            'confirmNewPassword',
-            'confirmEmail',
-            'confirmPhoneNumber',
-        ],
-        []
-    );
-    const termsFields: (keyof SignUpFormData)[] = useMemo(
-        () => ['isTermsChecked'],
-        []
-    );
+    'confirmNewPassword',
+    'confirmEmail',
+    'confirmPhoneNumber',
+];
+const termsFields: (keyof SignUpFormData)[] = ['isTermsChecked'];
+const privacyPolicyFields: (keyof SignUpFormData)[] = ['isPrivacyChecked'];
+const institutionFields: (keyof SignUpFormData)[] = ['institutionId'];
 
-    const privacyPolicyFields: (keyof SignUpFormData)[] = useMemo(
-        () => ['isPrivacyChecked'],
-        []
-    );
+export default function useEnableNext(step: number) {
+    const { errors, touched } = useFormikContext<SignUpFormData>();
 
     const noErrorsForStep = useCallback(
         (fields: (keyof SignUpFormData)[]) =>
@@ -79,12 +69,5 @@ export default function useEnableNext(step: number) {
                 log(`useEnableNext unrecognized step: ${step}`);
                 return true;
         }
-    }, [
-        dirty,
-        isValid,
-        noErrorsForStep,
-        someFieldTouched,
-        step,
-        userInfoFields,
-    ]);
+    }, [noErrorsForStep, someFieldTouched, step]);
 }
