@@ -338,28 +338,28 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 />
                 <h3> Plan </h3>
                 <PlanNote planState={planState} />
-                <Container>
-                    <Button
-                        icon
-                        labelPosition='left'
-                        floated='left'
-                        onClick={previousFormClick}
-                        className='note-previous-button'
-                    >
-                        Prev
-                        <Icon name='arrow left' />
-                    </Button>
-                    {/* mobile */}
-                    <Button
-                        icon
-                        floated='left'
-                        onClick={previousFormClick}
-                        className='small-note-previous-button'
-                    >
-                        <Icon name='arrow left' className='big' />
-                    </Button>
-                </Container>
             </Segment>
+            <Container className='prev-next-btn-container'>
+                <Button
+                    icon
+                    labelPosition='left'
+                    floated='left'
+                    onClick={previousFormClick}
+                    className='note-previous-button'
+                >
+                    Prev
+                    <Icon name='arrow left' />
+                </Button>
+                {/* mobile */}
+                <Button
+                    icon
+                    floated='left'
+                    onClick={previousFormClick}
+                    className='small-note-previous-button'
+                >
+                    <Icon name='arrow left' className='big' />
+                </Button>
+            </Container>
         </div>
     );
 };

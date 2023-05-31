@@ -1,4 +1,6 @@
 .ui.icon.button.note-previous-button {
+    position: fixed;
+    bottom: 15px;
     opacity: 0.8;
     margin: 0;
     display: block;
@@ -12,12 +14,13 @@
   }
   
   .ui.icon.button.note-previous-button {
-    left: -40px;
-    bottom: -17px;
+    left: 20px;
   }
   
   .ui.icon.button.small-note-previous-button {
     display: none;
+    position: fixed;
+    bottom: 15px;
     opacity: 0.8;
     margin: 0;
     background-color: #006b87;
