@@ -23,6 +23,7 @@ const initialValues: SignUpFormData = {
     role: 'manager',
     email: '',
     confirmEmail: '',
+    institutionId: '',
     // isInvited: false,  we don't need this, right?
     firstName: '',
     // middleName: '',

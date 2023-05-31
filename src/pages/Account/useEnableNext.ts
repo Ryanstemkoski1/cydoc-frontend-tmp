@@ -47,8 +47,8 @@ export default function useEnableNext(step: number) {
                 );
             case 1: // InstitutionPickerStep
                 return (
-                    someFieldTouched(termsFields) &&
-                    noErrorsForStep(termsFields)
+                    someFieldTouched(institutionFields) &&
+                    noErrorsForStep(institutionFields)
                 );
             case 2: // AddPaymentStep
                 return (
