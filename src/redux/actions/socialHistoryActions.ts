@@ -204,7 +204,7 @@ interface UpdateTobaccoPacksPerDayAction {
     };
 }
 
-export function updateTobaccoPacksPerDay(newPacksPerDay: number) {
+export function updateTobaccoPacksPerDay(newPacksPerDay: string) {
     return {
         type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_PACKS_PER_DAY,
         payload: {

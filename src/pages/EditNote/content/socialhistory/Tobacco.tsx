@@ -36,6 +36,7 @@ type Props = ReduxProps & OwnProps;
 
 interface State {
     invalidYear: boolean;
+    inputType: string;
 }
 
 class Tobacco extends React.Component<Props, State> {
@@ -45,6 +46,7 @@ class Tobacco extends React.Component<Props, State> {
         super(props);
         this.state = {
             invalidYear: false,
+            inputType: '',
         };
         this.currentYear = new Date(Date.now()).getFullYear();
         this.additionalFields = this.additionalFields.bind(this);
@@ -59,6 +61,63 @@ class Tobacco extends React.Component<Props, State> {
                     numberYear < 1900 ||
                     numberYear > this.currentYear),
         });
+    };
+
+    checkValidateStr = (testStr: string) => {
+        const trimmedValue = testStr;
+        let inputType = this.state.inputType;
+        if (`${this.props.tobacco.packsPerDay}`.length > testStr.length) {
+            if (this.state.inputType === 'DECIMAL' && testStr.indexOf('.')) {
+                this.setState({ inputType: '' });
+                inputType = '';
+            }
+            if (this.state.inputType === 'FRACTION' && testStr.indexOf('/')) {
+                this.setState({ inputType: '' });
+                inputType = '';
+            }
+            return true;
+        }
+        if (
+            /^(?:\d+(?:\s+\d+\/\d+)?|\d+\/\d+|\d+(?:\.\d+)?|\d+\s+\d+)$/.test(
+                trimmedValue
+            )
+        ) {
+            return true;
+        } else {
+            if (
+                testStr.length > 1 &&
+                testStr[testStr.length - 1] == '.' &&
+                inputType === '' &&
+                testStr.indexOf(' ') === -1
+            ) {
+                this.setState({ inputType: 'DECIMAL' });
+                return true;
+            }
+            if (
+                testStr.length > 1 &&
+                testStr[testStr.length - 1] == ' ' &&
+                testStr.indexOf(' ') === testStr.lastIndexOf(' ') &&
+                inputType !== 'DECIMAL' &&
+                inputType !== 'FRACTION'
+            ) {
+                return true;
+            }
+            if (
+                testStr.length > 1 &&
+                testStr[testStr.length - 1] == '/' &&
+                this.state.inputType === ''
+            ) {
+                this.setState({ inputType: 'FRACTION' });
+                return true;
+            }
+            return false;
+        }
+    };
+
+    validateInput = (input: string) => {
+        input = input.trim();
+        const pattern = /^(?:(?:\d+\s+)?\d+\/\d+|\d+(?:\.\d+)?|\d+)$/;
+        return pattern.test(input) ? false : true;
     };
 
     includeQuitYear() {
@@ -201,7 +260,7 @@ class Tobacco extends React.Component<Props, State> {
                             <Form.Field>
                                 Packs/Day
                                 <Input
-                                    type='number'
+                                    type='string'
                                     field='Packs/Day'
                                     condition='Tobacco'
                                     value={
@@ -210,18 +269,25 @@ class Tobacco extends React.Component<Props, State> {
                                             : values.packsPerDay
                                     }
                                     onChange={(_, { value }) => {
-                                        const numberInput = parseInt(value);
-                                        if (!isNaN(numberInput)) {
+                                        if (this.checkValidateStr(value)) {
                                             this.props.updateTobaccoPacksPerDay(
-                                                numberInput
+                                                value
                                             );
                                         } else if (value == '') {
                                             this.props.updateTobaccoPacksPerDay(
-                                                -1
+                                                '-1'
                                             );
+                                            this.setState({ inputType: '' });
                                         }
                                     }}
                                 />
+                                {this.validateInput(`${values.packsPerDay}`) &&
+                                    `${values.packsPerDay}` !== '' &&
+                                    values.packsPerDay !== -1 && (
+                                        <div className='error-input'>
+                                            Invalid input
+                                        </div>
+                                    )}
                             </Form.Field>
                         </Grid.Column>
                         <Grid.Column>
