@@ -1,16 +1,10 @@
-.prev-next-btn-container {
-    position: fixed;
-    bottom: 15px;
-    left: 50%;
-    transform: translate(-50%, 0);
-}
 .ui.button.previous-button, .ui.button.next-button {
-    /* position: sticky !important; */
+    position: sticky !important;
     bottom: 0;
     opacity: 0.8;
     margin: 0;
     display: block;
-    font-size: 18px;
+    font-size: 13px;
     background: #c8e2ea;
 }
 
@@ -21,7 +15,7 @@
 
 .ui.button.small-previous-button, .ui.button.small-next-button {
     display: none;
-    /* position: sticky !important; */
+    position: sticky !important;
     bottom: 0;
     opacity: 0.8;
     margin: 0;

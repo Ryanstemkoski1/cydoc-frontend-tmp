@@ -1,4 +1,3 @@
-
 .disease-container {
     text-align: center;
     display: -webkit-box;
@@ -99,28 +98,27 @@
 
 .ui.icon.button.hpi-previous-button,
 .ui.icon.button.hpi-next-button {
+    position: fixed;
+    bottom: 15px;
     margin: 0;
     opacity: 0.8;
     display: block;
-    font-size: 18px;
+    font-size: 13px;
     background: #006b87;
     color: white;
-    margin-bottom: 15px;
 }
 
 .hpi-disease-container {
     overflow: visible;
     position: relative;
 }
-.hpi-prev-next-btn-container{
-    padding-bottom: 18px;
-}
+
 .ui.icon.button.hpi-previous-button {
-    left: -40px;
+    left: 20px;
 }
 
 .ui.icon.button.hpi-next-button {
-    right: -40px;
+    right: 20px;
 }
 
 .ui.icon.button.hpi-previous-button:hover,
@@ -131,6 +129,7 @@
 .ui.icon.button.hpi-small-previous-button,
 .ui.icon.button.hpi-small-next-button {
     display: none;
+    position: fixed;
     bottom: 15px;
     opacity: 0.8;
     margin: 0;

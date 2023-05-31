@@ -8,7 +8,6 @@ import {
     Input,
     Button,
     InputOnChangeData,
-    Container,
 } from 'semantic-ui-react';
 import PhysicalExamGroup from './PhysicalExamGroup';
 import exampleSchema from 'constants/PhysicalExam/exampleSchema.json';
@@ -342,45 +341,44 @@ class PhysicalExamContent extends React.Component<Props, State> {
                     fluid
                     panels={this.renderPanels(exampleSchema.sections)}
                 />
-                <Container>
-                    <Button
-                        icon
-                        floated='left'
-                        onClick={this.props.previousFormClick}
-                        className='small-physical-previous-button'
-                    >
-                        <Icon name='arrow left' className='big' />
-                    </Button>
-                    <Button
-                        icon
-                        labelPosition='left'
-                        floated='left'
-                        onClick={this.props.previousFormClick}
-                        className='physical-previous-button'
-                    >
-                        Prev
-                        <Icon name='arrow left' />
-                    </Button>
 
-                    <Button
-                        icon
-                        floated='right'
-                        onClick={this.props.nextFormClick}
-                        className='small-physical-next-button'
-                    >
-                        <Icon name='arrow right' className='big' />
-                    </Button>
-                    <Button
-                        icon
-                        labelPosition='right'
-                        floated='right'
-                        onClick={this.props.nextFormClick}
-                        className='physical-next-button'
-                    >
-                        Next
-                        <Icon name='arrow right' />
-                    </Button>
-                </Container>
+                <Button
+                    icon
+                    floated='left'
+                    onClick={this.props.previousFormClick}
+                    className='small-physical-previous-button'
+                >
+                    <Icon name='arrow left' />
+                </Button>
+                <Button
+                    icon
+                    labelPosition='left'
+                    floated='left'
+                    onClick={this.props.previousFormClick}
+                    className='physical-previous-button'
+                >
+                    Prev
+                    <Icon name='arrow left' />
+                </Button>
+
+                <Button
+                    icon
+                    floated='right'
+                    onClick={this.props.nextFormClick}
+                    className='small-physical-next-button'
+                >
+                    <Icon name='arrow right' />
+                </Button>
+                <Button
+                    icon
+                    labelPosition='right'
+                    floated='right'
+                    onClick={this.props.nextFormClick}
+                    className='physical-next-button'
+                >
+                    Next
+                    <Icon name='arrow right' />
+                </Button>
             </>
         );
     }

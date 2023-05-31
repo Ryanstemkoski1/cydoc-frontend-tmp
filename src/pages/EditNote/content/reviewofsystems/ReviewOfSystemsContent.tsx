@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Masonry from 'react-masonry-css';
 import './ReviewOfSystems.css';
 import { ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP } from 'constants/breakpoints';
-import { Button, Icon, Header, Container } from 'semantic-ui-react';
+import { Button, Icon, Header } from 'semantic-ui-react';
 import ReviewOfSystemsCategory from './ReviewOfSystemsCategory';
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
@@ -117,31 +117,28 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
                         );
                     })}
                 </Masonry>
-                <Container>
-                    <Button
-                        icon
-                        floated='left'
-                        onClick={previousFormClick}
-                        className='small-ros-previous-button'
-                    >
-                        <Icon name='arrow left' className='big' />
-                    </Button>
-                    <Button
-                        icon
-                        labelPosition='left'
-                        floated='left'
-                        onClick={previousFormClick}
-                        className='ros-previous-button'
-                    >
-                        Prev
-                        <Icon name='arrow left' />
-                    </Button>
-                </Container>
-
+                <Button
+                    icon
+                    floated='left'
+                    onClick={previousFormClick}
+                    className='small-ros-previous-button'
+                >
+                    <Icon name='arrow left' />
+                </Button>
+                <Button
+                    icon
+                    labelPosition='left'
+                    floated='left'
+                    onClick={previousFormClick}
+                    className='ros-previous-button'
+                >
+                    Prev
+                    <Icon name='arrow left' />
+                </Button>
                 {patientView ? (
                     ''
                 ) : (
-                    <Container>
+                    <>
                         {' '}
                         <Button
                             icon
@@ -149,7 +146,7 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
                             onClick={nextFormClick}
                             className='small-ros-next-button'
                         >
-                            <Icon name='arrow right' className='big' />
+                            <Icon name='arrow right' />
                         </Button>
                         <Button
                             icon
@@ -161,7 +158,7 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
                             Next
                             <Icon name='arrow right' />
                         </Button>{' '}
-                    </Container>
+                    </>
                 )}
             </>
         );

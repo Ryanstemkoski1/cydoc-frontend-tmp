@@ -23,7 +23,6 @@ import {
     Header,
     Form,
     Icon,
-    Container,
 } from 'semantic-ui-react';
 import { PlanState } from 'redux/reducers/planReducer';
 import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
@@ -339,27 +338,25 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 <h3> Plan </h3>
                 <PlanNote planState={planState} />
             </Segment>
-            <Container className='prev-next-btn-container'>
-                <Button
-                    icon
-                    labelPosition='left'
-                    floated='left'
-                    onClick={previousFormClick}
-                    className='note-previous-button'
-                >
-                    Prev
-                    <Icon name='arrow left' />
-                </Button>
-                {/* mobile */}
-                <Button
-                    icon
-                    floated='left'
-                    onClick={previousFormClick}
-                    className='small-note-previous-button'
-                >
-                    <Icon name='arrow left' className='big' />
-                </Button>
-            </Container>
+            <Button
+                icon
+                labelPosition='left'
+                floated='left'
+                onClick={previousFormClick}
+                className='note-previous-button'
+            >
+                Prev
+                <Icon name='arrow left' />
+            </Button>
+            {/* mobile */}
+            <Button
+                icon
+                floated='left'
+                onClick={previousFormClick}
+                className='small-note-previous-button'
+            >
+                <Icon name='arrow left' />
+            </Button>
         </div>
     );
 };

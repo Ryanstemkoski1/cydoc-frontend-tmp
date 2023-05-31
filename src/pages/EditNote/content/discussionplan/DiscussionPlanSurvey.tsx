@@ -11,24 +11,20 @@ import {
 import { selectPlanSurvey } from 'redux/selectors/planSelectors';
 import { YesNoUncertainResponse } from 'constants/enums';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
-import PrevNextButton from '../../../../components/navigation/PrevNextButton';
 
 const GRID_QUESTION_WIDTH = 7;
 
 interface StateProps {
     survey: PlanSurvey;
 }
-interface IProps {
-    nextClick: () => void;
-    previousClick: () => void;
-}
+
 interface DispatchProps {
     updateAdmitToHospital: (value: YesNoUncertainResponse) => void;
     updateEmergency: (value: YesNoUncertainResponse) => void;
     updateSickness: (value: number) => void;
 }
 
-type DiscussionPlanSurveyProps = StateProps & DispatchProps & IProps;
+type DiscussionPlanSurveyProps = StateProps & DispatchProps;
 
 interface AnswerButtonsProps {
     value: YesNoUncertainResponse;
@@ -44,8 +40,6 @@ const DiscussionPlanSurvey = (props: DiscussionPlanSurveyProps) => {
         updateSickness,
         updateEmergency,
         updateAdmitToHospital,
-        nextClick,
-        previousClick,
     } = props;
 
     return (
@@ -109,10 +103,6 @@ const DiscussionPlanSurvey = (props: DiscussionPlanSurveyProps) => {
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
-            <PrevNextButton
-                nextClick={nextClick}
-                previousClick={previousClick}
-            />
         </Segment>
     );
 };

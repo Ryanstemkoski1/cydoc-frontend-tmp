@@ -99,10 +99,7 @@ export default class PatientHistoryContent extends Component {
 
         const buttons = Object.keys(tabDict).map((_name, index) => {
             return (
-                <Container
-                    key={`${_name}-${index}`}
-                    className='prev-next-ph-container'
-                >
+                <>
                     <Button
                         icon
                         labelPosition='left'
@@ -139,7 +136,7 @@ export default class PatientHistoryContent extends Component {
                         }
                         value={index == 0 ? undefined : index - 1}
                     >
-                        <Icon name='arrow left' className='big' />
+                        <Icon name='arrow left' />
                     </Button>
 
                     <Button
@@ -186,9 +183,9 @@ export default class PatientHistoryContent extends Component {
                         }
                         className='small-patient-next-button'
                     >
-                        <Icon name='arrow right' className='big' />
+                        <Icon name='arrow right' />
                     </Button>
-                </Container>
+                </>
             );
         });
 
@@ -198,7 +195,7 @@ export default class PatientHistoryContent extends Component {
                 menuItem: name,
                 render: () => (
                     <Tab.Pane className='white-card'>
-                        <div>{tabDict[name]}</div>
+                        {tabDict[name]}
                         {buttons[index]}
                     </Tab.Pane>
                 ),
@@ -236,10 +233,8 @@ export default class PatientHistoryContent extends Component {
                             {gridButtons}
                         </Grid>
 
-                        <Segment>
-                            {tabToDisplay}
-                            {buttons[activeIndex]}
-                        </Segment>
+                        <Segment>{tabToDisplay}</Segment>
+                        {buttons[activeIndex]}
                     </Container>
                 ) : (
                     <Tab

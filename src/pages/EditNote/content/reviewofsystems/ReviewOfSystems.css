@@ -42,10 +42,12 @@
 
 .ui.icon.button.ros-previous-button,
 .ui.icon.button.ros-next-button {
+    position: fixed;
+    bottom: 15px;
     opacity: 0.8;
     margin: 0;
     display: block;
-    font-size: 18px;
+    font-size: 13px;
     background: #006b87;
     color: white;
 }
@@ -56,11 +58,11 @@
 }
 
 .ui.icon.button.ros-previous-button {
-    left: 0;
+    left: 20px;
 }
 
 .ui.icon.button.ros-next-button {
-    right: 0;
+    right: 20px;
 }
 
 .ui.button.add-option-button {
@@ -70,6 +72,7 @@
 .ui.icon.button.small-ros-previous-button,
 .ui.icon.button.small-ros-next-button {
     display: none;
+    position: fixed;
     bottom: 15px;
     opacity: 0.8;
     margin: 0;

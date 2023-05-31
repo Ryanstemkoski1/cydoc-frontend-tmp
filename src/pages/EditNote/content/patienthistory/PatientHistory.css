@@ -96,9 +96,7 @@
   border-style: solid;
   border-color: transparent transparent #9f3a38 transparent;
 }
-.prev-next-ph-container{
-  margin-bottom: -64px;
-}
+
 .ui.icon.button.patient-previous-button, .ui.icon.button.patient-next-button,
 .ui.icon.button.social-previous-button, .ui.icon.button.social-next-button,
 .ui.icon.button.family-previous-button, .ui.icon.button.family-next-button,
@@ -106,26 +104,13 @@
 .ui.icon.button.medications-previous-button, .ui.icon.button.medications-next-button,
 .ui.icon.button.allergies-previous-button, .ui.icon.button.allergies-next-button {
   display: block;
+  position: fixed;
+  bottom: 15px;
+  margin: 0;
   opacity: 0.8;
-  font-size: 18px;
+  font-size: 13px;
   background: #006b87;
   color: white;
-}
-.ui.icon.button.patient-previous-button, 
-.ui.icon.button.social-previous-button,
-.ui.icon.button.family-previous-button,
-.ui.icon.button.surgical-previous-button,
-.ui.icon.button.medications-previous-button,
-.ui.icon.button.allergies-previous-button {
-  margin-left: -46px;
-}
-.ui.icon.button.patient-next-button,
-.ui.icon.button.social-next-button,
-.ui.icon.button.family-next-button,
-.ui.icon.button.surgical-next-button,
-.ui.icon.button.medications-next-button,
-.ui.icon.button.allergies-previous-button, .ui.icon.button.allergies-next-button {
-  margin-right: -46px;
 }
 
 .ui.icon.button.patient-previous-button:hover, .ui.icon.button.patient-next-button:hover,
@@ -140,13 +125,13 @@
 .ui.icon.button.patient-previous-button, .ui.icon.button.surgical-previous-button,
 .ui.icon.button.medications-previous-button, .ui.icon.button.allergies-previous-button,
 .ui.icon.button.social-previous-button, .ui.icon.button.family-previous-button {
-  left: 0px;
+  left: 20px;
 }
 
 .ui.icon.button.patient-next-button, .ui.icon.button.surgical-next-button,
 .ui.icon.button.medications-next-button, .ui.icon.button.allergies-next-button,
 .ui.icon.button.social-next-button, .ui.icon.button.family-next-button {
-  right: 0px;
+  right: 20px;
 }
 
 
@@ -192,9 +177,6 @@
 
 @media (min-width: 600px){
   .white-card {
-    min-height: calc(100vh - 360px);
-    display: flex !important;
-    flex-direction: column;
-    justify-content: space-between;
+      height: calc(100vh - 360px);
   }
 }
