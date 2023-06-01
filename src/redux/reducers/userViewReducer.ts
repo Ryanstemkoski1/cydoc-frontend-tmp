@@ -1,5 +1,5 @@
 import { YesNoResponse } from 'constants/enums';
-import { SelectOneInput, ResponseTypes } from 'constants/hpiEnums';
+import { ResponseTypes, SelectOneInput } from 'constants/hpiEnums';
 import { USER_VIEW_ACTION } from 'redux/actions/actionTypes';
 import { userViewActionTypes } from 'redux/actions/userViewActions';
 import { ChiefComplaintsState } from './chiefComplaintsReducer';
@@ -41,7 +41,8 @@ export interface userSurveyState {
                 | YesNoResponse
                 | SelectOneInput
                 | string
-                | ChiefComplaintsState;
+                | ChiefComplaintsState
+                | string;
         };
     };
 }
@@ -209,6 +210,23 @@ export function userViewReducer(
                         },
                     },
                 };
+        }
+
+        case USER_VIEW_ACTION.INITIAL_SURVEY_ADD_DATE_OR_PLACE: {
+            const { uid, response } = action.payload;
+            return {
+                ...state,
+                userSurvey: {
+                    ...state.userSurvey,
+                    nodes: {
+                        ...state.userSurvey.nodes,
+                        [uid]: {
+                            ...state.userSurvey.nodes[uid],
+                            response: response,
+                        },
+                    },
+                },
+            };
         }
 
         default:

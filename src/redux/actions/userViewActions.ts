@@ -93,9 +93,31 @@ export function initialSurveySearch(
     };
 }
 
+export interface InitialSurveyAddDateOrPlaceActions {
+    type: USER_VIEW_ACTION.INITIAL_SURVEY_ADD_DATE_OR_PLACE;
+    payload: {
+        uid: string;
+        response: string;
+    };
+}
+
+export function initialSurveyAddDateOrPlace(
+    uid: string,
+    input: string
+): InitialSurveyAddDateOrPlaceActions {
+    return {
+        type: USER_VIEW_ACTION.INITIAL_SURVEY_ADD_DATE_OR_PLACE,
+        payload: {
+            uid,
+            response: input,
+        },
+    };
+}
+
 export type userViewActionTypes =
     | UserViewAction
     | ProcessSurveyGraphAction
     | InitialSurveyYesNoAction
     | InitialSurveySearchAction
-    | UserViewIsSurgicalHistoryAction;
+    | UserViewIsSurgicalHistoryAction
+    | InitialSurveyAddDateOrPlaceActions;
