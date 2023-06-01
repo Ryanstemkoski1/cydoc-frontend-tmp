@@ -24,25 +24,25 @@ const Routes = (props: { children?: JSX.Element | null }) => {
         <BrowserRouter>
             <Route exact path='/' component={Home} />
             <Route exact path='/login' component={Login} />
-                <Route
-                    exact
-                    path='/forgotpasswordemail'
-                    component={ForgotPasswordEmail}
-                />
-                <PrivateRoute exact path='/editnote' component={EditNote} />
-                <PrivateRoute
-                    exact
-                    path='/secretdashboard'
-                    component={LandingPage}
-                />
-                <PrivateRoute
-                    exact
-                    path='/dashboard'
-                    component={LandingPagePublic}
-                />
-                <PrivateRoute
-                    exact
-                    path='/generateinpatientplan'
+            <Route
+                exact
+                path='/forgotpasswordemail'
+                component={ForgotPasswordEmail}
+            />
+            <PrivateRoute exact path='/editnote' component={EditNote} />
+            <PrivateRoute
+                exact
+                path='/secretdashboard'
+                component={LandingPage}
+            />
+            <PrivateRoute
+                exact
+                path='/dashboard'
+                component={LandingPagePublic}
+            />
+            <PrivateRoute
+                exact
+                path='/generateinpatientplan'
                 component={GenerateInpatientPlan}
             />
             <PrivateRoute exact path='/acid-test' component={AcidTest} />
@@ -57,17 +57,17 @@ const Routes = (props: { children?: JSX.Element | null }) => {
             <PrivateRoute
                 exact
                 path='/profilesecurity'
-                    component={ProfileSecurity}
-                />
-                <PrivateRoute
-                    exact
-                    path='/managerdashboard'
-                    component={ManagerDashboard}
-                />
-                <Route exact path='/privacypolicy' component={Policy} />
-                <Route
-                    exact
-                    path='/termsandconditions'
+                component={ProfileSecurity}
+            />
+            <PrivateRoute
+                exact
+                path='/managerdashboard'
+                component={ManagerDashboard}
+            />
+            <Route exact path='/privacypolicy' component={Policy} />
+            <Route
+                exact
+                path='/termsandconditions'
                     component={Terms_and_conditions}
                 />
                 <div className='footer-copyright'>
@@ -76,10 +76,10 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                     <a href='/privacypolicy' style={{ color: '#147A9B' }}>
                         Privacy Policy
                     </a>
-                    &emsp; • &emsp;
-                    <a href='/termsandconditions' style={{ color: '#147A9B' }}>
-                        Terms and Conditions
-                    </a>
+                &emsp; • &emsp;
+                <a href='/termsandconditions' style={{ color: '#147A9B' }}>
+                    Terms and Conditions
+                </a>
             </div>
             {props.children}
         </BrowserRouter>
