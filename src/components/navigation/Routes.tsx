@@ -43,32 +43,20 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                 <PrivateRoute
                     exact
                     path='/generateinpatientplan'
-                    component={GenerateInpatientPlan}
-                />
-                <PrivateRoute exact path='/acid-test' component={AcidTest} />
-                <PrivateRoute
-                    exact
-                    path='/templates/new'
-                    component={CreateGraph}
-                />
-                <PrivateRoute
-                    exact
-                    path='/templates/old'
-                    component={EditGraph}
-                />
-                <PrivateRoute
-                    exact
-                    path='/templates/edit'
-                    component={EditTemplate}
-                />
-                <PrivateRoute
-                    exact
-                    path='/editprofile'
-                    component={EditProfile}
-                />
-                <PrivateRoute
-                    exact
-                    path='/profilesecurity'
+                component={GenerateInpatientPlan}
+            />
+            <PrivateRoute exact path='/acid-test' component={AcidTest} />
+            <PrivateRoute exact path='/templates/new' component={CreateGraph} />
+            <PrivateRoute exact path='/templates/old' component={EditGraph} />
+            <PrivateRoute
+                exact
+                path='/templates/edit'
+                component={EditTemplate}
+            />
+            <PrivateRoute exact path='/editprofile' component={EditProfile} />
+            <PrivateRoute
+                exact
+                path='/profilesecurity'
                     component={ProfileSecurity}
                 />
                 <PrivateRoute
