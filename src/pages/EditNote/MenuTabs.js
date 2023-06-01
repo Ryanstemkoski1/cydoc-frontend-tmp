@@ -55,9 +55,9 @@ class ConnectedMenuTabs extends Component {
         const tabMenuItems = tabs.map((name, index) => (
             <Menu.Item
                 key={index}
-                name={name}
+                name={patientView ? '' + (index + 1) : name}
                 active={activeItem === name}
-                onClick={this.handleItemClick}
+                onClick={(e) => this.handleItemClick(e, { name })}
                 href={'#' + encodeURI(name)}
             />
         ));
