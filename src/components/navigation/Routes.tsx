@@ -1,6 +1,5 @@
 import Policy from 'constants/Documents/policy';
 import Terms_and_conditions from 'constants/Documents/terms_and_conditions';
-import LegacySignUpModal from 'pages/Account-Legacy/LegacySignUpModal';
 import EditProfile from 'pages/Account/EditProfile';
 import ForgotPasswordEmail from 'pages/Account/ForgotPasswordEmail';
 import Login from 'pages/Account/Login';
@@ -22,15 +21,9 @@ import { PrivateRoute } from './PrivateRoute';
 
 const Routes = (props: { children?: JSX.Element | null }) => {
     return (
-        <div>
-            <BrowserRouter>
-                <Route exact path='/' component={Home} />
-                <Route exact path='/login' component={Login} />
-                <Route
-                    exact
-                    path='/hidden-users'
-                    component={LegacySignUpModal}
-                />
+        <BrowserRouter>
+            <Route exact path='/' component={Home} />
+            <Route exact path='/login' component={Login} />
                 <Route
                     exact
                     path='/forgotpasswordemail'
@@ -99,10 +92,9 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                     <a href='/termsandconditions' style={{ color: '#147A9B' }}>
                         Terms and Conditions
                     </a>
-                </div>
-                {props.children}
-            </BrowserRouter>
-        </div>
+            </div>
+            {props.children}
+        </BrowserRouter>
     );
 };
 export default Routes;

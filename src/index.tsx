@@ -48,3 +48,5 @@ function App() {
         </CookiesProvider>
     );
 }
+
+root.render(<App />);
