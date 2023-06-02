@@ -16,7 +16,7 @@ const userInfoFields: (keyof SignUpFormData)[] = [
 ];
 const termsFields: (keyof SignUpFormData)[] = ['isTermsChecked'];
 const privacyPolicyFields: (keyof SignUpFormData)[] = ['isPrivacyChecked'];
-const institutionFields: (keyof SignUpFormData)[] = ['institutionId'];
+const institutionFields: (keyof SignUpFormData)[] = ['institutionName'];
 
 export default function useEnableNext(step: number) {
     const { errors, touched } = useFormikContext<SignUpFormData>();
