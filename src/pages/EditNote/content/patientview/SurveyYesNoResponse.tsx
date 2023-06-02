@@ -58,7 +58,7 @@ class SurveyYesNoResponse extends React.Component<Props> {
                 edges[edge.toString()].to,
             ])
             .sort((tup1, tup2) => parseInt(tup1[0]) - parseInt(tup2[0]))
-            .map(([_questionOrder, medId]) => medId);
+            .map(([, /* _questionOrder, */ medId]) => medId);
         this.props.addDisplayedNodes(chiefComplaint, childNodes, nodes);
     };
 

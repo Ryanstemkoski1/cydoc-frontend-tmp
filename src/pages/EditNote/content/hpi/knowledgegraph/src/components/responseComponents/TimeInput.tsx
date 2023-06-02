@@ -14,7 +14,7 @@ import { isTimeInputDictionary } from 'redux/reducers/hpiReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
-import { ROS_MED_BP, ROS_SMALL_BP } from 'constants/breakpoints';
+import { ROS_SMALL_BP } from 'constants/breakpoints';
 
 interface TimeInputProps {
     node: string;

@@ -87,14 +87,14 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
 
     displayVitals = () => {
         const vitals: string[] = [];
-        const vitalUnits: {
-            [index: string]: string;
-        } = {
-            'Heart Rate': ' bpm',
-            Temperature: ' °C',
-            RR: ' bpm',
-            'Oxygen Saturation': ' PaO₂',
-        };
+        // const vitalUnits: {
+        //     [index: string]: string;
+        // } = {
+        //     'Heart Rate': ' bpm',
+        //     Temperature: ' °C',
+        //     RR: ' bpm',
+        //     'Oxygen Saturation': ' PaO₂',
+        // };
 
         if (
             this.props.physicalExam.vitals.systolicBloodPressure !== 0 &&

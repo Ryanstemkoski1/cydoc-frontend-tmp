@@ -2,7 +2,6 @@ import {
     Form,
     Grid,
     TextAreaProps,
-    StrictInputProps,
     ButtonProps,
     Button,
 } from 'semantic-ui-react';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Icon } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import '../css/Button.css';
 import ChiefComplaintsButton from './ChiefComplaintsButton';
 import '../../HPI.css';
@@ -68,7 +68,7 @@ class BodySystemDropdown extends React.Component<
 
         const isMobile = window.innerWidth < NOTE_PAGE_MOBILE_BP;
         const cardio = imgToRender[name] == heart;
-        const neuro = imgToRender[name] == brain;
+        // const neuro = imgToRender[name] == brain;
 
         //Setting name to default of name, but abbreviating if needed
         let nameAbrev = name;
