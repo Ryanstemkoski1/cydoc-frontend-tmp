@@ -1,9 +1,9 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { AllergiesNote } from '../AllergiesNote';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const initAllergies = {
     0: { incitingAgent: '', reaction: '', comments: '' },

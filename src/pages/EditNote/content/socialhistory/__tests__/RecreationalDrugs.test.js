@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import RecreationalDrugs from '../RecreationalDrugs';
 
 import configureStore from 'redux-mock-store';
@@ -13,7 +13,7 @@ import {
     YesNoResponse,
 } from 'constants/enums';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -332,8 +332,7 @@ describe('Recreational Drugs Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.Yes,
                 },
@@ -346,8 +345,7 @@ describe('Recreational Drugs Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.Maybe,
                 },
@@ -360,8 +358,7 @@ describe('Recreational Drugs Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.No,
                 },
@@ -392,8 +389,7 @@ describe('Recreational Drugs Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_TRIED_TO_QUIT,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_TRIED_TO_QUIT,
                 payload: {
                     newResponse: YesNoResponse.Yes,
                 },
@@ -406,8 +402,7 @@ describe('Recreational Drugs Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_TRIED_TO_QUIT,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_TRIED_TO_QUIT,
                 payload: {
                     newResponse: YesNoResponse.No,
                 },
@@ -441,8 +436,7 @@ describe('Recreational Drugs Integration', () => {
                 });
             const expectedActions = [
                 {
-                    type:
-                        SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_COMMENTS,
+                    type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_COMMENTS,
                     payload: {
                         newComments: value,
                     },
@@ -477,8 +471,7 @@ describe('Recreational Drugs Integration', () => {
                 });
             const expectedActions = [
                 {
-                    type:
-                        SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_QUIT_YEAR,
+                    type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_QUIT_YEAR,
                     payload: {
                         newQuitYear: value,
                     },

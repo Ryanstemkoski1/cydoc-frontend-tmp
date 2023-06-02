@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import DiscussionPlan from '../DiscussionPlan';
 import DiscussionPlanMenu from '../DiscussionPlanMenu';
 import DiscussionPlanSurvey from '../DiscussionPlanSurvey';
@@ -9,8 +9,9 @@ import { BaseCategoryForm } from '../forms/BaseCategoryForm';
 import { conditionId, initialPlan } from '../util';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
+import { act } from 'react-dom/test-utils';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -68,7 +69,7 @@ describe('DiscussionPlan Integration', () => {
         expect(wrapper.find(DiscussionPlanMenu).prop('index')).toEqual(0);
     });
 
-    it('updates conditionId and index when tab is clicked', () => {
+    it('updates conditionId and index when tab is clicked', async () => {
         const id = 'foo';
         const wrapper = mountWithStore({
             ...initialPlan,
@@ -77,7 +78,9 @@ describe('DiscussionPlan Integration', () => {
                 [id]: { ...initialPlan.conditions[conditionId] },
             },
         });
-        wrapper.find(`a[uuid="${id}"]`).simulate('click');
+        await act(() => {
+            wrapper.find(`a[uuid="${id}"]`).simulate('click');
+        });
         expect(
             wrapper.find(DifferentialDiagnosisForm).prop('conditionId')
         ).toEqual(id);
