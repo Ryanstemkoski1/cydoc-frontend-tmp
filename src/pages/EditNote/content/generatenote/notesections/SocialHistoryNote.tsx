@@ -128,8 +128,34 @@ export class SocialHistoryNote extends Component<Props> {
         return str;
     };
 
+    validatePackPerDay = (input: string) => {
+        input = input.trim();
+        const pattern = /^(?:(?:\d+\s+)?\d+\/\d+|\d+(?:\.\d+)?|\d+)$/;
+        return pattern.test(input) ? false : true;
+    };
     render(): React.ReactNode {
         const { socialHistory } = this.props;
+        const packsPerDay: any = () => {
+            if (
+                this.validatePackPerDay(`${socialHistory.tobacco.packsPerDay}`)
+            ) {
+                return `0`;
+            }
+            const packs = `${socialHistory.tobacco.packsPerDay}`
+                .split(' ')
+                .reduce((acc, el) => {
+                    if (eval(el) == undefined) {
+                        return acc;
+                    }
+                    return (acc = eval(acc) + eval(el));
+                }, '0');
+            return packs;
+        };
+        const numberOfYears =
+            socialHistory.tobacco.numberOfYears == -1
+                ? 0
+                : socialHistory.tobacco.numberOfYears;
+
         const tobaccoText = this.checkEmptyTobacco()
             ? null
             : (socialHistory.tobacco.usage === SubstanceUsageResponse.Yes
@@ -145,12 +171,10 @@ export class SocialHistoryNote extends Component<Props> {
               (socialHistory.tobacco.usage === SubstanceUsageResponse.NeverUsed
                   ? ' Never used.'
                   : '') +
-              (socialHistory.tobacco.packsPerDay !== -1 &&
-              socialHistory.tobacco.numberOfYears
-                  ? ` ${(
-                        socialHistory.tobacco.numberOfYears *
-                        socialHistory.tobacco.packsPerDay
-                    ).toString()} pack years.`
+              (packsPerDay != -1 && socialHistory.tobacco.numberOfYears
+                  ? ` ${(numberOfYears * packsPerDay())
+                        .toFixed(1)
+                        .toString()} pack years.`
                   : '') +
               (socialHistory.tobacco.productsUsed.length !== 0
                   ? ` Products used: ${socialHistory.tobacco.productsUsed.join(
