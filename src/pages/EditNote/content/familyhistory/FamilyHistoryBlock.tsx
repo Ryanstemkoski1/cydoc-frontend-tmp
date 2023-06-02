@@ -61,11 +61,8 @@ class FamilyHistoryBlock extends Component<Props> {
 
     render() {
         const { mobile, conditionInp, index, isPreview } = this.props;
-        const {
-            condition,
-            hasAfflictedFamilyMember,
-            familyMembers,
-        } = this.props.familyHistoryItem;
+        const { condition, hasAfflictedFamilyMember, familyMembers } =
+            this.props.familyHistoryItem;
         // array of dropdowns displayed on Family History Family Member column
         // variable range that changes when the user clicks the + (add member) button
         // we want there to be at least one dropdown

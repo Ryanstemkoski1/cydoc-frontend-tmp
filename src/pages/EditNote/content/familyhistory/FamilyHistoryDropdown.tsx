@@ -40,9 +40,8 @@ class FamilyHistoryDropdown extends Component<Props> {
     constructor(props: Props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
-        this.handleCauseOfDeathToggle = this.handleCauseOfDeathToggle.bind(
-            this
-        );
+        this.handleCauseOfDeathToggle =
+            this.handleCauseOfDeathToggle.bind(this);
         this.handleCommentsChange = this.handleCommentsChange.bind(this);
         this.handleLivingToggle = this.handleLivingToggle.bind(this);
     }
@@ -101,12 +100,8 @@ class FamilyHistoryDropdown extends Component<Props> {
             /* eslint-disable-next-line */
             family_index,
         } = this.props;
-        const {
-            member,
-            causeOfDeath,
-            living,
-            comments,
-        } = this.props.familyHistoryMember;
+        const { member, causeOfDeath, living, comments } =
+            this.props.familyHistoryMember;
 
         return mobile ? (
             <div className='dropdown-component-container'>

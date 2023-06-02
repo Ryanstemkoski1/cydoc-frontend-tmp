@@ -50,12 +50,10 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
             ),
         };
         this.handleChange = this.handleChange.bind(this);
-        this.handleConditionToggleButtonClick = this.handleConditionToggleButtonClick.bind(
-            this
-        );
-        this.handleResolvedToggleButtonClick = this.handleResolvedToggleButtonClick.bind(
-            this
-        );
+        this.handleConditionToggleButtonClick =
+            this.handleConditionToggleButtonClick.bind(this);
+        this.handleResolvedToggleButtonClick =
+            this.handleResolvedToggleButtonClick.bind(this);
         this.generateListItems = this.generateListItems.bind(this);
         this.addSeenCondition = this.addSeenCondition.bind(this);
         this.addRow = this.addRow.bind(this);

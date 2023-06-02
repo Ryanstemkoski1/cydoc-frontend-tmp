@@ -10,9 +10,10 @@ class ConditionInput extends React.Component {
         let answer;
         let isTitleFocused = false;
         if (!this.props.isPreview) {
-            const condition = this.context[this.props.category][
-                this.props.index
-            ]['Condition'];
+            const condition =
+                this.context[this.props.category][this.props.index][
+                    'Condition'
+                ];
             answer = condition.length === 0 ? '' : condition;
             isTitleFocused = condition.length === 0;
         }

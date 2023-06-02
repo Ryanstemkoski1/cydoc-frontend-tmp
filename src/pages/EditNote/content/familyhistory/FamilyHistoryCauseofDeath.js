@@ -19,9 +19,10 @@ export default class FamilyHistoryCauseofDeath extends Component {
     }
 
     render() {
-        let cause_of_death = this.context['Family History'][this.props.index][
-            'Cause of Death'
-        ][this.props.family_index];
+        let cause_of_death =
+            this.context['Family History'][this.props.index]['Cause of Death'][
+                this.props.family_index
+            ];
         return (
             <div>
                 <ToggleButton

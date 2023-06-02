@@ -68,14 +68,14 @@ const Routes = (props: { children?: JSX.Element | null }) => {
             <Route
                 exact
                 path='/termsandconditions'
-                    component={Terms_and_conditions}
-                />
-                <div className='footer-copyright'>
-                    Copyright © 2023 Cydoc Corporation. All rights reserved.
-                    Patent pending. &emsp;•&emsp;
-                    <a href='/privacypolicy' style={{ color: '#147A9B' }}>
-                        Privacy Policy
-                    </a>
+                component={Terms_and_conditions}
+            />
+            <div className='footer-copyright'>
+                Copyright © 2023 Cydoc Corporation. All rights reserved. Patent
+                pending. &emsp;•&emsp;
+                <a href='/privacypolicy' style={{ color: '#147A9B' }}>
+                    Privacy Policy
+                </a>
                 &emsp; • &emsp;
                 <a href='/termsandconditions' style={{ color: '#147A9B' }}>
                     Terms and Conditions

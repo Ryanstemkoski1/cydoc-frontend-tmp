@@ -71,9 +71,8 @@ const DoctorSignUp = ({
     const phoneNumberRegex = new RegExp(
         '^[+]?[(]?[0-9]{3}[)]?[" "][-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'
     );
-    const [isInviteDoctorOpen, setIsInviteDoctorOpen] = useState(
-        continueIsActive
-    );
+    const [isInviteDoctorOpen, setIsInviteDoctorOpen] =
+        useState(continueIsActive);
     const [username, setUsername] = useState(userUsername);
     const [email, setEmail] = useState(userEmail);
     const [confirmEmail, setConfirmEmail] = useState(userEmail);
@@ -249,9 +248,8 @@ const DoctorSignUp = ({
             return true;
         }
         if (page === 1) {
-            const cardElementContainer = document.querySelector(
-                '#card-element'
-            );
+            const cardElementContainer =
+                document.querySelector('#card-element');
 
             const cardElementComplete = cardElementContainer.classList.contains(
                 'StripeElement--complete'
