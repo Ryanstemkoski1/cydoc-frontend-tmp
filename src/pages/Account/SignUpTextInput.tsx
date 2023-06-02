@@ -30,7 +30,6 @@ function SignUpTextInput({
     return useMemo(
         () => (
             <>
-                <Box margin={1} marginTop={2} />
                 <FastField
                     as={InputField}
                     id={fieldName}

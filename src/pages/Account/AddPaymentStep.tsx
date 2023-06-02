@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import './Account.css';
-import { Container, Modal, Header, Loader } from 'semantic-ui-react';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { SignUpFormData } from './SignUpForm';
 import { useField } from 'formik';
 import { log } from 'modules/logging';
 import { stringFromError } from 'modules/error-utils';
+import { Box } from '@mui/system';
+import { CircularProgress, Typography } from '@mui/material';
+import ModalHeader from './ModalHeader';
 
 export function AddPaymentStep() {
     const stripe = useStripe();
@@ -50,7 +52,7 @@ export function AddPaymentStep() {
                     );
                 }
                 if (paymentMethod) {
-                    console.log(`got payment method`, paymentMethod);
+                    // console.log(`got payment method`, paymentMethod);
 
                     setPaymentMethod(paymentMethod);
                 }
@@ -71,49 +73,41 @@ export function AddPaymentStep() {
 
     return (
         <>
-            <Modal.Header>Free Trial</Modal.Header>
-            <Modal.Content>
+            <ModalHeader title='Free Trial' />
+            <Box sx={{ margin: '2rem' }}>
                 {loading ? (
-                    <Loader active inline='centered' />
+                    <div style={{ textAlign: 'center', padding: '5rem' }}>
+                        <CircularProgress sx={{}} />
+                    </div>
                 ) : (
-                    <Container>
-                        <Header as='h5' textAlign='center' content='' />
-                        <div id='signup-modal-div'>
-                            <p
-                                style={{ textAlign: 'left' }}
-                                id='signup-modal-text'
-                            >
-                                You have been given a 90 day free trial. Your
-                                card will not be billed until the 4th month. The
-                                subscription is $100/clinician/month. You may
-                                cancel anytime.
-                            </p>
-                        </div>
+                    <>
+                        <Typography
+                            style={{
+                                textAlign: 'left',
+                                marginBottom: '2rem',
+                                justifyContent: 'center',
+                            }}
+                            id='signup-modal-text'
+                        >
+                            You have been given a 90 day free trial. Your card
+                            will not be billed until the 4th month. The
+                            subscription is $100/clinician/month. You may cancel
+                            anytime.
+                        </Typography>
                         <div
                             style={{
-                                maxWidth: '350px',
-                                marginTop: '15px',
-                                marginBottom: '15px',
+                                maxWidth: '90%',
                                 border: '1px solid grey',
                                 borderRadius: '4px',
-                                height: '400px',
-                                padding: '10px 10px 0 10px',
+                                height: '3rem',
+                                padding: '1rem',
                             }}
                         >
-                            <CardElement
-                                id='card-element'
-                                options={{
-                                    style: {
-                                        base: {
-                                            backgroundColor: 'white',
-                                        },
-                                    },
-                                }}
-                            />
+                            <CardElement id='card-element' />
                         </div>
-                    </Container>
+                    </>
                 )}
-            </Modal.Content>
+            </Box>
         </>
     );
 }

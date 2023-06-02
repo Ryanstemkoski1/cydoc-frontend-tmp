@@ -17,6 +17,7 @@ import {
     SemanticShorthandItem,
 } from 'semantic-ui-react';
 import { Stack } from '@mui/system';
+import { Grid } from '@mui/material';
 
 export function PasswordErrorMessages() {
     const [{ value: newPassword }, newPasswordMeta] =
@@ -71,21 +72,27 @@ export function PasswordErrorMessages() {
         }
     }, [newPassword, newPasswordMeta.touched]);
 
+    if (!showPasswordMatchError && !showPasswordRequirementsErrors) {
+        return null;
+    }
+
     return (
-        <Stack sx={{ marginTop: '2rem' }}>
-            {showPasswordMatchError && (
-                <Container className='pass-match-error'>
-                    <Icon name='exclamation circle' />
-                    Passwords do not match.
-                </Container>
-            )}
-            {showPasswordRequirementsErrors ? (
-                <Message
-                    error
-                    header='Password must satisfy the following requirements:'
-                    list={passwordErrorMessages}
-                />
-            ) : null}
-        </Stack>
+        <Grid item xs={12}>
+            <Stack sx={{ marginTop: '1rem' }}>
+                {showPasswordMatchError && (
+                    <Container className='pass-match-error'>
+                        <Icon name='exclamation circle' />
+                        Passwords do not match.
+                    </Container>
+                )}
+                {showPasswordRequirementsErrors ? (
+                    <Message
+                        error
+                        header='Password must satisfy the following requirements:'
+                        list={passwordErrorMessages}
+                    />
+                ) : null}
+            </Stack>
+        </Grid>
     );
 }

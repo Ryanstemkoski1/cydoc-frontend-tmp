@@ -15,11 +15,7 @@ export default function ModalHeader({ title }: Props) {
             >
                 {title}
             </Typography>
-            <Divider
-                sx={{
-                    marginBottom: '1rem',
-                }}
-            />
+            <Divider />
         </>
     );
 }

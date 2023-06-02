@@ -34,7 +34,11 @@ export function TermsOrPolicyStep({
     return (
         <>
             <ModalHeader title={title} />
-            <Box>
+            <Box
+                sx={{
+                    paddingTop: '1rem',
+                }}
+            >
                 {infoElement}
                 <Divider
                     sx={{
