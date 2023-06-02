@@ -1,0 +1,135 @@
+.ui.container.login {
+    padding: 10vh 0;
+    width: 450px;
+}
+
+.ui.container.login .segment {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.ui.container.sign-up {
+    padding: 2rem 0;
+    width: 700px;
+}
+.ui.container.sign-up .segment {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.ui.container.forgot-password-email {
+    padding: 10vh 0;
+    width: 450px;
+}
+
+.ui.container.forgot-password-email .segment {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+
+.ui.container.forgot-password {
+    padding: 10vh 0;
+    width: 450px;
+}
+
+.ui.container.forgot-password .segment {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.login > .container,
+.sign-up > .container, 
+.forgot-password > .container {
+    padding: 1rem;
+}
+
+.ui.header.logo-text {
+    font-family: Pompadour, Arial, Helvetica, sans-serif;
+    font-size: 2.7rem;
+    color: black;
+    margin: .5rem;
+}
+
+.ui.header.logo-text-mobile {
+    font-family: Pompadour, Arial, Helvetica, sans-serif;
+    font-size: 1.8rem;
+    color: black;
+    margin: .5rem;
+}
+
+.login-header, .sign-up-header, .forgot-password-header, .forgot-password-email-header{
+    padding: 1rem;
+    font-size: 1.2rem;
+    color: black;
+}
+
+.make-an-account-button, .forgot-password-button {
+    font-size: 0.9rem;
+    margin-top: 5px;
+    color: teal;
+}
+
+.role-label {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, .85);
+}
+
+.ui.card.password-reqs {
+    margin-top: 1rem;
+}
+
+.ui.card.password-reqs-not-met {
+    margin-top: 1rem;
+    border: 1px solid #9f3a38;
+    box-shadow: 0 1px 3px 0 #9f3a38, 0 0 0 1px #9f3a38;
+}
+
+.req-met {
+    color: green;
+}
+
+.req-not-met {
+    color: #9f3a38;
+}
+
+.ui.container.pass-match-error {
+    margin: -.5rem 0 .75rem;
+    color: #9f3a38;
+}
+
+.ui.form .fields > .field.role {
+    height: fit-content;
+    padding: 0.5em .5em;
+}
+
+.ui.container.pass-coming-soon {
+    color: black;
+    font-size: 1.5rem;
+}
+
+.ui.container.change-pass-button {
+    margin: .5rem 0 1.5rem;
+}
+
+
+#signup-modal-div {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+#signup-modal-title {
+    font-size: 25px;
+    color: black;
+}
+
+#signup-modal-text {
+    font-size: 18px;
+}
+
+#signup-modal-btns {
+    margin-bottom: 30px;
+    margin: auto;
+    text-align: center;
+}
