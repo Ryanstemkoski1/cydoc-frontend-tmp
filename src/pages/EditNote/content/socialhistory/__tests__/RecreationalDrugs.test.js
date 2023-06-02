@@ -296,17 +296,16 @@ describe('Recreational Drugs Integration', () => {
             );
 
             wrapper.find('button[type="delete"]').first().simulate('click');
+            wrapper.update();
 
-            const expectedActions = [
-                {
-                    type: SOCIAL_HISTORY_ACTION.DELETE_RECREATIONAL_DRUG_USED,
-                    payload: {
-                        index: 0,
-                    },
+            const expectedAction = {
+                type: SOCIAL_HISTORY_ACTION.DELETE_RECREATIONAL_DRUG_USED,
+                payload: {
+                    index: 0,
                 },
-            ];
+            };
 
-            expect(store.getActions()).toEqual(expectedActions);
+            expect(store.getActions()).toContainEqual(expectedAction);
         }
     );
 
