@@ -148,11 +148,7 @@ export function UserInfoStep() {
                             placeholder='confirm new password'
                         />
                     </Grid>
-                    <Grid item xs={12}>
-                        <PasswordErrorMessages />
-                    </Grid>
-
-                    <Divider />
+                    <PasswordErrorMessages />
                 </Grid>
             </Modal.Content>
         </>
