@@ -327,7 +327,7 @@ class Alcohol extends React.Component<Props, State> {
                         circular
                         icon='close'
                         size='mini'
-                        type='delete'
+                        id='btn-hpi-type-delete'
                         onClick={() => {
                             this.props.deleteAlcoholConsumption(rowindex);
                         }}
@@ -381,9 +381,8 @@ class Alcohol extends React.Component<Props, State> {
                             id='dropdown-display'
                         />
                         <Button
-                            id='btn-display'
                             icon='close'
-                            type='delete'
+                            id='btn-hpi-type-delete'
                             compact
                             onClick={() => {
                                 this.props.deleteAlcoholConsumption(i);
