@@ -295,7 +295,10 @@ describe('Recreational Drugs Integration', () => {
                 recreationalDrugsState
             );
 
-            wrapper.find('button[type="delete"]').first().simulate('click');
+            wrapper
+                .find('button[id="btn-hpi-type-delete"]')
+                .first()
+                .simulate('click');
             wrapper.update();
 
             const expectedAction = {

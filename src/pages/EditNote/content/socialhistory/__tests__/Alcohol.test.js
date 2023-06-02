@@ -258,7 +258,7 @@ describe('Alcohol Integration', () => {
 
     test.each(cases)(
         '%s view dispatches correct action when deleting row from alcohol consumption table',
-        (_type, mountAlcoholWithStore) => {
+        async (_type, mountAlcoholWithStore) => {
             const alcoholState = {
                 ...initialSocialHistoryState,
                 alcohol: {
@@ -276,7 +276,11 @@ describe('Alcohol Integration', () => {
 
             const { store, wrapper } = mountAlcoholWithStore(alcoholState);
 
-            wrapper.find('button[type="delete"]').first().simulate('click');
+            wrapper
+                .find('button[id="btn-hpi-type-delete"]')
+                .first()
+                .simulate('click');
+
             wrapper.update();
 
             const expectedAction = {
