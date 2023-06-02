@@ -9,6 +9,7 @@ import { BaseCategoryForm } from '../forms/BaseCategoryForm';
 import { conditionId, initialPlan } from '../util';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
+import { act } from 'react-dom/test-utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
