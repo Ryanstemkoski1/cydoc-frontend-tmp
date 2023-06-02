@@ -26,6 +26,11 @@ export default function useEnableNext(step: number) {
         []
     );
 
+    const privacyPolicyFields: (keyof SignUpFormData)[] = useMemo(
+        () => ['isPrivacyChecked'],
+        []
+    );
+
     const noErrorsForStep = useCallback(
         (fields: (keyof SignUpFormData)[]) =>
             !fields.some((f) => Object.keys(errors).includes(f)),
@@ -66,7 +71,10 @@ export default function useEnableNext(step: number) {
                     noErrorsForStep(termsFields)
                 );
             case 4: // PrivacyPolicyStep
-                return isValid && dirty;
+                return (
+                    someFieldTouched(privacyPolicyFields) &&
+                    noErrorsForStep(privacyPolicyFields)
+                );
             default:
                 log(`useEnableNext unrecognized step: ${step}`);
                 return true;
