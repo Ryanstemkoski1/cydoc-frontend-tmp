@@ -9,7 +9,6 @@ import { BaseCategoryForm } from '../forms/BaseCategoryForm';
 import { conditionId, initialPlan } from '../util';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import { act } from 'react-dom/test-utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -78,9 +77,8 @@ describe('DiscussionPlan Integration', () => {
                 [id]: { ...initialPlan.conditions[conditionId] },
             },
         });
-        await act(() => {
-            wrapper.find(`a[uuid="${id}"]`).simulate('click');
-        });
+        wrapper.find(`a[uuid="${id}"]`).simulate('click');
+        wrapper.update();
         expect(
             wrapper.find(DifferentialDiagnosisForm).prop('conditionId')
         ).toEqual(id);
