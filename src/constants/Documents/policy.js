@@ -45,12 +45,15 @@ const stylingObject = {
         wordBreak: 'break-word',
     },
 };
+const cssScroll = '.scroll { max-height: 240px; overflow-y: scroll; }';
+
 const Title = () => {
     return <div style={stylingObject.title}>Privacy Policy</div>;
 };
 const Policy = (props) => {
     return (
-        <div>
+        <div className='scroll'>
+            <style>{cssScroll}</style>
             {props.title ? null : <NavMenu />}
             <div style={stylingObject.body}>
                 <div style={stylingObject.subtitle}>

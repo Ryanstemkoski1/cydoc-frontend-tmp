@@ -37,6 +37,8 @@ const stylingObject = {
         wordBreak: 'break-word',
     },
 };
+const cssScroll = '.scroll { max-height: 240px; overflow-y: scroll; }';
+
 const Title = () => {
     return (
         <div style={stylingObject.title}>Terms and Conditions of Service</div>
@@ -45,6 +47,8 @@ const Title = () => {
 
 const Terms_and_conditions = (props) => {
     return (
+        <div className='scroll'>
+            <style> {cssScroll} </style>
         <div style={stylingObject.body}>
             {props.title ? null : <NavMenu />}
             <div
@@ -1194,10 +1198,14 @@ const Terms_and_conditions = (props) => {
                     </span>
                 </ol>
                 <span
-                    style={{ color: 'rgb(127, 127, 127)', marginLeft: '3em' }}
-                >
-                    <strong>Last updated: January 10, 2022</strong>
-                </span>
+                    style={{
+                        color: 'rgb(127, 127, 127)',
+                        marginLeft: '3em',
+                    }}
+                    >
+                        <strong>Last updated: January 10, 2022</strong>
+                    </span>
+                </div>
             </div>
         </div>
     );
