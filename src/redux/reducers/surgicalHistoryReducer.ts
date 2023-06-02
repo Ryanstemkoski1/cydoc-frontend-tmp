@@ -1,6 +1,5 @@
 import { SURGICAL_HISTORY_ACTION } from '../actions/actionTypes';
 import { SurgicalHistoryActionTypes } from '../actions/surgicalHistoryActions';
-import { v4 } from 'uuid';
 import { YesNoResponse } from 'constants/enums';
 
 export interface SurgicalHistoryState {
