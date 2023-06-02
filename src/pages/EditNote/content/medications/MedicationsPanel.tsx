@@ -33,7 +33,6 @@ import { DropdownType } from './MedicationsContent';
 import { OptionMapping } from '_processOptions';
 import { MEDICATIONS_PANEL_SCREEN_BP } from '../../../../constants/breakpoints';
 import './Medications.css';
-import { ResponseTypes } from 'constants/hpiEnums';
 
 interface OwnProps {
     mobile: boolean;

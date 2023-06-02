@@ -41,7 +41,9 @@ const DiscussionPlan = ({
     }, []);
 
     // Returns formatted actions
-    const formatAction = (action: PlanAction, ...args: any[]): EventHandler => {
+    const formatAction = (
+        action: PlanAction /*  ...args: any[] */
+    ): EventHandler => {
         return (_e, { uuid, value }) => {
             action(currentId, uuid, value);
         };

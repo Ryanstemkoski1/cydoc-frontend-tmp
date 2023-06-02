@@ -126,7 +126,7 @@ class FamilyHistoryContent extends Component<Props, State> {
         const standardFamilyHistory = famHistState;
 
         Object.entries(standardFamilyHistory).map(
-            (value: [string, FamilyHistoryCondition], index: number) => {
+            (value: [string, FamilyHistoryCondition]) => {
                 const disease = value[1]['condition'];
                 const standardDisease = standardizeDiseaseNames(disease);
                 let standardReplacedDisease = standardDisease;

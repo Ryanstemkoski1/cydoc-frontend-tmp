@@ -7,7 +7,6 @@ import { HpiState } from 'redux/reducers/hpiReducer';
 import {
     BodyLocationType,
     SelectOneInput,
-    SelectManyInput,
     HpiResponseType,
     LabTestType,
     ListTextInput,

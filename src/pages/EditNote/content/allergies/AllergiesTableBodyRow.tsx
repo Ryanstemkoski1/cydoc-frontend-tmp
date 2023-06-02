@@ -38,7 +38,7 @@ class AllergiesTableBodyRow extends Component<Props> {
             onAddItem,
             rowIndex,
         } = this.props;
-        const { incitingAgent, reaction, comments } = this.props.allergiesItem;
+        const { incitingAgent, reaction } = this.props.allergiesItem;
 
         const tableRows = fields.map(
             (field: keyof AllergiesItem, index: number) => {

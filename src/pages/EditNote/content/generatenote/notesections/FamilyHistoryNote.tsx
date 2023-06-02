@@ -1,8 +1,6 @@
-import { CognitoUserSession } from 'amazon-cognito-identity-js';
 import { YesNoResponse } from 'constants/enums';
 import React, { Component } from 'react';
 import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
-import { FamilyHistoryConditionFlat } from 'redux/selectors/familyHistorySelectors';
 import { Table } from 'semantic-ui-react';
 
 interface FamilyHistoryProps {
