@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { YesNoResponse } from 'constants/enums';
-import { GraphData, NodeInterface, ResponseTypes } from 'constants/hpiEnums';
+import { GraphData, ResponseTypes } from 'constants/hpiEnums';
 import React from 'react';
 import { connect } from 'react-redux';
 import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
@@ -10,10 +10,6 @@ import {
     resetAdditionalSurveyPage,
     updateAdditionalSurveyDetails,
 } from 'redux/actions/additionalSurveyActions';
-import {
-    AddDisplayedNodesAction,
-    addDisplayedNodes,
-} from 'redux/actions/displayedNodesActions';
 import {
     ProcessKnowledgeGraphAction,
     processKnowledgeGraph,
@@ -264,7 +260,6 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             ])
             .sort((tup1, tup2) => parseInt(tup1[0]) - parseInt(tup2[0]))
             .map(([_questionOrder, medId]) => medId);
-        this.props.addDisplayedNodes(chiefComplaint, childNodes, nodes);
     };
 
     renderSwitch = (id: string) => {
@@ -533,13 +528,6 @@ interface DispatchProps {
         uid: string,
         chiefComplaint: string
     ) => InitialSurveySearchAction;
-    addDisplayedNodes: (
-        category: string,
-        nodesArr: string[],
-        nodes: {
-            [node: string]: NodeInterface;
-        }
-    ) => AddDisplayedNodesAction;
     updateAdditionalSurveyDetails: (
         legalFirstName: string,
         legalLastName: string,
@@ -563,7 +551,6 @@ const mapDispatchToProps = {
     saveHpiHeader,
     processKnowledgeGraph,
     initialSurveySearch,
-    addDisplayedNodes,
     updateAdditionalSurveyDetails,
     resetAdditionalSurveyPage,
 };
