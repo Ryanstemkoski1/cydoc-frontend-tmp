@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import MedicalHistoryContent from '../MedicalHistoryContent.tsx';
@@ -11,7 +11,7 @@ import { MEDICAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
 import ConditionInput from 'components/tools/ConditionInput';
 // import MedicalHistoryNoteItem from '../MedicalHistoryNoteItem';
 import MedicalHistoryNoteRow from '../MedicalHistoryNoteRow';
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 

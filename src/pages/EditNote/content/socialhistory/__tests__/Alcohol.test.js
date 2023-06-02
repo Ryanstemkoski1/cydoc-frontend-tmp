@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import Alcohol from '../Alcohol';
 
 import configureStore from 'redux-mock-store';
@@ -15,7 +15,7 @@ import {
 import drinkTypes from 'constants/SocialHistory/drinkTypes';
 import drinkSizes from 'constants/SocialHistory/drinkSizes';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -311,8 +311,7 @@ describe('Alcohol Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.Yes,
                 },
@@ -325,8 +324,7 @@ describe('Alcohol Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.Maybe,
                 },
@@ -339,8 +337,7 @@ describe('Alcohol Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.No,
                 },
