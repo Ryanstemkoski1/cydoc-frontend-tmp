@@ -183,7 +183,7 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
             tendon_reflexes: [],
             cardiac: [],
             /* eslint-disable-next-line */
-            expand_murmurs: []
+            expand_murmurs: [],
         };
         for (const widget in physicalWidgets) {
             if (widget === 'pulses') {
@@ -377,13 +377,15 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
                                         featureKey === 'early') ||
                                     featureKey === 'mid'
                                 ) {
-                                    specificMurmurTime = this.convertButtonTextToNoteText(
-                                        featureKey
-                                    );
+                                    specificMurmurTime =
+                                        this.convertButtonTextToNoteText(
+                                            featureKey
+                                        );
                                 } else {
-                                    specificMurmurAdditionalFeatures = this.convertButtonTextToNoteText(
-                                        featureKey
-                                    );
+                                    specificMurmurAdditionalFeatures =
+                                        this.convertButtonTextToNoteText(
+                                            featureKey
+                                        );
                                 }
                             }
                         }

@@ -37,12 +37,10 @@ class TemplateQuestion extends Component {
         this.saveQuestion = this.saveQuestion.bind(this);
         this.saveQuestionType = this.saveQuestionType.bind(this);
         this.deleteQuestion = this.deleteQuestion.bind(this);
-        this.deleteQuestionWithChildren = this.deleteQuestionWithChildren.bind(
-            this
-        );
-        this.deleteUnrenderedChildren = this.deleteUnrenderedChildren.bind(
-            this
-        );
+        this.deleteQuestionWithChildren =
+            this.deleteQuestionWithChildren.bind(this);
+        this.deleteUnrenderedChildren =
+            this.deleteUnrenderedChildren.bind(this);
         this.keepUnrenderedChildren = this.keepUnrenderedChildren.bind(this);
         this.hideDeleteQuestion = this.hideDeleteQuestion.bind(this);
         this.editChildren = this.editChildren.bind(this);

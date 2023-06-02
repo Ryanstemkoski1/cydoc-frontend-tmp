@@ -181,9 +181,8 @@ class MedicationsPanel extends Component<Props, State> {
     onAddItemFormatter = (
         action: (type: DropdownType, value: string) => void
     ) => {
-        const medicationEntry = this.props.medicationsState[
-            this.props.medIndex
-        ];
+        const medicationEntry =
+            this.props.medicationsState[this.props.medIndex];
         if (!medicationEntry.isCurrentlyTaking.length)
             this.props.updateCurrentlyTaking(
                 this.props.medIndex,
@@ -203,9 +202,8 @@ class MedicationsPanel extends Component<Props, State> {
         let titleContent, contentInputs;
         // TODO: Remove the preview logic from this component (and potentially others in Patient History)
         //       and make it an entirely separate component for more explicit typecasting and functional differences
-        const medicationEntry = this.props.medicationsState[
-            this.props.medIndex
-        ];
+        const medicationEntry =
+            this.props.medicationsState[this.props.medIndex];
 
         const drugNameInput = (
             <Input
@@ -616,8 +614,9 @@ class MedicationsPanel extends Component<Props, State> {
                                         (medicationEntry as MedicationsItem)
                                             .endYear == -1
                                             ? ''
-                                            : (medicationEntry as MedicationsItem)
-                                                  .endYear
+                                            : (
+                                                  medicationEntry as MedicationsItem
+                                              ).endYear
                                     }
                                     onBlur={(e: Event) => {
                                         this.handleYearChange(

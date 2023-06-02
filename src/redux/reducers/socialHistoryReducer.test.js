@@ -105,8 +105,7 @@ describe('social history reducers', () => {
         };
         expect(
             socialHistoryReducer(socialHistoryStateWithAlcoholConsumption, {
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_CONSUMPTION_NUMBER_PER_WEEK,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_CONSUMPTION_NUMBER_PER_WEEK,
                 payload: {
                     index: 0,
                     newNumberPerWeek: 2,
@@ -164,8 +163,7 @@ describe('social history reducers', () => {
     it('updates alcohol interested in quitting', () => {
         expect(
             socialHistoryReducer(initialSocialHistoryState, {
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.Yes,
                 },
@@ -245,8 +243,7 @@ describe('social history reducers', () => {
     it('updates tobacco interested in quitting', () => {
         expect(
             socialHistoryReducer(initialSocialHistoryState, {
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.Yes,
                 },
@@ -302,8 +299,7 @@ describe('social history reducers', () => {
             socialHistoryReducer(
                 socialHistoryStateWithRecreationalDrugConsumption,
                 {
-                    type:
-                        SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_USED_NAME,
+                    type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_USED_NAME,
                     payload: {
                         index: 0,
                         newName: Object.values(drugNames)[0].value,
@@ -330,8 +326,7 @@ describe('social history reducers', () => {
             socialHistoryReducer(
                 socialHistoryStateWithRecreationalDrugConsumption,
                 {
-                    type:
-                        SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_USED_MODES_OF_DELIVERY,
+                    type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_USED_MODES_OF_DELIVERY,
                     payload: {
                         index: 0,
                         newSize: modesOfDelivery[0].value,
@@ -358,8 +353,7 @@ describe('social history reducers', () => {
             socialHistoryReducer(
                 socialHistoryStateWithRecreationalDrugConsumption,
                 {
-                    type:
-                        SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_USED_NUMBER_PER_WEEK,
+                    type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_USED_NUMBER_PER_WEEK,
                     payload: {
                         index: 0,
                         newNumberPerWeek: 2,
@@ -418,8 +412,7 @@ describe('social history reducers', () => {
     it('updates recreational drug interested in quitting', () => {
         expect(
             socialHistoryReducer(initialSocialHistoryState, {
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.Yes,
                 },
@@ -429,8 +422,7 @@ describe('social history reducers', () => {
     it('updates recreational drug tried to quit', () => {
         expect(
             socialHistoryReducer(initialSocialHistoryState, {
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_TRIED_TO_QUIT,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_TRIED_TO_QUIT,
                 payload: {
                     newResponse: YesNoResponse.Yes,
                 },

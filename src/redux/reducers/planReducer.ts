@@ -143,10 +143,8 @@ export function planReducer(
         }
         case PLAN_ACTION.DELETE_CONDITION: {
             const { conditionIndex } = action.payload;
-            const {
-                [conditionIndex]: deleted,
-                ...newConditions
-            } = state.conditions;
+            const { [conditionIndex]: deleted, ...newConditions } =
+                state.conditions;
             return {
                 ...state,
                 conditions: newConditions,
@@ -186,11 +184,8 @@ export function planReducer(
             };
         }
         case PLAN_ACTION.UPDATE_DIFFERENTIAL_DIAGNOSIS_COMMENTS: {
-            const {
-                conditionIndex,
-                diagnosisIndex,
-                newComments,
-            } = action.payload;
+            const { conditionIndex, diagnosisIndex, newComments } =
+                action.payload;
             return {
                 ...state,
                 conditions: {
@@ -211,11 +206,8 @@ export function planReducer(
             };
         }
         case PLAN_ACTION.UPDATE_DIFFERENTIAL_DIAGNOSIS: {
-            const {
-                conditionIndex,
-                diagnosisIndex,
-                newDiagnosis,
-            } = action.payload;
+            const { conditionIndex, diagnosisIndex, newDiagnosis } =
+                action.payload;
             return {
                 ...state,
                 conditions: {
@@ -237,10 +229,8 @@ export function planReducer(
         }
         case PLAN_ACTION.DELETE_DIFFERENTIAL_DIAGNOSIS: {
             const { conditionIndex, diagnosisIndex } = action.payload;
-            const {
-                [diagnosisIndex]: deleted,
-                ...newDiagnoses
-            } = state.conditions[conditionIndex].differentialDiagnoses;
+            const { [diagnosisIndex]: deleted, ...newDiagnoses } =
+                state.conditions[conditionIndex].differentialDiagnoses;
             return {
                 ...state,
                 conditions: {
@@ -274,11 +264,8 @@ export function planReducer(
             };
         }
         case PLAN_ACTION.UPDATE_PRESCRIPTION_COMMENTS: {
-            const {
-                conditionIndex,
-                prescriptionIndex,
-                newComments,
-            } = action.payload;
+            const { conditionIndex, prescriptionIndex, newComments } =
+                action.payload;
             return {
                 ...state,
                 conditions: {
@@ -298,11 +285,8 @@ export function planReducer(
             };
         }
         case PLAN_ACTION.UPDATE_PRESCRIPTION_DOSE: {
-            const {
-                conditionIndex,
-                prescriptionIndex,
-                newDose,
-            } = action.payload;
+            const { conditionIndex, prescriptionIndex, newDose } =
+                action.payload;
             return {
                 ...state,
                 conditions: {
@@ -322,11 +306,8 @@ export function planReducer(
             };
         }
         case PLAN_ACTION.UPDATE_PRESCRIPTION_TYPE: {
-            const {
-                conditionIndex,
-                prescriptionIndex,
-                newType,
-            } = action.payload;
+            const { conditionIndex, prescriptionIndex, newType } =
+                action.payload;
             return {
                 ...state,
                 conditions: {
@@ -346,11 +327,8 @@ export function planReducer(
             };
         }
         case PLAN_ACTION.UPDATE_PRESCRIPTION_SIGNATURE: {
-            const {
-                conditionIndex,
-                prescriptionIndex,
-                newSignature,
-            } = action.payload;
+            const { conditionIndex, prescriptionIndex, newSignature } =
+                action.payload;
             return {
                 ...state,
                 conditions: {
@@ -371,10 +349,8 @@ export function planReducer(
         }
         case PLAN_ACTION.DELETE_PRESCRIPTION: {
             const { conditionIndex, prescriptionIndex } = action.payload;
-            const {
-                [prescriptionIndex]: deleted,
-                ...newPrescriptions
-            } = state.conditions[conditionIndex].prescriptions;
+            const { [prescriptionIndex]: deleted, ...newPrescriptions } =
+                state.conditions[conditionIndex].prescriptions;
             return {
                 ...state,
                 conditions: {
@@ -408,11 +384,8 @@ export function planReducer(
             };
         }
         case PLAN_ACTION.UPDATE_PROCEDURE_OR_SERVICE: {
-            const {
-                conditionIndex,
-                procedureIndex,
-                newProcedure,
-            } = action.payload;
+            const { conditionIndex, procedureIndex, newProcedure } =
+                action.payload;
             return {
                 ...state,
                 conditions: {
@@ -433,11 +406,8 @@ export function planReducer(
             };
         }
         case PLAN_ACTION.UPDATE_PROCEDURE_OR_SERVICE_COMMENTS: {
-            const {
-                conditionIndex,
-                procedureIndex,
-                newComments,
-            } = action.payload;
+            const { conditionIndex, procedureIndex, newComments } =
+                action.payload;
             return {
                 ...state,
                 conditions: {
@@ -480,10 +450,8 @@ export function planReducer(
         }
         case PLAN_ACTION.DELETE_PROCEDURE_OR_SERVICE: {
             const { conditionIndex, procedureIndex } = action.payload;
-            const {
-                [procedureIndex]: deleted,
-                ...newProcedures
-            } = state.conditions[conditionIndex].proceduresAndServices;
+            const { [procedureIndex]: deleted, ...newProcedures } =
+                state.conditions[conditionIndex].proceduresAndServices;
             return {
                 ...state,
                 conditions: {
@@ -516,11 +484,8 @@ export function planReducer(
             };
         }
         case PLAN_ACTION.UPDATE_REFERRAL_DEPARTMENT: {
-            const {
-                conditionIndex,
-                referralIndex,
-                newDepartment,
-            } = action.payload;
+            const { conditionIndex, referralIndex, newDepartment } =
+                action.payload;
             return {
                 ...state,
                 conditions: {
@@ -541,11 +506,8 @@ export function planReducer(
             };
         }
         case PLAN_ACTION.UPDATE_REFERRAL_COMMENTS: {
-            const {
-                conditionIndex,
-                referralIndex,
-                newComments,
-            } = action.payload;
+            const { conditionIndex, referralIndex, newComments } =
+                action.payload;
             return {
                 ...state,
                 conditions: {
@@ -588,10 +550,8 @@ export function planReducer(
         }
         case PLAN_ACTION.DELETE_REFERRAL: {
             const { conditionIndex, referralIndex } = action.payload;
-            const {
-                [referralIndex]: deleted,
-                ...newReferrals
-            } = state.conditions[conditionIndex].referrals;
+            const { [referralIndex]: deleted, ...newReferrals } =
+                state.conditions[conditionIndex].referrals;
             return {
                 ...state,
                 conditions: {

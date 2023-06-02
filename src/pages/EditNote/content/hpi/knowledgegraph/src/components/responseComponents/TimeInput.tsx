@@ -50,12 +50,8 @@ class TimeInput extends React.Component<Props, TimeInputState> {
     }
 
     render() {
-        const {
-            node,
-            hpi,
-            handleTimeInputChange,
-            handleTimeOptionChange,
-        } = this.props;
+        const { node, hpi, handleTimeInputChange, handleTimeOptionChange } =
+            this.props;
         const currResponse = hpi.nodes[node].response;
         const timeDict: { [key: string]: string } = {
             minutes: 'min',

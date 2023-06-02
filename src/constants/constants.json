@@ -1,253 +1,257 @@
 {
-  "TAB_NAMES": [
-    "CC",
-    "HPI",
-    "Patient History",
-    "Review of Systems",
-    "Physical Exam",
-    "Plan",
-    "Generated Note"
-  ],
-  "PATIENT_VIEW_TAB_NAMES": [
-    "CC",
-    "HPI",
-    "Patient History",
-    "Review of Systems"
-  ],
-  "PMH_TAB_NAMES": [
-    "Medical History",
-    "Surgical History",
-    "Medications",
-    "Allergies",
-    "Social History",
-    "Family History",
-    "Medical History"
-  ],
-  "CONDITIONS": [
-    "Type II Diabetes",
-    "Myocardial Infarction",
-    "Hypertension",
-    "Hypercholesteremia",
-    "Depression",
-    "HIV"
-  ],
-  "MEDICAL_HISTORY": {
-    "STATE": {
-      "0": {
-        "Condition": "Type II Diabetes",
-        "Yes": false,
-        "No": false,
-        "Onset": "",
-        "Resolved": "",
-        "End Year": "",
-        "Comments": ""
-      },
-      "1": {
-        "Condition": "Myocardial Infarction",
-        "Yes": false,
-        "No": false,
-        "Onset": "",
-        "Resolved": "",
-        "End Year": "",
-        "Comments": ""
-      },
-      "2": {
-        "Condition": "Hypertension",
-        "Yes": false,
-        "No": false,
-        "Onset": "",
-        "Resolved": "",
-        "End Year": "",
-        "Comments": ""
-      },
-      "3": {
-        "Condition": "Hypercholesteremia",
-        "Yes": false,
-        "No": false,
-        "Onset": "",
-        "Resolved": "",
-        "End Year": "",
-        "Comments": ""
-      },
-      "4": {
-        "Condition": "Depression",
-        "Yes": false,
-        "No": false,
-        "Onset": "",
-        "Resolved": "",
-        "End Year": "",
-        "Comments": ""
-      },
-      "5": {
-        "Condition": "HIV",
-        "Yes": false,
-        "No": false,
-        "Onset": "",
-        "Resolved": "",
-        "End Year": "",
-        "Comments": ""
-      }
-    }
-  },
-  "FAMILY_HISTORY": {
-    "STATE": {
-      "0": {
-        "Condition": "Type II Diabetes",
-        "Yes": false,
-        "No": false,
-        "Family Member": [], 
-        "Cause of Death": [],
-        "Living": [],
-        "Comments": []
-      },
-      "1": {
-        "Condition": "Myocardial Infarction",
-        "Yes": false,
-        "No": false,
-        "Family Member": [],
-        "Cause of Death": [],
-        "Living": [],
-        "Comments": []
-      },
-      "2": {
-        "Condition": "Hypertension",
-        "Yes": false,
-        "No": false,
-        "Family Member": [],
-        "Cause of Death": [],
-        "Living": [],
-        "Comments": []
-      },
-      "3": {
-        "Condition": "Hypercholesteremia",
-        "Yes": false,
-        "No": false,
-        "Family Member": [],
-        "Cause of Death": [],
-        "Living": [],
-        "Comments": []
-      },
-      "4": {
-        "Condition": "Depression",
-        "Yes": false,
-        "No": false,
-        "Family Member": [],
-        "Cause of Death": [],
-        "Living": [],
-        "Comments": []
-      },
-      "5": {
-        "Condition": "HIV",
-        "Yes": false,
-        "No": false,
-        "Family Member": [],
-        "Cause of Death": [],
-        "Living": [],
-        "Comments": []
-      }
-    }
-  },
-  "SOCIAL_HISTORY": {
-    "SUBSTANCE_USE_CONTENT_HEADER": "Substance Use",
-    "SECONDARY_FIELDS": [
-      "Living Situation",
-      "Employment",
-      "Diet",
-      "Exercise"
+    "TAB_NAMES": [
+        "CC",
+        "HPI",
+        "Patient History",
+        "Review of Systems",
+        "Physical Exam",
+        "Plan",
+        "Generated Note"
     ],
-    "SUBSTANCE_USE_FIELDS": {
-      "Tobacco": {
-        "condition": "Tobacco",
-        "firstField": "Packs/Day",
-        "secondField": "Number of Years",
-        "thirdField": "Products Used",
-        "quitYear": "Quit Year"
-      },
-      "Alcohol": {
-        "condition": "Alcohol",
-        "firstField": "Drink Type",
-        "secondField": "Drink Size",
-        "thirdField": "# Per Week",
-        "quitYear": "Quit Year"
-      },
-      "Recreational Drugs": {
-        "condition": "Recreational Drugs",
-        "firstField": "Drug Name",
-        "secondField": "Mode of Delivery",
-        "thirdField": "# Per Week",
-        "quitYear": "Quit Year"
-      }
+    "PATIENT_VIEW_TAB_NAMES": [
+        "CC",
+        "HPI",
+        "Patient History",
+        "Review of Systems"
+    ],
+    "PMH_TAB_NAMES": [
+        "Medical History",
+        "Surgical History",
+        "Medications",
+        "Allergies",
+        "Social History",
+        "Family History",
+        "Medical History"
+    ],
+    "CONDITIONS": [
+        "Type II Diabetes",
+        "Myocardial Infarction",
+        "Hypertension",
+        "Hypercholesteremia",
+        "Depression",
+        "HIV"
+    ],
+    "MEDICAL_HISTORY": {
+        "STATE": {
+            "0": {
+                "Condition": "Type II Diabetes",
+                "Yes": false,
+                "No": false,
+                "Onset": "",
+                "Resolved": "",
+                "End Year": "",
+                "Comments": ""
+            },
+            "1": {
+                "Condition": "Myocardial Infarction",
+                "Yes": false,
+                "No": false,
+                "Onset": "",
+                "Resolved": "",
+                "End Year": "",
+                "Comments": ""
+            },
+            "2": {
+                "Condition": "Hypertension",
+                "Yes": false,
+                "No": false,
+                "Onset": "",
+                "Resolved": "",
+                "End Year": "",
+                "Comments": ""
+            },
+            "3": {
+                "Condition": "Hypercholesteremia",
+                "Yes": false,
+                "No": false,
+                "Onset": "",
+                "Resolved": "",
+                "End Year": "",
+                "Comments": ""
+            },
+            "4": {
+                "Condition": "Depression",
+                "Yes": false,
+                "No": false,
+                "Onset": "",
+                "Resolved": "",
+                "End Year": "",
+                "Comments": ""
+            },
+            "5": {
+                "Condition": "HIV",
+                "Yes": false,
+                "No": false,
+                "Onset": "",
+                "Resolved": "",
+                "End Year": "",
+                "Comments": ""
+            }
+        }
     },
-    "STATE": {
-      "Alcohol": {
-        "Yes": false,
-        "In the Past": false,
-        "Never Used": false,
-        "fields": [{"Drink Type": "", "Drink Size": "", "# Per Week": ""}],
-        "Quit Year": null,
-        "Comments": "",
-        "InterestedInQuitting": {
-          "Yes": false,
-          "Maybe": false,
-          "No": false
-        },
-        "TriedToQuit": {
-          "Yes": false,
-          "No": false
+    "FAMILY_HISTORY": {
+        "STATE": {
+            "0": {
+                "Condition": "Type II Diabetes",
+                "Yes": false,
+                "No": false,
+                "Family Member": [],
+                "Cause of Death": [],
+                "Living": [],
+                "Comments": []
+            },
+            "1": {
+                "Condition": "Myocardial Infarction",
+                "Yes": false,
+                "No": false,
+                "Family Member": [],
+                "Cause of Death": [],
+                "Living": [],
+                "Comments": []
+            },
+            "2": {
+                "Condition": "Hypertension",
+                "Yes": false,
+                "No": false,
+                "Family Member": [],
+                "Cause of Death": [],
+                "Living": [],
+                "Comments": []
+            },
+            "3": {
+                "Condition": "Hypercholesteremia",
+                "Yes": false,
+                "No": false,
+                "Family Member": [],
+                "Cause of Death": [],
+                "Living": [],
+                "Comments": []
+            },
+            "4": {
+                "Condition": "Depression",
+                "Yes": false,
+                "No": false,
+                "Family Member": [],
+                "Cause of Death": [],
+                "Living": [],
+                "Comments": []
+            },
+            "5": {
+                "Condition": "HIV",
+                "Yes": false,
+                "No": false,
+                "Family Member": [],
+                "Cause of Death": [],
+                "Living": [],
+                "Comments": []
+            }
         }
-      },
-      "Tobacco": {
-        "Yes": false,
-        "In the Past": false,
-        "Never Used": false,
-        "Packs/Day": "",
-        "Number of Years": "",
-        "Products Used": "",
-        "Quit Year": null,
-        "Comments": "",
-        "InterestedInQuitting": {
-          "Yes": false,
-          "Maybe": false,
-          "No": false
+    },
+    "SOCIAL_HISTORY": {
+        "SUBSTANCE_USE_CONTENT_HEADER": "Substance Use",
+        "SECONDARY_FIELDS": [
+            "Living Situation",
+            "Employment",
+            "Diet",
+            "Exercise"
+        ],
+        "SUBSTANCE_USE_FIELDS": {
+            "Tobacco": {
+                "condition": "Tobacco",
+                "firstField": "Packs/Day",
+                "secondField": "Number of Years",
+                "thirdField": "Products Used",
+                "quitYear": "Quit Year"
+            },
+            "Alcohol": {
+                "condition": "Alcohol",
+                "firstField": "Drink Type",
+                "secondField": "Drink Size",
+                "thirdField": "# Per Week",
+                "quitYear": "Quit Year"
+            },
+            "Recreational Drugs": {
+                "condition": "Recreational Drugs",
+                "firstField": "Drug Name",
+                "secondField": "Mode of Delivery",
+                "thirdField": "# Per Week",
+                "quitYear": "Quit Year"
+            }
         },
-        "TriedToQuit": {
-          "Yes": false,
-          "No": false
+        "STATE": {
+            "Alcohol": {
+                "Yes": false,
+                "In the Past": false,
+                "Never Used": false,
+                "fields": [
+                    { "Drink Type": "", "Drink Size": "", "# Per Week": "" }
+                ],
+                "Quit Year": null,
+                "Comments": "",
+                "InterestedInQuitting": {
+                    "Yes": false,
+                    "Maybe": false,
+                    "No": false
+                },
+                "TriedToQuit": {
+                    "Yes": false,
+                    "No": false
+                }
+            },
+            "Tobacco": {
+                "Yes": false,
+                "In the Past": false,
+                "Never Used": false,
+                "Packs/Day": "",
+                "Number of Years": "",
+                "Products Used": "",
+                "Quit Year": null,
+                "Comments": "",
+                "InterestedInQuitting": {
+                    "Yes": false,
+                    "Maybe": false,
+                    "No": false
+                },
+                "TriedToQuit": {
+                    "Yes": false,
+                    "No": false
+                }
+            },
+            "Recreational Drugs": {
+                "Yes": false,
+                "In the Past": false,
+                "Never Used": false,
+                "fields": [
+                    {
+                        "Drug Name": "",
+                        "Mode of Delivery": "",
+                        "# Per Week": ""
+                    }
+                ],
+                "Quit Year": null,
+                "Comments": "",
+                "InterestedInQuitting": {
+                    "Yes": false,
+                    "Maybe": false,
+                    "No": false
+                },
+                "TriedToQuit": {
+                    "Yes": false,
+                    "No": false
+                }
+            },
+            "Living Situation": "",
+            "Employment": "",
+            "Diet": "",
+            "Exercise": ""
         }
-      },
-      "Recreational Drugs": {
-        "Yes": false,
-        "In the Past": false,
-        "Never Used": false,
-        "fields": [{"Drug Name": "", "Mode of Delivery": "", "# Per Week": ""}],
-        "Quit Year": null,
-        "Comments": "",
-        "InterestedInQuitting": {
-          "Yes": false,
-          "Maybe": false,
-          "No": false
-        },
-        "TriedToQuit": {
-          "Yes": false,
-          "No": false
+    },
+    "ALLERGIES": {
+        "fields": ["Inciting Agent", "Reaction", "Comments"],
+        "STATE": {
+            "Inciting Agent": "",
+            "Reaction": "",
+            "Comments": ""
         }
-      },
-      "Living Situation": "",
-      "Employment": "",
-      "Diet": "",
-      "Exercise": ""
     }
-  },
-  "ALLERGIES": {
-    "fields": [
-      "Inciting Agent",
-      "Reaction",
-      "Comments"
-    ],
-    "STATE": {
-      "Inciting Agent": "",
-      "Reaction": "",
-      "Comments": ""
-    }
-  }
 }

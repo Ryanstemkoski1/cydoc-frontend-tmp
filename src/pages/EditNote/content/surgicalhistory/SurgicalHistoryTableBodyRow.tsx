@@ -80,12 +80,8 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
     };
 
     getCell(field: string) {
-        const {
-            rowIndex,
-            onAddItem,
-            proceduresOptions,
-            isPreview,
-        } = this.props;
+        const { rowIndex, onAddItem, proceduresOptions, isPreview } =
+            this.props;
         const { procedure, hasHadSurgery, year, comments } =
             this.props.surgicalHistoryItem! || {};
 

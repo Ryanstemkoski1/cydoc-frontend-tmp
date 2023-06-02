@@ -119,12 +119,8 @@ export class MedicationsContent extends Component<Props, State> {
     };
 
     addRow = () => {
-        const {
-            responseType,
-            node,
-            addMedsPopOption,
-            blankQuestionChange,
-        } = this.props;
+        const { responseType, node, addMedsPopOption, blankQuestionChange } =
+            this.props;
         const newKey = v4();
         addMedsPopOption(newKey, '');
         if (responseType == ResponseTypes.MEDS_BLANK && node) {
