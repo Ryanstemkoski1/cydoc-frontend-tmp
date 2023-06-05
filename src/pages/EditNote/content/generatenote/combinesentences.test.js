@@ -97,11 +97,23 @@ test('combine sentences with big N', () => {
 
 describe('compare function tests', () => {
     it('should combine similar sentences', () => {
-        const result = compare("The patient monitors their blood sugar.", "The patient monitors their blood sugar with a continuous glucose monitor.", 3)
-        expect(result).toBe(" The patient monitors their blood sugar with a continuous glucose monitor.")
-    })
+        const result = compare(
+            'The patient monitors their blood sugar.',
+            'The patient monitors their blood sugar with a continuous glucose monitor.',
+            3
+        );
+        expect(result).toBe(
+            ' The patient monitors their blood sugar with a continuous glucose monitor.'
+        );
+    });
     it('should work with multiple ands', () => {
-        const result = compare('The patient drinks and snores', 'The patient needs help getting out of bed', 2);
-        expect(result).toBe(" The patient drinks and snores and needs help getting out of bed.");
-    })
+        const result = compare(
+            'The patient drinks and snores',
+            'The patient needs help getting out of bed',
+            2
+        );
+        expect(result).toBe(
+            ' The patient drinks and snores and needs help getting out of bed.'
+        );
+    });
 });
