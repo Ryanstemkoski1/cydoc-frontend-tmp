@@ -7,6 +7,20 @@ Uses takeString to split up HPI string every period - then removes unneeded spac
 to each string that is next to eachother.
 */
 
+
+function removeDoubleWords(str: string) {
+    let words = str.split(' ');
+    let newWords = [];
+
+    for (let i = 0; i < words.length; i++) {
+        if (words[i] !== words[i+1]) {
+            newWords.push(words[i]);
+        }
+    }
+    
+    return newWords.join(' ');
+}
+
 function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -84,8 +98,6 @@ export function compare(strA: string, strB: string, n: number) {
             const newString = splitA[oneD].slice(0, -1);
             newSplitA[oneD] = newString;
         }
-        console.log(amtSame);
-        console.log(splitA, splitB);
         if (amtSame > n) {
             switch (splitB[amtSame]) {
                 case 'and':
@@ -140,7 +152,7 @@ export function compare(strA: string, strB: string, n: number) {
             combinedStr += '.';
         }
 
-        return ' ' + capitalizeFirstLetter(combinedStr);
+        return removeDoubleWords(' ' + capitalizeFirstLetter(combinedStr));
     } // otherwise return array containing the two strings.
      else {
         return [strA + '.', strB + '.'];
@@ -148,7 +160,6 @@ export function compare(strA: string, strB: string, n: number) {
 }
 
 export const combineHpiString = (str: string, n: number) => {
-    console.log(str);
     let newStr = '';
     const stringArr = str.split('.');
     let tempComb;
@@ -187,4 +198,3 @@ export const combineHpiString = (str: string, n: number) => {
     }
     return newStr;
 };
-console.log(compare("The patient monitors their blood sugar.", "The patient monitors their blood sugar with a continuous glucose monitor", 3));
