@@ -47,6 +47,7 @@ interface OwnProps {
     deleteRow: (e: any, index: string) => void;
     medIndex: string;
     singleType?: boolean;
+    isNote?: boolean;
 }
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -825,9 +826,11 @@ class MedicationsPanel extends Component<Props, State> {
                 >
                     {titleContent}
                 </Accordion.Title>
-                <Accordion.Content active={this.state.active}>
-                    {contentInputs}
-                </Accordion.Content>
+                {!this.props.isNote && (
+                    <Accordion.Content active={this.state.active}>
+                        {contentInputs}
+                    </Accordion.Content>
+                )}
             </>
         );
     }

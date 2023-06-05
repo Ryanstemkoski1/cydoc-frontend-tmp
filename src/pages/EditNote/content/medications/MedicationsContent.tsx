@@ -35,6 +35,7 @@ interface OwnProps {
     responseType?: ResponseTypes;
     node?: string;
     singleType?: boolean;
+    isNote?: boolean;
 }
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -165,6 +166,7 @@ export class MedicationsContent extends Component<Props, State> {
             hpi,
             updateCurrentlyTaking,
             medsPopYesNoToggle,
+            isNote = false,
         } = this.props;
 
         const panels = [],
@@ -186,6 +188,7 @@ export class MedicationsContent extends Component<Props, State> {
                             handleAddition={this.handleDropdownOptionAddition}
                             deleteRow={this.deleteRow}
                             singleType={this.props.singleType}
+                            isNote={isNote}
                         />
                     );
                 }
@@ -222,6 +225,7 @@ export class MedicationsContent extends Component<Props, State> {
                 )
                     panels.push(
                         <MedicationsPanel
+                            isNote={isNote}
                             mobile={mobile}
                             isPreview={false}
                             medIndex={medsEntries[medIndices[i]][0]}
