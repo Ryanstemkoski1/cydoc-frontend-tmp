@@ -26,22 +26,23 @@ interface PatientDisplayName {
 }
 
 const END_OF_SENTENCE_PUNC = '.!?';
-// selectively Lowercases anything except for multiple capitalized letters in a row 
+// selectively Lowercases anything except for multiple capitalized letters in a row
 const selectivelyLowercase = (str: string): string => {
     return str
         .split(' ')
-        .map(word => {
-            console.log(word);
-            if(["ANSWER", "NOTANSWER", "ANSWER.", "NOTANSWER."].includes(word)){
+        .map((word) => {
+            if (
+                ['ANSWER', 'NOTANSWER', 'ANSWER.', 'NOTANSWER.'].includes(word)
+            ) {
                 return word.toLowerCase();
+            } else {
+                const uppercaseCount = Array.from(word).reduce(
+                    (count, char) =>
+                        count + (char === char.toUpperCase() ? 1 : 0),
+                    0
+                );
+                return uppercaseCount > 1 ? word : word.toLowerCase();
             }
-                else{
-            const uppercaseCount = Array.from(word).reduce(
-                (count, char) => count + (char === char.toUpperCase() ? 1 : 0),
-                0
-            );
-            return uppercaseCount > 1 ? word : word.toLowerCase();
-                }
         })
         .join(' ');
 };
