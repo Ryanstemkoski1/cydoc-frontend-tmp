@@ -422,11 +422,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                       return (
                           <div
                               key={questions.nodes[key].text}
-                              className={
-                                  ['8', '9'].includes(questions.nodes[key].uid)
-                                      ? 'qa-div eight wide column'
-                                      : 'qa-div sixteen wide column'
-                              }
+                              className={'qa-div sixteen wide column'}
                           >
                               {questions.nodes[key].text}
                               <div className='survey-chips'>

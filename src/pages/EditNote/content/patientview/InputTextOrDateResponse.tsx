@@ -35,7 +35,7 @@ class InputTextOrDateResponse extends React.Component<Props> {
         } = this.props;
 
         return (
-            <div className='qa-button'>
+            <div className='qa-button width-50-desktop'>
                 <Form.Input
                     fluid
                     defaultValue={defaultValue}

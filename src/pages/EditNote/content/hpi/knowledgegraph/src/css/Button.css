@@ -73,6 +73,12 @@
     margin-top: 7px;
 }
 
+@media screen and (min-width: 767px) {
+    .width-50-desktop {
+        width: 50%;
+    }
+}
+
 .qa-div {
     margin-bottom: 20px;
 }
