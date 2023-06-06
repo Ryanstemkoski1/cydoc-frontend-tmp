@@ -87,7 +87,12 @@ export default class PatientHistoryContent extends Component {
             'Surgical History': (
                 <SurgicalHistoryContent activeTabName='Surgical History' />
             ),
-            Medications: <MedicationsContent activeTabName='Medications' />,
+            Medications: (
+                <MedicationsContent
+                    activeTabName='Medications'
+                    singleType={false}
+                />
+            ),
             Allergies: <AllergiesContent activeTabName='Allergies' />,
             'Social History': (
                 <SocialHistoryContent activeTabName='Social History' />

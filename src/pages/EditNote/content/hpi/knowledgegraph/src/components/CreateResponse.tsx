@@ -236,6 +236,8 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         values={choices}
                         responseType={responseType}
                         node={node}
+                        singleType={true}
+                        isNote={true}
                     />
                 );
             case ResponseTypes.FH_POP:
@@ -305,7 +307,9 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                             {this.state.question.trim()}
                         </span>
                     )}{' '}
-                    <div className='qa-button'>{this.renderSwitch()}</div>{' '}
+                    <div className='qa-button space-top remove-shadow'>
+                        {this.renderSwitch()}
+                    </div>{' '}
                 </div>
             </div>
         );

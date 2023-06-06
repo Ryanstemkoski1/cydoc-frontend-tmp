@@ -8,4 +8,5 @@ export const favChiefComplaints = [
     'Hyperlipidemia',
     'Opiate Use',
     'Genital Symptoms/STI',
+    'ADHD',
 ];

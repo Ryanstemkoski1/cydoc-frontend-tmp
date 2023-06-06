@@ -34,6 +34,8 @@ interface OwnProps {
     values?: string[];
     responseType?: ResponseTypes;
     node?: string;
+    singleType?: boolean;
+    isNote?: boolean;
 }
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -164,6 +166,7 @@ export class MedicationsContent extends Component<Props, State> {
             hpi,
             updateCurrentlyTaking,
             medsPopYesNoToggle,
+            isNote = false,
         } = this.props;
 
         const panels = [],
@@ -184,6 +187,8 @@ export class MedicationsContent extends Component<Props, State> {
                             currentYear={this.state.currentYear}
                             handleAddition={this.handleDropdownOptionAddition}
                             deleteRow={this.deleteRow}
+                            singleType={this.props.singleType}
+                            isNote={isNote}
                         />
                     );
                 }
@@ -194,8 +199,9 @@ export class MedicationsContent extends Component<Props, State> {
             if (responseType == ResponseTypes.MEDS_BLANK && node) {
                 const response = hpi.nodes[node].response as string[];
                 medIndices = response.map((key) =>
-                    medsEntries.findIndex((medItem) => medItem[0] == key)
+                    medsEntries?.findIndex((medItem) => medItem[0] == key)
                 );
+                medIndices = medIndices.filter((data) => data != -1);
             }
             for (let i = 0; i < medIndices.length; i++) {
                 /*
@@ -208,7 +214,8 @@ export class MedicationsContent extends Component<Props, State> {
                 as no while the user is looking at the page.
                 */
                 if (
-                    medIndices[i] &&
+                    medIndices[i] !== undefined &&
+                    medIndices[i] !== null &&
                     (responseType ||
                         this.state.currMeds.includes(
                             medsEntries[medIndices[i]][0]
@@ -218,6 +225,7 @@ export class MedicationsContent extends Component<Props, State> {
                 )
                     panels.push(
                         <MedicationsPanel
+                            isNote={isNote}
                             mobile={mobile}
                             isPreview={false}
                             medIndex={medsEntries[medIndices[i]][0]}
@@ -227,6 +235,7 @@ export class MedicationsContent extends Component<Props, State> {
                             currentYear={this.state.currentYear}
                             handleAddition={this.handleDropdownOptionAddition}
                             deleteRow={this.deleteRow}
+                            singleType={this.props.singleType}
                         />
                     );
             }
