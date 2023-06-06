@@ -46,7 +46,7 @@ const AdditionalSurvey = ({
     }, [additionalDetails]);
 
     return (
-        <div>
+        <div className='sixteen wide column'>
             <Form size='small'>
                 <div className='equal width fields'>
                     <Form.Input

@@ -45,6 +45,7 @@ import { currentNoteStore } from 'redux/store';
 import {
     Button,
     Container,
+    Grid,
     Icon,
     Message,
     Search,
@@ -59,6 +60,7 @@ import ChiefComplaintsButton, {
     PatientViewProps,
 } from '../hpi/knowledgegraph/src/components/ChiefComplaintsButton';
 import DetailsPage from './AdditionalSurvey';
+import InputTextOrDateResponse from './InputTextOrDateResponse';
 import SurveyYesNoResponse from './SurveyYesNoResponse';
 import initialQuestions from './constants/initialQuestions.json';
 import patientViewHeaders from './constants/patientViewHeaders.json';
@@ -197,6 +199,14 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             return;
         }
         const { userSurveyState } = this.props;
+
+        if (
+            this.state.activeItem === 0 &&
+            !userSurveyState.nodes['8'].response
+        ) {
+            this.setState({ error: true });
+            return;
+        }
         if (
             this.state.activeItem == 0 &&
             userSurveyState.graph['1'].some(
@@ -351,10 +361,54 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             : ''}
                     </div>
                 );
+            case ResponseTypes.TIME3DAYS:
+                return (
+                    <InputTextOrDateResponse
+                        id={id}
+                        type={'date'}
+                        defaultValue={
+                            userSurveyState.nodes[id].response as string
+                        }
+                        required={true}
+                        placeholder={'DD/MM/YYYY'}
+                        name={'dateOfAppointment'}
+                    />
+                );
+            case ResponseTypes.SHORT_TEXT:
+                return (
+                    <InputTextOrDateResponse
+                        id={id}
+                        type={'text'}
+                        defaultValue={
+                            userSurveyState.nodes[id].response as string
+                        }
+                        required={false}
+                        placeholder={'Last Name'}
+                        name={'lastNameOfClinic'}
+                    />
+                );
             default:
                 return;
         }
     };
+
+    isAtLeaseOneInputYesOnPage() {
+        const selected =
+            this.props.userSurveyState.nodes['2'].response ===
+                YesNoResponse.Yes ||
+            this.props.userSurveyState.nodes['3'].response ===
+                YesNoResponse.Yes ||
+            this.props.userSurveyState.nodes['4'].response ===
+                YesNoResponse.Yes;
+        if (
+            this.state.activeItem == 0 &&
+            selected &&
+            this.props.userSurveyState.nodes['8'].response
+        ) {
+            this.setState({ error: false });
+        }
+        return selected;
+    }
 
     render() {
         const { activeItem } = this.state,
@@ -368,7 +422,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                       return (
                           <div
                               key={questions.nodes[key].text}
-                              className='qa-div'
+                              className={'qa-div sixteen wide column'}
                           >
                               {questions.nodes[key].text}
                               <div className='survey-chips'>
@@ -414,6 +468,8 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                                     ? this.props.additionalSurvey
                                           .showAdditionalSurvey
                                         ? this.state.message
+                                        : this.isAtLeaseOneInputYesOnPage()
+                                        ? 'Please confirm the date of your appointment.'
                                         : 'Please answer Yes to at least one question to proceed.'
                                     : 'The maximum of 3 has been reached. Please un-select an existing option before adding a new one.'}
                             </Message.Header>
@@ -421,7 +477,9 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                     ) : (
                         ''
                     )}
-                    <Segment>{initialSurvey}</Segment>
+                    <Segment>
+                        <Grid>{initialSurvey}</Grid>
+                    </Segment>
                 </Container>
                 {this.props.additionalSurvey.showAdditionalSurvey === false &&
                 this.state.activeItem === 0 ? (
