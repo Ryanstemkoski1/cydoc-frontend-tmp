@@ -10,7 +10,6 @@ import Logo from '../../assets/cydoc-logo.svg';
 import NoteNameMenuItem, { Context } from './NoteNameMenuItem';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 import './NavMenu.css';
-import SignUpModal from 'pages/Account/SignUpModal';
 import {
     selectDoctorViewState,
     selectInitialPatientSurvey,
@@ -25,6 +24,7 @@ import {
 } from 'redux/actions/activeItemActions';
 import { YesNoResponse } from 'constants/enums';
 import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
+import SignUpForm from 'pages/Account/SignUpForm';
 
 interface ConnectedNavMenuProps {
     className: string;
@@ -127,11 +127,6 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         history.push(path);
     };
 
-    const handleClickSignUp = () => setSignUpActive(true);
-    const resetSignupState = () => {
-        setSignUpActive(false);
-    };
-
     // Menu items when not logged in
     const defaultMenuItems = (
         <Menu.Item>
@@ -147,14 +142,14 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                 icon='plus'
                 content='Sign Up'
                 size='small'
-                onClick={handleClickSignUp}
+                onClick={() => setSignUpActive(true)}
             />
-            {signUpActive && (
-                <SignUpModal
-                    navToSignUp={signUpActive}
-                    reloadModal={resetSignupState}
-                />
-            )}
+            <SignUpForm
+                modalOpen={signUpActive}
+                closeModal={() => setSignUpActive(false)}
+                sessionUserAttributes={null}
+                cognitoUser={null}
+            />
         </Menu.Item>
     );
     // Menu items when logged in

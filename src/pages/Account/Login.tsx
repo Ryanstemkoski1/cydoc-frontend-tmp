@@ -112,6 +112,11 @@ const Login = () => {
     if (isFirstLogin) {
         return (
             <SignUpForm
+                modalOpen={isFirstLogin}
+                closeModal={() => {
+                    // Don't allow users to close modal when requiring their "first login" user info
+                    null;
+                }}
                 cognitoUser={cognitoUser}
                 sessionUserAttributes={sessionUserAttributes}
             />

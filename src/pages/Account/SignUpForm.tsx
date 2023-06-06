@@ -37,14 +37,17 @@ const initialValues: SignUpFormData = {
 
 interface Props {
     sessionUserAttributes: UserAttributes | null;
+    closeModal: () => void;
     cognitoUser: CognitoUser | null;
+    modalOpen: boolean;
 }
 export default function SignUpForm({
-    sessionUserAttributes,
     cognitoUser,
+    modalOpen,
+    closeModal,
+    sessionUserAttributes,
 }: Props) {
     const [wizardPage, setWizardPage] = useState(0);
-    const [modalOpen, setModalOpen] = useState(true);
 
     const { form } = useSignUpFormController(
         initialValues,
@@ -204,33 +207,20 @@ export default function SignUpForm({
                 <Modal
                     dimmer='inverted'
                     size='small'
-                    onClose={() => {
-                        setModalOpen(false);
-                    }}
-                    onOpen={() => setModalOpen(true)}
+                    onClose={closeModal}
                     open={modalOpen}
                 >
                     <SignUpSteps
                         step={wizardPage}
                         goToNextStep={onNextClick}
-                        closeModal={() => {
-                            setModalOpen(false);
-                        }}
+                        closeModal={closeModal}
                         goToPrevStep={onPrevClick}
                     />
                     <NextBackButtonGroup
                         step={wizardPage}
-                        onClose={() => {
-                            setModalOpen(false);
-                            // reloadModal();
-                        }}
+                        onClose={closeModal}
                         onPrevClick={onPrevClick}
-                        onNextClick={() => {
-                            // TODO: use yup for validation
-                            // if (isSubmitValid(wizardPage)) {
-                            onNextClick();
-                            // }
-                        }}
+                        onNextClick={onNextClick}
                     />
                 </Modal>
             </Form>
