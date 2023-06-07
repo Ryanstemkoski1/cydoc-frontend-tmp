@@ -19,12 +19,16 @@ import AllergiesContent from './content/allergies/AllergiesContent';
 import SocialHistoryContent from './content/socialhistory/SocialHistoryContent';
 import FamilyHistoryContent from './content/familyhistory/FamilyHistoryContent';
 import './content/patienthistory/PatientHistory.css';
-import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import {
+    selectPatientViewState,
+    selectInitialPatientSurvey,
+} from 'redux/selectors/userViewSelectors';
 import './NotePage.css';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
 import InitialSurvey from './content/patientview/InitialSurvey';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
-
+import initialQuestions from './content/patientview/constants/initialQuestions.json';
+import { processSurveyGraph } from 'redux/actions/userViewActions';
 //Component that manages the content displayed based on the activeItem prop
 // and records the information the user enters as state
 
@@ -187,6 +191,14 @@ class NotePage extends Component {
     componentDidMount() {
         this.updateDimensions();
         window.addEventListener('resize', this.updateDimensions);
+        const { userSurveyState, processSurveyGraph } = this.props;
+        if (
+            !Object.keys(userSurveyState?.graph).length &&
+            !Object.keys(userSurveyState?.nodes).length &&
+            !Object.keys(userSurveyState?.order).length
+        ) {
+            processSurveyGraph(initialQuestions);
+        }
     }
 
     componentWillUnmount() {
@@ -381,11 +393,13 @@ const mapStateToProps = (state) => {
         chiefComplaints: state.chiefComplaints,
         patientView: selectPatientViewState(state),
         activeItem: selectActiveItem(state),
+        userSurveyState: selectInitialPatientSurvey(state),
     };
 };
 
 const mapDispatchToProps = {
     updateActiveItem,
+    processSurveyGraph,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotePage);
