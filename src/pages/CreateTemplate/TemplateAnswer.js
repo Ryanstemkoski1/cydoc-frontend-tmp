@@ -378,6 +378,7 @@ class TemplateAnswer extends Component {
                         isPreview={true}
                         mobile={collapseTabs}
                         values={values}
+                        singleType={false}
                     />
                 );
                 break;

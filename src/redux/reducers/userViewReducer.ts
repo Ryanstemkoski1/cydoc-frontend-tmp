@@ -1,8 +1,9 @@
 import { YesNoResponse } from 'constants/enums';
-import { SelectOneInput, ResponseTypes } from 'constants/hpiEnums';
+import { ResponseTypes, SelectOneInput } from 'constants/hpiEnums';
 import { USER_VIEW_ACTION } from 'redux/actions/actionTypes';
 import { userViewActionTypes } from 'redux/actions/userViewActions';
 import { ChiefComplaintsState } from './chiefComplaintsReducer';
+import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 
 // Eventually replace with hpiState interface ??
 export interface initialQuestionsState {
@@ -41,7 +42,8 @@ export interface userSurveyState {
                 | YesNoResponse
                 | SelectOneInput
                 | string
-                | ChiefComplaintsState;
+                | ChiefComplaintsState
+                | string;
         };
     };
 }
@@ -111,7 +113,7 @@ export function userViewReducer(
                 if (v.responseType == ResponseTypes.SELECTONE) {
                     if ('response' in v) {
                         response = v['response'] as SelectOneInput;
-                    } else {
+                    } else if (text.search('CLICK') > -1) {
                         const click = text.search('CLICK'),
                             select = text.search('\\['),
                             endSelect = text.search('\\]'),
@@ -126,6 +128,12 @@ export function userViewReducer(
                         responses.map((key) => (newRes[key] = false));
                         response = newRes;
                         text = text.slice(0, click);
+                    } else if (text.search('FAVORITES') > -1) {
+                        const favorites = text.search('CONSTANT'),
+                            newRes = {} as SelectOneInput;
+                        favChiefComplaints.map((key) => (newRes[key] = false));
+                        response = newRes;
+                        text = text.slice(0, favorites);
                     }
                 }
                 newState.userSurvey.nodes[node] = {
@@ -209,6 +217,23 @@ export function userViewReducer(
                         },
                     },
                 };
+        }
+
+        case USER_VIEW_ACTION.INITIAL_SURVEY_ADD_DATE_OR_PLACE: {
+            const { uid, response } = action.payload;
+            return {
+                ...state,
+                userSurvey: {
+                    ...state.userSurvey,
+                    nodes: {
+                        ...state.userSurvey.nodes,
+                        [uid]: {
+                            ...state.userSurvey.nodes[uid],
+                            response: response,
+                        },
+                    },
+                },
+            };
         }
 
         default:

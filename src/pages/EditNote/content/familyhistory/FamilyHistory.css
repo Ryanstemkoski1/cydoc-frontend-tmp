@@ -88,6 +88,12 @@
 #alcohol-header, #drugs-header {
     border-left: 0;
 }
+.error-input{
+    color: red;
+    margin-top: 5px;
+    margin-left: 5px;
+    font-style: italic;
+}
 
 @media screen and (max-width: 767px) {
     .ui.form.family-hx-note-item {

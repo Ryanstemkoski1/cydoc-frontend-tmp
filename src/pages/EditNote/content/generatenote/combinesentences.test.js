@@ -17,37 +17,37 @@ test('combine regular sentences 3', () => {
         'The dog is barking.',
     ]);
 });
-// test('combine regular sentences 4', () => {
-//     expect(
-//         compare(
-//             'The patient has a cellphone.',
-//             'The PATIENT has a hangnail.',
-//             2
-//         )
-//     ).toBe('The patient has a cellphone and a hangnail.');
-// });
-// test('combine regular sentences 5', () => {
-//     expect(
-//         compare(
-//             'The abdominal pain comes on every 60 minutes.',
-//             "The abdominal pain radiates to the patient's ear, pelvis, upper arm, and hand.",
-//             2
-//         )
-//     ).toBe(
-//         "The abdominal pain comes on every 60 minutes and radiates to the patient's ear, pelvis, upper arm, and hand."
-//     );
-// });
-// test('combine regular sentences 6', () => {
-//     expect(
-//         compare(
-//             ' The patient has traveled recently',
-//             ' The patient has difficulty with falling asleep',
-//             2
-//         )
-//     ).toBe(
-//         ' The patient has traveled recently and has difficulty with falling asleep.'
-//     );
-// });
+test('combine regular sentences 4', () => {
+    expect(
+        compare(
+            'The patient has a cellphone.',
+            'The PATIENT has a hangnail.',
+            3
+        )
+    ).toBe(' The patient has a cellphone and a hangnail.');
+});
+test('combine regular sentences 5', () => {
+    expect(
+        compare(
+            'The abdominal pain comes on every 60 minutes.',
+            "The abdominal pain radiates to the patient's ear, pelvis, upper arm, and hand.",
+            3
+        )
+    ).toBe(
+        " The abdominal pain comes on every 60 minutes and radiates to the patient's ear, pelvis, upper arm, and hand."
+    );
+});
+test('combine regular sentences 6', () => {
+    expect(
+        compare(
+            'The patient has traveled recently',
+            'The patient has difficulty with falling asleep',
+            2
+        )
+    ).toBe(
+        ' The patient has traveled recently and has difficulty with falling asleep.'
+    );
+});
 test('combine regular sentences 7', () => {
     expect(
         compare(
@@ -93,4 +93,27 @@ test('combine sentences with big N', () => {
         'The patient feels refreshed when they wake up.',
         'The patient feels sleepy during the day.',
     ]);
+});
+
+describe('compare function tests', () => {
+    it('should combine similar sentences', () => {
+        const result = compare(
+            'The patient monitors their blood sugar.',
+            'The patient monitors their blood sugar with a continuous glucose monitor.',
+            3
+        );
+        expect(result).toBe(
+            ' The patient monitors their blood sugar with a continuous glucose monitor.'
+        );
+    });
+    it('should work with multiple ands', () => {
+        const result = compare(
+            'The patient drinks and snores',
+            'The patient needs help getting out of bed',
+            2
+        );
+        expect(result).toBe(
+            ' The patient drinks and snores and needs help getting out of bed.'
+        );
+    });
 });

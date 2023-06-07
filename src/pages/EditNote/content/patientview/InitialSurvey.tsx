@@ -5,20 +5,31 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
 import {
+    GoBackToAdditionalSurvey,
+    UpdateAdditionalSurveyAction,
+    resetAdditionalSurveyPage,
+    updateAdditionalSurveyDetails,
+} from 'redux/actions/additionalSurveyActions';
+import {
+    AddDisplayedNodesAction,
+    addDisplayedNodes,
+} from 'redux/actions/displayedNodesActions';
+import {
     ProcessKnowledgeGraphAction,
     processKnowledgeGraph,
 } from 'redux/actions/hpiActions';
 import {
-    saveHpiHeader,
     SaveHpiHeaderAction,
+    saveHpiHeader,
 } from 'redux/actions/hpiHeadersActions';
 import {
-    initialSurveySearch,
     InitialSurveySearchAction,
-    processSurveyGraph,
     ProcessSurveyGraphAction,
+    initialSurveySearch,
+    processSurveyGraph,
 } from 'redux/actions/userViewActions';
 import { CurrentNoteState } from 'redux/reducers';
+import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
 import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
 import { isSelectOneResponse } from 'redux/reducers/hpiReducer';
 import {
@@ -26,39 +37,43 @@ import {
     isChiefComplaintsResponse,
     userSurveyState,
 } from 'redux/reducers/userViewReducer';
+import {
+    selectInitialPatientSurvey,
+    selectPatientViewState,
+} from 'redux/selectors/userViewSelectors';
 import { currentNoteStore } from 'redux/store';
 import {
     Button,
     Container,
+    Grid,
     Icon,
     Message,
     Search,
     Segment,
 } from 'semantic-ui-react';
-import initialQuestions from './constants/initialQuestions.json';
-import patientViewHeaders from './constants/patientViewHeaders.json';
-import SurveyYesNoResponse from './SurveyYesNoResponse';
-import { hpiHeaders } from '../hpi/knowledgegraph/src/API';
-import ChiefComplaintsButton, {
-    PatientViewProps,
-} from '../hpi/knowledgegraph/src/components/ChiefComplaintsButton';
 import {
     ChiefComplaintsProps,
     HpiHeadersProps,
 } from '../hpi/knowledgegraph/HPIContent';
-import {
-    selectInitialPatientSurvey,
-    selectPatientViewState,
-} from 'redux/selectors/userViewSelectors';
-import {
-    AddDisplayedNodesAction,
-    addDisplayedNodes,
-} from 'redux/actions/displayedNodesActions';
+import { hpiHeaders } from '../hpi/knowledgegraph/src/API';
+import ChiefComplaintsButton, {
+    PatientViewProps,
+} from '../hpi/knowledgegraph/src/components/ChiefComplaintsButton';
+import DetailsPage from './AdditionalSurvey';
+import InputTextOrDateResponse from './InputTextOrDateResponse';
+import SurveyYesNoResponse from './SurveyYesNoResponse';
+import initialQuestions from './constants/initialQuestions.json';
+import patientViewHeaders from './constants/patientViewHeaders.json';
 
 interface InitialSurveyState {
     activeItem: number;
     error: boolean;
     searchVal: string;
+    tempLegalFirstName: string;
+    tempLegalLastName: string;
+    tempSocialSecurityNumber: string;
+    tempDateOfBirth: string;
+    message: string;
 }
 
 interface InitialSurveyComponentProps {
@@ -68,10 +83,17 @@ interface InitialSurveyComponentProps {
 class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     constructor(props: Props) {
         super(props);
+        // eslint-disable-next-line no-console
+        console.log(props.additionalSurvey);
         this.state = {
             activeItem: 0,
             error: false,
             searchVal: '',
+            tempLegalFirstName: '',
+            tempLegalLastName: '',
+            tempSocialSecurityNumber: '',
+            tempDateOfBirth: '',
+            message: '',
         };
     }
 
@@ -121,11 +143,70 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     continue = (e: any) => this.props.continue(e);
 
     onPrevClick = () => {
+        this.setState({ error: false });
+        if (
+            this.state.activeItem === 0 &&
+            this.props.additionalSurvey.showAdditionalSurvey === false
+        ) {
+            this.props.resetAdditionalSurveyPage();
+            return;
+        }
         this.setState({ activeItem: this.state.activeItem - 1 });
     };
 
     onNextClick = (e: any) => {
+        if (
+            this.state.activeItem === 0 &&
+            this.props.additionalSurvey.showAdditionalSurvey === true
+        ) {
+            if (new Date() < new Date(this.state.tempDateOfBirth)) {
+                this.setState({
+                    error: true,
+                    message: 'Date of birth should be before current date',
+                });
+                return;
+            }
+
+            if (
+                this.state.tempLegalFirstName.trim() === '' ||
+                this.state.tempLegalLastName.trim() == '' ||
+                this.state.tempDateOfBirth.trim() === '' ||
+                this.state.tempSocialSecurityNumber.trim() == ''
+            ) {
+                this.setState({
+                    error: true,
+                    message: 'Please fill in all details to continue',
+                });
+                return;
+            }
+
+            if (this.state.tempSocialSecurityNumber.length !== 4) {
+                this.setState({
+                    error: true,
+                    message:
+                        'Social security number should consist of 4 numbers',
+                });
+                return;
+            }
+
+            this.props.updateAdditionalSurveyDetails(
+                this.state.tempLegalFirstName,
+                this.state.tempLegalLastName,
+                this.state.tempSocialSecurityNumber,
+                this.state.tempDateOfBirth
+            );
+            this.setState({ error: false });
+            return;
+        }
         const { userSurveyState } = this.props;
+
+        if (
+            this.state.activeItem === 0 &&
+            !userSurveyState.nodes['8'].response
+        ) {
+            this.setState({ error: true });
+            return;
+        }
         if (
             this.state.activeItem == 0 &&
             userSurveyState.graph['1'].some(
@@ -158,6 +239,20 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                 this.continue(e);
             } else this.setState({ error: true });
         }
+    };
+
+    setTempAdditionalDetails = (
+        tempLegalFirstName: string,
+        tempLegalLastName: string,
+        tempSocialSecurityNumber: string,
+        tempDateOfBirth: string
+    ) => {
+        this.setState({
+            tempLegalFirstName: tempLegalFirstName.trim(),
+            tempLegalLastName: tempLegalLastName.trim(),
+            tempSocialSecurityNumber: tempSocialSecurityNumber.trim(),
+            tempDateOfBirth: tempDateOfBirth,
+        });
     };
 
     getData = async (complaint: string) => {
@@ -266,41 +361,101 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             : ''}
                     </div>
                 );
+            case ResponseTypes.TIME3DAYS:
+                return (
+                    <InputTextOrDateResponse
+                        id={id}
+                        type={'date'}
+                        defaultValue={
+                            userSurveyState.nodes[id].response as string
+                        }
+                        required={true}
+                        placeholder={'DD/MM/YYYY'}
+                        name={'dateOfAppointment'}
+                    />
+                );
+            case ResponseTypes.SHORT_TEXT:
+                return (
+                    <InputTextOrDateResponse
+                        id={id}
+                        type={'text'}
+                        defaultValue={
+                            userSurveyState.nodes[id].response as string
+                        }
+                        required={false}
+                        placeholder={'Last Name'}
+                        name={'lastNameOfClinic'}
+                    />
+                );
             default:
                 return;
         }
     };
+
+    isAtLeaseOneInputYesOnPage() {
+        const selected =
+            this.props.userSurveyState.nodes['2'].response ===
+                YesNoResponse.Yes ||
+            this.props.userSurveyState.nodes['3'].response ===
+                YesNoResponse.Yes ||
+            this.props.userSurveyState.nodes['4'].response ===
+                YesNoResponse.Yes;
+        if (
+            this.state.activeItem == 0 &&
+            selected &&
+            this.props.userSurveyState.nodes['8'].response
+        ) {
+            this.setState({ error: false });
+        }
+        return selected;
+    }
 
     render() {
         const { activeItem } = this.state,
             { userSurveyState } = this.props,
             nodes = patientViewHeaders.parentNodes,
             nodeKey = Object.values(Object.entries(nodes)[activeItem][1])[0],
-            questions = initialQuestions as initialQuestionsState,
-            initialSurvey =
-                nodeKey in questions.nodes
-                    ? questions.graph[nodeKey].map((key) => {
-                          return (
-                              <div
-                                  key={questions.nodes[key].text}
-                                  className='qa-div'
-                              >
-                                  {questions.nodes[key].text}
-                                  <div>
-                                      {Object.keys(
-                                          this.props.userSurveyState.nodes
-                                      ).length
-                                          ? this.renderSwitch(key)
-                                          : ''}
-                                  </div>
+            questions = initialQuestions as initialQuestionsState;
+        let initialSurvey =
+            nodeKey in questions.nodes
+                ? questions.graph[nodeKey].map((key) => {
+                      return (
+                          <div
+                              key={questions.nodes[key].text}
+                              className={'qa-div sixteen wide column'}
+                          >
+                              {questions.nodes[key].text}
+                              <div className='survey-chips'>
+                                  {Object.keys(this.props.userSurveyState.nodes)
+                                      .length
+                                      ? this.renderSwitch(key)
+                                      : ''}
                               </div>
-                          );
-                      })
-                    : '',
-            isLoaded =
-                Object.keys(userSurveyState.graph).length &&
-                Object.keys(userSurveyState.nodes).length &&
-                Object.keys(userSurveyState.order).length;
+                          </div>
+                      );
+                  })
+                : '';
+        const isLoaded =
+            Object.keys(userSurveyState.graph).length &&
+            Object.keys(userSurveyState.nodes).length &&
+            Object.keys(userSurveyState.order).length;
+
+        initialSurvey = this.props.additionalSurvey.showAdditionalSurvey
+            ? [
+                  <DetailsPage
+                      key={0}
+                      legalFirstName={
+                          this.props.additionalSurvey.legalFirstName
+                      }
+                      legalLastName={this.props.additionalSurvey.legalLastName}
+                      socialSecurityNumber={
+                          this.props.additionalSurvey.socialSecurityNumber
+                      }
+                      dateOfBirth={this.props.additionalSurvey.dateOfBirth}
+                      setTempAdditionalDetails={this.setTempAdditionalDetails}
+                  />,
+              ]
+            : initialSurvey;
 
         return (
             <div>
@@ -310,15 +465,48 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                         <Message negative>
                             <Message.Header>
                                 {this.state.activeItem == 0
-                                    ? 'Please answer Yes to at least one question to proceed.'
+                                    ? this.props.additionalSurvey
+                                          .showAdditionalSurvey
+                                        ? this.state.message
+                                        : this.isAtLeaseOneInputYesOnPage()
+                                        ? 'Please confirm the date of your appointment.'
+                                        : 'Please answer Yes to at least one question to proceed.'
                                     : 'The maximum of 3 has been reached. Please un-select an existing option before adding a new one.'}
                             </Message.Header>
                         </Message>
                     ) : (
                         ''
                     )}
-                    <Segment>{initialSurvey}</Segment>
+                    <Segment>
+                        <Grid>{initialSurvey}</Grid>
+                    </Segment>
                 </Container>
+                {this.props.additionalSurvey.showAdditionalSurvey === false &&
+                this.state.activeItem === 0 ? (
+                    <div>
+                        {' '}
+                        <Button
+                            icon
+                            labelPosition='left'
+                            floated='left'
+                            className='hpi-previous-button'
+                            onClick={this.onPrevClick}
+                        >
+                            Previous
+                            <Icon name='arrow left' />
+                        </Button>
+                        <Button
+                            icon
+                            floated='left'
+                            className='hpi-small-previous-button'
+                            onClick={this.onPrevClick}
+                        >
+                            <Icon name='arrow left' />
+                        </Button>{' '}
+                    </div>
+                ) : (
+                    ''
+                )}
                 {this.state.activeItem > 0 ? (
                     <div>
                         {' '}
@@ -371,17 +559,23 @@ export interface initialSurveyProps {
     userSurveyState: userSurveyState;
 }
 
+export interface AdditionalSurveyProps {
+    additionalSurvey: additionalSurvey;
+}
+
 const mapStateToProps = (
     state: CurrentNoteState
 ): initialSurveyProps &
     HpiHeadersProps &
     PatientViewProps &
-    ChiefComplaintsProps => {
+    ChiefComplaintsProps &
+    AdditionalSurveyProps => {
     return {
         userSurveyState: selectInitialPatientSurvey(state),
         hpiHeaders: state.hpiHeaders,
         patientView: selectPatientViewState(state),
         chiefComplaints: state.chiefComplaints,
+        additionalSurvey: state.additionalSurvey,
     };
 };
 
@@ -404,6 +598,13 @@ interface DispatchProps {
             [node: string]: NodeInterface;
         }
     ) => AddDisplayedNodesAction;
+    updateAdditionalSurveyDetails: (
+        legalFirstName: string,
+        legalLastName: string,
+        socialSecurityNumber: string,
+        dateOfBirth: string
+    ) => UpdateAdditionalSurveyAction;
+    resetAdditionalSurveyPage: () => GoBackToAdditionalSurvey;
 }
 
 type Props = HpiHeadersProps &
@@ -412,7 +613,8 @@ type Props = HpiHeadersProps &
     DispatchProps &
     HpiHeadersProps &
     PatientViewProps &
-    ChiefComplaintsProps;
+    ChiefComplaintsProps &
+    AdditionalSurveyProps;
 
 const mapDispatchToProps = {
     processSurveyGraph,
@@ -420,6 +622,8 @@ const mapDispatchToProps = {
     processKnowledgeGraph,
     initialSurveySearch,
     addDisplayedNodes,
+    updateAdditionalSurveyDetails,
+    resetAdditionalSurveyPage,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InitialSurvey);

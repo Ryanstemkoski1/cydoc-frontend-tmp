@@ -157,7 +157,18 @@ a.ui.label, a.ui.active.label {
 .for-text {
     margin-left: 40px;
 }
-
+.drug-name .ui.input.medication.drug-input {
+    width: 100%;
+}
+.drug-name {
+    width: 70%;
+}
+.border-top {
+    border-top: 1px solid rgba(34, 36, 38, 0.15) !important;
+}
+.border-top .button-space {
+    margin-top: 11px !important;
+}
 /** For smaller screens e.g. iPhone 6/7/8 */
 @media (max-width: 425px) {
     .reason-wrapper {

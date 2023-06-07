@@ -9,7 +9,7 @@
         "7": "7"
     },
     "graph": {
-        "1": ["2", "3", "4"],
+        "1": ["2", "3", "4", "8", "9"],
         "2": [],
         "3": [],
         "4": [],
@@ -55,7 +55,7 @@
             },
             "6": {
                 "uid": "6",
-                "text": "Please select the most important conditions or symptoms that you would like to discuss today, up to a maximum of 3. CLICK[ADHD, Depression, Diabetes, Genital Symptoms/STI, Hypertension, Hyperlipidemia, Urinary Symptoms/UTI]",
+                "text": "Please select the most important conditions or symptoms that you would like to discuss today, up to a maximum of 3. FAVORITES",
                 "responseType": "SELECTONE",
                 "category": "",
                 "doctorView": ""
@@ -64,6 +64,20 @@
                 "uid": "7",
                 "text": "If you’d like to discuss an additional condition or symptom not listed above, please search for it here:",
                 "responseType": "SEARCH",
+                "category": "",
+                "doctorView": ""
+            },
+            "8": {
+                "uid": "8",
+                "text": "Please confirm the date of your appointment.",
+                "responseType": "TIME3DAYS",
+                "category": "",
+                "doctorView": ""
+            },
+            "9": {
+                "uid": "9",
+                "text": "What is the last name of the clinician you are seeing today? (optional)",
+                "responseType": "SHORT-TEXT",
                 "category": "",
                 "doctorView": ""
             }

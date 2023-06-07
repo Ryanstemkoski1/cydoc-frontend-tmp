@@ -46,6 +46,8 @@ interface OwnProps {
     handleAddition: (optionType: DropdownType, value: string) => void;
     deleteRow: (e: any, index: string) => void;
     medIndex: string;
+    singleType?: boolean;
+    isNote?: boolean;
 }
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -219,7 +221,7 @@ class MedicationsPanel extends Component<Props, State> {
                         : (medicationEntry as MedicationsItem).drugName
                 }
             >
-                <div id='width-full'>
+                <div id='width-full' className='full-width'>
                     {!isPreview && (
                         <Dropdown
                             fluid
@@ -749,18 +751,37 @@ class MedicationsPanel extends Component<Props, State> {
             );
         } else {
             titleContent = (
-                <Table className={'medications-desktop-accordion-title'}>
+                <Table
+                    className={`medications-desktop-accordion-title ${
+                        this.props.singleType && 'border-top'
+                    }`}
+                >
                     <Table.Body>
                         <Table.Row>
-                            <Table.Cell width={3}>{drugNameInput}</Table.Cell>
-                            <Table.Cell width={3}>{doseInput}</Table.Cell>
-                            <Table.Cell width={3}>{scheduleInput}</Table.Cell>
-                            <Table.Cell width={3}>
-                                <h3 className='for-text'>for</h3>
-                            </Table.Cell>
-                            <Table.Cell width={3}>
-                                {reasonForTakingInput}
-                            </Table.Cell>
+                            {this.props.singleType ? (
+                                <Table.Cell className='drug-name'>
+                                    {drugNameInput}
+                                </Table.Cell>
+                            ) : (
+                                <>
+                                    <Table.Cell width={3}>
+                                        {drugNameInput}
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
+                                        {doseInput}
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
+                                        {scheduleInput}
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
+                                        <h3 className='for-text'>for</h3>
+                                    </Table.Cell>
+                                    <Table.Cell width={3}>
+                                        {reasonForTakingInput}
+                                    </Table.Cell>
+                                </>
+                            )}
+
                             <Button
                                 circular
                                 icon='close'
@@ -771,7 +792,7 @@ class MedicationsPanel extends Component<Props, State> {
                                     );
                                 }}
                                 aria-label='delete-medication'
-                                className='hpi-ph-button'
+                                className='hpi-ph-button button-space'
                             />
                         </Table.Row>
                     </Table.Body>
@@ -805,9 +826,11 @@ class MedicationsPanel extends Component<Props, State> {
                 >
                     {titleContent}
                 </Accordion.Title>
-                <Accordion.Content active={this.state.active}>
-                    {contentInputs}
-                </Accordion.Content>
+                {!this.props.isNote && (
+                    <Accordion.Content active={this.state.active}>
+                        {contentInputs}
+                    </Accordion.Content>
+                )}
             </>
         );
     }

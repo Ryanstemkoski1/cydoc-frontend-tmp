@@ -7,9 +7,9 @@ export const client = axios.create({
 
 function getGraphClientURL() {
     let graphClientURL;
-    if (location.hostname == 'cydoc.ai') {
+    if (location.hostname == 'www.cydoc.ai') {
         graphClientURL = 'https://cydocgraph.herokuapp.com';
-    } else if (location.hostname == 'cyai.site') {
+    } else if (location.hostname == 'www.cyai.site') {
         graphClientURL = 'https://cydocgraphdev.herokuapp.com';
     } else if (location.hostname == 'localhost') {
         graphClientURL = 'https://cydocgraph.herokuapp.com';

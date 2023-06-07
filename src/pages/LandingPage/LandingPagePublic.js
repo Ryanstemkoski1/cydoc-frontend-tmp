@@ -12,6 +12,7 @@ import { LANDING_PAGE_MOBLE_BP } from 'constants/breakpoints.js';
 import './LandingPage.css';
 import Feedback from '../../assets/cydoc-feedback.svg';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import { changeUserView } from 'redux/actions/userViewActions';
 
 //Component that manages the layout of the dashboard page
 class LandingPage extends Component {
@@ -58,6 +59,11 @@ class LandingPage extends Component {
             !prompt || window.confirm('Delete current note and make a new one');
         if (toDelete) {
             this.props.deleteNote();
+            const doctorView = !this.props.patientView;
+            this.handleEditNoteClick();
+            this.props.changeUserView(
+                doctorView ? 'Doctor View' : 'Patient View'
+            );
             this.handleEditNoteClick();
         }
     };
@@ -229,6 +235,7 @@ const mapStatetoProps = (state) => ({
 
 const mapDispatchToProps = {
     deleteNote,
+    changeUserView,
 };
 
 export default connect(mapStatetoProps, mapDispatchToProps)(LandingPage);

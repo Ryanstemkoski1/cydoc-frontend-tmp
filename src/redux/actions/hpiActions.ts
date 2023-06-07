@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { HPI_ACTION, CHIEF_COMPLAINTS } from './actionTypes';
 import { YesNoResponse } from 'constants/enums';
 import {

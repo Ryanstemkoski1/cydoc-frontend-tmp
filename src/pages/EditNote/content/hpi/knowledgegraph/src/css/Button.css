@@ -1,6 +1,6 @@
 .button-item {
     margin-left: 30px;
-    width: 100%
+    width: 100%;
 }
 
 .ui.button.hpi-ph-button {
@@ -10,46 +10,46 @@
     box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
-.ui.button.hpi-ph-button:hover:not(.active) { 
+.ui.button.hpi-ph-button:hover:not(.active) {
     background-color: lightslategrey;
     border-radius: 20px;
     box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
-.ui.button.hpi-ph-button-selected.active:hover { 
+.ui.button.hpi-ph-button-selected.active:hover {
     background-color: #373b67;
     color: white;
     border-radius: 20px;
     box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
-.ui.button.hpi-chiefcomplaint-button-selected.active:hover { 
+.ui.button.hpi-chiefcomplaint-button-selected.active:hover {
     background-color: #373b67;
     color: white;
     border-radius: 20px;
     box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
-.ui.button.hpi-ph-button-selected { 
+.ui.button.hpi-ph-button-selected {
     background-color: #373b67;
     color: white;
     border-radius: 20px;
     box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }
 
-.ui.button.hpi-chiefcomplaint-button{
+.ui.button.hpi-chiefcomplaint-button {
     background-color: white;
     border-radius: 20px;
     box-shadow: 0 0 0 1px rgb(0 47 78 / 15%) inset;
 }
 
-.ui.button.hpi-chiefcomplaint-button:hover:not(.active) { 
+.ui.button.hpi-chiefcomplaint-button:hover:not(.active) {
     background-color: lightslategrey;
     border-radius: 20px;
     box-shadow: 0 0 0 1px rgb(0 47 78 / 15%) inset;
 }
 
-.ui.button.hpi-chiefcomplaint-button-selected { 
+.ui.button.hpi-chiefcomplaint-button-selected {
     background-color: #373b67;
     color: white;
     border-radius: 20px;
@@ -57,22 +57,30 @@
 }
 
 .field {
-  width: 100%;
-  border-radius: 4px;
-  position: relative;
-  background-color: rgba(255,255,255,0.3);
-  transition: 0.3s all;
+    width: 100%;
+    border-radius: 4px;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.3);
+    transition: 0.3s all;
 }
 .field:hover {
-  background-color: rgba(255, 255, 255, 0.45);
-  /*box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);*/
+    background-color: rgba(255, 255, 255, 0.45);
+    /*box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);*/
 }
-
 
 .qa-button {
     margin-top: 7px;
 }
 
+@media screen and (min-width: 767px) {
+    .width-50-desktop {
+        width: 50%;
+    }
+}
+
 .qa-div {
     margin-bottom: 20px;
+}
+.space-top {
+    margin-top: 20px;
 }

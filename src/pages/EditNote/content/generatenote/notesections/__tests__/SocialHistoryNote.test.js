@@ -191,7 +191,7 @@ describe('Social History Generate Note', () => {
             },
         });
         // Use the product of the two values
-        expect(wrapper.text()).toContain('1000 pack years');
+        expect(wrapper.text()).toContain('1000.0 pack years');
     });
 
     it('renders tobacco productsUsed correctly', () => {
