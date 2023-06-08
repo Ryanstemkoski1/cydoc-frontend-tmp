@@ -174,9 +174,3 @@
     right: 15px;
   }
 }
-
-@media (min-width: 600px){
-  .white-card {
-    min-height: calc(100vh - 360px);
-  }
-}
