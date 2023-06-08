@@ -1,30 +1,30 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Dropdown, Menu, Header, Image, Icon, Button } from 'semantic-ui-react';
-import { Link, useHistory } from 'react-router-dom';
 import {
     HIDE_CYDOC_IN_NAV_MENU_BP,
     LOGGEDIN_NAV_MENU_MOBILE_BP,
 } from 'constants/breakpoints.js';
-import AuthContext from '../../contexts/AuthContext';
-import Logo from '../../assets/cydoc-logo.svg';
-import NoteNameMenuItem, { Context } from './NoteNameMenuItem';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
-import './NavMenu.css';
+import { YesNoResponse } from 'constants/enums';
 import SignUpModal from 'pages/Account/SignUpModal';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
+import React, { useContext, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import {
+    UpdateActiveItemAction,
+    updateActiveItem,
+} from 'redux/actions/activeItemActions';
+import { UserViewAction, changeUserView } from 'redux/actions/userViewActions';
+import { CurrentNoteState } from 'redux/reducers';
 import {
     selectDoctorViewState,
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
-import { changeUserView, UserViewAction } from 'redux/actions/userViewActions';
-import { connect } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import {
-    updateActiveItem,
-    UpdateActiveItemAction,
-} from 'redux/actions/activeItemActions';
-import { YesNoResponse } from 'constants/enums';
-import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
+import { Button, Dropdown, Header, Icon, Image, Menu } from 'semantic-ui-react';
+import Logo from '../../assets/cydoc-logo.svg';
+import AuthContext from '../../contexts/AuthContext';
+import './NavMenu.css';
+import NoteNameMenuItem, { Context } from './NoteNameMenuItem';
 
 interface ConnectedNavMenuProps {
     className: string;
@@ -243,123 +243,124 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     };
 
     return (
-        <div>
-            <Menu className={`${className} nav-menu`} attached={attached}>
-                {context.token ? (
-                    <Menu.Item className='logo-menu' onClick={navigateToHome}>
-                        <Image
-                            src={Logo}
-                            className={
-                                collapseLoggedInNav
-                                    ? 'logo-circle-mobile'
-                                    : 'logo-circle'
-                            }
-                        />
-                        {!displayNoteName && !hideCydoc && (
-                            <Header
-                                as='h1'
-                                className={`${
-                                    collapseLoggedInNav
-                                        ? 'logo-text-mobile'
-                                        : 'logo-text'
-                                }`}
-                                content='Cydoc'
-                            />
-                        )}
-                    </Menu.Item>
-                ) : (
-                    <Menu.Item className='logo-menu' onClick={logoNotLoggedIn}>
-                        <Image
-                            src={Logo}
+        <Menu
+            className={`${className} nav-menu nav-bar ${
+                displayNoteName && doctorView ? 'nav-bar-input' : ''
+            }`}
+            attached={attached}
+        >
+            {context.token ? (
+                <Menu.Item className='logo-menu' onClick={navigateToHome}>
+                    <Image
+                        src={Logo}
+                        className={
+                            collapseLoggedInNav
+                                ? 'logo-circle-mobile'
+                                : 'logo-circle'
+                        }
+                    />
+                    {!displayNoteName && !hideCydoc && (
+                        <Header
+                            as='h1'
                             className={`${
                                 collapseLoggedInNav
-                                    ? 'logo-circle-mobile'
-                                    : 'logo-circle'
+                                    ? 'logo-text-mobile'
+                                    : 'logo-text'
                             }`}
+                            content='Cydoc'
                         />
-                        {!displayNoteName && !hideCydoc && (
-                            <Header
-                                as='h1'
-                                className={`${
-                                    collapseLoggedInNav
-                                        ? 'logo-text-mobile'
-                                        : 'logo-text'
-                                }`}
-                                content='Cydoc'
-                            />
-                        )}
-                    </Menu.Item>
-                )}
+                    )}
+                </Menu.Item>
+            ) : (
+                <Menu.Item className='logo-menu' onClick={logoNotLoggedIn}>
+                    <Image
+                        src={Logo}
+                        className={`${
+                            collapseLoggedInNav
+                                ? 'logo-circle-mobile'
+                                : 'logo-circle'
+                        }`}
+                    />
+                    {!displayNoteName && !hideCydoc && (
+                        <Header
+                            as='h1'
+                            className={`${
+                                collapseLoggedInNav
+                                    ? 'logo-text-mobile'
+                                    : 'logo-text'
+                            }`}
+                            content='Cydoc'
+                        />
+                    )}
+                </Menu.Item>
+            )}
 
-                {/* When parent is EditNote, then display the note name item */}
-                {displayNoteName && doctorView && (
-                    <NoteNameMenuItem mobile={collapseLoggedInNav} />
-                )}
-                {context.token && history.location.pathname.length > 1 ? (
-                    collapseLoggedInNav ? (
-                        <Button.Group>
-                            <Button
-                                compact
-                                onClick={() => {
-                                    changeUserView('Patient View');
-                                    if (!checkPatientView())
-                                        updateActiveItem('CC');
-                                }}
-                                className={`hpi-ph-button${
-                                    patientView ? '-selected' : ''
-                                }`}
-                            >
-                                Patient
-                            </Button>
-                            <Button.Or />
-                            <Button
-                                compact
-                                onClick={() => changeUserView('Doctor View')}
-                                className={`hpi-ph-button${
-                                    !patientView ? '-selected' : ''
-                                }`}
-                            >
-                                Doctor
-                            </Button>
-                        </Button.Group>
-                    ) : (
-                        <Button.Group>
-                            <Button
-                                style={{ maxHeight: '75%' }}
-                                onClick={() => {
-                                    changeUserView('Patient View');
-                                    if (!checkPatientView())
-                                        updateActiveItem('CC');
-                                }}
-                                className={`hpi-ph-button${
-                                    patientView ? '-selected' : ''
-                                }`}
-                            >
-                                Patient View
-                            </Button>
-                            <Button.Or />
-                            <Button
-                                style={{ maxHeight: '75%' }}
-                                onClick={() => changeUserView('Doctor View')}
-                                className={`hpi-ph-button${
-                                    !patientView ? '-selected' : ''
-                                }`}
-                            >
-                                Doctor View
-                            </Button>
-                        </Button.Group>
-                    )
+            {/* When parent is EditNote, then display the note name item */}
+            {displayNoteName && doctorView && (
+                <NoteNameMenuItem mobile={collapseLoggedInNav} />
+            )}
+            {context.token && history.location.pathname.length > 1 ? (
+                collapseLoggedInNav ? (
+                    <Button.Group>
+                        <Button
+                            compact
+                            onClick={() => {
+                                changeUserView('Patient View');
+                                if (!checkPatientView()) updateActiveItem('CC');
+                            }}
+                            className={`hpi-ph-button${
+                                patientView ? '-selected' : ''
+                            }`}
+                        >
+                            Patient
+                        </Button>
+                        <Button.Or />
+                        <Button
+                            compact
+                            onClick={() => changeUserView('Doctor View')}
+                            className={`hpi-ph-button${
+                                !patientView ? '-selected' : ''
+                            }`}
+                        >
+                            Doctor
+                        </Button>
+                    </Button.Group>
                 ) : (
-                    ''
-                )}
+                    <Button.Group>
+                        <Button
+                            style={{ maxHeight: '75%' }}
+                            onClick={() => {
+                                changeUserView('Patient View');
+                                if (!checkPatientView()) updateActiveItem('CC');
+                            }}
+                            className={`hpi-ph-button${
+                                patientView ? '-selected' : ''
+                            }`}
+                        >
+                            Patient View
+                        </Button>
+                        <Button.Or />
+                        <Button
+                            style={{ maxHeight: '75%' }}
+                            onClick={() => changeUserView('Doctor View')}
+                            className={`hpi-ph-button${
+                                !patientView ? '-selected' : ''
+                            }`}
+                        >
+                            Doctor View
+                        </Button>
+                    </Button.Group>
+                )
+            ) : (
+                ''
+            )}
 
-                {/* Navigation links */}
-                <Menu.Menu position='right'>
-                    {/* Menu will have different options depending on whether the user is logged in or not */}
-                    {context.token ? loggedInMenuItems : defaultMenuItems}
-                </Menu.Menu>
-            </Menu>
-        </div>
+            {/* Navigation links */}
+            <Menu.Menu position='right'>
+                {/* Menu will have different options depending on whether the user is logged in or not */}
+                {context.token ? loggedInMenuItems : defaultMenuItems}
+            </Menu.Menu>
+        </Menu>
     );
 };
 
