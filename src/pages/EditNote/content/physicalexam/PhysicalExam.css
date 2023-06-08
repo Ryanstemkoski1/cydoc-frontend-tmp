@@ -18,7 +18,29 @@
     font-size: 1.5rem !important;
     font-family: Nunito,Arial,Helvetica,sans-serif !important;
 }
-
+.active-tab-container .listing.dropdown-title.active {
+    border-left-color: #000;
+}
+.active-tab-container .listing.dropdown-title {
+    font-weight: 400 !important;
+    color: #000 !important;
+    padding: 8px 10px 8px 5px !important;
+} 
+.full-view-table table {
+    width: 100% !important; 
+}
+@media (max-width: 869px){
+    .physical-content label {
+        width: 100% !important;
+        margin-bottom: 10px !important;
+    }
+}
+@media (max-width: 500px){
+    .physical-content .labeled.input {
+        max-width: 100%;
+        width: 100% !important;
+    }
+}
 h5.ui.header{
   font-family: Nunito,Arial,Helvetica,sans-serif !important;
 }

@@ -266,8 +266,10 @@ class NotePage extends Component {
                     />
                 ) : (
                     <>
-                        Please select at least one Chief Complaint in the CC tab
-                        in order to view an HPI questionnaire.
+                        <div className='note-text'>
+                            Please select at least one Chief Complaint in the CC
+                            tab in order to view an HPI questionnaire.
+                        </div>
                         <Button
                             icon
                             labelPosition='left'

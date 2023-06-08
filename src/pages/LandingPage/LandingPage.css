@@ -87,13 +87,17 @@
     margin: 2vh 2vw;
 }
 
+.landing-box.bottom,
 .landing-col {
-    width: 30%;
+    width: 100%;
+    max-width: 400px;
+    padding: 60px 20px !important;
     margin: 10vh auto;
 }
 
 .landing-feedback {
-    width: 30%;
+    width: 100%;
+    max-width: 400px;
     margin: 3vh auto;
 }
 
@@ -109,7 +113,7 @@
     color: #0d5e70;
     border: 2px solid #6DA3B1;
     border-radius: 15px;
-    padding: 10vh 5vw;
+    padding: 10vh 5vw; 
     text-align: center;
     transition: all .1s ease-in-out;
 }
@@ -120,8 +124,7 @@
     border: 2px solid #0d5e70;
 }
 
-.landing-box.top,
-.landing-box.bottom {
+.landing-box.top {
     padding: 5vh 2.5vw;
     flex: 1;
 }
@@ -151,4 +154,9 @@
 
 .smaller-text {
     color: #6DA3B1
+}
+@media (max-width: 575px){
+    .landing-feedback {
+        max-width: 320px;
+    }
 }

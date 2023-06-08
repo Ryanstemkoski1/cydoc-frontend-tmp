@@ -290,7 +290,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 results={getRes()}
                             />
                             <Masonry
-                                className='disease-container'
+                                className='disease-container col-wrapper'
                                 breakpointCols={numColumns}
                                 columnClassName='disease-column'
                             >
@@ -333,31 +333,37 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         stackable
                                         centered
                                         id='hpi-menu'
+                                        className='bottom-no-space'
                                         relaxed
                                     >
                                         {' '}
-                                        {Object.keys(chiefComplaints).map(
-                                            (
-                                                menuItem: string,
-                                                index: number
-                                            ) => (
-                                                <ToggleButton
-                                                    key={menuItem}
-                                                    condition={menuItem}
-                                                    title={menuItem}
-                                                    onToggleButtonClick={(_e) =>
-                                                        this.props.onTabClick(
-                                                            _e,
-                                                            index
-                                                        )
-                                                    }
-                                                    active={
-                                                        this.props.activeTab ==
-                                                        menuItem
-                                                    }
-                                                />
-                                            )
-                                        )}
+                                        <div className='mobile-tab'>
+                                            {Object.keys(chiefComplaints).map(
+                                                (
+                                                    menuItem: string,
+                                                    index: number
+                                                ) => (
+                                                    <ToggleButton
+                                                        key={menuItem}
+                                                        condition={menuItem}
+                                                        title={menuItem}
+                                                        onToggleButtonClick={(
+                                                            _e
+                                                        ) =>
+                                                            this.props.onTabClick(
+                                                                _e,
+                                                                index
+                                                            )
+                                                        }
+                                                        active={
+                                                            this.props
+                                                                .activeTab ==
+                                                            menuItem
+                                                        }
+                                                    />
+                                                )
+                                            )}
+                                        </div>
                                     </Grid>
                                     <Segment>
                                         <MiscBox
@@ -498,7 +504,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         )
                                     }
                                 />
-                            )}{' '}
+                            )}
                         </>
                     );
                 }
