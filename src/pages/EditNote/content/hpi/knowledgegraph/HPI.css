@@ -22,7 +22,6 @@
     height: 25px !important;
 }
 
-
 .hpi-disease-button {
     width: 100%;
     text-align: left !important;
@@ -171,25 +170,23 @@
 .misc-box {
     height: 10vh !important;
 }
-@media only screen and (min-width: 768px) and (max-width: 991px){
+@media only screen and (min-width: 768px) and (max-width: 991px) {
     .hpi-text-drop {
         width: 723px;
     }
 }
-@media only screen and (min-width: 992px) and (max-width: 1199px){
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
     .hpi-text-drop {
         width: 933px;
     }
 }
-@media only screen and (min-width: 1200px){
+@media only screen and (min-width: 1200px) {
     .hpi-text-drop {
         width: 1127px;
     }
 }
 
-
 @media screen and (max-width: 1400px) {
-
     .ui.icon.button.hpi-previous-button,
     .ui.icon.button.hpi-next-button {
         display: none;
@@ -207,7 +204,6 @@
     .ui.icon.button.hpi-small-next-button {
         right: 5px;
     }
-
 }
 
 @media screen and (max-width: 700px) {
@@ -218,12 +214,11 @@
     }
 
     .question-map {
-        margin: auto .5rem;
+        margin: auto 0.5rem;
     }
 }
 
 @media screen and (max-width: 400px) {
-
     .ui.icon.button.hpi-small-previous-button {
         left: 15px;
     }

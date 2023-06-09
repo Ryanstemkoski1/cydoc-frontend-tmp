@@ -16,14 +16,15 @@
 
 .dropdown-title {
     font-size: 1.5rem !important;
-    font-family: Nunito,Arial,Helvetica,sans-serif !important;
+    font-family: Nunito, Arial, Helvetica, sans-serif !important;
 }
 
-h5.ui.header{
-  font-family: Nunito,Arial,Helvetica,sans-serif !important;
+h5.ui.header {
+    font-family: Nunito, Arial, Helvetica, sans-serif !important;
 }
 
-.ui.icon.button.physical-previous-button, .ui.icon.button.physical-next-button {
+.ui.icon.button.physical-previous-button,
+.ui.icon.button.physical-next-button {
     position: fixed;
     bottom: 15px;
     opacity: 0.8;
@@ -32,10 +33,12 @@ h5.ui.header{
     font-size: 13px;
     background: #006b87;
     color: white;
-  }
-  
-.ui.icon.button.physical-previous-button:hover, .ui.icon.button.physical-next-button:hover,
-.ui.icon.button.small-physical-previous-button, .ui.icon.button.small-physical-next-button {
+}
+
+.ui.icon.button.physical-previous-button:hover,
+.ui.icon.button.physical-next-button:hover,
+.ui.icon.button.small-physical-previous-button,
+.ui.icon.button.small-physical-next-button {
     opacity: 0.6;
 }
 
@@ -47,7 +50,8 @@ h5.ui.header{
     right: 20px;
 }
 
-.ui.icon.button.small-physical-previous-button, .ui.icon.button.small-physical-next-button {
+.ui.icon.button.small-physical-previous-button,
+.ui.icon.button.small-physical-next-button {
     display: none;
     position: fixed;
     bottom: 15px;
@@ -61,17 +65,17 @@ h5.ui.header{
     margin-bottom: 10px;
 }
 
-.selectable-temparature > .ui >.text  {
+.selectable-temparature > .ui > .text {
     margin: 0;
     overflow: hidden;
-    color: rgba(0,0,0,.6);
+    color: rgba(0, 0, 0, 0.6);
 }
 body ::-webkit-scrollbar-thumb {
     background: transparent;
 }
 
-@media screen and (max-width: 700px){
-    .ui.container.active-tab-container{
+@media screen and (max-width: 700px) {
+    .ui.container.active-tab-container {
         margin-top: 30px;
     }
 }
@@ -85,12 +89,13 @@ body ::-webkit-scrollbar-thumb {
 }
 
 @media screen and (max-width: 1400px) {
-
-    .ui.icon.button.physical-previous-button, .ui.icon.button.physical-next-button {
+    .ui.icon.button.physical-previous-button,
+    .ui.icon.button.physical-next-button {
         display: none;
     }
 
-    .ui.icon.button.small-physical-previous-button, .ui.icon.button.small-physical-next-button {
+    .ui.icon.button.small-physical-previous-button,
+    .ui.icon.button.small-physical-next-button {
         display: block;
     }
 
@@ -104,7 +109,6 @@ body ::-webkit-scrollbar-thumb {
 }
 
 @media screen and (max-width: 400px) {
-
     .physical-accordion {
         height: 350px;
     }

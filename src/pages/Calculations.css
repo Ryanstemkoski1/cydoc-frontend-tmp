@@ -4,14 +4,14 @@
     padding: 0;
 }
 .css-fix {
-  white-space: pre-wrap; /* or pre-line */
+    white-space: pre-wrap; /* or pre-line */
 }
 .triangle {
     cursor: pointer;
-    width: 13px; 
+    width: 13px;
     height: 13px;
     display: inline-block;
-    transition: transform .3s;
+    transition: transform 0.3s;
     transform-origin: center bottom;
 }
 .rotate {
@@ -21,18 +21,13 @@
 h5 {
     margin-top: 5px;
     margin-bottom: 5px;
-  }
+}
 
-  .text{
+.text {
     overflow: overlay;
-  }
+}
 
-  .no-outline:focus {
+.no-outline:focus {
     outline: none !important;
     box-shadow: none !important;
-  }
-  
-  
-  
-  
-  
+}

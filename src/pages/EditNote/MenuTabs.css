@@ -1,69 +1,67 @@
-
 /* Menu tabs have the box shadow instead of nav-menu */
 .menu-tab {
-  box-shadow: 0 10px 20px -3px RGBA(0, 128, 159, 0.2) !important;
-  border-bottom: 0 !important;
+    box-shadow: 0 10px 20px -3px RGBA(0, 128, 159, 0.2) !important;
+    border-bottom: 0 !important;
 }
 
 .collapsed-menu-tabs {
-  overflow: auto;
-  max-height: 50vh;
-  white-space: nowrap;
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
+    overflow: auto;
+    max-height: 50vh;
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 
-
 .expanded-menu-tabs {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 /* round out the menu tabs more */
 .ui.secondary.menu .expanded-menu-tabs .item {
-  display: block !important;
-  width: 155px;
-  height: 40px;
-  text-align: center;
+    display: block !important;
+    width: 155px;
+    height: 40px;
+    text-align: center;
 }
 
 /* round out the menu tabs more */
-.ui.secondary.menu .collapsed-menu-tabs .item  {
-  min-width: 100px;
-  display: block !important;
-  background-color: #EDEDED;
-  border-radius: 0 !important;
-  border-left: 1px solid #BDBDBD;
-  border-top: 1px solid #BDBDBD;
-  border-bottom: 1px solid #BDBDBD;
-  text-align: center;
-  margin: 0;
-  margin-bottom: -2px !important;
+.ui.secondary.menu .collapsed-menu-tabs .item {
+    min-width: 100px;
+    display: block !important;
+    background-color: #ededed;
+    border-radius: 0 !important;
+    border-left: 1px solid #bdbdbd;
+    border-top: 1px solid #bdbdbd;
+    border-bottom: 1px solid #bdbdbd;
+    text-align: center;
+    margin: 0;
+    margin-bottom: -2px !important;
 }
 
 .ui.secondary.menu .collapsed-menu-tabs .item.arrow {
-  min-width: 10px;
+    min-width: 10px;
 }
 
 /* current active tab styles */
 .expanded-menu-tabs .active.item {
-  color: #034353 !important;
-  background-color: #CDE1E9 !important;
-  margin-bottom: -4px !important;
+    color: #034353 !important;
+    background-color: #cde1e9 !important;
+    margin-bottom: -4px !important;
 }
 
 .collapsed-menu-tabs .active.item {
-  color: white !important;
-  background-color: #6db2c5 !important;
+    color: white !important;
+    background-color: #6db2c5 !important;
 }
 
 .form-tabs {
-  background-color: white;
+    background-color: white;
 }
 
 .collapsed-menu-icon {
-  margin: 0;
+    margin: 0;
 }

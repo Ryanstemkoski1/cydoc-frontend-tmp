@@ -8,11 +8,11 @@
 }
 
 .condition-header {
-    margin-bottom: .5rem !important;
+    margin-bottom: 0.5rem !important;
 }
 
 .condition-name {
-    margin-right: .8rem;
+    margin-right: 0.8rem;
     font-size: 15px;
     min-width: 12rem;
 }
@@ -35,7 +35,6 @@
     display: inline-table;
     width: 45%;
     margin-right: 50px;
-
 }
 
 .dropdown-inline-mobile {
@@ -49,7 +48,7 @@
 
 .text-area {
     width: 500px;
-    margin-bottom: .5rem !important;
+    margin-bottom: 0.5rem !important;
 }
 
 .display {
@@ -68,9 +67,9 @@
     margin-top: 25px;
 }
 
-.ui.grid .row+.ui.divider{
-  margin: 0.5rem 0.5rem;
-  padding-bottom: 10px;
+.ui.grid .row + .ui.divider {
+    margin: 0.5rem 0.5rem;
+    padding-bottom: 10px;
 }
 
 .content-style {
@@ -85,10 +84,11 @@
     margin-bottom: 25px;
 }
 
-#alcohol-header, #drugs-header {
+#alcohol-header,
+#drugs-header {
     border-left: 0;
 }
-.error-input{
+.error-input {
     color: red;
     margin-top: 5px;
     margin-left: 5px;
@@ -112,7 +112,7 @@
     }
 
     .ui.grid > .column:not(.row).cod-input {
-        padding-top: .4rem !important;
+        padding-top: 0.4rem !important;
         padding-bottom: 1.5rem !important;
     }
 
@@ -132,27 +132,27 @@
         width: 85%;
         white-space: nowrap;
     }
-    
+
     #dropdown-display {
         display: inline-block;
     }
-    
+
     #btn-hpi-type-delete {
         margin-top: 5px;
         margin-bottom: 5px;
         display: inline-block;
     }
-    
+
     #contents-div {
         width: 100%;
         white-space: nowrap;
     }
-    
+
     #contents-label {
         display: inline-block;
         margin-right: 15px;
     }
-    
+
     #num-per-week {
         width: 50%;
     }
@@ -183,7 +183,7 @@
 }
 
 .family-history-toggle {
-    display: flex
+    display: flex;
 }
 
 .family-history-header-mobile {
@@ -196,11 +196,10 @@
     white-space: nowrap;
 }
 
-.ui.grid>.row {
-  padding-bottom: 0rem;
+.ui.grid > .row {
+    padding-bottom: 0rem;
 }
 
 .ui.grid {
-  margin-bottom: 0rem;
+    margin-bottom: 0rem;
 }
-

@@ -1,4 +1,5 @@
-.ui.button.previous-button, .ui.button.next-button {
+.ui.button.previous-button,
+.ui.button.next-button {
     position: sticky !important;
     bottom: 0;
     opacity: 0.8;
@@ -8,12 +9,14 @@
     background: #c8e2ea;
 }
 
-.ui.button.previous-button:hover, .ui.button.next-button:hover {
+.ui.button.previous-button:hover,
+.ui.button.next-button:hover {
     opacity: 1;
     background: #c8e2ea;
 }
 
-.ui.button.small-previous-button, .ui.button.small-next-button {
+.ui.button.small-previous-button,
+.ui.button.small-next-button {
     display: none;
     position: sticky !important;
     bottom: 0;
@@ -39,14 +42,16 @@
 }
 
 @media screen and (max-width: 1300px) {
-    .ui.button.previous-button, .ui.button.next-button {
+    .ui.button.previous-button,
+    .ui.button.next-button {
         display: none;
     }
 
-    .ui.button.small-previous-button, .ui.button.small-next-button {
+    .ui.button.small-previous-button,
+    .ui.button.small-next-button {
         display: block;
     }
-    
+
     .edit-note-div {
         height: 260px;
     }
