@@ -132,7 +132,7 @@ class ReviewOfSystemsContent extends Component<ROSContentProps, ContentState> {
                     onClick={previousFormClick}
                     className='ros-previous-button'
                 >
-                    Previous
+                    Prev
                     <Icon name='arrow left' />
                 </Button>
                 {patientView ? (

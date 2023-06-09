@@ -29,7 +29,7 @@ h5.ui.header{
     opacity: 0.8;
     margin: 0;
     display: block;
-    font-size: 13px;
+    font-size: 18px;
     background: #006b87;
     color: white;
   }
@@ -69,6 +69,11 @@ h5.ui.header{
 body ::-webkit-scrollbar-thumb {
     background: transparent;
 }
+.bmi-text{
+    height: 38px;
+    display: flex;
+    align-items: center;
+}
 
 @media screen and (max-width: 700px){
     .ui.container.active-tab-container{
@@ -84,7 +89,7 @@ body ::-webkit-scrollbar-thumb {
     max-width: 100px;
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 600px) {
 
     .ui.icon.button.physical-previous-button, .ui.icon.button.physical-next-button {
         display: none;

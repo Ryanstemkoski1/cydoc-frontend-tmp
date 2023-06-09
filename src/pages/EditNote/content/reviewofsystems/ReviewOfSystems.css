@@ -47,7 +47,7 @@
     opacity: 0.8;
     margin: 0;
     display: block;
-    font-size: 13px;
+    font-size: 18px;
     background: #006b87;
     color: white;
 }
@@ -118,7 +118,7 @@
     width: 100%;
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 600px) {
     .ui.icon.button.ros-previous-button,
     .ui.icon.button.ros-next-button {
         display: none;

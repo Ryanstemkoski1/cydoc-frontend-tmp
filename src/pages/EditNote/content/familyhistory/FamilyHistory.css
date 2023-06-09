@@ -33,9 +33,7 @@
 
 .ui.fluid.dropdown.dropdown-inline {
     display: inline-table;
-    width: 45%;
-    margin-right: 50px;
-
+    width: 100%;
 }
 
 .dropdown-inline-mobile {

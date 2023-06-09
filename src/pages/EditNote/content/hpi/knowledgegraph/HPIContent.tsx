@@ -175,6 +175,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         const { windowWidth } = this.state;
         const { chiefComplaints, hpiHeaders, patientView } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
+
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         /* Creates list of body system buttons to add in the front page. 
            Loops through state variable, bodySystems, saved from the API */
@@ -304,7 +305,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 onClick={this.continue}
                                 className='hpi-small-next-button'
                             >
-                                <Icon name='arrow right' />
+                                <Icon name='arrow right' className='big' />
                             </Button>
                             <Button
                                 icon
@@ -362,6 +363,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                     <Segment>
                                         <MiscBox
                                             activeThing={this.props.activeTab}
+                                            step={step}
                                         />
                                         <DiseaseForm
                                             key={this.props.activeTab}
@@ -381,7 +383,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         onClick={this.back}
                                         className='hpi-small-previous-button'
                                     >
-                                        <Icon name='arrow left' />
+                                        <Icon
+                                            name='arrow left'
+                                            className='big'
+                                        />
                                     </Button>
                                     <Button
                                         icon
@@ -390,7 +395,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         onClick={this.back}
                                         className='hpi-previous-button'
                                     >
-                                        Previous
+                                        Prev
                                         <Icon name='arrow left' />
                                     </Button>
 
@@ -400,7 +405,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         onClick={this.continue}
                                         className='hpi-small-next-button'
                                     >
-                                        <Icon name='arrow right' />
+                                        <Icon
+                                            name='arrow right'
+                                            className='big'
+                                        />
                                     </Button>
                                     <Button
                                         icon
@@ -431,6 +439,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         activeThing={
                                                             diseaseCategory
                                                         }
+                                                        step={step}
                                                     />
                                                     <DiseaseForm
                                                         key={
@@ -455,7 +464,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         onClick={this.back}
                                                         className='hpi-small-previous-button'
                                                     >
-                                                        <Icon name='arrow left' />
+                                                        <Icon
+                                                            name='arrow left'
+                                                            className='big'
+                                                        />
                                                     </Button>
                                                     <Button
                                                         icon
@@ -464,7 +476,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         onClick={this.back}
                                                         className='hpi-previous-button'
                                                     >
-                                                        Previous Form
+                                                        Prev
                                                         <Icon name='arrow left' />
                                                     </Button>
                                                     <Button
