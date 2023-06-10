@@ -28,7 +28,6 @@ interface PatientDisplayName {
 const END_OF_SENTENCE_PUNC = '.!?';
 // selectively Lowercases anything except for multiple capitalized letters in a row
 const selectivelyLowercase = (str: string): string => {
-    console.log(str);
     return str
         .split(' ')
         .map((word) => {
