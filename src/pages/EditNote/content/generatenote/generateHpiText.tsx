@@ -28,6 +28,7 @@ interface PatientDisplayName {
 const END_OF_SENTENCE_PUNC = '.!?';
 // selectively Lowercases anything except for multiple capitalized letters in a row
 const selectivelyLowercase = (str: string): string => {
+    console.log(str);
     return str
         .split(' ')
         .map((word) => {
@@ -52,7 +53,6 @@ const selectivelyLowercase = (str: string): string => {
  * and colons). Removes multiple spaces.
  */
 export const fullClean = (sentence: string): string => {
-    sentence = sentence.toLowerCase();
 
     // remove punctuations except hyphens and parentheses
     sentence = sentence.replace(/[^\w\s.,:/()-]/g, '');
