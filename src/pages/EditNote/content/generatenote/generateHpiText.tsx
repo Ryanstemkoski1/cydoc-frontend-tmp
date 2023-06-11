@@ -52,7 +52,6 @@ const selectivelyLowercase = (str: string): string => {
  * and colons). Removes multiple spaces.
  */
 export const fullClean = (sentence: string): string => {
-
     // remove punctuations except hyphens and parentheses
     sentence = sentence.replace(/[^\w\s.,:/()-]/g, '');
 
