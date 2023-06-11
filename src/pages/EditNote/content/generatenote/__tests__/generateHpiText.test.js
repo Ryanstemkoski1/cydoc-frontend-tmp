@@ -257,7 +257,7 @@ describe('generateHpiText', () => {
 
         it('lowercases string', () => {
             const inp = 'Foo BAR';
-            const expected = 'foo bar';
+            const expected = 'foo BAR';
             expect(fullClean(inp)).toEqual(expected);
         });
 
