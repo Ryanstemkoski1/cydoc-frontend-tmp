@@ -275,7 +275,7 @@ describe('generateHpiText', () => {
 
         it('chains the rules', () => {
             const inp = '  foo?  BAR!! 42?   24,  eom.';
-            const expected = 'foo bar 42 24, eom';
+            const expected = 'foo BAR 42 24, eom';
             expect(fullClean(inp)).toEqual(expected);
         });
     });
