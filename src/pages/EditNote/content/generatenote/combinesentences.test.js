@@ -24,7 +24,7 @@ test('combine regular sentences 4', () => {
             'The PATIENT has a hangnail.',
             3
         )
-    ).toBe(' The patient has a cellphone and a hangnail.');
+    ).toBe(' The patient has a cellphone and hangnail.');
 });
 test('combine regular sentences 5', () => {
     expect(
