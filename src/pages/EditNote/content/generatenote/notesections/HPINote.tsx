@@ -171,7 +171,7 @@ export const extractNode = (
 
     if((node.responseType === ResponseTypes.YES_NO && node.response == YesNoResponse.Yes)||(node.responseType === ResponseTypes.NO_YES && node.response === YesNoResponse.No)){
         let childNode = state.hpi.nodes[state.hpi.graph[node.medID][0]];
-        if(childNode.responseType === "MEDS-BLANK" || childNode.responseType === "MEDS-POP"){
+        if(childNode.responseType === "MEDS-BLANK" || childNode.responseType === "MEDS-POP" && childNode.response != ""){
             return ["", "", ""];
         }
     }
