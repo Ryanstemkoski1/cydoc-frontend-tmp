@@ -188,7 +188,6 @@ class AllergiesContent extends Component<Props, OwnState> {
                         rowIndex={i}
                         value={isPreview ? '' : values[i].incitingAgent}
                     />
-                    {' causes '}
                     <Dropdown
                         fluid
                         search

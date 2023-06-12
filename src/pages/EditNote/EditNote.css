@@ -1,10 +1,10 @@
 .ui.button.previous-button, .ui.button.next-button {
-    position: sticky !important;
-    bottom: 0;
+    /* position: sticky !important;
+    bottom: 0; */
     opacity: 0.8;
     margin: 0;
     display: block;
-    font-size: 13px;
+    font-size: 18px;
     background: #c8e2ea;
 }
 
@@ -38,7 +38,7 @@
     height: 10px;
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 600px) {
     .ui.button.previous-button, .ui.button.next-button {
         display: none;
     }

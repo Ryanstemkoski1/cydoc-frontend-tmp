@@ -4,7 +4,7 @@
     opacity: 0.8;
     margin: 0;
     display: block;
-    font-size: 13px;
+    font-size: 18px;
     background-color: #006b87;
     color: white;
   }
@@ -39,7 +39,7 @@
     padding: 20px 40px;
   }
   
-  @media screen and (max-width: 1400px) {
+  @media screen and (max-width: 600px) {
     .ui.icon.button.note-previous-button {
         display: none;
     }

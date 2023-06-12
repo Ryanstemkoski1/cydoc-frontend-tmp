@@ -47,7 +47,6 @@ class ConnectedMenuTabs extends Component {
     render() {
         const { activeItem, activeTabIndex, patientView } = this.props;
         const { windowWidth } = this.state;
-
         const collapseMenu = windowWidth < MENU_TABS_MOBILE_BP;
         const tabs = patientView
             ? constants.PATIENT_VIEW_TAB_NAMES

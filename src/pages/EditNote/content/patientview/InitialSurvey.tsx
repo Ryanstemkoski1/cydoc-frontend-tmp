@@ -518,7 +518,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             className='hpi-previous-button'
                             onClick={this.onPrevClick}
                         >
-                            Previous
+                            Prev
                             <Icon name='arrow left' />
                         </Button>
                         <Button
@@ -527,7 +527,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             className='hpi-small-previous-button'
                             onClick={this.onPrevClick}
                         >
-                            <Icon name='arrow left' />
+                            <Icon name='arrow left' className='big' />
                         </Button>{' '}
                     </div>
                 ) : (
@@ -549,7 +549,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                     className='hpi-small-next-button'
                     onClick={this.onNextClick}
                 >
-                    <Icon name='arrow right' />
+                    <Icon name='arrow right' className='big' />
                 </Button>
             </div>
         );
