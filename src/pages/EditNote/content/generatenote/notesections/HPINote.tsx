@@ -168,11 +168,11 @@ export const extractNode = (
     node: GraphNode
 ): [string, string, string] => {
     /* eslint-disable no-case-declarations, no-fallthrough */
-    console.dir(state);
 
     if((node.responseType === ResponseTypes.YES_NO && node.response == YesNoResponse.Yes)||(node.responseType === ResponseTypes.NO_YES && node.response === YesNoResponse.No)){
-        if(state.hpi.nodes[state.hpi.graph[node.medID][0]].response){
-            return ['', '', ''];
+        let childNode = state.hpi.nodes[state.hpi.graph[node.medID][0]];
+        if(childNode.responseType === "MEDS-BLANK" || childNode.responseType === "MEDS-POP"){
+            return ["", "", ""];
         }
     }
 
