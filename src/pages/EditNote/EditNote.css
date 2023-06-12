@@ -72,3 +72,18 @@
         height: 50px;
     }
 }
+
+  .error-message {
+    margin-top: 10px;  
+  }   
+  .error-message + .active-tab-container{
+    margin-top: 10px;  
+  }
+
+  .error-message + div > div > .active-tab-container {
+    margin-top: 10px;  
+  }
+  
+  .error-message + div > .active-tab-container > div > .active-tab-container{
+    margin-top: 10px;  
+  }

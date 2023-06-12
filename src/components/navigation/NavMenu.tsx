@@ -1,30 +1,33 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Dropdown, Menu, Header, Image, Icon, Button } from 'semantic-ui-react';
-import { Link, useHistory } from 'react-router-dom';
 import {
     HIDE_CYDOC_IN_NAV_MENU_BP,
     LOGGEDIN_NAV_MENU_MOBILE_BP,
 } from 'constants/breakpoints.js';
-import AuthContext from '../../contexts/AuthContext';
-import Logo from '../../assets/cydoc-logo.svg';
-import NoteNameMenuItem, { Context } from './NoteNameMenuItem';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
-import './NavMenu.css';
+import { YesNoResponse } from 'constants/enums';
 import SignUpModal from 'pages/Account/SignUpModal';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
+import React, { useContext, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
+import {
+    UpdateActiveItemAction,
+    updateActiveItem,
+} from 'redux/actions/activeItemActions';
+import { UserViewAction, changeUserView } from 'redux/actions/userViewActions';
+import { CurrentNoteState } from 'redux/reducers';
+import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
+import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import {
     selectDoctorViewState,
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
-import { changeUserView, UserViewAction } from 'redux/actions/userViewActions';
-import { connect } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import {
-    updateActiveItem,
-    UpdateActiveItemAction,
-} from 'redux/actions/activeItemActions';
-import { YesNoResponse } from 'constants/enums';
-import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
+import { Button, Dropdown, Header, Icon, Image, Menu } from 'semantic-ui-react';
+import Logo from '../../assets/cydoc-logo.svg';
+import constants from '../../constants/constants.json';
+import AuthContext from '../../contexts/AuthContext';
+import './NavMenu.css';
+import NoteNameMenuItem, { Context } from './NoteNameMenuItem';
 
 interface ConnectedNavMenuProps {
     className: string;
@@ -223,23 +226,25 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     );
 
     const checkPatientView = () => {
-        const { userSurveyState } = props,
-            check1 =
-                'graph' in userSurveyState &&
-                '1' in userSurveyState.graph &&
-                Object.keys(userSurveyState.graph['1']).every(
-                    (key) =>
-                        userSurveyState.nodes[key].response !=
-                        YesNoResponse.None
-                ),
-            check2 =
-                'nodes' in userSurveyState &&
-                '6' in userSurveyState.nodes &&
-                '7' in userSurveyState.nodes &&
-                Object.keys(userSurveyState.nodes['6'].response).length +
-                    Object.keys(userSurveyState.nodes['7'].response).length >
-                    0;
-        return check1 && check2;
+        if (!constants.PATIENT_VIEW_TAB_NAMES.includes(props.activeItem)) {
+            return false;
+        }
+        const { userSurveyState, additionalSurvey } = props;
+        const selected =
+            userSurveyState.nodes['2'].response === YesNoResponse.Yes ||
+            userSurveyState.nodes['3'].response === YesNoResponse.Yes ||
+            userSurveyState.nodes['4'].response === YesNoResponse.Yes;
+        if (
+            !selected ||
+            !userSurveyState.nodes['8'].response ||
+            !additionalSurvey.legalFirstName ||
+            !additionalSurvey.legalLastName ||
+            !additionalSurvey.dateOfBirth ||
+            !additionalSurvey.socialSecurityNumber
+        ) {
+            return false;
+        }
+        return true;
     };
 
     return (
@@ -377,20 +382,34 @@ export interface userViewProps {
     patientView: boolean;
     doctorView: boolean;
 }
+export interface AdditionalSurveyProps {
+    additionalSurvey: additionalSurvey;
+}
+
+export interface ActiveItemProps {
+    activeItem: string;
+}
 
 const mapStateToProps = (
     state: CurrentNoteState
-): userViewProps & initialSurveyProps => {
+): userViewProps &
+    initialSurveyProps &
+    AdditionalSurveyProps &
+    ActiveItemProps => {
     return {
         patientView: selectPatientViewState(state),
         doctorView: selectDoctorViewState(state),
         userSurveyState: selectInitialPatientSurvey(state),
+        additionalSurvey: state.additionalSurvey,
+        activeItem: selectActiveItem(state),
     };
 };
 
 type Props = ConnectedNavMenuProps &
     userViewProps &
     DispatchProps &
-    initialSurveyProps;
+    initialSurveyProps &
+    AdditionalSurveyProps &
+    ActiveItemProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConnectedNavMenu);

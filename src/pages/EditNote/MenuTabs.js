@@ -57,7 +57,6 @@ class ConnectedMenuTabs extends Component {
                 name={patientView ? '' + (index + 1) : name}
                 active={activeItem === name}
                 onClick={(e) => this.handleItemClick(e, { name })}
-                href={'#' + encodeURI(name)}
             />
         ));
 

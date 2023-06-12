@@ -22,7 +22,8 @@ export function updateAdditionalSurveyDetails(
     legalFirstName: string,
     legalLastName: string,
     socialSecurityNumber: string,
-    dateOfBirth: string
+    dateOfBirth: string,
+    showAdditionalSurvey: boolean
 ): UpdateAdditionalSurveyAction {
     return {
         type: UPDATE_ADDITIONAL_DETAILS.UPDATE_ADDITIONAL_DETAILS,
@@ -31,7 +32,7 @@ export function updateAdditionalSurveyDetails(
             legalLastName,
             socialSecurityNumber,
             dateOfBirth,
-            showAdditionalSurvey: false,
+            showAdditionalSurvey,
         },
     };
 }
