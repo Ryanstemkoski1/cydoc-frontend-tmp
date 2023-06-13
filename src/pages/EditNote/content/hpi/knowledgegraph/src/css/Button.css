@@ -84,3 +84,7 @@
 .space-top {
     margin-top: 20px;
 }
+
+.width-50-desktop  * > .ui.dropdown>.text, .ui.dropdown>.default.text {
+    overflow: hidden;
+}

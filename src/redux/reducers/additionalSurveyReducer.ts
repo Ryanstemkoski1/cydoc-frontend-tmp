@@ -2,6 +2,8 @@ import { UPDATE_ADDITIONAL_DETAILS } from 'redux/actions/actionTypes';
 import {
     GoBackToAdditionalSurvey,
     UpdateAdditionalSurveyAction,
+    UpdateUserInfo,
+    ValidateUserInfo,
 } from 'redux/actions/additionalSurveyActions';
 
 export interface additionalSurvey {
@@ -9,7 +11,40 @@ export interface additionalSurvey {
     legalLastName: string;
     dateOfBirth: string;
     socialSecurityNumber: string;
-    showAdditionalSurvey: boolean;
+    initialSurveyState: number;
+    userInfo: UserInfo;
+    isUserInfoValid: boolean;
+}
+
+export interface UserInfo {
+    cellPhoneNumber: string;
+    email: string;
+    address: {
+        addressLine1: string;
+        addressLine2: string;
+        city: string;
+        state: string;
+        zipCode: string;
+    };
+    isInsured: boolean;
+    insuranceInfo: {
+        insuranceCompanyName: string;
+        insuranceCompanyPhoneNumber: string;
+        policyHolderName: string;
+        policyHolderRelationship: string;
+        policyHolderDOB: string;
+        policyHolderEmployed: boolean;
+        policyHolderEmployer: string;
+        policyHolderSSN: string;
+        policyHolderID: string;
+        group: string;
+    };
+    race: string[];
+    ethnicity: string;
+    genderIdentity: string[];
+    sex: string;
+    preferredPronouns: string;
+    title: string;
 }
 
 export const initialAdditionalSurveyData: additionalSurvey = {
@@ -17,23 +52,64 @@ export const initialAdditionalSurveyData: additionalSurvey = {
     legalLastName: '',
     dateOfBirth: '',
     socialSecurityNumber: '',
-    showAdditionalSurvey: true,
+    initialSurveyState: 0,
+    userInfo: {
+        cellPhoneNumber: '',
+        email: '',
+        address: {
+            addressLine1: '',
+            addressLine2: '',
+            city: '',
+            state: '',
+            zipCode: '',
+        },
+        isInsured: false,
+        insuranceInfo: {
+            insuranceCompanyName: '',
+            insuranceCompanyPhoneNumber: '',
+            policyHolderName: '',
+            policyHolderRelationship: '',
+            policyHolderDOB: '',
+            policyHolderEmployed: false,
+            policyHolderEmployer: '',
+            policyHolderSSN: '',
+            policyHolderID: '',
+            group: '',
+        },
+        race: [],
+        ethnicity: '',
+        genderIdentity: [],
+        sex: '',
+        preferredPronouns: '',
+        title: '',
+    },
+    isUserInfoValid: false,
 };
 
 export function additionalSurveyReducer(
     state = initialAdditionalSurveyData,
-    action: UpdateAdditionalSurveyAction | GoBackToAdditionalSurvey
+    action:
+        | UpdateAdditionalSurveyAction
+        | GoBackToAdditionalSurvey
+        | UpdateUserInfo
+        | ValidateUserInfo
 ) {
     switch (action.type) {
         case UPDATE_ADDITIONAL_DETAILS.UPDATE_ADDITIONAL_DETAILS:
-            state.legalFirstName = action.payload.legalFirstName;
-            state.legalLastName = action.payload.legalLastName;
-            state.socialSecurityNumber = action.payload.socialSecurityNumber;
-            state.dateOfBirth = action.payload.dateOfBirth;
-            state.showAdditionalSurvey = action.payload.showAdditionalSurvey;
+            state.legalFirstName = action.payload?.legalFirstName;
+            state.legalLastName = action.payload?.legalLastName;
+            state.socialSecurityNumber = action?.payload.socialSecurityNumber;
+            state.dateOfBirth = action.payload?.dateOfBirth;
+            state.initialSurveyState = action?.payload?.initialSurveyState;
             return state;
         case UPDATE_ADDITIONAL_DETAILS.GO_BACK:
-            state.showAdditionalSurvey = action.payload.showAdditionalSurvey;
+            state.initialSurveyState = state.initialSurveyState - 1;
+            return state;
+        case UPDATE_ADDITIONAL_DETAILS.UPDATE_USER_INFO:
+            state.userInfo = action.payload;
+            return state;
+        case UPDATE_ADDITIONAL_DETAILS.VALIDATE_USER_INFO:
+            state.isUserInfoValid = action.payload;
             return state;
         default:
             return state;
