@@ -276,6 +276,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         responseType={responseType}
                         mobile={collapseTabs}
                         node={node}
+                        hide={true}
                     />
                 );
             case ResponseTypes.LABORATORY_TEST:
