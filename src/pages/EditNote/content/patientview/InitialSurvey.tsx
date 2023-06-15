@@ -84,8 +84,6 @@ interface InitialSurveyComponentProps {
 class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     constructor(props: Props) {
         super(props);
-        // eslint-disable-next-line no-console
-        console.log(props.additionalSurvey);
         this.state = {
             activeItem: 0,
             error: false,
@@ -194,7 +192,8 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                 this.state.tempLegalFirstName,
                 this.state.tempLegalLastName,
                 this.state.tempSocialSecurityNumber,
-                this.state.tempDateOfBirth
+                this.state.tempDateOfBirth,
+                false
             );
             this.setState({ error: false });
             return;
@@ -254,6 +253,13 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             tempSocialSecurityNumber: tempSocialSecurityNumber.trim(),
             tempDateOfBirth: tempDateOfBirth,
         });
+        this.props.updateAdditionalSurveyDetails(
+            tempLegalFirstName.trim(),
+            tempLegalLastName.trim(),
+            tempSocialSecurityNumber.trim(),
+            tempDateOfBirth,
+            true
+        );
     };
 
     getData = async (complaint: string) => {
@@ -603,7 +609,8 @@ interface DispatchProps {
         legalFirstName: string,
         legalLastName: string,
         socialSecurityNumber: string,
-        dateOfBirth: string
+        dateOfBirth: string,
+        showAdditionalSurvey: boolean
     ) => UpdateAdditionalSurveyAction;
     resetAdditionalSurveyPage: () => GoBackToAdditionalSurvey;
 }

@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { Sticky } from 'semantic-ui-react';
+import { Sticky, Message } from 'semantic-ui-react';
 import MenuTabs from './MenuTabs';
 import NotePage from './NotePage';
 import NavMenu from '../../components/navigation/NavMenu';
@@ -16,7 +16,8 @@ import {
 import './NotePage.css';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
-
+import { withRouter } from 'react-router-dom';
+import { YesNoResponse } from 'constants/enums';
 // Component that manages the active state of the create note editor
 // and defines the layout of the editor
 class EditNote extends Component {
@@ -29,10 +30,12 @@ class EditNote extends Component {
             activeTabIndex: 0,
             windowWidth: 0,
             windowHeight: 0,
+            message: '',
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
 
+    timeoutRef = createRef();
     componentDidMount() {
         this.updateDimensions();
         window.addEventListener('resize', this.updateDimensions);
@@ -53,12 +56,68 @@ class EditNote extends Component {
         this.setState({ windowWidth, windowHeight });
     }
 
+    canNavigateToOtherPages() {
+        if (!this.props) {
+            return false;
+        }
+        const selected = this.isAllQuestionsNo();
+        const questionsNotAnswered = this.isQuestionsNotAnswered();
+        if (!selected || questionsNotAnswered) {
+            return false;
+        }
+        return true;
+    }
+
+    isAllQuestionsNo() {
+        const selected =
+            this.props.userSurveyState.nodes['2'].response ===
+                YesNoResponse.Yes ||
+            this.props.userSurveyState.nodes['3'].response ===
+                YesNoResponse.Yes ||
+            this.props.userSurveyState.nodes['4'].response ===
+                YesNoResponse.Yes;
+        return selected;
+    }
+
+    isQuestionsNotAnswered() {
+        if (
+            !this.props.userSurveyState.nodes['8'].response ||
+            !this.props.additionalSurvey.legalFirstName ||
+            !this.props.additionalSurvey.legalLastName ||
+            !this.props.additionalSurvey.dateOfBirth ||
+            !this.props.additionalSurvey.socialSecurityNumber
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     onTabChange(name) {
+        clearTimeout(this.timeoutRef?.current);
+        this.setState({ message: '' });
+        if (
+            this.props.patientView &&
+            name !== 'CC' &&
+            !this.canNavigateToOtherPages()
+        ) {
+            this.setState({
+                message: this.isQuestionsNotAnswered()
+                    ? 'Please complete all mandatory questions in section 1 before proceeding.'
+                    : 'Please answer Yes to at least one question to proceed.',
+            });
+            this.timeoutRef.current = setTimeout(() => {
+                this.setState({ message: '' });
+            }, 3000);
+            return;
+        }
         let activeItem = name;
         let activeTabIndex = constants.TAB_NAMES.indexOf(name);
         this.props.updateActiveItem(name);
         this.setState({ activeItem, activeTabIndex });
         window.scrollTo(0, 0);
+        this.props.history.push({
+            hash: '#' + encodeURI(name),
+        });
     }
 
     // brings users to the next form when clicked
@@ -100,6 +159,13 @@ class EditNote extends Component {
                 {editNoteHeader ? (
                     <>
                         <div className='mobile-header' />
+                        {this.props.patientView && this.state?.message && (
+                            <Message negative className='error-message'>
+                                <Message.Header>
+                                    {this.state.message}
+                                </Message.Header>
+                            </Message>
+                        )}
                         <NotePage
                             onNextClick={this.onNextClick}
                             onPreviousClick={this.onPreviousClick}
@@ -121,39 +187,53 @@ class EditNote extends Component {
                         className='edit-note-nav-menu'
                         displayNoteName={true}
                     />
-                    {this.props.patientView && this.props.activeItem == 'CC' ? (
-                        ''
-                    ) : (
-                        <div className={editNoteHeader ? 'sticky-div' : ''}>
-                            <MenuTabs
-                                activeItem={this.props.activeItem}
-                                onTabChange={this.onTabChange}
-                                activeTabIndex={this.state.activeTabIndex}
-                                attached
-                            />
-                        </div>
-                    )}
+
+                    <div className={editNoteHeader ? 'sticky-div' : ''}>
+                        <MenuTabs
+                            activeItem={this.props.activeItem}
+                            onTabChange={this.onTabChange}
+                            activeTabIndex={this.state.activeTabIndex}
+                            attached
+                        />
+                    </div>
                 </Sticky>
 
                 {editNoteHeader ? (
                     <></>
                 ) : (
-                    <NotePage
-                        onNextClick={this.onNextClick}
-                        onPreviousClick={this.onPreviousClick}
-                    />
+                    // for desktop
+                    <>
+                        {this.props.patientView && this.state?.message && (
+                            <Message
+                                negative
+                                className='container error-message'
+                                style={{ marginTop: '10px' }}
+                            >
+                                <Message.Header>
+                                    {this.state.message}
+                                </Message.Header>
+                            </Message>
+                        )}
+                        <NotePage
+                            onNextClick={this.onNextClick}
+                            onPreviousClick={this.onPreviousClick}
+                        />
+                    </>
                 )}
             </div>
         );
     }
 }
 
-export default connect(
-    (state) => ({
-        _id: selectNoteId(state),
-        patientView: selectPatientViewState(state),
-        userSurveyState: selectInitialPatientSurvey(state),
-        activeItem: selectActiveItem(state),
-    }),
-    { updateActiveItem }
-)(EditNote);
+export default withRouter(
+    connect(
+        (state) => ({
+            _id: selectNoteId(state),
+            patientView: selectPatientViewState(state),
+            userSurveyState: selectInitialPatientSurvey(state),
+            activeItem: selectActiveItem(state),
+            additionalSurvey: state.additionalSurvey,
+        }),
+        { updateActiveItem }
+    )(EditNote)
+);
