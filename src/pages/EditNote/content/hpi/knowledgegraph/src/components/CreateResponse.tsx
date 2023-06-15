@@ -263,6 +263,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         mobile={collapseTabs}
                         currentYear={-1}
                         node={node}
+                        hide={true}
                     />
                 );
 

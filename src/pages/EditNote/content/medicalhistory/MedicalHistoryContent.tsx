@@ -235,7 +235,9 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
             <GridContent
                 isPreview={this.props.isPreview}
                 numColumns={6}
-                contentHeader={<MedicalHistoryContentHeader />}
+                contentHeader={
+                    <MedicalHistoryContentHeader hide={this.props.hide} />
+                }
                 rows={rows}
                 //TODO: hpi?
                 value_type='Medical History'
@@ -255,6 +257,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         );
         const inputStyle = {
             maxWidth: '100%',
+            width: '100%',
         };
         return mobile
             ? conditions.map((condition: string, index: number) => {
@@ -288,6 +291,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                               index={condition}
                               currentYear={this.props.currentYear}
                               deleteRow={this.deleteRow}
+                              hide={this.props.hide}
                               conditionInput={
                                   <ConditionInput
                                       key={index}
@@ -342,6 +346,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                               isPreview={isPreview}
                               currentYear={this.props.currentYear}
                               deleteRow={this.deleteRow}
+                              hide={this.props.hide}
                               conditionInput={
                                   <ConditionInput
                                       key={index}
@@ -383,6 +388,7 @@ interface ContentProps {
     responseChoice?: string[];
     responseType?: ResponseTypes;
     node?: string;
+    hide?: boolean;
 }
 
 interface MedicalHistoryProps {
