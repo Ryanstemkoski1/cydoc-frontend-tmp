@@ -8,6 +8,12 @@ export interface UserViewAction {
         userView: string;
     };
 }
+export interface UserViewHasAllergiesAction {
+    type: USER_VIEW_ACTION.HAS_ALLERGIES;
+    payload: {
+        hasAllergies: boolean;
+    };
+}
 export interface UserViewIsSurgicalHistoryAction {
     type: USER_VIEW_ACTION.IS_SURGICAL_HISTORY;
     payload: {
@@ -19,6 +25,14 @@ export function changeUserView(userView: string): UserViewAction {
         type: USER_VIEW_ACTION.USER_VIEW,
         payload: {
             userView,
+        },
+    };
+}
+export function toggleHasAllergies(state: boolean): UserViewHasAllergiesAction {
+    return {
+        type: USER_VIEW_ACTION.HAS_ALLERGIES,
+        payload: {
+            hasAllergies: state,
         },
     };
 }
@@ -119,5 +133,6 @@ export type userViewActionTypes =
     | ProcessSurveyGraphAction
     | InitialSurveyYesNoAction
     | InitialSurveySearchAction
+    | UserViewHasAllergiesAction
     | UserViewIsSurgicalHistoryAction
     | InitialSurveyAddDateOrPlaceActions;

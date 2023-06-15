@@ -13,11 +13,7 @@ export interface AllergiesItem {
     id: string;
 }
 
-export const initialAllergiesState: AllergiesState = {
-    [v4()]: { incitingAgent: '', reaction: '', comments: '', id: '' },
-    [v4()]: { incitingAgent: '', reaction: '', comments: '', id: '' },
-    [v4()]: { incitingAgent: '', reaction: '', comments: '', id: '' },
-};
+export const initialAllergiesState: AllergiesState = {};
 
 export function allergiesReducer(
     state = initialAllergiesState,

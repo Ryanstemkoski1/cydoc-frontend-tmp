@@ -72,6 +72,11 @@ interface DispatchProps {
     ) => UpdatePatientInformationAction;
 }
 
+interface UserViewProps {
+    hasAllergies?: boolean | null;
+    isSurgicalHistory?: boolean | null;
+}
+
 interface StateProps {
     ROSState: ReviewOfSystemsState;
     planState: PlanState;
@@ -83,6 +88,7 @@ interface StateProps {
     medicalHistoryState: MedicalHistoryState;
     physicalExamState: PhysicalExamState;
     patientInformationState: PatientInformationState;
+    userViewState: UserViewProps;
 }
 
 const mapStateToProps = (state: CurrentNoteState): StateProps => ({
@@ -96,6 +102,7 @@ const mapStateToProps = (state: CurrentNoteState): StateProps => ({
     medicalHistoryState: state.medicalHistory,
     physicalExamState: state.physicalExam,
     patientInformationState: selectPatientInformationState(state),
+    userViewState: state.userView,
 });
 
 type Props = GenerateNoteProps & StateProps & DispatchProps;
@@ -118,6 +125,8 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
         physicalExamState,
         patientInformationState,
     } = props;
+
+    const { hasAllergies, isSurgicalHistory } = props.userViewState;
 
     const { patientName, pronouns } = patientInformationState;
 
@@ -310,6 +319,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 <SurgicalHistoryNote
                     isRich={isRichText}
                     surgicalHistory={surgicalHistoryState}
+                    isSurgicalHistory={isSurgicalHistory}
                 />
                 <h4> Medications </h4>
                 <MedicationsNote
@@ -317,7 +327,11 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                     medications={medicationsState}
                 />
                 <h4> Allergies </h4>
-                <AllergiesNote isRich={isRichText} allergies={allergiesState} />
+                <AllergiesNote
+                    isRich={isRichText}
+                    allergies={allergiesState}
+                    hasAllergies={hasAllergies}
+                />
                 <h4> Social History </h4>
                 <SocialHistoryNote
                     isRich={isRichText}

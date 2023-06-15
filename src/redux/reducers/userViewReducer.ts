@@ -52,6 +52,7 @@ export interface UserViewState {
     patientView: boolean;
     doctorView: boolean;
     userSurvey: userSurveyState;
+    hasAllergies?: boolean | null;
     isSurgicalHistory?: boolean | null;
 }
 
@@ -59,6 +60,7 @@ export const initialUserViewState: UserViewState = {
     patientView: true,
     doctorView: false,
     userSurvey: { order: {}, graph: {}, nodes: {} },
+    hasAllergies: null,
     isSurgicalHistory: null,
 };
 
@@ -83,6 +85,12 @@ export function userViewReducer(
             return {
                 ...state,
                 isSurgicalHistory: action.payload.isSurgicalHistory,
+            };
+        }
+        case USER_VIEW_ACTION.HAS_ALLERGIES: {
+            return {
+                ...state,
+                hasAllergies: action.payload.hasAllergies,
             };
         }
         case USER_VIEW_ACTION.USER_VIEW: {

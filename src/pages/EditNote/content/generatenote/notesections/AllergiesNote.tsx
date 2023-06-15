@@ -5,6 +5,7 @@ import { Table } from 'semantic-ui-react';
 interface AllergiesProps {
     isRich: boolean;
     allergies: AllergiesState;
+    hasAllergies?: boolean | null;
 }
 
 export class AllergiesNote extends Component<AllergiesProps> {
@@ -24,9 +25,12 @@ export class AllergiesNote extends Component<AllergiesProps> {
     };
 
     render() {
-        const { isRich, allergies } = this.props;
+        const { isRich, allergies, hasAllergies } = this.props;
 
-        if (this.checkEmpty()) {
+        // hasAllergies is value of the YES/NO question on allergies form
+        if (hasAllergies === false) {
+            return <div>The patient has no allergies.</div>;
+        } else if (this.checkEmpty()) {
             return <div />;
         } else if (isRich) {
             return (

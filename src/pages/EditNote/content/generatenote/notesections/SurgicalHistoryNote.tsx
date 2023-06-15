@@ -6,6 +6,7 @@ import { Table } from 'semantic-ui-react';
 interface SurgicalHistoryProps {
     isRich: boolean;
     surgicalHistory: SurgicalHistoryState;
+    isSurgicalHistory?: boolean | null;
 }
 
 export class SurgicalHistoryNote extends Component<SurgicalHistoryProps> {
@@ -26,9 +27,12 @@ export class SurgicalHistoryNote extends Component<SurgicalHistoryProps> {
     };
 
     render() {
-        const { isRich, surgicalHistory } = this.props;
+        const { isRich, surgicalHistory, isSurgicalHistory } = this.props;
 
-        if (this.checkEmpty()) {
+        // isSurgicalHistory is value of the YES/NO question on surgical history form
+        if (isSurgicalHistory === false) {
+            return <div>The patient has never had any surgeries.</div>;
+        } else if (this.checkEmpty()) {
             return <div />;
         } else if (isRich) {
             return (
