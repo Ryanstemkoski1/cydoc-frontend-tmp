@@ -21,7 +21,13 @@ const initialState = {
 };
 
 const connectStore = (state = initialState, props) => {
-    const store = mockStore({ allergies: state });
+    const store = mockStore({
+        allergies: state,
+        userView: {
+            patientView: true,
+            hasAllergies: true,
+        },
+    });
     return {
         store,
         wrapper: mount(
