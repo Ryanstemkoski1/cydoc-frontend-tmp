@@ -122,7 +122,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
             {
                 key: 'Vitals',
                 title: {
-                    className: 'ui dropdown-title',
+                    className: 'ui dropdown-title listing',
                     content: 'Vitals',
                     icon: 'dropdown',
                     onClick: () => {
@@ -131,7 +131,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                 },
                 content: {
                     content: (
-                        <Form>
+                        <Form className='physical-content'>
                             <Grid stackable columns='3'>
                                 <Grid.Column>
                                     <Header
@@ -295,7 +295,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
             panels.push({
                 key: itemGroups[i - 1].name,
                 title: {
-                    className: 'ui dropdown-title',
+                    className: 'ui dropdown-title listing',
                     content: itemGroups[i - 1].name,
                     icon: 'dropdown',
                     onClick: () => {
@@ -322,10 +322,12 @@ class PhysicalExamContent extends React.Component<Props, State> {
                 },
                 content: {
                     content: (
-                        <PhysicalExamGroup
-                            name={itemGroups[i - 1].name}
-                            rows={itemGroups[i - 1].rows}
-                        />
+                        <div className='btn-wrapper'>
+                            <PhysicalExamGroup
+                                name={itemGroups[i - 1].name}
+                                rows={itemGroups[i - 1].rows}
+                            />
+                        </div>
                     ),
                 },
             });

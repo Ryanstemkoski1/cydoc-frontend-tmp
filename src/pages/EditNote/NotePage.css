@@ -13,3 +13,8 @@
 .active-tab-container {
   margin: 50px;
 }
+.note-text {
+   text-align: center;
+   padding-left: 15px;
+   padding-right: 15px; 
+}

@@ -281,7 +281,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                         //     className='content-input-surgical content-dropdown medication'
                         //     id='add-row'
                         // >
-                        <div id='width-full'>
+                        <div id='width-full' className='full-view'>
                             <Dropdown
                                 clearable
                                 fluid

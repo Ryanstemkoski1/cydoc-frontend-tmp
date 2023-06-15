@@ -25,8 +25,9 @@
 /* round out the menu tabs more */
 .ui.secondary.menu .expanded-menu-tabs .item {
   display: block !important;
-  width: 155px;
+  flex: 1;
   height: 40px;
+  white-space: nowrap;
   text-align: center;
 }
 
@@ -67,3 +68,18 @@
 .collapsed-menu-icon {
   margin: 0;
 }
+.tabular.collapsed-menu-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  
+@media (max-width: 991){
+    .ui.secondary.menu .expanded-menu-tabs .item { 
+        flex: auto;
+    }
+}
+@media (max-width: 767){
+    .ui.menu>.ui.container { 
+        width: auto;
+    }
+}
+
