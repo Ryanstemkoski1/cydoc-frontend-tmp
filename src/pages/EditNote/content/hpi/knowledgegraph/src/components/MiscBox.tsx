@@ -19,7 +19,13 @@ import { ChiefComplaintsProps } from '../../HPIContent';
 import { FAMILY_HISTORY_MOBILE_BP } from 'constants/breakpoints.js';
 
 const MiscBox = (props: Props) => {
-    const { activeThing } = props;
+    const {
+        activeThing,
+        chiefComplaints,
+        patientView,
+        setNotesChiefComplaint,
+        step,
+    } = props;
     const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
     const mobile = windowWidth < FAMILY_HISTORY_MOBILE_BP;
     const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -35,7 +41,7 @@ const MiscBox = (props: Props) => {
     };
     return (
         <>
-            {!props.patientView && !mobile && (
+            {!patientView && !mobile && (
                 <Accordion
                     className={
                         activeIndex === 0
@@ -49,7 +55,7 @@ const MiscBox = (props: Props) => {
                         onClick={miscNotesClick}
                     >
                         <Icon name='dropdown' />
-                        Misc Notes&nbsp;&nbsp;&nbsp;&nbsp;
+                        Misc Notes: &nbsp;{Object.keys(chiefComplaints)[step]}
                     </Accordion.Title>
                     <Accordion.Content active={activeIndex === 0}>
                         <Form>
@@ -57,12 +63,12 @@ const MiscBox = (props: Props) => {
                                 className='misc-box'
                                 rows={3}
                                 onChange={(_e, { value }) => {
-                                    props.setNotesChiefComplaint(
+                                    setNotesChiefComplaint(
                                         activeThing as string,
                                         value
                                     );
                                 }}
-                                value={props.chiefComplaints[activeThing]}
+                                value={chiefComplaints[activeThing]}
                             />
                         </Form>
                     </Accordion.Content>
@@ -90,6 +96,7 @@ interface DispatchProps {
 }
 interface IProps {
     activeThing: string;
+    step: number;
 }
 type Props = ChiefComplaintsProps & PatientViewProps & DispatchProps & IProps;
 

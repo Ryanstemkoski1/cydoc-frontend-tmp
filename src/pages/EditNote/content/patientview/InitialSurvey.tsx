@@ -64,6 +64,7 @@ import InputTextOrDateResponse from './InputTextOrDateResponse';
 import SurveyYesNoResponse from './SurveyYesNoResponse';
 import initialQuestions from './constants/initialQuestions.json';
 import patientViewHeaders from './constants/patientViewHeaders.json';
+import './InitialSurvey.css';
 
 interface InitialSurveyState {
     activeItem: number;
@@ -83,8 +84,6 @@ interface InitialSurveyComponentProps {
 class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     constructor(props: Props) {
         super(props);
-        // eslint-disable-next-line no-console
-        console.log(props.additionalSurvey);
         this.state = {
             activeItem: 0,
             error: false,
@@ -193,7 +192,8 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                 this.state.tempLegalFirstName,
                 this.state.tempLegalLastName,
                 this.state.tempSocialSecurityNumber,
-                this.state.tempDateOfBirth
+                this.state.tempDateOfBirth,
+                false
             );
             this.setState({ error: false });
             return;
@@ -253,6 +253,13 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             tempSocialSecurityNumber: tempSocialSecurityNumber.trim(),
             tempDateOfBirth: tempDateOfBirth,
         });
+        this.props.updateAdditionalSurveyDetails(
+            tempLegalFirstName.trim(),
+            tempLegalLastName.trim(),
+            tempSocialSecurityNumber.trim(),
+            tempDateOfBirth,
+            true
+        );
     };
 
     getData = async (complaint: string) => {
@@ -425,7 +432,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                               className={'qa-div sixteen wide column'}
                           >
                               {questions.nodes[key].text}
-                              <div className='survey-chips'>
+                              <div className='survey-chips button-spacing'>
                                   {Object.keys(this.props.userSurveyState.nodes)
                                       .length
                                       ? this.renderSwitch(key)
@@ -517,7 +524,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             className='hpi-previous-button'
                             onClick={this.onPrevClick}
                         >
-                            Previous
+                            Prev
                             <Icon name='arrow left' />
                         </Button>
                         <Button
@@ -526,7 +533,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             className='hpi-small-previous-button'
                             onClick={this.onPrevClick}
                         >
-                            <Icon name='arrow left' />
+                            <Icon name='arrow left' className='big' />
                         </Button>{' '}
                     </div>
                 ) : (
@@ -548,7 +555,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                     className='hpi-small-next-button'
                     onClick={this.onNextClick}
                 >
-                    <Icon name='arrow right' />
+                    <Icon name='arrow right' className='big' />
                 </Button>
             </div>
         );
@@ -602,7 +609,8 @@ interface DispatchProps {
         legalFirstName: string,
         legalLastName: string,
         socialSecurityNumber: string,
-        dateOfBirth: string
+        dateOfBirth: string,
+        showAdditionalSurvey: boolean
     ) => UpdateAdditionalSurveyAction;
     resetAdditionalSurveyPage: () => GoBackToAdditionalSurvey;
 }

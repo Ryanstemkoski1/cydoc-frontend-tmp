@@ -28,6 +28,9 @@ class PhysicalExamContent extends React.Component<Props, State> {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
+            weightKg: 0,
+            heightM: 0,
+            bmi: 0,
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
@@ -56,6 +59,35 @@ class PhysicalExamContent extends React.Component<Props, State> {
     ) => {
         const numeric = +e.target.value;
         this.props.updateVitals(data.name, +numeric.toFixed(1));
+
+        if (data.name === 'weight' || data.name === 'height') {
+            this.calculateBmi(data.name, numeric);
+        }
+    };
+    calculateBmi = (name: string, val: number) => {
+        let weightInPl: number;
+        let heightInInch: number;
+        let weightInKg: number;
+        let valueInM: number;
+        let bmi: number;
+        // if
+        if (name === 'weight') {
+            weightInPl = val;
+            weightInKg = weightInPl * 0.45359237;
+            if (this.state.heightM) {
+                bmi = weightInKg / (this.state.heightM * this.state.heightM);
+                this.setState({ bmi: +bmi.toFixed(1) });
+            }
+            this.setState({ weightKg: weightInKg });
+        } else if (name === 'height') {
+            heightInInch = val;
+            valueInM = heightInInch * 0.0254;
+            if (this.state.weightKg) {
+                bmi = this.state.weightKg / (valueInM * valueInM);
+                this.setState({ bmi: +bmi.toFixed(1) });
+            }
+            this.setState({ heightM: valueInM });
+        }
     };
     handleChangeTemparature = (val: string, data: InputOnChangeData) => {
         const num = +val;
@@ -82,15 +114,6 @@ class PhysicalExamContent extends React.Component<Props, State> {
             />
         );
     };
-    temparatureNumericInput = () => {
-        return (
-            <Input
-                label={{ basic: true, content: 'kg' }}
-                labelPosition='right'
-                placeholder='Enter weight...'
-            />
-        );
-    };
 
     renderPanels = (groups: PhysicalExamSchemaItem[] | ExampleSchema[]) => {
         const itemGroups = groups as PhysicalExamSchemaItem[];
@@ -99,7 +122,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
             {
                 key: 'Vitals',
                 title: {
-                    className: 'ui dropdown-title',
+                    className: 'ui dropdown-title listing',
                     content: 'Vitals',
                     icon: 'dropdown',
                     onClick: () => {
@@ -108,7 +131,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                 },
                 content: {
                     content: (
-                        <Form>
+                        <Form className='physical-content'>
                             <Grid stackable columns='3'>
                                 <Grid.Column>
                                     <Header
@@ -172,6 +195,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                         />
                                     </Form.Field>
                                 </Grid.Column>
+
                                 <Grid.Column>
                                     <Form.Field inline={isMobileView}>
                                         <label>
@@ -185,6 +209,43 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                             null,
                                             null
                                         )}
+                                    </Form.Field>
+                                </Grid.Column>
+                                <Grid.Column>{''}</Grid.Column>
+                                <Grid.Column>
+                                    <Form.Field inline={isMobileView}>
+                                        <label>
+                                            <Header as='h5' content='Weight' />
+                                        </label>
+                                        {this.generateNumericInput(
+                                            'weight',
+                                            'pounds',
+                                            'right'
+                                        )}
+                                    </Form.Field>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Form.Field inline={isMobileView}>
+                                        <label>
+                                            <Header as='h5' content='Height' />
+                                        </label>
+                                        {this.generateNumericInput(
+                                            'height',
+                                            'inches',
+                                            'right'
+                                        )}
+                                    </Form.Field>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Form.Field inline={isMobileView}>
+                                        <label>
+                                            <Header as='h5' content='BMI' />
+                                        </label>
+                                        <p className='bmi-text'>
+                                            {this.state.bmi
+                                                ? this.state.bmi
+                                                : 'N/A'}
+                                        </p>
                                     </Form.Field>
                                 </Grid.Column>
                             </Grid>
@@ -234,7 +295,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
             panels.push({
                 key: itemGroups[i - 1].name,
                 title: {
-                    className: 'ui dropdown-title',
+                    className: 'ui dropdown-title listing',
                     content: itemGroups[i - 1].name,
                     icon: 'dropdown',
                     onClick: () => {
@@ -261,10 +322,12 @@ class PhysicalExamContent extends React.Component<Props, State> {
                 },
                 content: {
                     content: (
-                        <PhysicalExamGroup
-                            name={itemGroups[i - 1].name}
-                            rows={itemGroups[i - 1].rows}
-                        />
+                        <div className='btn-wrapper'>
+                            <PhysicalExamGroup
+                                name={itemGroups[i - 1].name}
+                                rows={itemGroups[i - 1].rows}
+                            />
+                        </div>
                     ),
                 },
             });
@@ -296,7 +359,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                     onClick={this.props.previousFormClick}
                     className='physical-previous-button'
                 >
-                    Previous
+                    Prev
                     <Icon name='arrow left' />
                 </Button>
 
@@ -357,6 +420,9 @@ interface DispatchProps {
 interface State {
     windowWidth: number;
     windowHeight: number;
+    weightKg: number;
+    heightM: number;
+    bmi: number;
 }
 
 type Props = DispatchProps & ContentProps;

@@ -266,8 +266,10 @@ class NotePage extends Component {
                     />
                 ) : (
                     <>
-                        Please select at least one Chief Complaint in the CC tab
-                        in order to view an HPI questionnaire.
+                        <div className='note-text'>
+                            Please select at least one Chief Complaint in the CC
+                            tab in order to view an HPI questionnaire.
+                        </div>
                         <Button
                             icon
                             labelPosition='left'
@@ -275,7 +277,7 @@ class NotePage extends Component {
                             onClick={this.backHPITab}
                             className='hpi-previous-button'
                         >
-                            Previous
+                            Prev
                             <Icon name='arrow left' />
                         </Button>
                         <Button
@@ -284,7 +286,7 @@ class NotePage extends Component {
                             onClick={this.backHPITab}
                             className='hpi-small-previous-button'
                         >
-                            <Icon name='arrow left' />
+                            <Icon name='arrow left' className='big' />
                         </Button>
                         <Button
                             icon
@@ -302,7 +304,7 @@ class NotePage extends Component {
                             onClick={this.continueHPITab}
                             className='hpi-small-next-button'
                         >
-                            <Icon name='arrow right' />
+                            <Icon name='arrow right' className='big' />
                         </Button>
                     </>
                 );

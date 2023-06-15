@@ -466,9 +466,11 @@ exports[`Generate Note matches snapshot 1`] = `
           "RR": 0,
           "diastolicBloodPressure": 0,
           "heartRate": 0,
+          "height": 0,
           "oxygenSaturation": 0,
           "systolicBloodPressure": 0,
           "temperature": 0,
+          "weight": 0,
         },
         "widgets": Object {
           "abdomen": Object {

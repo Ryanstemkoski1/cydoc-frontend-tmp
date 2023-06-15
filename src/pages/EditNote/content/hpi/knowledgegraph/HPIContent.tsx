@@ -175,6 +175,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         const { windowWidth } = this.state;
         const { chiefComplaints, hpiHeaders, patientView } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
+
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
         /* Creates list of body system buttons to add in the front page. 
            Loops through state variable, bodySystems, saved from the API */
@@ -290,7 +291,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 results={getRes()}
                             />
                             <Masonry
-                                className='disease-container'
+                                className='disease-container col-wrapper'
                                 breakpointCols={numColumns}
                                 columnClassName='disease-column'
                             >
@@ -304,7 +305,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 onClick={this.continue}
                                 className='hpi-small-next-button'
                             >
-                                <Icon name='arrow right' />
+                                <Icon name='arrow right' className='big' />
                             </Button>
                             <Button
                                 icon
@@ -333,35 +334,42 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         stackable
                                         centered
                                         id='hpi-menu'
+                                        className='bottom-no-space'
                                         relaxed
                                     >
                                         {' '}
-                                        {Object.keys(chiefComplaints).map(
-                                            (
-                                                menuItem: string,
-                                                index: number
-                                            ) => (
-                                                <ToggleButton
-                                                    key={menuItem}
-                                                    condition={menuItem}
-                                                    title={menuItem}
-                                                    onToggleButtonClick={(_e) =>
-                                                        this.props.onTabClick(
-                                                            _e,
-                                                            index
-                                                        )
-                                                    }
-                                                    active={
-                                                        this.props.activeTab ==
-                                                        menuItem
-                                                    }
-                                                />
-                                            )
-                                        )}
+                                        <div className='mobile-tab'>
+                                            {Object.keys(chiefComplaints).map(
+                                                (
+                                                    menuItem: string,
+                                                    index: number
+                                                ) => (
+                                                    <ToggleButton
+                                                        key={menuItem}
+                                                        condition={menuItem}
+                                                        title={menuItem}
+                                                        onToggleButtonClick={(
+                                                            _e
+                                                        ) =>
+                                                            this.props.onTabClick(
+                                                                _e,
+                                                                index
+                                                            )
+                                                        }
+                                                        active={
+                                                            this.props
+                                                                .activeTab ==
+                                                            menuItem
+                                                        }
+                                                    />
+                                                )
+                                            )}
+                                        </div>
                                     </Grid>
                                     <Segment>
                                         <MiscBox
                                             activeThing={this.props.activeTab}
+                                            step={step}
                                         />
                                         <DiseaseForm
                                             key={this.props.activeTab}
@@ -381,7 +389,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         onClick={this.back}
                                         className='hpi-small-previous-button'
                                     >
-                                        <Icon name='arrow left' />
+                                        <Icon
+                                            name='arrow left'
+                                            className='big'
+                                        />
                                     </Button>
                                     <Button
                                         icon
@@ -390,7 +401,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         onClick={this.back}
                                         className='hpi-previous-button'
                                     >
-                                        Previous
+                                        Prev
                                         <Icon name='arrow left' />
                                     </Button>
 
@@ -400,7 +411,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         onClick={this.continue}
                                         className='hpi-small-next-button'
                                     >
-                                        <Icon name='arrow right' />
+                                        <Icon
+                                            name='arrow right'
+                                            className='big'
+                                        />
                                     </Button>
                                     <Button
                                         icon
@@ -431,6 +445,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         activeThing={
                                                             diseaseCategory
                                                         }
+                                                        step={step}
                                                     />
                                                     <DiseaseForm
                                                         key={
@@ -455,7 +470,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         onClick={this.back}
                                                         className='hpi-small-previous-button'
                                                     >
-                                                        <Icon name='arrow left' />
+                                                        <Icon
+                                                            name='arrow left'
+                                                            className='big'
+                                                        />
                                                     </Button>
                                                     <Button
                                                         icon
@@ -464,7 +482,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                         onClick={this.back}
                                                         className='hpi-previous-button'
                                                     >
-                                                        Previous Form
+                                                        Prev
                                                         <Icon name='arrow left' />
                                                     </Button>
                                                     <Button
@@ -498,7 +516,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         )
                                     }
                                 />
-                            )}{' '}
+                            )}
                         </>
                     );
                 }

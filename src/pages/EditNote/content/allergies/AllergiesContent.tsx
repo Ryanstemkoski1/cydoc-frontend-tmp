@@ -171,7 +171,7 @@ class AllergiesContent extends Component<Props, OwnState> {
         const panels: Panel[] = [];
         nums.map((i: string) => {
             const titleContent = (
-                <Form className='inline-form'>
+                <Form className='inline-form spacing-x'>
                     <Dropdown
                         fluid
                         search
@@ -188,7 +188,6 @@ class AllergiesContent extends Component<Props, OwnState> {
                         rowIndex={i}
                         value={isPreview ? '' : values[i].incitingAgent}
                     />
-                    {' causes '}
                     <Dropdown
                         fluid
                         search
