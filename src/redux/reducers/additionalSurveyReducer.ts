@@ -83,7 +83,7 @@ export const initialAdditionalSurveyData: additionalSurvey = {
         preferredPronouns: '',
         title: '',
     },
-    isUserInfoValid: false,
+    isUserInfoValid: true,
 };
 
 export function additionalSurveyReducer(

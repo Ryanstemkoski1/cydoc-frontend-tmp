@@ -156,6 +156,13 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     onNextClick = (e: any) => {
         if (
             this.state.activeItem === 0 &&
+            this.props.additionalSurvey.initialSurveyState === 1 &&
+            this.props.additionalSurvey.isUserInfoValid == false
+        ) {
+            return;
+        }
+        if (
+            this.state.activeItem === 0 &&
             this.props.additionalSurvey.initialSurveyState === 0
         ) {
             if (new Date() < new Date(this.state.tempDateOfBirth)) {
