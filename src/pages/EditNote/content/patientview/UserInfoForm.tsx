@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import {
     UpdateUserInfo,
@@ -80,6 +80,11 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
         }
         return;
     };
+
+    useEffect(() => {
+        validateForm();
+    }, []);
+
     const validateForm = async () => {
         try {
             await formValidation.validate(userInfo);

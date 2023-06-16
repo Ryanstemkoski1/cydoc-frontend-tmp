@@ -16,7 +16,7 @@ const formSchema = {
                 : yup
                       .string()
                       .matches(
-                          /^[a-zA-Z]+$/,
+                          /^[A-Za-z\s]*$/,
                           'City should contain alphabets only'
                       )
         ),
@@ -26,7 +26,7 @@ const formSchema = {
                 : yup
                       .string()
                       .matches(
-                          /^[a-zA-Z]+$/,
+                          /^[A-Za-z\s]*$/,
                           'State should contain alphabets only'
                       )
         ),
