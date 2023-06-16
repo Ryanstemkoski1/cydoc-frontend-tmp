@@ -52,7 +52,19 @@ const OptimizedDropdown = (props) => {
 
     const flatOptions = useMemo(() => Object.values(options), [options]);
 
-    const sortedOptions = flatOptions.sort((a, b) =>
+    const uniqueOptions = [];
+    const uniqueMap = new Map();
+
+    flatOptions.forEach((el) => {
+        if (uniqueMap.has(el.label)) {
+            uniqueMap.set(el.label, true);
+        } else {
+            uniqueOptions.push(el);
+            uniqueMap.set(el.label, true);
+        }
+    });
+
+    const sortedOptions = uniqueOptions.sort((a, b) =>
         a?.label?.length > b?.label?.length ? 1 : -1
     );
     // Format onChange so that it has access to additional props similarly to

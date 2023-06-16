@@ -328,7 +328,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                                 value={
                                     isPreview ||
                                     year === -1 ||
-                                    year.toString() === '-' ||
+                                    year?.toString() === '-' ||
                                     isNaN(year)
                                         ? ''
                                         : year
@@ -420,8 +420,8 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             });
             popResponse(node, nums);
         }
-        if (responseType == ResponseTypes.PSH_BLANK && responseChoice)
-            nums = responseChoice;
+        // if (responseType == ResponseTypes.PSH_BLANK)
+        //     nums = nums;
 
         const content = (
             <>
