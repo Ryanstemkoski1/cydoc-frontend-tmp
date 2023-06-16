@@ -21,3 +21,10 @@
     margin-left: 10px;
     display: inline-block;
 }
+
+@media (max-width: 767px){
+    .full-view {
+        margin: 5px;
+        width: calc(100% - 10px) !important;
+    }
+}

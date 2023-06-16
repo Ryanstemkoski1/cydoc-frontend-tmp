@@ -1,0 +1,15 @@
+.scroll-table .sticky-header{
+    top: 0 !important;
+}
+@media (min-width: 745px){
+    .scroll-table {
+        overflow-x: auto;
+        padding-bottom: 20px;
+    }
+    .scroll-table::-webkit-scrollbar {
+        height: 3px;
+    }
+    .scroll-table-inner {
+        min-width: 1000px;
+    }    
+}

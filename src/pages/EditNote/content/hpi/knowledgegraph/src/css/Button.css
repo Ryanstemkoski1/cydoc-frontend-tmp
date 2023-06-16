@@ -84,3 +84,8 @@
 .space-top {
     margin-top: 20px;
 }
+@media (max-width: 767px){
+    .ui.button.btn-space {
+        margin: 2px !important;
+    }
+}

@@ -151,3 +151,6 @@
 .ui.button.select-all-negative {
     margin: 0.5rem auto;
 }
+.button-spacing button {
+    margin: 5px!important;
+}
