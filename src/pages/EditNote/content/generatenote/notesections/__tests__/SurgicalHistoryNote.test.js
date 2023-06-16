@@ -5,15 +5,18 @@ import { SurgicalHistoryNote } from '../SurgicalHistoryNote';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
-const surgical = {
+const initSurgeries = {
     foo: { procedure: '', year: -1, comments: '' },
     bar: { procedure: '', year: -1, comments: '' },
 };
 
-const mountWithProps = (surgicalHistory = surgical, isRich = false) => {
+const mountWithProps = (surgicalHistory = initSurgeries, isRich = false) => {
     return mount(
         <SurgicalHistoryNote
-            surgicalHistory={surgicalHistory}
+            surgicalHistory={{
+                hasSurgicalHistory: true,
+                elements: surgicalHistory,
+            }}
             isRich={isRich}
         />
     );

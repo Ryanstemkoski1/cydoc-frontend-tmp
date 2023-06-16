@@ -1,5 +1,21 @@
 import { ALLERGIES_ACTION } from './actionTypes';
 
+interface HasAllergiesAction {
+    type: ALLERGIES_ACTION.HAS_ALLERGIES;
+    payload: {
+        hasAllergies: boolean;
+    };
+}
+
+export function toggleHasAllergies(state: boolean): HasAllergiesAction {
+    return {
+        type: ALLERGIES_ACTION.HAS_ALLERGIES,
+        payload: {
+            hasAllergies: state,
+        },
+    };
+}
+
 interface UpdateIncitingAgentAction {
     type: ALLERGIES_ACTION.UPDATE_INCITING_AGENT;
     payload: {
@@ -99,6 +115,7 @@ export function deleteAllergy(index: string) {
 }
 
 export type AllergiesActionTypes =
+    | HasAllergiesAction
     | UpdateIncitingAgentAction
     | UpdateReactionAction
     | UpdateCommentsAction

@@ -52,16 +52,12 @@ export interface UserViewState {
     patientView: boolean;
     doctorView: boolean;
     userSurvey: userSurveyState;
-    hasAllergies?: boolean | null;
-    isSurgicalHistory?: boolean | null;
 }
 
 export const initialUserViewState: UserViewState = {
     patientView: true,
     doctorView: false,
     userSurvey: { order: {}, graph: {}, nodes: {} },
-    hasAllergies: null,
-    isSurgicalHistory: null,
 };
 
 export function isChiefComplaintsResponse(
@@ -81,18 +77,6 @@ export function userViewReducer(
     action: userViewActionTypes
 ): UserViewState {
     switch (action.type) {
-        case USER_VIEW_ACTION.IS_SURGICAL_HISTORY: {
-            return {
-                ...state,
-                isSurgicalHistory: action.payload.isSurgicalHistory,
-            };
-        }
-        case USER_VIEW_ACTION.HAS_ALLERGIES: {
-            return {
-                ...state,
-                hasAllergies: action.payload.hasAllergies,
-            };
-        }
         case USER_VIEW_ACTION.USER_VIEW: {
             return {
                 ...state,

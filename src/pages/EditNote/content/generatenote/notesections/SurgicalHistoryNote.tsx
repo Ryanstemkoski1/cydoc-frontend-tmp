@@ -6,16 +6,13 @@ import { Table } from 'semantic-ui-react';
 interface SurgicalHistoryProps {
     isRich: boolean;
     surgicalHistory: SurgicalHistoryState;
-    isSurgicalHistory?: boolean | null;
 }
 
 export class SurgicalHistoryNote extends Component<SurgicalHistoryProps> {
     checkEmpty = () => {
-        for (const id in this.props.surgicalHistory) {
-            if (
-                this.props.surgicalHistory[id].hasHadSurgery !=
-                YesNoResponse.None
-            ) {
+        const surgicalHistory = this.props.surgicalHistory.elements;
+        for (const id in surgicalHistory) {
+            if (surgicalHistory[id].hasHadSurgery != YesNoResponse.None) {
                 return false;
             }
         }
@@ -27,10 +24,12 @@ export class SurgicalHistoryNote extends Component<SurgicalHistoryProps> {
     };
 
     render() {
-        const { isRich, surgicalHistory, isSurgicalHistory } = this.props;
+        const { isRich } = this.props;
+        const { hasSurgicalHistory } = this.props.surgicalHistory;
+        const surgicalHistory = this.props.surgicalHistory.elements;
 
-        // isSurgicalHistory is value of the YES/NO question on surgical history form
-        if (isSurgicalHistory === false) {
+        // hasSurgicalHistory is value of the YES/NO question on surgical history form
+        if (hasSurgicalHistory === false) {
             return <div>The patient has never had any surgeries.</div>;
         } else if (this.checkEmpty()) {
             return <div />;
