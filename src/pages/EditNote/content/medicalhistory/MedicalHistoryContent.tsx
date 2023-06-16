@@ -233,20 +233,26 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         const rows = this.generateListItems(listValues as string[], mobile);
 
         return (
-            <GridContent
-                isPreview={this.props.isPreview}
-                numColumns={6}
-                contentHeader={
-                    <MedicalHistoryContentHeader hide={this.props.hide} />
-                }
-                rows={rows}
-                //TODO: hpi?
-                value_type='Medical History'
-                mobile={mobile}
-                addRow={this.addRow}
-                name={'medical history'}
-                pop={this.props.responseType == ResponseTypes.PMH_POP}
-            />
+            <div className='scroll-table'>
+                <div className='scroll-table-inner'>
+                    <GridContent
+                        isPreview={this.props.isPreview}
+                        numColumns={6}
+                        contentHeader={
+                            <MedicalHistoryContentHeader
+                                hide={this.props.hide}
+                            />
+                        }
+                        rows={rows}
+                        //TODO: hpi?
+                        value_type='Medical History'
+                        mobile={mobile}
+                        addRow={this.addRow}
+                        name={'medical history'}
+                        pop={this.props.responseType == ResponseTypes.PMH_POP}
+                    />
+                </div>
+            </div>
         );
     }
 
@@ -257,7 +263,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
             this.props.medicalHistory
         );
         const inputStyle = {
-            maxWidth: '100%',
+            maxWidth: '500px',
             width: '100%',
         };
         return mobile
