@@ -162,6 +162,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         ) {
             return;
         }
+
         if (
             this.state.activeItem === 0 &&
             this.props.additionalSurvey.initialSurveyState === 0

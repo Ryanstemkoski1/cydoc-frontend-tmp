@@ -4,12 +4,7 @@ const formSchema = {
     cellPhoneNumber: yup.lazy((value) =>
         value === ''
             ? yup.string()
-            : yup
-                  .string()
-                  .matches(
-                      /^\(\d{3}\)\d{3}-\d{4}$/gm,
-                      'Enter a valid phone number'
-                  )
+            : yup.string().matches(/^\d{10}$/gm, 'Enter a valid phone number')
     ),
     email: yup.string().email('Email address must be a valid email'),
     address: yup.object({
@@ -47,10 +42,7 @@ const formSchema = {
                 ? yup.string()
                 : yup
                       .string()
-                      .matches(
-                          /^\(\d{3}\)\d{3}-\d{4}$/gm,
-                          'Enter a valid insurance company phone number'
-                      )
+                      .matches(/^\d{10}$/gm, 'Enter a valid phone number')
         ),
         policyHolderName: yup.string(),
         policyHolderRelationship: yup.string(),
@@ -60,12 +52,7 @@ const formSchema = {
         policyHolderSSN: yup.lazy((value) =>
             value === ''
                 ? yup.string()
-                : yup
-                      .string()
-                      .matches(
-                          /([0-9]{3})-([0-9]{2})-([0-9]{4})/gm,
-                          'Enter a valid SSN'
-                      )
+                : yup.string().matches(/^\d{9}$/gm, 'Enter a valid SSN')
         ),
         policyHolderID: yup.string(),
         group: yup.string(),

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import InputMask from 'react-input-mask';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {
     UpdateUserInfo,
@@ -104,24 +103,22 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                 )}
                 <h4>Personal Information</h4>
                 <div className='equal width fields'>
-                    <Form.Field>
-                        <label>Phone number</label>
-                        <InputMask
-                            mask='(999)999-9999'
-                            maskChar={null}
-                            value={userInfo.cellPhoneNumber}
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) =>
-                                handleChange(
-                                    'cellPhoneNumber',
-                                    undefined,
-                                    e.target.value
-                                )
-                            }
-                            onBlur={validateForm}
-                        />
-                    </Form.Field>
+                    <Form.Input
+                        fluid
+                        aria-label='Phone number'
+                        label='Phone Number'
+                        name='cell phone number'
+                        value={userInfo.cellPhoneNumber}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            handleChange(
+                                'cellPhoneNumber',
+                                undefined,
+                                e.target.value
+                            )
+                        }
+                        type='number'
+                        onBlur={validateForm}
+                    />
                     <Form.Input
                         fluid
                         aria-label='email-address'
@@ -563,30 +560,28 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                                 }
                             />
 
-                            <Form.Field>
-                                <label>Insurance Company Phone Number</label>
-
-                                <InputMask
-                                    mask='(999)999-9999'
-                                    maskChar={null}
-                                    aria-label='Insurance company phone number'
-                                    name='Insurance company phone number'
-                                    value={
-                                        userInfo.insuranceInfo
-                                            .insuranceCompanyPhoneNumber
-                                    }
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) =>
-                                        handleChange(
-                                            'insuranceCompanyPhoneNumber',
-                                            'insuranceInfo',
-                                            e.target.value
-                                        )
-                                    }
-                                    onBlur={validateForm}
-                                />
-                            </Form.Field>
+                            <Form.Input
+                                fluid
+                                // required
+                                aria-label='Insurance company phone number'
+                                label='Insurance Company Phone Number'
+                                name='Insurance company phone number'
+                                value={
+                                    userInfo.insuranceInfo
+                                        .insuranceCompanyPhoneNumber
+                                }
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) =>
+                                    handleChange(
+                                        'insuranceCompanyPhoneNumber',
+                                        'insuranceInfo',
+                                        e.target.value
+                                    )
+                                }
+                                type='number'
+                                onBlur={validateForm}
+                            />
                         </div>
                         <div className='equal width fields'>
                             <Form.Input
@@ -693,29 +688,25 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                         )}
 
                         <div className='equal width fields'>
-                            <Form.Field>
-                                <label className='user-info-labels'>
-                                    Policy Holder&apos;s SSN#
-                                </label>
-
-                                <InputMask
-                                    mask='999-99-9999'
-                                    maskChar={null}
-                                    value={
-                                        userInfo.insuranceInfo.policyHolderSSN
-                                    }
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) =>
-                                        handleChange(
-                                            'policyHolderSSN',
-                                            'insuranceInfo',
-                                            e.target.value
-                                        )
-                                    }
-                                    onBlur={validateForm}
-                                />
-                            </Form.Field>
+                            <Form.Input
+                                fluid
+                                // required
+                                aria-label='Policy holders SSN'
+                                label="Policy Holder's SSN#"
+                                name='Policy holders SSN'
+                                value={userInfo.insuranceInfo.policyHolderSSN}
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) =>
+                                    handleChange(
+                                        'policyHolderSSN',
+                                        'insuranceInfo',
+                                        e.target.value
+                                    )
+                                }
+                                onBlur={validateForm}
+                                type='number'
+                            />
 
                             <Form.Input
                                 fluid

@@ -148,3 +148,14 @@
         width: calc(100% + 70px);
     }
 }
+
+.equal.width.fields > * input::-webkit-outer-spin-button,
+.equal.width.fields > * input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.equal.width.fields > *  > input[type=number] {
+  -moz-appearance: textfield;
+}
