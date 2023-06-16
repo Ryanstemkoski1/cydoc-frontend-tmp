@@ -88,3 +88,9 @@
 .width-50-desktop  * > .ui.dropdown>.text, .ui.dropdown>.default.text {
     overflow: hidden;
 }
+
+@media (max-width: 767px){
+    .ui.button.btn-space {
+        margin: 2px !important;
+    }
+}

@@ -18,6 +18,9 @@
     .input {
         overflow-x: hidden;
     }
+    .input.content-dropdown.medication {
+        overflow-x: visible;
+    }
 
     div.ui.huge.transparent.input.note-title {
         margin-top: 0px;

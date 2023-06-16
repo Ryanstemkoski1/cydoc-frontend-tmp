@@ -59,7 +59,7 @@ class ChiefComplaintsButton extends React.Component<Props> {
         } = this.props;
         return (
             <ToggleButton
-                className='tag_text'
+                className='tag_text btn-space'
                 active={name in chiefComplaints}
                 condition={name}
                 title={

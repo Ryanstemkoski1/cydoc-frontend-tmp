@@ -65,6 +65,7 @@ import SurveyYesNoResponse from './SurveyYesNoResponse';
 import UserInfoForm from './UserInfoForm';
 import initialQuestions from './constants/initialQuestions.json';
 import patientViewHeaders from './constants/patientViewHeaders.json';
+import './InitialSurvey.css';
 
 interface InitialSurveyState {
     activeItem: number;
@@ -455,7 +456,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                               className={'qa-div sixteen wide column'}
                           >
                               {questions.nodes[key].text}
-                              <div className='survey-chips'>
+                              <div className='survey-chips button-spacing'>
                                   {Object.keys(this.props.userSurveyState.nodes)
                                       .length
                                       ? this.renderSwitch(key)

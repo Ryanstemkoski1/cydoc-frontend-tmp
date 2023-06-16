@@ -104,7 +104,7 @@ class MedicalHistoryNoteItem extends Component<Props> {
 
         return (
             <Grid.Row>
-                <Form className='family-hx-note-item'>
+                <Form className='family-hx-note-item family-medical'>
                     <Form.Group inline className='condition-header'>
                         <div className='condition-name'>{conditionInput}</div>
                         <ToggleButton
