@@ -40,22 +40,28 @@
     padding: 0px;
 }
 
-a.ui.label, a.ui.active.label {
+a.ui.label,
+a.ui.active.label {
     max-width: 100%;
 }
 
 .ui.selection.dropdown .menu {
-  min-width: max-content;
+    min-width: max-content;
+}
+.medications-desktop-accordion-title.medication-wrap #dose-input textarea {
+    min-width: 135px;
+}
+.medications-desktop-accordion-title.medication-wrap #reason-input-div {
+    min-width: 145px;
+}
+@media screen and (max-width: 900px) {
+    .ui.selection.dropdown .menu {
+        min-width: fit-content;
+    }
 }
 
-@media screen and (max-width: 900px){
-  .ui.selection.dropdown .menu {
-    min-width: fit-content;
-  }
-}
-
-
-.ui.input.content-text, .ui.input.drug-text {
+.ui.input.content-text,
+.ui.input.drug-text {
     font-size: 12px;
 }
 
@@ -66,7 +72,7 @@ a.ui.label, a.ui.active.label {
 }
 
 .ui.multiple.search.dropdown.side-effects > input.search {
-    margin-left: -.4rem;
+    margin-left: -0.4rem;
 }
 
 .ui.input > .dropdown.side-effects-text {
@@ -115,12 +121,15 @@ a.ui.label, a.ui.active.label {
     width: 100%;
 }
 
-#dose-input-div, #schedule-input-div {
+#dose-input-div,
+#schedule-input-div {
     margin-left: 30px;
     width: 135px;
 }
 
-#start-year-label, #end-year-label, #comments-label {
+#start-year-label,
+#end-year-label,
+#comments-label {
     margin-right: 15px;
     margin-left: 12px;
     margin-top: 10px;
@@ -188,14 +197,16 @@ a.ui.label, a.ui.active.label {
         padding-bottom: 10px;
     }
 
-    #dose-input, #schedule-input {
+    #dose-input,
+    #schedule-input {
         width: 100%;
         margin-top: 10px;
         margin-left: 10px;
         display: inline-block;
     }
 
-    #dose-input-div, #schedule-input-div {
+    #dose-input-div,
+    #schedule-input-div {
         margin-left: -10px;
         width: 80%;
         white-space: nowrap;
@@ -215,18 +226,22 @@ a.ui.label, a.ui.active.label {
         display: inline-block;
     }
 
-    #start-year-input, #end-year-input, #comments-input {
+    #start-year-input,
+    #end-year-input,
+    #comments-input {
         width: 100%;
         white-space: nowrap;
     }
-    
-    #start-year-label, #end-year-label, #comments-label {
+
+    #start-year-label,
+    #end-year-label,
+    #comments-label {
         margin-right: 15px;
         margin-left: 12px;
         margin-top: 10px;
         display: inline-block;
     }
-    
+
     #schedule-input {
         margin-left: -40px;
         width: 195px;
@@ -269,5 +284,55 @@ a.ui.label, a.ui.active.label {
     #reason-input-div {
         margin-left: -60px;
         width: 100%;
+    }
+}
+@media (max-width: 767px) {
+    .full-width-m {
+        margin: 0;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+}
+@media (max-width: 1199px) and (min-width: 767px) {
+    table.medications-desktop-accordion-title.medication-wrap tbody,
+    table.medications-desktop-accordion-title.medication-wrap tr td,
+    table.medications-desktop-accordion-title.medication-wrap {
+        display: block !important;
+    }
+    table.medications-desktop-accordion-title.medication-wrap tr {
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    table.medications-desktop-accordion-title.medication-wrap tr td:nth-child(1),
+    table.medications-desktop-accordion-title.medication-wrap tr td:nth-child(2) {
+        width: 50% !important;
+    }
+    table.medications-desktop-accordion-title.medication-wrap tr td:nth-child(3),
+    table.medications-desktop-accordion-title.medication-wrap tr td:nth-child(5) {
+        width: calc(50% - 63px) !important;
+    }
+    table.medications-desktop-accordion-title.medication-wrap tr td:nth-child(4) {
+        width: 80px !important;
+        padding: 0 !important;
+    }
+    table.medications-desktop-accordion-title.medication-wrap #schedule-input {
+        margin-left: -15px;
+    }
+    table.medications-desktop-accordion-title.medication-wrap #dose-input-div,
+    table.medications-desktop-accordion-title.medication-wrap #schedule-input-div,
+    table.medications-desktop-accordion-title.medication-wrap #schedule-input,
+    table.medications-desktop-accordion-title.medication-wrap .ui.input {
+        width: 100%;
+    }
+    table.medications-desktop-accordion-title.medication-wrap .circular {
+        margin: 0 !important;
+    }
+    table.medications-desktop-accordion-title.medication-wrap .for-text {
+        margin: 0 20px !important;
+        text-align: center;
+    }
+    table.medications-desktop-accordion-title.medication-wrap #reason-input-div {
+        margin-left: 0 !important;
     }
 }

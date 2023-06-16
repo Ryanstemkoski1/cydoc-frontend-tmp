@@ -93,10 +93,17 @@
     font-style: italic;
 }
 
-@media screen and (max-width: 767px) {
+@media (max-width: 767px) {
+    .ui.form.family-hx-note-item.family-medical + .hpi-ph-button {
+        align-self: flex-start;
+        margin-top: 2px;
+    }
     .ui.form.family-hx-note-item {
         padding-left: 1rem;
         padding-right: 1rem;
+    }
+    .ui.form.family-hx-note-item.family-medical {
+        width: calc(100% - 50px);
     }
     .family-hx-note-item .inline.fields.condition-header {
         justify-content: space-between;
@@ -162,6 +169,34 @@
 
     #mode-of-delivery {
         width: 100%;
+    }
+    .family-medical .condition-header {
+        flex-wrap: nowrap !important;
+    }
+    .family-medical .condition-info > .field {
+        margin-top: 20px !important;
+    }
+    .family-medical .condition-name {
+        min-width: 0;
+    }
+    .family-hx-note .condition-header {
+        flex-wrap: nowrap !important;
+    }
+    .family-hx-note .condition-header div {
+        display: flex;
+    }
+    .family-history-dp > .row {
+        padding: 0 !important;
+    }
+    .family-history-dp > .row > .column {
+        padding-left: 0!important;
+        padding-right: 0!important;
+    }
+    .btn-wrapper {
+        margin: 5px 0 10px;
+    }
+    .btn-wrapper button {
+        margin-bottom: 5px !important;
     }
 }
 

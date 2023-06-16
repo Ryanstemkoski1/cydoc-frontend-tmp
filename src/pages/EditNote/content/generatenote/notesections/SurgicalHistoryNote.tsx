@@ -41,9 +41,9 @@ export class SurgicalHistoryNote extends Component<SurgicalHistoryProps> {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {Object.values(surgicalHistory).map((surgical) =>
+                        {Object.values(surgicalHistory).map((surgical, index) =>
                             surgical.procedure !== '' ? (
-                                <Table.Row>
+                                <Table.Row key={index}>
                                     <Table.Cell>
                                         {this.trimSurgicalProcedure(
                                             surgical.procedure
@@ -68,9 +68,9 @@ export class SurgicalHistoryNote extends Component<SurgicalHistoryProps> {
         } else {
             return (
                 <ul>
-                    {Object.values(surgicalHistory).map((surgical) =>
+                    {Object.values(surgicalHistory).map((surgical, index) =>
                         surgical.procedure !== '' ? (
-                            <li>
+                            <li key={index}>
                                 <b>
                                     {this.trimSurgicalProcedure(
                                         surgical.procedure

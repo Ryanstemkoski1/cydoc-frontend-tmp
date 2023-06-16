@@ -35,6 +35,7 @@ import {
 import AddRowButton from 'components/tools/AddRowButton';
 import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
+import './MedicalHistoryContent.css';
 
 //Component that manages the layout of the medical history tab content
 class MedicalHistoryContent extends React.Component<Props, OwnState> {
