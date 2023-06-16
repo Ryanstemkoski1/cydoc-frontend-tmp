@@ -62,6 +62,7 @@ import ChiefComplaintsButton, {
 import DetailsPage from './AdditionalSurvey';
 import InputTextOrDateResponse from './InputTextOrDateResponse';
 import SurveyYesNoResponse from './SurveyYesNoResponse';
+import UserInfoForm from './UserInfoForm';
 import initialQuestions from './constants/initialQuestions.json';
 import patientViewHeaders from './constants/patientViewHeaders.json';
 import './InitialSurvey.css';
@@ -145,7 +146,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         this.setState({ error: false });
         if (
             this.state.activeItem === 0 &&
-            this.props.additionalSurvey.showAdditionalSurvey === false
+            [1, 2].includes(this.props.additionalSurvey.initialSurveyState)
         ) {
             this.props.resetAdditionalSurveyPage();
             return;
@@ -156,7 +157,15 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     onNextClick = (e: any) => {
         if (
             this.state.activeItem === 0 &&
-            this.props.additionalSurvey.showAdditionalSurvey === true
+            this.props.additionalSurvey.initialSurveyState === 1 &&
+            this.props.additionalSurvey.isUserInfoValid == false
+        ) {
+            return;
+        }
+
+        if (
+            this.state.activeItem === 0 &&
+            this.props.additionalSurvey.initialSurveyState === 0
         ) {
             if (new Date() < new Date(this.state.tempDateOfBirth)) {
                 this.setState({
@@ -193,11 +202,27 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                 this.state.tempLegalLastName,
                 this.state.tempSocialSecurityNumber,
                 this.state.tempDateOfBirth,
-                false
+                1
             );
             this.setState({ error: false });
             return;
         }
+
+        if (
+            this.state.activeItem === 0 &&
+            this.props.additionalSurvey.initialSurveyState === 1
+        ) {
+            this.props.updateAdditionalSurveyDetails(
+                this.state.tempLegalFirstName,
+                this.state.tempLegalLastName,
+                this.state.tempSocialSecurityNumber,
+                this.state.tempDateOfBirth,
+                2
+            );
+            this.setState({ error: false });
+            return;
+        }
+
         const { userSurveyState } = this.props;
 
         if (
@@ -258,7 +283,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             tempLegalLastName.trim(),
             tempSocialSecurityNumber.trim(),
             tempDateOfBirth,
-            true
+            0
         );
     };
 
@@ -447,22 +472,29 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             Object.keys(userSurveyState.nodes).length &&
             Object.keys(userSurveyState.order).length;
 
-        initialSurvey = this.props.additionalSurvey.showAdditionalSurvey
-            ? [
-                  <DetailsPage
-                      key={0}
-                      legalFirstName={
-                          this.props.additionalSurvey.legalFirstName
-                      }
-                      legalLastName={this.props.additionalSurvey.legalLastName}
-                      socialSecurityNumber={
-                          this.props.additionalSurvey.socialSecurityNumber
-                      }
-                      dateOfBirth={this.props.additionalSurvey.dateOfBirth}
-                      setTempAdditionalDetails={this.setTempAdditionalDetails}
-                  />,
-              ]
-            : initialSurvey;
+        initialSurvey =
+            this.props.additionalSurvey.initialSurveyState == 0
+                ? [
+                      <DetailsPage
+                          key={0}
+                          legalFirstName={
+                              this.props.additionalSurvey.legalFirstName
+                          }
+                          legalLastName={
+                              this.props.additionalSurvey.legalLastName
+                          }
+                          socialSecurityNumber={
+                              this.props.additionalSurvey.socialSecurityNumber
+                          }
+                          dateOfBirth={this.props.additionalSurvey.dateOfBirth}
+                          setTempAdditionalDetails={
+                              this.setTempAdditionalDetails
+                          }
+                      />,
+                  ]
+                : this.props.additionalSurvey.initialSurveyState === 1
+                ? [<UserInfoForm key={1} />]
+                : initialSurvey;
 
         return (
             <div>
@@ -473,7 +505,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             <Message.Header>
                                 {this.state.activeItem == 0
                                     ? this.props.additionalSurvey
-                                          .showAdditionalSurvey
+                                          .initialSurveyState === 0
                                         ? this.state.message
                                         : this.isAtLeaseOneInputYesOnPage()
                                         ? 'Please confirm the date of your appointment.'
@@ -488,8 +520,9 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                         <Grid>{initialSurvey}</Grid>
                     </Segment>
                 </Container>
-                {this.props.additionalSurvey.showAdditionalSurvey === false &&
-                this.state.activeItem === 0 ? (
+                {[1, 2].includes(
+                    this.props.additionalSurvey.initialSurveyState
+                ) && this.state.activeItem === 0 ? (
                     <div>
                         {' '}
                         <Button
@@ -610,7 +643,7 @@ interface DispatchProps {
         legalLastName: string,
         socialSecurityNumber: string,
         dateOfBirth: string,
-        showAdditionalSurvey: boolean
+        initialSurveyState: number
     ) => UpdateAdditionalSurveyAction;
     resetAdditionalSurveyPage: () => GoBackToAdditionalSurvey;
 }

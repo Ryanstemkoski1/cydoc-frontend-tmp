@@ -89,3 +89,7 @@
         margin: 2px !important;
     }
 }
+
+.width-50-desktop  * > .ui.dropdown>.text, .ui.dropdown>.default.text {
+    overflow: hidden;
+}

@@ -62,7 +62,8 @@ class EditNote extends Component {
         }
         const selected = this.isAllQuestionsNo();
         const questionsNotAnswered = this.isQuestionsNotAnswered();
-        if (!selected || questionsNotAnswered) {
+        const isUserInfoValid = this.props.additionalSurvey.isUserInfoValid;
+        if (!selected || questionsNotAnswered || !isUserInfoValid) {
             return false;
         }
         return true;
