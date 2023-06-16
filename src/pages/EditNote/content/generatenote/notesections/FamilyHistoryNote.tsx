@@ -75,7 +75,9 @@ export class FamilyHistoryNote extends Component<FamilyHistoryProps> {
             } else if (
                 familyCondition.hasAfflictedFamilyMember === YesNoResponse.No
             ) {
-                noHistory.push(familyCondition.condition);
+                if (familyCondition.condition !== '') {
+                    noHistory.push(familyCondition.condition);
+                }
             }
         }
 
@@ -100,7 +102,7 @@ export class FamilyHistoryNote extends Component<FamilyHistoryProps> {
                             </li>
                         );
                     })}
-                    {noHistory ? (
+                    {noHistory && noHistory.length >= 1 ? (
                         <li>
                             No family history of{' '}
                             {noHistory.length > 1
