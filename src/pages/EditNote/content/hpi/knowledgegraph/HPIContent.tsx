@@ -51,10 +51,6 @@ import {
     SaveHpiHeaderAction,
 } from 'redux/actions/hpiHeadersActions';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
-import {
-    AddDisplayedNodesAction,
-    addDisplayedNodes,
-} from 'redux/actions/displayedNodesActions';
 import { graphClientURL } from 'constants/api.js';
 import MiscBox from './src/components/MiscBox';
 
@@ -121,20 +117,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         const response = await axios.get(
             graphClientURL + '/graph/category/' + chiefComplaint + '/4'
         );
-        const { data } = response,
-            { graph, nodes, edges, order } = data as GraphData,
-            firstOrderNodes = graph[order['1']].reduce((prevVal, edge) => {
-                const node = edges[edge.toString()].to;
-                let childNodes = [node];
-                if (['GENERAL', 'PAIN'].includes(nodes[node].category))
-                    childNodes = [
-                        ...childNodes,
-                        ...graph[node].map((edge) => edges[edge.toString()].to),
-                    ];
-                return [...prevVal, ...childNodes];
-            }, [] as string[]);
-        this.props.processKnowledgeGraph(data);
-        this.props.addDisplayedNodes(chiefComplaint, firstOrderNodes, nodes);
+        this.props.processKnowledgeGraph(response.data);
     };
 
     continue = (e: any) => this.props.continue(e);
@@ -373,12 +356,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                         />
                                         <DiseaseForm
                                             key={this.props.activeTab}
-                                            CCInfo={{
-                                                [this.props.activeTab]:
-                                                    parentNodes[
-                                                        this.props.activeTab
-                                                    ],
-                                            }}
+                                            category={this.props.activeTab}
                                             nextStep={this.continue}
                                             prevStep={this.back}
                                         />
@@ -455,12 +433,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                                 ]
                                                             )[0]
                                                         }
-                                                        CCInfo={{
-                                                            [diseaseCategory]:
-                                                                parentNodes[
-                                                                    diseaseCategory
-                                                                ],
-                                                        }}
+                                                        category={
+                                                            diseaseCategory
+                                                        }
                                                         nextStep={this.continue}
                                                         prevStep={this.back}
                                                     />
@@ -560,20 +535,12 @@ interface DispatchProps {
         graphData: GraphData
     ) => ProcessKnowledgeGraphAction;
     saveHpiHeader: (data: HpiHeadersState) => SaveHpiHeaderAction;
-    addDisplayedNodes: (
-        category: string,
-        nodesArr: string[],
-        nodes: {
-            [node: string]: NodeInterface;
-        }
-    ) => AddDisplayedNodesAction;
 }
 
 const mapDispatchToProps = {
     setNotesChiefComplaint,
     processKnowledgeGraph,
     saveHpiHeader,
-    addDisplayedNodes,
 };
 
 type Props = ChiefComplaintsProps &
