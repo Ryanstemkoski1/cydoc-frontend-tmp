@@ -1,33 +1,32 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { createHPI, createInitialHPI, HPI } from '../generateHpiText';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import { HpiState } from 'redux/reducers/hpiReducer';
+import { YesNoResponse } from 'constants/enums';
 import {
     BodyLocationType,
-    SelectOneInput,
-    SelectManyInput,
     HpiResponseType,
     LabTestType,
     ListTextInput,
     NodeInterface,
+    ResponseTypes,
+    SelectOneInput,
     TimeInput,
 } from 'constants/hpiEnums';
-import { YesNoResponse } from 'constants/enums';
-import { ResponseTypes } from 'constants/hpiEnums';
-import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
-import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
-import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
-import { MedicationsState } from 'redux/reducers/medicationsReducer';
-import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
-import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
-import { selectPatientInformationState } from 'redux/selectors/patientInformationSelector';
-import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
-import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
-import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
-import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
+import React from 'react';
+import { connect } from 'react-redux';
+import { CurrentNoteState } from 'redux/reducers';
 import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
+import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
+import { HpiState } from 'redux/reducers/hpiReducer';
+import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
+import { MedicationsState } from 'redux/reducers/medicationsReducer';
+import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
+import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
+import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
+import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
+import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
+import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
+import { selectPatientInformationState } from 'redux/selectors/patientInformationSelector';
+import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
+import { createHPI, createInitialHPI, HPI } from '../generateHpiText';
 
 interface HPINoteProps {
     hpi: HpiState;
@@ -363,14 +362,21 @@ export const extractNode = (
             const posArr: string[] = [];
             const negArr: string[] = [];
             (response as string[]).map((key) => {
-                const { hasHadSurgery, procedure } = state.surgicalHistory[key];
-                if (hasHadSurgery == YesNoResponse.Yes && procedure.length > 0)
-                    posArr.push(procedure);
-                else if (
-                    hasHadSurgery == YesNoResponse.No &&
-                    procedure.length > 0
-                )
-                    negArr.push(procedure);
+                if (key in state.surgicalHistory) {
+                    const { hasHadSurgery, procedure } = state.surgicalHistory[
+                        key
+                    ];
+                    if (
+                        hasHadSurgery == YesNoResponse.Yes &&
+                        procedure.length > 0
+                    )
+                        posArr.push(procedure);
+                    else if (
+                        hasHadSurgery == YesNoResponse.No &&
+                        procedure.length > 0
+                    )
+                        negArr.push(procedure);
+                }
             });
             answer = joinLists(posArr, 'and');
             negRes = joinLists(negArr, 'or');
