@@ -18,21 +18,21 @@ import { HpiState } from 'redux/reducers/hpiReducer';
 import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
 import { MedicationsState } from 'redux/reducers/medicationsReducer';
 import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
-import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
+import { SurgicalHistoryElements } from 'redux/reducers/surgicalHistoryReducer';
 import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
 import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
 import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
 import { selectPatientInformationState } from 'redux/selectors/patientInformationSelector';
-import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
+import { selectSurgicalHistoryProcedures } from 'redux/selectors/surgicalHistorySelectors';
 import { createHPI, createInitialHPI, HPI } from '../generateHpiText';
 
 interface HPINoteProps {
     hpi: HpiState;
     familyHistory: FamilyHistoryState;
     medications: MedicationsState;
-    surgicalHistory: SurgicalHistoryState;
+    surgicalHistory: SurgicalHistoryElements;
     medicalHistory: MedicalHistoryState;
     patientInformation: PatientInformationState;
     chiefComplaints: ChiefComplaintsState;
@@ -549,7 +549,7 @@ const mapStateToProps = (state: CurrentNoteState) => ({
     hpi: selectHpiState(state),
     familyHistory: selectFamilyHistoryState(state),
     medications: selectMedicationsState(state),
-    surgicalHistory: selectSurgicalHistoryState(state),
+    surgicalHistory: selectSurgicalHistoryProcedures(state),
     medicalHistory: selectMedicalHistoryState(state),
     patientInformation: selectPatientInformationState(state),
     chiefComplaints: selectChiefComplaintsState(state),

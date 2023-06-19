@@ -9,12 +9,13 @@ interface AllergiesProps {
 
 export class AllergiesNote extends Component<AllergiesProps> {
     checkEmpty = () => {
-        for (const id in this.props.allergies) {
+        const allergies = this.props.allergies.elements;
+        for (const id in allergies) {
             if (
                 !(
-                    this.props.allergies[id].incitingAgent === '' &&
-                    this.props.allergies[id].reaction === '' &&
-                    this.props.allergies[id].comments === ''
+                    allergies[id].incitingAgent === '' &&
+                    allergies[id].reaction === '' &&
+                    allergies[id].comments === ''
                 )
             ) {
                 return false;
@@ -24,9 +25,14 @@ export class AllergiesNote extends Component<AllergiesProps> {
     };
 
     render() {
-        const { isRich, allergies } = this.props;
+        const { isRich } = this.props;
+        const { hasAllergies } = this.props.allergies;
+        const allergies = this.props.allergies.elements;
 
-        if (this.checkEmpty()) {
+        // hasAllergies is value of the YES/NO question on allergies form
+        if (hasAllergies === false) {
+            return <div>The patient has no allergies.</div>;
+        } else if (this.checkEmpty()) {
             return <div />;
         } else if (isRich) {
             return (
