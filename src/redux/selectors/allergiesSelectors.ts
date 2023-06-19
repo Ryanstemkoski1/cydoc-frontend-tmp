@@ -1,19 +1,29 @@
 import { CurrentNoteState } from '../reducers';
-import { AllergiesState, AllergiesItem } from '../reducers/allergiesReducer';
+import {
+    AllergiesState,
+    AllergiesItem,
+    AllergiesElements,
+} from '../reducers/allergiesReducer';
 
 export function selectAllergiesState(state: CurrentNoteState): AllergiesState {
     return state.allergies;
 }
 
-export function selectAllergies(state: CurrentNoteState): AllergiesItem[] {
-    const allergiesState = state.allergies;
-    return Object.values(allergiesState);
+export function selectHasAllergiesState(
+    state: CurrentNoteState
+): boolean | null {
+    return state.allergies.hasAllergies;
+}
+
+export function selectAllergies(state: CurrentNoteState): AllergiesElements {
+    const allergiesState = state.allergies.elements;
+    return allergiesState;
 }
 
 export function selectAllergiesItem(
     state: CurrentNoteState,
-    index: keyof AllergiesState
+    index: keyof AllergiesElements
 ): AllergiesItem {
-    const allergiesState = state.allergies;
+    const allergiesState = state.allergies.elements;
     return allergiesState[index];
 }

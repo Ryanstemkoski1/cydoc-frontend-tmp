@@ -2,6 +2,7 @@ import { CurrentNoteState } from '../reducers';
 import {
     SurgicalHistoryState,
     SurgicalHistoryItem,
+    SurgicalHistoryElements,
 } from '../reducers/surgicalHistoryReducer';
 
 export function selectSurgicalHistoryState(
@@ -10,17 +11,23 @@ export function selectSurgicalHistoryState(
     return state.surgicalHistory;
 }
 
+export function selectHasSurgicalHistoryState(
+    state: CurrentNoteState
+): boolean | null {
+    return state.surgicalHistory.hasSurgicalHistory;
+}
+
 export function selectSurgicalHistoryProcedures(
     state: CurrentNoteState
-): SurgicalHistoryItem[] {
-    const surgicalHistoryState = state.surgicalHistory;
-    return Object.values(surgicalHistoryState);
+): SurgicalHistoryElements {
+    const surgicalHistoryState = state.surgicalHistory.elements;
+    return surgicalHistoryState;
 }
 
 export function selectSurgicalHistoryItem(
     state: CurrentNoteState,
-    index: keyof SurgicalHistoryState
+    index: keyof SurgicalHistoryElements
 ): SurgicalHistoryItem {
     const surgicalHistoryState = state.surgicalHistory;
-    return surgicalHistoryState[index];
+    return surgicalHistoryState.elements[index];
 }
