@@ -258,7 +258,6 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     <MedicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={choices}
                         responseType={responseType}
                         mobile={collapseTabs}
                         currentYear={-1}

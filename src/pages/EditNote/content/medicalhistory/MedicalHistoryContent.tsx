@@ -206,6 +206,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                         standardMedicalHistory[key].condition
                     ) ||
                     this.state.currConditions.includes(key) ||
+                    this.props.showNo ||
                     standardMedicalHistory[key].hasBeenAfflicted ==
                         YesNoResponse.Yes
             ) || constants.CONDITIONS;
@@ -396,6 +397,7 @@ interface ContentProps {
     responseType?: ResponseTypes;
     node?: string;
     hide?: boolean;
+    showNo?: boolean;
 }
 
 interface MedicalHistoryProps {
