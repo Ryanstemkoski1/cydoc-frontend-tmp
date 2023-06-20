@@ -1,40 +1,40 @@
+import GridContent from 'components/tools/GridContent.js';
+import ToggleButton from 'components/tools/ToggleButton.js';
+import { YesNoResponse } from 'constants/enums';
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 import {
+    addFamilyMember,
+    deleteFamilyMember,
+    toggleCauseOfDeathOption,
+    toggleConditionOption,
+    toggleLivingOption,
+    updateComments,
+    updateMember,
+} from 'redux/actions/familyHistoryActions';
+import { CurrentNoteState } from 'redux/reducers';
+import {
+    FamilyHistoryCondition,
+    FamilyHistoryState,
+} from 'redux/reducers/familyHistoryReducer';
+import {
+    FamilyHistoryConditionFlat,
+    selectFamilyHistoryCondition,
+    selectFamilyHistoryConditions,
+    selectFamilyHistoryState,
+} from 'redux/selectors/familyHistorySelectors';
+import {
+    Button,
+    ButtonProps,
+    Divider,
     Form,
     Grid,
-    Button,
     Header,
-    Divider,
-    ButtonProps,
 } from 'semantic-ui-react';
-import ToggleButton from 'components/tools/ToggleButton.js';
-import FamilyHistoryDropdown from './FamilyHistoryDropdown';
-import GridContent from 'components/tools/GridContent.js';
 import '../hpi/knowledgegraph/src/css/Button.css';
 import '../reviewofsystems/ReviewOfSystems.css';
 import './FamilyHistory.css';
-import { connect } from 'react-redux';
-import {
-    toggleConditionOption,
-    addFamilyMember,
-    deleteFamilyMember,
-    updateMember,
-    toggleCauseOfDeathOption,
-    toggleLivingOption,
-    updateComments,
-} from 'redux/actions/familyHistoryActions';
-import {
-    selectFamilyHistoryState,
-    selectFamilyHistoryConditions,
-    selectFamilyHistoryCondition,
-    FamilyHistoryConditionFlat,
-} from 'redux/selectors/familyHistorySelectors';
-import { YesNoResponse } from 'constants/enums';
-import {
-    FamilyHistoryState,
-    FamilyHistoryCondition,
-} from 'redux/reducers/familyHistoryReducer';
-import { CurrentNoteState } from 'redux/reducers';
+import FamilyHistoryDropdown from './FamilyHistoryDropdown';
 
 class FamilyHistoryBlock extends Component<Props> {
     constructor(props: Props) {
@@ -125,7 +125,7 @@ class FamilyHistoryBlock extends Component<Props> {
         }
         return mobile ? (
             <Grid.Row>
-                <Form className='family-hx-note-item'>
+                <Form className='family-hx-note-item family-hx-note'>
                     <Form.Group inline className='condition-header'>
                         <div className='condition-name'>{conditionInp}</div>
                         <div>

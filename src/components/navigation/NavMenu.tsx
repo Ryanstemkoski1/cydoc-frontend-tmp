@@ -23,7 +23,12 @@ import {
     UpdateActiveItemAction,
 } from 'redux/actions/activeItemActions';
 import { YesNoResponse } from 'constants/enums';
+import SignUpModal from 'pages/Account/SignUpModal';
 import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
+import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
+import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
+import constants from '../../constants/constants.json';
+import './NavMenu.css';
 import SignUpForm from 'pages/Account/SignUpForm';
 
 interface ConnectedNavMenuProps {
@@ -218,143 +223,146 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     );
 
     const checkPatientView = () => {
-        const { userSurveyState } = props,
-            check1 =
-                'graph' in userSurveyState &&
-                '1' in userSurveyState.graph &&
-                Object.keys(userSurveyState.graph['1']).every(
-                    (key) =>
-                        userSurveyState.nodes[key].response !=
-                        YesNoResponse.None
-                ),
-            check2 =
-                'nodes' in userSurveyState &&
-                '6' in userSurveyState.nodes &&
-                '7' in userSurveyState.nodes &&
-                Object.keys(userSurveyState.nodes['6'].response).length +
-                    Object.keys(userSurveyState.nodes['7'].response).length >
-                    0;
-        return check1 && check2;
+        if (!constants.PATIENT_VIEW_TAB_NAMES.includes(props.activeItem)) {
+            return false;
+        }
+        const { userSurveyState, additionalSurvey } = props;
+        const selected =
+            userSurveyState.nodes['2'].response === YesNoResponse.Yes ||
+            userSurveyState.nodes['3'].response === YesNoResponse.Yes ||
+            userSurveyState.nodes['4'].response === YesNoResponse.Yes;
+        if (
+            !selected ||
+            !userSurveyState.nodes['8'].response ||
+            !additionalSurvey.legalFirstName ||
+            !additionalSurvey.legalLastName ||
+            !additionalSurvey.dateOfBirth ||
+            !additionalSurvey.socialSecurityNumber
+        ) {
+            return false;
+        }
+        return true;
     };
 
     return (
-        <div>
-            <Menu className={`${className} nav-menu`} attached={attached}>
-                {context.token ? (
-                    <Menu.Item className='logo-menu' onClick={navigateToHome}>
-                        <Image
-                            src={Logo}
-                            className={
-                                collapseLoggedInNav
-                                    ? 'logo-circle-mobile'
-                                    : 'logo-circle'
-                            }
-                        />
-                        {!displayNoteName && !hideCydoc && (
-                            <Header
-                                as='h1'
-                                className={`${
-                                    collapseLoggedInNav
-                                        ? 'logo-text-mobile'
-                                        : 'logo-text'
-                                }`}
-                                content='Cydoc'
-                            />
-                        )}
-                    </Menu.Item>
-                ) : (
-                    <Menu.Item className='logo-menu' onClick={logoNotLoggedIn}>
-                        <Image
-                            src={Logo}
+        <Menu
+            className={`${className} nav-menu nav-bar ${
+                displayNoteName && doctorView ? 'nav-bar-input' : ''
+            }`}
+            attached={attached}
+        >
+            {context.token ? (
+                <Menu.Item className='logo-menu' onClick={navigateToHome}>
+                    <Image
+                        src={Logo}
+                        className={
+                            collapseLoggedInNav
+                                ? 'logo-circle-mobile'
+                                : 'logo-circle'
+                        }
+                    />
+                    {!displayNoteName && !hideCydoc && (
+                        <Header
+                            as='h1'
                             className={`${
                                 collapseLoggedInNav
-                                    ? 'logo-circle-mobile'
-                                    : 'logo-circle'
+                                    ? 'logo-text-mobile'
+                                    : 'logo-text'
                             }`}
+                            content='Cydoc'
                         />
-                        {!displayNoteName && !hideCydoc && (
-                            <Header
-                                as='h1'
-                                className={`${
-                                    collapseLoggedInNav
-                                        ? 'logo-text-mobile'
-                                        : 'logo-text'
-                                }`}
-                                content='Cydoc'
-                            />
-                        )}
-                    </Menu.Item>
-                )}
+                    )}
+                </Menu.Item>
+            ) : (
+                <Menu.Item className='logo-menu' onClick={logoNotLoggedIn}>
+                    <Image
+                        src={Logo}
+                        className={`${
+                            collapseLoggedInNav
+                                ? 'logo-circle-mobile'
+                                : 'logo-circle'
+                        }`}
+                    />
+                    {!displayNoteName && !hideCydoc && (
+                        <Header
+                            as='h1'
+                            className={`${
+                                collapseLoggedInNav
+                                    ? 'logo-text-mobile'
+                                    : 'logo-text'
+                            }`}
+                            content='Cydoc'
+                        />
+                    )}
+                </Menu.Item>
+            )}
 
-                {/* When parent is EditNote, then display the note name item */}
-                {displayNoteName && doctorView && (
-                    <NoteNameMenuItem mobile={collapseLoggedInNav} />
-                )}
-                {context.token && history.location.pathname.length > 1 ? (
-                    collapseLoggedInNav ? (
-                        <Button.Group>
-                            <Button
-                                compact
-                                onClick={() => {
-                                    changeUserView('Patient View');
-                                    if (!checkPatientView())
-                                        updateActiveItem('CC');
-                                }}
-                                className={`hpi-ph-button${
-                                    patientView ? '-selected' : ''
-                                }`}
-                            >
-                                Patient
-                            </Button>
-                            <Button.Or />
-                            <Button
-                                compact
-                                onClick={() => changeUserView('Doctor View')}
-                                className={`hpi-ph-button${
-                                    !patientView ? '-selected' : ''
-                                }`}
-                            >
-                                Doctor
-                            </Button>
-                        </Button.Group>
-                    ) : (
-                        <Button.Group>
-                            <Button
-                                style={{ maxHeight: '75%' }}
-                                onClick={() => {
-                                    changeUserView('Patient View');
-                                    if (!checkPatientView())
-                                        updateActiveItem('CC');
-                                }}
-                                className={`hpi-ph-button${
-                                    patientView ? '-selected' : ''
-                                }`}
-                            >
-                                Patient View
-                            </Button>
-                            <Button.Or />
-                            <Button
-                                style={{ maxHeight: '75%' }}
-                                onClick={() => changeUserView('Doctor View')}
-                                className={`hpi-ph-button${
-                                    !patientView ? '-selected' : ''
-                                }`}
-                            >
-                                Doctor View
-                            </Button>
-                        </Button.Group>
-                    )
+            {/* When parent is EditNote, then display the note name item */}
+            {displayNoteName && doctorView && (
+                <NoteNameMenuItem mobile={collapseLoggedInNav} />
+            )}
+            {context.token && history.location.pathname.length > 1 ? (
+                collapseLoggedInNav ? (
+                    <Button.Group>
+                        <Button
+                            compact
+                            onClick={() => {
+                                changeUserView('Patient View');
+                                if (!checkPatientView()) updateActiveItem('CC');
+                            }}
+                            className={`hpi-ph-button${
+                                patientView ? '-selected' : ''
+                            }`}
+                        >
+                            Patient
+                        </Button>
+                        <Button.Or />
+                        <Button
+                            compact
+                            onClick={() => changeUserView('Doctor View')}
+                            className={`hpi-ph-button${
+                                !patientView ? '-selected' : ''
+                            }`}
+                        >
+                            Doctor
+                        </Button>
+                    </Button.Group>
                 ) : (
-                    ''
-                )}
+                    <Button.Group>
+                        <Button
+                            style={{ maxHeight: '75%' }}
+                            onClick={() => {
+                                changeUserView('Patient View');
+                                if (!checkPatientView()) updateActiveItem('CC');
+                            }}
+                            className={`hpi-ph-button${
+                                patientView ? '-selected' : ''
+                            }`}
+                        >
+                            Patient View
+                        </Button>
+                        <Button.Or />
+                        <Button
+                            style={{ maxHeight: '75%' }}
+                            onClick={() => changeUserView('Doctor View')}
+                            className={`hpi-ph-button${
+                                !patientView ? '-selected' : ''
+                            }`}
+                        >
+                            Doctor View
+                        </Button>
+                    </Button.Group>
+                )
+            ) : (
+                ''
+            )}
 
-                {/* Navigation links */}
-                <Menu.Menu position='right'>
-                    {/* Menu will have different options depending on whether the user is logged in or not */}
-                    {context.token ? loggedInMenuItems : defaultMenuItems}
-                </Menu.Menu>
-            </Menu>
-        </div>
+            {/* Navigation links */}
+            <Menu.Menu position='right'>
+                {/* Menu will have different options depending on whether the user is logged in or not */}
+                {context.token ? loggedInMenuItems : defaultMenuItems}
+            </Menu.Menu>
+        </Menu>
     );
 };
 
@@ -372,20 +380,34 @@ export interface userViewProps {
     patientView: boolean;
     doctorView: boolean;
 }
+export interface AdditionalSurveyProps {
+    additionalSurvey: additionalSurvey;
+}
+
+export interface ActiveItemProps {
+    activeItem: string;
+}
 
 const mapStateToProps = (
     state: CurrentNoteState
-): userViewProps & initialSurveyProps => {
+): userViewProps &
+    initialSurveyProps &
+    AdditionalSurveyProps &
+    ActiveItemProps => {
     return {
         patientView: selectPatientViewState(state),
         doctorView: selectDoctorViewState(state),
         userSurveyState: selectInitialPatientSurvey(state),
+        additionalSurvey: state.additionalSurvey,
+        activeItem: selectActiveItem(state),
     };
 };
 
 type Props = ConnectedNavMenuProps &
     userViewProps &
     DispatchProps &
-    initialSurveyProps;
+    initialSurveyProps &
+    AdditionalSurveyProps &
+    ActiveItemProps;
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConnectedNavMenu);

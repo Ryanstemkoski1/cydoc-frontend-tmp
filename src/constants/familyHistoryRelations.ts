@@ -80,6 +80,16 @@ export const familyOptions = [
         value: 'cousin',
     },
     {
+        key: 'cousin (maternal side)',
+        text: 'cousin (maternal side)',
+        value: 'cousin (maternal side)',
+    },
+    {
+        key: 'cousin (paternal side)',
+        text: 'cousin (paternal side)',
+        value: 'cousin (paternal side)',
+    },
+    {
         key: 'other',
         text: 'other',
         value: 'other',

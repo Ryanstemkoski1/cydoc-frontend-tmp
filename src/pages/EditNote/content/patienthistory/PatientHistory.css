@@ -18,12 +18,10 @@
 }
 
 #patient-history-menu {
-    z-index: 1;
-    background-color: white;
-    border: 1px solid #c7c7c7;
-    border-radius: 5px;
-    padding-top: 10px;
-    padding-bottom: 5px;
+  z-index: 3;
+  background-color: white;
+  border: 1px solid #c7c7c7;
+  border-radius: 5px;
 }
 
 @media screen and (max-width: 1400px) {
@@ -96,26 +94,20 @@
     border-color: transparent transparent #9f3a38 transparent;
 }
 
-.ui.icon.button.patient-previous-button,
-.ui.icon.button.patient-next-button,
-.ui.icon.button.social-previous-button,
-.ui.icon.button.social-next-button,
-.ui.icon.button.family-previous-button,
-.ui.icon.button.family-next-button,
-.ui.icon.button.surgical-previous-button,
-.ui.icon.button.surgical-next-button,
-.ui.icon.button.medications-previous-button,
-.ui.icon.button.medications-next-button,
-.ui.icon.button.allergies-previous-button,
-.ui.icon.button.allergies-next-button {
-    display: block;
-    position: fixed;
-    bottom: 15px;
-    margin: 0;
-    opacity: 0.8;
-    font-size: 13px;
-    background: #006b87;
-    color: white;
+.ui.icon.button.patient-previous-button, .ui.icon.button.patient-next-button,
+.ui.icon.button.social-previous-button, .ui.icon.button.social-next-button,
+.ui.icon.button.family-previous-button, .ui.icon.button.family-next-button,
+.ui.icon.button.surgical-previous-button, .ui.icon.button.surgical-next-button,
+.ui.icon.button.medications-previous-button, .ui.icon.button.medications-next-button,
+.ui.icon.button.allergies-previous-button, .ui.icon.button.allergies-next-button {
+  display: block;
+  position: fixed;
+  bottom: 15px;
+  margin: 0;
+  opacity: 0.8;
+  font-size: 18px;
+  background: #006b87;
+  color: white;
 }
 
 .ui.icon.button.patient-previous-button:hover,
@@ -162,11 +154,7 @@
     color: white;
 }
 
-@media screen and (max-width: 1400px) {
-    .ui.icon.button.patient-previous-button,
-    .ui.icon.button.patient-next-button {
-        display: none;
-    }
+@media screen and (max-width: 600px) {
 
     .ui.icon.button.small-patient-previous-button,
     .ui.icon.button.small-patient-next-button {
@@ -177,9 +165,13 @@
         left: 5px;
     }
 
-    .ui.icon.button.small-patient-next-button {
-        right: 5px;
-    }
+  .ui.icon.button.small-patient-previous-button {
+    left: 5px;
+  }
+  
+  .ui.icon.button.small-patient-next-button {
+    right: 5px;
+  }
 }
 
 @media screen and (max-width: 400px) {
@@ -189,5 +181,14 @@
 
     .ui.icon.button.small-patient-next-button {
         right: 15px;
+    }
+}
+@media (max-width: 744px){
+    #patient-history-menu {
+        padding-top: 5px;
+        border-radius: 0;
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
     }
 }

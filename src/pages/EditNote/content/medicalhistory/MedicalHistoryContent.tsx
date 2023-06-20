@@ -35,6 +35,7 @@ import {
 import AddRowButton from 'components/tools/AddRowButton';
 import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
+import './MedicalHistoryContent.css';
 
 //Component that manages the layout of the medical history tab content
 class MedicalHistoryContent extends React.Component<Props, OwnState> {
@@ -230,18 +231,22 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         const rows = this.generateListItems(listValues as string[], mobile);
 
         return (
-            <GridContent
-                isPreview={this.props.isPreview}
-                numColumns={6}
-                contentHeader={<MedicalHistoryContentHeader />}
-                rows={rows}
-                //TODO: hpi?
-                value_type='Medical History'
-                mobile={mobile}
-                addRow={this.addRow}
-                name={'medical history'}
-                pop={this.props.responseType == ResponseTypes.PMH_POP}
-            />
+            <div className='scroll-table'>
+                <div className='scroll-table-inner'>
+                    <GridContent
+                        isPreview={this.props.isPreview}
+                        numColumns={6}
+                        contentHeader={<MedicalHistoryContentHeader />}
+                        rows={rows}
+                        //TODO: hpi?
+                        value_type='Medical History'
+                        mobile={mobile}
+                        addRow={this.addRow}
+                        name={'medical history'}
+                        pop={this.props.responseType == ResponseTypes.PMH_POP}
+                    />
+                </div>
+            </div>
         );
     }
 

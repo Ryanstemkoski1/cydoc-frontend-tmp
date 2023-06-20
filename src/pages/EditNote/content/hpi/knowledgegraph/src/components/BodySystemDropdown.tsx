@@ -103,7 +103,7 @@ class BodySystemDropdown extends React.Component<
                         </div>
                     </div>
                 </Button>
-                <div className='diseases-array'>
+                <div className='diseases-array btn-wrap'>
                     {this.state.selected
                         ? diseasesList
                               .filter((disease) => disease !== 'HIDDEN')

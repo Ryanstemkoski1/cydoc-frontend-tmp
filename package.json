@@ -52,6 +52,7 @@
         "watch-semantic": "cd src/semantic && npm run build-semantic && gulp watch",
         "start": "npm run build-semantic && react-scripts start",
         "build": "npm run build-semantic && react-scripts build",
+        "prettify": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
         "test": "react-scripts test --watchAll=false --verbose",
         "test-ci": "react-scripts test --watchAll=false --verbose --silent",
         "lint": "node lint.js",
@@ -126,6 +127,7 @@
     },
     "prettier": {
         "tabWidth": 4,
+        "printWidth": 80,
         "semi": true,
         "singleQuote": true,
         "jsxSingleQuote": true,

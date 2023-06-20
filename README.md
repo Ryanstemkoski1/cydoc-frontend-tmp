@@ -16,7 +16,14 @@
 
 6. Run **npm start** to start the project. This will start the project at [http://localhost:3000](http://localhost:3000) (or whichever port you are using). As you make edits to the code, the browser will automatically reload.
 
-7. Install [Redux dev tools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd/related?hl=en) for Chrome. This extension is invaluable for viewing and analyzing Redux state. 
+7. Install [Redux dev tools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd/related?hl=en) for Chrome. This extension is invaluable for viewing and analyzing Redux state.
+
+## Potential Setup Issues
+
+When attempting step 5, an issue may be encountered, particularly when using an M1 MacBook:
+" Error: Cannot find module 'node-darwin-arm64/package.json' "
+
+In the event this occurs, follow the steps outlined in the video linked [here](https://www.youtube.com/watch?v=sZybySiuz6w) and re-attempt to install dependencies.
 
 # Before Submitting a PR
 
@@ -28,17 +35,27 @@ Then, run `npm run lint` again and manually fix any remaining errors.
 
 Before submitting a PR, `npm run lint` should output the following:
 
-- 😄  No linting errors found for src/index.js
-- 😄  No linting errors found for src/contexts
-- 😄  No linting errors found for tests
-- 😄  No linting errors found for src/components
-- 😄  No linting errors found for src/constants
-- 😄  No linting errors found for src/pages
-- 😄 No linting errors found for src/auth
+-   😄 No linting errors found for src/index.js
+-   😄 No linting errors found for src/contexts
+-   😄 No linting errors found for tests
+-   😄 No linting errors found for src/components
+-   😄 No linting errors found for src/constants
+-   😄 No linting errors found for src/pages
+-   😄 No linting errors found for src/auth
+
+# Hiding Semantic css build changes
+
+Currently running a build creates uncommitted changes in the semantic build directory. You can prevent git from tracking these changes by running these two commands:
+
+```
+git update-index --skip-worktree src/semantic/dist/components/*.css
+git update-index --skip-worktree src/semantic/dist/*.css
+```
 
 # Testing with Jest and Enzyme
 
 To get started with testing, in your terminal run these two commands:
+
 ```
 npm install --save-dev jest
 npm install --save-dev enzyme jest-enzyme enzyme-adapter-react-16
@@ -94,6 +111,7 @@ To find documentation on testing with Enzyme, go to:
 [https://enzymejs.github.io/enzyme/](https://enzymejs.github.io/enzyme/)
 
 For more help check out the following resources:
-* The Udemy course [React Testing with Jest and Enzyme](https://www.udemy.com/course/react-testing-with-jest-and-enzyme/)
-* [Alicia Steiman's notes on this Udemy course](https://drive.google.com/file/d/1BB6xr8zONUKdINGIZk4Zt6rDz_Cfq0cD/view?usp=sharing)
-* [Alicia Steiman's front-end testing instruction video](https://drive.google.com/file/d/1_GTnP3PYZx-tipXoDZQG3Tau8vqFbpje/view?usp=sharing)
+
+-   The Udemy course [React Testing with Jest and Enzyme](https://www.udemy.com/course/react-testing-with-jest-and-enzyme/)
+-   [Alicia Steiman's notes on this Udemy course](https://drive.google.com/file/d/1BB6xr8zONUKdINGIZk4Zt6rDz_Cfq0cD/view?usp=sharing)
+-   [Alicia Steiman's front-end testing instruction video](https://drive.google.com/file/d/1_GTnP3PYZx-tipXoDZQG3Tau8vqFbpje/view?usp=sharing)

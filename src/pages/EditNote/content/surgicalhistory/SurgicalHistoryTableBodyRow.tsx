@@ -19,16 +19,12 @@ import {
 } from 'redux/actions/surgicalHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
-    SurgicalHistoryState,
+    SurgicalHistoryElements,
     SurgicalHistoryItem,
 } from 'redux/reducers/surgicalHistoryReducer';
 import Dropdown from 'components/tools/OptimizedDropdown';
-import { AllergiesState } from 'redux/reducers/allergiesReducer';
 import './SurgicalHistoryTableBodyRow.css';
-import {
-    selectSurgicalHistoryState,
-    selectSurgicalHistoryItem,
-} from 'redux/selectors/surgicalHistorySelectors';
+import { selectSurgicalHistoryItem } from 'redux/selectors/surgicalHistorySelectors';
 import { OptionMapping } from '_processOptions';
 import ToggleButton from 'components/tools/ToggleButton';
 import { YesNoResponse } from 'constants/enums';
@@ -261,7 +257,6 @@ interface OwnState {
 }
 
 interface SurgicalHistoryProps {
-    surgicalHistory: SurgicalHistoryState;
     surgicalHistoryItem: SurgicalHistoryItem;
 }
 
@@ -269,7 +264,7 @@ interface RowProps {
     isPreview: boolean;
     mobile: boolean;
     currentYear: number;
-    rowIndex: keyof AllergiesState;
+    rowIndex: keyof SurgicalHistoryElements;
     proceduresOptions: OptionMapping;
     fields: string[];
     onTableBodyChange: (
@@ -302,7 +297,6 @@ const mapStateToProps = (
     rowProps: RowProps
 ): SurgicalHistoryProps => {
     return {
-        surgicalHistory: selectSurgicalHistoryState(state),
         surgicalHistoryItem: selectSurgicalHistoryItem(
             state,
             rowProps.rowIndex

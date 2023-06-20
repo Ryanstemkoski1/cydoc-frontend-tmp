@@ -10,7 +10,15 @@ const initAllergies = {
 };
 
 const mountWithProps = (allergies = initAllergies, isRich = false) => {
-    return mount(<AllergiesNote allergies={allergies} isRich={isRich} />);
+    return mount(
+        <AllergiesNote
+            allergies={{
+                hasAllergies: true,
+                elements: allergies,
+            }}
+            isRich={isRich}
+        />
+    );
 };
 
 describe('AllergiesNote', () => {
