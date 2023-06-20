@@ -105,7 +105,7 @@ class FamilyHistoryDropdown extends Component<Props> {
 
         return mobile ? (
             <div className='dropdown-component-container'>
-                <Grid>
+                <Grid className='family-history-dp'>
                     <Grid.Row>
                         <Grid.Column>
                             <Grid.Row width={14}>

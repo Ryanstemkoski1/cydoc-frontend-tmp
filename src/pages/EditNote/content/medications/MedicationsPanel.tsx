@@ -211,14 +211,14 @@ class MedicationsPanel extends Component<Props, State> {
             <Input
                 disabled={isPreview}
                 transparent={isPreview}
-                className='content-input content-dropdown medication drug-input padding-bottom'
+                className='content-input content-dropdown medication drug-input full-width-m padding-bottom'
                 value={
                     isPreview
                         ? this.props.previewValue
                         : (medicationEntry as MedicationsItem).drugName
                 }
             >
-                <div id='width-full' className='full-width'>
+                <div id='width-full' className='full-width full-view'>
                     {!isPreview && (
                         <Dropdown
                             fluid
@@ -750,7 +750,7 @@ class MedicationsPanel extends Component<Props, State> {
         } else {
             titleContent = (
                 <Table
-                    className={`medications-desktop-accordion-title ${
+                    className={`medications-desktop-accordion-title medication-wrap ${
                         this.props.singleType && 'border-top'
                     }`}
                 >

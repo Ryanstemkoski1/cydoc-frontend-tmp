@@ -173,7 +173,7 @@ class RecreationalDrugs extends React.Component<Props, State> {
                             <div className='condition-name'>
                                 Are you interested in quitting?
                             </div>
-                            <div className='interested-in-quitting-buttons'>
+                            <div className='interested-in-quitting-buttons btn-wrapper'>
                                 {this.generateInterestedInQuittingButton(
                                     YesNoMaybeResponse.Yes
                                 )}
@@ -191,7 +191,7 @@ class RecreationalDrugs extends React.Component<Props, State> {
                             <div className='condition-name'>
                                 Have you tried to quit before?
                             </div>
-                            <div className='tried-to-quit-buttons'>
+                            <div className='tried-to-quit-buttons btn-wrapper'>
                                 {this.generateTriedQuittingButton(
                                     YesNoResponse.Yes
                                 )}
@@ -611,7 +611,7 @@ class RecreationalDrugs extends React.Component<Props, State> {
                 <Form className='family-hx-note-item'>
                     <Form.Group inline className='condition-header'>
                         <div className='condition-name'>Recreational Drugs</div>
-                        <div>
+                        <div className='btn-wrapper'>
                             {this.generateUsageButton(
                                 SubstanceUsageResponse.Yes
                             )}

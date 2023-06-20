@@ -122,7 +122,7 @@ export default class PatientHistoryContent extends Component {
                         }
                         value={index == 0 ? undefined : index - 1}
                     >
-                        Previous
+                        Prev
                         <Icon name='arrow left' />
                     </Button>
                     <Button
@@ -199,7 +199,7 @@ export default class PatientHistoryContent extends Component {
             return {
                 menuItem: name,
                 render: () => (
-                    <Tab.Pane>
+                    <Tab.Pane className='white-card'>
                         {tabDict[name]}
                         {buttons[index]}
                     </Tab.Pane>
@@ -237,6 +237,7 @@ export default class PatientHistoryContent extends Component {
                         >
                             {gridButtons}
                         </Grid>
+
                         <Segment>{tabToDisplay}</Segment>
                         {buttons[activeIndex]}
                     </Container>

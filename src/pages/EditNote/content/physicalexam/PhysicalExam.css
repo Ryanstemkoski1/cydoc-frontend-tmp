@@ -18,9 +18,31 @@
     font-size: 1.5rem !important;
     font-family: Nunito, Arial, Helvetica, sans-serif !important;
 }
-
-h5.ui.header {
-    font-family: Nunito, Arial, Helvetica, sans-serif !important;
+.active-tab-container .listing.dropdown-title.active {
+    border-left-color: #000;
+}
+.active-tab-container .listing.dropdown-title {
+    font-weight: 400 !important;
+    color: #000 !important;
+    padding: 8px 10px 8px 5px !important;
+} 
+.full-view-table table {
+    width: 100% !important; 
+}
+@media (max-width: 869px){
+    .physical-content label {
+        width: 100% !important;
+        margin-bottom: 10px !important;
+    }
+}
+@media (max-width: 500px){
+    .physical-content .labeled.input {
+        max-width: 100%;
+        width: 100% !important;
+    }
+}
+h5.ui.header{
+  font-family: Nunito,Arial,Helvetica,sans-serif !important;
 }
 
 .ui.icon.button.physical-previous-button,
@@ -30,7 +52,7 @@ h5.ui.header {
     opacity: 0.8;
     margin: 0;
     display: block;
-    font-size: 13px;
+    font-size: 18px;
     background: #006b87;
     color: white;
 }
@@ -73,6 +95,11 @@ h5.ui.header {
 body ::-webkit-scrollbar-thumb {
     background: transparent;
 }
+.bmi-text{
+    height: 38px;
+    display: flex;
+    align-items: center;
+}
 
 @media screen and (max-width: 700px) {
     .ui.container.active-tab-container {
@@ -88,9 +115,9 @@ body ::-webkit-scrollbar-thumb {
     max-width: 100px;
 }
 
-@media screen and (max-width: 1400px) {
-    .ui.icon.button.physical-previous-button,
-    .ui.icon.button.physical-next-button {
+@media screen and (max-width: 600px) {
+
+    .ui.icon.button.physical-previous-button, .ui.icon.button.physical-next-button {
         display: none;
     }
 

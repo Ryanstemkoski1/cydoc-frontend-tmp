@@ -1,0 +1,14 @@
+.input-column {
+    display: flex !important;
+    flex-direction: column;
+    line-height: 1.2;
+    justify-content: flex-end;
+}
+.input-column .survey-chips {
+    margin-top: 0;
+}
+@media (max-width: 767px){
+    .ui.grid>[class*="eight wide"].input-column.column.qa-div {
+        width: 100% !important;
+    }
+}

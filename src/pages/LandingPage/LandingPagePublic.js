@@ -113,7 +113,7 @@ class LandingPage extends Component {
                             size='large'
                             class='icons'
                         />
-                        <h3 className='text'>Create New Blank Note</h3>
+                        <h3 className='textt'>Create New Blank Note</h3>
                     </div>
                 )}
                 <div
@@ -121,7 +121,7 @@ class LandingPage extends Component {
                     onClick={() => this.handleEditNoteClick()}
                 >
                     <Icon name='file outline' size='large' class='icons' />
-                    <h3 className='text'>
+                    <h3 className='textt'>
                         {patientView
                             ? 'Click here to begin your visit'
                             : 'Return to Active Note'}
@@ -139,7 +139,7 @@ class LandingPage extends Component {
                         size='huge'
                         className='icons'
                     />
-                    <h3 className='text'>
+                    <h3 className='textt'>
                         {patientView
                             ? 'Click here to begin your visit'
                             : 'Create New Note'}

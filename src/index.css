@@ -22,8 +22,10 @@
     align-items: center;
     color: #147a9b;
     position: static;
-    padding-bottom: 25px;
+    padding-bottom: 45px;
     padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .ui.segment:hover {
