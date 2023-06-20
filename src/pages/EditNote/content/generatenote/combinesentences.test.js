@@ -37,17 +37,17 @@ test('combine regular sentences 5', () => {
         " The abdominal pain comes on every 60 minutes and radiates to the patient's ear, pelvis, upper arm, and hand."
     );
 });
-// test('combine regular sentences 6', () => {
-//     expect(
-//         compare(
-//             'The patient has traveled recently',
-//             'The patient has difficulty with falling asleep',
-//             2
-//         )
-//     ).toBe(
-//         ' The patient has traveled recently and has difficulty with falling asleep.'
-//     );
-// });
+test('combine regular sentences 6', () => {
+    expect(
+        compare(
+            'The patient has traveled recently',
+            'The patient has difficulty with falling asleep',
+            2
+        )
+    ).toBe(
+        ' The patient has traveled recently and difficulty with falling asleep.'
+    );
+});
 test('combine regular sentences 7', () => {
     expect(
         compare(
