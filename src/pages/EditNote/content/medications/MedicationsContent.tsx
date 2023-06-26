@@ -172,6 +172,7 @@ export class MedicationsContent extends Component<Props, State> {
                 for (let i = 0; i < values.length; i++) {
                     panels.push(
                         <MedicationsPanel
+                            key={`med-panel1-${i}`}
                             mobile={mobile}
                             isPreview={true}
                             previewValue={values[i]}
@@ -220,6 +221,7 @@ export class MedicationsContent extends Component<Props, State> {
                 )
                     panels.push(
                         <MedicationsPanel
+                            key={`med-panel2-${i}`}
                             isNote={isNote}
                             mobile={mobile}
                             isPreview={false}
