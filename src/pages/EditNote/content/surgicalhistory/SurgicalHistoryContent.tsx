@@ -131,7 +131,8 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         event:
             | React.FormEvent<HTMLTextAreaElement>
             | React.ChangeEvent<HTMLInputElement>
-            | React.SyntheticEvent,
+            | React.SyntheticEvent
+            | null,
         data: TextAreaProps | DropdownProps | InputOnChangeData
     ) {
         const { active } = this.state;
@@ -179,7 +180,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
     }
 
     handleAddition(
-        event: React.KeyboardEvent<HTMLElement>,
+        event: React.KeyboardEvent<HTMLElement> | React.SyntheticEvent | null,
         data: DropdownProps
     ) {
         const value = data.value as string;

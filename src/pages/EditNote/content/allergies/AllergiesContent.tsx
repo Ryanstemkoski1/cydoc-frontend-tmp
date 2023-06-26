@@ -87,7 +87,9 @@ class AllergiesContent extends Component<Props, OwnState> {
     handleTableBodyChange(
         _event:
             | React.FormEvent<HTMLTextAreaElement>
-            | React.ChangeEvent<HTMLInputElement>,
+            | React.ChangeEvent<HTMLInputElement>
+            | React.SyntheticEvent
+            | null,
         data: TextAreaProps | InputOnChangeData | DropdownProps
     ) {
         const { active } = this.state;

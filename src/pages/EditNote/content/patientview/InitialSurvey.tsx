@@ -227,7 +227,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         }
         if (
             this.state.activeItem == 0 &&
-            userSurveyState.graph['1'].some(
+            userSurveyState.graph['1']?.some(
                 (key) =>
                     userSurveyState.nodes[key].response == YesNoResponse.Yes
             )
