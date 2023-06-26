@@ -393,7 +393,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
 
     render() {
         const values = this.props.surgicalHistory;
-        let ind = Object.keys(values).length;
         let nums = Object.keys(values).filter(
             (key) =>
                 this.state.currSurgeries.includes(key) ||

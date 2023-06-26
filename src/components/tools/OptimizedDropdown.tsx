@@ -4,7 +4,6 @@ import {
     ActionMeta,
     GroupBase,
     MultiValue,
-    OnChangeValue,
     OptionsOrGroups,
     PropsValue,
     SingleValue,
@@ -29,11 +28,14 @@ const CustomOption = (props: {
     isFocused?: any;
     innerProps?: any;
 }) => {
-    const { innerProps } = props;
-    const newEditedProps = props;
-    delete newEditedProps.isFocused;
-    delete innerProps.onMouseMove;
-    delete innerProps.onMouseOver;
+    const { innerProps, ...newEditedProps } = props;
+
+    typeof newEditedProps.isFocused !== 'undefined' &&
+        delete newEditedProps.isFocused;
+    typeof innerProps.onMouseMove !== 'undefined' &&
+        delete innerProps.onMouseMove;
+    typeof innerProps.onMouseOver !== 'undefined' &&
+        delete innerProps.onMouseOver;
 
     const newProps = {
         innerProps,
@@ -99,7 +101,6 @@ const OptimizedDropdown = (props: {
     // Format onChange so that it has access to additional props similarly to
     // Semantic UI's Dropdowns
     const handleOnChange: (
-        // newValue: OnChangeValue<DropdownOption, true>,
         newValue: MultiValue<DropdownOption> | SingleValue<DropdownOption>,
         actionMeta?: ActionMeta<DropdownOption>
     ) => void = (newValue) => {
@@ -138,10 +139,12 @@ const OptimizedDropdown = (props: {
         const inputVal = { val }.val;
         if (inputVal !== '') {
             onAddItem(null, { ...otherProps, inputVal });
-            const newValue:
-                | MultiValue<DropdownOption>
-                | SingleValue<DropdownOption> = value;
-            handleOnChange({ value: newValue, label: inputVal });
+
+            handleOnChange({
+                value:
+                    typeof value === 'string' ? value : JSON.stringify(value),
+                label: inputVal,
+            });
         }
     };
     // When toggling between sections of note body, all options added by the
