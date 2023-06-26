@@ -29,13 +29,15 @@ const CustomOption = (props: {
     isFocused?: any;
     innerProps?: any;
 }) => {
-    // eslint-disable-next-line no-unused-vars
-    const { isFocused, innerProps, ...otherProps } = props;
-    // eslint-disable-next-line no-unused-vars
-    const { onMouseMove, onMouseOver, ...otherInnerProps } = innerProps;
+    const { innerProps } = props;
+    const newEditedProps = props;
+    delete newEditedProps.isFocused;
+    delete innerProps.onMouseMove;
+    delete innerProps.onMouseOver;
+
     const newProps = {
-        innerProps: { ...otherInnerProps },
-        ...otherProps,
+        innerProps,
+        ...newEditedProps,
     };
 
     return (

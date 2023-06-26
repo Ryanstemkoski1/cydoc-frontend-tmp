@@ -409,7 +409,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             surgicalHistory,
         } = this.props;
         if (responseType == ResponseTypes.PSH_POP && responseChoice && node) {
-            ind = -1;
             nums = responseChoice.map((procedureName) => {
                 const key = Object.keys(surgicalHistory).find(
                     (entry) => surgicalHistory[entry].procedure == procedureName
@@ -426,7 +425,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         }
         if (responseType == ResponseTypes.PSH_BLANK && responseChoice) {
             nums = responseChoice;
-            ind = -2;
         }
 
         const content = (
