@@ -49,7 +49,6 @@ interface State {
     windowWidth: number;
     windowHeight: number;
     currMeds: string[];
-    hpi: HpiState;
 }
 
 export enum DropdownType {
@@ -74,7 +73,6 @@ export class MedicationsContent extends Component<Props, State> {
                     this.props.medications[med].isCurrentlyTaking ==
                         YesNoResponse.Yes
             ),
-            hpi: this.props.hpi,
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
@@ -86,16 +84,6 @@ export class MedicationsContent extends Component<Props, State> {
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    componentDidUpdate(prevProps: Props) {
-        if (prevProps.hpi !== this.props.hpi) {
-            this.setState({ hpi: this.props.hpi });
-        }
-    }
-
-    getDerivedStateFromProps(nextProps: Props) {
-        this.setState({ hpi: nextProps.hpi });
     }
 
     updateDimensions() {
@@ -172,6 +160,7 @@ export class MedicationsContent extends Component<Props, State> {
                 for (let i = 0; i < values.length; i++) {
                     panels.push(
                         <MedicationsPanel
+                            key={`med-panel1-${i}`}
                             mobile={mobile}
                             isPreview={true}
                             previewValue={values[i]}
@@ -220,6 +209,7 @@ export class MedicationsContent extends Component<Props, State> {
                 )
                     panels.push(
                         <MedicationsPanel
+                            key={`med-panel2-${i}`}
                             isNote={isNote}
                             mobile={mobile}
                             isPreview={false}

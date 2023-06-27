@@ -87,7 +87,9 @@ class AllergiesContent extends Component<Props, OwnState> {
     handleTableBodyChange(
         _event:
             | React.FormEvent<HTMLTextAreaElement>
-            | React.ChangeEvent<HTMLInputElement>,
+            | React.ChangeEvent<HTMLInputElement>
+            | React.SyntheticEvent
+            | null,
         data: TextAreaProps | InputOnChangeData | DropdownProps
     ) {
         const { active } = this.state;
@@ -163,13 +165,13 @@ class AllergiesContent extends Component<Props, OwnState> {
 
     onAddItem = (_e: any, data: { [key: string]: any }) => {
         const { value } = data;
-        this.setState((state, _props) => ({
+        this.setState((state /* , _props */) => ({
             allergensOptions: {
                 ...state.allergensOptions,
                 [value]: { value, label: value },
             },
         }));
-        this.setState((state, _props) => ({
+        this.setState((state /* , _props */) => ({
             allergicReactionsOptions: {
                 ...state.allergicReactionsOptions,
                 [value]: { value, label: value },

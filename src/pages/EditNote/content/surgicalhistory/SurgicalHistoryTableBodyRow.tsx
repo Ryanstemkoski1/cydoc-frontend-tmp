@@ -60,7 +60,7 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
     };
 
     handleProcedureChange = (
-        event: React.SyntheticEvent,
+        event: React.SyntheticEvent | null,
         data: DropdownProps
     ) => {
         this.props.onTableBodyChange(event, data);
@@ -271,11 +271,15 @@ interface RowProps {
         event:
             | React.FormEvent<HTMLTextAreaElement>
             | React.ChangeEvent<HTMLInputElement>
-            | React.SyntheticEvent,
+            | React.SyntheticEvent
+            | null,
         data: TextAreaProps | DropdownProps | InputOnChangeData
     ) => void;
     onAddItem: (
-        event: React.KeyboardEvent<HTMLElement>,
+        event:
+            | React.KeyboardEvent<HTMLElement>
+            | React.SyntheticEvent<Element, Event>
+            | null,
         data: DropdownProps
     ) => void;
     deleteRow: (index: string) => void;

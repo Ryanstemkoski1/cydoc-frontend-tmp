@@ -134,7 +134,10 @@ interface AllergiesProps {
 interface RowProps {
     fields: (keyof AllergiesItem)[];
     onTableBodyChange: (
-        event: React.FormEvent<HTMLTextAreaElement>,
+        event:
+            | React.FormEvent<HTMLTextAreaElement>
+            | React.SyntheticEvent
+            | null,
         data: TextAreaProps
     ) => void;
     rowIndex: keyof AllergiesElements;

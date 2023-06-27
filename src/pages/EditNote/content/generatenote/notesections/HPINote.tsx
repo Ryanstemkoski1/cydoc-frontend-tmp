@@ -206,7 +206,7 @@ export const extractNode = (
                     (acc: string[], [key, value]) => {
                         if (
                             (typeof value === 'boolean' && value) ||
-                            Object.entries(value).some(([_k, v]) => v)
+                            Object.entries(value)?.some(([_k, v]) => v)
                         )
                             acc.push(key);
                         return acc;
