@@ -45,12 +45,12 @@ Before submitting a PR, `npm run lint` should output the following:
 
 # Hiding Semantic css build changes
 
-Currently running a build creates uncommitted changes in the semantic build directory. You can prevent git from tracking these changes by running these two commands:
+Currently running a build creates uncommitted changes in the semantic build directory. You can prevent git from tracking these changes by running the git ignore script with:
 
 ```
-git update-index --skip-worktree src/semantic/dist/components/*.css
-git update-index --skip-worktree src/semantic/dist/*.css
+npm run "ignore-semantic-changes
 ```
+It is run automatically when semantic is built or the dev server is started (`npm start`)
 
 # Testing with Jest and Enzyme
 
