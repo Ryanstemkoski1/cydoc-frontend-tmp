@@ -384,6 +384,14 @@ export function hpiReducer(
             else throw new Error('Not a number input response');
         }
 
+        case HPI_ACTION.HANDLE_YEAR_INPUT_CHANGE: {
+            // Updates year input response
+            const { medId, input } = action.payload;
+            if (state.nodes[medId].responseType === ResponseTypes.YEAR)
+                return updateResponse(medId, input, state);
+            else throw new Error('Not a year input response');
+        }
+
         case HPI_ACTION.LIST_TEXT_HANDLE_CHANGE: {
             /* 
             updates list input response using unique ids corresponding 
