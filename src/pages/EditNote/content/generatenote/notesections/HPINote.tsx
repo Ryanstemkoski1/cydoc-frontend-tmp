@@ -170,25 +170,35 @@ export const extractNode = (
     /* eslint-disable no-case-declarations, no-fallthrough */
 
     if (
-        (node.responseType === ResponseTypes.YES_NO && node.response == YesNoResponse.Yes) ||
-        (node.responseType === ResponseTypes.NO_YES && node.response === YesNoResponse.No)
+        (node.responseType === ResponseTypes.YES_NO &&
+            node.response == YesNoResponse.Yes) ||
+        (node.responseType === ResponseTypes.NO_YES &&
+            node.response === YesNoResponse.No)
     ) {
         const childNode = state.hpi.nodes[state.hpi.graph[node.medID][0]];
         const responseTypes = [
-            'MEDS-BLANK', 'MEDS-POP', 
-            'FH-POP', 'FH-BLANK', 
-            'PMH-POP', 'PMH-BLANK', 
-            'PSH-BLANK', 'PSH-POP'
+            'MEDS-BLANK',
+            'MEDS-POP',
+            'FH-POP',
+            'FH-BLANK',
+            'PMH-POP',
+            'PMH-BLANK',
+            'PSH-BLANK',
+            'PSH-POP',
         ];
-        console.log(responseTypes.includes(childNode.responseType) && childNode.response === true)
-        if (responseTypes.includes(childNode.responseType) && childNode.response === true) {
+
+        if (
+            responseTypes.includes(childNode.responseType) &&
+            Array.isArray(childNode.response) &&
+            childNode.response.length !== 0
+        ) {
             return ['', '', ''];
         }
     }
 
     if (
         node.responseType === ResponseTypes.NO_YES ||
-        node.responseType === ResponseTypes.YES_NO 
+        node.responseType === ResponseTypes.YES_NO
     ) {
         return node.response === YesNoResponse.Yes
             ? [node.blankYes, '', '']
