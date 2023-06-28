@@ -4,7 +4,9 @@ import './Account.css';
 import { Button } from 'semantic-ui-react';
 import useEnableNext from './useEnableNext';
 import { Box } from '@mui/system';
-import { Divider } from '@mui/material';
+import { Divider, Step, StepLabel, Stepper } from '@mui/material';
+
+const steps = ['User info', 'Institution', 'Payment', 'Terms', 'Privacy'];
 
 interface Props {
     step: number;
@@ -24,6 +26,73 @@ export function NextBackButtonGroup({
         <Box>
             <Divider />
             <Box
+                sx={{
+                    margin: '1.5rem',
+                }}
+            >
+                <Stepper
+                    color='teal'
+                    activeStep={step}
+                    sx={{
+                        marginBottom: '1.5rem',
+                        '& .MuiStepLabel-root .Mui-completed': {
+                            color: 'teal', // circle color (COMPLETED)
+                        },
+                        '& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel':
+                            {
+                                color: 'common.white', // Just text label (COMPLETED)
+                            },
+                        '& .MuiStepLabel-root .Mui-active': {
+                            color: 'teal', // circle color (ACTIVE)
+                        },
+                        '& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel':
+                            {
+                                color: 'common.white', // Just text label (ACTIVE)
+                            },
+                        '& .MuiStepLabel-root .Mui-active .MuiStepIcon-text': {
+                            fill: 'common.white', // circle's number (ACTIVE)
+                        },
+                    }}
+                >
+                    {steps.map((label, index) => (
+                        <Step color='teal' key={label}>
+                            <StepLabel>{label}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                    }}
+                >
+                    <Button
+                        basic
+                        color='teal'
+                        content='Cancel'
+                        type='button'
+                        onClick={onClose}
+                    />
+                    <Box sx={{ flex: '1 1 auto' }} />
+                    {step > 0 ? (
+                        <Button
+                            basic
+                            color='teal'
+                            content='Prev'
+                            type='button'
+                            onClick={onPrevClick}
+                        />
+                    ) : null}
+
+                    <Button
+                        disabled={!enableNext}
+                        color='teal'
+                        content='Next'
+                        onClick={onNextClick}
+                    />
+                </Box>
+            </Box>
+            {/* <Box
                 sx={{
                     display: 'flex',
                     justifyContent: 'flex-end',
@@ -52,7 +121,7 @@ export function NextBackButtonGroup({
                     content='Next'
                     onClick={onNextClick}
                 />
-            </Box>
+            </Box> */}
         </Box>
     );
 }
