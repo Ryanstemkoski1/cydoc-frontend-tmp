@@ -89,6 +89,10 @@ const validationSchema = Yup.object<SignUpFormData>({
             message: 'Password must meet requirements',
             exclusive: false,
         }),
+    institutionName: Yup.string()
+        .label('institutionName')
+        .required('Institution Name is required')
+        .min(1, 'Institution Name is required'),
 });
 
 export const useSignUpFormController = (

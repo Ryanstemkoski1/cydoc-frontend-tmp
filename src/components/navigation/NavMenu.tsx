@@ -23,7 +23,6 @@ import {
     UpdateActiveItemAction,
 } from 'redux/actions/activeItemActions';
 import { YesNoResponse } from 'constants/enums';
-import SignUpModal from 'pages/Account/SignUpModal';
 import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
 import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
