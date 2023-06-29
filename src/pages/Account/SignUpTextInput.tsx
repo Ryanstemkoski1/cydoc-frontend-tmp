@@ -1,10 +1,11 @@
 import React, { memo, useMemo } from 'react';
 import { FastField, useField, useFormikContext } from 'formik';
-import { Box, TextField, TextFieldProps } from '@mui/material';
+import { TextField, TextFieldProps } from '@mui/material';
 import InputMask from 'react-input-mask';
+import { SignUpFormData } from './SignUpForm';
 
 interface Props {
-    fieldName: string;
+    fieldName: keyof SignUpFormData;
     label?: string;
     placeholder?: string;
     type?: string;
@@ -51,9 +52,10 @@ function SignUpTextInput({
                             field.value !== newValue &&
                             newValue !== undefined
                         ) {
+                            helpers.setTouched(true, true);
                             helpers.setError('');
                             helpers.setValue(newValue, false);
-                            setTimeout(() => validateField(fieldName), 5);
+                            setTimeout(() => validateField(fieldName), 1);
                         }
                     }}
                     variant='outlined'

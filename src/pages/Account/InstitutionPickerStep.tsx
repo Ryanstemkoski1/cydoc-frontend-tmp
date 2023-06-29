@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './Account.css';
-import { Box, Stack } from '@mui/system';
+import { Stack } from '@mui/system';
 import ModalHeader from './ModalHeader';
 import SignUpTextInput from './SignUpTextInput';
 

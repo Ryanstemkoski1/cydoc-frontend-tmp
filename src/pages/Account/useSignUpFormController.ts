@@ -102,6 +102,7 @@ export const useSignUpFormController = (
 ) => {
     const form = useFormik({
         enableReinitialize: true,
+        validateOnChange: true,
         initialValues,
         onSubmit: async (formUserData, actions) => {
             invariant(cognitoUser, 'missing logged in user');

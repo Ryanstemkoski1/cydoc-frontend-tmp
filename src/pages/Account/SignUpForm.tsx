@@ -203,7 +203,7 @@ export default function SignUpForm({
 
     return (
         <FormikProvider value={form}>
-            <Form style={{ height: '100%' }}>
+            <Form>
                 <Modal
                     dimmer='inverted'
                     size='small'
