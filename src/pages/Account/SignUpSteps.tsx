@@ -4,6 +4,13 @@ import { PrivacyPolicyStep } from './PrivacyPolicyStep';
 import { AddPaymentStep } from './AddPaymentStep';
 import { TermsStep } from './TermsStep';
 import { InstitutionPickerStep } from './InstitutionPickerStep';
+import { log } from 'modules/logging';
+
+export const USER_INFO_STEP = 0;
+export const INSTITUTION_STEP = 1;
+export const PAYMENT_STEP = 2;
+export const TERMS_STEP = 3;
+export const PRIVACY_STEP = 4;
 
 export interface StepProps {
     step: number;
@@ -16,22 +23,23 @@ export default function SignUpSteps(props: StepProps) {
     const { step } = props;
 
     switch (step) {
-        case 0:
+        case USER_INFO_STEP:
             stepContent = <UserInfoStep />;
             break;
-        case 1:
+        case INSTITUTION_STEP:
             stepContent = <InstitutionPickerStep />;
             break;
-        case 2:
+        case PAYMENT_STEP:
             stepContent = <AddPaymentStep />;
             break;
-        case 3:
+        case TERMS_STEP:
             stepContent = <TermsStep />;
             break;
-        case 4:
+        case PRIVACY_STEP:
             stepContent = <PrivacyPolicyStep />;
             break;
         default:
+            log(`Invalid SignUp step reached: ${step}`);
             break;
     }
 

@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import './Account.css';
 import { Button } from 'semantic-ui-react';
 import useEnableNext from './useEnableNext';
 import { Box } from '@mui/system';
 import { Divider, Step, StepLabel, Stepper } from '@mui/material';
+import { useValidatePaymentMethod } from 'hooks/useValidatePaymentMethod';
+import { useFormikContext } from 'formik';
+import { PAYMENT_STEP } from './SignUpSteps';
 
 const steps = ['User info', 'Institution', 'Payment', 'Terms', 'Privacy'];
 
@@ -21,6 +24,19 @@ export function NextBackButtonGroup({
     onPrevClick,
 }: Props) {
     const enableNext = useEnableNext(step);
+    const { createStripePaymentMethod } = useValidatePaymentMethod();
+    const { isSubmitting } = useFormikContext();
+
+    const onPaymentStep = step === PAYMENT_STEP;
+
+    const submitPaymentThenNext = async () => {
+        // Submit payment & verify success
+        if (await createStripePaymentMethod()) {
+            // if success, go to next step
+            onNextClick();
+        }
+        // if failed, error will show in formik errors
+    };
 
     return (
         <Box>
@@ -87,8 +103,11 @@ export function NextBackButtonGroup({
                     <Button
                         disabled={!enableNext}
                         color='teal'
-                        content='Next'
-                        onClick={onNextClick}
+                        loading={isSubmitting}
+                        content={onPaymentStep ? 'Submit' : 'Next'}
+                        onClick={
+                            onPaymentStep ? submitPaymentThenNext : onNextClick
+                        }
                     />
                 </Box>
             </Box>

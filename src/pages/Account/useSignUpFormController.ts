@@ -93,6 +93,7 @@ const validationSchema = Yup.object<SignUpFormData>({
         .label('institutionName')
         .required('Institution Name is required')
         .min(1, 'Institution Name is required'),
+    paymentMethod: Yup.object().label('paymentMethod'),
 });
 
 export const useSignUpFormController = (
