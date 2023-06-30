@@ -5,7 +5,7 @@ import { Divider, Form, Grid, Input, Dropdown } from 'semantic-ui-react';
 import tobaccoProducts, {
     TobaccoProduct,
 } from 'constants/SocialHistory/tobaccoProducts';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import { selectTobaccoState } from 'redux/selectors/socialHistorySelectors';
 import {
     updateTobaccoUsage,

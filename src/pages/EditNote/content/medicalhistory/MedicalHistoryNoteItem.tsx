@@ -5,7 +5,7 @@ import {
     ButtonProps,
     Button,
 } from 'semantic-ui-react';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import React, { Component } from 'react';
 import '../familyhistory/FamilyHistory.css';
 import { connect } from 'react-redux';

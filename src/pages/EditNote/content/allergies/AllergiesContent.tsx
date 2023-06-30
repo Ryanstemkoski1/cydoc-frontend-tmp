@@ -36,7 +36,7 @@ import {
 } from 'redux/selectors/allergiesSelectors';
 import './table.css';
 import { OptionMapping } from '_processOptions';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import { questionContainer, questionTextStyle } from './styles';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 
