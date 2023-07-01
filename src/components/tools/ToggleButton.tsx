@@ -60,12 +60,14 @@ export default function ToggleButton<T = string>(props: ButtonProps<T>) {
         padding: '.4rem 1.2rem .4rem 1.2rem',
     };
 
+    // extra props for testing & node identification
+    const extraProps = { condition };
+
     return (
         <Button
-            // condition={condition}
-            // active={active}
-            onClick={(e) => onToggleButtonClick(e, propsWithCondition)}
             title={title}
+            {...extraProps}
+            onClick={(e) => onToggleButtonClick(e, propsWithCondition)}
             disabled={disabled}
             aria-label={ariaLabel}
             style={semanticButtonStyles}
