@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import './Account.css';
 import { Button } from 'semantic-ui-react';
@@ -7,7 +7,7 @@ import { Box } from '@mui/system';
 import { Divider, Step, StepLabel, Stepper } from '@mui/material';
 import { useValidatePaymentMethod } from 'hooks/useValidatePaymentMethod';
 import { useFormikContext } from 'formik';
-import { PAYMENT_STEP } from './SignUpSteps';
+import { PAYMENT_STEP, PRIVACY_STEP } from './SignUpSteps';
 
 const steps = ['User info', 'Institution', 'Payment', 'Terms', 'Privacy'];
 
@@ -25,18 +25,43 @@ export function NextBackButtonGroup({
 }: Props) {
     const enableNext = useEnableNext(step);
     const { createStripePaymentMethod } = useValidatePaymentMethod();
-    const { isSubmitting } = useFormikContext();
+    const { isSubmitting, submitForm } = useFormikContext();
 
     const onPaymentStep = step === PAYMENT_STEP;
+    const onLastStep = step === PRIVACY_STEP;
 
-    const submitPaymentThenNext = async () => {
-        // Submit payment & verify success
-        if (await createStripePaymentMethod()) {
-            // if success, go to next step
-            onNextClick();
+    // Some props for NextButton change depending on which step you're on
+    const nextButtonProps: {
+        onClick: () => Promise<unknown> | void;
+        content: string;
+    } = useMemo(() => {
+        if (onPaymentStep) {
+            return {
+                content: 'Submit',
+                onClick: async () =>
+                    (await createStripePaymentMethod()) && onNextClick(),
+                // Submit payment & verify success
+                // if success, go to next step
+                // if failed, error will show in formik errors
+            };
+        } else if (onLastStep) {
+            return {
+                content: 'Create Account',
+                onClick: submitForm,
+            };
+        } else {
+            return {
+                content: 'Next',
+                onClick: onNextClick,
+            };
         }
-        // if failed, error will show in formik errors
-    };
+    }, [
+        createStripePaymentMethod,
+        onLastStep,
+        onNextClick,
+        onPaymentStep,
+        submitForm,
+    ]);
 
     return (
         <Box>
@@ -104,10 +129,7 @@ export function NextBackButtonGroup({
                         disabled={!enableNext}
                         color='teal'
                         loading={isSubmitting}
-                        content={onPaymentStep ? 'Submit' : 'Next'}
-                        onClick={
-                            onPaymentStep ? submitPaymentThenNext : onNextClick
-                        }
+                        {...nextButtonProps}
                     />
                 </Box>
             </Box>

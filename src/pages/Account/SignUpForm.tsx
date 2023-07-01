@@ -19,7 +19,6 @@ export interface SignUpFormData extends ClinicianSignUpData {
 const initialValues: SignUpFormData = {
     isTermsChecked: false,
     isPrivacyChecked: false,
-    username: '',
     role: 'manager',
     email: '',
     confirmEmail: '',
