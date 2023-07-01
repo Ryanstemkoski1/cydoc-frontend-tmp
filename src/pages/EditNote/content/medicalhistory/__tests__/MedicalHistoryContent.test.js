@@ -4,7 +4,6 @@ import Adapter from '@cfaester/enzyme-adapter-react-18';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import MedicalHistoryContent from '../MedicalHistoryContent.tsx';
-import Button from '@mui/material/Button';
 import { MEDICAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
 // import AddRowButton from 'components/tools/AddRowButton';
 // import GridContent from 'components/tools/GridContent';
@@ -248,7 +247,7 @@ describe('MedicalHistoryContent', () => {
 
     test('toggling condition button dispatches correct action', () => {
         const { store, wrapper } = connectStore();
-        let togglebutton = wrapper
+        wrapper
             .find(MedicalHistoryNoteRow)
             .find('button[title="Yes"]')
             .at(0)
