@@ -45,9 +45,7 @@
     "scripts": {
         "build-semantic": "npm run ignore-semantic-changes && cd src/semantic && gulp build-css build-assets",
         "watch-semantic": "npm run ignore-semantic-changes && cd src/semantic && npm run build-semantic && gulp watch",
-        "ignore-semantic-changes": "if [[ $(uname) == MING* ]]; then npm run ignore-semantic-changes-windows; else npm run ignore-semantic-changes-unix; fi",
-        "ignore-semantic-changes-windows": "chmod +x .\\ignore-semantic-changes.sh && .\\ignore-semantic-changes.sh",
-        "ignore-semantic-changes-unix": "chmod +x ./ignore-semantic-changes.sh && ./ignore-semantic-changes.sh",
+        "ignore-semantic-changes": "chmod +x ./ignore-semantic-changes.sh && ./ignore-semantic-changes.sh",
         "start": "npm run build-semantic && react-scripts start",
         "build": "npm run build-semantic && react-scripts build",
         "prettify": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
