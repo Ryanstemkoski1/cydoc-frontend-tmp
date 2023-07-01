@@ -35,10 +35,10 @@ import * as Yup from 'yup';
 import { CognitoUser } from 'amazon-cognito-identity-js';
 
 const validationSchema = Yup.object({
-    username: Yup.string()
-        .label('Username')
+    email: Yup.string()
+        .label('Email')
         .trim()
-        .required('Username is required')
+        .required('Email is required')
         .min(1),
     password: Yup.string()
         .label('Password')
@@ -56,17 +56,15 @@ const Login = () => {
     // TODO: put cognito user into hook
     const [cognitoUser, setCognitoUser] = useState<null | CognitoUser>(null);
 
-    // const [username, setUsername] = useState('');
-    // const [password, setPassword] = useState('');
     const [isLoggingIn, setIsLoggingIn] = useState(false);
 
     const handleSubmit = useCallback(
         async ({
-            username,
+            email,
             password,
             role,
         }: {
-            username: string;
+            email: string;
             password: string;
             role: string;
         }) => {
@@ -80,7 +78,7 @@ const Login = () => {
             // log user in
             setIsLoggingIn(true);
             const loginResponse = await GetLogin(
-                username,
+                email,
                 password,
                 role,
                 context
@@ -131,7 +129,7 @@ const Login = () => {
                 />
                 <Formik
                     initialValues={{
-                        username: '',
+                        email: '',
                         password: '',
                         role: 'manager',
                     }}
@@ -167,12 +165,12 @@ const Login = () => {
                                         content='Login'
                                     />
                                     <Field
-                                        name='username'
+                                        name='email'
                                         margin='normal'
                                         required
                                         fullWidth
-                                        label='Username'
-                                        id='username'
+                                        label='Email'
+                                        id='email'
                                         type='input'
                                         as={TextField}
                                         variant='outlined'

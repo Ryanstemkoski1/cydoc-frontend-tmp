@@ -76,14 +76,6 @@ export function UserInfoStep() {
                             placeholder='Doe'
                         />
                     </Grid>
-                    <Grid item xs={12}>
-                        <SignUpTextInput
-                            label='Username'
-                            fieldName='username'
-                            placeholder='username'
-                            // height: min-content;
-                        />
-                    </Grid>
                     <Grid item xs={12} md={6}>
                         <SignUpTextInput
                             label='Email'

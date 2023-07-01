@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/react';
 import pkgInfo from '../../package.json';
 
 import { APP_ENV } from './environment';
-import { DynamoDbUser } from 'types/users';
+import { DbUser } from 'types/users';
 
 const SENTRY_ENABLED = process.env.NODE_ENV === 'production';
 
@@ -49,7 +49,7 @@ export function logError(error: Error) {
         console.error(error);
     }
 }
-export function setSentryUser(user: DynamoDbUser | null) {
+export function setSentryUser(user: DbUser | null) {
     if (SENTRY_ENABLED) {
         const sentryUser: Sentry.User | null = user
             ? {

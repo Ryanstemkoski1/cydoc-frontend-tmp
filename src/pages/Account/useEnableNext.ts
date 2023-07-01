@@ -11,7 +11,7 @@ import {
 } from './SignUpSteps';
 
 const userInfoFields: (keyof SignUpFormData)[] = [
-    'username',
+    'email',
     'firstName',
     'lastName',
     'email',

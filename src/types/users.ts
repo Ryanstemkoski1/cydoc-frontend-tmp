@@ -1,6 +1,6 @@
 export type ApiEditUserBase = Pick<
-    DynamoDbUser,
-    'username' | 'phoneNumber' | 'email' | 'firstName' | 'lastName'
+    DbUser,
+    'phoneNumber' | 'email' | 'firstName' | 'lastName'
 >;
 
 export interface ApiEditManager extends ApiEditUserBase {
@@ -8,7 +8,7 @@ export interface ApiEditManager extends ApiEditUserBase {
     joinedDoctors: Manager['joinedDoctors'];
 }
 
-export interface DynamoDbUser {
+export interface DbUser {
     username: string;
     firstName: string;
     lastName: string;
@@ -16,19 +16,17 @@ export interface DynamoDbUser {
     phoneNumber: string;
     institutionId?: string;
     role: 'manager' | 'clinician';
-    'custom:UUID'?: string;
-    'custom:associatedManager'?: string;
 }
 
-export interface Manager extends DynamoDbUser {
+export interface Manager extends DbUser {
     associatedDoctors: string[];
     joinedDoctors: string[];
 }
-export interface Doctor extends DynamoDbUser {
+export interface Doctor extends DbUser {
     joinedManager: string;
 }
 
-export interface ClinicianSignUpData extends DynamoDbUser {
+export interface ClinicianSignUpData extends DbUser {
     newPassword: string;
     confirmNewPassword: string;
     confirmEmail: string;

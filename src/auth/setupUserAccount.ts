@@ -13,10 +13,9 @@ const setupUserAccount = async (
     attributes: UserAttributes | null, // null when new users sign up
     newUserInfo: ClinicianSignUpData
 ) => {
-    const { firstName, username, lastName, phoneNumber } = newUserInfo;
+    const { firstName, lastName, phoneNumber } = newUserInfo;
     const { email } = attributes || newUserInfo;
     const user: ApiEditUserBase = {
-        username,
         phoneNumber,
         email,
         firstName,
