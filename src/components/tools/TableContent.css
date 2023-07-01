@@ -1,17 +1,17 @@
 .ui.input > input::-webkit-input-placeholder {
-    color: #DDDDDD;
+    color: #dddddd;
 }
 
 .ui.input > input::-moz-placeholder {
-    color: #DDDDDD;
+    color: #dddddd;
 }
 
 .ui.input > input:-ms-input-placeholder {
-    color: #DDDDDD;
+    color: #dddddd;
 }
 
 .ui.input.content-input {
-    margin: .75rem 1rem 0 1.5rem;
+    margin: 0.75rem 1rem 0 1.5rem;
     letter-spacing: 0;
 }
 
@@ -37,7 +37,7 @@
 }
 
 .ui.styled.accordion .active.title {
-    border-bottom: 1px solid rgba(34, 36, 38, .05);
+    border-bottom: 1px solid rgba(34, 36, 38, 0.05);
 }
 
 .inline-form {
@@ -76,7 +76,7 @@
 }
 
 .ui.multiple.search.dropdown.side-effects > input.search {
-    margin-left: -.4rem;
+    margin-left: -0.4rem;
 }
 
 .ui.dropdown.condition-input {
@@ -93,7 +93,7 @@
     position: relative;
     display: inline-block;
 }
-  
+
 .table-year-input .error {
     width: 12.5rem;
     background-color: #9f3a38;
@@ -110,7 +110,7 @@
 }
 
 .table-year-input .error::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 100%;
     left: 25%;

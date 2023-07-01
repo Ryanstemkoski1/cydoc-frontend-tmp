@@ -8,36 +8,36 @@
 }
 
 .ui.selection .dropdown.icon.clear::before {
-  content: "\f00d";
+    content: '\f00d';
 }
 
 #row {
-  border: none !important;
-  border-width: 0 !important;
-  border-color: transparent !important;
+    border: none !important;
+    border-width: 0 !important;
+    border-color: transparent !important;
 }
 
 #add-row {
-  width: 50%;
-  padding: 10px;
-  margin-left: 10px;
+    width: 50%;
+    padding: 10px;
+    margin-left: 10px;
 }
 
 #width-full {
-  width: 75%;
+    width: 75%;
 }
 
 #procedure-div {
-  width: 100%;
-  margin: auto;
+    width: 100%;
+    margin: auto;
 }
 
 #table-rows {
-  padding: 10px;
+    padding: 10px;
 }
 
-.delete-surgery{
-  position: relative;
-  top: 50%;
-  left: 50%;
+.delete-surgery {
+    position: relative;
+    top: 50%;
+    left: 50%;
 }

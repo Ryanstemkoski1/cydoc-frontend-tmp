@@ -45,12 +45,8 @@ const RELATIONSHIP_TO_PARENT = [
 ];
 
 const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
-    const {
-        userInfo,
-        isUserInfoValid,
-        updateUserInfo,
-        validateUserInfo,
-    } = props;
+    const { userInfo, isUserInfoValid, updateUserInfo, validateUserInfo } =
+        props;
 
     const [message, setMessage] = useState('');
 

@@ -59,12 +59,9 @@ const drugNames = [
     { key: 'Acetaminophen', value: 'Acetaminophen', text: 'Acetaminophen' },
     { key: 'Citalopram', value: 'Citalopram', text: 'Citalopram' },
     {
-        key:
-            'Dextroamphetamine; Dextroamphetamine Saccharate; Amphetamine; Amphetamine Aspartate',
-        value:
-            'Dextroamphetamine; Dextroamphetamine Saccharate; Amphetamine; Amphetamine Aspartate',
-        text:
-            'Dextroamphetamine; Dextroamphetamine Saccharate; Amphetamine; Amphetamine Aspartate',
+        key: 'Dextroamphetamine; Dextroamphetamine Saccharate; Amphetamine; Amphetamine Aspartate',
+        value: 'Dextroamphetamine; Dextroamphetamine Saccharate; Amphetamine; Amphetamine Aspartate',
+        text: 'Dextroamphetamine; Dextroamphetamine Saccharate; Amphetamine; Amphetamine Aspartate',
     },
     { key: 'Ibuprofen', value: 'Ibuprofen', text: 'Ibuprofen' },
     { key: 'Carvedilol', value: 'Carvedilol', text: 'Carvedilol' },

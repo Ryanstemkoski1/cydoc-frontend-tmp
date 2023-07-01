@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import ReviewOfSystemsContent from '../ReviewOfSystemsContent';
 import ReviewOfSystemsCategory from '../ReviewOfSystemsCategory';
 import configureStore from 'redux-mock-store';
@@ -9,7 +9,7 @@ import { initialStore } from '../utils';
 import { Provider } from 'react-redux';
 // import Masonry from 'react-masonry-css';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const initialState = {
     patientView: true,
