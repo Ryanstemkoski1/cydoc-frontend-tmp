@@ -44,7 +44,7 @@ import {
 } from 'redux/actions/hpiActions';
 import './SurgicalHistoryContent.css';
 import { YesNoResponse } from 'constants/enums';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import { questionContainer, questionTextStyle } from './styles';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 

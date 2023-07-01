@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import HPIContext from 'contexts/HPIContext.js';
 
 export default class FamilyHistoryCauseofDeath extends Component {

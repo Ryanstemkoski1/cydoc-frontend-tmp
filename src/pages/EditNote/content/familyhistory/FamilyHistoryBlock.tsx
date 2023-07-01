@@ -1,5 +1,5 @@
 import GridContent from 'components/tools/GridContent.js';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton, { ButtonProps } from 'components/tools/ToggleButton';
 import { YesNoResponse } from 'constants/enums';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
@@ -23,14 +23,7 @@ import {
     selectFamilyHistoryConditions,
     selectFamilyHistoryState,
 } from 'redux/selectors/familyHistorySelectors';
-import {
-    Button,
-    ButtonProps,
-    Divider,
-    Form,
-    Grid,
-    Header,
-} from 'semantic-ui-react';
+import { Button, Divider, Form, Grid, Header } from 'semantic-ui-react';
 import '../hpi/knowledgegraph/src/css/Button.css';
 import '../reviewofsystems/ReviewOfSystems.css';
 import './FamilyHistory.css';
@@ -51,7 +44,7 @@ class FamilyHistoryBlock extends Component<Props> {
     handleToggleButtonClick(event: React.MouseEvent, data: ButtonProps) {
         this.props.toggleConditionOption(
             this.props.index,
-            data.title.toUpperCase()
+            data.title.toUpperCase() as YesNoResponse
         );
     }
     /* eslint-disable-next-line */

@@ -12,7 +12,7 @@ import {
 import React, { Component, Fragment } from 'react';
 import HPIContext from 'contexts/HPIContext.js';
 import { familyOptions, FamilyOption } from 'constants/familyHistoryRelations';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import './FamilyHistory.css';
 import { connect } from 'react-redux';
 import {

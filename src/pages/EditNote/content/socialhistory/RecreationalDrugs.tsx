@@ -16,7 +16,7 @@ import { DrugName, drugNames } from 'constants/SocialHistory/drugNames';
 import modesOfDelivery, {
     ModeOfDelivery,
 } from 'constants/SocialHistory/modesOfDelivery';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import AddRowButton from 'components/tools/AddRowButton';
 import '../familyhistory/FamilyHistory.css';
 import {

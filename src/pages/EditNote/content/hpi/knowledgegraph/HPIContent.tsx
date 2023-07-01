@@ -327,7 +327,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                     menuItem: string,
                                                     index: number
                                                 ) => (
-                                                    <ToggleButton
+                                                    <ToggleButton<string>
                                                         key={menuItem}
                                                         condition={menuItem}
                                                         title={menuItem}

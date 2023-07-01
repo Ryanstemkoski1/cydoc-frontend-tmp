@@ -14,7 +14,7 @@ import {
 } from 'semantic-ui-react';
 import drinkTypes, { DrinkType } from 'constants/SocialHistory/drinkTypes';
 import drinkSizes, { DrinkSize } from 'constants/SocialHistory/drinkSizes';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import AddRowButton from 'components/tools/AddRowButton';
 import '../familyhistory/FamilyHistory.css';
 import {
