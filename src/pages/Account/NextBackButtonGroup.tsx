@@ -8,6 +8,7 @@ import { Divider, Step, StepLabel, Stepper } from '@mui/material';
 import { useValidatePaymentMethod } from 'hooks/useValidatePaymentMethod';
 import { useFormikContext } from 'formik';
 import { PAYMENT_STEP, PRIVACY_STEP } from './SignUpSteps';
+import { ErrorText } from 'components/Atoms/ErrorText';
 
 const steps = ['User info', 'Institution', 'Payment', 'Terms', 'Privacy'];
 
@@ -25,7 +26,7 @@ export function NextBackButtonGroup({
 }: Props) {
     const enableNext = useEnableNext(step);
     const { createStripePaymentMethod } = useValidatePaymentMethod();
-    const { isSubmitting, submitForm } = useFormikContext();
+    const { isSubmitting, submitForm, errors } = useFormikContext();
 
     const onPaymentStep = step === PAYMENT_STEP;
     const onLastStep = step === PRIVACY_STEP;
@@ -133,37 +134,10 @@ export function NextBackButtonGroup({
                         {...nextButtonProps}
                     />
                 </Box>
-            </Box>
-            {/* <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    flexDirection: 'row',
-                    margin: '1.5rem',
-                }}
-            >
-                <Button
-                    basic
-                    color='teal'
-                    content='Cancel'
-                    type='button'
-                    onClick={onClose}
-                />
-                {step > 0 ? (
-                    <Button
-                        color='teal'
-                        content='Prev'
-                        type='button'
-                        onClick={onPrevClick}
-                    />
+                {onLastStep && Object.keys(errors).length ? (
+                    <ErrorText message={JSON.stringify(errors)} />
                 ) : null}
-                <Button
-                    disabled={!enableNext}
-                    color='teal'
-                    content='Next'
-                    onClick={onNextClick}
-                />
-            </Box> */}
+            </Box>
         </Box>
     );
 }
