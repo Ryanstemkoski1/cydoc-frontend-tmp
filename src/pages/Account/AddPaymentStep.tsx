@@ -5,7 +5,8 @@ import { CardElement } from '@stripe/react-stripe-js';
 import { useField, useFormikContext } from 'formik';
 import { Box } from '@mui/system';
 import { CircularProgress, Typography } from '@mui/material';
-import ModalHeader from './ModalHeader';
+import ModalHeader from '../../components/Atoms/ModalHeader';
+import { ErrorText } from 'components/Atoms/ErrorText';
 
 export function AddPaymentStep() {
     const [, info, helpers] = useField<number | string>('paymentMethod');
@@ -42,13 +43,7 @@ export function AddPaymentStep() {
                             id='card-element'
                             onChange={() => helpers.setTouched(true)}
                         />
-                        {info.error ? (
-                            <Typography
-                                sx={{ color: 'red', marginTop: '1rem' }}
-                            >
-                                {info.error}
-                            </Typography>
-                        ) : null}
+                        {info.error ? <ErrorText message={info.error} /> : null}
                     </Box>
                 </>
             </Box>

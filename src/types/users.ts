@@ -9,7 +9,6 @@ export interface ApiEditManager extends ApiEditUserBase {
 }
 
 export interface DbUser {
-    username: string;
     firstName: string;
     lastName: string;
     email: string;

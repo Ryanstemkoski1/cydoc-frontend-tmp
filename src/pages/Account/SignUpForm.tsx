@@ -23,7 +23,6 @@ const initialValues: SignUpFormData = {
     email: '',
     confirmEmail: '',
     institutionName: '',
-    // isInvited: false,  we don't need this, right?
     firstName: '',
     lastName: '',
     newPassword: '',

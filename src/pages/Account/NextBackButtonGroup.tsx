@@ -48,6 +48,7 @@ export function NextBackButtonGroup({
             return {
                 content: 'Create Account',
                 onClick: submitForm,
+                type: 'submit',
             };
         } else {
             return {

@@ -10,6 +10,12 @@ const SENTRY_ENABLED = process.env.NODE_ENV === 'production';
 // eslint-disable-next-line no-console
 console.log(`PRODUCTION: ${SENTRY_ENABLED}, ENV: ${APP_ENV}`);
 
+// [[ uname == MING* ]] && echo "windows" || echo "unix"
+// [[ uname == Darw* ]] && echo "windows" || echo "unix"
+
+// if [[ uname == MING* ]]; then echo "windows"; else echo "unix"; fi
+// if [[ uname == Darw* ]]; then echo "windows"; else echo "unix"; fi
+
 // Initializes sentry error logging service
 export function initializeSentry() {
     Sentry.init({
