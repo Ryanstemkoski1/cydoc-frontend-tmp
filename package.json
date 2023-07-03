@@ -2,6 +2,7 @@
     "name": "cydoc-app",
     "version": "0.1.0",
     "private": true,
+    "license": "UNLICENSED",
     "dependencies": {
         "@aws-sdk/client-cognito-identity": "^3.5.0",
         "@aws-sdk/client-cognito-identity-provider": "^3.5.0",
