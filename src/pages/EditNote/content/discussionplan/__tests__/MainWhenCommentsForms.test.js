@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import {
     ReferralsForm,
     ProceduresAndServicesForm,
@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { PLAN_ACTION as TYPES } from 'redux/actions/actionTypes';
 // import { WhenResponse } from 'constants/enums';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -25,8 +25,10 @@ const mountWithStore = (
         conditionId,
         // Need to mock actual implementation as this function is responsible
         // for action dispatching
-        formatAction: jest.fn((action) => (_, { uuid, value }) =>
-            action(conditionId, uuid, value)
+        formatAction: jest.fn(
+            (action) =>
+                (_, { uuid, value }) =>
+                    action(conditionId, uuid, value)
         ),
         ...props,
     };

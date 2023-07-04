@@ -158,7 +158,6 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
           eventsEnabled={true}
           flowing={true}
           hoverable={true}
-          offset={0}
           on={
             Array [
               "click",
@@ -166,6 +165,7 @@ exports[`LungSoundsButtons matches snapshot 1`] = `
             ]
           }
           pinned={false}
+          popperModifiers={Array []}
           position="bottom center"
           trigger={
             <Button

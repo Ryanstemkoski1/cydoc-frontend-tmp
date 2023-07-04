@@ -87,12 +87,8 @@ class FamilyHistoryContent extends Component<Props, State> {
     }
 
     addRow() {
-        const {
-            responseType,
-            node,
-            addFhPopOptions,
-            blankQuestionChange,
-        } = this.props;
+        const { responseType, node, addFhPopOptions, blankQuestionChange } =
+            this.props;
         const newKey = v4();
         addFhPopOptions(newKey, '');
         if (responseType == ResponseTypes.FH_BLANK && node)
@@ -126,7 +122,7 @@ class FamilyHistoryContent extends Component<Props, State> {
         const standardFamilyHistory = famHistState;
 
         Object.entries(standardFamilyHistory).map(
-            (value: [string, FamilyHistoryCondition], index: number) => {
+            (value: [string, FamilyHistoryCondition]) => {
                 const disease = value[1]['condition'];
                 const standardDisease = standardizeDiseaseNames(disease);
                 let standardReplacedDisease = standardDisease;
@@ -150,9 +146,8 @@ class FamilyHistoryContent extends Component<Props, State> {
             node,
             familyHistory,
         } = this.props;
-        const standardFamilyHistory = this.standardizeFamilyHistory(
-            familyHistory
-        );
+        const standardFamilyHistory =
+            this.standardizeFamilyHistory(familyHistory);
         const defaultConditions = constants.CONDITIONS.map((condition) =>
             this.standardizeMedicalName(condition)
         );

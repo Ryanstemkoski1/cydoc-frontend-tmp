@@ -63,12 +63,8 @@ function formatPhoneNumber(value: string) {
 }
 
 const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
-    const {
-        userInfo,
-        isUserInfoValid,
-        updateUserInfo,
-        validateUserInfo,
-    } = props;
+    const { userInfo, isUserInfoValid, updateUserInfo, validateUserInfo } =
+        props;
 
     const [message, setMessage] = useState('');
 

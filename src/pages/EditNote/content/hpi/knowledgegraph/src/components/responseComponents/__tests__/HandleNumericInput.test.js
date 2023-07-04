@@ -1,12 +1,12 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { Provider } from 'react-redux';
 // import HandleNumericInput from '../HandleNumericInput';
 import { createCurrentNoteStore } from 'redux/store';
 // import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const connectRealStore = () => {
     const store = createCurrentNoteStore();
