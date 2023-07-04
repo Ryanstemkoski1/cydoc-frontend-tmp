@@ -6,7 +6,6 @@ import AbdomenExamButtons from './AbdomenExamButtons';
 import { initialPhysicalExamState } from 'redux/reducers/physicalExamReducer';
 import { AbdomenWidgetState } from 'redux/reducers/widgetReducers/abdomenWidgetReducer';
 import { ABDOMEN_WIDGET_ACTION } from 'redux/actions/actionTypes';
-import { Button, Popup } from 'semantic-ui-react';
 import { currentNoteStore } from 'redux/store';
 
 const section = 'rightUpperQuadrant';

@@ -16,7 +16,7 @@ import { DrugName, drugNames } from 'constants/SocialHistory/drugNames';
 import modesOfDelivery, {
     ModeOfDelivery,
 } from 'constants/SocialHistory/modesOfDelivery';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import AddRowButton from 'components/tools/AddRowButton';
 import '../familyhistory/FamilyHistory.css';
 import {
@@ -341,7 +341,7 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         circular
                         icon='close'
                         size='mini'
-                        type='delete'
+                        id='btn-hpi-type-delete'
                         onClick={() => {
                             this.props.deleteRecreationalDrugUsed(rowindex);
                         }}
@@ -395,9 +395,8 @@ class RecreationalDrugs extends React.Component<Props, State> {
                             id='dropdown-display'
                         />
                         <Button
-                            id='btn-display'
+                            id='btn-hpi-type-delete'
                             icon='close'
-                            type='delete'
                             compact
                             onClick={() => {
                                 this.props.deleteRecreationalDrugUsed(i);

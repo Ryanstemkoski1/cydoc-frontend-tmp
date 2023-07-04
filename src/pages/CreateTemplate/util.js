@@ -150,7 +150,8 @@ export const setAnswerInfo = (answerInfo, node) => {
         answerInfo.yesResponse = node.blankYes || '';
         answerInfo.noResponse = node.blankNo || '';
     } else if ('startResponse' in answerInfo) {
-        const capturingRegex = /(?<startResponse>.*)\bANSWER\b((?<posEndResponse>.*\.)(?<negStartResponse>.*)(\bNOTANSWER\b(?<negEndResponse>.*))|(?<endResponse>.*))/;
+        const capturingRegex =
+            /(?<startResponse>.*)\bANSWER\b((?<posEndResponse>.*\.)(?<negStartResponse>.*)(\bNOTANSWER\b(?<negEndResponse>.*))|(?<endResponse>.*))/;
         const found = node.blankTemplate.match(capturingRegex);
         if (found) {
             answerInfo.startResponse = found.groups.startResponse || '';
@@ -181,13 +182,8 @@ export const addChildrenNodes = (
     graphData,
     contextData
 ) => {
-    let {
-        numQuestions,
-        nextEdgeID,
-        contextEdges,
-        contextGraph,
-        contextNodes,
-    } = contextData;
+    let { numQuestions, nextEdgeID, contextEdges, contextGraph, contextNodes } =
+        contextData;
     const { graph, edges, nodes } = graphData;
 
     // Create edges and nodes for every new question

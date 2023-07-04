@@ -89,9 +89,8 @@ const getUserAttributes = async (role) => {
                         result[i].getName()
                     )
                 ) {
-                    attributes[attributeMappings[result[i].getName()]] = result[
-                        i
-                    ].getValue();
+                    attributes[attributeMappings[result[i].getName()]] =
+                        result[i].getValue();
                 }
             }
 

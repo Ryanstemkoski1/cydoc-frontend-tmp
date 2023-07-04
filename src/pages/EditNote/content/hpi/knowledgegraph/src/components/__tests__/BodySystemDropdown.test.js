@@ -1,12 +1,12 @@
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import BodySystemDropdown from '../BodySystemDropdown';
 import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import star from '../../icons/star.svg';
 // import ChiefComplaintsButton from '../ChiefComplaintsButton';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('ChiefComplaintsButton', () => {
     const wrapper = shallow(

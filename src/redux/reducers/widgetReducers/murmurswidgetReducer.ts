@@ -304,9 +304,10 @@ export function murmursWidgetReducer(
                         ...state[id].specificMurmurInfo!,
                         radiationTo: {
                             ...state[id].specificMurmurInfo!.radiationTo,
-                            [field]: !state[id].specificMurmurInfo!.radiationTo[
-                                field
-                            ],
+                            [field]:
+                                !state[id].specificMurmurInfo!.radiationTo[
+                                    field
+                                ],
                         },
                     },
                 },
@@ -327,8 +328,9 @@ export function murmursWidgetReducer(
                         ...state[id].specificMurmurInfo!,
                         additionalFeatures: {
                             ...state[id].specificMurmurInfo!.additionalFeatures,
-                            [field]: !state[id].specificMurmurInfo!
-                                .additionalFeatures[field],
+                            [field]:
+                                !state[id].specificMurmurInfo!
+                                    .additionalFeatures[field],
                         },
                     },
                 },

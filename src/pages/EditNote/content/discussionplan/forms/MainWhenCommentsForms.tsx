@@ -120,13 +120,8 @@ export const MainWhenCommentsForm = <
 >(
     props: MainWhenCommentsFormProps<T>
 ) => {
-    const {
-        mobile,
-        categoryData,
-        categoryProps,
-        formatAction,
-        ...actions
-    } = props;
+    const { mobile, categoryData, categoryProps, formatAction, ...actions } =
+        props;
     const { width } = UpdateDimensions();
 
     const gridHeaders = () => (
