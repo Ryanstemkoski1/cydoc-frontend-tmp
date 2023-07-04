@@ -4,13 +4,12 @@
     color: black;
 }
 
-.ui.button.tag_text:hover:not(.active)  {
+.ui.button.tag_text:hover:not(.active) {
     color: lightslategray;
 }
 
-
 .ui.button.tag_text-selected {
     margin-top: 1%;
-    background-color: #373b67 ;
-    color: white ;
+    background-color: #373b67;
+    color: white;
 }

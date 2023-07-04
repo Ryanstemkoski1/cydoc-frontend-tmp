@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import {
     initialPlan,
     conditionId,
@@ -8,7 +8,7 @@ import {
 } from 'pages/EditNote/content/discussionplan/util';
 import PlanNote, { EMPTY_NOTE_TEXT } from '../PlanNote';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const plan = {
     conditions: {
