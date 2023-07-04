@@ -1,17 +1,17 @@
 .ui.segment.note-page-container {
-  border-color: white;
-  margin: 2rem;
-  padding: 3rem;
+    border-color: white;
+    margin: 2rem;
+    padding: 3rem;
 }
 
 .ui.segment.note-page-container-mobile {
-  border-color: white;
-  margin: 1rem;
-  padding: 1rem;
+    border-color: white;
+    margin: 1rem;
+    padding: 1rem;
 }
 
 .active-tab-container {
-  margin: 50px;
+    margin: 50px;
 }
 .note-text {
    text-align: center;

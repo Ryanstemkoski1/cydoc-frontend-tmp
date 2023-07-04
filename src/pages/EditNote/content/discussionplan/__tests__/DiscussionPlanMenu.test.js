@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import DiscussionPlanMenu from '../DiscussionPlanMenu';
 import DiscussionPlanDeleteCard from '../DiscussionPlanDeleteCard';
 import configureStore from 'redux-mock-store';
@@ -8,7 +8,7 @@ import { initialPlan, conditionId } from '../util';
 import { Provider } from 'react-redux';
 import { PLAN_ACTION as TYPES } from 'redux/actions/actionTypes';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 

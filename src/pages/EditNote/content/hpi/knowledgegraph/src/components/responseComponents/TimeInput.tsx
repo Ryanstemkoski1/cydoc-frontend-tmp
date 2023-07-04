@@ -14,7 +14,7 @@ import { isTimeInputDictionary } from 'redux/reducers/hpiReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
-import { ROS_MED_BP, ROS_SMALL_BP } from 'constants/breakpoints';
+import { ROS_SMALL_BP } from 'constants/breakpoints';
 
 interface TimeInputProps {
     node: string;
@@ -50,14 +50,10 @@ class TimeInput extends React.Component<Props, TimeInputState> {
     }
 
     render() {
-        const {
-            node,
-            hpi,
-            handleTimeInputChange,
-            handleTimeOptionChange,
-        } = this.props;
+        const { node, hpi, handleTimeInputChange, handleTimeOptionChange } =
+            this.props;
         const currResponse = hpi.nodes[node].response;
-        const timeDict: { [key: string]: string } = {
+        const timeDict: { [key in TimeOption]: string } = {
             minutes: 'min',
             hours: 'hr',
             days: 'day',
@@ -66,11 +62,11 @@ class TimeInput extends React.Component<Props, TimeInputState> {
             years: 'yr',
         };
         const gridButtons = [0, 3].map((i) => {
-            const timeButtons = Object.keys(timeDict)
+            const timeButtons = (Object.keys(timeDict) as TimeOption[])
                 .slice(i, i + 3)
                 .map((timeItem) => (
                     <Grid.Row className='time-grid-row' key={timeItem}>
-                        <ToggleButton
+                        <ToggleButton<TimeOption>
                             className='time-grid-button'
                             active={
                                 isTimeInputDictionary(currResponse)

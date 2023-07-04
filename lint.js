@@ -6,7 +6,7 @@ const colors = require('colors');
 let failed = false;
 
 // paths to lint
-const indexPath = 'src/index.js';
+const indexPath = 'src/index.tsx';
 const contextsPath = 'src/contexts';
 const constantsPath = 'src/constants';
 const testsPath = 'src/tests';

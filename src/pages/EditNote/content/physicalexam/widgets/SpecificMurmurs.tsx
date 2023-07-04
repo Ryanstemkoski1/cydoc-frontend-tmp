@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Table, Button, Popup } from 'semantic-ui-react';
+import { Table, Button } from 'semantic-ui-react';
 import {
     toggleSpecificMurmurInfo,
     updateBestHeardAt,

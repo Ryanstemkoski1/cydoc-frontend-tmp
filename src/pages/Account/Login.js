@@ -42,9 +42,8 @@ const Login = () => {
     const [emailVerified, setIsEmailVerified] = useState(false);
     const [cognitoUser, setCognitoUser] = useState(null);
     const [emailVerificationCode, setEmailVerificationCode] = useState('');
-    const [emailVerificationChecked, setEmailVerificationChecked] = useState(
-        false
-    );
+    const [emailVerificationChecked, setEmailVerificationChecked] =
+        useState(false);
 
     // set isMounted to false when component is unmounted
     useEffect(() => {
