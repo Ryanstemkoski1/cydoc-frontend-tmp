@@ -23,19 +23,27 @@ const rawProcedures = {
     3954300: 'Administration of insulin',
     38470700: 'Administration of tetanus antitoxin',
     3775000: 'Administration of tranquilizer',
-    39901400: 'Administration of vaccine product containing only bordetella pertussis and clostridium tetani and corynebacterium diphtheriae antigens',
-    7315200: 'Administration of vaccine product containing only clostridium tetani and corynebacterium diphtheriae antigens',
+    39901400:
+        'Administration of vaccine product containing only bordetella pertussis and clostridium tetani and corynebacterium diphtheriae antigens',
+    7315200:
+        'Administration of vaccine product containing only clostridium tetani and corynebacterium diphtheriae antigens',
     12778600: 'Tetanus vaccination',
-    12778700: 'Administration of vaccine product containing only haemophilus influenzae type b antigen',
-    24378900: 'Administration of vaccine product containing only hepatitis a virus antigen',
-    7209300: 'Administration of vaccine product containing only human poliovirus antigen',
+    12778700:
+        'Administration of vaccine product containing only haemophilus influenzae type b antigen',
+    24378900:
+        'Administration of vaccine product containing only hepatitis a virus antigen',
+    7209300:
+        'Administration of vaccine product containing only human poliovirus antigen',
     8619800: 'Influenza vaccination',
-    87189800: 'Administration of vaccine product containing only live attenuated human alphaherpesvirus 3 antigen',
+    87189800:
+        'Administration of vaccine product containing only live attenuated human alphaherpesvirus 3 antigen',
     4228400: 'Bacillus calmette-guerin vaccination',
     3859800: 'Measles-mumps-rubella vaccination',
-    4108800: 'Administration of vaccine product containing only neisseria meningitidis antigen',
+    4108800:
+        'Administration of vaccine product containing only neisseria meningitidis antigen',
     3463100: 'Rabies vaccination',
-    1286600: 'Administration of vaccine product containing only streptococcus pneumoniae antigen',
+    1286600:
+        'Administration of vaccine product containing only streptococcus pneumoniae antigen',
     3387900: 'Administration of vaccine to produce active immunity',
     5: 'Administration of varicella live vaccine',
     1473400: 'Administrative procedure',
@@ -81,7 +89,8 @@ const rawProcedures = {
     35757900: 'Anastomosis of esophagus to intestinal segment',
     5830300: 'Anastomosis of gallbladder to hepatic ducts',
     8723100: 'Anastomosis of hepatic duct to gastrointestinal tract',
-    3972400: 'Anastomosis of internal mammary artery to coronary artery, double vessel',
+    3972400:
+        'Anastomosis of internal mammary artery to coronary artery, double vessel',
     738300: 'Anastomosis of intrathoracic artery',
     9009000: 'Anastomosis of pancreatic duct',
     5139600: 'Anastomosis of small intestine to rectal stump',
@@ -138,7 +147,8 @@ const rawProcedures = {
     7982700: 'Arteriovenous anastomosis for renal dialysis',
     9013100: 'Arthrocentesis',
     1957800: 'Arthrodesis',
-    5397600: 'Arthrodesis by anterior interbody technique of cervical region below c2 with bone graft',
+    5397600:
+        'Arthrodesis by anterior interbody technique of cervical region below c2 with bone graft',
     6351300: 'Arthrodesis of ankle',
     5849400: 'Arthrodesis of elbow',
     973000: 'Arthrodesis of hip',
@@ -149,7 +159,8 @@ const rawProcedures = {
     3314800: 'Arthrography',
     8832200: 'Arthrolysis by stretching or manipulation',
     1906300: 'Arthroplasty of knee',
-    1952900: 'Arthroplasty of metacarpophalangeal and interphalangeal joint with implant',
+    1952900:
+        'Arthroplasty of metacarpophalangeal and interphalangeal joint with implant',
     8046900: 'Arthroplasty of shoulder for recurrent dislocation',
     28181200: 'Arthroscopic shoulder procedure',
     5524400: 'Arthroscopically aided anterior cruciate ligament repair',
@@ -316,7 +327,8 @@ const rawProcedures = {
     6369700: 'Cardiopulmonary bypass operation',
     8966600: 'Cardiopulmonary resuscitation',
     2604600: 'Cardiovascular stress test using bicycle ergometer',
-    42422500: 'Cardiovascular stress test using the dobutamine stress test protocol',
+    42422500:
+        'Cardiovascular stress test using the dobutamine stress test protocol',
     8063500: 'Cardiovascular stress test using treadmill',
     7674600: 'Cardiovascular stress testing',
     25098000: 'Cardioversion',
@@ -392,18 +404,25 @@ const rawProcedures = {
     111900: 'Closed reduction of dislocation of foot and toe',
     8562400: 'Closed reduction of dislocation of shoulder',
     1855300: 'Closed reduction of dislocation of wrist',
-    27681300: 'Closed reduction of fracture of carpals and metacarpals with internal fixation',
+    27681300:
+        'Closed reduction of fracture of carpals and metacarpals with internal fixation',
     27230000: 'Closed reduction of fracture of femur with internal fixation',
     7315600: 'Closed reduction of fracture of humerus with internal fixation',
-    9035800: 'Closed reduction of fracture of humerus without internal fixation',
+    9035800:
+        'Closed reduction of fracture of humerus without internal fixation',
     1121500: 'Closed reduction of fracture of orbit, rim or wall',
-    2325300: 'Closed reduction of fracture of phalanges of foot with internal fixation',
-    9089900: 'Closed reduction of fracture of phalanges of hand with internal fixation',
-    6461400: 'Closed reduction of fracture of radius and ulna with internal fixation',
+    2325300:
+        'Closed reduction of fracture of phalanges of foot with internal fixation',
+    9089900:
+        'Closed reduction of fracture of phalanges of hand with internal fixation',
+    6461400:
+        'Closed reduction of fracture of radius and ulna with internal fixation',
     17917200: 'Closed reduction of fracture of radius and/or ulna',
-    27413200: 'Closed reduction of fracture of tarsals and metatarsals with internal fixation',
+    27413200:
+        'Closed reduction of fracture of tarsals and metatarsals with internal fixation',
     2192900: 'Closed reduction of fracture of tibia and fibula',
-    7967000: 'Closed reduction of fracture of tibia and fibula with internal fixation',
+    7967000:
+        'Closed reduction of fracture of tibia and fibula with internal fixation',
     4726400: 'Closed reduction of fracture with internal fixation',
     7652400: 'Closed reduction of fracture without internal fixation',
     1886500: 'Closed reduction of malar and zygomatic fracture',
@@ -453,7 +472,8 @@ const rawProcedures = {
     39200300: 'Colposcopy',
     8710600: 'Combined alcohol and drug detoxification (regime/therapy)',
     6221300: 'Combined alcohol and drug rehabilitation (regime/therapy)',
-    2391500: 'Combined alcohol and drug rehabilitation and detoxification (regime/therapy)',
+    2391500:
+        'Combined alcohol and drug rehabilitation and detoxification (regime/therapy)',
     1391000: 'Combined anteroposterior colporrhaphy',
     18332600: 'Combined physical therapy (regime/therapy)',
     7954400: 'Complete axillary lymphadenectomy',
@@ -464,7 +484,8 @@ const rawProcedures = {
     1233000: 'Complete parathyroidectomy',
     5899200: 'Complete patellectomy',
     4711000: 'Complete sialoadenectomy',
-    8779500: 'Complete transurethral resection of prostate, including control of postoperative bleeding',
+    8779500:
+        'Complete transurethral resection of prostate, including control of postoperative bleeding',
     11622400: 'Complication of procedure',
     8879700: 'Complication of surgical procedure',
     8425100: 'Comprehensive consultation',
@@ -490,7 +511,8 @@ const rawProcedures = {
     1142900: 'Consultation',
     23831800: 'Continuous ambulatory peritoneal dialysis',
     30969700: 'Continuous infusion of streptokinase',
-    4754500: 'Continuous positive airway pressure ventilation treatment (regime/therapy)',
+    4754500:
+        'Continuous positive airway pressure ventilation treatment (regime/therapy)',
     40896800: 'Contraception care education',
     39878000: 'Contraception education',
     4465100: 'Contraceptive use education',
@@ -526,7 +548,8 @@ const rawProcedures = {
     7047800: 'Correction of overlapping toes',
     26494900: 'Correction of pectus deformity',
     6282000: 'Correction of tetralogy of fallot, one-stage',
-    33990900: 'Correction of total anomalous pulmonary venous connection, one-stage',
+    33990900:
+        'Correction of total anomalous pulmonary venous connection, one-stage',
     5630600: 'Cosmetic surgery',
     40906300: 'Counseling',
     17100700: 'Counseling for bereavement',
@@ -581,7 +604,8 @@ const rawProcedures = {
     17778400: 'Decortication of lung',
     530400: 'Deep radiation therapy, 200-300 kvp',
     2834500: 'Delayed closure of abdominal wall',
-    42429400: 'Delayed hypersensitivity skin test for tuberculin purified protein derivative',
+    42429400:
+        'Delayed hypersensitivity skin test for tuberculin purified protein derivative',
     6206900: 'Delayed opening colostomy',
     4767200: 'Delayed suture of flexor tendons of hand',
     1249200: 'Delayed suture of tendon',
@@ -592,10 +616,12 @@ const rawProcedures = {
     3723600: 'Dermabrasion',
     3700200: 'Destruction of chorioretinal lesion by cryotherapy',
     8294800: 'Destruction of chorioretinal lesion by diathermy',
-    6452200: 'Destruction of chorioretinal lesion by implantation of radiation source',
+    6452200:
+        'Destruction of chorioretinal lesion by implantation of radiation source',
     4925700: 'Destruction of chorioretinal lesion by laser photocoagulation',
     8525700: 'Destruction of chorioretinal lesion by radiation therapy',
-    4168100: 'Destruction of chorioretinal lesion by xenon arc photocoagulation',
+    4168100:
+        'Destruction of chorioretinal lesion by xenon arc photocoagulation',
     290800: 'Destruction of hemorrhoids by cryotherapy',
     842200: 'Destruction of hemorrhoids by sclerotherapy',
     1924300: "Destruction of lesion of bartholin's gland by marsupialization",
@@ -612,7 +638,8 @@ const rawProcedures = {
     26563500: 'Diagnostic amniocentesis',
     17939800: 'Diagnostic arthroscopy of knee joint',
     1987500: 'Diagnostic aspiration of vitreous',
-    26537100: 'Diagnostic fiberoptic endoscopic examination of upper gastrointestinal tract',
+    26537100:
+        'Diagnostic fiberoptic endoscopic examination of upper gastrointestinal tract',
     26523200: 'Diagnostic lumbar puncture',
     7199900: 'Diagnostic procedure on femur',
     2735200: 'Diagnostic procedure on heart',
@@ -689,7 +716,8 @@ const rawProcedures = {
     7059000: 'Elevation of skull fracture fragments',
     764200: 'Endarterectomy of abdominal artery',
     4918700: 'Endarterectomy of aorta',
-    17536700: 'Endarterectomy of carotid artery and patch repair of carotid artery',
+    17536700:
+        'Endarterectomy of carotid artery and patch repair of carotid artery',
     3588800: 'Endarterectomy of head and neck artery',
     4462000: 'Endarterectomy of intracranial artery',
     4045500: 'Endarterectomy of lower limb artery',
@@ -759,7 +787,8 @@ const rawProcedures = {
     4883500: 'Esophagogastric fundoplasty',
     7600900: 'Esophagogastroduodenoscopy',
     8274400: 'Esophagogastrostomy by thoracic approach',
-    3897100: 'Esophagoileostomy, antesternal or antethoracic, with interposition of small bowel',
+    3897100:
+        'Esophagoileostomy, antesternal or antethoracic, with interposition of small bowel',
     23518300: 'Esophagomyotomy',
     7165800: 'Esophagoscopy for biopsy',
     6306500: 'Esophagoscopy for removal of foreign body',
@@ -769,7 +798,8 @@ const rawProcedures = {
     35955500: 'Ethmoidotomy',
     1045800: 'Evacuation of intracerebral hematoma',
     17171300: 'Evacuation of intracranial extradural hematoma',
-    3789400: 'Evaluation and management of new outpatient in office or other outpatient facility',
+    3789400:
+        'Evaluation and management of new outpatient in office or other outpatient facility',
     10822000: 'Evaluation and/or management - new patient',
     2974700: 'Evisceration of ocular contents with implant into scleral shell',
     17141900: 'Examination for population survey',
@@ -801,7 +831,8 @@ const rawProcedures = {
     28781500: 'Excision of excess colostomy mucosa',
     11297100: 'Excision of external ear, complete amputation',
     5959000: 'Excision of eye with implant and attachment of muscles',
-    44591200: 'Excision of fallopian tube and surgical removal of ectopic pregnancy',
+    44591200:
+        'Excision of fallopian tube and surgical removal of ectopic pregnancy',
     1536500: 'Excision of hematocele of tunica vaginalis',
     884600: 'Excision of hip joint synovium',
     2123200: 'Excision of humerus for graft',
@@ -813,7 +844,8 @@ const rawProcedures = {
     7699200: 'Excision of knee joint synovium',
     4520500: 'Excision of labial frenulum',
     44542900: 'Excision of lamina of cervical vertebra',
-    42775200: 'Excision of lamina of lumbar vertebra for decompression of spinal cord',
+    42775200:
+        'Excision of lamina of lumbar vertebra for decompression of spinal cord',
     38773100: 'Excision of lamina of vertebra',
     23302500: 'Excision of left atrial lesion',
     73502700: 'Excision of left testis',
@@ -1082,11 +1114,13 @@ const rawProcedures = {
     3101900: 'Implantation of artificial heart',
     5786700: 'Implantation of artificial urinary bladder sphincter',
     23317000: 'Implantation of automatic cardiac defibrillator',
-    4596500: 'Implantation of automatic cardioverter/defibrillator, total system',
+    4596500:
+        'Implantation of automatic cardioverter/defibrillator, total system',
     6307700: 'Implantation of blood vessels into myocardium',
     30728000: 'Implantation of cardiac pacemaker',
     35961200: 'Implantation of cochlear prosthetic device',
-    35960800: 'Implantation of cochlear prosthetic device, electrode and receiver',
+    35960800:
+        'Implantation of cochlear prosthetic device, electrode and receiver',
     6195200: 'Implantation of diaphragmatic pacemaker',
     206700: 'Implantation of electromagnetic hearing aid',
     3579700: 'Implantation of electronic stimulator in brain',
@@ -1197,18 +1231,22 @@ const rawProcedures = {
     5886300: 'Initial implantation of cardiac dual-chamber device',
     5486600: 'Initial implantation of cardiac single-chamber device',
     8872200: 'Initial implantation of electrode into cardiac atrium',
-    8782500: 'Initial implantation of electrode into cardiac atrium and ventricle',
+    8782500:
+        'Initial implantation of electrode into cardiac atrium and ventricle',
     6191600: 'Injection into bone marrow',
     3651100: 'Injection into inner ear',
     44918200: 'Injection of air into peritoneal cavity',
     28804500: 'Injection of amnion for termination of pregnancy',
-    27693400: 'Injection of anesthetic agent into peripheral nerve for analgesia',
-    27958900: 'Injection of anesthetic agent into sympathetic nerve for analgesia',
+    27693400:
+        'Injection of anesthetic agent into peripheral nerve for analgesia',
+    27958900:
+        'Injection of anesthetic agent into sympathetic nerve for analgesia',
     44736600: 'Injection of autologous whole blood into spinal epidural space',
     44936400: 'Injection of electrolyte',
     1172800: 'Injection of gas gangrene antitoxin',
     3209000: 'Injection of larynx',
-    3007300: 'Injection of locally-acting therapeutic substance into peritoneal cavity',
+    3007300:
+        'Injection of locally-acting therapeutic substance into peritoneal cavity',
     253600: 'Injection of medication in anterior chamber of eye',
     7584100: 'Injection of neurolytic agent into sympathetic nerve',
     5402300: 'Injection of peripheral nerve',
@@ -1230,7 +1268,8 @@ const rawProcedures = {
     726800: 'Injection of vitreous substitute',
     24652500: 'Insertion of atrial septal umbrella',
     5285200: 'Insertion of bilateral breast prostheses',
-    8373500: 'Insertion of biliary stent by endoscopic retrograde cholangiopancreatography',
+    8373500:
+        'Insertion of biliary stent by endoscopic retrograde cholangiopancreatography',
     9140400: 'Insertion of bone growth stimulator',
     428500: 'Insertion of bone growth stimulator into femur',
     7792800: 'Insertion of bone growth stimulator into humerus',
@@ -1238,7 +1277,8 @@ const rawProcedures = {
     6259500: 'Insertion of bone growth stimulator into tarsals and metatarsals',
     4411400: 'Insertion of bone growth stimulator into tibia and fibula',
     39224700: 'Insertion of catheter into artery',
-    6182000: 'Insertion of catheter into spinal canal for infusion of therapeutic substance',
+    6182000:
+        'Insertion of catheter into spinal canal for infusion of therapeutic substance',
     2848900: 'Insertion of choledochohepatic tube for decompression',
     5657000: 'Insertion of diaphragm into vagina',
     4426700: 'Insertion of drainage tube into kidney pelvis',
@@ -1260,7 +1300,8 @@ const rawProcedures = {
     5148600: 'Insertion of pack into sella turcica',
     38761300: 'Insertion of pack into vagina',
     42519600: 'Insertion of peripherally inserted central catheter',
-    5497400: 'Insertion of permanent pacemaker with transvenous electrodes, ventricular',
+    5497400:
+        'Insertion of permanent pacemaker with transvenous electrodes, ventricular',
     26495700: 'Insertion of pleural tube drain',
     17685400: 'Insertion of prostaglandin abortifacient suppository',
     30234300: 'Insertion of prosthesis for breast',
@@ -1280,19 +1321,22 @@ const rawProcedures = {
     7265700: 'Intelligence test',
     4025000: 'Interatrial transposition of venous return',
     22956700: 'Intermittent compression therapy (regime/therapy)',
-    38772700: 'Intermittent positive pressure breathing treatment (regime/therapy)',
+    38772700:
+        'Intermittent positive pressure breathing treatment (regime/therapy)',
     28763400: 'Intermittent skeletal traction',
     3380700: 'Internal and combined version with extraction',
     2668800: 'Internal and combined version without extraction',
     14921300: 'Internal cardiac massage',
     5937200: 'Internal drainage of pancreatic cyst',
     165300: 'Internal fixation of bone without fracture reduction',
-    7975900: 'Internal fixation of carpals and metacarpals without fracture reduction',
+    7975900:
+        'Internal fixation of carpals and metacarpals without fracture reduction',
     1196400: 'Internal fixation of femur without fracture reduction',
     2614400: 'Internal fixation of humerus without fracture reduction',
     6950500: 'Internal fixation of patella without fracture reduction',
     202100: 'Internal fixation of radius and ulna without fracture reduction',
-    7942300: 'Internal fixation of tarsals and metatarsals without fracture reduction',
+    7942300:
+        'Internal fixation of tarsals and metatarsals without fracture reduction',
     7271200: 'Internal fixation of tibia and fibula without fracture reduction',
     3195200: 'Interruption of vena cava',
     5965700: 'Intestinal bypass for morbid obesity',
@@ -1300,7 +1344,8 @@ const rawProcedures = {
     7453900: 'Intra-abdominal manipulation of large intestine',
     2347800: 'Intra-abdominal manipulation of small intestine',
     2402600: 'Intra-abdominal venous shunt',
-    30869500: 'Intracapsular cataract extraction and insertion of intraocular lens',
+    30869500:
+        'Intracapsular cataract extraction and insertion of intraocular lens',
     6635900: 'Intracapsular extraction of lens by inferior temporal route',
     1742400: 'Intracarotid amobarbital test',
     38469200: 'Intracavitary brachytherapy',
@@ -1313,7 +1358,8 @@ const rawProcedures = {
     25279300: 'Intraoperative neurophysiological monitoring (regime/therapy)',
     28721200: 'Intraspinal nerve root division',
     3512900: 'Intrathoracic esophageal anastomosis with interposition of colon',
-    6058100: 'Intrathoracic esophageal anastomosis with interposition of small bowel',
+    6058100:
+        'Intrathoracic esophageal anastomosis with interposition of small bowel',
     5308700: 'Intrathoracic esophagocolostomy',
     6000600: 'Intrathoracic phlebography',
     27440700: 'Intrauterine device check',
@@ -1351,9 +1397,12 @@ const rawProcedures = {
     28722200: 'Laminectomy site reopening',
     28219100: 'Laminotomy for decompression and exploration',
     602500: 'Laparoscopic appendectomy',
-    70900000: 'Laparoscopic bilateral repair of direct inguinal hernia with graft or prosthesis',
-    70899900: 'Laparoscopic bilateral repair of indirect inguinal hernia with graft or prosthesis',
-    70900100: 'Laparoscopic bilateral repair of one direct and one indirect inguinal hernia with graft or prosthesis',
+    70900000:
+        'Laparoscopic bilateral repair of direct inguinal hernia with graft or prosthesis',
+    70899900:
+        'Laparoscopic bilateral repair of indirect inguinal hernia with graft or prosthesis',
+    70900100:
+        'Laparoscopic bilateral repair of one direct and one indirect inguinal hernia with graft or prosthesis',
     1505000: 'Laparoscopic biopsy of liver',
     4559500: 'Laparoscopic cholecystectomy',
     6755700: 'Laparoscopic cholecystectomy with exploration of common duct',
@@ -1507,16 +1556,20 @@ const rawProcedures = {
     31059300: 'Metatarsophalangeal fusion',
     4671600: 'Microalbuminuria measurement',
     8963400: 'Microbial identification kit, rapid strep method',
-    60890800: 'Microscopic examination of bacterial smear of specimen from female genital tract',
-    60895100: 'Microscopic examination of bacterial smear of specimen from surgical wound',
+    60890800:
+        'Microscopic examination of bacterial smear of specimen from female genital tract',
+    60895100:
+        'Microscopic examination of bacterial smear of specimen from surgical wound',
     35959300: 'Midtarsal fusion',
     7619200: 'Mikulicz operation, resection of large intestine, second stage',
     38464200: 'Mitral valvuloplasty',
     22940800: 'Mobilization of the spine (regime/therapy)',
     72643700: 'Modified radical mastectomy of left breast',
     72643600: 'Modified radical mastectomy of right breast',
-    7379300: 'Monitoring of cardiac output by oxygen consumption technique (regime/therapy)',
-    7080300: 'Monitoring of cardiac output by thermodilution indicator (regime/therapy)',
+    7379300:
+        'Monitoring of cardiac output by oxygen consumption technique (regime/therapy)',
+    7080300:
+        'Monitoring of cardiac output by thermodilution indicator (regime/therapy)',
     1206500: 'Monitoring of coronary blood flow (regime/therapy)',
     13438800: 'Monofilament foot sensation test',
     23693200: 'Multicauterization of ovary',
@@ -1539,7 +1592,8 @@ const rawProcedures = {
     1352900: 'Nasal septoplasty',
     5361000: 'Nasal septoplasty with graft',
     11279000: 'Nasal sinus endoscopy',
-    5088600: 'Nasogastric intubation for enteral infusion of concentrated nutritional substances',
+    5088600:
+        'Nasogastric intubation for enteral infusion of concentrated nutritional substances',
     18269200: 'Nasopharyngeal airway insertion',
     6696100: 'Natural childbirth class education',
     5625100: 'Nebulizer therapy',
@@ -1616,16 +1670,22 @@ const rawProcedures = {
     8150600: 'Open reduction of dislocation of shoulder',
     4588500: 'Open reduction of dislocation of wrist',
     8648000: 'Open reduction of fracture',
-    6843200: 'Open reduction of fracture of carpals and metacarpals with internal fixation',
+    6843200:
+        'Open reduction of fracture of carpals and metacarpals with internal fixation',
     5747000: 'Open reduction of fracture of femur with internal fixation',
     8581300: 'Open reduction of fracture of humerus',
     3705300: 'Open reduction of fracture of humerus with internal fixation',
     2389700: 'Open reduction of fracture of orbit',
-    6234800: 'Open reduction of fracture of phalanges of foot with internal fixation',
-    4305000: 'Open reduction of fracture of phalanges of hand with internal fixation',
-    60878500: 'Open reduction of fracture of radius and ulna with internal fixation',
-    35993200: 'Open reduction of fracture of tarsals and metatarsals with internal fixation',
-    7401100: 'Open reduction of fracture of tibia and fibula with internal fixation',
+    6234800:
+        'Open reduction of fracture of phalanges of foot with internal fixation',
+    4305000:
+        'Open reduction of fracture of phalanges of hand with internal fixation',
+    60878500:
+        'Open reduction of fracture of radius and ulna with internal fixation',
+    35993200:
+        'Open reduction of fracture of tarsals and metatarsals with internal fixation',
+    7401100:
+        'Open reduction of fracture of tibia and fibula with internal fixation',
     2070100: 'Open reduction of fracture with internal fixation',
     1398700: 'Open reduction of malar and zygomatic fracture',
     30728900: 'Open reduction of mandibular fracture',
@@ -1651,7 +1711,8 @@ const rawProcedures = {
     4048500: 'Operation on pterygium with corneal graft',
     28720800: 'Operation on thalamus',
     7826800: 'Operation on trabeculae carneae cordis',
-    7120600: 'Operation on two or more extraocular muscles involving temporary detachment from globe, one or both eyes',
+    7120600:
+        'Operation on two or more extraocular muscles involving temporary detachment from globe, one or both eyes',
     2922400: 'Operative endoscopy of small intestine',
     6166100: 'Operative procedure on foot',
     11274600: 'Operative procedure on hand',
@@ -1676,7 +1737,8 @@ const rawProcedures = {
     11277500: 'Osteoclasis of tibia and fibula',
     7399700: 'Osteopathic manipulation to move tissue fluids',
     41632700: 'Osteopathic manipulation, high velocity, low amplitude forces',
-    1985900: 'Osteopathic manipulation, low-velocity, high-amplitude forces, springing',
+    1985900:
+        'Osteopathic manipulation, low-velocity, high-amplitude forces, springing',
     6536100: 'Osteopathic manipulative treatment using indirect method',
     5427900: 'Osteoplasty of cranium with bone graft',
     278000: 'Osteoplasty of facial bones',
@@ -1693,7 +1755,8 @@ const rawProcedures = {
     11624100: 'Pancreaticoduodenectomy',
     6770600: 'Pancreatolithotomy',
     3122200: 'Paracentesis of anterior chamber of eye',
-    4039500: 'Paracentesis of anterior chamber of eye with diagnostic aspiration of aqueous',
+    4039500:
+        'Paracentesis of anterior chamber of eye with diagnostic aspiration of aqueous',
     37208100: 'Parathyroid imaging',
     5330400: 'Parathyroidectomy',
     8187000: 'Parotidectomy',
@@ -1743,15 +1806,18 @@ const rawProcedures = {
     35957800: 'Percutaneous endoscopy through jejunostomy',
     6531300: 'Percutaneous extraction of common duct stones',
     5544700: 'Percutaneous hysterogram',
-    9085200: 'Percutaneous injection of therapeutic substance into cyst of kidney',
+    9085200:
+        'Percutaneous injection of therapeutic substance into cyst of kidney',
     31327000: 'Percutaneous insertion of nephrostomy tube',
     28748900: 'Percutaneous needle biopsy of liver',
     17512500: 'Percutaneous transluminal ablation of atrioventricular node',
     17538000: 'Percutaneous transluminal angioplasty of carotid artery',
     6845700: 'Percutaneous transluminal balloon angioplasty',
     1110100: 'Percutaneous transluminal coronary angioplasty',
-    39743100: 'Percutaneous transluminal coronary angioplasty with rotoablation, single vessel',
-    42561100: 'Percutaneous transluminal insertion of stent into carotid artery',
+    39743100:
+        'Percutaneous transluminal coronary angioplasty with rotoablation, single vessel',
+    42561100:
+        'Percutaneous transluminal insertion of stent into carotid artery',
     12925000: 'Percutaneous urinary vesicostomy',
     6886000: 'Percutaneous valvuloplasty',
     8805800: 'Perfusion',
@@ -1831,7 +1897,8 @@ const rawProcedures = {
     2072600: 'Pressure measurement of sphincter of oddi',
     44459800: 'Pretransplant evaluation of donor',
     10822400: 'Preventive patient evaluation',
-    26513200: 'Primary open reduction and internal fixation of proximal femoral fracture with screw/nail and plate device',
+    26513200:
+        'Primary open reduction and internal fixation of proximal femoral fracture with screw/nail and plate device',
     3080300: 'Printen and mason operation, high gastric bypass',
     2666100: 'Probing of lacrimal canaliculi',
     3392500: 'Probing of lacrimal punctum',
@@ -1855,8 +1922,10 @@ const rawProcedures = {
     23950500: 'Prosthetic total arthroplasty of ankle',
     17470200: 'Proximal pancreatectomy',
     11617500: 'Proximal subtotal gastrectomy',
-    3253700: 'Psychiatric diagnostic interview, examination, history, mental status and disposition',
-    1099700: 'Psychiatric evaluation of patient for testimentary capacity with report',
+    3253700:
+        'Psychiatric diagnostic interview, examination, history, mental status and disposition',
+    1099700:
+        'Psychiatric evaluation of patient for testimentary capacity with report',
     1019700: 'Psychiatric interview and evaluation',
     30244000: 'Psychiatric pharmacologic management',
     11314000: 'Psychiatric pre-commitment interview and report',
@@ -1934,7 +2003,8 @@ const rawProcedures = {
     7839700: 'Reconstruction of eyelid with hair follicle graft',
     4792000: 'Reconstruction of eyelid with tarsoconjunctival flap',
     3252900: 'Reconstruction of eyelid, full-thickness, involving lid margin',
-    1962900: 'Reconstruction of eyelid, partial-thickness, involving lid margin',
+    1962900:
+        'Reconstruction of eyelid, partial-thickness, involving lid margin',
     5613500: 'Reconstruction of frontonasal duct',
     3255900: 'Reconstruction of penis',
     17640800: 'Reconstruction of scrotum with local flap',
@@ -1969,9 +2039,11 @@ const rawProcedures = {
     3948200: 'Removal of arteriovenous shunt for renal dialysis',
     28566300: 'Removal of bone screw from bone',
     2731500: 'Removal of breast implant',
-    38620000: 'Removal of calculus of renal pelvis through percutaneous nephrostomy',
+    38620000:
+        'Removal of calculus of renal pelvis through percutaneous nephrostomy',
     4592100: 'Removal of cardiac pacemaker electrodes with replacement',
-    38468400: 'Removal of cardiac pacemaker with replacement by single-chamber device, rate-responsive',
+    38468400:
+        'Removal of cardiac pacemaker with replacement by single-chamber device, rate-responsive',
     7532500: 'Removal of cystostomy tube',
     23471800: 'Removal of dental pack',
     44843400: 'Removal of dental prosthesis',
@@ -1989,12 +2061,15 @@ const rawProcedures = {
     7352800: 'Removal of foreign body from hand without incision',
     70899300: 'Removal of foreign body from peritoneal cavity',
     4893300: 'Removal of foreign body from posterior segment of eye',
-    9099700: 'Removal of foreign body from posterior segment of eye without use of magnet',
-    44577300: 'Removal of foreign body from skin and/or subcutaneous tissue by incision',
+    9099700:
+        'Removal of foreign body from posterior segment of eye without use of magnet',
+    44577300:
+        'Removal of foreign body from skin and/or subcutaneous tissue by incision',
     5622300: 'Removal of foreign body from spinal canal',
     60911300: 'Removal of foreign body from vulva without incision',
     37140800: 'Removal of foreign body of lower limb, except foot',
-    40571000: 'Removal of foreign body without incision from upper limb, except hand',
+    40571000:
+        'Removal of foreign body without incision from upper limb, except hand',
     9083800: 'Removal of gastrostomy tube',
     133900: 'Removal of impacted feces',
     435000: 'Removal of implant of cornea',
@@ -2002,15 +2077,22 @@ const rawProcedures = {
     7201000: 'Removal of internal fixation device',
     2742600: 'Removal of internal fixation device from facial bone',
     9102400: 'Removal of internal penile prosthesis',
-    11283900: 'Removal of intraluminal foreign body from artificial stoma without incision',
-    1092300: 'Removal of intraluminal foreign body from large intestine without incision',
-    60924900: 'Removal of intraluminal foreign body from larynx without incision',
+    11283900:
+        'Removal of intraluminal foreign body from artificial stoma without incision',
+    1092300:
+        'Removal of intraluminal foreign body from large intestine without incision',
+    60924900:
+        'Removal of intraluminal foreign body from larynx without incision',
     60911000: 'Removal of intraluminal foreign body from nose without incision',
     8109300: 'Removal of intraluminal foreign body from oral cavity',
-    5460300: 'Removal of intraluminal foreign body from pharynx without incision',
-    60911200: 'Removal of intraluminal foreign body from urethra without incision',
-    2813600: 'Removal of intraluminal foreign body from uterus without incision',
-    8439700: 'Removal of intraluminal foreign body from vagina without incision',
+    5460300:
+        'Removal of intraluminal foreign body from pharynx without incision',
+    60911200:
+        'Removal of intraluminal foreign body from urethra without incision',
+    2813600:
+        'Removal of intraluminal foreign body from uterus without incision',
+    8439700:
+        'Removal of intraluminal foreign body from vagina without incision',
     5436200: 'Removal of intraocular foreign body from anterior segment of eye',
     881300: 'Removal of intraocular foreign body from anterior segment of eye with use of magnet',
     6825400: 'Removal of intrauterine device',
@@ -2035,7 +2117,8 @@ const rawProcedures = {
     8494900: 'Removal of spinal thecal shunt',
     3596300: 'Removal of staples',
     9058900: 'Removal of superficial foreign body from eye without incision',
-    8070300: 'Removal of surgically implanted material from posterior segment of eye',
+    8070300:
+        'Removal of surgically implanted material from posterior segment of eye',
     3054900: 'Removal of suture',
     2510100: 'Removal of therapeutic device',
     11315300: 'Removal of tracheostomy tube',
@@ -2068,11 +2151,13 @@ const rawProcedures = {
     5224700: 'Repair of aortic valve with tissue graft',
     7709500: 'Repair of arteriovenous fistula',
     6772700: 'Repair of artery with suture',
-    1174800: 'Repair of atrial septal defect with prosthesis by open heart technique',
+    1174800:
+        'Repair of atrial septal defect with prosthesis by open heart technique',
     2152600: 'Repair of atrial septal defect with tissue graft',
     4258200: 'Repair of atrioventricular canal defect',
     2264700: 'Repair of blepharoptosis by orbicularis oculi muscle sling',
-    35963700: 'Repair of blepharoptosis by resection or advancement of levator muscle or aponeurosis',
+    35963700:
+        'Repair of blepharoptosis by resection or advancement of levator muscle or aponeurosis',
     5613000: 'Repair of blepharoptosis by tarsal technique',
     1217500: 'Repair of blood vessel with suture',
     3249500: 'Repair of bone of skull',
@@ -2087,7 +2172,8 @@ const rawProcedures = {
     27402200: 'Repair of coarctation of aorta',
     5498700: 'Repair of common bile duct',
     1266000: 'Repair of complete shoulder cuff avulsion, chronic',
-    35994600: 'Repair of current obstetric laceration of rectum and sphincter ani',
+    35994600:
+        'Repair of current obstetric laceration of rectum and sphincter ani',
     972400: 'Repair of current obstetric laceration of uterus',
     35992700: 'Repair of cystocele',
     5291700: 'Repair of diaphragmatic hernia by abdominal approach',
@@ -2100,8 +2186,10 @@ const rawProcedures = {
     20395200: 'Repair of eye, multiple structures',
     2956000: 'Repair of eyeball socket with graft',
     39824800: 'Repair of eyelid',
-    36116200: 'Repair of eyelid laceration, full-thickness involving lid margin',
-    36115700: 'Repair of eyelid laceration, partial-thickness involving lid margin',
+    36116200:
+        'Repair of eyelid laceration, full-thickness involving lid margin',
+    36115700:
+        'Repair of eyelid laceration, partial-thickness involving lid margin',
     1170700: 'Repair of fallopian tube',
     5661400: 'Repair of fistula involving bladder and intestine',
     7371300: 'Repair of gastroschisis',
@@ -2179,7 +2267,8 @@ const rawProcedures = {
     6412400: 'Repair of vertebral fracture',
     2621200: 'Replacement of aortic valve',
     44189500: 'Replacement of aortic valve with tissue graft',
-    38468300: 'Replacement of cardiac pacemaker device with dual-chamber device',
+    38468300:
+        'Replacement of cardiac pacemaker device with dual-chamber device',
     44934000: 'Replacement of cast of lower limb',
     44934100: 'Replacement of cast of upper limb',
     4670600: 'Replacement of contraceptive intrauterine device',
@@ -2312,7 +2401,8 @@ const rawProcedures = {
     10793800: 'Small intestine excision',
     4000100: 'Smallpox vaccination',
     22532300: 'Smoking cessation education',
-    27501400: "Soave endorectal pull-through operation for hirschsprung's disease",
+    27501400:
+        "Soave endorectal pull-through operation for hirschsprung's disease",
     16874400: 'Soft tissue x-ray heart',
     7920600: 'Specialized medical examination',
     6633700: 'Speech defect training (regime/therapy)',
@@ -2426,7 +2516,8 @@ const rawProcedures = {
     4564300: 'Teleradiotherapy using electrons',
     6286700: 'Teleradiotherapy with radioactive cesium',
     38682900: 'Temporary colostomy',
-    3834000: 'Temporary insertion of pacemaker into atrium by transvenous route',
+    3834000:
+        'Temporary insertion of pacemaker into atrium by transvenous route',
     4398800: 'Temporary tracheostomy',
     22620300: 'Tendon graft',
     12000100: 'Testis excision',
@@ -2448,7 +2539,8 @@ const rawProcedures = {
     2532100: 'Thoracoscopic pneumonectomy',
     44418800: 'Thoracoscopic wedge resection of lung',
     1467100: 'Thoracoscopy',
-    1502300: 'Thromboendarterectomy with graft of carotid artery by neck incision',
+    1502300:
+        'Thromboendarterectomy with graft of carotid artery by neck incision',
     26573600: 'Through knee amputation',
     17118200: 'Thyroid disorder screening',
     6116700: 'Thyroid stimulating hormone measurement',
@@ -2460,7 +2552,8 @@ const rawProcedures = {
     2891300: 'Tonsillectomy and adenoidectomy',
     5516200: 'Tooth extraction',
     11614300: 'Total abdominal hysterectomy',
-    11614400: 'Total abdominal hysterectomy with bilateral salpingo-oophorectomy',
+    11614400:
+        'Total abdominal hysterectomy with bilateral salpingo-oophorectomy',
     18366800: 'Total avulsion of nail plate',
     518200: 'Total body perfusion',
     36738500: 'Total body scan',
@@ -2472,7 +2565,8 @@ const rawProcedures = {
     6774900: 'Total excision of pituitary gland by transfrontal approach',
     349800: 'Total excision of pituitary gland by transsphenoidal approach',
     9085600: 'Total excision of small intestine',
-    17371600: 'Total gastrectomy and anastomosis of esophagus to transposed jejunum',
+    17371600:
+        'Total gastrectomy and anastomosis of esophagus to transposed jejunum',
     9162100: 'Total gastrectomy with intestinal interposition',
     35970300: 'Total glossectomy',
     1720300: 'Total hepatectomy',
@@ -2505,7 +2599,8 @@ const rawProcedures = {
     3088000: 'Trabeculectomy ab externo',
     4470300: 'Trabeculotomy ab externo',
     23270400: 'Tracheobronchial lavage',
-    8503800: 'Tracing of carotid pulse with electrocardiogram lead (regime/therapy)',
+    8503800:
+        'Tracing of carotid pulse with electrocardiogram lead (regime/therapy)',
     1385200: 'Transabdominal gastroscopy',
     4: 'Transcatheter mitral valve repair',
     17201200: 'Transcervical thymectomy',
@@ -2549,7 +2644,8 @@ const rawProcedures = {
     38674500: 'Transurethral cystoscopy',
     17628800: 'Transurethral laser prostatectomy',
     9019900: 'Transurethral prostatectomy',
-    1915700: 'Transurethral removal of obstruction from ureter and renal pelvis',
+    1915700:
+        'Transurethral removal of obstruction from ureter and renal pelvis',
     2692500: 'Transverse colectomy',
     110400: 'Triad knee repair',
     26512000: 'Triple arthrodesis of hindfoot',
@@ -2557,14 +2653,16 @@ const rawProcedures = {
     17112600: 'Tuberculosis screening',
     985600: 'Tularemia vaccination',
     3193200: 'Tympanomastoidectomy',
-    4740900: 'Tympanoplasty type iii with graft against mobile and intact stapes',
+    4740900:
+        'Tympanoplasty type iii with graft against mobile and intact stapes',
     6851400: 'Tympanoplasty type iv with air pocket over round window',
     8924600: 'Tympanoplasty type v with fenestra in semicircular canal',
     39786200: 'Tympanostomy',
     29170200: 'Tympanosympathectomy',
     39776000: 'Tympanotomy',
     39810700: 'Type 2 tympanoplasty',
-    5351400: 'Ultrasonic fragmentation of urinary stone through percutaneous nephrostomy',
+    5351400:
+        'Ultrasonic fragmentation of urinary stone through percutaneous nephrostomy',
     3035300: 'Ultrasonography of aortic arch',
     2373800: 'Ultrasonography of digestive system',
     2393100: 'Ultrasonography of head and neck',
@@ -2622,7 +2720,8 @@ const rawProcedures = {
     6393300: 'Ventriculostomy',
     40122600: 'Vertebroplasty',
     1136900: 'Vestibuloplasty',
-    2780800: 'Video and radio-telemetered electroencephalographic monitoring (regime/therapy)',
+    2780800:
+        'Video and radio-telemetered electroencephalographic monitoring (regime/therapy)',
     24379100: 'Viral screening',
     40876000: 'Vision screening',
     6310700: 'Visual evoked potential study',

@@ -1,17 +1,16 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import MedicalHistoryContent from '../MedicalHistoryContent.tsx';
-import { Button } from 'semantic-ui-react';
 import { MEDICAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
 // import AddRowButton from 'components/tools/AddRowButton';
 // import GridContent from 'components/tools/GridContent';
 import ConditionInput from 'components/tools/ConditionInput';
 // import MedicalHistoryNoteItem from '../MedicalHistoryNoteItem';
 import MedicalHistoryNoteRow from '../MedicalHistoryNoteRow';
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -248,12 +247,11 @@ describe('MedicalHistoryContent', () => {
 
     test('toggling condition button dispatches correct action', () => {
         const { store, wrapper } = connectStore();
-        let togglebutton = wrapper
+        wrapper
             .find(MedicalHistoryNoteRow)
-            .find('ToggleButton[title="Yes"]')
-            .first();
-        let button = togglebutton.find(Button);
-        button.simulate('click');
+            .find('button[title="Yes"]')
+            .at(0)
+            .simulate('click');
         const expectedAction = [
             {
                 type: MEDICAL_HISTORY_ACTION.TOGGLE_OPTION,
@@ -265,9 +263,7 @@ describe('MedicalHistoryContent', () => {
         ];
         expect(store.getActions()).toEqual(expectedAction);
         store.clearActions();
-        togglebutton = wrapper.find('ToggleButton[title="No"]').first();
-        button = togglebutton.find(Button);
-        button.simulate('click');
+        wrapper.find('button[title="No"]').at(0).simulate('click');
         const expectedAction2 = [
             {
                 type: MEDICAL_HISTORY_ACTION.TOGGLE_OPTION,
@@ -283,10 +279,8 @@ describe('MedicalHistoryContent', () => {
     test('mobile toggle', () => {
         const { store, wrapper } = itemMount();
         expect(wrapper).toBeTruthy();
-        let togglebutton = wrapper.find('ToggleButton[title="Yes"]').first();
-        let button = togglebutton.find(Button);
-        expect(button).toHaveLength(1);
-        button.simulate('click');
+        wrapper.find('button[title="Yes"]').at(0).simulate('click');
+
         const expectedAction = [
             {
                 type: MEDICAL_HISTORY_ACTION.TOGGLE_OPTION,
@@ -298,10 +292,7 @@ describe('MedicalHistoryContent', () => {
         ];
         expect(store.getActions()).toEqual(expectedAction);
         store.clearActions();
-        togglebutton = wrapper.find('ToggleButton[title="No"]').first();
-        button = togglebutton.find(Button);
-        expect(button).toHaveLength(1);
-        button.simulate('click');
+        wrapper.find('button[title="No"]').first().simulate('click');
         const expectedAction2 = [
             {
                 type: MEDICAL_HISTORY_ACTION.TOGGLE_OPTION,
@@ -316,12 +307,9 @@ describe('MedicalHistoryContent', () => {
 
     test('toggling resolved button dispatches correct action', () => {
         const { store, wrapper } = connectStore();
-        let togglebutton = wrapper
-            .find(MedicalHistoryNoteRow)
-            .find('ToggleButton[title="Yes"]')
-            .at(1);
-        let button = togglebutton.find(Button);
-        button.simulate('click');
+
+        wrapper.find('button[title="Yes"]').at(1).simulate('click');
+
         const expectedAction = [
             {
                 type: MEDICAL_HISTORY_ACTION.UPDATE_CONDITION_RESOLVED,
@@ -333,12 +321,12 @@ describe('MedicalHistoryContent', () => {
         ];
         expect(store.getActions()).toEqual(expectedAction);
         store.clearActions();
-        togglebutton = wrapper
+        wrapper
             .find(MedicalHistoryNoteRow)
-            .find('ToggleButton[title="No"]')
-            .at(1);
-        button = togglebutton.find(Button);
-        button.simulate('click');
+            .find('button[title="No"]')
+            .at(1)
+            .simulate('click');
+
         const expectedAction2 = [
             {
                 type: MEDICAL_HISTORY_ACTION.UPDATE_CONDITION_RESOLVED,
@@ -354,10 +342,9 @@ describe('MedicalHistoryContent', () => {
     test('mobile resolved', () => {
         const { store, wrapper } = itemMount();
         expect(wrapper).toBeTruthy();
-        let togglebutton = wrapper.find('ToggleButton[title="Yes"]').at(1);
-        let button = togglebutton.find(Button);
-        expect(button).toHaveLength(1);
-        button.simulate('click');
+
+        let togglebutton = wrapper.find('button[title="Yes"]').at(1);
+        togglebutton.simulate('click');
         const expectedAction = [
             {
                 type: MEDICAL_HISTORY_ACTION.UPDATE_CONDITION_RESOLVED,
@@ -369,10 +356,7 @@ describe('MedicalHistoryContent', () => {
         ];
         expect(store.getActions()).toEqual(expectedAction);
         store.clearActions();
-        togglebutton = wrapper.find('ToggleButton[title="No"]').at(1);
-        button = togglebutton.find(Button);
-        expect(button).toHaveLength(1);
-        button.simulate('click');
+        wrapper.find('button[title="No"]').at(1).simulate('click');
         const expectedAction2 = [
             {
                 type: MEDICAL_HISTORY_ACTION.UPDATE_CONDITION_RESOLVED,

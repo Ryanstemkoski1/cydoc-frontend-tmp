@@ -206,7 +206,7 @@ export const extractNode = (
                     (acc: string[], [key, value]) => {
                         if (
                             (typeof value === 'boolean' && value) ||
-                            Object.entries(value).some(([_k, v]) => v)
+                            Object.entries(value)?.some(([_k, v]) => v)
                         )
                             acc.push(key);
                         return acc;
@@ -363,9 +363,8 @@ export const extractNode = (
             const negArr: string[] = [];
             (response as string[]).map((key) => {
                 if (key in state.surgicalHistory) {
-                    const { hasHadSurgery, procedure } = state.surgicalHistory[
-                        key
-                    ];
+                    const { hasHadSurgery, procedure } =
+                        state.surgicalHistory[key];
                     if (
                         hasHadSurgery == YesNoResponse.Yes &&
                         procedure.length > 0

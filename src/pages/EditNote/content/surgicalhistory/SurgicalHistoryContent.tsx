@@ -44,7 +44,7 @@ import {
 } from 'redux/actions/hpiActions';
 import './SurgicalHistoryContent.css';
 import { YesNoResponse } from 'constants/enums';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import { questionContainer, questionTextStyle } from './styles';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 
@@ -131,7 +131,8 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         event:
             | React.FormEvent<HTMLTextAreaElement>
             | React.ChangeEvent<HTMLInputElement>
-            | React.SyntheticEvent,
+            | React.SyntheticEvent
+            | null,
         data: TextAreaProps | DropdownProps | InputOnChangeData
     ) {
         const { active } = this.state;
@@ -179,7 +180,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
     }
 
     handleAddition(
-        event: React.KeyboardEvent<HTMLElement>,
+        event: React.KeyboardEvent<HTMLElement> | React.SyntheticEvent | null,
         data: DropdownProps
     ) {
         const value = data.value as string;
@@ -395,7 +396,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
 
     render() {
         const values = this.props.surgicalHistory;
-        let ind = Object.keys(values).length;
         let nums = Object.keys(values).filter(
             (key) =>
                 this.state.currSurgeries.includes(key) ||
@@ -411,7 +411,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             surgicalHistory,
         } = this.props;
         if (responseType == ResponseTypes.PSH_POP && responseChoice && node) {
-            ind = -1;
             nums = responseChoice.map((procedureName) => {
                 const key = Object.keys(surgicalHistory).find(
                     (entry) => surgicalHistory[entry].procedure == procedureName
@@ -426,8 +425,9 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             });
             popResponse(node, nums);
         }
-        // if (responseType == ResponseTypes.PSH_BLANK)
-        //     nums = nums;
+        // if (responseType == ResponseTypes.PSH_BLANK && responseChoice) {
+        //     nums = responseChoice;
+        // }
 
         const content = (
             <>

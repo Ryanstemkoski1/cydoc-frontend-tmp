@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import Tobacco from '../Tobacco';
 
 import configureStore from 'redux-mock-store';
@@ -14,7 +14,7 @@ import {
 } from 'constants/enums';
 import tobaccoProducts from 'constants/SocialHistory/tobaccoProducts';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -223,8 +223,7 @@ describe('Tobacco Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.Yes,
                 },
@@ -237,8 +236,7 @@ describe('Tobacco Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.Maybe,
                 },
@@ -251,8 +249,7 @@ describe('Tobacco Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.No,
                 },
