@@ -3,11 +3,11 @@ import Enzyme, {
     // shallow,
     mount,
 } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import UserForm from '../pages/Account/UserForm';
 // import { Form } from 'semantic-ui-react';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 // PLAN:
 // 1. test handleSubmit for both Register onSubmit prop and EditProfile onSubmit prop

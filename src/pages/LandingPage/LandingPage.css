@@ -49,17 +49,16 @@
     margin-right: 10px;
 }
 
-
 /* The placeholder segment in each column */
 .list-placeholder {
-    width: 110% !important;;
+    width: 110% !important;
     height: 90% !important;
     justify-content: start !important;
     overflow: auto !important;
 }
 
 .list-placeholder-templates {
-    width: 110% !important;;
+    width: 110% !important;
     height: 80% !important;
     justify-content: start !important;
     overflow: auto !important;
@@ -111,11 +110,11 @@
     cursor: pointer;
     background-color: white;
     color: #0d5e70;
-    border: 2px solid #6DA3B1;
+    border: 2px solid #6da3b1;
     border-radius: 15px;
     padding: 10vh 5vw; 
     text-align: center;
-    transition: all .1s ease-in-out;
+    transition: all 0.1s ease-in-out;
 }
 
 .landing-box:hover {
@@ -147,13 +146,13 @@
     left: 0;
 }
 
-.text {
+.textt {
     margin: 1vh 1vw;
-    color: #0d5e70
+    color: #0d5e70;
 }
 
 .smaller-text {
-    color: #6DA3B1
+    color: #6da3b1;
 }
 @media (max-width: 575px){
     .landing-feedback {

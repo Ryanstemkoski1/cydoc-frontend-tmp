@@ -7,12 +7,13 @@ import HPINote, {
 } from '../HPINote';
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import { initialHpiState } from 'redux/reducers/hpiReducer';
+import { initialSurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -35,7 +36,10 @@ const mockStore = configureStore([]);
 // });
 
 const mountWithStore = (hpi = initialHpiState) => {
-    const store = mockStore({ hpi });
+    const store = mockStore({
+        hpi,
+        surgicalHistory: initialSurgicalHistoryState,
+    });
     return {
         store,
         wrapper: mount(

@@ -161,6 +161,12 @@ export const BaseCategoryForm = <T extends { id: string }>(
         );
     }
 
+    const checkDifferentialDiagnoses = (s: string) => {
+        return s == 'differentialDiagnoses'
+            ? 'Diagnosis'
+            : _.startCase(s as string);
+    };
+
     // const enableToggle = mobile && category !== 'differentialDiagnoses';
     const enableToggle = mobile;
 
@@ -175,7 +181,7 @@ export const BaseCategoryForm = <T extends { id: string }>(
                     as='h2'
                     attached
                     size='large'
-                    content={_.startCase(category as string)}
+                    content={checkDifferentialDiagnoses(category)}
                 />
             </Accordion.Title>
             <Accordion.Content active={!enableToggle || expanded}>

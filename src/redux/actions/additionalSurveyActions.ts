@@ -1,3 +1,4 @@
+import { UserInfo } from 'redux/reducers/additionalSurveyReducer';
 import { UPDATE_ADDITIONAL_DETAILS } from './actionTypes';
 
 export interface UpdateAdditionalSurveyAction {
@@ -7,23 +8,29 @@ export interface UpdateAdditionalSurveyAction {
         legalLastName: string;
         socialSecurityNumber: string;
         dateOfBirth: string;
-        showAdditionalSurvey: boolean;
+        initialSurveyState: number;
     };
 }
 
 export interface GoBackToAdditionalSurvey {
     type: UPDATE_ADDITIONAL_DETAILS.GO_BACK;
-    payload: {
-        showAdditionalSurvey: boolean;
-    };
 }
 
+export interface UpdateUserInfo {
+    type: UPDATE_ADDITIONAL_DETAILS.UPDATE_USER_INFO;
+    payload: UserInfo;
+}
+
+export interface ValidateUserInfo {
+    type: UPDATE_ADDITIONAL_DETAILS.VALIDATE_USER_INFO;
+    payload: boolean;
+}
 export function updateAdditionalSurveyDetails(
     legalFirstName: string,
     legalLastName: string,
     socialSecurityNumber: string,
     dateOfBirth: string,
-    showAdditionalSurvey: boolean
+    initialSurveyState: number
 ): UpdateAdditionalSurveyAction {
     return {
         type: UPDATE_ADDITIONAL_DETAILS.UPDATE_ADDITIONAL_DETAILS,
@@ -32,7 +39,7 @@ export function updateAdditionalSurveyDetails(
             legalLastName,
             socialSecurityNumber,
             dateOfBirth,
-            showAdditionalSurvey,
+            initialSurveyState,
         },
     };
 }
@@ -40,8 +47,19 @@ export function updateAdditionalSurveyDetails(
 export function resetAdditionalSurveyPage(): GoBackToAdditionalSurvey {
     return {
         type: UPDATE_ADDITIONAL_DETAILS.GO_BACK,
-        payload: {
-            showAdditionalSurvey: true,
-        },
+    };
+}
+
+export function updateUserInfo(payload: UserInfo): UpdateUserInfo {
+    return {
+        type: UPDATE_ADDITIONAL_DETAILS.UPDATE_USER_INFO,
+        payload: payload,
+    };
+}
+
+export function validateUserInfo(payload: boolean): ValidateUserInfo {
+    return {
+        type: UPDATE_ADDITIONAL_DETAILS.VALIDATE_USER_INFO,
+        payload: payload,
     };
 }

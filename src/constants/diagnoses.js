@@ -20,7 +20,8 @@ const rawDiagnoses = {
     309083007: 'Back abscess',
     28432003: 'Abscess of breast',
     64576003: 'Buttock abscess',
-    235774002: 'Abscess of colon co-occurrent and due to diverticular disease of colon',
+    235774002:
+        'Abscess of colon co-occurrent and due to diverticular disease of colon',
     200751004: 'Face abscess',
     301706005: 'Abscess of foot',
     27916005: 'Liver abscess',
@@ -28,7 +29,8 @@ const rawDiagnoses = {
     6284004: 'Neck abscess',
     27717006: 'Scrotal abscess',
     31928004: 'Skin or subcutaneous tissue abscess',
-    866000008: 'Abscess of skin and/or subcutaneous tissue caused by ingrown hair',
+    866000008:
+        'Abscess of skin and/or subcutaneous tissue caused by ingrown hair',
     33261009: 'Abscess of tonsil',
     69430001: 'Vulvar abscess',
     79631006: 'Absence seizure',
@@ -52,7 +54,8 @@ const rawDiagnoses = {
     37320007: 'Acquired absence of tooth',
     65362007: 'Acquired cavovarus deformity of foot',
     88562000: 'Acquired deformity of ankle and/or foot',
-    64298006: 'Acquired deformity of distal interphalangeal joint of finger due to trauma',
+    64298006:
+        'Acquired deformity of distal interphalangeal joint of finger due to trauma',
     67321002: 'Acquired deformity of hip',
     240244006: 'Acquired deformity of joint of foot',
     18283000: 'Acquired nasal deformity',
@@ -126,7 +129,8 @@ const rawDiagnoses = {
     235866006: 'Acute hepatitis c',
     288723005: 'Acute ill defined cerebrovascular disease',
     719860006: 'Acute infectious conjunctivitis',
-    285381006: 'Acute infective exacerbation of chronic obstructive airways disease',
+    285381006:
+        'Acute infective exacerbation of chronic obstructive airways disease',
     438582003: 'Acute injury of anterior cruciate ligament',
     413439005: 'Acute ischemic heart disease',
     6655004: 'Acute laryngitis',
@@ -177,7 +181,8 @@ const rawDiagnoses = {
     67195008: 'Acute stress disorder',
     70422006: 'Acute subendocardial infarction',
     80600003: 'Acute suppuration of nasal sinus',
-    86279000: 'Acute suppurative otitis media with spontaneous rupture of ear drum',
+    86279000:
+        'Acute suppurative otitis media with spontaneous rupture of ear drum',
     17741008: 'Acute tonsillitis',
     231489001: 'Acute transient psychotic disorder',
     35183001: 'Acute transudative otitis media',
@@ -216,13 +221,16 @@ const rawDiagnoses = {
     237692001: 'Acth deficiency, unspecified',
     444613000: 'Adhd, adult residual',
     129588001: 'Failure to thrive syndrome, adult',
-    45376003: 'Adverse effect, caused by correct medicinal substance properly administered',
+    45376003:
+        'Adverse effect, caused by correct medicinal substance properly administered',
     62014003: 'Adverse drug reaction',
     370540009: 'Adverse reaction to food',
     441704009: 'Affective psychosis',
     278504009: 'Afibrinogenemia',
-    51044000: 'After-cataract not obscuring vision following extraction of cataract',
-    193615000: 'After-cataract with vision obscured following extraction of cataract',
+    51044000:
+        'After-cataract not obscuring vision following extraction of cataract',
+    193615000:
+        'After-cataract with vision obscured following extraction of cataract',
     267718000: 'Age-related macular degeneration',
     762907005: 'Agenesis of left kidney',
     762908000: 'Agenesis of right kidney',
@@ -291,7 +299,8 @@ const rawDiagnoses = {
     413533008: 'Anemia due to chronic blood loss',
     79035003: 'Anemia due to unknown mechanism',
     199246003: 'Anemia in pregnancy',
-    45828008: 'Anemia in mother complicating pregnancy, childbirth and/or puerperium',
+    45828008:
+        'Anemia in mother complicating pregnancy, childbirth and/or puerperium',
     191265009: 'Anemia due to neoplasia',
     234347009: 'Anemia of chronic disease',
     49708008: 'Anemia due to ckd',
@@ -425,7 +434,8 @@ const rawDiagnoses = {
     195147006: 'Atrial thrombosis',
     233917008: 'Av block',
     251166008: 'Atrioventricular nodal re-entry tachycardia',
-    253416000: 'Atrioventricular septal defect: atrial and ventricular components',
+    253416000:
+        'Atrioventricular septal defect: atrial and ventricular components',
     84568007: 'Atrophic gastritis',
     52441000: 'Postmenopausal atrophic vaginitis',
     248861000: 'Vulvar atrophy',
@@ -489,10 +499,13 @@ const rawDiagnoses = {
     193093009: "Bell's palsy",
     443416007: 'Benign adenomatous neoplasm',
     1201005: 'Benign essential htn',
-    23717007: 'Benign essential hypertension complicating and/or reason for care during pregnancy',
+    23717007:
+        'Benign essential hypertension complicating and/or reason for care during pregnancy',
     10725009: 'Benign htn',
-    194766005: 'Benign hypertensive heart disease without congestive cardiac failure',
-    77970009: 'Benign hypertensive heart disease without congestive heart failure',
+    194766005:
+        'Benign hypertensive heart disease without congestive cardiac failure',
+    77970009:
+        'Benign hypertensive heart disease without congestive heart failure',
     68267002: 'Idiopathic intracranial hypertension',
     444808002: 'Benign localized hyperplasia of prostate',
     58648008: 'Benign monoclonal gammopathy',
@@ -565,7 +578,8 @@ const rawDiagnoses = {
     83225003: 'Bipolar 2 disorder, unspecified episode',
     191627008: 'Bipolar affective disorder, current episode depression',
     191618007: 'Bipolar affective disorder, current episode manic',
-    191623007: 'Bipolar affective disorder, currently manic, severe, with psychosis',
+    191623007:
+        'Bipolar affective disorder, currently manic, severe, with psychosis',
     13746004: 'Bipolar disorder, unspecified type',
     85248005: 'Bipolar disorder in remission',
     92506005: 'Biventricular heart failure',
@@ -599,16 +613,21 @@ const rawDiagnoses = {
     20010003: 'Borderline personality disorder',
     72893007: 'Brachial neuritis',
     3548001: 'Brachial plexus disorder',
-    126944002: 'Brain disorder resulting from a period of impaired oxygen delivery to the brain',
+    126944002:
+        'Brain disorder resulting from a period of impaired oxygen delivery to the brain',
     28188001: 'Brain injury with open intracranial wound',
     9015001: 'Brain injury without open intracranial wound',
-    53267002: 'Brain injury without open intracranial wound and with loss of consciousness',
-    47450003: 'Brain injury without open intracranial wound and with moderate loss of consciousness (1-24 hours)',
-    55885004: 'Brain injury without open intracranial wound and with prolonged loss of consciousness (more than 24 hours) with return to pre-existing conscious level',
+    53267002:
+        'Brain injury without open intracranial wound and with loss of consciousness',
+    47450003:
+        'Brain injury without open intracranial wound and with moderate loss of consciousness (1-24 hours)',
+    55885004:
+        'Brain injury without open intracranial wound and with prolonged loss of consciousness (more than 24 hours) with return to pre-existing conscious level',
     230808006: 'Brain ventricular shunt obstruction',
     230802007: 'Brainstem death',
     111489007: 'Breathing related sleep disorder',
-    17532001: 'Breech malpresentation successfully converted to cephalic presentation',
+    17532001:
+        'Breech malpresentation successfully converted to cephalic presentation',
     192046006: 'Brief depressive adjustment reaction',
     247442005: 'Broken skin',
     58411009: 'Broken tooth with complication',
@@ -649,7 +668,8 @@ const rawDiagnoses = {
     201281002: 'Cafe au lait spots',
     27741009: 'Calcific tendinitis of shoulder',
     445512009: 'Calcification of coronary artery',
-    62382002: "Calcinosis, raynaud's phenomenon, sclerodactyly, and telangiectasia syndrome",
+    62382002:
+        "Calcinosis, raynaud's phenomenon, sclerodactyly, and telangiectasia syndrome",
     239832006: 'Calcium pyrophosphate deposition disease',
     427649000: 'Calcium renal calculus',
     266474003: 'Cholelithiasis',
@@ -720,7 +740,8 @@ const rawDiagnoses = {
     423973006: 'Carcinoma of uterine cervix, invasive',
     307593001: 'Carcinomatosis',
     410429000: 'Cardiac arrest due to unspecified cause',
-    233927002: 'Cardiac arrest due to unspecified cause, w successful resuscitation',
+    233927002:
+        'Cardiac arrest due to unspecified cause, w successful resuscitation',
     89138009: 'Cardiogenic shock',
     8186001: 'Cardiomegaly',
     85898001: 'Cardiomyopathy, unspecified',
@@ -879,7 +900,8 @@ const rawDiagnoses = {
     128286008: 'Chronic duodenal ulcer',
     89469000: 'Chronic duodenal ulcer w hemorrhage',
     49916007: 'Chronic duodenal ulcer w perforation',
-    402166000: 'Chronic effect of ultraviolet radiation on normal skin (photo-aging)',
+    402166000:
+        'Chronic effect of ultraviolet radiation on normal skin (photo-aging)',
     73237007: 'Chronic ethmoid sinusitis',
     52702003: 'Chronic fatigue syndrome',
     197618004: 'Chronic focal glomerulonephritis',
@@ -924,7 +946,8 @@ const rawDiagnoses = {
     79720007: 'Chronic nonalcoholic liver disease',
     185086009: 'Chronic obstructive bronchitis',
     13645005: 'Copd (chronic obstructive pulmonary disease)',
-    196001008: 'Chronic obstructive pulmonary disease with acute lower respiratory infection',
+    196001008:
+        'Chronic obstructive pulmonary disease with acute lower respiratory infection',
     425919003: 'Chronic organic brain syndrome',
     43829003: 'Chronic osteoarthritis',
     40970001: 'Chronic osteomyelitis of unspecified bone',
@@ -997,7 +1020,8 @@ const rawDiagnoses = {
     1658003: 'Closed fracture of acromial end of clavicle',
     42188001: 'Closed fracture of ankle',
     424648000: 'Closed fracture of base of fifth metatarsal bone',
-    54641008: 'Closed fracture of base of metacarpal bone other than first metacarpal',
+    54641008:
+        'Closed fracture of base of metacarpal bone other than first metacarpal',
     1705000: 'Closed fracture of base of neck of femur',
     423125000: 'Closed fracture of bone',
     64665009: 'Closed fracture of calcaneus',
@@ -1068,8 +1092,10 @@ const rawDiagnoses = {
     3291007: 'Closed fracture of two ribs',
     42636007: 'Closed fracture of upper end of humerus',
     23900009: 'Closed fracture of upper end of tibia',
-    207690005: 'Closed fracture of vault of skull with intracranial injury, with less than 1 hour loss of consciousness',
-    57998008: 'Closed fracture of vault of skull with subarachnoid, subdural and/or extradural hemorrhage',
+    207690005:
+        'Closed fracture of vault of skull with intracranial injury, with less than 1 hour loss of consciousness',
+    57998008:
+        'Closed fracture of vault of skull with subarachnoid, subdural and/or extradural hemorrhage',
     69866009: 'Closed fracture of vault of skull without intracranial injury',
     42157000: 'Closed fracture of vertebral column',
     208242007: 'Closed fracture proximal humerus, greater tuberosity',
@@ -1170,7 +1196,8 @@ const rawDiagnoses = {
     44057004: 'Conductive hearing loss',
     402944008: 'Condylomata lata of perianal skin',
     770626007: 'Congenital horner syndrome',
-    111443000: 'Congenital or acquired abnormality of cervix affecting pregnancy',
+    111443000:
+        'Congenital or acquired abnormality of cervix affecting pregnancy',
     65587001: 'Congenital anomaly of cerebrovascular system',
     69771008: 'Congenital esophageal anomaly',
     19416009: 'Congenital anomaly of eye',
@@ -1195,7 +1222,8 @@ const rawDiagnoses = {
     48334007: 'Congenital dislocation of hip',
     767002009: 'Congenital dislocation of left hip',
     767003004: 'Congenital dislocation of right hip',
-    74345006: 'Congenital disorder due to abnormality of chromosome number or structure',
+    74345006:
+        'Congenital disorder due to abnormality of chromosome number or structure',
     5867007: 'Congenital exomphalos',
     89689008: 'Congenital genu valgum',
     79168008: 'Congenital genu varum',
@@ -1307,8 +1335,10 @@ const rawDiagnoses = {
     23687008: 'Coronary artery spasm',
     386762009: 'Corpus luteum cyst',
     83799000: 'Corrected transposition of great vessels',
-    17498002: 'Cortex contusion without open intracranial wound and with loss of consciousness',
-    47979002: 'Cortex contusion without open intracranial wound and with moderate loss of consciousness (1-24 hours)',
+    17498002:
+        'Cortex contusion without open intracranial wound and with loss of consciousness',
+    47979002:
+        'Cortex contusion without open intracranial wound and with moderate loss of consciousness (1-24 hours)',
     78875003: 'Cortical senile cataract',
     18842008: 'Corticobasal degeneration',
     64109004: 'Costochondritis',
@@ -1376,7 +1406,8 @@ const rawDiagnoses = {
     128054009: 'Deep venous thrombosis of upper extremity',
     267513007: 'Deficiency anemias',
     239724009: 'Deficiency of anterior cruciate ligament',
-    124134002: 'Glucose 6 phosphate dehydrogenase deficiency (hemolytic disorder)',
+    124134002:
+        'Glucose 6 phosphate dehydrogenase deficiency (hemolytic disorder)',
     238107002: 'Protein calorie malnutrition, unspecified severity',
     22591001: 'Degeneration of cartilage and/or meniscus of knee',
     69195002: 'Cervical disc degeneration',
@@ -1449,10 +1480,13 @@ const rawDiagnoses = {
     46635009: 'Dm 1',
     44054006: 'Dm 2',
     81531005: 'Diabetes mellitus type 2 in obese',
-    425442003: 'Diabetic autonomic neuropathy associated with type 1 diabetes mellitus',
-    423263001: 'Diabetic autonomic neuropathy associated with type 2 diabetes mellitus',
+    425442003:
+        'Diabetic autonomic neuropathy associated with type 1 diabetes mellitus',
+    423263001:
+        'Diabetic autonomic neuropathy associated with type 2 diabetes mellitus',
     34140002: 'Diabetic gastroparesis',
-    424989000: 'Diabetic gastroparesis associated with type 2 diabetes mellitus',
+    424989000:
+        'Diabetic gastroparesis associated with type 2 diabetes mellitus',
     421165007: 'Diabetic oculopathy associated with type i diabetes mellitus',
     240711004: 'Candida diaper rash',
     91487003: 'Diaper dermatitis',
@@ -1618,7 +1652,8 @@ const rawDiagnoses = {
     429672007: 'Drug induced mood disorder',
     109957002: 'Drug-induced purpura',
     95533003: 'Duodenal hemorrhage',
-    34580000: 'Duodenal ulcer without hemorrhage, without perforation and without obstruction',
+    34580000:
+        'Duodenal ulcer without hemorrhage, without perforation and without obstruction',
     72007001: 'Duodenitis',
     274142002: "Dupuytren's contracture",
     410812005: "Dupuytren's disease",
@@ -1761,9 +1796,11 @@ const rawDiagnoses = {
     23913003: 'External hemorrhoid',
     38996000: 'External hemorrhoids without complication',
     254727007: 'Paget disease of skin, extramammary',
-    444597005: 'Extranodal marginal zone lymphoma of mucosa-associated lymphoid tissue of stomach',
+    444597005:
+        'Extranodal marginal zone lymphoma of mucosa-associated lymphoid tissue of stomach',
     76349003: 'Extrapyramidal disease',
-    276658003: 'Extreme immaturity of newborn, unspecified completed weeks gestation',
+    276658003:
+        'Extreme immaturity of newborn, unspecified completed weeks gestation',
     37471005: 'Hypersensitivity pneumonitis, unspecified agent',
     414173003: 'Exudative age-related macular degeneration',
     274412005: 'Eye disorder screening',
@@ -1809,22 +1846,27 @@ const rawDiagnoses = {
     4787007: 'Newborn affected by breech delivery and extraction',
     268808004: 'Newborn affected by breech delivery and extraction',
     73890002: 'Fetal or neonatal effect of delivery by vacuum extractor',
-    206118007: 'Fetal or neonatal effect of disproportion during labor and delivery',
-    5984000: 'Fetal or neonatal effect of malpresentation, malposition and/or disproportion during labor and/or delivery',
-    82719008: 'Fetal or neonatal effect of maternal anesthesia and/or analgesia',
+    206118007:
+        'Fetal or neonatal effect of disproportion during labor and delivery',
+    5984000:
+        'Fetal or neonatal effect of malpresentation, malposition and/or disproportion during labor and/or delivery',
+    82719008:
+        'Fetal or neonatal effect of maternal anesthesia and/or analgesia',
     206035009: 'Fetal or neonatal effect of maternal complication of pregnancy',
     206005002: 'Fetal or neonatal effect of maternal infection',
     206002004: 'Newborn affected by unspecified maternal condition',
     206038006: 'Fetal or neonatal effect of maternal oligohydramnios',
     268798004: 'Fetal or neonatal effect of maternal polyhydramnios',
-    206037001: 'Fetal or neonatal effect of maternal premature rupture of membrane',
+    206037001:
+        'Fetal or neonatal effect of maternal premature rupture of membrane',
     206046007: 'Fetal or neonatal effect of multiple pregnancy',
     18001006: 'Fetal or neonatal effect of multiple pregnancy',
     65599008: 'Fetal or neonatal effect of oligohydramnios',
     206065004: 'Fetal or neonatal effect of placenta previa',
     66215008: 'Fetal or neonatal effect of polyhydramnios',
     206087008: 'Fetal or neonatal effect of prolapsed cord',
-    206116006: 'Fetal or neonatal effect of transverse lie during labor and delivery',
+    206116006:
+        'Fetal or neonatal effect of transverse lie during labor and delivery',
     206122002: 'Fetal or neonatal effect of vacuum extraction delivery',
     68983007: 'Fetal or neonatal effects of maternal complication of pregnancy',
     38511004: 'Fetus or newborn affected by premature rupture of membranes',
@@ -1943,7 +1985,8 @@ const rawDiagnoses = {
     78622004: 'Galactorrhea not assoc w childbirth',
     312110005: 'Cholelithiasis w choledocholithiasis',
     235919008: 'Gallbladder calculus',
-    197377009: 'Gallbladder calculus with acute cholecystitis and no obstruction',
+    197377009:
+        'Gallbladder calculus with acute cholecystitis and no obstruction',
     95563007: 'Gallstone pancreatitis',
     445008009: 'Ganglion cyst',
     19354008: 'Ganglion cyst of tendon sheath',
@@ -1958,7 +2001,8 @@ const rawDiagnoses = {
     78809005: 'Benign polyp, stomach',
     397825006: 'Gastric ulcer of unspecified acuity',
     15902003: 'Gastric ulcer w hemorrhage',
-    59913009: 'Gastric ulcer without hemorrhage, without perforation and without obstruction',
+    59913009:
+        'Gastric ulcer without hemorrhage, without perforation and without obstruction',
     91109007: 'Gastric varices',
     4556007: 'Gastritis',
     196731005: 'Gastroduodenitis',
@@ -2111,7 +2155,8 @@ const rawDiagnoses = {
     52515009: 'Abdominal hernia',
     128545000: 'Hernia of abdominal wall',
     414396006: 'Ventral hernia',
-    414399004: 'Hernia of anterior abdominal wall without obstruction and without gangrene',
+    414399004:
+        'Hernia of anterior abdominal wall without obstruction and without gangrene',
     84857004: 'Herniation of nucleus pulposus',
     447072005: 'Female rectocele',
     231477003: 'Heroin dependence',
@@ -2203,8 +2248,10 @@ const rawDiagnoses = {
     427889009: 'Hypertension associated with transplantation',
     38341003: 'Htn (hypertension)',
     86234004: 'Hypertensive heart and renal disease',
-    194779001: 'Hypertensive heart and renal disease with (congestive) heart failure',
-    194781004: 'Hypertensive heart and renal disease with both (congestive) heart failure and renal failure',
+    194779001:
+        'Hypertensive heart and renal disease with (congestive) heart failure',
+    194781004:
+        'Hypertensive heart and renal disease with both (congestive) heart failure and renal failure',
     194780003: 'Hypertensive heart and renal disease with renal failure',
     64715009: 'Hypertensive heart disease',
     5148006: 'Hypertensive heart disease with congestive heart failure',
@@ -2311,7 +2358,8 @@ const rawDiagnoses = {
     52421005: 'Incipient cataract',
     236037000: 'Incisional hernia',
     414474001: 'Incisional hernia of anterior abdominal wall',
-    414477008: 'Incisional hernia of anterior abdominal wall without obstruction and without gangrene',
+    414477008:
+        'Incisional hernia of anterior abdominal wall without obstruction and without gangrene',
     72315009: 'Inclusion body myositis',
     427778008: 'Nasal valve incompetence',
     16863000: 'Incomplete abortion',
@@ -2323,7 +2371,8 @@ const rawDiagnoses = {
     200776003: 'Infantile seborrheic dermatitis',
     1178005: 'Infantile spastic cerebral palsy',
     300950007: 'Infected hand',
-    31871009: 'Infection and/or inflammatory reaction due to internal prosthetic device, implant and/or graft',
+    31871009:
+        'Infection and/or inflammatory reaction due to internal prosthetic device, implant and/or graft',
     71057007: 'E coli infection',
     40070004: 'Molluscum contagiosum infection',
     371686006: 'Mycobacterium avium complex',
@@ -2446,14 +2495,17 @@ const rawDiagnoses = {
     67766009: 'Intestinal adhesions with obstruction',
     197494007: 'Fat malabsorption',
     81060008: 'Bowel obstruction',
-    310387003: 'Intracapillary glomerulosclerosis of kidney due to diabetes mellitus',
+    310387003:
+        'Intracapillary glomerulosclerosis of kidney due to diabetes mellitus',
     128609009: 'Intracranial aneurysm',
     445513004: 'Intracranial cavernous hemangioma',
     254937005: 'Intracranial glioma',
     1386000: 'Intracranial hemorrhage',
-    111593004: 'Intracranial hemorrhage co-occurrent and due to closed fracture of vault of skull',
+    111593004:
+        'Intracranial hemorrhage co-occurrent and due to closed fracture of vault of skull',
     127296001: 'Intracranial injury',
-    207687004: 'Intracranial injury co-occurrent and due to closed fracture of vault of skull',
+    207687004:
+        'Intracranial injury co-occurrent and due to closed fracture of vault of skull',
     54355006: 'Intracranial injury, without skull fracture',
     302820008: 'Meningioma, brain',
     276851006: 'Intraduct papilloma of pancreas',
@@ -2466,7 +2518,8 @@ const rawDiagnoses = {
     65074000: 'Iritis',
     35240004: 'Iron deficiency',
     87522002: 'Iron deficiency anemia',
-    371315009: 'Iron deficiency anemia secondary to inadequate dietary iron intake',
+    371315009:
+        'Iron deficiency anemia secondary to inadequate dietary iron intake',
     11251000: 'Radiation cystitis',
     47099006: 'Irregular astigmatism',
     10743008: 'Irritable bowel syndrome',
@@ -2501,7 +2554,8 @@ const rawDiagnoses = {
     59078009: 'Klippel-trenaunay-weber syndrome',
     202381003: 'Knee joint effusion',
     239777004: 'Knee pyogenic arthritis',
-    66064007: 'Known or suspected fetal abnormality affecting management of mother',
+    66064007:
+        'Known or suspected fetal abnormality affecting management of mother',
     199516000: 'Known or suspected fetal abnormality',
     203638000: 'Kyphoscoliosis and scoliosis',
     414564002: 'Kyphosis',
@@ -2600,7 +2654,8 @@ const rawDiagnoses = {
     201837004: 'Localized, primary osteoarthritis of the ankle and/or foot',
     201834006: 'Localized, primary osteoarthritis of the hand',
     201836008: 'Localized, primary osteoarthritis of the lower leg',
-    201835007: 'Localized, primary osteoarthritis of the pelvic region and thigh',
+    201835007:
+        'Localized, primary osteoarthritis of the pelvic region and thigh',
     201831003: 'Localized, primary osteoarthritis of the shoulder region',
     201849003: 'Localized, secondary osteoarthritis of the shoulder region',
     301802001: 'Loin abscess',
@@ -2701,7 +2756,8 @@ const rawDiagnoses = {
     187734007: 'Malignant neoplasm of cardioesophageal junction of stomach',
     188151006: 'Malignant neoplasm of central part of female breast',
     363406005: 'Colon cancer, unspecified site',
-    187999008: 'Malignant neoplasm of connective and soft tissue of hip and lower limb',
+    187999008:
+        'Malignant neoplasm of connective and soft tissue of hip and lower limb',
     188189001: 'Malignant neoplasm of corpus uteri, excluding isthmus',
     372064008: 'Malignant neoplasm of female breast',
     428905002: 'Malignant neoplasm of gastrointestinal tract',
@@ -2783,8 +2839,10 @@ const rawDiagnoses = {
     188240003: 'Malignant tumor of vault of bladder',
     363367000: 'Malignant tumor of vulva',
     35265002: 'Mallory weiss syndrome',
-    77702009: 'Malnutrition of mild degree (gomez: 75% to less than 90% of standard weight)',
-    77091003: 'Malnutrition of moderate degree (gomez: 60% to less than 75% of standard weight)',
+    77702009:
+        'Malnutrition of mild degree (gomez: 75% to less than 90% of standard weight)',
+    77091003:
+        'Malnutrition of moderate degree (gomez: 60% to less than 75% of standard weight)',
     47944004: 'Teeth malocclusion',
     270498000: 'Malposition and malpresentation of fetus',
     231494001: 'Mania',
@@ -2836,7 +2894,8 @@ const rawDiagnoses = {
     23186000: 'Menstrual migraine',
     74732009: 'Psychological disorder',
     442351006: 'Drug induced mental disorder, unspecified type',
-    199257008: 'Mental disorders during pregnancy, childbirth and the puerperium',
+    199257008:
+        'Mental disorders during pregnancy, childbirth and the puerperium',
     91138005: 'Mental retardation',
     85007004: 'Meralgia paresthetica',
     253001006: 'Merkel cell carcinoma',
@@ -3011,7 +3070,8 @@ const rawDiagnoses = {
     73749009: 'Hyperbilirubinemia of prematurity',
     17140000: 'Neonatal jaundice due to delayed conjugation',
     82696006: 'Breast milk jaundice',
-    206439006: 'Neonatal jaundice due to glucose-6-phosphate dehydrogenase deficiency',
+    206439006:
+        'Neonatal jaundice due to glucose-6-phosphate dehydrogenase deficiency',
     206525008: 'Neonatal necrotizing enterocolitis, unspecified',
     32984002: 'Polycythemia neonatorum',
     127021009: 'Neoplasm of adrenal gland',
@@ -3125,7 +3185,8 @@ const rawDiagnoses = {
     64552006: 'Noninflammatory disorder of fallopian tube',
     79734007: 'Noninflammatory disorder of ovary',
     28271003: 'Noninflammatory disorder of vulva',
-    266591002: 'Noninflammatory disorders of the ovary, fallopian tube and broad ligament',
+    266591002:
+        'Noninflammatory disorders of the ovary, fallopian tube and broad ligament',
     62856000: 'Nonobliterative otosclerosis involving oval window',
     192454004: 'Nonorganic insomnia',
     390834004: 'Nonproliferative retinopathy due to diabetes mellitus',
@@ -3164,10 +3225,14 @@ const rawDiagnoses = {
     314022009: 'Obstruction of nasolacrimal duct',
     95575002: 'Obstruction of pelviureteric junction',
     236562009: 'Obstruction of peritoneal dialysis catheter',
-    767691009: 'Obstruction without gangrene co-occurrent and due to left inguinal hernia',
-    767746007: 'Obstruction without gangrene co-occurrent and due to recurrent left inguinal hernia',
-    767747003: 'Obstruction without gangrene co-occurrent and due to recurrent right inguinal hernia',
-    767690005: 'Obstruction without gangrene co-occurrent and due to right inguinal hernia',
+    767691009:
+        'Obstruction without gangrene co-occurrent and due to left inguinal hernia',
+    767746007:
+        'Obstruction without gangrene co-occurrent and due to recurrent left inguinal hernia',
+    767747003:
+        'Obstruction without gangrene co-occurrent and due to recurrent right inguinal hernia',
+    767690005:
+        'Obstruction without gangrene co-occurrent and due to right inguinal hernia',
     230746009: 'Obstructive hydrocephalus',
     59848001: 'Obstructive jaundice',
     78275009: 'Obstructive sleep apnea',
@@ -3264,7 +3329,8 @@ const rawDiagnoses = {
     239873007: 'Osteoarthritis of knee',
     268054009: 'Polyarticular osteoarthritis',
     239867006: 'Osteoarthritis of wrist',
-    33262002: 'Osteoarthrosis involving multiple sites but not designated as generalized',
+    33262002:
+        'Osteoarthrosis involving multiple sites but not designated as generalized',
     37895003: 'Osteoarthrosis of the carpometacarpal joint of the thumb',
     82562007: 'Osteochondritis dissecans',
     443093007: 'Osteochondroma',
@@ -3315,7 +3381,8 @@ const rawDiagnoses = {
     55525008: 'Paralytic ileus',
     116288000: 'Paralytic stroke',
     430959006: 'Paralytic syndrome of dominant side as late effect of stroke',
-    430947007: 'Paralytic syndrome of nondominant side as late effect of stroke',
+    430947007:
+        'Paralytic syndrome of nondominant side as late effect of stroke',
     191667009: 'Paranoid disorder',
     64905009: 'Paranoid schizophrenia',
     63181006: 'Paranoid schizophrenia in remission',
@@ -3358,12 +3425,14 @@ const rawDiagnoses = {
     409667007: 'Pathological fracture of femur',
     409666003: 'Pathological fracture of neck of femur',
     274146004: 'Vertebral pathological fx',
-    74391003: 'Pauciarticular juvenile rheumatoid arthritis of unspecified joint',
+    74391003:
+        'Pauciarticular juvenile rheumatoid arthritis of unspecified joint',
     81000006: 'Head lice',
     57643001: 'Peptic reflux disease',
     13200003: 'Peptic ulcer of unspecified site and acuity',
     64121000: 'Peptic ulcer w hemorrhage',
-    38365000: 'Peptic ulcer without hemorrhage, without perforation and without obstruction',
+    38365000:
+        'Peptic ulcer without hemorrhage, without perforation and without obstruction',
     56905009: 'Intestinal perforation',
     80142000: 'Nasal septal perforation',
     235741002: 'Perforation of small intestine',
@@ -3392,7 +3461,8 @@ const rawDiagnoses = {
     127014009: 'Peripheral angiopathy due to diabetes mellitus',
     399957001: 'Peripheral artery disease, unspecified type',
     275519006: 'Congenital peripheral arteriovenous malformation, unspecified',
-    421365002: 'Peripheral circulatory disorder due to type 1 diabetes mellitus',
+    421365002:
+        'Peripheral circulatory disorder due to type 1 diabetes mellitus',
     422166005: 'Dm 2 w peripheral vascular disease',
     405721006: 'Peripheral degeneration of retina',
     271809000: 'Peripheral edema',
@@ -3518,7 +3588,8 @@ const rawDiagnoses = {
     7339009: 'Drug induced polyneuropathy',
     49455004: 'Diabetic polyneuropathy',
     713706002: 'Dm 2 w polyneuropathy',
-    79268002: 'Polyneuropathy, organomegaly, endocrinopathy, monoclonal gammopathy, and skin changes syndrome',
+    79268002:
+        'Polyneuropathy, organomegaly, endocrinopathy, monoclonal gammopathy, and skin changes syndrome',
     35547002: 'Polyotia',
     441456002: 'Polyp',
     373610002: 'Nasopharyngeal polyp',
@@ -3721,7 +3792,8 @@ const rawDiagnoses = {
     19242006: 'Pulmonary edema',
     59282003: 'Pulmonary embolism',
     87433001: 'Emphysema',
-    233674008: 'Pulmonary emphysema in alpha-1 primary immunodeficiency deficiency',
+    233674008:
+        'Pulmonary emphysema in alpha-1 primary immunodeficiency deficiency',
     70995007: 'Pulmonary htn',
     24369008: 'Pulmonary sarcoidosis',
     194997002: 'Nonrheumatic pulmonary valve stenosis',
@@ -3780,7 +3852,8 @@ const rawDiagnoses = {
     767678008: 'Left recurrent inguinal hernia',
     66344007: 'Major depressive disorder, recurrent episode',
     46244001: 'Major depressive disorder, recurrent episode, in full remission',
-    33135002: 'Major depressive disorder, recurrent episode, in partial remission',
+    33135002:
+        'Major depressive disorder, recurrent episode, in partial remission',
     68019004: 'Recurrent major depression in remission',
     268621008: 'Recurrent major depressive episodes',
     281775009: 'Recurrent mouth ulcers',
@@ -3813,7 +3886,8 @@ const rawDiagnoses = {
     230374002: 'Remittent-progressive multiple sclerosis',
     236488005: 'Renal artery occlusion',
     302233006: 'Renal artery stenosis',
-    75150001: 'Renal disease in pregnancy and/or puerperium without hypertension',
+    75150001:
+        'Renal disease in pregnancy and/or puerperium without hypertension',
     421893009: 'Dm 1 w renal manifestation',
     420279001: 'Dm 2 w renal manifestation',
     42399005: 'Renal failure',
@@ -3845,7 +3919,8 @@ const rawDiagnoses = {
     82576008: 'Retained foreign body in eye',
     109894007: 'Retained placenta',
     275425008: 'Retained poc after sab',
-    44216000: 'Retained products of conception, following delivery with hemorrhage',
+    44216000:
+        'Retained products of conception, following delivery with hemorrhage',
     267064002: 'Urinary retention',
     373168002: 'Reticulosarcoma',
     40024006: 'Retinal defect',
@@ -4057,13 +4132,16 @@ const rawDiagnoses = {
     40700009: 'Severe intellectual disability',
     73867007: 'Severe major depression with psychotic features',
     75084000: 'Severe major depression without psychotic features',
-    430852001: 'Severe major depression, single episode, with psychotic features',
-    76441001: 'Severe major depression, single episode, without psychotic features',
+    430852001:
+        'Severe major depression, single episode, with psychotic features',
+    76441001:
+        'Severe major depression, single episode, without psychotic features',
     28663008: 'Severe manic bipolar i disorder with psychotic features',
     10981006: 'Severe mixed bipolar i disorder with psychotic features',
     46229002: 'Severe mixed bipolar i disorder without psychotic features',
     312905005: 'Severe nonproliferative retinopathy due to diabetes mellitus',
-    399872003: 'Severe nonproliferative retinopathy with clinically significant macular edema due to diabetes mellitus',
+    399872003:
+        'Severe nonproliferative retinopathy with clinically significant macular edema due to diabetes mellitus',
     426656000: 'Severe persistent asthma',
     46764007: 'Severe preeclampsia',
     28475009: 'Severe recurrent major depression with psychotic features',
@@ -4249,8 +4327,10 @@ const rawDiagnoses = {
     40799003: 'Subacromial bursitis',
     73774007: 'Subacute bacterial endocarditis',
     262955000: 'Traumatic subarachnoid hemorrhage',
-    87020000: 'Subarachnoid hemorrhage following injury without open intracranial wound and with brief loss of consciousness (less than one hour)',
-    88747000: 'Subarachnoid hemorrhage following injury without open intracranial wound and with prolonged loss of consciousness (more than 24 hours) and return to pre-existing conscious level',
+    87020000:
+        'Subarachnoid hemorrhage following injury without open intracranial wound and with brief loss of consciousness (less than one hour)',
+    88747000:
+        'Subarachnoid hemorrhage following injury without open intracranial wound and with prolonged loss of consciousness (more than 24 hours) and return to pre-existing conscious level',
     21454007: 'Subarachnoid intracranial hemorrhage',
     95723009: 'Subcapsular cataract',
     15258001: 'Subclavian steal syndrome',
@@ -4258,8 +4338,10 @@ const rawDiagnoses = {
     54823002: 'Subclinical hypothyroidism',
     78768009: 'Subconjunctival hemorrhage',
     78715003: 'Subdeltoid bursitis',
-    26205001: 'Subdural hemorrhage following injury without open intracranial wound and with brief loss of consciousness (less than one hour)',
-    63323000: 'Subdural hemorrhage following injury without open intracranial wound and with moderate loss of consciousness (1-24 hours)',
+    26205001:
+        'Subdural hemorrhage following injury without open intracranial wound and with brief loss of consciousness (less than one hour)',
+    63323000:
+        'Subdural hemorrhage following injury without open intracranial wound and with moderate loss of consciousness (1-24 hours)',
     35486000: 'Subdural intracranial hemorrhage',
     46109009: 'Subendocardial ischemia',
     22668006: 'Subglottic stenosis',
@@ -4310,7 +4392,8 @@ const rawDiagnoses = {
     55464009: 'Sle (systemic lupus erythematosus)',
     68815009: 'Sle w glomerulonephritis',
     397016004: 'Systemic mastocytosis',
-    201796004: 'Systemic onset juvenile idiopathic arthritis of unspecified joint',
+    201796004:
+        'Systemic onset juvenile idiopathic arthritis of unspecified joint',
     89155008: 'Scleroderma, unspecified',
     417996009: 'Systolic heart failure, unspecified acuity',
     56218007: 'Systolic hypertension',
@@ -4477,7 +4560,8 @@ const rawDiagnoses = {
     79586000: 'Tubal pregnancy',
     56717001: 'Tuberculosis',
     186194007: 'Tuberculosis of lung, confirmed by culture only',
-    186193001: 'Tuberculosis of lung, confirmed by sputum microscopy with or without culture',
+    186193001:
+        'Tuberculosis of lung, confirmed by sputum microscopy with or without culture',
     186195008: 'Tuberculosis of lung, confirmed histologically',
     58437007: 'Tb of meninges',
     186182003: 'Tb of pleura',
@@ -4568,7 +4652,8 @@ const rawDiagnoses = {
     72866009: 'Varicose veins of lower extremity',
     304930004: 'Varicose veins of lower extremity with ulcer',
     69352009: 'Varicose veins of lower extremity with ulcer and inflammation',
-    297713002: 'Varicose veins of lower extremity without ulcer and without inflammation',
+    297713002:
+        'Varicose veins of lower extremity without ulcer and without inflammation',
     195445008: 'Varicose veins of the leg with ulcer',
     429998004: 'Vascular dementia',
     230285003: 'Vascular dementia of acute onset',

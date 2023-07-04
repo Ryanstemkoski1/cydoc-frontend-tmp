@@ -9,11 +9,7 @@
             "Chills",
             "Night sweats"
         ],
-        "Eyes": [
-            "Glasses",
-            "Contacts",
-            "Blurriness"
-        ],
+        "Eyes": ["Glasses", "Contacts", "Blurriness"],
         "Ears": [
             "Changes in hearing",
             "Hearing loss",
@@ -35,12 +31,7 @@
             "Sore throat",
             "Hoarseness"
         ],
-        "Throat": [
-            "Lumps",
-            "Swelling",
-            "Pain",
-            "Stiffness"
-        ],
+        "Throat": ["Lumps", "Swelling", "Pain", "Stiffness"],
         "Respiratory": [
             "Dyspnea",
             "Dyspnea on exertion",
@@ -159,10 +150,6 @@
             "Confusion",
             "Memory loss"
         ],
-        "Psych": [
-            "Anxiety",
-            "Depression",
-            "Suicide attempts"
-        ]
+        "Psych": ["Anxiety", "Depression", "Suicide attempts"]
     }
 }

@@ -19,10 +19,7 @@
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "sitting upright",
-                        "laying still"
-                    ]
+                    "findings": ["sitting upright", "laying still"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -46,19 +43,14 @@
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": true,
-                    "findings": [
-                        "normocephalic",
-                        "atraumatic"
-                    ]
+                    "findings": ["normocephalic", "atraumatic"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "nuchal rigidity"
-                    ]
+                    "findings": ["nuchal rigidity"]
                 }
             ]
         },
@@ -70,9 +62,7 @@
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "PERRLA"
-                    ]
+                    "findings": ["PERRLA"]
                 },
                 {
                     "normalOrAbnormal": "normal",
@@ -101,9 +91,7 @@
                     "needsRightLeft": true,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "fundoscopy unremarkable"
-                    ]
+                    "findings": ["fundoscopy unremarkable"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -200,9 +188,7 @@
                     "needsRightLeft": true,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "diminished auditory acuity"
-                    ]
+                    "findings": ["diminished auditory acuity"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -241,10 +227,7 @@
                     "needsRightLeft": true,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "tenderness to palpation",
-                        "pain on palpation"
-                    ]
+                    "findings": ["tenderness to palpation", "pain on palpation"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -268,18 +251,14 @@
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "no sinus tenderness"
-                    ]
+                    "findings": ["no sinus tenderness"]
                 },
                 {
                     "normalOrAbnormal": "normal",
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "normal internal nose on otoscopy"
-                    ]
+                    "findings": ["normal internal nose on otoscopy"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -323,10 +302,7 @@
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": true,
-                    "findings": [
-                        "normal swallowing",
-                        "normal phonation"
-                    ]
+                    "findings": ["normal swallowing", "normal phonation"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -414,19 +390,14 @@
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": true,
-                    "findings": [
-                        "CTAB",
-                        "no wheezes rales or rhonchi"
-                    ]
+                    "findings": ["CTAB", "no wheezes rales or rhonchi"]
                 },
                 {
                     "normalOrAbnormal": "normal",
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "normal percussion"
-                    ]
+                    "findings": ["normal percussion"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -434,9 +405,7 @@
                     "display": "widget",
                     "widget": "LUNG_WIDGET",
                     "includeSelectAll": false,
-                    "findings": [
-
-                    ]
+                    "findings": []
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -468,18 +437,14 @@
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "no CVAT"
-                    ]
+                    "findings": ["no CVAT"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
                     "needsRightLeft": true,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "CVAT present"
-                    ]
+                    "findings": ["CVAT present"]
                 }
             ]
         },
@@ -504,11 +469,7 @@
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": true,
-                    "findings": [
-                        "normal PMI",
-                        "no bruits",
-                        "normal JVP"
-                    ]
+                    "findings": ["normal PMI", "no bruits", "normal JVP"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -522,7 +483,7 @@
                         "sinus arrhythmia"
                     ]
                 },
-                
+
                 {
                     "normalOrAbnormal": "abnormal",
                     "needsRightLeft": false,
@@ -551,19 +512,14 @@
                     "needsRightLeft": true,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "carotid bruit"
-                    ]
+                    "findings": ["carotid bruit"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "elevated JVP",
-                        "decreased JVP"
-                    ]
+                    "findings": ["elevated JVP", "decreased JVP"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -571,9 +527,7 @@
                     "display": "widget",
                     "widget": "MURMUR_WIDGET",
                     "includeSelectAll": false,
-                    "findings": [
-                        
-                    ]
+                    "findings": []
                 }
             ]
         },
@@ -596,9 +550,7 @@
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "normal dorsalis pedis"
-                    ]
+                    "findings": ["normal dorsalis pedis"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -606,9 +558,7 @@
                     "display": "widget",
                     "widget": "PULSES_WIDGET",
                     "includeSelectAll": false,
-                    "findings": [
-                        
-                    ]
+                    "findings": []
                 }
             ]
         },
@@ -620,31 +570,21 @@
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": true,
-                    "findings": [
-                        "normal bowel sounds",
-                        "no bruits"
-                    ]
+                    "findings": ["normal bowel sounds", "no bruits"]
                 },
                 {
                     "normalOrAbnormal": "normal",
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": true,
-                    "findings": [
-                        "no hepatomegaly",
-                        "no splenomegaly"
-                    ]
+                    "findings": ["no hepatomegaly", "no splenomegaly"]
                 },
                 {
                     "normalOrAbnormal": "normal",
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": true,
-                    "findings": [
-                        "soft",
-                        "nontender",
-                        "nondistended"
-                    ]
+                    "findings": ["soft", "nontender", "nondistended"]
                 },
                 {
                     "normalOrAbnormal": "normal",
@@ -663,9 +603,7 @@
                     "display": "widget",
                     "widget": "ABDOMEN_WIDGET",
                     "includeSelectAll": false,
-                    "findings": [
-                        
-                    ]
+                    "findings": []
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -747,9 +685,7 @@
                     "display": "widget",
                     "widget": "REFLEXES_WIDGET",
                     "includeSelectAll": false,
-                    "findings": [
-                        
-                    ]
+                    "findings": []
                 }
             ]
         },
@@ -761,30 +697,21 @@
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": true,
-                    "findings": [
-                        "warm and dry",
-                        "no visible lesions"
-                    ]
+                    "findings": ["warm and dry", "no visible lesions"]
                 },
                 {
                     "normalOrAbnormal": "normal",
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": true,
-                    "findings": [
-                        "no tenting",
-                        "normal turgor"
-                    ]
+                    "findings": ["no tenting", "normal turgor"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": false,
-                    "findings": [
-                        "tenting",
-                        "decreased turgor"
-                    ]
+                    "findings": ["tenting", "decreased turgor"]
                 },
                 {
                     "normalOrAbnormal": "abnormal",
@@ -792,9 +719,7 @@
                     "display": "widget",
                     "widget": "SKIN_WIDGET",
                     "includeSelectAll": false,
-                    "findings": [
-                        
-                    ]
+                    "findings": []
                 }
             ]
         },
@@ -851,10 +776,7 @@
                     "needsRightLeft": false,
                     "display": "buttons",
                     "includeSelectAll": true,
-                    "findings": [
-                        "normal UMN",
-                        "no pronator drift"
-                    ]
+                    "findings": ["normal UMN", "no pronator drift"]
                 },
                 {
                     "normalOrAbnormal": "normal",
@@ -883,13 +805,59 @@
     ],
 
     "widgets": {
-        "Lungs": {"Left Upper Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Upper Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Lingula": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Middle Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Left Lower Lobe": {"wheezes": false, "rales": false, "rhonchi": false}, "Right Lower Lobe": {"wheezes": false, "rales": false, "rhonchi": false}},
-        "Abdomen": {"Right Upper Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Left Upper Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Right Lower Quadrant": {"tenderness": false, "rebound": false, "guarding": false}, "Left Lower Quadrant": {"tenderness": false, "rebound": false, "guarding": false}},
+        "Lungs": {
+            "Left Upper Lobe": {
+                "wheezes": false,
+                "rales": false,
+                "rhonchi": false
+            },
+            "Right Upper Lobe": {
+                "wheezes": false,
+                "rales": false,
+                "rhonchi": false
+            },
+            "Lingula": { "wheezes": false, "rales": false, "rhonchi": false },
+            "Right Middle Lobe": {
+                "wheezes": false,
+                "rales": false,
+                "rhonchi": false
+            },
+            "Left Lower Lobe": {
+                "wheezes": false,
+                "rales": false,
+                "rhonchi": false
+            },
+            "Right Lower Lobe": {
+                "wheezes": false,
+                "rales": false,
+                "rhonchi": false
+            }
+        },
+        "Abdomen": {
+            "Right Upper Quadrant": {
+                "tenderness": false,
+                "rebound": false,
+                "guarding": false
+            },
+            "Left Upper Quadrant": {
+                "tenderness": false,
+                "rebound": false,
+                "guarding": false
+            },
+            "Right Lower Quadrant": {
+                "tenderness": false,
+                "rebound": false,
+                "guarding": false
+            },
+            "Left Lower Quadrant": {
+                "tenderness": false,
+                "rebound": false,
+                "guarding": false
+            }
+        },
         "Pulses": [],
         "Reflexes": [],
         "Murmurs": [],
-        "ExpandMurmurs":[]
-        
+        "ExpandMurmurs": []
     }
-
 }

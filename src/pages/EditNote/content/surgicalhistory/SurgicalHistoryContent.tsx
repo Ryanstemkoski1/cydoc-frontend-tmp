@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SurgicalHistoryTableBodyRow from './SurgicalHistoryTableBodyRow';
 import {
+    toggleHasSurgicalHistory,
     updateProcedure,
     updateYear,
     updateComments,
@@ -22,12 +23,15 @@ import {
 } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton';
 import {
-    SurgicalHistoryState,
     SurgicalHistoryItem,
+    SurgicalHistoryElements,
 } from 'redux/reducers/surgicalHistoryReducer';
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
-import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
+import {
+    selectHasSurgicalHistoryState,
+    selectSurgicalHistoryProcedures,
+} from 'redux/selectors/surgicalHistorySelectors';
 
 import { OptionMapping } from '_processOptions';
 import { ResponseTypes } from 'constants/hpiEnums';
@@ -40,9 +44,9 @@ import {
 } from 'redux/actions/hpiActions';
 import './SurgicalHistoryContent.css';
 import { YesNoResponse } from 'constants/enums';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import { questionContainer, questionTextStyle } from './styles';
-import { toggleIsSurgicalHistory } from 'redux/actions/userViewActions';
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
@@ -127,7 +131,8 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         event:
             | React.FormEvent<HTMLTextAreaElement>
             | React.ChangeEvent<HTMLInputElement>
-            | React.SyntheticEvent,
+            | React.SyntheticEvent
+            | null,
         data: TextAreaProps | DropdownProps | InputOnChangeData
     ) {
         const { active } = this.state;
@@ -175,7 +180,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
     }
 
     handleAddition(
-        event: React.KeyboardEvent<HTMLElement>,
+        event: React.KeyboardEvent<HTMLElement> | React.SyntheticEvent | null,
         data: DropdownProps
     ) {
         const value = data.value as string;
@@ -252,7 +257,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         );
     }
 
-    makeAccordionPanels(nums: string[], values: SurgicalHistoryState) {
+    makeAccordionPanels(nums: string[], values: SurgicalHistoryElements) {
         const { isPreview } = this.props;
         const panels: Panel[] = [];
         nums.map((i: string) => {
@@ -383,7 +388,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         return panels;
     }
     toggleYesNoButton(state: boolean | null) {
-        this.props.toggleIsSurgicalHistory(state as boolean);
+        this.props.toggleHasSurgicalHistory(state as boolean);
     }
 
     render() {
@@ -393,7 +398,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 this.state.currSurgeries.includes(key) ||
                 values[key].hasHadSurgery == YesNoResponse.Yes
         );
-        const { patientView } = this.props.userView;
+        const { hasSurgicalHistory, patientView } = this.props;
         const {
             responseChoice,
             addPshPopOptions,
@@ -417,8 +422,9 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             });
             popResponse(node, nums);
         }
-        if (responseType == ResponseTypes.PSH_BLANK && responseChoice)
+        if (responseType == ResponseTypes.PSH_BLANK && responseChoice) {
             nums = responseChoice;
+        }
 
         const content = (
             <>
@@ -453,9 +459,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                         <ToggleButton
                             className='button_yesno'
                             title='Yes'
-                            active={
-                                this.props.userView.isSurgicalHistory || false
-                            }
+                            active={hasSurgicalHistory || false}
                             onToggleButtonClick={() =>
                                 this.toggleYesNoButton(true)
                             }
@@ -464,9 +468,8 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                             className='button_yesno'
                             title='No'
                             active={
-                                this.props.userView.isSurgicalHistory !==
-                                    null &&
-                                !this.props.userView.isSurgicalHistory
+                                hasSurgicalHistory !== null &&
+                                !hasSurgicalHistory
                             }
                             onToggleButtonClick={() =>
                                 this.toggleYesNoButton(false)
@@ -474,13 +477,11 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                         />
                     </div>
                 )}
-                {nums.length &&
-                ((nums.length && this.props.userView.isSurgicalHistory) ||
-                    !patientView)
+                {nums.length && (hasSurgicalHistory || !patientView)
                     ? content
                     : ''}
                 {!this.props.isPreview &&
-                    (this.props.userView.isSurgicalHistory || !patientView) &&
+                    (hasSurgicalHistory || !patientView) &&
                     this.props.responseType != ResponseTypes.PSH_POP && (
                         <AddRowButton
                             onClick={this.addRow}
@@ -514,18 +515,16 @@ type OwnState = {
     currentYear: number;
     currSurgeries: string[];
 };
-export interface UserViewProps {
-    patientView: boolean;
-    doctorView: boolean;
-    isSurgicalHistory?: boolean | null;
-}
+
 interface SurgicalHistoryProps {
-    surgicalHistory: SurgicalHistoryState;
-    userView: UserViewProps;
+    hasSurgicalHistory: boolean | null;
+    surgicalHistory: SurgicalHistoryElements;
+    patientView: boolean;
 }
 
 interface ContentProps {
     isPreview: boolean;
+
     mobile: boolean;
     responseChoice?: string[];
     responseType?: ResponseTypes;
@@ -546,19 +545,21 @@ interface DispatchProps {
         conditionId: string
     ) => BlankQuestionChangeAction;
     popResponse: (medId: string, conditionIds: string[]) => PopResponseAction;
-    toggleIsSurgicalHistory: (state: boolean) => void;
+    toggleHasSurgicalHistory: (state: boolean) => void;
 }
 
 type Props = ContentProps & DispatchProps & SurgicalHistoryProps;
 
 const mapStateToProps = (state: CurrentNoteState): SurgicalHistoryProps => {
     return {
-        surgicalHistory: selectSurgicalHistoryState(state),
-        userView: state.userView,
+        hasSurgicalHistory: selectHasSurgicalHistoryState(state),
+        surgicalHistory: selectSurgicalHistoryProcedures(state),
+        patientView: selectPatientViewState(state),
     };
 };
 
 const mapDispatchToProps = {
+    toggleHasSurgicalHistory,
     updateProcedure,
     updateYear,
     updateComments,
@@ -566,7 +567,6 @@ const mapDispatchToProps = {
     addPshPopOptions,
     blankQuestionChange,
     popResponse,
-    toggleIsSurgicalHistory,
 };
 
 export default connect(

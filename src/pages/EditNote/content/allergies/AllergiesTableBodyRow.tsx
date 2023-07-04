@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import { Button, Table, TextArea, TextAreaProps } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { AllergiesState, AllergiesItem } from 'redux/reducers/allergiesReducer';
-import { CurrentNoteState } from 'redux/reducers';
 import {
-    selectAllergiesState,
-    selectAllergiesItem,
-} from 'redux/selectors/allergiesSelectors';
+    AllergiesItem,
+    AllergiesElements,
+} from 'redux/reducers/allergiesReducer';
+import { CurrentNoteState } from 'redux/reducers';
+import { selectAllergiesItem } from 'redux/selectors/allergiesSelectors';
 import './table.css';
 import { OptionMapping } from '_processOptions';
 
@@ -38,7 +38,11 @@ class AllergiesTableBodyRow extends Component<Props> {
             onAddItem,
             rowIndex,
         } = this.props;
-        const { incitingAgent, reaction, comments } = this.props.allergiesItem;
+        const {
+            incitingAgent,
+            reaction,
+            comments /* NOTE: if you remove this field, "comments" verify that corresponding tests for this file aren't failing  */,
+        } = this.props.allergiesItem;
 
         const tableRows = fields.map(
             (field: keyof AllergiesItem, index: number) => {
@@ -124,17 +128,19 @@ class AllergiesTableBodyRow extends Component<Props> {
 }
 
 interface AllergiesProps {
-    allergies: AllergiesState;
     allergiesItem: AllergiesItem;
 }
 
 interface RowProps {
     fields: (keyof AllergiesItem)[];
     onTableBodyChange: (
-        event: React.FormEvent<HTMLTextAreaElement>,
+        event:
+            | React.FormEvent<HTMLTextAreaElement>
+            | React.SyntheticEvent
+            | null,
         data: TextAreaProps
     ) => void;
-    rowIndex: keyof AllergiesState;
+    rowIndex: keyof AllergiesElements;
     isPreview: boolean;
     allergensOptions: OptionMapping;
     allergicReactionsOptions: OptionMapping;
@@ -149,7 +155,6 @@ const mapStateToProps = (
     rowProps: RowProps
 ): AllergiesProps => {
     return {
-        allergies: selectAllergiesState(state),
         allergiesItem: selectAllergiesItem(state, rowProps.rowIndex),
     };
 };

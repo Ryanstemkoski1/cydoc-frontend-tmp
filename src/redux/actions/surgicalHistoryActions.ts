@@ -1,6 +1,24 @@
 import { YesNoResponse } from 'constants/enums';
 import { SURGICAL_HISTORY_ACTION } from './actionTypes';
 
+interface HasSurgicalHistoryAction {
+    type: SURGICAL_HISTORY_ACTION.HAS_SURGICAL_HISTORY;
+    payload: {
+        hasSurgicalHistory: boolean;
+    };
+}
+
+export function toggleHasSurgicalHistory(
+    state: boolean
+): HasSurgicalHistoryAction {
+    return {
+        type: SURGICAL_HISTORY_ACTION.HAS_SURGICAL_HISTORY,
+        payload: {
+            hasSurgicalHistory: state,
+        },
+    };
+}
+
 interface UpdateProcedureAction {
     type: SURGICAL_HISTORY_ACTION.UPDATE_PROCEDURE;
     payload: {
@@ -111,6 +129,7 @@ export function addPshPopOptions(
 }
 
 export type SurgicalHistoryActionTypes =
+    | HasSurgicalHistoryAction
     | UpdateProcedureAction
     | ToggleOptionAction
     | UpdateYearAction

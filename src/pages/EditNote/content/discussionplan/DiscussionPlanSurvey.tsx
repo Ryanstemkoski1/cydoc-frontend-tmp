@@ -35,12 +35,8 @@ interface AnswerButtonsProps {
  * Component for the survey of the discussion and plan section
  */
 const DiscussionPlanSurvey = (props: DiscussionPlanSurveyProps) => {
-    const {
-        survey,
-        updateSickness,
-        updateEmergency,
-        updateAdmitToHospital,
-    } = props;
+    const { survey, updateSickness, updateEmergency, updateAdmitToHospital } =
+        props;
 
     return (
         <Segment className='plan-survey'>

@@ -19,16 +19,12 @@ import {
 } from 'redux/actions/surgicalHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
-    SurgicalHistoryState,
+    SurgicalHistoryElements,
     SurgicalHistoryItem,
 } from 'redux/reducers/surgicalHistoryReducer';
 import Dropdown from 'components/tools/OptimizedDropdown';
-import { AllergiesState } from 'redux/reducers/allergiesReducer';
 import './SurgicalHistoryTableBodyRow.css';
-import {
-    selectSurgicalHistoryState,
-    selectSurgicalHistoryItem,
-} from 'redux/selectors/surgicalHistorySelectors';
+import { selectSurgicalHistoryItem } from 'redux/selectors/surgicalHistorySelectors';
 import { OptionMapping } from '_processOptions';
 import ToggleButton from 'components/tools/ToggleButton';
 import { YesNoResponse } from 'constants/enums';
@@ -64,7 +60,7 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
     };
 
     handleProcedureChange = (
-        event: React.SyntheticEvent,
+        event: React.SyntheticEvent | null,
         data: DropdownProps
     ) => {
         this.props.onTableBodyChange(event, data);
@@ -80,12 +76,8 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
     };
 
     getCell(field: string) {
-        const {
-            rowIndex,
-            onAddItem,
-            proceduresOptions,
-            isPreview,
-        } = this.props;
+        const { rowIndex, onAddItem, proceduresOptions, isPreview } =
+            this.props;
         const { procedure, hasHadSurgery, year, comments } =
             this.props.surgicalHistoryItem! || {};
 
@@ -265,7 +257,6 @@ interface OwnState {
 }
 
 interface SurgicalHistoryProps {
-    surgicalHistory: SurgicalHistoryState;
     surgicalHistoryItem: SurgicalHistoryItem;
 }
 
@@ -273,18 +264,22 @@ interface RowProps {
     isPreview: boolean;
     mobile: boolean;
     currentYear: number;
-    rowIndex: keyof AllergiesState;
+    rowIndex: keyof SurgicalHistoryElements;
     proceduresOptions: OptionMapping;
     fields: string[];
     onTableBodyChange: (
         event:
             | React.FormEvent<HTMLTextAreaElement>
             | React.ChangeEvent<HTMLInputElement>
-            | React.SyntheticEvent,
+            | React.SyntheticEvent
+            | null,
         data: TextAreaProps | DropdownProps | InputOnChangeData
     ) => void;
     onAddItem: (
-        event: React.KeyboardEvent<HTMLElement>,
+        event:
+            | React.KeyboardEvent<HTMLElement>
+            | React.SyntheticEvent<Element, Event>
+            | null,
         data: DropdownProps
     ) => void;
     deleteRow: (index: string) => void;
@@ -306,7 +301,6 @@ const mapStateToProps = (
     rowProps: RowProps
 ): SurgicalHistoryProps => {
     return {
-        surgicalHistory: selectSurgicalHistoryState(state),
         surgicalHistoryItem: selectSurgicalHistoryItem(
             state,
             rowProps.rowIndex

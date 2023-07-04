@@ -79,7 +79,8 @@ const rawAllergens = {
     43386301: 'Magnetic resonance imaging contrast media allergy',
     43386401: 'Allergen extract vaccine allergy',
     43386501: 'Diagnostic dye allergy',
-    43386801: 'Drug groups primarily affecting the gastrointestinal system allergy',
+    43386801:
+        'Drug groups primarily affecting the gastrointestinal system allergy',
     43386901: 'Ulcer healing drug allergy',
     43387001: 'Bismuth chelate allergy',
     43387101: 'Sucralfate allergy',
@@ -249,7 +250,8 @@ const rawAllergens = {
     43403801: 'Immunosuppressant allergy',
     43403901: 'Cyclosporin allergy',
     43404001: 'Azathioprine allergy',
-    43404101: 'Drug groups primarily affecting the central nervous system allergy',
+    43404101:
+        'Drug groups primarily affecting the central nervous system allergy',
     43404201: 'Centrally acting appetite suppressant allergy',
     43404301: 'Mazindol allergy',
     43404401: 'Phentermine allergy',
@@ -408,7 +410,8 @@ const rawAllergens = {
     43421201: 'Alcohol metabolism modifier allergy',
     43421301: 'Disulfiram allergy',
     43421401: 'Disulphiram allergy',
-    43421501: 'Drug groups primarily affecting the autonomic nervous system allergy',
+    43421501:
+        'Drug groups primarily affecting the autonomic nervous system allergy',
     43421601: 'Beta-adrenoceptor blocking drug allergy',
     43421701: 'Cardioselective beta-blocker allergy',
     43421801: 'Acebutolol allergy',
@@ -657,7 +660,8 @@ const rawAllergens = {
     43446801: 'Acitretin allergy',
     43446901: 'Tretinoin allergy',
     43447001: 'Isotretinoin allergy',
-    43447101: 'Drug groups primarily affecting the musculoskeletal system allergy',
+    43447101:
+        'Drug groups primarily affecting the musculoskeletal system allergy',
     43447201: 'Drug for the treatment of gout allergy',
     43447301: 'Colchicum alkaloid allergy',
     43447401: 'Colchicine allergy',
@@ -692,8 +696,10 @@ const rawAllergens = {
     43450301: 'Smooth muscle relaxant allergy',
     43450401: 'Papaverine allergy',
     43450501: 'Flavoxate allergy',
-    43450601: 'Drug groups primarily used in obstetrics, gynecological and urinary tract disorders allergy',
-    43450701: 'Drug groups primarily used in obstetrics, gynaecological and urinary tract disorders allergy',
+    43450601:
+        'Drug groups primarily used in obstetrics, gynecological and urinary tract disorders allergy',
+    43450701:
+        'Drug groups primarily used in obstetrics, gynaecological and urinary tract disorders allergy',
     43450801: 'Mifepristone allergy',
     43450901: 'Non-ionic surfactant allergy',
     43451001: 'Nonoxinol allergy',
@@ -1430,7 +1436,8 @@ const rawAllergens = {
     43527201: 'Zinc allergy',
     43527301: 'Fluoride allergy',
     43527401: 'Sodium fluoride allergy',
-    43527501: 'Drug groups primarily affecting the cardiovascular system allergy',
+    43527501:
+        'Drug groups primarily affecting the cardiovascular system allergy',
     43527601: 'Lipid-lowering drug allergy',
     43527701: 'Dextrothyroxine sodium allergy',
     43527801: 'Gemfibrozil allergy',
