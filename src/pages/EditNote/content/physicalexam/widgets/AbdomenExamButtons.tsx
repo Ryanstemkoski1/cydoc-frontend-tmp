@@ -23,13 +23,15 @@ interface AbdomenExamButtonsProps {
 class AbdomenExamButtons extends Component<
     AbdomenExamButtonsProps & PropsFromRedux
 > {
-    getHandleClick = (fieldName: keyof AbdomenWidgetSection) => (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-        _data: ButtonProps
-    ) => {
-        event.preventDefault();
-        this.props.toggleSection(this.props.abdomenQuadrant, fieldName);
-    };
+    getHandleClick =
+        (fieldName: keyof AbdomenWidgetSection) =>
+        (
+            event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+            _data: ButtonProps
+        ) => {
+            event.preventDefault();
+            this.props.toggleSection(this.props.abdomenQuadrant, fieldName);
+        };
 
     renderButton = (option: keyof AbdomenWidgetSection) => (
         <Button

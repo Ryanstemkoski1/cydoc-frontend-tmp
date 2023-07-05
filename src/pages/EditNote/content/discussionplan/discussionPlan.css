@@ -8,22 +8,22 @@
 
 .ui.accordion.plan-section .ui.attached.header {
     border: none;
-    background-color:  #006b87;
+    background-color: #006b87;
     color: white;
     font-weight: 400;
 }
 
-.ui.accordion.plan-section .title~.content {
+.ui.accordion.plan-section .title ~ .content {
     padding-top: 0 !important;
 }
 
-.ui.accordion.plan-section .title~.content:last-child {
+.ui.accordion.plan-section .title ~ .content:last-child {
     padding-bottom: 1em !important;
 }
 
 .ui.accordion.plan-section-form {
     margin-top: 0;
-    box-shadow: 0 0 0 1px rgba(34,36,38,.15);
+    box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15);
 }
 
 .ui.accordion.plan-section-form > .title,
@@ -31,12 +31,10 @@
     border-left: none;
 }
 
-
 /**********************
   FORM CONTENT STYLING 
 ***********************/
 .plan-section-form .ui.dropdown.expanded-input,
-
 .plan-section-form .ui.dropdown.main-input {
     font-weight: normal;
     border: none;
@@ -51,7 +49,7 @@
     margin-left: 1em;
 }
 
-.plan-section-form:not(.prescriptions) .ui.dropdown.main-input>input.search,
+.plan-section-form:not(.prescriptions) .ui.dropdown.main-input > input.search,
 .plan-section-form:not(.prescriptions) .ui.dropdown.main-input {
     padding-left: 0.5em;
 }
@@ -64,7 +62,7 @@
     margin-bottom: 1rem;
 }
 
-.plan-section-form .title~.content {
+.plan-section-form .title ~ .content {
     padding-bottom: 1rem;
 }
 
@@ -76,28 +74,28 @@
 }
 
 .section-title > h2 {
-    background-color: #006b87!important;
-    font-weight: 400!important;
+    background-color: #006b87 !important;
+    font-weight: 400 !important;
 }
 
 .accordion.styled.plan-section > .title.section-title > h2 {
     color: white;
 }
 
-.ui.dropdown:not(.button)>.default.text {
+.ui.dropdown:not(.button) > .default.text {
     color: #707575 !important;
 }
 
 .section-body {
-    padding: 1em 0.5em!important;
+    padding: 1em 0.5em !important;
 }
 
-.ui.dropdown:not(.button)>.default.text {
-  color: #707575 !important;
+.ui.dropdown:not(.button) > .default.text {
+    color: #707575 !important;
 }
 
 .expanded-input .dropdown__value-container {
-  padding-left: 0;
+    padding-left: 0;
 }
 
 .section-body {
@@ -109,7 +107,7 @@
 }
 
 .ui.form textarea::placeholder {
-    color: rgba(0,0,0,.1);
+    color: rgba(0, 0, 0, 0.1);
 }
 
 .accordion.plan-section {
@@ -128,7 +126,8 @@
     border-bottom: none !important;
 }
 
-.ui.icon.button.plan-previous-button, .ui.icon.button.plan-next-button {
+.ui.icon.button.plan-previous-button,
+.ui.icon.button.plan-next-button {
     position: fixed;
     bottom: 15px;
     opacity: 0.8;
@@ -137,21 +136,23 @@
     font-size: 18px;
     background: #006b87;
     color: white;
-  }
-  
-  .ui.icon.button.plan-previous-button:hover, .ui.icon.button.plan-next-button:hover {
+}
+
+.ui.icon.button.plan-previous-button:hover,
+.ui.icon.button.plan-next-button:hover {
     opacity: 0.6;
-  }
-  
-  .ui.icon.button.plan-previous-button {
+}
+
+.ui.icon.button.plan-previous-button {
     left: 20px;
-  }
-  
-  .ui.icon.button.plan-next-button {
+}
+
+.ui.icon.button.plan-next-button {
     right: 20px;
-  }
-  
-  .ui.icon.button.small-plan-previous-button, .ui.icon.button.small-plan-next-button {
+}
+
+.ui.icon.button.small-plan-previous-button,
+.ui.icon.button.small-plan-next-button {
     display: none;
     position: fixed;
     bottom: 15px;
@@ -165,27 +166,27 @@
     .ui.icon.button.plan-previous-button, .ui.icon.button.plan-next-button {
       display: none;
     }
-  
-    .ui.icon.button.small-plan-previous-button, .ui.icon.button.small-plan-next-button {
-      display: block;
-    }
-    
-    .ui.icon.button.small-plan-previous-button {
-      left: 5px;
-    }
-  
+
+    .ui.icon.button.small-plan-previous-button,
     .ui.icon.button.small-plan-next-button {
-      right: 5px;
+        display: block;
     }
-  }
-  
-  @media screen and (max-width: 400px) {
+
     .ui.icon.button.small-plan-previous-button {
-      left: 15px;
+        left: 5px;
     }
-  
+
     .ui.icon.button.small-plan-next-button {
-      right: 15px;
+        right: 5px;
     }
-  }
-  
+}
+
+@media screen and (max-width: 400px) {
+    .ui.icon.button.small-plan-previous-button {
+        left: 15px;
+    }
+
+    .ui.icon.button.small-plan-next-button {
+        right: 15px;
+    }
+}

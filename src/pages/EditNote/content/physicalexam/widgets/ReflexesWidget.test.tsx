@@ -4,7 +4,7 @@ import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import { initialPhysicalExamState } from 'redux/reducers/physicalExamReducer';
 import ReflexesWidget from './ReflexesWidget';
-import { createCurrentNoteStore, currentNoteStore } from 'redux/store';
+import { createCurrentNoteStore } from 'redux/store';
 import { REFLEXES_WIDGET_ACTION } from 'redux/actions/actionTypes';
 import ReflexesWidgetItem from './ReflexesWidgetItem';
 

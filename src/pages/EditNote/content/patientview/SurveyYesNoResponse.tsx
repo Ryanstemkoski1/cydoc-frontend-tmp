@@ -44,12 +44,8 @@ class SurveyYesNoResponse extends React.Component<Props> {
     };
 
     addChiefComplaint(action: YesNoResponse) {
-        const {
-                userSurveyState,
-                id,
-                hpiHeaders,
-                selectChiefComplaint,
-            } = this.props,
+        const { userSurveyState, id, hpiHeaders, selectChiefComplaint } =
+                this.props,
             category = userSurveyState.nodes[id].category,
             prevVal = userSurveyState.nodes[id].response;
         if (category.length) {

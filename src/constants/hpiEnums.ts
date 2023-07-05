@@ -253,7 +253,7 @@ export type LabTestType = {
         [component: string]: {
             unit: string;
             value: string | number | undefined;
-            unitOptions: string[];
+            unitOptions: TimeOption[];
         };
     };
 };

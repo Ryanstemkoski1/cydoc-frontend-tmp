@@ -1,9 +1,9 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { SurgicalHistoryNote } from '../SurgicalHistoryNote';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const initSurgeries = {
     foo: { procedure: '', year: -1, comments: '' },

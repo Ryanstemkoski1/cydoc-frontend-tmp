@@ -35,7 +35,6 @@ import {
     isLabTestDictionary,
     isSelectOneResponse,
 } from 'redux/reducers/hpiReducer';
-import Masonry from 'react-masonry-component';
 import YearInput from './responseComponents/YearInput';
 
 interface CreateResponseProps {
@@ -207,7 +206,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     });
                 }
                 return (
-                    <Masonry className='ros-container' style={{ width: 357 }}>
+                    <div className='ros-container' style={{ width: 357 }}>
                         <ReviewOfSystemsCategory
                             key={''}
                             category={''}
@@ -215,7 +214,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                             selectManyOptions={responseChoice}
                             node={node}
                         />
-                    </Masonry>
+                    </div>
                 );
             }
 

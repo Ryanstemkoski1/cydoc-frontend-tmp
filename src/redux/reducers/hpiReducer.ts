@@ -15,7 +15,6 @@ import {
     NodeInterface,
     OrderInterface,
     SelectOneInput,
-    SelectManyInput,
 } from '../../constants/hpiEnums';
 import { v4 } from 'uuid';
 
@@ -117,7 +116,7 @@ function labTestResponse(
                 unitOptions: compSplit[1]
                     .trim()
                     .split('#')
-                    .map((str) => str.trim()),
+                    .map((str) => str.trim() as TimeOption),
             };
         });
         specificResponse = responseDict;

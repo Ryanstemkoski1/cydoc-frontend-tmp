@@ -371,8 +371,7 @@ export function updateRecreationalDrugUsedModesOfDelivery(
     newModesOfDelivery: ModeOfDelivery[]
 ) {
     return {
-        type:
-            SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_USED_MODES_OF_DELIVERY,
+        type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_USED_MODES_OF_DELIVERY,
         payload: {
             index,
             newModesOfDelivery,
@@ -393,8 +392,7 @@ export function updateRecreationalDrugUsedPerWeek(
     newNumberPerWeek: number
 ) {
     return {
-        type:
-            SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_USED_NUMBER_PER_WEEK,
+        type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_USED_NUMBER_PER_WEEK,
         payload: {
             index,
             newNumberPerWeek,
@@ -461,8 +459,7 @@ export function updateRecreationalDrugInterestedInQuitting(
     newResponse: YesNoMaybeResponse
 ) {
     return {
-        type:
-            SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_INTERESTED_IN_QUITTING,
+        type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_INTERESTED_IN_QUITTING,
         payload: {
             newResponse,
         },

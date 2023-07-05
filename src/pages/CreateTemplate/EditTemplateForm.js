@@ -543,12 +543,8 @@ class EditTemplateForm extends Component {
     render() {
         const { bodySystems, showDimmer, requestResult, fetching } = this.state;
 
-        const {
-            numQuestions,
-            title,
-            bodySystem,
-            disease,
-        } = this.context.template;
+        const { numQuestions, title, bodySystem, disease } =
+            this.context.template;
 
         const bodySystemOptions = Object.keys(bodySystems).map((bodySys) => ({
             key: bodySys,
