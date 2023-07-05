@@ -80,13 +80,18 @@ export function firstOrderNodes(state: CurrentNoteState) {
             parentNode = hpiHeaders.parentNodes[chiefComplaint][category],
             newNodes = graph[order[parentNode]['1']]
                 .reduce((prevVal, node) => {
-                    let newNodes = prevVal;
+                    let currNodes = prevVal;
+                    const i = currNodes.findIndex((n) => n == node);
                     if (
                         ['GENERAL', 'PAIN'].includes(nodes[node].category) ||
                         nodes[node].text == 'nan'
                     )
-                        newNodes = [...newNodes, ...graph[node]];
-                    return newNodes;
+                        currNodes = [
+                            ...currNodes.slice(0, i + 1),
+                            ...graph[node],
+                            ...currNodes.slice(i + 1, currNodes.length),
+                        ];
+                    return currNodes;
                 }, graph[order[parentNode]['1']] as string[])
                 .filter((node) => !totalNodes.includes(node));
         firstOrderNodesMap[chiefComplaint] = newNodes.slice().reverse();
