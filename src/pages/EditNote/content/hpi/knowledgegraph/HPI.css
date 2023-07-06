@@ -320,3 +320,9 @@
         right: 15px;
     }
 }
+
+@media screen and (min-width: 768px) {
+    .margin-bottom-for-notes {
+        padding-bottom: 130px !important;
+    }
+}
