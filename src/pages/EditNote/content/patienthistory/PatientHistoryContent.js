@@ -82,7 +82,10 @@ export default class PatientHistoryContent extends Component {
 
         const tabDict = {
             'Medical History': (
-                <MedicalHistoryContent activeTabName='Medical History' />
+                <MedicalHistoryContent
+                    activeTabName='Medical History'
+                    showNo={true}
+                />
             ),
             'Surgical History': (
                 <SurgicalHistoryContent activeTabName='Surgical History' />

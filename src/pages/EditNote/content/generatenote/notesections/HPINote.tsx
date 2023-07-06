@@ -330,19 +330,21 @@ export const extractNode = (
             res = response as string[];
             updatedRes = res.reduce(function (arr: string[], key) {
                 if (
-                    state.medicalHistory[key].hasBeenAfflicted ==
+                    key in state.medicalHistory &&
+                    state.medicalHistory[key]?.hasBeenAfflicted ==
                         YesNoResponse.Yes &&
-                    state.medicalHistory[key].condition.length > 0
+                    state.medicalHistory[key]?.condition.length > 0
                 )
                     arr.push(state.medicalHistory[key].condition);
                 return arr;
             }, []);
             updatedNeg = res.reduce(function (arr: string[], key) {
                 if (
-                    state.medicalHistory[key].hasBeenAfflicted ==
+                    key in state.medicalHistory &&
+                    state.medicalHistory[key]?.hasBeenAfflicted ==
                         YesNoResponse.No &&
                     negAnswer &&
-                    state.medicalHistory[key].condition.length > 0
+                    state.medicalHistory[key]?.condition.length > 0
                 )
                     arr.push(state.medicalHistory[key].condition);
                 return arr;
