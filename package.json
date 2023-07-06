@@ -56,7 +56,6 @@
         "extends": "react-app"
     },
     "jest": {
-        "preset": "ts-jest",
         "transform": {
             "^.+\\.(ts|tsx)?$": "ts-jest",
             "^.+\\.(js|jsx)$": "babel-jest"
@@ -108,6 +107,7 @@
         "gulp-chmod": "^3.0.0",
         "jest": "^27.0.0",
         "jest-enzyme": "^7.1.2",
+        "jest-watch-typeahead": "^2.2.2",
         "prettier": "^2.8.8",
         "prettier-eslint": "^12.0.0",
         "react-redux": "^8.0.5",
