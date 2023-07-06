@@ -119,7 +119,7 @@ class LandingPage extends Component {
                             size='large'
                             class='icons'
                         />
-                        <h3 className='text'>Create New Blank Note</h3>
+                        <h3 className='textt'>Create New Blank Note</h3>
                     </div>
                 )}
                 <div
@@ -127,7 +127,7 @@ class LandingPage extends Component {
                     onClick={() => this.handleEditNoteClick()}
                 >
                     <Icon name='file outline' size='large' class='icons' />
-                    <h3 className='text'>
+                    <h3 className='textt'>
                         {patientView
                             ? 'Click here to begin your visit'
                             : 'Return to Active Note'}
@@ -142,7 +142,7 @@ class LandingPage extends Component {
                             onClick={() => this.handleAcidTestClick()}
                         >
                             <Icon name='flask' size='large' className='icons' />
-                            <h3 className='text'>
+                            <h3 className='textt'>
                                 Create New Acid Base Analysis
                             </h3>
                         </div>
@@ -151,7 +151,7 @@ class LandingPage extends Component {
                             onClick={() => this.handleNewInpatientPlanClick()}
                         >
                             <Icon name='tasks' size='large' className='icons' />
-                            <h3 className='text'>Create New Inpatient Plan</h3>
+                            <h3 className='textt'>Create New Inpatient Plan</h3>
                         </div>
                     </>
                 )}
@@ -167,7 +167,7 @@ class LandingPage extends Component {
                         size='huge'
                         className='icons'
                     />
-                    <h3 className='text'>
+                    <h3 className='textt'>
                         {patientView
                             ? 'Click here to begin your visit'
                             : 'Create New Note'}
@@ -182,7 +182,7 @@ class LandingPage extends Component {
                             onClick={() => this.handleNewInpatientPlanClick()}
                         >
                             <Icon name='tasks' size='huge' className='icons' />
-                            <h3 className='text'>Create New Inpatient Plan</h3>
+                            <h3 className='textt'>Create New Inpatient Plan</h3>
                             <br />
                             <p className='smaller-text'>
                                 Generate a plan from labratory values
@@ -193,7 +193,7 @@ class LandingPage extends Component {
                             onClick={() => this.handleAcidTestClick()}
                         >
                             <Icon name='flask' size='huge' className='icons' />
-                            <h3 className='text'>
+                            <h3 className='textt'>
                                 Create New Acid Base Analysis
                             </h3>
                             <br />

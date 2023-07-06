@@ -20,10 +20,6 @@ import {
     noteTitleReducer,
 } from './currentNoteReducer';
 import {
-    displayedNodesReducer,
-    initialDisplayedNodesState,
-} from './displayedNodesReducer';
-import {
     familyHistoryReducer,
     initialFamilyHistoryState,
 } from './familyHistoryReducer';
@@ -75,7 +71,6 @@ const currentNoteReducer = combineReducers({
     hpiHeaders: hpiHeadersReducer,
     userView: userViewReducer,
     activeItem: activeItemReducer,
-    displayedNodes: displayedNodesReducer,
     additionalSurvey: additionalSurveyReducer,
 });
 
@@ -99,7 +94,6 @@ export const initialState: CurrentNoteState = {
     hpiHeaders: initialHpiHeadersState,
     userView: initialUserViewState,
     activeItem: initialActiveItemState,
-    displayedNodes: initialDisplayedNodesState,
     additionalSurvey: initialAdditionalSurveyData,
 };
 

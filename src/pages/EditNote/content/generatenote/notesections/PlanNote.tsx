@@ -74,7 +74,7 @@ export class PlanNote extends Component<PlanProps> {
 
                     {!empty.differentialDiagnoses ? (
                         <>
-                            <b>Differential Diagnosis</b>
+                            <b>Diagnosis</b>
                             <ol>
                                 {Object.values(
                                     condition.differentialDiagnoses

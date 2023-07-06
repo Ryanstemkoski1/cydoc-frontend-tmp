@@ -85,7 +85,7 @@ export class ReviewOfSystemsNote extends Component<ROSProps> {
                 {Object.keys(components).map((key) =>
                     components[key].positives.length > 0 ||
                     components[key].negatives.length > 0 ? (
-                        <li>
+                        <li key={key}>
                             <b>{key}: </b>
                             {components[key].positives.length > 0
                                 ? `Positive for ${components[

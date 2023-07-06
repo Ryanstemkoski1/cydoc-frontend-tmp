@@ -15,16 +15,21 @@ Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const mockStore = configureStore([]);
 
-const initialState = {
+const initialProcedures = {
     ['foo']: { procedure: '', year: -1, comments: '' },
     ['bar']: { procedure: '', year: -1, comments: '' },
     ['foobar']: { procedure: '', year: -1, comments: '' },
 };
 
+const initialState = {
+    hasSurgicalHistory: true,
+    elements: initialProcedures,
+};
+
 const initialStateUser = {
     patientView: true,
-    doctorView: false,
 };
+
 const connectStore = (
     state = initialState,
     stateUser = initialStateUser,

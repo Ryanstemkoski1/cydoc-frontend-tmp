@@ -80,3 +80,8 @@ div.ui.segment.buttons-segment {
 .ui.button.copy-button:hover{
   background-color:lemonchiffon;
 }
+@media (max-width: 767px){
+    .generate-note-buttons {
+        top: 123px;
+    }
+}

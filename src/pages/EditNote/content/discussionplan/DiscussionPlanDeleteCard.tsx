@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Icon, Button, Modal } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { deleteCondition } from 'redux/actions/planActions';
+import { Button, Icon, Modal } from 'semantic-ui-react';
 
 interface DispatchProps {
     deleteCondition: (conditionIndex: string) => void;
@@ -52,12 +52,19 @@ const DeleteCard = (props: DeleteCardProps & DispatchProps) => {
                 }?`}
             </Modal.Content>
             <Modal.Content className='btns'>
-                <Button basic color='grey' content='Cancel' onClick={onClose} />
-                <Button
-                    content='Delete'
-                    onClick={confirmDelete}
-                    floated='right'
-                />
+                <div className='modal-action'>
+                    <Button
+                        basic
+                        color='grey'
+                        content='Cancel'
+                        onClick={onClose}
+                    />
+                    <Button
+                        content='Delete'
+                        onClick={confirmDelete}
+                        floated='right'
+                    />
+                </div>
             </Modal.Content>
         </Modal>
     );
