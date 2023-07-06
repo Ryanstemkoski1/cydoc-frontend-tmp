@@ -18,6 +18,12 @@
 
 7. Install [Redux dev tools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd/related?hl=en) for Chrome. This extension is invaluable for viewing and analyzing Redux state. 
 
+## Potential Setup Issues
+When attempting step 5, an issue may be encountered, particularly when using an M1 MacBook:
+" Error: Cannot find module 'node-darwin-arm64/package.json' "
+
+In the event this occurs, follow the steps outlined in the video linked [here](https://www.youtube.com/watch?v=sZybySiuz6w) and re-attempt to install dependencies.
+
 # Before Submitting a PR
 
 Before committing changes, please run `npm run lint` to lint.

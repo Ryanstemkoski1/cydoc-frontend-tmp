@@ -12,7 +12,6 @@ import { WidgetActionTypes } from './widgetActions';
 import { chiefComplaintsActionTypes } from './chiefComplaintsActions';
 import { userViewActionTypes } from './userViewActions';
 import { activeItemActionTypes } from './activeItemActions';
-import { DisplayedNodesActionTypes } from './displayedNodesActions';
 
 export type AllActionTypes =
     | ROSActionTypes
@@ -28,5 +27,4 @@ export type AllActionTypes =
     | HpiActionTypes
     | chiefComplaintsActionTypes
     | userViewActionTypes
-    | activeItemActionTypes
-    | DisplayedNodesActionTypes;
+    | activeItemActionTypes;

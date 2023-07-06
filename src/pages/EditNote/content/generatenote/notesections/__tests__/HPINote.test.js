@@ -11,6 +11,7 @@ import EnzymeAdapter from 'enzyme-adapter-react-16';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import { initialHpiState } from 'redux/reducers/hpiReducer';
+import { initialSurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
 
 Enzyme.configure({ adapter: new EnzymeAdapter() });
 
@@ -97,7 +98,10 @@ describe('extractNode suite', () => {
 });
 
 const mountWithStore = (hpi = initialHpiState) => {
-    const store = mockStore({ hpi });
+    const store = mockStore({
+        hpi,
+        surgicalHistory: initialSurgicalHistoryState,
+    });
     return {
         store,
         wrapper: mount(

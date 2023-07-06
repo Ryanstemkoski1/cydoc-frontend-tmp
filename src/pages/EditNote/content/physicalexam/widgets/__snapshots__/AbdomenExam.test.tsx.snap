@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AbdomenExam matches snapshot 1`] = `
-<div>
+<div
+  className="full-view-table"
+>
   <Table
     as="table"
     celled={true}

@@ -19,6 +19,7 @@
 
 .hpi-disease-button-content-icon {
     line-height: 25px;
+    min-width: 25px;
     height: 25px !important;
 }
 
@@ -53,6 +54,9 @@
 
 .diseases-array {
     margin-bottom: 2rem;
+}
+.diseases-array.btn-wrap .button {
+    margin-top: 5px;
 }
 
 .disease-column {
@@ -104,7 +108,7 @@
     margin: 0;
     opacity: 0.8;
     display: block;
-    font-size: 13px;
+    font-size: 18px;
     background: #006b87;
     color: white;
 }
@@ -171,6 +175,9 @@
 .misc-box {
     height: 10vh !important;
 }
+#hpi-menu {
+    margin-bottom: 10px;
+}
 @media only screen and (min-width: 768px) and (max-width: 991px){
     .hpi-text-drop {
         width: 723px;
@@ -188,7 +195,7 @@
 }
 
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 600px) {
 
     .ui.icon.button.hpi-previous-button,
     .ui.icon.button.hpi-next-button {
@@ -210,6 +217,90 @@
 
 }
 
+@media only screen and (max-width: 794px) and (min-width: 768px)  {
+    .mobile-tab {
+        width: calc(100% - 40px);
+        padding: 0 !important;
+        box-shadow: 0 10px 15px 5px rgba(0,128,159,.2);
+    }
+    .mobile-tab .button {
+        position: relative;
+        line-height: 1;
+        padding: 0.92857143em 1.14285714em;
+        color: #707070 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        background-color: transparent !important;
+    }
+    .mobile-tab .button::after {
+        visibility: hidden;
+        position: absolute;
+        content: '';
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%) rotate(45deg);
+        background: 0 0;
+        margin: 0.5px 0 0;
+        width: 0.57142857em;
+        height: 0.57142857em;
+        border: none;
+        border-bottom: 1px solid #d4d4d5;
+        border-right: 1px solid #d4d4d5;
+        z-index: 2;
+        background-color: #f4f4f4 !important;
+    }
+    .mobile-tab .button.active {
+        background: rgba(0,0,0,.05) !important;
+        color: rgba(0,0,0,.95) !important;
+    }
+    .mobile-tab .button.active::after {
+        visibility: visible;
+    }
+}
+@media only screen and (max-width: 794px){
+    .mobile-tab {
+        background-color: white;
+    }
+
+}
+@media screen and (max-width: 767px) {
+    .col-wrapper {
+        flex-wrap: wrap;
+    }
+    .col-wrapper .disease-column {
+        width: 100% !important;
+    }
+    .col-wrapper .disease-column .mobile-hpi-icons {
+        max-width: 100%;
+        max-height: 90%;
+        margin-right: 5px;
+    } 
+    .diseases-array button {
+        margin-top: 10px !important;
+    }  
+    .mobile-tab {
+        z-index: 1;
+        width: 100%;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #c7c7c7;
+    }
+    .mobile-tab .button {
+        font-weight: 400;
+        border-radius: 20px;
+        margin: 5px 2px 0;
+        color: #0d5e70!important;
+        background-color: transparent !important;
+        box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+    }
+    .mobile-tab .button.active {
+        background: rgba(0,0,0,.05)!important;
+        box-shadow: ''!important;
+        color: rgba(0,0,0,.95)!important;
+    }
+    .bottom-no-space {
+        margin-bottom: 0 !important;
+    }  
+}
 @media screen and (max-width: 700px) {
     .category-header {
         text-align: center;

@@ -1,10 +1,10 @@
 .ui.button.previous-button, .ui.button.next-button {
-    position: sticky !important;
-    bottom: 0;
+    /* position: sticky !important;
+    bottom: 0; */
     opacity: 0.8;
     margin: 0;
     display: block;
-    font-size: 13px;
+    font-size: 18px;
     background: #c8e2ea;
 }
 
@@ -38,7 +38,7 @@
     height: 10px;
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 600px) {
     .ui.button.previous-button, .ui.button.next-button {
         display: none;
     }
@@ -71,4 +71,91 @@
     .edit-note-div {
         height: 50px;
     }
+}
+
+  .error-message {
+    margin-top: 10px;  
+  }   
+  .error-message + .active-tab-container{
+    margin-top: 10px;  
+  }
+
+  .error-message + div > div > .active-tab-container {
+    margin-top: 10px;  
+  }
+  
+  .error-message + div > .active-tab-container > div > .active-tab-container{
+    margin-top: 10px;  
+  }
+
+.flex {
+    display: flex;
+}
+.flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+.align-center {
+    align-items: center;
+}
+.justify-center {
+    justify-content: center;
+}
+.justify-between {
+    justify-content: space-between;
+}
+.justify-end {
+    justify-content: flex-end;
+}
+.width-100{
+    width: 100%;
+}
+.width-100 > * .field {
+    width: 166px;
+    margin-right: 10px;
+}
+
+.radio-wrapper {
+    padding: 0px 0.5rem;
+    margin-bottom: 10px;
+}
+
+.radio-wrapper > * .field {
+    margin-bottom: 2px !important;
+}
+
+.section-break {
+    background: #eaf3f5;
+    height: 10px;
+    width: calc(100% + 112px);
+    margin-left: -56px;
+    border: none;
+    margin-top: 25px;
+    margin-bottom: 10px; 
+}
+
+.user-info-labels {
+    display: block;
+    margin: 0 0 0.28571429rem 0;
+    color: rgba(0,0,0,.85);
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: none;
+}
+
+@media screen and (max-width: 421px) {
+    .section-break {
+        width: calc(100% + 70px);
+    }
+}
+
+.equal.width.fields > * input::-webkit-outer-spin-button,
+.equal.width.fields > * input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.equal.width.fields > *  > input[type=number] {
+  -moz-appearance: textfield;
 }

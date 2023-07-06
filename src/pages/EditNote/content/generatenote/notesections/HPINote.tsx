@@ -20,10 +20,10 @@ import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors
 import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
 import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
 import { MedicationsState } from 'redux/reducers/medicationsReducer';
-import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
+import { selectSurgicalHistoryProcedures } from 'redux/selectors/surgicalHistorySelectors';
 import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
 import { selectPatientInformationState } from 'redux/selectors/patientInformationSelector';
-import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
+import { SurgicalHistoryElements } from 'redux/reducers/surgicalHistoryReducer';
 import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
 import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
 import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
@@ -33,7 +33,7 @@ interface HPINoteProps {
     hpi: HpiState;
     familyHistory: FamilyHistoryState;
     medications: MedicationsState;
-    surgicalHistory: SurgicalHistoryState;
+    surgicalHistory: SurgicalHistoryElements;
     medicalHistory: MedicalHistoryState;
     patientInformation: PatientInformationState;
     chiefComplaints: ChiefComplaintsState;
@@ -571,7 +571,7 @@ const mapStateToProps = (state: CurrentNoteState) => ({
     hpi: selectHpiState(state),
     familyHistory: selectFamilyHistoryState(state),
     medications: selectMedicationsState(state),
-    surgicalHistory: selectSurgicalHistoryState(state),
+    surgicalHistory: selectSurgicalHistoryProcedures(state),
     medicalHistory: selectMedicalHistoryState(state),
     patientInformation: selectPatientInformationState(state),
     chiefComplaints: selectChiefComplaintsState(state),

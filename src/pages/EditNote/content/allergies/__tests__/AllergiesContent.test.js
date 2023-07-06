@@ -14,14 +14,23 @@ Enzyme.configure({ adapter: new EnzymeAdapter() });
 
 const mockStore = configureStore([]);
 
-const initialState = {
+const initialAllergies = {
     ['foo']: { incitingAgent: '', reaction: '', comments: '' },
     ['bar']: { incitingAgent: '', reaction: '', comments: '' },
     ['foobar']: { incitingAgent: '', reaction: '', comments: '' },
 };
 
+const initialState = {
+    hasAllergies: true,
+    elements: initialAllergies,
+};
+
+const initialUserState = {
+    patientView: true,
+};
+
 const connectStore = (state = initialState, props) => {
-    const store = mockStore({ allergies: state });
+    const store = mockStore({ allergies: state, userView: initialUserState });
     return {
         store,
         wrapper: mount(
