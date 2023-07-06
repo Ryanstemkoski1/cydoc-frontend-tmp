@@ -297,8 +297,9 @@ export const extractNode = (
             answer = joinLists(
                 (response as string[]).reduce((acc: string[], key) => {
                     if (
+                        key in state.medications &&
                         state.medications[key].isCurrentlyTaking ==
-                        YesNoResponse.Yes
+                            YesNoResponse.Yes
                     )
                         return [...acc, state.medications[key].drugName];
                     return acc;
