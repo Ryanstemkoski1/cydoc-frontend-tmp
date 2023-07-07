@@ -75,9 +75,12 @@ export function firstOrderNodes(state: CurrentNoteState) {
         firstOrderNodesMap: { [chiefComplaint: string]: string[] } = {},
         { graph, order, nodes } = hpi;
     let totalNodes: string[] = [];
+
     Object.keys(chiefComplaints).map((chiefComplaint) => {
         const category = Object.keys(hpiHeaders.parentNodes[chiefComplaint])[0],
-            parentNode = hpiHeaders.parentNodes[chiefComplaint][category],
+            parentNode = hpiHeaders.parentNodes[chiefComplaint][category];
+        let newNodes: string[] = [];
+        if (order && order[parentNode] && order[parentNode]['1']) {
             newNodes = graph[order[parentNode]['1']]
                 .reduce((prevVal, node) => {
                     let newNodes = prevVal;
@@ -89,6 +92,7 @@ export function firstOrderNodes(state: CurrentNoteState) {
                     return newNodes;
                 }, graph[order[parentNode]['1']] as string[])
                 .filter((node) => !totalNodes.includes(node));
+        }
         firstOrderNodesMap[chiefComplaint] = newNodes.slice().reverse();
         totalNodes = [...totalNodes, ...newNodes].filter(
             (node) => nodes[node].text != 'nan'

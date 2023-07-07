@@ -229,6 +229,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             <SurgicalHistoryTableBodyRow
                 {...this.props}
                 key={index}
+                hide={this.props.hide}
                 rowIndex={rowIndex}
                 fields={cellField}
                 onTableBodyChange={this.handleTableBodyChange}
@@ -245,7 +246,9 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
 
     //Method to generate the table header row
     makeHeader() {
-        const fields = ['Procedure', '', 'Year', 'Comments'];
+        const fields = this.props.hide
+            ? ['Procedure', '']
+            : ['Procedure', '', 'Year', 'Comments'];
         return (
             <Table.Row>
                 {fields.map((header, index) => (
@@ -330,7 +333,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                                 value={
                                     isPreview ||
                                     year === -1 ||
-                                    year.toString() === '-' ||
+                                    year?.toString() === '-' ||
                                     isNaN(year)
                                         ? ''
                                         : year
@@ -529,6 +532,7 @@ interface ContentProps {
     responseChoice?: string[];
     responseType?: ResponseTypes;
     node?: string;
+    hide?: boolean;
 }
 
 interface DispatchProps {
