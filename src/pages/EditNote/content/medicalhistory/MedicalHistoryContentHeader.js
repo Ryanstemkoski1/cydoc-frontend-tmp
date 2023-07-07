@@ -2,7 +2,22 @@ import React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
 
 //functional component for the Medical History header above the divider
-export default function MedicalHistoryContentHeader() {
+export default function MedicalHistoryContentHeader({ hide }) {
+    if (hide) {
+        return (
+            <Grid columns={1} centered className='sticky-header'>
+                <Grid.Row>
+                    <Grid.Column>
+                        <Header as='h4'>Condition</Header>
+                    </Grid.Column>
+                    <Grid.Column
+                        className='delete-header'
+                        width={2}
+                    ></Grid.Column>
+                </Grid.Row>
+            </Grid>
+        );
+    }
     return (
         <Grid columns={7} centered className='sticky-header'>
             <Grid.Row>

@@ -253,7 +253,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                     // if the user has chosen any diseases (positiveLength > 0), then the right button can be displayed
                     // to advance to other pages of the HPI form
                     <>
-                        <Segment>
+                        <Segment className='margin-bottom-for-notes'>
                             {positiveLength > 0 ? (
                                 positiveDiseases
                             ) : (
@@ -418,7 +418,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                   ].patientView
                                                 : diseaseCategory,
                                             render: () => (
-                                                <Tab.Pane>
+                                                <Tab.Pane className='margin-bottom-for-notes'>
                                                     <MiscBox
                                                         activeThing={
                                                             diseaseCategory
