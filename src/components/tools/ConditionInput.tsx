@@ -64,10 +64,8 @@ class ConditionInput extends React.Component<Props, OwnState> {
     render() {
         return (
             <React.Fragment>
-                {(this.props.category === 'Medical History' &&
-                    this.props.isPreview !== false) ||
-                (this.props.category === 'Family History' &&
-                    this.props.isPreview !== false) ? (
+                {this.props.category === 'Medical History' ||
+                this.props.category === 'Family History' ? (
                     <Input
                         disabled={this.props.isPreview}
                         className={

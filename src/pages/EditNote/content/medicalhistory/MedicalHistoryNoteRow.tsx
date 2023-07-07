@@ -88,7 +88,7 @@ class MedicalHistoryNoteRow extends Component<Props> {
     };
 
     render = () => {
-        const { conditionInput, isPreview, index } = this.props;
+        const { conditionInput, isPreview, index, hide } = this.props;
         const currentYear = new Date(Date.now()).getFullYear();
 
         const {
@@ -105,6 +105,22 @@ class MedicalHistoryNoteRow extends Component<Props> {
         const endYearString: string =
             endYear === -1 || isNaN(endYear) ? '' : endYear.toString();
 
+        if (hide) {
+            return (
+                <div className='flex margin-top-20'>
+                    <div className='input-field width-100-input'>
+                        {conditionInput}
+                    </div>
+                    <Button
+                        circular
+                        icon='close'
+                        onClick={() => this.props.deleteRow(this.props.index)}
+                        aria-label='delete-condition'
+                        className='hpi-ph-button'
+                    />
+                </div>
+            );
+        }
         return (
             <Grid.Row columns={7}>
                 <Grid.Column>{conditionInput}</Grid.Column>
@@ -253,6 +269,7 @@ interface RowProps {
     isPreview?: boolean;
     currentYear: number;
     index: keyof MedicalHistoryState;
+    hide?: boolean;
 }
 
 interface MedicalHistoryProps {

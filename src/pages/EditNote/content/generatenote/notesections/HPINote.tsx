@@ -297,8 +297,9 @@ export const extractNode = (
             answer = joinLists(
                 (response as string[]).reduce((acc: string[], key) => {
                     if (
+                        key in state.medications &&
                         state.medications[key].isCurrentlyTaking ==
-                        YesNoResponse.Yes
+                            YesNoResponse.Yes
                     )
                         return [...acc, state.medications[key].drugName];
                     return acc;
@@ -330,19 +331,21 @@ export const extractNode = (
             res = response as string[];
             updatedRes = res.reduce(function (arr: string[], key) {
                 if (
-                    state.medicalHistory[key].hasBeenAfflicted ==
+                    key in state.medicalHistory &&
+                    state.medicalHistory[key]?.hasBeenAfflicted ==
                         YesNoResponse.Yes &&
-                    state.medicalHistory[key].condition.length > 0
+                    state.medicalHistory[key]?.condition.length > 0
                 )
                     arr.push(state.medicalHistory[key].condition);
                 return arr;
             }, []);
             updatedNeg = res.reduce(function (arr: string[], key) {
                 if (
-                    state.medicalHistory[key].hasBeenAfflicted ==
+                    key in state.medicalHistory &&
+                    state.medicalHistory[key]?.hasBeenAfflicted ==
                         YesNoResponse.No &&
                     negAnswer &&
-                    state.medicalHistory[key].condition.length > 0
+                    state.medicalHistory[key]?.condition.length > 0
                 )
                     arr.push(state.medicalHistory[key].condition);
                 return arr;

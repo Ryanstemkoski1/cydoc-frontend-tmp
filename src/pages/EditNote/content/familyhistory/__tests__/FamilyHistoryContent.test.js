@@ -211,7 +211,7 @@ describe('FamilyHistoryContent', () => {
             condition: 'Type II Diabetes',
             key: '0',
             index: 'foo',
-            category: 'Family History',
+            category: 'Family',
         };
         const wrapper = mount(
             <Provider store={store}>
