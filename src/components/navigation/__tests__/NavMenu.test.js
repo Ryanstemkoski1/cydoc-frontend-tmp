@@ -1,13 +1,13 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
 import { BrowserRouter as Router } from 'react-router-dom';
 import NavMenu from '../NavMenu';
 import NoteNameMenuItem from '../NoteNameMenuItem';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 
+Enzyme.configure({ adapter: new Adapter() });
 const mockStore = configureStore([]);
 
 const initialState = {

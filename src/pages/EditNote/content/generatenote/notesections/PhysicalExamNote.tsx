@@ -87,14 +87,14 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
 
     displayVitals = () => {
         const vitals: string[] = [];
-        const vitalUnits: {
-            [index: string]: string;
-        } = {
-            'Heart Rate': ' bpm',
-            Temperature: ' °C',
-            RR: ' bpm',
-            'Oxygen Saturation': ' PaO₂',
-        };
+        // const vitalUnits: {
+        //     [index: string]: string;
+        // } = {
+        //     'Heart Rate': ' bpm',
+        //     Temperature: ' °C',
+        //     RR: ' bpm',
+        //     'Oxygen Saturation': ' PaO₂',
+        // };
 
         if (
             this.props.physicalExam.vitals.systolicBloodPressure !== 0 &&
@@ -183,7 +183,7 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
             tendon_reflexes: [],
             cardiac: [],
             /* eslint-disable-next-line */
-            expand_murmurs: []
+            expand_murmurs: [],
         };
         for (const widget in physicalWidgets) {
             if (widget === 'pulses') {
@@ -377,13 +377,15 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
                                         featureKey === 'early') ||
                                     featureKey === 'mid'
                                 ) {
-                                    specificMurmurTime = this.convertButtonTextToNoteText(
-                                        featureKey
-                                    );
+                                    specificMurmurTime =
+                                        this.convertButtonTextToNoteText(
+                                            featureKey
+                                        );
                                 } else {
-                                    specificMurmurAdditionalFeatures = this.convertButtonTextToNoteText(
-                                        featureKey
-                                    );
+                                    specificMurmurAdditionalFeatures =
+                                        this.convertButtonTextToNoteText(
+                                            featureKey
+                                        );
                                 }
                             }
                         }

@@ -8,6 +8,7 @@ import { LungsWidgetState } from 'redux/reducers/widgetReducers/lungsWidgetReduc
 import { LUNGS_WIDGET_ACTION } from 'redux/actions/actionTypes';
 import { Button, Popup } from 'semantic-ui-react';
 import { currentNoteStore } from 'redux/store';
+import { act } from 'react-dom/test-utils';
 
 const section = 'leftLowerLobe';
 const field = 'wheezes';
@@ -121,18 +122,24 @@ describe('LungSoundsButtons with real store', () => {
         expect(findButton(field).prop('color')).toBe(undefined);
     });
 
-    it('shows popup when hovering over More Options button', () => {
+    it('shows popup when hovering over More Options button', async () => {
         expect(findButton(popupField)).toHaveLength(0);
         expect(wrapper.find(Popup).find(Button)).toHaveLength(1); //This one button is the popup trigger
 
-        wrapper.find('Button[icon="plus"]').simulate('mouseenter');
-        jest.runAllTimers(); //Simulates popup delay
+        await act(() => {
+            wrapper.find('Button[icon="plus"]').simulate('mouseenter');
+            wrapper.update();
+            jest.runAllTimers(); //Simulates popup delay
+        });
         wrapper.update();
         expect(findButton(popupField)).toHaveLength(1);
         expect(wrapper.find(Popup).find(Button)).toHaveLength(6); //There should be 5 hidden buttons
 
-        wrapper.find('Button[icon="plus"]').simulate('mouseleave');
-        jest.runAllTimers();
+        await act(() => {
+            wrapper.find('Button[icon="plus"]').simulate('mouseleave');
+            jest.runAllTimers();
+            wrapper.update();
+        });
         wrapper.update();
         expect(
             wrapper.findWhere((node) => node.key() === popupField)
@@ -140,10 +147,14 @@ describe('LungSoundsButtons with real store', () => {
         expect(wrapper.find(Popup).find(Button)).toHaveLength(1);
     });
 
-    it('removes buttons from popup and puts them outside popup when they are clicked', () => {
-        wrapper.find('Button[icon="plus"]').simulate('mouseenter');
-        jest.runAllTimers();
+    it('removes buttons from popup and puts them outside popup when they are clicked', async () => {
+        await act(() => {
+            wrapper.find('Button[icon="plus"]').simulate('mouseenter');
+            wrapper.update();
+            jest.runAllTimers();
+        });
         wrapper.update();
+
         expect(wrapper.find(Popup).find(Button)).toHaveLength(6);
 
         findButton(popupField).simulate('click');

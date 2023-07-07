@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import PhysicalExamNote from '../PhysicalExamNote';
 import { initialAbdomenWidgetState } from 'redux/reducers/widgetReducers/abdomenWidgetReducer';
 import { initialLungsWidgetState } from 'redux/reducers/widgetReducers/lungsWidgetReducer';
@@ -13,7 +13,7 @@ import {
 } from 'redux/reducers/widgetReducers/murmurswidgetReducer';
 import { LeftRight } from 'constants/enums';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const emptyPhysicalExam = {
     vitals: {

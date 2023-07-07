@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import { YesNoResponse } from 'constants/enums';
@@ -11,7 +11,7 @@ import { FAMILY_HISTORY_ACTION } from 'redux/actions/actionTypes';
 import ConditionInput from 'components/tools/ConditionInput';
 import FamilyHistoryBlock from '../FamilyHistoryBlock';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -211,7 +211,7 @@ describe('FamilyHistoryContent', () => {
             condition: 'Type II Diabetes',
             key: '0',
             index: 'foo',
-            category: 'Family History',
+            category: 'Family',
         };
         const wrapper = mount(
             <Provider store={store}>

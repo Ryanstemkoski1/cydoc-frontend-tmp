@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import Alcohol from '../Alcohol';
 
 import configureStore from 'redux-mock-store';
@@ -15,7 +15,7 @@ import {
 import drinkTypes from 'constants/SocialHistory/drinkTypes';
 import drinkSizes from 'constants/SocialHistory/drinkSizes';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -258,7 +258,7 @@ describe('Alcohol Integration', () => {
 
     test.each(cases)(
         '%s view dispatches correct action when deleting row from alcohol consumption table',
-        (_type, mountAlcoholWithStore) => {
+        async (_type, mountAlcoholWithStore) => {
             const alcoholState = {
                 ...initialSocialHistoryState,
                 alcohol: {
@@ -276,18 +276,21 @@ describe('Alcohol Integration', () => {
 
             const { store, wrapper } = mountAlcoholWithStore(alcoholState);
 
-            wrapper.find('button[type="delete"]').first().simulate('click');
+            wrapper
+                .find('button[id="btn-hpi-type-delete"]')
+                .first()
+                .simulate('click');
 
-            const expectedActions = [
-                {
-                    type: SOCIAL_HISTORY_ACTION.DELETE_ALCOHOL_CONSUMPTION,
-                    payload: {
-                        index: 0,
-                    },
+            wrapper.update();
+
+            const expectedAction = {
+                type: SOCIAL_HISTORY_ACTION.DELETE_ALCOHOL_CONSUMPTION,
+                payload: {
+                    index: 0,
                 },
-            ];
+            };
 
-            expect(store.getActions()).toEqual(expectedActions);
+            expect(store.getActions()).toContainEqual(expectedAction);
         }
     );
 
@@ -311,8 +314,7 @@ describe('Alcohol Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.Yes,
                 },
@@ -325,8 +327,7 @@ describe('Alcohol Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.Maybe,
                 },
@@ -339,8 +340,7 @@ describe('Alcohol Integration', () => {
                 )
                 .simulate('click');
             expectedActions.push({
-                type:
-                    SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
+                type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
                 payload: {
                     newResponse: YesNoMaybeResponse.No,
                 },

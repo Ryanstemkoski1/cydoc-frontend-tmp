@@ -36,12 +36,12 @@ const qualityOptions: MurmurQuality[] = [
     'rasping',
     'musical',
 ];
-type optionTypes =
-    | typeof phaseOptions
-    | typeof crescDecrescOptions
-    | typeof bestHeardAtOptions
-    | typeof intensityOptions
-    | typeof pitchOptions;
+// type optionTypes =
+//     | typeof phaseOptions
+//     | typeof crescDecrescOptions
+//     | typeof bestHeardAtOptions
+//     | typeof intensityOptions
+//     | typeof pitchOptions;
 
 interface HeartMurmursItemProps {
     id: string;

@@ -35,7 +35,6 @@ import {
     isLabTestDictionary,
     isSelectOneResponse,
 } from 'redux/reducers/hpiReducer';
-import Masonry from 'react-masonry-component';
 
 interface CreateResponseProps {
     node: string;
@@ -206,7 +205,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     });
                 }
                 return (
-                    <Masonry className='ros-container' style={{ width: 357 }}>
+                    <div className='ros-container' style={{ width: 357 }}>
                         <ReviewOfSystemsCategory
                             key={''}
                             category={''}
@@ -214,7 +213,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                             selectManyOptions={responseChoice}
                             node={node}
                         />
-                    </Masonry>
+                    </div>
                 );
             }
 
@@ -258,11 +257,11 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     <MedicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={choices}
                         responseType={responseType}
                         mobile={collapseTabs}
                         currentYear={-1}
                         node={node}
+                        hide={true}
                     />
                 );
 

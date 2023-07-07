@@ -2,11 +2,10 @@ import {
     Form,
     Grid,
     TextAreaProps,
-    StrictInputProps,
     ButtonProps,
     Button,
 } from 'semantic-ui-react';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import React, { Component } from 'react';
 import '../familyhistory/FamilyHistory.css';
 import { connect } from 'react-redux';
@@ -101,6 +100,34 @@ class MedicalHistoryNoteItem extends Component<Props> {
             startYear === -1 || isNaN(startYear) ? '' : startYear.toString();
         const endYearString: string =
             endYear === -1 || isNaN(endYear) ? '' : endYear.toString();
+
+        if (this.props.hide) {
+            return (
+                <Grid.Row>
+                    <Form
+                        className='family-hx-note-item'
+                        style={{ width: 'calc(100% - 50px)' }}
+                    >
+                        <Form.Group inline className='condition-header'>
+                            <div className='condition-name'>
+                                {conditionInput}
+                            </div>
+                        </Form.Group>
+                    </Form>
+                    <Button
+                        circular
+                        icon='close'
+                        onClick={() => this.props.deleteRow(this.props.index)}
+                        aria-label='delete-conditon'
+                        className='hpi-ph-button'
+                        style={{
+                            width: '40px',
+                            height: '40px',
+                        }}
+                    />
+                </Grid.Row>
+            );
+        }
 
         return (
             <Grid.Row>
@@ -279,6 +306,7 @@ interface ItemProps {
     currentYear: number;
     isPreview?: boolean;
     deleteRow: (index: string) => void;
+    hide?: boolean;
 }
 
 type OwnProps = {
