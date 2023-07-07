@@ -88,8 +88,7 @@ const OptimizedDropdown = (props: {
     } = props;
 
     const flatOptions = useMemo(() => Object.values(options), [options]);
-
-    const uniqueOptions: ({ label?: string } | unknown)[] = [];
+    const uniqueOptions: DropdownOption[] = [];
     const uniqueMap = new Map();
 
     flatOptions.forEach((el) => {
@@ -112,19 +111,12 @@ const OptimizedDropdown = (props: {
 
     // Format onChange so that it has access to additional props similarly to
     // Semantic UI's Dropdowns
-    const handleOnChange: (
-        newValue: MultiValue<DropdownOption> | SingleValue<DropdownOption>,
-        actionMeta?: ActionMeta<DropdownOption>
-    ) => void = (newValue) => {
-        let value;
+    const handleOnChange = (option: any) => {
+        let value = option?.label || '';
         if (multiple) {
-            const multiOption = newValue as MultiValue<DropdownOption>;
-            value = multiOption?.[0]?.label || '';
-            Array.isArray(newValue)
-                ? (value = newValue.map((opt) => opt.value))
-                : (value = [(newValue as SingleValue<DropdownOption>)?.value]);
-        } else {
-            value = (newValue as SingleValue<DropdownOption>)?.label || '';
+            Array.isArray(option)
+                ? (value = option.map((opt) => opt.value))
+                : (value = [option.value]);
         }
         onChange(null, { ...otherProps, value });
     };

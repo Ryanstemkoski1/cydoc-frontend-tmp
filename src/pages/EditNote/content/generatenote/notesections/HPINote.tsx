@@ -1,32 +1,32 @@
-import { YesNoResponse } from 'constants/enums';
+import React from 'react';
+import { connect } from 'react-redux';
+import { createHPI, createInitialHPI, HPI } from '../generateHpiText';
+import { CurrentNoteState } from 'redux/reducers';
+import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import { HpiState } from 'redux/reducers/hpiReducer';
 import {
     BodyLocationType,
+    SelectOneInput,
     HpiResponseType,
     LabTestType,
     ListTextInput,
     NodeInterface,
-    ResponseTypes,
-    SelectOneInput,
     TimeInput,
 } from 'constants/hpiEnums';
-import React from 'react';
-import { connect } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
-import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
-import { HpiState } from 'redux/reducers/hpiReducer';
-import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
-import { MedicationsState } from 'redux/reducers/medicationsReducer';
-import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
-import { SurgicalHistoryElements } from 'redux/reducers/surgicalHistoryReducer';
-import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
+import { YesNoResponse } from 'constants/enums';
+import { ResponseTypes } from 'constants/hpiEnums';
 import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
 import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
-import { selectPatientInformationState } from 'redux/selectors/patientInformationSelector';
+import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
+import { MedicationsState } from 'redux/reducers/medicationsReducer';
 import { selectSurgicalHistoryProcedures } from 'redux/selectors/surgicalHistorySelectors';
-import { createHPI, createInitialHPI, HPI } from '../generateHpiText';
+import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
+import { selectPatientInformationState } from 'redux/selectors/patientInformationSelector';
+import { SurgicalHistoryElements } from 'redux/reducers/surgicalHistoryReducer';
+import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
+import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
+import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
+import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 
 interface HPINoteProps {
     hpi: HpiState;

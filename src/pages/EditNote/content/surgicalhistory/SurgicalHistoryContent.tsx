@@ -425,9 +425,9 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             });
             popResponse(node, nums);
         }
-        // if (responseType == ResponseTypes.PSH_BLANK && responseChoice) {
-        //     nums = responseChoice;
-        // }
+        if (responseType == ResponseTypes.PSH_BLANK && responseChoice) {
+            nums = responseChoice;
+        }
 
         const content = (
             <>
