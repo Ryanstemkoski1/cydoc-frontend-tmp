@@ -44,6 +44,24 @@ const RELATIONSHIP_TO_PARENT = [
     { text: 'Other', value: 'Other' },
 ];
 
+function formatPhoneNumber(value: string) {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, '');
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 4) return phoneNumber;
+    if (phoneNumberLength < 7) {
+        return '(' + phoneNumber.slice(0, 3) + ')' + phoneNumber.slice(3);
+    }
+    return (
+        '(' +
+        phoneNumber.slice(0, 3) +
+        ')' +
+        phoneNumber.slice(3, 6) +
+        '-' +
+        phoneNumber.slice(6, 10)
+    );
+}
+
 const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
     const { userInfo, isUserInfoValid, updateUserInfo, validateUserInfo } =
         props;
@@ -110,14 +128,10 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                         label='Phone Number'
                         name='cell phone number'
                         value={userInfo.cellPhoneNumber}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            handleChange(
-                                'cellPhoneNumber',
-                                undefined,
-                                e.target.value
-                            )
-                        }
-                        type='number'
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            const value = formatPhoneNumber(e.target.value);
+                            handleChange('cellPhoneNumber', undefined, value);
+                        }}
                         onBlur={validateForm}
                     />
                     <Form.Input
@@ -573,14 +587,16 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                                 }
                                 onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>
-                                ) =>
+                                ) => {
+                                    const value = formatPhoneNumber(
+                                        e.target.value
+                                    );
                                     handleChange(
                                         'insuranceCompanyPhoneNumber',
                                         'insuranceInfo',
-                                        e.target.value
-                                    )
-                                }
-                                type='number'
+                                        value
+                                    );
+                                }}
                                 onBlur={validateForm}
                             />
                         </div>
