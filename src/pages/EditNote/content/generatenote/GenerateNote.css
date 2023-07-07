@@ -10,6 +10,7 @@
 }
 
 .ui.icon.button.note-previous-button:hover {
+    color: white; 
     opacity: 0.6;
 }
 
@@ -37,8 +38,46 @@
     flex-direction: row;
     justify-content: space-between;
     padding: 20px 40px;
+    align-items: center;
+    box-shadow: none;
+    background-color: #F9FEFF;
+    margin-bottom: 1px;
+    border-bottom: 1px solid #F9FEFF;
   }
-  
+  #generateNoteButtonsContainer.generate-note-buttons__container h3 img {
+    width: 15px;
+    margin-right: 5px;
+  }
+  #generateNoteButtonsContainer.generate-note-buttons__container .input {
+    margin-left: 10px;
+    margin-right: auto
+  }
+  .generate-note-wrap .ui.segment {
+    padding: 30px 40px;
+    box-shadow: none;
+    border-bottom: 1px solid #D4E1E4;
+  }
+  .generate-note-wrap .ui.segment .title {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+  #generateNoteButtonsContainer.generate-note-buttons__container h3,
+  .generate-note-wrap .ui.segment  .title h3 {
+    margin: 0;
+    font-weight: 400;
+    color: #000;
+  }
+  .generate-note-wrap .ui.segment .title {
+    border-left: 0;
+  }
+  .generate-note-wrap .ui.segment  .title h3 img,
+  #generateNoteButtonsContainer.generate-note-buttons__container h3 img {
+    width: 15px;
+    margin-right: 5px;
+  }
+
   @media screen and (max-width: 600px) {
     .ui.icon.button.note-previous-button {
         display: none;
@@ -81,4 +120,63 @@ div.ui.segment.buttons-segment {
     .generate-note-buttons {
         top: 123px;
     }
+}
+
+.patientInfoWrapper ul {
+  column-count: 2;
+  column-gap: 10px;
+  list-style-type: none;
+  padding:0px;
+}
+
+.patientInfoWrapper ul li {
+      letter-spacing: 0px;
+      color: #707070;
+      font-size: 15px;
+      width: 100%;
+      margin-bottom: 10px;
+      margin-right: 10px;
+      display: flex;
+
+}
+
+.patientInfoWrapper ul li label{
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-right: 10px;
+}
+
+
+@media (max-width:1200px) {
+  .patientInfoWrapper ul {
+    column-count: 2;
+  }
+}
+
+@media (max-width:768px) {
+  .patientInfoWrapper ul {
+    column-count: 1;
+  }
+
+  .patientInfoWrapper ul li {
+    display: block;
+  }
+  .patientInfoWrapper ul li label{
+    display: block;
+    width: 100%;
+  }
+}
+
+.notes-wrapper {
+  overflow: hidden;
+}
+
+.ui.buttons.generate-note-button-spacing {
+  margin-right: 10px
+}
+
+.generated-note-text {
+  box-shadow: none;
+  margin-top: 20px;
 }

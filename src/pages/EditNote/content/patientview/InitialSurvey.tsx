@@ -206,10 +206,10 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             this.props.additionalSurvey.initialSurveyState === 1
         ) {
             this.props.updateAdditionalSurveyDetails(
-                this.state.tempLegalFirstName,
-                this.state.tempLegalLastName,
-                this.state.tempSocialSecurityNumber,
-                this.state.tempDateOfBirth,
+                this.props.additionalSurvey.legalFirstName,
+                this.props.additionalSurvey.legalLastName,
+                this.props.additionalSurvey.socialSecurityNumber,
+                this.props.additionalSurvey.dateOfBirth,
                 2
             );
             this.setState({ error: false });
