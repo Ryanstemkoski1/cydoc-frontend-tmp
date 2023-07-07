@@ -210,8 +210,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                             title: complaint,
                             onClick: () => {
                                 currentNoteStore.dispatch({
-                                    type:
-                                        CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
+                                    type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
                                     payload: {
                                         disease: complaint,
                                     },
@@ -254,7 +253,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                     // if the user has chosen any diseases (positiveLength > 0), then the right button can be displayed
                     // to advance to other pages of the HPI form
                     <>
-                        <Segment>
+                        <Segment className='margin-bottom-for-notes'>
                             {positiveLength > 0 ? (
                                 positiveDiseases
                             ) : (
@@ -267,7 +266,8 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 className='hpi-search-bar'
                                 minCharacters={2}
                                 onSearchChange={(event) => {
-                                    const target = event.target as HTMLTextAreaElement;
+                                    const target =
+                                        event.target as HTMLTextAreaElement;
                                     this.setState({ searchVal: target.value });
                                 }}
                                 value={this.state.searchVal}
@@ -327,7 +327,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                     menuItem: string,
                                                     index: number
                                                 ) => (
-                                                    <ToggleButton
+                                                    <ToggleButton<string>
                                                         key={menuItem}
                                                         condition={menuItem}
                                                         title={menuItem}
@@ -418,7 +418,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                                   ].patientView
                                                 : diseaseCategory,
                                             render: () => (
-                                                <Tab.Pane>
+                                                <Tab.Pane className='margin-bottom-for-notes'>
                                                     <MiscBox
                                                         activeThing={
                                                             diseaseCategory

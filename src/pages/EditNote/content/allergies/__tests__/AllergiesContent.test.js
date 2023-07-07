@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import AllergiesContent from '../AllergiesContent.tsx';
@@ -9,8 +9,9 @@ import AddRowButton from 'components/tools/AddRowButton';
 import { Button } from 'semantic-ui-react';
 import { ALLERGIES_ACTION } from 'redux/actions/actionTypes';
 import { PATIENT_HISTORY_ALLERGIES_MOBILE_BP } from 'constants/breakpoints';
+import { act } from 'react-dom/test-utils';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -60,22 +61,27 @@ describe('AllergiesContent', () => {
         expect(wrapper.find(AddRowButton)).toHaveLength(1);
     });
 
-    test('addRow works', () => {
+    test('addRow works', async () => {
         const { wrapper, store } = connectStore();
         const button = wrapper.find(AddRowButton).find(Button);
         expect(button).toBeTruthy();
-        button.simulate('click');
+        await act(() => {
+            button.simulate('click');
+        });
+
         const expectedActions = [{ type: ALLERGIES_ACTION.ADD_ALLERGY }];
         expect(store.getActions()).toEqual(expectedActions);
     });
 
-    test('deleteRow works', () => {
+    test('deleteRow works', async () => {
         const { wrapper, store } = connectStore();
         const button = wrapper
             .find('button[aria-label="delete-allergy"]')
             .first();
         expect(button).toBeTruthy();
-        button.simulate('click');
+        await act(() => {
+            button.simulate('click');
+        });
         const expectedActions = [
             {
                 type: ALLERGIES_ACTION.DELETE_ALLERGY,
@@ -182,11 +188,13 @@ describe('AllergiesContent', () => {
     //     expect(store.getActions()).toEqual(expectedAction);
     // });
 
-    test('editing comments dispatches correct action', () => {
+    test('editing comments dispatches correct action', async () => {
         const { store, wrapper } = connectStore();
         const input = wrapper.find('.table-row-text[type="comments"]').first();
-        input.simulate('change', {
-            target: { value: 'hives' },
+        await act(() => {
+            input.simulate('change', {
+                target: { value: 'hives' },
+            });
         });
         const expectedAction = [
             {
@@ -200,18 +208,22 @@ describe('AllergiesContent', () => {
         expect(store.getActions()).toEqual(expectedAction);
     });
 
-    it('editing comments dispatches correct action - mobile', () => {
+    it('editing comments dispatches correct action - mobile', async () => {
         const { store, wrapper } = connectStore(initialState);
 
         window.innerWidth = PATIENT_HISTORY_ALLERGIES_MOBILE_BP - 10;
-        window.dispatchEvent(new Event('resize'));
+        await act(() => {
+            window.dispatchEvent(new Event('resize'));
+        });
         wrapper.update();
-        wrapper
-            .find('input[type="comments"]')
-            .first()
-            .simulate('change', {
-                target: { value: 'Normal' },
-            });
+        await act(() => {
+            wrapper
+                .find('input[type="comments"]')
+                .first()
+                .simulate('change', {
+                    target: { value: 'Normal' },
+                });
+        });
 
         const expectedAction = [
             {
@@ -225,30 +237,38 @@ describe('AllergiesContent', () => {
         expect(store.getActions()).toEqual(expectedAction);
     });
 
-    test('handle cell click', () => {
+    test('handle cell click', async () => {
         const { wrapper } = connectStore();
         const input = wrapper.find('td').last();
-        input.simulate('click');
+        await act(() => {
+            input.simulate('click');
+        });
         expect(wrapper.find('textarea').last().rowindex).toEqual(
             document.activeElement.rowIndex
         );
     });
 
-    test('onTitleClick', () => {
+    test('onTitleClick', async () => {
         const { wrapper } = connectStore(initialState);
 
         window.innerWidth = PATIENT_HISTORY_ALLERGIES_MOBILE_BP - 10;
-        window.dispatchEvent(new Event('resize'));
+        await act(() => {
+            window.dispatchEvent(new Event('resize'));
+        });
         wrapper.update();
-        wrapper
-            .find('input[type="comments"]')
-            .first()
-            .simulate('change', {
-                target: { value: 'Normal' },
-            });
+        await act(() => {
+            wrapper
+                .find('input[type="comments"]')
+                .first()
+                .simulate('change', {
+                    target: { value: 'Normal' },
+                });
+        });
 
         const input = wrapper.find('.title').first();
-        input.simulate('click');
+        await act(() => {
+            input.simulate('click');
+        });
         expect(input.getElement().rowindex).toEqual(
             document.activeElement.rowIndex
         );

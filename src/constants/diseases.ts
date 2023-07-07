@@ -84,8 +84,7 @@ const rawDiseases: { [index: string]: string } = {
     '2.16.2.3': 'Benign neoplasm of the thyroid',
     '2.16.2.4': 'Benign neoplasm of cerebral meninges',
     '2.16.2.5': 'Other and unspecified benign neoplasms',
-    '3':
-        'Endocrine; nutritional; and metabolic diseases and immunity disorders',
+    '3': 'Endocrine; nutritional; and metabolic diseases and immunity disorders',
     '3.1': 'Thyroid disorders',
     '3.1.1': 'Thyrotoxicosis with or without goiter',
     '3.1.2': 'Other thyroid disorders',
@@ -526,8 +525,7 @@ const rawDiseases: { [index: string]: string } = {
     '11.5.2.4': 'Fourth degree perineal laceration',
     '11.5.2.5': 'Other perineal laceration and trauma',
     '11.5.3': 'Forceps delivery',
-    '11.6':
-        'Other complications of birth; puerperium affecting management of mother',
+    '11.6': 'Other complications of birth; puerperium affecting management of mother',
     '11.6.1': 'Postpartum hemorrhage',
     '11.6.2': 'Complications of the puerperium',
     '11.6.3': 'Cervical incompetence',
@@ -558,8 +556,7 @@ const rawDiseases: { [index: string]: string } = {
     '12.3.3': 'Other chronic skin ulcer',
     '12.4': 'Other skin disorders',
     '13': 'Diseases of the musculoskeletal system and connective tissue',
-    '13.1':
-        'Infective arthritis and osteomyelitis (except that caused by TB or STD)',
+    '13.1': 'Infective arthritis and osteomyelitis (except that caused by TB or STD)',
     '13.2': 'Non-traumatic joint disorders',
     '13.2.1': 'Rheumatoid arthritis and related disease',
     '13.2.2': 'Osteoarthritis',
@@ -725,8 +722,7 @@ const rawDiseases: { [index: string]: string } = {
     '16.11.2': 'Poisoning by other medications and drugs',
     '16.11.3': 'Poisoning by nonmedicinal substances',
     '16.12': 'Other injuries and conditions due to external causes',
-    '17':
-        'Symptoms; signs; and ill-defined conditions and factors influencing health status',
+    '17': 'Symptoms; signs; and ill-defined conditions and factors influencing health status',
     '17.1': 'Symptoms; signs; and ill-defined conditions',
     '17.1.1': 'Syncope',
     '17.1.2': 'Fever of unknown origin',

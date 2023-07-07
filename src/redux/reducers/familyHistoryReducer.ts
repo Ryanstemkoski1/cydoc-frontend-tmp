@@ -101,11 +101,8 @@ export function familyHistoryReducer(
             }
         }
         case FAMILY_HISTORY_ACTION.UPDATE_MEMBER: {
-            const {
-                conditionIndex,
-                familyMemberIndex,
-                newMember,
-            } = action.payload;
+            const { conditionIndex, familyMemberIndex, newMember } =
+                action.payload;
             return {
                 ...state,
                 [conditionIndex]: {
@@ -123,11 +120,8 @@ export function familyHistoryReducer(
             };
         }
         case FAMILY_HISTORY_ACTION.TOGGLE_CAUSE_OF_DEATH_OPTION: {
-            const {
-                conditionIndex,
-                familyMemberIndex,
-                optionSelected,
-            } = action.payload;
+            const { conditionIndex, familyMemberIndex, optionSelected } =
+                action.payload;
             return {
                 ...state,
                 [conditionIndex]: {
@@ -150,11 +144,8 @@ export function familyHistoryReducer(
             };
         }
         case FAMILY_HISTORY_ACTION.TOGGLE_LIVING_OPTION: {
-            const {
-                conditionIndex,
-                familyMemberIndex,
-                optionSelected,
-            } = action.payload;
+            const { conditionIndex, familyMemberIndex, optionSelected } =
+                action.payload;
             return {
                 ...state,
                 [conditionIndex]: {
@@ -177,11 +168,8 @@ export function familyHistoryReducer(
             };
         }
         case FAMILY_HISTORY_ACTION.UPDATE_COMMENTS: {
-            const {
-                conditionIndex,
-                familyMemberIndex,
-                newComments,
-            } = action.payload;
+            const { conditionIndex, familyMemberIndex, newComments } =
+                action.payload;
             return {
                 ...state,
                 [conditionIndex]: {

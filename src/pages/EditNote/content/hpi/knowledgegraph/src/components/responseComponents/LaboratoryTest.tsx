@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Input } from 'semantic-ui-react';
 import '../../css/TimeInput.css';
-import { HpiStateProps, LabTestType } from 'constants/hpiEnums';
+import { HpiStateProps, LabTestType, TimeOption } from 'constants/hpiEnums';
 import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import {
@@ -50,7 +50,7 @@ class LabTestInput extends React.Component<Props> {
                                 </label>
                             ) : (
                                 components[comp].unitOptions.map((u) => (
-                                    <ToggleButton
+                                    <ToggleButton<TimeOption>
                                         key={node + u}
                                         className='unit-option'
                                         condition={u}
@@ -60,7 +60,8 @@ class LabTestInput extends React.Component<Props> {
                                             this.props.labTestHandleClick(
                                                 node,
                                                 comp,
-                                                data.condition
+                                                (data?.condition ||
+                                                    '') as TimeOption
                                             )
                                         }
                                     />

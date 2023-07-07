@@ -20,7 +20,6 @@ import {
     BaseCategoryForm,
 } from './BaseCategoryForm';
 import UpdateDimensions from './UpdateDimensions';
-import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
 import './DiscussionPlanForms.css';
 import './planSections.css';
 

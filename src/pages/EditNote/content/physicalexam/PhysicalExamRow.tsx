@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
     Button,
     Grid,
@@ -190,10 +190,10 @@ class PhysicalExamRow extends React.Component<Props, State> {
 
     generateDropdown = ({
         findings,
-        includeSelectAll,
-        normalOrAbnormal,
-        needsRightLeft,
-    }: PhysicalExamSchemaRow) => {
+    }: // includeSelectAll,
+    // normalOrAbnormal,
+    // needsRightLeft,
+    PhysicalExamSchemaRow) => {
         return (
             <Grid.Row>
                 <Dropdown

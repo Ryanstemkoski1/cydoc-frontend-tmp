@@ -11,12 +11,8 @@ const EditGraph = () => {
     let [errorMessage, setErrorMessage] = useState('');
     let [isFetching, setIsFetching] = useState(false);
     let [isDisabled, setIsDisabled] = useState(false);
-    const {
-        doctorID,
-        createdTemplates,
-        updateTemplate,
-        setCreatedTemplates,
-    } = useContext(HPITemplateContext);
+    const { doctorID, createdTemplates, updateTemplate, setCreatedTemplates } =
+        useContext(HPITemplateContext);
 
     useEffect(() => {
         const fetchTemplates = async () => {

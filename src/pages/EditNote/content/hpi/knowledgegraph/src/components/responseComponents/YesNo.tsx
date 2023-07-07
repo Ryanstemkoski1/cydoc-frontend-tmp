@@ -25,8 +25,12 @@ class YesNo extends React.Component<Props> {
                     active={hpi.nodes[node].response == YesNoResponse.Yes}
                     condition='Yes'
                     title='Yes'
-                    onToggleButtonClick={(_e) =>
-                        this.props.yesNoToggleOption(node, YesNoResponse.Yes)
+                    onToggleButtonClick={
+                        (/* _e, _data */) =>
+                            this.props.yesNoToggleOption(
+                                node,
+                                YesNoResponse.Yes
+                            )
                     }
                 />
                 <ToggleButton
@@ -34,8 +38,9 @@ class YesNo extends React.Component<Props> {
                     active={hpi.nodes[node].response == YesNoResponse.No}
                     condition='No'
                     title='No'
-                    onToggleButtonClick={(_e) =>
-                        this.props.yesNoToggleOption(node, YesNoResponse.No)
+                    onToggleButtonClick={
+                        (/* _e, _data */) =>
+                            this.props.yesNoToggleOption(node, YesNoResponse.No)
                     }
                 />
             </div>

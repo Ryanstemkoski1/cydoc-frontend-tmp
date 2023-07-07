@@ -7,7 +7,7 @@
         padding-bottom: 20px;
     }
     .scroll-table::-webkit-scrollbar {
-        height: 3px;
+        height: 5px;
     }
     .scroll-table-inner {
         min-width: 1000px;
