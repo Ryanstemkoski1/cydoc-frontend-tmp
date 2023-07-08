@@ -28,7 +28,7 @@ import { PatientInformationState } from 'redux/reducers/patientInformationReduce
 import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
 import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 
-interface HPINoteProps {
+interface HPINotePropsFromRedux {
     hpi: HpiState;
     familyHistory: FamilyHistoryState;
     medications: MedicationsState;
@@ -37,6 +37,8 @@ interface HPINoteProps {
     patientInformation: PatientInformationState;
     chiefComplaints: ChiefComplaintsState;
 }
+
+type HPINoteProps = HPINotePropsFromRedux & { bulletNoteView?: boolean };
 
 export type GraphNode = NodeInterface & { response: HpiResponseType };
 
@@ -365,20 +367,14 @@ export const extractNode = (
             const posArr: string[] = [];
             const negArr: string[] = [];
             (response as string[]).map((key) => {
-                if (key in state.surgicalHistory) {
-                    const { hasHadSurgery, procedure } =
-                        state.surgicalHistory[key];
-                    if (
-                        hasHadSurgery == YesNoResponse.Yes &&
-                        procedure.length > 0
-                    )
-                        posArr.push(procedure);
-                    else if (
-                        hasHadSurgery == YesNoResponse.No &&
-                        procedure.length > 0
-                    )
-                        negArr.push(procedure);
-                }
+                const { hasHadSurgery, procedure } = state.surgicalHistory[key];
+                if (hasHadSurgery == YesNoResponse.Yes && procedure.length > 0)
+                    posArr.push(procedure);
+                else if (
+                    hasHadSurgery == YesNoResponse.No &&
+                    procedure.length > 0
+                )
+                    negArr.push(procedure);
             });
             answer = joinLists(posArr, 'and');
             negRes = joinLists(negArr, 'or');
@@ -452,8 +448,18 @@ export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
     }
     return formattedHpis;
 };
-
+// Function to remove specified phrases
+function removePhrases(text: string, phrases: string[]): string {
+    let modifiedText = text;
+    phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
+    phrases.forEach((phrase) => {
+        modifiedText = modifiedText.replace(new RegExp(phrase, 'g'), ''); // Removing each phrase globally
+    });
+    return modifiedText.trim();
+}
 const HPINote = (state: HPINoteProps) => {
+    const { bulletNoteView } = state;
+
     /*
     formattedHpis is a dictionary in which each key is the chief complaint
     and the value is an array of template sentences.
@@ -520,28 +526,88 @@ const HPINote = (state: HPINoteProps) => {
             miscNote: miscText[i],
         };
     }
+
+    // Add a list of phrases to remove when in bullet note view
+    const phrasesToRemove = [
+        'The patient has a',
+        'The patient has been',
+        'The patient has',
+        'The patient is',
+        'The patient',
+        'He',
+        'She',
+        'They',
+    ];
+
     return (
         <div>
             {actualNote.reduce((acc: JSX.Element[], text, i) => {
-                if (text.chiefComplaint in state.chiefComplaints)
-                    return [
-                        ...acc,
-                        <p key={i}>
-                            <b>{text.chiefComplaint}</b>
-                            <br />
-                            {text.text}
-                            {text.miscNote ? (
-                                <>
-                                    {' '}
-                                    <br />
-                                    <br />
-                                    {text.miscNote}
-                                </>
-                            ) : (
-                                ''
-                            )}
-                        </p>,
-                    ];
+                if (text.chiefComplaint in state.chiefComplaints) {
+                    // Process the text based on bulletNoteView flag
+                    const processedText = bulletNoteView
+                        ? removePhrases(text.text, phrasesToRemove)
+                        : text.text;
+
+                    // Return as bullet points if bulletNoteView is true, else return as paragraphs
+                    return bulletNoteView
+                        ? [
+                              ...acc,
+                              <ul key={i}>
+                                  {i === 0 ? (
+                                      <b>{text.chiefComplaint}</b>
+                                  ) : (
+                                      <li>
+                                          <b>{text.chiefComplaint}</b>
+                                      </li>
+                                  )}
+                                  {processedText
+                                      .split('. ')
+                                      .map(
+                                          (sentence, index) =>
+                                              sentence && (
+                                                  <li key={index}>
+                                                      {sentence.trim()}.
+                                                  </li>
+                                              )
+                                      )}
+                                  {text.miscNote &&
+                                      text.miscNote
+                                          .split('. ')
+                                          .map(
+                                              (sentence, index) =>
+                                                  sentence && (
+                                                      <li key={index}>
+                                                          {sentence.trim()}.
+                                                      </li>
+                                                  )
+                                          )}
+                              </ul>,
+                          ]
+                        : [
+                              ...acc,
+                              <p key={i}>
+                                  {i === 0 ? (
+                                      <b>{text.chiefComplaint}</b>
+                                  ) : (
+                                      <li>
+                                          <b>{text.chiefComplaint}</b>
+                                      </li>
+                                  )}
+                                  <br />
+                                  {processedText}
+                                  {text.miscNote ? (
+                                      <>
+                                          {' '}
+                                          <br />
+                                          <br />
+                                          {text.miscNote}
+                                      </>
+                                  ) : (
+                                      ''
+                                  )}
+                              </p>,
+                          ];
+                }
                 return acc;
             }, [])}
         </div>

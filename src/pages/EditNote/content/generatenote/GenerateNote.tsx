@@ -14,7 +14,6 @@ import { MedicationsState } from 'redux/reducers/medicationsReducer';
 import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
 import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
 import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
-import { PhysicalExamState } from 'redux/reducers/physicalExamReducer';
 import {
     Button,
     Segment,
@@ -56,6 +55,7 @@ import './GenerateNote.css';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 import { GENERATE_NOTE_MOBILE_BP } from 'constants/breakpoints';
 import { PatientPronouns } from 'constants/patientInformation';
+import { PhysicalExamState } from 'redux/reducers/physicalExamReducer';
 
 interface GenerateNoteProps {
     previousFormClick: () => void;
@@ -129,7 +129,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
         updatePatientInformation(patientName, pronouns);
         closeModal();
     };
-
+    const [isBulletNoteView, setIsBulletNoteView] = useState(false);
     const [isRichText, setIsRichText] = useState(false);
 
     /** TODO: This logic is loosely duplicated from NavMenu.tsx. This function has been brute-force copied
@@ -152,7 +152,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
         window.addEventListener('resize', updateDimensions);
         return (): void =>
             window.removeEventListener('resize', updateDimensions);
-    }, []);
+    }, [isBulletNoteView]);
 
     const copyNote = () => {
         const note = document.querySelectorAll('.generate-note-text');
@@ -180,7 +180,14 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
             </Button>
         </Button.Group>
     );
-
+    const bulletPointToggler = (
+        <Button
+            onClick={() => setIsBulletNoteView(!isBulletNoteView)}
+            className={`hpi-ph-button${isBulletNoteView ? '-selected' : ''}`}
+        >
+            Bullet Point view
+        </Button>
+    );
     let generateNoteButtons;
     if (!isMobile) {
         generateNoteButtons = (
@@ -230,6 +237,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                     </Button>
                 </Button.Group>
                 {richOrPlainButtons}
+                {bulletPointToggler}
             </Fragment>
         );
     } else {
@@ -299,7 +307,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
             <Segment className='generate-note-text'>
                 {/* <h1> {this.context.title} </h1> */}
                 <h3> History of Present Illness </h3>
-                <HPINote />
+                <HPINote bulletNoteView={isBulletNoteView} />
                 <h3> Patient History </h3>
                 <h4> Medical History </h4>
                 <MedicalHistoryNote
