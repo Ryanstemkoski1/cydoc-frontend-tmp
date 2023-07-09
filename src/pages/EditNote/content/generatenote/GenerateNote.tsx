@@ -152,7 +152,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
         window.addEventListener('resize', updateDimensions);
         return (): void =>
             window.removeEventListener('resize', updateDimensions);
-    }, [isBulletNoteView]);
+    }, []);
 
     const copyNote = () => {
         const note = document.querySelectorAll('.generate-note-text');
