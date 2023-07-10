@@ -55,7 +55,6 @@
   .generate-note-wrap .ui.segment {
     padding: 30px 40px;
     box-shadow: none;
-    border-bottom: 1px solid #D4E1E4;
   }
   .generate-note-wrap .ui.segment .title {
     display: flex;
@@ -176,7 +175,8 @@ div.ui.segment.buttons-segment {
   margin-right: 10px
 }
 
-.generated-note-text {
+.generate-note-wrap .ui.segment.generated-note-text {
   box-shadow: none;
   margin-top: 20px;
+  padding: 0px 0px;
 }

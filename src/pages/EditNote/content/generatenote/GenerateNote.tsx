@@ -390,52 +390,54 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                         height: isNoteExpanded === true ? '100%' : '0px',
                     }}
                 >
-                    <div className='generated-note-text'>
+                    <Segment className='generated-note-text'>
+                        <h3> History of Present Illness </h3>
                         <HPINote />
-                    </div>
+                        <h3> Patient History </h3>
+                        <h4> Medical History </h4>
+                        <MedicalHistoryNote
+                            isRich={isRichText}
+                            medicalHistory={medicalHistoryState}
+                        />
+                        <h4> Surgical History </h4>
+                        <SurgicalHistoryNote
+                            isRich={isRichText}
+                            surgicalHistory={surgicalHistoryState}
+                        />
+                        <h4> Medications </h4>
+                        <MedicationsNote
+                            isRich={isRichText}
+                            medications={medicationsState}
+                        />
+                        <h4> Allergies </h4>
+                        <AllergiesNote
+                            isRich={isRichText}
+                            allergies={allergiesState}
+                        />
+                        <h4> Social History </h4>
+                        <SocialHistoryNote
+                            isRich={isRichText}
+                            socialHistory={socialHistoryState}
+                        />
+                        <h4> Family History </h4>
+                        <FamilyHistoryNote
+                            isRich={isRichText}
+                            familyHistory={familyHistoryState}
+                        />
+                        <h3> Review of Systems </h3>
+                        <ReviewOfSystemsNote
+                            isRich={isRichText}
+                            ROSState={ROSState}
+                        />
+                        <h3> Physical Exam </h3>
+                        <PhysicalExamNote
+                            isRich={isRichText}
+                            physicalExam={physicalExamState}
+                        />
+                        <h3> Plan </h3>
+                        <PlanNote planState={planState} />
+                    </Segment>
                 </div>
-            </Segment>
-
-            <Segment className='generate-note-text'>
-                {/* <h1> {this.context.title} </h1> */}
-                <h3> History of Present Illness </h3>
-                <h3> Patient History </h3>
-                <h4> Medical History </h4>
-                <MedicalHistoryNote
-                    isRich={isRichText}
-                    medicalHistory={medicalHistoryState}
-                />
-                <h4> Surgical History </h4>
-                <SurgicalHistoryNote
-                    isRich={isRichText}
-                    surgicalHistory={surgicalHistoryState}
-                />
-                <h4> Medications </h4>
-                <MedicationsNote
-                    isRich={isRichText}
-                    medications={medicationsState}
-                />
-                <h4> Allergies </h4>
-                <AllergiesNote isRich={isRichText} allergies={allergiesState} />
-                <h4> Social History </h4>
-                <SocialHistoryNote
-                    isRich={isRichText}
-                    socialHistory={socialHistoryState}
-                />
-                <h4> Family History </h4>
-                <FamilyHistoryNote
-                    isRich={isRichText}
-                    familyHistory={familyHistoryState}
-                />
-                <h3> Review of Systems </h3>
-                <ReviewOfSystemsNote isRich={isRichText} ROSState={ROSState} />
-                <h3> Physical Exam </h3>
-                <PhysicalExamNote
-                    isRich={isRichText}
-                    physicalExam={physicalExamState}
-                />
-                <h3> Plan </h3>
-                <PlanNote planState={planState} />
             </Segment>
             <Button
                 icon
