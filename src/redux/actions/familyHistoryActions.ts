@@ -1,7 +1,6 @@
 import { FAMILY_HISTORY_ACTION } from './actionTypes';
 import { YesNoResponse } from '../../constants/enums';
 import { FamilyOption } from 'constants/familyHistoryRelations';
-import { string } from 'prop-types';
 
 interface ToggleConditionOptionAction {
     type: FAMILY_HISTORY_ACTION.TOGGLE_CONDITION_OPTION;
