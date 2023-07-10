@@ -141,9 +141,9 @@ export function compare(strA: string, strB: string, n: number) {
             combinedStr += ' and';
         }
         // Accounts for empty string due to first space in sentences
-        // Starts at indice n
+        // Starts at indice amtSame
 
-        for (let i = n; i < splitB.length; i++) {
+        for (let i = amtSame; i < splitB.length; i++) {
             combinedStr += splitB[i] === '.' ? '.' : ' ' + splitB[i];
         }
 
