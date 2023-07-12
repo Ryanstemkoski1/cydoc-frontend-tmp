@@ -3,8 +3,8 @@ import { Input } from 'semantic-ui-react';
 import { CurrentNoteState } from 'redux/reducers';
 import { HpiStateProps, NumberInput } from 'constants/hpiEnums';
 import {
-    handleNumericInputChange,
-    HandleNumericInputChangeAction,
+    handleYearInputChange,
+    HandleYearInputChangeAction,
 } from 'redux/actions/hpiActions';
 import { connect } from 'react-redux';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
@@ -34,17 +34,17 @@ class YearInput extends React.Component<Props, OwnState> {
     }
 
     handleInputChange = (value: number) => {
-        const { node, handleNumericInputChange } = this.props;
+        const { node, handleYearInputChange } = this.props;
         if (isNaN(value) || value < 1900 || value > 2023) {
             // reset year value if input is invalid
-            if (this.state.valid) {
-                handleNumericInputChange(node, undefined);
-            }
             this.setState({ valid: false, year: value });
+            if (this.state.valid) {
+                handleYearInputChange(node, undefined);
+            }
         } else {
             this.setState({ valid: true, year: value });
             // only set year value if input is valid
-            handleNumericInputChange(node, value);
+            handleYearInputChange(node, value);
         }
     };
 
@@ -87,10 +87,10 @@ type OwnState = {
 };
 
 interface DispatchProps {
-    handleNumericInputChange: (
+    handleYearInputChange: (
         medId: string,
         input: NumberInput
-    ) => HandleNumericInputChangeAction;
+    ) => HandleYearInputChangeAction;
 }
 
 const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
@@ -100,7 +100,7 @@ const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
 type Props = HpiStateProps & DispatchProps & YearInputProps;
 
 const mapDispatchToProps = {
-    handleNumericInputChange,
+    handleYearInputChange,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(YearInput);
