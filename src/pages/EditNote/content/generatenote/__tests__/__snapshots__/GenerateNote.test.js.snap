@@ -465,6 +465,7 @@ exports[`Generate Note matches snapshot 1`] = `
         "vitals": Object {
           "RR": 0,
           "diastolicBloodPressure": 0,
+          "headCircumference": 0,
           "heartRate": 0,
           "height": 0,
           "oxygenSaturation": 0,
