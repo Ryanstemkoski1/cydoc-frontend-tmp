@@ -96,7 +96,6 @@ class PhysicalExamContent extends React.Component<Props, State> {
         const dobObj = new Date(dateOfBirth);
         const timeDiff = Math.abs(Date.now() - dobObj.getTime());
         const ageInYears = timeDiff / (1000 * 60 * 60 * 24 * 365.25);
-        // const age = Math.floor(ageInYears);
         return ageInYears;
     };
 
