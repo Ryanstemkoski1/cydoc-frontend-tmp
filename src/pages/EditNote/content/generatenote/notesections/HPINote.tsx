@@ -185,13 +185,15 @@ export const extractNode = (
             'PSH-BLANK',
             'PSH-POP',
         ];
-
-        if (
-            responseTypes.includes(childNode.responseType) &&
-            Array.isArray(childNode.response) &&
-            childNode.response.length !== 0
-        ) {
-            return ['', '', ''];
+        if (childNode) {
+            if (Array.isArray(childNode.response)) {
+                if (
+                    responseTypes.includes(childNode.responseType) &&
+                    childNode.response.length !== 0
+                ) {
+                    return ['', '', ''];
+                }
+            }
         }
     }
 
