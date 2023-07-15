@@ -5,7 +5,11 @@ import invariant from 'tiny-invariant';
 import { ClinicianSignUpData, UserAttributes } from 'types/users';
 import { passwordIsValid } from 'constants/passwordErrors';
 import { SignUpFormData } from './SignUpForm';
-import { createUser } from 'modules/api';
+import { createDbUser } from 'modules/api';
+import { useHistory } from 'react-router-dom';
+import { breadcrumb, log } from 'modules/logging';
+import { CreateUserResponse } from 'types/api';
+import { createCognitoUser } from 'auth/cognito';
 
 const validationSchema = Yup.object<SignUpFormData>({
     isTermsChecked: Yup.bool()
@@ -97,15 +101,59 @@ export const useSignUpFormController = (
     sessionUserAttributes: UserAttributes | null,
     cognitoUser: CognitoUser | null
 ) => {
+    const history = useHistory();
+
     const form = useFormik({
         enableReinitialize: true,
         // validateOnChange: true,
         initialValues,
-        onSubmit: async (formUserData, actions) => {
-            console.log(`submitting new user`, formUserData);
+        onSubmit: async (formUserData, { setErrors, setSubmitting }) => {
+            const navtoLogin = () => {
+                setSubmitting(false);
+                history.push('/Login');
+            };
+            const formattedPhoneNumber = formatPhoneNumber(
+                formUserData.phoneNumber
+            );
+            formUserData.phoneNumber = formattedPhoneNumber;
+            formUserData.confirmPhoneNumber = formattedPhoneNumber;
+            breadcrumb(`submitting new user`, 'sign up', formUserData);
 
-            // user creation
-            const result = await createUser(formUserData);
+            try {
+                const cognitoUser = await createCognitoUser(
+                    formUserData,
+                    navtoLogin
+                );
+
+                // only proceed if cognito user was created successfully
+                const result =
+                    cognitoUser && (await createDbUser(formUserData));
+
+                if (result?.errorMessage?.length) {
+                    // Expected error, display to GUI
+                    setErrors({ signUpError: result.errorMessage });
+                } else if (result && (result as CreateUserResponse)?.user?.id) {
+                    // User created successfully, now login
+                    navtoLogin();
+                } else {
+                    // Unexpected error occurred
+                    breadcrumb(`Invalid user creation response`, 'sign up', {
+                        result,
+                        formUserData,
+                    });
+                    throw new Error(`Invalid user creation response`);
+                }
+            } catch (e) {
+                log(`Invalid user creation response`, {
+                    formUserData,
+                });
+                setErrors({
+                    signUpError:
+                        'Error occurred and has been logged to our support team. Check your internet connection, retry or speak to an administrator.',
+                });
+            } finally {
+                setSubmitting(false);
+            }
             // user info or password update (existing, authed user)
             // TODO: enable account creation with cognito user!
             // TODO: test flow with first time users created by other admins in portal
@@ -115,3 +163,9 @@ export const useSignUpFormController = (
 
     return { form };
 };
+
+const formatPhoneNumber = (phoneNumber: string): string =>
+    phoneNumber
+        .replace('(', '+1')
+        .replace(/-|\(|\)/gi, '')
+        .replace(' ', '');

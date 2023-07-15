@@ -7,9 +7,6 @@ import { DbUser } from 'types/users';
 
 const SENTRY_ENABLED = process.env.NODE_ENV === 'production';
 
-// eslint-disable-next-line no-console
-console.log(`PRODUCTION: ${SENTRY_ENABLED}, ENV: ${APP_ENV}`);
-
 // [[ uname == MING* ]] && echo "windows" || echo "unix"
 // [[ uname == Darw* ]] && echo "windows" || echo "unix"
 
@@ -56,10 +53,11 @@ export function logError(error: Error) {
     }
 }
 export function setSentryUser(user: DbUser | null) {
+    const userWithStringId = { ...user, id: `${user?.id}` };
     if (SENTRY_ENABLED) {
         const sentryUser: Sentry.User | null = user
             ? {
-                  ...user,
+                  ...userWithStringId,
               }
             : null;
         Sentry.setUser(sentryUser);
@@ -74,6 +72,7 @@ export function breadcrumb(message: string, category: string, crumb?: any) {
             data: crumb,
         });
     } else {
-        // console.warn(`BREADCRUMB: ${message}: ${JSON.stringify(crumb)}`);
+        // eslint-disable-next-line no-console
+        console.warn(`BREADCRUMB: ${message}: ${JSON.stringify(crumb)}`);
     }
 }

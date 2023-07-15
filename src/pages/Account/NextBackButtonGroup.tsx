@@ -9,6 +9,7 @@ import { useValidatePaymentMethod } from 'hooks/useValidatePaymentMethod';
 import { useFormikContext } from 'formik';
 import { PAYMENT_STEP, PRIVACY_STEP } from './SignUpSteps';
 import { ErrorText } from 'components/Atoms/ErrorText';
+import { SignUpFormData } from './SignUpForm';
 
 const steps = ['User info', 'Institution', 'Payment', 'Terms', 'Privacy'];
 
@@ -26,7 +27,8 @@ export function NextBackButtonGroup({
 }: Props) {
     const enableNext = useEnableNext(step);
     const { createStripePaymentMethod } = useValidatePaymentMethod();
-    const { isSubmitting, submitForm, errors } = useFormikContext();
+    const { isSubmitting, submitForm, errors } =
+        useFormikContext<SignUpFormData>();
 
     const onPaymentStep = step === PAYMENT_STEP;
     const onLastStep = step === PRIVACY_STEP;
@@ -135,7 +137,16 @@ export function NextBackButtonGroup({
                     />
                 </Box>
                 {onLastStep && Object.keys(errors).length ? (
-                    <ErrorText message={JSON.stringify(errors)} />
+                    <>
+                        {Object.keys(errors).map((errorKey) => (
+                            <ErrorText
+                                key={errorKey}
+                                message={`${errorKey}: ${
+                                    errors?.[errorKey as keyof SignUpFormData]
+                                }`}
+                            />
+                        ))}
+                    </>
                 ) : null}
             </Box>
         </Box>
