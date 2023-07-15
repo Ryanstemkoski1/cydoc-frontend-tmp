@@ -8,12 +8,10 @@ import { useSignUpFormController } from './useSignUpFormController';
 import { CognitoUser } from 'amazon-cognito-identity-js';
 import { NextBackButtonGroup } from './NextBackButtonGroup';
 import { ClinicianSignUpData, UserAttributes } from 'types/users';
-import { PaymentMethod } from '@stripe/stripe-js';
 
 export interface SignUpFormData extends ClinicianSignUpData {
     isPrivacyChecked: boolean;
     isTermsChecked: boolean;
-    paymentMethod?: PaymentMethod;
 }
 // TODO: pull from session
 const initialValues: SignUpFormData = {

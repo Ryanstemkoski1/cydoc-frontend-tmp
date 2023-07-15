@@ -4,7 +4,6 @@ import { useCallback, useMemo } from 'react';
 import { SignUpFormData } from './SignUpForm';
 import {
     INSTITUTION_STEP,
-    PAYMENT_STEP,
     PRIVACY_STEP,
     TERMS_STEP,
     USER_INFO_STEP,
@@ -21,7 +20,6 @@ const userInfoFields: (keyof SignUpFormData)[] = [
     'confirmEmail',
     'confirmPhoneNumber',
 ];
-const paymentFields: (keyof SignUpFormData)[] = ['paymentMethod'];
 const termsFields: (keyof SignUpFormData)[] = ['isTermsChecked'];
 const privacyPolicyFields: (keyof SignUpFormData)[] = ['isPrivacyChecked'];
 const institutionFields: (keyof SignUpFormData)[] = ['institutionName'];
@@ -57,11 +55,6 @@ export default function useEnableNext(step: number) {
                 return (
                     someFieldTouched(institutionFields) &&
                     noErrorsForStep(institutionFields)
-                );
-            case PAYMENT_STEP:
-                return (
-                    someFieldTouched(paymentFields) &&
-                    noErrorsForStep(paymentFields)
                 );
             case TERMS_STEP:
                 return (

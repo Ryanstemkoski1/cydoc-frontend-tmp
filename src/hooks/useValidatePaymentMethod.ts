@@ -11,8 +11,10 @@ export function useValidatePaymentMethod() {
         useField<SignUpFormData['firstName']>('firstName');
     const [{ value: lastName }] =
         useField<SignUpFormData['lastName']>('lastName');
-    const [, , paymentMethodHelpers] =
-        useField<SignUpFormData['paymentMethod']>('paymentMethod');
+
+    // TODO: update hook with info from new form data
+    // const [, , paymentMethodHelpers] =
+    //     useField<SignUpFormData['paymentMethod']>('paymentMethod');
     const { setSubmitting } = useFormikContext();
 
     const createStripePaymentMethod = async () => {
@@ -37,21 +39,24 @@ export function useValidatePaymentMethod() {
                         `[createPaymentMethod] error ${stringFromError(error)}`,
                         error
                     );
-                    paymentMethodHelpers.setError(stringFromError(error));
+                    // TODO: update hook with info from new form data
+                    // paymentMethodHelpers.setError(stringFromError(error));
                 }
                 if (paymentMethod?.id) {
                     // payment setup success, return true to calling function so user can advance
-                    paymentMethodHelpers.setValue(paymentMethod);
+                    // TODO: update hook with info from new form data
+                    // paymentMethodHelpers.setValue(paymentMethod);
                     return true;
                 }
             } catch (e) {
                 log(`[createStripePaymentMethod] ${stringFromError(e)}`, {
                     e,
                 });
-                paymentMethodHelpers.setError(
-                    `Try refreshing 
-                    Stripe error encountered: ${stringFromError(e)}`
-                );
+                // TODO: update hook with info from new form data
+                // paymentMethodHelpers.setError(
+                //     `Try refreshing
+                //     Stripe error encountered: ${stringFromError(e)}`
+                // );
             } finally {
                 setSubmitting(false);
             }

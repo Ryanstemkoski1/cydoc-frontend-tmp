@@ -18,6 +18,7 @@ import React from 'react';
 import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import { PrivateRoute } from './PrivateRoute';
+import { EditPayment } from 'pages/Account/EditPayment';
 
 const Routes = (props: { children?: JSX.Element | null }) => {
     return (
@@ -29,6 +30,7 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                 path='/forgotpasswordemail'
                 component={ForgotPasswordEmail}
             />
+            <Route exact path='/account/edit-payment' component={EditPayment} />
             <PrivateRoute exact path='/editnote' component={EditNote} />
             <PrivateRoute
                 exact
