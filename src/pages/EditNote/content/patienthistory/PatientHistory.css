@@ -1,7 +1,3 @@
-.patient-history-tab {
-    font-size: 13px;
-}
-
 .ui.selection.dropdown .menu {
     max-height: 184px;
 }
@@ -18,10 +14,10 @@
 }
 
 #patient-history-menu {
-  z-index: 3;
-  background-color: white;
-  border: 1px solid #c7c7c7;
-  border-radius: 5px;
+    z-index: 3;
+    background-color: white;
+    border: 1px solid #c7c7c7;
+    border-radius: 5px;
 }
 
 @media screen and (max-width: 1400px) {
@@ -59,7 +55,7 @@
 }
 
 .year-validation-error::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 100%;
     left: 25%;
@@ -84,7 +80,7 @@
 }
 
 .year-validation-mobile-error::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 100%;
     left: 25%;
@@ -94,20 +90,26 @@
     border-color: transparent transparent #9f3a38 transparent;
 }
 
-.ui.icon.button.patient-previous-button, .ui.icon.button.patient-next-button,
-.ui.icon.button.social-previous-button, .ui.icon.button.social-next-button,
-.ui.icon.button.family-previous-button, .ui.icon.button.family-next-button,
-.ui.icon.button.surgical-previous-button, .ui.icon.button.surgical-next-button,
-.ui.icon.button.medications-previous-button, .ui.icon.button.medications-next-button,
-.ui.icon.button.allergies-previous-button, .ui.icon.button.allergies-next-button {
-  display: block;
-  position: fixed;
-  bottom: 15px;
-  margin: 0;
-  opacity: 0.8;
-  font-size: 18px;
-  background: #006b87;
-  color: white;
+.ui.icon.button.patient-previous-button,
+.ui.icon.button.patient-next-button,
+.ui.icon.button.social-previous-button,
+.ui.icon.button.social-next-button,
+.ui.icon.button.family-previous-button,
+.ui.icon.button.family-next-button,
+.ui.icon.button.surgical-previous-button,
+.ui.icon.button.surgical-next-button,
+.ui.icon.button.medications-previous-button,
+.ui.icon.button.medications-next-button,
+.ui.icon.button.allergies-previous-button,
+.ui.icon.button.allergies-next-button {
+    display: block;
+    position: fixed;
+    bottom: 15px;
+    margin: 0;
+    opacity: 0.8;
+    font-size: 18px;
+    background: #006b87;
+    color: white;
 }
 
 .ui.icon.button.patient-previous-button:hover,
@@ -155,6 +157,10 @@
 }
 
 @media screen and (max-width: 600px) {
+    .ui.icon.button.patient-previous-button,
+    .ui.icon.button.patient-next-button {
+        display: none;
+    }
 
     .ui.icon.button.small-patient-previous-button,
     .ui.icon.button.small-patient-next-button {
@@ -165,25 +171,20 @@
         left: 5px;
     }
 
-  .ui.icon.button.small-patient-previous-button {
-    left: 5px;
-  }
-  
-  .ui.icon.button.small-patient-next-button {
-    right: 5px;
-  }
+    .ui.icon.button.small-patient-next-button {
+        right: 5px;
+    }
 }
 
 @media screen and (max-width: 400px) {
     .ui.icon.button.small-patient-previous-button {
         left: 15px;
     }
-
     .ui.icon.button.small-patient-next-button {
         right: 15px;
     }
 }
-@media (max-width: 744px){
+@media (max-width: 744px) {
     #patient-history-menu {
         padding-top: 5px;
         border-radius: 0;
@@ -191,4 +192,16 @@
         border-left: 0;
         border-right: 0;
     }
+}
+
+@media screen and (max-width: 767px) {
+  .patent-history-content .ui.divider {
+    display: none;
+  }
+  .patent-history-content {
+    padding: 0 16px;
+  }
+  .patent-history-content .family-hisory-note-mobile {
+        margin-bottom: 20px !important;
+  }
 }

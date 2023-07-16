@@ -1,10 +1,9 @@
+/* eslint-disable no-console */
 import React, { Component } from 'react';
-import { Menu, Container, Icon } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import constants from 'constants/constants';
 import HPIContext from 'contexts/HPIContext.js';
-import { MENU_TABS_MOBILE_BP } from '../../constants/breakpoints.js';
 import './MenuTabs.css';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
@@ -45,63 +44,67 @@ class ConnectedMenuTabs extends Component {
     handleItemClick = (e, { name }) => this.props.onTabChange(name);
 
     render() {
-        const { activeItem, activeTabIndex, patientView } = this.props;
-        const { windowWidth } = this.state;
-        const collapseMenu = windowWidth < MENU_TABS_MOBILE_BP;
+        const { activeItem, patientView } = this.props;
+
         const tabs = patientView
             ? constants.PATIENT_VIEW_TAB_NAMES
             : constants.TAB_NAMES;
-        const tabMenuItems = tabs.map((name, index) => (
-            <Menu.Item
-                key={index}
-                name={patientView ? '' + (index + 1) : name}
-                active={activeItem === name}
-                onClick={(e) => this.handleItemClick(e, { name })}
-            />
-        ));
+        const tabMenuItems = tabs.map((name, index) => ({
+            name: patientView ? '' + (index + 1) : name,
+            active: activeItem === name,
+            onClick: (e) => this.handleItemClick(e, { name }),
+        }));
 
-        return (
-            <div className='form-tabs'>
-                <Menu secondary className={collapseMenu ? '' : 'menu-tab'}>
-                    {/* Menu is different depending on screen size */}
-                    {collapseMenu ? (
-                        <CollapsedMenuTabs
-                            tabMenuItems={tabMenuItems}
-                            attached={this.props.attached}
-                            activeItem={activeItem}
-                            activeTabIndex={activeTabIndex}
-                        />
-                    ) : (
-                        <ExpandededMenuTabs
-                            tabMenuItems={tabMenuItems}
-                            attached={this.props.attached}
-                            activeItem={activeItem}
-                        />
-                    )}
-                </Menu>
-            </div>
+        return patientView ? (
+            <PatientViewMenu tabMenuItems={tabMenuItems} />
+        ) : (
+            <DoctorViewMenu tabMenuItems={tabMenuItems} />
         );
     }
 }
 
-// Functional component to display when tabs are collapsed
-function CollapsedMenuTabs(props) {
+function PatientViewMenu({ tabMenuItems }) {
     return (
-        <>
-            <Menu
-                tabular
-                attached={props.attached}
-                className='collapsed-menu-tabs'
-            >
-                <Menu.Item className='arrow'>
-                    <Icon
-                        name='window maximize outline'
-                        className='collapsed-menu-icon'
-                    />
-                </Menu.Item>
-                {props.tabMenuItems}
-            </Menu>
-        </>
+        <div className='patient-view-container'>
+            <div className='patient-view-content'>
+                {tabMenuItems.map(({ name, active, onClick }, index) => (
+                    <>
+                        <button
+                            key={index}
+                            className={`patient-view-button ${
+                                active ? 'active' : ''
+                            }`}
+                            onClick={onClick}
+                        >
+                            {name}
+                        </button>
+                        {tabMenuItems.length > index + 1 && <hr></hr>}
+                    </>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function DoctorViewMenu({ tabMenuItems }) {
+    return (
+        <div className='doctor-view-container'>
+            <div className='doctor-view-content'>
+                {tabMenuItems.map(({ name, active, onClick }) => (
+                    <>
+                        <button
+                            key={name}
+                            className={`doctor-view-button ${
+                                active ? 'active' : ''
+                            }`}
+                            onClick={onClick}
+                        >
+                            {name}
+                        </button>
+                    </>
+                ))}
+            </div>
+        </div>
     );
 }
 
@@ -110,17 +113,6 @@ export default connect((state) => ({
     patientView: selectPatientViewState(state),
     activeItem: selectActiveItem(state),
 }))(MenuTabs);
-
-// Functional component to display when tabs are all shown
-function ExpandededMenuTabs(props) {
-    return (
-        <Menu tabular attached={props.attached}>
-            <Container className='expanded-menu-tabs'>
-                {props.tabMenuItems}
-            </Container>
-        </Menu>
-    );
-}
 
 ConnectedMenuTabs.propTypes = {
     attached: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),

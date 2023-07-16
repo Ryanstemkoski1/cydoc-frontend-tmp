@@ -13,3 +13,27 @@
         min-width: 1000px;
     }    
 }
+@media (max-width: 767px){
+    .history-table {
+        margin-bottom: 25px;
+    }
+    .history-table .action-btn {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+    .history-table .mobile-block-row {
+        padding-top: 0;
+    }
+    .history-table .mobile-block-row::before {
+        display: none;
+    }
+    .history-table .ui.form.family-hx-note-item.family-medical {
+        width: 100%;
+    }
+    .history-table .confirmation-item {
+        margin-top: 20px;
+    }
+    .history-table .ui.divider {
+        display: none;
+    }
+}

@@ -1,8 +1,8 @@
-import { Divider, Grid } from 'semantic-ui-react';
+import { Divider, Grid, Image } from 'semantic-ui-react';
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import AddRowButton from 'components/tools/AddRowButton';
-
+import Add from '../../assets/add.svg';
 //Basic Layout and functionality for note tabs that use a grid. Includes support to
 // add a row, but likely this state will be lifted in the future
 export default class GridContent extends Component {
@@ -23,16 +23,15 @@ export default class GridContent extends Component {
         } = this.props;
         return mobile ? (
             <Fragment>
-                <br />
                 <Grid columns={1} verticalAlign='middle' divided='vertically'>
                     {rows}
                 </Grid>
                 <Divider />
                 {!isPreview && !this.props.pop ? (
-                    <AddRowButton
-                        onClick={this.props.addRow}
-                        name={this.props.name}
-                    />
+                    <div className='add-row-item' onClick={this.props.addRow}>
+                        <Image src={Add} />
+                        <AddRowButton name={this.props.name} />
+                    </div>
                 ) : (
                     ''
                 )}
@@ -44,7 +43,7 @@ export default class GridContent extends Component {
                 {this.props.small ? (
                     <Divider
                         style={{
-                            width: '90%',
+                            width: '100%',
                             margin: 'auto',
                             marginTop: '5px',
                             marginBottom: '5px',

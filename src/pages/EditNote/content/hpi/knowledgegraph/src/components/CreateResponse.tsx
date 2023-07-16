@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/Button.css';
+import './CreateResponse.css';
 import MultipleChoice from './responseComponents/MultipleChoice';
 import ReviewOfSystemsCategory from '../../../../reviewofsystems/ReviewOfSystemsCategory';
 import YesNo from './responseComponents/YesNo';
@@ -35,6 +36,7 @@ import {
     isLabTestDictionary,
     isSelectOneResponse,
 } from 'redux/reducers/hpiReducer';
+import Masonry from 'react-masonry-css';
 
 interface CreateResponseProps {
     node: string;
@@ -205,7 +207,11 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     });
                 }
                 return (
-                    <div className='ros-container' style={{ width: 357 }}>
+                    <Masonry
+                        breakpointCols={1}
+                        columnClassName='ros-column'
+                        className='ros-container'
+                    >
                         <ReviewOfSystemsCategory
                             key={''}
                             category={''}
@@ -213,7 +219,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                             selectManyOptions={responseChoice}
                             node={node}
                         />
-                    </div>
+                    </Masonry>
                 );
             }
 
@@ -306,7 +312,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                             {this.state.question.trim()}
                         </span>
                     )}{' '}
-                    <div className='qa-button space-top remove-shadow'>
+                    <div className='qa-button space-top remove-shadow createResponse'>
                         {this.renderSwitch()}
                     </div>{' '}
                 </div>

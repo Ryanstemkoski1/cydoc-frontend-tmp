@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {
     HIDE_CYDOC_IN_NAV_MENU_BP,
     LOGGEDIN_NAV_MENU_MOBILE_BP,
@@ -161,13 +162,14 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         </Menu.Item>
     );
     // Menu items when logged in
-    const loggedInMenuItems = collapseLoggedInNav ? (
+    const loggedInMenuItems = (
         <>
             <Menu.Item className='home-menu-item'>
                 <Button
                     basic
                     color='teal'
                     name='home'
+                    content={collapseLoggedInNav ? null : 'Home'}
                     icon='hospital outline'
                     onClick={navigateToHome}
                 />
@@ -180,44 +182,14 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                     floating
                     icon={null}
                     name='profile'
-                    className='profile-button profile-mobile'
-                    options={dropdownOptions}
-                    trigger={
-                        <span>
-                            <Icon
-                                name='user outline'
-                                className='profile-mobile-icon'
-                            />
-                        </span>
-                    }
-                />
-            </Menu.Item>
-        </>
-    ) : (
-        <>
-            <Menu.Item>
-                <Button
-                    basic
-                    color='teal'
-                    name='home'
-                    content='Home'
-                    icon='hospital outline'
-                    onClick={navigateToHome}
-                />
-            </Menu.Item>
-            <Menu.Item>
-                <Dropdown
-                    button
-                    basic
-                    color='teal'
-                    floating
-                    name='profile'
                     className='profile-button'
                     options={dropdownOptions}
                     trigger={
                         <span>
-                            <Icon name='user outline' />{' '}
-                            {context.user?.firstName}
+                            <Icon name='user outline' />
+                            {collapseLoggedInNav
+                                ? null
+                                : context.user?.firstName}
                         </span>
                     }
                 />
@@ -247,6 +219,14 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         return true;
     };
 
+    const handleClickLogo = () => {
+        if (context.token) {
+            navigateToHome();
+        } else {
+            logoNotLoggedIn();
+        }
+    };
+
     return (
         <Menu
             className={`${className} nav-menu nav-bar ${
@@ -254,52 +234,27 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             }`}
             attached={attached}
         >
-            {context.token ? (
-                <Menu.Item className='logo-menu' onClick={navigateToHome}>
-                    <Image
-                        src={Logo}
-                        className={
-                            collapseLoggedInNav
-                                ? 'logo-circle-mobile'
-                                : 'logo-circle'
-                        }
-                    />
-                    {!displayNoteName && !hideCydoc && (
-                        <Header
-                            as='h1'
-                            className={`${
-                                collapseLoggedInNav
-                                    ? 'logo-text-mobile'
-                                    : 'logo-text'
-                            }`}
-                            content='Cydoc'
-                        />
-                    )}
-                </Menu.Item>
-            ) : (
-                <Menu.Item className='logo-menu' onClick={logoNotLoggedIn}>
-                    <Image
-                        src={Logo}
+            <Menu.Item className='logo-menu' onClick={handleClickLogo}>
+                <Image
+                    src={Logo}
+                    className={
+                        collapseLoggedInNav
+                            ? 'logo-circle-mobile'
+                            : 'logo-circle'
+                    }
+                />
+                {!displayNoteName && !hideCydoc && (
+                    <Header
+                        as='h1'
                         className={`${
                             collapseLoggedInNav
-                                ? 'logo-circle-mobile'
-                                : 'logo-circle'
+                                ? 'logo-text-mobile'
+                                : 'logo-text'
                         }`}
+                        content='Cydoc'
                     />
-                    {!displayNoteName && !hideCydoc && (
-                        <Header
-                            as='h1'
-                            className={`${
-                                collapseLoggedInNav
-                                    ? 'logo-text-mobile'
-                                    : 'logo-text'
-                            }`}
-                            content='Cydoc'
-                        />
-                    )}
-                </Menu.Item>
-            )}
-
+                )}
+            </Menu.Item>
             {/* When parent is EditNote, then display the note name item */}
             {displayNoteName && doctorView && (
                 <NoteNameMenuItem mobile={collapseLoggedInNav} />

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-    Accordion,
     Form,
     Input,
     Table,
@@ -8,10 +7,10 @@ import {
     InputOnChangeData,
     DropdownProps,
     Header,
+    Image,
 } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton';
 import Dropdown from 'components/tools/OptimizedDropdown';
-import { PATIENT_HISTORY_ALLERGIES_MOBILE_BP } from 'constants/breakpoints';
 import allergens from 'constants/allergens';
 import allergicReactions from 'constants/allergicReactions';
 import AllergiesTableBodyRow from './AllergiesTableBodyRow';
@@ -36,9 +35,9 @@ import {
 } from 'redux/selectors/allergiesSelectors';
 import './table.css';
 import { OptionMapping } from '_processOptions';
-import ToggleButton from 'components/tools/ToggleButton';
-import { questionContainer, questionTextStyle } from './styles';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import './AllergiesContent.css';
+import Add from '../../../../assets/add.svg';
 
 //Component that manages the layout for the allergies page
 class AllergiesContent extends Component<Props, OwnState> {
@@ -185,40 +184,42 @@ class AllergiesContent extends Component<Props, OwnState> {
         const panels: Panel[] = [];
         nums.map((i: string) => {
             const titleContent = (
-                <Form className='inline-form spacing-x'>
-                    <Dropdown
-                        fluid
-                        search
-                        selection
-                        clearable
-                        transparent
-                        allowAdditions
-                        aria-label='incitingAgent'
-                        placeholder='Inciting Agent'
-                        type='incitingAgent'
-                        options={this.state.allergensOptions}
-                        onAddItem={this.onAddItem}
-                        onChange={this.handleTableBodyChange}
-                        rowIndex={i}
-                        value={isPreview ? '' : values[i].incitingAgent}
-                    />
-                    <Dropdown
-                        fluid
-                        search
-                        selection
-                        clearable
-                        transparent
-                        allowAdditions
-                        aria-label='reaction'
-                        placeholder='Reaction'
-                        type='reaction'
-                        options={this.state.allergicReactionsOptions}
-                        onAddItem={this.onAddItem}
-                        onChange={this.handleTableBodyChange}
-                        rowIndex={i}
-                        value={isPreview ? '' : values[i].reaction}
-                    />
-                </Form>
+                <>
+                    <Form className='inline-form spacing-x'>
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            clearable
+                            transparent
+                            allowAdditions
+                            aria-label='incitingAgent'
+                            placeholder='Inciting Agent'
+                            type='incitingAgent'
+                            options={this.state.allergensOptions}
+                            onAddItem={this.onAddItem}
+                            onChange={this.handleTableBodyChange}
+                            rowIndex={i}
+                            value={isPreview ? '' : values[i].incitingAgent}
+                        />
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            clearable
+                            transparent
+                            allowAdditions
+                            aria-label='reaction'
+                            placeholder='Reaction'
+                            type='reaction'
+                            options={this.state.allergicReactionsOptions}
+                            onAddItem={this.onAddItem}
+                            onChange={this.handleTableBodyChange}
+                            rowIndex={i}
+                            value={isPreview ? '' : values[i].reaction}
+                        />
+                    </Form>
+                </>
             );
 
             const contentInputs = (
@@ -275,8 +276,8 @@ class AllergiesContent extends Component<Props, OwnState> {
         const { hasAllergies, patientView } = this.props;
 
         const content = (
-            <>
-                {this.state.windowWidth <
+            <div className='allergies-section'>
+                {/* {this.state.windowWidth <
                 PATIENT_HISTORY_ALLERGIES_MOBILE_BP ? (
                     <Accordion
                         panels={this.makeAccordionPanels(nums, values)}
@@ -284,47 +285,24 @@ class AllergiesContent extends Component<Props, OwnState> {
                         fluid
                         styled
                     />
-                ) : (
-                    <Table celled className='table-display'>
-                        <Table.Header content={this.makeHeader()} />
-                        {/* eslint-disable-next-line react/no-children-prop */}
-                        <Table.Body children={this.makeTableBodyRows(nums)} />
-                    </Table>
-                )}
-            </>
+                ) : ( */}
+                <Table celled className='table-display'>
+                    <Table.Header content={this.makeHeader()} />
+                    {/* eslint-disable-next-line react/no-children-prop */}
+                    <Table.Body children={this.makeTableBodyRows(nums)} />
+                </Table>
+                {/* )} */}
+            </div>
         );
 
         return (
             <>
-                {patientView && (hasAllergies === null || !nums.length) && (
-                    <div style={questionContainer}>
-                        <Header
-                            as='h2'
-                            textAlign='left'
-                            content='Do you have any allergies?'
-                            style={questionTextStyle}
-                        />
-                        <ToggleButton
-                            className='button_yesno'
-                            title='Yes'
-                            active={hasAllergies || false}
-                            onToggleButtonClick={() =>
-                                this.toggleYesNoButton(true)
-                            }
-                        />
-                        <ToggleButton
-                            className='button_yesno'
-                            title='No'
-                            active={hasAllergies !== null && !hasAllergies}
-                            onToggleButtonClick={() =>
-                                this.toggleYesNoButton(false)
-                            }
-                        />
+                {content}
+                {!this.props.isPreview && (
+                    <div className='add-row-item' onClick={this.addRow}>
+                        <Image src={Add} />
+                        <AddRowButton name='allergy' />
                     </div>
-                )}
-                {nums.length && (hasAllergies || !patientView) ? content : ''}
-                {!this.props.isPreview && (hasAllergies || !patientView) && (
-                    <AddRowButton onClick={this.addRow} name='allergy' />
                 )}
             </>
         );

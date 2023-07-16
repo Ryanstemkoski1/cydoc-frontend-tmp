@@ -8,6 +8,7 @@ import {
     ButtonProps,
     InputProps,
     TextAreaProps,
+    Image,
 } from 'semantic-ui-react';
 import React, { Component, Fragment } from 'react';
 import HPIContext from 'contexts/HPIContext.js';
@@ -33,7 +34,7 @@ import {
 } from 'redux/reducers/familyHistoryReducer';
 import { CurrentNoteState } from 'redux/reducers';
 import '../hpi/knowledgegraph/src/css/Button.css';
-
+import Delete from '../../../../assets/delete.svg';
 class FamilyHistoryDropdown extends Component<Props> {
     static contextType = HPIContext;
 
@@ -104,7 +105,7 @@ class FamilyHistoryDropdown extends Component<Props> {
             this.props.familyHistoryMember;
 
         return mobile ? (
-            <div className='dropdown-component-container'>
+            <div className='dropdown-component-container family-hisory-block-mobile'>
                 <Grid className='family-history-dp'>
                     <Grid.Row>
                         <Grid.Column>
@@ -127,34 +128,38 @@ class FamilyHistoryDropdown extends Component<Props> {
                             </Grid.Row>
                             <Grid.Row columns={2}>
                                 <Grid.Column width={4}>
-                                    <Header.Subheader className='family-history-header-mobile'>
-                                        Cause of Death?
-                                    </Header.Subheader>
-                                    <div className='family-history-toggle'>
-                                        <ToggleButton
-                                            active={
-                                                causeOfDeath ===
-                                                YesNoResponse.Yes
-                                            }
-                                            condition={condition}
-                                            title='Yes'
-                                            onToggleButtonClick={
-                                                this.handleCauseOfDeathToggle
-                                            }
-                                            className='fam-hist-buttons'
-                                        />
-                                        <ToggleButton
-                                            active={
-                                                causeOfDeath ===
-                                                YesNoResponse.No
-                                            }
-                                            condition={condition}
-                                            title='No'
-                                            onToggleButtonClick={
-                                                this.handleCauseOfDeathToggle
-                                            }
-                                            className='fam-hist-buttons'
-                                        />
+                                    <div className='option-block'>
+                                        <Header.Subheader className='family-history-header-mobile'>
+                                            Cause of Death?
+                                        </Header.Subheader>
+                                        <div className='family-history-toggle switch-button is-large'>
+                                            <ToggleButton
+                                                active={
+                                                    causeOfDeath ===
+                                                    YesNoResponse.Yes
+                                                }
+                                                condition={condition}
+                                                title='Yes'
+                                                onToggleButtonClick={
+                                                    this
+                                                        .handleCauseOfDeathToggle
+                                                }
+                                                className='fam-hist-buttons'
+                                            />
+                                            <ToggleButton
+                                                active={
+                                                    causeOfDeath ===
+                                                    YesNoResponse.No
+                                                }
+                                                condition={condition}
+                                                title='No'
+                                                onToggleButtonClick={
+                                                    this
+                                                        .handleCauseOfDeathToggle
+                                                }
+                                                className='fam-hist-buttons'
+                                            />
+                                        </div>
                                     </div>
                                 </Grid.Column>
                                 {/* <Grid.Column mobile={1} /> */}
@@ -164,38 +169,42 @@ class FamilyHistoryDropdown extends Component<Props> {
                                         ''
                                     ) : (
                                         <Fragment>
-                                            <Header.Subheader className='family-history-header-mobile'>
-                                                Living?
-                                            </Header.Subheader>
-                                            <div className='family-history-toggle'>
-                                                <ToggleButton
-                                                    active={
-                                                        living ===
-                                                        YesNoResponse.Yes
-                                                            ? true
-                                                            : false
-                                                    }
-                                                    condition={condition}
-                                                    title='Yes'
-                                                    onToggleButtonClick={
-                                                        this.handleLivingToggle
-                                                    }
-                                                    className='fam-hist-buttons'
-                                                />
-                                                <ToggleButton
-                                                    active={
-                                                        living ===
-                                                        YesNoResponse.No
-                                                            ? true
-                                                            : false
-                                                    }
-                                                    condition={condition}
-                                                    title='No'
-                                                    onToggleButtonClick={
-                                                        this.handleLivingToggle
-                                                    }
-                                                    className='fam-hist-buttons'
-                                                />
+                                            <div className='option-block'>
+                                                <Header.Subheader className='family-history-header-mobile'>
+                                                    Living?
+                                                </Header.Subheader>
+                                                <div className='family-history-toggle switch-button is-large'>
+                                                    <ToggleButton
+                                                        active={
+                                                            living ===
+                                                            YesNoResponse.Yes
+                                                                ? true
+                                                                : false
+                                                        }
+                                                        condition={condition}
+                                                        title='Yes'
+                                                        onToggleButtonClick={
+                                                            this
+                                                                .handleLivingToggle
+                                                        }
+                                                        className='fam-hist-buttons'
+                                                    />
+                                                    <ToggleButton
+                                                        active={
+                                                            living ===
+                                                            YesNoResponse.No
+                                                                ? true
+                                                                : false
+                                                        }
+                                                        condition={condition}
+                                                        title='No'
+                                                        onToggleButtonClick={
+                                                            this
+                                                                .handleLivingToggle
+                                                        }
+                                                        className='fam-hist-buttons'
+                                                    />
+                                                </div>
                                             </div>
                                         </Fragment>
                                     )}
@@ -216,26 +225,38 @@ class FamilyHistoryDropdown extends Component<Props> {
                             </Grid.Row>
                             <Grid.Row
                                 width={4}
-                                className='delete-family-member-row-mobile'
+                                className='action-btn delete-family-member-row-mobile'
                             >
-                                <Button
-                                    circular
-                                    icon='close'
-                                    size='mini'
+                                <div className='action-btn-inner'>
+                                    <Button
+                                        circular
+                                        icon='close'
+                                        size='mini'
+                                        onClick={() =>
+                                            this.props.handleDelete(
+                                                index,
+                                                family_index
+                                            )
+                                        }
+                                        aria-label='delete-family-member'
+                                        className='hpi-ph-button'
+                                    />
+                                    delete family member
+                                </div>
+                                <aside
                                     onClick={() =>
                                         this.props.handleDelete(
                                             index,
                                             family_index
                                         )
                                     }
-                                    aria-label='delete-family-member'
-                                    className='hpi-ph-button'
-                                />
-                                delete family member
+                                >
+                                    <Image src={Delete} />
+                                    <span>Remove</span>
+                                </aside>
                             </Grid.Row>
                         </Grid.Column>
                     </Grid.Row>
-                    <Divider />
                 </Grid>
             </div>
         ) : (
