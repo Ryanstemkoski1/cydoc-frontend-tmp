@@ -271,10 +271,10 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     <SurgicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={choices}
                         responseType={responseType}
                         mobile={collapseTabs}
                         node={node}
+                        hide={true}
                     />
                 );
             case ResponseTypes.LABORATORY_TEST:

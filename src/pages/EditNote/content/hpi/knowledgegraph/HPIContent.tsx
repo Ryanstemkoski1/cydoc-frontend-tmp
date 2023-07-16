@@ -39,7 +39,7 @@ import {
 } from 'redux/selectors/planSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
 import axios from 'axios';
-import { GraphData, NodeInterface } from 'constants/hpiEnums';
+import { GraphData } from 'constants/hpiEnums';
 import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import {
     processKnowledgeGraph,

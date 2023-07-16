@@ -222,16 +222,38 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
 
     render() {
         //returns a Table.Row with a cell for each item in tableBodyPlaceholders
-        const { fields } = this.props;
+        const { fields, hide } = this.props;
 
-        const tableRows = fields.map((field: string, index: number) => {
-            const textAlign = field == 'hasHadSurgery' ? 'center' : 'left';
-            return (
-                <Table.Cell key={index} id='table-rows' textAlign={textAlign}>
-                    {this.getCell(field)}
-                </Table.Cell>
-            );
-        });
+        const tableRows = hide
+            ? fields.map((field: string, index: number) => {
+                  const textAlign =
+                      field == 'hasHadSurgery' ? 'center' : 'left';
+                  if (field !== 'procedure') {
+                      return null;
+                  }
+                  return (
+                      <Table.Cell
+                          key={index}
+                          id='table-rows'
+                          textAlign={textAlign}
+                      >
+                          {this.getCell(field)}
+                      </Table.Cell>
+                  );
+              })
+            : fields.map((field: string, index: number) => {
+                  const textAlign =
+                      field == 'hasHadSurgery' ? 'center' : 'left';
+                  return (
+                      <Table.Cell
+                          key={index}
+                          id='table-rows'
+                          textAlign={textAlign}
+                      >
+                          {this.getCell(field)}
+                      </Table.Cell>
+                  );
+              });
 
         return (
             <Table.Row>
@@ -267,6 +289,7 @@ interface RowProps {
     rowIndex: keyof SurgicalHistoryElements;
     proceduresOptions: OptionMapping;
     fields: string[];
+    hide?: boolean;
     onTableBodyChange: (
         event:
             | React.FormEvent<HTMLTextAreaElement>
