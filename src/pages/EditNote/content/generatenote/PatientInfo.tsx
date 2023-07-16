@@ -11,152 +11,190 @@ const PatientInfo = ({ additionalSurveyState }: PatentInfoProps) => {
         <div className='patientInfoWrapper'>
             <ul>
                 <li>
-                    <label>First Name:</label>{' '}
-                    {additionalSurveyState.legalFirstName || '-'}
+                    <label>First Name</label>
+                    <p>{additionalSurveyState.legalFirstName || '-'}</p>
                 </li>
                 <li>
-                    <label>Last Name:</label>{' '}
-                    {additionalSurveyState.legalLastName || '-'}
+                    <label>Last Name</label>
+                    <p>{additionalSurveyState.legalLastName || '-'}</p>
                 </li>
                 <li>
-                    <label>Last 4 SSN: </label>
-                    {additionalSurveyState.socialSecurityNumber || '-'}
+                    <label>Last 4 SSN</label>
+                    <p>{additionalSurveyState.socialSecurityNumber || '-'}</p>
                 </li>
                 <li>
-                    <label>Date of Birth:</label>{' '}
-                    {additionalSurveyState.dateOfBirth || '-'}
-                </li>
-
-                <li>
-                    <label>Phone Number:</label>{' '}
-                    {additionalSurveyState.userInfo.cellPhoneNumber || '-'}
+                    <label>Date of Birth</label>
+                    <p>{additionalSurveyState.dateOfBirth || '-'}</p>
                 </li>
 
                 <li>
-                    <label>Email Address:</label>{' '}
-                    {additionalSurveyState.userInfo.email || '-'}
+                    <label>Phone Number</label>
+                    <p>
+                        {additionalSurveyState.userInfo.cellPhoneNumber || '-'}
+                    </p>
                 </li>
 
                 <li>
-                    <label>Address Line 1: </label>{' '}
-                    {additionalSurveyState?.userInfo?.address?.addressLine1 ||
-                        '-'}
-                </li>
-                <li>
-                    <label>Address Line 1: </label>{' '}
-                    {additionalSurveyState?.userInfo?.address?.addressLine2 ||
-                        '-'}
-                </li>
-                <li>
-                    <label>City: </label>{' '}
-                    {additionalSurveyState.userInfo.address.city || '-'}
-                </li>
-                <li>
-                    <label>State: </label>{' '}
-                    {additionalSurveyState.userInfo.address.state || '-'}
-                </li>
-                <li>
-                    <label>Zip Code: </label>{' '}
-                    {additionalSurveyState.userInfo.address.zipCode || '-'}
+                    <label>Email Address</label>
+                    <p>{additionalSurveyState.userInfo.email || '-'}</p>
                 </li>
 
                 <li>
-                    <label>Race: </label>{' '}
-                    {additionalSurveyState.userInfo.race.length
-                        ? (additionalSurveyState.userInfo.race || []).map(
-                              (el) => el + ' '
-                          )
-                        : '-'}
+                    <label>Address Line 1</label>
+                    <p>
+                        {additionalSurveyState?.userInfo?.address
+                            ?.addressLine1 || '-'}
+                    </p>
+                </li>
+                <li>
+                    <label>Address Line 1</label>
+                    <p>
+                        {additionalSurveyState?.userInfo?.address
+                            ?.addressLine2 || '-'}
+                    </p>
+                </li>
+                <li>
+                    <label>City</label>
+                    <p>{additionalSurveyState.userInfo.address.city || '-'}</p>
+                </li>
+                <li>
+                    <label>State</label>
+                    <p>{additionalSurveyState.userInfo.address.state || '-'}</p>
+                </li>
+                <li>
+                    <label>Zip Code</label>
+                    <p>
+                        {additionalSurveyState.userInfo.address.zipCode || '-'}
+                    </p>
                 </li>
 
                 <li>
-                    <label>Gender Identity: </label>{' '}
-                    {additionalSurveyState.userInfo.genderIdentity.length
-                        ? (
-                              additionalSurveyState.userInfo.genderIdentity ||
-                              []
-                          ).map((el) => el + ' ')
-                        : '-'}
+                    <label>Race</label>
+                    <p>
+                        {additionalSurveyState.userInfo.race.length
+                            ? (additionalSurveyState.userInfo.race || []).map(
+                                  (el) => el + ' '
+                              )
+                            : '-'}
+                    </p>
                 </li>
 
                 <li>
-                    <label>Ethnicity: </label>{' '}
-                    {additionalSurveyState.userInfo.ethnicity || '-'}
+                    <label>Gender Identity</label>
+                    <p>
+                        {additionalSurveyState.userInfo.genderIdentity.length
+                            ? (
+                                  additionalSurveyState.userInfo
+                                      .genderIdentity || []
+                              ).map((el) => el + ' ')
+                            : '-'}
+                    </p>
                 </li>
 
                 <li>
-                    <label>Sex assigned at birth: </label>{' '}
-                    {additionalSurveyState.userInfo.sex || '-'}
-                </li>
-                <li>
-                    <label>Preferred pronouns: </label>{' '}
-                    {additionalSurveyState.userInfo.preferredPronouns || '-'}
-                </li>
-                <li>
-                    <label>Title: </label>{' '}
-                    {additionalSurveyState.userInfo.title || '-'}
+                    <label>Ethnicity</label>
+                    <p>{additionalSurveyState.userInfo.ethnicity || '-'}</p>
                 </li>
 
                 <li>
-                    <label>Are you insured:</label>{' '}
-                    {additionalSurveyState.userInfo.isInsured ? 'YES' : 'No'}
+                    <label>Sex assigned at birth</label>
+                    <p>{additionalSurveyState.userInfo.sex || '-'}</p>
+                </li>
+                <li>
+                    <label>Preferred pronouns</label>
+                    <p>
+                        {additionalSurveyState.userInfo.preferredPronouns ||
+                            '-'}
+                    </p>
+                </li>
+                <li>
+                    <label>Title</label>
+                    <p>{additionalSurveyState.userInfo.title || '-'}</p>
+                </li>
+
+                <li>
+                    <label>Are you insured</label>
+                    <p>
+                        {additionalSurveyState.userInfo.isInsured
+                            ? 'YES'
+                            : 'No'}
+                    </p>
                 </li>
                 {additionalSurveyState.userInfo.isInsured && (
                     <>
                         <li>
-                            <label>Insurance company:</label>{' '}
-                            {additionalSurveyState.userInfo.insuranceInfo
-                                .insuranceCompanyName || ''}
+                            <label>Insurance company</label>
+                            <p>
+                                {additionalSurveyState.userInfo.insuranceInfo
+                                    .insuranceCompanyName || ''}
+                            </p>
                         </li>
                         <li>
-                            <label>Insurance company Phone number: </label>{' '}
-                            {additionalSurveyState?.userInfo?.insuranceInfo
-                                ?.insuranceCompanyPhoneNumber || '-'}
+                            <label>Insurance company Phone number</label>
+                            <p>
+                                {additionalSurveyState?.userInfo?.insuranceInfo
+                                    ?.insuranceCompanyPhoneNumber || '-'}
+                            </p>
                         </li>
                         <li>
-                            <label>Policy holders name: </label>{' '}
-                            {additionalSurveyState.userInfo.insuranceInfo
-                                .policyHolderName || ''}
+                            <label>Policy holders name</label>
+                            <p>
+                                {additionalSurveyState.userInfo.insuranceInfo
+                                    .policyHolderName || ''}
+                            </p>
                         </li>
                         <li>
                             <label>
-                                Policy holders relationship to patient:
-                            </label>{' '}
-                            {additionalSurveyState.userInfo.insuranceInfo
-                                .policyHolderRelationship || ''}
+                                Policy holders relationship to patient
+                            </label>
+                            <p>
+                                {additionalSurveyState.userInfo.insuranceInfo
+                                    .policyHolderRelationship || ''}
+                            </p>
                         </li>
                         <li>
-                            <label>Policy holders DOB: </label>{' '}
-                            {additionalSurveyState.userInfo.insuranceInfo
-                                .policyHolderDOB || ''}
+                            <label>Policy holders DOB</label>
+                            <p>
+                                {additionalSurveyState.userInfo.insuranceInfo
+                                    .policyHolderDOB || ''}
+                            </p>
                         </li>
 
                         <li>
-                            <label>Is Policy holder Employed: </label>{' '}
-                            {additionalSurveyState.userInfo.insuranceInfo
-                                .policyHolderEmployed
-                                ? 'YES'
-                                : 'NO'}
+                            <label>Is Policy holder Employed</label>
+                            <p>
+                                {additionalSurveyState.userInfo.insuranceInfo
+                                    .policyHolderEmployed
+                                    ? 'YES'
+                                    : 'NO'}
+                            </p>
                         </li>
 
                         {additionalSurveyState.userInfo.insuranceInfo
                             .policyHolderEmployed && (
                             <li>
-                                <label>Policy holders employer: </label>{' '}
-                                {additionalSurveyState.userInfo.insuranceInfo
-                                    .policyHolderEmployer || ''}
+                                <label>Policy holders employer</label>
+                                <p>
+                                    {additionalSurveyState.userInfo
+                                        .insuranceInfo.policyHolderEmployer ||
+                                        ''}
+                                </p>
                             </li>
                         )}
 
                         <li>
-                            <label>Policy holders SSN: </label>{' '}
-                            {additionalSurveyState.userInfo.insuranceInfo
-                                .policyHolderSSN || '-'}
+                            <label>Policy holders SSN</label>
+                            <p>
+                                {additionalSurveyState.userInfo.insuranceInfo
+                                    .policyHolderSSN || '-'}
+                            </p>
                         </li>
                         <li>
-                            <label>Policy holders ID: </label>{' '}
-                            {additionalSurveyState.userInfo.insuranceInfo
-                                .policyHolderID || ''}
+                            <label>Policy holders ID</label>
+                            <p>
+                                {additionalSurveyState.userInfo.insuranceInfo
+                                    .policyHolderID || ''}
+                            </p>
                         </li>
                     </>
                 )}
