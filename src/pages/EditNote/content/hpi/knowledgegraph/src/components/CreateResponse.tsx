@@ -252,6 +252,18 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 );
 
             case ResponseTypes.PMH_POP:
+                return (
+                    <MedicalHistoryContent
+                        key={node}
+                        isPreview={false}
+                        responseChoice={choices}
+                        responseType={responseType}
+                        mobile={collapseTabs}
+                        currentYear={-1}
+                        node={node}
+                        hide={false}
+                    />
+                );
             case ResponseTypes.PMH_BLANK:
                 return (
                     <MedicalHistoryContent
