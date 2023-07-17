@@ -18,6 +18,7 @@ export interface PhysicalExamState {
         oxygenSaturation: number;
         weight: number;
         height: number;
+        headCircumference: number;
     };
     sections: PhysicalExamSectionState;
     widgets: WidgetsState;
@@ -34,6 +35,7 @@ export interface Vitals {
     oxygenSaturation: number;
     weight: number;
     height: number;
+    headCircumference: number;
 }
 
 export interface PhysicalExamSectionState {
@@ -59,6 +61,7 @@ export const initialPhysicalExamState: PhysicalExamState = {
         oxygenSaturation: 0,
         weight: 0,
         height: 0,
+        headCircumference: 0,
     },
     /* eslint-disable-next-line */
     sections: processPhysicalExamSchema(schema as PhysicalExamSchema),
