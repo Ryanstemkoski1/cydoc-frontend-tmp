@@ -7,3 +7,16 @@
     padding-left: 0px !important;
     padding-right: 0px !important;
 }
+
+.margin-top-20 {
+    margin-top: 20px;
+    display: flex;
+    width: 100%;
+    align-items:flex-start;
+}
+
+.width-100-input {
+    width: 100%;
+    max-width: 400px;
+    margin-right: 10px; 
+}

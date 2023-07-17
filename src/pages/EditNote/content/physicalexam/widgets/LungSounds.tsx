@@ -6,7 +6,7 @@ import './TableCSS.css';
 export default class LungSounds extends Component {
     render = () => {
         return (
-            <div>
+            <div className='full-view-table'>
                 <Table celled unstackable>
                     <Table.Body>
                         <Table.Row key='upperLobe'>

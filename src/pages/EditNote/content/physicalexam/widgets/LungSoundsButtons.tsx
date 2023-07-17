@@ -32,13 +32,15 @@ interface LungSoundsButtonsProps {
 class LungSoundsButtons extends Component<
     LungSoundsButtonsProps & PropsFromRedux
 > {
-    getHandleClick = (fieldName: keyof LungsWidgetSection) => (
-        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-        _data: ButtonProps
-    ) => {
-        event.preventDefault();
-        this.props.toggleSection(this.props.lungLobe, fieldName);
-    };
+    getHandleClick =
+        (fieldName: keyof LungsWidgetSection) =>
+        (
+            event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+            _data: ButtonProps
+        ) => {
+            event.preventDefault();
+            this.props.toggleSection(this.props.lungLobe, fieldName);
+        };
 
     getDisplayName = (fieldName: keyof LungsWidgetSection) => {
         return _.startCase(fieldName).toLowerCase();

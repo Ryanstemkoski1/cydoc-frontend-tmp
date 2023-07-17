@@ -14,7 +14,7 @@ import {
 } from 'semantic-ui-react';
 import drinkTypes, { DrinkType } from 'constants/SocialHistory/drinkTypes';
 import drinkSizes, { DrinkSize } from 'constants/SocialHistory/drinkSizes';
-import ToggleButton from 'components/tools/ToggleButton.js';
+import ToggleButton from 'components/tools/ToggleButton';
 import AddRowButton from 'components/tools/AddRowButton';
 import '../familyhistory/FamilyHistory.css';
 import {
@@ -165,7 +165,7 @@ class Alcohol extends React.Component<Props, State> {
                             <div className='condition-name'>
                                 Are you interested in quitting?
                             </div>
-                            <div className='interested-in-quitting-buttons'>
+                            <div className='interested-in-quitting-buttons btn-wrapper'>
                                 {this.generateInterestedInQuittingButton(
                                     YesNoMaybeResponse.Yes
                                 )}
@@ -183,7 +183,7 @@ class Alcohol extends React.Component<Props, State> {
                             <div className='condition-name'>
                                 Have you tried to quit before?
                             </div>
-                            <div className='tried-to-quit-buttons'>
+                            <div className='tried-to-quit-buttons btn-wrapper'>
                                 {this.generateTriedQuittingButton(
                                     YesNoResponse.Yes
                                 )}
@@ -327,7 +327,7 @@ class Alcohol extends React.Component<Props, State> {
                         circular
                         icon='close'
                         size='mini'
-                        type='delete'
+                        id='btn-hpi-type-delete'
                         onClick={() => {
                             this.props.deleteAlcoholConsumption(rowindex);
                         }}
@@ -381,9 +381,8 @@ class Alcohol extends React.Component<Props, State> {
                             id='dropdown-display'
                         />
                         <Button
-                            id='btn-display'
                             icon='close'
-                            type='delete'
+                            id='btn-hpi-type-delete'
                             compact
                             onClick={() => {
                                 this.props.deleteAlcoholConsumption(i);
@@ -597,7 +596,7 @@ class Alcohol extends React.Component<Props, State> {
                 <Form className='family-hx-note-item'>
                     <Form.Group inline className='condition-header'>
                         <div className='condition-name'>Alcohol</div>
-                        <div>
+                        <div className='btn-wrapper'>
                             {this.generateUsageButton(
                                 SubstanceUsageResponse.Yes
                             )}

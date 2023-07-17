@@ -16,6 +16,9 @@ export interface PhysicalExamState {
         RR: number;
         temperature: number;
         oxygenSaturation: number;
+        weight: number;
+        height: number;
+        headCircumference: number;
     };
     sections: PhysicalExamSectionState;
     widgets: WidgetsState;
@@ -30,6 +33,9 @@ export interface Vitals {
     RR: number;
     temperature: number;
     oxygenSaturation: number;
+    weight: number;
+    height: number;
+    headCircumference: number;
 }
 
 export interface PhysicalExamSectionState {
@@ -53,6 +59,9 @@ export const initialPhysicalExamState: PhysicalExamState = {
         RR: 0,
         temperature: 0,
         oxygenSaturation: 0,
+        weight: 0,
+        height: 0,
+        headCircumference: 0,
     },
     /* eslint-disable-next-line */
     sections: processPhysicalExamSchema(schema as PhysicalExamSchema),

@@ -9,14 +9,16 @@
     }
 }
 
-
 @media screen and (max-width: 500px) {
     div.fitted.item.note-name-menu-item {
         max-width: 150px;
     }
-    
+
     .input {
         overflow-x: hidden;
+    }
+    .input.content-dropdown.medication {
+        overflow-x: visible;
     }
 
     div.ui.huge.transparent.input.note-title {

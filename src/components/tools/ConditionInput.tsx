@@ -1,7 +1,5 @@
 import React from 'react';
 import { Input, Icon } from 'semantic-ui-react';
-import { adjustValue } from 'pages/EditNote/content/medicalhistory/util';
-import { medicalMapping } from 'constants/word-mappings';
 import { connect } from 'react-redux';
 import { updateConditionName } from 'redux/actions/medicalHistoryActions';
 import { updateCondition } from 'redux/actions/familyHistoryActions';
@@ -64,10 +62,8 @@ class ConditionInput extends React.Component<Props, OwnState> {
     render() {
         return (
             <React.Fragment>
-                {(this.props.category === 'Medical History' &&
-                    this.props.isPreview !== false) ||
-                (this.props.category === 'Family History' &&
-                    this.props.isPreview !== false) ? (
+                {this.props.category === 'Medical History' ||
+                this.props.category === 'Family History' ? (
                     <Input
                         disabled={this.props.isPreview}
                         className={

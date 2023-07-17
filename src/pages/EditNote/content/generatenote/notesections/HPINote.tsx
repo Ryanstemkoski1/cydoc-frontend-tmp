@@ -7,7 +7,6 @@ import { HpiState } from 'redux/reducers/hpiReducer';
 import {
     BodyLocationType,
     SelectOneInput,
-    SelectManyInput,
     HpiResponseType,
     LabTestType,
     ListTextInput,
@@ -20,10 +19,10 @@ import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors
 import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
 import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
 import { MedicationsState } from 'redux/reducers/medicationsReducer';
-import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
+import { selectSurgicalHistoryProcedures } from 'redux/selectors/surgicalHistorySelectors';
 import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
 import { selectPatientInformationState } from 'redux/selectors/patientInformationSelector';
-import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
+import { SurgicalHistoryElements } from 'redux/reducers/surgicalHistoryReducer';
 import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
 import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
 import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
@@ -33,7 +32,7 @@ interface HPINoteProps {
     hpi: HpiState;
     familyHistory: FamilyHistoryState;
     medications: MedicationsState;
-    surgicalHistory: SurgicalHistoryState;
+    surgicalHistory: SurgicalHistoryElements;
     medicalHistory: MedicalHistoryState;
     patientInformation: PatientInformationState;
     chiefComplaints: ChiefComplaintsState;
@@ -207,7 +206,7 @@ export const extractNode = (
                     (acc: string[], [key, value]) => {
                         if (
                             (typeof value === 'boolean' && value) ||
-                            Object.entries(value).some(([_k, v]) => v)
+                            Object.entries(value)?.some(([_k, v]) => v)
                         )
                             acc.push(key);
                         return acc;
@@ -252,6 +251,10 @@ export const extractNode = (
             updatedNeg = Object.keys(clickBoxesRes).filter(
                 (key) => !clickBoxesRes[key] && negAnswer
             );
+
+            // If zero YESs are selected but any NOs are selected --> all selections are NO
+            const allNo = updatedRes.length === 0 && updatedNeg.length > 0;
+
             answer = joinLists(
                 updatedRes.length > 0 ? (updatedRes as string[]) : [],
                 'and'
@@ -260,6 +263,12 @@ export const extractNode = (
                 updatedNeg.length > 0 ? (updatedNeg as string[]) : [],
                 'or'
             );
+
+            // All no --> custom answer selection to indicate that all selections were no
+            if (allNo) {
+                answer = 'all no';
+            }
+
             break;
 
         case ResponseTypes.FH_POP:
@@ -298,8 +307,9 @@ export const extractNode = (
             answer = joinLists(
                 (response as string[]).reduce((acc: string[], key) => {
                     if (
+                        key in state.medications &&
                         state.medications[key].isCurrentlyTaking ==
-                        YesNoResponse.Yes
+                            YesNoResponse.Yes
                     )
                         return [...acc, state.medications[key].drugName];
                     return acc;
@@ -331,19 +341,21 @@ export const extractNode = (
             res = response as string[];
             updatedRes = res.reduce(function (arr: string[], key) {
                 if (
-                    state.medicalHistory[key].hasBeenAfflicted ==
+                    key in state.medicalHistory &&
+                    state.medicalHistory[key]?.hasBeenAfflicted ==
                         YesNoResponse.Yes &&
-                    state.medicalHistory[key].condition.length > 0
+                    state.medicalHistory[key]?.condition.length > 0
                 )
                     arr.push(state.medicalHistory[key].condition);
                 return arr;
             }, []);
             updatedNeg = res.reduce(function (arr: string[], key) {
                 if (
-                    state.medicalHistory[key].hasBeenAfflicted ==
+                    key in state.medicalHistory &&
+                    state.medicalHistory[key]?.hasBeenAfflicted ==
                         YesNoResponse.No &&
                     negAnswer &&
-                    state.medicalHistory[key].condition.length > 0
+                    state.medicalHistory[key]?.condition.length > 0
                 )
                     arr.push(state.medicalHistory[key].condition);
                 return arr;
@@ -363,14 +375,20 @@ export const extractNode = (
             const posArr: string[] = [];
             const negArr: string[] = [];
             (response as string[]).map((key) => {
-                const { hasHadSurgery, procedure } = state.surgicalHistory[key];
-                if (hasHadSurgery == YesNoResponse.Yes && procedure.length > 0)
-                    posArr.push(procedure);
-                else if (
-                    hasHadSurgery == YesNoResponse.No &&
-                    procedure.length > 0
-                )
-                    negArr.push(procedure);
+                if (key in state.surgicalHistory) {
+                    const { hasHadSurgery, procedure } =
+                        state.surgicalHistory[key];
+                    if (
+                        hasHadSurgery == YesNoResponse.Yes &&
+                        procedure.length > 0
+                    )
+                        posArr.push(procedure);
+                    else if (
+                        hasHadSurgery == YesNoResponse.No &&
+                        procedure.length > 0
+                    )
+                        negArr.push(procedure);
+                }
             });
             answer = joinLists(posArr, 'and');
             negRes = joinLists(negArr, 'or');
@@ -543,7 +561,7 @@ const mapStateToProps = (state: CurrentNoteState) => ({
     hpi: selectHpiState(state),
     familyHistory: selectFamilyHistoryState(state),
     medications: selectMedicationsState(state),
-    surgicalHistory: selectSurgicalHistoryState(state),
+    surgicalHistory: selectSurgicalHistoryProcedures(state),
     medicalHistory: selectMedicalHistoryState(state),
     patientInformation: selectPatientInformationState(state),
     chiefComplaints: selectChiefComplaintsState(state),

@@ -35,6 +35,7 @@ import {
 import AddRowButton from 'components/tools/AddRowButton';
 import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
+import './MedicalHistoryContent.css';
 
 //Component that manages the layout of the medical history tab content
 class MedicalHistoryContent extends React.Component<Props, OwnState> {
@@ -50,12 +51,10 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
             ),
         };
         this.handleChange = this.handleChange.bind(this);
-        this.handleConditionToggleButtonClick = this.handleConditionToggleButtonClick.bind(
-            this
-        );
-        this.handleResolvedToggleButtonClick = this.handleResolvedToggleButtonClick.bind(
-            this
-        );
+        this.handleConditionToggleButtonClick =
+            this.handleConditionToggleButtonClick.bind(this);
+        this.handleResolvedToggleButtonClick =
+            this.handleResolvedToggleButtonClick.bind(this);
         this.generateListItems = this.generateListItems.bind(this);
         this.addSeenCondition = this.addSeenCondition.bind(this);
         this.addRow = this.addRow.bind(this);
@@ -205,6 +204,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                         standardMedicalHistory[key].condition
                     ) ||
                     this.state.currConditions.includes(key) ||
+                    this.props.showNo ||
                     standardMedicalHistory[key].hasBeenAfflicted ==
                         YesNoResponse.Yes
             ) || constants.CONDITIONS;
@@ -232,18 +232,26 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         const rows = this.generateListItems(listValues as string[], mobile);
 
         return (
-            <GridContent
-                isPreview={this.props.isPreview}
-                numColumns={6}
-                contentHeader={<MedicalHistoryContentHeader />}
-                rows={rows}
-                //TODO: hpi?
-                value_type='Medical History'
-                mobile={mobile}
-                addRow={this.addRow}
-                name={'medical history'}
-                pop={this.props.responseType == ResponseTypes.PMH_POP}
-            />
+            <div className='scroll-table'>
+                <div className='scroll-table-inner'>
+                    <GridContent
+                        isPreview={this.props.isPreview}
+                        numColumns={6}
+                        contentHeader={
+                            <MedicalHistoryContentHeader
+                                hide={this.props.hide}
+                            />
+                        }
+                        rows={rows}
+                        //TODO: hpi?
+                        value_type='Medical History'
+                        mobile={mobile}
+                        addRow={this.addRow}
+                        name={'medical history'}
+                        pop={this.props.responseType == ResponseTypes.PMH_POP}
+                    />
+                </div>
+            </div>
         );
     }
 
@@ -254,7 +262,8 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
             this.props.medicalHistory
         );
         const inputStyle = {
-            maxWidth: '100%',
+            maxWidth: '500px',
+            width: '100%',
         };
         return mobile
             ? conditions.map((condition: string, index: number) => {
@@ -288,6 +297,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                               index={condition}
                               currentYear={this.props.currentYear}
                               deleteRow={this.deleteRow}
+                              hide={this.props.hide}
                               conditionInput={
                                   <ConditionInput
                                       key={index}
@@ -342,6 +352,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                               isPreview={isPreview}
                               currentYear={this.props.currentYear}
                               deleteRow={this.deleteRow}
+                              hide={this.props.hide}
                               conditionInput={
                                   <ConditionInput
                                       key={index}
@@ -383,6 +394,8 @@ interface ContentProps {
     responseChoice?: string[];
     responseType?: ResponseTypes;
     node?: string;
+    hide?: boolean;
+    showNo?: boolean;
 }
 
 interface MedicalHistoryProps {

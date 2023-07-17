@@ -4,20 +4,20 @@
     opacity: 0.8;
     margin: 0;
     display: block;
-    font-size: 13px;
+    font-size: 18px;
     background-color: #006b87;
     color: white;
-  }
-  
-  .ui.icon.button.note-previous-button:hover {
+}
+
+.ui.icon.button.note-previous-button:hover {
     opacity: 0.6;
-  }
-  
-  .ui.icon.button.note-previous-button {
+}
+
+.ui.icon.button.note-previous-button {
     left: 20px;
-  }
-  
-  .ui.icon.button.small-note-previous-button {
+}
+
+.ui.icon.button.small-note-previous-button {
     display: none;
     position: fixed;
     bottom: 15px;
@@ -25,58 +25,60 @@
     margin: 0;
     background-color: #006b87;
     color: white;
-  }
+}
 
-  .generate-note-buttons {
+.generate-note-buttons {
     position: sticky;
     z-index: 3;
-  }
+}
 
-  #generateNoteButtonsContainer.generate-note-buttons__container {
+#generateNoteButtonsContainer.generate-note-buttons__container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding: 20px 40px;
   }
   
-  @media screen and (max-width: 1400px) {
+  @media screen and (max-width: 600px) {
     .ui.icon.button.note-previous-button {
         display: none;
     }
-  
+
     .ui.icon.button.small-note-previous-button {
         display: block;
     }
-    
+
     .ui.icon.button.small-note-previous-button {
-      left: 5px;
+        left: 5px;
     }
 
     .generate-note-buttons {
-      top: 140px;
+        top: 140px;
     }
-  
-  }
-  
-  @media screen and (max-width: 400px) {
+}
+
+@media screen and (max-width: 400px) {
     .ui.icon.button.small-note-previous-button {
-      left: 15px;
+        left: 15px;
     }
 
     .generate-note-buttons {
-      top: 150px;
+        top: 150px;
     }
-  }
-  
-
+}
 
 div.ui.segment.buttons-segment {
-  padding: 20px 20px 20px 20px;
+    padding: 20px 20px 20px 20px;
 }
 
-.ui.button.copy-button{
-  background-color:gold;
+.ui.button.copy-button {
+    background-color: gold;
 }
-.ui.button.copy-button:hover{
-  background-color:lemonchiffon;
+.ui.button.copy-button:hover {
+    background-color: lemonchiffon;
+}
+@media (max-width: 767px){
+    .generate-note-buttons {
+        top: 123px;
+    }
 }

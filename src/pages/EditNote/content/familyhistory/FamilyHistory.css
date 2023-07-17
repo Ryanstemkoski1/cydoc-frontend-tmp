@@ -8,11 +8,11 @@
 }
 
 .condition-header {
-    margin-bottom: .5rem !important;
+    margin-bottom: 0.5rem !important;
 }
 
 .condition-name {
-    margin-right: .8rem;
+    margin-right: 0.8rem;
     font-size: 15px;
     min-width: 12rem;
 }
@@ -33,9 +33,7 @@
 
 .ui.fluid.dropdown.dropdown-inline {
     display: inline-table;
-    width: 45%;
-    margin-right: 50px;
-
+    width: 100%;
 }
 
 .dropdown-inline-mobile {
@@ -49,7 +47,7 @@
 
 .text-area {
     width: 500px;
-    margin-bottom: .5rem !important;
+    margin-bottom: 0.5rem !important;
 }
 
 .display {
@@ -68,9 +66,9 @@
     margin-top: 25px;
 }
 
-.ui.grid .row+.ui.divider{
-  margin: 0.5rem 0.5rem;
-  padding-bottom: 10px;
+.ui.grid .row + .ui.divider {
+    margin: 0.5rem 0.5rem;
+    padding-bottom: 10px;
 }
 
 .content-style {
@@ -85,20 +83,28 @@
     margin-bottom: 25px;
 }
 
-#alcohol-header, #drugs-header {
+#alcohol-header,
+#drugs-header {
     border-left: 0;
 }
-.error-input{
+.error-input {
     color: red;
     margin-top: 5px;
     margin-left: 5px;
     font-style: italic;
 }
 
-@media screen and (max-width: 767px) {
+@media (max-width: 767px) {
+    .ui.form.family-hx-note-item.family-medical + .hpi-ph-button {
+        align-self: flex-start;
+        margin-top: 2px;
+    }
     .ui.form.family-hx-note-item {
         padding-left: 1rem;
         padding-right: 1rem;
+    }
+    .ui.form.family-hx-note-item.family-medical {
+        width: calc(100% - 50px);
     }
     .family-hx-note-item .inline.fields.condition-header {
         justify-content: space-between;
@@ -112,7 +118,7 @@
     }
 
     .ui.grid > .column:not(.row).cod-input {
-        padding-top: .4rem !important;
+        padding-top: 0.4rem !important;
         padding-bottom: 1.5rem !important;
     }
 
@@ -132,27 +138,27 @@
         width: 85%;
         white-space: nowrap;
     }
-    
+
     #dropdown-display {
         display: inline-block;
     }
-    
-    #btn-display {
+
+    #btn-hpi-type-delete {
         margin-top: 5px;
         margin-bottom: 5px;
         display: inline-block;
     }
-    
+
     #contents-div {
         width: 100%;
         white-space: nowrap;
     }
-    
+
     #contents-label {
         display: inline-block;
         margin-right: 15px;
     }
-    
+
     #num-per-week {
         width: 50%;
     }
@@ -164,6 +170,34 @@
 
     #mode-of-delivery {
         width: 100%;
+    }
+    .family-medical .condition-header {
+        flex-wrap: nowrap !important;
+    }
+    .family-medical .condition-info > .field {
+        margin-top: 20px !important;
+    }
+    .family-medical .condition-name {
+        min-width: 0;
+    }
+    .family-hx-note .condition-header {
+        flex-wrap: nowrap !important;
+    }
+    .family-hx-note .condition-header div {
+        display: flex;
+    }
+    .family-history-dp > .row {
+        padding: 0 !important;
+    }
+    .family-history-dp > .row > .column {
+        padding-left: 0!important;
+        padding-right: 0!important;
+    }
+    .btn-wrapper {
+        margin: 5px 0 10px;
+    }
+    .btn-wrapper button {
+        margin-bottom: 5px !important;
     }
 }
 
@@ -183,7 +217,7 @@
 }
 
 .family-history-toggle {
-    display: flex
+    display: flex;
 }
 
 .family-history-header-mobile {
@@ -196,11 +230,10 @@
     white-space: nowrap;
 }
 
-.ui.grid>.row {
-  padding-bottom: 0rem;
+.ui.grid > .row {
+    padding-bottom: 0rem;
 }
 
 .ui.grid {
-  margin-bottom: 0rem;
+    margin-bottom: 0rem;
 }
-

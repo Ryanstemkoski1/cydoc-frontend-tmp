@@ -19,16 +19,12 @@ import {
 } from 'redux/actions/surgicalHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
-    SurgicalHistoryState,
+    SurgicalHistoryElements,
     SurgicalHistoryItem,
 } from 'redux/reducers/surgicalHistoryReducer';
 import Dropdown from 'components/tools/OptimizedDropdown';
-import { AllergiesState } from 'redux/reducers/allergiesReducer';
 import './SurgicalHistoryTableBodyRow.css';
-import {
-    selectSurgicalHistoryState,
-    selectSurgicalHistoryItem,
-} from 'redux/selectors/surgicalHistorySelectors';
+import { selectSurgicalHistoryItem } from 'redux/selectors/surgicalHistorySelectors';
 import { OptionMapping } from '_processOptions';
 import ToggleButton from 'components/tools/ToggleButton';
 import { YesNoResponse } from 'constants/enums';
@@ -64,7 +60,7 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
     };
 
     handleProcedureChange = (
-        event: React.SyntheticEvent,
+        event: React.SyntheticEvent | null,
         data: DropdownProps
     ) => {
         this.props.onTableBodyChange(event, data);
@@ -80,12 +76,8 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
     };
 
     getCell(field: string) {
-        const {
-            rowIndex,
-            onAddItem,
-            proceduresOptions,
-            isPreview,
-        } = this.props;
+        const { rowIndex, onAddItem, proceduresOptions, isPreview } =
+            this.props;
         const { procedure, hasHadSurgery, year, comments } =
             this.props.surgicalHistoryItem! || {};
 
@@ -230,16 +222,38 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
 
     render() {
         //returns a Table.Row with a cell for each item in tableBodyPlaceholders
-        const { fields } = this.props;
+        const { fields, hide } = this.props;
 
-        const tableRows = fields.map((field: string, index: number) => {
-            const textAlign = field == 'hasHadSurgery' ? 'center' : 'left';
-            return (
-                <Table.Cell key={index} id='table-rows' textAlign={textAlign}>
-                    {this.getCell(field)}
-                </Table.Cell>
-            );
-        });
+        const tableRows = hide
+            ? fields.map((field: string, index: number) => {
+                  const textAlign =
+                      field == 'hasHadSurgery' ? 'center' : 'left';
+                  if (field !== 'procedure') {
+                      return null;
+                  }
+                  return (
+                      <Table.Cell
+                          key={index}
+                          id='table-rows'
+                          textAlign={textAlign}
+                      >
+                          {this.getCell(field)}
+                      </Table.Cell>
+                  );
+              })
+            : fields.map((field: string, index: number) => {
+                  const textAlign =
+                      field == 'hasHadSurgery' ? 'center' : 'left';
+                  return (
+                      <Table.Cell
+                          key={index}
+                          id='table-rows'
+                          textAlign={textAlign}
+                      >
+                          {this.getCell(field)}
+                      </Table.Cell>
+                  );
+              });
 
         return (
             <Table.Row>
@@ -265,7 +279,6 @@ interface OwnState {
 }
 
 interface SurgicalHistoryProps {
-    surgicalHistory: SurgicalHistoryState;
     surgicalHistoryItem: SurgicalHistoryItem;
 }
 
@@ -273,18 +286,23 @@ interface RowProps {
     isPreview: boolean;
     mobile: boolean;
     currentYear: number;
-    rowIndex: keyof AllergiesState;
+    rowIndex: keyof SurgicalHistoryElements;
     proceduresOptions: OptionMapping;
     fields: string[];
+    hide?: boolean;
     onTableBodyChange: (
         event:
             | React.FormEvent<HTMLTextAreaElement>
             | React.ChangeEvent<HTMLInputElement>
-            | React.SyntheticEvent,
+            | React.SyntheticEvent
+            | null,
         data: TextAreaProps | DropdownProps | InputOnChangeData
     ) => void;
     onAddItem: (
-        event: React.KeyboardEvent<HTMLElement>,
+        event:
+            | React.KeyboardEvent<HTMLElement>
+            | React.SyntheticEvent<Element, Event>
+            | null,
         data: DropdownProps
     ) => void;
     deleteRow: (index: string) => void;
@@ -306,7 +324,6 @@ const mapStateToProps = (
     rowProps: RowProps
 ): SurgicalHistoryProps => {
     return {
-        surgicalHistory: selectSurgicalHistoryState(state),
         surgicalHistoryItem: selectSurgicalHistoryItem(
             state,
             rowProps.rowIndex

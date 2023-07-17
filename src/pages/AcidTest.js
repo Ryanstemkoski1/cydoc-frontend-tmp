@@ -74,7 +74,7 @@ const AcidTest = () => {
             acidBaseCalcReturn.summary.slice(1);
         setSummary(acidBaseCalcReturn.summary);
         // Reset the state variables to their initial values
-    }, [pH, HC, PC, nA, Cl, Albumin]);
+    }, [pH, HC, PC, nA, Cl, Albumin, description]);
 
     const formatStringForCopy = () => {
         let str =

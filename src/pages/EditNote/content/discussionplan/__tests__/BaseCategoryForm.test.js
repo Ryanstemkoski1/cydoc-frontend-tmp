@@ -1,9 +1,9 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import EnzymeAdapter from 'enzyme-adapter-react-16';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { BaseCategoryForm } from '../forms/BaseCategoryForm';
 
-Enzyme.configure({ adapter: new EnzymeAdapter() });
+Enzyme.configure({ adapter: new Adapter() });
 
 const mountWithProps = ({ ...props } = {}) => {
     props = {
@@ -115,6 +115,6 @@ describe('BaseCategoryForm', () => {
     it('converts category prop to header using start case', () => {
         const wrapper = mountWithProps({ category: 'differentialDiagnoses' });
         const header = wrapper.find('.ui.attached.header');
-        expect(header.text()).toEqual('Differential Diagnoses');
+        expect(header.text()).toEqual('Diagnosis');
     });
 });

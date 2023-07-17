@@ -1,100 +1,97 @@
 .patient-history-tab {
-  font-size: 13px;
+    font-size: 13px;
 }
 
 .ui.selection.dropdown .menu {
-  max-height: 184px;
+    max-height: 184px;
 }
 
 .tab-content {
-  margin-top: 25px;
-  display: block;
+    margin-top: 25px;
+    display: block;
 }
 
 .condition-error {
-  margin-top: 0.5rem;
-  color: #b03060;
-  font-style: italic;
+    margin-top: 0.5rem;
+    color: #b03060;
+    font-style: italic;
 }
 
 #patient-history-menu {
-  z-index: 1;
+  z-index: 3;
   background-color: white;
   border: 1px solid #c7c7c7;
   border-radius: 5px;
-  padding-top: 10px;
-  padding-bottom: 5px;
 }
 
 @media screen and (max-width: 1400px) {
-  #patient-history-menu {
-    position: sticky;
-  }
+    #patient-history-menu {
+        position: sticky;
+    }
 }
 
-@media screen and (max-width: 500px){
-  #patient-history-menu {
-    position: static;
-  }
+@media screen and (max-width: 500px) {
+    #patient-history-menu {
+        position: static;
+    }
 }
-
 
 .sticky-header {
-  position: sticky;
-  z-index: 2;
-  background-color: white;
-  margin-bottom: -5px !important;
+    position: sticky;
+    z-index: 2;
+    background-color: white;
+    margin-bottom: -5px !important;
 }
 
 .year-validation-error {
-  width: 12.5rem;
-  background-color: #9f3a38;
-  color: #fff;
-  text-align: center;
-  border-radius: 2.5px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  top: 75%;
-  left: 50%;
-  margin-left: -60px;
-  transition: opacity 0.3s;
+    width: 12.5rem;
+    background-color: #9f3a38;
+    color: #fff;
+    text-align: center;
+    border-radius: 2.5px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 75%;
+    left: 50%;
+    margin-left: -60px;
+    transition: opacity 0.3s;
 }
 
 .year-validation-error::after {
-  content: "";
-  position: absolute;
-  bottom: 100%;
-  left: 25%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent #9f3a38 transparent;
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 25%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #9f3a38 transparent;
 }
 
 .year-validation-mobile-error {
-  width: 12.5rem;
-  background-color: #9f3a38;
-  color: #fff;
-  text-align: center;
-  border-radius: 2.5px;
-  padding: 5px 0;
-  position: absolute;
-  z-index: 1;
-  left: 50%;
-  margin-left: -60px;
-  transition: opacity 0.3s;
+    width: 12.5rem;
+    background-color: #9f3a38;
+    color: #fff;
+    text-align: center;
+    border-radius: 2.5px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    margin-left: -60px;
+    transition: opacity 0.3s;
 }
 
 .year-validation-mobile-error::after {
-  content: "";
-  position: absolute;
-  bottom: 100%;
-  left: 25%;
-  margin-left: -5px;
-  border-width: 5px;
-  border-style: solid;
-  border-color: transparent transparent #9f3a38 transparent;
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 25%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #9f3a38 transparent;
 }
 
 .ui.icon.button.patient-previous-button, .ui.icon.button.patient-next-button,
@@ -108,70 +105,90 @@
   bottom: 15px;
   margin: 0;
   opacity: 0.8;
-  font-size: 13px;
+  font-size: 18px;
   background: #006b87;
   color: white;
 }
 
-.ui.icon.button.patient-previous-button:hover, .ui.icon.button.patient-next-button:hover,
-.ui.icon.button.surgical-previous-button:hover, .ui.icon.button.surgical-next-button:hover,
-.ui.icon.button.medications-previous-button:hover, .ui.icon.button.medications-next-button:hover,
-.ui.icon.button.allergies-previous-button:hover, .ui.icon.button.allergies-next-button:hover,
-.ui.icon.button.social-previous-button:hover, .ui.icon.button.social-next-button:hover,
-.ui.icon.button.family-previous-button:hover, .ui.icon.button.family-next-button:hover {
-  opacity: 0.6;
+.ui.icon.button.patient-previous-button:hover,
+.ui.icon.button.patient-next-button:hover,
+.ui.icon.button.surgical-previous-button:hover,
+.ui.icon.button.surgical-next-button:hover,
+.ui.icon.button.medications-previous-button:hover,
+.ui.icon.button.medications-next-button:hover,
+.ui.icon.button.allergies-previous-button:hover,
+.ui.icon.button.allergies-next-button:hover,
+.ui.icon.button.social-previous-button:hover,
+.ui.icon.button.social-next-button:hover,
+.ui.icon.button.family-previous-button:hover,
+.ui.icon.button.family-next-button:hover {
+    opacity: 0.6;
 }
 
-.ui.icon.button.patient-previous-button, .ui.icon.button.surgical-previous-button,
-.ui.icon.button.medications-previous-button, .ui.icon.button.allergies-previous-button,
-.ui.icon.button.social-previous-button, .ui.icon.button.family-previous-button {
-  left: 20px;
+.ui.icon.button.patient-previous-button,
+.ui.icon.button.surgical-previous-button,
+.ui.icon.button.medications-previous-button,
+.ui.icon.button.allergies-previous-button,
+.ui.icon.button.social-previous-button,
+.ui.icon.button.family-previous-button {
+    left: 20px;
 }
 
-.ui.icon.button.patient-next-button, .ui.icon.button.surgical-next-button,
-.ui.icon.button.medications-next-button, .ui.icon.button.allergies-next-button,
-.ui.icon.button.social-next-button, .ui.icon.button.family-next-button {
-  right: 20px;
+.ui.icon.button.patient-next-button,
+.ui.icon.button.surgical-next-button,
+.ui.icon.button.medications-next-button,
+.ui.icon.button.allergies-next-button,
+.ui.icon.button.social-next-button,
+.ui.icon.button.family-next-button {
+    right: 20px;
 }
 
-
-.ui.icon.button.small-patient-previous-button, .ui.icon.button.small-patient-next-button {
-  display: none;
-  position: fixed;
-  bottom: 15px;
-  opacity: 0.8;
-  margin: 0;
-  background: #006b87;
-  color: white;
-}
-
-@media screen and (max-width: 1400px) {
-
-  .ui.icon.button.patient-previous-button, .ui.icon.button.patient-next-button {
+.ui.icon.button.small-patient-previous-button,
+.ui.icon.button.small-patient-next-button {
     display: none;
-  }
+    position: fixed;
+    bottom: 15px;
+    opacity: 0.8;
+    margin: 0;
+    background: #006b87;
+    color: white;
+}
 
-  .ui.icon.button.small-patient-previous-button, .ui.icon.button.small-patient-next-button {
-    display: block;
-  }
+@media screen and (max-width: 600px) {
+
+    .ui.icon.button.small-patient-previous-button,
+    .ui.icon.button.small-patient-next-button {
+        display: block;
+    }
+
+    .ui.icon.button.small-patient-previous-button {
+        left: 5px;
+    }
 
   .ui.icon.button.small-patient-previous-button {
     left: 5px;
   }
-
+  
   .ui.icon.button.small-patient-next-button {
     right: 5px;
   }
 }
 
 @media screen and (max-width: 400px) {
+    .ui.icon.button.small-patient-previous-button {
+        left: 15px;
+    }
 
-  .ui.icon.button.small-patient-previous-button {
-    left: 15px;
-  }
-
-  .ui.icon.button.small-patient-next-button {
-    right: 15px;
-  }
+    .ui.icon.button.small-patient-next-button {
+        right: 15px;
+    }
 }
-
+@media (max-width: 744px){
+    #patient-history-menu {
+        padding-top: 5px;
+        border-radius: 0;
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+    }
+}

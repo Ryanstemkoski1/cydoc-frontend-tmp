@@ -28,12 +28,12 @@
     margin-bottom: 2rem;
 }
 
-.ros-segments .ui.grid>.row {
+.ros-segments .ui.grid > .row {
     justify-content: space-between;
 }
 
 .ros-segments .header-titles {
-    margin-bottom: 0;;
+    margin-bottom: 0;
 }
 
 .ui.grid > .row > .column.no-padding {
@@ -47,7 +47,7 @@
     opacity: 0.8;
     margin: 0;
     display: block;
-    font-size: 13px;
+    font-size: 18px;
     background: #006b87;
     color: white;
 }
@@ -83,33 +83,33 @@
 .ui.container.active-tab-container {
     margin-bottom: 10px;
 }
-.survey-chips{
+.survey-chips {
     margin-top: 10px;
 }
-.survey-chips .ui.button.hpi-chiefcomplaint-button{
+.survey-chips .ui.button.hpi-chiefcomplaint-button {
     margin-bottom: 5px;
     width: calc(33.3% - 10px);
 }
-.survey-chips .ui.button.hpi-chiefcomplaint-button-selected{
+.survey-chips .ui.button.hpi-chiefcomplaint-button-selected {
     margin-bottom: 5px;
     width: calc(33.3% - 10px);
 }
-@media screen and (max-width: 992px){
-.survey-chips .ui.button.hpi-chiefcomplaint-button{
-    width: calc(50% - 10px);
+@media screen and (max-width: 992px) {
+    .survey-chips .ui.button.hpi-chiefcomplaint-button {
+        width: calc(50% - 10px);
+    }
+    .survey-chips .ui.button.hpi-chiefcomplaint-button-selected {
+        width: calc(50% - 10px);
+    }
 }
-.survey-chips .ui.button.hpi-chiefcomplaint-button-selected{
-    width: calc(50% - 10px);
-}
-}
-@media screen and (max-width: 700px){
-    .ui.container.active-tab-container{
+@media screen and (max-width: 700px) {
+    .ui.container.active-tab-container {
         margin-top: 30px;
     }
     .survey-chips .ui.button.hpi-chiefcomplaint-button {
         width: calc(100% - 10px);
     }
-    .survey-chips .ui.button.hpi-chiefcomplaint-button-selected{
+    .survey-chips .ui.button.hpi-chiefcomplaint-button-selected {
         width: calc(100% - 10px);
     }
 }
@@ -118,7 +118,7 @@
     width: 100%;
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 600px) {
     .ui.icon.button.ros-previous-button,
     .ui.icon.button.ros-next-button {
         display: none;
@@ -150,4 +150,7 @@
 
 .ui.button.select-all-negative {
     margin: 0.5rem auto;
+}
+.button-spacing button {
+    margin: 5px!important;
 }

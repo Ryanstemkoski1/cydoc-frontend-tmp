@@ -20,6 +20,7 @@ import { Vitals, VitalsFields } from 'redux/reducers/physicalExamReducer';
 import { PhysicalExamSchemaItem } from 'constants/PhysicalExam/physicalExamSchema';
 import { CurrentNoteState } from 'redux/reducers';
 import ButtonGroupTemparature from './InputSelectableTemparature';
+import { currentNoteStore } from 'redux/store';
 
 //Component that manages content for the Physical Exam tab
 class PhysicalExamContent extends React.Component<Props, State> {
@@ -28,6 +29,10 @@ class PhysicalExamContent extends React.Component<Props, State> {
         this.state = {
             windowWidth: 0,
             windowHeight: 0,
+            weightKg: 0,
+            heightM: 0,
+            bmi: 0,
+            headCircumference: 0,
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
@@ -56,7 +61,60 @@ class PhysicalExamContent extends React.Component<Props, State> {
     ) => {
         const numeric = +e.target.value;
         this.props.updateVitals(data.name, +numeric.toFixed(1));
+
+        if (data.name === 'weight' || data.name === 'height') {
+            this.calculateBmi(data.name, numeric);
+        }
     };
+    calculateBmi = (name: string, val: number) => {
+        let weightInPl: number;
+        let heightInInch: number;
+        let weightInKg: number;
+        let valueInM: number;
+        let bmi: number;
+        // if
+        if (name === 'weight') {
+            weightInPl = val;
+            weightInKg = weightInPl * 0.45359237;
+            if (this.state.heightM) {
+                bmi = weightInKg / (this.state.heightM * this.state.heightM);
+                this.setState({ bmi: +bmi.toFixed(1) });
+            }
+            this.setState({ weightKg: weightInKg });
+        } else if (name === 'height') {
+            heightInInch = val;
+            valueInM = heightInInch * 0.0254;
+            if (this.state.weightKg) {
+                bmi = this.state.weightKg / (valueInM * valueInM);
+                this.setState({ bmi: +bmi.toFixed(1) });
+            }
+            this.setState({ heightM: valueInM });
+        }
+    };
+
+    calculateAgeInYears = (dateOfBirth: string) => {
+        const dobObj = new Date(dateOfBirth);
+        const timeDiff = Math.abs(Date.now() - dobObj.getTime());
+        const ageInYears = timeDiff / (1000 * 60 * 60 * 24 * 365.25);
+        return ageInYears;
+    };
+
+    isPediatric() {
+        if (
+            currentNoteStore.getState().additionalSurvey.dateOfBirth ===
+                undefined ||
+            currentNoteStore.getState().additionalSurvey.dateOfBirth === null ||
+            currentNoteStore.getState().additionalSurvey.dateOfBirth === ''
+        ) {
+            return +false;
+        }
+
+        const patientAge = this.calculateAgeInYears(
+            currentNoteStore.getState().additionalSurvey.dateOfBirth
+        );
+        return +(patientAge <= 2);
+    }
+
     handleChangeTemparature = (val: string, data: InputOnChangeData) => {
         const num = +val;
         this.props.updateVitals(data.name, +num.toFixed(1));
@@ -82,15 +140,6 @@ class PhysicalExamContent extends React.Component<Props, State> {
             />
         );
     };
-    temparatureNumericInput = () => {
-        return (
-            <Input
-                label={{ basic: true, content: 'kg' }}
-                labelPosition='right'
-                placeholder='Enter weight...'
-            />
-        );
-    };
 
     renderPanels = (groups: PhysicalExamSchemaItem[] | ExampleSchema[]) => {
         const itemGroups = groups as PhysicalExamSchemaItem[];
@@ -99,7 +148,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
             {
                 key: 'Vitals',
                 title: {
-                    className: 'ui dropdown-title',
+                    className: 'ui dropdown-title listing',
                     content: 'Vitals',
                     icon: 'dropdown',
                     onClick: () => {
@@ -108,7 +157,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                 },
                 content: {
                     content: (
-                        <Form>
+                        <Form className='physical-content'>
                             <Grid stackable columns='3'>
                                 <Grid.Column>
                                     <Header
@@ -172,6 +221,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                         />
                                     </Form.Field>
                                 </Grid.Column>
+
                                 <Grid.Column>
                                     <Form.Field inline={isMobileView}>
                                         <label>
@@ -187,6 +237,69 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                         )}
                                     </Form.Field>
                                 </Grid.Column>
+                                <Grid.Column>{''}</Grid.Column>
+                                <Grid.Column>
+                                    <Form.Field inline={isMobileView}>
+                                        <label>
+                                            <Header as='h5' content='Weight' />
+                                        </label>
+                                        {this.generateNumericInput(
+                                            'weight',
+                                            'pounds',
+                                            'right'
+                                        )}
+                                    </Form.Field>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Form.Field inline={isMobileView}>
+                                        <label>
+                                            <Header
+                                                as='h5'
+                                                content={
+                                                    this.isPediatric()
+                                                        ? 'Length'
+                                                        : 'Height'
+                                                }
+                                            />
+                                        </label>
+                                        {this.generateNumericInput(
+                                            'height',
+                                            'inches',
+                                            'right'
+                                        )}
+                                    </Form.Field>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Form.Field inline={isMobileView}>
+                                        <label>
+                                            <Header as='h5' content='BMI' />
+                                        </label>
+                                        <p className='bmi-text'>
+                                            {this.state.bmi
+                                                ? this.state.bmi
+                                                : 'N/A'}
+                                        </p>
+                                    </Form.Field>
+                                </Grid.Column>
+                                {this.isPediatric() ? (
+                                    <Grid.Column>
+                                        <Form.Field inline={isMobileView}>
+                                            <label>
+                                                <Header
+                                                    as='h5'
+                                                    content='Head Circumference'
+                                                />
+                                            </label>
+                                            {this.generateNumericInput(
+                                                'headCircumference',
+                                                'inches',
+                                                'right'
+                                            )}
+                                        </Form.Field>
+                                    </Grid.Column>
+                                ) : (
+                                    <br></br>
+                                )}
                             </Grid>
                         </Form>
                     ),
@@ -234,7 +347,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
             panels.push({
                 key: itemGroups[i - 1].name,
                 title: {
-                    className: 'ui dropdown-title',
+                    className: 'ui dropdown-title listing',
                     content: itemGroups[i - 1].name,
                     icon: 'dropdown',
                     onClick: () => {
@@ -261,10 +374,12 @@ class PhysicalExamContent extends React.Component<Props, State> {
                 },
                 content: {
                     content: (
-                        <PhysicalExamGroup
-                            name={itemGroups[i - 1].name}
-                            rows={itemGroups[i - 1].rows}
-                        />
+                        <div className='btn-wrapper'>
+                            <PhysicalExamGroup
+                                name={itemGroups[i - 1].name}
+                                rows={itemGroups[i - 1].rows}
+                            />
+                        </div>
                     ),
                 },
             });
@@ -296,7 +411,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                     onClick={this.props.previousFormClick}
                     className='physical-previous-button'
                 >
-                    Previous
+                    Prev
                     <Icon name='arrow left' />
                 </Button>
 
@@ -357,6 +472,10 @@ interface DispatchProps {
 interface State {
     windowWidth: number;
     windowHeight: number;
+    weightKg: number;
+    heightM: number;
+    bmi: number;
+    headCircumference: number;
 }
 
 type Props = DispatchProps & ContentProps;

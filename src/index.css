@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Nunito';
-    src: url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+    src: url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 }
 
 @font-face {
@@ -20,12 +20,14 @@
     text-align: center;
     font-size: medium;
     align-items: center;
-    color: #147A9B;
+    color: #147a9b;
     position: static;
-    padding-bottom: 25px;
+    padding-bottom: 45px;
     padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .ui.segment:hover {
-    box-shadow: 0 10px 40px 5px RGBA(0, 128, 159, 0.2);;
+    box-shadow: 0 10px 40px 5px RGBA(0, 128, 159, 0.2);
 }

@@ -1,40 +1,33 @@
-import React, { Component, Fragment } from 'react';
-import {
-    Form,
-    Grid,
-    Button,
-    Header,
-    Divider,
-    ButtonProps,
-} from 'semantic-ui-react';
-import ToggleButton from 'components/tools/ToggleButton.js';
-import FamilyHistoryDropdown from './FamilyHistoryDropdown';
 import GridContent from 'components/tools/GridContent.js';
+import ToggleButton, { ButtonProps } from 'components/tools/ToggleButton';
+import { YesNoResponse } from 'constants/enums';
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import {
+    addFamilyMember,
+    deleteFamilyMember,
+    toggleCauseOfDeathOption,
+    toggleConditionOption,
+    toggleLivingOption,
+    updateComments,
+    updateMember,
+} from 'redux/actions/familyHistoryActions';
+import { CurrentNoteState } from 'redux/reducers';
+import {
+    FamilyHistoryCondition,
+    FamilyHistoryState,
+} from 'redux/reducers/familyHistoryReducer';
+import {
+    FamilyHistoryConditionFlat,
+    selectFamilyHistoryCondition,
+    selectFamilyHistoryConditions,
+    selectFamilyHistoryState,
+} from 'redux/selectors/familyHistorySelectors';
+import { Button, Divider, Form, Grid, Header } from 'semantic-ui-react';
 import '../hpi/knowledgegraph/src/css/Button.css';
 import '../reviewofsystems/ReviewOfSystems.css';
 import './FamilyHistory.css';
-import { connect } from 'react-redux';
-import {
-    toggleConditionOption,
-    addFamilyMember,
-    deleteFamilyMember,
-    updateMember,
-    toggleCauseOfDeathOption,
-    toggleLivingOption,
-    updateComments,
-} from 'redux/actions/familyHistoryActions';
-import {
-    selectFamilyHistoryState,
-    selectFamilyHistoryConditions,
-    selectFamilyHistoryCondition,
-    FamilyHistoryConditionFlat,
-} from 'redux/selectors/familyHistorySelectors';
-import { YesNoResponse } from 'constants/enums';
-import {
-    FamilyHistoryState,
-    FamilyHistoryCondition,
-} from 'redux/reducers/familyHistoryReducer';
-import { CurrentNoteState } from 'redux/reducers';
+import FamilyHistoryDropdown from './FamilyHistoryDropdown';
 
 class FamilyHistoryBlock extends Component<Props> {
     constructor(props: Props) {
@@ -51,7 +44,7 @@ class FamilyHistoryBlock extends Component<Props> {
     handleToggleButtonClick(event: React.MouseEvent, data: ButtonProps) {
         this.props.toggleConditionOption(
             this.props.index,
-            data.title.toUpperCase()
+            data.title.toUpperCase() as YesNoResponse
         );
     }
     /* eslint-disable-next-line */
@@ -61,11 +54,8 @@ class FamilyHistoryBlock extends Component<Props> {
 
     render() {
         const { mobile, conditionInp, index, isPreview } = this.props;
-        const {
-            condition,
-            hasAfflictedFamilyMember,
-            familyMembers,
-        } = this.props.familyHistoryItem;
+        const { condition, hasAfflictedFamilyMember, familyMembers } =
+            this.props.familyHistoryItem;
         // array of dropdowns displayed on Family History Family Member column
         // variable range that changes when the user clicks the + (add member) button
         // we want there to be at least one dropdown
@@ -128,7 +118,7 @@ class FamilyHistoryBlock extends Component<Props> {
         }
         return mobile ? (
             <Grid.Row>
-                <Form className='family-hx-note-item'>
+                <Form className='family-hx-note-item family-hx-note'>
                     <Form.Group inline className='condition-header'>
                         <div className='condition-name'>{conditionInp}</div>
                         <div>

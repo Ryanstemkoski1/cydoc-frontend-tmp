@@ -27,7 +27,6 @@
     padding-left: 30px;
 }
 
-
 .ui.container.forgot-password {
     padding: 10vh 0;
     width: 450px;
@@ -39,7 +38,7 @@
 }
 
 .login > .container,
-.sign-up > .container, 
+.sign-up > .container,
 .forgot-password > .container {
     padding: 1rem;
 }
@@ -48,23 +47,27 @@
     font-family: Pompadour, Arial, Helvetica, sans-serif;
     font-size: 2.7rem;
     color: black;
-    margin: .5rem;
+    margin: 0.5rem;
 }
 
 .ui.header.logo-text-mobile {
     font-family: Pompadour, Arial, Helvetica, sans-serif;
     font-size: 1.8rem;
     color: black;
-    margin: .5rem;
+    margin: 0.5rem;
 }
 
-.login-header, .sign-up-header, .forgot-password-header, .forgot-password-email-header{
+.login-header,
+.sign-up-header,
+.forgot-password-header,
+.forgot-password-email-header {
     padding: 1rem;
     font-size: 1.2rem;
     color: black;
 }
 
-.make-an-account-button, .forgot-password-button {
+.make-an-account-button,
+.forgot-password-button {
     font-size: 0.9rem;
     margin-top: 5px;
     color: teal;
@@ -72,7 +75,7 @@
 
 .role-label {
     font-size: 1rem;
-    color: rgba(0, 0, 0, .85);
+    color: rgba(0, 0, 0, 0.85);
 }
 
 .ui.card.password-reqs {
@@ -94,13 +97,13 @@
 }
 
 .ui.container.pass-match-error {
-    margin: -.5rem 0 .75rem;
+    margin: -0.5rem 0 0.75rem;
     color: #9f3a38;
 }
 
 .ui.form .fields > .field.role {
     height: fit-content;
-    padding: 0.5em .5em;
+    padding: 0.5em 0.5em;
 }
 
 .ui.container.pass-coming-soon {
@@ -109,9 +112,8 @@
 }
 
 .ui.container.change-pass-button {
-    margin: .5rem 0 1.5rem;
+    margin: 0.5rem 0 1.5rem;
 }
-
 
 #signup-modal-div {
     text-align: center;

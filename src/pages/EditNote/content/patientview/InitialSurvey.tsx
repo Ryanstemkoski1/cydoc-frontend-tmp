@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { YesNoResponse } from 'constants/enums';
-import { GraphData, NodeInterface, ResponseTypes } from 'constants/hpiEnums';
+import { GraphData, ResponseTypes } from 'constants/hpiEnums';
 import React from 'react';
 import { connect } from 'react-redux';
 import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
@@ -10,10 +10,6 @@ import {
     resetAdditionalSurveyPage,
     updateAdditionalSurveyDetails,
 } from 'redux/actions/additionalSurveyActions';
-import {
-    AddDisplayedNodesAction,
-    addDisplayedNodes,
-} from 'redux/actions/displayedNodesActions';
 import {
     ProcessKnowledgeGraphAction,
     processKnowledgeGraph,
@@ -62,8 +58,10 @@ import ChiefComplaintsButton, {
 import DetailsPage from './AdditionalSurvey';
 import InputTextOrDateResponse from './InputTextOrDateResponse';
 import SurveyYesNoResponse from './SurveyYesNoResponse';
+import UserInfoForm from './UserInfoForm';
 import initialQuestions from './constants/initialQuestions.json';
 import patientViewHeaders from './constants/patientViewHeaders.json';
+import './InitialSurvey.css';
 
 interface InitialSurveyState {
     activeItem: number;
@@ -83,8 +81,6 @@ interface InitialSurveyComponentProps {
 class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     constructor(props: Props) {
         super(props);
-        // eslint-disable-next-line no-console
-        console.log(props.additionalSurvey);
         this.state = {
             activeItem: 0,
             error: false,
@@ -107,17 +103,16 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                   ).length
                 : 0,
             q2_count = isChiefComplaintsResponse(res2.response)
-                ? Object.keys(res2.response).length
+                ? Object.keys(res2.response).filter((k) =>
+                      Object.keys(chiefComplaints).includes(k)
+                  ).length
                 : 0;
         return [q1_count, q2_count];
     }
 
     componentDidMount() {
-        const {
-            userSurveyState,
-            processSurveyGraph,
-            saveHpiHeader,
-        } = this.props;
+        const { userSurveyState, processSurveyGraph, saveHpiHeader } =
+            this.props;
         if (
             !Object.keys(userSurveyState.graph).length &&
             !Object.keys(userSurveyState.nodes).length &&
@@ -146,7 +141,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         this.setState({ error: false });
         if (
             this.state.activeItem === 0 &&
-            this.props.additionalSurvey.showAdditionalSurvey === false
+            [1, 2].includes(this.props.additionalSurvey.initialSurveyState)
         ) {
             this.props.resetAdditionalSurveyPage();
             return;
@@ -157,7 +152,15 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     onNextClick = (e: any) => {
         if (
             this.state.activeItem === 0 &&
-            this.props.additionalSurvey.showAdditionalSurvey === true
+            this.props.additionalSurvey.initialSurveyState === 1 &&
+            this.props.additionalSurvey.isUserInfoValid == false
+        ) {
+            return;
+        }
+
+        if (
+            this.state.activeItem === 0 &&
+            this.props.additionalSurvey.initialSurveyState === 0
         ) {
             if (new Date() < new Date(this.state.tempDateOfBirth)) {
                 this.setState({
@@ -193,11 +196,28 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                 this.state.tempLegalFirstName,
                 this.state.tempLegalLastName,
                 this.state.tempSocialSecurityNumber,
-                this.state.tempDateOfBirth
+                this.state.tempDateOfBirth,
+                1
             );
             this.setState({ error: false });
             return;
         }
+
+        if (
+            this.state.activeItem === 0 &&
+            this.props.additionalSurvey.initialSurveyState === 1
+        ) {
+            this.props.updateAdditionalSurveyDetails(
+                this.state.tempLegalFirstName,
+                this.state.tempLegalLastName,
+                this.state.tempSocialSecurityNumber,
+                this.state.tempDateOfBirth,
+                2
+            );
+            this.setState({ error: false });
+            return;
+        }
+
         const { userSurveyState } = this.props;
 
         if (
@@ -209,7 +229,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         }
         if (
             this.state.activeItem == 0 &&
-            userSurveyState.graph['1'].some(
+            userSurveyState.graph['1']?.some(
                 (key) =>
                     userSurveyState.nodes[key].response == YesNoResponse.Yes
             )
@@ -253,6 +273,13 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             tempSocialSecurityNumber: tempSocialSecurityNumber.trim(),
             tempDateOfBirth: tempDateOfBirth,
         });
+        this.props.updateAdditionalSurveyDetails(
+            tempLegalFirstName.trim(),
+            tempLegalLastName.trim(),
+            tempSocialSecurityNumber.trim(),
+            tempDateOfBirth,
+            0
+        );
     };
 
     getData = async (complaint: string) => {
@@ -273,19 +300,22 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                 edges[edge.toString()].to,
             ])
             .sort((tup1, tup2) => parseInt(tup1[0]) - parseInt(tup2[0]))
-            .map(([_questionOrder, medId]) => medId);
-        this.props.addDisplayedNodes(chiefComplaint, childNodes, nodes);
+            .map(([, /* _questionOrder, */ medId]) => medId);
     };
 
     renderSwitch = (id: string) => {
-        const {
-                userSurveyState,
-                patientView,
-                initialSurveySearch,
-            } = this.props,
+        const { userSurveyState, patientView, initialSurveySearch } =
+                this.props,
             currEntry = userSurveyState.nodes[id],
             { bodySystems, parentNodes } = this.props.hpiHeaders;
         // map through all complaints on the HPI and create search resuls
+        const node6 = Object.keys(
+            userSurveyState?.nodes['6']?.response || {}
+        ).map((complaint) =>
+            parentNodes[complaint]?.patientView !== 'HIDDEN'
+                ? parentNodes[complaint]?.patientView
+                : complaint
+        );
         const getRes = () => {
             const filterResults: object[] = [];
             Object.entries(bodySystems).forEach((grouping) => {
@@ -305,8 +335,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             title: title,
                             onClick: () => {
                                 currentNoteStore.dispatch({
-                                    type:
-                                        CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
+                                    type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
                                     payload: {
                                         disease: complaint,
                                     },
@@ -315,7 +344,9 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                                 initialSurveySearch(id, complaint);
                             },
                         };
-                        filterResults.push(temp);
+                        if (!node6.includes(title)) {
+                            filterResults.push(temp);
+                        }
                     }
                 });
             });
@@ -343,21 +374,22 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             className='hpi-search-bar'
                             minCharacters={2}
                             onSearchChange={(event) => {
-                                const target = event.target as HTMLTextAreaElement;
+                                const target =
+                                    event.target as HTMLTextAreaElement;
                                 this.setState({ searchVal: target.value });
                             }}
                             value={this.state.searchVal}
                             results={getRes()}
                         />
                         {isChiefComplaintsResponse(currEntry.response)
-                            ? Object.keys(
-                                  currEntry.response
-                              ).map((complaint) => (
-                                  <ChiefComplaintsButton
-                                      key={complaint}
-                                      name={complaint}
-                                  />
-                              ))
+                            ? Object.keys(currEntry.response).map(
+                                  (complaint) => (
+                                      <ChiefComplaintsButton
+                                          key={complaint}
+                                          name={complaint}
+                                      />
+                                  )
+                              )
                             : ''}
                     </div>
                 );
@@ -392,24 +424,6 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         }
     };
 
-    isAtLeaseOneInputYesOnPage() {
-        const selected =
-            this.props.userSurveyState.nodes['2'].response ===
-                YesNoResponse.Yes ||
-            this.props.userSurveyState.nodes['3'].response ===
-                YesNoResponse.Yes ||
-            this.props.userSurveyState.nodes['4'].response ===
-                YesNoResponse.Yes;
-        if (
-            this.state.activeItem == 0 &&
-            selected &&
-            this.props.userSurveyState.nodes['8'].response
-        ) {
-            this.setState({ error: false });
-        }
-        return selected;
-    }
-
     render() {
         const { activeItem } = this.state,
             { userSurveyState } = this.props,
@@ -425,7 +439,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                               className={'qa-div sixteen wide column'}
                           >
                               {questions.nodes[key].text}
-                              <div className='survey-chips'>
+                              <div className='survey-chips button-spacing'>
                                   {Object.keys(this.props.userSurveyState.nodes)
                                       .length
                                       ? this.renderSwitch(key)
@@ -439,36 +453,51 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             Object.keys(userSurveyState.graph).length &&
             Object.keys(userSurveyState.nodes).length &&
             Object.keys(userSurveyState.order).length;
-
-        initialSurvey = this.props.additionalSurvey.showAdditionalSurvey
-            ? [
-                  <DetailsPage
-                      key={0}
-                      legalFirstName={
-                          this.props.additionalSurvey.legalFirstName
-                      }
-                      legalLastName={this.props.additionalSurvey.legalLastName}
-                      socialSecurityNumber={
-                          this.props.additionalSurvey.socialSecurityNumber
-                      }
-                      dateOfBirth={this.props.additionalSurvey.dateOfBirth}
-                      setTempAdditionalDetails={this.setTempAdditionalDetails}
-                  />,
-              ]
-            : initialSurvey;
+        const selected =
+            this.props?.userSurveyState?.nodes['2']?.response ===
+                YesNoResponse.Yes ||
+            this.props?.userSurveyState?.nodes['3']?.response ===
+                YesNoResponse.Yes ||
+            this.props?.userSurveyState?.nodes['4']?.response ===
+                YesNoResponse.Yes;
+        initialSurvey =
+            this.props.additionalSurvey.initialSurveyState == 0
+                ? [
+                      <DetailsPage
+                          key={0}
+                          legalFirstName={
+                              this.props.additionalSurvey.legalFirstName
+                          }
+                          legalLastName={
+                              this.props.additionalSurvey.legalLastName
+                          }
+                          socialSecurityNumber={
+                              this.props.additionalSurvey.socialSecurityNumber
+                          }
+                          dateOfBirth={this.props.additionalSurvey.dateOfBirth}
+                          setTempAdditionalDetails={
+                              this.setTempAdditionalDetails
+                          }
+                      />,
+                  ]
+                : this.props.additionalSurvey.initialSurveyState === 1
+                ? [<UserInfoForm key={1} />]
+                : initialSurvey;
 
         return (
             <div>
                 <Container className='active-tab-container'>
                     {this.state.error ||
-                    (isLoaded && this.counter().reduce((a, v) => a + v) > 3) ? (
+                    (isLoaded &&
+                        this.state.activeItem == 1 &&
+                        this.counter().reduce((a, v) => a + v) > 3) ? (
                         <Message negative>
                             <Message.Header>
                                 {this.state.activeItem == 0
                                     ? this.props.additionalSurvey
-                                          .showAdditionalSurvey
+                                          .initialSurveyState === 0
                                         ? this.state.message
-                                        : this.isAtLeaseOneInputYesOnPage()
+                                        : selected
                                         ? 'Please confirm the date of your appointment.'
                                         : 'Please answer Yes to at least one question to proceed.'
                                     : 'The maximum of 3 has been reached. Please un-select an existing option before adding a new one.'}
@@ -481,8 +510,9 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                         <Grid>{initialSurvey}</Grid>
                     </Segment>
                 </Container>
-                {this.props.additionalSurvey.showAdditionalSurvey === false &&
-                this.state.activeItem === 0 ? (
+                {[1, 2].includes(
+                    this.props.additionalSurvey.initialSurveyState
+                ) && this.state.activeItem === 0 ? (
                     <div>
                         {' '}
                         <Button
@@ -517,7 +547,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             className='hpi-previous-button'
                             onClick={this.onPrevClick}
                         >
-                            Previous
+                            Prev
                             <Icon name='arrow left' />
                         </Button>
                         <Button
@@ -526,7 +556,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             className='hpi-small-previous-button'
                             onClick={this.onPrevClick}
                         >
-                            <Icon name='arrow left' />
+                            <Icon name='arrow left' className='big' />
                         </Button>{' '}
                     </div>
                 ) : (
@@ -548,7 +578,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                     className='hpi-small-next-button'
                     onClick={this.onNextClick}
                 >
-                    <Icon name='arrow right' />
+                    <Icon name='arrow right' className='big' />
                 </Button>
             </div>
         );
@@ -591,18 +621,12 @@ interface DispatchProps {
         uid: string,
         chiefComplaint: string
     ) => InitialSurveySearchAction;
-    addDisplayedNodes: (
-        category: string,
-        nodesArr: string[],
-        nodes: {
-            [node: string]: NodeInterface;
-        }
-    ) => AddDisplayedNodesAction;
     updateAdditionalSurveyDetails: (
         legalFirstName: string,
         legalLastName: string,
         socialSecurityNumber: string,
-        dateOfBirth: string
+        dateOfBirth: string,
+        initialSurveyState: number
     ) => UpdateAdditionalSurveyAction;
     resetAdditionalSurveyPage: () => GoBackToAdditionalSurvey;
 }
@@ -621,7 +645,6 @@ const mapDispatchToProps = {
     saveHpiHeader,
     processKnowledgeGraph,
     initialSurveySearch,
-    addDisplayedNodes,
     updateAdditionalSurveyDetails,
     resetAdditionalSurveyPage,
 };

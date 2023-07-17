@@ -7,6 +7,7 @@ import {
     TextAreaProps,
     InputOnChangeData,
     DropdownProps,
+    Header,
 } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton';
 import Dropdown from 'components/tools/OptimizedDropdown';
@@ -16,6 +17,7 @@ import allergicReactions from 'constants/allergicReactions';
 import AllergiesTableBodyRow from './AllergiesTableBodyRow';
 import { connect } from 'react-redux';
 import {
+    toggleHasAllergies,
     updateIncitingAgent,
     updateReaction,
     updateComments,
@@ -23,11 +25,20 @@ import {
     deleteAllergy,
     updateId,
 } from 'redux/actions/allergiesActions';
-import { AllergiesState, AllergiesItem } from 'redux/reducers/allergiesReducer';
+import {
+    AllergiesElements,
+    AllergiesItem,
+} from 'redux/reducers/allergiesReducer';
 import { CurrentNoteState } from 'redux/reducers';
-import { selectAllergiesState } from 'redux/selectors/allergiesSelectors';
+import {
+    selectAllergies,
+    selectHasAllergiesState,
+} from 'redux/selectors/allergiesSelectors';
 import './table.css';
 import { OptionMapping } from '_processOptions';
+import ToggleButton from 'components/tools/ToggleButton';
+import { questionContainer, questionTextStyle } from './styles';
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 
 //Component that manages the layout for the allergies page
 class AllergiesContent extends Component<Props, OwnState> {
@@ -44,6 +55,7 @@ class AllergiesContent extends Component<Props, OwnState> {
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
         this.updateDimensions = this.updateDimensions.bind(this);
+        this.toggleYesNoButton = this.toggleYesNoButton.bind(this);
     }
 
     componentDidMount() {
@@ -75,7 +87,9 @@ class AllergiesContent extends Component<Props, OwnState> {
     handleTableBodyChange(
         _event:
             | React.FormEvent<HTMLTextAreaElement>
-            | React.ChangeEvent<HTMLInputElement>,
+            | React.ChangeEvent<HTMLInputElement>
+            | React.SyntheticEvent
+            | null,
         data: TextAreaProps | InputOnChangeData | DropdownProps
     ) {
         const { active } = this.state;
@@ -137,7 +151,7 @@ class AllergiesContent extends Component<Props, OwnState> {
         return nums.map((rowIndex: string, index: number) => (
             <AllergiesTableBodyRow
                 key={index}
-                rowIndex={rowIndex as keyof AllergiesState}
+                rowIndex={rowIndex as keyof AllergiesElements}
                 fields={cellField}
                 onTableBodyChange={this.handleTableBodyChange}
                 isPreview={this.props.isPreview}
@@ -151,13 +165,13 @@ class AllergiesContent extends Component<Props, OwnState> {
 
     onAddItem = (_e: any, data: { [key: string]: any }) => {
         const { value } = data;
-        this.setState((state, _props) => ({
+        this.setState((state /* , _props */) => ({
             allergensOptions: {
                 ...state.allergensOptions,
                 [value]: { value, label: value },
             },
         }));
-        this.setState((state, _props) => ({
+        this.setState((state /* , _props */) => ({
             allergicReactionsOptions: {
                 ...state.allergicReactionsOptions,
                 [value]: { value, label: value },
@@ -165,13 +179,13 @@ class AllergiesContent extends Component<Props, OwnState> {
         }));
     };
 
-    makeAccordionPanels(nums: string[], values: AllergiesState) {
+    makeAccordionPanels(nums: string[], values: AllergiesElements) {
         const { isPreview } = this.props;
 
         const panels: Panel[] = [];
         nums.map((i: string) => {
             const titleContent = (
-                <Form className='inline-form'>
+                <Form className='inline-form spacing-x'>
                     <Dropdown
                         fluid
                         search
@@ -188,7 +202,6 @@ class AllergiesContent extends Component<Props, OwnState> {
                         rowIndex={i}
                         value={isPreview ? '' : values[i].incitingAgent}
                     />
-                    {' causes '}
                     <Dropdown
                         fluid
                         search
@@ -252,9 +265,14 @@ class AllergiesContent extends Component<Props, OwnState> {
         return panels;
     }
 
+    toggleYesNoButton(state: boolean | null) {
+        this.props.toggleHasAllergies(state as boolean);
+    }
+
     render() {
         const values = this.props.allergies;
         const nums = Object.keys(values);
+        const { hasAllergies, patientView } = this.props;
 
         const content = (
             <>
@@ -278,8 +296,34 @@ class AllergiesContent extends Component<Props, OwnState> {
 
         return (
             <>
-                {content}
-                {!this.props.isPreview && (
+                {patientView && (hasAllergies === null || !nums.length) && (
+                    <div style={questionContainer}>
+                        <Header
+                            as='h2'
+                            textAlign='left'
+                            content='Do you have any allergies?'
+                            style={questionTextStyle}
+                        />
+                        <ToggleButton
+                            className='button_yesno'
+                            title='Yes'
+                            active={hasAllergies || false}
+                            onToggleButtonClick={() =>
+                                this.toggleYesNoButton(true)
+                            }
+                        />
+                        <ToggleButton
+                            className='button_yesno'
+                            title='No'
+                            active={hasAllergies !== null && !hasAllergies}
+                            onToggleButtonClick={() =>
+                                this.toggleYesNoButton(false)
+                            }
+                        />
+                    </div>
+                )}
+                {nums.length && (hasAllergies || !patientView) ? content : ''}
+                {!this.props.isPreview && (hasAllergies || !patientView) && (
                     <AddRowButton onClick={this.addRow} name='allergy' />
                 )}
             </>
@@ -302,10 +346,13 @@ interface DispatchProps {
     updateId: (index: string, id: string) => void;
     addAllergy: () => void;
     deleteAllergy: (index: string) => void;
+    toggleHasAllergies: (state: boolean) => void;
 }
 
 interface AllergiesProps {
-    allergies: AllergiesState;
+    hasAllergies: boolean | null;
+    allergies: AllergiesElements;
+    patientView: boolean;
 }
 
 interface ContentProps {
@@ -324,11 +371,14 @@ type Props = AllergiesProps & ContentProps & DispatchProps;
 
 const mapStateToProps = (state: CurrentNoteState): AllergiesProps => {
     return {
-        allergies: selectAllergiesState(state),
+        hasAllergies: selectHasAllergiesState(state),
+        allergies: selectAllergies(state),
+        patientView: selectPatientViewState(state),
     };
 };
 
 const mapDispatchToProps = {
+    toggleHasAllergies,
     updateIncitingAgent,
     updateReaction,
     updateComments,
