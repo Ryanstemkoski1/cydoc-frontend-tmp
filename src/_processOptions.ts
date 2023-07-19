@@ -5,6 +5,8 @@ export interface DropdownOption {
 
 export type OptionMapping = { [key: string]: DropdownOption };
 
+export type DiagnosesOptions = { [key: string]: { 'label': string, 'items'?: DiagnosesOptions } }
+
 /**
  * Returns an OptionMapping already formatted for `OptimizedDropdown.tsx`. A
  * mapping is necessary as `react-select` stores the option objects as opposed
@@ -28,6 +30,17 @@ export const getOptionMapping = (
         mapping[value] = {
             value,
             label: options[key],
+        };
+        return mapping;
+    }, {} as OptionMapping);
+};
+
+export const getDiagnosesOptionMapping = (options: DiagnosesOptions): OptionMapping => {
+    return Object.keys(options).reduce((mapping, key) => {
+        const value = `${key}`; /* ${options[key]['label']} */
+        mapping[value] = {
+            value,
+            label: options[key]['label'],
         };
         return mapping;
     }, {} as OptionMapping);

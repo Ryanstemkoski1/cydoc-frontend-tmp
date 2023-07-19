@@ -1,5 +1,5 @@
 import React from 'react';
-import Dropdown from 'components/tools/OptimizedDropdown';
+import Dropdown from 'components/tools/RecursiveDropdown';
 import { Grid, TextArea } from 'semantic-ui-react';
 import { PlanAction } from '../util';
 import { connect } from 'react-redux';
@@ -22,6 +22,7 @@ import {
 import UpdateDimensions from './UpdateDimensions';
 import './DiscussionPlanForms.css';
 import './planSections.css';
+import { DiagnosesOptions } from '_processOptions';
 
 interface DifferentialDiagnosesDispatchProps {
     addDifferentialDiagnosis: PlanAction;
@@ -55,7 +56,7 @@ const DifferentialDiagnosesForm = (
                 allowAdditions
                 transparent={mobile}
                 value={row.diagnosis}
-                options={options?.main || {}}
+                options={options?.main as DiagnosesOptions || {}}
                 uuid={row.id}
                 onChange={formatAction(actions.updateDifferentialDiagnosis)}
                 onAddItem={onAddItem}
