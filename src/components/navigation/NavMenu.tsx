@@ -28,7 +28,6 @@ import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import constants from '../../constants/constants.json';
 import './NavMenu.css';
-import SignUpForm from 'pages/Account/SignUpForm';
 
 interface ConnectedNavMenuProps {
     className: string;
@@ -122,13 +121,11 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     const history = useHistory();
 
     const navigateToHome = () => {
-        const path = '/dashboard';
-        history.push(path);
+        history.push('/dashboard');
     };
 
     const logoNotLoggedIn = () => {
-        const path = '/';
-        history.push(path);
+        history.push('/');
     };
 
     // Menu items when not logged in
@@ -146,13 +143,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                 icon='plus'
                 content='Sign Up'
                 size='small'
-                onClick={() => setSignUpActive(true)}
-            />
-            <SignUpForm
-                modalOpen={signUpActive}
-                closeModal={() => setSignUpActive(false)}
-                sessionUserAttributes={null}
-                cognitoUser={null}
+                onClick={() => history.push('/sign-up')}
             />
         </Menu.Item>
     );

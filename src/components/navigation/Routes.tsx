@@ -19,12 +19,14 @@ import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import { PrivateRoute } from './PrivateRoute';
 import { EditPayment } from 'pages/Account/EditPayment';
+import SignUp from 'pages/SignUp';
 
 const Routes = (props: { children?: JSX.Element | null }) => {
     return (
         <BrowserRouter>
             <Route exact path='/' component={Home} />
             <Route exact path='/login' component={Login} />
+            <Route exact path='/sign-up' component={SignUp} />
             <Route
                 exact
                 path='/forgotpasswordemail'
