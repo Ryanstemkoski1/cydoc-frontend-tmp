@@ -22,7 +22,8 @@ class YearInput extends React.Component<Props, OwnState> {
         const values = hpi.nodes[node];
         const value = values.response as number;
         const isValidYear =
-            value == undefined || (!isNaN(value) && value >= 1900 && value <= currentYear);
+            value == undefined ||
+            (!isNaN(value) && value >= 1900 && value <= currentYear);
 
         this.state = {
             currentYear: currentYear,
@@ -37,7 +38,7 @@ class YearInput extends React.Component<Props, OwnState> {
     handleInputChange = (value: number) => {
         const { node, handleYearInputChange } = this.props;
         if (isNaN(value) || value < 1900 || value > this.state.currentYear) {
-            this.setState({ year: value })
+            this.setState({ year: value });
             // reset year value if input is invalid
             if (this.state.valid) {
                 handleYearInputChange(node, undefined);
@@ -49,7 +50,7 @@ class YearInput extends React.Component<Props, OwnState> {
         }
     };
 
-    handleInputBlur() {
+    handleInputBlur = () => {
         const { node, handleYearInputChange } = this.props;
         const { year } = this.state;
         if (isNaN(year) || year < 1900 || year > this.state.currentYear) {
