@@ -22,7 +22,7 @@ class YearInput extends React.Component<Props, OwnState> {
         const values = hpi.nodes[node];
         const value = values.response as number;
         const isValidYear =
-            !isNaN(value) && value >= 1900 && value <= currentYear;
+            value == undefined || (!isNaN(value) && value >= 1900 && value <= currentYear);
 
         this.state = {
             currentYear: currentYear,
@@ -31,13 +31,14 @@ class YearInput extends React.Component<Props, OwnState> {
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleInputBlur = this.handleInputBlur.bind(this);
     }
 
     handleInputChange = (value: number) => {
         const { node, handleYearInputChange } = this.props;
-        if (isNaN(value) || value < 1900 || value > 2023) {
+        if (isNaN(value) || value < 1900 || value > this.state.currentYear) {
+            this.setState({ year: value })
             // reset year value if input is invalid
-            this.setState({ valid: false, year: value });
             if (this.state.valid) {
                 handleYearInputChange(node, undefined);
             }
@@ -45,6 +46,15 @@ class YearInput extends React.Component<Props, OwnState> {
             this.setState({ valid: true, year: value });
             // only set year value if input is valid
             handleYearInputChange(node, value);
+        }
+    };
+
+    handleInputBlur() {
+        const { node, handleYearInputChange } = this.props;
+        const { year } = this.state;
+        if (isNaN(year) || year < 1900 || year > this.state.currentYear) {
+            this.setState({ valid: false });
+            handleYearInputChange(node, undefined);
         }
     };
 
@@ -69,10 +79,12 @@ class YearInput extends React.Component<Props, OwnState> {
                     onChange={(_e, data) =>
                         this.handleInputChange(parseInt(data.value))
                     }
-                />
+                >
+                    <input onBlur={this.handleInputBlur} />
+                </Input>
                 {!this.state.valid && this.state.year !== undefined && (
                     <p className='year-validation-mobile-error'>
-                        Please enter a year between 1900 and 2023
+                        {`Please enter a year between 1900 and ${this.state.currentYear}`}
                     </p>
                 )}
             </div>
