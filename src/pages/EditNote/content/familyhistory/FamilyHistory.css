@@ -285,7 +285,7 @@
         margin-bottom: 0 !important;
     }
     .family-hisory-note-mobile .ui.search.dropdown>.text {
-        visibility: visible;
+        overflow: visible;
     }
     .family-hisory-note-mobile .ui.grid {
         margin-top: 0;

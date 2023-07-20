@@ -156,7 +156,7 @@ class FamilyHistoryBlock extends Component<Props> {
                             <button
                                 className='delete-button'
                                 onClick={() => {
-                                    this.props.deleteRow(this.props.index);
+                                    this.props?.deleteRow(this.props.index);
                                 }}
                             >
                                 <Image src={Delete} />
@@ -204,7 +204,7 @@ class FamilyHistoryBlock extends Component<Props> {
                         circular
                         icon='close'
                         onClick={() => {
-                            this.props.deleteRow(this.props.index);
+                            this.props?.deleteRow(this.props.index);
                         }}
                         aria-label='delete-condition'
                         className='hpi-ph-button'
