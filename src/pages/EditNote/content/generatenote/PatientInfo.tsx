@@ -97,11 +97,11 @@ const PatientInfo = ({ additionalSurveyState }: PatentInfoProps) => {
                 </li>
 
                 <li>
-                    <label>Sex assigned at birth</label>
+                    <label>Sex Assigned At Birth</label>
                     <p>{additionalSurveyState.userInfo.sex || '-'}</p>
                 </li>
                 <li>
-                    <label>Preferred pronouns</label>
+                    <label>Preferred Pronouns</label>
                     <p>
                         {additionalSurveyState.userInfo.preferredPronouns ||
                             '-'}
@@ -113,7 +113,7 @@ const PatientInfo = ({ additionalSurveyState }: PatentInfoProps) => {
                 </li>
 
                 <li>
-                    <label>Are you insured</label>
+                    <label>Insured</label>
                     <p>
                         {additionalSurveyState.userInfo.isInsured
                             ? 'YES'
@@ -123,21 +123,21 @@ const PatientInfo = ({ additionalSurveyState }: PatentInfoProps) => {
                 {additionalSurveyState.userInfo.isInsured && (
                     <>
                         <li>
-                            <label>Insurance company</label>
+                            <label>Insurance Company</label>
                             <p>
                                 {additionalSurveyState.userInfo.insuranceInfo
                                     .insuranceCompanyName || ''}
                             </p>
                         </li>
                         <li>
-                            <label>Insurance company Phone number</label>
+                            <label>Insurance Company Phone</label>
                             <p>
                                 {additionalSurveyState?.userInfo?.insuranceInfo
                                     ?.insuranceCompanyPhoneNumber || '-'}
                             </p>
                         </li>
                         <li>
-                            <label>Policy holders name</label>
+                            <label>Policy Holder&apos;s name</label>
                             <p>
                                 {additionalSurveyState.userInfo.insuranceInfo
                                     .policyHolderName || ''}
@@ -145,7 +145,7 @@ const PatientInfo = ({ additionalSurveyState }: PatentInfoProps) => {
                         </li>
                         <li>
                             <label>
-                                Policy holders relationship to patient
+                                Policy Holder&apos;s Relationship to Patient
                             </label>
                             <p>
                                 {additionalSurveyState.userInfo.insuranceInfo
@@ -153,7 +153,7 @@ const PatientInfo = ({ additionalSurveyState }: PatentInfoProps) => {
                             </p>
                         </li>
                         <li>
-                            <label>Policy holders DOB</label>
+                            <label>Policy Holder&apos;s DOB</label>
                             <p>
                                 {additionalSurveyState.userInfo.insuranceInfo
                                     .policyHolderDOB || ''}
@@ -161,7 +161,7 @@ const PatientInfo = ({ additionalSurveyState }: PatentInfoProps) => {
                         </li>
 
                         <li>
-                            <label>Is Policy holder Employed</label>
+                            <label>Policy Holder Employed</label>
                             <p>
                                 {additionalSurveyState.userInfo.insuranceInfo
                                     .policyHolderEmployed
@@ -173,7 +173,7 @@ const PatientInfo = ({ additionalSurveyState }: PatentInfoProps) => {
                         {additionalSurveyState.userInfo.insuranceInfo
                             .policyHolderEmployed && (
                             <li>
-                                <label>Policy holders employer</label>
+                                <label>Policy Holder&apos;s Employer</label>
                                 <p>
                                     {additionalSurveyState.userInfo
                                         .insuranceInfo.policyHolderEmployer ||
@@ -183,14 +183,14 @@ const PatientInfo = ({ additionalSurveyState }: PatentInfoProps) => {
                         )}
 
                         <li>
-                            <label>Policy holders SSN</label>
+                            <label>Policy Holder&apos;s SSN#</label>
                             <p>
                                 {additionalSurveyState.userInfo.insuranceInfo
                                     .policyHolderSSN || '-'}
                             </p>
                         </li>
                         <li>
-                            <label>Policy holders ID</label>
+                            <label>Policy Holder&apos;s ID</label>
                             <p>
                                 {additionalSurveyState.userInfo.insuranceInfo
                                     .policyHolderID || ''}
