@@ -5,7 +5,9 @@ export interface DropdownOption {
 
 export type OptionMapping = { [key: string]: DropdownOption };
 
-export type DiagnosesOptions = { [key: string]: { 'label': string, 'items'?: DiagnosesOptions } }
+export type DiagnosesOptionMapping = {
+    [key: string]: { label: string; items?: DiagnosesOptionMapping };
+};
 
 /**
  * Returns an OptionMapping already formatted for `OptimizedDropdown.tsx`. A
@@ -35,7 +37,9 @@ export const getOptionMapping = (
     }, {} as OptionMapping);
 };
 
-export const getDiagnosesOptionMapping = (options: DiagnosesOptions): OptionMapping => {
+export const getDiagnosesOptionMapping = (
+    options: DiagnosesOptionMapping
+): OptionMapping => {
     return Object.keys(options).reduce((mapping, key) => {
         const value = `${key}`; /* ${options[key]['label']} */
         mapping[value] = {

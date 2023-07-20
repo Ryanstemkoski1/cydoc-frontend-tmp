@@ -10,7 +10,11 @@ import diseases from 'constants/diagnoses.json';
 import medications from 'constants/medications';
 import procedures from 'constants/procedures';
 import registrationConstants from 'constants/registration-constants.json';
-import { DiagnosesOptions, getOptionMapping, OptionMapping } from '_processOptions';
+import {
+    DiagnosesOptionMapping,
+    getOptionMapping,
+    OptionMapping,
+} from '_processOptions';
 import {
     PlanAction,
     ConditionCategoryKey,
@@ -20,7 +24,12 @@ import {
 import { Grid, Header, Accordion } from 'semantic-ui-react';
 import _ from 'lodash';
 
-type Options = { main: OptionMapping | DiagnosesOptions; when?: OptionMapping };
+type Options = { main: OptionMapping; when?: OptionMapping };
+
+type DiagnosesOptions = {
+    main: DiagnosesOptionMapping;
+    when?: DiagnosesOptionMapping;
+};
 
 interface CategoryFormStateProps<T> {
     categoryData: T[];
@@ -37,7 +46,7 @@ export type CategoryFormProps<T> = CategoryFormOwnProps &
 
 export type CategoryFormComponent<T> = (
     row: T,
-    options?: Options,
+    options?: Options | DiagnosesOptions,
     onAddItem?: HandleOnAddItem
 ) => JSX.Element;
 
@@ -58,8 +67,10 @@ interface BaseCategoryFormProps<T> {
 
 const specialties = getOptionMapping(registrationConstants.specialties);
 
-const TYPE_TO_OPTION: { [key in ConditionCategoryKey]: OptionMapping | DiagnosesOptions } = {
-    differentialDiagnoses: diseases as DiagnosesOptions,
+const TYPE_TO_OPTION: {
+    [key in ConditionCategoryKey]: OptionMapping | DiagnosesOptionMapping;
+} = {
+    differentialDiagnoses: diseases as DiagnosesOptionMapping,
     prescriptions: medications,
     proceduresAndServices: procedures,
     referrals: specialties,
@@ -83,7 +94,7 @@ export const BaseCategoryForm = <T extends { id: string }>(
 
     const [expanded, setExpanded] = useState<boolean>(false);
     const [activeRows, setActiveRows] = useState(new Set());
-    const [options, setOptions] = useState<Options>({
+    const [options, setOptions] = useState<Options | DiagnosesOptions>({
         main: TYPE_TO_OPTION[category] || {},
     });
 
@@ -103,27 +114,15 @@ export const BaseCategoryForm = <T extends { id: string }>(
         }
     }, [categoryData]);
 
-    const onAddItem: HandleOnAddItem = (_e, { placeholder, optiontype, value }) => {
+    const onAddItem: HandleOnAddItem = (_e, { optiontype, value }) => {
         // Add to list of options
-        if (placeholder == 'diagnosis') {
-            setOptions({
-                ...options,
-                'main': {
-                    ...options['main'],
-                    value: {
-                        'label': value,
-                    }
-                }
-            })
-        } else {
-            setOptions({
-                ...options,
-                [optiontype]: {
-                    ...options[optiontype as 'main' | 'when'],
-                    [value]: { value, label: value },
-                },
-            });
-        }
+        setOptions({
+            ...options,
+            [optiontype]: {
+                ...options[optiontype as 'main' | 'when'],
+                [value]: { value, label: value },
+            },
+        });
     };
 
     // Render each entry as an expandable accordion when in mobile view, and as a

@@ -19,10 +19,10 @@ import {
     CategoryFormOwnProps,
     BaseCategoryForm,
 } from './BaseCategoryForm';
-import UpdateDimensions from './UpdateDimensions';
+// import UpdateDimensions from './UpdateDimensions';
 import './DiscussionPlanForms.css';
 import './planSections.css';
-import { DiagnosesOptions } from '_processOptions';
+import { DiagnosesOptionMapping } from '_processOptions';
 
 interface DifferentialDiagnosesDispatchProps {
     addDifferentialDiagnosis: PlanAction;
@@ -37,7 +37,7 @@ const DifferentialDiagnosesForm = (
         DifferentialDiagnosesDispatchProps
 ) => {
     const { mobile, categoryData, formatAction, ...actions } = props;
-    const { width } = UpdateDimensions();
+    // const { width } = UpdateDimensions();
 
     const gridHeaders = () => (
         <Grid.Row>
@@ -46,20 +46,18 @@ const DifferentialDiagnosesForm = (
         </Grid.Row>
     );
 
-    const mainInput: ComponentFunction = (row, options, onAddItem) => (
+    const mainInput: ComponentFunction = (row, options) => (
         <>
             <Dropdown
                 fluid
                 search
                 selection
                 clearable
-                allowAdditions
                 transparent={mobile}
                 value={row.diagnosis}
-                options={options?.main as DiagnosesOptions || {}}
+                options={(options?.main as DiagnosesOptionMapping) || {}}
                 uuid={row.id}
                 onChange={formatAction(actions.updateDifferentialDiagnosis)}
-                onAddItem={onAddItem}
                 optiontype='main'
                 aria-label='Diagnosis-Dropdown'
                 placeholder='diagnosis'

@@ -3,9 +3,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Accordion, Grid, Table } from 'semantic-ui-react';
 import sideEffects from 'constants/sideEffects';
 import drugNames from 'constants/medications';
-import diseases from 'constants/diagnoses';
+import diseases from 'constants/diagnoses.json';
 import AddRowButton from 'components/tools/AddRowButton.js';
-import { OptionMapping } from '_processOptions';
+import { OptionMapping, DiagnosesOptionMapping } from '_processOptions';
 import {
     deleteMedication,
     addMedsPopOption,
@@ -43,7 +43,7 @@ type Props = ReduxProps & OwnProps;
 interface State {
     sideEffectsOptions: OptionMapping;
     medicationOptions: OptionMapping;
-    diseaseOptions: OptionMapping;
+    diseaseOptions: DiagnosesOptionMapping;
     currentYear: number;
     windowWidth: number;
     windowHeight: number;
@@ -64,7 +64,7 @@ export class MedicationsContent extends Component<Props, State> {
             windowHeight: 0,
             sideEffectsOptions: sideEffects,
             medicationOptions: drugNames,
-            diseaseOptions: diseases,
+            diseaseOptions: (diseases as DiagnosesOptionMapping) || {},
             currentYear: new Date(Date.now()).getFullYear(),
             currMeds: Object.keys(this.props.medications).filter(
                 (med) =>

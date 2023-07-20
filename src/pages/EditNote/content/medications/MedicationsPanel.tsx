@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import Dropdown from 'components/tools/OptimizedDropdown';
+import DiagnosesDropdown from 'components/tools/RecursiveDropdown';
 import {
     Accordion,
     Button,
@@ -30,7 +31,7 @@ import { YesNoResponse } from 'constants/enums';
 import { MedicationsItem } from 'redux/reducers/medicationsReducer';
 import ToggleButton from 'components/tools/ToggleButton';
 import { DropdownType } from './MedicationsContent';
-import { OptionMapping } from '_processOptions';
+import { DiagnosesOptionMapping, OptionMapping } from '_processOptions';
 import { MEDICATIONS_PANEL_SCREEN_BP } from '../../../../constants/breakpoints';
 import './Medications.css';
 
@@ -40,7 +41,7 @@ interface OwnProps {
     previewValue?: string;
     sideEffectsOptions: OptionMapping;
     medicationOptions: OptionMapping;
-    diseaseOptions: OptionMapping;
+    diseaseOptions: DiagnosesOptionMapping;
     currentYear: number;
     handleAddition: (optionType: DropdownType, value: string) => void;
     deleteRow: (e: any, index: string) => void;
@@ -413,10 +414,11 @@ class MedicationsPanel extends Component<Props, State> {
                                     : ''
                             }
                         >
-                            <Dropdown
+                            <DiagnosesDropdown
                                 fluid
                                 search
                                 selection
+                                clearable
                                 allowAdditions
                                 icon=''
                                 optiontype='diseaseOptions'
