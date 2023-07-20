@@ -14,6 +14,7 @@ import {
 import { PulsesWidgetItemState } from 'redux/reducers/widgetReducers/pulsesWidgetReducer';
 import { ReflexesWidgetItemState } from 'redux/reducers/widgetReducers/reflexesWidgetReducer';
 import { LeftRight } from 'constants/enums';
+import { currentNoteStore } from 'redux/store';
 
 interface PhysicalExamProps {
     isRich: boolean;
@@ -85,6 +86,29 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
         return comments + '. ';
     };
 
+    calculateAgeInYears = (dateOfBirth: string) => {
+        const dobObj = new Date(dateOfBirth);
+        const timeDiff = Math.abs(Date.now() - dobObj.getTime());
+        const ageInYears = timeDiff / (1000 * 60 * 60 * 24 * 365.25);
+        return ageInYears;
+    };
+
+    isPediatric() {
+        if (
+            currentNoteStore.getState().additionalSurvey.dateOfBirth ===
+                undefined ||
+            currentNoteStore.getState().additionalSurvey.dateOfBirth === null ||
+            currentNoteStore.getState().additionalSurvey.dateOfBirth === ''
+        ) {
+            return +false;
+        }
+
+        const patientAge = this.calculateAgeInYears(
+            currentNoteStore.getState().additionalSurvey.dateOfBirth
+        );
+        return +(patientAge <= 2);
+    }
+
     displayVitals = () => {
         const vitals: string[] = [];
         // const vitalUnits: {
@@ -95,6 +119,8 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
         //     RR: ' bpm',
         //     'Oxygen Saturation': ' PaO₂',
         // };
+
+        const displayH = this.isPediatric() ? 'Length' : 'Height';
 
         if (
             this.props.physicalExam.vitals.systolicBloodPressure !== 0 &&
@@ -143,6 +169,26 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
                                 this.props.physicalExam.vitals
                                     .oxygenSaturation +
                                 ' PaO₂'
+                        );
+                    } else if (vital == 'weight') {
+                        vitals.push(
+                            'Weight: ' +
+                                this.props.physicalExam.vitals.weight +
+                                ' pounds'
+                        );
+                    } else if (vital == 'height') {
+                        vitals.push(
+                            `${displayH}: ${this.props.physicalExam.vitals.height} inches`
+                        );
+                    } else if (
+                        vital == 'headCircumference' &&
+                        this.isPediatric()
+                    ) {
+                        vitals.push(
+                            'Head Circumference: ' +
+                                this.props.physicalExam.vitals
+                                    .headCircumference +
+                                ' inches'
                         );
                     }
                     // vitals.push(
