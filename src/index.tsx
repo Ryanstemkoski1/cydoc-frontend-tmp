@@ -14,8 +14,10 @@ import { loadStripe } from '@stripe/stripe-js';
 import { isLivemode } from './auth/livemode';
 import Routes from 'components/navigation/Routes';
 import { initializeSentry } from 'modules/logging';
+import { InitAmplify } from 'auth/amplify';
 
 initializeSentry();
+InitAmplify();
 
 const container = document.getElementById('root');
 // react's container is never null

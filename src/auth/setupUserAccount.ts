@@ -1,7 +1,7 @@
 import { CognitoUser } from 'amazon-cognito-identity-js';
 import { ApiEditUserBase, ClinicianSignUpData } from 'types/users';
 import { createDbUser } from 'modules/api';
-import { createCognitoUser } from './cognito';
+import { createAmplifyUser } from './amplify';
 
 const setupUserAccount = async (
     cognitoUser: CognitoUser, // null when new users sign up
@@ -23,7 +23,7 @@ const setupUserAccount = async (
         // create user in database & cognito
         const [dbUser, cognitoResult] = await Promise.all([
             createDbUser(newUserInfo),
-            createCognitoUser(newUserInfo, navtoLogin),
+            createAmplifyUser(newUserInfo, navtoLogin),
         ]);
 
         console.log(`user creation results`, { dbUser, cognitoResult });

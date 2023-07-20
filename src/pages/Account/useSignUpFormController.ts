@@ -9,7 +9,7 @@ import { createDbUser } from 'modules/api';
 import { useHistory } from 'react-router-dom';
 import { breadcrumb, log } from 'modules/logging';
 import { CreateUserResponse } from 'types/api';
-import { createCognitoUser } from 'auth/cognito';
+import { createAmplifyUser } from 'auth/amplify';
 
 const validationSchema = Yup.object<SignUpFormData>({
     isTermsChecked: Yup.bool()
@@ -106,27 +106,26 @@ export const useSignUpFormController = (
         enableReinitialize: true,
         // validateOnChange: true,
         initialValues,
-        onSubmit: async (formUserData, { setErrors, setSubmitting }) => {
+        onSubmit: async (newUserInfo, { setErrors, setSubmitting }) => {
             const navtoLogin = () => {
                 setSubmitting(false);
                 history.push('/Login');
             };
             const formattedPhoneNumber = formatPhoneNumber(
-                formUserData.phoneNumber
+                newUserInfo.phoneNumber
             );
-            formUserData.phoneNumber = formattedPhoneNumber;
-            formUserData.confirmPhoneNumber = formattedPhoneNumber;
-            breadcrumb(`submitting new user`, 'sign up', formUserData);
+            newUserInfo.phoneNumber = formattedPhoneNumber;
+            newUserInfo.confirmPhoneNumber = formattedPhoneNumber;
+            breadcrumb(`submitting new user`, 'sign up', newUserInfo);
 
             try {
-                const cognitoUser = await createCognitoUser(
-                    formUserData,
+                const cognitoUser = await createAmplifyUser(
+                    newUserInfo,
                     navtoLogin
                 );
 
                 // only proceed if cognito user was created successfully
-                const result =
-                    cognitoUser && (await createDbUser(formUserData));
+                const result = cognitoUser && (await createDbUser(newUserInfo));
 
                 if (result?.errorMessage?.length) {
                     // Expected error, display to GUI
@@ -138,13 +137,13 @@ export const useSignUpFormController = (
                     // Unexpected error occurred
                     breadcrumb(`Invalid user creation response`, 'sign up', {
                         result,
-                        formUserData,
+                        newUserInfo,
                     });
                     throw new Error(`Invalid user creation response`);
                 }
             } catch (e) {
                 log(`Invalid user creation response`, {
-                    formUserData,
+                    newUserInfo,
                 });
                 setErrors({
                     signUpError:
