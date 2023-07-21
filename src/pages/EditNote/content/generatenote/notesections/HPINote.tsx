@@ -281,6 +281,10 @@ export const extractNode = (
             updatedNeg = Object.keys(clickBoxesRes).filter(
                 (key) => !clickBoxesRes[key] && negAnswer
             );
+
+            // If zero YESs are selected but any NOs are selected --> all selections are NO
+            const allNo = updatedRes.length === 0 && updatedNeg.length > 0;
+
             answer = joinLists(
                 updatedRes.length > 0 ? (updatedRes as string[]) : [],
                 'and'
@@ -289,6 +293,12 @@ export const extractNode = (
                 updatedNeg.length > 0 ? (updatedNeg as string[]) : [],
                 'or'
             );
+
+            // All no --> custom answer selection to indicate that all selections were no
+            if (allNo) {
+                answer = 'all no';
+            }
+
             break;
 
         case ResponseTypes.FH_POP:
@@ -395,14 +405,20 @@ export const extractNode = (
             const posArr: string[] = [];
             const negArr: string[] = [];
             (response as string[]).map((key) => {
-                const { hasHadSurgery, procedure } = state.surgicalHistory[key];
-                if (hasHadSurgery == YesNoResponse.Yes && procedure.length > 0)
-                    posArr.push(procedure);
-                else if (
-                    hasHadSurgery == YesNoResponse.No &&
-                    procedure.length > 0
-                )
-                    negArr.push(procedure);
+                if (key in state.surgicalHistory) {
+                    const { hasHadSurgery, procedure } =
+                        state.surgicalHistory[key];
+                    if (
+                        hasHadSurgery == YesNoResponse.Yes &&
+                        procedure.length > 0
+                    )
+                        posArr.push(procedure);
+                    else if (
+                        hasHadSurgery == YesNoResponse.No &&
+                        procedure.length > 0
+                    )
+                        negArr.push(procedure);
+                }
             });
             answer = joinLists(posArr, 'and');
             negRes = joinLists(negArr, 'or');

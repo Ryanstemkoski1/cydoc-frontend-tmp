@@ -103,7 +103,9 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                   ).length
                 : 0,
             q2_count = isChiefComplaintsResponse(res2.response)
-                ? Object.keys(res2.response).length
+                ? Object.keys(res2.response).filter((k) =>
+                      Object.keys(chiefComplaints).includes(k)
+                  ).length
                 : 0;
         return [q1_count, q2_count];
     }
@@ -206,10 +208,10 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             this.props.additionalSurvey.initialSurveyState === 1
         ) {
             this.props.updateAdditionalSurveyDetails(
-                this.state.tempLegalFirstName,
-                this.state.tempLegalLastName,
-                this.state.tempSocialSecurityNumber,
-                this.state.tempDateOfBirth,
+                this.props.additionalSurvey.legalFirstName,
+                this.props.additionalSurvey.legalLastName,
+                this.props.additionalSurvey.socialSecurityNumber,
+                this.props.additionalSurvey.dateOfBirth,
                 2
             );
             this.setState({ error: false });
@@ -307,6 +309,13 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             currEntry = userSurveyState.nodes[id],
             { bodySystems, parentNodes } = this.props.hpiHeaders;
         // map through all complaints on the HPI and create search resuls
+        const node6 = Object.keys(
+            userSurveyState?.nodes['6']?.response || {}
+        ).map((complaint) =>
+            parentNodes[complaint]?.patientView !== 'HIDDEN'
+                ? parentNodes[complaint]?.patientView
+                : complaint
+        );
         const getRes = () => {
             const filterResults: object[] = [];
             Object.entries(bodySystems).forEach((grouping) => {
@@ -335,7 +344,9 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                                 initialSurveySearch(id, complaint);
                             },
                         };
-                        filterResults.push(temp);
+                        if (!node6.includes(title)) {
+                            filterResults.push(temp);
+                        }
                     }
                 });
             });
@@ -413,24 +424,6 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
         }
     };
 
-    isAtLeaseOneInputYesOnPage() {
-        const selected =
-            this.props.userSurveyState.nodes['2'].response ===
-                YesNoResponse.Yes ||
-            this.props.userSurveyState.nodes['3'].response ===
-                YesNoResponse.Yes ||
-            this.props.userSurveyState.nodes['4'].response ===
-                YesNoResponse.Yes;
-        if (
-            this.state.activeItem == 0 &&
-            selected &&
-            this.props.userSurveyState.nodes['8'].response
-        ) {
-            this.setState({ error: false });
-        }
-        return selected;
-    }
-
     render() {
         const { activeItem } = this.state,
             { userSurveyState } = this.props,
@@ -460,7 +453,13 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             Object.keys(userSurveyState.graph).length &&
             Object.keys(userSurveyState.nodes).length &&
             Object.keys(userSurveyState.order).length;
-
+        const selected =
+            this.props?.userSurveyState?.nodes['2']?.response ===
+                YesNoResponse.Yes ||
+            this.props?.userSurveyState?.nodes['3']?.response ===
+                YesNoResponse.Yes ||
+            this.props?.userSurveyState?.nodes['4']?.response ===
+                YesNoResponse.Yes;
         initialSurvey =
             this.props.additionalSurvey.initialSurveyState == 0
                 ? [
@@ -489,14 +488,16 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             <div>
                 <Container className='active-tab-container'>
                     {this.state.error ||
-                    (isLoaded && this.counter().reduce((a, v) => a + v) > 3) ? (
+                    (isLoaded &&
+                        this.state.activeItem == 1 &&
+                        this.counter().reduce((a, v) => a + v) > 3) ? (
                         <Message negative>
                             <Message.Header>
                                 {this.state.activeItem == 0
                                     ? this.props.additionalSurvey
                                           .initialSurveyState === 0
                                         ? this.state.message
-                                        : this.isAtLeaseOneInputYesOnPage()
+                                        : selected
                                         ? 'Please confirm the date of your appointment.'
                                         : 'Please answer Yes to at least one question to proceed.'
                                     : 'The maximum of 3 has been reached. Please un-select an existing option before adding a new one.'}

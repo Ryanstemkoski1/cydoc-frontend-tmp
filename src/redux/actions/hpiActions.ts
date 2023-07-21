@@ -267,6 +267,27 @@ export function handleTimeInputChange(
     };
 }
 
+export interface HandleYearInputChangeAction {
+    type: HPI_ACTION.HANDLE_YEAR_INPUT_CHANGE;
+    payload: {
+        medId: string;
+        input: NumberInput;
+    };
+}
+
+export function handleYearInputChange(
+    medId: string,
+    input: NumberInput
+): HandleYearInputChangeAction {
+    return {
+        type: HPI_ACTION.HANDLE_YEAR_INPUT_CHANGE,
+        payload: {
+            medId,
+            input,
+        },
+    };
+}
+
 export interface HandleTimeOptionChangeAction {
     type: HPI_ACTION.HANDLE_TIME_OPTION_CHANGE;
     payload: {
@@ -469,6 +490,7 @@ export type HpiActionTypes =
     | AddListInputAction
     | HandleNumericInputChangeAction
     | HandleTimeInputChangeAction
+    | HandleYearInputChangeAction
     | HandleTimeOptionChangeAction
     | YesNoToggleOptionAction
     | ScaleHandleValueAction

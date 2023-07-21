@@ -1,7 +1,5 @@
 import React from 'react';
 import { Input, Icon } from 'semantic-ui-react';
-import { adjustValue } from 'pages/EditNote/content/medicalhistory/util';
-import { medicalMapping } from 'constants/word-mappings';
 import { connect } from 'react-redux';
 import { updateConditionName } from 'redux/actions/medicalHistoryActions';
 import { updateCondition } from 'redux/actions/familyHistoryActions';

@@ -35,6 +35,7 @@ import {
     isLabTestDictionary,
     isSelectOneResponse,
 } from 'redux/reducers/hpiReducer';
+import YearInput from './responseComponents/YearInput';
 
 interface CreateResponseProps {
     node: string;
@@ -220,6 +221,9 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             case ResponseTypes.NUMBER:
                 return <HandleNumericInput key={node} node={node} />;
 
+            case ResponseTypes.YEAR:
+                return <YearInput key={node} node={node} />;
+
             case ResponseTypes.BODYLOCATION:
                 return <BodyLocation key={node} node={node} />;
             case ResponseTypes.SCALE1TO10:
@@ -252,6 +256,18 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 );
 
             case ResponseTypes.PMH_POP:
+                return (
+                    <MedicalHistoryContent
+                        key={node}
+                        isPreview={false}
+                        responseChoice={choices}
+                        responseType={responseType}
+                        mobile={collapseTabs}
+                        currentYear={-1}
+                        node={node}
+                        hide={false}
+                    />
+                );
             case ResponseTypes.PMH_BLANK:
                 return (
                     <MedicalHistoryContent
@@ -271,10 +287,10 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     <SurgicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={choices}
                         responseType={responseType}
                         mobile={collapseTabs}
                         node={node}
+                        hide={true}
                     />
                 );
             case ResponseTypes.LABORATORY_TEST:

@@ -44,20 +44,20 @@ const MiscBox = (props: Props) => {
             {!patientView && !mobile && (
                 <Accordion
                     className={
-                        activeIndex === 0
+                        activeIndex !== 0
                             ? 'hpi-text-drop'
                             : 'hpi-text-drop-folded'
                     }
                 >
                     <Accordion.Title
-                        active={activeIndex === 0}
+                        active={activeIndex !== 0}
                         index={0}
                         onClick={miscNotesClick}
                     >
                         <Icon name='dropdown' />
                         Misc Notes: &nbsp;{Object.keys(chiefComplaints)[step]}
                     </Accordion.Title>
-                    <Accordion.Content active={activeIndex === 0}>
+                    <Accordion.Content active={activeIndex !== 0}>
                         <Form>
                             <TextArea
                                 className='misc-box'
