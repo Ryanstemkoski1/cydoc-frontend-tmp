@@ -39,7 +39,7 @@ const PrescriptionsForm = (
     props: CategoryFormProps<PlanPrescriptionFlat> & PrescriptionsDispatchProps
 ) => {
     const { mobile, categoryData, formatAction, ...actions } = props;
-    const { width } = UpdateDimensions();
+    UpdateDimensions();
 
     const gridHeaders = () => (
         <Grid.Row>

@@ -41,6 +41,7 @@ class AllergiesTableBodyRow extends Component<Props> {
         const {
             incitingAgent,
             reaction,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             comments /* NOTE: if you remove this field, "comments" verify that corresponding tests for this file aren't failing  */,
         } = this.props.allergiesItem;
 

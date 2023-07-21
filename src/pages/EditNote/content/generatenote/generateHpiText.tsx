@@ -108,7 +108,11 @@ export const fillAnswers = (hpi: HPI): string => {
         fillSentence = fullClean(fillSentence);
         if (!answer.length)
             fillSentence = removeSentence(fillSentence, 'answer');
-        else if (fillSentence.match(/answer/)) {
+        else if (answer === 'all no') {
+            fillSentence = fillSentence.substring(
+                fillSentence.indexOf('answer') + 6
+            );
+        } else if (fillSentence.match(/answer/)) {
             fillSentence = fillSentence.replace(/answer/, stringHasI(answer));
         }
         if (!negAnswer.length)

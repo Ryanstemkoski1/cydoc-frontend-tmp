@@ -25,7 +25,6 @@ import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
 import '../hpi/knowledgegraph/src/css/Button.css';
 import { YesNoResponse } from 'constants/enums';
-import { HpiState } from 'redux/reducers/hpiReducer';
 
 interface OwnProps {
     mobile: boolean;

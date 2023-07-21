@@ -43,7 +43,7 @@ const AdditionalSurvey = ({
             additionalDetails.socialSecurityNumber,
             additionalDetails.dateOfBirth
         );
-    }, [additionalDetails]);
+    }, [additionalDetails, setTempAdditionalDetails]);
 
     return (
         <div className='sixteen wide column'>

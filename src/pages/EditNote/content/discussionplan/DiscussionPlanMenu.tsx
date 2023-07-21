@@ -75,7 +75,13 @@ export const DiscussionPlanMenu = (props: DiscussionPlanMenuProps) => {
             setCurrentId(conditions[newest].id);
             setCurrentIndex(newest);
         }
-    }, [prevNumConditions, conditions.length]);
+    }, [
+        prevNumConditions,
+        conditions.length,
+        conditions,
+        setCurrentId,
+        setCurrentIndex,
+    ]);
 
     // Select first tab on initial load
     useEffect(() => {

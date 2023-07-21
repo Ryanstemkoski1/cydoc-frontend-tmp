@@ -24,6 +24,7 @@ class HandleNumericInput extends React.Component<Props> {
                 key={question}
                 id={'numeric-input'}
                 type={'number'}
+                pattern={'[0-9]*'} // for numeric keypad on iOS
                 value={typeof value == 'number' ? value : undefined}
                 min={0}
                 onChange={(_e, data) =>
