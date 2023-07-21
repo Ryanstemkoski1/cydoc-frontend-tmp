@@ -356,7 +356,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                         />
                         Patient Information
                     </h3>
-                    
+
                     {generateNoteButtons}
                 </Segment>
             </div>

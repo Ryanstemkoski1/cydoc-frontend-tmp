@@ -562,67 +562,87 @@ const HPINote = (state: HPINoteProps) => {
 
                     // Return as bullet points if bulletNoteView is true, else return as paragraphs
                     return bulletNoteView
-    ? [
-          ...acc,
-          <ul className="no-bullets" key={i}>
-              {i === 0 ? (
-                  <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
-              ) : (
-                  <li>
-                      <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
-                  </li>
-              )}
-              {
-    processedText
-        .split('. ')
-        .map(
-            (sentence, index) =>
-                sentence && (
-                    <li key={index}>
-                        {capitalizeFirstLetter(sentence.trim())}{sentence.trim().endsWith('.') ? '' : '.'}
-                    </li>
-                )
-        )
-}
-{   
-    text.miscNote &&
-        text.miscNote
-            .split('. ')
-            .map(
-                (sentence, index) =>
-                    sentence && (
-                        <li key={index}>
-                            {capitalizeFirstLetter(sentence.trim())}{sentence.trim().endsWith('.') ? '' : '.'}
-                        </li>
-                    )
-            )
-                    }
-          </ul>,
-      ]
-    : [
-          ...acc,
-          <p key={i}>
-              {i === 0 ? (
-                  <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
-              ) : (
-                  <li>
-                      <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
-                  </li>
-              )}
-              <br />
-              {capitalizeFirstLetter(processedText)}
-              {text.miscNote ? (
-                  <>
-                      {' '}
-                      <br />
-                      <br />
-                      {capitalizeFirstLetter(text.miscNote)}
-                  </>
-              ) : (
-                  ''
-              )}
-          </p>,
-      ];
+                        ? [
+                              ...acc,
+                              <ul className='no-bullets' key={i}>
+                                  {i === 0 ? (
+                                      <b>
+                                          {capitalizeFirstLetter(
+                                              text.chiefComplaint
+                                          )}
+                                      </b>
+                                  ) : (
+                                      <li>
+                                          <b>
+                                              {capitalizeFirstLetter(
+                                                  text.chiefComplaint
+                                              )}
+                                          </b>
+                                      </li>
+                                  )}
+                                  {processedText.split('. ').map(
+                                      (sentence, index) =>
+                                          sentence && (
+                                              <li key={index}>
+                                                  {capitalizeFirstLetter(
+                                                      sentence.trim()
+                                                  )}
+                                                  {sentence.trim().endsWith('.')
+                                                      ? ''
+                                                      : '.'}
+                                              </li>
+                                          )
+                                  )}
+                                  {text.miscNote &&
+                                      text.miscNote.split('. ').map(
+                                          (sentence, index) =>
+                                              sentence && (
+                                                  <li key={index}>
+                                                      {capitalizeFirstLetter(
+                                                          sentence.trim()
+                                                      )}
+                                                      {sentence
+                                                          .trim()
+                                                          .endsWith('.')
+                                                          ? ''
+                                                          : '.'}
+                                                  </li>
+                                              )
+                                      )}
+                              </ul>,
+                          ]
+                        : [
+                              ...acc,
+                              <p key={i}>
+                                  {i === 0 ? (
+                                      <b>
+                                          {capitalizeFirstLetter(
+                                              text.chiefComplaint
+                                          )}
+                                      </b>
+                                  ) : (
+                                      <li>
+                                          <b>
+                                              {capitalizeFirstLetter(
+                                                  text.chiefComplaint
+                                              )}
+                                          </b>
+                                      </li>
+                                  )}
+                                  <br />
+                                  {capitalizeFirstLetter(processedText)}
+                                  {text.miscNote ? (
+                                      <>
+                                          {' '}
+                                          <br />
+                                          <br />
+                                          {capitalizeFirstLetter(text.miscNote)}
+                                      </>
+                                  ) : (
+                                      ''
+                                  )}
+                              </p>,
+                          ];
                 }
                 return acc;
             }, [])}
