@@ -83,7 +83,6 @@ const RecursiveDropdown = (props: {
         clearable,
         search,
         value = '',
-        className,
         onChange = () => undefined,
         ...otherProps
     } = nonRecursiveProps;
@@ -158,9 +157,9 @@ const RecursiveDropdown = (props: {
         <>
             <Dropdown
                 classNamePrefix='dropdown'
-                className={`opt-dropdown ${className} ${fluid && 'fluid'} ${
-                    transparent && 'transparent'
-                }`}
+                className={`opt-dropdown ${otherProps.className} ${
+                    fluid && 'fluid'
+                } ${transparent && 'transparent'}`}
                 components={{
                     MenuList,
                     Option: CustomOption,
