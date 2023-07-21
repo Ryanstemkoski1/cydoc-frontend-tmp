@@ -250,6 +250,10 @@ export const abbreviate = (hpiString: string): string => {
     return replaceMappedWords(hpiString, ABBREVIFY);
 };
 
+export function capitalizeFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 // TODO
 const conjugateThirdPerson = (hpiString: string) => hpiString;
 

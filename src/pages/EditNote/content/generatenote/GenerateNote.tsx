@@ -236,7 +236,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
             onClick={() => setIsBulletNoteView(!isBulletNoteView)}
             className={`hpi-ph-button${isBulletNoteView ? '-selected' : ''}`}
         >
-            Bullet Point view
+            Bullet Point HPI
         </Button>
     );
     let generateNoteButtons;
@@ -324,6 +324,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                         />
                         <IdentityForm />
                         {richOrPlainButtons}
+                        {bulletPointToggler}
                     </Form>
                 </Modal.Content>
                 <Modal.Actions>
@@ -355,6 +356,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                         />
                         Patient Information
                     </h3>
+                    
                     {generateNoteButtons}
                 </Segment>
             </div>

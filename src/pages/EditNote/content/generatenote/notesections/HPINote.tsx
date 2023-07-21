@@ -27,6 +27,8 @@ import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
 import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
 import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
 import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
+import { capitalizeFirstLetter } from '../generateHpiText';
+import './HPINote.css';
 
 interface HPINotePropsFromRedux {
     hpi: HpiState;
@@ -560,63 +562,67 @@ const HPINote = (state: HPINoteProps) => {
 
                     // Return as bullet points if bulletNoteView is true, else return as paragraphs
                     return bulletNoteView
-                        ? [
-                              ...acc,
-                              <ul key={i}>
-                                  {i === 0 ? (
-                                      <b>{text.chiefComplaint}</b>
-                                  ) : (
-                                      <li>
-                                          <b>{text.chiefComplaint}</b>
-                                      </li>
-                                  )}
-                                  {processedText
-                                      .split('. ')
-                                      .map(
-                                          (sentence, index) =>
-                                              sentence && (
-                                                  <li key={index}>
-                                                      {sentence.trim()}.
-                                                  </li>
-                                              )
-                                      )}
-                                  {text.miscNote &&
-                                      text.miscNote
-                                          .split('. ')
-                                          .map(
-                                              (sentence, index) =>
-                                                  sentence && (
-                                                      <li key={index}>
-                                                          {sentence.trim()}.
-                                                      </li>
-                                                  )
-                                          )}
-                              </ul>,
-                          ]
-                        : [
-                              ...acc,
-                              <p key={i}>
-                                  {i === 0 ? (
-                                      <b>{text.chiefComplaint}</b>
-                                  ) : (
-                                      <li>
-                                          <b>{text.chiefComplaint}</b>
-                                      </li>
-                                  )}
-                                  <br />
-                                  {processedText}
-                                  {text.miscNote ? (
-                                      <>
-                                          {' '}
-                                          <br />
-                                          <br />
-                                          {text.miscNote}
-                                      </>
-                                  ) : (
-                                      ''
-                                  )}
-                              </p>,
-                          ];
+    ? [
+          ...acc,
+          <ul className="no-bullets" key={i}>
+              {i === 0 ? (
+                  <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
+              ) : (
+                  <li>
+                      <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
+                  </li>
+              )}
+              {
+    processedText
+        .split('. ')
+        .map(
+            (sentence, index) =>
+                sentence && (
+                    <li key={index}>
+                        {capitalizeFirstLetter(sentence.trim())}{sentence.trim().endsWith('.') ? '' : '.'}
+                    </li>
+                )
+        )
+}
+{   
+    text.miscNote &&
+        text.miscNote
+            .split('. ')
+            .map(
+                (sentence, index) =>
+                    sentence && (
+                        <li key={index}>
+                            {capitalizeFirstLetter(sentence.trim())}{sentence.trim().endsWith('.') ? '' : '.'}
+                        </li>
+                    )
+            )
+                    }
+          </ul>,
+      ]
+    : [
+          ...acc,
+          <p key={i}>
+              {i === 0 ? (
+                  <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
+              ) : (
+                  <li>
+                      <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
+                  </li>
+              )}
+              <br />
+              {capitalizeFirstLetter(processedText)}
+              {text.miscNote ? (
+                  <>
+                      {' '}
+                      <br />
+                      <br />
+                      {capitalizeFirstLetter(text.miscNote)}
+                  </>
+              ) : (
+                  ''
+              )}
+          </p>,
+      ];
                 }
                 return acc;
             }, [])}
