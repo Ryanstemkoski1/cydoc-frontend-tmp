@@ -338,7 +338,7 @@ class NotePage extends Component {
                     />
                 );
                 break;
-            case 'Generated Note':
+            case 'Intake and Note':
                 tabToDisplay = patientView ? (
                     defaultTab
                 ) : (
