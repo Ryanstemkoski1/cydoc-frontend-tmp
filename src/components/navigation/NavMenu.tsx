@@ -30,7 +30,7 @@ import constants from '../../constants/constants.json';
 import './NavMenu.css';
 
 interface ConnectedNavMenuProps {
-    className: string;
+    className?: string;
     // For whether to stack another menu above/below
     attached: 'top' | 'bottom';
     // Whether to display or hide the note name

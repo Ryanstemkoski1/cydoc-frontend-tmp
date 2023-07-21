@@ -4,8 +4,6 @@
     "private": true,
     "license": "UNLICENSED",
     "dependencies": {
-        "@aws-sdk/client-cognito-identity": "^3.5.0",
-        "@aws-sdk/client-cognito-identity-provider": "^3.5.0",
         "@aws-sdk/credential-provider-cognito-identity": "^3.5.0",
         "@emotion/react": "^11.11.0",
         "@emotion/styled": "^11.11.0",
@@ -16,7 +14,7 @@
         "@stripe/stripe-js": "^1.53.0",
         "@types/react-input-mask": "^3.0.2",
         "@types/react-numeric-input": "^2.2.3",
-        "amazon-cognito-identity-js": "^4.5.7",
+        "amazon-cognito-identity-js": "^6.3.1",
         "aws-amplify": "^5.3.4",
         "axios": "^0.19.2",
         "colors": "^1.4.0",
