@@ -13,13 +13,13 @@ import { Box } from '@mui/system';
 import { useHistory } from 'react-router-dom';
 
 const Login = () => {
-    const { isSignedIn, mfaCompleted } = useAuth();
+    const { loginCorrect, isSignedIn } = useAuth();
     const history = useHistory();
 
     const [isFirstLogin, setIsFirstLogin] = useState(false);
 
     useEffect(() => {
-        isSignedIn && mfaCompleted && history.push('/');
+        loginCorrect && isSignedIn && history.push('/');
     });
 
     if (isFirstLogin) {
@@ -50,7 +50,7 @@ const Login = () => {
                         elevation={6}
                         sx={{ width: '30rem', padding: '2.5rem' }}
                     >
-                        {isSignedIn ? <MfaVerificationForm /> : <LoginForm />}
+                        {loginCorrect ? <MfaVerificationForm /> : <LoginForm />}
                     </Paper>
                 </Box>
             </>

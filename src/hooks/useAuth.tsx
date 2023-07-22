@@ -51,8 +51,8 @@ interface AmplifyError {
 export interface AuthContextValues {
     user: CognitoUser | null;
     loading: boolean;
+    loginCorrect: boolean;
     isSignedIn: boolean;
-    mfaCompleted: boolean;
     signIn: (
         email: string,
         password: string
@@ -87,14 +87,11 @@ export const AuthProvider: React.FC<
     Record<string, unknown> & PropsWithChildren<object>
 > = ({ children }) => {
     const [user, setUser] = useState<CognitoUser | null>(null);
-    const [isSignedIn, setIsSignedIn] = useState(false);
+    const [loginCorrect, setLoginCorrect] = useState(false);
     const [loading, setLoading] = useState(false);
     const history = useHistory();
 
-    const [mfaCompleted, setMfaCompleted] = useState(false);
-    // TODO: parse ^^status^^ from cognitoUser when it changes (see below)
-    // Here's an async method: https://github.com/aws-amplify/amplify-js/issues/3640#issuecomment-1198905668
-    // const mfaCompleted = useMemo(() => !!user?.challengeName?.length, [user]); // This key is not the correct way to determine this
+    const [isSignedIn, setIsSignedIn] = useState(false);
 
     useEffect(() => {
         const restoreUserSession = async () => {
@@ -110,6 +107,8 @@ export const AuthProvider: React.FC<
                     )) as CognitoUser;
 
                     setUser(user);
+                    setLoginCorrect(true);
+                    setIsSignedIn(true);
                 }
             } catch (e) {
                 const error = e as unknown as AmplifyError;
@@ -142,8 +141,8 @@ export const AuthProvider: React.FC<
 
                 // all user into app when first signing up
                 setUser(user);
+                setLoginCorrect(true);
                 setIsSignedIn(true);
-                setMfaCompleted(true);
 
                 return { user };
             } catch (e) {
@@ -170,14 +169,14 @@ export const AuthProvider: React.FC<
         async (email: string, password: string) => {
             try {
                 setLoading(true);
-                setMfaCompleted(false);
+                setIsSignedIn(false);
                 const cognitoUser = await Auth.signIn(email, password);
 
                 console.log(`User signed in`, {
                     cognitoUser,
                 });
 
-                setIsSignedIn(true);
+                setLoginCorrect(true);
                 setUser(cognitoUser);
 
                 // TODO: parse first login from response
@@ -214,8 +213,8 @@ export const AuthProvider: React.FC<
         () => () =>
             Promise.all([
                 Auth.signOut(),
+                setLoginCorrect(false),
                 setIsSignedIn(false),
-                setMfaCompleted(false),
                 setUser(null),
             ]),
         []
@@ -233,7 +232,7 @@ export const AuthProvider: React.FC<
 
                 console.log(`confirmed user`, confirmedUser);
 
-                setMfaCompleted(!!confirmedUser); // MFA has been completed
+                setIsSignedIn(!!confirmedUser); // MFA has been completed
                 setUser(confirmedUser);
                 history.push('/');
 
@@ -269,8 +268,8 @@ export const AuthProvider: React.FC<
         return {
             user,
             loading,
+            loginCorrect,
             isSignedIn,
-            mfaCompleted,
             signIn,
             signUp,
             signOut,
@@ -279,8 +278,8 @@ export const AuthProvider: React.FC<
     }, [
         user,
         loading,
+        loginCorrect,
         isSignedIn,
-        mfaCompleted,
         signIn,
         signUp,
         signOut,

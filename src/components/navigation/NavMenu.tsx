@@ -1,13 +1,12 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dropdown, Menu, Header, Image, Icon, Button } from 'semantic-ui-react';
 import { Link, useHistory } from 'react-router-dom';
 import {
     HIDE_CYDOC_IN_NAV_MENU_BP,
     LOGGEDIN_NAV_MENU_MOBILE_BP,
 } from 'constants/breakpoints.js';
-import AuthContext from '../../contexts/AuthContext';
 import Logo from '../../assets/cydoc-logo.svg';
-import NoteNameMenuItem, { Context } from './NoteNameMenuItem';
+import NoteNameMenuItem from './NoteNameMenuItem';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 import './NavMenu.css';
 import {
@@ -28,6 +27,7 @@ import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import constants from '../../constants/constants.json';
 import './NavMenu.css';
+import { useAuth } from 'hooks/useAuth';
 
 interface ConnectedNavMenuProps {
     className?: string;
@@ -49,9 +49,8 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         updateActiveItem,
     } = props;
 
-    const context = useContext(AuthContext) as Context;
+    const { isSignedIn, signOut, user } = useAuth();
     const [windowWidth, setWindowWidth] = useState(0);
-    const [signUpActive, setSignUpActive] = useState(false);
 
     // Set event listeners for window resize to determine mobile vs web view
     useEffect(() => {
@@ -111,7 +110,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             key: 'logout',
             text: 'Log Out',
             icon: 'sign out',
-            onClick: context.logOut,
+            onClick: signOut,
             selected: false,
             active: false,
         },
@@ -203,8 +202,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                     options={dropdownOptions}
                     trigger={
                         <span>
-                            <Icon name='user outline' />{' '}
-                            {context.user?.firstName}
+                            <Icon name='user outline' /> {'user?.firstName'}
                         </span>
                     }
                 />
@@ -241,7 +239,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             }`}
             attached={attached}
         >
-            {context.token ? (
+            {isSignedIn ? (
                 <Menu.Item className='logo-menu' onClick={navigateToHome}>
                     <Image
                         src={Logo}
@@ -291,7 +289,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             {displayNoteName && doctorView && (
                 <NoteNameMenuItem mobile={collapseLoggedInNav} />
             )}
-            {context.token && history.location.pathname.length > 1 ? (
+            {isSignedIn && history.location.pathname.length > 1 ? (
                 collapseLoggedInNav ? (
                     <Button.Group>
                         <Button
@@ -350,7 +348,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             {/* Navigation links */}
             <Menu.Menu position='right'>
                 {/* Menu will have different options depending on whether the user is logged in or not */}
-                {context.token ? loggedInMenuItems : defaultMenuItems}
+                {isSignedIn ? loggedInMenuItems : defaultMenuItems}
             </Menu.Menu>
         </Menu>
     );
