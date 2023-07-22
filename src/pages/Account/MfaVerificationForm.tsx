@@ -23,7 +23,7 @@ interface VerifyCodeSchema {
 }
 
 export default function MfaVerificationForm() {
-    const { verifyMfaCode, loading, signOut } = useAuth();
+    const { verifyMfaCode, authLoading, signOut } = useAuth();
 
     const onSubmit = async (
         { code }: VerifyCodeSchema,
@@ -83,7 +83,7 @@ export default function MfaVerificationForm() {
                     <Button
                         color='teal'
                         disabled={!values?.code?.length}
-                        loading={loading}
+                        loading={authLoading}
                         size='small'
                         type='submit'
                         content='Submit'

@@ -59,7 +59,7 @@ interface CognitoUser extends PartialCognitoUser {
 }
 export interface AuthContextValues {
     cognitoUser: CognitoUser | null;
-    loading: boolean;
+    authLoading: boolean;
     loginCorrect: boolean;
     isSignedIn: boolean;
     signIn: (
@@ -97,7 +97,7 @@ export const AuthProvider: React.FC<
 > = ({ children }) => {
     const [cognitoUser, setCognitoUser] = useState<CognitoUser | null>(null);
     const [loginCorrect, setLoginCorrect] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [authLoading, setAuthLoading] = useState(true);
     const history = useHistory();
 
     const [isSignedIn, setIsSignedIn] = useState(false);
@@ -134,6 +134,8 @@ export const AuthProvider: React.FC<
             } catch (e) {
                 const error = e as unknown as AmplifyError;
                 log('uncaught Error restoring session:', error);
+            } finally {
+                setAuthLoading(false);
             }
         };
 
@@ -143,7 +145,7 @@ export const AuthProvider: React.FC<
     const signUp: AuthContextValues['signUp'] = useCallback(
         async (email: string, password: string, phoneNumber: string) => {
             try {
-                setLoading(true);
+                setAuthLoading(true);
                 const { user } = await Auth.signUp({
                     username: email,
                     password,
@@ -177,7 +179,7 @@ export const AuthProvider: React.FC<
                     };
                 }
             } finally {
-                setLoading(false);
+                setAuthLoading(false);
             }
             return {
                 errorMessage:
@@ -189,7 +191,7 @@ export const AuthProvider: React.FC<
     const signIn: AuthContextValues['signIn'] = useCallback(
         async (email: string, password: string) => {
             try {
-                setLoading(true);
+                setAuthLoading(true);
                 setIsSignedIn(false);
                 const cognitoUser = await Auth.signIn(email, password);
 
@@ -220,7 +222,7 @@ export const AuthProvider: React.FC<
                     log(`SignIn: ${error?.code || 'unknown err'}`, error);
                 }
             } finally {
-                setLoading(false);
+                setAuthLoading(false);
             }
             return {
                 errorMessage:
@@ -233,7 +235,7 @@ export const AuthProvider: React.FC<
     const verifyMfaCode = useCallback(
         async (code: string) => {
             try {
-                setLoading(true);
+                setAuthLoading(true);
                 const confirmedUser = await Auth.confirmSignIn(
                     cognitoUser,
                     code,
@@ -264,7 +266,7 @@ export const AuthProvider: React.FC<
                 }
                 log('[verifyMfaCode] error', error);
             } finally {
-                setLoading(false);
+                setAuthLoading(false);
             }
             return {
                 errorMessage:
@@ -277,7 +279,7 @@ export const AuthProvider: React.FC<
     const contextValue: AuthContextValues = useMemo(() => {
         return {
             cognitoUser,
-            loading,
+            authLoading,
             loginCorrect,
             isSignedIn,
             signIn,
@@ -287,7 +289,7 @@ export const AuthProvider: React.FC<
         };
     }, [
         cognitoUser,
-        loading,
+        authLoading,
         loginCorrect,
         isSignedIn,
         signIn,

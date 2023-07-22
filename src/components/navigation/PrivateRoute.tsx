@@ -1,8 +1,11 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { useAuth } from 'hooks/useAuth';
 
-export const PrivateRoute = ({ component: Component, ...rest }) => {
+interface Props extends RouteProps {
+    component: any;
+}
+export const PrivateRoute = ({ component: Component, ...rest }: Props) => {
     const { isSignedIn } = useAuth();
     return (
         <Route
