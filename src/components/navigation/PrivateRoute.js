@@ -1,14 +1,14 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import AuthContext from '../../contexts/AuthContext';
+import { useAuth } from 'hooks/useAuth';
 
 export const PrivateRoute = ({ component: Component, ...rest }) => {
-    let context = useContext(AuthContext);
+    const { mfaCompleted } = useAuth();
     return (
         <Route
             {...rest}
             render={(props) =>
-                context.token ? (
+                mfaCompleted ? (
                     <Component {...props} />
                 ) : (
                     <Redirect

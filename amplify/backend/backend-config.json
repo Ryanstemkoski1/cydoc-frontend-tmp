@@ -2,7 +2,17 @@
   "auth": {
     "CydocAmplifyAuth": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "CydocAmplifyAuthPreSignup",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
         "mfaConfiguration": "ON",
         "mfaTypes": [
@@ -25,6 +35,31 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "CydocAmplifyAuthPreSignup": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_CydocAmplifyAuthPreSignup_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "CydocAmplifyAuthPreSignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_CydocAmplifyAuthPreSignup_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "CydocAmplifyAuthPreSignup"
+        }
+      ]
     }
   }
 }

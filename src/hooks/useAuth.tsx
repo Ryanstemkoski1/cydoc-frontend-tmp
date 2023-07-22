@@ -9,22 +9,41 @@ import React, {
 } from 'react';
 import { Auth, Amplify } from 'aws-amplify';
 import invariant from 'tiny-invariant';
-import { COGNITO_CLIENT_ID, COGNITO_POOL_ID } from 'modules/environment';
+import {
+    COGNITO_CLIENT_ID,
+    COGNITO_POOL_ID,
+    REGION,
+} from 'modules/environment';
 import { log } from 'modules/logging';
 import { CognitoUser } from 'amazon-cognito-identity-js';
+import { useHistory } from 'react-router-dom';
 
-export const InitAmplify = () =>
-    Amplify.configure({
-        Auth: {
-            userPoolWebClientId: COGNITO_CLIENT_ID,
-            userPoolId: COGNITO_POOL_ID,
-        },
-    });
+// Enable these lines to get more amplify debug info:
+// window.LOG_LEVEL = 'DEBUG';
+// Amplify.Logger.LOG_LEVEL = 'DEBUG';
+
+Amplify.configure({
+    Auth: {
+        userPoolRegion: REGION,
+        userPoolWebClientId: COGNITO_CLIENT_ID,
+        userPoolId: COGNITO_POOL_ID,
+    },
+});
 
 const USER_EXISTS = 'UsernameExistsException';
-type AmplifyErrorCode = typeof USER_EXISTS | 'some other code';
+const NOT_FOUND = 'UserNotFoundException';
+const NOT_AUTHORIZED = 'NotAuthorizedException';
+const CODE_MISMATCH = 'CodeMismatchException';
+
+type AmplifyErrorCode =
+    | typeof USER_EXISTS
+    | typeof NOT_FOUND
+    | typeof NOT_AUTHORIZED
+    | typeof CODE_MISMATCH
+    | 'some other code';
+
 interface AmplifyError {
-    name: 'UsernameExistsException';
+    name: AmplifyErrorCode;
     code: AmplifyErrorCode;
 }
 
@@ -33,6 +52,7 @@ export interface AuthContextValues {
     user: CognitoUser | null;
     loading: boolean;
     isSignedIn: boolean;
+    mfaCompleted: boolean;
     signIn: (
         email: string,
         password: string
@@ -40,7 +60,7 @@ export interface AuthContextValues {
     signUp: (
         email: string,
         password: string,
-        navtoLogin: () => void
+        phoneNumber: string
     ) => Promise<{ errorMessage?: string; user?: CognitoUser }>;
     verifyMfaCode: (
         code: string
@@ -69,8 +89,12 @@ export const AuthProvider: React.FC<
     const [user, setUser] = useState<CognitoUser | null>(null);
     const [isSignedIn, setIsSignedIn] = useState(false);
     const [loading, setLoading] = useState(false);
+    const history = useHistory();
 
-    // TODO: parse use info to determine if we need to gather more info
+    const [mfaCompleted, setMfaCompleted] = useState(false);
+    // TODO: parse ^^status^^ from cognitoUser when it changes (see below)
+    // Here's an async method: https://github.com/aws-amplify/amplify-js/issues/3640#issuecomment-1198905668
+    // const mfaCompleted = useMemo(() => !!user?.challengeName?.length, [user]); // This key is not the correct way to determine this
 
     useEffect(() => {
         const restoreUserSession = async () => {
@@ -97,7 +121,7 @@ export const AuthProvider: React.FC<
     }, [user]);
 
     const signUp: AuthContextValues['signUp'] = useCallback(
-        async (email: string, password: string, navtoLogin: () => void) => {
+        async (email: string, password: string, phoneNumber: string) => {
             try {
                 setLoading(true);
                 const { user } = await Auth.signUp({
@@ -105,7 +129,7 @@ export const AuthProvider: React.FC<
                     password,
                     attributes: {
                         email, // optional
-                        // phoneNumber, // optional - E.164 number convention
+                        phone_number: phoneNumber, // optional - E.164 number convention
                         // other custom attributes
                     },
                     autoSignIn: {
@@ -116,13 +140,18 @@ export const AuthProvider: React.FC<
 
                 console.log(`amplify user signed up:`, user);
 
+                // all user into app when first signing up
+                setUser(user);
+                setIsSignedIn(true);
+                setMfaCompleted(true);
+
                 return { user };
             } catch (e) {
                 const error = e as unknown as AmplifyError;
                 log('error signing up:', error);
                 if (error?.code === USER_EXISTS) {
                     alert(`Account already exists, please login`);
-                    navtoLogin();
+                    history.push('/login');
                     return {
                         errorMessage: `Account already exists, please login`,
                     };
@@ -135,46 +164,41 @@ export const AuthProvider: React.FC<
                     'Unknown error occurred, refresh, check your network & login',
             };
         },
-        []
+        [history]
     );
     const signIn: AuthContextValues['signIn'] = useCallback(
         async (email: string, password: string) => {
             try {
                 setLoading(true);
+                setMfaCompleted(false);
+                const cognitoUser = await Auth.signIn(email, password);
 
-                return Auth.signIn(email, password).then(
-                    (cognitoUser: CognitoUser) => {
-                        // Set user data and access token to memory
-                        // const {
-                        //     attributes,
-                        //     signInUserSession: { accessToken },
-                        // } = cognitoUser;
+                console.log(`User signed in`, {
+                    cognitoUser,
+                });
 
-                        console.log(`cognito user type check`, {
-                            // attributes,
-                            // accessToken,
-                            cognitoUser,
-                        });
+                setIsSignedIn(true);
+                setUser(cognitoUser);
 
-                        // const user = {
-                        //     email: attributes.email,
-                        //     username: attributes.preferred_username,
-                        //     userId: attributes.sub,
-                        //     accessToken: accessToken.jwtToken,
-                        // };
+                // TODO: parse first login from response
+                // setIsFirstLogin(loginResponse.isFirstLoginFlag);
 
-                        setIsSignedIn(true);
-                        setUser(user);
-
-                        // TODO: parse first login from response
-                        // setIsFirstLogin(loginResponse.isFirstLoginFlag);
-
-                        return { user: cognitoUser };
-                    }
-                );
+                return { user: cognitoUser };
             } catch (e) {
                 const error = e as unknown as AmplifyError;
-                log('error signing up:', error);
+
+                if (error.code === NOT_FOUND) {
+                    return {
+                        errorMessage:
+                            'User not found. Have you signed up or been invited yet?',
+                    };
+                } else if (error.code === NOT_AUTHORIZED) {
+                    return {
+                        errorMessage: 'Incorrect username or password',
+                    };
+                } else {
+                    log(`SignIn: ${error?.code || 'unknown err'}`, error);
+                }
             } finally {
                 setLoading(false);
             }
@@ -183,7 +207,18 @@ export const AuthProvider: React.FC<
                     'Unknown error occurred, refresh, check your network & login',
             };
         },
-        [user]
+        []
+    );
+
+    const signOut = useMemo(
+        () => () =>
+            Promise.all([
+                Auth.signOut(),
+                setIsSignedIn(false),
+                setMfaCompleted(false),
+                setUser(null),
+            ]),
+        []
     );
 
     const verifyMfaCode = useCallback(
@@ -198,12 +233,27 @@ export const AuthProvider: React.FC<
 
                 console.log(`confirmed user`, confirmedUser);
 
-                setIsSignedIn(!!confirmedUser);
+                setMfaCompleted(!!confirmedUser); // MFA has been completed
+                setUser(confirmedUser);
+                history.push('/');
 
                 return { user: confirmedUser, errorMessage: undefined };
             } catch (e) {
                 const error = e as unknown as AmplifyError;
-                log('error signing up:', error);
+
+                if (error.code === CODE_MISMATCH) {
+                    return { errorMessage: 'Incorrect code.' };
+                } else if (error.code === NOT_AUTHORIZED) {
+                    alert(
+                        'Login session expired, check your network and try logging in again.'
+                    );
+
+                    signOut();
+                    return {
+                        errorMessage: 'Session expired, try logging in again',
+                    };
+                }
+                log('[verifyMfaCode] error', error);
             } finally {
                 setLoading(false);
             }
@@ -212,16 +262,7 @@ export const AuthProvider: React.FC<
                     'Unknown error occurred, refresh, check your network & login',
             };
         },
-        [user]
-    );
-
-    const signOut = useCallback(
-        () => () =>
-            Auth.signOut().then(() => {
-                setIsSignedIn(false);
-                setUser(null);
-            }),
-        []
+        [history, signOut, user]
     );
 
     const contextValue: AuthContextValues = useMemo(() => {
@@ -229,12 +270,22 @@ export const AuthProvider: React.FC<
             user,
             loading,
             isSignedIn,
+            mfaCompleted,
             signIn,
             signUp,
             signOut,
             verifyMfaCode,
         };
-    }, [user, loading, isSignedIn, signIn, signUp, signOut, verifyMfaCode]);
+    }, [
+        user,
+        loading,
+        isSignedIn,
+        mfaCompleted,
+        signIn,
+        signUp,
+        signOut,
+        verifyMfaCode,
+    ]);
 
     return (
         <AuthProviderContext.Provider value={contextValue}>

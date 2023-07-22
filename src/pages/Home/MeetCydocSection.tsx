@@ -48,8 +48,6 @@ export const MeetCydocSection = (props: Props) => {
             <SignUpForm
                 modalOpen={signUpActive}
                 closeModal={() => setSignUpActive(false)}
-                cognitoUser={null}
-                sessionUserAttributes={null}
             />
             {props.windowWidth < HOME_MED_BP ? (
                 <>

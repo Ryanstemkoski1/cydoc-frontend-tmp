@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography } from '@mui/material';
 
 interface Props {
-    message: string;
+    message?: string | null;
 }
 
 export function ErrorText({ message }: Props) {

@@ -31,25 +31,14 @@ const initialValues: SignUpFormData = {
 };
 
 interface Props {
-    sessionUserAttributes: UserAttributes | null;
     closeModal: () => void;
-    cognitoUser: CognitoUser | null;
     modalOpen: boolean;
 }
-export default function SignUpForm({
-    cognitoUser,
-    modalOpen,
-    closeModal,
-    sessionUserAttributes,
-}: Props) {
+export default function SignUpForm({ modalOpen, closeModal }: Props) {
     const [wizardPage, setWizardPage] = useState(0);
     const onNextClick = () => setWizardPage(wizardPage + 1);
 
-    const { form } = useSignUpFormController(
-        initialValues,
-        sessionUserAttributes,
-        cognitoUser
-    );
+    const { form } = useSignUpFormController(initialValues);
 
     const phoneNumberRegex = new RegExp(
         '^[+]?[(]?[0-9]{3}[)]?[" "][-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'

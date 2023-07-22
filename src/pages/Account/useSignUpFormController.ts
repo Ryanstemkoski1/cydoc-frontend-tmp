@@ -1,15 +1,14 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { CognitoUser } from 'amazon-cognito-identity-js';
 import invariant from 'tiny-invariant';
-import { ClinicianSignUpData, UserAttributes } from 'types/users';
+import { ClinicianSignUpData } from 'types/users';
 import { passwordIsValid } from 'constants/passwordErrors';
 import { SignUpFormData } from './SignUpForm';
 import { createDbUser } from 'modules/api';
 import { useHistory } from 'react-router-dom';
 import { breadcrumb, log } from 'modules/logging';
 import { CreateUserResponse } from 'types/api';
-import { createAmplifyUser } from 'auth/amplify';
+import { useAuth } from 'hooks/useAuth';
 
 const validationSchema = Yup.object<SignUpFormData>({
     isTermsChecked: Yup.bool()
@@ -95,11 +94,8 @@ const validationSchema = Yup.object<SignUpFormData>({
         .min(1, 'Institution Name is required'),
 });
 
-export const useSignUpFormController = (
-    initialValues: ClinicianSignUpData,
-    sessionUserAttributes: UserAttributes | null,
-    cognitoUser: CognitoUser | null
-) => {
+export const useSignUpFormController = (initialValues: ClinicianSignUpData) => {
+    const { signUp } = useAuth();
     const history = useHistory();
 
     const form = useFormik({
@@ -107,10 +103,6 @@ export const useSignUpFormController = (
         // validateOnChange: true,
         initialValues,
         onSubmit: async (newUserInfo, { setErrors, setSubmitting }) => {
-            const navtoLogin = () => {
-                setSubmitting(false);
-                history.push('/Login');
-            };
             const formattedPhoneNumber = formatPhoneNumber(
                 newUserInfo.phoneNumber
             );
@@ -119,9 +111,10 @@ export const useSignUpFormController = (
             breadcrumb(`submitting new user`, 'sign up', newUserInfo);
 
             try {
-                const cognitoUser = await createAmplifyUser(
-                    newUserInfo,
-                    navtoLogin
+                const cognitoUser = await signUp(
+                    newUserInfo.email,
+                    newUserInfo.newPassword,
+                    newUserInfo.phoneNumber
                 );
 
                 // only proceed if cognito user was created successfully
@@ -131,8 +124,8 @@ export const useSignUpFormController = (
                     // Expected error, display to GUI
                     setErrors({ signUpError: result.errorMessage });
                 } else if (result && (result as CreateUserResponse)?.user?.id) {
-                    // User created successfully, now login
-                    navtoLogin();
+                    // User created successfully, let them into the app
+                    history.push('/');
                 } else {
                     // Unexpected error occurred
                     breadcrumb(`Invalid user creation response`, 'sign up', {
