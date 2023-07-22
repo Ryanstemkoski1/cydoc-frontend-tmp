@@ -53,7 +53,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     const { isSignedIn, signOut } = useAuth();
     const [windowWidth, setWindowWidth] = useState(0);
 
-    const { user } = useUser();
+    const { user, isManager } = useUser();
 
     // Set event listeners for window resize to determine mobile vs web view
     useEffect(() => {
@@ -130,6 +130,18 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         history.push('/');
     };
 
+    const userManager = isManager ? (
+        <Menu.Item>
+            <Button
+                basic
+                color='teal'
+                name='users'
+                content={collapseLoggedInNav ? undefined : 'Home'}
+                icon='users'
+                onClick={() => history.push('/managerdashboard')}
+            />
+        </Menu.Item>
+    ) : null;
     // Menu items when not logged in
     const defaultMenuItems = (
         <Menu.Item>
@@ -150,62 +162,41 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         </Menu.Item>
     );
     // Menu items when logged in
-    const loggedInMenuItems = collapseLoggedInNav ? (
+    const loggedInMenuItems = (
         <>
-            <Menu.Item className='home-menu-item'>
+            {userManager}
+            <Menu.Item>
                 <Button
                     basic
                     color='teal'
                     name='home'
+                    content={collapseLoggedInNav ? undefined : 'Home'}
                     icon='hospital outline'
                     onClick={navigateToHome}
                 />
             </Menu.Item>
-            <Menu.Item className='profile-menu-item'>
+            <Menu.Item>
                 <Dropdown
                     button
                     basic
                     color='teal'
                     floating
-                    icon={null}
                     name='profile'
-                    className='profile-button profile-mobile'
+                    className={`profile-button ${
+                        collapseLoggedInNav ? 'profile-mobile' : ''
+                    }`}
                     options={dropdownOptions}
                     trigger={
                         <span>
                             <Icon
                                 name='user outline'
-                                className='profile-mobile-icon'
+                                className={
+                                    collapseLoggedInNav
+                                        ? 'profile-mobile-icon'
+                                        : ''
+                                }
                             />
-                        </span>
-                    }
-                />
-            </Menu.Item>
-        </>
-    ) : (
-        <>
-            <Menu.Item>
-                <Button
-                    basic
-                    color='teal'
-                    name='home'
-                    content='Home'
-                    icon='hospital outline'
-                    onClick={navigateToHome}
-                />
-            </Menu.Item>
-            <Menu.Item>
-                <Dropdown
-                    button
-                    basic
-                    color='teal'
-                    floating
-                    name='profile'
-                    className='profile-button'
-                    options={dropdownOptions}
-                    trigger={
-                        <span>
-                            <Icon name='user outline' /> {user?.firstName}
+                            {collapseLoggedInNav ? undefined : user?.firstName}
                         </span>
                     }
                 />

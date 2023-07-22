@@ -2,16 +2,19 @@ import React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { useAuth } from 'hooks/useAuth';
 
-interface Props extends RouteProps {
+export interface PrivateRouteProps extends RouteProps {
     component: any;
 }
-export const PrivateRoute = ({ component: Component, ...rest }: Props) => {
-    const { isSignedIn } = useAuth();
+export const PrivateRoute = ({
+    component: Component,
+    ...rest
+}: PrivateRouteProps) => {
+    const { isSignedIn, authLoading: loading } = useAuth();
     return (
         <Route
             {...rest}
             render={(props) =>
-                isSignedIn ? (
+                loading || isSignedIn ? (
                     <Component {...props} />
                 ) : (
                     <Redirect

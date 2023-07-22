@@ -21,6 +21,7 @@ import { PrivateRoute } from './PrivateRoute';
 import { EditPayment } from 'pages/Account/EditPayment';
 import SignUp from 'pages/SignUp';
 import NotAuthorized from 'pages/NotAuthorized';
+import { ManagerRoute } from './ManagerRoute';
 
 const Routes = (props: { children?: JSX.Element | null }) => {
     return (
@@ -69,7 +70,7 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                 path='/profilesecurity'
                 component={ProfileSecurity}
             />
-            <PrivateRoute
+            <ManagerRoute
                 exact
                 path='/managerdashboard'
                 component={ManagerDashboard}

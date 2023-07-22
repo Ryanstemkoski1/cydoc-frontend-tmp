@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import './Account.css';
-import { Modal, Divider } from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
 import { Grid } from '@mui/material';
 import SignUpTextInput from './SignUpTextInput';
 import { PasswordErrorMessages } from './PasswordErrorMessage';
