@@ -9,30 +9,16 @@ import {
 import { API_URL } from './environment';
 import { stringFromError } from './error-utils';
 
-export async function createDbUser({
-    email,
-    firstName,
-    institutionName,
-    lastName,
-    newPassword,
-    phoneNumber,
-    role,
-}: ClinicianSignUpData) {
-    const body: UpdateUserBody = {
-        email,
-        firstName,
-        institutionName,
-        lastName,
-        password: newPassword,
-        phoneNumber,
-        role,
-    };
-
-    return postToApi<CreateUserResponse>('/user', 'createUser', body);
-}
-
 const JSON_POST_HEADER: RequestInit = {
     method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    mode: 'cors',
+};
+
+const JSON_GET_HEADER: RequestInit = {
+    method: 'GET',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -47,7 +33,7 @@ const JSON_POST_HEADER: RequestInit = {
  * @param T generic type of return object
  * @returns instance of "T" generic object on success
  */
-async function postToApi<T>(
+export async function postToApi<T>(
     path: string,
     description: string,
     body: ApiPostBody
@@ -86,6 +72,55 @@ async function postToApi<T>(
             path,
             description,
             body,
+            response,
+        });
+
+        return {
+            errorMessage:
+                'Unexpected error occurred, check your internet connection',
+        };
+    }
+}
+/**
+ * gets data from API
+ * @param path url to POST to
+ * @param description note for logging & debugging
+ * @param T generic type of return object
+ * @returns instance of "T" generic object on success
+ */
+export async function getFromApi<T>(
+    path: string,
+    description: string
+): Promise<T | ApiResponse> {
+    // TODO: if users is logged in, pull in authentication token
+
+    const url = `${API_URL}${path}`;
+    let response;
+    breadcrumb(`posting: ${JSON.stringify(path)}`, 'API', { url, path });
+
+    try {
+        response = await fetch(url, {
+            ...JSON_GET_HEADER,
+        });
+
+        const handledResponse = await handleResponse<T>(response);
+
+        breadcrumb(
+            `getFromApi${response.status} ${description} Response`,
+            'API',
+            {
+                handledResponse,
+                responseStatus: response.status,
+                responseOk: response.ok,
+                responseStatusText: response.statusText,
+            }
+        );
+
+        return handledResponse;
+    } catch (e) {
+        log(`[getFromApi] ${description}: ${stringFromError(e)}`, {
+            path,
+            description,
             response,
         });
 

@@ -28,6 +28,7 @@ import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import constants from '../../constants/constants.json';
 import './NavMenu.css';
 import { useAuth } from 'hooks/useAuth';
+import { useUser } from 'hooks/useUser';
 
 interface ConnectedNavMenuProps {
     className?: string;
@@ -49,8 +50,10 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         updateActiveItem,
     } = props;
 
-    const { isSignedIn, signOut, user } = useAuth();
+    const { isSignedIn, signOut } = useAuth();
     const [windowWidth, setWindowWidth] = useState(0);
+
+    const { user } = useUser();
 
     // Set event listeners for window resize to determine mobile vs web view
     useEffect(() => {
@@ -202,7 +205,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                     options={dropdownOptions}
                     trigger={
                         <span>
-                            <Icon name='user outline' /> {'user?.firstName'}
+                            <Icon name='user outline' /> {user?.firstName}
                         </span>
                     }
                 />

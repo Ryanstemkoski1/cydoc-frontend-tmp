@@ -15,7 +15,7 @@ import {
     REGION,
 } from 'modules/environment';
 import { log } from 'modules/logging';
-import { CognitoUser } from 'amazon-cognito-identity-js';
+import { CognitoUser as PartialCognitoUser } from 'amazon-cognito-identity-js';
 import { useHistory } from 'react-router-dom';
 
 // Enable these lines to get more amplify debug info:
@@ -47,9 +47,18 @@ interface AmplifyError {
     code: AmplifyErrorCode;
 }
 
-// TODO: return or manage an error message state?
+// Cognito's types don't include "attributes" for some reason...
+interface CognitoUser extends PartialCognitoUser {
+    attributes: {
+        email: string;
+        email_verified: boolean;
+        phone_number: string;
+        phone_number_verified: boolean;
+        sub: string; // cognito user guid
+    };
+}
 export interface AuthContextValues {
-    user: CognitoUser | null;
+    cognitoUser: CognitoUser | null;
     loading: boolean;
     loginCorrect: boolean;
     isSignedIn: boolean;
@@ -86,29 +95,41 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<
     Record<string, unknown> & PropsWithChildren<object>
 > = ({ children }) => {
-    const [user, setUser] = useState<CognitoUser | null>(null);
+    const [cognitoUser, setCognitoUser] = useState<CognitoUser | null>(null);
     const [loginCorrect, setLoginCorrect] = useState(false);
     const [loading, setLoading] = useState(false);
     const history = useHistory();
 
     const [isSignedIn, setIsSignedIn] = useState(false);
 
+    const signOut = useMemo(
+        () => () =>
+            Promise.all([
+                Auth.signOut(),
+                setLoginCorrect(false),
+                setIsSignedIn(false),
+                setCognitoUser(null),
+            ]),
+        []
+    );
+
     useEffect(() => {
         const restoreUserSession = async () => {
             try {
-                if (!user) {
+                if (!cognitoUser) {
                     // On component mount
                     // If a session cookie exists
                     // Then use it to reset/restore auth state
-                    const user = (await Auth.currentAuthenticatedUser().catch(
-                        (err) => {
+                    return Auth.currentAuthenticatedUser()
+                        .then((cognitoUser) => {
+                            setCognitoUser(cognitoUser);
+                            setLoginCorrect(true);
+                            setIsSignedIn(true);
+                        })
+                        .catch((err) => {
+                            signOut();
                             log(`Error restoring session`, err);
-                        }
-                    )) as CognitoUser;
-
-                    setUser(user);
-                    setLoginCorrect(true);
-                    setIsSignedIn(true);
+                        });
                 }
             } catch (e) {
                 const error = e as unknown as AmplifyError;
@@ -117,7 +138,7 @@ export const AuthProvider: React.FC<
         };
 
         restoreUserSession();
-    }, [user]);
+    }, [cognitoUser, signOut]);
 
     const signUp: AuthContextValues['signUp'] = useCallback(
         async (email: string, password: string, phoneNumber: string) => {
@@ -140,7 +161,7 @@ export const AuthProvider: React.FC<
                 console.log(`amplify user signed up:`, user);
 
                 // all user into app when first signing up
-                setUser(user);
+                setCognitoUser(user as CognitoUser);
                 setLoginCorrect(true);
                 setIsSignedIn(true);
 
@@ -177,7 +198,7 @@ export const AuthProvider: React.FC<
                 });
 
                 setLoginCorrect(true);
-                setUser(cognitoUser);
+                setCognitoUser(cognitoUser);
 
                 // TODO: parse first login from response
                 // setIsFirstLogin(loginResponse.isFirstLoginFlag);
@@ -209,23 +230,12 @@ export const AuthProvider: React.FC<
         []
     );
 
-    const signOut = useMemo(
-        () => () =>
-            Promise.all([
-                Auth.signOut(),
-                setLoginCorrect(false),
-                setIsSignedIn(false),
-                setUser(null),
-            ]),
-        []
-    );
-
     const verifyMfaCode = useCallback(
         async (code: string) => {
             try {
                 setLoading(true);
                 const confirmedUser = await Auth.confirmSignIn(
-                    user,
+                    cognitoUser,
                     code,
                     'SMS_MFA'
                 );
@@ -233,7 +243,7 @@ export const AuthProvider: React.FC<
                 console.log(`confirmed user`, confirmedUser);
 
                 setIsSignedIn(!!confirmedUser); // MFA has been completed
-                setUser(confirmedUser);
+                setCognitoUser(confirmedUser);
                 history.push('/');
 
                 return { user: confirmedUser, errorMessage: undefined };
@@ -261,12 +271,12 @@ export const AuthProvider: React.FC<
                     'Unknown error occurred, refresh, check your network & login',
             };
         },
-        [history, signOut, user]
+        [history, signOut, cognitoUser]
     );
 
     const contextValue: AuthContextValues = useMemo(() => {
         return {
-            user,
+            cognitoUser,
             loading,
             loginCorrect,
             isSignedIn,
@@ -276,7 +286,7 @@ export const AuthProvider: React.FC<
             verifyMfaCode,
         };
     }, [
-        user,
+        cognitoUser,
         loading,
         loginCorrect,
         isSignedIn,

@@ -4,7 +4,7 @@ import invariant from 'tiny-invariant';
 import { ClinicianSignUpData } from 'types/users';
 import { passwordIsValid } from 'constants/passwordErrors';
 import { SignUpFormData } from './SignUpForm';
-import { createDbUser } from 'modules/api';
+import { createDbUser } from 'modules/user-api';
 import { useHistory } from 'react-router-dom';
 import { breadcrumb, log } from 'modules/logging';
 import { CreateUserResponse } from 'types/api';

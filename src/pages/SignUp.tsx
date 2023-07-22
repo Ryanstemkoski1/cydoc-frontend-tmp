@@ -5,12 +5,5 @@ import SignUpForm from './Account/SignUpForm';
 export default function SignUp() {
     const history = useHistory();
 
-    return (
-        <SignUpForm
-            modalOpen
-            closeModal={history.goBack}
-            sessionUserAttributes={null}
-            cognitoUser={null}
-        />
-    );
+    return <SignUpForm modalOpen closeModal={history.goBack} />;
 }
