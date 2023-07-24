@@ -1,14 +1,14 @@
 import { ClinicianSignUpData, DbUser } from 'types/users';
-import { ApiResponse, CreateUserResponse, UpdateUserBody } from 'types/api';
+import { CreateUserResponse, UpdateUserBody } from 'types/api';
 import { getFromApi, postToApi } from './api';
 import invariant from 'tiny-invariant';
+import { log } from './logging';
 
 export async function createDbUser({
     email,
     firstName,
     institutionName,
     lastName,
-    newPassword,
     phoneNumber,
     role,
 }: ClinicianSignUpData) {
@@ -17,7 +17,6 @@ export async function createDbUser({
         firstName,
         institutionName,
         lastName,
-        password: newPassword,
         phoneNumber,
         role,
     };
@@ -25,8 +24,26 @@ export async function createDbUser({
     return postToApi<CreateUserResponse>('/user', 'createUser', body);
 }
 
-export const getDbUser = (email: string): Promise<DbUser | ApiResponse> => {
+export const getDbUser = async (email: string): Promise<DbUser> => {
     invariant(email, 'missing email');
 
-    return getFromApi<DbUser>(`/user/${email}`, 'getDbUser');
+    const response = await getFromApi<CreateUserResponse>(
+        `/user/${email}`,
+        'getDbUser'
+    );
+
+    if (response?.errorMessage) {
+        const { errorMessage } = response;
+        log(`User not found: ${email}`, { email, errorMessage });
+        throw new Error(errorMessage);
+    } else if ((response as CreateUserResponse)?.user) {
+        return (response as CreateUserResponse)?.user as DbUser;
+    } else {
+        throw new Error(`unrecognized API response`);
+    }
+};
+
+export const removeUser = async (id: number) => {
+    invariant(id, '[removeUser] missing id');
+    alert(`removing: user ${id} [NOT IMPLEMENTED]`);
 };

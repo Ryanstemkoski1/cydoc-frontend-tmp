@@ -9,11 +9,12 @@ export interface ApiEditManager extends ApiEditUserBase {
 }
 
 export interface DbUser {
+    id: number;
     firstName: string;
     lastName: string;
     email: string;
     phoneNumber: string;
-    institutionId?: string;
+    institutionId?: number;
     role: 'manager' | 'clinician';
 }
 
@@ -25,20 +26,25 @@ export interface Doctor extends DbUser {
     joinedManager: string;
 }
 
-export interface ClinicianSignUpData extends DbUser {
+export interface ClinicianSignUpData
+    extends Pick<
+        DbUser,
+        | 'firstName'
+        | 'lastName'
+        | 'email'
+        | 'phoneNumber'
+        | 'institutionId'
+        | 'role'
+    > {
     newPassword: string;
     confirmNewPassword: string;
     confirmEmail: string;
     confirmPhoneNumber: string;
     institutionName: string;
+    signUpError?: string;
 }
 
 export interface UserAttributes {
-    'custom:UUID'?: string;
-    'custom:associatedManager': string;
     email: string;
-    given_name: string;
-    // middle_name: string;
-    family_name: string;
     phone_number: string;
 }

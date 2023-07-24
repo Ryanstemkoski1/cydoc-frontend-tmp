@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Container, Form, Modal } from 'semantic-ui-react';
+import { Button, Container } from 'semantic-ui-react';
 import NavMenu from 'components/navigation/NavMenu';
 import './ManagerDashboard.css';
 import { DbUser } from 'types/users';
@@ -12,6 +12,7 @@ import MaterialTable, {
 import { Delete, Edit } from '@mui/icons-material';
 import { Column, Options } from '@material-table/core';
 import InviteClinicianModal from './InviteClinicianModal';
+import { removeUser } from 'modules/user-api';
 
 // manager dashboard view to view/add/remove doctor accounts
 const ManagerDashboard = () => {
@@ -50,11 +51,6 @@ const ManagerDashboard = () => {
 
     // TODO: review these state items:
     const [userToRemove, setUserToRemove] = useState('');
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [duplicateUsername, setDuplicateUsername] = useState(false);
 
     const actions = useMemo(
         () => [
@@ -95,12 +91,10 @@ const ManagerDashboard = () => {
                         const result = window.confirm(confirmMessage);
                         if (result) {
                             if ('id' in rowData) {
-                                alert(`removing: ${JSON.stringify(rowData)}`);
+                                removeUser(rowData.id);
                                 // removeBadge(rowData.id);
                             } else {
-                                rowData.map((user) =>
-                                    alert(`removing: ${JSON.stringify(user)}`)
-                                );
+                                rowData.map((user) => removeUser(user.id));
                             }
                         }
                     },
@@ -194,7 +188,7 @@ const COLUMNS: Column<DbUser>[] = [
     { title: 'Phone', field: 'phone' },
 ];
 
-const TABLE_OPTIONS: Options<UserRow> = {
+const TABLE_OPTIONS: Options<DbUser> = {
     actionsColumnIndex: -1,
     maxBodyHeight: `${materialTableHeight + 3}vh`,
     minBodyHeight: `${materialTableHeight + 3}vh`,

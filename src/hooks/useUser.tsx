@@ -2,8 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DbUser } from 'types/users';
 import { useAuth } from './useAuth';
 import { getDbUser } from 'modules/user-api';
-import { log } from 'modules/logging';
-import { ApiResponse } from 'types/api';
 
 export function useUser() {
     const { cognitoUser } = useAuth();
@@ -13,14 +11,9 @@ export function useUser() {
     const updateUserInfo = useCallback(async () => {
         if (cognitoUser) {
             const email = cognitoUser.attributes.email;
-            const userOrError = await getDbUser(email);
+            const user = await getDbUser(email);
 
-            if ((userOrError as ApiResponse)?.errorMessage) {
-                log(`User not found: ${email}`, { email, cognitoUser });
-            } else {
-                const dbUser = userOrError as DbUser;
-                setUser(dbUser);
-            }
+            setUser(user);
         }
     }, [cognitoUser]);
 

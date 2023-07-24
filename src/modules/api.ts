@@ -1,12 +1,6 @@
-import { ClinicianSignUpData } from 'types/users';
 import { breadcrumb, log } from './logging';
-import {
-    ApiPostBody,
-    ApiResponse,
-    CreateUserResponse,
-    UpdateUserBody,
-} from 'types/api';
-import { API_URL } from './environment';
+import { ApiPostBody, ApiResponse, ApiResponseBase } from 'types/api';
+import { API_URL, PUBLIC_API_URL } from './environment';
 import { stringFromError } from './error-utils';
 
 const JSON_POST_HEADER: RequestInit = {
@@ -36,11 +30,12 @@ const JSON_GET_HEADER: RequestInit = {
 export async function postToApi<T>(
     path: string,
     description: string,
-    body: ApiPostBody
+    body: ApiPostBody,
+    publicEndpoint = false
 ): Promise<T | ApiResponse> {
     // TODO: if users is logged in, pull in authentication token
 
-    const url = `${API_URL}${path}`;
+    const url = `${publicEndpoint ? PUBLIC_API_URL : API_URL}${path}`;
     let response;
     breadcrumb(`posting: ${JSON.stringify(path)}`, 'API', { url, path, body });
 
@@ -131,7 +126,9 @@ export async function getFromApi<T>(
     }
 }
 
-async function handleResponse<T>(response: Response): Promise<T | ApiResponse> {
+async function handleResponse<T>(
+    response: Response
+): Promise<T | ApiResponseBase> {
     const { url, bodyUsed, status, statusText } = response;
     const path = url.slice(API_URL.length) || url;
 
@@ -180,5 +177,5 @@ async function handleResponse<T>(response: Response): Promise<T | ApiResponse> {
         return Promise.reject('Bad response from api');
     }
 
-    return response.json() as unknown as T;
+    return response.json() as Promise<T>;
 }

@@ -1,18 +1,28 @@
 import React from 'react';
 import './ManagerDashboard.css';
-import { Grid } from '@mui/material';
+import { Box, Divider, Grid } from '@mui/material';
 import SignUpTextInput from 'pages/Account/SignUpTextInput';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import ModalHeader from 'components/Atoms/ModalHeader';
-import { Modal } from 'semantic-ui-react';
+import { Button, Modal } from 'semantic-ui-react';
+import { ErrorText } from 'components/Atoms/ErrorText';
+import { DbUser } from 'types/users';
+import { inviteUser } from 'modules/public-api';
+import { useUser } from 'hooks/useUser';
+
 interface Props {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const validationSchema = Yup.object({
+const validationSchema = Yup.object<NewClinicianSchema>({
     email: Yup.string()
+        .label('Email')
+        .trim()
+        .required('Email is required')
+        .min(1),
+    confirmEmail: Yup.string()
         .label('Email')
         .trim()
         .required('Email is required')
@@ -20,17 +30,24 @@ const validationSchema = Yup.object({
     firstName: Yup.string()
         .label('firstName')
         .trim()
-        .required('firstName is required')
-        .min(6),
+        .required('First name is required'),
+    lastName: Yup.string()
+        .label('lastName')
+        .trim()
+        .required('Last name is required'),
 });
-
-interface LoginSchema {
+export interface NewClinicianSchema {
     email: string;
-    password: string;
+    confirmEmail: string;
+    firstName: string;
+    lastName: string;
     role: DbUser['role'];
-    loginError?: string;
+    submitError?: string;
 }
+
 const InviteClinicianModal = ({ isOpen, onClose }: Props) => {
+    const { user } = useUser();
+
     return (
         <Modal
             dimmer='inverted'
@@ -39,20 +56,39 @@ const InviteClinicianModal = ({ isOpen, onClose }: Props) => {
             open={isOpen}
             style={{ padding: '1rem' }}
         >
-            <Formik<LoginSchema>
+            <Formik<NewClinicianSchema>
                 initialValues={{
                     email: '',
-                    password: '',
-                    role: 'manager',
+                    confirmEmail: '',
+                    firstName: '',
+                    lastName: '',
+                    role: 'clinician',
                 }}
-                onSubmit={(values) => console.log(`creating user with`, values)}
+                onSubmit={async (
+                    { email, firstName, lastName, role },
+                    { setSubmitting }
+                ) => {
+                    const result = await inviteUser({
+                        email,
+                        firstName,
+                        lastName,
+                        role,
+                        institutionId: user?.institutionId,
+                    });
+                    setSubmitting(false);
+
+                    if (result?.errorMessage) {
+                        alert(result.errorMessage);
+                    } else {
+                        onClose();
+                    }
+                }}
                 validateOnChange={true}
                 validationSchema={validationSchema}
             >
-                {({ errors, submitForm }) => (
+                {({ errors, submitForm, isSubmitting, touched }) => (
                     <>
-                        <ModalHeader title='Invite a doctor to Cydoc' />
-                        {/* <Form error={passwordErrorMessages().length > 0}> */}
+                        <ModalHeader title='Invite a clinician to your Institution' />
                         <Grid
                             container
                             spacing={4}
@@ -89,6 +125,60 @@ const InviteClinicianModal = ({ isOpen, onClose }: Props) => {
                                 />
                             </Grid>
                         </Grid>
+                        <Divider
+                            sx={{
+                                margin: '1.5rem',
+                            }}
+                        />
+                        <Box
+                            sx={{
+                                margin: '1.5rem',
+                            }}
+                        >
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    width: '100%',
+                                    justifyContent: 'space-between',
+                                }}
+                            >
+                                <Button
+                                    basic
+                                    color='teal'
+                                    content='Cancel'
+                                    type='button'
+                                    onClick={onClose}
+                                />
+
+                                <Button
+                                    color='teal'
+                                    disabled={
+                                        isSubmitting ||
+                                        !!Object.keys(errors).length ||
+                                        !Object.keys(touched).length
+                                    }
+                                    loading={isSubmitting}
+                                    content={'Create Account'}
+                                    onClick={submitForm}
+                                    type='submit'
+                                />
+                            </Box>
+                            {Object.keys(errors).length ? (
+                                <>
+                                    {Object.keys(errors).map((errorKey) => (
+                                        <ErrorText
+                                            key={errorKey}
+                                            message={`${errorKey}: ${
+                                                errors?.[
+                                                    errorKey as keyof NewClinicianSchema
+                                                ]
+                                            }`}
+                                        />
+                                    ))}
+                                </>
+                            ) : null}
+                        </Box>
                     </>
                 )}
             </Formik>

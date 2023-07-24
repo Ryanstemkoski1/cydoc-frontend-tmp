@@ -7,56 +7,24 @@ import React, {
     useCallback,
     PropsWithChildren,
 } from 'react';
-import { Auth, Amplify } from 'aws-amplify';
 import invariant from 'tiny-invariant';
-import {
-    COGNITO_CLIENT_ID,
-    COGNITO_POOL_ID,
-    REGION,
-} from 'modules/environment';
+
 import { log } from 'modules/logging';
-import { CognitoUser as PartialCognitoUser } from 'amazon-cognito-identity-js';
 import { useHistory } from 'react-router-dom';
+import {
+    CognitoAuth,
+    AmplifyError,
+    CODE_MISMATCH,
+    CognitoUser,
+    NOT_AUTHORIZED,
+    NOT_FOUND,
+    USER_EXISTS,
+} from 'auth/cognito';
 
 // Enable these lines to get more amplify debug info:
 // window.LOG_LEVEL = 'DEBUG';
 // Amplify.Logger.LOG_LEVEL = 'DEBUG';
 
-Amplify.configure({
-    Auth: {
-        userPoolRegion: REGION,
-        userPoolWebClientId: COGNITO_CLIENT_ID,
-        userPoolId: COGNITO_POOL_ID,
-    },
-});
-
-const USER_EXISTS = 'UsernameExistsException';
-const NOT_FOUND = 'UserNotFoundException';
-const NOT_AUTHORIZED = 'NotAuthorizedException';
-const CODE_MISMATCH = 'CodeMismatchException';
-
-type AmplifyErrorCode =
-    | typeof USER_EXISTS
-    | typeof NOT_FOUND
-    | typeof NOT_AUTHORIZED
-    | typeof CODE_MISMATCH
-    | 'some other code';
-
-interface AmplifyError {
-    name: AmplifyErrorCode;
-    code: AmplifyErrorCode;
-}
-
-// Cognito's types don't include "attributes" for some reason...
-interface CognitoUser extends PartialCognitoUser {
-    attributes: {
-        email: string;
-        email_verified: boolean;
-        phone_number: string;
-        phone_number_verified: boolean;
-        sub: string; // cognito user guid
-    };
-}
 export interface AuthContextValues {
     cognitoUser: CognitoUser | null;
     authLoading: boolean;
@@ -101,11 +69,14 @@ export const AuthProvider: React.FC<
     const history = useHistory();
 
     const [isSignedIn, setIsSignedIn] = useState(false);
+    // TODO: parse ^^status^^ from cognitoUser when it changes (see below)
+    // Here's an async method: https://github.com/aws-amplify/amplify-js/issues/3640#issuecomment-1198905668
+    // const isSignedIn = useMemo(() => !!user?.challengeName?.length, [user]); // This key is not the correct way to determine this
 
     const signOut = useMemo(
         () => () =>
             Promise.all([
-                Auth.signOut(),
+                CognitoAuth.signOut(),
                 setLoginCorrect(false),
                 setIsSignedIn(false),
                 setCognitoUser(null),
@@ -120,7 +91,7 @@ export const AuthProvider: React.FC<
                     // On component mount
                     // If a session cookie exists
                     // Then use it to reset/restore auth state
-                    return Auth.currentAuthenticatedUser()
+                    return CognitoAuth.currentAuthenticatedUser()
                         .then((cognitoUser) => {
                             setCognitoUser(cognitoUser);
                             setLoginCorrect(true);
@@ -146,7 +117,7 @@ export const AuthProvider: React.FC<
         async (email: string, password: string, phoneNumber: string) => {
             try {
                 setAuthLoading(true);
-                const { user } = await Auth.signUp({
+                const result = await CognitoAuth.signUp({
                     username: email,
                     password,
                     attributes: {
@@ -159,11 +130,12 @@ export const AuthProvider: React.FC<
                         enabled: true,
                     },
                 });
+                const user = result.user as CognitoUser;
 
                 console.log(`amplify user signed up:`, user);
 
                 // all user into app when first signing up
-                setCognitoUser(user as CognitoUser);
+                setCognitoUser(user);
                 setLoginCorrect(true);
                 setIsSignedIn(true);
 
@@ -193,7 +165,7 @@ export const AuthProvider: React.FC<
             try {
                 setAuthLoading(true);
                 setIsSignedIn(false);
-                const cognitoUser = await Auth.signIn(email, password);
+                const cognitoUser = await CognitoAuth.signIn(email, password);
 
                 console.log(`User signed in`, {
                     cognitoUser,
@@ -236,7 +208,7 @@ export const AuthProvider: React.FC<
         async (code: string) => {
             try {
                 setAuthLoading(true);
-                const confirmedUser = await Auth.confirmSignIn(
+                const confirmedUser = await CognitoAuth.confirmSignIn(
                     cognitoUser,
                     code,
                     'SMS_MFA'

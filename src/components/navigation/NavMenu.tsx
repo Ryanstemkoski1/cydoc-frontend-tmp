@@ -33,17 +33,17 @@ import { useUser } from 'hooks/useUser';
 interface ConnectedNavMenuProps {
     className?: string;
     // For whether to stack another menu above/below
-    attached: 'top' | 'bottom';
+    attached?: 'top' | 'bottom';
     // Whether to display or hide the note name
-    displayNoteName: boolean;
+    displayNoteName?: boolean;
 }
 
 // Navigation Bar component that will go at the top of most pages
 const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     const {
         className,
-        attached,
-        displayNoteName,
+        attached = 'top',
+        displayNoteName = false,
         patientView,
         doctorView,
         changeUserView,
@@ -136,7 +136,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                 basic
                 color='teal'
                 name='users'
-                content={collapseLoggedInNav ? undefined : 'Home'}
+                content={collapseLoggedInNav ? undefined : 'Manager Users'}
                 icon='users'
                 onClick={() => history.push('/managerdashboard')}
             />
