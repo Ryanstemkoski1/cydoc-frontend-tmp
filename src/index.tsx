@@ -14,6 +14,8 @@ import { isLivemode } from './auth/livemode';
 import Routes from 'components/navigation/Routes';
 import { initializeSentry } from 'modules/logging';
 import { AuthProvider } from 'hooks/useAuth';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 initializeSentry();
 
@@ -42,6 +44,10 @@ function App() {
                             <Elements stripe={stripePromise}>
                                 <Provider store={currentNoteStore}>
                                     <Routes />
+                                    <ToastContainer
+                                        theme='colored'
+                                        position='bottom-right'
+                                    />
                                 </Provider>
                             </Elements>
                         </HPITemplateStore>
