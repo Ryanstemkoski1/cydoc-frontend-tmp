@@ -264,20 +264,29 @@ export function hpiReducer(
                     response = Object.keys(ResponseTypes)[
                         Object.values(ResponseTypes).indexOf(node.responseType)
                     ] as keyof ExpectedResponseInterface;
-                newState = {
-                    ...newState,
-                    nodes: {
-                        ...newState.nodes,
-                        [currNode]: {
-                            ...nodes[currNode],
-                            response: labTestResponse(node, response),
+
+                // If a node does not exist in the state, then only add new data
+                if (!newState.nodes[currNode]) {
+                    newState = {
+                        ...newState,
+                        nodes: {
+                            ...newState.nodes,
+                            [currNode]: {
+                                ...nodes[currNode],
+                                response: labTestResponse(node, response),
+                            },
                         },
-                    },
-                    graph: {
-                        ...newState.graph,
-                        [currNode]: childNodes,
-                    },
-                };
+                        graph: {
+                            ...newState.graph,
+                            [currNode]: Array.from(
+                                new Set([
+                                    ...(newState.graph[currNode] || []),
+                                    ...childNodes,
+                                ])
+                            ),
+                        },
+                    };
+                }
             }
 
             return newState;
