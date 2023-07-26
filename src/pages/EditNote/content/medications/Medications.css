@@ -292,6 +292,12 @@ a.ui.active.label {
         padding: 0 !important;
         width: 100% !important;
     }
+    .medicationsContent-wrap .accordion.ui.fluid {
+        margin-bottom: 45px;
+    }
+    .medicationsContent-wrap {
+        margin-bottom: 25px;
+    }
 }
 @media (max-width: 1199px) and (min-width: 767px) {
     table.medications-desktop-accordion-title.medication-wrap tbody,

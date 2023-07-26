@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { Button, Container, Grid, Tab, Segment, Icon } from 'semantic-ui-react';
+import { Button, Segment, Icon } from 'semantic-ui-react';
+import constants from 'constants/constants';
 import MedicalHistoryContent from '../medicalhistory/MedicalHistoryContent';
 import SurgicalHistoryContent from '../surgicalhistory/SurgicalHistoryContent';
 import MedicationsContent from '../medications/MedicationsContent';
 import AllergiesContent from '../allergies/AllergiesContent';
 import SocialHistoryContent from '../socialhistory/SocialHistoryContent';
 import FamilyHistoryContent from '../familyhistory/FamilyHistoryContent';
+import Tab from '../../../../components/tools/Tab';
 import './PatientHistory.css';
-import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
-import constants from 'constants/constants';
 
 export default class PatientHistoryContent extends Component {
     constructor(props) {
@@ -75,10 +75,7 @@ export default class PatientHistoryContent extends Component {
     };
 
     render() {
-        const { windowWidth } = this.state;
-        const activeTabName = this.state.activeTabName;
         const activeIndex = this.state.activeIndex;
-        const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
 
         const tabDict = {
             'Medical History': (
@@ -198,74 +195,37 @@ export default class PatientHistoryContent extends Component {
         });
 
         // panes for desktop view
-        const panes = Object.keys(tabDict).map((name, index) => {
+        const panes = Object.keys(tabDict).map((name) => {
             return {
                 menuItem: name,
                 render: () => (
-                    <Tab.Pane className='white-card'>
-                        {tabDict[name]}
-                        {buttons[index]}
-                    </Tab.Pane>
+                    <Tab.Pane className='white-card'>{tabDict[name]}</Tab.Pane>
                 ),
             };
         });
 
-        const gridButtons = panes.map((pane, index) => {
-            return (
-                <Button
-                    basic
-                    key={index}
-                    // eslint-disable-next-line react/no-children-prop
-                    children={pane.menuItem}
-                    value={index}
-                    onClick={this.handleItemClick}
-                    active={this.state.activeTabName === pane.menuItem}
-                    style={{ marginBottom: 5 }}
-                />
-            );
-        });
         const tabToDisplay = this.props.onTabClick(
             this.state.activeTabName,
             this.state.windowWidth
         );
         return (
-            <>
-                {collapseTabs ? (
-                    <Container>
-                        <Grid
-                            stackable
-                            centered
-                            id='patient-history-menu'
-                            relaxed
-                        >
-                            {gridButtons}
-                        </Grid>
-
-                        <Segment>{tabToDisplay}</Segment>
-                        {buttons[activeIndex]}
-                    </Container>
-                ) : (
-                    <Tab
-                        menu={{
-                            pointing: true,
-                            id: 'patient-history-menu',
-                        }}
-                        id='tab-panes'
-                        panes={panes}
-                        activeTabName={activeTabName}
-                        activeIndex={activeIndex}
-                        index={activeIndex}
-                        onTabChange={(e, data) => {
-                            this.setState({
-                                activeTabName:
-                                    constants.PMH_TAB_NAMES[data.activeIndex],
-                                activeIndex: data.activeIndex,
-                            });
-                            this.props.handlePMHTabChange(e, data);
-                        }}
-                    />
-                )}
-            </>
+            <div className='patent-history-content'>
+                <Tab
+                    id='tab-panes'
+                    panes={panes}
+                    activeIndex={activeIndex}
+                    onTabChange={(e, data) => {
+                        this.setState({
+                            activeTabName:
+                                constants.PMH_TAB_NAMES[data.activeIndex],
+                            activeIndex: data.activeIndex,
+                        });
+                        this.props.handlePMHTabChange(e, data);
+                    }}
+                />
+                {buttons[activeIndex]}
+                <Segment>{tabToDisplay}</Segment>
+            </div>
         );
     }
 }

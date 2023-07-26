@@ -232,7 +232,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         const rows = this.generateListItems(listValues as string[], mobile);
 
         return (
-            <div className='scroll-table'>
+            <div className='scroll-table history-table'>
                 <div className='scroll-table-inner'>
                     <GridContent
                         isPreview={this.props.isPreview}

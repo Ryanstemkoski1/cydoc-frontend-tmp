@@ -216,14 +216,12 @@ describe('AllergiesContent', () => {
             window.dispatchEvent(new Event('resize'));
         });
         wrapper.update();
-        await act(() => {
-            wrapper
-                .find('input[type="comments"]')
-                .first()
-                .simulate('change', {
-                    target: { value: 'Normal' },
-                });
-        });
+        wrapper
+            .find('.table-row-text[type="comments"]')
+            .first()
+            .simulate('change', {
+                target: { value: 'Normal' },
+            });
 
         const expectedAction = [
             {
@@ -244,32 +242,6 @@ describe('AllergiesContent', () => {
             input.simulate('click');
         });
         expect(wrapper.find('textarea').last().rowindex).toEqual(
-            document.activeElement.rowIndex
-        );
-    });
-
-    test('onTitleClick', async () => {
-        const { wrapper } = connectStore(initialState);
-
-        window.innerWidth = PATIENT_HISTORY_ALLERGIES_MOBILE_BP - 10;
-        await act(() => {
-            window.dispatchEvent(new Event('resize'));
-        });
-        wrapper.update();
-        await act(() => {
-            wrapper
-                .find('input[type="comments"]')
-                .first()
-                .simulate('change', {
-                    target: { value: 'Normal' },
-                });
-        });
-
-        const input = wrapper.find('.title').first();
-        await act(() => {
-            input.simulate('click');
-        });
-        expect(input.getElement().rowindex).toEqual(
             document.activeElement.rowIndex
         );
     });

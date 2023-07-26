@@ -16,7 +16,7 @@ export default function AddRowButton(props) {
                 aria-label={ariaLabel ?? 'add-row'}
                 className='hpi-ph-button'
             />
-            add {name}
+            Add {name}
         </div>
     );
 }

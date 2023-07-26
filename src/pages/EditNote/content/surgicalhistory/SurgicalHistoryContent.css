@@ -27,4 +27,7 @@
         margin: 5px;
         width: calc(100% - 10px) !important;
     }
+    .surgical-history {
+        margin-bottom: 42px;
+    }
 }

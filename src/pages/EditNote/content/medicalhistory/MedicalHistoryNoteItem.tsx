@@ -4,6 +4,7 @@ import {
     TextAreaProps,
     ButtonProps,
     Button,
+    Image,
 } from 'semantic-ui-react';
 import ToggleButton from 'components/tools/ToggleButton';
 import React, { Component } from 'react';
@@ -26,7 +27,7 @@ import {
     updateComments,
     updateConditionResolved,
 } from 'redux/actions/medicalHistoryActions';
-
+import Delete from '../../../../assets/delete.svg';
 //Component for a row the Medical History GridContent
 class MedicalHistoryNoteItem extends Component<Props> {
     findIndex = (event: FindIndex, data: TextAreaProps) => {
@@ -130,108 +131,131 @@ class MedicalHistoryNoteItem extends Component<Props> {
         }
 
         return (
-            <Grid.Row>
+            <Grid.Row className='mobile-block-row'>
                 <Form className='family-hx-note-item family-medical'>
                     <Form.Group inline className='condition-header'>
                         <div className='condition-name'>{conditionInput}</div>
-                        <ToggleButton
-                            active={
-                                isPreview
-                                    ? false
-                                    : hasBeenAfflicted === YesNoResponse.Yes
-                            }
-                            condition={condition}
-                            title='Yes'
-                            onToggleButtonClick={
-                                isPreview
-                                    ? () => {
-                                          return undefined;
-                                      }
-                                    : this.handleConditionToggleButtonClick
-                            }
-                        />
-                        <ToggleButton
-                            active={
-                                isPreview
-                                    ? false
-                                    : hasBeenAfflicted === YesNoResponse.No
-                            }
-                            condition={condition}
-                            title='No'
-                            onToggleButtonClick={
-                                isPreview
-                                    ? () => {
-                                          return undefined;
-                                      }
-                                    : this.handleConditionToggleButtonClick
-                            }
-                        />
+                        <div
+                            className={`switch-button is-large ${
+                                hasBeenAfflicted === YesNoResponse.Yes
+                                    ? 'active'
+                                    : ''
+                            }`}
+                        >
+                            <ToggleButton
+                                active={
+                                    isPreview
+                                        ? false
+                                        : hasBeenAfflicted === YesNoResponse.Yes
+                                }
+                                condition={condition}
+                                title='Yes'
+                                onToggleButtonClick={
+                                    isPreview
+                                        ? () => {
+                                              return undefined;
+                                          }
+                                        : this.handleConditionToggleButtonClick
+                                }
+                            />
+                            <ToggleButton
+                                active={
+                                    isPreview
+                                        ? false
+                                        : hasBeenAfflicted === YesNoResponse.No
+                                }
+                                condition={condition}
+                                title='No'
+                                onToggleButtonClick={
+                                    isPreview
+                                        ? () => {
+                                              return undefined;
+                                          }
+                                        : this.handleConditionToggleButtonClick
+                                }
+                            />
+                        </div>
                     </Form.Group>
                     {hasBeenAfflicted === YesNoResponse.Yes && (
                         <div
                             className='condition-info'
                             style={{ marginLeft: '0px' }}
                         >
-                            <Form.TextArea
-                                label='Onset'
-                                index={index}
-                                condition={condition}
-                                placeholder='Onset'
-                                value={isPreview ? '2000' : onsetYearString}
-                                onChange={this.handleOnsetChange}
-                                rows={1}
-                                style={{ width: '100%' }}
-                            />
-                            {((isNaN(startYear) && onsetYearString !== '') ||
-                                (startYear < 1900 && startYear !== -1) ||
-                                startYear > currentYear) && (
-                                <p className='year-validation-mobile-error'>
-                                    Please enter a valid year after 1900
-                                </p>
-                            )}
-                            <span className='field'>
-                                <label>Has Condition Resolved?</label>
-                            </span>
-                            <div>
-                                <ToggleButton
-                                    active={
-                                        isPreview
-                                            ? false
-                                            : hasConditionResolved ===
-                                              YesNoResponse.Yes
-                                    }
-                                    condition={condition}
-                                    title='Yes'
-                                    onToggleButtonClick={
-                                        isPreview
-                                            ? () => {
-                                                  return undefined;
-                                              }
-                                            : this
-                                                  .handleResolvedToggleButtonClick
-                                    }
-                                />
-                                <ToggleButton
-                                    active={
-                                        isPreview
-                                            ? false
-                                            : hasConditionResolved ===
-                                              YesNoResponse.No
-                                    }
-                                    condition={condition}
-                                    title='No'
-                                    onToggleButtonClick={
-                                        isPreview
-                                            ? () => () => {
-                                                  return undefined;
-                                              }
-                                            : this
-                                                  .handleResolvedToggleButtonClick
-                                    }
-                                />
+                            <div className='confirmation-item option-block-item'>
+                                <span className='field'>
+                                    <label>Has Condition Resolved?</label>
+                                </span>
+                                <div
+                                    className={`switch-button is-large ${
+                                        hasConditionResolved ===
+                                        YesNoResponse.Yes
+                                            ? 'active'
+                                            : ''
+                                    }`}
+                                >
+                                    <ToggleButton
+                                        active={
+                                            isPreview
+                                                ? false
+                                                : hasConditionResolved ===
+                                                  YesNoResponse.Yes
+                                        }
+                                        condition={condition}
+                                        title='Yes'
+                                        onToggleButtonClick={
+                                            isPreview
+                                                ? () => {
+                                                      return undefined;
+                                                  }
+                                                : this
+                                                      .handleResolvedToggleButtonClick
+                                        }
+                                    />
+                                    <ToggleButton
+                                        active={
+                                            isPreview
+                                                ? false
+                                                : hasConditionResolved ===
+                                                  YesNoResponse.No
+                                        }
+                                        condition={condition}
+                                        title='No'
+                                        onToggleButtonClick={
+                                            isPreview
+                                                ? () => () => {
+                                                      return undefined;
+                                                  }
+                                                : this
+                                                      .handleResolvedToggleButtonClick
+                                        }
+                                    />
+                                </div>
                             </div>
-                            {hasConditionResolved === YesNoResponse.Yes && (
-                                <>
+                            <div className='ui grid year-block'>
+                                <div className='eight wide column'>
+                                    <Form.TextArea
+                                        label='Start Year'
+                                        index={index}
+                                        condition={condition}
+                                        placeholder='Start Year'
+                                        value={
+                                            isPreview ? '2000' : onsetYearString
+                                        }
+                                        onChange={this.handleOnsetChange}
+                                        rows={1}
+                                        style={{ width: '100%' }}
+                                    />
+                                    {((isNaN(startYear) &&
+                                        onsetYearString !== '') ||
+                                        (startYear < 1900 &&
+                                            startYear !== -1) ||
+                                        startYear > currentYear) && (
+                                        <p className='year-validation-mobile-error'>
+                                            Please enter a valid year after 1900
+                                        </p>
+                                    )}
+                                </div>
+                                <div className='eight wide column'>
                                     <Form.TextArea
                                         label='End Year'
                                         index={index}
@@ -241,12 +265,21 @@ class MedicalHistoryNoteItem extends Component<Props> {
                                             isPreview ? '2001' : endYearString
                                         }
                                         onChange={this.handleEndYearChange}
+                                        disabled={
+                                            isPreview ||
+                                            hasConditionResolved !==
+                                                YesNoResponse.Yes
+                                        }
                                         rows={1}
                                         style={{
                                             width: '100%',
                                             marginBottom: '5px',
                                         }}
                                     />
+                                </div>
+                            </div>
+                            {hasConditionResolved === YesNoResponse.Yes && (
+                                <>
                                     {((isNaN(endYear) &&
                                         endYearString !== '') ||
                                         (endYear < 1900 && endYear !== -1) ||
@@ -273,13 +306,25 @@ class MedicalHistoryNoteItem extends Component<Props> {
                         </div>
                     )}
                 </Form>
-                <Button
-                    circular
-                    icon='close'
-                    onClick={() => this.props.deleteRow(this.props.index)}
-                    aria-label='delete-conditon'
-                    className='hpi-ph-button'
-                />
+
+                <div className='action-btn'>
+                    <Button
+                        circular
+                        icon='close'
+                        onClick={() => this.props.deleteRow(this.props.index)}
+                        aria-label='delete-conditon'
+                        className='hpi-ph-button'
+                    />
+
+                    <aside
+                        onClick={() => {
+                            this.props.deleteRow(this.props.index);
+                        }}
+                    >
+                        <Image src={Delete} />
+                        <span>Remove</span>
+                    </aside>
+                </div>
             </Grid.Row>
         );
     };

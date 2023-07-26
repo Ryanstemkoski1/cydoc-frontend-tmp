@@ -38,6 +38,7 @@ import {
 import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
 import '../hpi/knowledgegraph/src/css/Button.css';
+import './FamilyHistoryContent.css';
 import { YesNoResponse } from 'constants/enums';
 import constants from 'constants/constants.json';
 
@@ -236,7 +237,7 @@ class FamilyHistoryContent extends Component<Props, State> {
         });
 
         return mobile ? (
-            <>
+            <div className='HistoryBlock-mobile'>
                 <GridContent
                     isPreview={this.props.isPreview}
                     numColumns={4}
@@ -248,10 +249,9 @@ class FamilyHistoryContent extends Component<Props, State> {
                     addRow={this.addRow}
                     name={'disease'}
                 />
-            </>
+            </div>
         ) : (
             <>
-                <div style={{ marginTop: 25 }}> </div>
                 {listItems}
                 {this.props.responseType != ResponseTypes.FH_POP ? (
                     <AddRowButton onClick={this.addRow} name={'disease'} />
