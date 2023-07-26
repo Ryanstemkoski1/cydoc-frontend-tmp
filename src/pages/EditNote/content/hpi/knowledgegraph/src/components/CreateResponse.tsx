@@ -37,6 +37,7 @@ import {
     isSelectOneResponse,
 } from 'redux/reducers/hpiReducer';
 import Masonry from 'react-masonry-css';
+import YearInput from './responseComponents/YearInput';
 
 interface CreateResponseProps {
     node: string;
@@ -225,6 +226,9 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
 
             case ResponseTypes.NUMBER:
                 return <HandleNumericInput key={node} node={node} />;
+
+            case ResponseTypes.YEAR:
+                return <YearInput key={node} node={node} />;
 
             case ResponseTypes.BODYLOCATION:
                 return <BodyLocation key={node} node={node} />;
