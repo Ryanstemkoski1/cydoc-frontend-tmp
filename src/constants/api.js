@@ -1,10 +1,5 @@
 import axios from 'axios';
 
-// Instantiate an axios client
-export const client = axios.create({
-    baseURL: 'https://cydocbackend.herokuapp.com',
-});
-
 function getGraphClientURL() {
     let graphClientURL;
     if (location.hostname == 'www.cydoc.ai') {
