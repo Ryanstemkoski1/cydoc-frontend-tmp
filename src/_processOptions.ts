@@ -1,6 +1,7 @@
 export interface DropdownOption {
     value: string;
     label: string;
+    isHeader?: boolean;
 }
 
 export type OptionMapping = { [key: string]: DropdownOption };
@@ -45,6 +46,7 @@ export const getDiagnosesOptionMapping = (
         mapping[value] = {
             value,
             label: options[key]['label'],
+            isHeader: 'items' in options[key],
         };
         return mapping;
     }, {} as OptionMapping);

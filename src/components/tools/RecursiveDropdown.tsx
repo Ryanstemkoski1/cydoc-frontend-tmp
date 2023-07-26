@@ -3,9 +3,11 @@ import Select, { createFilter, components } from 'react-select';
 import {
     GroupBase,
     InputActionMeta,
+    MultiValue,
     OptionsOrGroups,
     PropsValue,
     SingleValue,
+    StylesConfig,
     WindowedMenuList,
 } from 'react-windowed-select';
 import { Divider } from 'semantic-ui-react';
@@ -21,6 +23,34 @@ type OnAddItem = (
     value1: React.SyntheticEvent | null,
     option: OptionMapping | any
 ) => unknown;
+
+// Custom styled tag before the normally formatted text
+const TagLabel = (props: { children: any; isHeader: boolean }) => {
+    const color = props.isHeader ? 'gray' : 'green';
+    const backgroundColor = props.isHeader ? 'lightgray' : 'lightgreen';
+
+    return (
+        <div
+            style={{
+                color,
+                backgroundColor,
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '2px 6px',
+                marginRight: '6px',
+                fontSize: '12px',
+                fontStyle: 'normal',
+                fontFamily: 'Consolas,monospace',
+                lineHeight: 'normal',
+                boxSizing: 'border-box',
+                borderRadius: '4px',
+            }}
+        >
+            {props.children}
+        </div>
+    );
+};
+
 /**
  * Overrides and removes mouseover event handlers from react-select's default
  * `Option` component for optimization. Otherwise, a rerender would be
@@ -32,7 +62,16 @@ const CustomOption = (props: {
     isFocused?: any;
     innerProps?: any;
 }) => {
-    const { innerProps, ...newEditedProps } = props;
+    // Extract the label and value from the option
+    const { label, value, ...otherProps } = props;
+    const code = /^[A-Z0-9]+$/.test(value)
+        ? value.length > 3
+            ? `${value.substring(0, 3)}.${value.substring(3)}`
+            : value
+        : undefined;
+    const isHeader = otherProps.data?.isHeader || false;
+
+    const { innerProps, ...newEditedProps } = otherProps;
 
     typeof newEditedProps.isFocused !== 'undefined' &&
         delete newEditedProps.isFocused;
@@ -49,7 +88,8 @@ const CustomOption = (props: {
     return (
         // @ts-expect-error this is existing code that doesn't match our types, but we also need to limit our changes right now. If it's broken, change it!
         <components.Option {...newProps} className='option' role='option'>
-            {props.children}
+            {code && <TagLabel isHeader={isHeader}>{code}</TagLabel>}
+            {label}
         </components.Option>
     );
 };
@@ -116,6 +156,25 @@ const RecursiveDropdown = (props: {
         // if it stops working, re-evaluate types
     ) as OptionsOrGroups<DropdownOption, GroupBase<DropdownOption>>;
 
+    // add text styling to options (headers are italicized)
+    const optionsStyles: StylesConfig<DropdownOption> = {
+        option: (styles, { data }) => {
+            const fontStyle = data?.isHeader ? 'italic' : 'normal';
+            return {
+                ...styles,
+                fontStyle,
+                cursor: 'pointer',
+            };
+        },
+        singleValue: (styles, { data }) => {
+            const fontStyle = data?.isHeader ? 'italic' : 'normal';
+            return {
+                ...styles,
+                fontStyle,
+            };
+        },
+    };
+
     // set state variables
     const [val, setVal] = useState('');
     const [show, setShow] = useState(recursiveLevel > 0);
@@ -128,15 +187,17 @@ const RecursiveDropdown = (props: {
 
     // Format onChange so that it has access to additional props similarly to
     // Semantic UI's Dropdowns
-    const handleOnChange = (option: SingleValue<DropdownOption>) => {
-        let value = option?.value || '';
-        setSelectedValue(value);
-        setValueToDisplay(value !== '' ? dropdownOptions.value : undefined);
-        if (value == '') {
-            onChange(null, { ...otherProps, value });
-        } else if (value in options && !('items' in options[value])) {
-            value = options[value]['label'];
-            onChange(null, { ...otherProps, value });
+    const handleOnChange = (option: any) => {
+        let newValue = option?.value || '';
+        setSelectedValue(newValue);
+        setValueToDisplay(newValue !== '' ? dropdownOptions.value : undefined);
+        if (newValue == '') {
+            onChange(null, { ...otherProps, value: '' });
+        } else if (newValue in options && !('items' in options[newValue])) {
+            newValue = options[newValue]['label'];
+            onChange(null, { ...otherProps, value: newValue });
+        } else if (value !== '') {
+            onChange(null, { ...otherProps, value: '' });
         }
     };
 
@@ -171,6 +232,7 @@ const RecursiveDropdown = (props: {
                 inputValue={{ val }.val}
                 value={valueToDisplay}
                 options={{ show }.show ? sortedOptions : undefined}
+                styles={optionsStyles}
                 noOptionsMessage={() => null}
                 isClearable={clearable}
                 isLoading={loading}
