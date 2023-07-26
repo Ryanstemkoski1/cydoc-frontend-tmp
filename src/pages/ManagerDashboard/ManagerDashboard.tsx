@@ -25,20 +25,22 @@ const ManagerDashboard = () => {
         () =>
             user?.institutionId &&
             getInstitutionMembers(user?.institutionId).then(
-                (newMembersOrError) => {
-                    if (
-                        typeof newMembersOrError !== 'string' &&
-                        !!(newMembersOrError as [])?.length
-                    ) {
-                        const newMembers = newMembersOrError as DbUser[];
-                        setMembers(newMembers);
-                    } else {
-                        log(`Invalid getInstitutionMembers result`, {
-                            newMembersOrError,
+                ({ members, errorMessage }) => {
+                    if (errorMessage?.length) {
+                        log(`[getInstitutionMembers] errror: ${errorMessage}`, {
+                            members,
+                            errorMessage,
                         });
                         alert(
                             `Error fetching institution members, try refreshing or logging out`
                         );
+                    } else if (members) {
+                        setMembers(members);
+                    } else {
+                        log(`Invalid getInstitutionMembers result`, {
+                            members,
+                            errorMessage,
+                        });
                     }
                 }
             ),

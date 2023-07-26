@@ -1,4 +1,3 @@
-import { Institution } from './intitutions';
 import { ClinicianSignUpData, DbUser } from './users';
 
 export interface UpdateUserResponse {
@@ -9,8 +8,8 @@ export interface UpdateUserResponse {
 export interface CreateUserResponse extends ApiResponseBase {
     user?: DbUser;
 }
-export interface GetInstitutionsResponse extends ApiResponseBase {
-    institutions?: Institution[];
+export interface GetMembersResponse extends ApiResponseBase {
+    members?: DbUser[];
 }
 export type InviteUserBody = Pick<
     DbUser,
@@ -29,11 +28,11 @@ export type UpdateUserBody = Pick<
 
 // Generic errored ApiResponseBase includes errorMessage
 export interface ApiResponseBase {
-    errorMessage: string | undefined;
+    errorMessage?: string | undefined;
 }
 
 export type ApiPostBody = UpdateUserBody | InviteUserBody;
 export type ApiResponse =
     | CreateUserResponse
-    | GetInstitutionsResponse
+    | GetMembersResponse
     | ApiResponseBase;
