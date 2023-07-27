@@ -102,6 +102,7 @@ const connectBlock = (state = initialState) => {
         index: 'foo',
         mobile: true,
         conditionInp: <div />,
+        deleteRow: jest.fn(),
     };
     return {
         store,

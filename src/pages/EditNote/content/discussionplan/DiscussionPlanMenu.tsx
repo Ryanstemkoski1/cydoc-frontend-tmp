@@ -119,7 +119,12 @@ export const DiscussionPlanMenu = (props: DiscussionPlanMenuProps) => {
     };
 
     const addButton = (
-        <Menu.Item key='add-btn' id='add-condition' onClick={addCondition}>
+        <Menu.Item
+            key='add-btn'
+            id='add-condition'
+            className='add-condition'
+            onClick={addCondition}
+        >
             <Icon name='plus' />
         </Menu.Item>
     );
@@ -142,6 +147,7 @@ export const DiscussionPlanMenu = (props: DiscussionPlanMenuProps) => {
     // When screen is too small, show just the active condition as a tab
     // and hide the rest in a dropdown
     if (collapsed) {
+        const width = windowWidth >= 450 ? 'auto' : 100;
         const dropdownItems = conditions.map((condition, i) => (
             <Menu.Item
                 key={i}
@@ -152,7 +158,17 @@ export const DiscussionPlanMenu = (props: DiscussionPlanMenuProps) => {
                 idx={i}
                 uuid={condition.id}
                 onClick={selectTab}
-            />
+            >
+                {condition.name ? null : (
+                    <Input
+                        transparent
+                        type='text'
+                        placeholder='Condition Name'
+                        disabled
+                        style={{ width }}
+                    />
+                )}
+            </Menu.Item>
         ));
         dropdownItems.push(addButton);
         let currentTab;
