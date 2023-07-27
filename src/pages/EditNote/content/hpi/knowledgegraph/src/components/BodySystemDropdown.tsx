@@ -9,7 +9,7 @@ import psychiatry from '../icons/psychiatry.svg';
 import heent from '../icons/heent.svg';
 import respiratory from '../icons/respiratory.svg';
 import heart from '../icons/heart.svg';
-import yoga from '../icons/yoga.svg';
+import genmed from '../icons/genmed.svg';
 import intestines from '../icons/intestines.svg';
 import immunology from '../icons/immunology.svg';
 import dermatologic from '../icons/dermatologic.svg';
@@ -18,6 +18,7 @@ import endocrine from '../icons/endocrine.svg';
 import pediatrics from '../icons/pediatrics.svg';
 import musculoskeletal from '../icons/musculoskeletal.svg';
 import star from '../icons/star.svg';
+import blooddrop from '../icons/blooddrop.svg';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 interface BodySystemDropdownProps {
@@ -30,20 +31,21 @@ interface BodySystemDropdownState {
 }
 
 const imgToRender: { [key: string]: any } = {
-    Neurologic: brain,
-    Psychiatric: psychiatry,
-    HEENT: heent,
-    Respiratory: respiratory,
-    'Cardiovascular/Hematologic': heart,
-    'General/Lifestyle': yoga,
-    Gastrointestinal: intestines,
-    Immune: immunology,
-    Dermatologic: dermatologic,
-    'ObGyn/GU': kidneys,
-    Endocrine: endocrine,
+    Neurology: brain,
+    Psychiatry: psychiatry,
+    'Ophtho/ENT': heent,
+    Pulmonology: respiratory,
+    Cardiology: heart,
+    'General Medicine': genmed,
+    Gastroenterology: intestines,
+    Rheumatology: immunology,
+    Dermatology: dermatologic,
+    'Ob/Gyn': kidneys,
+    Endocrinology: endocrine,
     Pediatrics: pediatrics,
-    Musculoskeletal: musculoskeletal,
+    Orthopedics: musculoskeletal,
     Favorites: star,
+    'Heme/Onc': blooddrop,
 };
 
 class BodySystemDropdown extends React.Component<
@@ -67,12 +69,6 @@ class BodySystemDropdown extends React.Component<
         //if the BodySystem is Neurologic/Psychiatric -> abbreviate to Neuro/Psych
 
         const isMobile = window.innerWidth < NOTE_PAGE_MOBILE_BP;
-        const cardio = imgToRender[name] == heart;
-        // const neuro = imgToRender[name] == brain;
-
-        //Setting name to default of name, but abbreviating if needed
-        let nameAbrev = name;
-        if (cardio) nameAbrev = 'Cards/Heme';
 
         //Setting default render style to computer but changing to mobile if needed
         let styleToRender = 'hpi-disease-button';
@@ -99,7 +95,7 @@ class BodySystemDropdown extends React.Component<
                             />
                         </div>
                         <div className='hpi-disease-button-content-name'>
-                            {nameAbrev}
+                            {name}
                         </div>
                     </div>
                 </Button>

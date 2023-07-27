@@ -93,3 +93,13 @@
 .width-50-desktop  * > .ui.dropdown>.text, .ui.dropdown>.default.text {
     overflow: hidden;
 }
+
+.buttons-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.buttons-group > .ui.button {
+    margin: 0;
+}

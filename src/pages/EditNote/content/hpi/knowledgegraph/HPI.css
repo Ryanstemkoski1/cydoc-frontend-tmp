@@ -51,6 +51,11 @@
     margin: 3vh 0vh 0vw 0vw;
 }
 
+.hpi-search-bar .result .title {
+    padding-left: 10px !important;
+    border-radius: 0 !important;
+}
+
 .diseases-array {
     margin-bottom: 2rem;
 }
@@ -177,7 +182,7 @@
 #hpi-menu {
     margin-bottom: 10px;
 }
-@media only screen and (min-width: 768px) and (max-width: 991px){
+@media only screen and (min-width: 767px) and (max-width: 991px){
     .hpi-text-drop {
         width: 723px;
     }
@@ -215,7 +220,7 @@
     }
 }
 
-@media only screen and (max-width: 794px) and (min-width: 768px)  {
+@media only screen and (max-width: 794px) and (min-width: 767px)  {
     .mobile-tab {
         width: calc(100% - 40px);
         padding: 0 !important;
@@ -277,27 +282,41 @@
         margin-top: 10px !important;
     }  
     .mobile-tab {
-        z-index: 1;
         width: 100%;
         padding-bottom: 5px;
         border-bottom: 1px solid #c7c7c7;
     }
-    .mobile-tab .button {
+    .mobile-tab button {
         font-weight: 400;
         border-radius: 20px;
-        margin: 5px 2px 0;
+        margin: 5px 2px 0 !important;
         color: #0d5e70!important;
         background-color: transparent !important;
-        box-shadow: 0 0 0 1px rgba(34,36,38,.15) inset;
+     
     }
-    .mobile-tab .button.active {
+    .mobile-tab button.hpi-ph-button-selected,
+    .mobile-tab button.active {
         background: rgba(0,0,0,.05)!important;
         box-shadow: ''!important;
         color: rgba(0,0,0,.95)!important;
     }
     .bottom-no-space {
         margin-bottom: 0 !important;
-    }  
+    }
+    .hpi-content {
+        padding: 0 16px;
+        position: relative;
+    }
+    .ui.icon.button.hpi-small-previous-button,
+    .ui.icon.button.hpi-small-next-button {
+        width: 38px;
+        padding: 0;
+        height: 38px;
+    }
+    .ui.icon.button.hpi-small-previous-button i,
+    .ui.icon.button.hpi-small-next-button i{
+        font-size: 15px !important;
+    }
 }
 @media screen and (max-width: 700px) {
     .category-header {
@@ -321,7 +340,7 @@
     }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 767px) {
     .margin-bottom-for-notes {
         padding-bottom: 130px !important;
     }

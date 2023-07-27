@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-    Button,
-    Segment,
-    Icon,
-    Search,
-    Container,
-    Grid,
-    Tab,
-} from 'semantic-ui-react';
+import { Button, Segment, Icon, Search } from 'semantic-ui-react';
 import Masonry from 'react-masonry-css';
 import './src/css/App.css';
 import BodySystemDropdown from './src/components/BodySystemDropdown';
@@ -53,6 +45,7 @@ import {
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 import { graphClientURL } from 'constants/api.js';
 import MiscBox from './src/components/MiscBox';
+import Tab from '../../../../../components/tools/Tab';
 
 interface HPIContentProps {
     step: number;
@@ -156,7 +149,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
     render() {
         const { windowWidth } = this.state;
-        const { chiefComplaints, hpiHeaders, patientView } = this.props;
+        const { chiefComplaints, hpiHeaders } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
 
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
@@ -246,6 +239,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                 windowWidth < DISEASE_TABS_MED_BP) ||
             windowWidth < DISEASE_TABS_SMALL_BP;
 
+        const panes = Object.keys(chiefComplaints).map((name) => ({
+            menuItem: name,
+        }));
+
         // depending on the current step, we switch to a different view
         switch (step) {
             case -1:
@@ -281,14 +278,64 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 {diseaseComponents}
                             </Masonry>
                         </Segment>
-                        <>
+                    </>
+                );
+            default:
+                // if API data is loaded, render the DiseaseForm
+                if (
+                    Object.keys(bodySystems).length &&
+                    Object.keys(parentNodes).length
+                ) {
+                    return (
+                        <div className='hpi-content'>
+                            <Tab
+                                panes={panes}
+                                activeIndex={panes.findIndex(
+                                    (item) =>
+                                        item.menuItem === this.props.activeTab
+                                )}
+                                onTabChange={(_e: any, { value }: any) => {
+                                    // this.setState({ activeIndex: value });
+                                    this.props.onTabClick(_e, value);
+                                }}
+                            ></Tab>
+                            <Segment className='margin-bottom-for-notes'>
+                                <MiscBox
+                                    activeThing={this.props.activeTab}
+                                    step={step}
+                                />
+                                <DiseaseForm
+                                    key={this.props.activeTab}
+                                    category={this.props.activeTab}
+                                    nextStep={this.continue}
+                                    prevStep={this.back}
+                                />
+                            </Segment>
+                            <Button
+                                icon
+                                floated='left'
+                                onClick={this.back}
+                                className='hpi-small-previous-button'
+                            >
+                                <Icon name='arrow left' className='big' />
+                            </Button>
+                            <Button
+                                icon
+                                labelPosition='left'
+                                floated='left'
+                                onClick={this.back}
+                                className='hpi-previous-button'
+                            >
+                                Prev
+                                <Icon name='arrow left' />
+                            </Button>
                             <Button
                                 icon
                                 floated='right'
                                 onClick={this.continue}
                                 className='hpi-small-next-button'
                             >
-                                <Icon name='arrow right' className='big' />
+                                <Icon name='arrow right' />
                             </Button>
                             <Button
                                 icon
@@ -300,199 +347,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 Next
                                 <Icon name='arrow right' />
                             </Button>
-                        </>
-                    </>
-                );
-            default:
-                // if API data is loaded, render the DiseaseForm
-                if (
-                    Object.keys(bodySystems).length &&
-                    Object.keys(parentNodes).length
-                ) {
-                    return (
-                        <>
-                            {collapseTabs ? (
-                                <Container>
-                                    <Grid
-                                        stackable
-                                        centered
-                                        id='hpi-menu'
-                                        className='bottom-no-space'
-                                        relaxed
-                                    >
-                                        {' '}
-                                        <div className='mobile-tab'>
-                                            {Object.keys(chiefComplaints).map(
-                                                (
-                                                    menuItem: string,
-                                                    index: number
-                                                ) => (
-                                                    <ToggleButton<string>
-                                                        key={menuItem}
-                                                        condition={menuItem}
-                                                        title={menuItem}
-                                                        onToggleButtonClick={(
-                                                            _e
-                                                        ) =>
-                                                            this.props.onTabClick(
-                                                                _e,
-                                                                index
-                                                            )
-                                                        }
-                                                        active={
-                                                            this.props
-                                                                .activeTab ==
-                                                            menuItem
-                                                        }
-                                                    />
-                                                )
-                                            )}
-                                        </div>
-                                    </Grid>
-                                    <Segment>
-                                        <MiscBox
-                                            activeThing={this.props.activeTab}
-                                            step={step}
-                                        />
-                                        <DiseaseForm
-                                            key={this.props.activeTab}
-                                            category={this.props.activeTab}
-                                            nextStep={this.continue}
-                                            prevStep={this.back}
-                                        />
-                                    </Segment>
-                                    <Button
-                                        icon
-                                        floated='left'
-                                        onClick={this.back}
-                                        className='hpi-small-previous-button'
-                                    >
-                                        <Icon
-                                            name='arrow left'
-                                            className='big'
-                                        />
-                                    </Button>
-                                    <Button
-                                        icon
-                                        labelPosition='left'
-                                        floated='left'
-                                        onClick={this.back}
-                                        className='hpi-previous-button'
-                                    >
-                                        Prev
-                                        <Icon name='arrow left' />
-                                    </Button>
-
-                                    <Button
-                                        icon
-                                        floated='right'
-                                        onClick={this.continue}
-                                        className='hpi-small-next-button'
-                                    >
-                                        <Icon
-                                            name='arrow right'
-                                            className='big'
-                                        />
-                                    </Button>
-                                    <Button
-                                        icon
-                                        labelPosition='right'
-                                        floated='right'
-                                        onClick={this.continue}
-                                        className='hpi-next-button'
-                                    >
-                                        Next
-                                        <Icon name='arrow right' />
-                                    </Button>
-                                </Container>
-                            ) : (
-                                <Tab
-                                    menu={{
-                                        pointing: true,
-                                    }}
-                                    panes={Object.keys(chiefComplaints).map(
-                                        (diseaseCategory: string) => ({
-                                            menuItem: patientView
-                                                ? hpiHeaders.parentNodes[
-                                                      diseaseCategory
-                                                  ].patientView
-                                                : diseaseCategory,
-                                            render: () => (
-                                                <Tab.Pane className='margin-bottom-for-notes'>
-                                                    <MiscBox
-                                                        activeThing={
-                                                            diseaseCategory
-                                                        }
-                                                        step={step}
-                                                    />
-                                                    <DiseaseForm
-                                                        key={
-                                                            Object.keys(
-                                                                parentNodes[
-                                                                    diseaseCategory
-                                                                ]
-                                                            )[0]
-                                                        }
-                                                        category={
-                                                            diseaseCategory
-                                                        }
-                                                        nextStep={this.continue}
-                                                        prevStep={this.back}
-                                                    />
-                                                    <Button
-                                                        icon
-                                                        floated='left'
-                                                        onClick={this.back}
-                                                        className='hpi-small-previous-button'
-                                                    >
-                                                        <Icon
-                                                            name='arrow left'
-                                                            className='big'
-                                                        />
-                                                    </Button>
-                                                    <Button
-                                                        icon
-                                                        labelPosition='left'
-                                                        floated='left'
-                                                        onClick={this.back}
-                                                        className='hpi-previous-button'
-                                                    >
-                                                        Prev
-                                                        <Icon name='arrow left' />
-                                                    </Button>
-                                                    <Button
-                                                        icon
-                                                        floated='right'
-                                                        onClick={this.continue}
-                                                        className='hpi-small-next-button'
-                                                    >
-                                                        <Icon name='arrow right' />
-                                                    </Button>
-                                                    <Button
-                                                        icon
-                                                        labelPosition='right'
-                                                        floated='right'
-                                                        onClick={this.continue}
-                                                        className='hpi-next-button'
-                                                    >
-                                                        Next
-                                                        <Icon name='arrow right' />
-                                                    </Button>
-                                                </Tab.Pane>
-                                            ),
-                                        })
-                                    )}
-                                    id='tab-panes'
-                                    activeIndex={step}
-                                    onTabChange={(_e, data) =>
-                                        this.props.onTabClick(
-                                            _e,
-                                            data.activeIndex as number
-                                        )
-                                    }
-                                />
-                            )}
-                        </>
+                        </div>
                     );
                 }
                 // if API data is not yet loaded, show loading screen

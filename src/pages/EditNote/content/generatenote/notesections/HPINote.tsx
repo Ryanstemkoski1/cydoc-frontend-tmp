@@ -167,6 +167,36 @@ export const extractNode = (
     node: GraphNode
 ): [string, string, string] => {
     /* eslint-disable no-case-declarations, no-fallthrough */
+
+    if (
+        (node.responseType === ResponseTypes.YES_NO &&
+            node.response == YesNoResponse.Yes) ||
+        (node.responseType === ResponseTypes.NO_YES &&
+            node.response === YesNoResponse.No)
+    ) {
+        const childNode = state.hpi.nodes[state.hpi.graph[node.medID][0]];
+        const responseTypes = [
+            'MEDS-BLANK',
+            'MEDS-POP',
+            'FH-POP',
+            'FH-BLANK',
+            'PMH-POP',
+            'PMH-BLANK',
+            'PSH-BLANK',
+            'PSH-POP',
+        ];
+        if (childNode) {
+            if (Array.isArray(childNode.response)) {
+                if (
+                    responseTypes.includes(childNode.responseType) &&
+                    childNode.response.length !== 0
+                ) {
+                    return ['', '', ''];
+                }
+            }
+        }
+    }
+
     if (
         node.responseType === ResponseTypes.NO_YES ||
         node.responseType === ResponseTypes.YES_NO
