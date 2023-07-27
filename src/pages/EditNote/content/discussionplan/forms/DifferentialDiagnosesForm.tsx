@@ -55,6 +55,7 @@ const DifferentialDiagnosesForm = (
                 clearable
                 transparent={mobile}
                 value={row.diagnosis}
+                code={row.code}
                 options={(options?.main as DiagnosesOptionMapping) || {}}
                 uuid={row.id}
                 onChange={formatAction(actions.updateDifferentialDiagnosis)}

@@ -3,10 +3,8 @@ import Select, { createFilter, components } from 'react-select';
 import {
     GroupBase,
     InputActionMeta,
-    MultiValue,
     OptionsOrGroups,
     PropsValue,
-    SingleValue,
     StylesConfig,
     WindowedMenuList,
 } from 'react-windowed-select';
@@ -64,11 +62,7 @@ const CustomOption = (props: {
 }) => {
     // Extract the label and value from the option
     const { label, value, ...otherProps } = props;
-    const code = /^[A-Z0-9]+$/.test(value)
-        ? value.length > 3
-            ? `${value.substring(0, 3)}.${value.substring(3)}`
-            : value
-        : undefined;
+    const code = value;
     const isHeader = otherProps.data?.isHeader || false;
 
     const { innerProps, ...newEditedProps } = otherProps;
@@ -109,6 +103,7 @@ const RecursiveDropdown = (props: {
     search: boolean;
     options?: DiagnosesOptionMapping | undefined;
     value?: string | undefined;
+    code?: string | undefined;
     onChange?: OnAddItem;
     recursiveLevel?: number;
 }) => {
@@ -123,13 +118,14 @@ const RecursiveDropdown = (props: {
         clearable,
         search,
         value = '',
+        code = '',
         onChange = () => undefined,
         ...otherProps
     } = nonRecursiveProps;
 
     const dropdownOptions = getDiagnosesOptionMapping(options);
-    if (value !== '') {
-        dropdownOptions[value] = { value, label: value };
+    if (code !== '') {
+        dropdownOptions[code] = { value: code, label: value };
     }
     const flatOptions = useMemo(
         () => Object.values(dropdownOptions),
@@ -179,23 +175,26 @@ const RecursiveDropdown = (props: {
     const [val, setVal] = useState('');
     const [show, setShow] = useState(recursiveLevel > 0);
     const [selectedValue, setSelectedValue] = useState<string | undefined>(
-        value !== '' ? value : undefined
+        code !== '' ? code : undefined
     );
     const [valueToDisplay, setValueToDisplay] = useState<
         PropsValue<DropdownOption> | undefined
-    >(value !== '' ? dropdownOptions[value] : undefined);
+    >(code !== '' ? dropdownOptions[code] : undefined);
 
     // Format onChange so that it has access to additional props similarly to
     // Semantic UI's Dropdowns
     const handleOnChange = (option: any) => {
-        let newValue = option?.value || '';
-        setSelectedValue(newValue);
-        setValueToDisplay(newValue !== '' ? dropdownOptions.value : undefined);
-        if (newValue == '') {
+        const newCode = option?.value || '';
+        setSelectedValue(newCode);
+        setValueToDisplay(newCode !== '' ? dropdownOptions.newCode : undefined);
+        if (newCode == '') {
             onChange(null, { ...otherProps, value: '' });
-        } else if (newValue in options && !('items' in options[newValue])) {
-            newValue = options[newValue]['label'];
-            onChange(null, { ...otherProps, value: newValue });
+        } else if (newCode in options && !('items' in options[newCode])) {
+            const newValue = options[newCode]['label'];
+            onChange(null, {
+                ...otherProps,
+                value: { diagnosis: newValue, code: newCode },
+            });
         } else if (value !== '') {
             onChange(null, { ...otherProps, value: '' });
         }
