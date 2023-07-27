@@ -1,8 +1,8 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { useUser } from 'hooks/useUser';
+import useUser from 'hooks/useUser';
 import { PrivateRoute, PrivateRouteProps } from './PrivateRoute';
-import { useAuth } from 'hooks/useAuth';
+import useAuth from 'hooks/useAuth';
 
 export const ManagerRoute = (props: PrivateRouteProps) => {
     const { authLoading, isSignedIn } = useAuth();

@@ -7,7 +7,7 @@ import './Account.css';
 import { Button, Image } from 'semantic-ui-react';
 import Logo from '../../assets/cydoc-logo.svg';
 import * as Yup from 'yup';
-import { useAuth } from 'hooks/useAuth';
+import useAuth from 'hooks/useAuth';
 import { Box } from '@mui/system';
 import { ErrorText } from 'components/Atoms/ErrorText';
 

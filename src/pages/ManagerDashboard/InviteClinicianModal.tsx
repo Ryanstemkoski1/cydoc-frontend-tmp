@@ -9,7 +9,7 @@ import { Button, Modal } from 'semantic-ui-react';
 import { ErrorText } from 'components/Atoms/ErrorText';
 import { DbUser } from 'types/users';
 import { inviteUser } from 'modules/public-api';
-import { useUser } from 'hooks/useUser';
+import userUser from 'hooks/useUser';
 
 interface Props {
     isOpen: boolean;

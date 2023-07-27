@@ -3,8 +3,8 @@ import NavMenu from 'components/navigation/NavMenu';
 import { Box } from '@mui/system';
 import { Paper, Typography } from '@mui/material';
 import { log } from 'modules/logging';
-import { useUser } from 'hooks/useUser';
-import { useAuth } from 'hooks/useAuth';
+import useUser from 'hooks/useUser';
+import useAuth from 'hooks/useAuth';
 
 export default function NotAuthorized() {
     const { user, isManager } = useUser();

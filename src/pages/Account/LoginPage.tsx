@@ -6,7 +6,7 @@ import SignUpForm from './SignUpForm';
 
 import './Account.css';
 import LoginForm from './LoginForm';
-import { useAuth } from 'hooks/useAuth';
+import useAuth from 'hooks/useAuth';
 import MfaVerificationForm from './MfaVerificationForm';
 import { Paper } from '@mui/material';
 import { Box } from '@mui/system';

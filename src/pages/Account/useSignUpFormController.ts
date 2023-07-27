@@ -8,7 +8,7 @@ import { createDbUser } from 'modules/user-api';
 import { useHistory } from 'react-router-dom';
 import { breadcrumb, log } from 'modules/logging';
 import { CreateUserResponse } from 'types/api';
-import { useAuth } from 'hooks/useAuth';
+import useAuth from 'hooks/useAuth';
 
 const validationSchema = Yup.object<SignUpFormData>({
     isTermsChecked: Yup.bool()

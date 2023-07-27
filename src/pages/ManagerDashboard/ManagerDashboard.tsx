@@ -4,7 +4,7 @@ import NavMenu from 'components/navigation/NavMenu';
 import './ManagerDashboard.css';
 import { DbUser } from 'types/users';
 import { getInstitutionMembers } from 'modules/institution-api';
-import { useUser } from 'hooks/useUser';
+import useUser from 'hooks/useUser';
 import { log } from 'modules/logging';
 import MaterialTable, {
     materialTableHeight,
@@ -49,7 +49,7 @@ const ManagerDashboard = () => {
 
     useEffect(() => {
         fetchMembers();
-    }, [fetchMembers, user?.institutionId]);
+    }, [fetchMembers, user?.institutionId, isInviteUserOpen]);
 
     // TODO: review these state items:
     const [userToRemove, setUserToRemove] = useState('');

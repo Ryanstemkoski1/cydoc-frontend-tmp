@@ -22,7 +22,7 @@ import { Link } from 'react-router-dom';
 import Logo from '../../assets/cydoc-logo.svg';
 import './Account.css';
 import * as Yup from 'yup';
-import { useAuth } from 'hooks/useAuth';
+import useAuth from 'hooks/useAuth';
 import { DbUser } from 'types/users';
 import { ErrorText } from 'components/Atoms/ErrorText';
 

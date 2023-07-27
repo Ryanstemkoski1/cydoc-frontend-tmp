@@ -13,7 +13,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { isLivemode } from './auth/livemode';
 import Routes from 'components/navigation/Routes';
 import { initializeSentry } from 'modules/logging';
-import { AuthProvider } from 'hooks/useAuth';
+import { AuthProvider } from 'providers/AuthProvider';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

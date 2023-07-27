@@ -27,8 +27,8 @@ import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import constants from '../../constants/constants.json';
 import './NavMenu.css';
-import { useAuth } from 'hooks/useAuth';
-import { useUser } from 'hooks/useUser';
+import useAuth from 'hooks/useAuth';
+import useUser from 'hooks/useUser';
 
 interface ConnectedNavMenuProps {
     className?: string;
@@ -51,9 +51,8 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     } = props;
 
     const { isSignedIn, signOut } = useAuth();
-    const [windowWidth, setWindowWidth] = useState(0);
-
     const { user, isManager } = useUser();
+    const [windowWidth, setWindowWidth] = useState(0);
 
     // Set event listeners for window resize to determine mobile vs web view
     useEffect(() => {
