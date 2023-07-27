@@ -18,6 +18,7 @@ import endocrine from '../icons/endocrine.svg';
 import pediatrics from '../icons/pediatrics.svg';
 import musculoskeletal from '../icons/musculoskeletal.svg';
 import star from '../icons/star.svg';
+import blooddrop from '../icons/blooddrop.svg';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 interface BodySystemDropdownProps {
@@ -30,20 +31,21 @@ interface BodySystemDropdownState {
 }
 
 const imgToRender: { [key: string]: any } = {
-    Neurologic: brain,
-    Psychiatric: psychiatry,
+    Neurology: brain,
+    Psychiatry: psychiatry,
     HEENT: heent,
-    Respiratory: respiratory,
-    'Cardiovascular/Hematologic': heart,
-    'General/Lifestyle': yoga,
-    Gastrointestinal: intestines,
-    Immune: immunology,
-    Dermatologic: dermatologic,
-    'ObGyn/GU': kidneys,
-    Endocrine: endocrine,
+    Pulmonology: respiratory,
+    Cardiology: heart,
+    'General Medicine': yoga,
+    Gastroenterology: intestines,
+    Rheumatology: immunology,
+    Dermatology: dermatologic,
+    'Ob/Gyn': kidneys,
+    Endocrinology: endocrine,
     Pediatrics: pediatrics,
-    Musculoskeletal: musculoskeletal,
+    Orthopedics: musculoskeletal,
     Favorites: star,
+    'Heme/Onc': blooddrop,
 };
 
 class BodySystemDropdown extends React.Component<
