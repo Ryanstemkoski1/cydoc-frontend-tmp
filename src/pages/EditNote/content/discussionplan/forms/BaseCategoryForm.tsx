@@ -17,7 +17,7 @@ import {
     EventHandler,
     HandleOnAddItem,
 } from '../util';
-import { Grid, Header, Accordion } from 'semantic-ui-react';
+import { Grid, Header, Accordion, Icon } from 'semantic-ui-react';
 import _ from 'lodash';
 
 type Options = { main: OptionMapping; when?: OptionMapping };
@@ -177,12 +177,16 @@ export const BaseCategoryForm = <T extends { id: string }>(
                 /* eslint-disable-next-line */
                 onClick={enableToggle ? () => setExpanded(!expanded) : () => {}}
             >
-                <Header
-                    as='h2'
-                    attached
-                    size='large'
-                    content={checkDifferentialDiagnoses(category)}
-                />
+                <Header as='h2' attached size='large'>
+                    {mobile &&
+                        (expanded ? (
+                            <Icon name='caret down'></Icon>
+                        ) : (
+                            <Icon name='caret right'></Icon>
+                        ))}
+
+                    {_.startCase(category as string)}
+                </Header>
             </Accordion.Title>
             <Accordion.Content active={!enableToggle || expanded}>
                 {content}

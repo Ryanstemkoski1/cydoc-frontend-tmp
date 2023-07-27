@@ -115,6 +115,6 @@ describe('BaseCategoryForm', () => {
     it('converts category prop to header using start case', () => {
         const wrapper = mountWithProps({ category: 'differentialDiagnoses' });
         const header = wrapper.find('.ui.attached.header');
-        expect(header.text()).toEqual('Diagnosis');
+        expect(header.text()).toEqual('Differential Diagnoses');
     });
 });

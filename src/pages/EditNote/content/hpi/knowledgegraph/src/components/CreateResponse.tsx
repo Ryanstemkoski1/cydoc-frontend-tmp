@@ -328,7 +328,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                             {this.state.question.trim()}
                         </span>
                     )}{' '}
-                    <div className='qa-button space-top remove-shadow createResponse'>
+                    <div className='buttons-group qa-button space-top remove-shadow createResponse'>
                         {this.renderSwitch()}
                     </div>{' '}
                 </div>

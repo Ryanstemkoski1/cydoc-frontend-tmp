@@ -204,4 +204,14 @@
   .patent-history-content .family-hisory-note-mobile {
         margin-bottom: 20px !important;
   }
+  .ui.icon.button.small-patient-previous-button,
+    .ui.icon.button.small-patient-next-button {
+        padding: 0;
+        width: 38px;
+        height: 38px;
+    }
+    .ui.icon.button.small-patient-previous-button i,
+    .ui.icon.button.small-patient-next-button i{
+        font-size: 15px !important;
+    }
 }
