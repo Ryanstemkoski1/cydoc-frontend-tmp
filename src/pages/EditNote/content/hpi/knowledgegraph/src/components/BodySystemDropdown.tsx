@@ -9,7 +9,7 @@ import psychiatry from '../icons/psychiatry.svg';
 import heent from '../icons/heent.svg';
 import respiratory from '../icons/respiratory.svg';
 import heart from '../icons/heart.svg';
-import yoga from '../icons/yoga.svg';
+import genmed from '../icons/genmed.svg';
 import intestines from '../icons/intestines.svg';
 import immunology from '../icons/immunology.svg';
 import dermatologic from '../icons/dermatologic.svg';
@@ -33,10 +33,10 @@ interface BodySystemDropdownState {
 const imgToRender: { [key: string]: any } = {
     Neurology: brain,
     Psychiatry: psychiatry,
-    HEENT: heent,
+    'Ophtho/ENT': heent,
     Pulmonology: respiratory,
     Cardiology: heart,
-    'General Medicine': yoga,
+    'General Medicine': genmed,
     Gastroenterology: intestines,
     Rheumatology: immunology,
     Dermatology: dermatologic,
@@ -69,12 +69,6 @@ class BodySystemDropdown extends React.Component<
         //if the BodySystem is Neurologic/Psychiatric -> abbreviate to Neuro/Psych
 
         const isMobile = window.innerWidth < NOTE_PAGE_MOBILE_BP;
-        const cardio = imgToRender[name] == heart;
-        // const neuro = imgToRender[name] == brain;
-
-        //Setting name to default of name, but abbreviating if needed
-        let nameAbrev = name;
-        if (cardio) nameAbrev = 'Cards/Heme';
 
         //Setting default render style to computer but changing to mobile if needed
         let styleToRender = 'hpi-disease-button';
@@ -101,7 +95,7 @@ class BodySystemDropdown extends React.Component<
                             />
                         </div>
                         <div className='hpi-disease-button-content-name'>
-                            {nameAbrev}
+                            {name}
                         </div>
                     </div>
                 </Button>
