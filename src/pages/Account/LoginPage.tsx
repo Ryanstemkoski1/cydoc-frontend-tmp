@@ -9,8 +9,9 @@ import { Paper } from '@mui/material';
 import { Box } from '@mui/system';
 import { useHistory } from 'react-router-dom';
 import FirstLoginForm from './FirstLoginForm';
+import LoginForm from './LoginForm';
 
-const Login = () => {
+const LoginPage = () => {
     const { loginCorrect, isSignedIn, passwordResetRequired } = useAuth();
     const history = useHistory();
 
@@ -33,11 +34,11 @@ const Login = () => {
                 }}
             >
                 <Paper elevation={6} sx={{ width: '30rem', padding: '2.5rem' }}>
-                    {loginCorrect ? <MfaVerificationForm /> : <Login />}
+                    {loginCorrect ? <MfaVerificationForm /> : <LoginForm />}
                 </Paper>
             </Box>
         );
     }
 };
 
-export default Login;
+export default LoginPage;

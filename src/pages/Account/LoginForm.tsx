@@ -31,7 +31,7 @@ interface LoginSchema {
     loginError?: string;
 }
 
-const Login = () => {
+const LoginForm = () => {
     const { signIn } = useAuth();
 
     const onSubmit = async (
@@ -134,4 +134,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginForm;

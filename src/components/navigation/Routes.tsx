@@ -2,7 +2,7 @@ import Policy from 'constants/Documents/policy';
 import Terms_and_conditions from 'constants/Documents/terms_and_conditions';
 import EditProfile from 'pages/Account/EditProfile';
 import ForgotPasswordEmail from 'pages/Account/ForgotPasswordEmail';
-import Login from 'pages/Account/LoginPage';
+import LoginPage from 'pages/Account/LoginPage';
 import ProfileSecurity from 'pages/Account/ProfileSecurity';
 import AcidTest from 'pages/AcidTest';
 import CreateGraph from 'pages/CreateTemplate/CreateGraph';
@@ -27,7 +27,7 @@ const Routes = (props: { children?: JSX.Element | null }) => {
     return (
         <BrowserRouter>
             <Route exact path='/' component={Home} />
-            <Route exact path='/login' component={Login} />
+            <Route exact path='/login' component={LoginPage} />
             <Route exact path='/sign-up' component={SignUp} />
             <Route exact path='/not-authorized' component={NotAuthorized} />
             <Route
