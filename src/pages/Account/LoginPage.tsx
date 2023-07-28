@@ -1,59 +1,41 @@
-import React, { useEffect, useState } from 'react';
-
-import NavMenu from '../../components/navigation/NavMenu';
-import './Account.css';
-import SignUpForm from './SignUpForm';
+import React, { useEffect } from 'react';
 
 import './Account.css';
-import LoginForm from './LoginForm';
+
+import './Account.css';
 import useAuth from 'hooks/useAuth';
 import MfaVerificationForm from './MfaVerificationForm';
 import { Paper } from '@mui/material';
 import { Box } from '@mui/system';
 import { useHistory } from 'react-router-dom';
+import FirstLoginForm from './FirstLoginForm';
 
 const Login = () => {
-    const { loginCorrect, isSignedIn } = useAuth();
+    const { loginCorrect, isSignedIn, passwordResetRequired } = useAuth();
     const history = useHistory();
-
-    const [isFirstLogin, setIsFirstLogin] = useState(false);
 
     useEffect(() => {
         loginCorrect && isSignedIn && history.push('/');
     });
 
-    if (isFirstLogin) {
-        return (
-            <SignUpForm
-                modalOpen={isFirstLogin}
-                closeModal={() => {
-                    // Don't allow users to close modal when requiring their "first login" user info
-                    null;
-                }}
-            />
-        );
+    if (passwordResetRequired) {
+        // if (true) {
+        return <FirstLoginForm />;
     } else {
-        // TODO: move NavMenu logic to routes
         return (
-            <>
-                <NavMenu attached={'top'} displayNoteName={false} />
-                <Box
-                    sx={{
-                        width: '100%',
-                        height: '100%',
-                        padding: '10rem',
-                        display: 'flex',
-                        justifyContent: 'center',
-                    }}
-                >
-                    <Paper
-                        elevation={6}
-                        sx={{ width: '30rem', padding: '2.5rem' }}
-                    >
-                        {loginCorrect ? <MfaVerificationForm /> : <LoginForm />}
-                    </Paper>
-                </Box>
-            </>
+            <Box
+                sx={{
+                    width: '100%',
+                    height: '100%',
+                    padding: '10rem',
+                    display: 'flex',
+                    justifyContent: 'center',
+                }}
+            >
+                <Paper elevation={6} sx={{ width: '30rem', padding: '2.5rem' }}>
+                    {loginCorrect ? <MfaVerificationForm /> : <Login />}
+                </Paper>
+            </Box>
         );
     }
 };

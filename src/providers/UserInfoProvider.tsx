@@ -28,15 +28,9 @@ export const UserInfoProvider: React.FC<
     const isManager = useMemo(() => user?.role === 'manager', [user]);
 
     const updateUserInfo = useCallback(async () => {
-        if (cognitoUser) {
-            const email = cognitoUser?.attributes?.email;
-
-            if (email) {
-                const user = await getDbUser(email);
-                setUser(user || undefined);
-            } else {
-                console.log(`cognito user missing attributes`);
-            }
+        if (cognitoUser?.attributes?.email) {
+            const user = await getDbUser(cognitoUser?.attributes?.email);
+            setUser(user || undefined);
         } else {
             // reset user state on signOut
             setUser(undefined);

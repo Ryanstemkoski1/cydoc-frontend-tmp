@@ -2,26 +2,19 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import invariant from 'tiny-invariant';
 import { ClinicianSignUpData } from 'types/users';
-import { passwordIsValid } from 'constants/passwordErrors';
 import { SignUpFormData } from './SignUpForm';
 import { createDbUser } from 'modules/user-api';
 import { useHistory } from 'react-router-dom';
 import { breadcrumb, log } from 'modules/logging';
 import { CreateUserResponse } from 'types/api';
 import useAuth from 'hooks/useAuth';
+import { FirstLoginFormSpec } from './FirstLoginForm';
 
 const validationSchema = Yup.object<SignUpFormData>({
+    ...FirstLoginFormSpec, // Extend the validation spec from "first time login"
     isTermsChecked: Yup.bool()
         .label('isTermsChecked')
         .oneOf([true], 'You must agree to terms before continuing'),
-    firstName: Yup.string()
-        .label('firstName')
-        .required('First Name is required')
-        .min(1, 'Username is required'),
-    lastName: Yup.string()
-        .label('lastName')
-        .required('Last Name is required')
-        .min(1, 'Last Name is required'),
     email: Yup.string()
         .label('email')
         .required('Email is required')
@@ -33,59 +26,12 @@ const validationSchema = Yup.object<SignUpFormData>({
         .test({
             name: 'emails match',
             test: (value, context) => {
-                const existingValue = context.parent as ClinicianSignUpData;
+                const existingValue = context.parent as SignUpFormData;
                 invariant(existingValue, 'invalid yup email object shape');
 
                 return existingValue?.email === value;
             },
             message: 'Emails must match',
-            exclusive: false,
-        }),
-    phoneNumber: Yup.string()
-        .label('phoneNumber')
-        .required('Phone number is required')
-        .min(9, 'Phone number is required'),
-    confirmPhoneNumber: Yup.string()
-        .label('confirmPhoneNumber')
-        .required('Phone number is required')
-        .min(9, 'Phone number is required')
-        .test({
-            name: 'phonenumber-match',
-            test: (value, context) => {
-                const existingValue = context.parent as ClinicianSignUpData;
-                invariant(
-                    existingValue,
-                    'invalid yup phone number object shape'
-                );
-
-                return existingValue?.phoneNumber === value;
-            },
-            message: 'Phone numbers must match',
-            exclusive: false,
-        }),
-    newPassword: Yup.string()
-        .label('newPassword')
-        .required('password is required')
-        .min(1, 'password is required'),
-    confirmNewPassword: Yup.string()
-        .label('confirmNewPassword')
-        .required('Please confirm new password')
-        .min(1, 'Please confirm new password')
-        .test({
-            name: 'passwords-match',
-            test: (value, context) => {
-                const existingValue = context.parent as ClinicianSignUpData;
-                invariant(existingValue, 'invalid yup password object shape');
-
-                return existingValue?.newPassword === value;
-            },
-            message: 'Passwords must match',
-            exclusive: false,
-        })
-        .test({
-            name: 'confirm-new-password-requirements',
-            test: (value) => passwordIsValid(value),
-            message: 'Password must meet requirements',
             exclusive: false,
         }),
     institutionName: Yup.string()
@@ -94,7 +40,7 @@ const validationSchema = Yup.object<SignUpFormData>({
         .min(1, 'Institution Name is required'),
 });
 
-export const useSignUpFormController = (initialValues: ClinicianSignUpData) => {
+export const useSignUpFormController = (initialValues: SignUpFormData) => {
     const { signUp } = useAuth();
     const history = useHistory();
 

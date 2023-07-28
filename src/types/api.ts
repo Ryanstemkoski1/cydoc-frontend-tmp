@@ -16,7 +16,7 @@ export type InviteUserBody = Pick<
     'email' | 'lastName' | 'role' | 'firstName' | 'institutionId'
 >;
 
-export type UpdateUserBody = Pick<
+export type CreateUserBody = Pick<
     ClinicianSignUpData,
     | 'email'
     | 'institutionName'
@@ -24,6 +24,11 @@ export type UpdateUserBody = Pick<
     | 'lastName'
     | 'phoneNumber'
     | 'role'
+>;
+
+export type UpdateUserBody = Pick<
+    ClinicianSignUpData,
+    'email' | 'firstName' | 'lastName' | 'phoneNumber'
 >;
 
 // Generic errored ApiResponseBase includes errorMessage

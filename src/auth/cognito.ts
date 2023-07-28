@@ -18,6 +18,11 @@ export const USER_EXISTS = 'UsernameExistsException';
 export const NOT_FOUND = 'UserNotFoundException';
 export const NOT_AUTHORIZED = 'NotAuthorizedException';
 export const CODE_MISMATCH = 'CodeMismatchException';
+export const NEW_PASSWORD_REQUIRED = 'NEW_PASSWORD_REQUIRED';
+
+// Enable these lines to get more amplify debug info:
+// window.LOG_LEVEL = 'DEBUG';
+// Amplify.Logger.LOG_LEVEL = 'DEBUG';
 
 export type AmplifyErrorCode =
     | typeof USER_EXISTS

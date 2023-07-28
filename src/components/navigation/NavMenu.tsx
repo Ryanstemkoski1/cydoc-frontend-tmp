@@ -56,11 +56,6 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     // email/password correct but waiting on MFA? allow users to logOut
     const userCurrentlyLoggingIn = loginCorrect && !isSignedIn;
 
-    console.log(`user manager: ${isManager}`, {
-        user,
-        isManager,
-    });
-
     const [windowWidth, setWindowWidth] = useState(0);
 
     // Set event listeners for window resize to determine mobile vs web view
@@ -151,7 +146,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
 
     const logOutButton = (
         <Button
-            as={Link}
+            basic
             color='teal'
             name='logOut'
             onClick={signOut}

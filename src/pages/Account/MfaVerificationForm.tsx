@@ -8,7 +8,7 @@ import { Button, Image } from 'semantic-ui-react';
 import Logo from '../../assets/cydoc-logo.svg';
 import * as Yup from 'yup';
 import useAuth from 'hooks/useAuth';
-import { Box } from '@mui/system';
+import { Box, Stack } from '@mui/system';
 import { ErrorText } from 'components/Atoms/ErrorText';
 
 const validationSchema = Yup.object({
@@ -51,7 +51,7 @@ export default function MfaVerificationForm() {
             validationSchema={validationSchema}
         >
             {({ errors, submitForm, values }) => (
-                <Box textAlign='center'>
+                <Stack alignItems='center'>
                     <Image size='tiny' href='/' src={Logo} alt='logo' />
                     <Typography
                         variant='h5'
@@ -64,32 +64,37 @@ export default function MfaVerificationForm() {
                     </Typography>
                     <Field
                         name='code'
-                        margin='1rem'
                         required
-                        fullWidth
                         label='SMS Code'
                         id='code'
                         type='input'
                         as={TextField}
                         variant='outlined'
+                        style={{ width: '12rem' }}
                     />
-                    <Button
-                        // color='teal'
-                        size='small'
-                        content='Restart'
-                        style={{ marginRight: '2rem' }}
-                        onClick={signOut}
-                    />
-                    <Button
-                        color='teal'
-                        disabled={!values?.code?.length}
-                        loading={authLoading}
-                        size='small'
-                        type='submit'
-                        content='Submit'
-                        style={{ marginTop: '2rem' }}
-                        onClick={submitForm}
-                    />
+                    <Box
+                        width='100%'
+                        justifyContent='space-around'
+                        marginTop='2rem'
+                        display='flex'
+                    >
+                        <Button
+                            size='small'
+                            content='Restart'
+                            style={buttonStyles}
+                            onClick={signOut}
+                        />
+                        <Button
+                            color='teal'
+                            disabled={!values?.code?.length}
+                            loading={authLoading}
+                            size='small'
+                            type='submit'
+                            content='Submit'
+                            style={buttonStyles}
+                            onClick={submitForm}
+                        />
+                    </Box>
                     {Object.keys(errors).map((errorKey) => (
                         <ErrorText
                             key={errorKey}
@@ -98,8 +103,13 @@ export default function MfaVerificationForm() {
                             }`}
                         />
                     ))}
-                </Box>
+                </Stack>
             )}
         </Formik>
     );
 }
+
+const buttonStyles = {
+    paddingLeft: '2rem',
+    paddingRight: '2rem',
+};

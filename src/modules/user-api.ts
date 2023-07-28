@@ -1,8 +1,9 @@
 import { ClinicianSignUpData, DbUser } from 'types/users';
-import { CreateUserResponse, UpdateUserBody } from 'types/api';
+import { CreateUserBody, CreateUserResponse, UpdateUserBody } from 'types/api';
 import { getFromApi, postToApi } from './api';
 import invariant from 'tiny-invariant';
 import { log } from './logging';
+import { FistLoginFormData } from 'pages/Account/FirstLoginForm';
 
 export async function createDbUser({
     email,
@@ -12,7 +13,7 @@ export async function createDbUser({
     phoneNumber,
     role,
 }: ClinicianSignUpData) {
-    const body: UpdateUserBody = {
+    const body: CreateUserBody = {
         email,
         firstName,
         institutionName,
@@ -22,6 +23,13 @@ export async function createDbUser({
     };
 
     return postToApi<CreateUserResponse>('/user', 'createUser', body);
+}
+export async function updateDbUser(body: UpdateUserBody) {
+    return postToApi<CreateUserResponse>(
+        `/user/${body.email}`,
+        'createUser',
+        body
+    );
 }
 
 export const getDbUser = async (email: string): Promise<DbUser> => {

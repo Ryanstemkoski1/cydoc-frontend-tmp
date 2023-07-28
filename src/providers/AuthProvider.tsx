@@ -28,6 +28,7 @@ export interface AuthContextValues {
     cognitoUser: CognitoUser | null;
     authLoading: boolean;
     loginCorrect: boolean;
+    passwordResetRequired: boolean;
     isSignedIn: boolean;
     signIn: (
         email: string,
@@ -35,6 +36,10 @@ export interface AuthContextValues {
     ) => Promise<{ errorMessage?: string; user?: CognitoUser }>;
     signUp: (
         email: string,
+        password: string,
+        phoneNumber: string
+    ) => Promise<{ errorMessage?: string; user?: CognitoUser }>;
+    completeFirstLoginUpdate: (
         password: string,
         phoneNumber: string
     ) => Promise<{ errorMessage?: string; user?: CognitoUser }>;
@@ -53,6 +58,8 @@ export const AuthProvider: React.FC<
     const [cognitoUser, setCognitoUser] = useState<CognitoUser | null>(null);
     const [loginCorrect, setLoginCorrect] = useState(false);
     const [authLoading, setAuthLoading] = useState(true);
+    const passwordResetRequired =
+        cognitoUser?.challengeName === NEW_PASSWORD_REQUIRED;
     const history = useHistory();
 
     const [isSignedIn, setIsSignedIn] = useState(false);
@@ -246,25 +253,39 @@ export const AuthProvider: React.FC<
         [history, signOut, cognitoUser]
     );
 
+    const completeFirstLoginUpdate: AuthContextValues['completeFirstLoginUpdate'] =
+        (password: string, phoneNumber: string) => {
+            // eslint-disable-next-line no-console
+            console.log(`Cognito setting password and phone`, {
+                password,
+                phoneNumber,
+            });
+
+            return Promise.resolve({ errorMessage: 'not implemented' });
+        };
+
     const contextValue: AuthContextValues = useMemo(() => {
         return {
-            cognitoUser,
             authLoading,
-            loginCorrect,
+            cognitoUser,
+            completeFirstLoginUpdate,
             isSignedIn,
+            loginCorrect,
+            passwordResetRequired,
             signIn,
-            signUp,
             signOut,
+            signUp,
             verifyMfaCode,
         };
     }, [
-        cognitoUser,
         authLoading,
-        loginCorrect,
+        cognitoUser,
         isSignedIn,
+        loginCorrect,
+        passwordResetRequired,
         signIn,
-        signUp,
         signOut,
+        signUp,
         verifyMfaCode,
     ]);
 

@@ -1,29 +1,15 @@
 import React from 'react';
-import { ErrorMessage, Field, Formik, FormikHelpers } from 'formik';
+import { Field, Formik, FormikHelpers } from 'formik';
 import { TextField } from '@mui/material';
 
-import NavMenu from '../../components/navigation/NavMenu';
 import './Account.css';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
 
-import {
-    Segment,
-    Button,
-    Container,
-    Image,
-    Header,
-    Grid,
-} from 'semantic-ui-react';
+import { Button, Container, Image, Header, Grid } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/cydoc-logo.svg';
 import './Account.css';
 import * as Yup from 'yup';
 import useAuth from 'hooks/useAuth';
-import { DbUser } from 'types/users';
 import { ErrorText } from 'components/Atoms/ErrorText';
 
 const validationSchema = Yup.object({
@@ -42,7 +28,6 @@ const validationSchema = Yup.object({
 interface LoginSchema {
     email: string;
     password: string;
-    role: DbUser['role'];
     loginError?: string;
 }
 
@@ -50,15 +35,12 @@ const Login = () => {
     const { signIn } = useAuth();
 
     const onSubmit = async (
-        values: LoginSchema,
+        { email, password }: LoginSchema,
         { setErrors, setSubmitting }: FormikHelpers<LoginSchema>
     ) => {
         setErrors({});
         setSubmitting(true);
-        const { errorMessage, user } = await signIn(
-            values.email,
-            values.password
-        );
+        const { errorMessage } = await signIn(email, password);
         if (errorMessage?.length) {
             setErrors({ loginError: errorMessage });
         }
@@ -73,13 +55,12 @@ const Login = () => {
                 initialValues={{
                     email: '',
                     password: '',
-                    role: 'manager',
                 }}
                 onSubmit={onSubmit}
                 validateOnChange={true}
                 validationSchema={validationSchema}
             >
-                {({ errors, submitForm }) => (
+                {({ errors, submitForm, isSubmitting }) => (
                     <div>
                         <Container textAlign='center'>
                             <Image size='tiny' href='/' src={Logo} alt='logo' />
@@ -118,33 +99,6 @@ const Login = () => {
                             as={TextField}
                             variant='outlined'
                         />
-                        <FormControl>
-                            <FormLabel id='demo-radio-buttons-group-label'>
-                                I am a:
-                            </FormLabel>
-                            <RadioGroup
-                                defaultValue='manager'
-                                name='radio-buttons-group'
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignContent: 'center',
-                                }}
-                            >
-                                <FormControlLabel
-                                    value='clinician'
-                                    name='role'
-                                    control={<Radio />}
-                                    label='Healthcare Professional'
-                                />
-                                <FormControlLabel
-                                    value='manager'
-                                    name='role'
-                                    label='Manager'
-                                    control={<Radio />}
-                                />
-                            </RadioGroup>
-                        </FormControl>
                         <Grid align='middle'>
                             <Grid.Row columns={2}>
                                 <Grid.Column>
@@ -161,6 +115,7 @@ const Login = () => {
                                         color='teal'
                                         size='small'
                                         type='submit'
+                                        loading={isSubmitting}
                                         aria-label='login-button'
                                         content='Login'
                                         onClick={submitForm}
