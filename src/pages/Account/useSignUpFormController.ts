@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import invariant from 'tiny-invariant';
 import { ClinicianSignUpData } from 'types/users';
 import { SignUpFormData } from './SignUpForm';
-import { createDbUser } from 'modules/user-api';
+import { createDbUser, formatPhoneNumber } from 'modules/user-api';
 import { useHistory } from 'react-router-dom';
 import { breadcrumb, log } from 'modules/logging';
 import { CreateUserResponse } from 'types/api';
@@ -49,18 +49,13 @@ export const useSignUpFormController = (initialValues: SignUpFormData) => {
         // validateOnChange: true,
         initialValues,
         onSubmit: async (newUserInfo, { setErrors, setSubmitting }) => {
-            const formattedPhoneNumber = formatPhoneNumber(
-                newUserInfo.phoneNumber
-            );
-            newUserInfo.phoneNumber = formattedPhoneNumber;
-            newUserInfo.confirmPhoneNumber = formattedPhoneNumber;
             breadcrumb(`submitting new user`, 'sign up', newUserInfo);
 
             try {
                 const cognitoUser = await signUp(
                     newUserInfo.email,
                     newUserInfo.newPassword,
-                    newUserInfo.phoneNumber
+                    formatPhoneNumber(newUserInfo.phoneNumber)
                 );
 
                 // only proceed if cognito user was created successfully
@@ -100,9 +95,3 @@ export const useSignUpFormController = (initialValues: SignUpFormData) => {
 
     return { form };
 };
-
-const formatPhoneNumber = (phoneNumber: string): string =>
-    phoneNumber
-        .replace('(', '+1')
-        .replace(/-|\(|\)/gi, '')
-        .replace(' ', '');

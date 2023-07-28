@@ -66,8 +66,9 @@ const InviteClinicianModal = ({ isOpen, onClose }: Props) => {
                 }}
                 onSubmit={async (
                     { email, firstName, lastName, role },
-                    { setSubmitting }
+                    { setSubmitting, setErrors }
                 ) => {
+                    setErrors({});
                     const result = await inviteUser({
                         email,
                         firstName,
@@ -78,7 +79,7 @@ const InviteClinicianModal = ({ isOpen, onClose }: Props) => {
                     setSubmitting(false);
 
                     if (result?.errorMessage) {
-                        alert(result.errorMessage);
+                        setErrors({ submitError: result?.errorMessage });
                     } else {
                         onClose();
                     }
@@ -92,7 +93,7 @@ const InviteClinicianModal = ({ isOpen, onClose }: Props) => {
                         <Grid
                             container
                             spacing={4}
-                            style={{ padding: '1rem', marginTop: '1rem' }}
+                            style={{ padding: '1rem', marginTop: '.5rem' }}
                         >
                             <Grid item xs={12} md={6}>
                                 <SignUpTextInput
@@ -169,11 +170,11 @@ const InviteClinicianModal = ({ isOpen, onClose }: Props) => {
                                     {Object.keys(errors).map((errorKey) => (
                                         <ErrorText
                                             key={errorKey}
-                                            message={`${errorKey}: ${
+                                            message={
                                                 errors?.[
                                                     errorKey as keyof NewClinicianSchema
                                                 ]
-                                            }`}
+                                            }
                                         />
                                     ))}
                                 </>

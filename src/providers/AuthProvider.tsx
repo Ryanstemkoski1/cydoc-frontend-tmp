@@ -23,6 +23,8 @@ import {
 } from 'auth/cognito';
 import { UserInfoProvider } from './UserInfoProvider';
 import { stringFromError } from 'modules/error-utils';
+import { formatPhoneNumber } from 'modules/user-api';
+import { Auth } from 'aws-amplify';
 
 export interface AuthContextValues {
     cognitoUser: CognitoUser | null;
@@ -67,10 +69,11 @@ export const AuthProvider: React.FC<
     // Here's an async method: https://github.com/aws-amplify/amplify-js/issues/3640#issuecomment-1198905668
     // const isSignedIn = useMemo(() => !!user?.challengeName?.length, [user]); // This key is not the correct way to determine this
 
-    const signOut = useCallback(() => {
-        return CognitoAuth.signOut()
-            .then(() => {
-                setLoginCorrect(false);
+    const signOut = useCallback(
+        () => {
+            return CognitoAuth.signOut()
+                .then(() => {
+                    setLoginCorrect(false);
                 setIsSignedIn(false);
                 setCognitoUser(null);
             })
@@ -79,11 +82,16 @@ export const AuthProvider: React.FC<
                     isSignedIn,
                     cognitoUser,
                     loginCorrect,
-                    reason,
-                })
-            );
-    }, []);
+                        reason,
+                    })
+                );
+        },
+        /* don't need to include dependencies that are just for logging */
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
+    );
 
+    // Persist user login status on refresh
     useEffect(() => {
         const restoreUserSession = async () => {
             try {
@@ -254,15 +262,30 @@ export const AuthProvider: React.FC<
     );
 
     const completeFirstLoginUpdate: AuthContextValues['completeFirstLoginUpdate'] =
-        (password: string, phoneNumber: string) => {
-            // eslint-disable-next-line no-console
-            console.log(`Cognito setting password and phone`, {
-                password,
-                phoneNumber,
-            });
+        useCallback(
+            async (password: string, phoneNumber: string) => {
+                invariant(cognitoUser, 'missing signed in user');
 
-            return Promise.resolve({ errorMessage: 'not implemented' });
-        };
+                // completeNewPasswordChallenge
+                const updatePasswordResult = (await Auth.completeNewPassword(
+                    cognitoUser,
+                    password,
+                    {
+                        phone_number: formatPhoneNumber(phoneNumber),
+                    }
+                )) as CognitoUser;
+
+                console.log(`password challenge completed`, {
+                    updatePasswordResult,
+                });
+
+                return {
+                    user: updatePasswordResult,
+                    errorMessage: undefined,
+                };
+            },
+            [cognitoUser]
+        );
 
     const contextValue: AuthContextValues = useMemo(() => {
         return {
@@ -280,6 +303,7 @@ export const AuthProvider: React.FC<
     }, [
         authLoading,
         cognitoUser,
+        completeFirstLoginUpdate,
         isSignedIn,
         loginCorrect,
         passwordResetRequired,

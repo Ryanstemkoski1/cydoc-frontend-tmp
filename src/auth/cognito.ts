@@ -45,6 +45,7 @@ export interface CognitoUser extends PartialCognitoUser {
         phone_number_verified: boolean;
         sub: string; // cognito user guid
     };
+    challengeParam?: { userAttributes?: { email: string } };
 }
 
 export const CognitoAuth = Auth;

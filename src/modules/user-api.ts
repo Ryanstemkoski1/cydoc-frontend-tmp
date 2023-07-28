@@ -3,7 +3,12 @@ import { CreateUserBody, CreateUserResponse, UpdateUserBody } from 'types/api';
 import { getFromApi, postToApi } from './api';
 import invariant from 'tiny-invariant';
 import { log } from './logging';
-import { FistLoginFormData } from 'pages/Account/FirstLoginForm';
+
+export const formatPhoneNumber = (phoneNumber: string): string =>
+    phoneNumber
+        .replace('(', '+1')
+        .replace(/-|\(|\)/gi, '')
+        .replace(' ', '');
 
 export async function createDbUser({
     email,
@@ -18,13 +23,15 @@ export async function createDbUser({
         firstName,
         institutionName,
         lastName,
-        phoneNumber,
+        phoneNumber: formatPhoneNumber(phoneNumber),
         role,
     };
 
     return postToApi<CreateUserResponse>('/user', 'createUser', body);
 }
 export async function updateDbUser(body: UpdateUserBody) {
+    body.phoneNumber = formatPhoneNumber(body.phoneNumber);
+
     return postToApi<CreateUserResponse>(
         `/user/${body.email}`,
         'createUser',

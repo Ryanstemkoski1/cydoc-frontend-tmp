@@ -91,7 +91,7 @@ export async function getFromApi<T>(
 
     const url = `${API_URL}${path}`;
     let response;
-    breadcrumb(`posting: ${JSON.stringify(path)}`, 'API', { url, path });
+    breadcrumb(`getting: ${JSON.stringify(path)}`, 'API', { url, path });
 
     try {
         response = await fetch(url, {

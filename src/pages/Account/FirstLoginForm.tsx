@@ -107,7 +107,7 @@ const FirstLoginForm = () => {
         { setErrors, setSubmitting }: FormikHelpers<FistLoginFormData>
     ) => {
         try {
-            const email = cognitoUser?.attributes?.email;
+            const email = cognitoUser?.challengeParam?.userAttributes?.email;
             invariant(
                 email,
                 'Sign-In error, try refreshing and logging in again.'
@@ -116,11 +116,17 @@ const FirstLoginForm = () => {
             setErrors({});
             setSubmitting(true);
 
-            const [{ errorMessage }, { errorMessage: dbErrorMessage }] =
-                await Promise.all([
-                    completeFirstLoginUpdate(newPassword, phoneNumber),
-                    updateDbUser({ email, firstName, lastName, phoneNumber }),
-                ]);
+            const { errorMessage } = await completeFirstLoginUpdate(
+                newPassword,
+                phoneNumber
+            );
+            const { errorMessage: dbErrorMessage } = await updateDbUser({
+                email,
+                firstName,
+                lastName,
+                phoneNumber,
+            });
+
             if (errorMessage?.length || dbErrorMessage) {
                 setErrors({
                     signUpError: errorMessage || dbErrorMessage,
@@ -217,23 +223,24 @@ const FirstLoginForm = () => {
                                         placeholder='confirm new password'
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Stack>
-                                        {Object.keys(errors)
-                                            ?.slice(0, 1)
-                                            .map((errorKey) => (
-                                                <ErrorText
-                                                    key={errorKey}
-                                                    message={`${
-                                                        errors?.[
-                                                            errorKey as keyof FistLoginFormData
-                                                        ]
-                                                    }`}
-                                                />
-                                            ))}
-                                    </Stack>
-                                </Grid>
-
+                                {Object.keys(errors)?.length ? (
+                                    <Grid item xs={12}>
+                                        <Stack>
+                                            {Object.keys(errors)
+                                                ?.slice(0, 1)
+                                                .map((errorKey) => (
+                                                    <ErrorText
+                                                        key={errorKey}
+                                                        message={`${
+                                                            errors?.[
+                                                                errorKey as keyof FistLoginFormData
+                                                            ]
+                                                        }`}
+                                                    />
+                                                ))}
+                                        </Stack>
+                                    </Grid>
+                                ) : null}
                                 <Box
                                     marginTop='2rem'
                                     sx={{
