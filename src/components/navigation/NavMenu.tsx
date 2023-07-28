@@ -50,8 +50,17 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         updateActiveItem,
     } = props;
 
-    const { isSignedIn, signOut } = useAuth();
+    const { isSignedIn, signOut, loginCorrect } = useAuth();
     const { user, isManager } = useUser();
+
+    // email/password correct but waiting on MFA? allow users to logOut
+    const userCurrentlyLoggingIn = loginCorrect && !isSignedIn;
+
+    console.log(`user manager: ${isManager}`, {
+        user,
+        isManager,
+    });
+
     const [windowWidth, setWindowWidth] = useState(0);
 
     // Set event listeners for window resize to determine mobile vs web view
@@ -129,6 +138,28 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         history.push('/');
     };
 
+    const loginButton = (
+        <Button
+            as={Link}
+            color='teal'
+            name='login'
+            to='/login'
+            content='Login'
+            id='nav-menu__login-button'
+        />
+    );
+
+    const logOutButton = (
+        <Button
+            as={Link}
+            color='teal'
+            name='logOut'
+            onClick={signOut}
+            content='Log Out'
+            id='nav-menu__login-button'
+        />
+    );
+
     const userManager = isManager ? (
         <Menu.Item>
             <Button
@@ -143,20 +174,20 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     ) : null;
     // Menu items when not logged in
     const defaultMenuItems = (
+        // email/password correct but waiting on MFA? allow users to logOut
         <Menu.Item>
-            <Button
-                as={Link}
-                color='teal'
-                name='login'
-                to='/login'
-                content='Login'
-                id='nav-menu__login-button'
-            />
+            {userCurrentlyLoggingIn ? logOutButton : loginButton}
             <Button
                 icon='plus'
                 content='Sign Up'
                 size='small'
-                onClick={() => history.push('/sign-up')}
+                onClick={() => {
+                    if (userCurrentlyLoggingIn) {
+                        // if the user tries to signUp while waiting for MFA, sign them out
+                        signOut();
+                    }
+                    history.push('/sign-up');
+                }}
             />
         </Menu.Item>
     );

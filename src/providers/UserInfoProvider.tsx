@@ -30,14 +30,18 @@ export const UserInfoProvider: React.FC<
     const updateUserInfo = useCallback(async () => {
         if (cognitoUser) {
             const email = cognitoUser?.attributes?.email;
-            const user = !!email && (await getDbUser(email));
 
-            setUser(user || undefined);
+            if (email) {
+                const user = await getDbUser(email);
+                setUser(user || undefined);
+            } else {
+                console.log(`cognito user missing attributes`);
+            }
         } else {
             // reset user state on signOut
             setUser(undefined);
         }
-    }, [cognitoUser]);
+    }, [cognitoUser?.attributes?.email]);
 
     useEffect(() => {
         updateUserInfo();

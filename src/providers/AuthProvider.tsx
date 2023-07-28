@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import invariant from 'tiny-invariant';
 
-import { log } from 'modules/logging';
+import { breadcrumb, log } from 'modules/logging';
 import { useHistory } from 'react-router-dom';
 import {
     CognitoAuth,
@@ -22,6 +22,7 @@ import {
     NEW_PASSWORD_REQUIRED,
 } from 'auth/cognito';
 import { UserInfoProvider } from './UserInfoProvider';
+import { stringFromError } from 'modules/error-utils';
 
 export interface AuthContextValues {
     cognitoUser: CognitoUser | null;
@@ -60,12 +61,20 @@ export const AuthProvider: React.FC<
     // const isSignedIn = useMemo(() => !!user?.challengeName?.length, [user]); // This key is not the correct way to determine this
 
     const signOut = useCallback(() => {
-        return Promise.all([
-            CognitoAuth.signOut(),
-            setLoginCorrect(false),
-            setIsSignedIn(false),
-            setCognitoUser(null),
-        ]);
+        return CognitoAuth.signOut()
+            .then(() => {
+                setLoginCorrect(false);
+                setIsSignedIn(false);
+                setCognitoUser(null);
+            })
+            .catch((reason) =>
+                log(`Sign out error: ${stringFromError(reason)}`, {
+                    isSignedIn,
+                    cognitoUser,
+                    loginCorrect,
+                    reason,
+                })
+            );
     }, []);
 
     useEffect(() => {
@@ -83,7 +92,10 @@ export const AuthProvider: React.FC<
                         })
                         .catch((err) => {
                             signOut();
-                            log(`Error restoring session`, err);
+                            breadcrumb(
+                                `unable to restore session, user logged out`,
+                                'auth'
+                            );
                         });
                 }
             } catch (e) {
