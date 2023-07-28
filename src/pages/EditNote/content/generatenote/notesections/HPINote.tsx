@@ -545,6 +545,7 @@ const HPINote = (state: HPINoteProps) => {
         'The patient has been',
         'The patient has',
         'The patient is',
+        'The patients',
         'The patient',
         'He',
         'She',
@@ -559,90 +560,44 @@ const HPINote = (state: HPINoteProps) => {
                     const processedText = bulletNoteView
                         ? removePhrases(text.text, phrasesToRemove)
                         : text.text;
-
-                    // Return as bullet points if bulletNoteView is true, else return as paragraphs
-                    return bulletNoteView
-                        ? [
-                              ...acc,
-                              <ul className='no-bullets' key={i}>
-                                  {i === 0 ? (
-                                      <b>
-                                          {capitalizeFirstLetter(
-                                              text.chiefComplaint
-                                          )}
-                                      </b>
-                                  ) : (
-                                      <li>
-                                          <b>
-                                              {capitalizeFirstLetter(
-                                                  text.chiefComplaint
-                                              )}
-                                          </b>
-                                      </li>
-                                  )}
-                                  {processedText.split('. ').map(
-                                      (sentence, index) =>
-                                          sentence && (
-                                              <li key={index}>
-                                                  {capitalizeFirstLetter(
-                                                      sentence.trim()
-                                                  )}
-                                                  {sentence.trim().endsWith('.')
-                                                      ? ''
-                                                      : '.'}
-                                              </li>
-                                          )
-                                  )}
-                                  {text.miscNote &&
-                                      text.miscNote.split('. ').map(
-                                          (sentence, index) =>
-                                              sentence && (
-                                                  <li key={index}>
-                                                      {capitalizeFirstLetter(
-                                                          sentence.trim()
-                                                      )}
-                                                      {sentence
-                                                          .trim()
-                                                          .endsWith('.')
-                                                          ? ''
-                                                          : '.'}
-                                                  </li>
-                                              )
-                                      )}
-                              </ul>,
-                          ]
-                        : [
-                              ...acc,
-                              <p key={i}>
-                                  {i === 0 ? (
-                                      <b>
-                                          {capitalizeFirstLetter(
-                                              text.chiefComplaint
-                                          )}
-                                      </b>
-                                  ) : (
-                                      <li>
-                                          <b>
-                                              {capitalizeFirstLetter(
-                                                  text.chiefComplaint
-                                              )}
-                                          </b>
-                                      </li>
-                                  )}
-                                  <br />
-                                  {capitalizeFirstLetter(processedText)}
-                                  {text.miscNote ? (
-                                      <>
-                                          {' '}
-                                          <br />
-                                          <br />
-                                          {capitalizeFirstLetter(text.miscNote)}
-                                      </>
-                                  ) : (
-                                      ''
-                                  )}
-                              </p>,
-                          ];
+                    // Prepare the content to be rendered in bullet points or paragraphs
+                    const content = bulletNoteView ? (
+                        <li key={i}>
+                            <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
+                            {processedText.split('. ').map((sentence, index) => (
+                                <li key={index}>
+                                    {capitalizeFirstLetter(sentence.trim())}
+                                    {sentence.trim().endsWith('.') ? '' : '.'}
+                                </li>
+                            ))}
+                            {text.miscNote &&
+                                text.miscNote.split('. ').map((sentence, index) => (
+                                    <li key={index}>
+                                        {capitalizeFirstLetter(sentence.trim())}
+                                        {sentence.trim().endsWith('.') ? '' : '.'}
+                                    </li>
+                                ))}
+                        </li>
+                    ) : (
+                        <p key={i}>
+                            <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
+                            <br />
+                            {capitalizeFirstLetter(processedText)}
+                            {text.miscNote ? (
+                                <>
+                                    {' '}
+                                    <br />
+                                    <br />
+                                    {capitalizeFirstLetter(text.miscNote)}
+                                </>
+                            ) : (
+                                ''
+                            )}
+                        </p>
+                    );
+    
+                    // Render the content inside a list (<ul>) or paragraph (<p>) accordingly
+                    return bulletNoteView ? [...acc, <ul className="no-bullets" key={i}>{content}</ul>] : [...acc, content];
                 }
                 return acc;
             }, [])}

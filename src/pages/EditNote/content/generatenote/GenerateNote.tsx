@@ -135,7 +135,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
         updatePatientInformation(patientName, pronouns);
         closeModal();
     };
-    const [isBulletNoteView, setIsBulletNoteView] = useState(false);
+    const [isBulletNoteView, setIsBulletNoteView] = useState(true);
     const [isRichText, setIsRichText] = useState(false);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -289,7 +289,6 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                     </Button>
                 </Button.Group>
                 {richOrPlainButtons}
-                {bulletPointToggler}
             </Fragment>
         );
     } else {
