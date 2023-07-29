@@ -3,7 +3,6 @@ import { YesNoResponse } from 'constants/enums';
 import { ResponseTypes } from 'constants/hpiEnums';
 import { CurrentNoteState } from 'redux/reducers';
 
-
 function traverseNodes(
     currNodes: string[],
     state: CurrentNoteState,
@@ -86,9 +85,7 @@ export function firstOrderNodes(state: CurrentNoteState) {
                 .reduce((prevVal, node) => {
                     let currNodes = prevVal;
                     const i = currNodes.findIndex((n) => n == node);
-                    if (
-                        nodes[node].text == 'nan'
-                    )
+                    if (nodes[node].text == 'nan')
                         currNodes = [
                             ...currNodes.slice(0, i + 1),
                             ...graph[node],
