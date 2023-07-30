@@ -564,19 +564,29 @@ const HPINote = (state: HPINoteProps) => {
                     const content = bulletNoteView ? (
                         <li key={i}>
                             <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
-                            {processedText.split('. ').map((sentence, index) => (
-                                <li key={index}>
-                                    {capitalizeFirstLetter(sentence.trim())}
-                                    {sentence.trim().endsWith('.') ? '' : '.'}
-                                </li>
-                            ))}
-                            {text.miscNote &&
-                                text.miscNote.split('. ').map((sentence, index) => (
+                            {processedText
+                                .split('. ')
+                                .map((sentence, index) => (
                                     <li key={index}>
                                         {capitalizeFirstLetter(sentence.trim())}
-                                        {sentence.trim().endsWith('.') ? '' : '.'}
+                                        {sentence.trim().endsWith('.')
+                                            ? ''
+                                            : '.'}
                                     </li>
                                 ))}
+                            {text.miscNote &&
+                                text.miscNote
+                                    .split('. ')
+                                    .map((sentence, index) => (
+                                        <li key={index}>
+                                            {capitalizeFirstLetter(
+                                                sentence.trim()
+                                            )}
+                                            {sentence.trim().endsWith('.')
+                                                ? ''
+                                                : '.'}
+                                        </li>
+                                    ))}
                         </li>
                     ) : (
                         <p key={i}>
@@ -595,9 +605,16 @@ const HPINote = (state: HPINoteProps) => {
                             )}
                         </p>
                     );
-    
+
                     // Render the content inside a list (<ul>) or paragraph (<p>) accordingly
-                    return bulletNoteView ? [...acc, <ul className="no-bullets" key={i}>{content}</ul>] : [...acc, content];
+                    return bulletNoteView
+                        ? [
+                              ...acc,
+                              <ul className='no-bullets' key={i}>
+                                  {content}
+                              </ul>,
+                          ]
+                        : [...acc, content];
                 }
                 return acc;
             }, [])}
