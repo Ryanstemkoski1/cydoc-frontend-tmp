@@ -27,7 +27,6 @@ const initialValues: SignUpFormData = {
     confirmNewPassword: '',
     confirmPhoneNumber: '+1',
     phoneNumber: '+1',
-    paymentMethod: undefined,
 };
 
 interface Props {
