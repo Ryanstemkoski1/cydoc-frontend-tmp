@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import NavMenu from 'components/navigation/NavMenu';
 import { Box } from '@mui/system';
 import { Paper, Typography } from '@mui/material';
 import { log } from 'modules/logging';
@@ -20,7 +19,6 @@ export default function NotAuthorized() {
     });
     return (
         <>
-            <NavMenu attached={'top'} displayNoteName={false} />
             <Box
                 sx={{
                     width: '100%',

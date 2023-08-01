@@ -24,7 +24,6 @@ import { triggerEmailVerification, verifyEmail } from 'auth/verifyEmail';
 import AuthContext from '../../contexts/AuthContext';
 import NotesContext from '../../contexts/NotesContext';
 import Logo from '../../assets/cydoc-logo.svg';
-import NavMenu from '../../components/navigation/NavMenu';
 import './Account.css';
 import isEmailVerified from 'auth/isEmailVerified';
 import DoctorSignUp from './DoctorSignUp';
@@ -190,7 +189,6 @@ const Login = () => {
 
     return (
         <>
-            <NavMenu />
             <Modal open={showEmailVerificationModal}>
                 <Modal.Header>Verify Email</Modal.Header>
                 <Modal.Content>

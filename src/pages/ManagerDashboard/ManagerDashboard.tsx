@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Container } from 'semantic-ui-react';
-import NavMenu from 'components/navigation/NavMenu';
 import './ManagerDashboard.css';
 import { DbUser } from 'types/users';
 import { getInstitutionMembers } from 'modules/institution-api';
@@ -129,7 +128,6 @@ const ManagerDashboard = () => {
 
     return (
         <>
-            <NavMenu />
             <Container className='manager-dashboard-container'>
                 <MaterialTable
                     actions={actions}

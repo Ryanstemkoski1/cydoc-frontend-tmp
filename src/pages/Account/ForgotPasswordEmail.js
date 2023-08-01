@@ -19,7 +19,6 @@ import {
 import { Link } from 'react-router-dom';
 import AuthContext from '../../contexts/AuthContext';
 import Logo from '../../assets/cydoc-logo.svg';
-import NavMenu from '../../components/navigation/NavMenu';
 import './Account.css';
 import ResetPassword from 'auth/forgotPassword';
 import EnterConfirmationCode from 'auth/enterConfirmationCode';
@@ -368,9 +367,6 @@ const ForgotPasswordEmail = () => {
 
     return (
         <>
-            <div className='nav-menu-container'>
-                <NavMenu />
-            </div>
             <div className='forgot-password-email'>
                 {!codeSent || !obfuscatedEmail
                     ? renderEnterEmail()

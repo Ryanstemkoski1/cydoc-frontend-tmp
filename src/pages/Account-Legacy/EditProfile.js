@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Segment, Container, Header, Modal, Button } from 'semantic-ui-react';
 import AuthContext from '../../contexts/AuthContext';
 import UserForm from './UserForm';
-import NavMenu from '../../components/navigation/NavMenu';
 import getUserAttributes from 'auth/getUserAttributes';
 import updateUserAttributes from 'auth/updateUserAttributes';
 import './Account.css';
@@ -215,7 +214,6 @@ const EditProfile = () => {
 
     return (
         <>
-            <NavMenu />
             <Container className='sign-up'>
                 <DeleteModal
                     open={confirmDeleteModalOpen}

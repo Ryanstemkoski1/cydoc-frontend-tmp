@@ -2,7 +2,6 @@ import React, { Component, createRef } from 'react';
 import { Sticky, Message } from 'semantic-ui-react';
 import MenuTabs from './MenuTabs';
 import NotePage from './NotePage';
-import NavMenu from '../../components/navigation/NavMenu';
 import constants from 'constants/constants';
 import { connect } from 'react-redux';
 import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
@@ -184,11 +183,6 @@ class EditNote extends Component {
                     context={this.noteContent}
                     id={editNoteHeader ? 'mobile-nav' : 'stickyHeader'}
                 >
-                    <NavMenu
-                        className='edit-note-nav-menu'
-                        displayNoteName={true}
-                    />
-
                     <div className={editNoteHeader ? 'sticky-div' : ''}>
                         <MenuTabs
                             activeItem={this.props.activeItem}

@@ -22,10 +22,12 @@ import { EditPayment } from 'pages/Account/EditPayment';
 import SignUp from 'pages/SignUp';
 import NotAuthorized from 'pages/NotAuthorized';
 import { ManagerRoute } from './ManagerRoute';
+import NavMenu from './NavMenu';
 
 const Routes = (props: { children?: JSX.Element | null }) => {
     return (
         <BrowserRouter>
+            <NavMenu attached={'top'} displayNoteName={false} />{' '}
             <Route exact path='/' component={Home} />
             <Route exact path='/login' component={LoginPage} />
             <Route exact path='/sign-up' component={SignUp} />

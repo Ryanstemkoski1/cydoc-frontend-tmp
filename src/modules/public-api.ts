@@ -3,7 +3,9 @@ import { postToApi } from './api';
 import { toast } from 'react-toastify';
 import { stringFromError } from './error-utils';
 
-export async function inviteUser(body: InviteUserBody) {
+export async function inviteUser(
+    body: InviteUserBody
+): Promise<CreateUserResponse> {
     return new Promise((resolve) =>
         toast
             .promise(

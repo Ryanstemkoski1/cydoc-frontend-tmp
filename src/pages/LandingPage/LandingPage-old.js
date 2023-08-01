@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import NavMenu from '../../components/navigation/NavMenu';
 import VerticalMenu from './VerticalMenu';
 import { Grid, Segment } from 'semantic-ui-react';
 import Records from './Records';
@@ -49,9 +48,6 @@ export default class LandingPageOld extends Component {
 
         return (
             <>
-                <div>
-                    <NavMenu className='landing-page-nav-menu' />
-                </div>
                 {stack ? (
                     <>
                         <VerticalMenu setActive={this.setActive} stack />

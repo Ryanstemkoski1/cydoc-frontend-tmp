@@ -10,7 +10,6 @@ import {
     Divider,
 } from 'semantic-ui-react';
 import AuthContext from 'contexts/AuthContext';
-import NavMenu from 'components/navigation/NavMenu';
 import { passwordErrors } from 'constants/passwordErrors';
 import changePassword from 'auth/changePassword';
 import './Account.css';
@@ -110,9 +109,6 @@ const ProfileSecurity = () => {
 
     return (
         <>
-            <div className='nav-menu-container'>
-                <NavMenu />
-            </div>
             <Container className='login'>
                 <Segment clearing>
                     <Header

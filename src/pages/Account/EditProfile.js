@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Segment, Container, Header, Modal, Button } from 'semantic-ui-react';
 import AuthContext from '../../contexts/AuthContext';
 import UserForm from './UserForm';
-import NavMenu from '../../components/navigation/NavMenu';
 import getUserAttributes from 'auth/getUserAttributes';
 import updateUserAttributes from 'auth/updateUserAttributes';
 import './Account.css';
@@ -214,36 +213,33 @@ const EditProfile = () => {
     );
 
     return (
-        <>
-            <NavMenu />
-            <Container className='sign-up'>
-                <DeleteModal
-                    open={confirmDeleteModalOpen}
-                    setOpen={setConfirmDeleteModalOpen}
+        <Container className='sign-up'>
+            <DeleteModal
+                open={confirmDeleteModalOpen}
+                setOpen={setConfirmDeleteModalOpen}
+            />
+            <Segment clearing raised>
+                <Header as='h2' textAlign='center' content='Edit Profile' />
+                <UserForm
+                    userInfo={userInfo}
+                    doneLoading={callFinished}
+                    handleSubmit={handleSubmit}
+                    buttonAriaLabel='Save-Profile-Info'
+                    buttonText='Save'
                 />
-                <Segment clearing raised>
-                    <Header as='h2' textAlign='center' content='Edit Profile' />
-                    <UserForm
-                        userInfo={userInfo}
-                        doneLoading={callFinished}
-                        handleSubmit={handleSubmit}
-                        buttonAriaLabel='Save-Profile-Info'
-                        buttonText='Save'
+                {callFinished && (
+                    <Button
+                        basic
+                        color='red'
+                        content='Delete Account'
+                        type='button'
+                        onClick={() => {
+                            setConfirmDeleteModalOpen(true);
+                        }}
                     />
-                    {callFinished && (
-                        <Button
-                            basic
-                            color='red'
-                            content='Delete Account'
-                            type='button'
-                            onClick={() => {
-                                setConfirmDeleteModalOpen(true);
-                            }}
-                        />
-                    )}
-                </Segment>
-            </Container>
-        </>
+                )}
+            </Segment>
+        </Container>
     );
 };
 

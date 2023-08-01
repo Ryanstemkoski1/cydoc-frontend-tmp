@@ -9,7 +9,6 @@ import {
 } from 'semantic-ui-react';
 
 import ToggleButton from 'components/tools/ToggleButton';
-import NavMenu from 'components/navigation/NavMenu';
 import {
     initialConditionsState,
     initialValuesState,
@@ -864,7 +863,6 @@ const GenerateInpatientPlan = () => {
      ************************************************************************/
     return (
         <Fragment>
-            <NavMenu className='landing-page-nav-menu' />
             <Container className='active-tab-container large-width'>
                 <Segment>
                     <Grid columns={2} divided relaxed stackable>

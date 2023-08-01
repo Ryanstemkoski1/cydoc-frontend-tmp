@@ -6,7 +6,6 @@ import { initialState } from 'redux/reducers';
 import _ from 'lodash';
 
 import { deleteNote } from '../../redux/actions/currentNoteActions';
-import NavMenu from '../../components/navigation/NavMenu';
 
 import { LANDING_PAGE_MOBLE_BP } from 'constants/breakpoints.js';
 import './LandingPage.css';
@@ -199,9 +198,6 @@ class LandingPage extends Component {
             default:
                 return (
                     <>
-                        <div>
-                            <NavMenu className='landing-page-nav-menu' />
-                        </div>
                         {!patientView ? (
                             <div className='landing-feedback'>
                                 <Image src={Feedback} />

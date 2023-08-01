@@ -1,5 +1,4 @@
 import React from 'react';
-import NavMenu from '../../components/navigation/NavMenu';
 
 {
     /* eslint-disable */
@@ -50,7 +49,6 @@ const Terms_and_conditions = (props) => {
         <div className='scroll'>
             <style> {cssScroll} </style>
         <div style={stylingObject.body}>
-            {props.title ? null : <NavMenu />}
             <div
                 style={{
                     marginLeft: '3em',
