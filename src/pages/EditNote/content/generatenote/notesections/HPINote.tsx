@@ -533,7 +533,9 @@ const HPINote = (state: HPINoteProps) => {
         'They',
     ];
     finalPara.forEach((paragraph, i) => {
-        finalPara[i] = bulletNoteView ? removePhrases(paragraph, phrasesToRemove) : paragraph;
+        finalPara[i] = bulletNoteView
+            ? removePhrases(paragraph, phrasesToRemove)
+            : paragraph;
     });
 
     const miscText = [];
@@ -555,7 +557,6 @@ const HPINote = (state: HPINoteProps) => {
         };
     }
 
-
     return (
         <div>
             {actualNote.reduce((acc: JSX.Element[], text, i) => {
@@ -565,16 +566,12 @@ const HPINote = (state: HPINoteProps) => {
                     const content = bulletNoteView ? (
                         <li key={i}>
                             <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
-                            {text.text
-                                .split('. ')
-                                .map((sentence, index) => (
-                                    <li key={index}>
-                                        {capitalizeFirstLetter(sentence.trim())}
-                                        {sentence.trim().endsWith('.')
-                                            ? ''
-                                            : '.'}
-                                    </li>
-                                ))}
+                            {text.text.split('. ').map((sentence, index) => (
+                                <li key={index}>
+                                    {capitalizeFirstLetter(sentence.trim())}
+                                    {sentence.trim().endsWith('.') ? '' : '.'}
+                                </li>
+                            ))}
                             {text.miscNote &&
                                 text.miscNote
                                     .split('. ')
