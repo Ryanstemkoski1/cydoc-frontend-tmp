@@ -29,6 +29,7 @@ import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelec
 import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 import { capitalizeFirstLetter } from '../generateHpiText';
 import './HPINote.css';
+import { textFieldClasses } from '@mui/material';
 
 interface HPINotePropsFromRedux {
     hpi: HpiState;
@@ -475,12 +476,12 @@ const HPINote = (state: HPINoteProps) => {
     /*
     formattedHpis is a dictionary in which each key is the chief complaint
     and the value is an array of template sentences.
-    
+
     The following will convert each CC's array of template sentences into a 
     paragraph, which is then re-split into an array and converted into a Set
     of sentences for de-duplication within the paragraph and comparison with 
     latter chief complaints.
-    
+
     Specifically, each chief complaint set will be compared with later chief
     complaint sets to look for duplicate sentences (finding the complement of
     the second set). The first instances of duplicate sentences are kept, 
@@ -520,6 +521,21 @@ const HPINote = (state: HPINoteProps) => {
         return acc;
     }, []);
 
+    // After the finalPara array is constructed, perform the removal operation.
+    const phrasesToRemove = [
+        'The patient has been',
+        'The patient has',
+        'The patient is',
+        'The patients',
+        'The patient',
+        'He',
+        'She',
+        'They',
+    ];
+    finalPara.forEach((paragraph, i) => {
+        finalPara[i] = bulletNoteView ? removePhrases(paragraph, phrasesToRemove) : paragraph;
+    });
+
     const miscText = [];
     const actualNote = [];
     /**
@@ -539,32 +555,17 @@ const HPINote = (state: HPINoteProps) => {
         };
     }
 
-    // Add a list of phrases to remove when in bullet note view
-    const phrasesToRemove = [
-        'The patient has a',
-        'The patient has been',
-        'The patient has',
-        'The patient is',
-        'The patients',
-        'The patient',
-        'He',
-        'She',
-        'They',
-    ];
 
     return (
         <div>
             {actualNote.reduce((acc: JSX.Element[], text, i) => {
                 if (text.chiefComplaint in state.chiefComplaints) {
                     // Process the text based on bulletNoteView flag
-                    const processedText = bulletNoteView
-                        ? removePhrases(text.text, phrasesToRemove)
-                        : text.text;
                     // Prepare the content to be rendered in bullet points or paragraphs
                     const content = bulletNoteView ? (
                         <li key={i}>
                             <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
-                            {processedText
+                            {text.text
                                 .split('. ')
                                 .map((sentence, index) => (
                                     <li key={index}>
@@ -592,7 +593,7 @@ const HPINote = (state: HPINoteProps) => {
                         <p key={i}>
                             <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
                             <br />
-                            {capitalizeFirstLetter(processedText)}
+                            {capitalizeFirstLetter(text.text)}
                             {text.miscNote ? (
                                 <>
                                     {' '}
