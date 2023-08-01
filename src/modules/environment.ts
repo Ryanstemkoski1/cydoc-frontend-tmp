@@ -22,6 +22,7 @@ const API_URL_STAGING =
     'https://ldxpvwxff1.execute-api.us-east-2.amazonaws.com/Prod';
 const PUBLIC_API_URL_STAGING =
     'https://sn067pu0f0.execute-api.us-east-2.amazonaws.com/Prod';
+const PUBLIC_API_URL_PRODUCTION = ''; // TODO: get public API url
 
 const REGION_STAGING = 'us-east-2';
 const REGION_PRODUCTION = 'us-east-1';
@@ -37,4 +38,5 @@ if (isProduction()) {
     COGNITO_POOL_ID = COGNITO_POOL_ID_PRODUCTION;
     API_URL = API_URL_PRODUCTION;
     REGION = REGION_PRODUCTION;
+    PUBLIC_API_URL = PUBLIC_API_URL_PRODUCTION;
 }
