@@ -1,6 +1,5 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Segment, Container, Header, Modal, Button } from 'semantic-ui-react';
-import AuthContext from '../../contexts/AuthContext';
 import UserForm from './UserForm';
 import getUserAttributes from 'auth/getUserAttributes';
 import updateUserAttributes from 'auth/updateUserAttributes';
@@ -9,11 +8,14 @@ import { doctorClient, managerClient } from 'constants/api';
 import getUUID from 'auth/getUUID';
 import getDoctorsOfManager from 'auth/getDoctorsOfManager';
 import { isLivemode } from 'auth/livemode';
+import useUser from 'hooks/useUser';
+import useAuth from 'hooks/useAuth';
+import { DbUser } from 'types/users';
+import { stringFromError } from 'modules/error-utils';
 
-const initializeFormFields = (role, username, email) => {
-    if (role === 'doctor') {
+const initializeFormFields = (role: DbUser['role'], email: string) => {
+    if (role === 'clinician') {
         return {
-            username,
             role,
             firstName: '',
             middleName: '',
@@ -31,7 +33,6 @@ const initializeFormFields = (role, username, email) => {
         };
     } else if (role === 'manager') {
         return {
-            username,
             role,
             firstName: '',
             middleName: '',
@@ -46,9 +47,16 @@ const initializeFormFields = (role, username, email) => {
     }
 };
 
-const DeleteModal = ({ open, setOpen }) => {
-    const context = useContext(AuthContext);
-    const role = context.role;
+const DeleteModal = ({
+    open,
+    setOpen,
+}: {
+    open: boolean;
+    setOpen: (open: boolean) => void;
+}) => {
+    const { isManager } = useUser();
+    const { signOut } = useAuth();
+
     const [loading, setLoading] = useState(false);
 
     const deleteDoctors = async () => {
@@ -64,21 +72,22 @@ const DeleteModal = ({ open, setOpen }) => {
 
     const deleteSelf = useCallback(async () => {
         setLoading(true);
-        const client = role === 'doctor' ? doctorClient : managerClient;
-        const path = role === 'doctor' ? '/doctors/' : '/managers/';
-        const uuid = await getUUID(role);
-        try {
-            await client.delete(path + uuid, {
-                data: JSON.stringify({
-                    stripeMode: isLivemode(),
-                }),
-            });
-            context.logOut();
-        } catch (err) {
-            alert('Error deleting from database.');
-        }
+        const client = isManager ? managerClient : doctorClient;
+        const path = isManager ? '/managers/' : '/doctors/';
+        alert('not implemented');
+        // const uuid = await getUUID(role);
+        // try {
+        //     await client.delete(path + uuid, {
+        //         data: JSON.stringify({
+        //             stripeMode: isLivemode(),
+        //         }),
+        //     });
+        //     signOut();
+        // } catch (err) {
+        //     alert('Error deleting from database.');
+        // }
         setLoading(false);
-    }, [context, role]);
+    }, [signOut, isManager]);
 
     const deleteSelfAndSub = useCallback(async () => {
         setLoading(true);
@@ -129,7 +138,7 @@ const DeleteModal = ({ open, setOpen }) => {
                         loading={loading}
                         disabled={loading}
                     />
-                    {role === 'manager' && (
+                    {isManager && (
                         <Button
                             basic
                             color='red'
@@ -149,51 +158,47 @@ const DeleteModal = ({ open, setOpen }) => {
 };
 
 const EditProfile = () => {
-    const context = useContext(AuthContext);
-    const user = context.user;
-    const role = context.role;
+    const { user } = useUser();
+    const role = user?.role || 'clinician';
 
     const [callFinished, setCallFinished] = useState(false);
     const [userInfo, setUserInfo] = useState(
-        initializeFormFields(role, user.username, user.email)
+        initializeFormFields(role, user?.email || '')
     );
     const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
 
     // retrieve user attributes from Cognito and Dynamo when component is mounted
     useEffect(() => {
-        const getAttributes = async (role) => {
+        const getAttributes = async () => {
             try {
                 const getUserAttributesResponse = await getUserAttributes(role);
-                setUserInfo({
-                    ...userInfo,
-                    username: getUserAttributesResponse.username,
-                    firstName: getUserAttributesResponse.firstName,
-                    middleName: getUserAttributesResponse.middleName,
-                    lastName: getUserAttributesResponse.lastName,
-                    email: getUserAttributesResponse.email,
-                    countryCode: '+1',
-                    phoneNumber: getUserAttributesResponse.phoneNumber.slice(2),
-                    birthday: getUserAttributesResponse.birthday,
-                });
+                // setUserInfo({
+                //     ...userInfo,
+                //     firstName: getUserAttributesResponse.firstName,
+                //     middleName: getUserAttributesResponse.middleName,
+                //     lastName: getUserAttributesResponse.lastName,
+                //     email: getUserAttributesResponse.email,
+                //     countryCode: '+1',
+                //     phoneNumber: getUserAttributesResponse.phoneNumber.slice(2),
+                //     birthday: getUserAttributesResponse.birthday,
+                // });
             } catch (err) {
                 alert(
-                    `Error retrieving user information: ${
-                        err.message || JSON.stringify(err)
-                    }`
+                    `Error retrieving user information: ${stringFromError(err)}`
                 );
                 return;
             } finally {
                 setCallFinished(true);
             }
         };
-        getAttributes(role);
+        getAttributes();
         // need to disable the warning below to prevent this function from continuously running
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // save user information in Cognito and Dynamo
     const handleSubmit = useCallback(
-        async (userInfo) => {
+        async (userInfo: any) => {
             try {
                 const phoneNumber = userInfo.countryCode + userInfo.phoneNumber;
                 // update info in Cognito and in Dynamo
@@ -203,9 +208,7 @@ const EditProfile = () => {
                 });
             } catch (err) {
                 alert(
-                    `Error updating user information: ${
-                        err.message || JSON.stringify(err)
-                    }`
+                    `Error updating user information: ${stringFromError(err)}`
                 );
             }
         },

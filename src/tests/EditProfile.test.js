@@ -2,10 +2,10 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
 import EditProfile from '../pages/Account/EditProfile';
-import AuthContext from '../contexts/AuthContext';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
+import { AuthProvider } from 'providers/AuthProvider';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -46,9 +46,9 @@ const setup = (context, state = initialState) => {
         wrapper: mount(
             <BrowserRouter>
                 <Provider store={store}>
-                    <AuthContext.Provider value={context}>
+                    <AuthProvider>
                         <EditProfile />
-                    </AuthContext.Provider>
+                    </AuthProvider>
                 </Provider>
             </BrowserRouter>
         ),
