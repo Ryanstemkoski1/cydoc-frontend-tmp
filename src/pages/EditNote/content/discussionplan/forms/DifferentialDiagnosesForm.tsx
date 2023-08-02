@@ -53,6 +53,8 @@ const DifferentialDiagnosesForm = (
                 search
                 selection
                 clearable
+                loading={options && Object.keys(options.main).length == 0}
+                disabled={options && Object.keys(options.main).length == 0}
                 transparent={mobile}
                 value={row.diagnosis}
                 code={row.code}

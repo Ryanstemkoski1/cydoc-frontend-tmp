@@ -6,7 +6,6 @@
 import React, { useState, useEffect } from 'react';
 import AddRowButton from 'components/tools/AddRowButton';
 import { WhenResponse } from 'constants/enums';
-import diseases from 'constants/diagnoses.json';
 import medications from 'constants/medications';
 import procedures from 'constants/procedures';
 import registrationConstants from 'constants/registration-constants.json';
@@ -68,9 +67,9 @@ interface BaseCategoryFormProps<T> {
 const specialties = getOptionMapping(registrationConstants.specialties);
 
 const TYPE_TO_OPTION: {
-    [key in ConditionCategoryKey]: OptionMapping | DiagnosesOptionMapping;
+    [key in ConditionCategoryKey]: OptionMapping;
 } = {
-    differentialDiagnoses: diseases as DiagnosesOptionMapping,
+    differentialDiagnoses: {},
     prescriptions: medications,
     proceduresAndServices: procedures,
     referrals: specialties,
@@ -97,6 +96,16 @@ export const BaseCategoryForm = <T extends { id: string }>(
     const [options, setOptions] = useState<Options | DiagnosesOptions>({
         main: TYPE_TO_OPTION[category] || {},
     });
+
+    useEffect(() => {
+        if (category === 'differentialDiagnoses') {
+            import('constants/diagnoses.json').then((diseases) => {
+                setOptions({
+                    main: diseases as unknown as DiagnosesOptionMapping,
+                });
+            });
+        }
+    }, [category]);
 
     useEffect(() => {
         if (categoryData.length > 0 && 'when' in categoryData[0]) {
