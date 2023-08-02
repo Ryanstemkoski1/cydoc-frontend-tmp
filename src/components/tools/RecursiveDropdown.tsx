@@ -16,6 +16,7 @@ import {
     getDiagnosesOptionMapping,
 } from '_processOptions';
 import './OptimizedDropdown.css';
+import './RecursiveDropdown.css';
 
 type OnAddItem = (
     value1: React.SyntheticEvent | null,
@@ -24,26 +25,8 @@ type OnAddItem = (
 
 // Custom styled tag before the normally formatted text
 const TagLabel = (props: { children: any; isHeader: boolean }) => {
-    const color = props.isHeader ? 'gray' : 'green';
-    const backgroundColor = props.isHeader ? 'lightgray' : 'lightgreen';
-
     return (
-        <div
-            style={{
-                color,
-                backgroundColor,
-                display: 'inline-flex',
-                alignItems: 'center',
-                padding: '2px 6px',
-                marginRight: '6px',
-                fontSize: '12px',
-                fontStyle: 'normal',
-                fontFamily: 'Consolas,monospace',
-                lineHeight: 'normal',
-                boxSizing: 'border-box',
-                borderRadius: '4px',
-            }}
-        >
+        <div className={`tag ${props.isHeader && 'isHeader'}`}>
             {props.children}
         </div>
     );
@@ -143,14 +126,13 @@ const RecursiveDropdown = (props: {
         }
     });
 
-    const sortedOptions = uniqueOptions.sort(
-        (a: { label?: string } | unknown, b: { label?: string } | unknown) =>
-            // @ts-expect-error missing "label" field is already handled acceptably
-            a?.label?.length > b?.label?.length ? 1 : -1
-        // NOTE:
-        // overriding types because this is legacy code that is working.
-        // if it stops working, re-evaluate types
-    ) as OptionsOrGroups<DropdownOption, GroupBase<DropdownOption>>;
+    // NOTE:
+    // overriding types because this is legacy code that is working.
+    // if it stops working, re-evaluate types
+    const finalOptions = uniqueOptions as OptionsOrGroups<
+        DropdownOption,
+        GroupBase<DropdownOption>
+    >;
 
     // add text styling to options (headers are italicized)
     const optionsStyles: StylesConfig<DropdownOption> = {
@@ -230,7 +212,7 @@ const RecursiveDropdown = (props: {
                 {...otherProps}
                 inputValue={{ val }.val}
                 value={valueToDisplay}
-                options={{ show }.show ? sortedOptions : undefined}
+                options={{ show }.show ? finalOptions : undefined}
                 styles={optionsStyles}
                 noOptionsMessage={() => null}
                 isClearable={clearable}
