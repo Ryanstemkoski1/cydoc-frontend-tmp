@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import invariant from 'tiny-invariant';
 
-import { breadcrumb, log } from 'modules/logging';
+import { breadcrumb, log, updateLoggedUser } from 'modules/logging';
 import { useHistory } from 'react-router-dom';
 import {
     CognitoAuth,
@@ -100,7 +100,10 @@ export const AuthProvider: React.FC<
                     // If a session cookie exists
                     // Then use it to reset/restore auth state
                     return CognitoAuth.currentAuthenticatedUser()
-                        .then((cognitoUser) => {
+                        .then((cognitoUser: CognitoUser) => {
+                            updateLoggedUser({
+                                email: cognitoUser?.attributes?.email,
+                            });
                             setCognitoUser(cognitoUser);
                             setLoginCorrect(true);
                             setIsSignedIn(true);
@@ -146,6 +149,9 @@ export const AuthProvider: React.FC<
                 // console.log(`amplify user signed up:`, user);
 
                 // all user into app when first signing up
+                updateLoggedUser({
+                    email,
+                });
                 setCognitoUser(user);
                 setLoginCorrect(true);
                 setIsSignedIn(true);
@@ -185,6 +191,9 @@ export const AuthProvider: React.FC<
                 // });
 
                 setLoginCorrect(true);
+                updateLoggedUser({
+                    email,
+                });
                 setCognitoUser(cognitoUser);
 
                 // TODO: parse first login from response

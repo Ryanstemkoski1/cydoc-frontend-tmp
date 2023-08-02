@@ -1,4 +1,5 @@
 import useAuth from 'hooks/useAuth';
+import { updateLoggedUser } from 'modules/logging';
 import { getDbUser } from 'modules/user-api';
 import React, {
     PropsWithChildren,
@@ -42,11 +43,19 @@ export const UserInfoProvider: React.FC<
             // reset user state on signOut
             setUser(undefined);
         }
-    }, [cognitoUser?.attributes?.email]);
+    }, [
+        cognitoUser?.attributes?.email,
+        cognitoUser?.challengeParam?.userAttributes?.email,
+    ]);
 
     useEffect(() => {
         updateUserInfo();
     }, [updateUserInfo]);
+
+    // update user in sentry logging
+    useEffect(() => {
+        user && updateLoggedUser(user);
+    }, [user]);
 
     const contextValue = useMemo(() => {
         return { user, updateUserInfo, isManager };

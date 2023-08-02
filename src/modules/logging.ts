@@ -13,6 +13,18 @@ const SENTRY_ENABLED = process.env.NODE_ENV === 'production';
 // if [[ uname == MING* ]]; then echo "windows"; else echo "unix"; fi
 // if [[ uname == Darw* ]]; then echo "windows"; else echo "unix"; fi
 
+export const updateLoggedUser = (user: Partial<DbUser> | null) => {
+    if (user) {
+        const newUser: Sentry.User = {
+            ...user,
+            id: `${user.id}`,
+        };
+        Sentry.setUser(newUser);
+    } else {
+        Sentry.setUser(user);
+    }
+};
+
 // Initializes sentry error logging service
 export function initializeSentry() {
     Sentry.init({
