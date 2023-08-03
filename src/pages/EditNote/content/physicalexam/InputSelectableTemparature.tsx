@@ -45,10 +45,10 @@ const InputSelectableTemparature = (props: Props) => {
         setCurrentTemparature(newVal);
         if (currentUnit === 0) {
             props.handleTempChange(newVal + '');
-            // props.handleTempUnitChange('0');
+            props.handleTempUnitChange('0');
         } else {
-            props.handleTempChange(foreignheightToCelcius(newVal) + '');
-            // props.handleTempUnitChange('1');
+            props.handleTempChange(newVal + '');
+            props.handleTempUnitChange('1');
         }
     };
     const toggleUnit = (
