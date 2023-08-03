@@ -165,7 +165,6 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
                         vitals.push(
                             'Temperature: ' +
                                 this.props.physicalExam.vitals.temperature +
-                                ' ' +
                                 currUnit
                         );
                     } else if (vital == 'oxygenSaturation') {
