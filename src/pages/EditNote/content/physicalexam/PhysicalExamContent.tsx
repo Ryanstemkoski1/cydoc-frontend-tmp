@@ -115,9 +115,14 @@ class PhysicalExamContent extends React.Component<Props, State> {
         return +(patientAge <= 2);
     }
 
-    handleChangeTemparature = (val: string, data: InputOnChangeData) => {
+    handleChangeTemparature = (val: string) => {
         const num = +val;
-        this.props.updateVitals(data.name, +num.toFixed(1));
+        this.props.updateVitals('temperature', +num.toFixed(1));
+    };
+
+    handleChangeTemperatureUnit = (val: string) => {
+        const num = +val;
+        this.props.updateVitals('tempUnit', +num.toFixed(1));
     };
 
     generateNumericInput = (
@@ -215,8 +220,17 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                             />
                                         </label>
                                         <ButtonGroupTemparature
-                                            handleChange={
+                                            temperature={
+                                                this.props.vitals.temperature
+                                            }
+                                            tempUnit={
+                                                this.props.vitals.tempUnit
+                                            }
+                                            handleTempChange={
                                                 this.handleChangeTemparature
+                                            }
+                                            handleTempUnitChange={
+                                                this.handleChangeTemperatureUnit
                                             }
                                         />
                                     </Form.Field>
