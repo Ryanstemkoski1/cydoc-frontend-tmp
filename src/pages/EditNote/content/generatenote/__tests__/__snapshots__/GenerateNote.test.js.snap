@@ -470,6 +470,7 @@ exports[`Generate Note matches snapshot 1`] = `
           "height": 0,
           "oxygenSaturation": 0,
           "systolicBloodPressure": 0,
+          "tempUnit": 0,
           "temperature": 0,
           "weight": 0,
         },
