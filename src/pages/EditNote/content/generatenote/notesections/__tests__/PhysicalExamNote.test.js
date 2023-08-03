@@ -22,6 +22,7 @@ const emptyPhysicalExam = {
         heartRate: 0,
         RR: 0,
         temperature: 0,
+        tempUnit: 0,
         oxygenSaturation: 0,
     },
     sections: {},
