@@ -42,7 +42,7 @@ export const FirstLoginFormSpec = {
     firstName: Yup.string()
         .label('firstName')
         .required('First Name is required')
-        .min(1, 'Username is required'),
+        .min(1, 'First Name is required'),
     lastName: Yup.string()
         .label('lastName')
         .required('Last Name is required')

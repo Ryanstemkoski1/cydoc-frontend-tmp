@@ -1,7 +1,7 @@
 import Policy from 'constants/Documents/policy';
 import Terms_and_conditions from 'constants/Documents/terms_and_conditions';
 import EditProfile from 'pages/Account/EditProfile';
-import ForgotPasswordEmail from 'pages/Account/ForgotPasswordEmail';
+import ForgotPasswordPage from 'pages/Account/ForgotPassword';
 import LoginPage from 'pages/Account/LoginPage';
 import ProfileSecurity from 'pages/Account/ProfileSecurity';
 import AcidTest from 'pages/AcidTest';
@@ -34,8 +34,8 @@ const Routes = (props: { children?: JSX.Element | null }) => {
             <Route exact path='/not-authorized' component={NotAuthorized} />
             <Route
                 exact
-                path='/forgotpasswordemail'
-                component={ForgotPasswordEmail}
+                path='/forgot-password'
+                component={ForgotPasswordPage}
             />
             <PrivateRoute
                 exact

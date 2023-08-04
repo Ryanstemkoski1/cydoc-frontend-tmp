@@ -104,7 +104,7 @@ const LoginForm = () => {
                                 <Grid.Column>
                                     <Link
                                         style={{ color: '#007db3' }}
-                                        to='/forgotpasswordemail'
+                                        to='/forgot-password'
                                         className='forgot-password-button'
                                     >
                                         Forgot Password?

@@ -1,7 +1,6 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import invariant from 'tiny-invariant';
-import { ClinicianSignUpData } from 'types/users';
 import { SignUpFormData } from './SignUpForm';
 import { createDbUser, formatPhoneNumber } from 'modules/user-api';
 import { useHistory } from 'react-router-dom';

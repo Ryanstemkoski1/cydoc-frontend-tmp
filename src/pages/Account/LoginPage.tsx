@@ -5,11 +5,10 @@ import './Account.css';
 import './Account.css';
 import useAuth from 'hooks/useAuth';
 import MfaVerificationForm from './MfaVerificationForm';
-import { Paper } from '@mui/material';
-import { Box } from '@mui/system';
 import { useHistory } from 'react-router-dom';
 import FirstLoginForm from './FirstLoginForm';
 import LoginForm from './LoginForm';
+import { CenteredPaper } from 'components/Atoms/CenteredPaper';
 
 const LoginPage = () => {
     const { loginCorrect, isSignedIn, passwordResetRequired } = useAuth();
@@ -24,19 +23,9 @@ const LoginPage = () => {
         return <FirstLoginForm />;
     } else {
         return (
-            <Box
-                sx={{
-                    width: '100%',
-                    height: '100%',
-                    padding: '10rem',
-                    display: 'flex',
-                    justifyContent: 'center',
-                }}
-            >
-                <Paper elevation={6} sx={{ width: '30rem', padding: '2.5rem' }}>
-                    {loginCorrect ? <MfaVerificationForm /> : <LoginForm />}
-                </Paper>
-            </Box>
+            <CenteredPaper>
+                {loginCorrect ? <MfaVerificationForm /> : <LoginForm />}
+            </CenteredPaper>
         );
     }
 };
