@@ -1,4 +1,4 @@
-import { Box, Grid, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { Field, Formik, FormikHelpers } from 'formik';
 import React, { useCallback } from 'react';
 import { Button } from 'semantic-ui-react';
@@ -217,7 +217,7 @@ export default function ForgotPasswordCodeForm({
                         onClick={submitForm}
                         color='teal'
                         size='small'
-                        disabled={!!Object.keys(errors).length}
+                        disabled={!!Object.keys(errors).length || isSubmitting}
                         aria-label='submit'
                         content='Update Password'
                         type='submit'

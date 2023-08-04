@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Container, Image, Header } from 'semantic-ui-react';
+import { Container, Image, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/cydoc-logo.svg';
 import './Account.css';
@@ -52,8 +52,10 @@ export default ForgotPasswordPage;
 
 function SuccessMessage() {
     return (
-        <Stack>
-            <Typography>Password Successfully Changed</Typography>
+        <Stack display='flex'>
+            <Typography margin='1rem' paddingTop='1rem' textAlign='center'>
+                Password updated.
+            </Typography>
             <Link
                 style={{ color: '#007db3' }}
                 to='/login'

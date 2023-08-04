@@ -112,9 +112,9 @@ export const confirmCode = async (
                             }
                         }),
                 {
-                    error: 'Error inviting user',
-                    pending: `Inviting new user...`,
-                    success: 'User invited!',
+                    error: 'Error updating password',
+                    pending: `Updating password...`,
+                    success: 'Password updated!',
                 }
             )
             // format response so UI knows what error to display

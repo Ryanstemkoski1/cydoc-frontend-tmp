@@ -75,7 +75,7 @@ export default function MfaVerificationForm() {
                     <Box
                         width='100%'
                         justifyContent='space-around'
-                        marginTop='2rem'
+                        marginTop='2.5rem'
                         display='flex'
                     >
                         <Button

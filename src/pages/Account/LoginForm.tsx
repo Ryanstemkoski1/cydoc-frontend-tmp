@@ -4,13 +4,14 @@ import { TextField } from '@mui/material';
 
 import './Account.css';
 
-import { Button, Container, Image, Header, Grid } from 'semantic-ui-react';
+import { Button, Container, Image, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/cydoc-logo.svg';
 import './Account.css';
 import * as Yup from 'yup';
 import useAuth from 'hooks/useAuth';
 import { ErrorText } from 'components/Atoms/ErrorText';
+import { Box } from '@mui/system';
 
 const validationSchema = Yup.object({
     email: Yup.string()
@@ -99,30 +100,28 @@ const LoginForm = () => {
                             as={TextField}
                             variant='outlined'
                         />
-                        <Grid align='middle'>
-                            <Grid.Row columns={2}>
-                                <Grid.Column>
-                                    <Link
-                                        style={{ color: '#007db3' }}
-                                        to='/forgot-password'
-                                        className='forgot-password-button'
-                                    >
-                                        Forgot Password?
-                                    </Link>
-                                </Grid.Column>
-                                <Grid.Column textAlign='right'>
-                                    <Button
-                                        color='teal'
-                                        size='small'
-                                        type='submit'
-                                        loading={isSubmitting}
-                                        aria-label='login-button'
-                                        content='Login'
-                                        onClick={submitForm}
-                                    />
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
+                        <Box
+                            display='flex'
+                            alignItems='center'
+                            justifyContent='space-between'
+                        >
+                            <Link
+                                style={{ color: '#007db3' }}
+                                to='/forgot-password'
+                                className='forgot-password-button'
+                            >
+                                Forgot Password?
+                            </Link>
+                            <Button
+                                color='teal'
+                                size='small'
+                                type='submit'
+                                loading={isSubmitting}
+                                aria-label='login-button'
+                                content='Login'
+                                onClick={submitForm}
+                            />
+                        </Box>
                         <ErrorText
                             key={'loginError'}
                             message={errors?.loginError || null}
