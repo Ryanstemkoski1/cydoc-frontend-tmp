@@ -310,7 +310,7 @@ const AcidTest = () => {
                             </div>
                         </>
                     )}
-                    {primaryExp != '' && (
+                    {summary.length != '' && (
                         <Grid.Row centered>
                             <Button
                                 className='ui button'
