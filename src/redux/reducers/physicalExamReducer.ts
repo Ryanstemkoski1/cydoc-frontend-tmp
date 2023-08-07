@@ -15,6 +15,7 @@ export interface PhysicalExamState {
         heartRate: number;
         RR: number;
         temperature: number;
+        tempUnit: number;
         oxygenSaturation: number;
         weight: number;
         height: number;
@@ -32,6 +33,7 @@ export interface Vitals {
     heartRate: number;
     RR: number;
     temperature: number;
+    tempUnit: number;
     oxygenSaturation: number;
     weight: number;
     height: number;
@@ -58,6 +60,7 @@ export const initialPhysicalExamState: PhysicalExamState = {
         heartRate: 0,
         RR: 0,
         temperature: 0,
+        tempUnit: 0,
         oxygenSaturation: 0,
         weight: 0,
         height: 0,
