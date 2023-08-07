@@ -21,7 +21,8 @@ function removeDoubleWords(str: string) {
 }
 
 function capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    const trimmedString = string.trim(); // Trim leading and trailing spaces
+    return trimmedString.charAt(0).toUpperCase() + trimmedString.slice(1);
 }
 
 function removeItem(array: any, item: any) {

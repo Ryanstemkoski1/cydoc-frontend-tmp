@@ -250,6 +250,10 @@ export const abbreviate = (hpiString: string): string => {
     return replaceMappedWords(hpiString, ABBREVIFY);
 };
 
+export function capitalizeFirstLetter(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 // TODO
 const conjugateThirdPerson = (hpiString: string) => hpiString;
 
@@ -286,9 +290,9 @@ export const createHPI = (
     pronouns: PatientPronouns
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
+    hpiString = partOfSpeechCorrection(hpiString);
     hpiString = combineHpiString(hpiString, 3);
     hpiString = fillNameAndPronouns(hpiString, patientInfo);
-    hpiString = partOfSpeechCorrection(hpiString);
     hpiString = fillMedicalTerms(hpiString);
     hpiString = conjugateThirdPerson(hpiString);
     hpiString = abbreviate(hpiString);

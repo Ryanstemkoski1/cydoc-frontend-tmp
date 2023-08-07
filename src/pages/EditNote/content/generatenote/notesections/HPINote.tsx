@@ -27,8 +27,11 @@ import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
 import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
 import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
 import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
+import { capitalizeFirstLetter } from '../generateHpiText';
+import './HPINote.css';
+import { textFieldClasses } from '@mui/material';
 
-interface HPINoteProps {
+interface HPINotePropsFromRedux {
     hpi: HpiState;
     familyHistory: FamilyHistoryState;
     medications: MedicationsState;
@@ -37,6 +40,8 @@ interface HPINoteProps {
     patientInformation: PatientInformationState;
     chiefComplaints: ChiefComplaintsState;
 }
+
+type HPINoteProps = HPINotePropsFromRedux & { bulletNoteView?: boolean };
 
 export type GraphNode = NodeInterface & { response: HpiResponseType };
 
@@ -405,20 +410,14 @@ export const extractNode = (
             const posArr: string[] = [];
             const negArr: string[] = [];
             (response as string[]).map((key) => {
-                if (key in state.surgicalHistory) {
-                    const { hasHadSurgery, procedure } =
-                        state.surgicalHistory[key];
-                    if (
-                        hasHadSurgery == YesNoResponse.Yes &&
-                        procedure.length > 0
-                    )
-                        posArr.push(procedure);
-                    else if (
-                        hasHadSurgery == YesNoResponse.No &&
-                        procedure.length > 0
-                    )
-                        negArr.push(procedure);
-                }
+                const { hasHadSurgery, procedure } = state.surgicalHistory[key];
+                if (hasHadSurgery == YesNoResponse.Yes && procedure.length > 0)
+                    posArr.push(procedure);
+                else if (
+                    hasHadSurgery == YesNoResponse.No &&
+                    procedure.length > 0
+                )
+                    negArr.push(procedure);
             });
             answer = joinLists(posArr, 'and');
             negRes = joinLists(negArr, 'or');
@@ -492,17 +491,27 @@ export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
     }
     return formattedHpis;
 };
-
+// Function to remove specified phrases
+function removePhrases(text: string, phrases: string[]): string {
+    let modifiedText = text;
+    phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
+    phrases.forEach((phrase) => {
+        modifiedText = modifiedText.replace(new RegExp(phrase, 'g'), ''); // Removing each phrase globally
+    });
+    return modifiedText.trim();
+}
 const HPINote = (state: HPINoteProps) => {
+    const { bulletNoteView } = state;
+
     /*
     formattedHpis is a dictionary in which each key is the chief complaint
     and the value is an array of template sentences.
-    
+
     The following will convert each CC's array of template sentences into a 
     paragraph, which is then re-split into an array and converted into a Set
     of sentences for de-duplication within the paragraph and comparison with 
     latter chief complaints.
-    
+
     Specifically, each chief complaint set will be compared with later chief
     complaint sets to look for duplicate sentences (finding the complement of
     the second set). The first instances of duplicate sentences are kept, 
@@ -542,6 +551,23 @@ const HPINote = (state: HPINoteProps) => {
         return acc;
     }, []);
 
+    // After the finalPara array is constructed, perform the removal operation.
+    const phrasesToRemove = [
+        'The patient has been',
+        'The patient has',
+        'The patient is',
+        'The patients',
+        'The patient',
+        'He',
+        'She',
+        'They',
+    ];
+    finalPara.forEach((paragraph, i) => {
+        finalPara[i] = bulletNoteView
+            ? removePhrases(paragraph, phrasesToRemove)
+            : paragraph;
+    });
+
     const miscText = [];
     const actualNote = [];
     /**
@@ -560,28 +586,64 @@ const HPINote = (state: HPINoteProps) => {
             miscNote: miscText[i],
         };
     }
+
     return (
         <div>
             {actualNote.reduce((acc: JSX.Element[], text, i) => {
-                if (text.chiefComplaint in state.chiefComplaints)
-                    return [
-                        ...acc,
+                if (text.chiefComplaint in state.chiefComplaints) {
+                    // Process the text based on bulletNoteView flag
+                    // Prepare the content to be rendered in bullet points or paragraphs
+                    const content = bulletNoteView ? (
+                        <li key={i}>
+                            <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
+                            {text.text.split('. ').map((sentence, index) => (
+                                <li key={index}>
+                                    {capitalizeFirstLetter(sentence.trim())}
+                                    {sentence.trim().endsWith('.') ? '' : '.'}
+                                </li>
+                            ))}
+                            {text.miscNote &&
+                                text.miscNote
+                                    .split('. ')
+                                    .map((sentence, index) => (
+                                        <li key={index}>
+                                            {capitalizeFirstLetter(
+                                                sentence.trim()
+                                            )}
+                                            {sentence.trim().endsWith('.')
+                                                ? ''
+                                                : '.'}
+                                        </li>
+                                    ))}
+                        </li>
+                    ) : (
                         <p key={i}>
-                            <b>{text.chiefComplaint}</b>
+                            <b>{capitalizeFirstLetter(text.chiefComplaint)}</b>
                             <br />
-                            {text.text}
+                            {capitalizeFirstLetter(text.text)}
                             {text.miscNote ? (
                                 <>
                                     {' '}
                                     <br />
                                     <br />
-                                    {text.miscNote}
+                                    {capitalizeFirstLetter(text.miscNote)}
                                 </>
                             ) : (
                                 ''
                             )}
-                        </p>,
-                    ];
+                        </p>
+                    );
+
+                    // Render the content inside a list (<ul>) or paragraph (<p>) accordingly
+                    return bulletNoteView
+                        ? [
+                              ...acc,
+                              <ul className='no-bullets' key={i}>
+                                  {content}
+                              </ul>,
+                          ]
+                        : [...acc, content];
+                }
                 return acc;
             }, [])}
         </div>
