@@ -48,16 +48,10 @@ const stylingObject = {
         marginLeft: '15px'
     }
 };
-const [checked, setChecked] = useState(false);
 
-const handleChange = (event) => {
-  setChecked(event.target.checked);
-};
-
-const Terms_and_conditions = (props) => {
+const TermsAndConditions = () => {
     return(
         <>
-        <NavMenu/>
     <div style={stylingObject.body}>
     <div>
     <span style={stylingObject.title}>
@@ -1798,15 +1792,6 @@ const Terms_and_conditions = (props) => {
     </div>
     <div>
     </div>
-    <div>
-        <ul>
-            <li>
-                <span>
-                    I AGREE TO THIS AGREEMENT
-                </span>
-            </li>
-        </ul>
-    </div>
 </div>
 <div>
 </div>
@@ -1815,16 +1800,20 @@ const Terms_and_conditions = (props) => {
 <div>
 </div>
 </div>
-<label>
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={handleChange}
-        />
-        Check me
-      </label>
-</>
-    );
+</>);
 };
+
+const Terms_and_conditions = (props) => {
+    const { title } = props;
+    return !title ? (
+        <>
+        <NavMenu />
+        {TermsAndConditions()}
+        </>
+    ) :(
+    <>
+        {TermsAndConditions()}
+    </>);
+}
 
 export default Terms_and_conditions;
