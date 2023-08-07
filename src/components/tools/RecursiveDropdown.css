@@ -1,0 +1,19 @@
+.tag {
+    color: #007a9a;
+    background-color: #90e4f9;
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 6px;
+    margin-right: 6px;
+    font-size: 12px;
+    font-style: normal;
+    font-family: 'Consolas', monospace;
+    line-height: normal;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+.tag.isHeader {
+    color: gray;
+    background-color: lightgray;
+}

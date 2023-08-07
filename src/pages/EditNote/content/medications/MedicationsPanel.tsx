@@ -417,6 +417,7 @@ class MedicationsPanel extends Component<Props, State> {
                                 fluid
                                 search
                                 selection
+                                clearable
                                 allowAdditions
                                 icon=''
                                 optiontype='diseaseOptions'

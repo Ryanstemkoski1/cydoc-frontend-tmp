@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Accordion, Grid, Table, Image } from 'semantic-ui-react';
 import sideEffects from 'constants/sideEffects';
 import drugNames from 'constants/medications';
-import diseases from 'constants/diagnoses';
+import diseases from 'constants/oldDiagnoses';
 import AddRowButton from 'components/tools/AddRowButton.js';
 import { OptionMapping } from '_processOptions';
 import {

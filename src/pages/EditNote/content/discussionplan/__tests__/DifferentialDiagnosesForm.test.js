@@ -1,6 +1,7 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
+import { act } from 'react-dom/test-utils';
 import DifferentialDiagnosesForm from '../forms/DifferentialDiagnosesForm';
 import configureStore from 'redux-mock-store';
 import { conditionId, categoryId, initialPlan } from '../util';
@@ -39,12 +40,25 @@ const mountWithStore = (
 
 describe('DifferentialDiagnosesForm', () => {
     it('renders without crashing', () => {
-        const { wrapper } = mountWithStore();
+        let wrapper;
+
+        act(() => {
+            wrapper = mountWithStore()['wrapper'];
+        });
         expect(wrapper).toBeTruthy();
     });
 
-    it('matches snapshot', () => {
-        const { wrapper } = mountWithStore();
+    it('matches snapshot', async () => {
+        let wrapper;
+
+        act(() => {
+            wrapper = mountWithStore()['wrapper'];
+        });
+
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0)); // Wait for async operations
+            wrapper.update();
+        });
         expect(wrapper.html()).toMatchSnapshot();
     });
 
@@ -98,15 +112,27 @@ describe('DifferentialDiagnosesForm', () => {
     //     expect(store.getActions()).toEqual(expectedActions);
     // });
 
-    it('dispatches correct action when updating comments', () => {
-        const { store, wrapper } = mountWithStore();
+    it('dispatches correct action when updating comments', async () => {
+        let stor, wrap;
+
+        act(() => {
+            const { store, wrapper } = mountWithStore();
+            stor = store;
+            wrap = wrapper;
+        });
+
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0)); // Wait for async operations
+            wrap.update();
+        });
 
         const value = 'foo';
-        wrapper
-            .find('textarea[aria-label="Diagnosis-Comment"]')
-            .simulate('change', {
+        wrap.find('textarea[aria-label="Diagnosis-Comment"]').simulate(
+            'change',
+            {
                 target: { value },
-            });
+            }
+        );
         const expectedActions = [
             {
                 type: TYPES.UPDATE_DIFFERENTIAL_DIAGNOSIS_COMMENTS,
@@ -117,13 +143,24 @@ describe('DifferentialDiagnosesForm', () => {
                 },
             },
         ];
-        expect(store.getActions()).toEqual(expectedActions);
+        expect(stor.getActions()).toEqual(expectedActions);
     });
 
-    it('dispatches correct action when adding row', () => {
-        const { store, wrapper } = mountWithStore();
+    it('dispatches correct action when adding row', async () => {
+        let stor, wrap;
 
-        wrapper.find('button[aria-label="add-row"]').simulate('click');
+        act(() => {
+            const { store, wrapper } = mountWithStore();
+            stor = store;
+            wrap = wrapper;
+        });
+
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0)); // Wait for async operations
+            wrap.update();
+        });
+
+        wrap.find('button[aria-label="add-row"]').simulate('click');
         const expectedActions = [
             {
                 type: TYPES.ADD_DIFFERENTIAL_DIAGNOSIS,
@@ -132,6 +169,6 @@ describe('DifferentialDiagnosesForm', () => {
                 },
             },
         ];
-        expect(store.getActions()).toEqual(expectedActions);
+        expect(stor.getActions()).toEqual(expectedActions);
     });
 });

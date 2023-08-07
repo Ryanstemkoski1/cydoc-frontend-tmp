@@ -1,5 +1,5 @@
 import React from 'react';
-import Dropdown from 'components/tools/OptimizedDropdown';
+import Dropdown from 'components/tools/RecursiveDropdown';
 import { Grid, TextArea } from 'semantic-ui-react';
 import { PlanAction } from '../util';
 import { connect } from 'react-redux';
@@ -19,9 +19,10 @@ import {
     CategoryFormOwnProps,
     BaseCategoryForm,
 } from './BaseCategoryForm';
-import UpdateDimensions from './UpdateDimensions';
+// import UpdateDimensions from './UpdateDimensions';
 import './DiscussionPlanForms.css';
 import './planSections.css';
+import { DiagnosesOptionMapping } from '_processOptions';
 
 interface DifferentialDiagnosesDispatchProps {
     addDifferentialDiagnosis: PlanAction;
@@ -36,7 +37,7 @@ const DifferentialDiagnosesForm = (
         DifferentialDiagnosesDispatchProps
 ) => {
     const { mobile, categoryData, formatAction, ...actions } = props;
-    const { width } = UpdateDimensions();
+    // const { width } = UpdateDimensions();
 
     const gridHeaders = () => (
         <Grid.Row>
@@ -45,20 +46,21 @@ const DifferentialDiagnosesForm = (
         </Grid.Row>
     );
 
-    const mainInput: ComponentFunction = (row, options, onAddItem) => (
+    const mainInput: ComponentFunction = (row, options) => (
         <>
             <Dropdown
                 fluid
                 search
                 selection
                 clearable
-                allowAdditions
+                loading={options && Object.keys(options.main).length == 0}
+                disabled={options && Object.keys(options.main).length == 0}
                 transparent={mobile}
                 value={row.diagnosis}
-                options={options?.main || {}}
+                code={row.code}
+                options={(options?.main as DiagnosesOptionMapping) || {}}
                 uuid={row.id}
                 onChange={formatAction(actions.updateDifferentialDiagnosis)}
-                onAddItem={onAddItem}
                 optiontype='main'
                 aria-label='Diagnosis-Dropdown'
                 placeholder='diagnosis'

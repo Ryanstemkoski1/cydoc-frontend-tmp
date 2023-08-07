@@ -24,6 +24,7 @@ import {
 import UpdateDimensions from './UpdateDimensions';
 import './DiscussionPlanForms.css';
 import './planSections.css';
+import { OptionMapping } from '_processOptions';
 
 interface PrescriptionsDispatchProps {
     addPrescription: PlanAction;
@@ -61,7 +62,7 @@ const PrescriptionsForm = (
                 transparent={mobile}
                 uuid={row.id}
                 value={row.type}
-                options={options?.main || {}}
+                options={(options?.main as OptionMapping) || {}}
                 onChange={formatAction(actions.updatePrescriptionType)}
                 onAddItem={onAddItem}
                 aria-label='Prescription-Dropdown'

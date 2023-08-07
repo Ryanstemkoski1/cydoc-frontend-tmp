@@ -60,9 +60,11 @@
     cursor: text;
 }
 
+/*
 .opt-dropdown div {
     border-radius: 0;
 }
+*/
 
 /* Hide the vertical bar adjacent to `downward-arrow` */
 span.dropdown__indicator-separator {
@@ -97,4 +99,9 @@ div.dropdown__indicator {
     background-color: rgba(0, 0, 0, 0.05);
     color: rgba(0, 0, 0, 0.9);
     font-weight: 600;
+}
+
+.dropdown-divider {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }

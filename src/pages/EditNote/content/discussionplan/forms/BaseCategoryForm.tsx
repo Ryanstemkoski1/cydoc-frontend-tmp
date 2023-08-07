@@ -6,11 +6,14 @@
 import React, { useState, useEffect } from 'react';
 import AddRowButton from 'components/tools/AddRowButton';
 import { WhenResponse } from 'constants/enums';
-import diseases from 'constants/diagnoses';
 import medications from 'constants/medications';
 import procedures from 'constants/procedures';
 import registrationConstants from 'constants/registration-constants.json';
-import { getOptionMapping, OptionMapping } from '_processOptions';
+import {
+    DiagnosesOptionMapping,
+    getOptionMapping,
+    OptionMapping,
+} from '_processOptions';
 import {
     PlanAction,
     ConditionCategoryKey,
@@ -21,6 +24,11 @@ import { Grid, Header, Accordion, Icon } from 'semantic-ui-react';
 import _ from 'lodash';
 
 type Options = { main: OptionMapping; when?: OptionMapping };
+
+type DiagnosesOptions = {
+    main: DiagnosesOptionMapping;
+    when?: DiagnosesOptionMapping;
+};
 
 interface CategoryFormStateProps<T> {
     categoryData: T[];
@@ -37,7 +45,7 @@ export type CategoryFormProps<T> = CategoryFormOwnProps &
 
 export type CategoryFormComponent<T> = (
     row: T,
-    options?: Options,
+    options?: Options | DiagnosesOptions,
     onAddItem?: HandleOnAddItem
 ) => JSX.Element;
 
@@ -58,8 +66,10 @@ interface BaseCategoryFormProps<T> {
 
 const specialties = getOptionMapping(registrationConstants.specialties);
 
-const TYPE_TO_OPTION: { [key in ConditionCategoryKey]: OptionMapping } = {
-    differentialDiagnoses: diseases,
+const TYPE_TO_OPTION: {
+    [key in ConditionCategoryKey]: OptionMapping;
+} = {
+    differentialDiagnoses: {},
     prescriptions: medications,
     proceduresAndServices: procedures,
     referrals: specialties,
@@ -83,9 +93,19 @@ export const BaseCategoryForm = <T extends { id: string }>(
 
     const [expanded, setExpanded] = useState<boolean>(false);
     const [activeRows, setActiveRows] = useState(new Set());
-    const [options, setOptions] = useState<Options>({
+    const [options, setOptions] = useState<Options | DiagnosesOptions>({
         main: TYPE_TO_OPTION[category] || {},
     });
+
+    useEffect(() => {
+        if (category === 'differentialDiagnoses') {
+            import('constants/diagnoses.json').then((diseases) => {
+                setOptions({
+                    main: diseases as unknown as DiagnosesOptionMapping,
+                });
+            });
+        }
+    }, [category]);
 
     useEffect(() => {
         if (categoryData.length > 0 && 'when' in categoryData[0]) {
