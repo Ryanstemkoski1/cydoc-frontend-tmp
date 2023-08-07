@@ -1,6 +1,5 @@
 import React from 'react';
 import AuthContext from './AuthContext';
-import { client } from 'constants/api';
 import { noteBody } from 'constants/noteBody.js';
 
 const Context = React.createContext({});
@@ -21,25 +20,6 @@ export class NotesStore extends React.Component {
     //Returns all the user's active notes as an Iterable
     getActiveNotes = () => {
         return this.state.activeNotes.values();
-    };
-
-    //Retrieves the user's notes using an API call
-    loadNotes = async (_id = this.context.user._id) => {
-        let response = await client.get('/records');
-
-        if (response === null) {
-            alert('null response');
-            return;
-        }
-
-        let notes = new Map();
-        response.data.forEach((note) => {
-            if (note.doctorID === _id) {
-                notes.set(note._id, note);
-            }
-        });
-
-        this.setState({ notes: notes });
     };
 
     //Adds the provided note into activeNotes
@@ -88,21 +68,9 @@ export class NotesStore extends React.Component {
             });
         }
 
-        let response = await client.post('/record/new', note);
-
-        if (response === null) {
-            alert('null response');
-            return;
-        }
-
-        if (response.status - 200 < 100) {
-            let newNote = response.data;
-            let prevNotes = new Map(this.state.notes);
-            this.setState({ notes: prevNotes.set(newNote._id, newNote) });
-            return newNote;
-        } else {
-            alert(response.data.Message);
-        }
+        let prevNotes = new Map(this.state.notes);
+        this.setState({ notes: prevNotes.set(newNote._id, newNote) });
+        return newNote;
     };
 
     //Deletes a note from state and backend storage
@@ -110,25 +78,13 @@ export class NotesStore extends React.Component {
         note.doctorID = this.context.user._id;
         note.clinicID = this.context.user.workplace;
 
-        let response = await client.delete(`/record/${note._id}`, note);
-
-        if (response === null) {
-            alert('null response');
-            return;
-        }
-
-        if (response.status - 200 < 100) {
-            this.setState((state) => {
-                let prevNotes = new Map(state.notes);
-                let prevActiveNotes = new Map(state.activeNotes);
-                prevNotes.delete(note._id);
-                prevActiveNotes.delete(note._id);
-                return { notes: prevNotes, activeNotes: prevActiveNotes };
-            });
-            alert('Delete Success');
-        } else {
-            alert(response.data.Message);
-        }
+        this.setState((state) => {
+            let prevNotes = new Map(state.notes);
+            let prevActiveNotes = new Map(state.activeNotes);
+            prevNotes.delete(note._id);
+            prevActiveNotes.delete(note._id);
+            return { notes: prevNotes, activeNotes: prevActiveNotes };
+        });
     };
 
     // Updates a note in state and backend storage
@@ -136,26 +92,15 @@ export class NotesStore extends React.Component {
         note.doctorID = this.context.user._id;
         note.clinicID = this.context.user.workplace;
 
-        let response = await client.put(`/record/${note._id}`, note);
-
-        if (response == null) {
-            alert('null response');
-            return;
-        }
-
-        if (response.status - 200 < 100) {
-            this.setState((state) => {
-                let prevNotes = new Map(state.notes);
-                Object.assign(prevNotes.get(note._id), {
-                    ...note,
-                    unsavedChanges: false,
-                });
-                return { notes: prevNotes };
+        this.setState((state) => {
+            let prevNotes = new Map(state.notes);
+            Object.assign(prevNotes.get(note._id), {
+                ...note,
+                unsavedChanges: false,
             });
-            return 'Save Success';
-        } else {
-            return 'Save Failure';
-        }
+            return { notes: prevNotes };
+        });
+        return 'Save Success';
     };
 
     // Updates a note in state ONLY
