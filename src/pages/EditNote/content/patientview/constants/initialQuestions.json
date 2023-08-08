@@ -82,7 +82,7 @@
             "doctorView": ""
         },
         "10": {
-            "uid": "5",
+            "uid": "10",
             "text": "If you could not find your condition or symptom, please describe it here in a few words:",
             "responseType": "LONG_TEXT",
             "category": "",

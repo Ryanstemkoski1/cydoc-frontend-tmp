@@ -16,4 +16,5 @@
 .cc-description {
     font-family: Nunito, Arial, Helvetica, 'sans-serif';
     width: 100%;
+    height: 6rem !important;
 }

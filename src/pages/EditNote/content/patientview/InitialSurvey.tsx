@@ -127,7 +127,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             !Object.keys(userSurveyState.order).length
         )
             processSurveyGraph(initialQuestions as initialQuestionsState);
-        else
+        else {
             this.setState({
                 activeItem: Object.keys(userSurveyState.nodes).every(
                     (key) =>
@@ -137,6 +137,14 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                     ? 1
                     : 0,
             });
+            if (this.props.additionalSurvey.complaintsDescription.length > 0) {
+                this.setState({
+                    descriptionVal:
+                        this.props.additionalSurvey.complaintsDescription,
+                    showDescriptionBox: true,
+                });
+            }
+        }
         if (hpiHeaders) {
             const data = hpiHeaders;
             data.then((res) => saveHpiHeader(res.data));
@@ -439,9 +447,6 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                             <TextArea
                                 id={id}
                                 className='cc-description'
-                                defaultValue={
-                                    userSurveyState.nodes[id].response as string
-                                }
                                 placeholder={
                                     'Description of condition or symptom... (max 200 characters)'
                                 }
