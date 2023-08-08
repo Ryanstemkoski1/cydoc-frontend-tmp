@@ -2,6 +2,7 @@ import { UPDATE_ADDITIONAL_DETAILS } from 'redux/actions/actionTypes';
 import {
     GoBackToAdditionalSurvey,
     UpdateAdditionalSurveyAction,
+    UpdateChiefComplaintsDescription,
     UpdateUserInfo,
     ValidateUserInfo,
 } from 'redux/actions/additionalSurveyActions';
@@ -14,6 +15,7 @@ export interface additionalSurvey {
     initialSurveyState: number;
     userInfo: UserInfo;
     isUserInfoValid: boolean;
+    complaintsDescription: string;
 }
 
 export interface UserInfo {
@@ -84,12 +86,14 @@ export const initialAdditionalSurveyData: additionalSurvey = {
         title: '',
     },
     isUserInfoValid: true,
+    complaintsDescription: '',
 };
 
 export function additionalSurveyReducer(
     state = initialAdditionalSurveyData,
     action:
         | UpdateAdditionalSurveyAction
+        | UpdateChiefComplaintsDescription
         | GoBackToAdditionalSurvey
         | UpdateUserInfo
         | ValidateUserInfo
@@ -101,6 +105,9 @@ export function additionalSurveyReducer(
             state.socialSecurityNumber = action?.payload.socialSecurityNumber;
             state.dateOfBirth = action.payload?.dateOfBirth;
             state.initialSurveyState = action?.payload?.initialSurveyState;
+            return state;
+        case UPDATE_ADDITIONAL_DETAILS.UPDATE_CC_DESCRIPTION:
+            state.complaintsDescription = action.payload?.complaintsDescription;
             return state;
         case UPDATE_ADDITIONAL_DETAILS.GO_BACK:
             state.initialSurveyState = state.initialSurveyState - 1;

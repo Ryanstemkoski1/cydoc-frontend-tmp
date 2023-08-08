@@ -12,6 +12,13 @@ export interface UpdateAdditionalSurveyAction {
     };
 }
 
+export interface UpdateChiefComplaintsDescription {
+    type: UPDATE_ADDITIONAL_DETAILS.UPDATE_CC_DESCRIPTION;
+    payload: {
+        complaintsDescription: string;
+    };
+}
+
 export interface GoBackToAdditionalSurvey {
     type: UPDATE_ADDITIONAL_DETAILS.GO_BACK;
 }
@@ -41,6 +48,15 @@ export function updateAdditionalSurveyDetails(
             dateOfBirth,
             initialSurveyState,
         },
+    };
+}
+
+export function updateChiefComplaintsDescription(
+    complaintsDescription: string
+): UpdateChiefComplaintsDescription {
+    return {
+        type: UPDATE_ADDITIONAL_DETAILS.UPDATE_CC_DESCRIPTION,
+        payload: { complaintsDescription },
     };
 }
 

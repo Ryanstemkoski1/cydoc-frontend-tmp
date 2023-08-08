@@ -12,3 +12,8 @@
         width: 100% !important;
     }
 }
+
+.cc-description {
+    font-family: Nunito, Arial, Helvetica, 'sans-serif';
+    width: 100%;
+}
