@@ -3,12 +3,11 @@ import { Field, Formik, FormikHelpers } from 'formik';
 
 import './Account.css';
 
-import { Button, Container, Image, Header } from 'semantic-ui-react';
-import Logo from '../../assets/cydoc-logo.svg';
+import { Button } from 'semantic-ui-react';
 import './Account.css';
 import * as Yup from 'yup';
 import { ErrorText } from 'components/Atoms/ErrorText';
-import { Grid, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { sendResetPasswordCode } from 'auth/cognito';
 import { Box } from '@mui/system';
 import { useHistory } from 'react-router-dom';
@@ -85,7 +84,7 @@ const ForgotPasswordEmailForm = ({ onSuccessfulSubmission }: Props) => {
                                 color='teal'
                                 content='Cancel'
                                 type='button'
-                                onClick={() => history.push('/')}
+                                onClick={() => history.push('/login')}
                             />
                             <Button
                                 color='teal'

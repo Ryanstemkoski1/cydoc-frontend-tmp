@@ -221,7 +221,7 @@ export default function ForgotPasswordCodeForm({
                         aria-label='submit'
                         content='Update Password'
                         type='submit'
-                        style={{ marginTop: '1rem' }}
+                        style={{ marginTop: '1.5rem' }}
                     />
                     <ErrorText
                         key={'loginError'}

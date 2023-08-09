@@ -1,20 +1,20 @@
 import React from 'react';
 import { Field, Formik, FormikHelpers } from 'formik';
-import { TextField, Typography } from '@mui/material';
+import { TextField } from '@mui/material';
 
 import './Account.css';
 
-import { Button, Image } from 'semantic-ui-react';
-import Logo from '../../assets/cydoc-logo.svg';
+import { Button } from 'semantic-ui-react';
 import * as Yup from 'yup';
 import useAuth from 'hooks/useAuth';
 import { Box, Stack } from '@mui/system';
 import { ErrorText } from 'components/Atoms/ErrorText';
+import LogoHeader from 'components/Atoms/LogoHeader';
 
 const validationSchema = Yup.object({
     code: Yup.string()
         .label('Code')
-        .required('Verifcation code is required')
+        .required('Verification code is required')
         .min(1),
 });
 
@@ -52,16 +52,7 @@ export default function MfaVerificationForm() {
         >
             {({ errors, submitForm, values }) => (
                 <Stack alignItems='center'>
-                    <Image size='tiny' href='/' src={Logo} alt='logo' />
-                    <Typography
-                        variant='h5'
-                        color='common.black'
-                        style={{
-                            margin: '2rem',
-                        }}
-                    >
-                        Enter SMS verification code
-                    </Typography>
+                    <LogoHeader title='Enter SMS verification code' />
                     <Field
                         name='code'
                         required
@@ -70,12 +61,12 @@ export default function MfaVerificationForm() {
                         type='input'
                         as={TextField}
                         variant='outlined'
-                        style={{ width: '12rem' }}
+                        style={{ width: '12rem', marginTop: '1rem' }}
                     />
                     <Box
                         width='100%'
-                        justifyContent='space-around'
-                        marginTop='2.5rem'
+                        justifyContent='space-between'
+                        marginTop='2rem'
                         display='flex'
                     >
                         <Button

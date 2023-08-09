@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Container, Image, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import Logo from '../../assets/cydoc-logo.svg';
 import './Account.css';
 import ForgotPasswordEmailForm from './ForgotPasswordEmailForm';
 import ForgotPasswordCodeForm from './ForgotPasswordCodeForm';
 import { Stack, Typography } from '@mui/material';
 import { CenteredPaper } from 'components/Atoms/CenteredPaper';
+import LogoHeader from 'components/Atoms/LogoHeader';
 
 const ForgotPasswordPage = () => {
     const [codeSentEmail, setCodeSentEmail] = useState('');
@@ -16,12 +15,7 @@ const ForgotPasswordPage = () => {
 
     return (
         <CenteredPaper>
-            <Container textAlign='center'>
-                <Image size='tiny' href='/' src={Logo} alt='logo' />
-                <Header as='h1' className='logo-text' content='Cydoc' />
-                <Typography>Forgot password</Typography>
-            </Container>
-
+            <LogoHeader title='Forgot password' />
             <div className='forgot-password-email'>
                 {!codeSentEmail || !obfuscatedEmail ? (
                     <ForgotPasswordEmailForm
@@ -54,7 +48,7 @@ function SuccessMessage() {
     return (
         <Stack display='flex'>
             <Typography margin='1rem' paddingTop='1rem' textAlign='center'>
-                Password updated.
+                Password updated!
             </Typography>
             <Link
                 style={{ color: '#007db3' }}

@@ -4,14 +4,14 @@ import { TextField } from '@mui/material';
 
 import './Account.css';
 
-import { Button, Container, Image, Header } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import Logo from '../../assets/cydoc-logo.svg';
 import './Account.css';
 import * as Yup from 'yup';
 import useAuth from 'hooks/useAuth';
 import { ErrorText } from 'components/Atoms/ErrorText';
 import { Box } from '@mui/system';
+import LogoHeader from 'components/Atoms/LogoHeader';
 
 const validationSchema = Yup.object({
     email: Yup.string()
@@ -23,7 +23,7 @@ const validationSchema = Yup.object({
         .label('Password')
         .trim()
         .required('Password is required')
-        .min(6), // TODO: link up min with ACTUAL password minimum
+        .min(7),
 });
 
 interface LoginSchema {
@@ -63,20 +63,7 @@ const LoginForm = () => {
             >
                 {({ errors, submitForm, isSubmitting }) => (
                     <div>
-                        <Container textAlign='center'>
-                            <Image size='tiny' href='/' src={Logo} alt='logo' />
-                            <Header
-                                as='h1'
-                                className='logo-text'
-                                content='Cydoc'
-                            />
-                        </Container>
-                        <Container
-                            className='login-header'
-                            color='black'
-                            textAlign='center'
-                            content='Login'
-                        />
+                        <LogoHeader title='Login' />
                         <Field
                             name='email'
                             margin='normal'
@@ -120,6 +107,7 @@ const LoginForm = () => {
                                 aria-label='login-button'
                                 content='Login'
                                 onClick={submitForm}
+                                style={{ marginTop: '.5rem' }}
                             />
                         </Box>
                         <ErrorText

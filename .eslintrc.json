@@ -91,7 +91,7 @@
                     }
                 ],
                 "no-var": ["error"],
-                "no-console": ["error"],
+                "no-console": ["warn"],
                 "react/prop-types": "off"
             },
             "settings": {
