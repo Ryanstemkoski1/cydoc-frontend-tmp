@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
     Form,
     Segment,
@@ -9,15 +9,16 @@ import {
     Icon,
     Divider,
 } from 'semantic-ui-react';
-import AuthContext from 'contexts/AuthContext';
 import { passwordErrors } from 'constants/passwordErrors';
 import changePassword from 'auth/changePassword';
 import './Account.css';
 import { passwordRequirements } from 'auth/passwordReqs';
+import useUser from 'hooks/useUser';
 
+// NOTE: this page needs to be updated to use the new auth password editing logic
 const ProfileSecurity = () => {
-    const context = useContext(AuthContext);
-    const role = context.role;
+    const { user, isManager } = useUser();
+    const role = user?.role;
 
     const [curPassword, setCurPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -33,26 +34,35 @@ const ProfileSecurity = () => {
         passesMinLength: false,
     });
 
-    const handleCurPasswordChange = (e, { value }) => {
+    const handleCurPasswordChange = (
+        e: unknown,
+        { value }: { value: string }
+    ) => {
         setCurPassword(value);
     };
 
-    const handleNewPasswordChange = (e, { value }) => {
+    const handleNewPasswordChange = (
+        e: unknown,
+        { value }: { value: string }
+    ) => {
         setPasswordReqs(passwordRequirements(passwordReqs, value, role));
         setNewPassword(value);
     };
 
-    const handleRetypeNewPasswordChange = (e, { value }) => {
+    const handleRetypeNewPasswordChange = (
+        e: unknown,
+        { value }: { value: string }
+    ) => {
         setRetypeNewPassword(value);
     };
 
-    const handleFocusNewPassword = (value) => {
+    const handleFocusNewPassword = (value: boolean) => {
         setShowPasswordReqs(value);
     };
 
     const handleChangePasswordSubmit = async () => {
         for (const req in passwordReqs) {
-            if (!passwordReqs[req]) {
+            if (!passwordReqs?.[req as keyof typeof passwordReqs]) {
                 setShowPasswordReqs(true);
                 setPasswordMeetsReqs(false);
                 return;
@@ -79,8 +89,11 @@ const ProfileSecurity = () => {
 
     const passwordErrorMessages = () => {
         const errMsgs = [];
-        const passwordErrs = passwordErrors(role);
-        for (const err in passwordErrs) {
+        const passwordErrs = passwordErrors(
+            isManager ? 'manager' : 'clinician'
+        );
+        for (const untyped in passwordErrs) {
+            const err = untyped as keyof typeof passwordErrs; // set types for key
             if (passwordReqs[err]) {
                 errMsgs.push(
                     <Card.Content
@@ -88,7 +101,7 @@ const ProfileSecurity = () => {
                         className={passwordMeetsReqs ? 'req-met' : ''}
                     >
                         <Icon name='check' size='small' />
-                        {passwordErrs[err]}
+                        {passwordErrs?.[err]}
                     </Card.Content>
                 );
             } else {
@@ -98,7 +111,7 @@ const ProfileSecurity = () => {
                         className={!passwordMeetsReqs ? 'req-not-met' : ''}
                     >
                         <Icon name='times' size='small' />
-                        {passwordErrs[err]}
+                        {passwordErrs?.[err]}
                     </Card.Content>
                 );
             }
