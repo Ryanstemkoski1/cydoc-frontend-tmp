@@ -74,14 +74,14 @@ export const AuthProvider: React.FC<
             return CognitoAuth.signOut()
                 .then(() => {
                     setLoginCorrect(false);
-                setIsSignedIn(false);
-                setCognitoUser(null);
-            })
-            .catch((reason) =>
-                log(`Sign out error: ${stringFromError(reason)}`, {
-                    isSignedIn,
-                    cognitoUser,
-                    loginCorrect,
+                    setIsSignedIn(false);
+                    setCognitoUser(null);
+                })
+                .catch((reason) =>
+                    log(`Sign out error: ${stringFromError(reason)}`, {
+                        isSignedIn,
+                        cognitoUser,
+                        loginCorrect,
                         reason,
                     })
                 );

@@ -1,6 +1,4 @@
 import React from 'react';
-import { client } from 'constants/api';
-import AuthContext from './AuthContext';
 import { noteBody } from 'constants/noteBody.js';
 
 const Context = React.createContext({});
