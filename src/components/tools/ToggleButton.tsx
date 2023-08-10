@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 export interface ButtonProps<T = string> {
-    active: boolean;
+    active?: boolean;
     title: string;
     condition?: T;
-    onToggleButtonClick: (
+    onToggleButtonClick?: (
         e: React.MouseEvent,
         props: ButtonProps & { condition: T }
     ) => void;
@@ -67,7 +67,10 @@ export default function ToggleButton<T = string>(props: ButtonProps<T>) {
         <Button
             title={title}
             {...extraProps}
-            onClick={(e) => onToggleButtonClick(e, propsWithCondition)}
+            onClick={(e) =>
+                onToggleButtonClick &&
+                onToggleButtonClick(e, propsWithCondition)
+            }
             disabled={disabled}
             aria-label={ariaLabel}
             style={semanticButtonStyles}

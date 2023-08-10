@@ -34,6 +34,7 @@ import _ from 'lodash';
 import UpdateDimensions from './UpdateDimensions';
 import './DiscussionPlanForms.css';
 import './planSections.css';
+import { OptionMapping } from '_processOptions';
 
 export const ProceduresAndServicesForm = connect(
     (state: CurrentNoteState, ownProps: CategoryFormOwnProps) => ({
@@ -148,7 +149,7 @@ export const MainWhenCommentsForm = <
                 transparent={mobile}
                 optiontype='main'
                 uuid={row.id}
-                options={options?.main || {}}
+                options={(options?.main as OptionMapping) || {}}
                 onChange={formatAction(actions.mainOnChange)}
                 onAddItem={onAddItem}
                 value={categoryProps.getMainValue(row)}
@@ -179,7 +180,7 @@ export const MainWhenCommentsForm = <
                     transparent={mobile}
                     optiontype='when'
                     uuid={row.id}
-                    options={options?.when || {}}
+                    options={(options?.when as OptionMapping) || {}}
                     onChange={formatAction(actions.whenOnChange)}
                     onAddItem={onAddItem}
                     value={row.when}

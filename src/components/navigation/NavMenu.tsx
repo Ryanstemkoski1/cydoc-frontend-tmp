@@ -251,6 +251,14 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         return true;
     };
 
+    const handleClickLogo = () => {
+        if (context.token) {
+            navigateToHome();
+        } else {
+            logoNotLoggedIn();
+        }
+    };
+
     return (
         <Menu
             className={`${className} nav-menu nav-bar ${
@@ -286,24 +294,13 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                         src={Logo}
                         className={`${
                             collapseLoggedInNav
-                                ? 'logo-circle-mobile'
-                                : 'logo-circle'
+                                ? 'logo-text-mobile'
+                                : 'logo-text'
                         }`}
+                        content='Cydoc'
                     />
-                    {!displayNoteName && !hideCydoc && (
-                        <Header
-                            as='h1'
-                            className={`${
-                                collapseLoggedInNav
-                                    ? 'logo-text-mobile'
-                                    : 'logo-text'
-                            }`}
-                            content='Cydoc'
-                        />
-                    )}
-                </Menu.Item>
-            )}
-
+                )}
+            </Menu.Item>
             {/* When parent is EditNote, then display the note name item */}
             {displayNoteName && doctorView && (
                 <NoteNameMenuItem mobile={collapseLoggedInNav} />

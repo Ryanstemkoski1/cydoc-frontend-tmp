@@ -99,6 +99,7 @@ export enum ResponseTypes {
     NO_YES = 'NO-YES',
     YES_NO = 'YES-NO',
     SHORT_TEXT = 'SHORT-TEXT',
+    LONG_TEXT = 'LONG_TEXT',
     FH_POP = 'FH-POP',
     PMH_BLANK = 'PMH-BLANK',
     SELECTONE = 'SELECTONE',
@@ -114,6 +115,7 @@ export enum ResponseTypes {
     BMP = 'BMP',
     LFT = 'LFT',
     SEARCH = 'SEARCH',
+    YEAR = 'YEAR',
 }
 
 export interface ExpectedResponseInterface {
@@ -125,6 +127,7 @@ export interface ExpectedResponseInterface {
     TIME3DAYS: TimeInput;
     LIST_TEXT: ListTextInput;
     SHORT_TEXT: string;
+    LONG_TEXT: string;
     NUMBER: NumberInput;
     BODYLOCATION: BodyLocationType;
     FH_POP: string[];
@@ -154,6 +157,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     TIME3DAYS: { numInput: undefined, timeOption: '' },
     LIST_TEXT: { 1: '', 2: '', 3: '' },
     SHORT_TEXT: '',
+    LONG_TEXT: '',
     NUMBER: undefined,
     BODYLOCATION: bodyLocationResponse(),
     FH_POP: [],

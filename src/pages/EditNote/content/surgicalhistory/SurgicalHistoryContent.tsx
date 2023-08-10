@@ -20,6 +20,7 @@ import {
     TextAreaProps,
     InputOnChangeData,
     Header,
+    Image,
 } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton';
 import {
@@ -47,7 +48,7 @@ import { YesNoResponse } from 'constants/enums';
 import ToggleButton from 'components/tools/ToggleButton';
 import { questionContainer, questionTextStyle } from './styles';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
-
+import Add from '../../../../assets/add.svg';
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
         super(props);
@@ -229,6 +230,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
             <SurgicalHistoryTableBodyRow
                 {...this.props}
                 key={index}
+                hide={this.props.hide}
                 rowIndex={rowIndex}
                 fields={cellField}
                 onTableBodyChange={this.handleTableBodyChange}
@@ -245,7 +247,9 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
 
     //Method to generate the table header row
     makeHeader() {
-        const fields = ['Procedure', '', 'Year', 'Comments'];
+        const fields = this.props.hide
+            ? ['Procedure', '']
+            : ['Procedure', '', 'Year', 'Comments'];
         return (
             <Table.Row>
                 {fields.map((header, index) => (
@@ -330,7 +334,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                                 value={
                                     isPreview ||
                                     year === -1 ||
-                                    year.toString() === '-' ||
+                                    year?.toString() === '-' ||
                                     isNaN(year)
                                         ? ''
                                         : year
@@ -447,7 +451,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         );
 
         return (
-            <>
+            <div className='surgical-history'>
                 {patientView && !nums.length && (
                     <div style={questionContainer}>
                         <Header
@@ -483,12 +487,12 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 {!this.props.isPreview &&
                     (hasSurgicalHistory || !patientView) &&
                     this.props.responseType != ResponseTypes.PSH_POP && (
-                        <AddRowButton
-                            onClick={this.addRow}
-                            name='surgical history'
-                        />
+                        <div className='add-row-item' onClick={this.addRow}>
+                            <Image src={Add} />
+                            <AddRowButton name='surgical history' />
+                        </div>
                     )}
-            </>
+            </div>
         );
     }
 }
@@ -529,6 +533,7 @@ interface ContentProps {
     responseChoice?: string[];
     responseType?: ResponseTypes;
     node?: string;
+    hide?: boolean;
 }
 
 interface DispatchProps {

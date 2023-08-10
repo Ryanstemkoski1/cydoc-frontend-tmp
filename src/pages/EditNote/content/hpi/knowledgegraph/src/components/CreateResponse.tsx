@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/Button.css';
+import './CreateResponse.css';
 import MultipleChoice from './responseComponents/MultipleChoice';
 import ReviewOfSystemsCategory from '../../../../reviewofsystems/ReviewOfSystemsCategory';
 import YesNo from './responseComponents/YesNo';
@@ -35,6 +36,8 @@ import {
     isLabTestDictionary,
     isSelectOneResponse,
 } from 'redux/reducers/hpiReducer';
+import Masonry from 'react-masonry-css';
+import YearInput from './responseComponents/YearInput';
 
 interface CreateResponseProps {
     node: string;
@@ -205,7 +208,11 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     });
                 }
                 return (
-                    <div className='ros-container' style={{ width: 357 }}>
+                    <Masonry
+                        breakpointCols={1}
+                        columnClassName='ros-column'
+                        className='ros-container'
+                    >
                         <ReviewOfSystemsCategory
                             key={''}
                             category={''}
@@ -213,12 +220,15 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                             selectManyOptions={responseChoice}
                             node={node}
                         />
-                    </div>
+                    </Masonry>
                 );
             }
 
             case ResponseTypes.NUMBER:
                 return <HandleNumericInput key={node} node={node} />;
+
+            case ResponseTypes.YEAR:
+                return <YearInput key={node} node={node} />;
 
             case ResponseTypes.BODYLOCATION:
                 return <BodyLocation key={node} node={node} />;
@@ -252,6 +262,18 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 );
 
             case ResponseTypes.PMH_POP:
+                return (
+                    <MedicalHistoryContent
+                        key={node}
+                        isPreview={false}
+                        responseChoice={choices}
+                        responseType={responseType}
+                        mobile={collapseTabs}
+                        currentYear={-1}
+                        node={node}
+                        hide={false}
+                    />
+                );
             case ResponseTypes.PMH_BLANK:
                 return (
                     <MedicalHistoryContent
@@ -271,10 +293,10 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     <SurgicalHistoryContent
                         key={node}
                         isPreview={false}
-                        responseChoice={choices}
                         responseType={responseType}
                         mobile={collapseTabs}
                         node={node}
+                        hide={true}
                     />
                 );
             case ResponseTypes.LABORATORY_TEST:
@@ -306,7 +328,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                             {this.state.question.trim()}
                         </span>
                     )}{' '}
-                    <div className='qa-button space-top remove-shadow'>
+                    <div className='buttons-group qa-button space-top remove-shadow createResponse'>
                         {this.renderSwitch()}
                     </div>{' '}
                 </div>

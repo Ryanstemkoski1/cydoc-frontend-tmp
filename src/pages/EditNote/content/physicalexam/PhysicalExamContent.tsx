@@ -20,6 +20,7 @@ import { Vitals, VitalsFields } from 'redux/reducers/physicalExamReducer';
 import { PhysicalExamSchemaItem } from 'constants/PhysicalExam/physicalExamSchema';
 import { CurrentNoteState } from 'redux/reducers';
 import ButtonGroupTemparature from './InputSelectableTemparature';
+import { currentNoteStore } from 'redux/store';
 
 //Component that manages content for the Physical Exam tab
 class PhysicalExamContent extends React.Component<Props, State> {
@@ -31,6 +32,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
             weightKg: 0,
             heightM: 0,
             bmi: 0,
+            headCircumference: 0,
         };
         this.updateDimensions = this.updateDimensions.bind(this);
     }
@@ -89,9 +91,38 @@ class PhysicalExamContent extends React.Component<Props, State> {
             this.setState({ heightM: valueInM });
         }
     };
-    handleChangeTemparature = (val: string, data: InputOnChangeData) => {
+
+    calculateAgeInYears = (dateOfBirth: string) => {
+        const dobObj = new Date(dateOfBirth);
+        const timeDiff = Math.abs(Date.now() - dobObj.getTime());
+        const ageInYears = timeDiff / (1000 * 60 * 60 * 24 * 365.25);
+        return ageInYears;
+    };
+
+    isPediatric() {
+        if (
+            currentNoteStore.getState().additionalSurvey.dateOfBirth ===
+                undefined ||
+            currentNoteStore.getState().additionalSurvey.dateOfBirth === null ||
+            currentNoteStore.getState().additionalSurvey.dateOfBirth === ''
+        ) {
+            return +false;
+        }
+
+        const patientAge = this.calculateAgeInYears(
+            currentNoteStore.getState().additionalSurvey.dateOfBirth
+        );
+        return +(patientAge <= 2);
+    }
+
+    handleChangeTemparature = (val: string) => {
         const num = +val;
-        this.props.updateVitals(data.name, +num.toFixed(1));
+        this.props.updateVitals('temperature', +num.toFixed(1));
+    };
+
+    handleChangeTemperatureUnit = (val: string) => {
+        const num = +val;
+        this.props.updateVitals('tempUnit', +num.toFixed(1));
     };
 
     generateNumericInput = (
@@ -189,8 +220,17 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                             />
                                         </label>
                                         <ButtonGroupTemparature
-                                            handleChange={
+                                            temperature={
+                                                this.props.vitals.temperature
+                                            }
+                                            tempUnit={
+                                                this.props.vitals.tempUnit
+                                            }
+                                            handleTempChange={
                                                 this.handleChangeTemparature
+                                            }
+                                            handleTempUnitChange={
+                                                this.handleChangeTemperatureUnit
                                             }
                                         />
                                     </Form.Field>
@@ -227,7 +267,14 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                 <Grid.Column>
                                     <Form.Field inline={isMobileView}>
                                         <label>
-                                            <Header as='h5' content='Height' />
+                                            <Header
+                                                as='h5'
+                                                content={
+                                                    this.isPediatric()
+                                                        ? 'Length'
+                                                        : 'Height'
+                                                }
+                                            />
                                         </label>
                                         {this.generateNumericInput(
                                             'height',
@@ -248,6 +295,25 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                         </p>
                                     </Form.Field>
                                 </Grid.Column>
+                                {this.isPediatric() ? (
+                                    <Grid.Column>
+                                        <Form.Field inline={isMobileView}>
+                                            <label>
+                                                <Header
+                                                    as='h5'
+                                                    content='Head Circumference'
+                                                />
+                                            </label>
+                                            {this.generateNumericInput(
+                                                'headCircumference',
+                                                'inches',
+                                                'right'
+                                            )}
+                                        </Form.Field>
+                                    </Grid.Column>
+                                ) : (
+                                    <br></br>
+                                )}
                             </Grid>
                         </Form>
                     ),
@@ -423,6 +489,7 @@ interface State {
     weightKg: number;
     heightM: number;
     bmi: number;
+    headCircumference: number;
 }
 
 type Props = DispatchProps & ContentProps;

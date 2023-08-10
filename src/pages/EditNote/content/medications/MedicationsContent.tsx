@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Accordion, Grid, Table } from 'semantic-ui-react';
+import { Accordion, Grid, Table, Image } from 'semantic-ui-react';
 import sideEffects from 'constants/sideEffects';
 import drugNames from 'constants/medications';
-import diseases from 'constants/diagnoses';
+import diseases from 'constants/oldDiagnoses';
 import AddRowButton from 'components/tools/AddRowButton.js';
 import { OptionMapping } from '_processOptions';
 import {
@@ -25,7 +25,7 @@ import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import ToggleButton from 'components/tools/ToggleButton';
 import '../hpi/knowledgegraph/src/css/Button.css';
 import { YesNoResponse } from 'constants/enums';
-import { HpiState } from 'redux/reducers/hpiReducer';
+import Add from '../../../../assets/add.svg';
 
 interface OwnProps {
     mobile: boolean;
@@ -232,7 +232,7 @@ export class MedicationsContent extends Component<Props, State> {
                 []
             );
         return (
-            <>
+            <div>
                 <Grid columns={2} key={node}>
                     {node &&
                         responseType == ResponseTypes.MEDS_POP &&
@@ -301,17 +301,22 @@ export class MedicationsContent extends Component<Props, State> {
                             ];
                         }, [])}
                 </Grid>
-                {content}
+                <div className='medicationsContent-wrap'>{content}</div>
                 {!this.props.isPreview &&
                     responseType != ResponseTypes.MEDS_POP && (
-                        <AddRowButton
+                        <div
+                            className='add-row-item'
                             onClick={this.addRow}
-                            ariaLabel='Add-Medication-Row-Button'
-                            name='medication'
                             key={JSON.stringify(this.props.hpi)}
-                        />
+                        >
+                            <Image src={Add} />
+                            <AddRowButton
+                                ariaLabel='Add-Medication-Row-Button'
+                                name='medication'
+                            />
+                        </div>
                     )}
-            </>
+            </div>
         );
     }
 }

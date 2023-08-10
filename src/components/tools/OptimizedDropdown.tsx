@@ -88,8 +88,19 @@ const OptimizedDropdown = (props: {
     } = props;
 
     const flatOptions = useMemo(() => Object.values(options), [options]);
+    const uniqueOptions: DropdownOption[] = [];
+    const uniqueMap = new Map();
 
-    const sortedOptions = flatOptions.sort(
+    flatOptions.forEach((el) => {
+        if (uniqueMap.has(el.label)) {
+            uniqueMap.set(el.label, true);
+        } else {
+            uniqueOptions.push(el);
+            uniqueMap.set(el.label, true);
+        }
+    });
+
+    const sortedOptions = uniqueOptions.sort(
         (a: { label?: string } | unknown, b: { label?: string } | unknown) =>
             // @ts-expect-error missing "label" field is already handled acceptably
             a?.label?.length > b?.label?.length ? 1 : -1
@@ -100,19 +111,12 @@ const OptimizedDropdown = (props: {
 
     // Format onChange so that it has access to additional props similarly to
     // Semantic UI's Dropdowns
-    const handleOnChange: (
-        newValue: MultiValue<DropdownOption> | SingleValue<DropdownOption>,
-        actionMeta?: ActionMeta<DropdownOption>
-    ) => void = (newValue) => {
-        let value;
+    const handleOnChange = (option: any) => {
+        let value = option?.label || '';
         if (multiple) {
-            const multiOption = newValue as MultiValue<DropdownOption>;
-            value = multiOption?.[0]?.label || '';
-            Array.isArray(newValue)
-                ? (value = newValue.map((opt) => opt.value))
-                : (value = [(newValue as SingleValue<DropdownOption>)?.value]);
-        } else {
-            value = (newValue as SingleValue<DropdownOption>)?.label || '';
+            Array.isArray(option)
+                ? (value = option.map((opt) => opt.value))
+                : (value = [option.value]);
         }
         onChange(null, { ...otherProps, value });
     };

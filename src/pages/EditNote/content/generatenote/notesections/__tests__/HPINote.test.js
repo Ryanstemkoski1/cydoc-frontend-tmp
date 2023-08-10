@@ -3,7 +3,7 @@ import HPINote, {
     // sortGraph,
     joinLists,
     // isEmpty,
-    // extractNode,
+    extractNode,
 } from '../HPINote';
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
@@ -17,23 +17,85 @@ Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
-// const createGraphNode = (fields = {}) => ({
-//     uid: '',
-//     medID: '',
-//     category: '',
-//     text: '',
-//     responseType: 'SHORT-TEXT',
-//     bodySystem: '',
-//     noteSection: '',
-//     doctorView: '',
-//     patientView: '',
-//     doctorCreated: '',
-//     blankTemplate: 'blankTemplate',
-//     blankYes: 'blankYes',
-//     blankNo: 'blankNo',
-//     response: '',
-//     ...fields,
-// });
+const createGraphNode = (responseType, response, medID) => ({
+    uid: '',
+    medID: medID,
+    category: '',
+    text: '',
+    responseType: responseType,
+    bodySystem: '',
+    noteSection: '',
+    doctorView: '',
+    patientView: '',
+    doctorCreated: '',
+    blankTemplate: 'blankTemplate',
+    blankYes: 'The patient does take insulin',
+    blankNo: 'The patient does not currently take insulin',
+    response: response,
+});
+const node1 = createGraphNode('MEDS-BLANK', ['ausydfg121873'], 'DML0002');
+
+const createState = () => {
+    return {
+        hpi: {
+            nodes: {
+                DML0002: node1,
+            },
+            graph: {
+                DML0001: ['DML0002', 'DML0003', 'DML0006'],
+            },
+        },
+    };
+};
+
+const state = createState();
+
+describe('extractNode suite', () => {
+    test('grabs correct child node', () => {
+        const parentNode = createGraphNode('YES-NO', 'YES', 'DML0001');
+        const result = state.hpi.nodes[state.hpi.graph[parentNode.medID][0]];
+        // Check the result
+        expect(result).toEqual(node1);
+    });
+
+    test('ensures is of correct responseType', () => {
+        const parentNode = createGraphNode('YES-NO', 'YES', 'DML0001');
+        const responseTypes = [
+            'MEDS-BLANK',
+            'MEDS-POP',
+            'FH-POP',
+            'FH-BLANK',
+            'PMH-POP',
+            'PMH-BLANK',
+            'PSH-BLANK',
+            'PSH-POP',
+        ];
+        const childNode = state.hpi.nodes[state.hpi.graph[parentNode.medID][0]];
+
+        const result =
+            responseTypes.includes(childNode.responseType) &&
+            Array.isArray(childNode.response) &&
+            childNode.response.length !== 0;
+
+        // Check the result
+        expect(result).toEqual(true);
+    });
+    test('ensures skips correct parent node', () => {
+        const parentNode = createGraphNode('YES-NO', 'YES', 'DML0001');
+        const result = extractNode(state, parentNode);
+        expect(result).toEqual(['', '', '']);
+    });
+    test('ensures doesnt skip upon YES/NO NO parent node', () => {
+        const parentNode = createGraphNode('YES-NO', 'NO', 'DML0001');
+        const result = extractNode(state, parentNode);
+        expect(result).toEqual([parentNode.blankNo, '', '']);
+    });
+    test('ensures doesnt skip upon NO/YES YES parent node', () => {
+        const parentNode = createGraphNode('NO-YES', 'YES', 'DML0001');
+        const result = extractNode(state, parentNode);
+        expect(result).toEqual([parentNode.blankYes, '', '']);
+    });
+});
 
 const mountWithStore = (hpi = initialHpiState) => {
     const store = mockStore({

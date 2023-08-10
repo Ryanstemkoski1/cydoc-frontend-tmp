@@ -23,11 +23,13 @@ import {
     selectFamilyHistoryConditions,
     selectFamilyHistoryState,
 } from 'redux/selectors/familyHistorySelectors';
-import { Button, Divider, Form, Grid, Header } from 'semantic-ui-react';
+import { Button, Divider, Form, Grid, Header, Image } from 'semantic-ui-react';
 import '../hpi/knowledgegraph/src/css/Button.css';
 import '../reviewofsystems/ReviewOfSystems.css';
 import './FamilyHistory.css';
 import FamilyHistoryDropdown from './FamilyHistoryDropdown';
+import Delete from '../../../../assets/delete.svg';
+import Add from '../../../../assets/add.svg';
 
 class FamilyHistoryBlock extends Component<Props> {
     constructor(props: Props) {
@@ -61,14 +63,19 @@ class FamilyHistoryBlock extends Component<Props> {
         // we want there to be at least one dropdown
         let dropdownList = [];
         const familyIndexes = Object.keys(familyMembers);
-        dropdownList = familyIndexes.map((familyIndex) => (
+        dropdownList = familyIndexes.map((familyIndex, listIndex) => (
             <FamilyHistoryDropdown
                 condition={condition}
                 index={index}
                 key={familyIndex}
                 family_index={familyIndex}
                 mobile={mobile}
-                handleDelete={this.handleDelete}
+                // if is the first family dropdown then handleDelete will act as deleteRow.
+                handleDelete={
+                    listIndex === 0
+                        ? () => this.props.deleteRow(this.props.index)
+                        : this.handleDelete
+                }
             />
         ));
         const newContentHeader = (
@@ -117,75 +124,92 @@ class FamilyHistoryBlock extends Component<Props> {
             noActive = false;
         }
         return mobile ? (
-            <Grid.Row>
+            <Grid.Row className='family-hisory-note-mobile'>
                 <Form className='family-hx-note-item family-hx-note'>
                     <Form.Group inline className='condition-header'>
                         <div className='condition-name'>{conditionInp}</div>
-                        <div>
-                            <ToggleButton
-                                active={yesActive}
-                                condition={condition}
+                        <div className='family-buttons'>
+                            <button
                                 title='Yes'
-                                className='fam-hist-buttons'
-                                onToggleButtonClick={handleToggle}
-                            />
-                            <ToggleButton
-                                active={noActive}
-                                condition={condition}
+                                className={`yes-button ${
+                                    yesActive ? 'active' : ''
+                                }`}
+                                type='button'
+                                onClick={(event) =>
+                                    handleToggle(event, { title: 'Yes' })
+                                }
+                            >
+                                YES
+                            </button>
+                            <button
                                 title='No'
-                                className='fam-hist-buttons'
-                                onToggleButtonClick={handleToggle}
-                            />
+                                className={`no-button ${
+                                    noActive ? 'active' : ''
+                                }`}
+                                type='button'
+                                onClick={(event) =>
+                                    handleToggle(event, { title: 'No' })
+                                }
+                            >
+                                NO
+                            </button>
+                            <button
+                                className='delete-button'
+                                onClick={() => {
+                                    this.props?.deleteRow(this.props.index);
+                                }}
+                            >
+                                <Image src={Delete} />
+                            </button>
                         </div>
                     </Form.Group>
-                    <div className='condition-info'>
-                        {yesActive ? (
-                            <>
-                                {dropdownList}
-                                <>
-                                    <Button
-                                        circular
-                                        icon='plus'
-                                        size='mini'
-                                        onClick={this.handlePlusClick}
-                                        aria-label='add-family-member'
-                                        className='hpi-ph-button'
-                                    />
-                                    add family member
-                                </>
-                            </>
-                        ) : (
-                            ''
-                        )}
-                    </div>
+                    {yesActive ? (
+                        <div className='condition-info'>
+                            {dropdownList}
+                            <div className='add-icon'>
+                                <Image
+                                    onClick={this.handlePlusClick}
+                                    src={Add}
+                                />
+                                Add family member
+                            </div>
+                        </div>
+                    ) : (
+                        ''
+                    )}
                 </Form>
             </Grid.Row>
         ) : (
-            <div>
-                {conditionInp}
-                <ToggleButton
-                    active={yesActive}
-                    condition={condition}
-                    className='fam-hist-buttons'
-                    title='Yes'
-                    onToggleButtonClick={handleToggle}
-                />
-                <ToggleButton
-                    active={noActive}
-                    condition={condition}
-                    className='fam-hist-buttons'
-                    title='No'
-                    onToggleButtonClick={handleToggle}
-                />
-                <Button
-                    circular
-                    icon='close'
-                    onClick={() => {
-                        this.props.deleteRow(this.props.index);
-                    }}
-                    aria-label='delete-condition'
-                    className='hpi-ph-button'
-                />
+            <div className='family-hisory-block'>
+                <div className='row-wrap'>
+                    {conditionInp}
+                    <div className='btn-wrap'>
+                        <ToggleButton
+                            active={yesActive}
+                            condition={condition}
+                            className='fam-hist-buttons'
+                            title='Yes'
+                            onToggleButtonClick={handleToggle}
+                        />
+                        <ToggleButton
+                            active={noActive}
+                            condition={condition}
+                            className='fam-hist-buttons'
+                            title='No'
+                            onToggleButtonClick={handleToggle}
+                        />
+                    </div>
+
+                    <Button
+                        circular
+                        icon='close'
+                        onClick={() => {
+                            this.props?.deleteRow(this.props.index);
+                        }}
+                        aria-label='delete-condition'
+                        className='hpi-ph-button'
+                    />
+                </div>
                 <div className='condition-info-container'>
                     {yesActive ? (
                         /*

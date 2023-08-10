@@ -22,6 +22,7 @@ const emptyPhysicalExam = {
         heartRate: 0,
         RR: 0,
         temperature: 0,
+        tempUnit: 0,
         oxygenSaturation: 0,
     },
     sections: {},
@@ -68,7 +69,7 @@ describe('Physical Exam Note', () => {
         const items = wrapper.find('li');
         expect(items).toHaveLength(1);
         expect(items.text()).toContain(
-            'Vitals: Heart Rate: 1 BPM, RR: 2 BPM, Temperature: 100°C, Oxygen Saturation: 20 PaO₂'
+            'Vitals: Heart Rate: 1 BPM, RR: 2 BPM, Temperature: 100°F, Oxygen Saturation: 20 PaO₂'
         );
     });
     it('renders vitals correctly (rich)', () => {
@@ -90,7 +91,7 @@ describe('Physical Exam Note', () => {
         expect(row.text()).toContain('Vitals');
         expect(row.text()).toContain(
             'Heart Rate: 1 BPM, ' +
-                'RR: 2 BPM, Temperature: 100°C, Oxygen Saturation: 20 PaO₂'
+                'RR: 2 BPM, Temperature: 100°F, Oxygen Saturation: 20 PaO₂'
         );
     });
     it('renders only non-empty vitals correctly (non-rich)', () => {
@@ -107,7 +108,7 @@ describe('Physical Exam Note', () => {
         });
         const items = wrapper.find('li');
         expect(items).toHaveLength(1);
-        expect(items.text()).toContain('Vitals: RR: 2 BPM, Temperature: 100°C');
+        expect(items.text()).toContain('Vitals: RR: 2 BPM, Temperature: 100°F');
     });
     it('renders only non-empty vitals (rich)', () => {
         const wrapper = mountWithProps(
@@ -126,7 +127,7 @@ describe('Physical Exam Note', () => {
         );
         const row = wrapper.find('tr').at(1);
         expect(row.text()).toContain('Vitals');
-        expect(row.text()).toContain('RR: 2 BPM, Temperature: 100°C');
+        expect(row.text()).toContain('RR: 2 BPM, Temperature: 100°F');
     });
     const cases = [true, false];
     //works correctly in app

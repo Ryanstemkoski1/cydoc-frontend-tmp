@@ -22,11 +22,11 @@
 
 /* round out the menu tabs more */
 .ui.secondary.menu .expanded-menu-tabs .item {
-  display: block !important;
-  flex: 1;
-  height: 40px;
-  white-space: nowrap;
-  text-align: center;
+    display: block !important;
+    flex: 1;
+    height: 40px;
+    white-space: nowrap;
+    text-align: center;
 }
 
 /* round out the menu tabs more */
@@ -68,16 +68,191 @@
 }
 .tabular.collapsed-menu-tabs::-webkit-scrollbar {
     display: none;
-  }
-  
-@media (max-width: 991){
-    .ui.secondary.menu .expanded-menu-tabs .item { 
+}
+
+@media (max-width: 991) {
+    .ui.secondary.menu .expanded-menu-tabs .item {
         flex: auto;
     }
 }
-@media (max-width: 767){
-    .ui.menu>.ui.container { 
+@media (max-width: 767) {
+    .ui.menu > .ui.container {
         width: auto;
     }
 }
 
+.patient-view-container {
+    background-color: #fff;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    top: -1px;
+}
+
+.patient-view-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin: 0 auto;
+    padding: 0 20px 20px;
+}
+
+.patient-view-content hr {
+    flex: 1;
+    height: 1px;
+    background-color: #367898;
+    border-width: 0;
+}
+
+.patient-view-button {
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    background-color: transparent;
+    border-radius: 50%;
+    color: #367898;
+    border: 1px solid #b1c7cc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Nunito,Arial,Helvetica,sans-serif;
+}
+
+.patient-view-button.active, .patient-view-button:hover {
+    background-color: #367898;
+    border: 1px solid #367898;
+    color: #fff;
+}
+
+.doctor-view-container {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    font-size: 0;
+}
+
+.doctor-view-container:after,
+.doctor-view-container:before {
+    position: relative;
+    z-index: 1;
+    top: -1px;
+    background-color: #fff;
+    content: '';
+    flex: 1;
+    display: block;
+    height: 60px;
+    border-bottom: 1px solid #367898;
+}
+
+.doctor-view-container:after {
+    margin-left: -2px;
+}
+
+.doctor-view-container:before {
+    margin-right: -2px;
+}
+
+.doctor-view-content {
+    width: 100%;
+    overflow-x: scroll;
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    top: -1px;
+}
+
+.doctor-view-content::-webkit-scrollbar {
+    display: none;
+}
+
+.doctor-view-button {
+    flex-grow: 1;
+    margin-bottom: 10px;
+    padding: 20px;
+    border: 0;
+    white-space: nowrap;
+    border-bottom: 1px solid #367898;
+    background-color: #fff;
+    color: #788d92;
+    cursor: pointer;
+    position: relative;
+    font-size: 16px;
+    height: 60px;
+    font-family: Nunito,Arial,Helvetica,sans-serif;
+}
+
+.doctor-view-button::before {
+    content: '';
+    display: none;
+    width: 0;
+    height: 0;
+    bottom: -10px;
+    left: 50%;
+    transform-origin: center;
+    border-style: solid;
+    border-width: 10px 10px 0 10px;
+    border-color: #367898 transparent transparent transparent;
+    position: absolute;
+    transform: translate(-50%, 0);
+}
+
+.doctor-view-button::after {
+    content: '';
+    display: none;
+    width: 0;
+    height: 0;
+    bottom: -8px;
+    left: 50%;
+    transform-origin: center;
+    border-style: solid;
+    border-width: 9px 9px 0 9px;
+    border-color: #fff transparent transparent transparent;
+    position: absolute;
+    transform: translate(-50%, 0);
+}
+
+.doctor-view-button:hover::before,
+.doctor-view-button:hover::after,
+.doctor-view-button.active::before,
+.doctor-view-button.active::after {
+    display: block;
+}
+
+.doctor-view-button.active {
+    color: #367898;
+    font-weight: 700;
+}
+
+.doctor-view-button:hover {
+    color: #367898;
+}
+
+@media screen and (max-width: 767px) {
+    .patient-view-content {
+        padding: 0 16px 10px;
+    }
+}
+@media screen and (min-width: 1200px) {
+    .doctor-view-content,
+    .patient-view-content {
+        max-width: 1127px;
+    }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .doctor-view-content,
+    .patient-view-content {
+        max-width: 993px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .doctor-view-content,
+    .patient-view-content {
+        max-width: 723px;
+    }
+}

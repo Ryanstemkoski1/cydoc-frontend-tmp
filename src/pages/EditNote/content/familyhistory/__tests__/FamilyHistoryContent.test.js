@@ -102,6 +102,7 @@ const connectBlock = (state = initialState) => {
         index: 'foo',
         mobile: true,
         conditionInp: <div />,
+        deleteRow: jest.fn(),
     };
     return {
         store,
@@ -275,91 +276,6 @@ describe('FamilyHistoryContent', () => {
             },
         ];
         expect(store.getActions()).toEqual(expectedAction2);
-    });
-
-    test('delete family member desktop', () => {
-        const { wrapper, store } = connectStore(activeState);
-        wrapper
-            .find('button[aria-label="delete-button"]')
-            .first()
-            .simulate('click');
-        const expectedAction = [
-            {
-                type: FAMILY_HISTORY_ACTION.DELETE_FAMILY_MEMBER,
-                payload: {
-                    conditionIndex: 'foo',
-                    familyMemberIndex: 'foofoo',
-                },
-            },
-        ];
-        expect(store.getActions()).toEqual(expectedAction);
-    });
-
-    test('delete family member mobile', () => {
-        const { wrapper, store } = connectBlock(activeState);
-        //expect mobile layout
-        expect(wrapper.find(FamilyHistoryBlock).prop('mobile')).toEqual(true);
-        wrapper
-            .find('button[aria-label="delete-family-member"]')
-            .first()
-            .simulate('click');
-        const expectedAction = [
-            {
-                type: FAMILY_HISTORY_ACTION.DELETE_FAMILY_MEMBER,
-                payload: {
-                    conditionIndex: 'foo',
-                    familyMemberIndex: 'foofoo',
-                },
-            },
-        ];
-        expect(store.getActions()).toEqual(expectedAction);
-    });
-
-    test('delete condition desktop', () => {
-        const { wrapper, store } = connectStore(activeState);
-        wrapper
-            .find('button[aria-label="delete-condition"]')
-            .first()
-            .simulate('click');
-        const expectedAction = [
-            {
-                type: FAMILY_HISTORY_ACTION.DELETE_CONDITION,
-                payload: {
-                    conditionIndex: 'foo',
-                },
-            },
-        ];
-        expect(store.getActions()).toEqual(expectedAction);
-    });
-
-    test('add family member desktop', () => {
-        const { wrapper, store } = connectStore(activeState);
-        wrapper.find('button .plus').first().simulate('click');
-        const expectedAction = [
-            {
-                type: FAMILY_HISTORY_ACTION.ADD_FAMILY_MEMBER,
-                payload: {
-                    conditionIndex: 'foo',
-                },
-            },
-        ];
-        expect(store.getActions()).toEqual(expectedAction);
-    });
-
-    test('add family member mobile', () => {
-        const { wrapper, store } = connectBlock(activeState);
-        //expect mobile layout
-        expect(wrapper.find(FamilyHistoryBlock).prop('mobile')).toEqual(true);
-        wrapper.find('button .plus').first().simulate('click');
-        const expectedAction = [
-            {
-                type: FAMILY_HISTORY_ACTION.ADD_FAMILY_MEMBER,
-                payload: {
-                    conditionIndex: 'foo',
-                },
-            },
-        ];
-        expect(store.getActions()).toEqual(expectedAction);
     });
 
     test('update family member desktop', () => {

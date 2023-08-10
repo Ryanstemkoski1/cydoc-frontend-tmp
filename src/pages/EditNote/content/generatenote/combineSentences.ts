@@ -21,7 +21,8 @@ function removeDoubleWords(str: string) {
 }
 
 function capitalizeFirstLetter(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    const trimmedString = string.trim(); // Trim leading and trailing spaces
+    return trimmedString.charAt(0).toUpperCase() + trimmedString.slice(1);
 }
 
 function removeItem(array: any, item: any) {
@@ -141,9 +142,9 @@ export function compare(strA: string, strB: string, n: number) {
             combinedStr += ' and';
         }
         // Accounts for empty string due to first space in sentences
-        // Starts at indice n
+        // Starts at indice amtSame
 
-        for (let i = n; i < splitB.length; i++) {
+        for (let i = amtSame; i < splitB.length; i++) {
             combinedStr += splitB[i] === '.' ? '.' : ' ' + splitB[i];
         }
 

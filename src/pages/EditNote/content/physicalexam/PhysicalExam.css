@@ -148,3 +148,16 @@ body ::-webkit-scrollbar-thumb {
         right: 15px;
     }
 }
+
+@media (max-width: 767px) {
+    .ui.icon.button.small-physical-previous-button,
+    .ui.icon.button.small-physical-next-button {
+        padding: 0;
+        width: 38px;
+        height: 38px;
+    }
+    .ui.icon.button.small-physical-previous-button i,
+    .ui.icon.button.small-physical-next-button i{
+        font-size: 15px !important;
+    }
+}

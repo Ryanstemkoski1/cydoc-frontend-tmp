@@ -17,7 +17,7 @@ export default function UpdateDimensions() {
             window.addEventListener('resize', handleResize);
             return () => window.removeEventListener('resize', handleResize);
         }
-    }, [typeof window !== 'undefined']);
+    }, [typeof window !== 'undefined', handleResize]);
 
     return windowDimensions;
 }

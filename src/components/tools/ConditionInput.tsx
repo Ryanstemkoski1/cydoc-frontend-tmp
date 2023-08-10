@@ -1,7 +1,5 @@
 import React from 'react';
 import { Input, Icon } from 'semantic-ui-react';
-import { adjustValue } from 'pages/EditNote/content/medicalhistory/util';
-import { medicalMapping } from 'constants/word-mappings';
 import { connect } from 'react-redux';
 import { updateConditionName } from 'redux/actions/medicalHistoryActions';
 import { updateCondition } from 'redux/actions/familyHistoryActions';
@@ -64,34 +62,41 @@ class ConditionInput extends React.Component<Props, OwnState> {
     render() {
         return (
             <React.Fragment>
-                {this.props.category === 'Medical History' ||
-                this.props.category === 'Family History' ? (
-                    <Input
-                        disabled={this.props.isPreview}
-                        className={
-                            this.state.isTitleFocused === true
-                                ? 'ui input focus'
-                                : 'ui input transparent'
-                        }
-                        type='text'
-                        placeholder='Condition'
-                        onChange={this.handleInputChange}
-                        onFocus={() => {
-                            this.setState({ isTitleFocused: true });
-                        }}
-                        onBlur={this.handleOnBlur}
-                        value={this.props.isPreview ? '' : this.props.condition}
-                        style={this.props.style && this.props.style}
-                    />
-                ) : (
-                    <p>{this.props.condition}</p>
-                )}
-                {this.state.isRepeat && (
-                    <div className='condition-error'>
-                        <Icon color='red' name='warning circle' />
-                        Condition already included
-                    </div>
-                )}
+                <div className='condition-wrap'>
+                    <span className='field condition-label'>
+                        <label>Condition</label>
+                    </span>
+                    {this.props.category === 'Medical History' ||
+                    this.props.category === 'Family History' ? (
+                        <Input
+                            disabled={this.props.isPreview}
+                            className={
+                                this.state.isTitleFocused === true
+                                    ? 'ui input focus'
+                                    : 'ui input transparent'
+                            }
+                            type='text'
+                            placeholder='Condition'
+                            onChange={this.handleInputChange}
+                            onFocus={() => {
+                                this.setState({ isTitleFocused: true });
+                            }}
+                            onBlur={this.handleOnBlur}
+                            value={
+                                this.props.isPreview ? '' : this.props.condition
+                            }
+                            style={this.props.style && this.props.style}
+                        />
+                    ) : (
+                        <p>{this.props.condition}</p>
+                    )}
+                    {this.state.isRepeat && (
+                        <div className='condition-error'>
+                            <Icon color='red' name='warning circle' />
+                            Condition already included
+                        </div>
+                    )}
+                </div>
             </React.Fragment>
         );
     }

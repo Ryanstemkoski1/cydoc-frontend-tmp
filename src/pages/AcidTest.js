@@ -1,5 +1,5 @@
-import AcidTestInputBox from './AcidTestInputBox';
 import React from 'react';
+import AcidTestInputBox from './AcidTestInputBox';
 import { useState, useEffect, useCallback } from 'react';
 import runAnalysis from './AcidBase/acidBaseCalculator';
 import Calculations from './Calculations';
@@ -29,6 +29,7 @@ const AcidTest = () => {
     const [activeIndex, setActiveIndex] = useState(1);
     const [isMobile, setIsMobile] = useState(false);
     const [arr, setArray] = useState([]);
+    const [copyStatus, setCopyStatus] = useState('not copied');
 
     useEffect(() => {
         const handleResize = () => {
@@ -73,7 +74,7 @@ const AcidTest = () => {
             acidBaseCalcReturn.summary.slice(1);
         setSummary(acidBaseCalcReturn.summary);
         // Reset the state variables to their initial values
-    }, [pH, HC, PC, nA, Cl, Albumin]);
+    }, [pH, HC, PC, nA, Cl, Albumin, description]);
 
     const formatStringForCopy = () => {
         let str =
@@ -112,14 +113,14 @@ const AcidTest = () => {
                 ])
                 .then(
                     () => {
-                        alert('Successfully copied Acid-Base test');
+                        setCopyStatus('copied');
                     },
                     (err) => {
-                        alert('Error writing to clipboard' + err);
+                        setCopyStatus('Error writing to clipboard' + err);
                     }
                 );
         } else {
-            alert('Clipboard API not supported');
+            setCopyStatus('Clipboard API not supported');
         }
     };
 
@@ -308,19 +309,36 @@ const AcidTest = () => {
                             </div>
                         </>
                     )}
-                    {primaryExp != '' && (
+                    {summary.length != '' && (
                         <Grid.Row centered>
                             <Button
                                 className='ui button'
                                 onClick={handleCopyResultsClick}
+                                content={
+                                    copyStatus == 'copied'
+                                        ? 'Copied!'
+                                        : 'Copy Results'
+                                }
                                 style={{
                                     marginTop: '5px',
                                     color: 'black',
-                                    backgroundColor: 'gold',
+                                    backgroundColor:
+                                        copyStatus == 'copied'
+                                            ? 'green'
+                                            : 'gold',
+                                }}
+                            ></Button>
+                        </Grid.Row>
+                    )}
+                    {copyStatus != 'copied' && copyStatus != 'not copied' && (
+                        <Grid.Row centered>
+                            <p
+                                style={{
+                                    color: 'red',
                                 }}
                             >
-                                Copy Results
-                            </Button>
+                                {copyStatus}
+                            </p>
                         </Grid.Row>
                     )}
                 </Grid>

@@ -8,7 +8,7 @@
 }
 
 .condition-header {
-    margin-bottom: 0.5rem !important;
+    margin-bottom: 0rem !important;
 }
 
 .condition-name {
@@ -106,6 +106,9 @@
     .ui.form.family-hx-note-item.family-medical {
         width: calc(100% - 50px);
     }
+    .family-hx-note-item .inline.fields.condition-header .switch-button {
+        margin-top: 3px;
+    }
     .family-hx-note-item .inline.fields.condition-header {
         justify-content: space-between;
     }
@@ -143,7 +146,7 @@
         display: inline-block;
     }
 
-    #btn-hpi-type-delete {
+    #btn-display {
         margin-top: 5px;
         margin-bottom: 5px;
         display: inline-block;
@@ -183,15 +186,12 @@
     .family-hx-note .condition-header {
         flex-wrap: nowrap !important;
     }
-    .family-hx-note .condition-header div {
-        display: flex;
-    }
     .family-history-dp > .row {
         padding: 0 !important;
     }
     .family-history-dp > .row > .column {
-        padding-left: 0!important;
-        padding-right: 0!important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
     .btn-wrapper {
         margin: 5px 0 10px;
@@ -236,4 +236,110 @@
 
 .ui.grid {
     margin-bottom: 0rem;
+}
+
+@media (min-width: 768px) {
+    .family-hisory-block .row-wrap {
+        display: flex;
+        align-items: center;
+    }
+    .family-hisory-block .btn-wrap {
+        flex: auto;
+        margin-left: 20px;
+    }
+    .family-hisory-block .row {
+        align-items: center !important;
+    }
+    .family-hisory-block .text {
+        overflow: inherit;
+    }
+    .family-hisory-block .dropdown-component-container button.hpi-ph-button {
+        min-width: 30px;
+    }
+}
+
+@media (max-width: 767px) {
+    .family-hisory-block-mobile {
+        margin-bottom: 20px;
+    } 
+    .family-hisory-block-mobile .ui[class*="vertically divided"].grid>.row:before {
+        width: 100% !important;
+    }    
+    .family-hisory-block-mobile .action-btn {
+        padding: 15px 0 !important;
+        margin: 0 15px 0;
+    }
+    .family-hisory-block-mobile .family-history-header-mobile {
+        min-width: 0;
+        margin-right: 20px;
+    }
+    .family-hisory-block-mobile .option-block {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .family-hisory-note-mobile {
+        margin-bottom: 30px !important;
+    }
+    .family-hisory-note-mobile:last-child {
+        margin-bottom: 0 !important;
+    }
+    .family-hisory-note-mobile .ui.search.dropdown>.text {
+        overflow: visible;
+    }
+    .family-hisory-note-mobile .ui.grid {
+        margin-top: 0;
+    }
+}
+
+.family-buttons {
+    display: flex;
+}
+
+button {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.yes-button, .no-button {
+    width: 40px;
+    height: 34px;
+    outline: none;
+    border: 1px solid #dbebef;
+    color: #767676;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+.yes-button {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    padding-left: 4px;
+}
+
+.no-button {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-left: none;
+    padding-right: 4px;
+}
+
+.yes-button.active,
+.no-button.active {
+    background-color: #367898;
+    color: #e6eff3;
+}
+
+.delete-button {
+    width: 15px;
+    margin-left: 20px;
+}
+
+.delete-button i.icon {
+    margin: 0;
 }

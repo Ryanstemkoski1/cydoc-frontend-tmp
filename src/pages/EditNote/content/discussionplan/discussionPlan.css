@@ -3,7 +3,7 @@
 ***********************/
 
 .ui.accordion.plan-section {
-    margin-bottom: 2.5em;
+    margin-bottom: 1.5em;
 }
 
 .ui.accordion.plan-section .ui.attached.header {
@@ -114,6 +114,14 @@
     margin: 1.5rem 0;
 }
 
+.add-condition {
+    text-align: center !important;
+}
+
+.ui.menu .ui.dropdown .menu>.item.add-condition .icon:not(.dropdown) {
+    margin: 0 !important;
+}
+
 .delete-btn-wrapper {
     align-items: center;
 }
@@ -160,11 +168,11 @@
     margin: 0;
     background: #006b87;
     color: white;
-  }
-  
-  @media screen and (max-width: 600px) {
+}
+
+@media screen and (max-width: 600px) {
     .ui.icon.button.plan-previous-button, .ui.icon.button.plan-next-button {
-      display: none;
+        display: none;
     }
 
     .ui.icon.button.small-plan-previous-button,
@@ -190,3 +198,33 @@
         right: 15px;
     }
 }
+
+@media (max-width: 767px) {
+    .ui.icon.button.small-plan-previous-button,
+    .ui.icon.button.small-plan-next-button {
+        padding: 0;
+        width: 38px;
+        height: 38px;
+    }
+    .ui.icon.button.small-plan-previous-button i,
+    .ui.icon.button.small-plan-next-button i{
+        font-size: 15px !important;
+    }
+}
+
+@media (max-width: 767px){
+    .dropdown-nav .item .menu {
+        left: auto;
+        right: 2px;
+        min-width: 235px;
+        max-width: 280px;
+    }
+    .dropdown-nav .item .menu a {
+        word-break: break-all;
+        white-space: normal;
+    }
+    .dropdown-nav .item .menu .input {
+        width: 100% !important;
+    }
+}
+

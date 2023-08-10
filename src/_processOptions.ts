@@ -1,9 +1,14 @@
 export interface DropdownOption {
     value: string;
     label: string;
+    isHeader?: boolean;
 }
 
 export type OptionMapping = { [key: string]: DropdownOption };
+
+export type DiagnosesOptionMapping = {
+    [key: string]: { label: string; items?: DiagnosesOptionMapping };
+};
 
 /**
  * Returns an OptionMapping already formatted for `OptimizedDropdown.tsx`. A
@@ -28,6 +33,20 @@ export const getOptionMapping = (
         mapping[value] = {
             value,
             label: options[key],
+        };
+        return mapping;
+    }, {} as OptionMapping);
+};
+
+export const getDiagnosesOptionMapping = (
+    options: DiagnosesOptionMapping
+): OptionMapping => {
+    return Object.keys(options).reduce((mapping, key) => {
+        const value = `${key}`; /* ${options[key]['label']} */
+        mapping[value] = {
+            value,
+            label: options[key]['label'],
+            isHeader: 'items' in options[key],
         };
         return mapping;
     }, {} as OptionMapping);

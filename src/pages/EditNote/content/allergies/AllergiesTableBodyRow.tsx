@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { Component } from 'react';
 import Dropdown from 'components/tools/OptimizedDropdown';
-import { Button, Table, TextArea, TextAreaProps } from 'semantic-ui-react';
+import {
+    Button,
+    Table,
+    TextArea,
+    TextAreaProps,
+    Image,
+} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import {
     AllergiesItem,
@@ -11,6 +17,7 @@ import { CurrentNoteState } from 'redux/reducers';
 import { selectAllergiesItem } from 'redux/selectors/allergiesSelectors';
 import './table.css';
 import { OptionMapping } from '_processOptions';
+import Delete from '../../../../assets/delete.svg';
 
 class AllergiesTableBodyRow extends Component<Props> {
     constructor(props: Props) {
@@ -21,7 +28,7 @@ class AllergiesTableBodyRow extends Component<Props> {
     handleCellClick = (e: React.MouseEvent) => {
         const innerInput = (e.target as HTMLTableCellElement)
             .lastElementChild as any;
-        // Handles clicks outside of the "clickable area" (padding) of the textarea component within a cell
+        // Handles clicks outside of the 'clickable area' (padding) of the textarea component within a cell
         if (innerInput != null) {
             if (innerInput.type === 'textarea') {
                 innerInput.focus();
@@ -41,6 +48,7 @@ class AllergiesTableBodyRow extends Component<Props> {
         const {
             incitingAgent,
             reaction,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             comments /* NOTE: if you remove this field, "comments" verify that corresponding tests for this file aren't failing  */,
         } = this.props.allergiesItem;
 
@@ -49,6 +57,7 @@ class AllergiesTableBodyRow extends Component<Props> {
                 if (field === 'incitingAgent') {
                     return (
                         <Table.Cell key={index}>
+                            <label>Inciting Agent</label>
                             <Dropdown
                                 fluid
                                 search
@@ -70,6 +79,7 @@ class AllergiesTableBodyRow extends Component<Props> {
                 } else if (field === 'reaction') {
                     return (
                         <Table.Cell key={index}>
+                            <label>Reaction</label>
                             <Dropdown
                                 fluid
                                 search
@@ -91,6 +101,7 @@ class AllergiesTableBodyRow extends Component<Props> {
                 } else {
                     return (
                         <Table.Cell key={index} onClick={this.handleCellClick}>
+                            <label>Comments</label>
                             <div className='ui form'>
                                 <TextArea
                                     rows={3}
@@ -112,15 +123,26 @@ class AllergiesTableBodyRow extends Component<Props> {
             <Table.Row>
                 {tableRows}
                 <td>
-                    <Button
-                        circular
-                        icon='close'
-                        onClick={() => {
-                            this.props.deleteRow(rowIndex as string);
-                        }}
-                        aria-label='delete-allergy'
-                        className='hpi-ph-button delete-allergy'
-                    />
+                    <div className='action-btn'>
+                        <Button
+                            circular
+                            icon='close'
+                            onClick={() => {
+                                this.props.deleteRow(rowIndex as string);
+                            }}
+                            aria-label='delete-allergy'
+                            className='hpi-ph-button delete-allergy'
+                        />
+
+                        <aside
+                            onClick={() => {
+                                this.props.deleteRow(rowIndex as string);
+                            }}
+                        >
+                            <Image src={Delete} />
+                            <span>Remove</span>
+                        </aside>
+                    </div>
                 </td>
             </Table.Row>
         );

@@ -62,7 +62,7 @@ const DiscussionPlan = ({
 
     return (
         <>
-            <Segment>
+            <Segment className='dropdown-nav'>
                 <DiscussionPlanMenu
                     index={currentIndex}
                     windowWidth={windowWidth}

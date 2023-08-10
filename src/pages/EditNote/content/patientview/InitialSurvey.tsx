@@ -7,8 +7,10 @@ import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
 import {
     GoBackToAdditionalSurvey,
     UpdateAdditionalSurveyAction,
+    UpdateChiefComplaintsDescription,
     resetAdditionalSurveyPage,
     updateAdditionalSurveyDetails,
+    updateChiefComplaintsDescription,
 } from 'redux/actions/additionalSurveyActions';
 import {
     ProcessKnowledgeGraphAction,
@@ -41,11 +43,13 @@ import { currentNoteStore } from 'redux/store';
 import {
     Button,
     Container,
+    Form,
     Grid,
     Icon,
     Message,
     Search,
     Segment,
+    TextArea,
 } from 'semantic-ui-react';
 import {
     ChiefComplaintsProps,
@@ -67,6 +71,8 @@ interface InitialSurveyState {
     activeItem: number;
     error: boolean;
     searchVal: string;
+    descriptionVal: string;
+    showDescriptionBox: boolean;
     tempLegalFirstName: string;
     tempLegalLastName: string;
     tempSocialSecurityNumber: string;
@@ -85,6 +91,8 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             activeItem: 0,
             error: false,
             searchVal: '',
+            descriptionVal: '',
+            showDescriptionBox: false,
             tempLegalFirstName: '',
             tempLegalLastName: '',
             tempSocialSecurityNumber: '',
@@ -103,7 +111,9 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                   ).length
                 : 0,
             q2_count = isChiefComplaintsResponse(res2.response)
-                ? Object.keys(res2.response).length
+                ? Object.keys(res2.response).filter((k) =>
+                      Object.keys(chiefComplaints).includes(k)
+                  ).length
                 : 0;
         return [q1_count, q2_count];
     }
@@ -117,7 +127,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             !Object.keys(userSurveyState.order).length
         )
             processSurveyGraph(initialQuestions as initialQuestionsState);
-        else
+        else {
             this.setState({
                 activeItem: Object.keys(userSurveyState.nodes).every(
                     (key) =>
@@ -127,6 +137,14 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                     ? 1
                     : 0,
             });
+            if (this.props.additionalSurvey.complaintsDescription.length > 0) {
+                this.setState({
+                    descriptionVal:
+                        this.props.additionalSurvey.complaintsDescription,
+                    showDescriptionBox: true,
+                });
+            }
+        }
         if (hpiHeaders) {
             const data = hpiHeaders;
             data.then((res) => saveHpiHeader(res.data));
@@ -206,10 +224,10 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             this.props.additionalSurvey.initialSurveyState === 1
         ) {
             this.props.updateAdditionalSurveyDetails(
-                this.state.tempLegalFirstName,
-                this.state.tempLegalLastName,
-                this.state.tempSocialSecurityNumber,
-                this.state.tempDateOfBirth,
+                this.props.additionalSurvey.legalFirstName,
+                this.props.additionalSurvey.legalLastName,
+                this.props.additionalSurvey.socialSecurityNumber,
+                this.props.additionalSurvey.dateOfBirth,
                 2
             );
             this.setState({ error: false });
@@ -252,8 +270,13 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             this.setState({ error: true });
         } else if (this.state.activeItem == 1) {
             const [q1_count, q2_count] = this.counter();
-            if (q1_count + q2_count <= 3) {
+            if (q1_count + q2_count == 0 && !this.state.descriptionVal) {
+                this.setState({ error: true, showDescriptionBox: true });
+            } else if (q1_count + q2_count <= 3) {
                 this.setState({ error: false });
+                this.props.updateChiefComplaintsDescription(
+                    this.state.descriptionVal
+                );
                 this.continue(e);
             } else this.setState({ error: true });
         }
@@ -307,6 +330,13 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             currEntry = userSurveyState.nodes[id],
             { bodySystems, parentNodes } = this.props.hpiHeaders;
         // map through all complaints on the HPI and create search resuls
+        const node6 = Object.keys(
+            userSurveyState?.nodes['6']?.response || {}
+        ).map((complaint) =>
+            parentNodes[complaint]?.patientView !== 'HIDDEN'
+                ? parentNodes[complaint]?.patientView
+                : complaint
+        );
         const getRes = () => {
             const filterResults: object[] = [];
             Object.entries(bodySystems).forEach((grouping) => {
@@ -335,7 +365,9 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                                 initialSurveySearch(id, complaint);
                             },
                         };
-                        filterResults.push(temp);
+                        if (!node6.includes(title)) {
+                            filterResults.push(temp);
+                        }
                     }
                 });
             });
@@ -353,7 +385,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                           />
                       ))
                     : '';
-            case 'SEARCH':
+            case ResponseTypes.SEARCH:
                 return (
                     <div>
                         <Search
@@ -408,28 +440,35 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                         name={'lastNameOfClinic'}
                     />
                 );
+            case ResponseTypes.LONG_TEXT:
+                if (this.state.showDescriptionBox) {
+                    return (
+                        <Form>
+                            <TextArea
+                                id={id}
+                                className='cc-description'
+                                placeholder={
+                                    'Description of condition or symptom... (max 200 characters)'
+                                }
+                                onChange={(event) => {
+                                    const target =
+                                        event.target as HTMLTextAreaElement;
+                                    if (target.value.length <= 200) {
+                                        this.setState({
+                                            descriptionVal: target.value,
+                                        });
+                                    }
+                                    this.setState({ error: false });
+                                }}
+                                value={this.state.descriptionVal}
+                            />
+                        </Form>
+                    );
+                } else return;
             default:
                 return;
         }
     };
-
-    isAtLeaseOneInputYesOnPage() {
-        const selected =
-            this.props.userSurveyState.nodes['2'].response ===
-                YesNoResponse.Yes ||
-            this.props.userSurveyState.nodes['3'].response ===
-                YesNoResponse.Yes ||
-            this.props.userSurveyState.nodes['4'].response ===
-                YesNoResponse.Yes;
-        if (
-            this.state.activeItem == 0 &&
-            selected &&
-            this.props.userSurveyState.nodes['8'].response
-        ) {
-            this.setState({ error: false });
-        }
-        return selected;
-    }
 
     render() {
         const { activeItem } = this.state,
@@ -441,18 +480,21 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             nodeKey in questions.nodes
                 ? questions.graph[nodeKey].map((key) => {
                       return (
-                          <div
-                              key={questions.nodes[key].text}
-                              className={'qa-div sixteen wide column'}
-                          >
-                              {questions.nodes[key].text}
-                              <div className='survey-chips button-spacing'>
-                                  {Object.keys(this.props.userSurveyState.nodes)
-                                      .length
-                                      ? this.renderSwitch(key)
-                                      : ''}
+                          (key !== '10' || this.state.showDescriptionBox) && (
+                              <div
+                                  key={questions.nodes[key].text}
+                                  className={'qa-div sixteen wide column'}
+                              >
+                                  {questions.nodes[key].text}
+                                  <div className='survey-chips button-spacing'>
+                                      {Object.keys(
+                                          this.props.userSurveyState.nodes
+                                      ).length
+                                          ? this.renderSwitch(key)
+                                          : ''}
+                                  </div>
                               </div>
-                          </div>
+                          )
                       );
                   })
                 : '';
@@ -460,7 +502,13 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             Object.keys(userSurveyState.graph).length &&
             Object.keys(userSurveyState.nodes).length &&
             Object.keys(userSurveyState.order).length;
-
+        const selected =
+            this.props?.userSurveyState?.nodes['2']?.response ===
+                YesNoResponse.Yes ||
+            this.props?.userSurveyState?.nodes['3']?.response ===
+                YesNoResponse.Yes ||
+            this.props?.userSurveyState?.nodes['4']?.response ===
+                YesNoResponse.Yes;
         initialSurvey =
             this.props.additionalSurvey.initialSurveyState == 0
                 ? [
@@ -489,16 +537,21 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             <div>
                 <Container className='active-tab-container'>
                     {this.state.error ||
-                    (isLoaded && this.counter().reduce((a, v) => a + v) > 3) ? (
+                    (isLoaded &&
+                        this.state.activeItem == 1 &&
+                        this.counter().reduce((a, v) => a + v) > 3) ? (
                         <Message negative>
                             <Message.Header>
                                 {this.state.activeItem == 0
                                     ? this.props.additionalSurvey
                                           .initialSurveyState === 0
                                         ? this.state.message
-                                        : this.isAtLeaseOneInputYesOnPage()
+                                        : selected
                                         ? 'Please confirm the date of your appointment.'
                                         : 'Please answer Yes to at least one question to proceed.'
+                                    : this.counter().reduce((a, v) => a + v) ==
+                                      0
+                                    ? 'Please select at least one condition or symptom. Otherwise, describe it in the box below.'
                                     : 'The maximum of 3 has been reached. Please un-select an existing option before adding a new one.'}
                             </Message.Header>
                         </Message>
@@ -627,6 +680,9 @@ interface DispatchProps {
         dateOfBirth: string,
         initialSurveyState: number
     ) => UpdateAdditionalSurveyAction;
+    updateChiefComplaintsDescription: (
+        complaintsDescription: string
+    ) => UpdateChiefComplaintsDescription;
     resetAdditionalSurveyPage: () => GoBackToAdditionalSurvey;
 }
 
@@ -645,6 +701,7 @@ const mapDispatchToProps = {
     processKnowledgeGraph,
     initialSurveySearch,
     updateAdditionalSurveyDetails,
+    updateChiefComplaintsDescription,
     resetAdditionalSurveyPage,
 };
 

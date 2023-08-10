@@ -44,6 +44,24 @@ const RELATIONSHIP_TO_PARENT = [
     { text: 'Other', value: 'Other' },
 ];
 
+function formatPhoneNumber(value: string) {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, '');
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 4) return phoneNumber;
+    if (phoneNumberLength < 7) {
+        return '(' + phoneNumber.slice(0, 3) + ')' + phoneNumber.slice(3);
+    }
+    return (
+        '(' +
+        phoneNumber.slice(0, 3) +
+        ')' +
+        phoneNumber.slice(3, 6) +
+        '-' +
+        phoneNumber.slice(6, 10)
+    );
+}
+
 const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
     const { userInfo, isUserInfoValid, updateUserInfo, validateUserInfo } =
         props;
@@ -110,14 +128,10 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                         label='Phone Number'
                         name='cell phone number'
                         value={userInfo.cellPhoneNumber}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                            handleChange(
-                                'cellPhoneNumber',
-                                undefined,
-                                e.target.value
-                            )
-                        }
-                        type='number'
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            const value = formatPhoneNumber(e.target.value);
+                            handleChange('cellPhoneNumber', undefined, value);
+                        }}
                         onBlur={validateForm}
                     />
                     <Form.Input
@@ -294,7 +308,7 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                 <div className='equal width fields'>
                     <div className='width-100 form radio-wrapper'>
                         <h4 className='user-info-labels'>
-                            Sex Assigned at Birth
+                            Sex Assigned At Birth
                         </h4>
                         <div className='flex flex-wrap'>
                             <Form.Field>
@@ -526,8 +540,8 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                 <h4>Insurance Information</h4>
                 <div className='equal width fields'>
                     <Form.Checkbox
-                        aria-label='Are you insured?'
-                        label='Are you Insured?'
+                        aria-label='Insured?'
+                        label='Insured?'
                         name='insured'
                         checked={userInfo.isInsured}
                         onChange={() =>
@@ -544,7 +558,7 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                         <div className='equal width fields'>
                             <Form.Input
                                 fluid
-                                aria-label='Insurance company'
+                                aria-label='Insurance Company'
                                 label='Insurance Company'
                                 name='Insurance company'
                                 value={
@@ -564,23 +578,25 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                             <Form.Input
                                 fluid
                                 // required
-                                aria-label='Insurance company phone number'
-                                label='Insurance Company Phone Number'
-                                name='Insurance company phone number'
+                                aria-label='Insurance Company Phone'
+                                label='Insurance Company Phone'
+                                name='Insurance Company Phone'
                                 value={
                                     userInfo.insuranceInfo
                                         .insuranceCompanyPhoneNumber
                                 }
                                 onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>
-                                ) =>
+                                ) => {
+                                    const value = formatPhoneNumber(
+                                        e.target.value
+                                    );
                                     handleChange(
                                         'insuranceCompanyPhoneNumber',
                                         'insuranceInfo',
-                                        e.target.value
-                                    )
-                                }
-                                type='number'
+                                        value
+                                    );
+                                }}
                                 onBlur={validateForm}
                             />
                         </div>
@@ -589,7 +605,7 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                                 fluid
                                 aria-label='Policy holders name'
                                 label="Policy Holder's Name"
-                                name='Policy holders name'
+                                name="Policy Holder's Name"
                                 value={userInfo.insuranceInfo.policyHolderName}
                                 onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>
@@ -604,9 +620,9 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                             <Form.Input
                                 fluid
                                 type='date'
-                                aria-label='Policy holders date of birth'
-                                label="Policy Holder's Date of Birth"
-                                name='Policy holders date of birth'
+                                aria-label="Policy holder's DOB"
+                                label="Policy Holder's DOB"
+                                name="Policy holder's DOB"
                                 value={userInfo.insuranceInfo.policyHolderDOB}
                                 onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>
@@ -648,9 +664,9 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
 
                         <div className='equal width fields'>
                             <Form.Checkbox
-                                aria-label='Is policy holder employed?'
-                                label='Is Policy Holder Employed?'
-                                name='Is policy holder employed?'
+                                aria-label='Policy Holder Employed?'
+                                label='Policy Holder Employed'
+                                name='Policy Holder Employed'
                                 checked={
                                     userInfo.insuranceInfo.policyHolderEmployed
                                 }
@@ -668,9 +684,9 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                             <div className='equal width fields width-50-desktop'>
                                 <Form.Input
                                     fluid
-                                    aria-label='Policy holders employer'
+                                    aria-label="Policy Holder's employer"
                                     label="Policy Holder's Employer"
-                                    name='Policy holders employer'
+                                    name="Policy Holder's Employer"
                                     value={
                                         userInfo.insuranceInfo
                                             .policyHolderEmployer
@@ -692,9 +708,9 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
                             <Form.Input
                                 fluid
                                 // required
-                                aria-label='Policy holders SSN'
+                                aria-label="Policy Holder's SSN"
                                 label="Policy Holder's SSN#"
-                                name='Policy holders SSN'
+                                name="Policy Holder's SSN#"
                                 value={userInfo.insuranceInfo.policyHolderSSN}
                                 onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>
@@ -711,9 +727,9 @@ const UserInfoForm = (props: UserInfoFormProps & DispatchProps) => {
 
                             <Form.Input
                                 fluid
-                                aria-label='Policy holders Id'
-                                label="Policy Holder's ID#"
-                                name='Policy holders Id'
+                                aria-label="Policy Holder's Id"
+                                label="Policy Holder's ID"
+                                name="Policy Holder's ID"
                                 value={userInfo.insuranceInfo.policyHolderID}
                                 onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>
