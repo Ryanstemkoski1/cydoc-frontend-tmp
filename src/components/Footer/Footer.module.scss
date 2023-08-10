@@ -1,0 +1,46 @@
+@import '../../assets/scss/variables.scss';
+.footer {
+    padding: 25px 15px;
+    text-align: center;
+    color: rgba($color-black, 0.5);
+    a {
+        color: rgba($color-black, 0.5);
+        &:hover {
+            color: $color-primary;
+        }
+    }
+    ul {
+        list-style: none;
+        li {
+            display: flex;
+            align-items: center;
+            & + li {
+                &::before {
+                    width: 3px;
+                    content: '';
+                    height: 3px;
+                    display: block;
+                    margin: 0 20px;
+                    border-radius: 50%;
+                    background-color: rgba($color-black, 0.5);
+                    @include max-screen($tablet) {
+                        margin: 0 10px;
+                    }
+                }
+            }
+            &:nth-child(1) {
+                @include max-screen($mobile) {
+                    width: 100%;
+                    justify-content: center;
+                }
+            }
+            &:nth-child(2) {
+                &::before {
+                    @include max-screen($mobile) {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}

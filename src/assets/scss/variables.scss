@@ -1,0 +1,46 @@
+// Colors
+$color-primary: #147a9b;
+$color-primary-light: #b2c7cc;
+$color-secondary: #373b67;
+$color-light: #eaf3f5;
+$color-border: #e2e2e2;
+$color-white: #ffffff;
+$color-black: #000;
+$color-error: #ff4d4d;
+$color-error-light: #fff3f3;
+
+// View screen colors
+$color-pink: #efc3f6;
+$color-pink-light: #fff8ff;
+$color-green: #b0e4df;
+$color-green-light: #f1fcfa;
+$color-green-dark: #047a9b;
+$color-green-medium: #e6f7f4;
+$color-yellow: #ffdfa5;
+$color-yellow-light: #fffcf6;
+$color-yello-dark: #ffd700;
+
+// Base
+$font-size-base: 16px;
+$line-height-base: 1.8;
+$font-family-primary: 'Nunito', sans-serif;
+$font-family-secondary: 'Pompadour', sans-serif;
+$radius: 10px;
+
+// typography
+$font-size-h1: 28px;
+$font-size-h2: 22px;
+$font-size-h3: 20px;
+$font-size-h4: 16px;
+
+// Breakpoints
+$small: 575px;
+$mobile: 767px;
+$tablet: 991px;
+$desktop: 1199px;
+
+// image path
+$imgPath: '/assets/images/';
+
+// mixins
+@import 'mixins';

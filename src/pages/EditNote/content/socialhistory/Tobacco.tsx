@@ -1,28 +1,24 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Divider, Form, Grid, Input, Dropdown } from 'semantic-ui-react';
 import tobaccoProducts, {
     TobaccoProduct,
 } from 'constants/SocialHistory/tobaccoProducts';
-import ToggleButton from 'components/tools/ToggleButton';
-import { selectTobaccoState } from 'redux/selectors/socialHistorySelectors';
+import { SubstanceUsageResponse, YesNoMaybeResponse } from 'constants/enums';
+import React from 'react';
+import { ConnectedProps, connect } from 'react-redux';
 import {
-    updateTobaccoUsage,
-    updateTobaccoPacksPerDay,
-    updateTobaccoNumberOfYears,
-    updateTobaccoProductUsed,
-    updateTobaccoQuitYear,
     updateTobaccoComments,
     updateTobaccoInterestedInQuitting,
+    updateTobaccoNumberOfYears,
+    updateTobaccoPacksPerDay,
+    updateTobaccoProductUsed,
+    updateTobaccoQuitYear,
     updateTobaccoTriedToQuit,
+    updateTobaccoUsage,
 } from 'redux/actions/socialHistoryActions';
-import {
-    SubstanceUsageResponse,
-    YesNoMaybeResponse,
-    YesNoResponse,
-} from 'constants/enums';
 import { CurrentNoteState } from 'redux/reducers';
+import { selectTobaccoState } from 'redux/selectors/socialHistorySelectors';
+import { Divider, Dropdown, Form, Grid, Input } from 'semantic-ui-react';
+import HistoryButtons from '../../../../components/tools/ThreeButton/ThreeButtons';
 import '../familyhistory/FamilyHistory.css';
 import '../hpi/knowledgegraph/src/css/Button.css';
 
@@ -158,70 +154,40 @@ class Tobacco extends React.Component<Props, State> {
         }
     }
 
-    generateInterestedInQuittingButton(response: YesNoMaybeResponse) {
-        const values = this.props.tobacco;
-
-        return (
-            <ToggleButton
-                onToggleButtonClick={() => {
-                    this.props.updateTobaccoInterestedInQuitting(response);
-                }}
-                condition='Tobacco'
-                title={
-                    response === YesNoMaybeResponse.Yes
-                        ? 'Yes'
-                        : response === YesNoMaybeResponse.Maybe
-                        ? 'Maybe'
-                        : response === YesNoMaybeResponse.No
-                        ? 'No'
-                        : ''
-                }
-                active={values.interestedInQuitting === response}
-            />
-        );
-    }
-
-    generateTriedQuittingButton(response: YesNoResponse) {
-        const values = this.props.tobacco;
-
-        return (
-            <ToggleButton
-                onToggleButtonClick={() => {
-                    this.props.updateTobaccoTriedToQuit(response);
-                }}
-                condition='Tobacco'
-                title={
-                    response === YesNoResponse.Yes
-                        ? 'Yes'
-                        : response === YesNoResponse.No
-                        ? 'No'
-                        : ''
-                }
-                active={values.triedToQuit === response}
-            />
-        );
-    }
-
     quittingQuestions() {
         const values = this.props.tobacco;
         if (values.usage === SubstanceUsageResponse.Yes) {
             return (
                 <Grid stackable>
-                    <Form className='family-hx-note-item'>
+                    <Form className='family-hx-note-item bottom-space'>
                         <Form.Group inline className='condition-header'>
                             <div className='condition-name'>
                                 Are you interested in quitting?
                             </div>
                             <div className='interested-in-quitting-buttons btn-wrapper'>
-                                {this.generateInterestedInQuittingButton(
-                                    YesNoMaybeResponse.Yes
-                                )}
-                                {this.generateInterestedInQuittingButton(
-                                    YesNoMaybeResponse.Maybe
-                                )}
-                                {this.generateInterestedInQuittingButton(
-                                    YesNoMaybeResponse.No
-                                )}
+                                <HistoryButtons
+                                    options={[
+                                        {
+                                            value: YesNoMaybeResponse.Yes,
+                                            label: 'Yes',
+                                        },
+                                        {
+                                            value: YesNoMaybeResponse.Maybe,
+                                            label: 'Maybe',
+                                        },
+                                        {
+                                            value: YesNoMaybeResponse.No,
+                                            label: 'No',
+                                        },
+                                    ]}
+                                    keyToCompare={'interestedInQuitting'}
+                                    condition={'Tobacco'}
+                                    value={this.props.tobacco}
+                                    onToggle={
+                                        this.props
+                                            .updateTobaccoInterestedInQuitting
+                                    }
+                                />
                             </div>
                         </Form.Group>
                     </Form>
@@ -230,14 +196,22 @@ class Tobacco extends React.Component<Props, State> {
                             <div className='condition-name'>
                                 Have you tried to quit before?
                             </div>
-                            <div className='tried-to-quit-buttons btn-wrapper'>
-                                {this.generateTriedQuittingButton(
-                                    YesNoResponse.Yes
-                                )}
-                                {this.generateTriedQuittingButton(
-                                    YesNoResponse.No
-                                )}
-                            </div>
+                            <HistoryButtons
+                                options={[
+                                    {
+                                        value: YesNoMaybeResponse.Yes,
+                                        label: 'Yes',
+                                    },
+                                    {
+                                        value: YesNoMaybeResponse.No,
+                                        label: 'No',
+                                    },
+                                ]}
+                                keyToCompare={'triedToQuit'}
+                                condition={'Tobacco'}
+                                value={this.props.tobacco}
+                                onToggle={this.props.updateTobaccoTriedToQuit}
+                            />
                         </Form.Group>
                     </Form>
                 </Grid>
@@ -344,30 +318,6 @@ class Tobacco extends React.Component<Props, State> {
         }
     }
 
-    generateUsageButton(response: SubstanceUsageResponse) {
-        const values = this.props.tobacco;
-
-        return (
-            <ToggleButton
-                onToggleButtonClick={() => {
-                    this.props.updateTobaccoUsage(response);
-                }}
-                condition='Tobacco'
-                className='social-hist-buttons'
-                title={
-                    response === SubstanceUsageResponse.Yes
-                        ? 'Yes'
-                        : response === SubstanceUsageResponse.InThePast
-                        ? 'In the Past'
-                        : response === SubstanceUsageResponse.NeverUsed
-                        ? 'Never Used'
-                        : ''
-                }
-                active={values.usage === response}
-            />
-        );
-    }
-
     render() {
         const values = this.props.tobacco;
 
@@ -377,15 +327,26 @@ class Tobacco extends React.Component<Props, State> {
                     <Form.Group inline className='condition-header'>
                         <div className='condition-name'>Tobacco</div>
                         <div className='btn-wrapper'>
-                            {this.generateUsageButton(
-                                SubstanceUsageResponse.Yes
-                            )}
-                            {this.generateUsageButton(
-                                SubstanceUsageResponse.InThePast
-                            )}
-                            {this.generateUsageButton(
-                                SubstanceUsageResponse.NeverUsed
-                            )}
+                            <HistoryButtons
+                                options={[
+                                    {
+                                        value: SubstanceUsageResponse.Yes,
+                                        label: 'Yes',
+                                    },
+                                    {
+                                        value: SubstanceUsageResponse.InThePast,
+                                        label: 'In the Past',
+                                    },
+                                    {
+                                        value: SubstanceUsageResponse.NeverUsed,
+                                        label: 'Never used',
+                                    },
+                                ]}
+                                keyToCompare={'usage'}
+                                condition={'Tobacco'}
+                                value={this.props.tobacco}
+                                onToggle={this.props.updateTobaccoUsage}
+                            />
                         </div>
                     </Form.Group>
                     {(values.usage === SubstanceUsageResponse.Yes ||

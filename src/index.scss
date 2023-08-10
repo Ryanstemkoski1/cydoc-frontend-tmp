@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap");
+@font-face {
+    font-family: "Pompadour";
+    src: url("./assets/Pompadour.otf");
+}
+
+// start styling
+@import "assets/scss/variables.scss";
+@import "assets/scss/base";
+@import "assets/scss/flex";
+@import "assets/scss/button";
+@import "assets/scss/typography";
+// end styling
+
+.ui.header {
+    color: #0d5e70;
+}
+
+.ui.segment {
+    transition: box-shadow 100ms;
+}
+
+.footer-copyright {
+    text-align: center;
+    font-size: medium;
+    align-items: center;
+    color: #147a9b;
+    position: static;
+    padding-bottom: 45px;
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.ui.segment:hover {
+    box-shadow: 0 10px 40px 5px RGBA(0, 128, 159, 0.2);
+}

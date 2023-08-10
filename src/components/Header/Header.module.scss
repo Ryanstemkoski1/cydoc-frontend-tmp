@@ -1,0 +1,35 @@
+@import '../../assets/scss/variables.scss';
+.header {
+    top: 0;
+    left: 0;
+    z-index: 9;
+    position: sticky;
+    padding: 10px 30px;
+    background-color: $color-white;
+    box-shadow: 0 0 6px $color-primary-light;
+    @include max-screen($desktop) {
+        padding: 10px 15px;
+    }
+    &__logo {
+        cursor: default;
+        img {
+            width: 60px;
+            margin-right: 10px;
+            @include max-screen($mobile) {
+                width: 45px;
+            }
+        }
+        span {
+            font-size: 26px;
+            font-weight: 600;
+            color: $color-black;
+            font-family: $font-family-secondary;
+            @include max-screen($mobile) {
+                font-size: 20px;
+            }
+        }
+        &.isLinking {
+            cursor: pointer;
+        }
+    }
+}

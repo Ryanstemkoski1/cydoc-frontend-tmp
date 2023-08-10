@@ -1,33 +1,33 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { OptionMapping } from '_processOptions';
+import Dropdown from 'components/tools/OptimizedDropdown';
+import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
+import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from 'constants/enums';
 import React, { Component } from 'react';
-import {
-    TextArea,
-    Table,
-    Input,
-    TextAreaProps,
-    DropdownProps,
-    InputOnChangeData,
-    Button,
-} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import {
-    updateProcedure,
-    toggleOption,
-    updateYear,
-    updateComments,
     deleteProcedure,
+    toggleOption,
+    updateComments,
+    updateProcedure,
+    updateYear,
 } from 'redux/actions/surgicalHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
     SurgicalHistoryElements,
     SurgicalHistoryItem,
 } from 'redux/reducers/surgicalHistoryReducer';
-import Dropdown from 'components/tools/OptimizedDropdown';
-import './SurgicalHistoryTableBodyRow.css';
 import { selectSurgicalHistoryItem } from 'redux/selectors/surgicalHistorySelectors';
-import { OptionMapping } from '_processOptions';
-import ToggleButton from 'components/tools/ToggleButton';
-import { YesNoResponse } from 'constants/enums';
+import {
+    DropdownProps,
+    Input,
+    InputOnChangeData,
+    Table,
+    TextArea,
+    TextAreaProps,
+} from 'semantic-ui-react';
+import './SurgicalHistoryTableBodyRow.css';
 
 //Controlled component for a row in a TableContent component
 export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
@@ -125,15 +125,14 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
             case 'hasHadSurgery': {
                 cell = (
                     <>
-                        <ToggleButton
-                            active={
+                        <YesAndNo
+                            yesButtonActive={
                                 isPreview
                                     ? false
                                     : hasHadSurgery == YesNoResponse.Yes
                             }
-                            condition={procedure}
-                            title='Yes'
-                            onToggleButtonClick={
+                            yesButtonCondition={procedure}
+                            handleYesButtonClick={
                                 isPreview
                                     ? () => {
                                           return undefined;
@@ -144,16 +143,13 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
                                               YesNoResponse.Yes
                                           )
                             }
-                        />
-                        <ToggleButton
-                            active={
+                            noButtonActive={
                                 isPreview
                                     ? false
                                     : hasHadSurgery == YesNoResponse.No
                             }
-                            condition={procedure}
-                            title='No'
-                            onToggleButtonClick={
+                            noButtonCondition={procedure}
+                            handleNoButtonClick={
                                 isPreview
                                     ? () => {
                                           return undefined;
@@ -259,14 +255,10 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
             <Table.Row>
                 {tableRows}
                 <td>
-                    <Button
-                        circular
-                        icon='close'
+                    <RemoveButton
                         onClick={() => {
                             this.props.deleteRow(this.props.rowIndex as string);
                         }}
-                        aria-label='delete-surgery'
-                        className='hpi-ph-button delete-surgery'
                     />
                 </td>
             </Table.Row>

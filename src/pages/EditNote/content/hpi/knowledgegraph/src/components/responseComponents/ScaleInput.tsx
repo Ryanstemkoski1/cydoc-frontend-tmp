@@ -1,16 +1,17 @@
-import React from 'react';
-import { CurrentNoteState } from 'redux/reducers';
+import Input from 'components/Input/Input';
 import { HpiStateProps } from 'constants/hpiEnums';
-import {
-    scaleHandleValue,
-    scaleHandleClear,
-    ScaleHandleValueAction,
-    ScaleHandleClearAction,
-} from 'redux/actions/hpiActions';
-import { connect } from 'react-redux';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
-
+import React from 'react';
+import { connect } from 'react-redux';
+import {
+    ScaleHandleClearAction,
+    ScaleHandleValueAction,
+    scaleHandleClear,
+    scaleHandleValue,
+} from 'redux/actions/hpiActions';
+import { CurrentNoteState } from 'redux/reducers';
+import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import style from './ScaleInput.module.scss';
 /*
 TODO:
 Make custom labels besides healthy and sick
@@ -28,40 +29,45 @@ class ScaleInput extends React.Component<Props> {
         const response = hpi.nodes[node].response;
         const value = typeof response == 'number' ? response : '';
         return (
-            <div className='scale-input'>
-                <label> 1 </label>
-                <input
-                    type='range'
-                    min={1}
-                    max={10}
-                    step={1}
-                    id='scale-slider'
-                    value={value}
-                    onChange={(e): ScaleHandleValueAction =>
-                        scaleHandleValue(node, parseInt(e.target.value))
-                    }
-                />
-                <label> 10 </label>
-                <input
-                    min={1}
-                    max={10}
-                    step={1}
-                    type='number'
-                    id='scale-value'
-                    value={value}
-                    onChange={(e): ScaleHandleValueAction =>
-                        scaleHandleValue(node, parseInt(e.target.value))
-                    }
-                />
-                <button
-                    className='ui hpi-ph-button compact button scale-clear'
-                    style={{ marginLeft: 10 }}
-                    onClick={(_e): void => {
-                        scaleHandleClear(node);
-                    }}
-                >
-                    Clear
-                </button>
+            <div
+                className={`${style.scaleInput} flex-wrap align-center justify-between`}
+            >
+                <div className={`${style.scaleInput__range} flex align-center`}>
+                    <label> 0 </label>
+                    <input
+                        type='range'
+                        min={0}
+                        max={10}
+                        step={0}
+                        id='scale-slider'
+                        value={value === '' ? 0 : value}
+                        onChange={(e): ScaleHandleValueAction =>
+                            scaleHandleValue(node, parseInt(e.target.value))
+                        }
+                    />
+                    <label> 10 </label>
+                </div>
+                <div className={`${style.scaleInput__input} flex align-center`}>
+                    <Input
+                        min={0}
+                        max={10}
+                        step={0}
+                        type='number'
+                        id='scale-value'
+                        value={value}
+                        onChange={(e: any): ScaleHandleValueAction =>
+                            scaleHandleValue(node, parseInt(e.target.value))
+                        }
+                    />
+                    <button
+                        className='button sm pill'
+                        onClick={(_e): void => {
+                            scaleHandleClear(node);
+                        }}
+                    >
+                        Clear
+                    </button>
+                </div>
             </div>
         );
     }

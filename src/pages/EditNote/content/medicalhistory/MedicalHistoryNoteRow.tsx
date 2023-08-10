@@ -1,34 +1,31 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import {
-    Form,
-    Grid,
-    TextAreaProps,
-    ButtonProps,
-    Button,
-} from 'semantic-ui-react';
-import ToggleButton from 'components/tools/ToggleButton';
-import React, { Component } from 'react';
-import '../familyhistory/FamilyHistory.css';
-import { connect } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import {
-    MedicalHistoryState,
-    MedicalHistoryItem,
-} from 'redux/reducers/medicalHistoryReducer';
+import Input from 'components/Input/Input';
+import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
+import ToolTip from 'components/tools/ToolTip/Tooltip';
+import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from 'constants/enums';
-import {
-    selectMedicalHistoryState,
-    selectMedicalHistoryItem,
-} from 'redux/selectors/medicalHistorySelector';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
     toggleOption,
-    updateStartYear,
-    updateEndYear,
     updateComments,
     updateConditionResolved,
+    updateEndYear,
+    updateStartYear,
 } from 'redux/actions/medicalHistoryActions';
+import { CurrentNoteState } from 'redux/reducers';
+import {
+    MedicalHistoryItem,
+    MedicalHistoryState,
+} from 'redux/reducers/medicalHistoryReducer';
+import {
+    selectMedicalHistoryItem,
+    selectMedicalHistoryState,
+} from 'redux/selectors/medicalHistorySelector';
+import { ButtonProps, Form, TextAreaProps } from 'semantic-ui-react';
+import '../familyhistory/FamilyHistory.css';
 import '../hpi/knowledgegraph/src/css/Button.css';
-import './MedicalHistoryNoteRow.css';
+import style from './MedicalHistoryNoteRow.module.scss';
 
 //Component for a row the Medical History GridContent
 class MedicalHistoryNoteRow extends Component<Props> {
@@ -107,159 +104,176 @@ class MedicalHistoryNoteRow extends Component<Props> {
 
         if (hide) {
             return (
-                <div className='flex margin-top-20'>
-                    <div className='input-field width-100-input'>
-                        {conditionInput}
-                    </div>
-                    <Button
-                        circular
-                        icon='close'
-                        onClick={() => this.props.deleteRow(this.props.index)}
-                        aria-label='delete-condition'
-                        className='hpi-ph-button'
-                    />
-                </div>
+                <tr>
+                    <td>
+                        <div
+                            className={`${style.medicalHistory__condition} flex justify-between`}
+                        >
+                            <p>{conditionInput}</p>
+
+                            <RemoveButton
+                                onClick={() =>
+                                    this.props.deleteRow(this.props.index)
+                                }
+                            />
+                        </div>
+                    </td>
+                </tr>
             );
         }
         return (
-            <Grid.Row columns={7}>
-                <Grid.Column>{conditionInput}</Grid.Column>
-                <Grid.Column textAlign='center' className='toggle-button-row'>
-                    <ToggleButton
-                        active={
-                            isPreview
-                                ? false
-                                : hasBeenAfflicted === YesNoResponse.Yes
-                        }
-                        condition={condition}
-                        title='Yes'
-                        onToggleButtonClick={
-                            isPreview
-                                ? () => {
-                                      return undefined;
-                                  }
-                                : this.handleConditionToggleButtonClick
-                        }
-                    />
-                    <ToggleButton
-                        active={
-                            isPreview
-                                ? false
-                                : hasBeenAfflicted === YesNoResponse.No
-                        }
-                        condition={condition}
-                        title='No'
-                        onToggleButtonClick={
-                            isPreview
-                                ? () => {
-                                      return undefined;
-                                  }
-                                : this.handleConditionToggleButtonClick
-                        }
-                    />
-                </Grid.Column>
-                <Grid.Column>
-                    <Form>
-                        <Form.TextArea
-                            condition={condition}
-                            index={index}
-                            placeholder='Onset'
-                            value={isPreview ? '2000' : onsetYearString}
-                            onChange={this.handleOnsetChange}
-                            disabled={isPreview}
-                            rows={1}
-                        />
-                    </Form>
-                    {((isNaN(startYear) && onsetYearString !== '') ||
-                        (startYear < 1900 && startYear !== -1) ||
-                        startYear > currentYear) && (
-                        <p className='year-validation-mobile-error'>
-                            Please enter a year between 1900 and {currentYear}
-                        </p>
-                    )}
-                </Grid.Column>
-                <Grid.Column textAlign='center' className='toggle-button-row'>
-                    <ToggleButton
-                        active={
-                            isPreview
-                                ? false
-                                : hasConditionResolved === YesNoResponse.Yes
-                        }
-                        condition={condition}
-                        title='Yes'
-                        onToggleButtonClick={
-                            isPreview
-                                ? () => {
-                                      return undefined;
-                                  }
-                                : this.handleResolvedToggleButtonClick
-                        }
-                    />
-                    <ToggleButton
-                        active={
-                            isPreview
-                                ? false
-                                : hasConditionResolved === YesNoResponse.No
-                        }
-                        condition={condition}
-                        title='No'
-                        onToggleButtonClick={
-                            isPreview
-                                ? () => {
-                                      return undefined;
-                                  }
-                                : this.handleResolvedToggleButtonClick
-                        }
-                    />
-                </Grid.Column>
-                <Grid.Column>
-                    <Form>
-                        <Form.TextArea
-                            condition={condition}
-                            index={index}
-                            placeholder='End Year'
-                            value={isPreview ? '2001' : endYearString}
-                            onChange={this.handleEndYearChange}
-                            disabled={
-                                isPreview ||
-                                hasConditionResolved !== YesNoResponse.Yes
+            <tr>
+                <td>{conditionInput}</td>
+                <td>
+                    <div className='flex-wrap align-center justify-between'>
+                        <strong>Condition</strong>
+                        <YesAndNo
+                            yesButtonActive={
+                                isPreview
+                                    ? false
+                                    : hasBeenAfflicted === YesNoResponse.Yes
                             }
-                            rows={1}
+                            yesButtonCondition={condition}
+                            handleYesButtonClick={
+                                isPreview
+                                    ? () => {
+                                          return undefined;
+                                      }
+                                    : this.handleConditionToggleButtonClick
+                            }
+                            noButtonActive={
+                                isPreview
+                                    ? false
+                                    : hasBeenAfflicted === YesNoResponse.No
+                            }
+                            noButtonCondition={condition}
+                            handleNoButtonClick={
+                                isPreview
+                                    ? () => {
+                                          return undefined;
+                                      }
+                                    : this.handleConditionToggleButtonClick
+                            }
                         />
-                    </Form>
-                    {hasConditionResolved === YesNoResponse.Yes &&
-                        ((isNaN(endYear) && endYearString !== '') ||
-                            (endYear < startYear && endYear !== -1) ||
-                            endYear > currentYear) && (
-                            <p className='year-validation-mobile-error'>
-                                Please enter a year between {startYear} and{' '}
-                                {currentYear}
-                            </p>
-                        )}
-                </Grid.Column>
-                <Grid.Column>
+                    </div>
+                </td>
+                <td>
+                    <strong>Start Year</strong>
+                    <ToolTip
+                        messageContent={`Please enter a year between 1900 and ${currentYear}`}
+                        messageShow={
+                            (isNaN(startYear) && onsetYearString !== '') ||
+                            (startYear < 1900 && startYear !== -1) ||
+                            startYear > currentYear
+                        }
+                    >
+                        <form>
+                            <Input
+                                condition={condition}
+                                index={index}
+                                placeholder='Onset'
+                                value={isPreview ? '2000' : onsetYearString}
+                                onChange={(e: any) =>
+                                    this.handleOnsetChange(e, {
+                                        condition: condition,
+                                    })
+                                }
+                                disabled={isPreview}
+                                rows={1}
+                            />
+                        </form>
+                    </ToolTip>
+                </td>
+                <td>
+                    <div className='flex-wrap align-center justify-between'>
+                        <strong>Has Condition Resolved? </strong>
+                        <YesAndNo
+                            yesButtonActive={
+                                isPreview
+                                    ? false
+                                    : hasConditionResolved === YesNoResponse.Yes
+                            }
+                            yesButtonCondition={condition}
+                            yesButtonClasses='fam-hist-buttons'
+                            handleYesButtonClick={
+                                isPreview
+                                    ? () => {
+                                          return undefined;
+                                      }
+                                    : this.handleResolvedToggleButtonClick
+                            }
+                            noButtonActive={
+                                isPreview
+                                    ? false
+                                    : hasConditionResolved === YesNoResponse.No
+                            }
+                            noButtonCondition={condition}
+                            handleNoButtonClick={
+                                isPreview
+                                    ? () => {
+                                          return undefined;
+                                      }
+                                    : this.handleResolvedToggleButtonClick
+                            }
+                        />
+                    </div>
+                </td>
+                <td>
+                    <strong>End Year</strong>
+                    <ToolTip
+                        messageContent={`Please enter a year between 
+                        ${startYear} and ${currentYear}`}
+                        messageShow={
+                            hasConditionResolved === YesNoResponse.Yes &&
+                            ((isNaN(endYear) && endYearString !== '') ||
+                                (endYear < startYear && endYear !== -1) ||
+                                endYear > currentYear)
+                        }
+                    >
+                        <form>
+                            <Input
+                                condition={condition}
+                                index={index}
+                                placeholder='End Year'
+                                value={isPreview ? '2001' : endYearString}
+                                onChange={(e: any) =>
+                                    this.handleEndYearChange(e, {
+                                        condition: condition,
+                                    })
+                                }
+                                disabled={
+                                    isPreview ||
+                                    hasConditionResolved !== YesNoResponse.Yes
+                                }
+                                rows={1}
+                            />
+                        </form>
+                    </ToolTip>
+                </td>
+                <td>
+                    <strong>Comments</strong>
                     <Form>
                         <Form.TextArea
                             rows={2}
                             condition={condition}
                             index={index}
                             value={isPreview ? '' : comments}
-                            onChange={this.handleCommentsChange}
+                            onChange={(e: any, _data: any) =>
+                                this.handleCommentsChange(e, {
+                                    condition: condition,
+                                })
+                            }
                             placeholder='Comments'
                             disabled={isPreview}
                         />
                     </Form>
-                </Grid.Column>
-                <Grid.Column className='delete-row' textAlign='center'>
-                    <Button
-                        circular
-                        icon='close'
+                </td>
+                <td>
+                    <RemoveButton
                         onClick={() => this.props.deleteRow(this.props.index)}
-                        aria-label='delete-condition'
-                        className='hpi-ph-button'
                     />
-                </Grid.Column>
-            </Grid.Row>
+                </td>
+            </tr>
         );
     };
 }

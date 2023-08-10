@@ -1,9 +1,0 @@
-.createResponse .ui.input {
-    min-width: 200px;
-    margin-right: 20px;
-}
-@media (max-width: 767px){
-.createResponse .ui.input {
-    min-width: 190px;
-}
-}

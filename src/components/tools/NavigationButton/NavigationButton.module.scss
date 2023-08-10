@@ -1,0 +1,15 @@
+@import '../../../assets/scss/variables.scss';
+.navigationButton {
+    display: flex;
+    justify-content: flex-end;
+    button {
+        @include max-screen($mobile) {
+            flex: 1;
+        }
+        & + button {
+            @include min-screen($mobile) {
+                margin-left: 25px !important;
+            }
+        }
+    }
+}

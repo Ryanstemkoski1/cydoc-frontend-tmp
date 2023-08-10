@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Segment } from 'semantic-ui-react';
+import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
+import { DISCUSSION_PLAN_SECTION_BP } from 'constants/breakpoints.js';
+import useDimensions from 'hooks/useDimensions';
+import React, { useState } from 'react';
+import { Segment } from 'semantic-ui-react';
 import DiscussionPlanMenu from './DiscussionPlanMenu';
+import DiscussionPlanSurvey from './DiscussionPlanSurvey';
+import './discussionPlan.css';
 import DifferentialDiagnosesForm from './forms/DifferentialDiagnosesForm';
-import PrescriptionsForm from './forms/PrescriptionsForm';
 import {
     ProceduresAndServicesForm,
     ReferralsForm,
 } from './forms/MainWhenCommentsForms';
-import DiscussionPlanSurvey from './DiscussionPlanSurvey';
-import { DISCUSSION_PLAN_SECTION_BP } from 'constants/breakpoints.js';
-import { PlanAction, EventHandler } from './util';
-import './discussionPlan.css';
+import PrescriptionsForm from './forms/PrescriptionsForm';
+import { EventHandler, PlanAction } from './util';
 
 interface DiscussionPlanProps {
     nextFormClick: () => void;
@@ -24,21 +26,9 @@ const DiscussionPlan = ({
     nextFormClick,
     previousFormClick,
 }: DiscussionPlanProps) => {
-    const [windowWidth, setWindowWidth] = useState<number>(0);
+    const [windowWidth] = useDimensions();
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [currentId, setCurrentId] = useState<string>('');
-
-    // Set event listeners for window resize to determine mobile vs web view
-    useEffect(() => {
-        const updateDimensions = () => {
-            setWindowWidth(
-                typeof window !== 'undefined' ? window.innerWidth : 0
-            );
-        };
-        updateDimensions();
-        window.addEventListener('resize', updateDimensions);
-        return () => window.removeEventListener('resize', updateDimensions);
-    }, []);
 
     // Returns formatted actions
     const formatAction = (
@@ -72,37 +62,9 @@ const DiscussionPlan = ({
                 {form}
             </Segment>
             <DiscussionPlanSurvey />
-            <Button
-                icon='arrow left'
-                floated='left'
-                className='small-plan-previous-button'
-                aria-label='previous-button'
-                onClick={previousFormClick}
-            />
-            <Button
-                icon='arrow left'
-                labelPosition='left'
-                floated='left'
-                onClick={previousFormClick}
-                className='plan-previous-button'
-                aria-label='previous-button'
-                content='Prev'
-            />
-            <Button
-                icon='arrow right'
-                floated='right'
-                aria-label='next-button'
-                className='small-plan-next-button'
-                onClick={nextFormClick}
-            />
-            <Button
-                icon='arrow right'
-                labelPosition='right'
-                aria-label='next-button'
-                floated='right'
-                onClick={nextFormClick}
-                className='plan-next-button'
-                content='Next'
+            <NavigationButton
+                previousClick={previousFormClick}
+                nextClick={nextFormClick}
             />
         </>
     );

@@ -1,53 +1,54 @@
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
+import Dropdown from 'components/tools/OptimizedDropdown';
+import procedures from 'constants/procedures';
 import React, { Component } from 'react';
-import SurgicalHistoryTableBodyRow from './SurgicalHistoryTableBodyRow';
+import { connect } from 'react-redux';
 import {
-    toggleHasSurgicalHistory,
-    updateProcedure,
-    updateYear,
-    updateComments,
-    deleteProcedure,
     AddPshPopOptionsAction,
     addPshPopOptions,
+    deleteProcedure,
+    toggleHasSurgicalHistory,
+    updateComments,
+    updateProcedure,
+    updateYear,
 } from 'redux/actions/surgicalHistoryActions';
-import procedures from 'constants/procedures';
-import Dropdown from 'components/tools/OptimizedDropdown';
-import {
-    Accordion,
-    Form,
-    Input,
-    Table,
-    DropdownProps,
-    TextAreaProps,
-    InputOnChangeData,
-    Header,
-    Image,
-} from 'semantic-ui-react';
-import AddRowButton from 'components/tools/AddRowButton';
-import {
-    SurgicalHistoryItem,
-    SurgicalHistoryElements,
-} from 'redux/reducers/surgicalHistoryReducer';
 import { CurrentNoteState } from 'redux/reducers';
-import { connect } from 'react-redux';
+import {
+    SurgicalHistoryElements,
+    SurgicalHistoryItem,
+} from 'redux/reducers/surgicalHistoryReducer';
 import {
     selectHasSurgicalHistoryState,
     selectSurgicalHistoryProcedures,
 } from 'redux/selectors/surgicalHistorySelectors';
+import {
+    Accordion,
+    DropdownProps,
+    Form,
+    Header,
+    Image,
+    Input,
+    InputOnChangeData,
+    Table,
+    TextAreaProps,
+} from 'semantic-ui-react';
+import SurgicalHistoryTableBodyRow from './SurgicalHistoryTableBodyRow';
 
 import { OptionMapping } from '_processOptions';
+import { YesNoResponse } from 'constants/enums';
 import { ResponseTypes } from 'constants/hpiEnums';
-import { v4 } from 'uuid';
 import {
     BlankQuestionChangeAction,
-    blankQuestionChange,
     PopResponseAction,
+    blankQuestionChange,
     popResponse,
 } from 'redux/actions/hpiActions';
-import './SurgicalHistoryContent.css';
-import { YesNoResponse } from 'constants/enums';
-import ToggleButton from 'components/tools/ToggleButton';
-import { questionContainer, questionTextStyle } from './styles';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import { v4 } from 'uuid';
+import './SurgicalHistoryContent.css';
+import { questionContainer, questionTextStyle } from './styles';
+
+import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import Add from '../../../../assets/add.svg';
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
@@ -453,29 +454,23 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         return (
             <div className='surgical-history'>
                 {patientView && !nums.length && (
-                    <div style={questionContainer}>
+                    <div className='header-wrap' style={questionContainer}>
                         <Header
                             as='h2'
                             textAlign='left'
                             content='Have you had any surgeries?'
                             style={questionTextStyle}
                         />
-                        <ToggleButton
-                            className='button_yesno'
-                            title='Yes'
-                            active={hasSurgicalHistory || false}
-                            onToggleButtonClick={() =>
+                        <YesAndNo
+                            yesButtonActive={hasSurgicalHistory || false}
+                            handleYesButtonClick={() =>
                                 this.toggleYesNoButton(true)
                             }
-                        />
-                        <ToggleButton
-                            className='button_yesno'
-                            title='No'
-                            active={
+                            noButtonActive={
                                 hasSurgicalHistory !== null &&
                                 !hasSurgicalHistory
                             }
-                            onToggleButtonClick={() =>
+                            handleNoButtonClick={() =>
                                 this.toggleYesNoButton(false)
                             }
                         />

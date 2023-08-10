@@ -1,5 +1,6 @@
+import Input from 'components/Input/Input';
 import React, { useEffect } from 'react';
-import { Form } from 'semantic-ui-react';
+import style from './AdditionalSurvey.module.scss';
 
 export interface AdditionalSurveyProps {
     legalFirstName: string;
@@ -46,22 +47,22 @@ const AdditionalSurvey = ({
     }, [additionalDetails, setTempAdditionalDetails]);
 
     return (
-        <div className='sixteen wide column'>
-            <Form size='small'>
-                <div className='equal width fields'>
-                    <Form.Input
-                        fluid
-                        required
-                        aria-label='First-Name'
+        <div className={style.additionalSurvey}>
+            <form className={`${style.additionalSurvey__row} flex-wrap`}>
+                <div className={style.additionalSurvey__col}>
+                    <Input
                         label='Legal First Name'
+                        required={true}
+                        aria-label='First-Name'
                         name='legalFirstName'
                         placeholder='Legal First Name'
                         defaultValue={additionalDetails.legalFirstName}
                         onChange={handleChange}
                     />
-                    <Form.Input
-                        fluid
-                        required
+                </div>
+                <div className={style.additionalSurvey__col}>
+                    <Input
+                        required={true}
                         aria-label='last-Name'
                         label='Legal Last Name'
                         name='legalLastName'
@@ -71,11 +72,9 @@ const AdditionalSurvey = ({
                     />
                 </div>
 
-                <div className='equal width fields'>
-                    <Form.Input
-                        fluid
-                        required
-                        aria-label='Social-Security-Number'
+                <div className={style.additionalSurvey__col}>
+                    <Input
+                        required={true}
                         label='Last 4 SSN'
                         name='socialSecurityNumber'
                         placeholder='Last 4 SSN'
@@ -84,11 +83,11 @@ const AdditionalSurvey = ({
                         defaultValue={additionalDetails.socialSecurityNumber}
                         onChange={handleChange}
                     />
-                    <Form.Input
+                </div>
+                <div className={style.additionalSurvey__col}>
+                    <Input
+                        required={true}
                         type='date'
-                        fluid
-                        required
-                        aria-label='Date-Of-Birth'
                         label='Date of Birth'
                         name='dateOfBirth'
                         placeholder='mm/dd/yyyy'
@@ -97,7 +96,7 @@ const AdditionalSurvey = ({
                         onChange={handleChange}
                     />
                 </div>
-            </Form>
+            </form>
         </div>
     );
 };

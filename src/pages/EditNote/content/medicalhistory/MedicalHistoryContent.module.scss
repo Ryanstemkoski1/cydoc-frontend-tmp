@@ -1,0 +1,9 @@
+@import '../../../../assets/scss/variables.scss';
+.historyTable {
+    table {
+        min-width: 100%;
+        @include min-screen($mobile) {
+            width: max-content !important;
+        }
+    }
+}

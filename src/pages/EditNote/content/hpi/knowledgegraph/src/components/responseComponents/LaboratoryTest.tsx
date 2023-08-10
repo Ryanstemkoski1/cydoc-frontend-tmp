@@ -1,17 +1,17 @@
-import React from 'react';
-import { Grid, Input } from 'semantic-ui-react';
-import '../../css/TimeInput.css';
+import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
 import { HpiStateProps, LabTestType, TimeOption } from 'constants/hpiEnums';
-import { CurrentNoteState } from 'redux/reducers';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
-    labTestHandleClick,
     LabTestHandleClickAction,
-    labTestInputChange,
     LabTestInputChangeAction,
+    labTestHandleClick,
+    labTestInputChange,
 } from 'redux/actions/hpiActions';
+import { CurrentNoteState } from 'redux/reducers';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import ToggleButton from 'components/tools/ToggleButton';
+import { Grid, Input } from 'semantic-ui-react';
+import '../../css/TimeInput.css';
 
 interface LabTestInputProps {
     node: string;

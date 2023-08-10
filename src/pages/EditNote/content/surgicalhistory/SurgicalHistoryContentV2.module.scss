@@ -1,0 +1,15 @@
+@import '../../../../assets/scss/variables.scss';
+.surgicalHistory {
+    &__item {
+        p {
+            margin-bottom: 0;
+            width: calc(100% - 180px);
+            @include max-screen($mobile) {
+                width: 100%;
+            }
+        }
+        aside {
+            max-width: 180px;
+        }
+    }
+}

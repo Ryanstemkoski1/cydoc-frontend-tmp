@@ -1,31 +1,31 @@
-import React, { Component } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Accordion, Grid, Table, Image } from 'semantic-ui-react';
-import sideEffects from 'constants/sideEffects';
+import { OptionMapping } from '_processOptions';
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
+import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
+import { YesNoResponse } from 'constants/enums';
+import { ResponseTypes } from 'constants/hpiEnums';
 import drugNames from 'constants/medications';
 import diseases from 'constants/oldDiagnoses';
-import AddRowButton from 'components/tools/AddRowButton.js';
-import { OptionMapping } from '_processOptions';
+import sideEffects from 'constants/sideEffects';
+import { withDimensionsHook } from 'hooks/useDimensions';
+import React, { Component } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
 import {
-    deleteMedication,
+    blankQuestionChange,
+    medsPopYesNoToggle,
+} from 'redux/actions/hpiActions';
+import {
     addMedsPopOption,
+    deleteMedication,
     updateCurrentlyTaking,
 } from 'redux/actions/medicationsActions';
-import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
-import './Medications.css';
 import { CurrentNoteState } from 'redux/reducers';
-import MedicationsPanel from './MedicationsPanel';
-import { ResponseTypes } from 'constants/hpiEnums';
-import { v4 } from 'uuid';
-import {
-    medsPopYesNoToggle,
-    blankQuestionChange,
-} from 'redux/actions/hpiActions';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import ToggleButton from 'components/tools/ToggleButton';
+import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
+import { Accordion, Grid, Table } from 'semantic-ui-react';
+import { v4 } from 'uuid';
 import '../hpi/knowledgegraph/src/css/Button.css';
-import { YesNoResponse } from 'constants/enums';
-import Add from '../../../../assets/add.svg';
+import './Medications.css';
+import MedicationsPanel from './MedicationsPanel';
 
 interface OwnProps {
     mobile: boolean;
@@ -39,15 +39,16 @@ interface OwnProps {
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
 
-type Props = ReduxProps & OwnProps;
+type Props = ReduxProps &
+    OwnProps & {
+        dimensions?: any;
+    };
 
 interface State {
     sideEffectsOptions: OptionMapping;
     medicationOptions: OptionMapping;
     diseaseOptions: OptionMapping;
     currentYear: number;
-    windowWidth: number;
-    windowHeight: number;
     currMeds: string[];
 }
 
@@ -61,8 +62,6 @@ export class MedicationsContent extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
             sideEffectsOptions: sideEffects,
             medicationOptions: drugNames,
             diseaseOptions: diseases,
@@ -74,25 +73,6 @@ export class MedicationsContent extends Component<Props, State> {
                         YesNoResponse.Yes
             ),
         };
-        this.updateDimensions = this.updateDimensions.bind(this);
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-        const windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
     }
 
     handleDropdownOptionAddition = (
@@ -116,8 +96,6 @@ export class MedicationsContent extends Component<Props, State> {
         if (responseType == ResponseTypes.MEDS_BLANK && node) {
             blankQuestionChange(node, newKey);
             this.forceUpdate();
-            /* eslint-disable-next-line no-console*/
-            console.log(this.props.medications);
         } else this.setState({ currMeds: [...this.state.currMeds, newKey] });
     };
 
@@ -227,7 +205,7 @@ export class MedicationsContent extends Component<Props, State> {
         }
         const content =
             panels.length && responseType != ResponseTypes.MEDS_POP ? (
-                <Accordion panels={panels} exclusive={false} fluid styled />
+                <Accordion panels={panels} exclusive={false} />
             ) : (
                 []
             );
@@ -301,20 +279,15 @@ export class MedicationsContent extends Component<Props, State> {
                             ];
                         }, [])}
                 </Grid>
-                <div className='medicationsContent-wrap'>{content}</div>
+                {content}
                 {!this.props.isPreview &&
                     responseType != ResponseTypes.MEDS_POP && (
-                        <div
-                            className='add-row-item'
-                            onClick={this.addRow}
-                            key={JSON.stringify(this.props.hpi)}
-                        >
-                            <Image src={Add} />
+                        <>
                             <AddRowButton
-                                ariaLabel='Add-Medication-Row-Button'
-                                name='medication'
+                                name={'Medication'}
+                                onClick={this.addRow}
                             />
-                        </div>
+                        </>
                     )}
             </div>
         );
@@ -336,4 +309,6 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default connect(mapStateToProps, mapDispatchToProps)(MedicationsContent);
+export default withDimensionsHook(
+    connect(mapStateToProps, mapDispatchToProps)(MedicationsContent)
+);

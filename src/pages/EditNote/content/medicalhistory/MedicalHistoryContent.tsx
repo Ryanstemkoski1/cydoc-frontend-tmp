@@ -1,41 +1,40 @@
-import MedicalHistoryNoteRow from './MedicalHistoryNoteRow';
-import MedicalHistoryNoteItem from './MedicalHistoryNoteItem';
-import React from 'react';
-import MedicalHistoryContentHeader from './MedicalHistoryContentHeader';
-import GridContent from 'components/tools/GridContent.js';
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
+import ConditionInput from 'components/tools/ConditionInput/ConditionInput';
+import GridContentV2 from 'components/tools/GridContentV2/GridContentV2';
 import constants from 'constants/constants.json';
-import ConditionInput from 'components/tools/ConditionInput';
+import diseaseSynonyms from 'constants/diseaseSynonyms';
+import { YesNoResponse } from 'constants/enums';
+import { ResponseTypes } from 'constants/hpiEnums';
+import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
+    BlankQuestionChangeAction,
+    PopResponseAction,
+    blankQuestionChange,
+    popResponse,
+} from 'redux/actions/hpiActions';
+import {
+    AddPmhPopOptionsAction,
+    addPmhPopOptions,
+    deleteCondition,
     toggleOption,
-    updateStartYear,
-    updateEndYear,
     updateComments,
     updateConditionResolved,
-    addPmhPopOptions,
-    AddPmhPopOptionsAction,
-    deleteCondition,
+    updateEndYear,
+    updateStartYear,
 } from 'redux/actions/medicalHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
     MedicalHistoryItem,
     MedicalHistoryState,
 } from 'redux/reducers/medicalHistoryReducer';
-import { YesNoResponse } from 'constants/enums';
-import { TextAreaProps, ButtonProps } from 'semantic-ui-react';
 import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
-import { ResponseTypes } from 'constants/hpiEnums';
+import { ButtonProps, TextAreaProps } from 'semantic-ui-react';
 import { v4 } from 'uuid';
-import {
-    blankQuestionChange,
-    BlankQuestionChangeAction,
-    PopResponseAction,
-    popResponse,
-} from 'redux/actions/hpiActions';
-import AddRowButton from 'components/tools/AddRowButton';
-import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
-import diseaseSynonyms from 'constants/diseaseSynonyms';
-import './MedicalHistoryContent.css';
+import style from './MedicalHistoryContent.module.scss';
+import MedicalHistoryNoteItem from './MedicalHistoryNoteItem';
+import MedicalHistoryNoteRow from './MedicalHistoryNoteRow';
 
 //Component that manages the layout of the medical history tab content
 class MedicalHistoryContent extends React.Component<Props, OwnState> {
@@ -230,25 +229,53 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
             listValues = responseChoice;
         }
         const rows = this.generateListItems(listValues as string[], mobile);
+        const header = [
+            {
+                title: 'Condition',
+                col: 3,
+            },
+        ];
+        if (!this.props.hide) {
+            header.push(
+                {
+                    title: '',
+                    col: 9,
+                },
+                {
+                    title: 'Start Year',
+                    col: 3,
+                },
+                {
+                    title: 'Has Condition Resolved?',
+                    col: 9,
+                },
+                {
+                    title: 'End Year',
+                    col: 9,
+                },
+                {
+                    title: 'Comments',
+                    col: 9,
+                },
 
+                {
+                    title: '',
+                    col: 9,
+                }
+            );
+        }
         return (
-            <div className='scroll-table history-table'>
-                <div className='scroll-table-inner'>
-                    <GridContent
-                        isPreview={this.props.isPreview}
-                        numColumns={6}
-                        contentHeader={
-                            <MedicalHistoryContentHeader
-                                hide={this.props.hide}
-                            />
+            <div className={style.historyTable}>
+                <div className={`${style.historyTable__scroll} scrollbar`}>
+                    <GridContentV2
+                        header_titles={header}
+                        rows={rows as React.JSX.Element[] | React.JSX.Element}
+                        name='medical history'
+                        onAddRow={this.addRow}
+                        canAddNew={
+                            !this.props.isPreview &&
+                            !(this.props.responseType == ResponseTypes.PMH_POP)
                         }
-                        rows={rows}
-                        //TODO: hpi?
-                        value_type='Medical History'
-                        mobile={mobile}
-                        addRow={this.addRow}
-                        name={'medical history'}
-                        pop={this.props.responseType == ResponseTypes.PMH_POP}
                     />
                 </div>
             </div>

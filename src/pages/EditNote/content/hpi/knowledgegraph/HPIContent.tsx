@@ -1,51 +1,52 @@
-import React from 'react';
-import { Button, Segment, Icon, Search } from 'semantic-ui-react';
-import Masonry from 'react-masonry-css';
-import './src/css/App.css';
-import BodySystemDropdown from './src/components/BodySystemDropdown';
-import DiseaseForm from './src/components/DiseaseForm';
-import { hpiHeaders } from './src/API';
-import './HPI.css';
+import axios from 'axios';
+import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
+import { graphClientURL } from 'constants/api.js';
 import {
+    DISEASE_TABS_MED_BP,
+    DISEASE_TABS_SMALL_BP,
     ROS_LARGE_BP,
     ROS_MED_BP,
     ROS_SMALL_BP,
-    DISEASE_TABS_SMALL_BP,
-    DISEASE_TABS_MED_BP,
 } from 'constants/breakpoints';
-import { CurrentNoteState } from 'redux/reducers';
+import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
+import { GraphData } from 'constants/hpiEnums';
+import { withDimensionsHook } from 'hooks/useDimensions';
+import React from 'react';
+import Masonry from 'react-masonry-css';
 import { connect } from 'react-redux';
-import ChiefComplaintsButton, {
-    PatientViewProps,
-} from './src/components/ChiefComplaintsButton';
-import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 import {
-    setNotesChiefComplaint,
     SetNotesChiefComplaintAction,
+    setNotesChiefComplaint,
 } from 'redux/actions/chiefComplaintsActions';
-import { CHIEF_COMPLAINTS } from '../../../../../redux/actions/actionTypes';
-import { currentNoteStore } from 'redux/store';
+import {
+    ProcessKnowledgeGraphAction,
+    processKnowledgeGraph,
+} from 'redux/actions/hpiActions';
+import {
+    SaveHpiHeaderAction,
+    saveHpiHeader,
+} from 'redux/actions/hpiHeadersActions';
+import { CurrentNoteState } from 'redux/reducers';
+import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
+import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
 import {
     PlanConditionsFlat,
     selectPlanConditions,
 } from 'redux/selectors/planSelectors';
-import ToggleButton from 'components/tools/ToggleButton';
-import axios from 'axios';
-import { GraphData } from 'constants/hpiEnums';
-import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
-import {
-    processKnowledgeGraph,
-    ProcessKnowledgeGraphAction,
-} from 'redux/actions/hpiActions';
-import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
-import {
-    saveHpiHeader,
-    SaveHpiHeaderAction,
-} from 'redux/actions/hpiHeadersActions';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
-import { graphClientURL } from 'constants/api.js';
-import MiscBox from './src/components/MiscBox';
+import { currentNoteStore } from 'redux/store';
+import { Button, Icon, Search, Segment } from 'semantic-ui-react';
 import Tab from '../../../../../components/tools/Tab';
+import { CHIEF_COMPLAINTS } from '../../../../../redux/actions/actionTypes';
+import './HPI.css';
+import { hpiHeaders } from './src/API';
+import BodySystemDropdown from './src/components/BodySystemDropdown';
+import ChiefComplaintsButton, {
+    PatientViewProps,
+} from './src/components/ChiefComplaintsButton';
+import DiseaseForm from './src/components/DiseaseForm';
+import MiscBox from './src/components/MiscBox';
+import './src/css/App.css';
 
 interface HPIContentProps {
     step: number;
@@ -56,8 +57,6 @@ interface HPIContentProps {
 }
 
 interface HPIContentState {
-    windowWidth: number;
-    windowHeight: number;
     searchVal: string;
     activeIndex: number;
 }
@@ -66,12 +65,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
             searchVal: '',
             activeIndex: 0, //misc notes box active
         };
-        this.updateDimensions = this.updateDimensions.bind(this);
         // this.handleItemClick = this.handleItemClick.bind(this);
     }
 
@@ -87,21 +83,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             const data = hpiHeaders;
             data.then((res) => this.props.saveHpiHeader(res.data));
         }
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-        const windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
     }
 
     getData = async (complaint: string) => {
@@ -148,8 +129,8 @@ class HPIContent extends React.Component<Props, HPIContentState> {
     // };
 
     render() {
-        const { windowWidth } = this.state;
-        const { chiefComplaints, hpiHeaders } = this.props;
+        const { windowWidth } = this.props.dimensions;
+        const { chiefComplaints, hpiHeaders, patientView } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
 
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
@@ -278,6 +259,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 {diseaseComponents}
                             </Masonry>
                         </Segment>
+                        <>
+                            <NavigationButton nextClick={this.continue} />
+                        </>
                     </>
                 );
             default:
@@ -402,6 +386,10 @@ type Props = ChiefComplaintsProps &
     HpiHeadersProps &
     HPIContentProps &
     DispatchProps &
-    PatientViewProps;
+    PatientViewProps & {
+        dimensions?: any;
+    };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HPIContent);
+export default withDimensionsHook(
+    connect(mapStateToProps, mapDispatchToProps)(HPIContent)
+);

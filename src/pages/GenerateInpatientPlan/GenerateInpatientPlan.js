@@ -8,7 +8,7 @@ import {
     Button,
 } from 'semantic-ui-react';
 
-import ToggleButton from 'components/tools/ToggleButton';
+import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
 import NavMenu from 'components/navigation/NavMenu';
 import {
     initialConditionsState,

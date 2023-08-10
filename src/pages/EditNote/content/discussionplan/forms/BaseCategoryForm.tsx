@@ -3,25 +3,25 @@
  * structure/responsiveness/interactions of the discussion and plan page.
  */
 
-import React, { useState, useEffect } from 'react';
-import AddRowButton from 'components/tools/AddRowButton';
+import {
+    DiagnosesOptionMapping,
+    OptionMapping,
+    getOptionMapping,
+} from '_processOptions';
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
 import { WhenResponse } from 'constants/enums';
 import medications from 'constants/medications';
 import procedures from 'constants/procedures';
 import registrationConstants from 'constants/registration-constants.json';
+import _ from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { Accordion, Grid, Header, Icon } from 'semantic-ui-react';
 import {
-    DiagnosesOptionMapping,
-    getOptionMapping,
-    OptionMapping,
-} from '_processOptions';
-import {
-    PlanAction,
     ConditionCategoryKey,
     EventHandler,
     HandleOnAddItem,
+    PlanAction,
 } from '../util';
-import { Grid, Header, Accordion, Icon } from 'semantic-ui-react';
-import _ from 'lodash';
 
 type Options = { main: OptionMapping; when?: OptionMapping };
 

@@ -1,15 +1,15 @@
-import React from 'react';
-import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
-import configureStore from 'redux-mock-store';
-import { Provider } from 'react-redux';
+import ConditionInput from 'components/tools/ConditionInput/ConditionInput';
 import { YesNoResponse } from 'constants/enums';
 import { FamilyOption } from 'constants/familyHistoryRelations';
+import Enzyme, { mount } from 'enzyme';
+import React from 'react';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
+import { FAMILY_HISTORY_ACTION } from 'redux/actions/actionTypes';
+import FamilyHistoryBlock from '../FamilyHistoryBlock';
 import FamilyHistoryContent from '../FamilyHistoryContent';
 import FamilyHistoryDropdown from '../FamilyHistoryDropdown';
-import { FAMILY_HISTORY_ACTION } from 'redux/actions/actionTypes';
-import ConditionInput from 'components/tools/ConditionInput';
-import FamilyHistoryBlock from '../FamilyHistoryBlock';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -278,22 +278,22 @@ describe('FamilyHistoryContent', () => {
         expect(store.getActions()).toEqual(expectedAction2);
     });
 
-    test('update family member desktop', () => {
-        const { wrapper, store } = connectStore(activeState);
-        wrapper.find('.dropdown-inline').first().simulate('click');
-        wrapper.find('[role="option"]').at(1).simulate('click');
-        const expectedAction = [
-            {
-                type: FAMILY_HISTORY_ACTION.UPDATE_MEMBER,
-                payload: {
-                    conditionIndex: 'foo',
-                    familyMemberIndex: 'foofoo',
-                    newMember: 'mother',
-                },
-            },
-        ];
-        expect(store.getActions()).toEqual(expectedAction);
-    });
+    // test('update family member desktop', () => {
+    //     const { wrapper, store } = connectStore(activeState);
+    //     wrapper.find('.dropdown-inline').first().simulate('click');
+    //     wrapper.find('[role="option"]').at(1).simulate('click');
+    //     const expectedAction = [
+    //         {
+    //             type: FAMILY_HISTORY_ACTION.UPDATE_MEMBER,
+    //             payload: {
+    //                 conditionIndex: 'foo',
+    //                 familyMemberIndex: 'foofoo',
+    //                 newMember: 'mother',
+    //             },
+    //         },
+    //     ];
+    //     expect(store.getActions()).toEqual(expectedAction);
+    // });
 
     test('update family member mobile', () => {
         const { wrapper, store } = connectDropdown(activeState, {

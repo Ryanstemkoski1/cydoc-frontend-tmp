@@ -1,15 +1,14 @@
-import React from 'react';
-import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
-import configureStore from 'redux-mock-store';
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton.js';
+import { PATIENT_HISTORY_ALLERGIES_MOBILE_BP } from 'constants/breakpoints';
+import Enzyme, { mount } from 'enzyme';
+import React from 'react';
+import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
+import { ALLERGIES_ACTION } from 'redux/actions/actionTypes';
 import AllergiesContent from '../AllergiesContent.tsx';
 import AllergiesTableBodyRow from '../AllergiesTableBodyRow';
-import AddRowButton from 'components/tools/AddRowButton';
-import { Button } from 'semantic-ui-react';
-import { ALLERGIES_ACTION } from 'redux/actions/actionTypes';
-import { PATIENT_HISTORY_ALLERGIES_MOBILE_BP } from 'constants/breakpoints';
-import { act } from 'react-dom/test-utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -63,7 +62,7 @@ describe('AllergiesContent', () => {
 
     test('addRow works', async () => {
         const { wrapper, store } = connectStore();
-        const button = wrapper.find(AddRowButton).find(Button);
+        const button = wrapper.find(AddRowButton).find('button');
         expect(button).toBeTruthy();
         await act(() => {
             button.simulate('click');

@@ -1,0 +1,15 @@
+@import '../../../../assets/scss/variables.scss';
+.medication {
+    &__row {
+        padding: 20px 0;
+        border-bottom: 1px solid $color-border;
+        &:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+        p {
+            margin-bottom: 0;
+            width: calc(100% - 200px);
+        }
+    }
+}

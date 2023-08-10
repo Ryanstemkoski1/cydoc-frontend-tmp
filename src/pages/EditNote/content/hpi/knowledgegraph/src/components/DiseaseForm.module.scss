@@ -1,0 +1,13 @@
+.diseaseForm {
+    h5 {
+        font-weight: 400;
+        margin-bottom: 30px;
+    }
+    :global {
+        .isYesNo {
+            h5 {
+                margin-bottom: 0;
+            }
+        }
+    }
+}

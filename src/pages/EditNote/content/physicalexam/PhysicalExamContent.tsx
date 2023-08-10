@@ -1,58 +1,37 @@
+import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
+import exampleSchema from 'constants/PhysicalExam/exampleSchema.json';
+import { PhysicalExamSchemaItem } from 'constants/PhysicalExam/physicalExamSchema';
+import { PHYSICAL_EXAM_MOBILE_BP } from 'constants/breakpoints.js';
+import { withDimensionsHook } from 'hooks/useDimensions';
 import React from 'react';
+import { connect } from 'react-redux';
+import { updateVitals } from 'redux/actions/physicalExamActions';
+import { CurrentNoteState } from 'redux/reducers';
+import { Vitals, VitalsFields } from 'redux/reducers/physicalExamReducer';
+import { selectVitals } from 'redux/selectors/physicalExamSelectors';
+import { currentNoteStore } from 'redux/store';
 import {
     Accordion,
     Form,
     Grid,
     Header,
-    Icon,
     Input,
-    Button,
     InputOnChangeData,
 } from 'semantic-ui-react';
-import PhysicalExamGroup from './PhysicalExamGroup';
-import exampleSchema from 'constants/PhysicalExam/exampleSchema.json';
-import { PHYSICAL_EXAM_MOBILE_BP } from 'constants/breakpoints.js';
-import './PhysicalExam.css';
-import { updateVitals } from 'redux/actions/physicalExamActions';
-import { connect } from 'react-redux';
-import { selectVitals } from 'redux/selectors/physicalExamSelectors';
-import { Vitals, VitalsFields } from 'redux/reducers/physicalExamReducer';
-import { PhysicalExamSchemaItem } from 'constants/PhysicalExam/physicalExamSchema';
-import { CurrentNoteState } from 'redux/reducers';
 import ButtonGroupTemparature from './InputSelectableTemparature';
-import { currentNoteStore } from 'redux/store';
+import './PhysicalExam.css';
+import PhysicalExamGroup from './PhysicalExamGroup';
 
 //Component that manages content for the Physical Exam tab
 class PhysicalExamContent extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
             weightKg: 0,
             heightM: 0,
             bmi: 0,
             headCircumference: 0,
         };
-        this.updateDimensions = this.updateDimensions.bind(this);
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-        const windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
     }
 
     handleChange = (
@@ -148,7 +127,8 @@ class PhysicalExamContent extends React.Component<Props, State> {
 
     renderPanels = (groups: PhysicalExamSchemaItem[] | ExampleSchema[]) => {
         const itemGroups = groups as PhysicalExamSchemaItem[];
-        const isMobileView = this.state.windowWidth <= PHYSICAL_EXAM_MOBILE_BP;
+        const isMobileView =
+            this.props.dimensions.windowWidth <= PHYSICAL_EXAM_MOBILE_BP;
         const panels = [
             {
                 key: 'Vitals',
@@ -410,43 +390,10 @@ class PhysicalExamContent extends React.Component<Props, State> {
                     panels={this.renderPanels(exampleSchema.sections)}
                 />
 
-                <Button
-                    icon
-                    floated='left'
-                    onClick={this.props.previousFormClick}
-                    className='small-physical-previous-button'
-                >
-                    <Icon name='arrow left' />
-                </Button>
-                <Button
-                    icon
-                    labelPosition='left'
-                    floated='left'
-                    onClick={this.props.previousFormClick}
-                    className='physical-previous-button'
-                >
-                    Prev
-                    <Icon name='arrow left' />
-                </Button>
-
-                <Button
-                    icon
-                    floated='right'
-                    onClick={this.props.nextFormClick}
-                    className='small-physical-next-button'
-                >
-                    <Icon name='arrow right' />
-                </Button>
-                <Button
-                    icon
-                    labelPosition='right'
-                    floated='right'
-                    onClick={this.props.nextFormClick}
-                    className='physical-next-button'
-                >
-                    Next
-                    <Icon name='arrow right' />
-                </Button>
+                <NavigationButton
+                    previousClick={this.props.previousFormClick}
+                    nextClick={this.props.nextFormClick}
+                />
             </>
         );
     }
@@ -484,15 +431,16 @@ interface DispatchProps {
 }
 
 interface State {
-    windowWidth: number;
-    windowHeight: number;
     weightKg: number;
     heightM: number;
     bmi: number;
     headCircumference: number;
 }
 
-type Props = DispatchProps & ContentProps;
+type Props = DispatchProps &
+    ContentProps & {
+        dimensions?: any;
+    };
 
 const mapStatetoProps = (state: CurrentNoteState) => {
     return {
@@ -504,7 +452,6 @@ const mapDispatchToProps = {
     updateVitals,
 };
 
-export default connect(
-    mapStatetoProps,
-    mapDispatchToProps
-)(PhysicalExamContent);
+export default withDimensionsHook(
+    connect(mapStatetoProps, mapDispatchToProps)(PhysicalExamContent)
+);

@@ -1,64 +1,57 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
-import { CurrentNoteState } from 'redux/reducers';
-import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
-import { selectReviewOfSystemsState } from 'redux/selectors/reviewOfSystemsSelectors';
-import { selectPlanState } from 'redux/selectors/planSelectors';
-import { SocialHistoryState } from 'redux/reducers/socialHistoryReducer';
-import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
-import { selectAllergiesState } from 'redux/selectors/allergiesSelectors';
-import { AllergiesState } from 'redux/reducers/allergiesReducer';
-import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
-import { MedicationsState } from 'redux/reducers/medicationsReducer';
-import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
-import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
-import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
 import {
-    Button,
-    Segment,
-    Input,
-    Modal,
-    Header,
-    Form,
-    Icon,
-} from 'semantic-ui-react';
-import { PlanState } from 'redux/reducers/planReducer';
-import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
-import { selectPatientInformationState } from 'redux/selectors/patientInformationSelector';
-import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
-import {
-    updatePatientName,
-    UpdatePatientNameAction,
-    updatePatientPronouns,
-    UpdatePatientPronounsAction,
     UpdatePatientInformationAction,
+    UpdatePatientNameAction,
+    UpdatePatientPronounsAction,
     updatePatientInformation,
+    updatePatientName,
+    updatePatientPronouns,
 } from 'redux/actions/patientInformationActions';
+import { CurrentNoteState } from 'redux/reducers';
+import { AllergiesState } from 'redux/reducers/allergiesReducer';
+import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
+import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
+import { MedicationsState } from 'redux/reducers/medicationsReducer';
+import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
+import { PhysicalExamState } from 'redux/reducers/physicalExamReducer';
+import { PlanState } from 'redux/reducers/planReducer';
+import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
+import { SocialHistoryState } from 'redux/reducers/socialHistoryReducer';
+import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
+import { selectAllergiesState } from 'redux/selectors/allergiesSelectors';
+import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
+import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
+import { selectPatientInformationState } from 'redux/selectors/patientInformationSelector';
+import { selectPlanState } from 'redux/selectors/planSelectors';
+import { selectReviewOfSystemsState } from 'redux/selectors/reviewOfSystemsSelectors';
+import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
+import { Button, Form, Header, Input, Modal, Segment } from 'semantic-ui-react';
 
 // import all the individual note sections
+import './GenerateNote.css';
+import AllergiesNote from './notesections/AllergiesNote';
+import FamilyHistoryNote from './notesections/FamilyHistoryNote';
 import HPINote from './notesections/HPINote';
 import MedicalHistoryNote from './notesections/MedicalHistoryNote';
-import SurgicalHistoryNote from './notesections/SurgicalHistoryNote';
 import MedicationsNote from './notesections/MedicationsNote';
-import AllergiesNote from './notesections/AllergiesNote';
-import SocialHistoryNote from './notesections/SocialHistoryNote';
-import FamilyHistoryNote from './notesections/FamilyHistoryNote';
-import ReviewOfSystemsNote from './notesections/ReviewOfSystemsNote';
 import PhysicalExamNote from './notesections/PhysicalExamNote';
 import PlanNote from './notesections/PlanNote';
-import './GenerateNote.css';
+import ReviewOfSystemsNote from './notesections/ReviewOfSystemsNote';
+import SocialHistoryNote from './notesections/SocialHistoryNote';
+import SurgicalHistoryNote from './notesections/SurgicalHistoryNote';
 
 import IdentityForm from '../../../../components/tools/IdentityForm';
 
-import './GenerateNote.css';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { GENERATE_NOTE_MOBILE_BP } from 'constants/breakpoints';
 import { PatientPronouns } from 'constants/patientInformation';
-import { PhysicalExamState } from 'redux/reducers/physicalExamReducer';
-import PatientInfo from './PatientInfo';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
 import BottomArrow from '../../../../assets/angle-down.svg';
+import './GenerateNote.css';
+import PatientInfo from './PatientInfo';
 
 interface GenerateNoteProps {
     previousFormClick: () => void;
@@ -448,25 +441,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                     </Segment>
                 </div>
             </Segment>
-            <Button
-                icon
-                labelPosition='left'
-                floated='left'
-                onClick={previousFormClick}
-                className='note-previous-button'
-            >
-                Prev
-                <Icon name='arrow left' />
-            </Button>
-            {/* mobile */}
-            <Button
-                icon
-                floated='left'
-                onClick={previousFormClick}
-                className='small-note-previous-button'
-            >
-                <Icon name='arrow left' className='big' />
-            </Button>
+            <NavigationButton previousClick={previousFormClick} />
         </div>
     );
 };

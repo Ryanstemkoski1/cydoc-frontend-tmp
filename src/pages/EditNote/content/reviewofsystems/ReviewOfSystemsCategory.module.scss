@@ -1,0 +1,24 @@
+@import '../../../../assets/scss/variables.scss';
+.reviewOfSystems {
+    &__item {
+        padding: 20px 0;
+        border-bottom: 1px solid $color-border;
+        &:last-of-type {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+        p {
+            margin: 0;
+            min-width: 45%;
+            padding-right: 10px;
+            max-width: calc(100% - 160px);
+            @include max-screen($mobile) {
+                max-width: none;
+                width: calc(100% - 130px);
+            }
+        }
+        aside {
+            max-width: 160px;
+        }
+    }
+}

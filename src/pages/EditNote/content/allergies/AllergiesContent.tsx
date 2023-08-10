@@ -1,43 +1,42 @@
-import React, { Component } from 'react';
-import {
-    Form,
-    Input,
-    Table,
-    TextAreaProps,
-    InputOnChangeData,
-    DropdownProps,
-    Header,
-    Image,
-} from 'semantic-ui-react';
-import AddRowButton from 'components/tools/AddRowButton';
+import { OptionMapping } from '_processOptions';
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import allergens from 'constants/allergens';
 import allergicReactions from 'constants/allergicReactions';
-import AllergiesTableBodyRow from './AllergiesTableBodyRow';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-    toggleHasAllergies,
-    updateIncitingAgent,
-    updateReaction,
-    updateComments,
     addAllergy,
     deleteAllergy,
+    toggleHasAllergies,
+    updateComments,
     updateId,
+    updateIncitingAgent,
+    updateReaction,
 } from 'redux/actions/allergiesActions';
+import { CurrentNoteState } from 'redux/reducers';
 import {
     AllergiesElements,
     AllergiesItem,
 } from 'redux/reducers/allergiesReducer';
-import { CurrentNoteState } from 'redux/reducers';
 import {
     selectAllergies,
     selectHasAllergiesState,
 } from 'redux/selectors/allergiesSelectors';
-import './table.css';
-import { OptionMapping } from '_processOptions';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
-import './AllergiesContent.css';
+import {
+    DropdownProps,
+    Form,
+    Image,
+    Input,
+    InputOnChangeData,
+    Table,
+    TextAreaProps,
+} from 'semantic-ui-react';
 import Add from '../../../../assets/add.svg';
+import './AllergiesContent.css';
+import AllergiesTableBodyRow from './AllergiesTableBodyRow';
+import './table.css';
 
 //Component that manages the layout for the allergies page
 class AllergiesContent extends Component<Props, OwnState> {

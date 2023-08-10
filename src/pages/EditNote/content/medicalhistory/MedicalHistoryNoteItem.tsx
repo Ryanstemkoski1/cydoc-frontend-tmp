@@ -1,33 +1,33 @@
-import {
-    Form,
-    Grid,
-    TextAreaProps,
-    ButtonProps,
-    Button,
-    Image,
-} from 'semantic-ui-react';
-import ToggleButton from 'components/tools/ToggleButton';
-import React, { Component } from 'react';
-import '../familyhistory/FamilyHistory.css';
-import { connect } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import {
-    MedicalHistoryState,
-    MedicalHistoryItem,
-} from 'redux/reducers/medicalHistoryReducer';
+import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from 'constants/enums';
-import {
-    selectMedicalHistoryState,
-    selectMedicalHistoryItem,
-} from 'redux/selectors/medicalHistorySelector';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
     toggleOption,
-    updateStartYear,
-    updateEndYear,
     updateComments,
     updateConditionResolved,
+    updateEndYear,
+    updateStartYear,
 } from 'redux/actions/medicalHistoryActions';
+import { CurrentNoteState } from 'redux/reducers';
+import {
+    MedicalHistoryItem,
+    MedicalHistoryState,
+} from 'redux/reducers/medicalHistoryReducer';
+import {
+    selectMedicalHistoryItem,
+    selectMedicalHistoryState,
+} from 'redux/selectors/medicalHistorySelector';
+import {
+    Button,
+    ButtonProps,
+    Form,
+    Grid,
+    Image,
+    TextAreaProps,
+} from 'semantic-ui-react';
 import Delete from '../../../../assets/delete.svg';
+import '../familyhistory/FamilyHistory.css';
 //Component for a row the Medical History GridContent
 class MedicalHistoryNoteItem extends Component<Props> {
     findIndex = (event: FindIndex, data: TextAreaProps) => {
@@ -135,46 +135,39 @@ class MedicalHistoryNoteItem extends Component<Props> {
                 <Form className='family-hx-note-item family-medical'>
                     <Form.Group inline className='condition-header'>
                         <div className='condition-name'>{conditionInput}</div>
-                        <div
-                            className={`switch-button is-large ${
+                        <YesAndNo
+                            containerClasses={`${
                                 hasBeenAfflicted === YesNoResponse.Yes
                                     ? 'active'
                                     : ''
                             }`}
-                        >
-                            <ToggleButton
-                                active={
-                                    isPreview
-                                        ? false
-                                        : hasBeenAfflicted === YesNoResponse.Yes
-                                }
-                                condition={condition}
-                                title='Yes'
-                                onToggleButtonClick={
-                                    isPreview
-                                        ? () => {
-                                              return undefined;
-                                          }
-                                        : this.handleConditionToggleButtonClick
-                                }
-                            />
-                            <ToggleButton
-                                active={
-                                    isPreview
-                                        ? false
-                                        : hasBeenAfflicted === YesNoResponse.No
-                                }
-                                condition={condition}
-                                title='No'
-                                onToggleButtonClick={
-                                    isPreview
-                                        ? () => {
-                                              return undefined;
-                                          }
-                                        : this.handleConditionToggleButtonClick
-                                }
-                            />
-                        </div>
+                            yesButtonActive={
+                                isPreview
+                                    ? false
+                                    : hasBeenAfflicted === YesNoResponse.Yes
+                            }
+                            yesButtonCondition={condition}
+                            handleYesButtonClick={
+                                isPreview
+                                    ? () => {
+                                          return undefined;
+                                      }
+                                    : this.handleConditionToggleButtonClick
+                            }
+                            noButtonActive={
+                                isPreview
+                                    ? false
+                                    : hasBeenAfflicted === YesNoResponse.No
+                            }
+                            noButtonCondition={condition}
+                            handleNoButtonClick={
+                                isPreview
+                                    ? () => {
+                                          return undefined;
+                                      }
+                                    : this.handleConditionToggleButtonClick
+                            }
+                        />
                     </Form.Group>
                     {hasBeenAfflicted === YesNoResponse.Yes && (
                         <div
@@ -185,51 +178,45 @@ class MedicalHistoryNoteItem extends Component<Props> {
                                 <span className='field'>
                                     <label>Has Condition Resolved?</label>
                                 </span>
-                                <div
-                                    className={`switch-button is-large ${
+
+                                <YesAndNo
+                                    containerClasses={`${
                                         hasConditionResolved ===
                                         YesNoResponse.Yes
                                             ? 'active'
                                             : ''
                                     }`}
-                                >
-                                    <ToggleButton
-                                        active={
-                                            isPreview
-                                                ? false
-                                                : hasConditionResolved ===
-                                                  YesNoResponse.Yes
-                                        }
-                                        condition={condition}
-                                        title='Yes'
-                                        onToggleButtonClick={
-                                            isPreview
-                                                ? () => {
-                                                      return undefined;
-                                                  }
-                                                : this
-                                                      .handleResolvedToggleButtonClick
-                                        }
-                                    />
-                                    <ToggleButton
-                                        active={
-                                            isPreview
-                                                ? false
-                                                : hasConditionResolved ===
-                                                  YesNoResponse.No
-                                        }
-                                        condition={condition}
-                                        title='No'
-                                        onToggleButtonClick={
-                                            isPreview
-                                                ? () => () => {
-                                                      return undefined;
-                                                  }
-                                                : this
-                                                      .handleResolvedToggleButtonClick
-                                        }
-                                    />
-                                </div>
+                                    yesButtonActive={
+                                        isPreview
+                                            ? false
+                                            : hasConditionResolved ===
+                                              YesNoResponse.Yes
+                                    }
+                                    yesButtonCondition={condition}
+                                    handleYesButtonClick={
+                                        isPreview
+                                            ? () => {
+                                                  return undefined;
+                                              }
+                                            : this
+                                                  .handleResolvedToggleButtonClick
+                                    }
+                                    noButtonActive={
+                                        isPreview
+                                            ? false
+                                            : hasConditionResolved ===
+                                              YesNoResponse.No
+                                    }
+                                    noButtonCondition={condition}
+                                    handleNoButtonClick={
+                                        isPreview
+                                            ? () => {
+                                                  return undefined;
+                                              }
+                                            : this
+                                                  .handleResolvedToggleButtonClick
+                                    }
+                                />
                             </div>
                             <div className='ui grid year-block'>
                                 <div className='eight wide column'>

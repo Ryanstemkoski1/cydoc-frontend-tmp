@@ -182,7 +182,7 @@
 #hpi-menu {
     margin-bottom: 10px;
 }
-@media only screen and (min-width: 767px) and (max-width: 991px){
+@media only screen and (min-width: 767px) and (max-width: 991px) {
     .hpi-text-drop {
         width: 723px;
     }
@@ -198,9 +198,7 @@
     }
 }
 
-
 @media screen and (max-width: 600px) {
-
     .ui.icon.button.hpi-previous-button,
     .ui.icon.button.hpi-next-button {
         display: none;
@@ -220,11 +218,11 @@
     }
 }
 
-@media only screen and (max-width: 794px) and (min-width: 767px)  {
+@media only screen and (max-width: 794px) and (min-width: 768px) {
     .mobile-tab {
         width: calc(100% - 40px);
         padding: 0 !important;
-        box-shadow: 0 10px 15px 5px rgba(0,128,159,.2);
+        box-shadow: 0 10px 15px 5px rgba(0, 128, 159, 0.2);
     }
     .mobile-tab .button {
         position: relative;
@@ -253,18 +251,17 @@
         background-color: #f4f4f4 !important;
     }
     .mobile-tab .button.active {
-        background: rgba(0,0,0,.05) !important;
-        color: rgba(0,0,0,.95) !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+        color: rgba(0, 0, 0, 0.95) !important;
     }
     .mobile-tab .button.active::after {
         visibility: visible;
     }
 }
-@media only screen and (max-width: 794px){
+@media only screen and (max-width: 794px) {
     .mobile-tab {
         background-color: white;
     }
-
 }
 @media screen and (max-width: 767px) {
     .col-wrapper {
@@ -277,10 +274,10 @@
         max-width: 100%;
         max-height: 90%;
         margin-right: 5px;
-    } 
+    }
     .diseases-array button {
         margin-top: 10px !important;
-    }  
+    }
     .mobile-tab {
         width: 100%;
         padding-bottom: 5px;
@@ -289,16 +286,15 @@
     .mobile-tab button {
         font-weight: 400;
         border-radius: 20px;
-        margin: 5px 2px 0 !important;
-        color: #0d5e70!important;
+        margin: 5px 2px 0;
+        color: #0d5e70 !important;
         background-color: transparent !important;
-     
+        box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
     }
-    .mobile-tab button.hpi-ph-button-selected,
-    .mobile-tab button.active {
-        background: rgba(0,0,0,.05)!important;
-        box-shadow: ''!important;
-        color: rgba(0,0,0,.95)!important;
+    .mobile-tab .button.active {
+        background: rgba(0, 0, 0, 0.05) !important;
+        box-shadow: '' !important;
+        color: rgba(0, 0, 0, 0.95) !important;
     }
     .bottom-no-space {
         margin-bottom: 0 !important;
@@ -337,11 +333,5 @@
 
     .ui.icon.button.hpi-small-next-button {
         right: 15px;
-    }
-}
-
-@media screen and (min-width: 767px) {
-    .margin-bottom-for-notes {
-        padding-bottom: 130px !important;
     }
 }

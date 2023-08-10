@@ -1,0 +1,36 @@
+@import '../../../../assets/scss/variables.scss';
+.symptomsBlock {
+    &__all {
+        cursor: pointer;
+        margin-top: 20px;
+        position: relative;
+        padding-left: 35px;
+        color: $color-black;
+        font-family: $font-family-primary;
+        &::before {
+            left: 0;
+            content: '';
+            top: -4px;
+            width: 25px;
+            height: 25px;
+            display: block;
+            border-radius: 3px;
+            position: absolute;
+            border: 1px solid darken($color-border, 44.71);
+            @include max-screen($mobile) {
+                width: 20px;
+                height: 20px;
+            }
+        }
+        &.active {
+            &::before {
+                border-color: $color-primary;
+                background-color: $color-primary;
+                @include background-image(check, svg, center, no-repeat, 13px);
+                @include max-screen($mobile) {
+                    background-size: 11px;
+                }
+            }
+        }
+    }
+}

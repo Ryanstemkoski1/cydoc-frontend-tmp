@@ -1,46 +1,46 @@
-import React, { Component } from 'react';
-import GridContent from 'components/tools/GridContent.js';
-import FamilyHistoryContentHeader from './FamilyHistoryContentHeader';
-import ConditionInput from 'components/tools/ConditionInput';
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
+import ConditionInput from 'components/tools/ConditionInput/ConditionInput';
+import GridContent from 'components/tools/GridContent/GridContent';
 import { FAMILY_HISTORY_MOBILE_BP } from 'constants/breakpoints.js';
-import FamilyHistoryBlock from './FamilyHistoryBlock';
-import AddRowButton from 'components/tools/AddRowButton.js';
+import constants from 'constants/constants.json';
+import diseaseSynonyms from 'constants/diseaseSynonyms';
+import { YesNoResponse } from 'constants/enums';
+import { ResponseTypes } from 'constants/hpiEnums';
+import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
+import { medicalMapping } from 'constants/word-mappings';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-    toggleConditionOption,
+    AddFhPopOptionsAction,
     addFamilyMember,
+    addFhPopOptions,
+    deleteCondition,
     deleteFamilyMember,
-    updateMember,
     toggleCauseOfDeathOption,
+    toggleConditionOption,
     toggleLivingOption,
     updateComments,
     updateCondition,
-    AddFhPopOptionsAction,
-    addFhPopOptions,
-    deleteCondition,
+    updateMember,
 } from 'redux/actions/familyHistoryActions';
-import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
+import {
+    BlankQuestionChangeAction,
+    PopResponseAction,
+    blankQuestionChange,
+    popResponse,
+} from 'redux/actions/hpiActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
     FamilyHistoryCondition,
     FamilyHistoryState,
 } from 'redux/reducers/familyHistoryReducer';
-import { adjustValue } from '../medicalhistory/util';
-import { medicalMapping } from 'constants/word-mappings';
+import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
 import { v4 } from 'uuid';
-import { ResponseTypes } from 'constants/hpiEnums';
-import {
-    blankQuestionChange,
-    BlankQuestionChangeAction,
-    PopResponseAction,
-    popResponse,
-} from 'redux/actions/hpiActions';
-import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
-import diseaseSynonyms from 'constants/diseaseSynonyms';
 import '../hpi/knowledgegraph/src/css/Button.css';
+import { adjustValue } from '../medicalhistory/util';
+import FamilyHistoryBlock from './FamilyHistoryBlock';
 import './FamilyHistoryContent.css';
-import { YesNoResponse } from 'constants/enums';
-import constants from 'constants/constants.json';
+import FamilyHistoryContentHeader from './FamilyHistoryContentHeader';
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.
@@ -237,19 +237,17 @@ class FamilyHistoryContent extends Component<Props, State> {
         });
 
         return mobile ? (
-            <div className='HistoryBlock-mobile'>
-                <GridContent
-                    isPreview={this.props.isPreview}
-                    numColumns={4}
-                    contentHeader={<FamilyHistoryContentHeader />}
-                    rows={listItems}
-                    pop={this.props.responseType == ResponseTypes.FH_POP}
-                    conditions={listValues}
-                    mobile={mobile}
-                    addRow={this.addRow}
-                    name={'disease'}
-                />
-            </div>
+            <GridContent
+                isPreview={this.props.isPreview}
+                numColumns={4}
+                contentHeader={<FamilyHistoryContentHeader />}
+                rows={listItems}
+                pop={this.props.responseType == ResponseTypes.FH_POP}
+                conditions={listValues}
+                mobile={mobile}
+                addRow={this.addRow}
+                name={'disease'}
+            />
         ) : (
             <>
                 {listItems}

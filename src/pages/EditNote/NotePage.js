@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Button, Icon } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 import PhysicalExamContent from './content/physicalexam/PhysicalExamContent';
 import ReviewOfSystemsContent from './content/reviewofsystems/ReviewOfSystemsContent';
 import HPIContent from './content/hpi/knowledgegraph/HPIContent';
@@ -29,6 +29,7 @@ import InitialSurvey from './content/patientview/InitialSurvey';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import initialQuestions from './content/patientview/constants/initialQuestions.json';
 import { processSurveyGraph } from 'redux/actions/userViewActions';
+import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 //Component that manages the content displayed based on the activeItem prop
 // and records the information the user enters as state
 
@@ -270,42 +271,10 @@ class NotePage extends Component {
                             Please select at least one Chief Complaint in the CC
                             tab in order to view an HPI questionnaire.
                         </div>
-                        <Button
-                            icon
-                            labelPosition='left'
-                            floated='left'
-                            onClick={this.backHPITab}
-                            className='hpi-previous-button'
-                        >
-                            Prev
-                            <Icon name='arrow left' />
-                        </Button>
-                        <Button
-                            icon
-                            floated='left'
-                            onClick={this.backHPITab}
-                            className='hpi-small-previous-button'
-                        >
-                            <Icon name='arrow left' className='big' />
-                        </Button>
-                        <Button
-                            icon
-                            labelPosition='right'
-                            floated='right'
-                            onClick={this.continueHPITab}
-                            className='hpi-next-button'
-                        >
-                            Next
-                            <Icon name='arrow right' />
-                        </Button>
-                        <Button
-                            icon
-                            floated='right'
-                            onClick={this.continueHPITab}
-                            className='hpi-small-next-button'
-                        >
-                            <Icon name='arrow right' className='big' />
-                        </Button>
+                        <NavigationButton
+                            previousClick={this.backHPITab}
+                            nextClick={this.continueHPITab}
+                        />
                     </>
                 );
                 break;

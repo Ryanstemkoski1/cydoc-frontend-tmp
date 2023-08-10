@@ -149,7 +149,7 @@ const Login = () => {
             <NotesContext.Consumer>
                 {(ctx) => {
                     ctx.loadNotes(context.user._id);
-                    return <Redirect push to='/dashboard' />;
+                    return <Redirect push to='/view/product' />;
                 }}
             </NotesContext.Consumer>
         );

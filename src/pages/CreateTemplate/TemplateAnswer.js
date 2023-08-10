@@ -27,7 +27,7 @@ import {
     Icon,
 } from 'semantic-ui-react';
 import { graphClient } from 'constants/api';
-import ToggleButton from 'components/tools/ToggleButton';
+import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
 import { joinLists } from 'pages/EditNote/content/generatenote/notesections/HPINote';
 import {
     capitalize,

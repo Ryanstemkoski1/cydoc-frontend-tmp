@@ -22,12 +22,19 @@
     display: inline-block;
 }
 
-@media (max-width: 767px){
+@media (max-width: 767px) {
     .full-view {
         margin: 5px;
         width: calc(100% - 10px) !important;
     }
     .surgical-history {
         margin-bottom: 42px;
+    }
+    .surgical-history .header-wrap {
+        display: block !important;
+    }
+    .surgical-history h2 {
+        width: 100%;
+        margin-bottom: 10px !important;
     }
 }

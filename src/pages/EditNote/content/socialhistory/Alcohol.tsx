@@ -1,6 +1,31 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
+import HistoryButtons from 'components/tools/ThreeButton/ThreeButtons';
+import drinkSizes, { DrinkSize } from 'constants/SocialHistory/drinkSizes';
+import drinkTypes, { DrinkType } from 'constants/SocialHistory/drinkTypes';
+import {
+    SubstanceUsageResponse,
+    YesNoMaybeResponse,
+    YesNoResponse,
+} from 'constants/enums';
+import _ from 'lodash';
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { ConnectedProps, connect } from 'react-redux';
+import {
+    addAlcoholConsumption,
+    deleteAlcoholConsumption,
+    updateAlcoholComments,
+    updateAlcoholConsumptionPerWeek,
+    updateAlcoholConsumptionSize,
+    updateAlcoholConsumptionType,
+    updateAlcoholInterestedInQuitting,
+    updateAlcoholQuitYear,
+    updateAlcoholTriedToQuit,
+    updateAlcoholUsage,
+} from 'redux/actions/socialHistoryActions';
+import { CurrentNoteState } from 'redux/reducers';
+import { AlcoholConsumption } from 'redux/reducers/socialHistoryReducer';
+import { selectAlcoholState } from 'redux/selectors/socialHistorySelectors';
 import {
     Accordion,
     Button,
@@ -12,32 +37,7 @@ import {
     Table,
     TextArea,
 } from 'semantic-ui-react';
-import drinkTypes, { DrinkType } from 'constants/SocialHistory/drinkTypes';
-import drinkSizes, { DrinkSize } from 'constants/SocialHistory/drinkSizes';
-import ToggleButton from 'components/tools/ToggleButton';
-import AddRowButton from 'components/tools/AddRowButton';
 import '../familyhistory/FamilyHistory.css';
-import {
-    updateAlcoholUsage,
-    addAlcoholConsumption,
-    updateAlcoholConsumptionType,
-    updateAlcoholConsumptionSize,
-    updateAlcoholConsumptionPerWeek,
-    deleteAlcoholConsumption,
-    updateAlcoholQuitYear,
-    updateAlcoholComments,
-    updateAlcoholInterestedInQuitting,
-    updateAlcoholTriedToQuit,
-} from 'redux/actions/socialHistoryActions';
-import { AlcoholConsumption } from 'redux/reducers/socialHistoryReducer';
-import { selectAlcoholState } from 'redux/selectors/socialHistorySelectors';
-import {
-    SubstanceUsageResponse,
-    YesNoMaybeResponse,
-    YesNoResponse,
-} from 'constants/enums';
-import { CurrentNoteState } from 'redux/reducers';
-import _ from 'lodash';
 import '../hpi/knowledgegraph/src/css/Button.css';
 
 type OwnProps = {
@@ -111,70 +111,40 @@ class Alcohol extends React.Component<Props, State> {
         }
     }
 
-    generateInterestedInQuittingButton(response: YesNoMaybeResponse) {
-        const values = this.props.alcohol;
-
-        return (
-            <ToggleButton
-                onToggleButtonClick={() => {
-                    this.props.updateAlcoholInterestedInQuitting(response);
-                }}
-                condition='Alcohol'
-                title={
-                    response === YesNoMaybeResponse.Yes
-                        ? 'Yes'
-                        : response === YesNoMaybeResponse.Maybe
-                        ? 'Maybe'
-                        : response === YesNoMaybeResponse.No
-                        ? 'No'
-                        : ''
-                }
-                active={values.interestedInQuitting === response}
-            />
-        );
-    }
-
-    generateTriedQuittingButton(response: YesNoResponse) {
-        const values = this.props.alcohol;
-
-        return (
-            <ToggleButton
-                onToggleButtonClick={() => {
-                    this.props.updateAlcoholTriedToQuit(response);
-                }}
-                condition='Alcohol'
-                title={
-                    response === YesNoResponse.Yes
-                        ? 'Yes'
-                        : response === YesNoResponse.No
-                        ? 'No'
-                        : ''
-                }
-                active={values.triedToQuit === response}
-            />
-        );
-    }
-
     quittingQuestions() {
         const values = this.props.alcohol;
         if (values.usage === SubstanceUsageResponse.Yes) {
             return (
                 <Grid stackable>
-                    <Form className='family-hx-note-item'>
+                    <Form className='family-hx-note-item bottom-space'>
                         <Form.Group inline className='condition-header'>
                             <div className='condition-name'>
                                 Are you interested in quitting?
                             </div>
                             <div className='interested-in-quitting-buttons btn-wrapper'>
-                                {this.generateInterestedInQuittingButton(
-                                    YesNoMaybeResponse.Yes
-                                )}
-                                {this.generateInterestedInQuittingButton(
-                                    YesNoMaybeResponse.Maybe
-                                )}
-                                {this.generateInterestedInQuittingButton(
-                                    YesNoMaybeResponse.No
-                                )}
+                                <HistoryButtons
+                                    options={[
+                                        {
+                                            value: YesNoMaybeResponse.Yes,
+                                            label: 'Yes',
+                                        },
+                                        {
+                                            value: YesNoMaybeResponse.Maybe,
+                                            label: 'Maybe',
+                                        },
+                                        {
+                                            value: YesNoMaybeResponse.No,
+                                            label: 'No',
+                                        },
+                                    ]}
+                                    keyToCompare='interestedInQuitting'
+                                    condition='Alcohol'
+                                    value={this.props.alcohol}
+                                    onToggle={
+                                        this.props
+                                            .updateAlcoholInterestedInQuitting
+                                    }
+                                />
                             </div>
                         </Form.Group>
                     </Form>
@@ -184,12 +154,24 @@ class Alcohol extends React.Component<Props, State> {
                                 Have you tried to quit before?
                             </div>
                             <div className='tried-to-quit-buttons btn-wrapper'>
-                                {this.generateTriedQuittingButton(
-                                    YesNoResponse.Yes
-                                )}
-                                {this.generateTriedQuittingButton(
-                                    YesNoResponse.No
-                                )}
+                                <HistoryButtons
+                                    options={[
+                                        {
+                                            value: YesNoResponse.Yes,
+                                            label: 'Yes',
+                                        },
+                                        {
+                                            value: YesNoResponse.No,
+                                            label: 'No',
+                                        },
+                                    ]}
+                                    keyToCompare='triedToQuit'
+                                    condition='Alcohol'
+                                    value={this.props.alcohol}
+                                    onToggle={
+                                        this.props.updateAlcoholTriedToQuit
+                                    }
+                                />
                             </div>
                         </Form.Group>
                     </Form>
@@ -564,30 +546,6 @@ class Alcohol extends React.Component<Props, State> {
         }
     }
 
-    generateUsageButton(response: SubstanceUsageResponse) {
-        const values = this.props.alcohol;
-
-        return (
-            <ToggleButton
-                onToggleButtonClick={() => {
-                    this.props.updateAlcoholUsage(response);
-                }}
-                condition='Alcohol'
-                className='social-hist-buttons'
-                title={
-                    response === SubstanceUsageResponse.Yes
-                        ? 'Yes'
-                        : response === SubstanceUsageResponse.InThePast
-                        ? 'In the Past'
-                        : response === SubstanceUsageResponse.NeverUsed
-                        ? 'Never Used'
-                        : ''
-                }
-                active={values.usage === response}
-            />
-        );
-    }
-
     render() {
         const values = this.props.alcohol;
 
@@ -597,15 +555,26 @@ class Alcohol extends React.Component<Props, State> {
                     <Form.Group inline className='condition-header'>
                         <div className='condition-name'>Alcohol</div>
                         <div className='btn-wrapper'>
-                            {this.generateUsageButton(
-                                SubstanceUsageResponse.Yes
-                            )}
-                            {this.generateUsageButton(
-                                SubstanceUsageResponse.InThePast
-                            )}
-                            {this.generateUsageButton(
-                                SubstanceUsageResponse.NeverUsed
-                            )}
+                            <HistoryButtons
+                                options={[
+                                    {
+                                        value: SubstanceUsageResponse.Yes,
+                                        label: 'Yes',
+                                    },
+                                    {
+                                        value: SubstanceUsageResponse.InThePast,
+                                        label: 'In the Past',
+                                    },
+                                    {
+                                        value: SubstanceUsageResponse.NeverUsed,
+                                        label: 'Never Used',
+                                    },
+                                ]}
+                                keyToCompare='usage'
+                                condition='Alcohol'
+                                value={this.props.alcohol}
+                                onToggle={this.props.updateAlcoholUsage}
+                            />
                         </div>
                     </Form.Group>
                     {(values.usage === SubstanceUsageResponse.Yes ||

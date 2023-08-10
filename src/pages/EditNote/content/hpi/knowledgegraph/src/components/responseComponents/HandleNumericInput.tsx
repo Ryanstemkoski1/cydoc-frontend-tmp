@@ -1,12 +1,13 @@
-import React from 'react';
-import { Input } from 'semantic-ui-react';
-import { CurrentNoteState } from 'redux/reducers';
+/* eslint-disable no-console */
+import Input from 'components/Input/Input';
 import { HpiStateProps, NumberInput } from 'constants/hpiEnums';
-import {
-    handleNumericInputChange,
-    HandleNumericInputChangeAction,
-} from 'redux/actions/hpiActions';
+import React from 'react';
 import { connect } from 'react-redux';
+import {
+    HandleNumericInputChangeAction,
+    handleNumericInputChange,
+} from 'redux/actions/hpiActions';
+import { CurrentNoteState } from 'redux/reducers';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 
 interface HandleNumericInputProps {
@@ -27,9 +28,9 @@ class HandleNumericInput extends React.Component<Props> {
                 pattern={'[0-9]*'} // for numeric keypad on iOS
                 value={typeof value == 'number' ? value : undefined}
                 min={0}
-                onChange={(_e, data) =>
-                    handleNumericInputChange(node, parseInt(data.value))
-                }
+                onChange={(_e: any) => {
+                    handleNumericInputChange(node, parseInt(_e.target.value));
+                }}
             />
         );
     }

@@ -152,6 +152,7 @@
     bottom: 15px;
     opacity: 0.8;
     margin: 0;
+    z-index: 1;
     background: #006b87;
     color: white;
 }

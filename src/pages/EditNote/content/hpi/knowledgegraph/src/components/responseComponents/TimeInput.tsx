@@ -1,54 +1,28 @@
+import Input from 'components/Input/Input';
+import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
+import { ROS_SMALL_BP } from 'constants/breakpoints';
+import { HpiStateProps, NumberInput, TimeOption } from 'constants/hpiEnums';
+import { withDimensionsHook } from 'hooks/useDimensions';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 import React from 'react';
-import { Grid, Input } from 'semantic-ui-react';
-import '../../css/TimeInput.css';
-import { TimeOption, HpiStateProps, NumberInput } from 'constants/hpiEnums';
-import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
 import {
-    handleTimeInputChange,
-    handleTimeOptionChange,
     HandleTimeInputChangeAction,
     HandleTimeOptionChangeAction,
+    handleTimeInputChange,
+    handleTimeOptionChange,
 } from 'redux/actions/hpiActions';
+import { CurrentNoteState } from 'redux/reducers';
 import { isTimeInputDictionary } from 'redux/reducers/hpiReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import ToggleButton from 'components/tools/ToggleButton';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
-import { ROS_SMALL_BP } from 'constants/breakpoints';
+import '../../css/TimeInput.css';
+import style from './TimeInput.module.scss';
 
 interface TimeInputProps {
     node: string;
 }
 
-interface TimeInputState {
-    windowWidth: number;
-    windowHeight: number;
-}
-
-class TimeInput extends React.Component<Props, TimeInputState> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
-        };
-        this.updateDimensions = this.updateDimensions.bind(this);
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-        const windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
-    }
-
+class TimeInput extends React.Component<Props> {
     render() {
         const { node, hpi, handleTimeInputChange, handleTimeOptionChange } =
             this.props;
@@ -65,7 +39,10 @@ class TimeInput extends React.Component<Props, TimeInputState> {
             const timeButtons = (Object.keys(timeDict) as TimeOption[])
                 .slice(i, i + 3)
                 .map((timeItem) => (
-                    <Grid.Row className='time-grid-row' key={timeItem}>
+                    <div
+                        className={style.symptomsHistory__timeItem}
+                        key={timeItem}
+                    >
                         <ToggleButton<TimeOption>
                             className='time-grid-button'
                             active={
@@ -75,7 +52,7 @@ class TimeInput extends React.Component<Props, TimeInputState> {
                             }
                             condition={timeItem}
                             title={
-                                this.state.windowWidth > ROS_SMALL_BP
+                                this.props.dimensions.windowWidth > ROS_SMALL_BP
                                     ? timeItem
                                     : timeDict[timeItem]
                             }
@@ -86,53 +63,44 @@ class TimeInput extends React.Component<Props, TimeInputState> {
                                 handleTimeOptionChange(node, data.condition)
                             }
                         />
-                    </Grid.Row>
+                    </div>
                 ));
-            return <Grid.Column key={i}>{timeButtons}</Grid.Column>;
+            return (
+                <div
+                    className={`${style.symptomsHistory__timeGrid} flex-wrap`}
+                    key={i}
+                >
+                    {timeButtons}
+                </div>
+            );
         });
         return (
-            <div className='time-div'>
-                <Grid columns='equal'>
-                    <Grid.Row>
-                        <Grid.Column width={4}>
-                            <div className='time-input'>
-                                <Input
-                                    className={'time-input'}
-                                    id={'numeric-input'}
-                                    key={this.props.node}
-                                    type={'number'}
-                                    value={
-                                        isTimeInputDictionary(currResponse) &&
-                                        currResponse.numInput != 0
-                                            ? currResponse.numInput
-                                            : null
-                                    }
-                                    min={0}
-                                    onChange={(
-                                        _e,
-                                        data
-                                    ): HandleTimeInputChangeAction =>
-                                        handleTimeInputChange(
-                                            node,
-                                            parseInt(data.value)
-                                        )
-                                    }
-                                />
-                            </div>
-                        </Grid.Column>
-                        <Grid.Column width={1}></Grid.Column>
-                        <Grid.Column
-                            width={
-                                this.state.windowWidth > ROS_SMALL_BP ? 6 : 8
-                            }
-                        >
-                            <Grid columns={2}>
-                                {gridButtons[0]}
-                                {gridButtons[1]}
-                            </Grid>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
+            <div className={`${style.symptomsHistory} flex-wrap align-center`}>
+                <div className={style.symptomsHistory__input}>
+                    <Input
+                        className={'time-input'}
+                        id={'numeric-input'}
+                        key={this.props.node}
+                        type={'number'}
+                        value={
+                            isTimeInputDictionary(currResponse) &&
+                            currResponse.numInput != 0
+                                ? currResponse.numInput
+                                : null
+                        }
+                        min={0}
+                        onChange={(e: any): HandleTimeInputChangeAction => {
+                            return handleTimeInputChange(
+                                node,
+                                parseInt(e.target.value)
+                            );
+                        }}
+                    />
+                </div>
+                <div className={`${style.symptomsHistory__time} flex-wrap`}>
+                    {gridButtons[0]}
+                    {gridButtons[1]}
+                </div>
             </div>
         );
     }
@@ -153,11 +121,17 @@ const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
     hpi: selectHpiState(state),
 });
 
-type Props = HpiStateProps & DispatchProps & TimeInputProps;
+type Props = HpiStateProps &
+    DispatchProps &
+    TimeInputProps & {
+        dimensions?: any;
+    };
 
 const mapDispatchToProps = {
     handleTimeInputChange,
     handleTimeOptionChange,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TimeInput);
+export default withDimensionsHook(
+    connect(mapStateToProps, mapDispatchToProps)(TimeInput)
+);

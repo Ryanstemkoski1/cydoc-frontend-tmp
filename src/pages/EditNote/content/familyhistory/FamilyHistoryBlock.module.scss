@@ -1,0 +1,26 @@
+@import '../../../../assets/scss/variables.scss';
+.historyBlock {
+    &__response {
+        padding: 10px 0;
+        padding: 15px 0;
+        border-top: 1px solid $color-border;
+        &:first-child {
+            border-top: 0;
+        }
+    }
+    &__input {
+        flex: auto;
+        padding-right: 20px;
+        @include max-screen($mobile) {
+            max-width: calc(100% - 145px);
+            padding-right: 10px;
+        }
+    }
+    &__remove {
+        cursor: pointer;
+        margin-left: 20px;
+        @include max-screen($mobile) {
+            margin-left: 10px;
+        }
+    }
+}

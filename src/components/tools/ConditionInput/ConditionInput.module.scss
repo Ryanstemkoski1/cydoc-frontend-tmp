@@ -1,0 +1,13 @@
+@import '../../../assets/scss/variables.scss';
+.conditionBlock {
+    &__error {
+        display: flex;
+        font-size: 14px;
+        align-items: center;
+        color: $color-error;
+        img {
+            width: 18px;
+            margin-right: 5px;
+        }
+    }
+}

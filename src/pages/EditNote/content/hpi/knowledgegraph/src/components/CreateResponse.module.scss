@@ -1,0 +1,36 @@
+@import '../../../../../../../assets/scss/variables.scss';
+.response {
+    padding: 20px 0;
+    border-top: 1px solid $color-border;
+    &:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+    }
+    h5 {
+        font-weight: 400;
+        font-size: $font-size-base;
+        font-family: $font-family-primary;
+        @include max-screen($mobile) {
+            margin-bottom: 10px;
+        }
+    }
+    &__grid {
+        h5 {
+            margin-bottom: 0;
+            width: calc(100% - 180px);
+            @include max-screen($mobile) {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+        aside {
+            max-width: 180px;
+        }
+    }
+    &__wrap {
+        margin: 0 -5px;
+        button {
+            margin: 5px !important;
+        }
+    }
+}

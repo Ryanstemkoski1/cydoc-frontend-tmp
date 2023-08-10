@@ -1,3 +1,4 @@
+import Input from 'components/Input/Input';
 import React from 'react';
 import { connect } from 'react-redux';
 import {
@@ -7,7 +8,6 @@ import {
 import { CurrentNoteState } from 'redux/reducers';
 import { userSurveyState } from 'redux/reducers/userViewReducer';
 import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
-import { Form } from 'semantic-ui-react';
 
 interface InputTextOrDateResponseProps {
     id: string;
@@ -35,19 +35,16 @@ class InputTextOrDateResponse extends React.Component<Props> {
         } = this.props;
 
         return (
-            <div className='qa-button width-50-desktop'>
-                <Form.Input
-                    fluid
-                    defaultValue={defaultValue}
-                    required={required}
-                    type={type}
-                    placeholder={placeholder}
-                    name={name}
-                    onChange={(e) =>
-                        initialSurveyAddDateOrPlace(id, e.target.value)
-                    }
-                />
-            </div>
+            <Input
+                defaultValue={defaultValue}
+                required={required}
+                type={type}
+                placeholder={placeholder}
+                name={name}
+                onChange={(e: any) =>
+                    initialSurveyAddDateOrPlace(id, e.target.value)
+                }
+            />
         );
     }
 }

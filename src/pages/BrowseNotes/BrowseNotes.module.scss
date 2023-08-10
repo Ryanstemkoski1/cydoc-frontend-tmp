@@ -1,0 +1,91 @@
+@import '../../assets/scss/variables.scss';
+.notesBlock {
+    h1 {
+        color: $color-green-dark;
+        text-align: center;
+    }
+    &__notesWrap {
+        margin: 20px 0;
+        border-radius: $radius;
+        background-color: $color-white;
+        border: 1px solid $color-light;
+        box-shadow: 0 0 20px rgba($color-black, 0.05);
+    }
+    &__dropdown {
+        max-width: 300px;
+        width: 100%;
+        margin-left: 20px;
+    }
+    &__header {
+        padding: 20px 30px;
+        border-bottom: 1px solid $color-primary-light;
+        @include max-screen($mobile) {
+            padding: 20px;
+        }
+        a {
+            background-color: $color-light;
+            width: 40px;
+            height: 40px;
+            border-radius: $radius;
+            img {
+                width: 8px;
+            }
+        }
+    }
+    &__tableWrapper {
+        max-height: calc(100vh - 500px);
+        overflow-y: auto;
+        min-height: 150px;
+        margin: 6px -10px 6px 0;
+        padding-right: 10px;
+    }
+    &__content {
+        padding: 30px;
+        gap: 30px;
+        @include max-screen($mobile) {
+            padding: 20px;
+            gap: 20px;
+        }
+        h4 {
+            margin-bottom: 0;
+            &.clinical {
+                min-height: 45px;
+            }
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            tr {
+                td {
+                    padding: 10px 0;
+                    width: 70%;
+                    &:last-child {
+                        text-align: right;
+                    }
+                    @include max-screen($mobile) {
+                        width: 55%;
+                    }
+                    &.nodata {
+                        text-align: center;
+                    }
+                    span {
+                        &:hover {
+                            color: $color-green-dark;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &__contentInner {
+        width: calc(50% - 15px);
+        padding: 30px;
+        box-shadow: 0px 0px 20px rgba($color-black, 0.05);
+        border-radius: $radius;
+        @include max-screen($mobile) {
+            padding: 20px;
+            width: 100%;
+        }
+    }
+}

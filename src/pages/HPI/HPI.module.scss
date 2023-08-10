@@ -1,0 +1,10 @@
+@import '../../assets/scss/variables.scss';
+.editNote {
+    padding: 50px 0 20px;
+    @include max-screen($tablet) {
+        padding-top: 30px;
+    }
+    @include max-screen($mobile) {
+        padding: 20px 0;
+    }
+}

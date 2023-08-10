@@ -1,0 +1,49 @@
+@import '../../../assets/scss/variables.scss';
+.preHpi {
+    &__items {
+        gap: 0 40px;
+    }
+    &__item {
+        width: 100%;
+        padding: 20px 0;
+        border-bottom: 1px solid $color-border;
+        &:first-child {
+            padding-top: 0;
+        }
+        p {
+            margin-bottom: 0;
+            padding-right: 10px;
+            width: calc(100% - 150px);
+            @include max-screen($mobile) {
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+        aside {
+            @include min-screen($mobile) {
+                max-width: 150px;
+            }
+        }
+    }
+    &__itemCol {
+        border-bottom: 0;
+        width: calc(50% - 20px);
+        @include max-screen($mobile) {
+            width: 100%;
+        }
+        aside,
+        p {
+            width: 100%;
+            max-width: 100%;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        &:last-of-type {
+            @include max-screen($mobile) {
+                padding-top: 0;
+            }
+        }
+    }
+}

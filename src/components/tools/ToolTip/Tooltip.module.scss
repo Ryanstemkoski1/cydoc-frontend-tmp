@@ -1,0 +1,28 @@
+@import '../../../assets/scss/variables.scss';
+.tooltip {
+    position: relative;
+    &__message {
+        left: 50%;
+        z-index: 1;
+        width: 200px;
+        padding: 10px;
+        font-size: 12px;
+        position: absolute;
+        border-radius: 5px;
+        bottom: calc(100% + 5px);
+        transform: translateX(-50%);
+        border: 1px solid rgba($color-error, 0.2);
+        background-color: $color-error-light;
+        box-shadow: 0 5px 10px rgba($color-black, 0.05);
+        &::before {
+            left: 50%;
+            content: '';
+            top: 100%;
+            display: block;
+            position: absolute;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: lighten($color-error, 20);
+        }
+    }
+}

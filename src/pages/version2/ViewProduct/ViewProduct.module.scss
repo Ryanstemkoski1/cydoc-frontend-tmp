@@ -1,0 +1,118 @@
+@import '../../../assets/scss/variables.scss';
+.viewForm{
+    padding: 100px 20px 20px;
+    @include max-screen($tablet){
+        padding-top: 50px;
+    }
+    @include max-screen($mobile){
+        padding-top: 20px;
+    }
+    &__inner{
+        max-width: 927px;
+        width: 100%;
+        padding: 0 30px 30px;
+        background-color: $color-white;
+        border-radius: $radius;
+        @include max-screen($mobile){
+            padding: 0 20px 30px;
+        }
+        h2{
+            padding: 30px 0 6px;
+            margin: 0;
+        }
+        p{
+            color: rgba($color-black, 0.5);
+            margin-bottom: 20px;
+        }
+        button{
+            margin-top: 30px;
+            @include max-screen($mobile){
+                width: 100%;
+            }
+        }
+    }
+    &__content{
+        border-bottom: 1px solid $color-border;
+        padding-bottom: 30px;
+    }
+    &__tabs{
+        gap: 20px;
+        a{
+            padding: 10px 15px;
+            width: calc(50% - 10px);
+            gap: 20px;
+            color: $color-black;
+            font-weight: 700;
+            border-radius: $radius;
+            border: 1px solid $color-primary-light;
+            @include max-screen($mobile){
+                width: 100%;
+                gap: 15px;
+            }
+            &::before{
+                content: "";
+                border: 1px solid $color-primary-light;
+                width: 26px;
+                height: 26px;
+                border-radius: 100%;
+            }
+            &.patient{
+                &.active{
+                    background-color: $color-pink-light;
+                    border-color: $color-pink;
+                }
+                span{
+                    border: 1px solid $color-pink;
+                    box-shadow: 0px 0px 5px rgba($color-pink, 0.5);
+                    background-color: $color-pink-light;
+                }
+            }
+            &.doctor{
+                &.active{
+                    background-color: $color-green-medium;
+                    border-color: $color-green;
+                }
+                span{
+                    border: 1px solid $color-green;
+                    box-shadow: 0px 0px 5px rgba($color-green, 0.5);
+                    background-color: $color-green-light;
+                }
+            }
+            &.medical{
+                &.active{
+                    background-color: rgba($color-primary, 0.05);
+                    border-color: rgba($color-primary, 0.4);
+                }
+                span{
+                    border: 1px solid rgba($color-primary, 0.4);
+                    box-shadow: 0px 0px 5px rgba($color-primary, 0.1);
+                    background-color: rgba($color-primary, 0.05);
+                }
+            }
+            &.record{
+                &.active{
+                    background-color: $color-yellow-light;
+                    border-color: $color-yellow;
+                }
+                span{
+                    border: 1px solid $color-yellow;
+                    box-shadow: 0px 0px 5px rgba($color-yellow, 0.5);
+                    background-color: $color-yellow-light;
+                }
+            }
+            &.active{
+                &::before{
+                       border: none;
+                       background-color: $color-green-dark;
+                       @include background-image(check, svg, center, no-repeat, 13px);
+                }
+            }
+            span{
+                border-radius: 12px;
+                padding: 10px;
+                width: 42px;
+                height: 42px;
+            }
+        }
+    }
+}
