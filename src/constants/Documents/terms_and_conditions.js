@@ -38,6 +38,14 @@ const stylingObject = {
         fontFamily: 'Arial',
         wordBreak: 'break-word',
     },
+    underlineBold: {
+        textDecoration: 'underline',
+        fontWeight: 'bold',
+    },
+    underlineIndent: {
+        textDecoration: 'underline',
+        marginLeft: '15px'
+    },
     underline: {
         textDecoration: 'underline',
     },
@@ -45,7 +53,7 @@ const stylingObject = {
         marginLeft: '10px'
     },
     mediumIndent: {
-        marginLeft: '15px'
+        marginLeft: '20px'
     }
 };
 
@@ -113,13 +121,12 @@ const TermsAndConditions = () => {
     <div>
     </div>
     <div>
-        <ol start="1" style={{ marginLeft: '15px'}}>
-            <li>
+        <div start="1" style={{ marginLeft: '15px'}}>
                 <span style={{ marginLeft: '10px', textDecoration: 'underline', fontWeight: 'bold'}}>
-                    Definitions.
+                    1.  Definitions.
                 </span>
-            </li>
-        </ol>
+
+        </div>
     </div>
     <div>
         <span>
@@ -238,22 +245,20 @@ const TermsAndConditions = () => {
         </span>
     </div>
     <div>
-        <ol start="2" style={stylingObject.slightIndent}>
-            <li>
-                <span style={{ marginLeft: '10px', textDecoration: 'underline', fontWeight: 'bold'}}>
+        <div style={stylingObject.slightIndent}>
+            2  &nbsp;
+                <span style={{ marginLeft: '15px', textDecoration: 'underline', fontWeight: 'bold'}}>
                     Access to the Cydoc Service.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
-                <span style={{ marginLeft: '10px', textDecoration: 'underline', fontWeight: 'bold'}}>
+        <div style={stylingObject.mediumIndent}>
+            2.1 &nbsp;
+                <span style={{ marginLeft: '20px', textDecoration: 'underline', fontWeight: 'bold'}}>
                     Access and Use.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
@@ -298,10 +303,10 @@ const TermsAndConditions = () => {
         </span>
     </div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
-                    <strong style={stylingObject.underline}>Disclaimer</strong>.  CYDOC IS NOT PROVIDING MEDICAL OR PROFESSIONAL
+                    <span style={{marginLeft: '15px'}}>2.2 &nbsp;</span>
+                    <strong style={stylingObject.underlineIndent}>Disclaimer</strong>.  CYDOC IS NOT PROVIDING MEDICAL OR PROFESSIONAL
                     ADVICE.  THE CYDOC SERVICE PROVIDES A TOOL THAT ALLOWS YOU
                     TO GENERATE YOUR OWN TEXT NOTES.  YOU ARE SOLELY
                     RESPONSIBLE, AND YOU SHALL RELY ON YOUR OWN PERSONNEL FOR
@@ -313,25 +318,23 @@ const TermsAndConditions = () => {
                     INACCURACIES AND/OR ERRORS IN THE CONTENT, RESULTS, OR
                     OUTPUT OF THE CYDOC SERVICE.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="3" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>2.3 &nbsp;</span>
                    <strong style={stylingObject.underline}>Changes</strong>. Cydoc reserves the right, in its sole discretion,
                     to make any changes to the Cydoc Service and Cydoc Materials
                     that it deems necessary or useful to maintain or enhance the
                     Cydoc Service generally or to comply with applicable law.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="4" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>2.4 &nbsp;</span>
                 <strong style={stylingObject.underline}>Suspension or Termination of Service </strong>. Cydoc may, directly or
                     indirectly, suspend, terminate or otherwise deny access to
                     or use of all or any part of the Cydoc Service or Cydoc
@@ -351,25 +354,23 @@ const TermsAndConditions = () => {
                     not limit any of Cydoc’s other rights or remedies, whether
                     at law, in equity or under this Agreement.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="3" style={stylingObject.slightIndent}>
-            <li>
+        <div  style={stylingObject.slightIndent}>
+        <span style={{marginLeft: '15px'}}>3 &nbsp; </span>
                 <span style={stylingObject.underline}>
                     <strong>
                     Use Restrictions:
                     </strong>
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>3.1 &nbsp;</span>
                 <span>
                     You shall not, and shall not permit any third party to,
                     access or use the Cydoc Service or Cydoc Materials except as
@@ -428,12 +429,11 @@ const TermsAndConditions = () => {
                     Users and all individuals who access the Cydoc Service
                     through links or other access mechanisms you provide.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>3.2 &nbsp;</span>
                 <span>
                     There may be only one Authorized User per account on the
                     Cydoc Service. You may sign up for multiple accounts (and
@@ -446,21 +446,19 @@ const TermsAndConditions = () => {
                     passwords or account or any other breach of security that is
                     known or suspected by you.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="4" style={stylingObject.slightIndent}>
-            <li>
+        <div style={stylingObject.slightIndent}>
+            4.  &nbsp;
                 <strong style={stylingObject.underline}>
                     Your Obligations.
                 </strong>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>4.1 &nbsp;</span>
                 <span>
                 <strong style={stylingObject.underline}>Your Systems and Cooperation</strong>. You shall at all times during
                     the term of this Agreement: (a) set up, maintain and operate
@@ -476,14 +474,13 @@ const TermsAndConditions = () => {
                     Cydoc Service or Cydoc Materials; and (iii) conclusions,
                     decisions or actions based on such use.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>4.2 &nbsp;</span>
                 <span>
                 <strong style={stylingObject.underline}>Corrective Action and Notice</strong>. If you become aware of any
                     actual or threatened activity prohibited by Section 3, you
@@ -495,21 +492,18 @@ const TermsAndConditions = () => {
                     Cydoc Materials; and (b) notify Cydoc of any such actual or
                     threatened activity.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="5" style={stylingObject.slightIndent}>
-            <li>
+        <div style={stylingObject.slightIndent}>
                 <span>
-                <strong style={stylingObject.underline}>Security</strong>.
+                5. &nbsp;  <strong style={stylingObject.underline}>Security</strong>.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>5.1 &nbsp;</span>
                 <span>
                 <strong style={stylingObject.underline}>Your Control and Responsibility</strong>. You have and will retain
                     sole responsibility for: (a) ensuring that you have all
@@ -541,13 +535,12 @@ const TermsAndConditions = () => {
                     </a>
                     .
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>5.2 &nbsp;</span>
                 <strong style={stylingObject.underline}>Compliance</strong>. The parties acknowledge that as part of the
                     Cydoc Service provided by Cydoc, Cydoc may perform or assist
                     in performing a function or activity on your behalf that
@@ -561,23 +554,21 @@ const TermsAndConditions = () => {
                     any communications (e.g., emails or texts) to invite
                     individuals to provide information to the Cydoc Service.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="6" style={stylingObject.slightIndent}>
-            <li>
+        <div style={stylingObject.slightIndent}>
                 <strong style={stylingObject.underline}>
-                    Installation
+                    6.  Installation &nbsp;
                 </strong>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
+    <span style={{marginLeft: '15px'}}>6.1 &nbsp;</span>
         <span>
-            6.1     Cydoc will not provide installation services, since the
+            Cydoc will not provide installation services, since the
             Cydoc Service does not need to be installed. Cydoc is a cloud-based
             service accessible through a web browser on any device with an
             Internet connection including a desktop computer, laptop, tablet,
@@ -587,18 +578,17 @@ const TermsAndConditions = () => {
         </span>
     </div>
     <div>
-        <ol start="7" style={stylingObject.slightIndent}>
-            <li>
+        <div style={stylingObject.slightIndent}>
+            7.  &nbsp;
                 <strong style={stylingObject.underline}>
                     Fees and Payment.
                 </strong>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>7.1 &nbsp;</span>
                 <strong style={stylingObject.underline}>Fees and Payment</strong>. You shall pay Cydoc the fees set forth in
                     each Order Form (“Fees”) in accordance with this Section 7.
                     Unless otherwise specified in the applicable Order Form,
@@ -616,13 +606,13 @@ const TermsAndConditions = () => {
                     terminate this Agreement immediately and without liability
                     or notice to Customer.
                 </span>
-            </li>
-        </ol>
+
+        </div>
     </div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>7.2 &nbsp;</span>
                 <strong style={stylingObject.underline}>Auto-Renewal</strong>.  Unless otherwise specified in the applicable
                     Order Form, your credit card will be billed at signup.  YOU
                     EXPRESSLY ACKNOWLEDGE AND AGREE THAT (A) YOUR SUBSCRIPTION
@@ -641,13 +631,12 @@ const TermsAndConditions = () => {
                     REFUND OF ANY AMOUNTS THAT YOU HAVE ALREADY PAID, TO THE
                     FULLEST EXTENT PERMITTED BY APPLICABLE LAW.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="3" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>7.3 &nbsp;</span>
                 <strong style={stylingObject.underline}>Taxes</strong>. All Fees and other amounts payable by you under this
                     Agreement are exclusive of taxes and similar assessments.
                     Without limiting the foregoing, you are responsible for all
@@ -657,24 +646,22 @@ const TermsAndConditions = () => {
                     payable by you hereunder, other than any taxes imposed on
                     Cydoc’s income.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="8" style={stylingObject.slightIndent}>
-            <li>
+        <div style={stylingObject.slightIndent}>
+            8.  &nbsp;
                 <span style={stylingObject.underline}>
                     Intellectual Property Rights.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>8.1 &nbsp;</span>
                 <strong style={stylingObject.underline}>Cydoc Materials</strong>. All right, title and interest in and to the
                     Cydoc Service and Cydoc Materials, including all
                     Intellectual Property Rights therein, are and will remain
@@ -693,36 +680,33 @@ const TermsAndConditions = () => {
                     Service or Cydoc Materials, whether expressly, by
                     implication, estoppel or otherwise.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>8.2 &nbsp;</span>
                 <strong style={stylingObject.underline}>Your Data</strong>. As between Cydoc and you, all Your Data shall
                     belong to you, provided however that Cydoc is hereby
                     expressly authorized to use Your Data to provide and improve
                     the Cydoc Service.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="3" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>8.3 &nbsp;</span>
                 <span>
                     Cydoc may use Customer’s name and/or its logo on Cydoc’s
                     website and in its marketing materials to indicate that
                     Customer is a client of Cydoc.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="4" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>8.4 &nbsp;</span>
                 <strong style={stylingObject.underline}>De-Identified Data</strong>. For clarification purposes, during and
                     after the term of this Agreement, nothing in this Agreement
                     is intended to prohibit Cydoc from creating and using
@@ -736,24 +720,22 @@ const TermsAndConditions = () => {
                     information derived from Personal Data) that has been
                     de-identified in accordance with HIPAA.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="9" style={stylingObject.slightIndent}>
-            <li>
+        <div style={stylingObject.slightIndent}>
+            9.  &nbsp;
                 <span style={stylingObject.underline}>
                     Representations and Warranties.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>9.1 &nbsp;</span>
                 <strong style={stylingObject.underline}>Representations, Warranties and Covenants</strong>. You represent,
                     warrant and covenant to Cydoc that you own or otherwise have
                     and will have the necessary rights and consents in and
@@ -763,20 +745,18 @@ const TermsAndConditions = () => {
                     of any third party, or violate any applicable laws, rules or
                     regulations.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>9.2 &nbsp;</span>
                 <span style={stylingObject.underline}>
                     Warranties.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <span>
+        <span style={{marginLeft: '15px'}}>
             (a)     <strong style={stylingObject.underline}>Mutual Warranties</strong>. Each party represents and warrants to the
             other that: (a) it has the authority to enter into and perform the
             duties and obligations described in this Agreement; (b) the
@@ -854,18 +834,17 @@ const TermsAndConditions = () => {
         </span>
     </div>
     <div>
-        <ol start="10" style={stylingObject.slightIndent}>
-            <li>
+        <div style={stylingObject.slightIndent}>
+            10.  &nbsp;
                 <span style={stylingObject.underline}>
                     Indemnification.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>10.1 &nbsp;</span>
                 <strong style={stylingObject.underline}>By Cydoc</strong>. Cydoc shall defend, indemnify and hold harmless
                     Customer and its officers, directors, employees, successors
                     and assigns, from and against any and all losses, damages,
@@ -897,15 +876,14 @@ const TermsAndConditions = () => {
                     exclusive remedy with respect to any claim of intellectual
                     property infringement.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>10.2 &nbsp;</span>
                 <strong style={stylingObject.underline}>Limits on Indemnity</strong>. Cydoc shall have no obligation under
                     Section 10.1 for any Claim based upon use by Customer of the
                     Cydoc Service or Documentation in a form other than as
@@ -919,13 +897,12 @@ const TermsAndConditions = () => {
                     where such claim would have been avoided by the use of the
                     same.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="3" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>10.3 &nbsp;</span>
                 <strong style={stylingObject.underline}>By Customer</strong>. Customer shall defend, indemnify and hold
                     harmless Cydoc and its officers, directors, employees,
                     successors and assigns, from and against any and all losses,
@@ -940,13 +917,12 @@ const TermsAndConditions = () => {
                     adjustment or compromise of such claim.  Cydoc shall have no
                     authority to settle any such claim on behalf of Customer.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="11" style={stylingObject.slightIndent}>
-            <li>
+        <div style={stylingObject.slightIndent}>
                 <span>
+                    11. &nbsp;
                 <strong style={stylingObject.underline}>Limitations of Liability</strong>. IN NO EVENT WILL CYDOC OR ANY OF
                     ITS LICENSORS, SERVICE PROVIDERS, OFFICERS, DIRECTORS,
                     EMPLOYEES, SUCCESSORS OR ASSIGNS BE LIABLE UNDER OR IN
@@ -973,22 +949,20 @@ const TermsAndConditions = () => {
                     TO THE CLAIM. THE FOREGOING LIMITATIONS APPLY EVEN IF ANY
                     REMEDY FAILS OF ITS ESSENTIAL PURPOSE.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="12" style={stylingObject.slightIndent}>
-            <li>
+        <div style={stylingObject.slightIndent}>
+            12.  &nbsp;
                 <span style={stylingObject.underline}>
                     Term and Termination.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>12.1 &nbsp;</span>
                 <strong style={stylingObject.underline}>Term and Termination</strong>.  The term of this Agreement shall be
                     as set forth on the applicable form accompanying your Order
                     Form, if any or other agreement that incorporates this
@@ -1008,46 +982,40 @@ const TermsAndConditions = () => {
                     not dismissed within sixty (60) days, or if the other party
                     ceases to be actively engaged in business.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>12.2 &nbsp;</span>
                 <span>
                 <strong style={stylingObject.underline}>Effect of Termination</strong>. Upon termination or expiration of
                     this Agreement for any reason:
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
                     You shall immediately discontinue access and use of the
                     Cydoc Service and destroy all usernames and passwords
                     associated with such access to the Cydoc Service shall
                     terminate; and
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
                     All payments due to Cydoc by you shall remain due and
                     payable in accordance with the terms hereof.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="3" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>12.3 &nbsp;</span>
                 <span>
                     Notwithstanding anything contained in this Agreement, Cydoc
                     reserves the right, without notice and in our sole
@@ -1059,13 +1027,12 @@ const TermsAndConditions = () => {
                     paid to us, to the fullest extent permitted by applicable
                     law.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="13" style={stylingObject.slightIndent}>
-            <li>
+        <div style={stylingObject.slightIndent}>
                 <span>
+                    13.  &nbsp;
                 <strong style={stylingObject.underline}>Confidentiality</strong>. Each party agrees that during and after the
                     existence of this Agreement it will hold in strictest
                     confidence, and will not use for any purpose unrelated to
@@ -1108,37 +1075,34 @@ const TermsAndConditions = () => {
                     party in obtaining a protective order or other appropriate
                     relief.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="14" style={stylingObject.slightIndent}>
-            <li>
+        <div style={stylingObject.slightIndent}>
+            14.  &nbsp;
                 <span style={stylingObject.underline}>
                     Miscellaneous.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>14.1 &nbsp;</span> 
                 <strong style={stylingObject.underline}>Relationship of the Parties</strong>. This Agreement does not create
                     any agency, partnership, joint venture or other form of
                     joint enterprise, employment or fiduciary relationship
                     between the parties, and neither party shall have authority
                     to contract for or bind the other party.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>14.2 &nbsp;</span>
                 <strong style={stylingObject.underline}>Notices</strong>. Any notice or other communication under this
                     Agreement given by either party to the other will be in
                     writing and delivered either (a) in person or by
@@ -1158,23 +1122,21 @@ const TermsAndConditions = () => {
                     time change such addresses by giving the other party notice
                     of such change in accordance with this paragraph.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="3" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>14.3 &nbsp;</span>
                 <span>
                 <strong style={stylingObject.underline}>Headings</strong>. The headings in this Agreement are for reference
                     only and do not affect the interpretation of this Agreement.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="4" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>14.4 &nbsp;</span>
                 <strong style={stylingObject.underline}>Entire Agreement</strong>. This Agreement, including the attached
                     Exhibits A and B, each of which are incorporated herein by
                     reference, constitutes the entire agreement between the
@@ -1184,15 +1146,14 @@ const TermsAndConditions = () => {
                     the provisions of Sections 2.2, 3.1, 5, 7-9, 11, 12 and 14
                     shall survive any termination of this Agreement.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="5" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>14.5 &nbsp;</span>
                 <strong style={stylingObject.underline}>Assignment</strong>.  Neither party may assign this Agreement, in
                     whole or in part, without the other party’s written consent;
                     provided, however, that either party may assign this
@@ -1204,13 +1165,12 @@ const TermsAndConditions = () => {
                     Any attempt to assign this Agreement other than in
                     accordance with this provision shall be null and void.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="6" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>14.6 &nbsp;</span>
                 <strong style={stylingObject.underline}>No Third-Party Beneficiaries</strong>. This Agreement is for the sole
                     benefit of the parties hereto and their respective
                     successors and permitted assigns and nothing herein, express
@@ -1219,13 +1179,12 @@ const TermsAndConditions = () => {
                     remedy of any nature whatsoever under or by reason of this
                     Agreement.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="7" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>14.7 &nbsp;</span>
                 <strong style={stylingObject.underline}>Amendment and Modification; Waiver</strong>. No amendment to or
                     modification of this Agreement is effective unless it is in
                     writing and signed by each party. No waiver by any party of
@@ -1240,13 +1199,12 @@ const TermsAndConditions = () => {
                     thereof or the exercise of any other right, remedy, power or
                     privilege.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="8" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>14.8 &nbsp;</span>
                 <strong style={stylingObject.underline}>Severability</strong>. If any term or provision of this Agreement is
                     invalid, illegal or unenforceable in any jurisdiction, such
                     invalidity, illegality or unenforceability shall not affect
@@ -1267,13 +1225,12 @@ const TermsAndConditions = () => {
                     section and by Customer during registration on the Cydoc
                     website.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="9" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>14.9 &nbsp;</span>
                 <strong style={stylingObject.underline}>Governing Law; Submission to Jurisdiction</strong>. This Agreement is
                     governed by and construed in accordance with the internal
                     laws of the State of North Carolina, including its statutes
@@ -1299,22 +1256,20 @@ const TermsAndConditions = () => {
                     fees and expenses incurred in resolving such claim, action
                     or judicial proceeding.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="10" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>14.10 &nbsp;</span>
                 <strong style={stylingObject.underline}>Force Majeure</strong>.  Nonperformance of either party shall be
                     excused to the extent that performance is rendered
                     impossible by any reason where failure to perform is beyond
                     the reasonable control of the nonperforming party.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
     <div style={{ display: 'inline-block', textAlign: 'center' }}>
@@ -1488,43 +1443,40 @@ const TermsAndConditions = () => {
     <div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+            1.  &nbsp;
                 <span>
                     Obligations and Activities of BA.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>1.1 &nbsp;</span>
                 <span>
                     BA agrees to not use or disclose Protected Health
                     Information (“PHI”) other than as permitted or required by
                     this Addendum, the Agreement or as Required By Law.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>1.2 &nbsp;</span>
                 <span>
                     BA agrees to use appropriate safeguards, and comply with
                     Subpart C of 45 C.F.R. Part 164 with respect to Electronic
                     PHI, to prevent use or disclosure of the PHI other than as
                     provided for by this Addendum.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="3" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>1.3 &nbsp;</span>
                     BA agrees to report to CE any use or disclosure of PHI not
                     provided for by this Addendum of which it becomes aware,
                     including breaches of Unsecured PHI as required by 45 C.F.R.
@@ -1535,12 +1487,11 @@ const TermsAndConditions = () => {
                     security incidents such as port scans, pings, etc., that do
                     not pose a material threat to the PHI.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="4" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>1.4 &nbsp;</span>
                 <span>
                     BA agrees to ensure that any subcontractor, to whom it
                     provides PHI received from, or created or received by BA on
@@ -1548,13 +1499,12 @@ const TermsAndConditions = () => {
                     conditions that apply through this Addendum to BA with
                     respect to such information.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="5" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>1.5 &nbsp;</span>
                     BA agrees to provide access, at the request of CE during
                     normal business hours, to PHI in a Designated Record Set to
                     CE or, as directed by CE, to an Individual in order to meet
@@ -1562,26 +1512,24 @@ const TermsAndConditions = () => {
                     delivers to BA a written notice at least five (5) business
                     days in advance of requesting such access.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="6" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>1.6 &nbsp;</span>
                 <span>
                     BA agrees to make any amendment(s) to PHI in a Designated
                     Record Set that CE directs pursuant to 45 C.F.R. §164.526,
                     at the request of CE or an Individual.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="7" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>1.7 &nbsp;</span>
                     Unless otherwise protected or prohibited from discovery or
                     disclosure by law, BA agrees to make internal practices,
                     books and records, relating to the use or disclosure of PHI
@@ -1589,46 +1537,42 @@ const TermsAndConditions = () => {
                     available to the Secretary for purposes of the Secretary
                     determining CE’s compliance with the HIPAA Rules.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="8" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>1.8 &nbsp;</span>
                 <span>
                     BA agrees to maintain and, on request of CE, provide to CE
                     documentation necessary to permit CE to respond to a request
                     by an Individual for an accounting of disclosures of PHI in
                     accordance with 45 C.F.R. §164.528.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="9" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>1.9 &nbsp;</span>
                 <span>
                     To the extent BA carries out one or more of CE’s obligations
                     under Subpart E of 45 C.F.R. Part 164, BA agrees to comply
                     with the requirements of Subpart E that apply to CE in the
                     performance of such obligations.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+            2.  &nbsp;
                 <span>
                     Permitted Uses and Disclosures by BA.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>2.1 &nbsp;</span>
                     Except as otherwise limited by this Addendum, BA may make
                     any uses and disclosures of PHI necessary to perform the
                     services, if any, for and on behalf of CE in accordance with
@@ -1636,28 +1580,26 @@ const TermsAndConditions = () => {
                     obligations under this Addendum, if such uses or disclosures
                     would not violate the Privacy Rule if done by CE.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>2.2 &nbsp;</span>
                     Except as otherwise limited in this Addendum, BA may use PHI
                     for the proper management and administration of the BA,
                     including internal analytics for BA’s own product
                     development, or to carry out the legal responsibilities of
                     the BA.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="3" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>2.3  &nbsp;</span>
                     Except as otherwise limited in this Addendum, BA may
                     disclose PHI for the proper management and administration of
                     the BA or to carry out the legal responsibilities of BA,
@@ -1670,12 +1612,11 @@ const TermsAndConditions = () => {
                     aware in which the confidentiality of the information has
                     been breached.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="4" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>2.4 &nbsp;</span>
                 <span>
                     Except as otherwise limited in this Addendum, BA may use
                     Protected Health Information: (i) to provide Data
@@ -1684,67 +1625,61 @@ const TermsAndConditions = () => {
                     (ii) to de-identify such PHI in accordance with 45 C.F.R.
                     164.514(a) through (c).
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="3" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+            3.  &nbsp;
                 <span>
                     Obligations of CE.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="1" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+        <span style={{marginLeft: '15px'}}>3.1 &nbsp;</span>
                 <span>
                     If and to the extent that CE has imposed or agreed to any
                     limitation on the use or disclosure of PHI that is more
                     restrictive than HIPAA, CE shall notify BA of any such
                     limitation(s) that CE has imposed.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
 </div>
 <div>
     <div>
-        <ol start="2" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>3.2 &nbsp;</span>
                     CE shall immediately notify BA of any changes in, or
                     revocation of, permission by Individual to use or disclose
                     Protected Health Information, to the extent that such
                     changes may affect BA’s use or disclosure of Protected
                     Health Information.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
-        <ol start="3" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
                 <span>
+                <span style={{marginLeft: '15px'}}>3.3 &nbsp;</span>
                     CE shall not request BA to use or disclose PHI in any manner
                     that would not be permissible under the HIPAA Rules if done
                     by the CE, except as permitted under Section 2 of this
                     Addendum.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
     </div>
     <div>
-        <ol start="4" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+            4.   &nbsp;
                 <span>
                     Term and Termination.
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
         <span>
@@ -1767,13 +1702,12 @@ const TermsAndConditions = () => {
 </div>
 <div>
     <div>
-        <ol start="5" style={stylingObject.mediumIndent}>
-            <li>
+        <div style={stylingObject.mediumIndent}>
+            5.  &nbsp;
                 <span>
                     Effect of Termination. 
                 </span>
-            </li>
-        </ol>
+        </div>
     </div>
     <div>
         <span>
