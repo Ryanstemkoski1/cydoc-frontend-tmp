@@ -10,7 +10,7 @@ import getDoctorsOfManager from 'auth/getDoctorsOfManager';
 import { isLivemode } from 'auth/livemode';
 import useUser from 'hooks/useUser';
 import useAuth from 'hooks/useAuth';
-import { DbUser } from 'types/users';
+import { DbUser } from '@cydoc-ai/types';
 import { stringFromError } from 'modules/error-utils';
 
 const initializeFormFields = (role: DbUser['role'], email: string) => {

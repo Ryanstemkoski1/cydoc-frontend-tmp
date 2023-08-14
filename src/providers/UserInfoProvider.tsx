@@ -10,7 +10,7 @@ import React, {
     useState,
 } from 'react';
 import invariant from 'tiny-invariant';
-import { DbUser } from 'types/users';
+import { DbUser } from '@cydoc-ai/types';
 
 export interface UserInfoProviderContextValues {
     user: DbUser | undefined;

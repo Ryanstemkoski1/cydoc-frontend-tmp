@@ -5,9 +5,8 @@ import { Form, FormikProvider } from 'formik';
 
 import SignUpSteps from './SignUpSteps';
 import { useSignUpFormController } from './useSignUpFormController';
-import { CognitoUser } from 'amazon-cognito-identity-js';
 import { NextBackButtonGroup } from './NextBackButtonGroup';
-import { ClinicianSignUpData, UserAttributes } from 'types/users';
+import { ClinicianSignUpData } from 'types/signUp';
 
 export interface SignUpFormData extends ClinicianSignUpData {
     isPrivacyChecked: boolean;

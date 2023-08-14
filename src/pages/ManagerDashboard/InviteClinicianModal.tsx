@@ -7,9 +7,10 @@ import { Formik } from 'formik';
 import ModalHeader from 'components/Atoms/ModalHeader';
 import { Button, Modal } from 'semantic-ui-react';
 import { ErrorText } from 'components/Atoms/ErrorText';
-import { DbUser } from 'types/users';
+import { DbUser } from '@cydoc-ai/types';
 import { inviteUser } from 'modules/public-api';
 import useUser from 'hooks/useUser';
+import invariant from 'tiny-invariant';
 
 interface Props {
     isOpen: boolean;
@@ -69,6 +70,7 @@ const InviteClinicianModal = ({ isOpen, onClose }: Props) => {
                     { setSubmitting, setErrors }
                 ) => {
                     setErrors({});
+                    invariant(user?.institutionId, 'user missing institution');
                     const result = await inviteUser({
                         email,
                         firstName,

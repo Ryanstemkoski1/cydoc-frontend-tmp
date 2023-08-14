@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/react';
 import pkgInfo from '../../package.json';
 
 import { APP_ENV } from './environment';
-import { DbUser } from 'types/users';
+import { DbUser } from '@cydoc-ai/types';
 
 const SENTRY_ENABLED = process.env.NODE_ENV === 'production';
 

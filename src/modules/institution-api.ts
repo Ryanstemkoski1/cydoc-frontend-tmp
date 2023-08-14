@@ -1,7 +1,6 @@
 import { getFromApi } from './api';
-import { ApiResponse, GetMembersResponse } from 'types/api';
+import { ApiResponse, GetMembersResponse, Institution } from '@cydoc-ai/types';
 import invariant from 'tiny-invariant';
-import { Institution } from 'types/intitutions';
 
 export const getInstitutionMembers = (
     institutionId: number

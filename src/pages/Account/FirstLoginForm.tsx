@@ -6,7 +6,7 @@ import './Account.css';
 import './Account.css';
 import * as Yup from 'yup';
 import useAuth from 'hooks/useAuth';
-import { DbUser } from 'types/users';
+import { DbUser } from '@cydoc-ai/types';
 import ModalHeader from 'components/Atoms/ModalHeader';
 import { Button } from 'semantic-ui-react';
 import SignUpTextInput from './SignUpTextInput';

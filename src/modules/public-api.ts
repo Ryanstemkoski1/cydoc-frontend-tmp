@@ -1,16 +1,16 @@
-import { CreateUserResponse, InviteUserBody } from 'types/api';
+import { UpdateUserResponse, InviteUserBody } from '@cydoc-ai/types';
 import { postToApi } from './api';
 import { toast } from 'react-toastify';
 import { stringFromError } from './error-utils';
 
 export async function inviteUser(
     body: InviteUserBody
-): Promise<CreateUserResponse> {
+): Promise<UpdateUserResponse> {
     return new Promise((resolve) =>
         toast
             .promise(
                 async () => {
-                    const result = await postToApi<CreateUserResponse>(
+                    const result = await postToApi<UpdateUserResponse>(
                         '/user',
                         'createUser',
                         body,

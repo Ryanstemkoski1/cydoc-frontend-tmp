@@ -1,5 +1,5 @@
 import { breadcrumb, log } from './logging';
-import { ApiPostBody, ApiResponse, ApiResponseBase } from 'types/api';
+import { ApiPostBody, ApiResponse, ApiResponseBase } from '@cydoc-ai/types';
 import { API_URL, PUBLIC_API_URL } from './environment';
 import { stringFromError } from './error-utils';
 

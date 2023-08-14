@@ -1,8 +1,13 @@
-import { ClinicianSignUpData, DbUser } from 'types/users';
-import { CreateUserBody, CreateUserResponse, UpdateUserBody } from 'types/api';
+import {
+    CreateUserBody,
+    DbUser,
+    UpdateUserBody,
+    UpdateUserResponse,
+} from '@cydoc-ai/types';
 import { getFromApi, postToApi } from './api';
 import invariant from 'tiny-invariant';
 import { log } from './logging';
+import { ClinicianSignUpData } from 'types/signUp';
 
 export const formatPhoneNumber = (phoneNumber: string): string =>
     phoneNumber
@@ -25,14 +30,15 @@ export async function createDbUser({
         lastName,
         phoneNumber: formatPhoneNumber(phoneNumber),
         role,
+        isInvite: false,
     };
 
-    return postToApi<CreateUserResponse>('/user', 'createUser', body);
+    return postToApi<UpdateUserResponse>('/user', 'createUser', body);
 }
 export async function updateDbUser(body: UpdateUserBody) {
     body.phoneNumber = formatPhoneNumber(body.phoneNumber);
 
-    return postToApi<CreateUserResponse>(
+    return postToApi<UpdateUserResponse>(
         `/user/${body.email}`,
         'createUser',
         body
@@ -42,7 +48,7 @@ export async function updateDbUser(body: UpdateUserBody) {
 export const getDbUser = async (email: string): Promise<DbUser> => {
     invariant(email, 'missing email');
 
-    const response = await getFromApi<CreateUserResponse>(
+    const response = await getFromApi<UpdateUserResponse>(
         `/user/${email}`,
         'getDbUser'
     );
@@ -51,8 +57,8 @@ export const getDbUser = async (email: string): Promise<DbUser> => {
         const { errorMessage } = response;
         log(`User not found: ${email}`, { email, errorMessage });
         throw new Error(errorMessage);
-    } else if ((response as CreateUserResponse)?.user) {
-        return (response as CreateUserResponse)?.user as DbUser;
+    } else if ((response as UpdateUserResponse)?.user) {
+        return (response as UpdateUserResponse)?.user as DbUser;
     } else {
         throw new Error(`unrecognized API response`);
     }

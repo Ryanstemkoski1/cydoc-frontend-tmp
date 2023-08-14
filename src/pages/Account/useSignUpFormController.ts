@@ -5,9 +5,9 @@ import { SignUpFormData } from './SignUpForm';
 import { createDbUser, formatPhoneNumber } from 'modules/user-api';
 import { useHistory } from 'react-router-dom';
 import { breadcrumb, log } from 'modules/logging';
-import { CreateUserResponse } from 'types/api';
 import useAuth from 'hooks/useAuth';
 import { FirstLoginFormSpec } from './FirstLoginForm';
+import { UpdateUserResponse } from '@cydoc-ai/types';
 
 const validationSchema = Yup.object<SignUpFormData>({
     ...FirstLoginFormSpec, // Extend the validation spec from "first time login"
@@ -63,7 +63,7 @@ export const useSignUpFormController = (initialValues: SignUpFormData) => {
                 if (result?.errorMessage?.length) {
                     // Expected error, display to GUI
                     setErrors({ signUpError: result.errorMessage });
-                } else if (result && (result as CreateUserResponse)?.user?.id) {
+                } else if (result && (result as UpdateUserResponse)?.user?.id) {
                     // User created successfully, let them into the app
                     history.push('/');
                 } else {

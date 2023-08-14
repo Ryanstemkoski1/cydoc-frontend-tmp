@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Container } from 'semantic-ui-react';
 import './ManagerDashboard.css';
-import { DbUser } from 'types/users';
+import { DbUser } from '@cydoc-ai/types';
 import { getInstitutionMembers } from 'modules/institution-api';
 import useUser from 'hooks/useUser';
 import { log } from 'modules/logging';
