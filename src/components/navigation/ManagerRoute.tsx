@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import useUser from 'hooks/useUser';
 import { PrivateRoute, PrivateRouteProps } from './PrivateRoute';
 import useAuth from 'hooks/useAuth';
@@ -11,6 +11,14 @@ export const ManagerRoute = (props: PrivateRouteProps) => {
     // wait until user info is fetched to determine authorization
     const unauthorizedRole = isSignedIn && user && !isManager;
     const notLoggedIn = !authLoading && !isSignedIn;
+    const location = useLocation();
+    const atCurrentRoute = location.pathname
+        .toLowerCase()
+        .includes(props.path?.toString().toLowerCase() || 'no path');
+
+    // V5 of browser router is calling render() once for all routes
+    // if this is happening, we should not redirect users
+    if (!atCurrentRoute) return null;
 
     if (notLoggedIn) {
         <Redirect
