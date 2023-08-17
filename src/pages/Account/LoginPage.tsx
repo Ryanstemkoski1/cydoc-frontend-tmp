@@ -19,7 +19,6 @@ const LoginPage = () => {
     });
 
     if (passwordResetRequired) {
-        // if (true) {
         return <FirstLoginForm />;
     } else {
         return (

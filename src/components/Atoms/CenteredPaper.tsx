@@ -1,12 +1,14 @@
 import React from 'react';
 import { Box } from '@mui/system';
-import { Paper } from '@mui/material';
+import { CircularProgress, Paper } from '@mui/material';
 
 interface Props {
     children: any;
+    sx?: any;
+    loading?: boolean;
 }
 
-export function CenteredPaper({ children }: Props) {
+export function CenteredPaper({ children, sx, loading = false }: Props) {
     return (
         <Box
             sx={{
@@ -17,8 +19,17 @@ export function CenteredPaper({ children }: Props) {
                 justifyContent: 'center',
             }}
         >
-            <Paper elevation={6} sx={{ width: '30rem', padding: '2.5rem' }}>
-                {children}
+            <Paper
+                elevation={6}
+                sx={{ width: '30rem', padding: '2.5rem', ...sx }}
+            >
+                {loading ? (
+                    <div style={{ textAlign: 'center', padding: '5rem' }}>
+                        <CircularProgress />
+                    </div>
+                ) : (
+                    children
+                )}
             </Paper>
         </Box>
     );

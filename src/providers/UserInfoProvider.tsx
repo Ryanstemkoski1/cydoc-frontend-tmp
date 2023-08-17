@@ -16,6 +16,7 @@ export interface UserInfoProviderContextValues {
     user: DbUser | undefined;
     updateUserInfo: () => void;
     isManager: boolean;
+    loading: boolean;
 }
 
 export const UserInfoProviderContext =
@@ -26,22 +27,27 @@ export const UserInfoProvider: React.FC<
 > = ({ children }) => {
     const { cognitoUser } = useAuth();
     const [user, setUser] = useState<DbUser | undefined>(undefined);
+    const [loading, setLoading] = useState(true);
     const isManager = useMemo(() => user?.role === 'manager', [user]);
 
     const updateUserInfo = useCallback(async () => {
-        if (
-            cognitoUser?.attributes?.email ||
-            cognitoUser?.challengeParam?.userAttributes?.email
-        ) {
-            const user = await getDbUser(
+        try {
+            if (
                 cognitoUser?.attributes?.email ||
-                    cognitoUser?.challengeParam?.userAttributes?.email ||
-                    ''
-            );
-            setUser(user || undefined);
-        } else {
-            // reset user state on signOut
-            setUser(undefined);
+                cognitoUser?.challengeParam?.userAttributes?.email
+            ) {
+                const user = await getDbUser(
+                    cognitoUser?.attributes?.email ||
+                        cognitoUser?.challengeParam?.userAttributes?.email ||
+                        ''
+                );
+                setUser(user || undefined);
+            } else {
+                // reset user state on signOut
+                setUser(undefined);
+            }
+        } finally {
+            setLoading(false);
         }
     }, [
         cognitoUser?.attributes?.email,
@@ -58,8 +64,8 @@ export const UserInfoProvider: React.FC<
     }, [user]);
 
     const contextValue = useMemo(() => {
-        return { user, updateUserInfo, isManager };
-    }, [user, updateUserInfo, isManager]);
+        return { user, updateUserInfo, isManager, loading };
+    }, [user, updateUserInfo, isManager, loading]);
 
     return (
         <UserInfoProviderContext.Provider value={contextValue}>
