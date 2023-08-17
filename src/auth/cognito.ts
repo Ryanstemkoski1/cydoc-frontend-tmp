@@ -122,3 +122,53 @@ export const confirmCode = async (
                 resolve({ success: false, errorMessage: stringFromError(e) })
             )
     );
+
+export const updatePassword = async (
+    oldPassword: string,
+    newPassword: string
+): Promise<{
+    success: boolean;
+    obfuscatedEmail?: string;
+    errorMessage?: string;
+}> =>
+    new Promise((resolve) =>
+        toast
+            .promise(
+                async () => {
+                    const user = await Auth.currentAuthenticatedUser();
+                    return Auth.changePassword(user, oldPassword, newPassword)
+                        .then(async (result) => {
+                            resolve({
+                                success: true,
+                            });
+                        })
+                        .catch((err) => {
+                            // user authentication was not successful
+                            if (
+                                err.message.includes(
+                                    'Member must satisfy regular expression pattern'
+                                )
+                            ) {
+                                throw new Error(
+                                    'Error changing password: Password does not satisfy requirements.'
+                                );
+                            } else {
+                                throw new Error(
+                                    `Error changing password: ${
+                                        err.message || JSON.stringify(err)
+                                    }`
+                                );
+                            }
+                        });
+                },
+                {
+                    error: 'Error updating password',
+                    pending: `Updating password...`,
+                    success: 'Password updated!',
+                }
+            )
+            // format response so UI knows what error to display
+            .catch((e) =>
+                resolve({ success: false, errorMessage: stringFromError(e) })
+            )
+    );

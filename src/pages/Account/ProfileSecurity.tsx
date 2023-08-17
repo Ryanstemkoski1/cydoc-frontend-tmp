@@ -10,15 +10,17 @@ import {
     Divider,
 } from 'semantic-ui-react';
 import { passwordErrors } from 'constants/passwordErrors';
-import changePassword from 'auth/changePassword';
 import './Account.css';
 import { passwordRequirements } from 'auth/passwordReqs';
 import useUser from 'hooks/useUser';
+import { updatePassword } from 'auth/cognito';
+import { useHistory } from 'react-router-dom';
 
 // NOTE: this page needs to be updated to use the new auth password editing logic
 const ProfileSecurity = () => {
     const { user, isManager } = useUser();
     const role = user?.role;
+    const history = useHistory();
 
     const [curPassword, setCurPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -75,14 +77,13 @@ const ProfileSecurity = () => {
             return;
         }
 
-        const changePasswordResponse = await changePassword(
+        const changePasswordResponse = await updatePassword(
             curPassword,
-            newPassword,
-            role
+            newPassword
         );
 
-        if (changePasswordResponse?.includes('SUCCESS')) {
-            alert('Password successfully updated.');
+        if (changePasswordResponse?.success) {
+            history.push('/');
         }
         return;
     };
