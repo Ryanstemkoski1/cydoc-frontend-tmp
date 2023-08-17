@@ -77,6 +77,7 @@ const InviteClinicianModal = ({ isOpen, onClose }: Props) => {
                         lastName,
                         role,
                         institutionId: user?.institutionId,
+                        isInvite: true,
                     });
                     setSubmitting(false);
 

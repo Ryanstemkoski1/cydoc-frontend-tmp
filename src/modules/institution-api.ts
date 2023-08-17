@@ -3,7 +3,7 @@ import { ApiResponse, GetMembersResponse, Institution } from '@cydoc-ai/types';
 import invariant from 'tiny-invariant';
 
 export const getInstitutionMembers = (
-    institutionId: number
+    institutionId: string
 ): Promise<GetMembersResponse> => {
     invariant(institutionId, '[getInstitutionMembers] missing institutionId');
 
@@ -14,7 +14,7 @@ export const getInstitutionMembers = (
 };
 
 export const getInstitution = (
-    institutionId: number
+    institutionId: string
 ): Promise<Institution | ApiResponse> => {
     invariant(institutionId, '[getInstitution] missing institutionId');
 

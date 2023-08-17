@@ -7,7 +7,8 @@ import { useHistory } from 'react-router-dom';
 import { breadcrumb, log } from 'modules/logging';
 import useAuth from 'hooks/useAuth';
 import { FirstLoginFormSpec } from './FirstLoginForm';
-import { UpdateUserResponse } from '@cydoc-ai/types';
+import { DbUser, UpdateUserResponse } from '@cydoc-ai/types';
+import { CognitoUser } from 'auth/cognito';
 
 const validationSchema = Yup.object<SignUpFormData>({
     ...FirstLoginFormSpec, // Extend the validation spec from "first time login"
@@ -49,16 +50,23 @@ export const useSignUpFormController = (initialValues: SignUpFormData) => {
         initialValues,
         onSubmit: async (newUserInfo, { setErrors, setSubmitting }) => {
             breadcrumb(`submitting new user`, 'sign up', newUserInfo);
+            setErrors({});
 
             try {
-                const cognitoUser = await signUp(
+                const signUpResult = await signUp(
                     newUserInfo.email,
                     newUserInfo.newPassword,
                     formatPhoneNumber(newUserInfo.phoneNumber)
                 );
 
                 // only proceed if cognito user was created successfully
-                const result = cognitoUser && (await createDbUser(newUserInfo));
+                let result: {
+                    user?: CognitoUser | DbUser | undefined;
+                    errorMessage?: any;
+                } = signUpResult; // carry over errors
+                if (signUpResult?.user) {
+                    result = await createDbUser(newUserInfo);
+                }
 
                 if (result?.errorMessage?.length) {
                     // Expected error, display to GUI

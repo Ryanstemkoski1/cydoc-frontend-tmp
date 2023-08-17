@@ -64,7 +64,7 @@ export const getDbUser = async (email: string): Promise<DbUser> => {
     }
 };
 
-export const removeUser = async (id: number) => {
+export const removeUser = async (id: string) => {
     invariant(id, '[removeUser] missing id');
     alert(`removing: user ${id} [NOT IMPLEMENTED]`);
 };

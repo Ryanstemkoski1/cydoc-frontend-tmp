@@ -87,7 +87,7 @@
     },
     "devDependencies": {
         "@cfaester/enzyme-adapter-react-18": "^0.7.0",
-        "@cydoc-ai/types": "^0.1.4",
+        "@cydoc-ai/types": "^0.2.0",
         "@types/enzyme": "^3.10.8",
         "@types/jest": "^27.0.0",
         "@types/lodash": "^4.14.168",
