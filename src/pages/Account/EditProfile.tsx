@@ -5,7 +5,6 @@ import getUserAttributes from 'auth/getUserAttributes';
 import updateUserAttributes from 'auth/updateUserAttributes';
 import './Account.css';
 import { doctorClient, managerClient } from 'constants/api';
-import getUUID from 'auth/getUUID';
 import getDoctorsOfManager from 'auth/getDoctorsOfManager';
 import { isLivemode } from 'auth/livemode';
 import useUser from 'hooks/useUser';

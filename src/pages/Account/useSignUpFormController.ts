@@ -62,7 +62,7 @@ export const useSignUpFormController = (initialValues: SignUpFormData) => {
                 // only proceed if cognito user was created successfully
                 let result: {
                     user?: CognitoUser | DbUser | undefined;
-                    errorMessage?: any;
+                    errorMessage?: string;
                 } = signUpResult; // carry over errors
                 if (signUpResult?.user) {
                     result = await createDbUser(newUserInfo);

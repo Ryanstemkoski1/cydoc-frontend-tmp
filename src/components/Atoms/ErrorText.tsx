@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography } from '@mui/material';
 
 interface Props {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     message?: string | any | null;
 }
 

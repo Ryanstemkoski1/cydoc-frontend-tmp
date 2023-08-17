@@ -6,7 +6,6 @@ import {
     TextAreaProps,
     InputOnChangeData,
     DropdownProps,
-    Header,
     Image,
 } from 'semantic-ui-react';
 import AddRowButton from 'components/tools/AddRowButton';
@@ -273,7 +272,7 @@ class AllergiesContent extends Component<Props, OwnState> {
     render() {
         const values = this.props.allergies;
         const nums = Object.keys(values);
-        const { hasAllergies, patientView } = this.props;
+        // const { hasAllergies, patientView } = this.props;
 
         const content = (
             <div className='allergies-section'>

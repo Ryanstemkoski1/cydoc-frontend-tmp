@@ -29,7 +29,7 @@ export function EditPayment() {
             validateOnChange={true}
             validationSchema={validationSchema}
         >
-            {({ errors, submitForm, setTouched }) => (
+            {({ errors, setTouched }) => (
                 <>
                     <ModalHeader title='Free Trial' />
                     <Box sx={{ margin: '2rem' }}>
