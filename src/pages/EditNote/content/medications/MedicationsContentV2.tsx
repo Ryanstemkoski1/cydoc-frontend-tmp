@@ -234,7 +234,7 @@ export class MedicationsContent extends Component<Props, State> {
                         return [
                             ...acc,
                             <div
-                                className={`${style.medication__row} flex-wrap align-center justify-between`}
+                                className={`${style.medication__row} flex-wrap align-center`}
                                 key={medication}
                             >
                                 <p>{medication}</p>

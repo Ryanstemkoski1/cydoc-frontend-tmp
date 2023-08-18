@@ -10,7 +10,7 @@
 }
 
 .ui.icon.button.note-previous-button:hover {
-    color: white; 
+    color: white;
     opacity: 0.6;
 }
 
@@ -40,47 +40,51 @@
     padding: 20px 40px;
     align-items: center;
     box-shadow: none;
-    background-color: #F9FEFF;
+    background-color: #f9feff;
     margin-bottom: 1px;
-    border-bottom: 1px solid #F9FEFF;
-  }
-  #generateNoteButtonsContainer.generate-note-buttons__container h3 img {
+    border-bottom: 1px solid #f9feff;
+}
+#generateNoteButtonsContainer.generate-note-buttons__container h3 img {
     width: 15px;
     margin-right: 5px;
-  }
-  #generateNoteButtonsContainer.generate-note-buttons__container .input {
+}
+#generateNoteButtonsContainer.generate-note-buttons__container .input {
     margin-left: 10px;
-    margin-right: auto
-  }
-  .generate-note-wrap .ui.segment {
+    margin-right: auto;
+}
+.generate-note-wrap .ui.segment {
     padding: 30px 40px;
     box-shadow: none;
     /* border-bottom: 1px solid #D4E1E4; */
-  }
-  .generate-note-wrap .ui.segment .title {
+}
+.generate-note-wrap .ui.segment .title {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-  }
-  #generateNoteButtonsContainer.generate-note-buttons__container h3,
-  .generate-note-wrap .ui.segment  .title h3 {
+}
+#generateNoteButtonsContainer.generate-note-buttons__container h3,
+.generate-note-wrap .ui.segment .title h3 {
     margin: 0;
+    user-select: none;
+    cursor: pointer;
     font-weight: 400;
     color: #000;
-  }
-  .generate-note-wrap .ui.segment .title {
+    display: flex;
+    align-items: center;
+}
+.generate-note-wrap .ui.segment .title {
     border-left: 0;
-  }
-  .generate-note-wrap .ui.segment  .title h3 img,
-  #generateNoteButtonsContainer.generate-note-buttons__container h3 img {
+}
+.generate-note-wrap .ui.segment .title h3 img,
+#generateNoteButtonsContainer.generate-note-buttons__container h3 img {
     width: 15px;
     vertical-align: middle;
-    margin-top: -5px;
+    margin-top: -1px;
     margin-right: 5px;
-  }
+}
 
-  @media screen and (max-width: 600px) {
+@media screen and (max-width: 600px) {
     .ui.icon.button.note-previous-button {
         display: none;
     }
@@ -118,53 +122,52 @@ div.ui.segment.buttons-segment {
 .ui.button.copy-button:hover {
     background-color: lemonchiffon;
 }
-@media (max-width: 767px){
+@media (max-width: 767px) {
     .generate-note-buttons {
         top: 123px;
     }
 }
 
 .patientInfoWrapper ul {
-  column-count: 2;
-  column-gap: 10px;
-  list-style-type: none;
-  padding:0px;
+    column-count: 2;
+    column-gap: 10px;
+    list-style-type: none;
+    padding: 0px;
 }
 
 .patientInfoWrapper ul li {
-      letter-spacing: 0px;
-      font-size: 15px;
-      width: 100%;
-      margin-bottom: 10px;
-      margin-right: 10px;
-      display: flex;
-      align-items: center;
+    letter-spacing: 0px;
+    font-size: 15px;
+    width: 100%;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
 }
 
-.patientInfoWrapper ul li label{
-  font-size: 15px;
-  font-weight: 600;
-  width: 200px;
+.patientInfoWrapper ul li label {
+    font-size: 15px;
+    font-weight: 600;
+    width: 200px;
 }
 .patientInfoWrapper ul li p {
     width: calc(100% - 200px);
     padding-left: 15px;
 }
 
-@media (max-width:1200px) {
-  .patientInfoWrapper ul {
-    column-count: 2;
-  }
-  .patientInfoWrapper ul li label{
-    width: 160px;
-  }
-  .patientInfoWrapper ul li p {
-      width: calc(100% - 160px);
-  }
-  
+@media (max-width: 1200px) {
+    .patientInfoWrapper ul {
+        column-count: 2;
+    }
+    .patientInfoWrapper ul li label {
+        width: 160px;
+    }
+    .patientInfoWrapper ul li p {
+        width: calc(100% - 160px);
+    }
 }
 
-@media (max-width:991px) {
+@media (max-width: 991px) {
     .generate-note-wrap .ui.segment {
         padding: 15px;
     }
@@ -173,22 +176,26 @@ div.ui.segment.buttons-segment {
         padding-right: 15px;
     }
 }
-@media (max-width:768px) {
-  .patientInfoWrapper ul {
-    column-count: 1;
-  }
+@media (max-width: 768px) {
+    .patientInfoWrapper ul {
+        column-count: 1;
+    }
 }
 
 .notes-wrapper {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .ui.buttons.generate-note-button-spacing {
-  margin-right: 10px
+    margin-right: 10px;
+}
+.generate-note-buttons__container .ui.buttons .button,
+.ui.buttons.generate-note-button-spacing .button {
+    border-radius: 20px !important;
 }
 
 .generate-note-wrap .ui.segment.generated-note-text {
-  box-shadow: none;
-  margin-top: 20px;
-  padding: 0px 0px;
+    box-shadow: none;
+    margin-top: 20px;
+    padding: 0px 0px;
 }

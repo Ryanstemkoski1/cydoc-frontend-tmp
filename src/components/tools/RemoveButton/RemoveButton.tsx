@@ -4,7 +4,11 @@ import style from './RemoveButton.module.scss';
 
 const RemoveButton = ({ onClick }: any) => {
     return (
-        <button className={style.removeButton} onClick={onClick}>
+        <button
+            className={style.removeButton}
+            onClick={onClick}
+            aria-label='remove'
+        >
             <img src={Delete} alt='Remove' />
             <span>Remove</span>
         </button>

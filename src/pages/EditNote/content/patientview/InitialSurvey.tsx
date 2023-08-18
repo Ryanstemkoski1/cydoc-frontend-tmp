@@ -557,11 +557,15 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                     ) : (
                         ''
                     )}
-                    <Segment>
-                        <Grid>{initialSurvey}</Grid>
+                    <Segment className='additional'>
+                        <Grid>
+                            <div className='sixteen wide column'>
+                                {initialSurvey}
+                            </div>
+                        </Grid>
                     </Segment>
                 </Container>
-                {[1, 2].includes(
+                {/* {[1, 2].includes(
                     this.props.additionalSurvey.initialSurveyState
                 ) && this.state.activeItem === 0 ? (
                     <NavigationButton previousClick={this.onPrevClick} />
@@ -572,8 +576,19 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                     <NavigationButton previousClick={this.onPrevClick} />
                 ) : (
                     ''
-                )}
-                <NavigationButton nextClick={this.onNextClick} />
+                )} */}
+                <NavigationButton
+                    previousClick={
+                        ([1, 2].includes(
+                            this.props.additionalSurvey.initialSurveyState
+                        ) &&
+                            this.state.activeItem === 0) ||
+                        this.state.activeItem > 0
+                            ? this.onPrevClick
+                            : null
+                    }
+                    nextClick={this.onNextClick}
+                />
             </div>
         );
     }

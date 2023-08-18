@@ -1,4 +1,3 @@
-import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
 import { YesNoResponse } from 'constants/enums';
 import { HpiStateProps, ResponseTypes } from 'constants/hpiEnums';
@@ -22,16 +21,16 @@ import {
 } from 'redux/reducers/hpiReducer';
 import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import FamilyHistoryContent from '../../../../familyhistory/FamilyHistoryContent';
-import MedicalHistoryContent from '../../../../medicalhistory/MedicalHistoryContent';
-import ReviewOfSystemsCategory from '../../../../reviewofsystems/ReviewOfSystemsCategory';
-import SurgicalHistoryContent from '../../../../surgicalhistory/SurgicalHistoryContentV2';
+import FamilyHistoryContentV2 from '../../../../familyhistory/FamilyHistoryContentV2';
+import MedicalHistoryContentV2 from '../../../../medicalhistory/MedicalHistoryContentV2';
+import ReviewOfSystemsCategoryV2 from '../../../../reviewofsystems/ReviewOfSystemsCategoryV2';
+import SurgicalHistoryContentV2 from '../../../../surgicalhistory/SurgicalHistoryContentV2';
 import '../css/Button.css';
 import style from './CreateResponse.module.scss';
 import BodyLocation from './responseComponents/BodyLocation';
 import HandleInput from './responseComponents/HandleInput';
 import HandleNumericInput from './responseComponents/HandleNumericInput';
-import LaboratoryTest from './responseComponents/LaboratoryTestV2';
+import LaboratoryTestV2 from './responseComponents/LaboratoryTestV2';
 import ListText from './responseComponents/ListText';
 import MultipleChoice from './responseComponents/MultipleChoice';
 import ScaleInput from './responseComponents/ScaleInput';
@@ -130,7 +129,7 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
                 ResponseTypes.PMH_BLANK,
                 ResponseTypes.PSH_BLANK,
             ],
-            collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
+            collapseTabs = false;
 
         const responseChoice = this.state.responseChoice;
         const synonymTypes = [
@@ -197,7 +196,7 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
                     });
                 }
                 return (
-                    <ReviewOfSystemsCategory
+                    <ReviewOfSystemsCategoryV2
                         key={''}
                         category={''}
                         selectManyState={formattedResponseChoice}
@@ -235,7 +234,7 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
             case ResponseTypes.FH_POP:
             case ResponseTypes.FH_BLANK:
                 return (
-                    <FamilyHistoryContent
+                    <FamilyHistoryContentV2
                         key={node}
                         isPreview={false}
                         responseChoice={choices}
@@ -246,7 +245,7 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
 
             case ResponseTypes.PMH_POP:
                 return (
-                    <MedicalHistoryContent
+                    <MedicalHistoryContentV2
                         key={node}
                         isPreview={false}
                         responseChoice={choices}
@@ -259,7 +258,7 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
                 );
             case ResponseTypes.PMH_BLANK:
                 return (
-                    <MedicalHistoryContent
+                    <MedicalHistoryContentV2
                         key={node}
                         isPreview={false}
                         responseType={responseType}
@@ -273,7 +272,7 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
             case ResponseTypes.PSH_POP:
             case ResponseTypes.PSH_BLANK:
                 return (
-                    <SurgicalHistoryContent
+                    <SurgicalHistoryContentV2
                         key={node}
                         isPreview={false}
                         responseType={responseType}
@@ -286,7 +285,7 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
             case ResponseTypes.CBC:
             case ResponseTypes.BMP:
             case ResponseTypes.LFT:
-                return <LaboratoryTest key={node} node={node} />;
+                return <LaboratoryTestV2 key={node} node={node} />;
             default:
                 return;
         }
@@ -302,7 +301,7 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
             <div
                 className={`${style.response} ${
                     isYesNoResponseType
-                        ? `${style.response__grid} flex-wrap align-center justify-between`
+                        ? `${style.response__grid} flex-wrap align-center`
                         : ''
                 }`}
             >

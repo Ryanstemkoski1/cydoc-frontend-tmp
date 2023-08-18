@@ -7,7 +7,6 @@ import {
     ChiefComplaintsProps,
     HpiHeadersProps,
 } from 'pages/EditNote/content/hpi/knowledgegraph/HPIContent';
-import { hpiHeaders } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
 import ChiefComplaintsButton, {
     PatientViewProps,
 } from 'pages/EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
@@ -74,37 +73,6 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
             searchVal: '',
             message: '',
         };
-    }
-
-    counter() {
-        const { userSurveyState, chiefComplaints } = this.props;
-        const res1 = userSurveyState.nodes['6'],
-            res2 = userSurveyState.nodes['7'],
-            q1_count = isSelectOneResponse(res1.response)
-                ? Object.keys(res1.response).filter((k) =>
-                      Object.keys(chiefComplaints).includes(k)
-                  ).length
-                : 0,
-            q2_count = isChiefComplaintsResponse(res2.response)
-                ? Object.keys(res2.response).length
-                : 0;
-        return [q1_count, q2_count];
-    }
-
-    componentDidMount() {
-        const { userSurveyState, processSurveyGraph, saveHpiHeader } =
-            this.props;
-        if (
-            !Object.keys(userSurveyState.graph).length &&
-            !Object.keys(userSurveyState.nodes).length &&
-            !Object.keys(userSurveyState.order).length
-        )
-            processSurveyGraph(initialQuestions as initialQuestionsState);
-
-        if (hpiHeaders) {
-            const data = hpiHeaders;
-            data.then((res) => saveHpiHeader(res.data));
-        }
     }
 
     continue = (e: any) => this.props.continue(e);
@@ -243,7 +211,7 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
                         name={'dateOfAppointment'}
                     />
                 );
-            case ResponseTypes.SHORT_TEXT:
+            case ResponseTypes.SHORT_TEXT: {
                 return (
                     <InputTextOrDateResponse
                         id={id}
@@ -254,8 +222,10 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
                         required={false}
                         placeholder={'Last Name'}
                         name={'lastNameOfClinic'}
+                        disabled={true}
                     />
                 );
+            }
             default:
                 return;
         }
@@ -303,11 +273,6 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
                       );
                   })
                 : '';
-
-        const isLoaded =
-            Object.keys(userSurveyState.graph).length &&
-            Object.keys(userSurveyState.nodes).length &&
-            Object.keys(userSurveyState.order).length;
 
         return (
             <>

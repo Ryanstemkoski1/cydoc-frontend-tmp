@@ -3,7 +3,6 @@
 }
 
 .ros-container {
-    text-align: center;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -15,7 +14,12 @@
     padding-left: 2rem;
     background-clip: padding-box;
 }
-
+.ros-column aside {
+    margin-left: auto;
+}
+.ros-column p {
+    margin-right: auto !important;
+}
 .ros-system {
     margin-bottom: 2rem !important;
     width: auto !important;
@@ -197,7 +201,7 @@
         height: 38px;
     }
     .ui.icon.button.small-ros-previous-button i,
-    .ui.icon.button.small-ros-next-button i{
+    .ui.icon.button.small-ros-next-button i {
         font-size: 15px !important;
     }
 }

@@ -1,32 +1,32 @@
-import React, {
-    useContext,
-    useState,
-    useCallback,
-    useRef,
-    useEffect,
-} from 'react';
-import {
-    Form,
-    Segment,
-    Button,
-    Container,
-    Image,
-    Header,
-    Grid,
-    Modal,
-    Input,
-} from 'semantic-ui-react';
-import { Redirect } from 'react-router';
-import { Link } from 'react-router-dom';
+import isEmailVerified from 'auth/isEmailVerified';
 import GetLogin from 'auth/login';
 import SetupAccount from 'auth/setupAccount';
 import { triggerEmailVerification, verifyEmail } from 'auth/verifyEmail';
-import AuthContext from '../../contexts/AuthContext';
-import NotesContext from '../../contexts/NotesContext';
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
+import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
+import {
+    Button,
+    Container,
+    Form,
+    Grid,
+    Header,
+    Image,
+    Input,
+    Modal,
+    Segment,
+} from 'semantic-ui-react';
 import Logo from '../../assets/cydoc-logo.svg';
 import NavMenu from '../../components/navigation/NavMenu';
+import AuthContext from '../../contexts/AuthContext';
+import NotesContext from '../../contexts/NotesContext';
 import './Account.css';
-import isEmailVerified from 'auth/isEmailVerified';
 import DoctorSignUp from './DoctorSignUp';
 
 const Login = () => {
@@ -149,7 +149,7 @@ const Login = () => {
             <NotesContext.Consumer>
                 {(ctx) => {
                     ctx.loadNotes(context.user._id);
-                    return <Redirect push to='/view/product' />;
+                    return <Redirect push to='/dashboard' />;
                 }}
             </NotesContext.Consumer>
         );

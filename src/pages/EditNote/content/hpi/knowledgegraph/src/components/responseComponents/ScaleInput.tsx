@@ -54,10 +54,14 @@ class ScaleInput extends React.Component<Props> {
                         step={0}
                         type='number'
                         id='scale-value'
-                        value={value}
-                        onChange={(e: any): ScaleHandleValueAction =>
-                            scaleHandleValue(node, parseInt(e.target.value))
-                        }
+                        value={value === 0 ? '' : value}
+                        onChange={(e: any): ScaleHandleValueAction => {
+                            const value = e.target.value;
+                            return scaleHandleValue(
+                                node,
+                                parseInt(value === '' ? '0' : value)
+                            );
+                        }}
                     />
                     <button
                         className='button sm pill'

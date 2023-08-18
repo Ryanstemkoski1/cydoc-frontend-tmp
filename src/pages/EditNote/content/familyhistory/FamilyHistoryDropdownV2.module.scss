@@ -17,4 +17,9 @@
             display: none !important;
         }
     }
+    &__dropdown {
+        @include min-screen($mobile) {
+            width: 195px;
+        }
+    }
 }

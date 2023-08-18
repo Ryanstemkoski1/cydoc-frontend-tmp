@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import constants from 'constants/constants';
-import { Button, Container, Grid, Segment } from 'semantic-ui-react';
-import MedicalHistoryContent from '../medicalhistory/MedicalHistoryContent';
-import SurgicalHistoryContent from '../surgicalhistory/SurgicalHistoryContent';
-import MedicationsContent from '../medications/MedicationsContent';
-import AllergiesContent from '../allergies/AllergiesContent';
-import SocialHistoryContent from '../socialhistory/SocialHistoryContent';
-import FamilyHistoryContent from '../familyhistory/FamilyHistoryContent';
-import Tab from '../../../../components/tools/Tab';
-import './PatientHistory.css';
-import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
+import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
+import constants from 'constants/constants';
+import { withDimensionsHook } from 'hooks/useDimensions';
+import React, { Component } from 'react';
+import { Button, Container, Grid, Segment } from 'semantic-ui-react';
+import Tab from '../../../../components/tools/Tab';
+import AllergiesContent from '../allergies/AllergiesContent';
+import FamilyHistoryContent from '../familyhistory/FamilyHistoryContent';
+import MedicalHistoryContent from '../medicalhistory/MedicalHistoryContent';
+import MedicationsContent from '../medications/MedicationsContent';
+import SocialHistoryContent from '../socialhistory/SocialHistoryContent';
+import SurgicalHistoryContent from '../surgicalhistory/SurgicalHistoryContent';
+import './PatientHistory.css';
 
 export default withDimensionsHook(
     class PatientHistoryContent extends Component {
@@ -153,7 +153,7 @@ export default withDimensionsHook(
             });
             const tabToDisplay = this.props.onTabClick(
                 this.state.activeTabName,
-                this.state.windowWidth
+                windowWidth
             );
             return (
                 <>
@@ -167,32 +167,37 @@ export default withDimensionsHook(
                             >
                                 {gridButtons}
                             </Grid>
-
-                            <Segment>{tabToDisplay}</Segment>
+                            <Segment className='ui-mobile'>
+                                {tabToDisplay}
+                            </Segment>
                             {buttons[activeIndex]}
                         </Container>
                     ) : (
-                        <Tab
-                            menu={{
-                                pointing: true,
-                                id: 'patient-history-menu',
-                            }}
-                            id='tab-panes'
-                            panes={panes}
-                            activeTabName={activeTabName}
-                            activeIndex={activeIndex}
-                            index={activeIndex}
-                            onTabChange={(e, data) => {
-                                this.setState({
-                                    activeTabName:
-                                        constants.PMH_TAB_NAMES[
-                                            data.activeIndex
-                                        ],
-                                    activeIndex: data.activeIndex,
-                                });
-                                this.props.handlePMHTabChange(e, data);
-                            }}
-                        />
+                        <>
+                            <Tab
+                                menu={{
+                                    pointing: true,
+                                    id: 'patient-history-menu',
+                                }}
+                                id='tab-panes'
+                                panes={panes}
+                                activeTabName={activeTabName}
+                                activeIndex={activeIndex}
+                                index={activeIndex}
+                                onTabChange={(e, data) => {
+                                    this.setState({
+                                        activeTabName:
+                                            constants.PMH_TAB_NAMES[
+                                                data.activeIndex
+                                            ],
+                                        activeIndex: data.activeIndex,
+                                    });
+                                    this.props.handlePMHTabChange(e, data);
+                                }}
+                            />
+                            <Segment>{tabToDisplay}</Segment>
+                            {buttons[activeIndex]}
+                        </>
                     )}
                 </>
             );

@@ -15,26 +15,30 @@ const AllNegativeButton = (props) => {
 
     return (
         <div className={style.symptomsBlock}>
-            <button
-                className={`${style.symptomsBlock__all} ${
-                    allNegative && style.active
-                }`}
-                onClick={() =>
-                    React.Children.map(children, (child) => {
-                        const optionName =
-                            child.props.children?.[0]?.props?.children;
-                        const noButton =
-                            child.props.children?.[1]?.props?.children;
-                        if (allNegative) {
-                            handleClick(optionName, null);
-                        } else if (!noButton?.props?.noButtonActive) {
-                            handleClick(optionName, YesNoResponse.No);
-                        }
-                    })
-                }
-            >
-                Select All No
-            </button>
+            <div className={`${style.symptomsBlock__btn} flex align-center`}>
+                <p></p>
+                <button
+                    className={`${
+                        style.symptomsBlock__all
+                    } button outline info pill sm ${allNegative && 'active'}`}
+                    data-hover={false}
+                    onClick={() =>
+                        React.Children.map(children, (child) => {
+                            const optionName =
+                                child.props.children?.[0]?.props?.children;
+                            const noButton =
+                                child.props.children?.[1]?.props?.children;
+                            if (allNegative) {
+                                handleClick(optionName, null);
+                            } else if (!noButton?.props?.noButtonActive) {
+                                handleClick(optionName, YesNoResponse.No);
+                            }
+                        })
+                    }
+                >
+                    ALL NO
+                </button>
+            </div>
             {children}
         </div>
     );

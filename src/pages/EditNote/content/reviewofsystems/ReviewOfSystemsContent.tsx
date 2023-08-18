@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { CurrentNoteState } from 'redux/reducers';
 import { selectReviewOfSystemsCategories } from 'redux/selectors/reviewOfSystemsSelectors';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
-import { Header } from 'semantic-ui-react';
+import { Header, Segment } from 'semantic-ui-react';
 import constants from '../../../../constants/review-of-systems-constants.json';
 import { PatientViewProps } from '../hpi/knowledgegraph/src/components/ChiefComplaintsButton';
 import './ReviewOfSystems.css';
@@ -80,21 +80,26 @@ class ReviewOfSystemsContent extends Component<ROSContentProps> {
                 >
                     {this.props.ROSCategories.map((categories) => {
                         return (
-                            <ReviewOfSystemsCategory
-                                key={categories}
-                                category={categories}
-                                selectManyOptions={[]}
-                                selectManyState={{}}
-                                node={''}
-                            />
+                            <Segment key={categories}>
+                                <ReviewOfSystemsCategory
+                                    key={categories}
+                                    category={categories}
+                                    selectManyOptions={[]}
+                                    selectManyState={{}}
+                                    node={''}
+                                />
+                            </Segment>
                         );
                     })}
                 </Masonry>
-                <NavigationButton previousClick={previousFormClick} />
+
                 {patientView ? (
-                    ''
+                    <NavigationButton previousClick={previousFormClick} />
                 ) : (
-                    <NavigationButton nextClick={nextFormClick} />
+                    <NavigationButton
+                        previousClick={previousFormClick}
+                        nextClick={nextFormClick}
+                    />
                 )}
             </>
         );

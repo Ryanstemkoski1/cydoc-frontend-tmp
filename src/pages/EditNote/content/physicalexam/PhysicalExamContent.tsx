@@ -389,7 +389,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                     fluid
                     panels={this.renderPanels(exampleSchema.sections)}
                 />
-
+                <br />
                 <NavigationButton
                     previousClick={this.props.previousFormClick}
                     nextClick={this.props.nextFormClick}

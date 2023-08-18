@@ -2,39 +2,39 @@
  * @fileoverview Components that utilizes [main: string], when, comments fields
  * in the discussion and plan page
  */
-import React from 'react';
-import { connect } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import {
-    selectPlanCondition,
-    PlanProceduresAndServicesFlat,
-    PlanReferralsFlat,
-} from 'redux/selectors/planSelectors';
-import {
-    addProcedureOrService,
-    updateProcedureOrService,
-    updateProcedureOrServiceComments,
-    updateProcedureOrServiceWhen,
-    addReferral,
-    updateReferralDepartment,
-    updateReferralComments,
-    updateReferralWhen,
-} from 'redux/actions/planActions';
-import {
-    CategoryFormProps,
-    CategoryFormOwnProps,
-    CategoryFormComponent,
-    BaseCategoryForm,
-} from './BaseCategoryForm';
-import { PlanAction, ConditionCategoryKey } from '../util';
-import { Grid, TextArea } from 'semantic-ui-react';
+import { OptionMapping } from '_processOptions';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import { WhenResponse } from 'constants/enums';
 import _ from 'lodash';
-import UpdateDimensions from './UpdateDimensions';
+import React from 'react';
+import { connect } from 'react-redux';
+import {
+    addProcedureOrService,
+    addReferral,
+    updateProcedureOrService,
+    updateProcedureOrServiceComments,
+    updateProcedureOrServiceWhen,
+    updateReferralComments,
+    updateReferralDepartment,
+    updateReferralWhen,
+} from 'redux/actions/planActions';
+import { CurrentNoteState } from 'redux/reducers';
+import {
+    PlanProceduresAndServicesFlat,
+    PlanReferralsFlat,
+    selectPlanCondition,
+} from 'redux/selectors/planSelectors';
+import { Grid, TextArea } from 'semantic-ui-react';
+import { ConditionCategoryKey, PlanAction } from '../util';
+import {
+    BaseCategoryForm,
+    CategoryFormComponent,
+    CategoryFormOwnProps,
+    CategoryFormProps,
+} from './BaseCategoryForm';
 import './DiscussionPlanForms.css';
+import UpdateDimensions from './UpdateDimensions';
 import './planSections.css';
-import { OptionMapping } from '_processOptions';
 
 export const ProceduresAndServicesForm = connect(
     (state: CurrentNoteState, ownProps: CategoryFormOwnProps) => ({
@@ -248,7 +248,8 @@ export const MainWhenCommentsForm = <
             categoryData={categoryData}
             numColumns={3}
             addRowLabel={categoryProps.addRowLabel}
-            addRow={formatAction(actions.addRow)}
+            // addRow={formatAction(actions.addRow)}
+            addRow={() => actions.addRow(actions.conditionId)}
             components={{
                 gridColumn,
                 gridHeaders,

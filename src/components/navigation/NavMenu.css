@@ -9,11 +9,11 @@
 .nav-bar {
     align-items: center;
 }
-.nav-bar .note-name-menu-item{
+.nav-bar .note-name-menu-item {
     width: auto;
 }
 .nav-bar .right .item::before {
-    display: none;    
+    display: none;
 }
 
 .ui.image.logo-circle-mobile {
@@ -69,7 +69,7 @@
     .nav-bar .logo-menu {
         padding-right: 0 !important;
         padding-left: 15px !important;
-    } 
+    }
     .nav-bar .profile-button,
     .nav-bar .right .item button {
         font-size: 0 !important;
@@ -115,7 +115,7 @@
         font-size: 14px !important;
         line-height: 1;
     }
-    .nav-bar .profile-button.dropdown.ui .menu a.item span { 
+    .nav-bar .profile-button.dropdown.ui .menu a.item span {
         font-size: 14px !important;
         overflow: visible !important;
         padding: 5px 10px !important;
@@ -129,7 +129,7 @@
 
 /* Navigation button styles */
 .nav-menu .button {
-    background-color: #CDE1E9;
+    background-color: #cde1e9;
     color: #034353;
     font-weight: 400;
 }
@@ -139,7 +139,7 @@
 }
 
 .ui.image img {
-    margin: 0 .5rem;
+    margin: 0 0.5rem;
 }
 
 /* Make the divide between menu tabs seamless */
@@ -152,12 +152,10 @@
     font-weight: 'normal';
 }
 
-
 /* note name input box styles */
 .note-name-menu-item input {
     width: 200px;
     color: #0d5e70 !important;
-
 }
 .note-name-menu-item .input:hover {
     border-bottom: 0;
@@ -179,12 +177,12 @@
 }
 
 .ui.menu.item.user-item {
-    color: #6DA3B1;
+    color: #6da3b1;
     font-weight: normal;
 }
 
 .note-title {
-    flex: 80%
+    flex: 80%;
 }
 
 .save-button {
@@ -221,7 +219,6 @@
 }
 
 .ui.label {
-    width: 120px;
     padding-right: 0;
 }
 
@@ -234,11 +231,12 @@
     padding-top: 35px;
 }
 
-.error-div{
+.error-div {
     position: relative;
 }
 
-#first-name-error, #dob-error {
+#first-name-error,
+#dob-error {
     border: 1px solid;
     z-index: 1;
     margin: -10px;
@@ -263,7 +261,7 @@
 }
 
 .ui.button.profile-mobile {
-    padding: .78571429em;
+    padding: 0.78571429em;
 }
 
 #menu-item {
@@ -303,8 +301,9 @@
         display: block;
         margin-bottom: 15px;
     }
-    
-    #first-name, #middle-name {
+
+    #first-name,
+    #middle-name {
         margin-right: 0;
     }
 
@@ -326,16 +325,19 @@
         margin-top: 0 !important;
     }
 
-    .fields.error-div.phone-div, .fields.phone-div {
+    .fields.error-div.phone-div,
+    .fields.phone-div {
         margin-bottom: 15px;
     }
-    
-    #first-name-error, #last-name-error, #email-error {
+
+    #first-name-error,
+    #last-name-error,
+    #email-error {
         margin-right: 10px;
         bottom: 0px;
         padding: 2px;
     }
-    
+
     #dob-error {
         bottom: 0px;
         padding: 2px;
@@ -350,18 +352,30 @@
         padding: 2px;
     }
 
-    .eight.wide.field.address, .three.wide.field.address, .five.wide.field.address {
+    .eight.wide.field.address,
+    .three.wide.field.address,
+    .five.wide.field.address {
         margin-bottom: 15px;
     }
 
-    .ui.form:not(.unstackable) .fields:not(.unstackable) > .three.wide.field.address,
-    .ui.form:not(.unstackable) .fields:not(.unstackable) > .four.wide.field.mobile-checkbox {
+    .ui.form:not(.unstackable)
+        .fields:not(.unstackable)
+        > .three.wide.field.address,
+    .ui.form:not(.unstackable)
+        .fields:not(.unstackable)
+        > .four.wide.field.mobile-checkbox {
         width: 40% !important;
     }
 
-    .ui.form:not(.unstackable) .fields:not(.unstackable) > .five.wide.field.address,
-    .ui.form:not(.unstackable) .fields:not(.unstackable) > .required.eight.wide.field.patient-info-input,
-    .ui.form:not(.unstackable) .fields:not(.unstackable) > .eight.wide.field.patient-info-input {
+    .ui.form:not(.unstackable)
+        .fields:not(.unstackable)
+        > .five.wide.field.address,
+    .ui.form:not(.unstackable)
+        .fields:not(.unstackable)
+        > .required.eight.wide.field.patient-info-input,
+    .ui.form:not(.unstackable)
+        .fields:not(.unstackable)
+        > .eight.wide.field.patient-info-input {
         width: 60% !important;
     }
 }
@@ -393,4 +407,11 @@
         font-size: 12px !important;
         padding: 3px 15px !important;
     }
+}
+.btn-group .button.hpi-ph-button-selected {
+    color: #fff !important;
+    background-color: #373b67 !important;
+}
+.btn-group button.button {
+    border-radius: 20px !important;
 }

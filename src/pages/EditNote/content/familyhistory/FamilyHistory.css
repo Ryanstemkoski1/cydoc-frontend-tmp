@@ -106,11 +106,8 @@
         margin-top: 2px;
     }
     .ui.form.family-hx-note-item {
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-    .ui.form.family-hx-note-item.family-medical {
-        width: calc(100% - 50px);
+        padding-left: 0;
+        padding-right: 0;
     }
     .family-hx-note-item .inline.fields.condition-header .switch-button {
         margin-top: 3px;

@@ -27,7 +27,7 @@ import {
     InputOnChangeData,
     TextAreaProps,
 } from 'semantic-ui-react';
-import SurgicalHistoryTableBodyRowNew from './SurgicalHistoryTableBodyRowV2';
+import SurgicalHistoryTableBodyRowV2 from './SurgicalHistoryTableBodyRowV2';
 
 import { OptionMapping } from '_processOptions';
 import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
@@ -206,7 +206,7 @@ class SurgicalHistoryContentV2 extends Component<Props, OwnState> {
             addProceduresOptions
         );
         return nums.map((rowIndex: string, index: number) => (
-            <SurgicalHistoryTableBodyRowNew
+            <SurgicalHistoryTableBodyRowV2
                 {...this.props}
                 key={index}
                 hide={this.props.hide}

@@ -1,10 +1,17 @@
 import React from 'react';
-import AlertIconSuccess from '../../../assets/images/alert-green.svg';
+import AlertIconSuccess from '../../../assets/images/check-circle.svg';
 import AlertIcon from '../../../assets/images/alert.svg';
 import style from './Notification.module.scss';
 interface NotificationProps {
     message: string;
-    type?: 'error' | 'success';
+    type?: NotificationType;
+}
+
+export type NotificationType = 'error' | 'success';
+
+export enum NotificationTypeEnum {
+    ERROR = 'error',
+    SUCCESS = 'success',
 }
 
 const Notification = ({ message = '', type = 'error' }: NotificationProps) => {

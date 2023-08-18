@@ -74,9 +74,7 @@ describe('AllergiesContent', () => {
 
     test('deleteRow works', async () => {
         const { wrapper, store } = connectStore();
-        const button = wrapper
-            .find('button[aria-label="delete-allergy"]')
-            .first();
+        const button = wrapper.find('button[aria-label="remove"]').first();
         expect(button).toBeTruthy();
         await act(() => {
             button.simulate('click');

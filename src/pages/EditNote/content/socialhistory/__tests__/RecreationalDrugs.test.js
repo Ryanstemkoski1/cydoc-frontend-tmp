@@ -296,7 +296,7 @@ describe('Recreational Drugs Integration', () => {
             );
 
             wrapper
-                .find('button[id="btn-hpi-type-delete"]')
+                .find('button[aria-label="remove"]')
                 .first()
                 .simulate('click');
             wrapper.update();

@@ -1,11 +1,13 @@
 import React from 'react';
 import style from './NavigationButton.module.scss';
+import ButtonLoader from 'components/ButtonLoader/ButtonLoader';
 
 interface NavigationButtonProps {
     previousClick?: any;
     nextClick?: any;
     firstButtonLabel?: string;
     secondButtonLabel?: string;
+    loading?: boolean;
 }
 
 const NavigationButton = ({
@@ -13,6 +15,7 @@ const NavigationButton = ({
     nextClick,
     firstButtonLabel = 'Previous',
     secondButtonLabel = 'Next',
+    loading = false,
 }: NavigationButtonProps) => {
     return (
         <div className={style.navigationButton}>
@@ -29,11 +32,13 @@ const NavigationButton = ({
             {nextClick && (
                 <button
                     className='button'
+                    disabled={loading}
                     onClick={($event) => {
                         nextClick($event);
                     }}
                 >
                     {secondButtonLabel}
+                    {loading && <ButtonLoader />}
                 </button>
             )}
         </div>

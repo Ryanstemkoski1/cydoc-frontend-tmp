@@ -1,3 +1,7 @@
+@import '../../../assets/scss/variables.scss';
 .YesNoButton {
     text-transform: uppercase;
+    button {
+        border-color: $color-primary !important;
+    }
 }

@@ -271,10 +271,13 @@ class NotePage extends Component {
                             Please select at least one Chief Complaint in the CC
                             tab in order to view an HPI questionnaire.
                         </div>
-                        <NavigationButton
-                            previousClick={this.backHPITab}
-                            nextClick={this.continueHPITab}
-                        />
+                        <br />
+                        <div className='flex justify-center'>
+                            <NavigationButton
+                                previousClick={this.backHPITab}
+                                nextClick={this.continueHPITab}
+                            />
+                        </div>
                     </>
                 );
                 break;

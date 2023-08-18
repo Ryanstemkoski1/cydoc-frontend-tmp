@@ -319,7 +319,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 <>
                     <div id='contents-input-div'>
                         <label
-                            className='medications-content-input-label'
+                            className='medications-content-input-label surgical__label'
                             id='year-label'
                         >
                             <b>Year:</b>
@@ -353,7 +353,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                     </div>
                     <div id='contents-input-div'>
                         <label
-                            className='medications-content-input-label'
+                            className='medications-content-input-label surgical__label'
                             id='comments-label'
                         >
                             <b>Comments:</b>
@@ -482,10 +482,10 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 {!this.props.isPreview &&
                     (hasSurgicalHistory || !patientView) &&
                     this.props.responseType != ResponseTypes.PSH_POP && (
-                        <div className='add-row-item' onClick={this.addRow}>
-                            <Image src={Add} />
-                            <AddRowButton name='surgical history' />
-                        </div>
+                        <AddRowButton
+                            onClick={this.addRow}
+                            name='surgical history'
+                        />
                     )}
             </div>
         );

@@ -6,10 +6,12 @@ import ForgotPasswordEmail from 'pages/Account/ForgotPasswordEmail';
 import Login from 'pages/Account/Login';
 import ProfileSecurity from 'pages/Account/ProfileSecurity';
 import AcidTest from 'pages/AcidTest';
+import AfterSubmissionPage from 'pages/AfterSubmissionPage';
 import CreateGraph from 'pages/CreateTemplate/CreateGraph';
 import EditGraph from 'pages/CreateTemplate/EditGraph';
 import EditTemplate from 'pages/CreateTemplate/EditTemplate';
 import EditNote from 'pages/EditNote/EditNote';
+import QRCodePage from 'pages/EditNote/QRCodePage';
 import GenerateInpatientPlan from 'pages/GenerateInpatientPlan/GenerateInpatientPlan';
 import HPI from 'pages/HPI/Hpi';
 import LandingPage from 'pages/LandingPage/LandingPage';
@@ -35,11 +37,8 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                         path='/forgotpasswordemail'
                         component={ForgotPasswordEmail}
                     />
-                    <PrivateRoute
-                        exact
-                        path='/ehr/:view'
-                        component={EditNote}
-                    />
+                    <PrivateRoute exact path='/editnote' component={EditNote} />
+                    <PrivateRoute exact path='/qrcode' component={QRCodePage} />
                     <Route exact path='/hpi/:view' component={HPI} />
                     <Route
                         exact
@@ -104,6 +103,11 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                         exact
                         path='/termsandconditions'
                         component={Terms_and_conditions}
+                    />
+                    <Route
+                        exact
+                        path={'/submission-successful'}
+                        component={AfterSubmissionPage}
                     />
                     <Route
                         exact

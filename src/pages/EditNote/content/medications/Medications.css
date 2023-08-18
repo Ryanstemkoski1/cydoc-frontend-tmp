@@ -54,6 +54,9 @@ a.ui.active.label {
 .medications-desktop-accordion-title.medication-wrap #reason-input-div {
     min-width: 145px;
 }
+.title-item {
+    border-left: 0;
+}
 @media screen and (max-width: 900px) {
     .ui.selection.dropdown .menu {
         min-width: fit-content;
@@ -121,12 +124,6 @@ a.ui.active.label {
     width: 100%;
 }
 
-#dose-input-div,
-#schedule-input-div {
-    margin-left: 30px;
-    width: 135px;
-}
-
 #start-year-label,
 #end-year-label,
 #comments-label {
@@ -135,23 +132,9 @@ a.ui.active.label {
     margin-top: 10px;
 }
 
-#schedule-input {
-    margin-left: -40px;
-    width: 195px;
-    /* display: inline-block; */
-}
-
 #reason-input {
     margin-top: 0;
     width: 100%;
-}
-
-#reason-input-div {
-    margin-left: -110px;
-}
-
-#reason-dropdown {
-    margin-left: 10px;
 }
 
 #currently-taking-btns {
@@ -160,12 +143,11 @@ a.ui.active.label {
 }
 
 #currently-taking {
+    display: flex;
+    align-items: center;
     margin-top: 10px !important;
 }
 
-.for-text {
-    margin-left: 40px;
-}
 .drug-name .ui.input.medication.drug-input {
     width: 100%;
 }
@@ -200,7 +182,7 @@ a.ui.active.label {
     #dose-input,
     #schedule-input {
         width: 100%;
-        margin-top: 10px;
+        margin-top: 5px;
         margin-left: 10px;
         display: inline-block;
     }
@@ -214,14 +196,14 @@ a.ui.active.label {
 
     #dose-input-label {
         margin-right: 15px;
-        margin-left: 22px;
+        margin-left: 10px;
         margin-top: 15px;
         display: inline-block;
     }
 
     #schedule-input-label {
         margin-right: 65px;
-        margin-left: 22px;
+        margin-left: 10px;
         margin-top: 15px;
         display: inline-block;
     }
@@ -230,7 +212,6 @@ a.ui.active.label {
     #end-year-input,
     #comments-input {
         width: 100%;
-        white-space: nowrap;
     }
 
     #start-year-label,
@@ -266,26 +247,6 @@ a.ui.active.label {
     }
 }
 
-@media (max-width: 1199px) and (min-width: 995px) {
-    #dose-input-div {
-        margin-left: 5px;
-        width: 100px;
-    }
-
-    #schedule-input {
-        width: 150px;
-    }
-
-    #schedule-input-div {
-        width: 0;
-        margin-left: 15px;
-    }
-
-    #reason-input-div {
-        margin-left: -60px;
-        width: 100%;
-    }
-}
 @media (max-width: 767px) {
     .full-width-m {
         margin: 0;
@@ -310,15 +271,25 @@ a.ui.active.label {
         flex-wrap: wrap;
         align-items: center;
     }
-    table.medications-desktop-accordion-title.medication-wrap tr td:nth-child(1),
-    table.medications-desktop-accordion-title.medication-wrap tr td:nth-child(2) {
+    table.medications-desktop-accordion-title.medication-wrap
+        tr
+        td:nth-child(1),
+    table.medications-desktop-accordion-title.medication-wrap
+        tr
+        td:nth-child(2) {
         width: 50% !important;
     }
-    table.medications-desktop-accordion-title.medication-wrap tr td:nth-child(3),
-    table.medications-desktop-accordion-title.medication-wrap tr td:nth-child(5) {
+    table.medications-desktop-accordion-title.medication-wrap
+        tr
+        td:nth-child(3),
+    table.medications-desktop-accordion-title.medication-wrap
+        tr
+        td:nth-child(5) {
         width: calc(50% - 63px) !important;
     }
-    table.medications-desktop-accordion-title.medication-wrap tr td:nth-child(4) {
+    table.medications-desktop-accordion-title.medication-wrap
+        tr
+        td:nth-child(4) {
         width: 80px !important;
         padding: 0 !important;
     }
@@ -326,7 +297,8 @@ a.ui.active.label {
         margin-left: -15px;
     }
     table.medications-desktop-accordion-title.medication-wrap #dose-input-div,
-    table.medications-desktop-accordion-title.medication-wrap #schedule-input-div,
+    table.medications-desktop-accordion-title.medication-wrap
+        #schedule-input-div,
     table.medications-desktop-accordion-title.medication-wrap #schedule-input,
     table.medications-desktop-accordion-title.medication-wrap .ui.input {
         width: 100%;
@@ -338,7 +310,8 @@ a.ui.active.label {
         margin: 0 20px !important;
         text-align: center;
     }
-    table.medications-desktop-accordion-title.medication-wrap #reason-input-div {
+    table.medications-desktop-accordion-title.medication-wrap
+        #reason-input-div {
         margin-left: 0 !important;
     }
 }

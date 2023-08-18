@@ -13,14 +13,6 @@
     div.fitted.item.note-name-menu-item {
         max-width: 150px;
     }
-
-    .input {
-        overflow-x: hidden;
-    }
-    .input.content-dropdown.medication {
-        overflow-x: visible;
-    }
-
     div.ui.huge.transparent.input.note-title {
         margin-top: 0px;
     }

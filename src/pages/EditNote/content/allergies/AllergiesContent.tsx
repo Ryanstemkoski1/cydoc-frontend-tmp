@@ -27,13 +27,11 @@ import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 import {
     DropdownProps,
     Form,
-    Image,
     Input,
     InputOnChangeData,
     Table,
     TextAreaProps,
 } from 'semantic-ui-react';
-import Add from '../../../../assets/add.svg';
 import './AllergiesContent.css';
 import AllergiesTableBodyRow from './AllergiesTableBodyRow';
 import './table.css';
@@ -298,10 +296,7 @@ class AllergiesContent extends Component<Props, OwnState> {
             <>
                 {content}
                 {!this.props.isPreview && (
-                    <div className='add-row-item' onClick={this.addRow}>
-                        <Image src={Add} />
-                        <AddRowButton name='allergy' />
-                    </div>
+                    <AddRowButton name='allergy' onClick={this.addRow} />
                 )}
             </>
         );

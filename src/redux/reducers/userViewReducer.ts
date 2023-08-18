@@ -1,9 +1,9 @@
 import { YesNoResponse } from 'constants/enums';
+import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import { ResponseTypes, SelectOneInput } from 'constants/hpiEnums';
 import { USER_VIEW_ACTION } from 'redux/actions/actionTypes';
 import { userViewActionTypes } from 'redux/actions/userViewActions';
 import { ChiefComplaintsState } from './chiefComplaintsReducer';
-import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 
 // Eventually replace with hpiState interface ??
 export interface initialQuestionsState {
@@ -212,6 +212,23 @@ export function userViewReducer(
         }
 
         case USER_VIEW_ACTION.INITIAL_SURVEY_ADD_DATE_OR_PLACE: {
+            const { uid, response } = action.payload;
+            return {
+                ...state,
+                userSurvey: {
+                    ...state.userSurvey,
+                    nodes: {
+                        ...state.userSurvey.nodes,
+                        [uid]: {
+                            ...state.userSurvey.nodes[uid],
+                            response: response,
+                        },
+                    },
+                },
+            };
+        }
+
+        case USER_VIEW_ACTION.INITIAL_SURVEY_ADD_TEXT: {
             const { uid, response } = action.payload;
             return {
                 ...state,

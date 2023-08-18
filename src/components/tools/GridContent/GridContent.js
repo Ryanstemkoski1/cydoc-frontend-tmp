@@ -1,8 +1,7 @@
 import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
-import { Divider, Image } from 'semantic-ui-react';
-import Add from '../../../assets/add.svg';
+import { Divider } from 'semantic-ui-react';
 //Basic Layout and functionality for note tabs that use a grid. Includes support to
 // add a row, but likely this state will be lifted in the future
 export default class GridContent extends Component {
@@ -19,10 +18,10 @@ export default class GridContent extends Component {
             <>
                 {rows}
                 {!isPreview && !this.props.pop ? (
-                    <div className='add-row-item' onClick={this.props.addRow}>
-                        <Image src={Add} />
-                        <AddRowButton name={this.props.name} />
-                    </div>
+                    <AddRowButton
+                        name={this.props.name}
+                        onClick={this.props.addRow}
+                    />
                 ) : (
                     ''
                 )}

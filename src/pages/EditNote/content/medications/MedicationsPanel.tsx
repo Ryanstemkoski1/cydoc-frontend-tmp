@@ -35,6 +35,7 @@ import { MEDICATIONS_PANEL_SCREEN_BP } from '../../../../constants/breakpoints';
 import './Medications.css';
 import { DropdownType } from './MedicationsContent';
 import style from './MedicationsPanel.module.scss';
+import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
 
 interface OwnProps {
     mobile: boolean;
@@ -188,54 +189,63 @@ class MedicationsPanel extends Component<Props, State> {
             this.props.medicationsState[this.props.medIndex];
 
         const drugNameInput = (
-            <Input
-                disabled={isPreview}
-                transparent={isPreview}
-                value={
-                    isPreview
-                        ? this.props.previewValue
-                        : (medicationEntry as MedicationsItem).drugName
-                }
-            >
-                <div id='width-full' className='full-width full-view'>
-                    {!isPreview && (
-                        <Dropdown
-                            fluid
-                            search
-                            selection
-                            clearable
-                            allowAdditions
-                            icon=''
-                            optiontype='medicationOptions'
-                            type='Drug Name'
-                            options={this.props.medicationOptions}
-                            placeholder='Medication name'
-                            onChange={this.onChangeFormatter((value) =>
-                                this.props.updateDrugName(
-                                    this.props.medIndex,
-                                    value as string
-                                )
-                            )}
-                            value={
-                                (medicationEntry as MedicationsItem).drugName
-                            }
-                            onBlur={(event: any) =>
-                                this.onMedicationsBlur(event)
-                            }
-                            onAddItem={this.onAddItemFormatter(
-                                (optiontype, value) =>
-                                    this.props.handleAddition(optiontype, value)
-                            )}
-                            aria-label='Drug-Name-Dropdown'
-                            className='side-effects'
-                        />
-                    )}
-                </div>
-            </Input>
+            <div className={style.medication__input}>
+                <Input
+                    disabled={isPreview}
+                    transparent={isPreview}
+                    value={
+                        isPreview
+                            ? this.props.previewValue
+                            : (medicationEntry as MedicationsItem).drugName
+                    }
+                >
+                    <div id='width-full' className='full-width full-view'>
+                        {!isPreview && (
+                            <Dropdown
+                                fluid
+                                search
+                                selection
+                                clearable
+                                allowAdditions
+                                icon=''
+                                optiontype='medicationOptions'
+                                type='Drug Name'
+                                options={this.props.medicationOptions}
+                                placeholder='Medication name'
+                                onChange={this.onChangeFormatter((value) =>
+                                    this.props.updateDrugName(
+                                        this.props.medIndex,
+                                        value as string
+                                    )
+                                )}
+                                value={
+                                    (medicationEntry as MedicationsItem)
+                                        .drugName
+                                }
+                                onBlur={(event: any) =>
+                                    this.onMedicationsBlur(event)
+                                }
+                                onAddItem={this.onAddItemFormatter(
+                                    (optiontype, value) =>
+                                        this.props.handleAddition(
+                                            optiontype,
+                                            value
+                                        )
+                                )}
+                                aria-label='Drug-Name-Dropdown'
+                                className='side-effects'
+                            />
+                        )}
+                    </div>
+                </Input>
+            </div>
         );
 
         const doseInput = (
-            <div className='ui form' id='dose-input-div'>
+            <div
+                className={`ui form ${style.medication__wrap}`}
+                id='dose-input-div'
+            >
                 {this.props.dimensions.windowWidth <
                 MEDICATIONS_PANEL_SCREEN_BP ? (
                     <label
@@ -247,7 +257,7 @@ class MedicationsPanel extends Component<Props, State> {
                 ) : (
                     <></>
                 )}
-                <div id='dose-input'>
+                <div className={style.medication__field} id='dose-input'>
                     {this.props.dimensions.windowWidth <
                     MEDICATIONS_PANEL_SCREEN_BP ? (
                         <Input
@@ -282,8 +292,7 @@ class MedicationsPanel extends Component<Props, State> {
                                 mobile && {
                                     basic: true,
                                     content: 'Dose: ',
-                                    className:
-                                        'medications-content-input-label',
+                                    className: `medications-content-input-label`,
                                 }
                             }
                             placeholder='e.g. 81 mg tablet'
@@ -305,11 +314,14 @@ class MedicationsPanel extends Component<Props, State> {
 
         const scheduleInput = (
             <>
-                <div className='ui form' id='schedule-input-div'>
+                <div
+                    className={`ui form ${style.medication__wrap} ${style.medication__label}`}
+                    id='schedule-input-div'
+                >
                     {this.props.dimensions.windowWidth <
                     MEDICATIONS_PANEL_SCREEN_BP ? (
                         <label
-                            className='medications-content-input-label'
+                            className={`medications-content-input-label ${style.medication__label}`}
                             id='schedule-input-label'
                         >
                             <b>Schedule:</b>
@@ -317,7 +329,10 @@ class MedicationsPanel extends Component<Props, State> {
                     ) : (
                         <></>
                     )}
-                    <div id='schedule-input'>
+                    <div
+                        id='schedule-input'
+                        className={style.medication__field}
+                    >
                         {this.props.dimensions.windowWidth <
                         MEDICATIONS_PANEL_SCREEN_BP ? (
                             <Input
@@ -375,13 +390,13 @@ class MedicationsPanel extends Component<Props, State> {
         );
 
         const reasonForTakingInput = (
-            <div id='reason-input-div'>
+            <div id='reason-input-div' className={style.medication__dropdown}>
                 <div id='reason-input'>
                     {this.props.dimensions.windowWidth <
                     MEDICATIONS_PANEL_SCREEN_BP ? (
                         <Label
                             basic
-                            className={'medications-content-input-label'}
+                            className={`medications-content-input-label ${style.medication__label}`}
                             content={'Reason for taking: '}
                         />
                     ) : (
@@ -436,14 +451,17 @@ class MedicationsPanel extends Component<Props, State> {
         );
 
         const startYearInput = (
-            <div className='margin' id='start-year-input'>
+            <div
+                className={`margin ${style.medication__wrap}`}
+                id='start-year-input'
+            >
                 <label
-                    className='medications-content-input-label'
+                    className={`medications-content-input-label ${style.medication__label}`}
                     id='start-year-label'
                 >
                     <b>Start Year:</b>
                 </label>
-                <div id='width-full'>
+                <div id='width-full' className={style.medication__field}>
                     <Input
                         fluid
                         transparent
@@ -493,7 +511,7 @@ class MedicationsPanel extends Component<Props, State> {
             <div id='currently-taking'>
                 <Label
                     basic
-                    className='ui input content-input medications-content-input-label'
+                    className={`ui input content-input medications-content-input-label ${style.medication__label}`}
                     content='Currently Taking: '
                 />
                 {this.props.dimensions.windowWidth <
@@ -630,7 +648,7 @@ class MedicationsPanel extends Component<Props, State> {
                 {/* <Input fluid className='content-input content-dropdown'> */}
                 <Label
                     basic
-                    className={'medications-content-input-label'}
+                    className={`medications-content-input-label ${style.medication__label}`}
                     content={'Side Effects: '}
                 />
                 <div id='width-full reason-dropdown'>
@@ -671,12 +689,12 @@ class MedicationsPanel extends Component<Props, State> {
         const commentsInput = (
             <div className='margin' id='comments-input'>
                 <label
-                    className='medications-content-input-label'
+                    className={`medications-content-input-label ${style.medication__label}`}
                     id='comments-label'
                 >
                     <b>Comments:</b>
                 </label>
-                <div id='width-full'>
+                <div id='width-full' className={style.medication__field}>
                     <Input
                         fluid
                         transparent
@@ -746,19 +764,20 @@ class MedicationsPanel extends Component<Props, State> {
                                         <h3 className='for-text'>for</h3>
                                     </td>
                                     <td>{reasonForTakingInput}</td>
-
-                                    <Button
-                                        circular
-                                        icon='close'
-                                        onClick={(e) => {
-                                            this.props.deleteRow(
-                                                e,
-                                                this.props.medIndex
-                                            );
-                                        }}
-                                        aria-label='delete-medication'
-                                        className='hpi-ph-button button-space'
-                                    />
+                                    <td>
+                                        <div
+                                            className={style.medication__remove}
+                                        >
+                                            <RemoveButton
+                                                onClick={(e: any) => {
+                                                    this.props.deleteRow(
+                                                        e,
+                                                        this.props.medIndex
+                                                    );
+                                                }}
+                                            />
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -788,6 +807,7 @@ class MedicationsPanel extends Component<Props, State> {
         return (
             <>
                 <Accordion.Title
+                    className='title-item'
                     active={this.state.active}
                     onClick={this.onTitleClick}
                 >

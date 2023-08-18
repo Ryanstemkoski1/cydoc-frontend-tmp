@@ -14,6 +14,10 @@ import {
     initialChiefComplaintsState,
 } from './chiefComplaintsReducer';
 import {
+    clinicianDetailReducer,
+    initialClinicianDetail,
+} from './clinicianDetailReducer';
+import {
     initialNoteId,
     initialNoteTitle,
     noteIdReducer,
@@ -72,6 +76,7 @@ const currentNoteReducer = combineReducers({
     userView: userViewReducer,
     activeItem: activeItemReducer,
     additionalSurvey: additionalSurveyReducer,
+    clinicianDetail: clinicianDetailReducer,
 });
 
 export type CurrentNoteState = ReturnType<typeof currentNoteReducer>;
@@ -95,6 +100,7 @@ export const initialState: CurrentNoteState = {
     userView: initialUserViewState,
     activeItem: initialActiveItemState,
     additionalSurvey: initialAdditionalSurveyData,
+    clinicianDetail: initialClinicianDetail,
 };
 
 export function rootReducer(

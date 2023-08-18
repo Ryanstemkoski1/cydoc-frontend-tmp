@@ -102,16 +102,18 @@ class FamilyHistoryDropdownV2 extends Component<Props> {
                 <tr>
                     <td>
                         <strong>Family Member</strong>
-                        <DropDownSemantic
-                            value={member}
-                            search
-                            selection
-                            fluid
-                            options={familyOptions.filter(
-                                (item) => item.text !== ''
-                            )}
-                            onChange={this.handleChange}
-                        />
+                        <div className={style.familyHistoryBlock__dropdown}>
+                            <DropDownSemantic
+                                value={member}
+                                search
+                                selection
+                                fluid
+                                options={familyOptions.filter(
+                                    (item) => item.text !== ''
+                                )}
+                                onChange={this.handleChange}
+                            />
+                        </div>
                     </td>
 
                     <td>

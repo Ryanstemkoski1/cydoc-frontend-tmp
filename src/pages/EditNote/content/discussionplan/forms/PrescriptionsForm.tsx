@@ -1,30 +1,30 @@
-import React from 'react';
-import { Grid, TextArea } from 'semantic-ui-react';
+import { OptionMapping } from '_processOptions';
 import Dropdown from 'components/tools/OptimizedDropdown';
-import { PlanAction } from '../util';
+import React from 'react';
 import { connect } from 'react-redux';
+import {
+    addPrescription,
+    updatePrescriptionComments,
+    updatePrescriptionDose,
+    updatePrescriptionSignature,
+    updatePrescriptionType,
+} from 'redux/actions/planActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
     PlanPrescriptionFlat,
     selectPlanCondition,
 } from 'redux/selectors/planSelectors';
+import { Grid, TextArea } from 'semantic-ui-react';
+import { PlanAction } from '../util';
 import {
-    addPrescription,
-    updatePrescriptionComments,
-    updatePrescriptionDose,
-    updatePrescriptionType,
-    updatePrescriptionSignature,
-} from 'redux/actions/planActions';
-import {
-    CategoryFormProps,
+    BaseCategoryForm,
     CategoryFormComponent,
     CategoryFormOwnProps,
-    BaseCategoryForm,
+    CategoryFormProps,
 } from './BaseCategoryForm';
-import UpdateDimensions from './UpdateDimensions';
 import './DiscussionPlanForms.css';
+import UpdateDimensions from './UpdateDimensions';
 import './planSections.css';
-import { OptionMapping } from '_processOptions';
 
 interface PrescriptionsDispatchProps {
     addPrescription: PlanAction;
@@ -170,7 +170,8 @@ const PrescriptionsForm = (
             categoryData={categoryData}
             numColumns={3}
             addRowLabel='prescription'
-            addRow={formatAction(actions.addPrescription)}
+            // addRow={formatAction(actions.addPrescription)}
+            addRow={() => actions.addPrescription(actions.conditionId)}
             components={{
                 gridColumn,
                 gridHeaders,

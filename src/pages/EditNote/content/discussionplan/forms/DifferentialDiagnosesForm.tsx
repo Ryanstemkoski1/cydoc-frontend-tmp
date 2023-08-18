@@ -1,28 +1,28 @@
-import React from 'react';
 import Dropdown from 'components/tools/RecursiveDropdown';
-import { Grid, TextArea } from 'semantic-ui-react';
-import { PlanAction } from '../util';
+import React from 'react';
 import { connect } from 'react-redux';
+import {
+    addDifferentialDiagnosis,
+    updateDifferentialDiagnosis,
+    updateDifferentialDiagnosisComments,
+} from 'redux/actions/planActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
     PlanDiagnosisFlat,
     selectPlanCondition,
 } from 'redux/selectors/planSelectors';
+import { Grid, TextArea } from 'semantic-ui-react';
+import { PlanAction } from '../util';
 import {
-    addDifferentialDiagnosis,
-    updateDifferentialDiagnosisComments,
-    updateDifferentialDiagnosis,
-} from 'redux/actions/planActions';
-import {
-    CategoryFormProps,
+    BaseCategoryForm,
     CategoryFormComponent,
     CategoryFormOwnProps,
-    BaseCategoryForm,
+    CategoryFormProps,
 } from './BaseCategoryForm';
 // import UpdateDimensions from './UpdateDimensions';
+import { DiagnosesOptionMapping } from '_processOptions';
 import './DiscussionPlanForms.css';
 import './planSections.css';
-import { DiagnosesOptionMapping } from '_processOptions';
 
 interface DifferentialDiagnosesDispatchProps {
     addDifferentialDiagnosis: PlanAction;
@@ -36,7 +36,8 @@ const DifferentialDiagnosesForm = (
     props: CategoryFormProps<PlanDiagnosisFlat> &
         DifferentialDiagnosesDispatchProps
 ) => {
-    const { mobile, categoryData, formatAction, ...actions } = props;
+    const { mobile, categoryData, formatAction, conditionId, ...actions } =
+        props;
     // const { width } = UpdateDimensions();
 
     const gridHeaders = () => (
@@ -131,7 +132,8 @@ const DifferentialDiagnosesForm = (
             addRowLabel='diagnosis'
             category='differentialDiagnoses'
             categoryData={categoryData}
-            addRow={formatAction(actions.addDifferentialDiagnosis)}
+            addRow={() => actions.addDifferentialDiagnosis(conditionId)}
+            // addRow={formatAction(actions.addDifferentialDiagnosis)}
             components={{
                 mobileTitle,
                 mobileContent,

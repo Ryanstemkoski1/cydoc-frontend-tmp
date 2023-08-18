@@ -30,7 +30,7 @@ import '../hpi/knowledgegraph/src/css/Button.css';
 import '../reviewofsystems/ReviewOfSystems.css';
 import './FamilyHistory.css';
 import style from './FamilyHistoryBlock.module.scss';
-import FamilyHistoryDropdown from './FamilyHistoryDropdownV2';
+import FamilyHistoryDropdownV2 from './FamilyHistoryDropdownV2';
 
 class FamilyHistoryBlock extends Component<Props> {
     constructor(props: Props) {
@@ -65,7 +65,7 @@ class FamilyHistoryBlock extends Component<Props> {
         let dropdownList = [];
         const familyIndexes = Object.keys(familyMembers);
         dropdownList = familyIndexes.map((familyIndex, listIndex, array) => (
-            <FamilyHistoryDropdown
+            <FamilyHistoryDropdownV2
                 condition={condition}
                 index={index}
                 key={familyIndex}
@@ -127,7 +127,7 @@ class FamilyHistoryBlock extends Component<Props> {
         return (
             <>
                 <div
-                    className={`${style.historyBlock__response} flex align-center justify-between`}
+                    className={`${style.historyBlock__response} flex align-center`}
                 >
                     <div className={style.historyBlock__input}>
                         {conditionInp}

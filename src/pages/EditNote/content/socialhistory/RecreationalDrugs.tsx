@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
+import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
 import HistoryButtons from 'components/tools/ThreeButton/ThreeButtons';
 import { DrugName, drugNames } from 'constants/SocialHistory/drugNames';
 import modesOfDelivery, {
@@ -317,16 +318,11 @@ class RecreationalDrugs extends React.Component<Props, State> {
             }
             case 'delete': {
                 cell = (
-                    <Button
-                        rowindex={rowindex}
-                        circular
-                        icon='close'
-                        size='mini'
-                        id='btn-hpi-type-delete'
+                    <RemoveButton
+                        name='sw'
                         onClick={() => {
                             this.props.deleteRecreationalDrugUsed(rowindex);
                         }}
-                        className='hpi-ph-button'
                     />
                 );
                 break;
@@ -377,6 +373,7 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         />
                         <Button
                             id='btn-hpi-type-delete'
+                            aria-label='remove'
                             icon='close'
                             compact
                             onClick={() => {
@@ -494,7 +491,6 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         {this.getCell('# Per Week', index)}
                     </Table.Cell>
                     <Table.Cell
-                        collapsing
                         id='drugs-header'
                         onClick={this.handleCellClick}
                     >

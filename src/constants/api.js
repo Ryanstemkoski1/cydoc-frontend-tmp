@@ -56,3 +56,8 @@ export const rosClient = axios.create({
         'https://3euj91pn42.execute-api.us-east-1.amazonaws.com/dev/ros-data/get',
     headers: { 'Content-Type': 'application/json' },
 });
+
+export const localhostClient = axios.create({
+    baseURL: 'http://127.0.0.1:3000',
+    headers: { 'Content-Type': 'application/json' },
+});

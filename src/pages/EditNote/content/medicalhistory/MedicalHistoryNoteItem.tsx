@@ -174,7 +174,7 @@ class MedicalHistoryNoteItem extends Component<Props> {
                             className='condition-info'
                             style={{ marginLeft: '0px' }}
                         >
-                            <div className='confirmation-item option-block-item'>
+                            <div className='confirmation-item option-block-item flex align-center'>
                                 <span className='field'>
                                     <label>Has Condition Resolved?</label>
                                 </span>

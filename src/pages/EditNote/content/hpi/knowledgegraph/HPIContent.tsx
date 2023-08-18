@@ -233,7 +233,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                     <>
                         <Segment className='margin-bottom-for-notes'>
                             {positiveLength > 0 ? (
-                                positiveDiseases
+                                <div className='notes-btn-wrap flex-wrap'>
+                                    {positiveDiseases}
+                                </div>
                             ) : (
                                 <div className='positive-diseases-placeholder' />
                             )}
@@ -295,42 +297,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                     prevStep={this.back}
                                 />
                             </Segment>
-                            <Button
-                                icon
-                                floated='left'
-                                onClick={this.back}
-                                className='hpi-small-previous-button'
-                            >
-                                <Icon name='arrow left' className='big' />
-                            </Button>
-                            <Button
-                                icon
-                                labelPosition='left'
-                                floated='left'
-                                onClick={this.back}
-                                className='hpi-previous-button'
-                            >
-                                Prev
-                                <Icon name='arrow left' />
-                            </Button>
-                            <Button
-                                icon
-                                floated='right'
-                                onClick={this.continue}
-                                className='hpi-small-next-button'
-                            >
-                                <Icon name='arrow right' />
-                            </Button>
-                            <Button
-                                icon
-                                labelPosition='right'
-                                floated='right'
-                                onClick={this.continue}
-                                className='hpi-next-button'
-                            >
-                                Next
-                                <Icon name='arrow right' />
-                            </Button>
+                            <NavigationButton
+                                previousClick={this.back}
+                                nextClick={this.continue}
+                            />
                         </div>
                     );
                 }

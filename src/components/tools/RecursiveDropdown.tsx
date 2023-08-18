@@ -15,7 +15,6 @@ import {
     OptionMapping,
     getDiagnosesOptionMapping,
 } from '_processOptions';
-import './OptimizedDropdown.css';
 import './RecursiveDropdown.css';
 
 type OnAddItem = (

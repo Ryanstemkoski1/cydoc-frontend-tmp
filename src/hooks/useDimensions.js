@@ -22,7 +22,7 @@ function useDimensions() {
         return () => window.removeEventListener('resize', updateDimensions);
     }, []);
 
-    return [windowWidth, windowHeight];
+    return { windowWidth, windowHeight };
 }
 
 function withDimensionsHook(Component) {

@@ -16,6 +16,7 @@ interface InputTextOrDateResponseProps {
     required: boolean;
     placeholder: string;
     name: string;
+    disabled?: boolean;
 }
 
 class InputTextOrDateResponse extends React.Component<Props> {
@@ -32,6 +33,7 @@ class InputTextOrDateResponse extends React.Component<Props> {
             placeholder,
             name,
             initialSurveyAddDateOrPlace,
+            disabled = false,
         } = this.props;
 
         return (
@@ -44,6 +46,7 @@ class InputTextOrDateResponse extends React.Component<Props> {
                 onChange={(e: any) =>
                     initialSurveyAddDateOrPlace(id, e.target.value)
                 }
+                disabled={disabled}
             />
         );
     }

@@ -26,7 +26,7 @@ const DiscussionPlan = ({
     nextFormClick,
     previousFormClick,
 }: DiscussionPlanProps) => {
-    const [windowWidth] = useDimensions();
+    const { windowWidth } = useDimensions();
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [currentId, setCurrentId] = useState<string>('');
 

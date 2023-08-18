@@ -126,6 +126,11 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         history.push(path);
     };
 
+    const navigateToQRCodePage = () => {
+        const path = '/qrcode';
+        history.push(path);
+    };
+
     const logoNotLoggedIn = () => {
         const path = '/';
         history.push(path);
@@ -172,6 +177,16 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                     content={collapseLoggedInNav ? null : 'Home'}
                     icon='hospital outline'
                     onClick={navigateToHome}
+                />
+            </Menu.Item>
+            <Menu.Item className='home-menu-item'>
+                <Button
+                    basic
+                    color='teal'
+                    name='QR Code'
+                    content={collapseLoggedInNav ? null : 'QR Code'}
+                    icon='hospital outline'
+                    onClick={navigateToQRCodePage}
                 />
             </Menu.Item>
             <Menu.Item className='profile-menu-item'>
@@ -261,7 +276,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             )}
             {context.token && history.location.pathname.length > 1 ? (
                 collapseLoggedInNav ? (
-                    <Button.Group>
+                    <Button.Group className='btn-group'>
                         <Button
                             compact
                             onClick={() => {
@@ -286,7 +301,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                         </Button>
                     </Button.Group>
                 ) : (
-                    <Button.Group>
+                    <Button.Group className='btn-group'>
                         <Button
                             style={{ maxHeight: '75%' }}
                             onClick={() => {

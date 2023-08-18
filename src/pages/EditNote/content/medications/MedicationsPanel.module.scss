@@ -1,3 +1,4 @@
+@import '../../../../assets/scss/variables.scss';
 .medication {
     padding-top: 20px;
     aside {
@@ -5,5 +6,56 @@
     }
     img {
         width: 18px;
+    }
+    table {
+        width: 100%;
+        tr {
+            td {
+                padding: 5px 10px;
+                &:nth-child(1) {
+                    padding-left: 0;
+                }
+                &:last-child {
+                    padding-right: 0;
+                }
+            }
+        }
+    }
+    &__label {
+        white-space: nowrap;
+        padding-left: 0 !important;
+        margin-left: 0 !important;
+    }
+    &__dropdown {
+        width: 250px;
+        @include max-screen($desktop) {
+            width: 200px;
+        }
+    }
+    &__input {
+        width: 200px;
+        @include max-screen($tablet) {
+            width: 100%;
+            padding-top: 10px;
+        }
+        > div {
+            width: 100%;
+        }
+    }
+    &__wrap {
+        @include max-screen($tablet) {
+            display: flex;
+        }
+    }
+    &__field {
+        @include max-screen($tablet) {
+            padding-top: 12px;
+        }
+        input {
+            @include max-screen($tablet) {
+                min-width: 100%;
+                width: auto !important;
+            }
+        }
     }
 }

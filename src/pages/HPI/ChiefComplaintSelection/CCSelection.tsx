@@ -1,8 +1,11 @@
 import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
 import axios from 'axios';
 import Search from 'components/Input/Search';
+import TextArea from 'components/Input/Textarea';
 import { ActiveItemProps } from 'components/navigation/NavMenu';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
+import { NotificationTypeEnum } from 'components/tools/Notification/Notification';
+import { localhostClient } from 'constants/api';
 import { GraphData, ResponseTypes } from 'constants/hpiEnums';
 import {
     ChiefComplaintsProps,
@@ -16,6 +19,7 @@ import initialQuestions from 'pages/EditNote/content/patientview/constants/initi
 import patientViewHeaders from 'pages/EditNote/content/patientview/constants/patientViewHeaders.json';
 import React, { useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router';
 import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
 import {
     GoBackToAdditionalSurvey,
@@ -32,8 +36,10 @@ import {
     saveHpiHeader,
 } from 'redux/actions/hpiHeadersActions';
 import {
+    InitialSurveyAddTextActions,
     InitialSurveySearchAction,
     ProcessSurveyGraphAction,
+    initialSurveyAddText,
     initialSurveySearch,
     processSurveyGraph,
 } from 'redux/actions/userViewActions';
@@ -48,21 +54,41 @@ import {
 } from 'redux/reducers/userViewReducer';
 import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
 import { currentNoteStore } from 'redux/store';
+import getHPIText from 'utils/getHPIText';
 import style from './CCSelection.module.scss';
 
 interface InitialSurveyComponentProps {
     continue: (e: any) => void;
     onPreviousClick: () => void;
     setErrorMessage: (message: string) => void;
+    notification: {
+        setNotificationMessage: React.Dispatch<React.SetStateAction<string>>;
+        setNotificationType: React.Dispatch<
+            React.SetStateAction<NotificationTypeEnum>
+        >;
+    };
 }
 
 const CCSelection = (props: Props) => {
     const [searchVal, setSearchVal] = useState('');
+    const [loading, setLoading] = useState(false);
+
     const selectedCC = useMemo(() => {
         return Object.keys(props.chiefComplaints).filter(
             (item) => item !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM
         );
     }, [props.chiefComplaints]);
+    const [showRequiredFieldValidation, setShowRequiredFieldValidation] =
+        useState({
+            status: false,
+            forUID: '-1',
+        });
+
+    const history = useHistory();
+
+    const [showNodeTen, setShowNodeTen] = useState(
+        Boolean(props.userSurveyState.nodes['10'].response)
+    );
 
     const canWeAddNewCC = (complaint: string): boolean => {
         // if user trying to unselect or length is < 3
@@ -71,6 +97,12 @@ const CCSelection = (props: Props) => {
 
         return false;
     };
+
+    const showNextButton = useMemo(() => {
+        return !(
+            showNodeTen && Object.keys(props.chiefComplaints).length === 0
+        );
+    }, [props.chiefComplaints, showNodeTen]);
 
     useEffect(() => {
         const { userSurveyState, processSurveyGraph, saveHpiHeader } = props;
@@ -87,18 +119,27 @@ const CCSelection = (props: Props) => {
         }
     }, []);
 
+    useEffect(() => {
+        setShowRequiredFieldValidation({
+            status: false,
+            forUID: '-1',
+        });
+    }, [props.userSurveyState]);
+
     const onPrevClick = () => props.onPreviousClick();
 
     const onNextClick = (e: any) => {
-        const CC = Object.keys(props.chiefComplaints);
-
-        if (
-            !CC.includes(ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM) &&
-            CC.length === 0
+        if (selectedCC.length === 0 && !showNodeTen) {
+            setShowNodeTen(true);
+        } else if (
+            selectedCC.length === 0 &&
+            showNodeTen &&
+            !props.userSurveyState.nodes['10'].response
         ) {
-            props.setErrorMessage(
-                'Please select at least one condition or symptom'
-            );
+            setShowRequiredFieldValidation({
+                status: true,
+                forUID: '10',
+            });
         } else {
             props.continue(e);
         }
@@ -155,6 +196,8 @@ const CCSelection = (props: Props) => {
                                     props.setErrorMessage(
                                         'The maximum of 3 has been reached. Please un-select an existing option before adding a new one.'
                                     );
+                                    getData(complaint);
+                                    initialSurveySearch(id, complaint);
                                     return;
                                 }
                                 currentNoteStore.dispatch({
@@ -254,6 +297,27 @@ const CCSelection = (props: Props) => {
                         )}
                     </>
                 );
+            case ResponseTypes.LONG_TEXT:
+                return (
+                    <div className={style.diseaseSelections__textarea}>
+                        <TextArea
+                            key={id}
+                            value={currEntry.response}
+                            placeholder={
+                                'Description of condition or symptom... (max 200 characters)'
+                            }
+                            onChange={(
+                                _e: any,
+                                { value }: { value: string }
+                            ) => {
+                                if (value.length <= 200) {
+                                    props.initialSurveyAddText(id, value);
+                                }
+                            }}
+                        />
+                    </div>
+                );
+
             default:
                 return;
         }
@@ -264,9 +328,74 @@ const CCSelection = (props: Props) => {
     const questions = initialQuestions as initialQuestionsState;
     const userSurveyStateNodes = Object.keys(props.userSurveyState.nodes);
 
+    const handleSubmit = () => {
+        if (selectedCC.length === 0 && showNodeTen === false) {
+            setShowNodeTen(true);
+            return;
+        }
+
+        if (
+            showNodeTen &&
+            selectedCC.length === 0 &&
+            !(
+                (props.userSurveyState.nodes['10'].response || '') as string
+            ).trim()
+        ) {
+            setShowRequiredFieldValidation({
+                status: true,
+                forUID: '10',
+            });
+            return;
+        }
+        const rootState = currentNoteStore.getState();
+
+        const first_name = rootState.additionalSurvey.legalFirstName;
+        const last_name = rootState.additionalSurvey.legalLastName;
+        const appointment_date =
+            rootState.userView.userSurvey.nodes[8].response;
+        const date_of_birth = rootState.additionalSurvey.dateOfBirth;
+        const last_4_ssn = rootState.additionalSurvey.socialSecurityNumber;
+        const hpi_text = getHPIText();
+        const clinician_id = rootState.clinicianDetail.id;
+
+        const { setNotificationMessage, setNotificationType } =
+            props.notification;
+        setLoading(true);
+        localhostClient
+            .post('/appointment', {
+                first_name,
+                last_name,
+                appointment_date,
+                date_of_birth,
+                last_4_ssn,
+                hpi_text: JSON.stringify(hpi_text),
+                clinician_id,
+            })
+            .then((res) => {
+                if (res.status !== 200) throw new Error();
+                history.push('/submission-successful');
+            })
+            .catch((_error) => {
+                setNotificationMessage('Failed to submit your questionnaire');
+                setNotificationType(NotificationTypeEnum.ERROR);
+            })
+            .finally(() => {
+                if (showRequiredFieldValidation.status) {
+                    setShowRequiredFieldValidation({
+                        status: false,
+                        forUID: '-1',
+                    });
+                }
+                setLoading(false);
+            });
+    };
+
     const content =
         nodeKey in questions.nodes &&
         questions.graph[nodeKey].map((key) => {
+            if (key === '10' && !(showNodeTen && selectedCC.length === 0))
+                return null;
+
             return (
                 <div
                     className={`${
@@ -279,6 +408,12 @@ const CCSelection = (props: Props) => {
                     <p>{questions.nodes[key].text}</p>
 
                     {userSurveyStateNodes.length && renderSwitch(key)}
+                    {showRequiredFieldValidation.forUID === key &&
+                        showRequiredFieldValidation.status === true && (
+                            <div className={style.diseaseSelections__error}>
+                                This field is required
+                            </div>
+                        )}
                 </div>
             );
         });
@@ -288,7 +423,9 @@ const CCSelection = (props: Props) => {
             {content}
             <NavigationButton
                 previousClick={onPrevClick}
-                nextClick={onNextClick}
+                nextClick={showNextButton ? onNextClick : handleSubmit}
+                loading={loading}
+                secondButtonLabel={showNextButton ? 'Next' : 'Submit'}
             />
         </div>
     );
@@ -336,6 +473,10 @@ interface DispatchProps {
         initialSurveyState: number
     ) => UpdateAdditionalSurveyAction;
     resetAdditionalSurveyPage: () => GoBackToAdditionalSurvey;
+    initialSurveyAddText: (
+        id: string,
+        response: string
+    ) => InitialSurveyAddTextActions;
 }
 
 type Props = HpiHeadersProps &
@@ -355,6 +496,7 @@ const mapDispatchToProps = {
     initialSurveySearch,
     updateAdditionalSurveyDetails,
     resetAdditionalSurveyPage,
+    initialSurveyAddText,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CCSelection);

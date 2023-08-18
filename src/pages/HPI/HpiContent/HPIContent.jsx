@@ -1,18 +1,13 @@
 import axios from 'axios';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { graphClientURL } from 'constants/api.js';
-import {
-    DISEASE_TABS_MED_BP,
-    DISEASE_TABS_SMALL_BP,
-    ROS_LARGE_BP,
-    ROS_MED_BP,
-    ROS_SMALL_BP,
-} from 'constants/breakpoints';
+import { graphClientURL, localhostClient } from 'constants/api.js';
+import { ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP } from 'constants/breakpoints';
 import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import { withDimensionsHook } from 'hooks/useDimensions';
 import React from 'react';
 import Masonry from 'react-masonry-css';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { setNotesChiefComplaint } from 'redux/actions/chiefComplaintsActions';
 import { processKnowledgeGraph } from 'redux/actions/hpiActions';
 import { saveHpiHeader } from 'redux/actions/hpiHeadersActions';
@@ -20,13 +15,13 @@ import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import { selectPlanConditions } from 'redux/selectors/planSelectors';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 import { currentNoteStore } from 'redux/store';
-import { Button, Container, Icon, Search, Segment } from 'semantic-ui-react';
+import { Search, Segment } from 'semantic-ui-react';
+import getHPIText from 'utils/getHPIText';
 import { CHIEF_COMPLAINTS } from '../../../redux/actions/actionTypes';
 import { hpiHeaders } from '../../EditNote/content/hpi/knowledgegraph/src/API';
 import BodySystemDropdown from '../../EditNote/content/hpi/knowledgegraph/src/components/BodySystemDropdown';
 import ChiefComplaintsButton from '../../EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
 import DiseaseForm from '../../EditNote/content/hpi/knowledgegraph/src/components/DiseaseFormV2';
-import MiscBox from '../../EditNote/content/hpi/knowledgegraph/src/components/MiscBox';
 
 class HPIContent extends React.Component {
     constructor(props) {
@@ -34,6 +29,7 @@ class HPIContent extends React.Component {
         this.state = {
             searchVal: '',
             activeIndex: 0, //misc notes box active
+            loading: false,
         };
     }
 
@@ -80,7 +76,43 @@ class HPIContent extends React.Component {
         return result;
     };
 
-    handleSubmit = () => {};
+    handleSubmit = () => {
+        const rootState = currentNoteStore.getState();
+
+        const first_name = rootState.additionalSurvey.legalFirstName;
+        const last_name = rootState.additionalSurvey.legalLastName;
+        const appointment_date =
+            rootState.userView.userSurvey.nodes[8].response;
+        const date_of_birth = rootState.additionalSurvey.dateOfBirth;
+        const last_4_ssn = rootState.additionalSurvey.socialSecurityNumber;
+        const hpi_text = getHPIText();
+        const clinician_id = rootState.clinicianDetail.id;
+
+        const { setNotificationMessage, setNotificationType } =
+            this.props.notification;
+        this.setState({ loading: true });
+        localhostClient
+            .post('/appointment', {
+                first_name,
+                last_name,
+                appointment_date,
+                date_of_birth,
+                last_4_ssn,
+                hpi_text: JSON.stringify(hpi_text),
+                clinician_id,
+            })
+            .then((res) => {
+                if (res.status !== 200) throw new Error();
+                this.props.history.push('/submission-successful');
+            })
+            .catch((_error) => {
+                setNotificationMessage('Failed to submit your questionnaire');
+                setNotificationType('error');
+            })
+            .finally(() => {
+                this.setState({ loading: false });
+            });
+    };
 
     render() {
         const { windowWidth } = this.props.dimensions;
@@ -166,12 +198,6 @@ class HPIContent extends React.Component {
             numColumns = 2;
         }
 
-        const collapseTabs =
-            Object.keys(chiefComplaints).length >= 10 ||
-            (Object.keys(chiefComplaints).length >= 5 &&
-                windowWidth < DISEASE_TABS_MED_BP) ||
-            windowWidth < DISEASE_TABS_SMALL_BP;
-
         const shouldShowNextButton = this.shouldShowNextButton();
 
         // depending on the current step, we switch to a different view
@@ -218,72 +244,29 @@ class HPIContent extends React.Component {
                 ) {
                     return (
                         <>
-                            {collapseTabs ? (
-                                <Container>
-                                    <Segment>
-                                        <MiscBox
-                                            activeThing={this.props.activeTab}
-                                            step={step}
-                                        />
-                                        <DiseaseForm
-                                            key={this.props.activeTab}
-                                            category={this.props.activeTab}
-                                            nextStep={this.continue}
-                                            prevStep={this.back}
-                                        />
-                                    </Segment>
-                                    <Button
-                                        icon
-                                        floated='left'
-                                        onClick={this.back}
-                                        className='hpi-small-previous-button'
-                                    >
-                                        <Icon
-                                            name='arrow left'
-                                            className='big'
-                                        />
-                                    </Button>
-                                    <Button
-                                        icon
-                                        labelPosition='left'
-                                        floated='left'
-                                        onClick={this.back}
-                                        className='hpi-previous-button'
-                                    >
-                                        Prev
-                                        <Icon name='arrow left' />
-                                    </Button>
-                                </Container>
-                            ) : (
-                                <>
-                                    <DiseaseForm
-                                        key={
-                                            Object.keys(
-                                                parentNodes[
-                                                    this.props.activeItem
-                                                ]
-                                            )[0]
-                                        }
-                                        category={this.props.activeItem}
-                                        nextStep={this.continue}
-                                        prevStep={this.back}
-                                    />
+                            <DiseaseForm
+                                key={
+                                    Object.keys(
+                                        parentNodes[this.props.activeItem]
+                                    )[0]
+                                }
+                                category={this.props.activeItem}
+                                nextStep={this.continue}
+                                prevStep={this.back}
+                            />
 
-                                    <NavigationButton
-                                        previousClick={this.back}
-                                        nextClick={
-                                            shouldShowNextButton
-                                                ? this.continue
-                                                : this.handleSubmit
-                                        }
-                                        secondButtonLabel={
-                                            shouldShowNextButton
-                                                ? 'Next'
-                                                : 'Submit'
-                                        }
-                                    />
-                                </>
-                            )}
+                            <NavigationButton
+                                previousClick={this.back}
+                                nextClick={
+                                    shouldShowNextButton
+                                        ? this.continue
+                                        : this.handleSubmit
+                                }
+                                loading={this.state.loading}
+                                secondButtonLabel={
+                                    shouldShowNextButton ? 'Next' : 'Submit'
+                                }
+                            />
                         </>
                     );
                 }
@@ -312,5 +295,5 @@ const mapDispatchToProps = {
 };
 
 export default withDimensionsHook(
-    connect(mapStateToProps, mapDispatchToProps)(HPIContent)
+    withRouter(connect(mapStateToProps, mapDispatchToProps)(HPIContent))
 );

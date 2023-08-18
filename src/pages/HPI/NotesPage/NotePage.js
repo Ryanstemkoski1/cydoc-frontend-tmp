@@ -69,7 +69,7 @@ class NotePage extends Component {
         //Instantiates and returns the correct content component based on the active tab
         //passes in the corresponding handler and values prop
         let tabToDisplay;
-        const { patientView, chiefComplaints } = this.props,
+        const { patientView, chiefComplaints, notification } = this.props,
             defaultTab = <InitialSurvey continue={this.nextFormClick} />;
         if (patientView) {
             switch (activeItem) {
@@ -169,6 +169,7 @@ class NotePage extends Component {
                                     ]
                                 );
                             }}
+                            notification={notification}
                         />
                     );
                     break;

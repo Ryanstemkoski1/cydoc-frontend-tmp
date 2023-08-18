@@ -1,32 +1,97 @@
-import React, { useEffect, useState } from 'react';
+import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
+import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
+import { ProductType, ViewType } from 'assets/enums/route.enums';
+import CommonLayout from 'components/CommonLayout/CommonLayout';
+import Header from 'components/Header/Header';
+import Stepper from 'components/Stepper/Stepper';
+import Notification, {
+    NotificationTypeEnum,
+} from 'components/tools/Notification/Notification';
+import { localhostClient } from 'constants/api';
+import { YesNoResponse } from 'constants/enums';
+import useQuery from 'hooks/useQuery';
+import { hpiHeaders } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
+import initialQuestions from 'pages/EditNote/content/patientview//constants/initialQuestions.json';
+import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect, useHistory, useParams } from 'react-router';
+import { updateActiveItem } from 'redux/actions/activeItemActions';
+import { selectChiefComplaint } from 'redux/actions/chiefComplaintsActions';
+import { setClinicianDetail } from 'redux/actions/clinicianDetailActions';
+import { saveHpiHeader } from 'redux/actions/hpiHeadersActions';
+import {
+    initialSurveyAddDateOrPlace,
+    processSurveyGraph,
+} from 'redux/actions/userViewActions';
+import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
 import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
-import { updateActiveItem } from 'redux/actions/activeItemActions';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
-import { YesNoResponse } from 'constants/enums';
-import Stepper from 'components/Stepper/Stepper';
-import PreHPI from './PreHpi/PreHPI';
-import InitialSurveyHPI from './InitialSurvey/InitialSurvey';
-import CCSelection from './ChiefComplaintSelection/CCSelection';
-import NewNotePage from './NotesPage/NotePage';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import style from './HPI.module.scss';
-import { Redirect, useParams } from 'react-router';
-import CommonLayout from 'components/CommonLayout/CommonLayout';
-import Header from 'components/Header/Header';
+import { Loader } from 'semantic-ui-react';
+import AuthContext from '../../contexts/AuthContext';
 import BrowseNotes from '../BrowseNotes/BrowseNotes';
-import { selectChiefComplaint } from 'redux/actions/chiefComplaintsActions';
-import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
-import Notification from 'components/tools/Notification/Notification';
+import CCSelection from './ChiefComplaintSelection/CCSelection';
+import style from './HPI.module.scss';
+import InitialSurveyHPI from './InitialSurvey/InitialSurvey';
+import NewNotePage from './NotesPage/NotePage';
+import PreHPI from './PreHpi/PreHPI';
 
 const HPI = () => {
     const dispatch = useDispatch();
-    const [errorMessage, setErrorMessage] = useState('');
+    const [notificationMessage, setNotificationMessage] = useState('');
+    const [notificationType, setNotificationType] = useState(
+        NotificationTypeEnum.ERROR
+    );
     const [title, SetTitle] = useState('');
+    const history = useHistory();
+    const query = useQuery();
+    const [isLoading, setIsLoading] = useState(true);
+    let { view } = useParams();
+    const context = useContext(AuthContext);
+
+    useEffect(() => {
+        if (
+            !Object.keys(reduxState.userSurveyState.graph).length &&
+            !Object.keys(reduxState.userSurveyState.nodes).length &&
+            !Object.keys(reduxState.userSurveyState.order).length
+        )
+            dispatch(processSurveyGraph(initialQuestions));
+
+        if (hpiHeaders) {
+            const data = hpiHeaders;
+            data.then((res) => dispatch(saveHpiHeader(res.data)));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (view === ViewType.DOCTOR) return;
+
+        const [CLINICIAN_ID, INSTITUTION_ID] = [
+            query.get(HPIPatientQueryParams.CLINICIAN_ID),
+            query.get(HPIPatientQueryParams.INSTITUTION_ID),
+        ];
+
+        if (!CLINICIAN_ID || !INSTITUTION_ID) {
+            history.replace('/');
+            return;
+        }
+
+        localhostClient
+            .get(`/clinic/${CLINICIAN_ID}/${INSTITUTION_ID}`)
+            .then((res) => {
+                dispatch(setClinicianDetail(res.data.detail));
+                // setting the userSurveyState.node[9] value to clinician's last name.
+                dispatch(
+                    initialSurveyAddDateOrPlace(9, res.data.detail.last_name)
+                );
+                setIsLoading(false);
+            })
+            .catch((_error) => {
+                history.replace('/');
+            });
+    }, [query, view]);
 
     const [patientViewTabs, setPatientViewTabs] = useState([
         'InitialSurvey',
@@ -42,11 +107,10 @@ const HPI = () => {
         chiefComplaints: state.chiefComplaints,
     }));
 
-    let { view } = useParams();
-
     useEffect(() => {
-        if (view === 'patient') dispatch(updateActiveItem('InitialSurvey'));
-        else if (view === 'doctor')
+        if (view === ViewType.PATIENT)
+            dispatch(updateActiveItem('InitialSurvey'));
+        else if (view === ViewType.DOCTOR)
             dispatch(updateActiveItem('Generated Note'));
 
         setTimeout(() => {
@@ -55,7 +119,7 @@ const HPI = () => {
     }, [view]);
 
     useEffect(() => {
-        if (view !== 'patient') return undefined;
+        if (view !== ViewType.PATIENT) return undefined;
 
         const steps = ['InitialSurvey', 'PreHPI'];
         if (
@@ -83,19 +147,44 @@ const HPI = () => {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            setErrorMessage('');
+            setNotificationMessage('');
         }, 3000);
         return () => clearTimeout(timeout);
-    }, [errorMessage]);
+    }, [notificationMessage]);
 
     useEffect(() => {
         const { title } = screenForPatient();
         SetTitle(title);
     }, [reduxState.activeItem]);
 
+    function canWeMoveToChiefComplaintPages(name) {
+        const selectedChiefComplaints = Object.keys(
+            reduxState.chiefComplaints
+        ).filter((item) => item !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM);
+
+        const questionTenResponse = (
+            reduxState.userSurveyState.nodes['10'].response || ''
+        ).trim();
+
+        if (
+            (selectedChiefComplaints.includes(name) ||
+                name === ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM) &&
+            (reduxState.userSurveyState.nodes['3'].response ===
+                YesNoResponse.Yes ||
+                reduxState.userSurveyState.nodes['4'].response ===
+                    YesNoResponse.Yes) &&
+            selectedChiefComplaints.length === 0 &&
+            !questionTenResponse
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
     function onTabChange(name) {
-        if (errorMessage) {
-            setErrorMessage('');
+        if (notificationMessage) {
+            setNotificationMessage('');
         }
 
         const {
@@ -113,12 +202,14 @@ const HPI = () => {
                 socialSecurityNumber
             )
         ) {
-            setErrorMessage('Please fill in all details to continue');
+            setNotificationMessage('Please fill in all details to continue');
             return;
         }
 
-        dispatch(updateActiveItem(name));
-        window.scrollTo(0, 0);
+        if (canWeMoveToChiefComplaintPages(name)) {
+            dispatch(updateActiveItem(name));
+            window.scrollTo(0, 0);
+        }
     }
 
     // brings users to the next form when clicked
@@ -126,8 +217,8 @@ const HPI = () => {
         // do nothing
         if (!reduxState.patientView) return;
 
-        if (errorMessage) {
-            setErrorMessage('');
+        if (notificationMessage) {
+            setNotificationMessage('');
         }
 
         const tabs = patientViewTabs;
@@ -136,8 +227,10 @@ const HPI = () => {
         if (length === nextTabIndex) return;
 
         const nextTab = tabs[nextTabIndex];
-        dispatch(updateActiveItem(nextTab));
-        window.scrollTo(0, 0);
+        if (canWeMoveToChiefComplaintPages(nextTab)) {
+            dispatch(updateActiveItem(nextTab));
+            window.scrollTo(0, 0);
+        }
     };
 
     // brings users to the previous form when clicked
@@ -145,8 +238,8 @@ const HPI = () => {
         // do nothing
         if (!reduxState.patientView) return;
 
-        if (errorMessage) {
-            setErrorMessage('');
+        if (notificationMessage) {
+            setNotificationMessage('');
         }
 
         const tabs = patientViewTabs;
@@ -160,8 +253,17 @@ const HPI = () => {
     };
 
     // invalid view entered, redirect to hpi - patient view
-    if (['doctor', 'patient'].includes(view) === false) {
-        return <Redirect to='/hpi/patient' />;
+    if ([ViewType.DOCTOR, ViewType.PATIENT].includes(view) === false) {
+        return <Redirect to={`/${ProductType.HPI}/${ViewType.PATIENT}`} />;
+    }
+
+    // on doctor view authentication is must
+    if (view === ViewType.DOCTOR && !context.token) {
+        return <Redirect to='/login' />;
+    }
+
+    if (isLoading && view === ViewType.PATIENT) {
+        return <Loader active />;
     }
 
     function screenForPatient() {
@@ -171,7 +273,7 @@ const HPI = () => {
                     component: (
                         <InitialSurveyHPI
                             continue={onNextClick}
-                            setErrorMessage={setErrorMessage}
+                            setErrorMessage={setNotificationMessage}
                         />
                     ),
                     title: 'Please enter the details below',
@@ -183,7 +285,7 @@ const HPI = () => {
                         <PreHPI
                             continue={onNextClick}
                             onPreviousClick={onPreviousClick}
-                            setErrorMessage={setErrorMessage}
+                            setErrorMessage={setNotificationMessage}
                         />
                     ),
                     title: 'Help Cydoc personalize your questionnaire',
@@ -195,7 +297,11 @@ const HPI = () => {
                         <CCSelection
                             continue={onNextClick}
                             onPreviousClick={onPreviousClick}
-                            setErrorMessage={setErrorMessage}
+                            setErrorMessage={setNotificationMessage}
+                            notification={{
+                                setNotificationMessage,
+                                setNotificationType,
+                            }}
                         />
                     ),
                     title: `Please select the top 3 conditions or symptoms you'd like to discuss`,
@@ -207,6 +313,10 @@ const HPI = () => {
                         <NewNotePage
                             onNextClick={onNextClick}
                             onPreviousClick={onPreviousClick}
+                            notification={{
+                                setNotificationMessage,
+                                setNotificationType,
+                            }}
                         />
                     ),
                     title: reduxState.activeItem,
@@ -220,22 +330,26 @@ const HPI = () => {
             <Header />
             <div className={style.editNote}>
                 <div className='centering'>
-                    {view === 'patient' && (
-                        <Stepper
-                            tabs={patientViewTabs}
-                            onTabChange={onTabChange}
-                        />
+                    {view === ViewType.PATIENT && (
+                        <>
+                            <Stepper
+                                tabs={patientViewTabs}
+                                onTabChange={onTabChange}
+                            />
+                            <CommonLayout title={title}>
+                                {notificationMessage && (
+                                    <Notification
+                                        message={notificationMessage}
+                                        type={notificationType}
+                                    />
+                                )}
+                                {/* TODO: NEED TO REFACTOR */}
+                                {screenForPatient().component}
+                                {/* <QRCode showDownloadButton={true} /> */}
+                            </CommonLayout>
+                        </>
                     )}
-                    {view === 'patient' && (
-                        <CommonLayout title={title}>
-                            {errorMessage && (
-                                <Notification message={errorMessage} />
-                            )}
-                            {/* TODO: NEED TO REFACTOR */}
-                            {view === 'patient' && screenForPatient().component}
-                        </CommonLayout>
-                    )}
-                    {view === 'doctor' && <BrowseNotes />}
+                    {view === ViewType.DOCTOR && <BrowseNotes />}
                 </div>
             </div>
         </>

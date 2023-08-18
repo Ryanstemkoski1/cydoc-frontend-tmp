@@ -1,17 +1,14 @@
-import Dropdown from 'components/Input/Dropdown';
+import DropdownForClinicians from 'components/Input/DropdownForClinicians';
 import Modal from 'components/Modal/Modal';
-import React, { useEffect, useState } from 'react';
+import { localhostClient } from 'constants/api';
+import React, { useCallback, useEffect, useState } from 'react';
 import LeftArrow from '../../assets/images/left-arrow.svg';
 import RightArrow from '../../assets/images/right-arrow.svg';
 import style from './BrowseNotes.module.scss';
 
 const selectOptions: string[] = ['Harsh Patel', 'Baker, Ronald', 'Smith, Jane'];
-const usersList: string[] = ['Harsh Patel', 'Baker, Ronald', 'Smith, Jane'];
-const unreportedUsersList: string[] = [
-    'Harsh Patel',
-    'Baker, Ronald',
-    'Smith, Jane',
-];
+const usersList: User[] = [];
+const unreportedUsersList: User[] = [];
 
 const months = [
     'January',
@@ -45,20 +42,78 @@ function formatDate(date: Date): string {
         months[date.getMonth()] +
         ' ' +
         date.getDate() +
-        ' ' +
+        ', ' +
         date.getFullYear()
     );
+}
+
+function formatDatev2(date: Date): string {
+    return (
+        date.getFullYear().toString() +
+        '-' +
+        (date.getMonth() + 1).toString() +
+        '-' +
+        date.getDate().toString()
+    );
+}
+
+interface User {
+    id: number;
+    first_name: string;
+    last_name: string;
+    date_of_birth: Date;
+}
+
+export interface Clinician {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    institution_id: number;
 }
 
 const BrowseNotes = () => {
     const [date, setDate] = useState(new Date());
     const [users, setUsers] = useState(usersList);
     const [unreportedUsers, setUnreportedUsers] = useState(unreportedUsersList);
-    const [showModal, setShowModal] = useState<boolean>(false);
-    const [username, setUsername] = useState<string>('');
 
-    const openModal = (user: string) => {
-        setUsername(user);
+    const [clinicians, setClinicians] = useState<Clinician[]>([]);
+    const [clinician, setClinician] = useState<Clinician>();
+
+    const fetchHPIAppointments = useCallback(
+        async (date: Date, clinician_id: number) => {
+            const response = await localhostClient.get(
+                `/appointments?appointment_date=${formatDatev2(
+                    date
+                )}&clinician_id=${clinician_id}`
+            );
+
+            const fetchDetails = response.data.data as User[];
+
+            setUsers(
+                fetchDetails.map(
+                    ({ first_name, last_name, date_of_birth, id }) => ({
+                        id,
+                        first_name,
+                        date_of_birth: new Date(date_of_birth),
+                        last_name,
+                    })
+                )
+            );
+        },
+        []
+    );
+
+    const fetchClinicians = useCallback(async () => {
+        const response = await localhostClient.get('/clinicians');
+        setClinicians(response.data.clinicians);
+    }, []);
+
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [appointmentId, setAppointmentId] = useState<number>(0);
+
+    const openModal = (appointmentId: number) => {
+        setAppointmentId(appointmentId);
         setShowModal(true);
     };
 
@@ -71,14 +126,15 @@ const BrowseNotes = () => {
     };
 
     useEffect(() => {
-        if (date.getTime() > new Date().getTime()) {
-            setUsers([]);
-            setUnreportedUsers([]);
-        } else {
-            setUsers(usersList);
-            setUnreportedUsers(usersList);
-        }
-    }, [date]);
+        if (!clinician) return;
+        setUsers([]);
+        fetchHPIAppointments(date, clinician.id);
+    }, [date, clinician]);
+
+    useEffect(() => {
+        setClinicians([]);
+        fetchClinicians();
+    }, []);
 
     return (
         <div className={style.notesBlock}>
@@ -105,20 +161,22 @@ const BrowseNotes = () => {
                 <div className={` ${style.notesBlock__content} flex-wrap `}>
                     <div className={style.notesBlock__contentInner}>
                         <div className='flex align-center justify-between'>
-                            <h4>Clinical</h4>
+                            <h4>Clinician</h4>
                             <div className={style.notesBlock__dropdown}>
-                                <Dropdown
-                                    items={selectOptions}
-                                    onChange={() => {
-                                        return;
+                                <DropdownForClinicians
+                                    items={clinicians}
+                                    onChange={(id: number) => {
+                                        const selectedClinician =
+                                            clinicians.find(
+                                                (item) => item.id === id
+                                            ) as Clinician;
+                                        setClinician(selectedClinician);
                                     }}
-                                    placeholder='Clinical'
+                                    placeholder='Clinician'
                                 />
                             </div>
                         </div>
-                        <div
-                            className={`${style.notesBlock__tableWrapper} scrollbar`}
-                        >
+                        <div className={`${style.notesBlock__tableWrapper}`}>
                             <table>
                                 {/* <thead>
                                     <tr>
@@ -145,14 +203,20 @@ const BrowseNotes = () => {
                                                             <span
                                                                 onClick={() => {
                                                                     openModal(
-                                                                        user
+                                                                        user.id
                                                                     );
                                                                 }}
                                                             >
-                                                                {user}
+                                                                {user.first_name +
+                                                                    ' ' +
+                                                                    user.last_name}
                                                             </span>
                                                         </td>
-                                                        <td>5/22/1974</td>
+                                                        <td>
+                                                            {formatDatev2(
+                                                                user.date_of_birth
+                                                            )}
+                                                        </td>
                                                     </tr>
                                                 );
                                             })}
@@ -165,11 +229,9 @@ const BrowseNotes = () => {
                     <div className={style.notesBlock__contentInner}>
                         <h4 className={`${style.clinical} flex align-center`}>
                             {' '}
-                            Clinical: Unreported
+                            Clinician: Unreported
                         </h4>
-                        <div
-                            className={`${style.notesBlock__tableWrapper} scrollbar`}
-                        >
+                        <div className={`${style.notesBlock__tableWrapper}`}>
                             <table>
                                 <tbody>
                                     {unreportedUsers.length == 0 ? (
@@ -191,14 +253,20 @@ const BrowseNotes = () => {
                                                                 <span
                                                                     onClick={() =>
                                                                         openModal(
-                                                                            user
+                                                                            user.id
                                                                         )
                                                                     }
                                                                 >
-                                                                    {user}
+                                                                    {user.first_name +
+                                                                        ' ' +
+                                                                        user.last_name}
                                                                 </span>
                                                             </td>
-                                                            <td>5/22/1974</td>
+                                                            <td>
+                                                                {formatDatev2(
+                                                                    user.date_of_birth
+                                                                )}
+                                                            </td>
                                                         </tr>
                                                     );
                                                 }
@@ -212,9 +280,10 @@ const BrowseNotes = () => {
                 </div>
             </div>
             <Modal
+                key={appointmentId}
                 showModal={showModal}
                 setShowModal={setShowModal}
-                username={username}
+                appointmentId={appointmentId}
             />
         </div>
     );
