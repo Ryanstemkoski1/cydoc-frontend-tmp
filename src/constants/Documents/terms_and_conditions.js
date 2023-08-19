@@ -525,15 +525,7 @@ const TermsAndConditions = () => {
                     all applicable federal, state and foreign privacy and data
                     protection Laws.  Please report system availability or other
                     system issues (security or otherwise) to Cydoc Support by
-                    emailing
-                    <a
-                        href="mailto:admin@cydoc.ai"
-                        target="_blank"
-                        rel="noreferrer noopener"
-                    >
-                        admin@cydoc.ai
-                    </a>
-                    .
+                    emailing admin@cydoc.ai.
                 </span>
         </div>
     </div>
@@ -1267,7 +1259,7 @@ const TermsAndConditions = () => {
                 <strong style={stylingObject.underline}>Force Majeure</strong>.  Nonperformance of either party shall be
                     excused to the extent that performance is rendered
                     impossible by any reason where failure to perform is beyond
-                    the reasonable control of the nonperforming party.
+                    the reasonable control of the non performing party.
                 </span>
         </div>
     </div>
