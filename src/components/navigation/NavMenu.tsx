@@ -94,21 +94,21 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     const dropdownOptions = [
         {
             as: Link,
-            to: '/editprofile',
+            to: '/edit-profile',
             key: 'editProfile',
             text: 'Edit Profile',
             icon: 'setting',
             selected: false,
-            active: window.location.href.includes('editprofile'),
+            active: window.location.href.includes('edit-profile'),
         },
         {
             as: Link,
-            to: '/profilesecurity',
+            to: '/profile-security',
             key: 'profileSecurity',
             text: 'Profile Security',
             icon: 'lock',
             selected: false,
-            active: window.location.href.includes('profilesecurity'),
+            active: window.location.href.includes('profile-security'),
         },
         {
             as: Link,
@@ -163,7 +163,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                 name='users'
                 content={collapseLoggedInNav ? undefined : 'Manager Users'}
                 icon='users'
-                onClick={() => history.push('/managerdashboard')}
+                onClick={() => history.push('/manager-dashboard')}
             />
         </Menu.Item>
     ) : null;

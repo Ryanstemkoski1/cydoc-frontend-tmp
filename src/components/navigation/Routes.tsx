@@ -66,15 +66,15 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                 path='/templates/edit'
                 component={EditTemplate}
             />
-            <PrivateRoute exact path='/editprofile' component={EditProfile} />
+            <PrivateRoute exact path='/edit-profile' component={EditProfile} />
             <PrivateRoute
                 exact
-                path='/profilesecurity'
+                path='/profile-security'
                 component={ProfileSecurity}
             />
             <ManagerRoute
                 exact
-                path='/managerdashboard'
+                path='/manager-dashboard'
                 component={ManagerDashboard}
             />
             <Route exact path='/privacypolicy' component={Policy} />
