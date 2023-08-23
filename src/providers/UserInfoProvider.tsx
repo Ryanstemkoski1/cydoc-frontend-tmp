@@ -1,6 +1,6 @@
 import useAuth from 'hooks/useAuth';
-import { updateLoggedUser } from 'modules/logging';
-import { getDbUser } from 'modules/user-api';
+import { updateLoggedUser } from '../modules/logging';
+import { getDbUser } from '../modules/user-api';
 import React, {
     PropsWithChildren,
     useCallback,

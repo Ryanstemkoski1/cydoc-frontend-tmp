@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { log } from 'modules/logging';
+import { log } from '../../modules/logging';
 import { useCallback, useMemo } from 'react';
 import { SignUpFormData } from './SignUpForm';
 import {

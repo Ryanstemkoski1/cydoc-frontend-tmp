@@ -3,7 +3,7 @@ import { UserInfoStep } from './UserInfoStep';
 import { PrivacyPolicyStep } from './PrivacyPolicyStep';
 import { TermsStep } from './TermsStep';
 import { InstitutionPickerStep } from './InstitutionPickerStep';
-import { log } from 'modules/logging';
+import { log } from '../../modules/logging';
 
 export const USER_INFO_STEP = 0;
 export const INSTITUTION_STEP = 1;

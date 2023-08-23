@@ -2,16 +2,16 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Container } from 'semantic-ui-react';
 import './ManagerDashboard.css';
 import { DbUser } from '@cydoc-ai/types';
-import { getInstitutionMembers } from 'modules/institution-api';
+import { getInstitutionMembers } from '../../modules/institution-api';
 import useUser from 'hooks/useUser';
-import { log } from 'modules/logging';
+import { log } from '../../modules/logging';
 import MaterialTable, {
     materialTableHeight,
 } from 'components/Molecules/MaterialTable';
 import { Delete, Edit } from '@mui/icons-material';
 import { Column, Options } from '@material-table/core';
 import InviteClinicianModal from './InviteClinicianModal';
-import { removeUser } from 'modules/user-api';
+import { removeUser } from '../../modules/user-api';
 
 // manager dashboard view to view/add/remove doctor accounts
 const ManagerDashboard = () => {

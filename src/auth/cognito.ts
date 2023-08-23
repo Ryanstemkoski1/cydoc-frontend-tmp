@@ -4,8 +4,8 @@ import {
     COGNITO_CLIENT_ID,
     COGNITO_POOL_ID,
     REGION,
-} from 'modules/environment';
-import { stringFromError } from 'modules/error-utils';
+} from '../../src/modules/environment';
+import { stringFromError } from '../../src/modules/error-utils';
 import { toast } from 'react-toastify';
 
 Amplify.configure({

@@ -1,7 +1,7 @@
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useField, useFormikContext } from 'formik';
-import { stringFromError } from 'modules/error-utils';
-import { log } from 'modules/logging';
+import { stringFromError } from '../modules/error-utils';
+import { log } from '../modules/logging';
 import { SignUpFormData } from 'pages/Account/SignUpForm';
 
 export function useValidatePaymentMethod() {

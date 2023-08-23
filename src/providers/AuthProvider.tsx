@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import invariant from 'tiny-invariant';
 
-import { breadcrumb, log, updateLoggedUser } from 'modules/logging';
+import { breadcrumb, log, updateLoggedUser } from '../modules/logging';
 import { useHistory } from 'react-router-dom';
 import {
     CognitoAuth,
@@ -22,8 +22,8 @@ import {
     NEW_PASSWORD_REQUIRED,
 } from 'auth/cognito';
 import { UserInfoProvider } from './UserInfoProvider';
-import { stringFromError } from 'modules/error-utils';
-import { formatPhoneNumber } from 'modules/user-api';
+import { stringFromError } from '../modules/error-utils';
+import { formatPhoneNumber } from '../modules/user-api';
 import { Auth } from 'aws-amplify';
 
 export interface AuthContextValues {
