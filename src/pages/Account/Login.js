@@ -147,9 +147,8 @@ const Login = () => {
     if (emailVerified && authenticated) {
         return (
             <NotesContext.Consumer>
-                {(ctx) => {
-                    ctx.loadNotes(context.user._id);
-                    return <Redirect push to='/dashboard' />;
+                {(_ctx) => {
+                    return <Redirect push to='/hpi/doctor' />;
                 }}
             </NotesContext.Consumer>
         );
