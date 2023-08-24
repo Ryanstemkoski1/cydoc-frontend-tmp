@@ -1,12 +1,18 @@
-import DropdownForClinicians from 'components/Input/DropdownForClinicians';
+import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
+import { getFullName } from 'components/Input/DropdownForClinicians';
+import Input from 'components/Input/Input';
 import Modal from 'components/Modal/Modal';
 import { localhostClient } from 'constants/api';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLoadingStatus } from 'redux/actions/loadingStatusActions';
+import { CurrentNoteState } from 'redux/reducers';
 import LeftArrow from '../../assets/images/left-arrow.svg';
+import RefreshIcon from '../../assets/images/refresh.png';
 import RightArrow from '../../assets/images/right-arrow.svg';
 import style from './BrowseNotes.module.scss';
 
-const selectOptions: string[] = ['Harsh Patel', 'Baker, Ronald', 'Smith, Jane'];
 const usersList: User[] = [];
 const unreportedUsersList: User[] = [];
 
@@ -49,19 +55,20 @@ function formatDate(date: Date): string {
 
 function formatDatev2(date: Date): string {
     return (
-        date.getFullYear().toString() +
-        '-' +
         (date.getMonth() + 1).toString() +
-        '-' +
-        date.getDate().toString()
+        '/' +
+        date.getDate().toString() +
+        '/' +
+        date.getFullYear().toString()
     );
 }
 
-interface User {
+export interface User {
     id: number;
     first_name: string;
     last_name: string;
     date_of_birth: Date;
+    clinician_id: number | null;
 }
 
 export interface Clinician {
@@ -72,48 +79,80 @@ export interface Clinician {
     institution_id: number;
 }
 
+async function fetchHPIAppointments(
+    date: Date,
+    clinician_id: number | null,
+    stateUpdaterFunc: (users: User[]) => void,
+    onSuccess?: () => void,
+    onError?: (error: any) => void
+) {
+    try {
+        let url = `/appointments?appointment_date=${formatDatev2(date)}`;
+
+        if (clinician_id !== null) {
+            url += `&clinician_id=${clinician_id}`;
+        }
+
+        const response = await localhostClient.get(url);
+
+        const fetchDetails = response.data.data as User[];
+
+        stateUpdaterFunc(
+            fetchDetails.map(
+                ({
+                    first_name,
+                    last_name,
+                    date_of_birth,
+                    id,
+                    clinician_id,
+                }) => ({
+                    id,
+                    first_name,
+                    date_of_birth: new Date(date_of_birth),
+                    last_name,
+                    clinician_id,
+                })
+            )
+        );
+
+        onSuccess?.();
+    } catch (_error: any) {
+        onError?.(_error);
+    }
+}
+
+function useClinicianDetails(): Clinician {
+    const user = useCookies(['user'])[0].user;
+    return {
+        id: Number(
+            localStorage.getItem(HPIPatientQueryParams.CLINICIAN_ID) as string
+        ),
+        email: user.email,
+        first_name: user.firstName,
+        last_name: user.lastName,
+        institution_id: Number(
+            localStorage.getItem(HPIPatientQueryParams.INSTITUTION_ID) as string
+        ),
+    };
+}
+
 const BrowseNotes = () => {
     const [date, setDate] = useState(new Date());
     const [users, setUsers] = useState(usersList);
     const [unreportedUsers, setUnreportedUsers] = useState(unreportedUsersList);
-
-    const [clinicians, setClinicians] = useState<Clinician[]>([]);
-    const [clinician, setClinician] = useState<Clinician>();
-
-    const fetchHPIAppointments = useCallback(
-        async (date: Date, clinician_id: number) => {
-            const response = await localhostClient.get(
-                `/appointments?appointment_date=${formatDatev2(
-                    date
-                )}&clinician_id=${clinician_id}`
-            );
-
-            const fetchDetails = response.data.data as User[];
-
-            setUsers(
-                fetchDetails.map(
-                    ({ first_name, last_name, date_of_birth, id }) => ({
-                        id,
-                        first_name,
-                        date_of_birth: new Date(date_of_birth),
-                        last_name,
-                    })
-                )
-            );
-        },
-        []
-    );
-
-    const fetchClinicians = useCallback(async () => {
-        const response = await localhostClient.get('/clinicians');
-        setClinicians(response.data.clinicians);
-    }, []);
+    const clinician = useClinicianDetails();
+    const dispatch = useDispatch();
 
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [appointmentId, setAppointmentId] = useState<number>(0);
+    const [selectedAppointment, setSelectedAppointment] = useState<User | null>(
+        null
+    );
+    const loadingStatus = useSelector(
+        (state: CurrentNoteState) => state.loadingStatus
+    );
 
-    const openModal = (appointmentId: number) => {
-        setAppointmentId(appointmentId);
+    const openModal = (user: User) => {
+        setSelectedAppointment(user);
         setShowModal(true);
     };
 
@@ -126,15 +165,62 @@ const BrowseNotes = () => {
     };
 
     useEffect(() => {
-        if (!clinician) return;
-        setUsers([]);
-        fetchHPIAppointments(date, clinician.id);
-    }, [date, clinician]);
+        dispatch(setLoadingStatus(true));
+        fetchHPIAppointments(date, clinician.id, (users: User[]) => {
+            const unreportedUsers = users.filter(
+                (user) => user.clinician_id === null
+            );
+            const reportedUsers = users.filter(
+                (user) => user.clinician_id !== null
+            );
+            setUsers(reportedUsers);
+            setUnreportedUsers(unreportedUsers);
+            dispatch(setLoadingStatus(false));
+        });
+    }, [date]);
 
-    useEffect(() => {
-        setClinicians([]);
-        fetchClinicians();
-    }, []);
+    function renderUsers(users: User[]) {
+        return (
+            <div className={`${style.notesBlock__tableWrapper}`}>
+                <table>
+                    <tbody>
+                        {!loadingStatus && users.length == 0 ? (
+                            <tr>
+                                <td colSpan={2} className={style.nodata}>
+                                    No users found
+                                </td>
+                            </tr>
+                        ) : (
+                            <>
+                                {users.map((user, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <td>
+                                                <span
+                                                    onClick={() =>
+                                                        openModal(user)
+                                                    }
+                                                >
+                                                    {user.last_name +
+                                                        ', ' +
+                                                        user.first_name}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {formatDatev2(
+                                                    user.date_of_birth
+                                                )}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        );
+    }
 
     return (
         <div className={style.notesBlock}>
@@ -163,127 +249,73 @@ const BrowseNotes = () => {
                         <div className='flex align-center justify-between'>
                             <h4>Clinician</h4>
                             <div className={style.notesBlock__dropdown}>
-                                <DropdownForClinicians
-                                    items={clinicians}
-                                    onChange={(id: number) => {
-                                        const selectedClinician =
-                                            clinicians.find(
-                                                (item) => item.id === id
-                                            ) as Clinician;
-                                        setClinician(selectedClinician);
+                                {/* <DropdownForClinicians
+                                    items={[clinician]}
+                                    onChange={() => {
+                                        return;
                                     }}
+                                    value={getFullName(
+                                        clinician.first_name,
+                                        clinician.last_name
+                                    )}
                                     placeholder='Clinician'
+                                /> */}
+
+                                <Input
+                                    value={getFullName(
+                                        clinician.first_name,
+                                        clinician.last_name
+                                    )}
+                                    disabled
                                 />
                             </div>
                         </div>
-                        <div className={`${style.notesBlock__tableWrapper}`}>
-                            <table>
-                                {/* <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead> */}
-                                <tbody>
-                                    {users.length == 0 ? (
-                                        <tr>
-                                            <td
-                                                colSpan={2}
-                                                className={style.nodata}
-                                            >
-                                                No users found
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        <>
-                                            {users.map((user, index) => {
-                                                return (
-                                                    <tr key={index}>
-                                                        <td>
-                                                            <span
-                                                                onClick={() => {
-                                                                    openModal(
-                                                                        user.id
-                                                                    );
-                                                                }}
-                                                            >
-                                                                {user.first_name +
-                                                                    ' ' +
-                                                                    user.last_name}
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            {formatDatev2(
-                                                                user.date_of_birth
-                                                            )}
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            })}
-                                        </>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
+
+                        {renderUsers(users)}
                     </div>
                     <div className={style.notesBlock__contentInner}>
                         <h4 className={`${style.clinical} flex align-center`}>
                             {' '}
                             Clinician: Unreported
                         </h4>
-                        <div className={`${style.notesBlock__tableWrapper}`}>
-                            <table>
-                                <tbody>
-                                    {unreportedUsers.length == 0 ? (
-                                        <tr>
-                                            <td
-                                                colSpan={2}
-                                                className={style.nodata}
-                                            >
-                                                No users found
-                                            </td>
-                                        </tr>
-                                    ) : (
-                                        <>
-                                            {unreportedUsers.map(
-                                                (user, index) => {
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td>
-                                                                <span
-                                                                    onClick={() =>
-                                                                        openModal(
-                                                                            user.id
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    {user.first_name +
-                                                                        ' ' +
-                                                                        user.last_name}
-                                                                </span>
-                                                            </td>
-                                                            <td>
-                                                                {formatDatev2(
-                                                                    user.date_of_birth
-                                                                )}
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                }
-                                            )}
-                                        </>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
+                        {renderUsers(unreportedUsers)}
+                    </div>
+                    <div
+                        className={`${style.notesBlock__reload} flex justify-end`}
+                    >
+                        <button
+                            onClick={async () => {
+                                dispatch(setLoadingStatus(true));
+                                fetchHPIAppointments(
+                                    date,
+                                    clinician.id,
+                                    (users: User[]) => {
+                                        const unreportedUsers = users.filter(
+                                            (user) => user.clinician_id === null
+                                        );
+                                        const reportedUsers = users.filter(
+                                            (user) => user.clinician_id !== null
+                                        );
+                                        setUsers(reportedUsers);
+                                        setUnreportedUsers(unreportedUsers);
+                                        dispatch(setLoadingStatus(false));
+                                    }
+                                );
+                            }}
+                        >
+                            <picture>
+                                <img src={RefreshIcon} alt='Refresh' />
+                            </picture>
+                            Check for new questionnaires
+                        </button>
                     </div>
                 </div>
             </div>
             <Modal
-                key={appointmentId}
+                key={selectedAppointment?.id}
                 showModal={showModal}
                 setShowModal={setShowModal}
-                appointmentId={appointmentId}
+                selectedAppointment={selectedAppointment}
             />
         </div>
     );
