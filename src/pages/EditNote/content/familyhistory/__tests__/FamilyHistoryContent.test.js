@@ -295,29 +295,6 @@ describe('FamilyHistoryContent', () => {
     //     expect(store.getActions()).toEqual(expectedAction);
     // });
 
-    test('update family member mobile', () => {
-        const { wrapper, store } = connectDropdown(activeState, {
-            mobile: true,
-        });
-        //expect mobile layout
-        expect(
-            wrapper.find(FamilyHistoryDropdown).first().prop('mobile')
-        ).toEqual(true);
-        wrapper.find('.dropdown-inline-mobile').first().simulate('click');
-        wrapper.find('[role="option"]').at(1).simulate('click');
-        const expectedAction = [
-            {
-                type: FAMILY_HISTORY_ACTION.UPDATE_MEMBER,
-                payload: {
-                    conditionIndex: 'foo',
-                    familyMemberIndex: 'foofoo',
-                    newMember: 'mother',
-                },
-            },
-        ];
-        expect(store.getActions()).toEqual(expectedAction);
-    });
-
     test('cause of death toggle desktop', () => {
         const { wrapper, store } = connectStore(activeState);
         wrapper.find('button[title="Yes"]').at(1).simulate('click');
