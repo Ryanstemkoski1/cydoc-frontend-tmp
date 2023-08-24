@@ -1,6 +1,4 @@
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { DISCUSSION_PLAN_SECTION_BP } from 'constants/breakpoints.js';
-import useDimensions from 'hooks/useDimensions';
 import React, { useState } from 'react';
 import { Segment } from 'semantic-ui-react';
 import DiscussionPlanMenu from './DiscussionPlanMenu';
@@ -26,7 +24,6 @@ const DiscussionPlan = ({
     nextFormClick,
     previousFormClick,
 }: DiscussionPlanProps) => {
-    const { windowWidth } = useDimensions();
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [currentId, setCurrentId] = useState<string>('');
 
@@ -39,8 +36,7 @@ const DiscussionPlan = ({
         };
     };
 
-    const mobile = windowWidth < DISCUSSION_PLAN_SECTION_BP;
-    const formProps = { mobile, formatAction, conditionId: currentId };
+    const formProps = { formatAction, conditionId: currentId };
     const form = currentId !== '' && (
         <>
             <DifferentialDiagnosesForm {...formProps} />
@@ -55,7 +51,6 @@ const DiscussionPlan = ({
             <Segment className='dropdown-nav'>
                 <DiscussionPlanMenu
                     index={currentIndex}
-                    windowWidth={windowWidth}
                     setCurrentIndex={setCurrentIndex}
                     setCurrentId={setCurrentId}
                 />

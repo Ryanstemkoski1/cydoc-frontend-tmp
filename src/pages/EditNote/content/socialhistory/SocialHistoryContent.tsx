@@ -1,27 +1,24 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Grid, TextArea, Form } from 'semantic-ui-react';
-import Tobacco from './Tobacco';
-import Alcohol from './Alcohol';
-import RecreationalDrugs from './RecreationalDrugs';
-import { selectSecondaryFieldsState } from 'redux/selectors/socialHistorySelectors';
 import {
-    updateLivingSituation,
-    updateEmployment,
     updateDiet,
+    updateEmployment,
     updateExercise,
+    updateLivingSituation,
 } from 'redux/actions/socialHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
+import { selectSecondaryFieldsState } from 'redux/selectors/socialHistorySelectors';
+import { Form, Grid, TextArea } from 'semantic-ui-react';
 import '../hpi/knowledgegraph/src/css/Button.css';
+import Alcohol from './Alcohol';
+import RecreationalDrugs from './RecreationalDrugs';
+import Tobacco from './Tobacco';
 
-interface OwnProps {
-    mobile: boolean;
-}
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
 
-type Props = ReduxProps & OwnProps;
+type Props = ReduxProps;
 
 export class SocialHistoryContent extends React.Component<Props> {
     constructor(props: Props) {
@@ -100,9 +97,9 @@ export class SocialHistoryContent extends React.Component<Props> {
 
         return (
             <div className='social-history-content'>
-                <Tobacco mobile={this.props.mobile} />
-                <Alcohol mobile={this.props.mobile} />
-                <RecreationalDrugs mobile={this.props.mobile} />
+                <Tobacco />
+                <Alcohol />
+                <RecreationalDrugs />
                 <Grid columns={2} stackable>
                     {secondaryFieldRows}
                 </Grid>

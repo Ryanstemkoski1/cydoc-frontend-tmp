@@ -30,6 +30,10 @@ import {
 import { hpiHeadersReducer, initialHpiHeadersState } from './hpiHeadersReducer';
 import { hpiReducer, initialHpiState } from './hpiReducer';
 import {
+    initialLoadingStatus,
+    loadingStatusReducer,
+} from './loadingStatusReducer';
+import {
     initialMedicalHistoryState,
     medicalHistoryReducer,
 } from './medicalHistoryReducer';
@@ -77,6 +81,7 @@ const currentNoteReducer = combineReducers({
     activeItem: activeItemReducer,
     additionalSurvey: additionalSurveyReducer,
     clinicianDetail: clinicianDetailReducer,
+    loadingStatus: loadingStatusReducer,
 });
 
 export type CurrentNoteState = ReturnType<typeof currentNoteReducer>;
@@ -101,6 +106,7 @@ export const initialState: CurrentNoteState = {
     activeItem: initialActiveItemState,
     additionalSurvey: initialAdditionalSurveyData,
     clinicianDetail: initialClinicianDetail,
+    loadingStatus: initialLoadingStatus,
 };
 
 export function rootReducer(

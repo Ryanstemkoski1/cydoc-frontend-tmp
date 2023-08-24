@@ -181,7 +181,6 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
 
     render() {
         const {
-            mobile,
             responseChoice,
             responseType,
             addPmhPopOptions,
@@ -227,7 +226,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                 return <AddRowButton onClick={this.addRow} name={'disease'} />;
             listValues = responseChoice;
         }
-        const rows = this.generateListItems(listValues as string[], mobile);
+        const rows = this.generateListItems(listValues as string[]);
         const header = [
             {
                 title: 'Condition',
@@ -281,7 +280,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         );
     }
 
-    generateListItems(conditions: string[], mobile: boolean) {
+    generateListItems(conditions: string[]) {
         const { isPreview } = this.props;
         const { seenConditions } = this.state;
         const standardMedicalHistory = this.standardizeMedicalHistory(
@@ -357,7 +356,6 @@ export type SeenCondition = {
 
 interface ContentProps {
     isPreview: boolean;
-    mobile: boolean;
     currentYear: number;
     responseChoice?: string[];
     responseType?: ResponseTypes;

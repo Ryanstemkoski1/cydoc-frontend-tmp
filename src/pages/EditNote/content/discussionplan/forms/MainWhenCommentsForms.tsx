@@ -33,7 +33,6 @@ import {
     CategoryFormProps,
 } from './BaseCategoryForm';
 import './DiscussionPlanForms.css';
-import UpdateDimensions from './UpdateDimensions';
 import './planSections.css';
 
 export const ProceduresAndServicesForm = connect(
@@ -121,14 +120,11 @@ export const MainWhenCommentsForm = <
 >(
     props: MainWhenCommentsFormProps<T>
 ) => {
-    const { mobile, categoryData, categoryProps, formatAction, ...actions } =
-        props;
-    const { width } = UpdateDimensions();
+    const { categoryData, categoryProps, formatAction, ...actions } = props;
 
     const gridHeaders = () => (
         <Grid.Row>
             <Grid.Column>
-                {' '}
                 {_.upperFirst(categoryProps.mainValueName as string)}{' '}
             </Grid.Column>
             <Grid.Column> When </Grid.Column>
@@ -138,7 +134,6 @@ export const MainWhenCommentsForm = <
 
     const mobileTitle: CategoryFormComponent<T> = (row, options, onAddItem) => (
         <div className='container' id='main-when-mobile-title'>
-            {width < 800 ? <label>{categoryProps.mainValueName}</label> : <></>}
             <div className='container' id='main-when-mobile-title-inner' />
             <Dropdown
                 fluid
@@ -146,7 +141,7 @@ export const MainWhenCommentsForm = <
                 selection
                 allowAdditions
                 clearable
-                transparent={mobile}
+                transparent={false}
                 optiontype='main'
                 uuid={row.id}
                 options={(options?.main as OptionMapping) || {}}
@@ -162,13 +157,6 @@ export const MainWhenCommentsForm = <
 
     const whenInput: CategoryFormComponent<T> = (row, options, onAddItem) => (
         <>
-            {width < 800 ? (
-                <div className='container'>
-                    <label>When</label>
-                </div>
-            ) : (
-                <></>
-            )}
             <div className='container' id='main-when-mobile-title-inner' />
             <div id='near-width'>
                 <Dropdown
@@ -177,7 +165,7 @@ export const MainWhenCommentsForm = <
                     selection
                     allowAdditions
                     clearable
-                    transparent={mobile}
+                    transparent={false}
                     optiontype='when'
                     uuid={row.id}
                     options={(options?.when as OptionMapping) || {}}
@@ -213,37 +201,8 @@ export const MainWhenCommentsForm = <
         </React.Fragment>
     );
 
-    const mobileContent: CategoryFormComponent<T> = (
-        row,
-        options,
-        onAddItem
-    ) => (
-        <>
-            {whenInput(row, options, onAddItem)}
-            <div className='container' id='main-when-mobile-content' />
-            <label>Comments</label>
-            <div className='container' id='main-when-mobile-title-inner' />
-            <div className='ui form' id='near-width'>
-                <TextArea
-                    fluid
-                    type='text'
-                    transparent
-                    uuid={row.id}
-                    value={row.comments}
-                    onChange={formatAction(actions.commentsOnChange)}
-                    placeholder='comments'
-                    aria-label={`${
-                        categoryProps.mainValueName as string
-                    }-Comment`}
-                    className='expanded-input'
-                />
-            </div>
-        </>
-    );
-
     return (
         <BaseCategoryForm
-            mobile={mobile}
             category={categoryProps.category}
             categoryData={categoryData}
             numColumns={3}
@@ -253,8 +212,6 @@ export const MainWhenCommentsForm = <
             components={{
                 gridColumn,
                 gridHeaders,
-                mobileTitle,
-                mobileContent,
             }}
         />
     );

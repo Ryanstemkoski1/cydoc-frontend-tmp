@@ -2,7 +2,6 @@ import diseaseSynonyms from 'constants/diseaseSynonyms';
 import { YesNoResponse } from 'constants/enums';
 import { HpiStateProps, ResponseTypes } from 'constants/hpiEnums';
 import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import MedicationsContentV2 from 'pages/EditNote/content/medications/MedicationsContentV2';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -120,8 +119,7 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
     };
 
     renderSwitch = () => {
-        const { windowWidth } = this.props.dimensions,
-            { node, hpi } = this.props,
+        const { node, hpi } = this.props,
             { responseType } = hpi.nodes[node],
             blankTypes = [
                 ResponseTypes.FH_BLANK,
@@ -223,7 +221,6 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
                     <MedicationsContentV2
                         key={node}
                         isPreview={false}
-                        mobile={collapseTabs}
                         values={choices}
                         responseType={responseType}
                         node={node}
@@ -250,7 +247,6 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
                         isPreview={false}
                         responseChoice={choices}
                         responseType={responseType}
-                        mobile={collapseTabs}
                         currentYear={-1}
                         node={node}
                         hide={false}
@@ -262,7 +258,6 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
                         key={node}
                         isPreview={false}
                         responseType={responseType}
-                        mobile={collapseTabs}
                         currentYear={-1}
                         node={node}
                         hide={true}
@@ -276,7 +271,6 @@ class CreateResponseV2 extends React.Component<Props, CreateResponseState> {
                         key={node}
                         isPreview={false}
                         responseType={responseType}
-                        mobile={collapseTabs}
                         node={node}
                         hide={true}
                     />
@@ -330,17 +324,11 @@ const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
     hpi: selectHpiState(state),
 });
 
-type Props = HpiStateProps &
-    DispatchProps &
-    CreateResponseProps & {
-        dimensions?: any;
-    };
+type Props = HpiStateProps & DispatchProps & CreateResponseProps;
 
 const mapDispatchToProps = {
     addFhPopOptions,
     blankQuestionChange,
 };
 
-export default withDimensionsHook(
-    connect(mapStateToProps, mapDispatchToProps)(CreateResponseV2)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateResponseV2);

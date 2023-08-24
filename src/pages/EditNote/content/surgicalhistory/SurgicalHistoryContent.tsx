@@ -22,11 +22,9 @@ import {
     selectSurgicalHistoryProcedures,
 } from 'redux/selectors/surgicalHistorySelectors';
 import {
-    Accordion,
     DropdownProps,
     Form,
     Header,
-    Image,
     Input,
     InputOnChangeData,
     Table,
@@ -49,7 +47,6 @@ import './SurgicalHistoryContent.css';
 import { questionContainer, questionTextStyle } from './styles';
 
 import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
-import Add from '../../../../assets/add.svg';
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
         super(props);
@@ -72,7 +69,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         }
 
         this.state = {
-            windowWidth: 0,
             proceduresOptions: procedures,
             active: new Set(),
             isInvalidYear: invalidYearSet,
@@ -89,24 +85,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
-        this.updateDimensions = this.updateDimensions.bind(this);
         this.toggleYesNoButton = this.toggleYesNoButton.bind(this);
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-
-        this.setState({ windowWidth });
     }
 
     addRow() {
@@ -239,7 +218,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 proceduresOptions={updatedProceduresOptions}
                 isPreview={this.props.isPreview}
                 currentYear={this.state.currentYear}
-                mobile={this.props.mobile}
                 deleteRow={this.deleteRow}
                 pop={this.props.responseType == ResponseTypes.PSH_POP}
             />
@@ -433,21 +411,12 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
 
         const content = (
             <>
-                {this.state.windowWidth < 800 ? (
-                    <Accordion
-                        panels={this.makeAccordionPanels(nums, values)}
-                        exclusive={false}
-                        fluid
-                        styled
-                    />
-                ) : (
-                    <Table celled className='table-display'>
-                        {<Table.Header content={this.makeHeader()} />}
-                        {/* eslint-disable react/no-children-prop */}
-                        <Table.Body children={this.makeTableBodyRows(nums)} />
-                        {/* eslint-enable react/no-children-prop */}
-                    </Table>
-                )}
+                <Table celled className='table-display'>
+                    {<Table.Header content={this.makeHeader()} />}
+                    {/* eslint-disable react/no-children-prop */}
+                    <Table.Body children={this.makeTableBodyRows(nums)} />
+                    {/* eslint-enable react/no-children-prop */}
+                </Table>
             </>
         );
 
@@ -507,7 +476,6 @@ export type Procedure = {
 }[];
 
 type OwnState = {
-    windowWidth: number;
     proceduresOptions: OptionMapping;
     active: Set<string>;
     isInvalidYear: Set<unknown>;
@@ -524,7 +492,6 @@ interface SurgicalHistoryProps {
 interface ContentProps {
     isPreview: boolean;
 
-    mobile: boolean;
     responseChoice?: string[];
     responseType?: ResponseTypes;
     node?: string;

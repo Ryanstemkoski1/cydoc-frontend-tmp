@@ -2,7 +2,6 @@ import { OptionMapping } from '_processOptions';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from 'constants/enums';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import React, { Component } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import {
@@ -34,7 +33,6 @@ import { DropdownType } from './MedicationsContent';
 import style from './MedicationsPanel.module.scss';
 
 interface OwnProps {
-    mobile: boolean;
     isPreview: boolean;
     previewValue?: string;
     sideEffectsOptions: OptionMapping;
@@ -176,7 +174,7 @@ class MedicationsPanelV2 extends Component<Props, State> {
     };
 
     makePanel() {
-        const { mobile, isPreview } = this.props;
+        const { isPreview } = this.props;
 
         // TODO: Remove the preview logic from this component (and potentially others in Patient History)
         //       and make it an entirely separate component for more explicit typecasting and functional differences
@@ -229,14 +227,6 @@ class MedicationsPanelV2 extends Component<Props, State> {
                             transparent
                             disabled={isPreview}
                             type='Dose'
-                            label={
-                                mobile && {
-                                    basic: true,
-                                    content: 'Dose: ',
-                                    className:
-                                        'medications-content-input-label',
-                                }
-                            }
                             placeholder='e.g. 81 mg tablet'
                             onChange={this.onDoseChange}
                             value={
@@ -264,14 +254,6 @@ class MedicationsPanelV2 extends Component<Props, State> {
                                 transparent
                                 disabled={isPreview}
                                 type='Schedule'
-                                label={
-                                    mobile && {
-                                        basic: true,
-                                        content: 'Schedule: ',
-                                        className:
-                                            'medications-content-input-label',
-                                    }
-                                }
                                 placeholder='e.g. once a day'
                                 onChange={this.onScheduleChange}
                                 value={
@@ -657,6 +639,4 @@ const mapDispatchToProps = {
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-export default withDimensionsHook(
-    connect(mapStateToProps, mapDispatchToProps)(MedicationsPanelV2)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(MedicationsPanelV2);

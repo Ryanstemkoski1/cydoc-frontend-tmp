@@ -1,47 +1,39 @@
+import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
+import constants from 'constants/constants';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { updateActiveItem } from 'redux/actions/activeItemActions';
+import { processSurveyGraph } from 'redux/actions/userViewActions';
+import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
+import {
+    selectInitialPatientSurvey,
+    selectPatientViewState,
+} from 'redux/selectors/userViewSelectors';
 import { Container } from 'semantic-ui-react';
+import './NotePage.css';
+import AllergiesContent from './content/allergies/AllergiesContent';
+import DiscussionPlan from './content/discussionplan/DiscussionPlan.tsx';
+import FamilyHistoryContent from './content/familyhistory/FamilyHistoryContent';
+import GenerateNote from './content/generatenote/GenerateNote.tsx';
+import HPIContent from './content/hpi/knowledgegraph/HPIContent';
+import MedicalHistoryContent from './content/medicalhistory/MedicalHistoryContent';
+import MedicationsContent from './content/medications/MedicationsContent';
+import './content/patienthistory/PatientHistory.css';
+import PatientHistoryContent from './content/patienthistory/PatientHistoryContent';
+import InitialSurvey from './content/patientview/InitialSurvey';
+import initialQuestions from './content/patientview/constants/initialQuestions.json';
 import PhysicalExamContent from './content/physicalexam/PhysicalExamContent';
 import ReviewOfSystemsContent from './content/reviewofsystems/ReviewOfSystemsContent';
-import HPIContent from './content/hpi/knowledgegraph/HPIContent';
-import PatientHistoryContent from './content/patienthistory/PatientHistoryContent';
-import GenerateNote from './content/generatenote/GenerateNote.tsx';
-import DiscussionPlan from './content/discussionplan/DiscussionPlan.tsx';
-import { connect } from 'react-redux';
-import constants from 'constants/constants';
-import {
-    PATIENT_HISTORY_MOBILE_BP,
-    SOCIAL_HISTORY_MOBILE_BP,
-} from 'constants/breakpoints.js';
-import MedicalHistoryContent from './content/medicalhistory/MedicalHistoryContent';
-import SurgicalHistoryContent from './content/surgicalhistory/SurgicalHistoryContent';
-import MedicationsContent from './content/medications/MedicationsContent';
-import AllergiesContent from './content/allergies/AllergiesContent';
 import SocialHistoryContent from './content/socialhistory/SocialHistoryContent';
-import FamilyHistoryContent from './content/familyhistory/FamilyHistoryContent';
-import './content/patienthistory/PatientHistory.css';
-import {
-    selectPatientViewState,
-    selectInitialPatientSurvey,
-} from 'redux/selectors/userViewSelectors';
-import './NotePage.css';
-import { updateActiveItem } from 'redux/actions/activeItemActions';
-import InitialSurvey from './content/patientview/InitialSurvey';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
-import initialQuestions from './content/patientview/constants/initialQuestions.json';
-import { processSurveyGraph } from 'redux/actions/userViewActions';
-import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
+import SurgicalHistoryContent from './content/surgicalhistory/SurgicalHistoryContent';
 //Component that manages the content displayed based on the activeItem prop
 // and records the information the user enters as state
 
 class NotePage extends Component {
     constructor(props) {
         super(props);
-        //bind methods
-        this.updateDimensions = this.updateDimensions.bind(this);
         //initialize state
         this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
             activeHPI: '',
             activePMH: 'Medical History',
             pmhTab: constants.PMH_TAB_NAMES.indexOf('Medical History'),
@@ -109,36 +101,26 @@ class NotePage extends Component {
     };
 
     // panes for mobile view
-    onPMHTabClick(activeTabName, windowWidth) {
-        const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
-        const socialHistoryMobile = windowWidth < SOCIAL_HISTORY_MOBILE_BP;
-
+    onPMHTabClick(activeTabName) {
         let tabToDisplay;
         switch (activeTabName) {
             case 'Medical History':
-                tabToDisplay = <MedicalHistoryContent mobile={collapseTabs} />;
+                tabToDisplay = <MedicalHistoryContent />;
                 break;
             case 'Surgical History':
-                tabToDisplay = <SurgicalHistoryContent mobile={collapseTabs} />;
+                tabToDisplay = <SurgicalHistoryContent />;
                 break;
             case 'Medications':
-                tabToDisplay = (
-                    <MedicationsContent
-                        mobile={collapseTabs}
-                        singleType={false}
-                    />
-                );
+                tabToDisplay = <MedicationsContent singleType={false} />;
                 break;
             case 'Allergies':
-                tabToDisplay = <AllergiesContent mobile={collapseTabs} />;
+                tabToDisplay = <AllergiesContent />;
                 break;
             case 'Social History':
-                tabToDisplay = (
-                    <SocialHistoryContent mobile={socialHistoryMobile} />
-                );
+                tabToDisplay = <SocialHistoryContent />;
                 break;
             case 'Family History':
-                tabToDisplay = <FamilyHistoryContent mobile={collapseTabs} />;
+                tabToDisplay = <FamilyHistoryContent />;
                 break;
             case null:
                 this.setState({
@@ -147,7 +129,7 @@ class NotePage extends Component {
                 });
                 break;
             default:
-                tabToDisplay = <MedicalHistoryContent mobile={collapseTabs} />;
+                tabToDisplay = <MedicalHistoryContent />;
                 break;
         }
         return tabToDisplay;
@@ -190,8 +172,6 @@ class NotePage extends Component {
     }
 
     componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
         const { userSurveyState, processSurveyGraph } = this.props;
         if (
             !Object.keys(userSurveyState?.graph).length &&
@@ -200,18 +180,6 @@ class NotePage extends Component {
         ) {
             processSurveyGraph(initialQuestions);
         }
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-        let windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
     }
 
     nextFormClick = () => {

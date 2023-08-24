@@ -27,7 +27,6 @@ import { CurrentNoteState } from 'redux/reducers';
 import { AlcoholConsumption } from 'redux/reducers/socialHistoryReducer';
 import { selectAlcoholState } from 'redux/selectors/socialHistorySelectors';
 import {
-    Accordion,
     Button,
     Divider,
     Dropdown,
@@ -40,13 +39,10 @@ import {
 import '../familyhistory/FamilyHistory.css';
 import '../hpi/knowledgegraph/src/css/Button.css';
 
-type OwnProps = {
-    mobile: boolean;
-};
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
 
-type Props = ReduxProps & OwnProps;
+type Props = ReduxProps;
 
 interface State {
     invalidYear: boolean;
@@ -500,22 +496,7 @@ class Alcohol extends React.Component<Props, State> {
             const drinksConsumed = values.drinksConsumed;
             const rows = this.makeTableBodyRows(drinksConsumed);
 
-            const content = this.props.mobile ? (
-                <div>
-                    <p>
-                        {values.usage === SubstanceUsageResponse.InThePast
-                            ? 'Please summarize what you used to drink:'
-                            : 'Please summarize your current drinking habits:'}
-                    </p>
-                    <Accordion
-                        panels={this.makeAccordionPanels(drinksConsumed)}
-                        exclusive={false}
-                        fluid
-                        styled
-                        aria-label='Alcohol-Consumption-Accordion'
-                    />
-                </div>
-            ) : (
+            const content = (
                 <div>
                     {values.usage === SubstanceUsageResponse.InThePast
                         ? 'Please summarize what you used to drink:'
@@ -600,9 +581,6 @@ class Alcohol extends React.Component<Props, State> {
                                             value as string
                                         );
                                     }}
-                                    placeholder={
-                                        this.props.mobile ? 'Comments' : null
-                                    }
                                 />
                             </Grid.Row>
                         </div>

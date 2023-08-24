@@ -1,19 +1,18 @@
-import React from 'react';
-import AcidTestInputBox from './AcidTestInputBox';
-import { useState, useEffect, useCallback } from 'react';
-import runAnalysis from './AcidBase/acidBaseCalculator';
-import Calculations from './Calculations';
+import React, { useCallback, useState } from 'react';
 import {
     Accordion,
     Button,
     Container,
     Grid,
+    Header,
     Icon,
     Segment,
-    Header,
 } from 'semantic-ui-react';
-import DifferentialDiagnoses from './DifferentialDiagnoses';
 import NavMenu from './../components/navigation/NavMenu';
+import runAnalysis from './AcidBase/acidBaseCalculator';
+import AcidTestInputBox from './AcidTestInputBox';
+import Calculations from './Calculations';
+import DifferentialDiagnoses from './DifferentialDiagnoses';
 
 const AcidTest = () => {
     const [pH, setPH] = useState(0);
@@ -28,18 +27,8 @@ const AcidTest = () => {
     const [summary, setSummary] = useState('');
     const [description, setDescription] = useState('');
     const [activeIndex, setActiveIndex] = useState(1);
-    const [isMobile, setIsMobile] = useState(false);
     const [arr, setArray] = useState([]);
     const [copyStatus, setCopyStatus] = useState('not copied');
-
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobile(window.innerWidth < 768);
-        };
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, [pH, HC, PC, nA, Cl, Albumin]);
 
     const handleAccordionClick = () => {
         activeIndex === 0 ? setActiveIndex(1) : setActiveIndex(0);
@@ -364,7 +353,7 @@ const AcidTest = () => {
                             <Grid.Column
                                 alignItems='center'
                                 justifyContent='center'
-                                width={`${!isMobile ? 8 : 11}`}
+                                width={`8`}
                             >
                                 <div
                                     className='flexParent'
@@ -377,7 +366,7 @@ const AcidTest = () => {
                                     {acidBaseSubsection()}
                                 </div>
                             </Grid.Column>
-                            <Grid.Column width={`${!isMobile ? 8 : 11}`}>
+                            <Grid.Column width={`8`}>
                                 <div
                                     className='acidBaseTest flexParent'
                                     style={{

@@ -1,8 +1,5 @@
 /* eslint-disable no-console */
-import {
-    HIDE_CYDOC_IN_NAV_MENU_BP,
-    LOGGEDIN_NAV_MENU_MOBILE_BP,
-} from 'constants/breakpoints.js';
+import MenuButton, { MenuItem } from 'components/Header/MenuButton';
 import { YesNoResponse } from 'constants/enums';
 import SignUpModal from 'pages/Account/SignUpModal';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
@@ -23,8 +20,14 @@ import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
-import { Button, Dropdown, Header, Icon, Image, Menu } from 'semantic-ui-react';
+import { Button, Header, Image, Menu } from 'semantic-ui-react';
 import Logo from '../../assets/cydoc-logo.svg';
+import DashboardIcon from '../../assets/images/dashboard.png';
+import Setting from '../../assets/images/edit.svg';
+import Home from '../../assets/images/home.svg';
+import Logout from '../../assets/images/logout.svg';
+import QrCode from '../../assets/images/qr-code.svg';
+import Security from '../../assets/images/security.svg';
 import constants from '../../constants/constants.json';
 import AuthContext from '../../contexts/AuthContext';
 import './NavMenu.css';
@@ -51,21 +54,48 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     } = props;
 
     const context = useContext(AuthContext) as Context;
-    const [windowWidth, setWindowWidth] = useState(0);
-    const [signUpActive, setSignUpActive] = useState(false);
 
-    // Set event listeners for window resize to determine mobile vs web view
-    useEffect(() => {
-        const updateDimensions = (): void => {
-            setWindowWidth(
-                typeof window !== 'undefined' ? window.innerWidth : 0
-            );
-        };
-        updateDimensions();
-        window.addEventListener('resize', updateDimensions);
-        return (): void =>
-            window.removeEventListener('resize', updateDimensions);
-    }, []);
+    const loggedInMenuButtonItems: MenuItem[] = [
+        {
+            to: '/',
+            label: 'Home',
+            icon: Home,
+            active: false,
+        },
+        {
+            to: '/dashboard',
+            label: 'Dashboard',
+            icon: DashboardIcon,
+            active: window.location.href.includes('dashboard'),
+        },
+        {
+            to: '/editprofile',
+            label: 'Edit Profile',
+            icon: Setting,
+            active: window.location.href.includes('editprofile'),
+        },
+        {
+            to: '/qrcode',
+            label: 'QR Code',
+            icon: QrCode,
+            active: window.location.href.includes('qrcode'),
+        },
+        {
+            to: '/profilesecurity',
+            label: 'Profile Security',
+            icon: Security,
+            active: window.location.href.includes('profilesecurity'),
+        },
+        {
+            to: '/',
+            label: 'Log Out',
+            icon: Logout,
+            onClick: context.logOut,
+            active: false,
+        },
+    ];
+
+    const [signUpActive, setSignUpActive] = useState(false);
 
     // Display warning when user tries to close the tab
     useEffect(() => {
@@ -84,50 +114,11 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         };
     }, []);
 
-    const collapseLoggedInNav = windowWidth < LOGGEDIN_NAV_MENU_MOBILE_BP;
-    const hideCydoc = windowWidth < HIDE_CYDOC_IN_NAV_MENU_BP;
-
-    const dropdownOptions = [
-        {
-            as: Link,
-            to: '/editprofile',
-            key: 'editProfile',
-            text: 'Edit Profile',
-            icon: 'setting',
-            selected: false,
-            active: window.location.href.includes('editprofile'),
-        },
-        {
-            as: Link,
-            to: '/profilesecurity',
-            key: 'profileSecurity',
-            text: 'Profile Security',
-            icon: 'lock',
-            selected: false,
-            active: window.location.href.includes('profilesecurity'),
-        },
-        {
-            as: Link,
-            to: '/',
-            key: 'logout',
-            text: 'Log Out',
-            icon: 'sign out',
-            onClick: context.logOut,
-            selected: false,
-            active: false,
-        },
-    ];
-
     // Use for redirecting
     const history = useHistory();
 
     const navigateToHome = () => {
         const path = '/dashboard';
-        history.push(path);
-    };
-
-    const navigateToQRCodePage = () => {
-        const path = '/qrcode';
         history.push(path);
     };
 
@@ -168,48 +159,10 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     );
     // Menu items when logged in
     const loggedInMenuItems = (
-        <>
-            <Menu.Item className='home-menu-item'>
-                <Button
-                    basic
-                    color='teal'
-                    name='home'
-                    content={collapseLoggedInNav ? null : 'Home'}
-                    icon='hospital outline'
-                    onClick={navigateToHome}
-                />
-            </Menu.Item>
-            <Menu.Item className='home-menu-item'>
-                <Button
-                    basic
-                    color='teal'
-                    name='QR Code'
-                    content={collapseLoggedInNav ? null : 'QR Code'}
-                    icon='hospital outline'
-                    onClick={navigateToQRCodePage}
-                />
-            </Menu.Item>
-            <Menu.Item className='profile-menu-item'>
-                <Dropdown
-                    button
-                    basic
-                    color='teal'
-                    floating
-                    icon={null}
-                    name='profile'
-                    className='profile-button'
-                    options={dropdownOptions}
-                    trigger={
-                        <span>
-                            <Icon name='user outline' />
-                            {collapseLoggedInNav
-                                ? null
-                                : context.user?.firstName}
-                        </span>
-                    }
-                />
-            </Menu.Item>
-        </>
+        <MenuButton
+            label={context.user?.firstName ?? ''}
+            items={loggedInMenuButtonItems}
+        />
     );
 
     const checkPatientView = () => {
@@ -250,82 +203,42 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             attached={attached}
         >
             <Menu.Item className='logo-menu' onClick={handleClickLogo}>
-                <Image
-                    src={Logo}
-                    className={
-                        collapseLoggedInNav
-                            ? 'logo-circle-mobile'
-                            : 'logo-circle'
-                    }
-                />
-                {!displayNoteName && !hideCydoc && (
+                <Image src={Logo} className={'logo-circle'} />
+                {!displayNoteName && (
                     <Header
                         as='h1'
-                        className={`${
-                            collapseLoggedInNav
-                                ? 'logo-text-mobile'
-                                : 'logo-text'
-                        }`}
+                        className={`${'logo-text'}`}
                         content='Cydoc'
                     />
                 )}
             </Menu.Item>
             {/* When parent is EditNote, then display the note name item */}
-            {displayNoteName && doctorView && (
-                <NoteNameMenuItem mobile={collapseLoggedInNav} />
-            )}
+            {displayNoteName && doctorView && <NoteNameMenuItem />}
             {context.token && history.location.pathname.length > 1 ? (
-                collapseLoggedInNav ? (
-                    <Button.Group className='btn-group'>
-                        <Button
-                            compact
-                            onClick={() => {
-                                changeUserView('Patient View');
-                                if (!checkPatientView()) updateActiveItem('CC');
-                            }}
-                            className={`hpi-ph-button${
-                                patientView ? '-selected' : ''
-                            }`}
-                        >
-                            Patient
-                        </Button>
-                        <Button.Or />
-                        <Button
-                            compact
-                            onClick={() => changeUserView('Doctor View')}
-                            className={`hpi-ph-button${
-                                !patientView ? '-selected' : ''
-                            }`}
-                        >
-                            Doctor
-                        </Button>
-                    </Button.Group>
-                ) : (
-                    <Button.Group className='btn-group'>
-                        <Button
-                            style={{ maxHeight: '75%' }}
-                            onClick={() => {
-                                changeUserView('Patient View');
-                                if (!checkPatientView()) updateActiveItem('CC');
-                            }}
-                            className={`hpi-ph-button${
-                                patientView ? '-selected' : ''
-                            }`}
-                        >
-                            Patient View
-                        </Button>
-                        <Button.Or />
-                        <Button
-                            style={{ maxHeight: '75%' }}
-                            onClick={() => changeUserView('Doctor View')}
-                            className={`hpi-ph-button${
-                                !patientView ? '-selected' : ''
-                            }`}
-                        >
-                            Doctor View
-                        </Button>
-                    </Button.Group>
-                )
+                <Button.Group className='btn-group'>
+                    <Button
+                        style={{ maxHeight: '75%' }}
+                        onClick={() => {
+                            changeUserView('Patient View');
+                            if (!checkPatientView()) updateActiveItem('CC');
+                        }}
+                        className={`hpi-ph-button${
+                            patientView ? '-selected' : ''
+                        }`}
+                    >
+                        Patient View
+                    </Button>
+                    <Button.Or />
+                    <Button
+                        style={{ maxHeight: '75%' }}
+                        onClick={() => changeUserView('Doctor View')}
+                        className={`hpi-ph-button${
+                            !patientView ? '-selected' : ''
+                        }`}
+                    >
+                        Doctor View
+                    </Button>
+                </Button.Group>
             ) : (
                 ''
             )}

@@ -24,7 +24,7 @@
 .nav-menu {
     box-shadow: 0 0 20px 5px RGBA(0, 128, 159, 0.2) !important;
     height: 100px;
-    padding: 1.5rem 0;
+    padding: 1.5rem 16px 1.5rem 0;
 }
 .nav-bar {
     margin-bottom: 0 !important;

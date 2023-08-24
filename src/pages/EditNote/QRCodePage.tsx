@@ -1,15 +1,11 @@
+import Header from 'components/Header/Header';
 import QRCodeComponent from 'components/QRCode';
-import NavMenu from 'components/navigation/NavMenu';
 import React from 'react';
 
 function QRCodePage() {
     return (
         <div>
-            <NavMenu
-                className='edit-note-nav-menu'
-                displayNoteName={true}
-                attached={'top'}
-            />
+            <Header />
             <QRCodeComponent showDownloadButton={true} />
         </div>
     );

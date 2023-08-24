@@ -231,7 +231,6 @@ interface SurgicalHistoryProps {
 
 interface RowProps {
     isPreview: boolean;
-    mobile: boolean;
     currentYear: number;
     rowIndex: keyof SurgicalHistoryElements;
     proceduresOptions: OptionMapping;

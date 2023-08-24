@@ -36,9 +36,7 @@ const DifferentialDiagnosesForm = (
     props: CategoryFormProps<PlanDiagnosisFlat> &
         DifferentialDiagnosesDispatchProps
 ) => {
-    const { mobile, categoryData, formatAction, conditionId, ...actions } =
-        props;
-    // const { width } = UpdateDimensions();
+    const { categoryData, formatAction, conditionId, ...actions } = props;
 
     const gridHeaders = () => (
         <Grid.Row>
@@ -56,7 +54,7 @@ const DifferentialDiagnosesForm = (
                 clearable
                 loading={options && Object.keys(options.main).length == 0}
                 disabled={options && Object.keys(options.main).length == 0}
-                transparent={mobile}
+                transparent={false}
                 value={row.diagnosis}
                 code={row.code}
                 options={(options?.main as DiagnosesOptionMapping) || {}}
@@ -68,36 +66,6 @@ const DifferentialDiagnosesForm = (
                 className='main-input'
             />
             <div className='container' id='main-input-div' />
-        </>
-    );
-
-    const mobileTitle: ComponentFunction = (row, options, onAddItem) => (
-        <div className='mobile-title'>
-            <label>Diagnosis</label>
-            <div className='container' id='container-div' />
-            {mainInput(row, options, onAddItem)}
-        </div>
-    );
-
-    const mobileContent: ComponentFunction = (row) => (
-        <>
-            <label>Comments</label>
-            <div className='container' id='container-div' />
-            <div className='ui form' id='mobile-content-form'>
-                <TextArea
-                    fluid
-                    value={row.comments}
-                    uuid={row.id}
-                    type='text'
-                    transparent={mobile}
-                    onChange={formatAction(
-                        actions.updateDifferentialDiagnosisComments
-                    )}
-                    aria-label='Diagnosis-Comment'
-                    placeholder='e.g. this diagnosis is more likely because...'
-                    className='expanded-input'
-                />
-            </div>
         </>
     );
 
@@ -120,14 +88,12 @@ const DifferentialDiagnosesForm = (
                         />
                     </div>
                 </Grid.Column>
-                {/* <Grid.Column width={10}>{mobileContent(row)}</Grid.Column> */}
             </React.Fragment>
         );
     };
 
     return (
         <BaseCategoryForm<PlanDiagnosisFlat>
-            mobile={mobile}
             numColumns={2}
             addRowLabel='diagnosis'
             category='differentialDiagnoses'
@@ -135,8 +101,6 @@ const DifferentialDiagnosesForm = (
             addRow={() => actions.addDifferentialDiagnosis(conditionId)}
             // addRow={formatAction(actions.addDifferentialDiagnosis)}
             components={{
-                mobileTitle,
-                mobileContent,
                 gridColumn,
                 gridHeaders,
                 /* eslint-disable-next-line */

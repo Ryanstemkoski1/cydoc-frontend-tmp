@@ -1,22 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Popup, Button, Icon } from 'semantic-ui-react';
-import { PROTIPS_BUTTON_BP } from 'constants/breakpoints';
+import React from 'react';
+import { Button, Icon, Popup } from 'semantic-ui-react';
 
 import '../TemplateForm.css';
 
 const ProTips = () => {
-    const [width, setWidth] = useState(0);
-
-    useEffect(() => {
-        const updateDimensions = () => {
-            let width = typeof window !== 'undefined' ? window.innerWidth : 0;
-            setWidth(width);
-        };
-        updateDimensions();
-        window.addEventListener('resize', updateDimensions);
-        return () => window.removeEventListener('resize', updateDimensions);
-    }, []);
-
     const content = (
         <ul>
             <li>Only Yes/No questions can have follow-up questions.</li>
@@ -62,7 +49,7 @@ const ProTips = () => {
                     circular
                     icon='lightbulb outline'
                     // value must explicitly be null to be an icon button
-                    content={width > PROTIPS_BUTTON_BP ? 'Pro Tips' : null}
+                    content={'Pro Tips'}
                 />
             }
         />

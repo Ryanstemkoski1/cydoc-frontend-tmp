@@ -1,4 +1,4 @@
-@import '../../assets/scss/variables.scss';
+@import "../../assets/scss/variables.scss";
 .header {
     top: 0;
     left: 0;
@@ -30,6 +30,12 @@
         }
         &.isLinking {
             cursor: pointer;
+        }
+    }
+    &__home {
+        img {
+            width: 14px;
+            margin-right: 5px;
         }
     }
 }

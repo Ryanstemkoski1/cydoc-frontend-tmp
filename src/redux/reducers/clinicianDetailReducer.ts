@@ -4,16 +4,16 @@ import { clinicianDetailAction } from 'redux/actions/clinicianDetailActions';
 export interface initialClinicianDetailType {
     first_name: string;
     last_name: string;
-    id: number;
-    institution_id: number;
+    id: number | null;
+    institution_id: number | null;
     email: string;
 }
 
 export const initialClinicianDetail: initialClinicianDetailType = {
     first_name: '',
     last_name: '',
-    id: -1,
-    institution_id: -1,
+    id: null,
+    institution_id: null,
     email: '',
 };
 

@@ -1,21 +1,21 @@
-import React, { useRef, useEffect, MouseEvent, ChangeEvent } from 'react';
-import {
-    Menu,
-    Icon,
-    Dropdown,
-    Input,
-    InputOnChangeData,
-    MenuItemProps,
-} from 'semantic-ui-react';
-import DeleteCard from './DiscussionPlanDeleteCard';
+import { DISCUSSION_PLAN_MENU_BP } from 'constants/breakpoints.js';
+import React, { ChangeEvent, MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
+import { addCondition, updateConditionName } from 'redux/actions/planActions';
+import { CurrentNoteState } from 'redux/reducers';
 import {
     PlanConditionsFlat,
     selectPlanConditions,
 } from 'redux/selectors/planSelectors';
-import { addCondition, updateConditionName } from 'redux/actions/planActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { DISCUSSION_PLAN_MENU_BP } from 'constants/breakpoints.js';
+import {
+    Dropdown,
+    Icon,
+    Input,
+    InputOnChangeData,
+    Menu,
+    MenuItemProps,
+} from 'semantic-ui-react';
+import DeleteCard from './DiscussionPlanDeleteCard';
 
 const TAB_WIDTH = 250;
 
@@ -30,7 +30,6 @@ interface DispatchProps {
 
 interface OwnProps {
     index: number;
-    windowWidth: number;
     setCurrentIndex: (val: number) => void;
     setCurrentId: (val: string) => void;
 }
@@ -53,7 +52,6 @@ const usePrevious = <T,>(value: T) => {
  */
 export const DiscussionPlanMenu = (props: DiscussionPlanMenuProps) => {
     const {
-        windowWidth,
         index,
         conditions,
         setCurrentIndex,
@@ -64,9 +62,7 @@ export const DiscussionPlanMenu = (props: DiscussionPlanMenuProps) => {
 
     const prevNumConditions = usePrevious<number>(conditions.length) || 0;
 
-    const collapsed =
-        windowWidth < DISCUSSION_PLAN_MENU_BP ||
-        conditions.length * TAB_WIDTH > DISCUSSION_PLAN_MENU_BP;
+    const collapsed = conditions.length * TAB_WIDTH > DISCUSSION_PLAN_MENU_BP;
 
     // Switch to the new tab if one was just added
     useEffect(() => {
@@ -147,7 +143,7 @@ export const DiscussionPlanMenu = (props: DiscussionPlanMenuProps) => {
     // When screen is too small, show just the active condition as a tab
     // and hide the rest in a dropdown
     if (collapsed) {
-        const width = windowWidth >= 450 ? 'auto' : 100;
+        const width = 'auto';
         const dropdownItems = conditions.map((condition, i) => (
             <Menu.Item
                 key={i}

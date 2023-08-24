@@ -1,8 +1,6 @@
 import Input from 'components/Input/Input';
 import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
-import { ROS_SMALL_BP } from 'constants/breakpoints';
 import { HpiStateProps, NumberInput, TimeOption } from 'constants/hpiEnums';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -51,11 +49,7 @@ class TimeInput extends React.Component<Props> {
                                     : false
                             }
                             condition={timeItem}
-                            title={
-                                this.props.dimensions.windowWidth > ROS_SMALL_BP
-                                    ? timeItem
-                                    : timeDict[timeItem]
-                            }
+                            title={timeItem}
                             onToggleButtonClick={(
                                 _e,
                                 data
@@ -121,17 +115,11 @@ const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
     hpi: selectHpiState(state),
 });
 
-type Props = HpiStateProps &
-    DispatchProps &
-    TimeInputProps & {
-        dimensions?: any;
-    };
+type Props = HpiStateProps & DispatchProps & TimeInputProps;
 
 const mapDispatchToProps = {
     handleTimeInputChange,
     handleTimeOptionChange,
 };
 
-export default withDimensionsHook(
-    connect(mapStateToProps, mapDispatchToProps)(TimeInput)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(TimeInput);

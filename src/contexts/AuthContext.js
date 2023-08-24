@@ -1,3 +1,4 @@
+import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import React from 'react';
 import { withCookies } from 'react-cookie';
 
@@ -38,6 +39,8 @@ class AuthStore extends React.Component {
         this.props.cookies.remove('user');
         this.props.cookies.remove('role');
         this.props.cookies.remove('token');
+        localStorage.removeItem(HPIPatientQueryParams.CLINICIAN_ID);
+        localStorage.removeItem(HPIPatientQueryParams.INSTITUTION_ID);
         this.setState({ user: null, role: null, token: null });
     };
 

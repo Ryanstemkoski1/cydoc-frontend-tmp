@@ -1,7 +1,5 @@
 import { PhysicalExamSchemaRow } from 'constants/PhysicalExam/physicalExamSchema';
-import { PHYSICAL_EXAM_MOBILE_BP } from 'constants/breakpoints.js';
 import { LRButtonState } from 'constants/enums';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
@@ -109,7 +107,6 @@ class PhysicalExamGroup extends Component<Props> {
     };
 
     render() {
-        const { windowWidth } = this.props.dimensions;
         const { physicalExamSection } = this.props;
         const { comments } = physicalExamSection;
         const rowComponents = this.generateRows(
@@ -130,12 +127,7 @@ class PhysicalExamGroup extends Component<Props> {
         );
         return (
             <Form>
-                {windowWidth !== 0 && windowWidth < PHYSICAL_EXAM_MOBILE_BP ? (
-                    <>
-                        {rowComponents}
-                        {commentComponent}
-                    </>
-                ) : (
+                {
                     <Grid columns='equal'>
                         <Grid.Row>
                             <Grid.Column>{rowComponents}</Grid.Column>
@@ -144,7 +136,7 @@ class PhysicalExamGroup extends Component<Props> {
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
-                )}
+                }
             </Form>
         );
     }
@@ -166,10 +158,7 @@ interface DispatchProps {
     physicalExamSection: PhysicalExamSection;
 }
 
-type Props = GroupProps &
-    DispatchProps & {
-        dimensions?: any;
-    };
+type Props = GroupProps & DispatchProps;
 
 const mapStatetoProps = (state: CurrentNoteState, props: GroupProps) => {
     return {
@@ -183,6 +172,4 @@ const mapDispatchToProps = {
     updateComments,
 };
 
-export default withDimensionsHook(
-    connect(mapStatetoProps, mapDispatchToProps)(PhysicalExamGroup)
-);
+export default connect(mapStatetoProps, mapDispatchToProps)(PhysicalExamGroup);

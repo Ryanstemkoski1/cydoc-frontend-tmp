@@ -1,46 +1,23 @@
+import { homeContent } from 'constants/homeContent';
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Segment } from 'semantic-ui-react';
-import { homeContent } from 'constants/homeContent';
 import NavMenu from '../../components/navigation/NavMenu';
-import { MeetCydocSection } from './MeetCydocSection';
 import { BetterNotesIcons } from './BetterNotesIcons';
 import { FeaturesGrid } from './FeaturesGrid';
 import './Home.css';
+import { MeetCydocSection } from './MeetCydocSection';
 
 class Home extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
-        };
-        this.updateDimensions = this.updateDimensions.bind(this);
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-        let windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
     }
 
     render() {
-        const { windowWidth } = this.state;
         return (
             <Fragment>
                 <NavMenu />
-                <MeetCydocSection windowWidth={windowWidth} />
+                <MeetCydocSection />
                 <Segment className='better-notes'>
                     <div className='diagonal'>
                         <div className='diagonal-content'>
@@ -52,7 +29,7 @@ class Home extends Component {
                             <p className='better-notes-description'>
                                 {homeContent.betterNotes.description}
                             </p>
-                            <BetterNotesIcons windowWidth={windowWidth} />
+                            <BetterNotesIcons />
                         </div>
                     </div>
                 </Segment>
@@ -85,7 +62,7 @@ class Home extends Component {
                         className='home-header white'
                         textAlign='center'
                     />
-                    <FeaturesGrid windowWidth={windowWidth} />
+                    <FeaturesGrid />
                 </Segment>
                 <Segment className='footer'>
                     <Header

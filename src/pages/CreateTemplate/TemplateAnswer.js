@@ -1,38 +1,37 @@
-import React, { Component } from 'react';
-import HPITemplateContext from '../../contexts/HPITemplateContext';
-import { questionTypeMapping, questionTypes } from 'constants/questionTypes';
-import diseaseCodes from 'constants/diseaseCodes';
-import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
-import MedicalHistoryContent from 'pages/EditNote/content/medicalhistory/MedicalHistoryContent';
-import SurgicalHistoryContent from 'pages/EditNote/content/surgicalhistory/SurgicalHistoryContent';
-import MedicationsContent from 'pages/EditNote/content/medications/MedicationsContent';
-import FamilyHistoryContent from 'pages/EditNote/content/familyhistory/FamilyHistoryContent';
-import ImportQuestionForm from './modules/ImportQuestionForm';
-import GeneratedSentence from './modules/GeneratedSentence';
-import {
-    getAnswerInfo,
-    createNodeId,
-    sortEdges,
-    updateParent,
-    addChildrenNodes,
-} from './util';
-import { RESPONSE_PLACEHOLDER } from './placeholders';
-import {
-    Input,
-    Button,
-    Dropdown,
-    Message,
-    List,
-    Accordion,
-    Icon,
-} from 'semantic-ui-react';
-import { graphClient } from 'constants/api';
 import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
-import { joinLists } from 'pages/EditNote/content/generatenote/notesections/HPINote';
+import { graphClient } from 'constants/api';
+import diseaseCodes from 'constants/diseaseCodes';
+import { questionTypeMapping, questionTypes } from 'constants/questionTypes';
+import FamilyHistoryContent from 'pages/EditNote/content/familyhistory/FamilyHistoryContent';
 import {
     capitalize,
     fillAnswers,
 } from 'pages/EditNote/content/generatenote/generateHpiText';
+import { joinLists } from 'pages/EditNote/content/generatenote/notesections/HPINote';
+import MedicalHistoryContent from 'pages/EditNote/content/medicalhistory/MedicalHistoryContent';
+import MedicationsContent from 'pages/EditNote/content/medications/MedicationsContent';
+import SurgicalHistoryContent from 'pages/EditNote/content/surgicalhistory/SurgicalHistoryContent';
+import React, { Component } from 'react';
+import {
+    Accordion,
+    Button,
+    Dropdown,
+    Icon,
+    Input,
+    List,
+    Message,
+} from 'semantic-ui-react';
+import HPITemplateContext from '../../contexts/HPITemplateContext';
+import GeneratedSentence from './modules/GeneratedSentence';
+import ImportQuestionForm from './modules/ImportQuestionForm';
+import { RESPONSE_PLACEHOLDER } from './placeholders';
+import {
+    addChildrenNodes,
+    createNodeId,
+    getAnswerInfo,
+    sortEdges,
+    updateParent,
+} from './util';
 const MIN_OPTIONS = 2;
 
 class TemplateAnswer extends Component {
@@ -41,8 +40,6 @@ class TemplateAnswer extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
             showOtherGraphs: false,
             otherGraph: null,
             showPreview: false,
@@ -54,22 +51,12 @@ class TemplateAnswer extends Component {
                 context.template.nodes[props.qId].answerInfo,
             showPreviewSentence: false,
         };
-        this.updateDimensions = this.updateDimensions.bind(this);
         this.connectGraph = this.connectGraph.bind(this);
         this.saveAnswer = this.saveAnswer.bind(this);
         this.addChildQuestion = this.addChildQuestion.bind(this);
         this.saveButtonOption = this.saveButtonOption.bind(this);
         this.addButtonOption = this.addButtonOption.bind(this);
         this.removeButtonOption = this.removeButtonOption.bind(this);
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
     }
 
     componentDidUpdate(prevProps) {
@@ -81,14 +68,6 @@ class TemplateAnswer extends Component {
             this.setState({ showOptionError: false });
         }
     }
-
-    updateDimensions = () => {
-        let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-        let windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
-    };
 
     showGraphOptions = () => {
         this.setState({ showOtherGraphs: true });
@@ -351,9 +330,7 @@ class TemplateAnswer extends Component {
      * @param {String} type: the response type
      */
     getPreviewComponent = (type) => {
-        const { windowWidth } = this.state;
         const { nodes } = this.context.template;
-        const collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
 
         let preview;
         let responseType = type.split('-')[0];
@@ -365,18 +342,13 @@ class TemplateAnswer extends Component {
         switch (responseType) {
             case questionTypes.FH:
                 preview = (
-                    <FamilyHistoryContent
-                        isPreview={true}
-                        mobile={collapseTabs}
-                        values={values}
-                    />
+                    <FamilyHistoryContent isPreview={true} values={values} />
                 );
                 break;
             case questionTypes.MEDS:
                 preview = (
                     <MedicationsContent
                         isPreview={true}
-                        mobile={collapseTabs}
                         values={values}
                         singleType={false}
                     />
@@ -384,20 +356,12 @@ class TemplateAnswer extends Component {
                 break;
             case questionTypes.PMH:
                 preview = (
-                    <MedicalHistoryContent
-                        isPreview={true}
-                        mobile={collapseTabs}
-                        values={values}
-                    />
+                    <MedicalHistoryContent isPreview={true} values={values} />
                 );
                 break;
             case questionTypes.PSH:
                 preview = (
-                    <SurgicalHistoryContent
-                        isPreview={true}
-                        mobile={collapseTabs}
-                        values={values}
-                    />
+                    <SurgicalHistoryContent isPreview={true} values={values} />
                 );
                 break;
             default:

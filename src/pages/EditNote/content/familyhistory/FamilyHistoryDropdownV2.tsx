@@ -274,7 +274,6 @@ interface DispatchProps {
 interface DropdownProps {
     index: string;
     family_index: string;
-    mobile: boolean;
     condition: string;
     /* eslint-disable-next-line */
     handleDelete: (index: string, family_index: string) => void;

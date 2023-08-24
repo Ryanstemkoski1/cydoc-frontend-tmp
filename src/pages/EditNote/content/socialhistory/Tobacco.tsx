@@ -22,13 +22,10 @@ import HistoryButtons from '../../../../components/tools/ThreeButton/ThreeButton
 import '../familyhistory/FamilyHistory.css';
 import '../hpi/knowledgegraph/src/css/Button.css';
 
-type OwnProps = {
-    mobile: boolean;
-};
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
 
-type Props = ReduxProps & OwnProps;
+type Props = ReduxProps;
 
 interface State {
     invalidYear: boolean;
@@ -372,9 +369,6 @@ class Tobacco extends React.Component<Props, State> {
                                             value as string
                                         );
                                     }}
-                                    placeholder={
-                                        this.props.mobile ? 'Comments' : null
-                                    }
                                     rows={3}
                                 />
                             </Grid.Row>

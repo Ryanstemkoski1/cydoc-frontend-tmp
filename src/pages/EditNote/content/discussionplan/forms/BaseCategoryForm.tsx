@@ -35,7 +35,6 @@ interface CategoryFormStateProps<T> {
 }
 
 export interface CategoryFormOwnProps {
-    mobile: boolean;
     conditionId: string;
     formatAction: (action: PlanAction, ...args: any[]) => EventHandler;
 }
@@ -50,14 +49,11 @@ export type CategoryFormComponent<T> = (
 ) => JSX.Element;
 
 interface BaseCategoryFormProps<T> {
-    mobile: boolean;
     category: ConditionCategoryKey;
     categoryData: T[];
     numColumns: 2 | 3;
     addRowLabel: string;
     components: {
-        mobileContent: CategoryFormComponent<T>;
-        mobileTitle: CategoryFormComponent<T>;
         gridColumn: CategoryFormComponent<T>;
         gridHeaders: React.FC;
     };
@@ -84,7 +80,6 @@ export const BaseCategoryForm = <T extends { id: string }>(
     const {
         category,
         categoryData,
-        mobile,
         components,
         numColumns,
         addRowLabel,
@@ -136,79 +131,35 @@ export const BaseCategoryForm = <T extends { id: string }>(
 
     // Render each entry as an expandable accordion when in mobile view, and as a
     // responsive grid otherwise.
-    let content;
-    if (mobile) {
-        const toggleRow = (id: string) => {
-            const newActiveRows = new Set(activeRows);
-            if (activeRows.has(id)) {
-                newActiveRows.delete(id);
-            } else {
-                newActiveRows.add(id);
-            }
-            setActiveRows(newActiveRows);
-        };
 
-        const panels = categoryData.map((row) => {
-            const title = components.mobileTitle(row, options, onAddItem);
-            const content = components.mobileContent(row, options, onAddItem);
-            return {
-                key: row.id,
-                active: activeRows.has(row.id),
-                title: { content: title },
-                onTitleClick: () => toggleRow(row.id),
-                content: { content },
-            };
-        });
-
-        content = (
-            <Accordion
-                fluid
-                styled
-                exclusive={false}
-                panels={panels}
-                className={`plan-section-form ${category as string}`}
-            />
-        );
-    } else {
-        const body = categoryData.map((row) =>
-            components.gridColumn(row, options, onAddItem)
-        );
-        content = (
-            <Grid stackable columns={numColumns} className='section-body'>
-                {components.gridHeaders({})}
-                {body}
-            </Grid>
-        );
-    }
-
-    const checkDifferentialDiagnoses = (s: string) => {
-        return s == 'differentialDiagnoses'
-            ? 'Diagnosis'
-            : _.startCase(s as string);
-    };
-
-    // const enableToggle = mobile && category !== 'differentialDiagnoses';
-    const enableToggle = mobile;
+    const body = categoryData.map((row) =>
+        components.gridColumn(row, options, onAddItem)
+    );
+    const content = (
+        <Grid stackable columns={numColumns} className='section-body'>
+            {components.gridHeaders({})}
+            {body}
+        </Grid>
+    );
 
     return (
         <Accordion fluid className='plan-section'>
             <Accordion.Title
-                active={!enableToggle || expanded}
+                active={true}
                 /* eslint-disable-next-line */
-                onClick={enableToggle ? () => setExpanded(!expanded) : () => {}}
+                onClick={() => {}}
             >
                 <Header as='h2' attached size='large'>
-                    {mobile &&
-                        (expanded ? (
-                            <Icon name='caret down'></Icon>
-                        ) : (
-                            <Icon name='caret right'></Icon>
-                        ))}
+                    {expanded ? (
+                        <Icon name='caret down'></Icon>
+                    ) : (
+                        <Icon name='caret right'></Icon>
+                    )}
 
                     {_.startCase(category as string)}
                 </Header>
             </Accordion.Title>
-            <Accordion.Content active={!enableToggle || expanded}>
+            <Accordion.Content active={true}>
                 {content}
                 <AddRowButton name={addRowLabel} onClick={addRow} />
             </Accordion.Content>

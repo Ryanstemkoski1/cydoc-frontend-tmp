@@ -1,8 +1,8 @@
 import { OptionMapping } from '_processOptions';
 import Dropdown from 'components/tools/OptimizedDropdown';
+import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
 import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from 'constants/enums';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import React, { Component } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import {
@@ -24,21 +24,17 @@ import {
 } from 'redux/selectors/medicationsSelectors';
 import {
     Accordion,
-    Button,
     Input,
     Label,
     TextArea,
     TextAreaProps,
 } from 'semantic-ui-react';
 import Delete from '../../../../assets/delete.svg';
-import { MEDICATIONS_PANEL_SCREEN_BP } from '../../../../constants/breakpoints';
 import './Medications.css';
 import { DropdownType } from './MedicationsContent';
 import style from './MedicationsPanel.module.scss';
-import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
 
 interface OwnProps {
-    mobile: boolean;
     isPreview: boolean;
     previewValue?: string;
     sideEffectsOptions: OptionMapping;
@@ -180,9 +176,8 @@ class MedicationsPanel extends Component<Props, State> {
     };
 
     makePanel() {
-        const { mobile, isPreview } = this.props;
+        const { isPreview } = this.props;
 
-        let titleContent, contentInputs;
         // TODO: Remove the preview logic from this component (and potentially others in Patient History)
         //       and make it an entirely separate component for more explicit typecasting and functional differences
         const medicationEntry =
@@ -246,55 +241,13 @@ class MedicationsPanel extends Component<Props, State> {
                 className={`ui form ${style.medication__wrap}`}
                 id='dose-input-div'
             >
-                {this.props.dimensions.windowWidth <
-                MEDICATIONS_PANEL_SCREEN_BP ? (
-                    <label
-                        className='medications-content-input-label'
-                        id='dose-input-label'
-                    >
-                        <b>Dose:</b>
-                    </label>
-                ) : (
-                    <></>
-                )}
                 <div className={style.medication__field} id='dose-input'>
-                    {this.props.dimensions.windowWidth <
-                    MEDICATIONS_PANEL_SCREEN_BP ? (
-                        <Input
-                            fluid
-                            transparent
-                            disabled={isPreview}
-                            type='Dose'
-                            placeholder='e.g. 81 mg tablet'
-                            onChange={this.onChangeFormatter((value) =>
-                                this.props.updateDose(
-                                    this.props.medIndex,
-                                    value
-                                )
-                            )}
-                            value={
-                                isPreview
-                                    ? ''
-                                    : (medicationEntry as MedicationsItem)[
-                                          'dose'
-                                      ]
-                            }
-                            aria-label='Dose-Input'
-                            className='content-input'
-                        />
-                    ) : (
+                    {
                         <TextArea
                             fluid
                             transparent
                             disabled={isPreview}
                             type='Dose'
-                            label={
-                                mobile && {
-                                    basic: true,
-                                    content: 'Dose: ',
-                                    className: `medications-content-input-label`,
-                                }
-                            }
                             placeholder='e.g. 81 mg tablet'
                             onChange={this.onDoseChange}
                             value={
@@ -307,7 +260,7 @@ class MedicationsPanel extends Component<Props, State> {
                             aria-label='Dose-Input'
                             className='content-input'
                         />
-                    )}
+                    }
                 </div>
             </div>
         );
@@ -318,59 +271,16 @@ class MedicationsPanel extends Component<Props, State> {
                     className={`ui form ${style.medication__wrap} ${style.medication__label}`}
                     id='schedule-input-div'
                 >
-                    {this.props.dimensions.windowWidth <
-                    MEDICATIONS_PANEL_SCREEN_BP ? (
-                        <label
-                            className={`medications-content-input-label ${style.medication__label}`}
-                            id='schedule-input-label'
-                        >
-                            <b>Schedule:</b>
-                        </label>
-                    ) : (
-                        <></>
-                    )}
                     <div
                         id='schedule-input'
                         className={style.medication__field}
                     >
-                        {this.props.dimensions.windowWidth <
-                        MEDICATIONS_PANEL_SCREEN_BP ? (
-                            <Input
-                                fluid
-                                transparent
-                                disabled={isPreview}
-                                type='Schedule'
-                                placeholder='e.g. once a day'
-                                onChange={this.onChangeFormatter((value) =>
-                                    this.props.updateSchedule(
-                                        this.props.medIndex,
-                                        value
-                                    )
-                                )}
-                                value={
-                                    isPreview
-                                        ? ''
-                                        : (medicationEntry as MedicationsItem)[
-                                              'schedule'
-                                          ]
-                                }
-                                aria-label='Schedule-Input'
-                                className='content-input'
-                            />
-                        ) : (
+                        {
                             <TextArea
                                 fluid
                                 transparent
                                 disabled={isPreview}
                                 type='Schedule'
-                                label={
-                                    mobile && {
-                                        basic: true,
-                                        content: 'Schedule: ',
-                                        className:
-                                            'medications-content-input-label',
-                                    }
-                                }
                                 placeholder='e.g. once a day'
                                 onChange={this.onScheduleChange}
                                 value={
@@ -383,7 +293,7 @@ class MedicationsPanel extends Component<Props, State> {
                                 aria-label='Schedule-Input'
                                 className='content-input'
                             />
-                        )}
+                        }
                     </div>
                 </div>
             </>
@@ -392,25 +302,8 @@ class MedicationsPanel extends Component<Props, State> {
         const reasonForTakingInput = (
             <div id='reason-input-div' className={style.medication__dropdown}>
                 <div id='reason-input'>
-                    {this.props.dimensions.windowWidth <
-                    MEDICATIONS_PANEL_SCREEN_BP ? (
-                        <Label
-                            basic
-                            className={`medications-content-input-label ${style.medication__label}`}
-                            content={'Reason for taking: '}
-                        />
-                    ) : (
-                        <></>
-                    )}
                     {!isPreview && (
-                        <div
-                            id={
-                                this.props.dimensions.windowWidth <
-                                MEDICATIONS_PANEL_SCREEN_BP
-                                    ? 'reason-dropdown'
-                                    : ''
-                            }
-                        >
+                        <div>
                             <Dropdown
                                 fluid
                                 search
@@ -514,35 +407,7 @@ class MedicationsPanel extends Component<Props, State> {
                     className={`ui input content-input medications-content-input-label ${style.medication__label}`}
                     content='Currently Taking: '
                 />
-                {this.props.dimensions.windowWidth <
-                MEDICATIONS_PANEL_SCREEN_BP ? (
-                    <div id='currently-taking-btns'>
-                        <YesAndNo
-                            yesButtonActive={
-                                !isPreview &&
-                                (medicationEntry as MedicationsItem)
-                                    .isCurrentlyTaking === YesNoResponse.Yes
-                            }
-                            handleYesButtonClick={() => {
-                                this.props.updateCurrentlyTaking(
-                                    this.props.medIndex,
-                                    YesNoResponse.Yes
-                                );
-                            }}
-                            noButtonActive={
-                                !isPreview &&
-                                (medicationEntry as MedicationsItem)
-                                    .isCurrentlyTaking === YesNoResponse.No
-                            }
-                            handleNoButtonClick={() => {
-                                this.props.updateCurrentlyTaking(
-                                    this.props.medIndex,
-                                    YesNoResponse.No
-                                );
-                            }}
-                        />
-                    </div>
-                ) : (
+                {
                     <>
                         <YesAndNo
                             yesButtonActive={
@@ -569,7 +434,7 @@ class MedicationsPanel extends Component<Props, State> {
                             }}
                         />
                     </>
-                )}
+                }
             </div>
         );
 
@@ -719,82 +584,60 @@ class MedicationsPanel extends Component<Props, State> {
             </div>
         );
 
-        if (this.props.dimensions.windowWidth < MEDICATIONS_PANEL_SCREEN_BP) {
-            titleContent = <>{drugNameInput}</>;
-
-            contentInputs = (
-                <>
-                    {doseInput}
-                    {scheduleInput}
-                    {reasonForTakingInput}
-                    {startYearInput}
-                    {currentlyTakingInput}
-                    {endYearInput}
-                    {sideEffectsInput}
-                    {commentsInput}
-                </>
-            );
-        } else {
-            titleContent = (
-                <div className={style.medication}>
-                    {this.props.singleType ? (
-                        <div
-                            className={`${style.medication__item} flex align-center justify-between`}
+        const titleContent = (
+            <div className={style.medication}>
+                {this.props.singleType ? (
+                    <div
+                        className={`${style.medication__item} flex align-center justify-between`}
+                    >
+                        <aside>{drugNameInput}</aside>
+                        <button
+                            onClick={(e) => {
+                                this.props.deleteRow(e, this.props.medIndex);
+                            }}
                         >
-                            <aside>{drugNameInput}</aside>
-                            <button
-                                onClick={(e) => {
-                                    this.props.deleteRow(
-                                        e,
-                                        this.props.medIndex
-                                    );
-                                }}
-                            >
-                                <img src={Delete} alt='Remove' />
-                            </button>
-                        </div>
-                    ) : (
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>{drugNameInput}</td>
-                                    <td>{doseInput}</td>
-                                    <td>{scheduleInput}</td>
-                                    <td>
-                                        <h3 className='for-text'>for</h3>
-                                    </td>
-                                    <td>{reasonForTakingInput}</td>
-                                    <td>
-                                        <div
-                                            className={style.medication__remove}
-                                        >
-                                            <RemoveButton
-                                                onClick={(e: any) => {
-                                                    this.props.deleteRow(
-                                                        e,
-                                                        this.props.medIndex
-                                                    );
-                                                }}
-                                            />
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    )}
-                </div>
-            );
+                            <img src={Delete} alt='Remove' />
+                        </button>
+                    </div>
+                ) : (
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>{drugNameInput}</td>
+                                <td>{doseInput}</td>
+                                <td>{scheduleInput}</td>
+                                <td>
+                                    <h3 className='for-text'>for</h3>
+                                </td>
+                                <td>{reasonForTakingInput}</td>
+                                <td>
+                                    <div className={style.medication__remove}>
+                                        <RemoveButton
+                                            onClick={(e: any) => {
+                                                this.props.deleteRow(
+                                                    e,
+                                                    this.props.medIndex
+                                                );
+                                            }}
+                                        />
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                )}
+            </div>
+        );
 
-            contentInputs = (
-                <>
-                    {startYearInput}
-                    {currentlyTakingInput}
-                    {endYearInput}
-                    {sideEffectsInput}
-                    {commentsInput}
-                </>
-            );
-        }
+        const contentInputs = (
+            <>
+                {startYearInput}
+                {currentlyTakingInput}
+                {endYearInput}
+                {sideEffectsInput}
+                {commentsInput}
+            </>
+        );
 
         return {
             titleContent,
@@ -841,6 +684,4 @@ const mapDispatchToProps = {
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-export default withDimensionsHook(
-    connect(mapStateToProps, mapDispatchToProps)(MedicationsPanel)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(MedicationsPanel);

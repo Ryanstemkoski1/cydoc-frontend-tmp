@@ -1,9 +1,10 @@
+import Loader from 'components/tools/Loader/Loader';
 import { Clinician } from 'pages/BrowseNotes/BrowseNotes';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import style from './Input.module.scss';
 
 interface Props {
-    items: Clinician[];
+    items: Clinician[] | null;
     placeholder?: string;
     onChange: (id: number) => void;
     canEnterNewValue?: boolean;
@@ -20,15 +21,19 @@ function getDummyClinician(value: string): Clinician {
     };
 }
 
-function getFullName(first_name: string, last_name: string) {
+export function getFullName(first_name: string, last_name: string) {
     return `${last_name}, ${first_name}`;
 }
 
 function getfilteredItems(
-    items: Clinician[],
+    items: Clinician[] | null,
     value: string,
     canEnterNewValue: boolean
 ) {
+    if (items === null) {
+        return null;
+    }
+
     let filteredItems = items.filter((item) =>
         getFullName(item.first_name, item.last_name).includes(value)
     );
@@ -91,25 +96,31 @@ function DropdownForClinicians({
                 />
             </div>
 
-            {filteredItems && showDropdown && (
-                <div className={style.input__suggestion}>
-                    {filteredItems.map((item) => (
-                        <a
-                            key={item.id}
-                            onClick={() => {
-                                onChange(item.id);
-                                setShowDropdown(false);
-                                setValue(
-                                    getFullName(item.first_name, item.last_name)
-                                );
-                            }}
-                        >
-                            {getFullName(item.first_name, item.last_name)}
-                        </a>
-                    ))}
-                    {!filteredItems.length && <span>No record found</span>}
-                </div>
-            )}
+            {showDropdown &&
+                (filteredItems === null ? (
+                    <Loader />
+                ) : (
+                    <div className={style.input__suggestion}>
+                        {filteredItems.map((item) => (
+                            <a
+                                key={item.id}
+                                onClick={() => {
+                                    onChange(item.id);
+                                    setShowDropdown(false);
+                                    setValue(
+                                        getFullName(
+                                            item.first_name,
+                                            item.last_name
+                                        )
+                                    );
+                                }}
+                            >
+                                {getFullName(item.first_name, item.last_name)}
+                            </a>
+                        ))}
+                        {!filteredItems.length && <span>No record found</span>}
+                    </div>
+                ))}
         </div>
     );
 }

@@ -1,23 +1,22 @@
-import React, { Component, createRef } from 'react';
-import { Sticky, Message } from 'semantic-ui-react';
-import MenuTabs from './MenuTabs';
-import NotePage from './NotePage';
-import NavMenu from '../../components/navigation/NavMenu';
 import constants from 'constants/constants';
+import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
 import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
-import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
+import { Message, Sticky } from 'semantic-ui-react';
+import NavMenu from '../../components/navigation/NavMenu';
+import MenuTabs from './MenuTabs';
+import NotePage from './NotePage';
 
-import './EditNote.css';
+import { YesNoResponse } from 'constants/enums';
+import { withRouter } from 'react-router-dom';
+import { updateActiveItem } from 'redux/actions/activeItemActions';
+import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
+import './EditNote.css';
 import './NotePage.css';
-import { updateActiveItem } from 'redux/actions/activeItemActions';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
-import { withRouter } from 'react-router-dom';
-import { YesNoResponse } from 'constants/enums';
 // Component that manages the active state of the create note editor
 // and defines the layout of the editor
 class EditNote extends Component {
@@ -28,32 +27,16 @@ class EditNote extends Component {
         this.onPreviousClick = this.onPreviousClick.bind(this);
         this.state = {
             activeTabIndex: 0,
-            windowWidth: 0,
-            windowHeight: 0,
             message: '',
         };
-        this.updateDimensions = this.updateDimensions.bind(this);
     }
 
     timeoutRef = createRef();
     componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
         // Setting view to top of the page upon loading a note
         setTimeout(() => {
             window.scrollTo(0, 0);
         }, 0);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-        let windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-        this.setState({ windowWidth, windowHeight });
     }
 
     canNavigateToOtherPages() {
@@ -152,44 +135,17 @@ class EditNote extends Component {
         // if (this.props._id === '') {
         //     return <Redirect push to='/dashboard' />;
         // }
-        const { windowWidth } = this.state;
-        const editNoteHeader = windowWidth < NOTE_PAGE_MOBILE_BP;
 
         return (
             <div ref={this.noteContent}>
-                {editNoteHeader ? (
-                    <>
-                        <div className='mobile-header' />
-                        {this.props.patientView && this.state?.message && (
-                            <Message negative className='error-message'>
-                                <Message.Header>
-                                    {this.state.message}
-                                </Message.Header>
-                            </Message>
-                        )}
-                        <NotePage
-                            onNextClick={this.onNextClick}
-                            onPreviousClick={this.onPreviousClick}
-                        />
-                        <div
-                            className='container'
-                            id='mobile-header-container'
-                        />
-                    </>
-                ) : (
-                    <></>
-                )}
                 {/* Top NavMenu and MenuTabs stay on top regardless of scroll*/}
-                <Sticky
-                    context={this.noteContent}
-                    id={editNoteHeader ? 'mobile-nav' : 'stickyHeader'}
-                >
+                <Sticky context={this.noteContent} id={'stickyHeader'}>
                     <NavMenu
                         className='edit-note-nav-menu'
                         displayNoteName={true}
                     />
 
-                    <div className={editNoteHeader ? 'sticky-div' : ''}>
+                    <div>
                         <MenuTabs
                             activeItem={this.props.activeItem}
                             onTabChange={this.onTabChange}
@@ -199,28 +155,19 @@ class EditNote extends Component {
                     </div>
                 </Sticky>
 
-                {editNoteHeader ? (
-                    <></>
-                ) : (
-                    // for desktop
-                    <>
-                        {this.props.patientView && this.state?.message && (
-                            <Message
-                                negative
-                                className='container error-message'
-                                style={{ marginTop: '10px' }}
-                            >
-                                <Message.Header>
-                                    {this.state.message}
-                                </Message.Header>
-                            </Message>
-                        )}
-                        <NotePage
-                            onNextClick={this.onNextClick}
-                            onPreviousClick={this.onPreviousClick}
-                        />
-                    </>
+                {this.props.patientView && this.state?.message && (
+                    <Message
+                        negative
+                        className='container error-message'
+                        style={{ marginTop: '10px' }}
+                    >
+                        <Message.Header>{this.state.message}</Message.Header>
+                    </Message>
                 )}
+                <NotePage
+                    onNextClick={this.onNextClick}
+                    onPreviousClick={this.onPreviousClick}
+                />
             </div>
         );
     }

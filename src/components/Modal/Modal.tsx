@@ -1,4 +1,7 @@
+import { getFullName } from 'components/Input/DropdownForClinicians';
+import Loader from 'components/tools/Loader/Loader';
 import { localhostClient } from 'constants/api';
+import { User } from 'pages/BrowseNotes/BrowseNotes';
 import React, { useEffect, useRef, useState } from 'react';
 import { formatHPIText } from 'utils/getHPIText';
 import style from './Modal.module.scss';
@@ -6,7 +9,7 @@ import style from './Modal.module.scss';
 export interface ModalProps {
     showModal: boolean;
     setShowModal: any;
-    appointmentId: number;
+    selectedAppointment: User | null;
 }
 
 interface HPIAppointmentDetails {
@@ -20,18 +23,22 @@ interface HPIAppointmentDetails {
     clinician_id: number;
 }
 
-const Modal = ({ showModal, setShowModal, appointmentId }: ModalProps) => {
+const Modal = ({
+    showModal,
+    setShowModal,
+    selectedAppointment,
+}: ModalProps) => {
     const modalRef = useRef<any>();
     const [hpiAppointMentDetails, setHpiAppointmentDetails] =
         useState<HPIAppointmentDetails | null>(null);
 
     useEffect(() => {
-        if (appointmentId === 0) return;
+        if (!selectedAppointment?.id) return;
         let stale = false;
 
         async function fetchHPIAppointmentsDetails() {
             const response = await localhostClient.get(
-                `/appointment/${appointmentId}`
+                `/appointment/${selectedAppointment?.id}`
             );
             if (!stale) setHpiAppointmentDetails(response.data.data[0]);
         }
@@ -41,7 +48,7 @@ const Modal = ({ showModal, setShowModal, appointmentId }: ModalProps) => {
         return () => {
             stale = true;
         };
-    }, [appointmentId]);
+    }, [selectedAppointment]);
 
     const handleClickOutsideModal = (event: any) => {
         if (!modalRef.current?.contains(event.target)) {
@@ -68,11 +75,11 @@ const Modal = ({ showModal, setShowModal, appointmentId }: ModalProps) => {
             <div className={style.modal__inner} ref={modalRef}>
                 <div className={style.modal__header}>
                     <h3>
-                        {hpiAppointMentDetails
-                            ? hpiAppointMentDetails?.last_name +
-                              ', ' +
-                              hpiAppointMentDetails?.first_name
-                            : 'Loading...'}
+                        {selectedAppointment &&
+                            getFullName(
+                                selectedAppointment.first_name,
+                                selectedAppointment.last_name
+                            )}
                     </h3>
                 </div>
                 <div className={style.modal__innerContent}>
@@ -86,10 +93,11 @@ const Modal = ({ showModal, setShowModal, appointmentId }: ModalProps) => {
                         </button>
                     </div>
                     <p id='copy-notes'>
-                        {hpiAppointMentDetails
-                            ? formatHPIText(hpiAppointMentDetails.hpi_text)
-                            : 'Loading....'}
-                        {/* <HPINote /> */}
+                        {hpiAppointMentDetails ? (
+                            formatHPIText(hpiAppointMentDetails.hpi_text)
+                        ) : (
+                            <Loader />
+                        )}
                     </p>
                 </div>
             </div>

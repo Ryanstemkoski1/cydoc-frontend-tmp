@@ -27,7 +27,7 @@ import { selectPatientInformationState } from 'redux/selectors/patientInformatio
 import { selectPlanState } from 'redux/selectors/planSelectors';
 import { selectReviewOfSystemsState } from 'redux/selectors/reviewOfSystemsSelectors';
 import { selectSurgicalHistoryState } from 'redux/selectors/surgicalHistorySelectors';
-import { Button, Form, Header, Input, Modal, Segment } from 'semantic-ui-react';
+import { Button, Segment } from 'semantic-ui-react';
 
 // import all the individual note sections
 import './GenerateNote.css';
@@ -42,10 +42,7 @@ import ReviewOfSystemsNote from './notesections/ReviewOfSystemsNote';
 import SocialHistoryNote from './notesections/SocialHistoryNote';
 import SurgicalHistoryNote from './notesections/SurgicalHistoryNote';
 
-import IdentityForm from '../../../../components/tools/IdentityForm';
-
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { GENERATE_NOTE_MOBILE_BP } from 'constants/breakpoints';
 import { PatientPronouns } from 'constants/patientInformation';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
@@ -128,7 +125,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
         updatePatientInformation(patientName, pronouns);
         closeModal();
     };
-    const [isBulletNoteView, setIsBulletNoteView] = useState(true);
+    const [isBulletNoteView, _setIsBulletNoteView] = useState(true);
     const [isRichText, setIsRichText] = useState(false);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -143,19 +140,9 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
      * 3) Prop-drilling should be avoided. This is a good article that details
      * how to use composition to avoid prop-drilling: https://javascript.plainenglish.io/composition-in-react-f02afe24bc46
      */
-    const [isMobile, setIsMobile] = useState(false);
     useEffect(() => {
-        const updateDimensions = (): void => {
-            const windowWidth =
-                typeof window !== 'undefined' ? window.innerWidth : 0;
-            setIsMobile(windowWidth < GENERATE_NOTE_MOBILE_BP);
-        };
-        updateDimensions();
         prefillName();
         prefillPronouns();
-        window.addEventListener('resize', updateDimensions);
-        return (): void =>
-            window.removeEventListener('resize', updateDimensions);
     }, []);
 
     const prefillPronouns = () => {
@@ -224,112 +211,51 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
             </Button>
         </Button.Group>
     );
-    const bulletPointToggler = (
-        <Button
-            onClick={() => setIsBulletNoteView(!isBulletNoteView)}
-            className={`hpi-ph-button${isBulletNoteView ? '-selected' : ''}`}
-        >
-            Bullet Point HPI
-        </Button>
+
+    const generateNoteButtons = (
+        <Fragment>
+            <div className={'ui input large'}>
+                <input
+                    id='patientName'
+                    type='text'
+                    autoComplete='off'
+                    placeholder="Patient's name (optional)"
+                    value={patientName}
+                    disabled={true}
+                    onChange={(e) => updatePatientName(e.target.value)}
+                ></input>
+            </div>
+            <Button.Group className='generate-note-button-spacing'>
+                <Button
+                    onClick={() => updatePatientPronouns(PatientPronouns.She)}
+                    className={`hpi-ph-button${
+                        pronouns === PatientPronouns.She ? '-selected' : ''
+                    }`}
+                >
+                    She
+                </Button>
+                <Button.Or />
+                <Button
+                    onClick={() => updatePatientPronouns(PatientPronouns.They)}
+                    className={`hpi-ph-button${
+                        pronouns === PatientPronouns.They ? '-selected' : ''
+                    }`}
+                >
+                    They
+                </Button>
+                <Button.Or />
+                <Button
+                    onClick={() => updatePatientPronouns(PatientPronouns.He)}
+                    className={`hpi-ph-button${
+                        pronouns === PatientPronouns.He ? '-selected' : ''
+                    }`}
+                >
+                    He
+                </Button>
+            </Button.Group>
+            {richOrPlainButtons}
+        </Fragment>
     );
-    let generateNoteButtons;
-    if (!isMobile) {
-        generateNoteButtons = (
-            <Fragment>
-                <div className={'ui input large'}>
-                    <input
-                        id='patientName'
-                        type='text'
-                        autoComplete='off'
-                        placeholder="Patient's name (optional)"
-                        value={patientName}
-                        disabled={true}
-                        onChange={(e) => updatePatientName(e.target.value)}
-                    ></input>
-                </div>
-                <Button.Group className='generate-note-button-spacing'>
-                    <Button
-                        onClick={() =>
-                            updatePatientPronouns(PatientPronouns.She)
-                        }
-                        className={`hpi-ph-button${
-                            pronouns === PatientPronouns.She ? '-selected' : ''
-                        }`}
-                    >
-                        She
-                    </Button>
-                    <Button.Or />
-                    <Button
-                        onClick={() =>
-                            updatePatientPronouns(PatientPronouns.They)
-                        }
-                        className={`hpi-ph-button${
-                            pronouns === PatientPronouns.They ? '-selected' : ''
-                        }`}
-                    >
-                        They
-                    </Button>
-                    <Button.Or />
-                    <Button
-                        onClick={() =>
-                            updatePatientPronouns(PatientPronouns.He)
-                        }
-                        className={`hpi-ph-button${
-                            pronouns === PatientPronouns.He ? '-selected' : ''
-                        }`}
-                    >
-                        He
-                    </Button>
-                </Button.Group>
-                {richOrPlainButtons}
-            </Fragment>
-        );
-    } else {
-        generateNoteButtons = (
-            <Modal
-                className='patient-modal'
-                onClose={closeModal}
-                onOpen={openModal}
-                open={isModalOpen}
-                size='tiny'
-                dimmer='inverted'
-                trigger={
-                    <Button basic color='teal' name='home' icon='info circle' />
-                }
-            >
-                <Header>Patient Information</Header>
-                <Modal.Content>
-                    <Form>
-                        <Form.Field
-                            fluid
-                            autoComplete='off'
-                            id='patientName'
-                            type='text'
-                            label="Patient's Name"
-                            className='patient-info-input'
-                            placeholder="Enter the patient's name, e.g. Ms. Lee (optional)"
-                            control={Input}
-                            value={patientName}
-                            onChange={(e: any) =>
-                                updatePatientName(e.target.value)
-                            }
-                        />
-                        <IdentityForm />
-                        {richOrPlainButtons}
-                        {bulletPointToggler}
-                    </Form>
-                </Modal.Content>
-                <Modal.Actions>
-                    <Button
-                        color='blue'
-                        type='submit'
-                        onClick={savePatientInfo}
-                        content='Save'
-                    />
-                </Modal.Actions>
-            </Modal>
-        );
-    }
 
     return (
         <div className='generate-note-wrap'>

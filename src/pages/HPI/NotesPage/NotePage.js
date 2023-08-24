@@ -1,5 +1,4 @@
 import constants from 'constants/constants';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
@@ -204,6 +203,4 @@ const mapDispatchToProps = {
     processSurveyGraph,
 };
 
-export default withDimensionsHook(
-    connect(mapStateToProps, mapDispatchToProps)(NotePage)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(NotePage);

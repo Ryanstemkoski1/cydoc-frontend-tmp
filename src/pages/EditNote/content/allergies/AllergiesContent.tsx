@@ -41,7 +41,6 @@ class AllergiesContent extends Component<Props, OwnState> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            windowWidth: 0,
             active: new Set(),
             allergensOptions: allergens,
             allergicReactionsOptions: allergicReactions,
@@ -50,24 +49,7 @@ class AllergiesContent extends Component<Props, OwnState> {
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
-        this.updateDimensions = this.updateDimensions.bind(this);
         this.toggleYesNoButton = this.toggleYesNoButton.bind(this);
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-
-        this.setState({ windowWidth });
     }
 
     addRow() {
@@ -274,21 +256,11 @@ class AllergiesContent extends Component<Props, OwnState> {
 
         const content = (
             <div className='allergies-section'>
-                {/* {this.state.windowWidth <
-                PATIENT_HISTORY_ALLERGIES_MOBILE_BP ? (
-                    <Accordion
-                        panels={this.makeAccordionPanels(nums, values)}
-                        exclusive={false}
-                        fluid
-                        styled
-                    />
-                ) : ( */}
                 <Table celled className='table-display'>
                     <Table.Header content={this.makeHeader()} />
                     {/* eslint-disable-next-line react/no-children-prop */}
                     <Table.Body children={this.makeTableBodyRows(nums)} />
                 </Table>
-                {/* )} */}
             </div>
         );
 
@@ -329,17 +301,15 @@ interface AllergiesProps {
 
 interface ContentProps {
     isPreview: boolean;
-    mobile: boolean;
 }
 
 interface OwnState {
-    windowWidth: number;
     active: Set<string>;
     allergensOptions: OptionMapping;
     allergicReactionsOptions: OptionMapping;
 }
 
-type Props = AllergiesProps & ContentProps & DispatchProps;
+type Props = AllergiesProps & DispatchProps & ContentProps;
 
 const mapStateToProps = (state: CurrentNoteState): AllergiesProps => {
     return {

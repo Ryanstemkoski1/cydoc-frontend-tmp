@@ -1,6 +1,5 @@
 import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
 import ConditionInput from 'components/tools/ConditionInput/ConditionInput';
-import { FAMILY_HISTORY_MOBILE_BP } from 'constants/breakpoints.js';
 import constants from 'constants/constants.json';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
 import { YesNoResponse } from 'constants/enums';
@@ -43,7 +42,6 @@ import FamilyHistoryBlock from './FamilyHistoryBlock';
 class FamilyHistoryContent extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
-        this.updateDimensions = this.updateDimensions.bind(this);
         this.addRow = this.addRow.bind(this);
         this.addSeenCond = this.addSeenCond.bind(this);
         //Checks if all response choices exist and adds new ones
@@ -54,8 +52,6 @@ class FamilyHistoryContent extends Component<Props, State> {
             conditions[adjustValue(name, medicalMapping)] = val;
         });
         this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
             seenConditions: conditions,
             currConditions: Object.keys(this.props.familyHistory).filter(
                 (condition) =>
@@ -63,24 +59,6 @@ class FamilyHistoryContent extends Component<Props, State> {
                     this.props.familyHistory[condition].hasAfflictedFamilyMember
             ),
         };
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-        const windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
     }
 
     addRow() {
@@ -134,7 +112,6 @@ class FamilyHistoryContent extends Component<Props, State> {
     }
 
     render() {
-        const { windowWidth } = this.state;
         const {
             responseChoice,
             addFhPopOptions,
@@ -148,7 +125,6 @@ class FamilyHistoryContent extends Component<Props, State> {
         const defaultConditions = constants.CONDITIONS.map((condition) =>
             this.standardizeMedicalName(condition)
         );
-        const mobile = windowWidth < FAMILY_HISTORY_MOBILE_BP;
         //Create collection of rows
         // Use second OR statement so that the information may be auto-populated in the Family History tab
         let listValues = Object.keys(standardFamilyHistory).filter(
@@ -188,7 +164,6 @@ class FamilyHistoryContent extends Component<Props, State> {
                     <FamilyHistoryBlock
                         isPreview={this.props.isPreview}
                         key={index}
-                        mobile={mobile}
                         conditionInp={
                             <ConditionInput
                                 seenConditions={this.state.seenConditions}
@@ -211,7 +186,6 @@ class FamilyHistoryContent extends Component<Props, State> {
                     <FamilyHistoryBlock
                         isPreview={this.props.isPreview}
                         key={index}
-                        mobile={mobile}
                         conditionInp={
                             <ConditionInput
                                 seenConditions={this.state.seenConditions}
@@ -275,8 +249,6 @@ interface DispatchProps {
 
 interface State {
     seenConditions: SeenCondition;
-    windowWidth: number;
-    windowHeight: number;
     currConditions: string[];
 }
 

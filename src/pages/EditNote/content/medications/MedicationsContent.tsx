@@ -6,7 +6,6 @@ import { ResponseTypes } from 'constants/hpiEnums';
 import drugNames from 'constants/medications';
 import diseases from 'constants/oldDiagnoses';
 import sideEffects from 'constants/sideEffects';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import React, { Component } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import {
@@ -28,7 +27,6 @@ import './Medications.css';
 import MedicationsPanel from './MedicationsPanel';
 
 interface OwnProps {
-    mobile: boolean;
     isPreview?: boolean;
     values?: string[];
     responseType?: ResponseTypes;
@@ -39,10 +37,7 @@ interface OwnProps {
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
 
-type Props = ReduxProps &
-    OwnProps & {
-        dimensions?: any;
-    };
+type Props = ReduxProps & OwnProps;
 
 interface State {
     sideEffectsOptions: OptionMapping;
@@ -120,7 +115,6 @@ export class MedicationsContent extends Component<Props, State> {
             values,
             isPreview,
             medications,
-            mobile,
             responseType,
             node,
             addMedsPopOption,
@@ -139,7 +133,6 @@ export class MedicationsContent extends Component<Props, State> {
                     panels.push(
                         <MedicationsPanel
                             key={`med-panel1-${i}`}
-                            mobile={mobile}
                             isPreview={true}
                             previewValue={values[i]}
                             medIndex={medsEntries[i][0]}
@@ -189,7 +182,6 @@ export class MedicationsContent extends Component<Props, State> {
                         <MedicationsPanel
                             key={`med-panel2-${i}`}
                             isNote={isNote}
-                            mobile={mobile}
                             isPreview={false}
                             medIndex={medsEntries[medIndices[i]][0]}
                             sideEffectsOptions={this.state.sideEffectsOptions}
@@ -309,6 +301,4 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default withDimensionsHook(
-    connect(mapStateToProps, mapDispatchToProps)(MedicationsContent)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(MedicationsContent);

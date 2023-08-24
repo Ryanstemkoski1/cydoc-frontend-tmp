@@ -22,7 +22,6 @@ import {
     selectSurgicalHistoryProcedures,
 } from 'redux/selectors/surgicalHistorySelectors';
 import {
-    Accordion,
     DropdownProps,
     InputOnChangeData,
     TextAreaProps,
@@ -35,7 +34,6 @@ import GridContentV2 from 'components/tools/GridContentV2/GridContentV2';
 import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from 'constants/enums';
 import { ResponseTypes } from 'constants/hpiEnums';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import {
     BlankQuestionChangeAction,
     PopResponseAction,
@@ -217,7 +215,6 @@ class SurgicalHistoryContentV2 extends Component<Props, OwnState> {
                 proceduresOptions={updatedProceduresOptions}
                 isPreview={this.props.isPreview}
                 currentYear={this.state.currentYear}
-                mobile={this.props.mobile}
                 deleteRow={this.deleteRow}
                 pop={this.props.responseType == ResponseTypes.PSH_POP}
             />
@@ -395,30 +392,17 @@ class SurgicalHistoryContentV2 extends Component<Props, OwnState> {
         }
 
         const content = (
-            <>
-                {this.props.dimensions.windowWidth < 800 ? (
-                    <Accordion
-                        panels={this.makeAccordionPanels(nums, values)}
-                        exclusive={false}
-                        fluid
-                        styled
-                    />
-                ) : (
-                    <>
-                        <GridContentV2
-                            header_titles={this.makeHeader()}
-                            rows={this.makeTableBodyRows(nums)}
-                            canAddNew={
-                                !this.props.isPreview &&
-                                (hasSurgicalHistory || !patientView) &&
-                                this.props.responseType != ResponseTypes.PSH_POP
-                            }
-                            name='Surgical History'
-                            onAddRow={this.addRow}
-                        />
-                    </>
-                )}
-            </>
+            <GridContentV2
+                header_titles={this.makeHeader()}
+                rows={this.makeTableBodyRows(nums)}
+                canAddNew={
+                    !this.props.isPreview &&
+                    (hasSurgicalHistory || !patientView) &&
+                    this.props.responseType != ResponseTypes.PSH_POP
+                }
+                name='Surgical History'
+                onAddRow={this.addRow}
+            />
         );
 
         return (
@@ -491,7 +475,6 @@ interface SurgicalHistoryProps {
 interface ContentProps {
     isPreview: boolean;
     dimensions?: any;
-    mobile: boolean;
     responseChoice?: string[];
     responseType?: ResponseTypes;
     node?: string;
@@ -536,6 +519,7 @@ const mapDispatchToProps = {
     popResponse,
 };
 
-export default withDimensionsHook(
-    connect(mapStateToProps, mapDispatchToProps)(SurgicalHistoryContentV2)
-);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(SurgicalHistoryContentV2);

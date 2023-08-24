@@ -56,7 +56,7 @@ class FamilyHistoryBlock extends Component<Props> {
     }
 
     render() {
-        const { mobile, conditionInp, index, isPreview } = this.props;
+        const { conditionInp, index, isPreview } = this.props;
         const { condition, hasAfflictedFamilyMember, familyMembers } =
             this.props.familyHistoryItem;
         // array of dropdowns displayed on Family History Family Member column
@@ -70,7 +70,6 @@ class FamilyHistoryBlock extends Component<Props> {
                 index={index}
                 key={familyIndex}
                 family_index={familyIndex}
-                mobile={mobile}
                 // if is the first family dropdown then handleDelete will act as deleteRow.
                 handleDelete={
                     listIndex === 0 && array.length === 1
@@ -176,7 +175,6 @@ interface FamilyHistoryProps {
 
 interface BlockProps {
     index: string;
-    mobile: boolean;
     isPreview?: boolean;
     conditionInp: JSX.Element;
     pop: boolean;

@@ -1,6 +1,4 @@
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP } from 'constants/breakpoints';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import React, { Component } from 'react';
 import Masonry from 'react-masonry-css';
 import { connect } from 'react-redux';
@@ -30,9 +28,7 @@ interface SectionProps {
 type ROSContentProps = ContentProps &
     SectionProps &
     StateProps &
-    PatientViewProps & {
-        dimensions?: any;
-    };
+    PatientViewProps;
 
 const mapStateToProps = (
     state: CurrentNoteState
@@ -50,16 +46,7 @@ class ReviewOfSystemsContent extends Component<ROSContentProps> {
 
     render() {
         const { nextFormClick, previousFormClick, patientView } = this.props;
-        const { windowWidth } = this.props.dimensions;
-        let numColumns: number;
-        numColumns = 1;
-        if (windowWidth > ROS_LARGE_BP) {
-            numColumns = 3;
-        } else if (windowWidth > ROS_MED_BP) {
-            numColumns = 3;
-        } else if (windowWidth > ROS_SMALL_BP) {
-            numColumns = 2;
-        }
+        const numColumns = 3;
 
         return (
             <>
@@ -106,6 +93,4 @@ class ReviewOfSystemsContent extends Component<ROSContentProps> {
     }
 }
 
-export default withDimensionsHook(
-    connect(mapStateToProps, null)(ReviewOfSystemsContent)
-);
+export default connect(mapStateToProps, null)(ReviewOfSystemsContent);

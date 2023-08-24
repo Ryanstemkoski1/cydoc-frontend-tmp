@@ -1,4 +1,5 @@
 import Footer from 'components/Footer/Footer';
+import GlobalLoader from 'components/GlobalLoader/GlobalLoader';
 import Policy from 'constants/Documents/policy';
 import Terms_and_conditions from 'constants/Documents/terms_and_conditions';
 import EditProfile from 'pages/Account/EditProfile';
@@ -20,14 +21,20 @@ import ManagerDashboard from 'pages/ManagerDashboard/ManagerDashboard';
 import Home from 'pages/version2/Home/Home';
 import ViewProduct from 'pages/version2/ViewProduct/ViewProduct';
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router';
+import { CurrentNoteState } from 'redux/reducers';
 import { PrivateRoute } from './PrivateRoute';
 
 const Routes = (props: { children?: JSX.Element | null }) => {
     const isHomePage = useLocation().pathname === '/';
+    const loadingStatus = useSelector(
+        (state: CurrentNoteState) => state.loadingStatus
+    );
 
     return (
         <div className='layout'>
+            {loadingStatus && <GlobalLoader />}
             <div className='layout__content'>
                 <Switch>
                     <Route exact path='/' component={Home} />
