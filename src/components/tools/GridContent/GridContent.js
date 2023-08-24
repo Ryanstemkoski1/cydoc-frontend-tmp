@@ -12,21 +12,8 @@ export default class GridContent extends Component {
     }
 
     render() {
-        const { contentHeader, rows, mobile, isPreview, value_type } =
-            this.props;
-        return mobile ? (
-            <>
-                {rows}
-                {!isPreview && !this.props.pop ? (
-                    <AddRowButton
-                        name={this.props.name}
-                        onClick={this.props.addRow}
-                    />
-                ) : (
-                    ''
-                )}
-            </>
-        ) : (
+        const { contentHeader, rows, isPreview, value_type } = this.props;
+        return (
             <Fragment>
                 {contentHeader}
                 {this.props.small ? (

@@ -1,11 +1,12 @@
 import { localhostClient } from 'constants/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
-import { useSelector } from 'react-redux';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import toImg from 'react-svg-to-image';
-import { CurrentNoteState } from 'redux/reducers';
 import { Loader } from 'semantic-ui-react';
 import style from './QRCode.module.scss';
 
@@ -16,16 +17,16 @@ interface QRCodeProps {
 function QRCodeComponent({ showDownloadButton = true }: QRCodeProps) {
     const [link, setLink] = useState<string>('');
 
-    const { institution_id, clinician_id } = useSelector(
-        (state: CurrentNoteState) => ({
-            institution_id: state.clinicianDetail.institution_id,
-            clinician_id: state.clinicianDetail.id,
-        })
-    );
-
     const fetchQRCodeLink = useCallback(async () => {
+        const clinicianId = localStorage.getItem(
+            HPIPatientQueryParams.CLINICIAN_ID
+        );
+        const institutionId = localStorage.getItem(
+            HPIPatientQueryParams.INSTITUTION_ID
+        );
+
         const response = await localhostClient.get(
-            `/hpi-qr?institution_id=${17}&clinician_id=${4}`
+            `/hpi-qr?${HPIPatientQueryParams.INSTITUTION_ID}=${institutionId}&${HPIPatientQueryParams.CLINICIAN_ID}=${clinicianId}`
         );
 
         const link = response.data.link as string | null;
@@ -35,7 +36,7 @@ function QRCodeComponent({ showDownloadButton = true }: QRCodeProps) {
 
     useEffect(() => {
         fetchQRCodeLink();
-    }, [institution_id, clinician_id]);
+    }, []);
 
     const handleClick = (event: any) => {
         toImg('#qrcode', 'qrcode-value');

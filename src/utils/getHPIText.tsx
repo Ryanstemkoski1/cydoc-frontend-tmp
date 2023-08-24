@@ -66,37 +66,39 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
     switch (node.responseType) {
         case ResponseTypes.YES_NO:
         case ResponseTypes.NO_YES:
-            return node.response === YesNoResponse.None;
+            return node?.response === YesNoResponse.None;
 
         case ResponseTypes.SCALE1TO10:
         case ResponseTypes.NUMBER:
-            return node.response === undefined;
+            return node?.response === undefined;
 
         case ResponseTypes.LIST_TEXT: {
-            return Object.entries(node.response as ListTextInput).every(
+            return Object?.entries(node?.response as ListTextInput).every(
                 ([_key, value]) => value === ''
             );
         }
 
         case ResponseTypes.BODYLOCATION:
-            return Object.entries(node.response as BodyLocationType).every(
+            return Object?.entries(node.response as BodyLocationType).every(
                 ([_key, value]) => {
                     if (typeof value === 'boolean') return !value;
-                    else return Object.entries(value).every(([_k, v]) => !v);
+                    else return Object?.entries(value).every(([_k, v]) => !v);
                 }
             );
 
         case ResponseTypes.TIME3DAYS: {
-            const timeRes = node.response as TimeInput;
-            return timeRes.numInput === undefined && timeRes.timeOption === '';
+            const timeRes = node?.response as TimeInput;
+            return (
+                timeRes?.numInput === undefined && timeRes?.timeOption === ''
+            );
         }
         case ResponseTypes.LABORATORY_TEST:
         case ResponseTypes.CBC:
         case ResponseTypes.BMP:
         case ResponseTypes.LFT: {
-            const response = node.response as LabTestType;
-            for (const comp in response.components) {
-                if (response.components[comp].value) return false;
+            const response = node?.response as LabTestType;
+            for (const comp in response?.components) {
+                if (response?.components?.[comp]?.value) return false;
             }
             return true;
         }
@@ -107,43 +109,44 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
             return node.response === '';
 
         case ResponseTypes.SELECTONE: {
-            const response = node.response as SelectOneInput;
-            return Object.keys(response).every((key) => !response[key]);
+            const response = node?.response as SelectOneInput;
+            return Object?.keys(response).every((key) => !response[key]);
         }
 
         case ResponseTypes.MEDS_POP: {
-            const response = node.response as { [med: string]: string };
-            return Object.keys(response).every(
+            const response = node?.response as { [med: string]: string };
+            return Object?.keys(response).every(
                 (key) => response[key] == YesNoResponse.None
             );
         }
 
         case ResponseTypes.FH_POP: {
-            const response = node.response as [];
-            return response.every(
+            const response = (node?.response as []) || [];
+            return response?.every(
                 (condition) =>
-                    state.familyHistory[condition].hasAfflictedFamilyMember ==
-                    ''
+                    state?.familyHistory?.[condition]
+                        ?.hasAfflictedFamilyMember == ''
             );
         }
 
         case ResponseTypes.PMH_POP: {
-            const response = node.response as [];
-            return response.every(
+            const response = (node?.response as []) || [];
+            return response?.every(
                 (condition) =>
-                    state.medicalHistory[condition].hasBeenAfflicted == ''
+                    state?.medicalHistory?.[condition]?.hasBeenAfflicted == ''
             );
         }
 
         case ResponseTypes.PSH_POP: {
-            const response = node.response as [];
-            return response.every(
-                (surgery) => state.surgicalHistory[surgery].hasHadSurgery == ''
+            const response = (node?.response as []) || [];
+            return response?.every(
+                (surgery) =>
+                    state?.surgicalHistory?.[surgery]?.hasHadSurgery == ''
             );
         }
 
         default:
-            return (node.response as string[]).length === 0;
+            return (node?.response as string[])?.length === 0;
     }
 };
 
@@ -154,12 +157,12 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
  *      A
  */
 export const joinLists = (items: string[], lastSeparator = 'and'): string => {
-    if (items.length > 1) {
+    if (items?.length > 1) {
         const lastItem = items.pop();
         items.push(`${lastSeparator} ${lastItem}`);
     }
-    const separator = items.length > 2 ? ', ' : ' ';
-    return items.join(separator);
+    const separator = items?.length > 2 ? ', ' : ' ';
+    return items?.join(separator);
 };
 
 /**
@@ -173,12 +176,13 @@ export const extractNode = (
     /* eslint-disable no-case-declarations, no-fallthrough */
 
     if (
-        (node.responseType === ResponseTypes.YES_NO &&
-            node.response == YesNoResponse.Yes) ||
-        (node.responseType === ResponseTypes.NO_YES &&
-            node.response === YesNoResponse.No)
+        (node?.responseType === ResponseTypes.YES_NO &&
+            node?.response == YesNoResponse.Yes) ||
+        (node?.responseType === ResponseTypes.NO_YES &&
+            node?.response === YesNoResponse.No)
     ) {
-        const childNode = state.hpi.nodes[state.hpi.graph[node.medID][0]];
+        const childNode =
+            state?.hpi?.nodes?.[state?.hpi?.graph?.[node?.medID]?.[0]];
         const responseTypes = [
             'MEDS-BLANK',
             'MEDS-POP',
@@ -190,10 +194,10 @@ export const extractNode = (
             'PSH-POP',
         ];
         if (childNode) {
-            if (Array.isArray(childNode.response)) {
+            if (Array.isArray(childNode?.response)) {
                 if (
-                    responseTypes.includes(childNode.responseType) &&
-                    childNode.response.length !== 0
+                    responseTypes?.includes(childNode?.responseType) &&
+                    childNode?.response?.length !== 0
                 ) {
                     return ['', '', ''];
                 }
@@ -205,13 +209,13 @@ export const extractNode = (
         node.responseType === ResponseTypes.NO_YES ||
         node.responseType === ResponseTypes.YES_NO
     ) {
-        return node.response === YesNoResponse.Yes
+        return node?.response === YesNoResponse.Yes
             ? [node.blankYes, '', '']
             : [node.blankNo, '', ''];
     }
     // all other types utilize blankTemplate and the second string
     const { response } = node;
-    const negAnswer = node.blankTemplate.includes('NOTANSWER');
+    const negAnswer = node?.blankTemplate?.includes('NOTANSWER');
     const lastSeparator = negAnswer ? 'or' : 'and';
     let answer = '',
         negRes = '',
@@ -226,7 +230,7 @@ export const extractNode = (
 
         case ResponseTypes.TIME3DAYS:
             const timeRes = response as TimeInput;
-            answer = [timeRes.numInput, timeRes.timeOption].join(' ');
+            answer = [timeRes?.numInput, timeRes?.timeOption].join(' ');
             break;
 
         case ResponseTypes.SHORT_TEXT:
@@ -236,11 +240,11 @@ export const extractNode = (
 
         case ResponseTypes.BODYLOCATION:
             answer = joinLists(
-                Object.entries(response as BodyLocationType).reduce(
+                Object?.entries(response as BodyLocationType).reduce(
                     (acc: string[], [key, value]) => {
                         if (
                             (typeof value === 'boolean' && value) ||
-                            Object.entries(value)?.some(([_k, v]) => v)
+                            Object?.entries(value)?.some(([_k, v]) => v)
                         )
                             acc.push(key);
                         return acc;
@@ -310,29 +314,31 @@ export const extractNode = (
             res = response as string[];
             updatedRes = res.reduce(function (arr: string[], key) {
                 if (
-                    state.familyHistory[key].hasAfflictedFamilyMember ==
+                    key in state?.familyHistory &&
+                    state?.familyHistory?.[key]?.hasAfflictedFamilyMember ==
                         YesNoResponse.Yes &&
-                    state.familyHistory[key].condition.length > 0
+                    state?.familyHistory?.[key]?.condition?.length > 0
                 )
-                    arr.push(state.familyHistory[key].condition);
+                    arr.push(state?.familyHistory?.[key]?.condition);
                 return arr;
             }, []);
             updatedNeg = res.reduce(function (arr: string[], key) {
                 if (
-                    state.familyHistory[key].hasAfflictedFamilyMember ==
+                    key in state.familyHistory &&
+                    state?.familyHistory?.[key]?.hasAfflictedFamilyMember ==
                         YesNoResponse.No &&
                     negAnswer &&
-                    state.familyHistory[key].condition.length > 0
+                    state?.familyHistory?.[key]?.condition?.length > 0
                 )
                     arr.push(state.familyHistory[key].condition);
                 return arr;
             }, []);
             answer = joinLists(
-                updatedRes.length > 0 ? (updatedRes as string[]) : [],
+                updatedRes?.length > 0 ? (updatedRes as string[]) : [],
                 'and'
             );
             negRes = joinLists(
-                updatedNeg.length > 0 ? (updatedNeg as string[]) : [],
+                updatedNeg?.length > 0 ? (updatedNeg as string[]) : [],
                 'or'
             );
             break;
@@ -536,7 +542,7 @@ function getHPIText() {
     const formattedHpis = extractHpi(state);
 
     if (Object.keys(formattedHpis).length === 0) {
-        return (response as string).trim()
+        return (response as string)?.trim()
             ? [
                   {
                       title: text,
@@ -595,7 +601,7 @@ function getHPIText() {
         };
     }
 
-    if (((response || '') as string).trim())
+    if (((response as string) || '')?.trim())
         actualNote.push({
             title: text,
             text: response || '',
@@ -606,7 +612,12 @@ function getHPIText() {
 }
 
 export function formatHPIText(hpi_text: string) {
-    const parsedHPIText = JSON.parse(hpi_text) as HPIText[];
+    const parsedHPIText = JSON.parse(hpi_text) as HPIText[] | string;
+
+    if (typeof parsedHPIText === 'string') {
+        return <p>{parsedHPIText}</p>;
+    }
+
     return parsedHPIText.map((item) => {
         return (
             <p key={item.title}>
