@@ -80,7 +80,7 @@ const EditProfile = () => {
     const onSubmit = async (
         { firstName, lastName, phoneNumber }: EditUserInfo,
         { setErrors, setSubmitting }: FormikHelpers<EditUserInfo>
-    ) => {
+    ) =>
         toast
             .promise(
                 async () => {
@@ -126,7 +126,6 @@ const EditProfile = () => {
                     e,
                 });
             });
-    };
 
     // show loader while retrieving info from Cognito/database
     if (loading) {

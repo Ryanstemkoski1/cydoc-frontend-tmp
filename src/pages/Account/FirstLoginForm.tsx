@@ -18,6 +18,7 @@ import useUser from 'hooks/useUser';
 import { CenteredPaper } from '../../components/Atoms/CenteredPaper';
 import FormErrors from 'components/Molecules/FormErrors';
 import { EditUserInfo, UserInfoFormSpec } from './EditProfile';
+import { toast } from 'react-toastify';
 
 export interface FistLoginFormData extends EditUserInfo {
     newPassword: string;
@@ -75,55 +76,64 @@ const FirstLoginForm = () => {
     const onSubmit = async (
         { firstName, lastName, phoneNumber, newPassword }: FistLoginFormData,
         { setErrors, setSubmitting }: FormikHelpers<FistLoginFormData>
-    ) => {
-        try {
-            const email = cognitoUser?.challengeParam?.userAttributes?.email;
-            invariant(
-                email,
-                'Sign-In error, try refreshing and logging in again.'
-            );
+    ) =>
+        toast
+            .promise(
+                async () => {
+                    try {
+                        const email =
+                            cognitoUser?.challengeParam?.userAttributes?.email;
+                        invariant(
+                            email,
+                            'Sign-In error, try refreshing and logging in again.'
+                        );
 
-            setErrors({});
-            setSubmitting(true);
+                        setErrors({});
+                        setSubmitting(true);
 
-            const { errorMessage } = await completeFirstLoginUpdate(
-                newPassword,
-                phoneNumber
-            );
-            const { errorMessage: dbErrorMessage } = await updateDbUser({
-                email,
-                firstName,
-                lastName,
-                phoneNumber,
-            });
+                        const { errorMessage } = await completeFirstLoginUpdate(
+                            newPassword,
+                            phoneNumber
+                        );
+                        const { errorMessage: dbErrorMessage } =
+                            await updateDbUser({
+                                email,
+                                firstName,
+                                lastName,
+                                phoneNumber,
+                            });
+                        if (errorMessage?.length || dbErrorMessage) {
+                            throw new Error(errorMessage || dbErrorMessage);
+                        } else {
+                            console.log(`user info updated successfully`, {
+                                errorMessage,
+                                dbErrorMessage,
+                            });
 
-            if (errorMessage?.length || dbErrorMessage) {
+                            history.push('/');
+                        }
+                    } finally {
+                        setSubmitting(false);
+                    }
+                },
+                {
+                    error: 'Error updating user',
+                    pending: `Updating user...`,
+                    success: 'User updated!',
+                }
+            )
+            .catch((e) => {
                 setErrors({
-                    submitError: errorMessage || dbErrorMessage,
+                    submitError: stringFromError(e),
                 });
-            } else {
-                console.log(`user info updated successfully`, {
-                    errorMessage,
-                    dbErrorMessage,
+                log(`[FirstLoginSubmit] ${stringFromError(e)}`, {
+                    firstName,
+                    lastName,
+                    phoneNumber,
+                    newPassword,
+                    e,
                 });
-
-                history.push('/');
-            }
-        } catch (e) {
-            setErrors({
-                submitError: stringFromError(e),
             });
-            log(`[FirstLoginSubmit] ${stringFromError(e)}`, {
-                firstName,
-                lastName,
-                phoneNumber,
-                newPassword,
-                e,
-            });
-        } finally {
-            setSubmitting(false);
-        }
-    };
 
     return (
         <CenteredPaper sx={{ width: '80%' }} loading={loading}>
