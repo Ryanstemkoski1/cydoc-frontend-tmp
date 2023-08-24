@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import constants from 'constants/constants';
 import HPIContext from 'contexts/HPIContext.js';
-import './MenuTabs.css';
-import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import PropTypes from 'prop-types';
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import './MenuTabs.css';
 
 //Component for the tabs that toggle the different sections of the Create Note editor
 class ConnectedMenuTabs extends Component {
@@ -14,30 +14,10 @@ class ConnectedMenuTabs extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
             textInput: 'Untitled',
             isTitleFocused: false,
         };
-        this.updateDimensions = this.updateDimensions.bind(this);
         this.handleItemClick = this.handleItemClick.bind(this);
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-        let windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
     }
 
     // onClick event is handled by parent
@@ -68,9 +48,8 @@ function PatientViewMenu({ tabMenuItems }) {
         <div className='patient-view-container'>
             <div className='patient-view-content'>
                 {tabMenuItems.map(({ name, active, onClick }, index) => (
-                    <>
+                    <Fragment key={index}>
                         <button
-                            key={index}
                             className={`patient-view-button ${
                                 active ? 'active' : ''
                             }`}
@@ -79,7 +58,7 @@ function PatientViewMenu({ tabMenuItems }) {
                             {name}
                         </button>
                         {tabMenuItems.length > index + 1 && <hr></hr>}
-                    </>
+                    </Fragment>
                 ))}
             </div>
         </div>
@@ -91,17 +70,15 @@ function DoctorViewMenu({ tabMenuItems }) {
         <div className='doctor-view-container'>
             <div className='doctor-view-content'>
                 {tabMenuItems.map(({ name, active, onClick }) => (
-                    <>
-                        <button
-                            key={name}
-                            className={`doctor-view-button ${
-                                active ? 'active' : ''
-                            }`}
-                            onClick={onClick}
-                        >
-                            {name}
-                        </button>
-                    </>
+                    <button
+                        key={name}
+                        className={`doctor-view-button ${
+                            active ? 'active' : ''
+                        }`}
+                        onClick={onClick}
+                    >
+                        {name}
+                    </button>
                 ))}
             </div>
         </div>

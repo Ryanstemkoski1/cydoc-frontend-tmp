@@ -1,16 +1,8 @@
 import axios from 'axios';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { graphClientURL } from 'constants/api.js';
-import {
-    DISEASE_TABS_MED_BP,
-    DISEASE_TABS_SMALL_BP,
-    ROS_LARGE_BP,
-    ROS_MED_BP,
-    ROS_SMALL_BP,
-} from 'constants/breakpoints';
 import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import { GraphData } from 'constants/hpiEnums';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import React from 'react';
 import Masonry from 'react-masonry-css';
 import { connect } from 'react-redux';
@@ -35,7 +27,7 @@ import {
 } from 'redux/selectors/planSelectors';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 import { currentNoteStore } from 'redux/store';
-import { Button, Icon, Search, Segment } from 'semantic-ui-react';
+import { Search, Segment } from 'semantic-ui-react';
 import Tab from '../../../../../components/tools/Tab';
 import { CHIEF_COMPLAINTS } from '../../../../../redux/actions/actionTypes';
 import './HPI.css';
@@ -98,39 +90,8 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
     back = (e: any) => this.props.back(e);
 
-    // setStickyHeaders() {
-    //     const stickyHeaders = document.getElementsByClassName('sticky-header');
-    //     const patientHistoryMenu = document.getElementById(
-    //         'patient-history-menu'
-    //     );
-    //     if (
-    //         stickyHeaders != null &&
-    //         stickyHeaders.length != 0 &&
-    //         patientHistoryMenu != null
-    //     ) {
-    //         for (let i = 0; i < stickyHeaders.length; i++) {
-    //             stickyHeaders[i].style.top = `${
-    //                 parseInt(patientHistoryMenu.style.top) +
-    //                 patientHistoryMenu.offsetHeight
-    //             }px`;
-    //         }
-    //     }
-    // }
-    // miscNotesClick = (
-    //     _e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    //     titleProps: AccordionTitleProps
-    // ) => {
-    //     const { activeIndex } = this.state;
-    //     const newIndex =
-    //         activeIndex === titleProps.index
-    //             ? -1
-    //             : (titleProps.index as number);
-    //     this.setState({ activeIndex: newIndex });
-    // };
-
     render() {
-        const { windowWidth } = this.props.dimensions;
-        const { chiefComplaints, hpiHeaders, patientView } = this.props;
+        const { chiefComplaints, hpiHeaders } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
 
         // If you wrap the positiveDiseases in a div you can get them to appear next to the diseaseComponents on the side
@@ -205,20 +166,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         const positiveLength: number = positiveDiseases.length;
 
         // window/screen responsiveness
-        let numColumns = 1;
-        if (windowWidth > ROS_LARGE_BP) {
-            numColumns = 4;
-        } else if (windowWidth > ROS_MED_BP) {
-            numColumns = 3;
-        } else if (windowWidth > ROS_SMALL_BP) {
-            numColumns = 2;
-        }
-
-        const collapseTabs =
-            Object.keys(chiefComplaints).length >= 10 ||
-            (Object.keys(chiefComplaints).length >= 5 &&
-                windowWidth < DISEASE_TABS_MED_BP) ||
-            windowWidth < DISEASE_TABS_SMALL_BP;
+        const numColumns = 4;
 
         const panes = Object.keys(chiefComplaints).map((name) => ({
             menuItem: name,
@@ -242,7 +190,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                             <Search
                                 size='large'
                                 placeholder='Type in a condition...'
-                                noResultsMessage
                                 className='hpi-search-bar'
                                 minCharacters={2}
                                 onSearchChange={(event) => {
@@ -356,10 +303,6 @@ type Props = ChiefComplaintsProps &
     HpiHeadersProps &
     HPIContentProps &
     DispatchProps &
-    PatientViewProps & {
-        dimensions?: any;
-    };
+    PatientViewProps;
 
-export default withDimensionsHook(
-    connect(mapStateToProps, mapDispatchToProps)(HPIContent)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(HPIContent);

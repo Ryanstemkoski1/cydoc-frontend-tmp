@@ -22,8 +22,8 @@ export default function GridContenV2({
             <table>
                 <thead>
                     <tr>
-                        {header_titles.map((item) => (
-                            <th key={item.title}>{item.title}</th>
+                        {header_titles.map((item, index) => (
+                            <th key={index}>{item.title}</th>
                         ))}
                     </tr>
                 </thead>

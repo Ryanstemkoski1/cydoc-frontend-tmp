@@ -39,7 +39,7 @@ type ComponentFunction = CategoryFormComponent<PlanPrescriptionFlat>;
 const PrescriptionsForm = (
     props: CategoryFormProps<PlanPrescriptionFlat> & PrescriptionsDispatchProps
 ) => {
-    const { mobile, categoryData, formatAction, ...actions } = props;
+    const { categoryData, formatAction, ...actions } = props;
     UpdateDimensions();
 
     const gridHeaders = () => (
@@ -59,7 +59,7 @@ const PrescriptionsForm = (
                 allowAdditions
                 clearable
                 optiontype='main'
-                transparent={mobile}
+                transparent={false}
                 uuid={row.id}
                 value={row.type}
                 options={(options?.main as OptionMapping) || {}}
@@ -74,15 +74,13 @@ const PrescriptionsForm = (
             <div className='container' id='prescriptions-container2' />
             <div className='ui form'>
                 <TextArea
-                    fluid
                     type='text'
-                    transparent={mobile}
                     uuid={row.id}
                     value={row.dose}
                     onChange={formatAction(actions.updatePrescriptionDose)}
                     aria-label='Prescription-Amount'
                     placeholder='e.g. 81 mg tablet'
-                    className={`recipe-amount ${!mobile && 'lg'}`}
+                    className={`recipe-amount lg`}
                 />
             </div>
         </div>
@@ -120,52 +118,8 @@ const PrescriptionsForm = (
         </React.Fragment>
     );
 
-    const mobileTitle: ComponentFunction = (row, options, onAddItem) => (
-        <div className='mobile-title'>
-            <label> Rx </label>
-            {mainInput(row, options, onAddItem)}
-        </div>
-    );
-
-    const mobileContent: ComponentFunction = (row) => (
-        <>
-            <label className='prescriptions-label'> Signature (Sig) </label>
-            <div className='container' id='prescriptions-container1' />
-            <div className='ui form' id='prescriptions-ui-form'>
-                <TextArea
-                    fluid
-                    transparent
-                    type='text'
-                    uuid={row.id}
-                    value={row.signature}
-                    onChange={formatAction(actions.updatePrescriptionSignature)}
-                    placeholder='e.g. 1 tablet every 8 hours'
-                    aria-label='Prescription-Signature'
-                    className='expanded-input'
-                />
-            </div>
-            <div className='container' id='prescriptions-container2' />
-            <label className='prescriptions-label'> Comments </label>
-            <div className='container' id='prescriptions-container1' />
-            <div className='ui form' id='prescriptions-ui-form'>
-                <TextArea
-                    fluid
-                    transparent
-                    type='text'
-                    uuid={row.id}
-                    value={row.comments}
-                    onChange={formatAction(actions.updatePrescriptionComments)}
-                    placeholder='e.g. take with food'
-                    aria-label='Prescription-Comment'
-                    className='expanded-input'
-                />
-            </div>
-        </>
-    );
-
     return (
         <BaseCategoryForm<PlanPrescriptionFlat>
-            mobile={mobile}
             category='prescriptions'
             categoryData={categoryData}
             numColumns={3}
@@ -175,8 +129,6 @@ const PrescriptionsForm = (
             components={{
                 gridColumn,
                 gridHeaders,
-                mobileTitle,
-                mobileContent,
             }}
         />
     );

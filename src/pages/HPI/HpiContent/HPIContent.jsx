@@ -1,9 +1,8 @@
+import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import axios from 'axios';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { graphClientURL, localhostClient } from 'constants/api.js';
-import { ROS_LARGE_BP, ROS_MED_BP, ROS_SMALL_BP } from 'constants/breakpoints';
 import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import React from 'react';
 import Masonry from 'react-masonry-css';
 import { connect } from 'react-redux';
@@ -103,7 +102,23 @@ class HPIContent extends React.Component {
             })
             .then((res) => {
                 if (res.status !== 200) throw new Error();
-                this.props.history.push('/submission-successful');
+
+                const query = new URLSearchParams(this.props.location.search);
+
+                const clinicianId = query.get(
+                    HPIPatientQueryParams.CLINICIAN_ID
+                );
+                const institutionId = query.get(
+                    HPIPatientQueryParams.INSTITUTION_ID
+                );
+
+                let url = '/submission-successful';
+
+                if (clinicianId !== null && institutionId !== null) {
+                    url = `${url}?${HPIPatientQueryParams.INSTITUTION_ID}=${institutionId}&${HPIPatientQueryParams.CLINICIAN_ID}=${clinicianId}`;
+                }
+
+                this.props.history.push(url);
             })
             .catch((_error) => {
                 setNotificationMessage('Failed to submit your questionnaire');
@@ -115,7 +130,6 @@ class HPIContent extends React.Component {
     };
 
     render() {
-        const { windowWidth } = this.props.dimensions;
         const { chiefComplaints, hpiHeaders } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
 
@@ -189,14 +203,7 @@ class HPIContent extends React.Component {
         const positiveLength = positiveDiseases.length;
 
         // window/screen responsiveness
-        let numColumns = 1;
-        if (windowWidth > ROS_LARGE_BP) {
-            numColumns = 4;
-        } else if (windowWidth > ROS_MED_BP) {
-            numColumns = 3;
-        } else if (windowWidth > ROS_SMALL_BP) {
-            numColumns = 2;
-        }
+        let numColumns = 4;
 
         const shouldShowNextButton = this.shouldShowNextButton();
 
@@ -216,7 +223,6 @@ class HPIContent extends React.Component {
                             <Search
                                 size='large'
                                 placeholder='Type in a condition...'
-                                noResultsMessage
                                 className='hpi-search-bar'
                                 minCharacters={2}
                                 onSearchChange={(event) => {
@@ -294,6 +300,6 @@ const mapDispatchToProps = {
     saveHpiHeader,
 };
 
-export default withDimensionsHook(
-    withRouter(connect(mapStateToProps, mapDispatchToProps)(HPIContent))
+export default withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(HPIContent)
 );
