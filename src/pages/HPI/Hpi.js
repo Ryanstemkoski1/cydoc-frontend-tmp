@@ -7,7 +7,7 @@ import Stepper from 'components/Stepper/Stepper';
 import Notification, {
     NotificationTypeEnum,
 } from 'components/tools/Notification/Notification';
-import { localhostClient } from 'constants/api';
+import { stagingClient } from 'constants/api';
 import { YesNoResponse } from 'constants/enums';
 import useQuery from 'hooks/useQuery';
 import { hpiHeaders } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
@@ -95,7 +95,7 @@ const HPI = () => {
 
         setIsLoading(true);
 
-        localhostClient
+        stagingClient
             .get(`/clinic/${clinicianId}/${institutionId}`)
             .then((res) => {
                 dispatch(setClinicianDetail(res.data.detail));

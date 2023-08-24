@@ -1,6 +1,6 @@
 import { getFullName } from 'components/Input/DropdownForClinicians';
 import Loader from 'components/tools/Loader/Loader';
-import { localhostClient } from 'constants/api';
+import { stagingClient } from 'constants/api';
 import { User } from 'pages/BrowseNotes/BrowseNotes';
 import React, { useEffect, useRef, useState } from 'react';
 import { formatHPIText } from 'utils/getHPIText';
@@ -37,7 +37,7 @@ const Modal = ({
         let stale = false;
 
         async function fetchHPIAppointmentsDetails() {
-            const response = await localhostClient.get(
+            const response = await stagingClient.get(
                 `/appointment/${selectedAppointment?.id}`
             );
             if (!stale) setHpiAppointmentDetails(response.data.data[0]);
@@ -64,6 +64,15 @@ const Modal = ({
             );
         }
     };
+
+    useEffect(() => {
+        if (showModal) {
+            document.body.classList.add('isHidden');
+            return () => {
+                document.body.classList.remove('isHidden');
+            };
+        }
+    }, [showModal]);
 
     return (
         <div
@@ -92,13 +101,16 @@ const Modal = ({
                             Copy HPI
                         </button>
                     </div>
-                    <p id='copy-notes'>
+                    <div
+                        className={`${style.modal__scroll} scrollbar`}
+                        id='copy-notes'
+                    >
                         {hpiAppointMentDetails ? (
                             formatHPIText(hpiAppointMentDetails.hpi_text)
                         ) : (
                             <Loader />
                         )}
-                    </p>
+                    </div>
                 </div>
             </div>
         </div>

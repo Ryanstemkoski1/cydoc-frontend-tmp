@@ -33,14 +33,14 @@
     }
     &__innerContent {
         padding: 20px;
-        @include max-screen($mobile){
+        @include max-screen($mobile) {
             padding: 15px 12px;
         }
         h4 {
             margin: 0;
             width: calc(100% - 100px);
             padding-right: 5px;
-            @include max-screen($mobile){
+            @include max-screen($mobile) {
                 width: calc(100% - 76px);
                 font-size: 14px;
             }
@@ -49,5 +49,11 @@
             color: rgba($color-black, 0.5);
             padding: 20px 0;
         }
+    }
+    &__scroll {
+        padding: 0 20px;
+        overflow-y: auto;
+        margin: 20px -20px 0;
+        max-height: calc(100vh - 200px);
     }
 }

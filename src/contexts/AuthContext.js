@@ -13,7 +13,7 @@ class AuthStore extends React.Component {
 
     /*
     const user = {
-            username: "yasab",
+            username: yasab",
             password: "basay",
             email: "yasa@b.aig",
             phoneNumber: "123456789",
@@ -36,9 +36,9 @@ class AuthStore extends React.Component {
     };
 
     logOut = () => {
-        this.props.cookies.remove('user');
-        this.props.cookies.remove('role');
-        this.props.cookies.remove('token');
+        this.props.cookies.remove('user', { path: '/' });
+        this.props.cookies.remove('role', { path: '/' });
+        this.props.cookies.remove('token', { path: '/' });
         localStorage.removeItem(HPIPatientQueryParams.CLINICIAN_ID);
         localStorage.removeItem(HPIPatientQueryParams.INSTITUTION_ID);
         this.setState({ user: null, role: null, token: null });

@@ -2,7 +2,7 @@ import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import { getFullName } from 'components/Input/DropdownForClinicians';
 import Input from 'components/Input/Input';
 import Modal from 'components/Modal/Modal';
-import { localhostClient } from 'constants/api';
+import { stagingClient } from 'constants/api';
 import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
@@ -93,7 +93,7 @@ async function fetchHPIAppointments(
             url += `&clinician_id=${clinician_id}`;
         }
 
-        const response = await localhostClient.get(url);
+        const response = await stagingClient.get(url);
 
         const fetchDetails = response.data.data as User[];
 
@@ -166,17 +166,21 @@ const BrowseNotes = () => {
 
     useEffect(() => {
         dispatch(setLoadingStatus(true));
-        fetchHPIAppointments(date, clinician.id, (users: User[]) => {
-            const unreportedUsers = users.filter(
-                (user) => user.clinician_id === null
-            );
-            const reportedUsers = users.filter(
-                (user) => user.clinician_id !== null
-            );
-            setUsers(reportedUsers);
-            setUnreportedUsers(unreportedUsers);
+        try {
+            fetchHPIAppointments(date, clinician.id, (users: User[]) => {
+                const unreportedUsers = users.filter(
+                    (user) => user.clinician_id === null
+                );
+                const reportedUsers = users.filter(
+                    (user) => user.clinician_id !== null
+                );
+                setUsers(reportedUsers);
+                setUnreportedUsers(unreportedUsers);
+                dispatch(setLoadingStatus(false));
+            });
+        } catch (_error: any) {
             dispatch(setLoadingStatus(false));
-        });
+        }
     }, [date]);
 
     function renderUsers(users: User[]) {

@@ -1,4 +1,4 @@
-import { localhostClient } from 'constants/api';
+import { stagingClient } from 'constants/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -25,7 +25,7 @@ function QRCodeComponent({ showDownloadButton = true }: QRCodeProps) {
             HPIPatientQueryParams.INSTITUTION_ID
         );
 
-        const response = await localhostClient.get(
+        const response = await stagingClient.get(
             `/hpi-qr?${HPIPatientQueryParams.INSTITUTION_ID}=${institutionId}&${HPIPatientQueryParams.CLINICIAN_ID}=${clinicianId}`
         );
 

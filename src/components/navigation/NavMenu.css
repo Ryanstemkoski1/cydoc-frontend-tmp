@@ -1,7 +1,9 @@
 .ui.menu .item.logo-menu:hover {
     background-color: transparent;
 }
-
+.ui.menu .item.logo-menu::before {
+    display: none;
+}
 .ui.image.logo-circle {
     width: 4.6rem;
 }

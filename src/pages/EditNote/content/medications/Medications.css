@@ -179,21 +179,6 @@ a.ui.active.label {
         padding-bottom: 10px;
     }
 
-    #dose-input,
-    #schedule-input {
-        width: 100%;
-        margin-top: 5px;
-        margin-left: 10px;
-        display: inline-block;
-    }
-
-    #dose-input-div,
-    #schedule-input-div {
-        margin-left: -10px;
-        width: 80%;
-        white-space: nowrap;
-    }
-
     #dose-input-label {
         margin-right: 15px;
         margin-left: 10px;
@@ -219,25 +204,8 @@ a.ui.active.label {
     #comments-label {
         margin-right: 15px;
         margin-left: 12px;
-        margin-top: 10px;
+        margin-top: 0;
         display: inline-block;
-    }
-
-    #schedule-input {
-        margin-left: -40px;
-        width: 195px;
-        display: inline-block;
-    }
-
-    #reason-input {
-        margin-top: 10px;
-        width: 100%;
-    }
-
-    #reason-input-div {
-        margin-left: 0px;
-        margin-top: 10px;
-        width: 100%;
     }
 
     #currently-taking {

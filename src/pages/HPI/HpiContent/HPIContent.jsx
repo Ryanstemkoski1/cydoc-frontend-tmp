@@ -1,7 +1,7 @@
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import axios from 'axios';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { graphClientURL, localhostClient } from 'constants/api.js';
+import { graphClientURL, stagingClient } from 'constants/api.js';
 import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import React from 'react';
 import Masonry from 'react-masonry-css';
@@ -90,7 +90,7 @@ class HPIContent extends React.Component {
         const { setNotificationMessage, setNotificationType } =
             this.props.notification;
         this.setState({ loading: true });
-        localhostClient
+        stagingClient
             .post('/appointment', {
                 first_name,
                 last_name,
@@ -118,7 +118,7 @@ class HPIContent extends React.Component {
                     url = `${url}?${HPIPatientQueryParams.INSTITUTION_ID}=${institutionId}&${HPIPatientQueryParams.CLINICIAN_ID}=${clinicianId}`;
                 }
 
-                this.props.history.push(url);
+                window.location.href = url;
             })
             .catch((_error) => {
                 setNotificationMessage('Failed to submit your questionnaire');

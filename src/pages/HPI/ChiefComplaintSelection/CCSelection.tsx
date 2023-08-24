@@ -6,7 +6,7 @@ import TextArea from 'components/Input/Textarea';
 import { ActiveItemProps } from 'components/navigation/NavMenu';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { NotificationTypeEnum } from 'components/tools/Notification/Notification';
-import { localhostClient } from 'constants/api';
+import { stagingClient } from 'constants/api';
 import { GraphData, ResponseTypes } from 'constants/hpiEnums';
 import useQuery from 'hooks/useQuery';
 import {
@@ -21,7 +21,6 @@ import initialQuestions from 'pages/EditNote/content/patientview/constants/initi
 import patientViewHeaders from 'pages/EditNote/content/patientview/constants/patientViewHeaders.json';
 import React, { useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router';
 import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
 import {
     GoBackToAdditionalSurvey,
@@ -83,8 +82,6 @@ const CCSelection = (props: Props) => {
     const { setNotificationMessage, setNotificationType } = notification;
     const nodeTenResponse = userSurveyState.nodes['10'].response;
     const query = useQuery();
-
-    const history = useHistory();
 
     const [searchVal, setSearchVal] = useState('');
     const [loading, setLoading] = useState(false);
@@ -390,7 +387,7 @@ const CCSelection = (props: Props) => {
             props.notification;
 
         setLoading(true);
-        localhostClient
+        stagingClient
             .post('/appointment', {
                 first_name,
                 last_name,
@@ -417,7 +414,7 @@ const CCSelection = (props: Props) => {
                     url = `${url}?${HPIPatientQueryParams.INSTITUTION_ID}=${institutionId}&${HPIPatientQueryParams.CLINICIAN_ID}=${clinicianId}`;
                 }
 
-                history.push(url);
+                window.location.href = url;
             })
             .catch((_error) => {
                 setNotificationMessage('Failed to submit your questionnaire');

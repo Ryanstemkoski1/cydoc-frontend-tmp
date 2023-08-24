@@ -258,7 +258,7 @@ class MedicationsPanel extends Component<Props, State> {
                                       ]
                             }
                             aria-label='Dose-Input'
-                            className='content-input'
+                            className='content-input scrollbar'
                         />
                     }
                 </div>
@@ -291,7 +291,7 @@ class MedicationsPanel extends Component<Props, State> {
                                           ]
                                 }
                                 aria-label='Schedule-Input'
-                                className='content-input'
+                                className='content-input scrollbar'
                             />
                         }
                     </div>

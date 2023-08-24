@@ -30,7 +30,7 @@ function AfterSubmissionPage() {
                         </picture>
                         <h5>Success!</h5>
                         <p>
-                            Your Questionnaire has successfully {'\n'} been
+                            Your questionnaire has successfully {'\n'} been
                             submitted
                         </p>
 

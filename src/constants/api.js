@@ -57,7 +57,7 @@ export const rosClient = axios.create({
     headers: { 'Content-Type': 'application/json' },
 });
 
-export const localhostClient = axios.create({
-    baseURL: 'http://127.0.0.1:3000',
+export const stagingClient = axios.create({
+    baseURL: 'https://ldxpvwxff1.execute-api.us-east-2.amazonaws.com/Prod/',
     headers: { 'Content-Type': 'application/json' },
 });

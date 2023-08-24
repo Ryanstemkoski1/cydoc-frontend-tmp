@@ -70,13 +70,10 @@ function MenuButton({ label, icon, to, items }: Props) {
                                 item.active ? style.active : ''
                             } flex align-center`}
                             key={item.label}
-                            onClick={
-                                item.onClick
-                                    ? item.onClick
-                                    : () => {
-                                          if (item.to) history.push(item.to);
-                                      }
-                            }
+                            onClick={() => {
+                                if (item.onClick) item.onClick();
+                                if (item.to) history.push(item.to);
+                            }}
                         >
                             <img src={item.icon} alt={item.label + ' icon'} />
                             {item.label}

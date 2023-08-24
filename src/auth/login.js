@@ -2,7 +2,7 @@ import { AuthenticationDetails, CognitoUser } from 'amazon-cognito-identity-js';
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import getUserAttributes from 'auth/getUserAttributes';
 import getUserPool from 'auth/getUserPool';
-import { localhostClient } from 'constants/api';
+import { stagingClient } from 'constants/api';
 
 async function getClinicianIdAndInstitutionIdByEmail(email) {
     if (!email) return;
@@ -10,7 +10,7 @@ async function getClinicianIdAndInstitutionIdByEmail(email) {
     let institutionId = '';
 
     try {
-        const res = await localhostClient.get(`/user/${email}`);
+        const res = await stagingClient.get(`/user/${email}`);
         const { id, institutionId: _institutionId } = res.data.user;
         clinicianId = id;
         institutionId = _institutionId;

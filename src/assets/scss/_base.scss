@@ -20,6 +20,9 @@ body {
     @include max-screen($mobile) {
         font-size: 14px;
     }
+    &.isHidden {
+        overflow: hidden;
+    }
 }
 a {
     outline: none;
