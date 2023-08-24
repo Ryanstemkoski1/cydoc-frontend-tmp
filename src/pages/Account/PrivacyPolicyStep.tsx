@@ -7,7 +7,7 @@ export function PrivacyPolicyStep() {
     return (
         <TermsOrPolicyStep
             fieldName='isPrivacyChecked'
-            infoElement={<Policy title={true} />}
+            infoElement={<Policy title={false} />}
             title='Privacy Policy'
             label='Agree To Privacy Policy'
         />

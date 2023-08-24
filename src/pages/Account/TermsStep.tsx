@@ -7,8 +7,8 @@ export function TermsStep() {
         <TermsOrPolicyStep
             fieldName='isTermsChecked'
             infoElement={<Terms_and_conditions title={true} />}
-            title='Terms of Use'
-            label='Agree To Terms of Use'
+            title='Terms of Service'
+            label='Agree To Terms of Service'
         />
     );
 }
