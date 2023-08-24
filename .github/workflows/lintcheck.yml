@@ -21,6 +21,7 @@ jobs:
               env:
                   CI: false
                   NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+                  NODE_OPTIONS: "--max_old_space_size=4096"
             - name: Run lint checks
               run: npm run lint
             - name: Run unit tests
