@@ -67,8 +67,14 @@
             box-shadow: none !important;
             border-radius: 8px !important;
         }
+        .label {
+            z-index: 1;
+            position: relative;
+        }
     }
+    &.multiple,
     &[aria-multiselectable='true'] {
+        min-height: 45px !important;
         height: auto !important;
     }
     &.multiple.search {
@@ -79,6 +85,8 @@
         }
         .divider.text {
             margin: 0;
+            padding-left: 15px !important;
+            padding-right: 15px !important;
         }
     }
     &.selection {

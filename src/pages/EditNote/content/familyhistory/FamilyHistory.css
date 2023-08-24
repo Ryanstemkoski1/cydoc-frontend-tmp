@@ -99,8 +99,14 @@
     margin-left: 5px;
     font-style: italic;
 }
-
+.recreational-dropdown {
+    max-width: 250px;
+}
 @media (max-width: 767px) {
+    .recreational-dropdown {
+        max-width: 100%;
+        padding-bottom: 10px;
+    }
     .ui.form.family-hx-note-item.family-medical + .hpi-ph-button {
         align-self: flex-start;
         margin-top: 2px;

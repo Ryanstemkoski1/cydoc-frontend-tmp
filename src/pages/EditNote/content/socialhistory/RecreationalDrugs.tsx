@@ -30,7 +30,6 @@ import { CurrentNoteState } from 'redux/reducers';
 import { DrugUsage } from 'redux/reducers/socialHistoryReducer';
 import { selectRecreationalDrugsState } from 'redux/selectors/socialHistorySelectors';
 import {
-    Accordion,
     Button,
     Divider,
     Dropdown,
@@ -43,13 +42,10 @@ import {
 import '../familyhistory/FamilyHistory.css';
 import '../hpi/knowledgegraph/src/css/Button.css';
 
-type OwnProps = {
-    mobile: boolean;
-};
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;
 
-type Props = ReduxProps & OwnProps;
+type Props = ReduxProps;
 
 interface State {
     invalidYear: boolean;
@@ -484,7 +480,10 @@ class RecreationalDrugs extends React.Component<Props, State> {
                     <Table.Cell onClick={this.handleCellClick}>
                         {this.getCell('Drug Name', index, availableDrugNames)}
                     </Table.Cell>
-                    <Table.Cell onClick={this.handleCellClick}>
+                    <Table.Cell
+                        onClick={this.handleCellClick}
+                        className='recreational-dropdown'
+                    >
                         {this.getCell('Mode of Delivery', index)}
                     </Table.Cell>
                     <Table.Cell onClick={this.handleCellClick}>
@@ -512,22 +511,7 @@ class RecreationalDrugs extends React.Component<Props, State> {
             const drugsUsed = values.drugsUsed;
             const rows = this.makeTableBodyRows(drugsUsed);
 
-            const content = this.props.mobile ? (
-                <div>
-                    <p>
-                        {values.usage === SubstanceUsageResponse.InThePast
-                            ? 'Please summarize what recreational drugs you previously used:'
-                            : 'Please summarize your current drug use:'}
-                    </p>
-                    <Accordion
-                        panels={this.makeAccordionPanels(drugsUsed)}
-                        exclusive={false}
-                        fluid
-                        styled
-                        aria-label='Recreational-Drugs-Consumption-Accordion'
-                    />
-                </div>
-            ) : (
+            const content = (
                 <div>
                     {values.usage === SubstanceUsageResponse.InThePast
                         ? 'Please summarize what recreational drugs you previously used:'
@@ -612,9 +596,6 @@ class RecreationalDrugs extends React.Component<Props, State> {
                                             value as string
                                         );
                                     }}
-                                    placeholder={
-                                        this.props.mobile ? 'Comments' : null
-                                    }
                                 />
                             </Grid.Row>
                         </div>
@@ -624,7 +605,6 @@ class RecreationalDrugs extends React.Component<Props, State> {
                         <Divider hidden />
                     ) : null}
                 </Form>
-
                 <Divider className='divider-style' />
             </Grid.Row>
         );
