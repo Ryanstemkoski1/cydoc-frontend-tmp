@@ -1,4 +1,5 @@
 import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
+import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import axios from 'axios';
 import Search from 'components/Input/Search';
 import TextArea from 'components/Input/Textarea';
@@ -7,11 +8,12 @@ import NavigationButton from 'components/tools/NavigationButton/NavigationButton
 import { NotificationTypeEnum } from 'components/tools/Notification/Notification';
 import { localhostClient } from 'constants/api';
 import { GraphData, ResponseTypes } from 'constants/hpiEnums';
+import useQuery from 'hooks/useQuery';
 import {
     ChiefComplaintsProps,
     HpiHeadersProps,
 } from 'pages/EditNote/content/hpi/knowledgegraph/HPIContent';
-import { hpiHeaders } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
+import { hpiHeaders as hpiHeadersApiClient } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
 import ChiefComplaintsButton, {
     PatientViewProps,
 } from 'pages/EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
@@ -60,7 +62,6 @@ import style from './CCSelection.module.scss';
 interface InitialSurveyComponentProps {
     continue: (e: any) => void;
     onPreviousClick: () => void;
-    setErrorMessage: (message: string) => void;
     notification: {
         setNotificationMessage: React.Dispatch<React.SetStateAction<string>>;
         setNotificationType: React.Dispatch<
@@ -70,72 +71,93 @@ interface InitialSurveyComponentProps {
 }
 
 const CCSelection = (props: Props) => {
+    const {
+        userSurveyState,
+        chiefComplaints,
+        processKnowledgeGraph,
+        notification,
+        hpiHeaders,
+        processSurveyGraph,
+        saveHpiHeader,
+    } = props;
+    const { setNotificationMessage, setNotificationType } = notification;
+    const nodeTenResponse = userSurveyState.nodes['10'].response;
+    const query = useQuery();
+
+    const history = useHistory();
+
     const [searchVal, setSearchVal] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const selectedCC = useMemo(() => {
-        return Object.keys(props.chiefComplaints).filter(
-            (item) => item !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM
-        );
-    }, [props.chiefComplaints]);
     const [showRequiredFieldValidation, setShowRequiredFieldValidation] =
         useState({
             status: false,
             forUID: '-1',
         });
+    const [showNodeTen, setShowNodeTen] = useState(Boolean(nodeTenResponse));
 
-    const history = useHistory();
-
-    const [showNodeTen, setShowNodeTen] = useState(
-        Boolean(props.userSurveyState.nodes['10'].response)
+    const selectedCC = useMemo(
+        () =>
+            Object.keys(chiefComplaints).filter(
+                (item) => item !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM
+            ),
+        [chiefComplaints]
+    );
+    const showSubmitButton = useMemo(
+        () => showNodeTen && Object.keys(chiefComplaints).length === 0,
+        [chiefComplaints, showNodeTen]
     );
 
-    const canWeAddNewCC = (complaint: string): boolean => {
+    const nodes = patientViewHeaders.parentNodes;
+    const nodeKey = Object.values(Object.entries(nodes)[1][1])[0];
+    const questions = initialQuestions as initialQuestionsState;
+    const userSurveyStateNodes = Object.keys(userSurveyState.nodes);
+    const content =
+        nodeKey in questions.nodes &&
+        questions.graph[nodeKey].map((key) => {
+            if (key === '10' && !(showNodeTen && selectedCC.length === 0))
+                return null;
+
+            return (
+                <div
+                    className={`${
+                        questions.nodes[key].responseType === 'SEARCH'
+                            ? `${style.diseaseSelections__search} flex-wrap justify-between`
+                            : ''
+                    }`}
+                    key={questions.nodes[key].text}
+                >
+                    <p>{questions.nodes[key].text}</p>
+
+                    {userSurveyStateNodes.length && renderSwitch(key)}
+                    {showRequiredFieldValidation.forUID === key &&
+                        showRequiredFieldValidation.status === true && (
+                            <div className={style.diseaseSelections__error}>
+                                This field is required
+                            </div>
+                        )}
+                </div>
+            );
+        });
+
+    /* ----- FUNCTIONS ----- */
+
+    function canWeAddNewCC(complaint: string): boolean {
         // if user trying to unselect or length is < 3
         if (selectedCC.includes(complaint) || selectedCC.length < 3)
             return true;
 
         return false;
-    };
+    }
 
-    const showNextButton = useMemo(() => {
-        return !(
-            showNodeTen && Object.keys(props.chiefComplaints).length === 0
-        );
-    }, [props.chiefComplaints, showNodeTen]);
+    function onPrevClick() {
+        return props.onPreviousClick();
+    }
 
-    useEffect(() => {
-        const { userSurveyState, processSurveyGraph, saveHpiHeader } = props;
-        if (
-            !Object.keys(userSurveyState.graph).length &&
-            !Object.keys(userSurveyState.nodes).length &&
-            !Object.keys(userSurveyState.order).length
-        )
-            processSurveyGraph(initialQuestions as initialQuestionsState);
-
-        if (hpiHeaders) {
-            const data = hpiHeaders;
-            data.then((res) => saveHpiHeader(res.data));
-        }
-    }, []);
-
-    useEffect(() => {
-        setShowRequiredFieldValidation({
-            status: false,
-            forUID: '-1',
-        });
-    }, [props.userSurveyState]);
-
-    const onPrevClick = () => props.onPreviousClick();
-
-    const onNextClick = (e: any) => {
+    function onNextClick(e: any) {
         if (selectedCC.length === 0 && !showNodeTen) {
             setShowNodeTen(true);
-        } else if (
-            selectedCC.length === 0 &&
-            showNodeTen &&
-            !props.userSurveyState.nodes['10'].response
-        ) {
+        } else if (selectedCC.length === 0 && showNodeTen && !nodeTenResponse) {
             setShowRequiredFieldValidation({
                 status: true,
                 forUID: '10',
@@ -143,9 +165,9 @@ const CCSelection = (props: Props) => {
         } else {
             props.continue(e);
         }
-    };
+    }
 
-    const getData = async (complaint: string) => {
+    async function getData(complaint: string) {
         const { parentNodes } = props.hpiHeaders,
             chiefComplaint = Object.keys(parentNodes[complaint])[0],
             response = await axios.get(
@@ -156,7 +178,7 @@ const CCSelection = (props: Props) => {
             { data } = response,
             { graph, nodes, edges } = data as GraphData,
             parentNode = parentNodes[complaint][chiefComplaint];
-        props.processKnowledgeGraph(data);
+        processKnowledgeGraph(data);
         const childNodes = graph[parentNode]
             .map((edge: number) => [
                 edges[edge.toString()].toQuestionOrder.toString(),
@@ -164,9 +186,9 @@ const CCSelection = (props: Props) => {
             ])
             .sort((tup1, tup2) => parseInt(tup1[0]) - parseInt(tup2[0]))
             .map(([, /* _questionOrder, */ medId]) => medId);
-    };
+    }
 
-    const renderSwitch = (id: string) => {
+    function renderSwitch(id: string) {
         const { userSurveyState, patientView, initialSurveySearch } = props,
             currEntry = userSurveyState.nodes[id],
             { bodySystems, parentNodes } = props.hpiHeaders;
@@ -193,8 +215,11 @@ const CCSelection = (props: Props) => {
                             title: title,
                             onClick: () => {
                                 if (!canWeAddNewCC(complaint)) {
-                                    props.setErrorMessage(
+                                    setNotificationMessage(
                                         'The maximum of 3 has been reached. Please un-select an existing option before adding a new one.'
+                                    );
+                                    setNotificationType(
+                                        NotificationTypeEnum.ERROR
                                     );
                                     getData(complaint);
                                     initialSurveySearch(id, complaint);
@@ -235,9 +260,13 @@ const CCSelection = (props: Props) => {
                             <span
                                 onClick={() => {
                                     if (!canWeAddNewCC(condition)) {
-                                        props.setErrorMessage(
+                                        setNotificationMessage(
                                             'The maximum of 3 has been reached. Please un-select an existing option before adding a new one.'
                                         );
+                                        setNotificationType(
+                                            NotificationTypeEnum.ERROR
+                                        );
+
                                         return;
                                     }
                                 }}
@@ -276,8 +305,11 @@ const CCSelection = (props: Props) => {
                                         <span
                                             onClick={() => {
                                                 if (!canWeAddNewCC(complaint)) {
-                                                    props.setErrorMessage(
+                                                    setNotificationMessage(
                                                         'The maximum of 3 has been reached. Please un-select an existing option before adding a new one.'
+                                                    );
+                                                    setNotificationType(
+                                                        NotificationTypeEnum.ERROR
                                                     );
                                                     return;
                                                 }
@@ -301,8 +333,9 @@ const CCSelection = (props: Props) => {
                 return (
                     <div className={style.diseaseSelections__textarea}>
                         <TextArea
+                            maxlength='200'
                             key={id}
-                            value={currEntry.response}
+                            value={(currEntry?.response as string) || ''}
                             placeholder={
                                 'Description of condition or symptom... (max 200 characters)'
                             }
@@ -310,9 +343,10 @@ const CCSelection = (props: Props) => {
                                 _e: any,
                                 { value }: { value: string }
                             ) => {
-                                if (value.length <= 200) {
-                                    props.initialSurveyAddText(id, value);
-                                }
+                                props.initialSurveyAddText(
+                                    id,
+                                    value.substring(0, 200)
+                                );
                             }}
                         />
                     </div>
@@ -321,14 +355,9 @@ const CCSelection = (props: Props) => {
             default:
                 return;
         }
-    };
+    }
 
-    const nodes = patientViewHeaders.parentNodes;
-    const nodeKey = Object.values(Object.entries(nodes)[1][1])[0];
-    const questions = initialQuestions as initialQuestionsState;
-    const userSurveyStateNodes = Object.keys(props.userSurveyState.nodes);
-
-    const handleSubmit = () => {
+    function handleSubmit() {
         if (selectedCC.length === 0 && showNodeTen === false) {
             setShowNodeTen(true);
             return;
@@ -337,9 +366,7 @@ const CCSelection = (props: Props) => {
         if (
             showNodeTen &&
             selectedCC.length === 0 &&
-            !(
-                (props.userSurveyState.nodes['10'].response || '') as string
-            ).trim()
+            !((nodeTenResponse || '') as string).trim()
         ) {
             setShowRequiredFieldValidation({
                 status: true,
@@ -347,6 +374,7 @@ const CCSelection = (props: Props) => {
             });
             return;
         }
+
         const rootState = currentNoteStore.getState();
 
         const first_name = rootState.additionalSurvey.legalFirstName;
@@ -360,6 +388,7 @@ const CCSelection = (props: Props) => {
 
         const { setNotificationMessage, setNotificationType } =
             props.notification;
+
         setLoading(true);
         localhostClient
             .post('/appointment', {
@@ -373,7 +402,22 @@ const CCSelection = (props: Props) => {
             })
             .then((res) => {
                 if (res.status !== 200) throw new Error();
-                history.push('/submission-successful');
+
+                const clinicianId = query.get(
+                    HPIPatientQueryParams.CLINICIAN_ID
+                );
+
+                const institutionId = query.get(
+                    HPIPatientQueryParams.INSTITUTION_ID
+                );
+
+                let url = '/submission-successful';
+
+                if (clinicianId !== null && institutionId !== null) {
+                    url = `${url}?${HPIPatientQueryParams.INSTITUTION_ID}=${institutionId}&${HPIPatientQueryParams.CLINICIAN_ID}=${clinicianId}`;
+                }
+
+                history.push(url);
             })
             .catch((_error) => {
                 setNotificationMessage('Failed to submit your questionnaire');
@@ -388,44 +432,39 @@ const CCSelection = (props: Props) => {
                 }
                 setLoading(false);
             });
-    };
+    }
 
-    const content =
-        nodeKey in questions.nodes &&
-        questions.graph[nodeKey].map((key) => {
-            if (key === '10' && !(showNodeTen && selectedCC.length === 0))
-                return null;
+    /* ----- EFFECTS ----- */
 
-            return (
-                <div
-                    className={`${
-                        questions.nodes[key].responseType === 'SEARCH'
-                            ? `${style.diseaseSelections__search} flex-wrap justify-between`
-                            : ''
-                    }`}
-                    key={questions.nodes[key].text}
-                >
-                    <p>{questions.nodes[key].text}</p>
+    useEffect(() => {
+        if (
+            !Object.keys(userSurveyState.graph).length &&
+            !Object.keys(userSurveyState.nodes).length &&
+            !Object.keys(userSurveyState.order).length
+        )
+            processSurveyGraph(initialQuestions as initialQuestionsState);
 
-                    {userSurveyStateNodes.length && renderSwitch(key)}
-                    {showRequiredFieldValidation.forUID === key &&
-                        showRequiredFieldValidation.status === true && (
-                            <div className={style.diseaseSelections__error}>
-                                This field is required
-                            </div>
-                        )}
-                </div>
-            );
+        if (hpiHeaders) {
+            const data = hpiHeadersApiClient;
+            data.then((res) => saveHpiHeader(res.data));
+        }
+    }, []);
+
+    useEffect(() => {
+        setShowRequiredFieldValidation({
+            status: false,
+            forUID: '-1',
         });
+    }, [userSurveyState]);
 
     return (
         <div className={style.diseaseSelections}>
             {content}
             <NavigationButton
                 previousClick={onPrevClick}
-                nextClick={showNextButton ? onNextClick : handleSubmit}
                 loading={loading}
-                secondButtonLabel={showNextButton ? 'Next' : 'Submit'}
+                nextClick={showSubmitButton ? handleSubmit : onNextClick}
+                secondButtonLabel={showSubmitButton ? 'Submit' : 'Next'}
             />
         </div>
     );

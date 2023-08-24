@@ -1,11 +1,22 @@
+import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import Header from 'components/Header/Header';
+import useQuery from 'hooks/useQuery';
 import React from 'react';
-import { useHistory } from 'react-router';
 import CheckWhite from '../assets/images/check-white.svg';
 import style from './AfterSubmissionPage.module.scss';
 
 function AfterSubmissionPage() {
-    const history = useHistory();
+    const query = useQuery();
+
+    const clinicianId = query.get(HPIPatientQueryParams.CLINICIAN_ID);
+    const institutionId = query.get(HPIPatientQueryParams.INSTITUTION_ID);
+
+    let resetButtonURL = '/hpi/patient';
+
+    if (clinicianId !== null && institutionId !== null) {
+        resetButtonURL = `${resetButtonURL}?${HPIPatientQueryParams.INSTITUTION_ID}=${institutionId}&${HPIPatientQueryParams.CLINICIAN_ID}=${clinicianId}`;
+    }
+
     return (
         <>
             <Header />
@@ -19,16 +30,17 @@ function AfterSubmissionPage() {
                         </picture>
                         <h5>Success!</h5>
                         <p>
-                            Your questionnaire has successfully {'\n'} been
+                            Your Questionnaire has successfully {'\n'} been
                             submitted
                         </p>
+
                         <button
                             className='button'
                             onClick={() => {
-                                history.replace('/');
+                                window.location.replace(resetButtonURL);
                             }}
                         >
-                            Go to home page
+                            Reset the form
                         </button>
                     </div>
                 </div>

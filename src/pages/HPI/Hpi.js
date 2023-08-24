@@ -12,7 +12,7 @@ import { YesNoResponse } from 'constants/enums';
 import useQuery from 'hooks/useQuery';
 import { hpiHeaders } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
 import initialQuestions from 'pages/EditNote/content/patientview//constants/initialQuestions.json';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, useHistory, useParams } from 'react-router';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
@@ -45,11 +45,26 @@ const HPI = () => {
         NotificationTypeEnum.ERROR
     );
     const [title, SetTitle] = useState('');
-    const history = useHistory();
+    const reduxState = useSelector((state) => ({
+        _id: selectNoteId(state),
+        patientView: selectPatientViewState(state),
+        userSurveyState: selectInitialPatientSurvey(state),
+        activeItem: selectActiveItem(state),
+        additionalSurvey: state.additionalSurvey,
+        chiefComplaints: state.chiefComplaints,
+    }));
     const query = useQuery();
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     let { view } = useParams();
+    const history = useHistory();
     const context = useContext(AuthContext);
+    const selectedChiefComplaints = useMemo(
+        () =>
+            Object.keys(reduxState.chiefComplaints).filter(
+                (item) => item !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM
+            ),
+        [reduxState.chiefComplaints]
+    );
 
     useEffect(() => {
         if (
@@ -68,28 +83,32 @@ const HPI = () => {
     useEffect(() => {
         if (view === ViewType.DOCTOR) return;
 
-        const [CLINICIAN_ID, INSTITUTION_ID] = [
+        const [clinicianId, institutionId] = [
             query.get(HPIPatientQueryParams.CLINICIAN_ID),
             query.get(HPIPatientQueryParams.INSTITUTION_ID),
         ];
 
-        if (!CLINICIAN_ID || !INSTITUTION_ID) {
-            history.replace('/');
+        if (!clinicianId || !institutionId) {
+            history.replace(`/${ProductType.HPI}/${ViewType.PATIENT}`);
             return;
         }
 
+        setIsLoading(true);
+
         localhostClient
-            .get(`/clinic/${CLINICIAN_ID}/${INSTITUTION_ID}`)
+            .get(`/clinic/${clinicianId}/${institutionId}`)
             .then((res) => {
                 dispatch(setClinicianDetail(res.data.detail));
                 // setting the userSurveyState.node[9] value to clinician's last name.
                 dispatch(
                     initialSurveyAddDateOrPlace(9, res.data.detail.last_name)
                 );
-                setIsLoading(false);
             })
             .catch((_error) => {
-                history.replace('/');
+                history.replace(`/${ProductType.HPI}/${ViewType.PATIENT}`);
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
     }, [query, view]);
 
@@ -97,15 +116,6 @@ const HPI = () => {
         'InitialSurvey',
         'PreHPI',
     ]);
-
-    const reduxState = useSelector((state) => ({
-        _id: selectNoteId(state),
-        patientView: selectPatientViewState(state),
-        userSurveyState: selectInitialPatientSurvey(state),
-        activeItem: selectActiveItem(state),
-        additionalSurvey: state.additionalSurvey,
-        chiefComplaints: state.chiefComplaints,
-    }));
 
     useEffect(() => {
         if (view === ViewType.PATIENT)
@@ -130,13 +140,6 @@ const HPI = () => {
         ) {
             steps.push('CCSelection');
         } else {
-            const selectedChiefComplaints = Object.keys(
-                reduxState.chiefComplaints
-            ).filter(
-                (item) => item !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM
-            );
-
-            // remove selected CC from state
             selectedChiefComplaints.forEach((item) => {
                 dispatch(selectChiefComplaint(item));
             });
@@ -158,10 +161,6 @@ const HPI = () => {
     }, [reduxState.activeItem]);
 
     function canWeMoveToChiefComplaintPages(name) {
-        const selectedChiefComplaints = Object.keys(
-            reduxState.chiefComplaints
-        ).filter((item) => item !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM);
-
         const questionTenResponse = (
             reduxState.userSurveyState.nodes['10'].response || ''
         ).trim();
@@ -297,7 +296,6 @@ const HPI = () => {
                         <CCSelection
                             continue={onNextClick}
                             onPreviousClick={onPreviousClick}
-                            setErrorMessage={setNotificationMessage}
                             notification={{
                                 setNotificationMessage,
                                 setNotificationType,
@@ -327,7 +325,7 @@ const HPI = () => {
 
     return (
         <>
-            <Header />
+            <Header view={view} />
             <div className={style.editNote}>
                 <div className='centering'>
                     {view === ViewType.PATIENT && (
