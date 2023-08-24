@@ -40,7 +40,7 @@ export async function updateDbUser(body: UpdateUserBody) {
 
     return postToApi<UpdateUserResponse>(
         `/user/${body.email}`,
-        'createUser',
+        'updateDbUser',
         body
     );
 }

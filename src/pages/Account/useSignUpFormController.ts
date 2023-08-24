@@ -70,7 +70,7 @@ export const useSignUpFormController = (initialValues: SignUpFormData) => {
 
                 if (result?.errorMessage?.length) {
                     // Expected error, display to GUI
-                    setErrors({ signUpError: result.errorMessage });
+                    setErrors({ submitError: result.errorMessage });
                 } else if (result && (result as UpdateUserResponse)?.user?.id) {
                     // User created successfully, let them into the app
                     history.push('/');
@@ -87,7 +87,7 @@ export const useSignUpFormController = (initialValues: SignUpFormData) => {
                     newUserInfo,
                 });
                 setErrors({
-                    signUpError:
+                    submitError:
                         'Error occurred and has been logged to our support team. Check your internet connection, retry or speak to an administrator.',
                 });
             } finally {

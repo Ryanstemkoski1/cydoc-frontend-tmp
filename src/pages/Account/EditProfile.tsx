@@ -1,50 +1,242 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Segment, Container, Header, Modal, Button } from 'semantic-ui-react';
-import UserForm from './UserForm';
-import getUserAttributes from 'auth/getUserAttributes';
-import updateUserAttributes from 'auth/updateUserAttributes';
+import React, { useCallback, useState } from 'react';
+import { Segment, Container, Modal, Button } from 'semantic-ui-react';
 import './Account.css';
-import { doctorClient, managerClient } from 'constants/api';
-import getDoctorsOfManager from 'auth/getDoctorsOfManager';
-import { isLivemode } from 'auth/livemode';
 import useUser from 'hooks/useUser';
 import useAuth from 'hooks/useAuth';
+import { Loader } from 'semantic-ui-react';
+import { Formik, FormikHelpers } from 'formik';
+import * as Yup from 'yup';
+import ModalHeader from 'components/Atoms/ModalHeader';
+import SignUpTextInput from './SignUpTextInput';
+import { PasswordErrorMessages } from './PasswordErrorMessage';
+import { Grid } from '@mui/material';
+import FormErrors from '../../components/Molecules/FormErrors';
+import invariant from 'tiny-invariant';
 import { DbUser } from '@cydoc-ai/types';
-import { stringFromError } from '../../modules/error-utils';
+import { updateDbUser } from 'modules/user-api';
+import { stringFromError } from 'modules/error-utils';
+import { log } from 'modules/logging';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-const initializeFormFields = (role: DbUser['role'], email: string) => {
-    if (role === 'clinician') {
-        return {
-            role,
-            firstName: '',
-            middleName: '',
-            lastName: '',
-            email,
-            countryCode: '+1',
-            phoneNumber: '',
-            phoneNumberIsMobile: true,
-            birthday: '',
-            isStudent: '',
-            degreesCompleted: ['', '', ''],
-            degreesInProgress: ['', '', ''],
-            specialties: ['', '', ''],
-            workplace: '',
-        };
-    } else if (role === 'manager') {
-        return {
-            role,
-            firstName: '',
-            middleName: '',
-            lastName: '',
-            email,
-            countryCode: '+1',
-            phoneNumber: '',
-            phoneNumberIsMobile: true,
-            birthday: '',
-            workplace: '',
-        };
-    }
+const INITIAL_VALUES: EditUserInfo = {
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    confirmPhoneNumber: '',
 };
+
+export interface EditUserInfo
+    extends Pick<DbUser, 'firstName' | 'lastName' | 'phoneNumber'> {
+    confirmPhoneNumber: string;
+    submitError?: string;
+}
+// Same validation object used in sign up & first login
+export const UserInfoFormSpec = {
+    firstName: Yup.string()
+        .label('firstName')
+        .required('First Name is required')
+        .min(1, 'First Name is required'),
+    lastName: Yup.string()
+        .label('lastName')
+        .required('Last Name is required')
+        .min(1, 'Last Name is required'),
+    phoneNumber: Yup.string()
+        .label('phoneNumber')
+        .required('Phone number is required')
+        .min(9, 'Phone number is required'),
+    confirmPhoneNumber: Yup.string()
+        .label('confirmPhoneNumber')
+        .required('Please confirm phone number')
+        .min(9, 'Please confirm phone number')
+        .test({
+            name: 'phone-number-match',
+            test: (value, context) => {
+                const existingValue = context.parent as EditUserInfo;
+                invariant(
+                    existingValue,
+                    'invalid yup phone number object shape'
+                );
+
+                return existingValue?.phoneNumber === value;
+            },
+            message: 'Phone numbers must match',
+            exclusive: false,
+        }),
+};
+
+const validationSchema = Yup.object<EditUserInfo>(UserInfoFormSpec);
+
+const EditProfile = () => {
+    const { user, loading } = useUser();
+    const initialValues = {
+        ...INITIAL_VALUES,
+        ...user,
+        confirmPhoneNumber: user?.phoneNumber || '',
+    };
+    const history = useHistory();
+    const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
+
+    const onSubmit = async (
+        { firstName, lastName, phoneNumber }: EditUserInfo,
+        { setErrors, setSubmitting }: FormikHelpers<EditUserInfo>
+    ) => {
+        toast
+            .promise(
+                async () => {
+                    try {
+                        const email = user?.email;
+                        invariant(
+                            email,
+                            'Sign-In error, try refreshing and logging in again.'
+                        );
+
+                        setErrors({});
+                        setSubmitting(true);
+
+                        // TODO: update phone number in cognito pool
+                        const { errorMessage } = await updateDbUser({
+                            email,
+                            firstName,
+                            lastName,
+                            phoneNumber,
+                        });
+
+                        if (errorMessage?.length) {
+                            throw new Error(errorMessage);
+                        }
+                    } finally {
+                        setSubmitting(false);
+                    }
+                },
+                {
+                    error: 'Error updating user',
+                    pending: `Updating user...`,
+                    success: 'User updated!',
+                }
+            )
+            .catch((e) => {
+                setErrors({
+                    submitError: stringFromError(e),
+                });
+                log(`[EditProfileSubmit] ${stringFromError(e)}`, {
+                    firstName,
+                    lastName,
+                    phoneNumber,
+                    e,
+                });
+            });
+    };
+
+    // show loader while retrieving info from Cognito/database
+    if (loading) {
+        return <Loader active inline='centered' />;
+    }
+
+    return (
+        <Container className='sign-up'>
+            <DeleteModal
+                open={confirmDeleteModalOpen}
+                setOpen={setConfirmDeleteModalOpen}
+            />
+            <Segment clearing raised>
+                <Formik<EditUserInfo>
+                    enableReinitialize
+                    initialValues={initialValues}
+                    onSubmit={onSubmit}
+                    validateOnChange={false}
+                    validationSchema={validationSchema}
+                >
+                    {({ errors, submitForm, isSubmitting, touched }) => (
+                        <div>
+                            <ModalHeader title='Enter User Info' />
+                            <Grid container spacing={4} paddingTop='2rem'>
+                                <Grid item xs={12} md={6}>
+                                    <SignUpTextInput
+                                        label='First Name'
+                                        fieldName='firstName'
+                                        placeholder='Jane'
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <SignUpTextInput
+                                        label='Last Name'
+                                        fieldName='lastName'
+                                        placeholder='Doe'
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <SignUpTextInput
+                                        fieldName='phoneNumber'
+                                        label='U.S. Phone Number'
+                                        placeholder='XXXXXXXXXX'
+                                        type='tel'
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <SignUpTextInput
+                                        fieldName='confirmPhoneNumber'
+                                        label='Confirm U.S. Phone Number'
+                                        placeholder='XXXXXXXXXX'
+                                        type='tel'
+                                    />
+                                </Grid>
+                                <FormErrors />
+                                {/* <Box
+                                    marginTop='2rem'
+                                    sx={{
+                                        display: 'flex',
+                                        width: '100%',
+                                        justifyContent: 'space-between',
+                                    }}
+                                > */}
+                                <Grid item xs={12} sm={6}>
+                                    <Button
+                                        basic
+                                        color='red'
+                                        content='Delete Account'
+                                        type='button'
+                                        onClick={() => {
+                                            setConfirmDeleteModalOpen(true);
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={6}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'flex-end',
+                                        flexDirection: 'column-reverse',
+                                    }}
+                                >
+                                    <Button
+                                        color='teal'
+                                        disabled={
+                                            isSubmitting ||
+                                            !!Object.keys(errors).length ||
+                                            !Object.keys(touched).length
+                                        }
+                                        loading={isSubmitting}
+                                        content={'Save'}
+                                        onClick={submitForm}
+                                        type='submit'
+                                    />
+                                    {/* </Box> */}
+                                </Grid>
+
+                                <PasswordErrorMessages />
+                            </Grid>
+                        </div>
+                    )}
+                </Formik>
+            </Segment>
+        </Container>
+    );
+};
+
+export default EditProfile;
 
 const DeleteModal = ({
     open,
@@ -53,51 +245,14 @@ const DeleteModal = ({
     open: boolean;
     setOpen: (open: boolean) => void;
 }) => {
-    const { isManager } = useUser();
+    const { isManager, user, loading } = useUser();
     const { signOut } = useAuth();
 
-    const [loading, setLoading] = useState(false);
-
-    const deleteDoctors = async () => {
-        const doctors = await getDoctorsOfManager('manager');
-        for (let i = 0; i < doctors.length; i++) {
-            await doctorClient.delete('/doctors/' + doctors[i], {
-                data: JSON.stringify({
-                    stripeMode: isLivemode(),
-                }),
-            });
-        }
-    };
-
     const deleteSelf = useCallback(async () => {
-        setLoading(true);
-        const client = isManager ? managerClient : doctorClient;
-        const path = isManager ? '/managers/' : '/doctors/';
-        alert('not implemented');
-        // const uuid = await getUUID(role);
-        // try {
-        //     await client.delete(path + uuid, {
-        //         data: JSON.stringify({
-        //             stripeMode: isLivemode(),
-        //         }),
-        //     });
-        //     signOut();
-        // } catch (err) {
-        //     alert('Error deleting from database.');
-        // }
-        setLoading(false);
-    }, [signOut, isManager]);
-
-    const deleteSelfAndSub = useCallback(async () => {
-        setLoading(true);
-        try {
-            await deleteDoctors();
-            await deleteSelf();
-        } catch (err) {
-            alert('Error deleting from database.');
-        }
-        setLoading(false);
-    }, [deleteSelf]);
+        // TODO: implement user & institution deletion logic
+        log(`User requested deletion`, { user });
+        signOut();
+    }, [signOut, user]);
 
     return (
         <Modal
@@ -143,7 +298,7 @@ const DeleteModal = ({
                             color='red'
                             content='Delete self and managed doctors'
                             type='button'
-                            onClick={deleteSelfAndSub}
+                            onClick={deleteSelf}
                             size={'small'}
                             loading={loading}
                             disabled={loading}
@@ -155,94 +310,3 @@ const DeleteModal = ({
         </Modal>
     );
 };
-
-const EditProfile = () => {
-    const { user } = useUser();
-    const role = user?.role || 'clinician';
-
-    const [callFinished, setCallFinished] = useState(false);
-    const [userInfo, setUserInfo] = useState(
-        initializeFormFields(role, user?.email || '')
-    );
-    const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
-
-    // retrieve user attributes from Cognito and Dynamo when component is mounted
-    useEffect(() => {
-        const getAttributes = async () => {
-            try {
-                const getUserAttributesResponse = await getUserAttributes(role);
-                // setUserInfo({
-                //     ...userInfo,
-                //     firstName: getUserAttributesResponse.firstName,
-                //     middleName: getUserAttributesResponse.middleName,
-                //     lastName: getUserAttributesResponse.lastName,
-                //     email: getUserAttributesResponse.email,
-                //     countryCode: '+1',
-                //     phoneNumber: getUserAttributesResponse.phoneNumber.slice(2),
-                //     birthday: getUserAttributesResponse.birthday,
-                // });
-            } catch (err) {
-                alert(
-                    `Error retrieving user information: ${stringFromError(err)}`
-                );
-                return;
-            } finally {
-                setCallFinished(true);
-            }
-        };
-        getAttributes();
-        // need to disable the warning below to prevent this function from continuously running
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    // save user information in Cognito and Dynamo
-    const handleSubmit = useCallback(
-        async (userInfo: any) => {
-            try {
-                const phoneNumber = userInfo.countryCode + userInfo.phoneNumber;
-                // update info in Cognito and in Dynamo
-                await updateUserAttributes(role, {
-                    ...userInfo,
-                    phoneNumber,
-                });
-            } catch (err) {
-                alert(
-                    `Error updating user information: ${stringFromError(err)}`
-                );
-            }
-        },
-        [role]
-    );
-
-    return (
-        <Container className='sign-up'>
-            <DeleteModal
-                open={confirmDeleteModalOpen}
-                setOpen={setConfirmDeleteModalOpen}
-            />
-            <Segment clearing raised>
-                <Header as='h2' textAlign='center' content='Edit Profile' />
-                <UserForm
-                    userInfo={userInfo}
-                    doneLoading={callFinished}
-                    handleSubmit={handleSubmit}
-                    buttonAriaLabel='Save-Profile-Info'
-                    buttonText='Save'
-                />
-                {callFinished && (
-                    <Button
-                        basic
-                        color='red'
-                        content='Delete Account'
-                        type='button'
-                        onClick={() => {
-                            setConfirmDeleteModalOpen(true);
-                        }}
-                    />
-                )}
-            </Segment>
-        </Container>
-    );
-};
-
-export default EditProfile;

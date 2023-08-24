@@ -1,33 +1,27 @@
 import React from 'react';
 import { Formik, FormikHelpers } from 'formik';
-
-import './Account.css';
-
 import './Account.css';
 import * as Yup from 'yup';
 import useAuth from 'hooks/useAuth';
-import { DbUser } from '@cydoc-ai/types';
 import ModalHeader from 'components/Atoms/ModalHeader';
 import { Button } from 'semantic-ui-react';
 import SignUpTextInput from './SignUpTextInput';
 import { PasswordErrorMessages } from './PasswordErrorMessage';
-import { Box, Grid, Stack } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import invariant from 'tiny-invariant';
 import { passwordIsValid } from 'constants/passwordErrors';
 import { updateDbUser } from '../../modules/user-api';
 import { stringFromError } from '../../modules/error-utils';
 import { log } from '../../modules/logging';
 import { useHistory } from 'react-router-dom';
-import { ErrorText } from 'components/Atoms/ErrorText';
 import useUser from 'hooks/useUser';
-import { CenteredPaper } from 'components/Atoms/CenteredPaper';
+import { CenteredPaper } from '../../components/Atoms/CenteredPaper';
+import FormErrors from 'components/Molecules/FormErrors';
+import { EditUserInfo, UserInfoFormSpec } from './EditProfile';
 
-export interface FistLoginFormData
-    extends Pick<DbUser, 'firstName' | 'lastName' | 'phoneNumber'> {
+export interface FistLoginFormData extends EditUserInfo {
     newPassword: string;
     confirmNewPassword: string;
-    confirmPhoneNumber: string;
-    signUpError?: string;
 }
 
 const INITIAL_VALUES: FistLoginFormData = {
@@ -41,36 +35,7 @@ const INITIAL_VALUES: FistLoginFormData = {
 
 // Same validation object used in sign up
 export const FirstLoginFormSpec = {
-    firstName: Yup.string()
-        .label('firstName')
-        .required('First Name is required')
-        .min(1, 'First Name is required'),
-    lastName: Yup.string()
-        .label('lastName')
-        .required('Last Name is required')
-        .min(1, 'Last Name is required'),
-    phoneNumber: Yup.string()
-        .label('phoneNumber')
-        .required('Phone number is required')
-        .min(9, 'Phone number is required'),
-    confirmPhoneNumber: Yup.string()
-        .label('confirmPhoneNumber')
-        .required('Please confirm phone number')
-        .min(9, 'Please confirm phone number')
-        .test({
-            name: 'phone-number-match',
-            test: (value, context) => {
-                const existingValue = context.parent as FistLoginFormData;
-                invariant(
-                    existingValue,
-                    'invalid yup phone number object shape'
-                );
-
-                return existingValue?.phoneNumber === value;
-            },
-            message: 'Phone numbers must match',
-            exclusive: false,
-        }),
+    ...UserInfoFormSpec,
     newPassword: Yup.string()
         .label('newPassword')
         .required('Password is required')
@@ -134,7 +99,7 @@ const FirstLoginForm = () => {
 
             if (errorMessage?.length || dbErrorMessage) {
                 setErrors({
-                    signUpError: errorMessage || dbErrorMessage,
+                    submitError: errorMessage || dbErrorMessage,
                 });
             } else {
                 console.log(`user info updated successfully`, {
@@ -146,7 +111,7 @@ const FirstLoginForm = () => {
             }
         } catch (e) {
             setErrors({
-                signUpError: stringFromError(e),
+                submitError: stringFromError(e),
             });
             log(`[FirstLoginSubmit] ${stringFromError(e)}`, {
                 firstName,
@@ -203,7 +168,6 @@ const FirstLoginForm = () => {
                                     type='tel'
                                 />
                             </Grid>
-
                             <Grid item xs={12} md={6}>
                                 <SignUpTextInput
                                     label='New password'
@@ -220,24 +184,7 @@ const FirstLoginForm = () => {
                                     placeholder='confirm new password'
                                 />
                             </Grid>
-                            {Object.keys(errors)?.length ? (
-                                <Grid item xs={12}>
-                                    <Stack>
-                                        {Object.keys(errors)
-                                            ?.slice(0, 1)
-                                            .map((errorKey) => (
-                                                <ErrorText
-                                                    key={errorKey}
-                                                    message={`${
-                                                        errors?.[
-                                                            errorKey as keyof FistLoginFormData
-                                                        ]
-                                                    }`}
-                                                />
-                                            ))}
-                                    </Stack>
-                                </Grid>
-                            ) : null}
+                            <FormErrors />
                             <Box
                                 marginTop='2rem'
                                 sx={{
@@ -259,7 +206,6 @@ const FirstLoginForm = () => {
                                     type='submit'
                                 />
                             </Box>
-
                             <PasswordErrorMessages />
                         </Grid>
                     </div>

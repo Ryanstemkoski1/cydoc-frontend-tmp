@@ -10,5 +10,5 @@ export interface ClinicianSignUpData
     confirmEmail: string;
     confirmPhoneNumber: string;
     institutionName: string;
-    signUpError?: string;
+    submitError?: string;
 }

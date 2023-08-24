@@ -32,8 +32,8 @@ export function NextBackButtonGroup({
 
     const onLastStep = step === PRIVACY_STEP;
     const accountAlreadyExists = useMemo(
-        () => errors?.signUpError?.includes('already exists'),
-        [errors?.signUpError]
+        () => errors?.submitError?.includes('already exists'),
+        [errors?.submitError]
     );
 
     // Some props for NextButton change depending on which step you're on
