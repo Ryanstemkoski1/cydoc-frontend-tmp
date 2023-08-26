@@ -1,5 +1,5 @@
-import React from 'react';
 import { YesNoResponse } from 'constants/enums';
+import React from 'react';
 import style from './AllNegativeButton.module.scss';
 //Component that triggers its handleClick function on all children when clicked
 const AllNegativeButton = (props) => {
@@ -9,25 +9,26 @@ const AllNegativeButton = (props) => {
         !children ||
         children.every(
             (currentOption) =>
-                currentOption?.props?.children[1].props?.children?.props
-                    ?.noButtonActive
+                currentOption?.props?.children[0]?.props?.noButtonActive
         );
 
     return (
         <div className={style.symptomsBlock}>
-            <div className={`${style.symptomsBlock__btn} flex align-center`}>
-                <p></p>
+            <div
+                className={`${style.symptomsBlock__btn} symptomsBlockBtn flex align-center justify-center`}
+            >
                 <button
                     className={`${
                         style.symptomsBlock__all
-                    } button outline info pill sm ${allNegative && 'active'}`}
+                    } button outline info pill sm ${
+                        allNegative && style.active
+                    }`}
                     data-hover={false}
                     onClick={() =>
                         React.Children.map(children, (child) => {
                             const optionName =
-                                child.props.children?.[0]?.props?.children;
-                            const noButton =
                                 child.props.children?.[1]?.props?.children;
+                            const noButton = child.props.children?.[0];
                             if (allNegative) {
                                 handleClick(optionName, null);
                             } else if (!noButton?.props?.noButtonActive) {
@@ -36,7 +37,7 @@ const AllNegativeButton = (props) => {
                         })
                     }
                 >
-                    ALL NO
+                    Select All No
                 </button>
             </div>
             {children}

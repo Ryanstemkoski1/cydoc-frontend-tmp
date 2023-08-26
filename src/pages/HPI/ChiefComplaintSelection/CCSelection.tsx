@@ -247,6 +247,9 @@ const CCSelection = (props: Props) => {
             return filterResults;
         };
 
+        // eslint-disable-next-line no-console
+        console.log(currEntry);
+
         switch (currEntry.responseType) {
             case ResponseTypes.SELECTONE:
                 return isSelectOneResponse(currEntry.response) ? (

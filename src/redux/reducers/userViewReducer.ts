@@ -120,7 +120,7 @@ export function userViewReducer(
                         responses.map((key) => (newRes[key] = false));
                         response = newRes;
                         text = text.slice(0, click);
-                    } else if (text.search('FAVORITES') > -1) {
+                    } else if (text.search('maximum of 3') > -1) {
                         const favorites = text.search('CONSTANT'),
                             newRes = {} as SelectOneInput;
                         favChiefComplaints.map((key) => (newRes[key] = false));

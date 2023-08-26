@@ -1,7 +1,14 @@
 @import '../../../assets/scss/variables.scss';
 .YesNoButton {
-    text-transform: uppercase;
+    text-transform: capitalize;
     button {
-        border-color: $color-primary !important;
+        border-color: darken($color-gray, 20%) !important;
+        background-color: $color-gray !important;
+    }
+    :global {
+        button.active {
+            border-color: $color-primary !important;
+            background-color: $color-primary !important;
+        }
     }
 }

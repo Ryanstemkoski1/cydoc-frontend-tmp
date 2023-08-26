@@ -1,5 +1,11 @@
 @import '../../../../assets/scss/variables.scss';
 .reviewOfSystems {
+    &__caption {
+        text-align: center;
+        margin-bottom: 20px !important;
+        padding-bottom: 10px !important;
+        border-bottom: 1px solid rgba($color-primary, 0.5) !important;
+    }
     &__item {
         padding: 20px 0;
         border-bottom: 1px solid $color-border;
@@ -12,19 +18,27 @@
         }
         p {
             margin: 0;
-            width: 45%;
-            padding-right: 10px;
-            max-width: calc(100% - 160px);
-            @include max-screen($desktop) {
-                width: 48%;
-            }
+            text-align: center;
+            padding: 0 10px;
+            width: calc(100% - 120px);
             @include max-screen($mobile) {
-                max-width: none;
                 width: calc(100% - 130px);
             }
         }
-        aside {
-            max-width: 160px;
+        > div {
+            &:nth-child(1) {
+                button[title='Yes'] {
+                    display: none;
+                }
+                button[title='No'] {
+                    margin-left: 0;
+                }
+            }
+            &:nth-child(3) {
+                button[title='No'] {
+                    display: none;
+                }
+            }
         }
     }
 }

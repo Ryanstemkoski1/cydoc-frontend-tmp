@@ -1,26 +1,12 @@
 @import '../../../../assets/scss/variables.scss';
 .symptomsBlock {
-    &__btn {
-        @include max-screen($mobile) {
-            justify-content: space-between;
-        }
-        p {
-            margin: 0;
-            width: 45%;
-            padding-right: 10px;
-            max-width: calc(100% - 160px);
-            @include max-screen($desktop) {
-                width: 48%;
-            }
-            @include max-screen($mobile) {
-                max-width: none;
-                width: calc(100% - 130px);
-            }
-        }
-    }
     &__all {
-        margin-left: 75px;
-        padding: 5px 8px 4px 8px !important;
-        border-color: $color-primary !important;
+        border-color: darken($color-gray, 20%) !important;
+        background-color: $color-gray !important;
+        &.active {
+            color: $color-white !important;
+            border-color: $color-primary !important;
+            background-color: $color-primary !important;
+        }
     }
 }

@@ -1,24 +1,24 @@
+import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from 'constants/enums';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import {
-    toggleROSOption,
-    ToggleROSOptionAction,
-} from 'redux/actions/reviewOfSystemsActions';
 import {
     selectManyHandleClick,
     SelectManyHandleClickAction,
 } from 'redux/actions/hpiActions';
 import {
-    selectReviewOfSystemsState,
-    selectReviewOfSystemsOptions,
-} from 'redux/selectors/reviewOfSystemsSelectors';
-import { YesNoResponse } from 'constants/enums';
-import { Grid, Button, Divider, Segment, Header } from 'semantic-ui-react';
-import './ReviewOfSystems.css';
+    toggleROSOption,
+    ToggleROSOptionAction,
+} from 'redux/actions/reviewOfSystemsActions';
+import { CurrentNoteState } from 'redux/reducers';
 import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
+import {
+    selectReviewOfSystemsOptions,
+    selectReviewOfSystemsState,
+} from 'redux/selectors/reviewOfSystemsSelectors';
+import { Header } from 'semantic-ui-react';
 import AllNegativeButton from './AllNegativeButton.js';
-import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
+import './ReviewOfSystems.css';
 import style from './ReviewOfSystemsCategory.module.scss';
 
 interface CategoryProps {
@@ -134,7 +134,10 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
         return (
             <div className={style.reviewOfSystems}>
                 {!this.isSelectMany() && (
-                    <Header as='h3' className='header-titles'>
+                    <Header
+                        as='h3'
+                        className={`header-titles ${style.reviewOfSystems__caption}`}
+                    >
                         {this.breakWord(category)}
                     </Header>
                 )}
@@ -142,35 +145,43 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
                 <AllNegativeButton handleClick={this.handleChange}>
                     {ROSOptions.map((option: string) => (
                         <div
-                            className={`${style.reviewOfSystems__item} flex-wrap align-center`}
+                            className={`${style.reviewOfSystems__item} reviewOfSystemsItem flex align-center justify-between`}
                             key={option}
                         >
+                            <YesAndNo
+                                yesButtonActive={
+                                    ROSState[category][option] ===
+                                    YesNoResponse.Yes
+                                }
+                                handleYesButtonClick={() =>
+                                    this.handleChange(option, YesNoResponse.Yes)
+                                }
+                                noButtonActive={
+                                    ROSState[category][option] ===
+                                    YesNoResponse.No
+                                }
+                                handleNoButtonClick={() => {
+                                    this.handleChange(option, YesNoResponse.No);
+                                }}
+                            />
                             <p>{option.replace('Δ', 'Changes in')}</p>
 
-                            <aside>
-                                <YesAndNo
-                                    yesButtonActive={
-                                        ROSState[category][option] ===
-                                        YesNoResponse.Yes
-                                    }
-                                    handleYesButtonClick={() =>
-                                        this.handleChange(
-                                            option,
-                                            YesNoResponse.Yes
-                                        )
-                                    }
-                                    noButtonActive={
-                                        ROSState[category][option] ===
-                                        YesNoResponse.No
-                                    }
-                                    handleNoButtonClick={() => {
-                                        this.handleChange(
-                                            option,
-                                            YesNoResponse.No
-                                        );
-                                    }}
-                                />
-                            </aside>
+                            <YesAndNo
+                                yesButtonActive={
+                                    ROSState[category][option] ===
+                                    YesNoResponse.Yes
+                                }
+                                handleYesButtonClick={() =>
+                                    this.handleChange(option, YesNoResponse.Yes)
+                                }
+                                noButtonActive={
+                                    ROSState[category][option] ===
+                                    YesNoResponse.No
+                                }
+                                handleNoButtonClick={() => {
+                                    this.handleChange(option, YesNoResponse.No);
+                                }}
+                            />
                         </div>
                     ))}
                 </AllNegativeButton>

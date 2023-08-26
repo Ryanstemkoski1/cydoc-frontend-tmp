@@ -541,15 +541,15 @@ function getHPIText() {
 
     const formattedHpis = extractHpi(state);
 
+    const node10HPIText = {
+        title: 'Patient describes their condition or symptom as follows:',
+        text: response || '',
+        miscText: '',
+    };
+
     if (Object.keys(formattedHpis).length === 0) {
         return (response as string)?.trim()
-            ? [
-                  {
-                      title: text,
-                      text: response,
-                      miscText: '',
-                  },
-              ]
+            ? [node10HPIText]
             : 'No history of present illness reported.';
     }
 
@@ -601,12 +601,7 @@ function getHPIText() {
         };
     }
 
-    if (((response as string) || '')?.trim())
-        actualNote.push({
-            title: text,
-            text: response || '',
-            miscText: '',
-        });
+    if (((response as string) || '')?.trim()) actualNote.push(node10HPIText);
 
     return actualNote;
 }

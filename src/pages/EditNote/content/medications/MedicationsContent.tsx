@@ -1,6 +1,6 @@
 import { OptionMapping } from '_processOptions';
 import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
-import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
+import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from 'constants/enums';
 import { ResponseTypes } from 'constants/hpiEnums';
 import drugNames from 'constants/medications';
@@ -227,15 +227,15 @@ export class MedicationsContent extends Component<Props, State> {
                                         YesNoResponse.No;
                             return [
                                 ...acc,
-                                <Grid.Row key={medication}>
-                                    <Grid.Column width={3}>
-                                        {medication}
-                                    </Grid.Column>
-                                    <Grid.Column width={3}>
-                                        <ToggleButton
-                                            active={yesActive}
-                                            title='Yes'
-                                            onToggleButtonClick={(): void => {
+                                <div
+                                    className='item-wrapper flex align-center'
+                                    key={medication}
+                                >
+                                    <p>{medication}</p>
+                                    <aside>
+                                        <YesAndNo
+                                            yesButtonActive={yesActive}
+                                            handleYesButtonClick={(): void => {
                                                 updateCurrentlyTaking(
                                                     medKey,
                                                     yesActive
@@ -248,11 +248,8 @@ export class MedicationsContent extends Component<Props, State> {
                                                     YesNoResponse.Yes
                                                 );
                                             }}
-                                        />
-                                        <ToggleButton
-                                            active={noActive}
-                                            title='No'
-                                            onToggleButtonClick={(): void => {
+                                            noButtonActive={noActive}
+                                            handleNoButtonClick={(): void => {
                                                 updateCurrentlyTaking(
                                                     medKey,
                                                     noActive
@@ -266,8 +263,8 @@ export class MedicationsContent extends Component<Props, State> {
                                                 );
                                             }}
                                         />
-                                    </Grid.Column>
-                                </Grid.Row>,
+                                    </aside>
+                                </div>,
                             ];
                         }, [])}
                 </Grid>
