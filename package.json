@@ -36,6 +36,7 @@
         "react-scripts": "^5.0.0",
         "react-smooth-render": "^1.0.0",
         "react-svg-to-image": "^3.0.0",
+        "react-to-print": "^2.14.13",
         "react-windowed-select": "^5.1.0",
         "stream": "^0.0.2",
         "update": "^0.7.4",

@@ -18,16 +18,16 @@ const Header = () => {
 
     let menuItems: MenuItem[] = [
         {
+            to: '/qrcode',
+            label: 'Clinic QR Code',
+            icon: QrCode,
+            active: window.location.href.includes('qrcode'),
+        },
+        {
             to: '/editprofile',
             label: 'Edit Profile',
             icon: Setting,
             active: window.location.href.includes('editprofile'),
-        },
-        {
-            to: '/qrcode',
-            label: 'QR Code',
-            icon: QrCode,
-            active: window.location.href.includes('qrcode'),
         },
         {
             to: '/profilesecurity',

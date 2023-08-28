@@ -63,6 +63,12 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             active: false,
         },
         {
+            to: '/qrcode',
+            label: 'Clinic QR Code',
+            icon: QrCode,
+            active: window.location.href.includes('qrcode'),
+        },
+        {
             to: '/dashboard',
             label: 'Dashboard',
             icon: DashboardIcon,
@@ -74,12 +80,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             icon: Setting,
             active: window.location.href.includes('editprofile'),
         },
-        {
-            to: '/qrcode',
-            label: 'QR Code',
-            icon: QrCode,
-            active: window.location.href.includes('qrcode'),
-        },
+
         {
             to: '/profilesecurity',
             label: 'Profile Security',
