@@ -203,7 +203,18 @@ const COLUMNS: Column<DbUser>[] = [
     { title: 'First Name', field: 'firstName' },
     { title: 'Last Name', field: 'lastName' },
     { title: 'Email', field: 'email' },
-    { title: 'Role', field: 'role' },
+    {
+        title: 'Role',
+        field: 'role',
+        render: ({ role }) => {
+            if (role === 'manager') return 'manager';
+            else if (role === 'clinician') return 'clinician or staff';
+            else {
+                log(`[ManagerDashboard] unrecognized role: ${role}`);
+                return 'none';
+            }
+        },
+    },
 
     { field: 'id', filtering: false, hidden: true, title: 'ID' },
     { title: 'Phone', field: 'phone' },
