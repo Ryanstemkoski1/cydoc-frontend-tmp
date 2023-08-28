@@ -12,6 +12,7 @@ import useAuth from 'hooks/useAuth';
 import { ErrorText } from 'components/Atoms/ErrorText';
 import { Box } from '@mui/system';
 import LogoHeader from 'components/Atoms/LogoHeader';
+import { SubmitOnEnter } from 'components/Atoms/SubmitOnEnter';
 
 const validationSchema = Yup.object({
     email: Yup.string()
@@ -99,6 +100,7 @@ const LoginForm = () => {
                             >
                                 Forgot Password?
                             </Link>
+                            <SubmitOnEnter />
                             <Button
                                 color='teal'
                                 size='small'

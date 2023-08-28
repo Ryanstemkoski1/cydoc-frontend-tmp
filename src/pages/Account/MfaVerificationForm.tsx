@@ -10,6 +10,7 @@ import useAuth from 'hooks/useAuth';
 import { Box, Stack } from '@mui/system';
 import { ErrorText } from 'components/Atoms/ErrorText';
 import LogoHeader from 'components/Atoms/LogoHeader';
+import { SubmitOnEnter } from 'components/Atoms/SubmitOnEnter';
 
 const validationSchema = Yup.object({
     code: Yup.string()
@@ -86,6 +87,7 @@ export default function MfaVerificationForm() {
                             style={buttonStyles}
                             onClick={signOut}
                         />
+                        <SubmitOnEnter />
                         <Button
                             color='teal'
                             disabled={!values?.code?.length}
