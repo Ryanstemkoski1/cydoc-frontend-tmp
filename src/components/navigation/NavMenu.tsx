@@ -161,7 +161,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                 basic
                 color='teal'
                 name='users'
-                content={collapseLoggedInNav ? undefined : 'Manager Users'}
+                content={collapseLoggedInNav ? undefined : 'Manage Users'}
                 icon='users'
                 onClick={() => history.push('/manager-dashboard')}
             />

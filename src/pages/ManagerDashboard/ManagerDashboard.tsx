@@ -12,6 +12,8 @@ import { Delete, Edit } from '@mui/icons-material';
 import { Column, Options } from '@material-table/core';
 import InviteClinicianModal from './InviteClinicianModal';
 import { removeUser } from '../../modules/user-api';
+import { Box, Stack } from '@mui/system';
+import { Grid } from '@mui/material';
 
 // manager dashboard view to view/add/remove doctor accounts
 const ManagerDashboard = () => {
@@ -149,22 +151,41 @@ const ManagerDashboard = () => {
                     }}
                     tableId='BrandBadges'
                     title={
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <h3>Institution Members</h3>
-                            <Button
-                                icon='plus'
-                                content='Invite a doctor'
-                                size='small'
-                                style={{ marginLeft: '1rem' }}
-                                onClick={() => setIsInviteUserOpen(true)}
-                            />
-                        </div>
+                        <Grid container>
+                            <Grid item xs={12} sm={9}>
+                                <Stack marginTop={'1rem'}>
+                                    <h3 style={{ marginBottom: '0rem' }}>
+                                        Clinic Users
+                                    </h3>
+                                    <p>
+                                        {` Every clinician or staff member in your
+                                    clinic who requires access to Cydoc should
+                                    have their own username and password. \nPlease
+                                    click the "Invite a user" button to send
+                                    email invitations to additional clinicians
+                                    or staff.`}
+                                    </p>
+                                </Stack>
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
+                                <Box
+                                    margin={'1rem'}
+                                    height={'100%'}
+                                    display={'flex'}
+                                    alignItems={'center'}
+                                >
+                                    <Button
+                                        icon='plus'
+                                        content='Invite a user'
+                                        size='small'
+                                        style={{ marginLeft: '1rem' }}
+                                        onClick={() =>
+                                            setIsInviteUserOpen(true)
+                                        }
+                                    />
+                                </Box>
+                            </Grid>
+                        </Grid>
                     }
                 />
             </Container>
