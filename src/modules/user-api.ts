@@ -64,7 +64,17 @@ export const getDbUser = async (email: string): Promise<DbUser> => {
     }
 };
 
-export const removeUser = async (id: string) => {
-    invariant(id, '[removeUser] missing id');
-    alert(`removing: user ${id} [NOT IMPLEMENTED]`);
+export const removeUser = async (user: DbUser) => {
+    invariant(user, '[removeUser] missing id');
+
+    log(`User deletion requested`, user);
+
+    if (user.role === 'manager') {
+        alert(
+            `Deleting this manager account will result in cancellation of your clinic's subscription to Cydoc. To cancel your subscription please email rachel.draelos@cydoc.ai`
+        );
+    } else
+        alert(
+            `Deleting this account is not yet implemented. We're working on this feature and it should be added in the coming weeks. To proceed with removal, please email rachel.draelos@cydoc.ai`
+        );
 };

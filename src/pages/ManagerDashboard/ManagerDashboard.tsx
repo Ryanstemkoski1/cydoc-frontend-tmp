@@ -94,10 +94,9 @@ const ManagerDashboard = () => {
                         const result = window.confirm(confirmMessage);
                         if (result) {
                             if ('id' in rowData) {
-                                removeUser(rowData.id);
-                                // removeBadge(rowData.id);
+                                removeUser(rowData);
                             } else {
-                                rowData.map((user) => removeUser(user.id));
+                                rowData.map((user) => removeUser(user));
                             }
                         }
                     },
@@ -106,27 +105,6 @@ const ManagerDashboard = () => {
         ],
         []
     );
-
-    // const switchFullUserInfoView = (username, view) => {
-    //     const show = view === 'show';
-    //     const extraInfo = document.querySelectorAll(`.${username}`);
-    //     extraInfo.forEach((item) => {
-    //         item.style.display = show ? 'block' : 'none';
-    //     });
-    //     const viewMoreButton = document.querySelector(`.${username}-view-more`);
-    //     const viewLessButton = document.querySelector(`.${username}-view-less`);
-    //     const removeButton = document.querySelector(`.${username}-remove`);
-    //     viewMoreButton.style.display = show ? 'none' : 'inline-block';
-    //     viewLessButton.style.display = show ? 'inline-block' : 'none';
-    //     removeButton.style.display = show ? 'inline-block' : 'none';
-    // };
-
-    const removeDoctor = () => {
-        const deleteUsername = userToRemove[0];
-        const deleteUUID = userToRemove[1];
-        setUserToRemove('');
-        // managerDeleteUser(deleteUsername, deleteUUID);
-    };
 
     return (
         <>
