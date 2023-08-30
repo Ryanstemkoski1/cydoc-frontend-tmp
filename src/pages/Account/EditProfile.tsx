@@ -74,7 +74,6 @@ const EditProfile = () => {
         ...user,
         confirmPhoneNumber: user?.phoneNumber || '',
     };
-    const history = useHistory();
     const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
 
     const onSubmit = async (

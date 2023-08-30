@@ -52,9 +52,6 @@ const ManagerDashboard = () => {
         fetchMembers();
     }, [fetchMembers, user?.institutionId, isInviteUserOpen]);
 
-    // TODO: review these state items:
-    const [userToRemove, setUserToRemove] = useState('');
-
     const actions = useMemo(
         () => [
             (/* _rowData: UserRow */) => ({
@@ -68,19 +65,6 @@ const ManagerDashboard = () => {
                     }
                 },
             }),
-
-            // (/* rowData: UserRow */) => ({
-            //     icon: GroupAdd,
-            //     tooltip: 'Edit User Groups',
-            //     onClick: (event: any, rowData: UserRow | UserRow[]) => {
-            //         if ('id' in rowData) {
-            //             setEditingUserGroups([rowData.id]);
-            //         } else {
-            //             setEditingUserGroups(rowData.map((row) => row.id));
-            //         }
-            //         setShowGroupsModal(true);
-            //     },
-            // }),
             (/* rowData: UserRow */) => {
                 return {
                     icon: () => <Delete />,

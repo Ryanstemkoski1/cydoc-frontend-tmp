@@ -88,7 +88,7 @@ export const confirmCode = async (
             .promise(
                 async () =>
                     Auth.forgotPasswordSubmit(email, code, password)
-                        .then(async (result) => {
+                        .then(async (/* result: string */) => {
                             resolve({
                                 success: true,
                             });
@@ -137,7 +137,7 @@ export const updatePassword = async (
                 async () => {
                     const user = await Auth.currentAuthenticatedUser();
                     return Auth.changePassword(user, oldPassword, newPassword)
-                        .then(async (result) => {
+                        .then(async (/* result: string */) => {
                             resolve({
                                 success: true,
                             });
