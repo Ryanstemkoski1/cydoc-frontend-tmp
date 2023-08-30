@@ -284,6 +284,9 @@ export const AuthProvider: React.FC<
                     }
                 )) as CognitoUser;
 
+                setCognitoUser(updatePasswordResult);
+                setLoginCorrect(true);
+
                 console.log(`password challenge completed`, {
                     updatePasswordResult,
                 });

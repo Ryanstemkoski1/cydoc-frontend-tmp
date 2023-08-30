@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 
 import './Account.css';
-
-import './Account.css';
 import useAuth from 'hooks/useAuth';
 import MfaVerificationForm from './MfaVerificationForm';
 import { useHistory } from 'react-router-dom';

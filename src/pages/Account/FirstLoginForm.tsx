@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, FormikHelpers } from 'formik';
 import './Account.css';
 import * as Yup from 'yup';
@@ -20,6 +20,7 @@ import FormErrors from 'components/Molecules/FormErrors';
 import { EditUserInfo, UserInfoFormSpec } from './EditProfile';
 import { toast } from 'react-toastify';
 import { SubmitOnEnter } from 'components/Atoms/SubmitOnEnter';
+import MfaVerificationForm from './MfaVerificationForm';
 
 export interface FistLoginFormData extends EditUserInfo {
     newPassword: string;
@@ -69,9 +70,9 @@ const validationSchema = Yup.object<FistLoginFormData>(FirstLoginFormSpec);
 
 const FirstLoginForm = () => {
     const { completeFirstLoginUpdate, cognitoUser } = useAuth();
-    const history = useHistory();
     const { loading, user } = useUser();
-
+    const [loginSuccessfulShowMfaForm, setLoginSuccessfulShowMfaForm] =
+        useState(false);
     const initialValues = { ...INITIAL_VALUES, ...user };
 
     const onSubmit = async (
@@ -111,7 +112,8 @@ const FirstLoginForm = () => {
                                 dbErrorMessage,
                             });
 
-                            history.push('/');
+                            // Show the MFA screen immediately so the user can use the code they just received to login with the existing session
+                            setLoginSuccessfulShowMfaForm(true);
                         }
                     } finally {
                         setSubmitting(false);
@@ -135,6 +137,12 @@ const FirstLoginForm = () => {
                     e,
                 });
             });
+
+    if (loginSuccessfulShowMfaForm) {
+        <CenteredPaper>
+            return <MfaVerificationForm />;
+        </CenteredPaper>;
+    }
 
     return (
         <CenteredPaper sx={{ width: '80%' }} loading={loading}>
