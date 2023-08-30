@@ -19,6 +19,7 @@ import { CenteredPaper } from '../../components/Atoms/CenteredPaper';
 import FormErrors from 'components/Molecules/FormErrors';
 import { EditUserInfo, UserInfoFormSpec } from './EditProfile';
 import { toast } from 'react-toastify';
+import { SubmitOnEnter } from 'components/Atoms/SubmitOnEnter';
 
 export interface FistLoginFormData extends EditUserInfo {
     newPassword: string;
@@ -203,6 +204,7 @@ const FirstLoginForm = () => {
                                     justifyContent: 'flex-end',
                                 }}
                             >
+                                <SubmitOnEnter />
                                 <Button
                                     color='teal'
                                     disabled={
