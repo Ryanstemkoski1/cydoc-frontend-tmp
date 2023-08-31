@@ -121,7 +121,7 @@ export const BaseCategoryForm = <T extends { id: string }>(
                 when: whenOptions,
             });
         }
-    }, [categoryData, options]);
+    }, [categoryData]);
 
     const onAddItem: HandleOnAddItem = (_e, { optiontype, value }) => {
         // Add to list of options
