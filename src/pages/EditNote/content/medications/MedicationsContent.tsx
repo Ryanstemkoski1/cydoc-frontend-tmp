@@ -20,10 +20,11 @@ import {
 import { CurrentNoteState } from 'redux/reducers';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
-import { Accordion, Grid, Table } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import { v4 } from 'uuid';
 import '../hpi/knowledgegraph/src/css/Button.css';
 import './Medications.css';
+import style from './MedicationsContent.module.scss';
 import MedicationsPanel from './MedicationsPanel';
 
 interface OwnProps {
@@ -132,7 +133,7 @@ export class MedicationsContent extends Component<Props, State> {
                 for (let i = 0; i < values.length; i++) {
                     panels.push(
                         <MedicationsPanel
-                            key={`med-panel1-${i}`}
+                            key={`med-panel1-${medsEntries[i][0]}`}
                             isPreview={true}
                             previewValue={values[i]}
                             medIndex={medsEntries[i][0]}
@@ -180,7 +181,7 @@ export class MedicationsContent extends Component<Props, State> {
                 )
                     panels.push(
                         <MedicationsPanel
-                            key={`med-panel2-${i}`}
+                            key={`med-panel2-${medsEntries[medIndices[i]][0]}`}
                             isNote={isNote}
                             isPreview={false}
                             medIndex={medsEntries[medIndices[i]][0]}
@@ -196,78 +197,74 @@ export class MedicationsContent extends Component<Props, State> {
             }
         }
         const content =
-            panels.length && responseType != ResponseTypes.MEDS_POP ? (
-                <Accordion panels={panels} exclusive={false} />
-            ) : (
-                []
-            );
+            panels.length && responseType != ResponseTypes.MEDS_POP
+                ? panels
+                : [];
         return (
             <div>
-                <Grid columns={2} key={node}>
-                    {node &&
-                        responseType == ResponseTypes.MEDS_POP &&
-                        values &&
-                        values.reduce((acc: JSX.Element[], medication) => {
-                            const key = medsEntries.find(
-                                (entry) => entry[1].drugName == medication
-                            );
-                            let medKey = '';
-                            if (key) medKey = key[0];
-                            else {
-                                medKey = v4();
-                                addMedsPopOption(medKey, medication);
-                            }
-                            const yesActive =
-                                    medKey in medications &&
-                                    medications[medKey].isCurrentlyTaking ==
-                                        YesNoResponse.Yes,
-                                noActive =
-                                    medKey in medications &&
-                                    medications[medKey].isCurrentlyTaking ==
-                                        YesNoResponse.No;
-                            return [
-                                ...acc,
-                                <div
-                                    className='item-wrapper flex align-center'
-                                    key={medication}
-                                >
-                                    <p>{medication}</p>
-                                    <aside>
-                                        <YesAndNo
-                                            yesButtonActive={yesActive}
-                                            handleYesButtonClick={(): void => {
-                                                updateCurrentlyTaking(
-                                                    medKey,
-                                                    yesActive
-                                                        ? YesNoResponse.None
-                                                        : YesNoResponse.Yes
-                                                );
-                                                medsPopYesNoToggle(
-                                                    node,
-                                                    medication,
-                                                    YesNoResponse.Yes
-                                                );
-                                            }}
-                                            noButtonActive={noActive}
-                                            handleNoButtonClick={(): void => {
-                                                updateCurrentlyTaking(
-                                                    medKey,
-                                                    noActive
-                                                        ? YesNoResponse.None
-                                                        : YesNoResponse.No
-                                                );
-                                                medsPopYesNoToggle(
-                                                    node,
-                                                    medication,
-                                                    YesNoResponse.No
-                                                );
-                                            }}
-                                        />
-                                    </aside>
-                                </div>,
-                            ];
-                        }, [])}
-                </Grid>
+                {node &&
+                    responseType == ResponseTypes.MEDS_POP &&
+                    values &&
+                    values.reduce((acc: JSX.Element[], medication) => {
+                        const key = medsEntries.find(
+                            (entry) => entry[1].drugName == medication
+                        );
+                        let medKey = '';
+                        if (key) medKey = key[0];
+                        else {
+                            medKey = v4();
+                            addMedsPopOption(medKey, medication);
+                        }
+                        const yesActive =
+                                medKey in medications &&
+                                medications[medKey].isCurrentlyTaking ==
+                                    YesNoResponse.Yes,
+                            noActive =
+                                medKey in medications &&
+                                medications[medKey].isCurrentlyTaking ==
+                                    YesNoResponse.No;
+                        return [
+                            ...acc,
+                            <div
+                                className={`${style.medication__row} item-wrapper flex-wrap align-center`}
+                                key={medication}
+                            >
+                                <p>{medication}</p>
+                                <aside>
+                                    <YesAndNo
+                                        yesButtonActive={yesActive}
+                                        handleYesButtonClick={(): void => {
+                                            updateCurrentlyTaking(
+                                                medKey,
+                                                yesActive
+                                                    ? YesNoResponse.None
+                                                    : YesNoResponse.Yes
+                                            );
+                                            medsPopYesNoToggle(
+                                                node,
+                                                medication,
+                                                YesNoResponse.Yes
+                                            );
+                                        }}
+                                        noButtonActive={noActive}
+                                        handleNoButtonClick={(): void => {
+                                            updateCurrentlyTaking(
+                                                medKey,
+                                                noActive
+                                                    ? YesNoResponse.None
+                                                    : YesNoResponse.No
+                                            );
+                                            medsPopYesNoToggle(
+                                                node,
+                                                medication,
+                                                YesNoResponse.No
+                                            );
+                                        }}
+                                    />
+                                </aside>
+                            </div>,
+                        ];
+                    }, [])}
                 {content}
                 {!this.props.isPreview &&
                     responseType != ResponseTypes.MEDS_POP && (

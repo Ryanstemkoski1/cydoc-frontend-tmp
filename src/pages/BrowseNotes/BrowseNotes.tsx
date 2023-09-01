@@ -1,5 +1,4 @@
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
-import { getFullName } from 'components/Input/DropdownForClinicians';
 import Input from 'components/Input/Input';
 import Modal from 'components/Modal/Modal';
 import { stagingClient } from 'constants/api';
@@ -53,7 +52,7 @@ function formatDate(date: Date): string {
     );
 }
 
-function formatDatev2(date: Date): string {
+function formatDateOfBirth(date: Date): string {
     return (
         (date.getMonth() + 1).toString() +
         '/' +
@@ -65,32 +64,32 @@ function formatDatev2(date: Date): string {
 
 export interface User {
     id: number;
-    first_name: string;
-    last_name: string;
-    date_of_birth: Date;
-    clinician_id: number | null;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date;
+    clinicianId: number | null;
 }
 
 export interface Clinician {
     id: number;
-    first_name: string;
-    last_name: string;
+    firstName: string;
+    lastName: string;
     email: string;
-    institution_id: number;
+    institutionId: number;
 }
 
 async function fetchHPIAppointments(
     date: Date,
-    clinician_id: number | null,
+    clinicianId: number | null,
     stateUpdaterFunc: (users: User[]) => void,
     onSuccess?: () => void,
     onError?: (error: any) => void
 ) {
     try {
-        let url = `/appointments?appointment_date=${formatDatev2(date)}`;
+        let url = `/appointments?appointment_date=${formatDateOfBirth(date)}`;
 
-        if (clinician_id !== null) {
-            url += `&clinician_id=${clinician_id}`;
+        if (clinicianId !== null) {
+            url += `&clinician_id=${clinicianId}`;
         }
 
         const response = await stagingClient.get(url);
@@ -99,18 +98,12 @@ async function fetchHPIAppointments(
 
         stateUpdaterFunc(
             fetchDetails.map(
-                ({
-                    first_name,
-                    last_name,
-                    date_of_birth,
+                ({ firstName, lastName, dateOfBirth, id, clinicianId }) => ({
                     id,
-                    clinician_id,
-                }) => ({
-                    id,
-                    first_name,
-                    date_of_birth: new Date(date_of_birth),
-                    last_name,
-                    clinician_id,
+                    firstName,
+                    dateOfBirth: new Date(dateOfBirth),
+                    lastName,
+                    clinicianId,
                 })
             )
         );
@@ -128,9 +121,9 @@ function useClinicianDetails(): Clinician {
             localStorage.getItem(HPIPatientQueryParams.CLINICIAN_ID) as string
         ),
         email: user.email,
-        first_name: user.firstName,
-        last_name: user.lastName,
-        institution_id: Number(
+        firstName: user.firstName,
+        lastName: user.lastName,
+        institutionId: Number(
             localStorage.getItem(HPIPatientQueryParams.INSTITUTION_ID) as string
         ),
     };
@@ -165,15 +158,19 @@ const BrowseNotes = () => {
     };
 
     useEffect(() => {
-        dispatch(setLoadingStatus(true));
+        loadPatientHistory();
+    }, [date]);
+
+    const loadPatientHistory = () => {
         try {
+            dispatch(setLoadingStatus(true));
             fetchHPIAppointments(date, clinician.id, (users: User[]) => {
                 const unreportedUsers = users.filter(
-                    (user) => user.clinician_id === null
+                    (user) => !user.clinicianId
                 );
-                const reportedUsers = users.filter(
-                    (user) => user.clinician_id !== null
-                );
+                const reportedUsers = users.filter((user) => {
+                    return user.clinicianId == clinician.id;
+                });
                 setUsers(reportedUsers);
                 setUnreportedUsers(unreportedUsers);
                 dispatch(setLoadingStatus(false));
@@ -181,7 +178,7 @@ const BrowseNotes = () => {
         } catch (_error: any) {
             dispatch(setLoadingStatus(false));
         }
-    }, [date]);
+    };
 
     function renderUsers(users: User[]) {
         return (
@@ -205,14 +202,14 @@ const BrowseNotes = () => {
                                                         openModal(user)
                                                     }
                                                 >
-                                                    {user.last_name +
+                                                    {user.lastName +
                                                         ', ' +
-                                                        user.first_name}
+                                                        user.firstName}
                                                 </span>
                                             </td>
                                             <td>
-                                                {formatDatev2(
-                                                    user.date_of_birth
+                                                {formatDateOfBirth(
+                                                    user.dateOfBirth
                                                 )}
                                             </td>
                                         </tr>
@@ -253,23 +250,12 @@ const BrowseNotes = () => {
                         <div className='flex align-center justify-between'>
                             <h4>Clinician</h4>
                             <div className={style.notesBlock__dropdown}>
-                                {/* <DropdownForClinicians
-                                    items={[clinician]}
-                                    onChange={() => {
-                                        return;
-                                    }}
-                                    value={getFullName(
-                                        clinician.first_name,
-                                        clinician.last_name
-                                    )}
-                                    placeholder='Clinician'
-                                /> */}
-
                                 <Input
-                                    value={getFullName(
-                                        clinician.first_name,
-                                        clinician.last_name
-                                    )}
+                                    value={
+                                        clinician.lastName +
+                                        ', ' +
+                                        clinician.firstName
+                                    }
                                     disabled
                                 />
                             </div>
@@ -287,26 +273,7 @@ const BrowseNotes = () => {
                     <div
                         className={`${style.notesBlock__reload} flex justify-end`}
                     >
-                        <button
-                            onClick={async () => {
-                                dispatch(setLoadingStatus(true));
-                                fetchHPIAppointments(
-                                    date,
-                                    clinician.id,
-                                    (users: User[]) => {
-                                        const unreportedUsers = users.filter(
-                                            (user) => user.clinician_id === null
-                                        );
-                                        const reportedUsers = users.filter(
-                                            (user) => user.clinician_id !== null
-                                        );
-                                        setUsers(reportedUsers);
-                                        setUnreportedUsers(unreportedUsers);
-                                        dispatch(setLoadingStatus(false));
-                                    }
-                                );
-                            }}
-                        >
+                        <button onClick={loadPatientHistory}>
                             <picture>
                                 <img src={RefreshIcon} alt='Refresh' />
                             </picture>

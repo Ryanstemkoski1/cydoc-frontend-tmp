@@ -1,4 +1,3 @@
-import { DISCUSSION_PLAN_MENU_BP } from 'constants/breakpoints.js';
 import React, { ChangeEvent, MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import { addCondition, updateConditionName } from 'redux/actions/planActions';
@@ -16,8 +15,7 @@ import {
     MenuItemProps,
 } from 'semantic-ui-react';
 import DeleteCard from './DiscussionPlanDeleteCard';
-
-const TAB_WIDTH = 250;
+import style from './DiscussionPlanMenu.module.scss';
 
 interface StateProps {
     conditions: PlanConditionsFlat[];
@@ -62,7 +60,7 @@ export const DiscussionPlanMenu = (props: DiscussionPlanMenuProps) => {
 
     const prevNumConditions = usePrevious<number>(conditions.length) || 0;
 
-    const collapsed = conditions.length * TAB_WIDTH > DISCUSSION_PLAN_MENU_BP;
+    const collapsed = conditions.length > 1;
 
     // Switch to the new tab if one was just added
     useEffect(() => {
@@ -184,7 +182,7 @@ export const DiscussionPlanMenu = (props: DiscussionPlanMenuProps) => {
         }
 
         return (
-            <Menu tabular>
+            <Menu tabular className={style.navMenu}>
                 {currentTab}
                 <Menu.Item>
                     <Dropdown
@@ -220,7 +218,7 @@ export const DiscussionPlanMenu = (props: DiscussionPlanMenuProps) => {
     ));
     menuItems.push(addButton);
     return (
-        <Menu stackable tabular>
+        <Menu stackable tabular className={style.navMenu__single}>
             {menuItems}
             {deleteComponent}
         </Menu>

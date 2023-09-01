@@ -1,10 +1,10 @@
+import Loader from 'components/tools/Loader/Loader';
 import { HpiStateProps } from 'constants/hpiEnums';
 import React from 'react';
 import { connect } from 'react-redux';
 import { CurrentNoteState } from 'redux/reducers';
 import { nodesToDisplayInOrder } from 'redux/selectors/displayedNodesSelectors';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import { Loader } from 'semantic-ui-react';
 import '../../HPI.css';
 import { HpiHeadersProps } from '../../HPIContent';
 import '../css/App.css';
@@ -46,7 +46,7 @@ export class DiseaseForm extends React.Component<Props> {
             hpi.graph ? (
             this.traverseChildNodes()
         ) : (
-            <Loader active> </Loader>
+            <Loader />
         );
     }
 }

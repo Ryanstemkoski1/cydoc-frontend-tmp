@@ -1,4 +1,3 @@
-import { getFullName } from 'components/Input/DropdownForClinicians';
 import Loader from 'components/tools/Loader/Loader';
 import { stagingClient } from 'constants/api';
 import { User } from 'pages/BrowseNotes/BrowseNotes';
@@ -14,13 +13,13 @@ export interface ModalProps {
 
 interface HPIAppointmentDetails {
     id: number;
-    first_name: string;
-    last_name: string;
-    date_of_birth: Date;
-    last_4_ssn: string;
-    appointment_date: Date;
-    hpi_text: string;
-    clinician_id: number;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date;
+    last4ssn: string;
+    appointmentDate: Date;
+    hpiText: string;
+    clinicianId: number;
 }
 
 const Modal = ({
@@ -40,7 +39,7 @@ const Modal = ({
             const response = await stagingClient.get(
                 `/appointment/${selectedAppointment?.id}`
             );
-            if (!stale) setHpiAppointmentDetails(response.data.data[0]);
+            if (!stale) setHpiAppointmentDetails(response.data.data);
         }
 
         fetchHPIAppointmentsDetails();
@@ -74,6 +73,8 @@ const Modal = ({
         }
     }, [showModal]);
 
+    const fullName =
+        selectedAppointment?.lastName + ', ' + selectedAppointment?.firstName;
     return (
         <div
             onClick={handleClickOutsideModal}
@@ -83,13 +84,7 @@ const Modal = ({
         >
             <div className={style.modal__inner} ref={modalRef}>
                 <div className={style.modal__header}>
-                    <h3>
-                        {selectedAppointment &&
-                            getFullName(
-                                selectedAppointment.first_name,
-                                selectedAppointment.last_name
-                            )}
-                    </h3>
+                    <h3>{selectedAppointment && fullName}</h3>
                 </div>
                 <div className={style.modal__innerContent}>
                     <div className='flex align-center justify-between'>
@@ -106,7 +101,7 @@ const Modal = ({
                         id='copy-notes'
                     >
                         {hpiAppointMentDetails ? (
-                            formatHPIText(hpiAppointMentDetails.hpi_text)
+                            formatHPIText(hpiAppointMentDetails.hpiText)
                         ) : (
                             <Loader />
                         )}

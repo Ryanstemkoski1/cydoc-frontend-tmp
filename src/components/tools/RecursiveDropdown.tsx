@@ -1,5 +1,11 @@
+import {
+    DiagnosesOptionMapping,
+    DropdownOption,
+    OptionMapping,
+    getDiagnosesOptionMapping,
+} from '_processOptions';
 import React, { useMemo, useState } from 'react';
-import Select, { createFilter, components } from 'react-select';
+import Select, { components, createFilter } from 'react-select';
 import {
     GroupBase,
     InputActionMeta,
@@ -9,12 +15,6 @@ import {
     WindowedMenuList,
 } from 'react-windowed-select';
 import { Divider } from 'semantic-ui-react';
-import {
-    DiagnosesOptionMapping,
-    DropdownOption,
-    OptionMapping,
-    getDiagnosesOptionMapping,
-} from '_processOptions';
 import './RecursiveDropdown.css';
 
 type OnAddItem = (

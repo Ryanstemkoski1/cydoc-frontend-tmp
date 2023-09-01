@@ -1,18 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import {
-    Accordion,
-    Button,
-    Container,
-    Grid,
-    Header,
-    Icon,
-    Segment,
-} from 'semantic-ui-react';
+import { Accordion } from 'semantic-ui-react';
 import NavMenu from './../components/navigation/NavMenu';
 import runAnalysis from './AcidBase/acidBaseCalculator';
 import AcidTestInputBox from './AcidTestInputBox';
 import Calculations from './Calculations';
 import DifferentialDiagnoses from './DifferentialDiagnoses';
+import style from './AcidTest.module.scss';
 
 const AcidTest = () => {
     const [pH, setPH] = useState(0);
@@ -136,90 +129,64 @@ const AcidTest = () => {
     const acidBaseSubsection = () => {
         return (
             <>
-                <Grid
-                    columns={1}
-                    display='flex'
-                    justifyContent='center'
-                    flexDirection='column'
+                <h2>Laboratory Data</h2>
+
+                <p>Please fill in the required fields below</p>
+                <div className={style.acidPage__input}>
+                    <AcidTestInputBox
+                        callback={onPhChange}
+                        label1='pH'
+                        subscript='Normal Range 7.35-7.45'
+                        onKeyPress={onKeyPress}
+                    />
+                </div>
+                <div className={style.acidPage__input}>
+                    <AcidTestInputBox
+                        callback={onHCChange}
+                        label1='HCO3+'
+                        subscript='Normal Range 21-30 mEq/L'
+                        onKeyPress={onKeyPress}
+                    />
+                </div>
+                <div className={style.acidPage__input}>
+                    <AcidTestInputBox
+                        callback={onPCChange}
+                        label1='pCO2'
+                        subscript='Normal Range 35-45 mmHg'
+                        onKeyPress={onKeyPress}
+                    />
+                </div>
+                <div className={style.acidPage__input}>
+                    <AcidTestInputBox
+                        callback={onNaChange}
+                        label1='Na'
+                        subscript='Normal Range 135-145 mEq/L'
+                        onKeyPress={onKeyPress}
+                    />
+                </div>
+                <div className={style.acidPage__input}>
+                    <AcidTestInputBox
+                        callback={onClChange}
+                        label1='Cl'
+                        subscript='Normal Range 98-108 mEq/L'
+                        onKeyPress={onKeyPress}
+                    />
+                </div>
+                <div className={style.acidPage__input}>
+                    <AcidTestInputBox
+                        callback={onAlbuminChange}
+                        label1='Albumin'
+                        subscript='Normal Range 3.5 - 4.8 meq/L'
+                        onKeyPress={onKeyPress}
+                    />
+                </div>
+                <button
+                    className='button pill'
+                    onClick={handleClick}
+                    type='submit'
                 >
-                    <br></br>
-                    <Grid.Row centered>
-                        <Header
-                            as='h2'
-                            textAlign='center'
-                            color='rgba(7, 126, 157, 255)'
-                        >
-                            Laboratory Data
-                        </Header>
-                    </Grid.Row>
-                    <Grid.Row
-                        className='subheader'
-                        color='rgba(130,130,130,255)'
-                    >
-                        Please fill in the required fields below
-                    </Grid.Row>
-                    <Grid.Row>
-                        <AcidTestInputBox
-                            callback={onPhChange}
-                            label1='pH'
-                            subscript='Normal Range 7.35-7.45'
-                            onKeyPress={onKeyPress}
-                        />
-                    </Grid.Row>
-                    <Grid.Row>
-                        <AcidTestInputBox
-                            callback={onHCChange}
-                            label1='HCO3+'
-                            subscript='Normal Range 21-30 mEq/L'
-                            onKeyPress={onKeyPress}
-                        />
-                    </Grid.Row>
-                    <Grid.Row>
-                        <AcidTestInputBox
-                            callback={onPCChange}
-                            label1='pCO2'
-                            subscript='Normal Range 35-45 mmHg'
-                            onKeyPress={onKeyPress}
-                        />
-                    </Grid.Row>
-                    <Grid.Row>
-                        <AcidTestInputBox
-                            callback={onNaChange}
-                            label1='Na'
-                            subscript='Normal Range 135-145 mEq/L'
-                            onKeyPress={onKeyPress}
-                        />
-                    </Grid.Row>
-                    <Grid.Row>
-                        <AcidTestInputBox
-                            callback={onClChange}
-                            label1='Cl'
-                            subscript='Normal Range 98-108 mEq/L'
-                            onKeyPress={onKeyPress}
-                        />
-                    </Grid.Row>
-                    <Grid.Row>
-                        <AcidTestInputBox
-                            callback={onAlbuminChange}
-                            label1='Albumin'
-                            subscript='Normal Range 3.5 - 4.8 meq/L'
-                            onKeyPress={onKeyPress}
-                        />
-                    </Grid.Row>
-                    <Grid.Row>
-                        <button
-                            className='ui button'
-                            onClick={handleClick}
-                            type='submit'
-                            style={{
-                                color: 'white',
-                                backgroundColor: 'rgba(7,126,157,255)',
-                            }}
-                        >
-                            Calculate Results
-                        </button>
-                    </Grid.Row>
-                </Grid>
+                    Calculate Results
+                </button>
             </>
         );
     };
@@ -227,111 +194,50 @@ const AcidTest = () => {
     const summarySubSection = () => {
         return (
             <>
-                <Grid columns={1}>
-                    <Grid.Row centered>
-                        <Header
-                            as='h2'
-                            textAlign='center'
-                            color='rgba(7, 126, 157, 255)'
-                        >
-                            Interpretation
-                        </Header>
-                    </Grid.Row>
-                    <Grid.Row textAlign='center'>
-                        {description == '' && (
-                            <div className='row center subheader'>
-                                Fill in the laboratory data on the left, then
-                                press &lsquo;Calculate Results&rsquo; to see
-                                your results.
-                            </div>
-                        )}
-                    </Grid.Row>
-
-                    {description != '' && (
-                        <>
-                            <br></br>
-                            <div
-                                className='acidBaseTest'
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    position: 'relative',
-                                    bottom: '0vh',
-                                    marginLeft: '5px',
-                                }}
+                <h2>Interpretation</h2>
+                {description == '' && (
+                    <p>
+                        Fill in the laboratory data on the left, then press
+                        &lsquo;Calculate Results&rsquo; to see your results.
+                    </p>
+                )}
+                {description != '' && (
+                    <>
+                        <Accordion className='accordion-ui'>
+                            <Accordion.Title
+                                active={activeIndex === 1}
+                                onClick={handleAccordionClick}
                             >
-                                <Grid.Row>
-                                    <Accordion style={{ textAlign: 'start' }}>
-                                        <Accordion.Title
-                                            active={activeIndex === 1}
-                                            style={{
-                                                color: 'rgba(7,126,157,255)',
-                                                fontWeight: 'bold',
-                                            }}
-                                            onClick={handleAccordionClick}
-                                        >
-                                            <Icon name='dropdown' />
-                                            Summary
-                                        </Accordion.Title>
-                                        <Accordion.Content
-                                            active={activeIndex === 1}
-                                            style={{
-                                                color: 'rgba(7,126,157,255)',
-                                            }}
-                                        >
-                                            {summary}
-                                        </Accordion.Content>
-                                    </Accordion>
-                                </Grid.Row>
-                                <br></br>
-                                <Grid.Row className='css-fix'>
-                                    <DifferentialDiagnoses description={arr} />
-                                </Grid.Row>
-                                <br></br>
-                                <Grid.Row>
-                                    <Calculations
-                                        style={{ marginTop: '5px' }}
-                                        PrimaryDisorder={primaryExp}
-                                        SecondaryDisorder={secondaryExp}
-                                        AnionGap={anionString}
-                                    />
-                                </Grid.Row>
-                            </div>
-                        </>
-                    )}
+                                Summary
+                            </Accordion.Title>
+                            <Accordion.Content active={activeIndex === 1}>
+                                {summary}
+                            </Accordion.Content>
+                        </Accordion>
+
+                        <DifferentialDiagnoses description={arr} />
+                        <Calculations
+                            PrimaryDisorder={primaryExp}
+                            SecondaryDisorder={secondaryExp}
+                            AnionGap={anionString}
+                        />
+                    </>
+                )}
+                <div className={style.acidPage__bottom}>
                     {summary.length != '' && (
-                        <Grid.Row centered>
-                            <Button
-                                className='ui button'
-                                onClick={handleCopyResultsClick}
-                                content={
-                                    copyStatus == 'copied'
-                                        ? 'Copied!'
-                                        : 'Copy Results'
-                                }
-                                style={{
-                                    marginTop: '5px',
-                                    color: 'black',
-                                    backgroundColor:
-                                        copyStatus == 'copied'
-                                            ? 'green'
-                                            : 'gold',
-                                }}
-                            ></Button>
-                        </Grid.Row>
+                        <button
+                            className='button pill'
+                            onClick={handleCopyResultsClick}
+                        >
+                            {copyStatus == 'copied'
+                                ? 'Copied!'
+                                : 'Copy Results'}
+                        </button>
                     )}
                     {copyStatus != 'copied' && copyStatus != 'not copied' && (
-                        <Grid.Row centered>
-                            <p
-                                style={{
-                                    color: 'red',
-                                }}
-                            >
-                                {copyStatus}
-                            </p>
-                        </Grid.Row>
+                        <p>{copyStatus}</p>
                     )}
-                </Grid>
+                </div>
             </>
         );
     };
@@ -344,43 +250,17 @@ const AcidTest = () => {
                     attached='top'
                     displayNoteName={false}
                 />
-                <Container
-                    className='active-tab-container large-width'
-                    style={{ width: '90%' }}
-                >
-                    <Segment>
-                        <Grid columns={2} divided relaxed stackable>
-                            <Grid.Column
-                                alignItems='center'
-                                justifyContent='center'
-                                width={`8`}
-                            >
-                                <div
-                                    className='flexParent'
-                                    style={{
-                                        backgroundColor: '#fff',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    {acidBaseSubsection()}
-                                </div>
-                            </Grid.Column>
-                            <Grid.Column width={`8`}>
-                                <div
-                                    className='acidBaseTest flexParent'
-                                    style={{
-                                        backgroundColor: '#fff',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    {summarySubSection()}
-                                </div>
-                            </Grid.Column>
-                        </Grid>
-                    </Segment>
-                </Container>
+                <div className='centering'>
+                    <div className={`${style.acidPage} flex-wrap`}>
+                        <div className={style.acidPage__col}>
+                            {acidBaseSubsection()}
+                        </div>
+
+                        <div className={style.acidPage__col}>
+                            {summarySubSection()}
+                        </div>
+                    </div>
+                </div>
             </>
         );
     };

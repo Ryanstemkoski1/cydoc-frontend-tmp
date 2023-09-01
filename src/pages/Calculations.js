@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Accordion, Icon } from 'semantic-ui-react';
-import './Calculations.css';
+import { Accordion } from 'semantic-ui-react';
+import style from './Calculations.module.scss';
 
 const Calculations = ({
     PrimaryDisorder = '',
@@ -11,59 +11,27 @@ const Calculations = ({
     const handleClick = () =>
         activeIndex === 0 ? setActiveIndex(1) : setActiveIndex(0);
     return (
-        <Accordion>
-            <div
-                className='calculations'
-                style={{
-                    color: 'rgba(7,126,157,255)',
-                    textAlign: 'start',
-                    outline: 'none',
-                }}
+        <Accordion className='accordion-ui'>
+            <Accordion.Title
+                active={activeIndex == 1}
+                onClick={handleClick}
+                index={0}
             >
-                <br></br>
-                <Accordion.Title
-                    active={activeIndex == 1}
-                    onClick={handleClick}
-                    index={0}
-                    className='no-outline borderless'
-                    style={{ color: 'rgba(7,126,157,255)', fontWeight: 'bold' }}
-                >
-                    <Icon name='dropdown' />
-                    Calculations
-                </Accordion.Title>
-                <Accordion.Content
-                    className='borderless'
-                    active={activeIndex === 1}
-                >
-                    <div>
-                        <h5
-                            className='acidBaseTest'
-                            style={{ fontWeight: 'bold' }}
-                        >
-                            Primary Disorder
-                        </h5>
-                        <span className='acidBaseTest css-fix'>
-                            {PrimaryDisorder}
-                        </span>
-                        <h5
-                            className='acidBaseTest'
-                            style={{ fontWeight: 'bold' }}
-                        >
-                            Secondary Disorder
-                        </h5>
-                        <span className='acidBaseTest css-fix'>
-                            {SecondaryDisorder}
-                        </span>
-                        <h5
-                            className='acidBaseTest css-fix'
-                            style={{ fontWeight: 'bold' }}
-                        >
-                            Anion Gap
-                        </h5>
-                        <span className='acidBaseTest css-fix'>{AnionGap}</span>
-                    </div>
-                </Accordion.Content>
-            </div>
+                Calculations
+            </Accordion.Title>
+            <Accordion.Content
+                className='borderless'
+                active={activeIndex === 1}
+            >
+                <div className={style.calculations}>
+                    <h5>Primary Disorder</h5>
+                    <span>{PrimaryDisorder}</span>
+                    <h5>Secondary Disorder</h5>
+                    <span>{SecondaryDisorder}</span>
+                    <h5>Anion Gap</h5>
+                    <span>{AnionGap}</span>
+                </div>
+            </Accordion.Content>
         </Accordion>
     );
 };

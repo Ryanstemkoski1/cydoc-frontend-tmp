@@ -40,10 +40,6 @@ function QRCodeComponent({ showDownloadButton = true }: QRCodeProps) {
 
     const handleClick = (event: any) => {
         toImg('#qrcode', 'qrcode-value');
-        // .then((data: any) => {
-        //     // eslint-disable-next-line no-console
-        //     console.log(data);
-        // });
     };
 
     return (

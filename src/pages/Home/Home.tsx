@@ -1,8 +1,8 @@
 import Header from 'components/Header/Header';
 import React from 'react';
 import { useHistory } from 'react-router';
-import BannerMobile from '../../../assets/images/banner-mobile.png';
-import Banner from '../../../assets/images/banner.png';
+import BannerMobile from '../../assets/images/banner-mobile.png';
+import Banner from '../../assets/images/banner.png';
 import style from './Home.module.scss';
 
 const Home = () => {

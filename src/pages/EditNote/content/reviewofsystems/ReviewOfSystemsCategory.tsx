@@ -145,7 +145,7 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
                 <AllNegativeButton handleClick={this.handleChange}>
                     {ROSOptions.map((option: string) => (
                         <div
-                            className={`${style.reviewOfSystems__item} reviewOfSystemsItem flex align-center justify-between`}
+                            className={`${style.reviewOfSystems__item} reviewOfSystemsItem flex flex-wrap align-center justify-between`}
                             key={option}
                         >
                             <YesAndNo

@@ -165,9 +165,17 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 return <ListText key={node} node={node} />;
 
             case ResponseTypes.SELECTONE:
-                return responseChoice.map((item: string) => (
-                    <MultipleChoice key={item} name={item} node={node} />
-                ));
+                return (
+                    <div className={`${style.response__wrap} flex-wrap`}>
+                        {responseChoice.map((item: string) => (
+                            <MultipleChoice
+                                key={item}
+                                name={item}
+                                node={node}
+                            />
+                        ))}
+                    </div>
+                );
 
             case ResponseTypes.SELECTMANY: {
                 const existingResponse = this.props.hpi.nodes[node].response;

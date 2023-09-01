@@ -1,4 +1,4 @@
-import GridContentV2 from 'components/tools/GridContentV2/GridContentV2';
+import GridContent from 'components/tools/GridContent/GridContent';
 import { ButtonProps } from 'components/tools/ToggleButton/ToggleButton';
 import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from 'constants/enums';
@@ -30,7 +30,7 @@ import '../hpi/knowledgegraph/src/css/Button.css';
 import '../reviewofsystems/ReviewOfSystems.css';
 import './FamilyHistory.css';
 import style from './FamilyHistoryBlock.module.scss';
-import FamilyHistoryDropdownV2 from './FamilyHistoryDropdownV2';
+import FamilyHistoryDropdown from './FamilyHistoryDropdown';
 
 class FamilyHistoryBlock extends Component<Props> {
     constructor(props: Props) {
@@ -65,7 +65,7 @@ class FamilyHistoryBlock extends Component<Props> {
         let dropdownList = [];
         const familyIndexes = Object.keys(familyMembers);
         dropdownList = familyIndexes.map((familyIndex, listIndex, array) => (
-            <FamilyHistoryDropdownV2
+            <FamilyHistoryDropdown
                 condition={condition}
                 index={index}
                 key={familyIndex}
@@ -154,7 +154,7 @@ class FamilyHistoryBlock extends Component<Props> {
                 </div>
                 {yesActive && (
                     <>
-                        <GridContentV2
+                        <GridContent
                             header_titles={familyBlockHeaders}
                             rows={dropdownList}
                             name='Family Member'

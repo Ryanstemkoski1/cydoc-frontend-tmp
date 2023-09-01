@@ -13,7 +13,7 @@ class AuthStore extends React.Component {
 
     /*
     const user = {
-            username: yasab",
+            username: "yasab",
             password: "basay",
             email: "yasa@b.aig",
             phoneNumber: "123456789",

@@ -206,7 +206,8 @@ const CCSelection = (props: Props) => {
                         toCompare = title.toString().toLowerCase();
                     if (
                         complaint !== 'HIDDEN' &&
-                        toCompare.includes(searchVal.toLowerCase())
+                        toCompare.includes(searchVal.toLowerCase()) &&
+                        title !== 'Annual Physical Exam'
                     ) {
                         const temp = {
                             title: title,
@@ -246,9 +247,6 @@ const CCSelection = (props: Props) => {
 
             return filterResults;
         };
-
-        // eslint-disable-next-line no-console
-        console.log(currEntry);
 
         switch (currEntry.responseType) {
             case ResponseTypes.SELECTONE:

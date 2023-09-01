@@ -1,3 +1,5 @@
+import Textarea from 'components/Input/Textarea';
+import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
 import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from 'constants/enums';
 import { FamilyOption, familyOptions } from 'constants/familyHistoryRelations';
@@ -20,19 +22,11 @@ import {
     selectFamilyHistoryMember,
     selectFamilyHistoryState,
 } from 'redux/selectors/familyHistorySelectors';
-import {
-    Button,
-    ButtonProps,
-    Dropdown,
-    Form,
-    Grid,
-    Header,
-    InputProps,
-    TextAreaProps,
-} from 'semantic-ui-react';
+import { ButtonProps, Dropdown as DropDownSemantic } from 'semantic-ui-react';
 import '../hpi/knowledgegraph/src/css/Button.css';
 import './FamilyHistory.css';
-class FamilyHistoryDropdown extends Component<Props> {
+import style from './FamilyHistoryDropdown.module.scss';
+class FamilyHistoryDropdownV2 extends Component<Props> {
     static contextType = HPIContext;
 
     constructor(props: Props) {
@@ -44,8 +38,15 @@ class FamilyHistoryDropdown extends Component<Props> {
         this.handleLivingToggle = this.handleLivingToggle.bind(this);
     }
 
+    // handleChange(event: React.SyntheticEvent<HTMLElement, Event>) {
+    //     /* eslint-disable-next-line */
+    //     const { index, family_index } = this.props;
+    //     const value = (event.target as HTMLInputElement)
+    //         .textContent as FamilyOption;
+    //     this.props.updateMember(index, family_index, value);
+    // }
+
     handleChange(event: React.SyntheticEvent<HTMLElement, Event>) {
-        /* eslint-disable-next-line */
         const { index, family_index } = this.props;
         const value = (event.target as HTMLInputElement)
             .textContent as FamilyOption;
@@ -80,19 +81,15 @@ class FamilyHistoryDropdown extends Component<Props> {
         );
     }
 
-    handleCommentsChange(
-        event: React.FormEvent,
-        data: InputProps | TextAreaProps
-    ) {
+    handleCommentsChange(value: string) {
         /* eslint-disable-next-line */
         const { index, family_index } = this.props;
-        this.props.updateComments(index, family_index, data.value);
+        this.props.updateComments(index, family_index, value);
     }
 
     render() {
         const {
             condition,
-            handleDelete,
             index,
             /* eslint-disable-next-line */
             family_index,
@@ -101,34 +98,27 @@ class FamilyHistoryDropdown extends Component<Props> {
             this.props.familyHistoryMember;
 
         return (
-            <div className='dropdown-component-container'>
-                <Grid>
-                    <Grid.Row>
-                        <Grid.Column width={1}>
-                            <Button
-                                circular
-                                icon='close'
-                                size='mini'
-                                onClick={() =>
-                                    this.props.handleDelete(index, family_index)
-                                }
-                                aria-label='delete-button'
-                                className='hpi-ph-button'
-                            />
-                        </Grid.Column>
-                        <Grid.Column width={3}>
-                            <Dropdown
+            <>
+                <tr>
+                    <td>
+                        <strong>Family Member</strong>
+                        <div className={style.familyHistoryBlock__dropdown}>
+                            <DropDownSemantic
                                 value={member}
                                 search
                                 selection
                                 fluid
-                                options={familyOptions}
+                                options={familyOptions.filter(
+                                    (item) => item.text !== ''
+                                )}
                                 onChange={this.handleChange}
-                                className='dropdown-inline'
                             />
-                        </Grid.Column>
+                        </div>
+                    </td>
 
-                        <Grid.Column width={3}>
+                    <td>
+                        <div className='flex align-center justify-between'>
+                            <strong>Cause of Death</strong>
                             <YesAndNo
                                 yesButtonActive={
                                     causeOfDeath === YesNoResponse.Yes
@@ -149,33 +139,16 @@ class FamilyHistoryDropdown extends Component<Props> {
                                     this.handleCauseOfDeathToggle
                                 }
                             />
-                        </Grid.Column>
+                        </div>
 
-                        <Grid.Column width={9}>
-                            <Form>
-                                <Form.TextArea
-                                    rows={1}
-                                    condition={condition}
-                                    value={comments}
-                                    onChange={this.handleCommentsChange}
-                                    placeholder='Comments'
-                                />
-                            </Form>
-                        </Grid.Column>
-                    </Grid.Row>
-                    {causeOfDeath === YesNoResponse.Yes ||
-                    causeOfDeath === YesNoResponse.None ? (
-                        ''
-                    ) : (
-                        <Grid.Row className='living-toggle-row'>
-                            <Grid.Column width={4} />
-
-                            <Grid.Column width={3}>
-                                <Grid.Column width={2}>
-                                    <Header.Subheader className='living-toggle-title'>
-                                        Living?
-                                    </Header.Subheader>
-                                </Grid.Column>
+                        {causeOfDeath === YesNoResponse.Yes ||
+                        causeOfDeath === YesNoResponse.None ? (
+                            ''
+                        ) : (
+                            <div
+                                className={`${style.familyHistoryBlock__living} flex align-center justify-between`}
+                            >
+                                Living?
                                 <YesAndNo
                                     yesButtonActive={
                                         living === YesNoResponse.Yes
@@ -198,11 +171,70 @@ class FamilyHistoryDropdown extends Component<Props> {
                                     }
                                     noButtonClasses='fam-hist-buttons'
                                 />
-                            </Grid.Column>
-                        </Grid.Row>
-                    )}
-                </Grid>
-            </div>
+                            </div>
+                        )}
+                    </td>
+
+                    <td>
+                        <strong>Comment</strong>
+                        <form>
+                            <Textarea
+                                mobileHeight={true}
+                                condition={condition}
+                                value={comments}
+                                onChange={(e: any) =>
+                                    this.handleCommentsChange(e.target.value)
+                                }
+                                placeholder='Comments'
+                            />
+                        </form>
+                    </td>
+
+                    <td>
+                        <RemoveButton
+                            onClick={() =>
+                                this.props.handleDelete(index, family_index)
+                            }
+                        />
+                    </td>
+                </tr>
+
+                {causeOfDeath === YesNoResponse.Yes ||
+                causeOfDeath === YesNoResponse.None ? (
+                    ''
+                ) : (
+                    <>
+                        <tr className={style.familyHistoryBlock__row}>
+                            <td>Living?</td>
+                            <td colSpan={2}>
+                                <YesAndNo
+                                    yesButtonActive={
+                                        living === YesNoResponse.Yes
+                                            ? true
+                                            : false
+                                    }
+                                    yesButtonCondition={condition}
+                                    yesButtonClasses='fam-hist-buttons'
+                                    handleYesButtonClick={
+                                        this.handleLivingToggle
+                                    }
+                                    noButtonActive={
+                                        living === YesNoResponse.No
+                                            ? true
+                                            : false
+                                    }
+                                    noButtonCondition={condition}
+                                    handleNoButtonClick={
+                                        this.handleLivingToggle
+                                    }
+                                    noButtonClasses='fam-hist-buttons'
+                                />
+                            </td>
+                            <td></td>
+                        </tr>
+                    </>
+                )}
+            </>
         );
     }
 }
@@ -274,4 +306,4 @@ const mapDispatchToProps = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(FamilyHistoryDropdown);
+)(FamilyHistoryDropdownV2);

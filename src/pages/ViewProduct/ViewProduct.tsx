@@ -2,10 +2,10 @@ import { ProductType, ViewType } from 'assets/enums/route.enums';
 import Header from 'components/Header/Header';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import DoctorIcon from '../../../assets/images/doctor.svg';
-import MedicalIcon from '../../../assets/images/medical-app.svg';
-import MedicalRecordIcon from '../../../assets/images/medical-record.svg';
-import PatientIcon from '../../../assets/images/patient.svg';
+import DoctorIcon from '../../assets/images/doctor.svg';
+import MedicalIcon from '../../assets/images/medical-app.svg';
+import MedicalRecordIcon from '../../assets/images/medical-record.svg';
+import PatientIcon from '../../assets/images/patient.svg';
 import style from './ViewProduct.module.scss';
 
 export default function ViewProduct() {

@@ -184,55 +184,41 @@ class MedicationsPanel extends Component<Props, State> {
             this.props.medicationsState[this.props.medIndex];
 
         const drugNameInput = (
-            <div className={style.medication__input}>
-                <Input
-                    disabled={isPreview}
-                    transparent={isPreview}
-                    value={
-                        isPreview
-                            ? this.props.previewValue
-                            : (medicationEntry as MedicationsItem).drugName
-                    }
-                >
-                    <div id='width-full' className='full-width full-view'>
-                        {!isPreview && (
-                            <Dropdown
-                                fluid
-                                search
-                                selection
-                                clearable
-                                allowAdditions
-                                icon=''
-                                optiontype='medicationOptions'
-                                type='Drug Name'
-                                options={this.props.medicationOptions}
-                                placeholder='Medication name'
-                                onChange={this.onChangeFormatter((value) =>
-                                    this.props.updateDrugName(
-                                        this.props.medIndex,
-                                        value as string
-                                    )
-                                )}
-                                value={
-                                    (medicationEntry as MedicationsItem)
-                                        .drugName
-                                }
-                                onBlur={(event: any) =>
-                                    this.onMedicationsBlur(event)
-                                }
-                                onAddItem={this.onAddItemFormatter(
-                                    (optiontype, value) =>
-                                        this.props.handleAddition(
-                                            optiontype,
-                                            value
-                                        )
-                                )}
-                                aria-label='Drug-Name-Dropdown'
-                                className='side-effects'
-                            />
-                        )}
-                    </div>
-                </Input>
+            <div className={`${style.medication__input} input-max-wrap`}>
+                <div id='width-full' className='full-width full-view'>
+                    {!isPreview && (
+                        <Dropdown
+                            fluid
+                            search
+                            selection
+                            clearable
+                            allowAdditions
+                            icon=''
+                            optiontype='medicationOptions'
+                            type='Drug Name'
+                            options={this.props.medicationOptions}
+                            placeholder='Medication name'
+                            onChange={this.onChangeFormatter((value) =>
+                                this.props.updateDrugName(
+                                    this.props.medIndex,
+                                    value as string
+                                )
+                            )}
+                            value={
+                                (medicationEntry as MedicationsItem).drugName
+                            }
+                            onBlur={(event: any) =>
+                                this.onMedicationsBlur(event)
+                            }
+                            onAddItem={this.onAddItemFormatter(
+                                (optiontype, value) =>
+                                    this.props.handleAddition(optiontype, value)
+                            )}
+                            aria-label='Drug-Name-Dropdown'
+                            className='side-effects'
+                        />
+                    )}
+                </div>
             </div>
         );
 
@@ -456,12 +442,6 @@ class MedicationsPanel extends Component<Props, State> {
                                     transparent
                                     disabled={isPreview}
                                     type='End Year'
-                                    // label={{
-                                    //     basic: true,
-                                    //     content: 'End Year:',
-                                    //     className:
-                                    //         'medications-content-input-label',
-                                    // }}
                                     placeholder='e.g. 2020'
                                     value={
                                         isPreview ||
@@ -510,7 +490,6 @@ class MedicationsPanel extends Component<Props, State> {
 
         const sideEffectsInput = (
             <div className='margin'>
-                {/* <Input fluid className='content-input content-dropdown'> */}
                 <Label
                     basic
                     className={`medications-content-input-label ${style.medication__label}`}

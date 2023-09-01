@@ -34,10 +34,8 @@ import {
 } from 'redux/reducers/familyHistoryReducer';
 import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
 import { v4 } from 'uuid';
-import '../hpi/knowledgegraph/src/css/Button.css';
 import { adjustValue } from '../medicalhistory/util';
 import FamilyHistoryBlock from './FamilyHistoryBlock';
-import './FamilyHistoryContent.css';
 
 //TODO: finish the styling for this page
 //Component that manages the layout for the Family History page.

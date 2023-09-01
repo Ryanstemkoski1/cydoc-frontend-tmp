@@ -96,12 +96,12 @@ const HPI = () => {
         setIsLoading(true);
 
         stagingClient
-            .get(`/clinic/${clinicianId}/${institutionId}`)
+            .get(`/institution/${institutionId}/${clinicianId}/member`)
             .then((res) => {
                 dispatch(setClinicianDetail(res.data.detail));
                 // setting the userSurveyState.node[9] value to clinician's last name.
                 dispatch(
-                    initialSurveyAddDateOrPlace(9, res.data.detail.last_name)
+                    initialSurveyAddDateOrPlace(9, res.data.detail.lastName)
                 );
             })
             .catch((_error) => {

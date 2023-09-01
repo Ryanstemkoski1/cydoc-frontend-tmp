@@ -1,8 +1,8 @@
 import React from 'react';
 import AddRowButton from '../AddRowButton/AddRowButton';
-import style from './GridContentV2.module.scss';
+import style from './GridContent.module.scss';
 
-interface GridContentV2Props {
+interface GridContentProps {
     header_titles: { title: string; col?: number }[];
     onAddRow?: () => void;
     rows: React.JSX.Element[] | React.JSX.Element;
@@ -10,13 +10,13 @@ interface GridContentV2Props {
     name?: string;
 }
 
-export default function GridContenV2({
+export default function GridContent({
     header_titles,
     onAddRow,
     rows,
     canAddNew = true,
     name,
-}: GridContentV2Props) {
+}: GridContentProps) {
     return (
         <div className={style.familyTable}>
             <table>

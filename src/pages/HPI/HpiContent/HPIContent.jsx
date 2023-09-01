@@ -20,7 +20,7 @@ import { CHIEF_COMPLAINTS } from '../../../redux/actions/actionTypes';
 import { hpiHeaders } from '../../EditNote/content/hpi/knowledgegraph/src/API';
 import BodySystemDropdown from '../../EditNote/content/hpi/knowledgegraph/src/components/BodySystemDropdown';
 import ChiefComplaintsButton from '../../EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
-import DiseaseForm from '../../EditNote/content/hpi/knowledgegraph/src/components/DiseaseFormV2';
+import DiseaseForm from '../../EditNote/content/hpi/knowledgegraph/src/components/DiseaseForm';
 
 class HPIContent extends React.Component {
     constructor(props) {

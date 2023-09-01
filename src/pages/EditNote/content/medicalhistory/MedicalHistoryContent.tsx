@@ -1,6 +1,6 @@
 import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
 import ConditionInput from 'components/tools/ConditionInput/ConditionInput';
-import GridContentV2 from 'components/tools/GridContentV2/GridContentV2';
+import GridContent from 'components/tools/GridContent/GridContent';
 import constants from 'constants/constants.json';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
 import { YesNoResponse } from 'constants/enums';
@@ -265,7 +265,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         return (
             <div className={style.historyTable}>
                 <div className={`${style.historyTable__scroll} scrollbar`}>
-                    <GridContentV2
+                    <GridContent
                         header_titles={header}
                         rows={rows as React.JSX.Element[] | React.JSX.Element}
                         name='medical history'

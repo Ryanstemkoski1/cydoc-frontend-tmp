@@ -1,4 +1,4 @@
-import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
+import Input from 'components/Input/Input';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import procedures from 'constants/procedures';
 import React, { Component } from 'react';
@@ -23,16 +23,15 @@ import {
 } from 'redux/selectors/surgicalHistorySelectors';
 import {
     DropdownProps,
-    Form,
-    Header,
-    Input,
     InputOnChangeData,
-    Table,
     TextAreaProps,
 } from 'semantic-ui-react';
 import SurgicalHistoryTableBodyRow from './SurgicalHistoryTableBodyRow';
 
 import { OptionMapping } from '_processOptions';
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
+import GridContent from 'components/tools/GridContent/GridContent';
+import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from 'constants/enums';
 import { ResponseTypes } from 'constants/hpiEnums';
 import {
@@ -43,10 +42,8 @@ import {
 } from 'redux/actions/hpiActions';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 import { v4 } from 'uuid';
-import './SurgicalHistoryContent.css';
-import { questionContainer, questionTextStyle } from './styles';
+import style from './SurgicalHistoryContent.module.scss';
 
-import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
         super(props);
@@ -229,15 +226,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         const fields = this.props.hide
             ? ['Procedure', '']
             : ['Procedure', '', 'Year', 'Comments'];
-        return (
-            <Table.Row>
-                {fields.map((header, index) => (
-                    <Table.HeaderCell key={index} className='sticky-header'>
-                        {header}
-                    </Table.HeaderCell>
-                ))}
-            </Table.Row>
-        );
+        return fields.map((item) => ({ title: item, col: 1 }));
     }
 
     makeAccordionPanels(nums: string[], values: SurgicalHistoryElements) {
@@ -254,7 +243,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 comments = values[i].comments;
             }
             const titleContent = (
-                <Form className='inline-form'>
+                <form className='inline-form'>
                     {isPreview ? (
                         <Input
                             disabled
@@ -263,12 +252,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                             value={nums[n]}
                         />
                     ) : (
-                        // <Input
-                        //     fluid
-                        //     transparent
-                        //     className='content-input-surgical content-dropdown medication'
-                        //     id='add-row'
-                        // >
                         <div id='width-full' className='full-view'>
                             <Dropdown
                                 clearable
@@ -288,9 +271,8 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                                 className='content-input-surgical'
                             />
                         </div>
-                        // </Input>
                     )}
-                </Form>
+                </form>
             );
 
             const contentInputs = (
@@ -410,52 +392,53 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         }
 
         const content = (
-            <>
-                <Table celled className='table-display'>
-                    {<Table.Header content={this.makeHeader()} />}
-                    {/* eslint-disable react/no-children-prop */}
-                    <Table.Body children={this.makeTableBodyRows(nums)} />
-                    {/* eslint-enable react/no-children-prop */}
-                </Table>
-            </>
+            <GridContent
+                header_titles={this.makeHeader()}
+                rows={this.makeTableBodyRows(nums)}
+                canAddNew={
+                    !this.props.isPreview &&
+                    (hasSurgicalHistory || !patientView) &&
+                    this.props.responseType != ResponseTypes.PSH_POP
+                }
+                name='Surgical History'
+                onAddRow={this.addRow}
+            />
         );
 
         return (
-            <div className='surgical-history'>
+            <div className={style.surgicalHistory}>
                 {patientView && !nums.length && (
-                    <div className='header-wrap' style={questionContainer}>
-                        <Header
-                            as='h2'
-                            textAlign='left'
-                            content='Have you had any surgeries?'
-                            style={questionTextStyle}
-                        />
-                        <YesAndNo
-                            yesButtonActive={hasSurgicalHistory || false}
-                            handleYesButtonClick={() =>
-                                this.toggleYesNoButton(true)
-                            }
-                            noButtonActive={
-                                hasSurgicalHistory !== null &&
-                                !hasSurgicalHistory
-                            }
-                            handleNoButtonClick={() =>
-                                this.toggleYesNoButton(false)
-                            }
-                        />
+                    <div
+                        className={`${style.surgicalHistory__item} flex-wrap align-center justify-between`}
+                    >
+                        <p>Have you had any surgeries?</p>
+                        <aside>
+                            <YesAndNo
+                                yesButtonActive={hasSurgicalHistory || false}
+                                handleYesButtonClick={() =>
+                                    this.toggleYesNoButton(true)
+                                }
+                                noButtonActive={
+                                    hasSurgicalHistory !== null &&
+                                    !hasSurgicalHistory
+                                }
+                                handleNoButtonClick={() =>
+                                    this.toggleYesNoButton(false)
+                                }
+                            />
+                        </aside>
                     </div>
                 )}
-                {nums.length && (hasSurgicalHistory || !patientView)
-                    ? content
-                    : ''}
-                {!this.props.isPreview &&
+                {nums.length !== 0 &&
                     (hasSurgicalHistory || !patientView) &&
-                    this.props.responseType != ResponseTypes.PSH_POP && (
-                        <AddRowButton
-                            onClick={this.addRow}
-                            name='surgical history'
-                        />
-                    )}
+                    content}
+
+                {nums.length === 0 && (hasSurgicalHistory || !patientView) && (
+                    <AddRowButton
+                        onClick={this.addRow}
+                        name='Surgical History'
+                    />
+                )}
             </div>
         );
     }
@@ -491,7 +474,6 @@ interface SurgicalHistoryProps {
 
 interface ContentProps {
     isPreview: boolean;
-
     responseChoice?: string[];
     responseType?: ResponseTypes;
     node?: string;

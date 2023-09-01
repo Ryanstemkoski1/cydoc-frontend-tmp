@@ -7,7 +7,11 @@ import style from './AddRowButton.module.scss';
 export default function AddRowButton(props) {
     const { name, onClick } = props;
     return (
-        <button className={style.addButton} onClick={onClick}>
+        <button
+            className={style.addButton}
+            onClick={onClick}
+            aria-label='add-row'
+        >
             <img src={Add} alt='Add' />
             <span>Add {name}</span>
         </button>
