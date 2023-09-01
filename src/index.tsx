@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { CookiesProvider } from 'react-cookie';
 import './semantic/dist/semantic.min.css';
 import { HPIStore } from './contexts/HPIContext';
-import { AuthStore } from './contexts/AuthContext';
 import { NotesStore } from './contexts/NotesContext';
 import { HPITemplateStore } from './contexts/HPITemplateContext';
 import './index.css';
@@ -13,6 +12,12 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { isLivemode } from './auth/livemode';
 import Routes from 'components/navigation/Routes';
+import { initializeSentry } from '../src/modules/logging';
+import { AuthProvider } from 'providers/AuthProvider';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+initializeSentry();
 
 const container = document.getElementById('root');
 // react's container is never null
@@ -32,19 +37,23 @@ const stripePromise = loadStripe(getStripePublishableKey());
 function App() {
     return (
         <CookiesProvider>
-            <AuthStore>
+            <AuthProvider>
                 <NotesStore>
                     <HPIStore>
                         <HPITemplateStore>
                             <Elements stripe={stripePromise}>
                                 <Provider store={currentNoteStore}>
                                     <Routes />
+                                    <ToastContainer
+                                        theme='colored'
+                                        position='bottom-right'
+                                    />
                                 </Provider>
                             </Elements>
                         </HPITemplateStore>
                     </HPIStore>
                 </NotesStore>
-            </AuthStore>
+            </AuthProvider>
         </CookiesProvider>
     );
 }

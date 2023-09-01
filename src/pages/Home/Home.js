@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Segment } from 'semantic-ui-react';
 import { homeContent } from 'constants/homeContent';
-import NavMenu from '../../components/navigation/NavMenu';
 import { MeetCydocSection } from './MeetCydocSection';
 import { BetterNotesIcons } from './BetterNotesIcons';
 import { FeaturesGrid } from './FeaturesGrid';
@@ -39,7 +38,6 @@ class Home extends Component {
         const { windowWidth } = this.state;
         return (
             <Fragment>
-                <NavMenu />
                 <MeetCydocSection windowWidth={windowWidth} />
                 <Segment className='better-notes'>
                     <div className='diagonal'>

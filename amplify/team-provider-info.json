@@ -1,0 +1,27 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cydocamplify-dev-144358-authRole",
+      "UnauthRoleArn": "arn:aws:iam::425244354998:role/amplify-cydocamplify-dev-144358-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::425244354998:role/amplify-cydocamplify-dev-144358-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-cydocamplify-dev-144358-deployment",
+      "UnauthRoleName": "amplify-cydocamplify-dev-144358-unauthRole",
+      "StackName": "amplify-cydocamplify-dev-144358",
+      "StackId": "arn:aws:cloudformation:us-east-2:425244354998:stack/amplify-cydocamplify-dev-144358/8a4166c0-2746-11ee-84e5-0a37ce3d2b4b",
+      "AmplifyAppId": "d3livo3yot4u0a",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-cydocamplify-dev-144358-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "CydocAmplifyAuth": {}
+      },
+      "function": {
+        "CydocAmplifyAuthPreSignup": {
+          "deploymentBucketName": "amplify-cydocamplify-dev-144358-deployment",
+          "s3Key": "amplify-builds/CydocAmplifyAuthPreSignup-512f4544534f44724963-build.zip"
+        }
+      }
+    }
+  }
+}

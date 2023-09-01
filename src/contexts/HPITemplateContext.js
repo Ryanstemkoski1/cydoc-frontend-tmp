@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import AuthContext from './AuthContext';
 import { getNewTemplate } from '../pages/CreateTemplate/util';
 
 const HPITemplateContext = React.createContext({});
 
 export class HPITemplateStore extends Component {
-    static contextType = AuthContext;
-
     constructor(props) {
         super(props);
 

@@ -1,58 +1,62 @@
-/* eslint-disable no-console */
+import React, { useState, useEffect } from 'react';
+import { Dropdown, Menu, Header, Image, Icon, Button } from 'semantic-ui-react';
+import { Link, useHistory } from 'react-router-dom';
 import {
     HIDE_CYDOC_IN_NAV_MENU_BP,
     LOGGEDIN_NAV_MENU_MOBILE_BP,
 } from 'constants/breakpoints.js';
-import { YesNoResponse } from 'constants/enums';
-import SignUpModal from 'pages/Account/SignUpModal';
+import Logo from '../../assets/cydoc-logo.svg';
+import NoteNameMenuItem from './NoteNameMenuItem';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
-import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
-import React, { useContext, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
-import {
-    UpdateActiveItemAction,
-    updateActiveItem,
-} from 'redux/actions/activeItemActions';
-import { UserViewAction, changeUserView } from 'redux/actions/userViewActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
+import './NavMenu.css';
 import {
     selectDoctorViewState,
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
-import { Button, Dropdown, Header, Icon, Image, Menu } from 'semantic-ui-react';
-import Logo from '../../assets/cydoc-logo.svg';
+import { changeUserView, UserViewAction } from 'redux/actions/userViewActions';
+import { connect } from 'react-redux';
+import { CurrentNoteState } from 'redux/reducers';
+import {
+    updateActiveItem,
+    UpdateActiveItemAction,
+} from 'redux/actions/activeItemActions';
+import { YesNoResponse } from 'constants/enums';
+import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
+import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
+import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import constants from '../../constants/constants.json';
-import AuthContext from '../../contexts/AuthContext';
 import './NavMenu.css';
-import NoteNameMenuItem, { Context } from './NoteNameMenuItem';
+import useAuth from 'hooks/useAuth';
+import useUser from 'hooks/useUser';
 
 interface ConnectedNavMenuProps {
-    className: string;
+    className?: string;
     // For whether to stack another menu above/below
-    attached: 'top' | 'bottom';
-    // Whether to display or hiee the note name
-    displayNoteName: boolean;
+    attached?: 'top' | 'bottom';
+    // Whether to display or hide the note name
+    displayNoteName?: boolean;
 }
 
 // Navigation Bar component that will go at the top of most pages
 const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     const {
         className,
-        attached,
-        displayNoteName,
+        attached = 'top',
+        displayNoteName = false,
         patientView,
         doctorView,
         changeUserView,
         updateActiveItem,
     } = props;
 
-    const context = useContext(AuthContext) as Context;
+    const { isSignedIn, signOut, loginCorrect } = useAuth();
+    const { user, isManager } = useUser();
+
+    // email/password correct but waiting on MFA? allow users to logOut
+    const userCurrentlyLoggingIn = loginCorrect && !isSignedIn;
+
     const [windowWidth, setWindowWidth] = useState(0);
-    const [signUpActive, setSignUpActive] = useState(false);
 
     // Set event listeners for window resize to determine mobile vs web view
     useEffect(() => {
@@ -90,21 +94,21 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     const dropdownOptions = [
         {
             as: Link,
-            to: '/editprofile',
+            to: '/edit-profile',
             key: 'editProfile',
             text: 'Edit Profile',
             icon: 'setting',
             selected: false,
-            active: window.location.href.includes('editprofile'),
+            active: window.location.href.includes('edit-profile'),
         },
         {
             as: Link,
-            to: '/profilesecurity',
+            to: '/profile-security',
             key: 'profileSecurity',
             text: 'Profile Security',
             icon: 'lock',
             selected: false,
-            active: window.location.href.includes('profilesecurity'),
+            active: window.location.href.includes('profile-security'),
         },
         {
             as: Link,
@@ -112,7 +116,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             key: 'logout',
             text: 'Log Out',
             icon: 'sign out',
-            onClick: context.logOut,
+            onClick: signOut,
             selected: false,
             active: false,
         },
@@ -122,74 +126,102 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     const history = useHistory();
 
     const navigateToHome = () => {
-        const path = '/dashboard';
-        history.push(path);
+        history.push('/dashboard');
     };
 
     const logoNotLoggedIn = () => {
-        const path = '/';
-        history.push(path);
+        history.push('/');
     };
 
-    const handleClickSignUp = () => setSignUpActive(true);
-    const resetSignupState = () => {
-        setSignUpActive(false);
-    };
+    const loginButton = (
+        <Button
+            as={Link}
+            color='teal'
+            name='login'
+            to='/login'
+            content='Login'
+            id='nav-menu__login-button'
+        />
+    );
 
-    // Menu items when not logged in
-    const defaultMenuItems = (
+    const logOutButton = (
+        <Button
+            basic
+            color='teal'
+            name='logOut'
+            onClick={signOut}
+            content='Log Out'
+            id='nav-menu__login-button'
+        />
+    );
+
+    const userManager = isManager ? (
         <Menu.Item>
             <Button
-                as={Link}
+                basic
                 color='teal'
-                name='login'
-                to='/login'
-                content='Login'
-                id='nav-menu__login-button'
+                name='users'
+                content={collapseLoggedInNav ? undefined : 'Manage Users'}
+                icon='users'
+                onClick={() => history.push('/manager-dashboard')}
             />
+        </Menu.Item>
+    ) : null;
+    // Menu items when not logged in
+    const defaultMenuItems = (
+        // email/password correct but waiting on MFA? allow users to logOut
+        <Menu.Item>
+            {userCurrentlyLoggingIn ? logOutButton : loginButton}
             <Button
                 icon='plus'
                 content='Sign Up'
                 size='small'
-                onClick={handleClickSignUp}
+                onClick={() => {
+                    if (userCurrentlyLoggingIn) {
+                        // if the user tries to signUp while waiting for MFA, sign them out
+                        signOut();
+                    }
+                    history.push('/sign-up');
+                }}
             />
-            {signUpActive && (
-                <SignUpModal
-                    navToSignUp={signUpActive}
-                    reloadModal={resetSignupState}
-                />
-            )}
         </Menu.Item>
     );
     // Menu items when logged in
     const loggedInMenuItems = (
         <>
-            <Menu.Item className='home-menu-item'>
+            {userManager}
+            <Menu.Item>
                 <Button
                     basic
                     color='teal'
                     name='home'
-                    content={collapseLoggedInNav ? null : 'Home'}
+                    content={collapseLoggedInNav ? undefined : 'Home'}
                     icon='hospital outline'
                     onClick={navigateToHome}
                 />
             </Menu.Item>
-            <Menu.Item className='profile-menu-item'>
+            <Menu.Item>
                 <Dropdown
                     button
                     basic
                     color='teal'
                     floating
-                    icon={null}
                     name='profile'
-                    className='profile-button'
+                    className={`profile-button ${
+                        collapseLoggedInNav ? 'profile-mobile' : ''
+                    }`}
                     options={dropdownOptions}
                     trigger={
                         <span>
-                            <Icon name='user outline' />
-                            {collapseLoggedInNav
-                                ? null
-                                : context.user?.firstName}
+                            <Icon
+                                name='user outline'
+                                className={
+                                    collapseLoggedInNav
+                                        ? 'profile-mobile-icon'
+                                        : ''
+                                }
+                            />
+                            {collapseLoggedInNav ? undefined : user?.firstName}
                         </span>
                     }
                 />
@@ -219,14 +251,6 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         return true;
     };
 
-    const handleClickLogo = () => {
-        if (context.token) {
-            navigateToHome();
-        } else {
-            logoNotLoggedIn();
-        }
-    };
-
     return (
         <Menu
             className={`${className} nav-menu nav-bar ${
@@ -234,32 +258,56 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             }`}
             attached={attached}
         >
-            <Menu.Item className='logo-menu' onClick={handleClickLogo}>
-                <Image
-                    src={Logo}
-                    className={
-                        collapseLoggedInNav
-                            ? 'logo-circle-mobile'
-                            : 'logo-circle'
-                    }
-                />
-                {!displayNoteName && !hideCydoc && (
-                    <Header
-                        as='h1'
+            {isSignedIn ? (
+                <Menu.Item className='logo-menu' onClick={navigateToHome}>
+                    <Image
+                        src={Logo}
+                        className={
+                            collapseLoggedInNav
+                                ? 'logo-circle-mobile'
+                                : 'logo-circle'
+                        }
+                    />
+                    {!displayNoteName && !hideCydoc && (
+                        <Header
+                            as='h1'
+                            className={`${
+                                collapseLoggedInNav
+                                    ? 'logo-text-mobile'
+                                    : 'logo-text'
+                            }`}
+                            content='Cydoc'
+                        />
+                    )}
+                </Menu.Item>
+            ) : (
+                <Menu.Item className='logo-menu' onClick={logoNotLoggedIn}>
+                    <Image
+                        src={Logo}
                         className={`${
                             collapseLoggedInNav
-                                ? 'logo-text-mobile'
-                                : 'logo-text'
+                                ? 'logo-circle-mobile'
+                                : 'logo-circle'
                         }`}
-                        content='Cydoc'
                     />
-                )}
-            </Menu.Item>
+                    {!displayNoteName && !hideCydoc && (
+                        <Header
+                            as='h1'
+                            className={`${
+                                collapseLoggedInNav
+                                    ? 'logo-text-mobile'
+                                    : 'logo-text'
+                            }`}
+                            content='Cydoc'
+                        />
+                    )}
+                </Menu.Item>
+            )}
             {/* When parent is EditNote, then display the note name item */}
             {displayNoteName && doctorView && (
                 <NoteNameMenuItem mobile={collapseLoggedInNav} />
             )}
-            {context.token && history.location.pathname.length > 1 ? (
+            {isSignedIn && history.location.pathname.length > 1 ? (
                 collapseLoggedInNav ? (
                     <Button.Group>
                         <Button
@@ -318,7 +366,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             {/* Navigation links */}
             <Menu.Menu position='right'>
                 {/* Menu will have different options depending on whether the user is logged in or not */}
-                {context.token ? loggedInMenuItems : defaultMenuItems}
+                {isSignedIn ? loggedInMenuItems : defaultMenuItems}
             </Menu.Menu>
         </Menu>
     );

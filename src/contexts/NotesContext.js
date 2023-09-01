@@ -1,12 +1,9 @@
 import React from 'react';
-import AuthContext from './AuthContext';
 import { noteBody } from 'constants/noteBody.js';
 
 const Context = React.createContext({});
 
 export class NotesStore extends React.Component {
-    static contextType = AuthContext;
-
     state = {
         notes: new Map(),
         activeNotes: new Map(),

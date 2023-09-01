@@ -13,7 +13,6 @@ import {
     Header,
 } from 'semantic-ui-react';
 import DifferentialDiagnoses from './DifferentialDiagnoses';
-import NavMenu from './../components/navigation/NavMenu';
 
 const AcidTest = () => {
     const [pH, setPH] = useState(0);
@@ -349,50 +348,43 @@ const AcidTest = () => {
 
     const acidTest = () => {
         return (
-            <>
-                <NavMenu
-                    className='Acid Test'
-                    attached='top'
-                    displayNoteName={false}
-                />
-                <Container
-                    className='active-tab-container large-width'
-                    style={{ width: '90%' }}
-                >
-                    <Segment>
-                        <Grid columns={2} divided relaxed stackable>
-                            <Grid.Column
-                                alignItems='center'
-                                justifyContent='center'
-                                width={`${!isMobile ? 8 : 11}`}
+            <Container
+                className='active-tab-container large-width'
+                style={{ width: '90%' }}
+            >
+                <Segment>
+                    <Grid columns={2} divided relaxed stackable>
+                        <Grid.Column
+                            alignItems='center'
+                            justifyContent='center'
+                            width={`${!isMobile ? 8 : 11}`}
+                        >
+                            <div
+                                className='flexParent'
+                                style={{
+                                    backgroundColor: '#fff',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }}
                             >
-                                <div
-                                    className='flexParent'
-                                    style={{
-                                        backgroundColor: '#fff',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    {acidBaseSubsection()}
-                                </div>
-                            </Grid.Column>
-                            <Grid.Column width={`${!isMobile ? 8 : 11}`}>
-                                <div
-                                    className='acidBaseTest flexParent'
-                                    style={{
-                                        backgroundColor: '#fff',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    {summarySubSection()}
-                                </div>
-                            </Grid.Column>
-                        </Grid>
-                    </Segment>
-                </Container>
-            </>
+                                {acidBaseSubsection()}
+                            </div>
+                        </Grid.Column>
+                        <Grid.Column width={`${!isMobile ? 8 : 11}`}>
+                            <div
+                                className='acidBaseTest flexParent'
+                                style={{
+                                    backgroundColor: '#fff',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                {summarySubSection()}
+                            </div>
+                        </Grid.Column>
+                    </Grid>
+                </Segment>
+            </Container>
         );
     };
 
