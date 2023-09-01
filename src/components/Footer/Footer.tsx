@@ -3,7 +3,7 @@ import style from './Footer.module.scss';
 
 const Footer = () => {
     return (
-        <div className={`${style.footer}`}>
+        <div className={style.footer}>
             <ul className='flex-wrap justify-center'>
                 <li>
                     Copyright © 2023 Cydoc Corporation. All rights reserved.

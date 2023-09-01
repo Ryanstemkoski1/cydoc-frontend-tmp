@@ -1,36 +1,48 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import QRCode from 'react-qr-code';
-import style from '../../assets/scss/qrcode-print.module.scss';
 import Logo from '../../assets/images/logo.svg';
+import style from '../../assets/scss/qrcode-print.module.scss';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import PrintTemplate from 'react-print';
+
 interface Props {
     link: string;
 }
 
-function StaffQRCodePage({ link }: Props, ref: any) {
+function StaffQRCodePage({ link }: Props) {
     return (
         <div
-            className={`${style.patientQR} flex align-center justify-center`}
-            ref={ref}
+            className={`${style.patientQRMain} flex align-center justify-center`}
         >
-            <h2>Thank you for choosing</h2>
+            <PrintTemplate>
+                <div className={`${style.patientQR}`}>
+                    <h2>Thank you for choosing</h2>
 
-            <img className={style.patientQR__logo} src={Logo} alt='Cydoc' />
+                    <img
+                        className={style.patientQR__logo}
+                        src={Logo}
+                        alt='Cydoc'
+                    />
 
-            <h2>
-                to streamline your clinic&rsquo;s <br /> appointments with AI.{' '}
-            </h2>
+                    <h2>
+                        to streamline your clinic&rsquo;s <br /> appointments
+                        with AI.{' '}
+                    </h2>
 
-            <p>
-                To start a Cydoc Smart Patient Intake Form&copy;,
-                <br /> scan this QR code with a clinic-owned tablet
-                <br /> before handing the tablet to the patient.
-            </p>
+                    <p>
+                        To start a Cydoc Smart Patient Intake Form&copy;,
+                        <br /> scan this QR code with a clinic-owned tablet
+                        <br /> before handing the tablet to the patient.
+                    </p>
 
-            <div className={style.patientQR__image}>
-                <QRCode value={link} />
-            </div>
+                    <div className={style.patientQR__image}>
+                        <QRCode value={link} />
+                    </div>
+                </div>
+            </PrintTemplate>
         </div>
     );
 }
 
-export default forwardRef(StaffQRCodePage);
+export default StaffQRCodePage;
