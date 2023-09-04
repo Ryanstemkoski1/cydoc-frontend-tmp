@@ -2,9 +2,11 @@ import Footer from 'components/Footer/Footer';
 import GlobalLoader from 'components/GlobalLoader/GlobalLoader';
 import Policy from 'constants/Documents/policy';
 import Terms_and_conditions from 'constants/Documents/terms_and_conditions';
+import useAuth from 'hooks/useAuth';
+import { EditPayment } from 'pages/Account/EditPayment';
 import EditProfile from 'pages/Account/EditProfile';
-import ForgotPasswordEmail from 'pages/Account/ForgotPasswordEmail';
-import Login from 'pages/Account/Login';
+import ForgotPasswordPage from 'pages/Account/ForgotPassword';
+import LoginPage from 'pages/Account/LoginPage';
 import ProfileSecurity from 'pages/Account/ProfileSecurity';
 import AcidTest from 'pages/AcidTest';
 import AfterSubmissionPage from 'pages/AfterSubmissionPage';
@@ -18,12 +20,16 @@ import Home from 'pages/Home/Home';
 import LandingPage from 'pages/LandingPage/LandingPage';
 import LandingPagePublic from 'pages/LandingPage/LandingPagePublic';
 import ManagerDashboard from 'pages/ManagerDashboard/ManagerDashboard';
+import NotAuthorized from 'pages/NotAuthorized';
 import QRCodePage from 'pages/QRCodePage/QRCodePage';
+import SignUp from 'pages/SignUp';
 import ViewProduct from 'pages/ViewProduct/ViewProduct';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router';
 import { CurrentNoteState } from 'redux/reducers';
+import { ManagerRoute } from './ManagerRoute';
+import NavMenu from './NavMenu';
 import { PrivateRoute } from './PrivateRoute';
 
 const Routes = (props: { children?: JSX.Element | null }) => {
@@ -31,18 +37,26 @@ const Routes = (props: { children?: JSX.Element | null }) => {
     const loadingStatus = useSelector(
         (state: CurrentNoteState) => state.loadingStatus
     );
+    const { authLoading } = useAuth();
 
     return (
         <div className='layout'>
-            {loadingStatus && <GlobalLoader />}
+            {(authLoading || loadingStatus) && <GlobalLoader />}
+            <NavMenu attached={'top'} displayNoteName={true} />{' '}
             <div className='layout__content'>
                 <Switch>
                     <Route exact path='/' component={Home} />
-                    <Route exact path='/login' component={Login} />
+                    <Route exact path='/sign-up' component={SignUp} />
+                    <Route exact path='/login' component={LoginPage} />
                     <Route
                         exact
-                        path='/forgotpasswordemail'
-                        component={ForgotPasswordEmail}
+                        path='/not-authorized'
+                        component={NotAuthorized}
+                    />
+                    <Route
+                        exact
+                        path='/forgot-password'
+                        component={ForgotPasswordPage}
                     />
                     <PrivateRoute exact path='/editnote' component={EditNote} />
                     <PrivateRoute exact path='/qrcode' component={QRCodePage} />
@@ -101,7 +115,12 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                     />
                     <PrivateRoute
                         exact
-                        path='/managerdashboard'
+                        path='/account/edit-payment'
+                        component={EditPayment}
+                    />
+                    <ManagerRoute
+                        exact
+                        path='/manager-dashboard'
                         component={ManagerDashboard}
                     />
                     <Route exact path='/view/product' component={ViewProduct} />

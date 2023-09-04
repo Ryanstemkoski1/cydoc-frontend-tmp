@@ -1,4 +1,3 @@
-import Header from 'components/Header/Header';
 import React from 'react';
 import { useHistory } from 'react-router';
 import BannerMobile from '../../assets/images/banner-mobile.png';
@@ -14,7 +13,6 @@ const Home = () => {
     const history = useHistory();
     return (
         <>
-            <Header />
             <div className='centering'>
                 <div className={`${style.home} flex`}>
                     <div className={style.home__top}>

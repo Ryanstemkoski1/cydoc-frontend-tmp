@@ -252,7 +252,7 @@ class AllergiesContent extends Component<Props, OwnState> {
     render() {
         const values = this.props.allergies;
         const nums = Object.keys(values);
-        const { hasAllergies, patientView } = this.props;
+        // const { hasAllergies, patientView } = this.props;
 
         const content = (
             <div className='allergies-section'>

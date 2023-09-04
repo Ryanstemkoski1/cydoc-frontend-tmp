@@ -1,11 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { Accordion } from 'semantic-ui-react';
-import NavMenu from './../components/navigation/NavMenu';
 import runAnalysis from './AcidBase/acidBaseCalculator';
+import style from './AcidTest.module.scss';
 import AcidTestInputBox from './AcidTestInputBox';
 import Calculations from './Calculations';
 import DifferentialDiagnoses from './DifferentialDiagnoses';
-import style from './AcidTest.module.scss';
 
 const AcidTest = () => {
     const [pH, setPH] = useState(0);
@@ -245,11 +244,6 @@ const AcidTest = () => {
     const acidTest = () => {
         return (
             <>
-                <NavMenu
-                    className='Acid Test'
-                    attached='top'
-                    displayNoteName={false}
-                />
                 <div className='centering'>
                     <div className={`${style.acidPage} flex-wrap`}>
                         <div className={style.acidPage__col}>

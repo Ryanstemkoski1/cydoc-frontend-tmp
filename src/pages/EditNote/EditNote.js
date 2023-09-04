@@ -3,7 +3,6 @@ import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
 import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
 import { Message, Sticky } from 'semantic-ui-react';
-import NavMenu from '../../components/navigation/NavMenu';
 import MenuTabs from './MenuTabs';
 import NotePage from './NotePage';
 
@@ -140,19 +139,12 @@ class EditNote extends Component {
             <div ref={this.noteContent}>
                 {/* Top NavMenu and MenuTabs stay on top regardless of scroll*/}
                 <Sticky context={this.noteContent} id={'stickyHeader'}>
-                    <NavMenu
-                        className='edit-note-nav-menu'
-                        displayNoteName={true}
+                    <MenuTabs
+                        activeItem={this.props.activeItem}
+                        onTabChange={this.onTabChange}
+                        activeTabIndex={this.state.activeTabIndex}
+                        attached
                     />
-
-                    <div>
-                        <MenuTabs
-                            activeItem={this.props.activeItem}
-                            onTabChange={this.onTabChange}
-                            activeTabIndex={this.state.activeTabIndex}
-                            attached
-                        />
-                    </div>
                 </Sticky>
 
                 {this.props.patientView && this.state?.message && (

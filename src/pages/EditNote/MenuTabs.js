@@ -45,7 +45,7 @@ class ConnectedMenuTabs extends Component {
 
 function PatientViewMenu({ tabMenuItems }) {
     return (
-        <div className='patient-view-container'>
+        <div className='patient-view-container stepper-block'>
             <div className='patient-view-content'>
                 {tabMenuItems.map(({ name, active, onClick }, index) => (
                     <Fragment key={index}>

@@ -1,26 +1,6 @@
 import { AuthenticationDetails, CognitoUser } from 'amazon-cognito-identity-js';
-import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import getUserAttributes from 'auth/getUserAttributes';
 import getUserPool from 'auth/getUserPool';
-import { stagingClient } from 'constants/api';
-
-async function getClinicianIdAndInstitutionIdByEmail(email) {
-    if (!email) return;
-    let clinicianId = '';
-    let institutionId = '';
-
-    try {
-        const res = await stagingClient.get(`/user/${email}`);
-        const { id, institutionId: _institutionId } = res.data.user;
-        clinicianId = id;
-        institutionId = _institutionId;
-    } catch (error) {}
-
-    return {
-        clinicianId,
-        institutionId,
-    };
-}
 
 const GetLogin = async (username, password, role, context) => {
     // can't log user in without username, password, or role
@@ -64,20 +44,6 @@ const GetLogin = async (username, password, role, context) => {
                 // };
                 const accessToken = _result.getAccessToken().getJwtToken();
                 const getUserAttributesResponse = await getUserAttributes(role);
-
-                const { clinicianId, institutionId } =
-                    await getClinicianIdAndInstitutionIdByEmail(
-                        getUserAttributesResponse.email
-                    );
-
-                localStorage.setItem(
-                    HPIPatientQueryParams.CLINICIAN_ID,
-                    clinicianId
-                );
-                localStorage.setItem(
-                    HPIPatientQueryParams.INSTITUTION_ID,
-                    institutionId
-                );
 
                 context.storeLoginInfo(
                     getUserAttributesResponse,

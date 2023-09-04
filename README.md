@@ -52,7 +52,14 @@ npm run "ignore-semantic-changes
 ```
 It is run automatically when semantic is built or the dev server is started (`npm start`)
 
-# Testing with Jest and Enzyme
+# Bash problems on windows
+
+If the `npm scripts` are not running correctly, it's likely your bash env is messed up.
+
+What do you see when you run `uname`?
+Relevant info: https://stackoverflow.com/questions/50998089/running-npm-script-on-windows-starting-with-a-period
+
+# DEPRECATED Testing with Jest and Enzyme
 
 To get started with testing, in your terminal run these two commands:
 

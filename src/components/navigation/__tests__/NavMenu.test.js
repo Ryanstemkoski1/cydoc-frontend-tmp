@@ -6,6 +6,7 @@ import NoteNameMenuItem from '../NoteNameMenuItem';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
+import { AuthProvider } from 'providers/AuthProvider';
 
 Enzyme.configure({ adapter: new Adapter() });
 const mockStore = configureStore([]);
@@ -29,7 +30,9 @@ const connectStore = (props, state = initialState) => {
         wrapper: mount(
             <Router>
                 <Provider store={store}>
-                    <NavMenu {...props} />
+                    <AuthProvider>
+                        <NavMenu {...props} />
+                    </AuthProvider>
                 </Provider>
             </Router>
         ),

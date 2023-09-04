@@ -69,15 +69,32 @@
 .tabular.collapsed-menu-tabs::-webkit-scrollbar {
     display: none;
 }
-
-@media (max-width: 991) {
+.stepper-block {
+    padding-top: 30px;
+    background-color: transparent !important;
+}
+.stepper-block > div {
+    padding: 0;
+}
+@media (max-width: 1199px) {
+    .stepper-block > div {
+        padding: 0 30px;
+    }
+}
+@media (max-width: 991px) {
     .ui.secondary.menu .expanded-menu-tabs .item {
         flex: auto;
     }
+    .stepper-block > div {
+        padding: 0;
+    }
 }
-@media (max-width: 767) {
+@media (max-width: 767px) {
     .ui.menu > .ui.container {
         width: auto;
+    }
+    .stepper-block > div {
+        padding: 0 15px;
     }
 }
 
@@ -118,10 +135,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: Nunito,Arial,Helvetica,sans-serif;
+    font-family: Nunito, Arial, Helvetica, sans-serif;
 }
 
-.patient-view-button.active, .patient-view-button:hover {
+.patient-view-button.active,
+.patient-view-button:hover {
     background-color: #367898;
     border: 1px solid #367898;
     color: #fff;
@@ -182,7 +200,7 @@
     position: relative;
     font-size: 16px;
     height: 60px;
-    font-family: Nunito,Arial,Helvetica,sans-serif;
+    font-family: Nunito, Arial, Helvetica, sans-serif;
 }
 
 .doctor-view-button::before {

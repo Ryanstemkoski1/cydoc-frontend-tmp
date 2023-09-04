@@ -5,7 +5,6 @@ import { Redirect } from 'react-router';
 import { initialState } from 'redux/reducers';
 import { Icon, Image } from 'semantic-ui-react';
 
-import NavMenu from '../../components/navigation/NavMenu';
 import { deleteNote } from '../../redux/actions/currentNoteActions';
 
 import { changeUserView } from 'redux/actions/userViewActions';
@@ -137,9 +136,6 @@ class LandingPage extends Component {
             default:
                 return (
                     <>
-                        <div>
-                            <NavMenu className='landing-page-nav-menu' />
-                        </div>
                         {!patientView ? (
                             <div className='landing-feedback'>
                                 <Image src={Feedback} />
