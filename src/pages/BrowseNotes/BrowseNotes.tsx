@@ -1,9 +1,8 @@
-import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import Input from 'components/Input/Input';
 import Modal from 'components/Modal/Modal';
 import { stagingClient } from 'constants/api';
+import useUser from 'hooks/useUser';
 import React, { useEffect, useState } from 'react';
-import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoadingStatus } from 'redux/actions/loadingStatusActions';
 import { CurrentNoteState } from 'redux/reducers';
@@ -11,9 +10,6 @@ import LeftArrow from '../../assets/images/left-arrow.svg';
 import RefreshIcon from '../../assets/images/refresh.png';
 import RightArrow from '../../assets/images/right-arrow.svg';
 import style from './BrowseNotes.module.scss';
-
-const usersList: User[] = [];
-const unreportedUsersList: User[] = [];
 
 const months = [
     'January',
@@ -52,17 +48,18 @@ function formatDate(date: Date): string {
     );
 }
 
-function formatDateOfBirth(date: Date): string {
+function formatDateOfBirth(date: string | Date): string {
+    const inDateFormat = new Date(date);
     return (
-        (date.getMonth() + 1).toString() +
+        (inDateFormat.getMonth() + 1).toString() +
         '/' +
-        date.getDate().toString() +
+        inDateFormat.getDate().toString() +
         '/' +
-        date.getFullYear().toString()
+        inDateFormat.getFullYear().toString()
     );
 }
 
-export interface User {
+export interface AppointmentUser {
     id: number;
     firstName: string;
     lastName: string;
@@ -70,19 +67,10 @@ export interface User {
     clinicianId: number | null;
 }
 
-export interface Clinician {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    institutionId: number;
-}
-
 async function fetchHPIAppointments(
     date: Date,
-    clinicianId: number | null,
-    stateUpdaterFunc: (users: User[]) => void,
-    onSuccess?: () => void,
+    clinicianId: string,
+    stateUpdaterFunc: (users: AppointmentUser[]) => void,
     onError?: (error: any) => void
 ) {
     try {
@@ -91,60 +79,31 @@ async function fetchHPIAppointments(
         if (clinicianId !== null) {
             url += `&clinician_id=${clinicianId}`;
         }
-
         const response = await stagingClient.get(url);
-
-        const fetchDetails = response.data.data as User[];
-
-        stateUpdaterFunc(
-            fetchDetails.map(
-                ({ firstName, lastName, dateOfBirth, id, clinicianId }) => ({
-                    id,
-                    firstName,
-                    dateOfBirth: new Date(dateOfBirth),
-                    lastName,
-                    clinicianId,
-                })
-            )
-        );
-
-        onSuccess?.();
+        const fetchDetails = response.data.data as AppointmentUser[];
+        stateUpdaterFunc(fetchDetails);
     } catch (_error: any) {
         onError?.(_error);
     }
 }
 
-function useClinicianDetails(): Clinician {
-    const user = useCookies(['user'])[0].user;
-    return {
-        id: Number(
-            localStorage.getItem(HPIPatientQueryParams.CLINICIAN_ID) as string
-        ),
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        institutionId: Number(
-            localStorage.getItem(HPIPatientQueryParams.INSTITUTION_ID) as string
-        ),
-    };
-}
-
 const BrowseNotes = () => {
     const [date, setDate] = useState(new Date());
-    const [users, setUsers] = useState(usersList);
-    const [unreportedUsers, setUnreportedUsers] = useState(unreportedUsersList);
-    const clinician = useClinicianDetails();
+    const [users, setUsers] = useState<AppointmentUser[]>([]);
+    const [unreportedUsers, setUnreportedUsers] = useState<AppointmentUser[]>(
+        []
+    );
+    const { user } = useUser();
     const dispatch = useDispatch();
 
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [selectedAppointment, setSelectedAppointment] = useState<User | null>(
-        null
-    );
+    const [selectedAppointment, setSelectedAppointment] =
+        useState<AppointmentUser | null>(null);
     const loadingStatus = useSelector(
         (state: CurrentNoteState) => state.loadingStatus
     );
 
-    const openModal = (user: User) => {
+    const openModal = (user: AppointmentUser) => {
         setSelectedAppointment(user);
         setShowModal(true);
     };
@@ -159,18 +118,22 @@ const BrowseNotes = () => {
 
     useEffect(() => {
         loadPatientHistory();
-    }, [date]);
+    }, [user, date]);
 
     const loadPatientHistory = () => {
+        dispatch(setLoadingStatus(true));
+        if (!user) {
+            dispatch(setLoadingStatus(false));
+            return;
+        }
         try {
-            dispatch(setLoadingStatus(true));
-            fetchHPIAppointments(date, clinician.id, (users: User[]) => {
-                const unreportedUsers = users.filter(
-                    (user) => !user.clinicianId
+            fetchHPIAppointments(date, user.id, (users: AppointmentUser[]) => {
+                const unreportedUsers: AppointmentUser[] = users.filter(
+                    (currentUser) => currentUser.clinicianId !== Number(user.id)
                 );
-                const reportedUsers = users.filter((user) => {
-                    return user.clinicianId == clinician.id;
-                });
+                const reportedUsers: AppointmentUser[] = users.filter(
+                    (currentUser) => currentUser.clinicianId === Number(user.id)
+                );
                 setUsers(reportedUsers);
                 setUnreportedUsers(unreportedUsers);
                 dispatch(setLoadingStatus(false));
@@ -180,7 +143,7 @@ const BrowseNotes = () => {
         }
     };
 
-    function renderUsers(users: User[]) {
+    function renderUsers(users: AppointmentUser[]) {
         return (
             <div className={`${style.notesBlock__tableWrapper}`}>
                 <table>
@@ -252,9 +215,11 @@ const BrowseNotes = () => {
                             <div className={style.notesBlock__dropdown}>
                                 <Input
                                     value={
-                                        clinician.lastName +
-                                        ', ' +
-                                        clinician.firstName
+                                        user
+                                            ? user!.lastName +
+                                              ', ' +
+                                              user!.firstName
+                                            : ''
                                     }
                                     disabled
                                 />

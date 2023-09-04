@@ -24,6 +24,15 @@
                 height: 13px;
                 margin-left: 5px;
             }
+            span {
+                @include max-screen($mobile) {
+                    display: block;
+                    max-width: 100px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+            }
             &.active {
                 img {
                     transform: rotate(180deg);
@@ -33,13 +42,16 @@
     }
     &__item {
         position: absolute;
-        top: 45px;
+        top: 53px;
         right: 0;
         left: auto;
         box-shadow: 0 2px 4px 0 $color-primary-light;
         background-color: $color-white;
         min-width: max-content;
         display: none;
+        @include max-screen($mobile) {
+            top: 46px;
+        }
         &.active {
             display: block;
         }

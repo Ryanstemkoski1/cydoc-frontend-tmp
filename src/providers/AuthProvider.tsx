@@ -1,30 +1,30 @@
 import React, {
-    useState,
-    useEffect,
-    useContext,
-    createContext,
-    useMemo,
-    useCallback,
     PropsWithChildren,
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
 } from 'react';
 import invariant from 'tiny-invariant';
 
-import { breadcrumb, log, updateLoggedUser } from '../modules/logging';
-import { useHistory } from 'react-router-dom';
 import {
-    CognitoAuth,
     AmplifyError,
     CODE_MISMATCH,
+    CognitoAuth,
     CognitoUser,
+    NEW_PASSWORD_REQUIRED,
     NOT_AUTHORIZED,
     NOT_FOUND,
     USER_EXISTS,
-    NEW_PASSWORD_REQUIRED,
 } from 'auth/cognito';
-import { UserInfoProvider } from './UserInfoProvider';
-import { stringFromError } from '../modules/error-utils';
-import { formatPhoneNumber } from '../modules/user-api';
 import { Auth } from 'aws-amplify';
+import { useHistory } from 'react-router-dom';
+import { stringFromError } from '../modules/error-utils';
+import { breadcrumb, log, updateLoggedUser } from '../modules/logging';
+import { formatPhoneNumber } from '../modules/user-api';
+import { UserInfoProvider } from './UserInfoProvider';
 
 export interface AuthContextValues {
     cognitoUser: CognitoUser | null;
@@ -99,6 +99,7 @@ export const AuthProvider: React.FC<
                     // On component mount
                     // If a session cookie exists
                     // Then use it to reset/restore auth state
+                    setAuthLoading(true);
                     return CognitoAuth.currentAuthenticatedUser()
                         .then((cognitoUser: CognitoUser) => {
                             updateLoggedUser({
@@ -114,16 +115,18 @@ export const AuthProvider: React.FC<
                                 `unable to restore session, user logged out`,
                                 'auth'
                             );
+                            setAuthLoading(false);
+                        })
+                        .finally(() => {
+                            setAuthLoading(false);
                         });
                 }
             } catch (e) {
+                setAuthLoading(false);
                 const error = e as unknown as AmplifyError;
                 log('uncaught Error restoring session:', error);
-            } finally {
-                setAuthLoading(false);
             }
         };
-
         restoreUserSession();
     }, [cognitoUser, signOut]);
 

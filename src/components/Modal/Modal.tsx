@@ -1,25 +1,19 @@
 import Loader from 'components/tools/Loader/Loader';
 import { stagingClient } from 'constants/api';
-import { User } from 'pages/BrowseNotes/BrowseNotes';
-import React, { useEffect, useRef, useState } from 'react';
+import { AppointmentUser } from 'pages/BrowseNotes/BrowseNotes';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { formatHPIText } from 'utils/getHPIText';
 import style from './Modal.module.scss';
 
 export interface ModalProps {
     showModal: boolean;
     setShowModal: any;
-    selectedAppointment: User | null;
+    selectedAppointment: AppointmentUser | null;
 }
 
-interface HPIAppointmentDetails {
-    id: number;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: Date;
-    last4ssn: string;
+interface HPIAppointmentDetails extends AppointmentUser {
     appointmentDate: Date;
     hpiText: string;
-    clinicianId: number;
 }
 
 const Modal = ({
@@ -31,22 +25,16 @@ const Modal = ({
     const [hpiAppointMentDetails, setHpiAppointmentDetails] =
         useState<HPIAppointmentDetails | null>(null);
 
+    const fetchHPIAppointmentsDetails = useCallback(async () => {
+        const response = await stagingClient.get(
+            `/appointment/${selectedAppointment?.id}`
+        );
+        setHpiAppointmentDetails(response.data.data);
+    }, []);
+
     useEffect(() => {
         if (!selectedAppointment?.id) return;
-        let stale = false;
-
-        async function fetchHPIAppointmentsDetails() {
-            const response = await stagingClient.get(
-                `/appointment/${selectedAppointment?.id}`
-            );
-            if (!stale) setHpiAppointmentDetails(response.data.data);
-        }
-
         fetchHPIAppointmentsDetails();
-
-        return () => {
-            stale = true;
-        };
     }, [selectedAppointment]);
 
     const handleClickOutsideModal = (event: any) => {
@@ -67,10 +55,10 @@ const Modal = ({
     useEffect(() => {
         if (showModal) {
             document.body.classList.add('isHidden');
-            return () => {
-                document.body.classList.remove('isHidden');
-            };
         }
+        return () => {
+            document.body.classList.remove('isHidden');
+        };
     }, [showModal]);
 
     const fullName =

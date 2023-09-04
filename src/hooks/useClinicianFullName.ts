@@ -1,13 +1,9 @@
-import { Context } from 'components/navigation/NoteNameMenuItem';
-import AuthContext from 'contexts/AuthContext';
-import { useContext } from 'react';
+import useUser from './useUser';
 
 function useClinicianFullName() {
-    const { user } = useContext(AuthContext) as Context;
+    const { user } = useUser();
 
-    return `${user?.firstName ?? ''} ${user?.middleName ?? ''} ${
-        user?.lastName ?? ''
-    }`;
+    return `${user?.firstName ?? ''} ${user?.lastName ?? ''}`;
 }
 
 export default useClinicianFullName;

@@ -53,8 +53,10 @@ function MenuButton({ label, icon, to, items }: Props) {
                         showMenuItems ? style.active : ''
                     }`}
                 >
-                    {label}
-                    {!!items && <img src={ArrowDown} alt='arrow down' />}
+                    <span>{label}</span>
+                    {!!items && Boolean(label) && (
+                        <img src={ArrowDown} alt='arrow down' />
+                    )}
                 </a>
             </div>
 
@@ -73,6 +75,7 @@ function MenuButton({ label, icon, to, items }: Props) {
                             onClick={() => {
                                 if (item.onClick) item.onClick();
                                 if (item.to) history.push(item.to);
+                                setShowMenuItems(false);
                             }}
                         >
                             <img src={item.icon} alt={item.label + ' icon'} />

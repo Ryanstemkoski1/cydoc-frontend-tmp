@@ -1,5 +1,4 @@
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
-import Header from 'components/Header/Header';
 import useQuery from 'hooks/useQuery';
 import React from 'react';
 import CheckWhite from '../assets/images/check-white.svg';
@@ -19,7 +18,6 @@ function AfterSubmissionPage() {
 
     return (
         <>
-            <Header />
             <div className='centering'>
                 <div
                     className={`${style.successBlock} flex-wrap align-center justify-center`}

@@ -37,6 +37,15 @@
             background-color: rgba($color-yello-dark, 0.6);
         }
     }
+    &.gray {
+        color: $color-black;
+        background-color: $color-gray;
+        &.active,
+        &:hover {
+            color: $color-white;
+            background-color: $color-secondary;
+        }
+    }
     &.outline {
         color: $color-primary;
         background-color: transparent;

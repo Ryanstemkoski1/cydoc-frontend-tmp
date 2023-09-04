@@ -2,17 +2,17 @@ import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import { ProductType, ViewType } from 'assets/enums/route.enums';
 import CommonLayout from 'components/CommonLayout/CommonLayout';
-import Header from 'components/Header/Header';
 import Stepper from 'components/Stepper/Stepper';
 import Notification, {
     NotificationTypeEnum,
 } from 'components/tools/Notification/Notification';
 import { stagingClient } from 'constants/api';
 import { YesNoResponse } from 'constants/enums';
+import useAuth from 'hooks/useAuth';
 import useQuery from 'hooks/useQuery';
 import { hpiHeaders } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
 import initialQuestions from 'pages/EditNote/content/patientview//constants/initialQuestions.json';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, useHistory, useParams } from 'react-router';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
@@ -30,7 +30,6 @@ import {
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
 import { Loader } from 'semantic-ui-react';
-import AuthContext from '../../contexts/AuthContext';
 import BrowseNotes from '../BrowseNotes/BrowseNotes';
 import CCSelection from './ChiefComplaintSelection/CCSelection';
 import style from './HPI.module.scss';
@@ -55,9 +54,9 @@ const HPI = () => {
     }));
     const query = useQuery();
     const [isLoading, setIsLoading] = useState(false);
+    const { isSignedIn, authLoading } = useAuth();
     let { view } = useParams();
     const history = useHistory();
-    const context = useContext(AuthContext);
     const selectedChiefComplaints = useMemo(
         () =>
             Object.keys(reduxState.chiefComplaints).filter(
@@ -256,8 +255,7 @@ const HPI = () => {
         return <Redirect to={`/${ProductType.HPI}/${ViewType.PATIENT}`} />;
     }
 
-    // on doctor view authentication is must
-    if (view === ViewType.DOCTOR && !context.token) {
+    if (view === ViewType.DOCTOR && !(isSignedIn || authLoading)) {
         return <Redirect to='/login' />;
     }
 
@@ -325,7 +323,6 @@ const HPI = () => {
 
     return (
         <>
-            <Header view={view} />
             <div className={style.editNote}>
                 <div className='centering'>
                     {view === ViewType.PATIENT && (

@@ -1,5 +1,4 @@
 import { ProductType, ViewType } from 'assets/enums/route.enums';
-import Header from 'components/Header/Header';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import DoctorIcon from '../../assets/images/doctor.svg';
@@ -21,7 +20,6 @@ export default function ViewProduct() {
 
     return (
         <>
-            <Header />
             <div className={` ${style.viewForm} flex-wrap justify-center`}>
                 <div className={style.viewForm__inner}>
                     <div className={style.viewForm__content}>
