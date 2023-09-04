@@ -1,6 +1,5 @@
 import useClinicianFullName from 'hooks/useClinicianFullName';
 import React from 'react';
-import QRCode from 'react-qr-code';
 import Logo from '../../assets/images/logo.svg';
 import style from '../../assets/scss/qrcode-print.module.scss';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -8,10 +7,10 @@ import style from '../../assets/scss/qrcode-print.module.scss';
 import PrintTemplate from 'react-print';
 
 interface Props {
-    link: string;
+    children: React.JSX.Element[] | React.JSX.Element;
 }
 
-function PatientQRCodePage({ link }: Props) {
+function PatientQRCodePage({ children }: Props) {
     const clinicianFullName = useClinicianFullName();
 
     return (
@@ -21,7 +20,7 @@ function PatientQRCodePage({ link }: Props) {
             <PrintTemplate>
                 <div className={`${style.patientQR}`}>
                     <h2>
-                        {clinicianFullName} <br />
+                        <span>{clinicianFullName}</span>
                         has partnered with
                     </h2>
 
@@ -36,9 +35,7 @@ function PatientQRCodePage({ link }: Props) {
                         To complete your check-in using Cydoc&lsquo;s Medical AI
                         Assistant, <br /> please scan this QR code now:
                     </p>
-                    <div className={style.patientQR__image}>
-                        <QRCode value={link} />
-                    </div>
+                    <div className={style.patientQR__image}>{children}</div>
                 </div>
             </PrintTemplate>
         </div>

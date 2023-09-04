@@ -1,9 +1,9 @@
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
-import Header from 'components/Header/Header';
 import { stagingClient } from 'constants/api';
+import useUser from 'hooks/useUser';
 import React, { useCallback, useEffect, useState } from 'react';
+import QRCode from 'react-qr-code';
 import { useDispatch } from 'react-redux';
-import { setLoadingStatus } from 'redux/actions/loadingStatusActions';
 import QRIcon1 from '../../assets/images/qr-code-icon1.svg';
 import QRIcon2 from '../../assets/images/qr-code-icon2.svg';
 import QRIcon3 from '../../assets/images/qr-code-icon3.svg';
@@ -22,13 +22,16 @@ function printDocument() {
 function QRCodePage() {
     const dispatch = useDispatch();
     const [showQRCodePage, setShowQRCodePage] = useState<QRCodeType>('');
+    const { user } = useUser();
 
     const handlePatientPrint = () => {
+        if (!user) return;
         setShowQRCodePage('patient');
         printDocument();
     };
 
     const handleStaffPrint = () => {
+        if (!user) return;
         setShowQRCodePage('staff');
         printDocument();
     };
@@ -36,14 +39,12 @@ function QRCodePage() {
     const [link, setLink] = useState<string>('');
 
     const fetchQRCodeLink = useCallback(async () => {
-        dispatch(setLoadingStatus(true));
+        const clinicianId = user?.id;
+        const institutionId = user?.institutionId;
 
-        const clinicianId = localStorage.getItem(
-            HPIPatientQueryParams.CLINICIAN_ID
-        );
-        const institutionId = localStorage.getItem(
-            HPIPatientQueryParams.INSTITUTION_ID
-        );
+        if (!clinicianId || !institutionId) {
+            return;
+        }
 
         try {
             const response = await stagingClient.get(
@@ -53,19 +54,18 @@ function QRCodePage() {
             const link = response.data.link as string | null;
 
             if (link) setLink(link);
-        } finally {
-            dispatch(setLoadingStatus(false));
-        }
-    }, []);
+        } catch (_error: any) {}
+    }, [user]);
 
     useEffect(() => {
         fetchQRCodeLink();
-    }, []);
+    }, [user]);
+
+    const qrCode = <QRCode value={link} />;
 
     return (
         <>
             <div id='react-no-print'>
-                <Header />
                 <div className='centering'>
                     <div className={style.QRCodePage}>
                         <div className={style.QRCodePage__header}>
@@ -172,9 +172,11 @@ function QRCodePage() {
 
             <div id='print-mount' className={style.QRCodePage__printWrapper}>
                 {showQRCodePage === 'patient' && (
-                    <PatientQRCodePage link={link} />
+                    <PatientQRCodePage>{qrCode}</PatientQRCodePage>
                 )}
-                {showQRCodePage === 'staff' && <StaffQRCodePage link={link} />}
+                {showQRCodePage === 'staff' && (
+                    <StaffQRCodePage>{qrCode}</StaffQRCodePage>
+                )}
             </div>
         </>
     );
