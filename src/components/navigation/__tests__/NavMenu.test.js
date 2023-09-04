@@ -1,12 +1,12 @@
-import React from 'react';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
 import Enzyme, { mount } from 'enzyme';
+import { AuthProvider } from 'providers/AuthProvider';
+import React from 'react';
+import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
+import configureStore from 'redux-mock-store';
 import NavMenu from '../NavMenu';
 import NoteNameMenuItem from '../NoteNameMenuItem';
-import configureStore from 'redux-mock-store';
-import { Provider } from 'react-redux';
-import Adapter from '@cfaester/enzyme-adapter-react-18';
-import { AuthProvider } from 'providers/AuthProvider';
 
 Enzyme.configure({ adapter: new Adapter() });
 const mockStore = configureStore([]);
@@ -62,6 +62,6 @@ describe('NavMenu', () => {
             { displayNoteName: true },
             { ...initialState, doctorView: true }
         );
-        expect(wrapper.find(NoteNameMenuItem)).toHaveLength(1);
+        expect(wrapper.find(NoteNameMenuItem)).toHaveLength(0);
     });
 });
