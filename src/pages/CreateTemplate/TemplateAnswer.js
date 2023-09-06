@@ -7,7 +7,6 @@ import {
     capitalize,
     fillAnswers,
 } from 'pages/EditNote/content/generatenote/generateHpiText';
-import { joinLists } from 'pages/EditNote/content/generatenote/notesections/HPINote';
 import MedicalHistoryContent from 'pages/EditNote/content/medicalhistory/MedicalHistoryContent';
 import MedicationsContent from 'pages/EditNote/content/medications/MedicationsContent';
 import SurgicalHistoryContent from 'pages/EditNote/content/surgicalhistory/SurgicalHistoryContent';
@@ -22,6 +21,7 @@ import {
     Message,
 } from 'semantic-ui-react';
 import HPITemplateContext from '../../contexts/HPITemplateContext';
+import { joinLists } from '../../utils/getHPIText';
 import GeneratedSentence from './modules/GeneratedSentence';
 import ImportQuestionForm from './modules/ImportQuestionForm';
 import { RESPONSE_PLACEHOLDER } from './placeholders';

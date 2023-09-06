@@ -67,7 +67,7 @@ function PatientViewMenu({ tabMenuItems }) {
 
 function DoctorViewMenu({ tabMenuItems }) {
     return (
-        <div className='doctor-view-container'>
+        <div className='doctor-view-container sticky-sub-nav'>
             <div className='doctor-view-content'>
                 {tabMenuItems.map(({ name, active, onClick }) => (
                     <button

@@ -1,8 +1,8 @@
 import Loader from 'components/tools/Loader/Loader';
 import { stagingClient } from 'constants/api';
 import { AppointmentUser } from 'pages/BrowseNotes/BrowseNotes';
+import { ParseAndRenderHpiNote } from 'pages/EditNote/content/generatenote/notesections/HPINote';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { formatHPIText } from 'utils/getHPIText';
 import style from './Modal.module.scss';
 
 export interface ModalProps {
@@ -89,7 +89,9 @@ const Modal = ({
                         id='copy-notes'
                     >
                         {hpiAppointMentDetails ? (
-                            formatHPIText(hpiAppointMentDetails.hpiText)
+                            <ParseAndRenderHpiNote
+                                hpiText={hpiAppointMentDetails.hpiText}
+                            />
                         ) : (
                             <Loader />
                         )}

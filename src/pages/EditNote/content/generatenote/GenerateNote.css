@@ -28,11 +28,6 @@
     color: white;
 }
 
-.generate-note-buttons {
-    position: sticky;
-    z-index: 3;
-}
-
 #generateNoteButtonsContainer.generate-note-buttons__container {
     display: flex;
     flex-direction: row;

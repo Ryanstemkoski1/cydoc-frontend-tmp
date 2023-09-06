@@ -151,6 +151,11 @@
     display: flex;
     font-size: 0;
 }
+.sticky-sub-nav {
+    z-index: 999;
+    top: 81px;
+    position: sticky;
+}
 
 .doctor-view-container:after,
 .doctor-view-container:before {
@@ -249,7 +254,15 @@
     color: #367898;
 }
 
+@media screen and (max-width: 991px) {
+    .sticky-sub-nav {
+        top: 121px;
+    }
+}
 @media screen and (max-width: 767px) {
+    .sticky-sub-nav {
+        top: 106px;
+    }
     .patient-view-content {
         padding: 0 16px 10px;
     }

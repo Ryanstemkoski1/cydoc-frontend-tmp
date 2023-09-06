@@ -33,7 +33,6 @@ import { Button, Segment } from 'semantic-ui-react';
 import './GenerateNote.css';
 import AllergiesNote from './notesections/AllergiesNote';
 import FamilyHistoryNote from './notesections/FamilyHistoryNote';
-import HPINote from './notesections/HPINote';
 import MedicalHistoryNote from './notesections/MedicalHistoryNote';
 import MedicationsNote from './notesections/MedicationsNote';
 import PhysicalExamNote from './notesections/PhysicalExamNote';
@@ -46,9 +45,11 @@ import NavigationButton from 'components/tools/NavigationButton/NavigationButton
 import { PatientPronouns } from 'constants/patientInformation';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
+import getHPIText, { HPIText } from 'utils/getHPIText';
 import BottomArrow from '../../../../assets/angle-down.svg';
 import './GenerateNote.css';
 import PatientInfo from './PatientInfo';
+import HPINote from './notesections/HPINote';
 
 interface GenerateNoteProps {
     previousFormClick: () => void;
@@ -320,7 +321,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 >
                     <Segment className='generated-note-text'>
                         <h3> History of Present Illness </h3>
-                        <HPINote bulletNoteView={isBulletNoteView} />
+                        <HPINote text={getHPIText() as HPIText[]} />
                         <h3> Patient History </h3>
                         <h4> Medical History </h4>
                         <MedicalHistoryNote

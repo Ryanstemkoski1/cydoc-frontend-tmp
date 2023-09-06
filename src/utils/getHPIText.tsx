@@ -14,7 +14,6 @@ import {
     createHPI,
     createInitialHPI,
 } from 'pages/EditNote/content/generatenote/generateHpiText';
-import React from 'react';
 import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
 import { HpiState } from 'redux/reducers/hpiReducer';
@@ -604,34 +603,6 @@ function getHPIText() {
     if (((response as string) || '')?.trim()) actualNote.push(node10HPIText);
 
     return actualNote;
-}
-
-export function formatHPIText(hpi_text: string) {
-    const parsedHPIText = JSON.parse(hpi_text) as HPIText[] | string;
-
-    if (typeof parsedHPIText === 'string') {
-        return <p>{parsedHPIText}</p>;
-    }
-
-    return parsedHPIText.map((item) => {
-        return (
-            <p key={item.title}>
-                <b>{item.title}</b>
-                <br />
-                {item.text}
-                {item.miscNote ? (
-                    <>
-                        {' '}
-                        <br />
-                        <br />
-                        {item.miscNote}
-                    </>
-                ) : (
-                    ''
-                )}
-            </p>
-        );
-    });
 }
 
 export default getHPIText;
