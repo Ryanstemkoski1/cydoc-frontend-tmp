@@ -15,7 +15,6 @@ import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
 import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
 import { MedicationsState } from 'redux/reducers/medicationsReducer';
 import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
-import { PhysicalExamState } from 'redux/reducers/physicalExamReducer';
 import { PlanState } from 'redux/reducers/planReducer';
 import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
 import { SocialHistoryState } from 'redux/reducers/socialHistoryReducer';
@@ -33,6 +32,7 @@ import { Button, Segment } from 'semantic-ui-react';
 import './GenerateNote.css';
 import AllergiesNote from './notesections/AllergiesNote';
 import FamilyHistoryNote from './notesections/FamilyHistoryNote';
+import HPINote from './notesections/HPINote';
 import MedicalHistoryNote from './notesections/MedicalHistoryNote';
 import MedicationsNote from './notesections/MedicationsNote';
 import PhysicalExamNote from './notesections/PhysicalExamNote';
@@ -45,11 +45,11 @@ import NavigationButton from 'components/tools/NavigationButton/NavigationButton
 import { PatientPronouns } from 'constants/patientInformation';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
+import { PhysicalExamState } from 'redux/reducers/physicalExamReducer';
 import getHPIText, { HPIText } from 'utils/getHPIText';
 import BottomArrow from '../../../../assets/angle-down.svg';
 import './GenerateNote.css';
 import PatientInfo from './PatientInfo';
-import HPINote from './notesections/HPINote';
 
 interface GenerateNoteProps {
     previousFormClick: () => void;
@@ -126,7 +126,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
         updatePatientInformation(patientName, pronouns);
         closeModal();
     };
-    const [isBulletNoteView, _setIsBulletNoteView] = useState(true);
+    const [isBulletNoteView, setIsBulletNoteView] = useState(true);
     const [isRichText, setIsRichText] = useState(false);
 
     const [isExpanded, setIsExpanded] = useState(false);
@@ -213,6 +213,19 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
         </Button.Group>
     );
 
+    const bulletPointToggler = (
+        <Button.Group className='btn-right'>
+            <Button
+                onClick={() => setIsBulletNoteView(!isBulletNoteView)}
+                className={`margin-left-1 hpi-ph-button${
+                    isBulletNoteView ? '-selected' : ''
+                }`}
+            >
+                Bullet Point HPI
+            </Button>
+        </Button.Group>
+    );
+
     const generateNoteButtons = (
         <Fragment>
             <div className={'ui input large'}>
@@ -255,6 +268,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 </Button>
             </Button.Group>
             {richOrPlainButtons}
+            {bulletPointToggler}
         </Fragment>
     );
 
@@ -321,7 +335,10 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 >
                     <Segment className='generated-note-text'>
                         <h3> History of Present Illness </h3>
-                        <HPINote text={getHPIText() as HPIText[]} />
+                        <HPINote
+                            text={getHPIText(isBulletNoteView) as HPIText[]}
+                            bulletNoteView={isBulletNoteView}
+                        />
                         <h3> Patient History </h3>
                         <h4> Medical History </h4>
                         <MedicalHistoryNote

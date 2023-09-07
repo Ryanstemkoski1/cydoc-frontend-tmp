@@ -502,13 +502,23 @@ export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
     return formattedHpis;
 };
 
+// Function to remove specified phrases
+function removePhrases(text: string, phrases: string[]): string {
+    let modifiedText = text;
+    phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
+    phrases.forEach((phrase) => {
+        modifiedText = modifiedText.replace(new RegExp(phrase, 'g'), ''); // Removing each phrase globally
+    });
+    return modifiedText.trim();
+}
+
 export interface HPIText {
     title: string;
     text: string;
     miscNote: string;
 }
 
-function getHPIText() {
+function getHPIText(bulletNoteView = false) {
     const rootState = currentNoteStore.getState();
 
     const state = {
@@ -536,7 +546,7 @@ function getHPIText() {
     while later ones are removed.
     */
 
-    const { response, text } = state.userSurvey.nodes['10'];
+    const { response } = state.userSurvey.nodes['10'];
 
     const formattedHpis = extractHpi(state);
 
@@ -581,6 +591,25 @@ function getHPIText() {
         // paragraph (i.e. set B is a subset of set A)
         return acc;
     }, []);
+
+    // After the finalPara array is constructed, perform the removal operation.
+    const phrasesToRemove = [
+        'The patient has been',
+        'The patient has',
+        'The patient is',
+        'The patients',
+        'The patient',
+        'He',
+        'She',
+        'They',
+    ];
+
+    finalPara.forEach((paragraph, i) => {
+        finalPara[i] = bulletNoteView
+            ? removePhrases(paragraph, phrasesToRemove)
+            : paragraph;
+    });
+
     const miscText = [];
     const actualNote = [];
     /**
