@@ -1,41 +1,39 @@
-import MedicalHistoryNoteRow from './MedicalHistoryNoteRow';
-import MedicalHistoryNoteItem from './MedicalHistoryNoteItem';
-import React from 'react';
-import MedicalHistoryContentHeader from './MedicalHistoryContentHeader';
-import GridContent from 'components/tools/GridContent.js';
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
+import ConditionInput from 'components/tools/ConditionInput/ConditionInput';
+import GridContent from 'components/tools/GridContent/GridContent';
 import constants from 'constants/constants.json';
-import ConditionInput from 'components/tools/ConditionInput';
+import diseaseSynonyms from 'constants/diseaseSynonyms';
+import { YesNoResponse } from 'constants/enums';
+import { ResponseTypes } from 'constants/hpiEnums';
+import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
+    BlankQuestionChangeAction,
+    PopResponseAction,
+    blankQuestionChange,
+    popResponse,
+} from 'redux/actions/hpiActions';
+import {
+    AddPmhPopOptionsAction,
+    addPmhPopOptions,
+    deleteCondition,
     toggleOption,
-    updateStartYear,
-    updateEndYear,
     updateComments,
     updateConditionResolved,
-    addPmhPopOptions,
-    AddPmhPopOptionsAction,
-    deleteCondition,
+    updateEndYear,
+    updateStartYear,
 } from 'redux/actions/medicalHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
     MedicalHistoryItem,
     MedicalHistoryState,
 } from 'redux/reducers/medicalHistoryReducer';
-import { YesNoResponse } from 'constants/enums';
-import { TextAreaProps, ButtonProps } from 'semantic-ui-react';
 import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
-import { ResponseTypes } from 'constants/hpiEnums';
+import { ButtonProps, TextAreaProps } from 'semantic-ui-react';
 import { v4 } from 'uuid';
-import {
-    blankQuestionChange,
-    BlankQuestionChangeAction,
-    PopResponseAction,
-    popResponse,
-} from 'redux/actions/hpiActions';
-import AddRowButton from 'components/tools/AddRowButton';
-import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
-import diseaseSynonyms from 'constants/diseaseSynonyms';
-import './MedicalHistoryContent.css';
+import style from './MedicalHistoryContent.module.scss';
+import MedicalHistoryNoteRow from './MedicalHistoryNoteRow';
 
 //Component that manages the layout of the medical history tab content
 class MedicalHistoryContent extends React.Component<Props, OwnState> {
@@ -183,7 +181,6 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
 
     render() {
         const {
-            mobile,
             responseChoice,
             responseType,
             addPmhPopOptions,
@@ -229,33 +226,61 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                 return <AddRowButton onClick={this.addRow} name={'disease'} />;
             listValues = responseChoice;
         }
-        const rows = this.generateListItems(listValues as string[], mobile);
+        const rows = this.generateListItems(listValues as string[]);
+        const header = [
+            {
+                title: 'Condition',
+                col: 3,
+            },
+        ];
+        if (!this.props.hide) {
+            header.push(
+                {
+                    title: '',
+                    col: 9,
+                },
+                {
+                    title: 'Start Year',
+                    col: 3,
+                },
+                {
+                    title: 'Has Condition Resolved?',
+                    col: 9,
+                },
+                {
+                    title: 'End Year',
+                    col: 9,
+                },
+                {
+                    title: 'Comments',
+                    col: 9,
+                },
 
+                {
+                    title: '',
+                    col: 9,
+                }
+            );
+        }
         return (
-            <div className='scroll-table history-table'>
-                <div className='scroll-table-inner'>
+            <div className={style.historyTable}>
+                <div className={`${style.historyTable__scroll} scrollbar`}>
                     <GridContent
-                        isPreview={this.props.isPreview}
-                        numColumns={6}
-                        contentHeader={
-                            <MedicalHistoryContentHeader
-                                hide={this.props.hide}
-                            />
+                        header_titles={header}
+                        rows={rows as React.JSX.Element[] | React.JSX.Element}
+                        name='medical history'
+                        onAddRow={this.addRow}
+                        canAddNew={
+                            !this.props.isPreview &&
+                            !(this.props.responseType == ResponseTypes.PMH_POP)
                         }
-                        rows={rows}
-                        //TODO: hpi?
-                        value_type='Medical History'
-                        mobile={mobile}
-                        addRow={this.addRow}
-                        name={'medical history'}
-                        pop={this.props.responseType == ResponseTypes.PMH_POP}
                     />
                 </div>
             </div>
         );
     }
 
-    generateListItems(conditions: string[], mobile: boolean) {
+    generateListItems(conditions: string[]) {
         const { isPreview } = this.props;
         const { seenConditions } = this.state;
         const standardMedicalHistory = this.standardizeMedicalHistory(
@@ -265,116 +290,58 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
             maxWidth: '500px',
             width: '100%',
         };
-        return mobile
-            ? conditions.map((condition: string, index: number) => {
-                  if (isPreview) {
-                      return (
-                          <MedicalHistoryNoteItem
-                              key={index}
-                              index={condition}
-                              conditionInput={
-                                  <ConditionInput
-                                      key={index}
-                                      index={condition}
-                                      category={'Medical History'}
-                                      isPreview={isPreview}
-                                      seenConditions={seenConditions}
-                                      addSeenCondition={this.addSeenCondition}
-                                      condition={condition}
-                                      standardizeName={
-                                          this.standardizeMedicalName
-                                      }
-                                  />
-                              }
-                              currentYear={this.props.currentYear}
-                              deleteRow={this.deleteRow}
-                          />
-                      );
-                  } else if (condition in standardMedicalHistory) {
-                      return (
-                          <MedicalHistoryNoteItem
-                              key={index}
-                              index={condition}
-                              currentYear={this.props.currentYear}
-                              deleteRow={this.deleteRow}
-                              hide={this.props.hide}
-                              conditionInput={
-                                  <ConditionInput
-                                      key={index}
-                                      isPreview={isPreview}
-                                      index={condition}
-                                      category={'Medical History'}
-                                      seenConditions={seenConditions}
-                                      addSeenCondition={this.addSeenCondition}
-                                      condition={
-                                          standardMedicalHistory[condition]
-                                              .condition
-                                      }
-                                      standardizeName={
-                                          this.standardizeMedicalName
-                                      }
-                                  />
-                              }
-                          />
-                      );
-                  }
-              })
-            : conditions.map((conditionIndex: string, index: number) => {
-                  if (isPreview) {
-                      return (
-                          <MedicalHistoryNoteRow
-                              key={index}
-                              index={conditionIndex}
-                              isPreview={isPreview}
-                              currentYear={this.props.currentYear}
-                              deleteRow={this.deleteRow}
-                              conditionInput={
-                                  <ConditionInput
-                                      key={index}
-                                      isPreview={isPreview}
-                                      index={conditionIndex}
-                                      category={'Medical History'}
-                                      condition={conditionIndex}
-                                      seenConditions={seenConditions}
-                                      addSeenCondition={this.addSeenCondition}
-                                      standardizeName={
-                                          this.standardizeMedicalName
-                                      }
-                                  />
-                              }
-                          />
-                      );
-                  } else if (conditionIndex in standardMedicalHistory) {
-                      return (
-                          <MedicalHistoryNoteRow
-                              key={index}
-                              index={conditionIndex}
-                              isPreview={isPreview}
-                              currentYear={this.props.currentYear}
-                              deleteRow={this.deleteRow}
-                              hide={this.props.hide}
-                              conditionInput={
-                                  <ConditionInput
-                                      key={index}
-                                      index={conditionIndex}
-                                      category={'Medical History'}
-                                      seenConditions={seenConditions}
-                                      addSeenCondition={this.addSeenCondition}
-                                      condition={
-                                          standardMedicalHistory[conditionIndex]
-                                              .condition
-                                      }
-                                      isPreview={isPreview}
-                                      standardizeName={
-                                          this.standardizeMedicalName
-                                      }
-                                      style={inputStyle}
-                                  />
-                              }
-                          />
-                      );
-                  }
-              });
+        return conditions.map((conditionIndex: string, index: number) => {
+            if (isPreview) {
+                return (
+                    <MedicalHistoryNoteRow
+                        key={index}
+                        index={conditionIndex}
+                        isPreview={isPreview}
+                        currentYear={this.props.currentYear}
+                        deleteRow={this.deleteRow}
+                        conditionInput={
+                            <ConditionInput
+                                key={index}
+                                isPreview={isPreview}
+                                index={conditionIndex}
+                                category={'Medical History'}
+                                condition={conditionIndex}
+                                seenConditions={seenConditions}
+                                addSeenCondition={this.addSeenCondition}
+                                standardizeName={this.standardizeMedicalName}
+                            />
+                        }
+                    />
+                );
+            } else if (conditionIndex in standardMedicalHistory) {
+                return (
+                    <MedicalHistoryNoteRow
+                        key={index}
+                        index={conditionIndex}
+                        isPreview={isPreview}
+                        currentYear={this.props.currentYear}
+                        deleteRow={this.deleteRow}
+                        hide={this.props.hide}
+                        conditionInput={
+                            <ConditionInput
+                                key={index}
+                                index={conditionIndex}
+                                category={'Medical History'}
+                                seenConditions={seenConditions}
+                                addSeenCondition={this.addSeenCondition}
+                                condition={
+                                    standardMedicalHistory[conditionIndex]
+                                        .condition
+                                }
+                                isPreview={isPreview}
+                                standardizeName={this.standardizeMedicalName}
+                                style={inputStyle}
+                            />
+                        }
+                    />
+                );
+            }
+        });
     }
 }
 
@@ -389,7 +356,6 @@ export type SeenCondition = {
 
 interface ContentProps {
     isPreview: boolean;
-    mobile: boolean;
     currentYear: number;
     responseChoice?: string[];
     responseType?: ResponseTypes;

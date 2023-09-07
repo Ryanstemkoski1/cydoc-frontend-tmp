@@ -1,23 +1,17 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { Component } from 'react';
-import Dropdown from 'components/tools/OptimizedDropdown';
-import {
-    Button,
-    Table,
-    TextArea,
-    TextAreaProps,
-    Image,
-} from 'semantic-ui-react';
-import { connect } from 'react-redux';
-import {
-    AllergiesItem,
-    AllergiesElements,
-} from 'redux/reducers/allergiesReducer';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectAllergiesItem } from 'redux/selectors/allergiesSelectors';
-import './table.css';
 import { OptionMapping } from '_processOptions';
-import Delete from '../../../../assets/delete.svg';
+import Dropdown from 'components/tools/OptimizedDropdown';
+import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { CurrentNoteState } from 'redux/reducers';
+import {
+    AllergiesElements,
+    AllergiesItem,
+} from 'redux/reducers/allergiesReducer';
+import { selectAllergiesItem } from 'redux/selectors/allergiesSelectors';
+import { Table, TextArea, TextAreaProps } from 'semantic-ui-react';
+import './table.css';
 
 class AllergiesTableBodyRow extends Component<Props> {
     constructor(props: Props) {
@@ -123,26 +117,11 @@ class AllergiesTableBodyRow extends Component<Props> {
             <Table.Row>
                 {tableRows}
                 <td>
-                    <div className='action-btn'>
-                        <Button
-                            circular
-                            icon='close'
-                            onClick={() => {
-                                this.props.deleteRow(rowIndex as string);
-                            }}
-                            aria-label='delete-allergy'
-                            className='hpi-ph-button delete-allergy'
-                        />
-
-                        <aside
-                            onClick={() => {
-                                this.props.deleteRow(rowIndex as string);
-                            }}
-                        >
-                            <Image src={Delete} />
-                            <span>Remove</span>
-                        </aside>
-                    </div>
+                    <RemoveButton
+                        onClick={() => {
+                            this.props.deleteRow(rowIndex as string);
+                        }}
+                    />
                 </td>
             </Table.Row>
         );

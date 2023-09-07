@@ -1,15 +1,15 @@
-import React from 'react';
+import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from 'constants/enums';
-import { CurrentNoteState } from 'redux/reducers';
 import { HpiStateProps } from 'constants/hpiEnums';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
     yesNoToggleOption,
     YesNoToggleOptionAction,
 } from 'redux/actions/hpiActions';
+import { CurrentNoteState } from 'redux/reducers';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import ToggleButton from 'components/tools/ToggleButton';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 interface YesNoProps {
     node: string;
@@ -19,31 +19,24 @@ class YesNo extends React.Component<Props> {
     render() {
         const { hpi, node } = this.props;
         return (
-            <div>
-                <ToggleButton
-                    className='button_yesno'
-                    active={hpi.nodes[node].response == YesNoResponse.Yes}
-                    condition='Yes'
-                    title='Yes'
-                    onToggleButtonClick={
-                        (/* _e, _data */) =>
-                            this.props.yesNoToggleOption(
-                                node,
-                                YesNoResponse.Yes
-                            )
+            <>
+                <YesAndNo
+                    yesButtonActive={
+                        hpi.nodes[node].response == YesNoResponse.Yes
+                    }
+                    yesButtonCondition={'Yes'}
+                    handleYesButtonClick={() =>
+                        this.props.yesNoToggleOption(node, YesNoResponse.Yes)
+                    }
+                    noButtonActive={
+                        hpi.nodes[node].response == YesNoResponse.No
+                    }
+                    noButtonCondition={'No'}
+                    handleNoButtonClick={() =>
+                        this.props.yesNoToggleOption(node, YesNoResponse.No)
                     }
                 />
-                <ToggleButton
-                    className='button_yesno'
-                    active={hpi.nodes[node].response == YesNoResponse.No}
-                    condition='No'
-                    title='No'
-                    onToggleButtonClick={
-                        (/* _e, _data */) =>
-                            this.props.yesNoToggleOption(node, YesNoResponse.No)
-                    }
-                />
-            </div>
+            </>
         );
     }
 }

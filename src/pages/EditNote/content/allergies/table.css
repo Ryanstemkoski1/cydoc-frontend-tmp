@@ -4,11 +4,6 @@
     border-color: transparent !important;
 }
 
-#contents-input-div {
-    width: 100%;
-    white-space: nowrap;
-}
-
 #comments-label {
     margin-right: 15px;
     margin-left: 10px;
@@ -26,7 +21,7 @@
     top: 50%;
     left: 50%;
 }
-@media (max-width: 767px){
+@media (max-width: 767px) {
     .spacing-x {
         padding-left: 10px;
         padding-right: 10px;

@@ -1,48 +1,27 @@
+import _ from 'lodash';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Icon, Button, Image } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
 import { initialState } from 'redux/reducers';
-import _ from 'lodash';
+import { Icon, Image } from 'semantic-ui-react';
 
 import { deleteNote } from '../../redux/actions/currentNoteActions';
 
-import { LANDING_PAGE_MOBLE_BP } from 'constants/breakpoints.js';
-import './LandingPage.css';
-import Feedback from '../../assets/cydoc-feedback.svg';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import Feedback from '../../assets/cydoc-feedback.svg';
+import './LandingPage.css';
 
 //Component that manages the layout of the dashboard page
 class LandingPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            windowWidth: 1000,
-            windowHeight: 0,
             redirect: '',
         };
-        this.updateDimensions = this.updateDimensions.bind(this);
 
         this.handleNewHPIClick = this.handleNewHPIClick.bind(this);
         this.handleEditHPIClick = this.handleEditHPIClick.bind(this);
         this.checkExistingNote = this.checkExistingNote.bind(this);
-    }
-
-    componentDidMount = () => {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    };
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-        let windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
     }
 
     handleEditNoteClick = () => {
@@ -100,9 +79,7 @@ class LandingPage extends Component {
     }
 
     render() {
-        const { windowWidth } = this.state;
         const { patientView } = this.props;
-        const stack = windowWidth < LANDING_PAGE_MOBLE_BP;
         const noteExists = this.checkExistingNote();
         const desktopNoteButtons = noteExists ? (
             <div className='landing-col multiple'>
@@ -116,7 +93,7 @@ class LandingPage extends Component {
                         <Icon
                             name='file alternate outline'
                             size='large'
-                            class='icons'
+                            className='icons'
                         />
                         <h3 className='textt'>Create New Blank Note</h3>
                     </div>
@@ -125,7 +102,7 @@ class LandingPage extends Component {
                     className='landing-box bottom'
                     onClick={() => this.handleEditNoteClick()}
                 >
-                    <Icon name='file outline' size='large' class='icons' />
+                    <Icon name='file outline' size='large' className='icons' />
                     <h3 className='textt'>
                         {patientView
                             ? 'Click here to begin your visit'
@@ -205,74 +182,6 @@ class LandingPage extends Component {
             </Fragment>
         );
 
-        const existingNoteMobileButton = noteExists && (
-            <div
-                onClick={this.handleEditNoteClick}
-                className='ui animated fade button landing'
-                tabIndex='0'
-            >
-                <div className='visible content' size='massive'>
-                    <Button size='big'>Return to an Active Note</Button>
-                </div>
-                <div className='hidden content'>
-                    <Icon
-                        name='file alternate outline'
-                        size='large'
-                        className='icons'
-                    ></Icon>
-                </div>
-            </div>
-        );
-
-        const newNoteMobileButton = (
-            <div
-                onClick={() => this.handleNewNoteClick(noteExists)}
-                className='ui animated fade button landing'
-                tabIndex='0'
-            >
-                <div className='visible content' size='massive'>
-                    <Button size='big'> Create New Blank Note</Button>
-                </div>
-                <div className='hidden content'>
-                    <Icon
-                        name={`file outline ${!noteExists ? 'alternate' : ''}`}
-                        size='large'
-                        className='icons'
-                    ></Icon>
-                </div>
-            </div>
-        );
-
-        const newAcidBaseAnalysisMobileButton = (
-            <div
-                onClick={() => this.handleAcidTestClick()}
-                className='ui animated fade button landing'
-                tabIndex='0'
-            >
-                <div className='visible content' size='massive'>
-                    <Button size='big'>Create New Acid Base Analysis</Button>
-                </div>
-                <div className='hidden content'>
-                    <Icon name='flask' size='large' className='icons'></Icon>
-                </div>
-            </div>
-        );
-
-        const newInpatientPlanMobileButton = (
-            <div
-                onClick={() => this.handleNewInpatientPlanClick()}
-                className='ui animated fade button landing'
-                tabIndex='0'
-            >
-                <div className='visible content' size='massive'>
-                    <Button size='big'>Create New Inpatient Plan</Button>
-                </div>
-                <div className='hidden content'>
-                    <Icon name='tasks' size='large' className='icons'></Icon>
-                </div>
-            </div>
-        );
-
         switch (this.state.redirect) {
             case 'NEW_NOTE':
                 return <Redirect to='/editnote' />;
@@ -299,21 +208,8 @@ class LandingPage extends Component {
                         ) : (
                             ''
                         )}
-                        <div
-                            className={`landing-boxes ${
-                                stack ? 'rows' : 'columns'
-                            }`}
-                        >
-                            {stack ? (
-                                <>
-                                    {existingNoteMobileButton}
-                                    {newNoteMobileButton}
-                                    {newInpatientPlanMobileButton}
-                                    {newAcidBaseAnalysisMobileButton}
-                                </>
-                            ) : (
-                                <>{desktopNoteButtons}</>
-                            )}
+                        <div className={`landing-boxes ${'columns'}`}>
+                            {<>{desktopNoteButtons}</>}
                         </div>
                     </>
                 );

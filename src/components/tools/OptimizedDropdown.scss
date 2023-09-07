@@ -1,0 +1,69 @@
+@import '../../assets/scss/variables.scss';
+.custom-dropdown {
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+        background: rgba($color-black, 0.05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgba($color-black, 0.3);
+    }
+    &__control {
+        height: 45px;
+        border-radius: 8px !important;
+        color: $color-black;
+        box-shadow: none !important;
+        border: 1px solid $color-border;
+        &--is-focused {
+            border-color: $color-primary !important;
+        }
+    }
+    &__input {
+        font-size: 14px;
+        font-family: $font-size-base;
+        color: $color-black !important;
+    }
+    &__indicator-separator {
+        display: none;
+    }
+    &__dropdown-indicator {
+        @include background-image(angle-down, svg, center, no-repeat, 12px);
+        svg {
+            opacity: 0;
+        }
+    }
+    &__placeholder {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    &__clear-indicator {
+        cursor: pointer;
+    }
+    &__menu {
+        margin: 0 !important;
+        border-radius: 8px !important;
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0 2px 5px rgba($color-black, 0.1) !important;
+    }
+
+    .option {
+        font-size: 14px;
+        cursor: pointer;
+        padding: 5px 15px;
+        user-select: none;
+        color: $color-black;
+        border-bottom: 1px solid rgba($color-black, 0.05);
+        font-weight: 400 !important;
+        &:hover {
+            color: $color-primary !important;
+            background-color: transparent !important;
+        }
+    }
+    &__option--is-selected {
+        color: $color-primary !important;
+        background-color: transparent !important;
+    }
+}

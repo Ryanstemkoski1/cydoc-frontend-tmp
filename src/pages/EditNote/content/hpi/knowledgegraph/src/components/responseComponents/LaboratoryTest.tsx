@@ -1,17 +1,17 @@
-import React from 'react';
-import { Grid, Input } from 'semantic-ui-react';
-import '../../css/TimeInput.css';
+import Input from 'components/Input/Input';
+import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
 import { HpiStateProps, LabTestType, TimeOption } from 'constants/hpiEnums';
-import { CurrentNoteState } from 'redux/reducers';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
-    labTestHandleClick,
     LabTestHandleClickAction,
-    labTestInputChange,
     LabTestInputChangeAction,
+    labTestHandleClick,
+    labTestInputChange,
 } from 'redux/actions/hpiActions';
+import { CurrentNoteState } from 'redux/reducers';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import ToggleButton from 'components/tools/ToggleButton';
+import '../../css/TimeInput.css';
 
 interface LabTestInputProps {
     node: string;
@@ -23,15 +23,14 @@ class LabTestInput extends React.Component<Props> {
             response = hpi.nodes[node].response as LabTestType,
             components = response.components;
         return (
-            <Grid columns='equal'>
+            <div>
                 {Object.keys(components).map((comp) => (
-                    <Grid.Row key={node + comp}>
-                        <Grid.Column> {comp} </Grid.Column>
-                        <Grid.Column>
-                            {' '}
+                    <div key={node + comp}>
+                        <div> {comp} </div>
+                        <div>
                             <Input
                                 id={'lab-test'}
-                                onChange={(_e, data) =>
+                                onChange={(_e: any, data: any) =>
                                     this.props.labTestInputChange(
                                         node,
                                         comp,
@@ -39,14 +38,13 @@ class LabTestInput extends React.Component<Props> {
                                     )
                                 }
                                 value={components[comp].value}
-                            />{' '}
-                        </Grid.Column>
-                        <Grid.Column width={9}>
+                            />
+                        </div>
+                        <div>
                             {components[comp].unitOptions.length == 1 ? (
                                 <label>
-                                    {components[comp].unit != 'nounits'
-                                        ? components[comp].unit
-                                        : ''}
+                                    {components[comp].unit != 'nounits' &&
+                                        components[comp].unit}
                                 </label>
                             ) : (
                                 components[comp].unitOptions.map((u) => (
@@ -67,10 +65,10 @@ class LabTestInput extends React.Component<Props> {
                                     />
                                 ))
                             )}
-                        </Grid.Column>
-                    </Grid.Row>
+                        </div>
+                    </div>
                 ))}
-            </Grid>
+            </div>
         );
     }
 }

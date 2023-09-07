@@ -1,34 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { Dropdown, Menu, Header, Image, Icon, Button } from 'semantic-ui-react';
-import { Link, useHistory } from 'react-router-dom';
-import {
-    HIDE_CYDOC_IN_NAV_MENU_BP,
-    LOGGEDIN_NAV_MENU_MOBILE_BP,
-} from 'constants/breakpoints.js';
+import React, { useEffect, useMemo } from 'react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Button, Menu } from 'semantic-ui-react';
 import Logo from '../../assets/cydoc-logo.svg';
 import NoteNameMenuItem from './NoteNameMenuItem';
+/* eslint-disable no-console */
+import MenuButton, { MenuItem } from 'components/Header/MenuButton';
+import { YesNoResponse } from 'constants/enums';
+import useAuth from 'hooks/useAuth';
+import useUser from 'hooks/useUser';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
-import './NavMenu.css';
+import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
+import { connect } from 'react-redux';
+import {
+    UpdateActiveItemAction,
+    updateActiveItem,
+} from 'redux/actions/activeItemActions';
+import { UserViewAction, changeUserView } from 'redux/actions/userViewActions';
+import { CurrentNoteState } from 'redux/reducers';
+import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
+import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import {
     selectDoctorViewState,
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
-import { changeUserView, UserViewAction } from 'redux/actions/userViewActions';
-import { connect } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import {
-    updateActiveItem,
-    UpdateActiveItemAction,
-} from 'redux/actions/activeItemActions';
-import { YesNoResponse } from 'constants/enums';
-import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
-import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
+import DashboardIcon from '../../assets/images/dashboard.png';
+import Setting from '../../assets/images/edit.svg';
+import Home from '../../assets/images/home.svg';
+import Logout from '../../assets/images/logout.svg';
+import QrCode from '../../assets/images/qr-code.svg';
+import Security from '../../assets/images/security.svg';
+import Users from '../../assets/images/users.svg';
 import constants from '../../constants/constants.json';
-import './NavMenu.css';
-import useAuth from 'hooks/useAuth';
-import useUser from 'hooks/useUser';
+import style from './NavMenu.module.scss';
 
 interface ConnectedNavMenuProps {
     className?: string;
@@ -38,11 +42,16 @@ interface ConnectedNavMenuProps {
     displayNoteName?: boolean;
 }
 
+const OurCreatedRoutes = [
+    'hpi',
+    'qrcode',
+    '/view/product',
+    'submission-successful',
+];
+
 // Navigation Bar component that will go at the top of most pages
 const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     const {
-        className,
-        attached = 'top',
         displayNoteName = false,
         patientView,
         doctorView,
@@ -50,89 +59,82 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         updateActiveItem,
     } = props;
 
-    const { isSignedIn, signOut, loginCorrect } = useAuth();
+    const location = useLocation();
+    const history = useHistory();
+    const isHomePage = location?.pathname === '/';
+    const { signOut, loginCorrect, isSignedIn, authLoading } = useAuth();
     const { user, isManager } = useUser();
-
+    const isCurrentOurRoute = useMemo(
+        () =>
+            OurCreatedRoutes.some((item) =>
+                location.pathname.toLowerCase().includes(item)
+            ),
+        [location.pathname]
+    );
     // email/password correct but waiting on MFA? allow users to logOut
     const userCurrentlyLoggingIn = loginCorrect && !isSignedIn;
 
-    const [windowWidth, setWindowWidth] = useState(0);
-
-    // Set event listeners for window resize to determine mobile vs web view
-    useEffect(() => {
-        const updateDimensions = (): void => {
-            setWindowWidth(
-                typeof window !== 'undefined' ? window.innerWidth : 0
-            );
-        };
-        updateDimensions();
-        window.addEventListener('resize', updateDimensions);
-        return (): void =>
-            window.removeEventListener('resize', updateDimensions);
-    }, []);
-
-    // Display warning when user tries to close the tab
-    useEffect(() => {
-        const handleTabClose = (event: BeforeUnloadEvent) => {
-            event.preventDefault();
-            // Some browsers do not support overriding this message (ex: Chrome), so the custom message will not display
-            // in all browsers.
-            return (event.returnValue =
-                'Are you sure you want to exit? Your current note will not be saved.');
-        };
-
-        window.addEventListener('beforeunload', handleTabClose);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleTabClose);
-        };
-    }, []);
-
-    const collapseLoggedInNav = windowWidth < LOGGEDIN_NAV_MENU_MOBILE_BP;
-    const hideCydoc = windowWidth < HIDE_CYDOC_IN_NAV_MENU_BP;
-
-    const dropdownOptions = [
+    // Logged In Menu Items
+    let loggedInMenuButtonItems: MenuItem[] = [
         {
-            as: Link,
-            to: '/edit-profile',
-            key: 'editProfile',
-            text: 'Edit Profile',
-            icon: 'setting',
-            selected: false,
-            active: window.location.href.includes('edit-profile'),
+            to: '/qrcode',
+            label: 'Clinic QR Code',
+            icon: QrCode,
+            active: window.location.href.includes('qrcode'),
         },
         {
-            as: Link,
-            to: '/profile-security',
-            key: 'profileSecurity',
-            text: 'Profile Security',
-            icon: 'lock',
-            selected: false,
-            active: window.location.href.includes('profile-security'),
+            to: '/dashboard',
+            label: 'Dashboard',
+            icon: DashboardIcon,
+            active: window.location.href.includes('dashboard'),
         },
         {
-            as: Link,
+            to: '/editprofile',
+            label: 'Edit Profile',
+            icon: Setting,
+            active: window.location.href.includes('editprofile'),
+        },
+
+        {
+            to: '/profilesecurity',
+            label: 'Profile Security',
+            icon: Security,
+            active: window.location.href.includes('profilesecurity'),
+        },
+        {
             to: '/',
-            key: 'logout',
-            text: 'Log Out',
-            icon: 'sign out',
+            label: 'Log Out',
+            icon: Logout,
             onClick: signOut,
-            selected: false,
             active: false,
         },
     ];
 
-    // Use for redirecting
-    const history = useHistory();
+    if (isManager) {
+        loggedInMenuButtonItems = [
+            {
+                to: '/manager-dashboard',
+                label: 'Manage Users',
+                icon: Users,
+                active: window.location.href.includes('manager-dashboard'),
+            },
+            ...loggedInMenuButtonItems,
+        ];
+    }
 
-    const navigateToHome = () => {
-        history.push('/dashboard');
-    };
+    if (!isHomePage) {
+        loggedInMenuButtonItems = [
+            {
+                to: '/',
+                label: 'Home',
+                icon: Home,
+                active: false,
+            },
+            ...loggedInMenuButtonItems,
+        ];
+    }
 
-    const logoNotLoggedIn = () => {
-        history.push('/');
-    };
-
+    // Default Menu Items
     const loginButton = (
         <Button
             as={Link}
@@ -155,19 +157,6 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         />
     );
 
-    const userManager = isManager ? (
-        <Menu.Item>
-            <Button
-                basic
-                color='teal'
-                name='users'
-                content={collapseLoggedInNav ? undefined : 'Manage Users'}
-                icon='users'
-                onClick={() => history.push('/manager-dashboard')}
-            />
-        </Menu.Item>
-    ) : null;
-    // Menu items when not logged in
     const defaultMenuItems = (
         // email/password correct but waiting on MFA? allow users to logOut
         <Menu.Item>
@@ -185,48 +174,6 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                 }}
             />
         </Menu.Item>
-    );
-    // Menu items when logged in
-    const loggedInMenuItems = (
-        <>
-            {userManager}
-            <Menu.Item>
-                <Button
-                    basic
-                    color='teal'
-                    name='home'
-                    content={collapseLoggedInNav ? undefined : 'Home'}
-                    icon='hospital outline'
-                    onClick={navigateToHome}
-                />
-            </Menu.Item>
-            <Menu.Item>
-                <Dropdown
-                    button
-                    basic
-                    color='teal'
-                    floating
-                    name='profile'
-                    className={`profile-button ${
-                        collapseLoggedInNav ? 'profile-mobile' : ''
-                    }`}
-                    options={dropdownOptions}
-                    trigger={
-                        <span>
-                            <Icon
-                                name='user outline'
-                                className={
-                                    collapseLoggedInNav
-                                        ? 'profile-mobile-icon'
-                                        : ''
-                                }
-                            />
-                            {collapseLoggedInNav ? undefined : user?.firstName}
-                        </span>
-                    }
-                />
-            </Menu.Item>
-        </>
     );
 
     const checkPatientView = () => {
@@ -251,124 +198,91 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         return true;
     };
 
-    return (
-        <Menu
-            className={`${className} nav-menu nav-bar ${
-                displayNoteName && doctorView ? 'nav-bar-input' : ''
-            }`}
-            attached={attached}
-        >
-            {isSignedIn ? (
-                <Menu.Item className='logo-menu' onClick={navigateToHome}>
-                    <Image
-                        src={Logo}
-                        className={
-                            collapseLoggedInNav
-                                ? 'logo-circle-mobile'
-                                : 'logo-circle'
-                        }
-                    />
-                    {!displayNoteName && !hideCydoc && (
-                        <Header
-                            as='h1'
-                            className={`${
-                                collapseLoggedInNav
-                                    ? 'logo-text-mobile'
-                                    : 'logo-text'
-                            }`}
-                            content='Cydoc'
-                        />
-                    )}
-                </Menu.Item>
-            ) : (
-                <Menu.Item className='logo-menu' onClick={logoNotLoggedIn}>
-                    <Image
-                        src={Logo}
-                        className={`${
-                            collapseLoggedInNav
-                                ? 'logo-circle-mobile'
-                                : 'logo-circle'
-                        }`}
-                    />
-                    {!displayNoteName && !hideCydoc && (
-                        <Header
-                            as='h1'
-                            className={`${
-                                collapseLoggedInNav
-                                    ? 'logo-text-mobile'
-                                    : 'logo-text'
-                            }`}
-                            content='Cydoc'
-                        />
-                    )}
-                </Menu.Item>
-            )}
-            {/* When parent is EditNote, then display the note name item */}
-            {displayNoteName && doctorView && (
-                <NoteNameMenuItem mobile={collapseLoggedInNav} />
-            )}
-            {isSignedIn && history.location.pathname.length > 1 ? (
-                collapseLoggedInNav ? (
-                    <Button.Group>
-                        <Button
-                            compact
-                            onClick={() => {
-                                changeUserView('Patient View');
-                                if (!checkPatientView()) updateActiveItem('CC');
-                            }}
-                            className={`hpi-ph-button${
-                                patientView ? '-selected' : ''
-                            }`}
-                        >
-                            Patient
-                        </Button>
-                        <Button.Or />
-                        <Button
-                            compact
-                            onClick={() => changeUserView('Doctor View')}
-                            className={`hpi-ph-button${
-                                !patientView ? '-selected' : ''
-                            }`}
-                        >
-                            Doctor
-                        </Button>
-                    </Button.Group>
-                ) : (
-                    <Button.Group>
-                        <Button
-                            style={{ maxHeight: '75%' }}
-                            onClick={() => {
-                                changeUserView('Patient View');
-                                if (!checkPatientView()) updateActiveItem('CC');
-                            }}
-                            className={`hpi-ph-button${
-                                patientView ? '-selected' : ''
-                            }`}
-                        >
-                            Patient View
-                        </Button>
-                        <Button.Or />
-                        <Button
-                            style={{ maxHeight: '75%' }}
-                            onClick={() => changeUserView('Doctor View')}
-                            className={`hpi-ph-button${
-                                !patientView ? '-selected' : ''
-                            }`}
-                        >
-                            Doctor View
-                        </Button>
-                    </Button.Group>
-                )
-            ) : (
-                ''
-            )}
+    // Display warning when user tries to close the tab
+    useEffect(() => {
+        if (!isCurrentOurRoute) {
+            const handleTabClose = (event: BeforeUnloadEvent) => {
+                event.preventDefault();
+                // Some browsers do not support overriding this message (ex: Chrome), so the custom message will not display
+                // in all browsers.
+                return (event.returnValue =
+                    'Are you sure you want to exit? Your current note will not be saved.');
+            };
 
-            {/* Navigation links */}
-            <Menu.Menu position='right'>
-                {/* Menu will have different options depending on whether the user is logged in or not */}
-                {isSignedIn ? loggedInMenuItems : defaultMenuItems}
-            </Menu.Menu>
-        </Menu>
+            window.addEventListener('beforeunload', handleTabClose);
+
+            return () => {
+                window.removeEventListener('beforeunload', handleTabClose);
+            };
+        }
+    }, [isCurrentOurRoute]);
+
+    return (
+        <header
+            className={`${style.header} ${
+                displayNoteName && doctorView ? style.headerNote : ''
+            } flex align-center justify-between`}
+        >
+            <Link
+                className={`${style.header__logo} ${
+                    isHomePage ? '' : style.isLinking
+                } flex align-center`}
+                to='/'
+            >
+                <img src={Logo} alt='Cydoc' />
+                {(!(isSignedIn && history.location.pathname.length) ||
+                    isCurrentOurRoute ||
+                    isHomePage) && <span>Cydoc</span>}
+            </Link>
+
+            {displayNoteName &&
+                doctorView &&
+                !isHomePage &&
+                !isCurrentOurRoute && (
+                    <div className={style.header__note}>
+                        <NoteNameMenuItem />
+                    </div>
+                )}
+
+            {isSignedIn &&
+                history.location.pathname.length > 1 &&
+                !isCurrentOurRoute && (
+                    <div className={`${style.header__view} flex align-center`}>
+                        <button
+                            onClick={() => {
+                                changeUserView('Patient View');
+                                if (!checkPatientView()) updateActiveItem('CC');
+                            }}
+                            className={`button sm pill gray ${
+                                patientView ? 'active' : ''
+                            }`}
+                        >
+                            Patient <span>View</span>
+                        </button>
+                        <strong className='flex align-center justify-center'>
+                            or
+                        </strong>
+                        <button
+                            onClick={() => changeUserView('Doctor View')}
+                            className={`button sm pill gray ${
+                                !patientView ? 'active' : ''
+                            }`}
+                        >
+                            Doctor <span>View</span>
+                        </button>
+                    </div>
+                )}
+
+            {!authLoading &&
+                (isSignedIn ? (
+                    <MenuButton
+                        label={user?.firstName ?? ''}
+                        items={loggedInMenuButtonItems}
+                    />
+                ) : (
+                    defaultMenuItems
+                ))}
+        </header>
     );
 };
 

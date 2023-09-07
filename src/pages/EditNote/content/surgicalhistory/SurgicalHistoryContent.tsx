@@ -1,54 +1,49 @@
+import Input from 'components/Input/Input';
+import Dropdown from 'components/tools/OptimizedDropdown';
+import procedures from 'constants/procedures';
 import React, { Component } from 'react';
-import SurgicalHistoryTableBodyRow from './SurgicalHistoryTableBodyRow';
+import { connect } from 'react-redux';
 import {
-    toggleHasSurgicalHistory,
-    updateProcedure,
-    updateYear,
-    updateComments,
-    deleteProcedure,
     AddPshPopOptionsAction,
     addPshPopOptions,
+    deleteProcedure,
+    toggleHasSurgicalHistory,
+    updateComments,
+    updateProcedure,
+    updateYear,
 } from 'redux/actions/surgicalHistoryActions';
-import procedures from 'constants/procedures';
-import Dropdown from 'components/tools/OptimizedDropdown';
-import {
-    Accordion,
-    Form,
-    Input,
-    Table,
-    DropdownProps,
-    TextAreaProps,
-    InputOnChangeData,
-    Header,
-    Image,
-} from 'semantic-ui-react';
-import AddRowButton from 'components/tools/AddRowButton';
-import {
-    SurgicalHistoryItem,
-    SurgicalHistoryElements,
-} from 'redux/reducers/surgicalHistoryReducer';
 import { CurrentNoteState } from 'redux/reducers';
-import { connect } from 'react-redux';
+import {
+    SurgicalHistoryElements,
+    SurgicalHistoryItem,
+} from 'redux/reducers/surgicalHistoryReducer';
 import {
     selectHasSurgicalHistoryState,
     selectSurgicalHistoryProcedures,
 } from 'redux/selectors/surgicalHistorySelectors';
+import {
+    DropdownProps,
+    InputOnChangeData,
+    TextAreaProps,
+} from 'semantic-ui-react';
+import SurgicalHistoryTableBodyRow from './SurgicalHistoryTableBodyRow';
 
 import { OptionMapping } from '_processOptions';
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
+import GridContent from 'components/tools/GridContent/GridContent';
+import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from 'constants/enums';
 import { ResponseTypes } from 'constants/hpiEnums';
-import { v4 } from 'uuid';
 import {
     BlankQuestionChangeAction,
-    blankQuestionChange,
     PopResponseAction,
+    blankQuestionChange,
     popResponse,
 } from 'redux/actions/hpiActions';
-import './SurgicalHistoryContent.css';
-import { YesNoResponse } from 'constants/enums';
-import ToggleButton from 'components/tools/ToggleButton';
-import { questionContainer, questionTextStyle } from './styles';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
-import Add from '../../../../assets/add.svg';
+import { v4 } from 'uuid';
+import style from './SurgicalHistoryContent.module.scss';
+
 class SurgicalHistoryContent extends Component<Props, OwnState> {
     constructor(props: Props) {
         super(props);
@@ -71,7 +66,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         }
 
         this.state = {
-            windowWidth: 0,
             proceduresOptions: procedures,
             active: new Set(),
             isInvalidYear: invalidYearSet,
@@ -88,24 +82,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
-        this.updateDimensions = this.updateDimensions.bind(this);
         this.toggleYesNoButton = this.toggleYesNoButton.bind(this);
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-
-        this.setState({ windowWidth });
     }
 
     addRow() {
@@ -238,7 +215,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 proceduresOptions={updatedProceduresOptions}
                 isPreview={this.props.isPreview}
                 currentYear={this.state.currentYear}
-                mobile={this.props.mobile}
                 deleteRow={this.deleteRow}
                 pop={this.props.responseType == ResponseTypes.PSH_POP}
             />
@@ -250,15 +226,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         const fields = this.props.hide
             ? ['Procedure', '']
             : ['Procedure', '', 'Year', 'Comments'];
-        return (
-            <Table.Row>
-                {fields.map((header, index) => (
-                    <Table.HeaderCell key={index} className='sticky-header'>
-                        {header}
-                    </Table.HeaderCell>
-                ))}
-            </Table.Row>
-        );
+        return fields.map((item) => ({ title: item, col: 1 }));
     }
 
     makeAccordionPanels(nums: string[], values: SurgicalHistoryElements) {
@@ -275,7 +243,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                 comments = values[i].comments;
             }
             const titleContent = (
-                <Form className='inline-form'>
+                <form className='inline-form'>
                     {isPreview ? (
                         <Input
                             disabled
@@ -284,12 +252,6 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                             value={nums[n]}
                         />
                     ) : (
-                        // <Input
-                        //     fluid
-                        //     transparent
-                        //     className='content-input-surgical content-dropdown medication'
-                        //     id='add-row'
-                        // >
                         <div id='width-full' className='full-view'>
                             <Dropdown
                                 clearable
@@ -309,16 +271,15 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                                 className='content-input-surgical'
                             />
                         </div>
-                        // </Input>
                     )}
-                </Form>
+                </form>
             );
 
             const contentInputs = (
                 <>
                     <div id='contents-input-div'>
                         <label
-                            className='medications-content-input-label'
+                            className='medications-content-input-label surgical__label'
                             id='year-label'
                         >
                             <b>Year:</b>
@@ -352,7 +313,7 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
                     </div>
                     <div id='contents-input-div'>
                         <label
-                            className='medications-content-input-label'
+                            className='medications-content-input-label surgical__label'
                             id='comments-label'
                         >
                             <b>Comments:</b>
@@ -431,67 +392,53 @@ class SurgicalHistoryContent extends Component<Props, OwnState> {
         }
 
         const content = (
-            <>
-                {this.state.windowWidth < 800 ? (
-                    <Accordion
-                        panels={this.makeAccordionPanels(nums, values)}
-                        exclusive={false}
-                        fluid
-                        styled
-                    />
-                ) : (
-                    <Table celled className='table-display'>
-                        {<Table.Header content={this.makeHeader()} />}
-                        {/* eslint-disable react/no-children-prop */}
-                        <Table.Body children={this.makeTableBodyRows(nums)} />
-                        {/* eslint-enable react/no-children-prop */}
-                    </Table>
-                )}
-            </>
+            <GridContent
+                header_titles={this.makeHeader()}
+                rows={this.makeTableBodyRows(nums)}
+                canAddNew={
+                    !this.props.isPreview &&
+                    (hasSurgicalHistory || !patientView) &&
+                    this.props.responseType != ResponseTypes.PSH_POP
+                }
+                name='Surgical History'
+                onAddRow={this.addRow}
+            />
         );
 
         return (
-            <div className='surgical-history'>
+            <div className={style.surgicalHistory}>
                 {patientView && !nums.length && (
-                    <div style={questionContainer}>
-                        <Header
-                            as='h2'
-                            textAlign='left'
-                            content='Have you had any surgeries?'
-                            style={questionTextStyle}
-                        />
-                        <ToggleButton
-                            className='button_yesno'
-                            title='Yes'
-                            active={hasSurgicalHistory || false}
-                            onToggleButtonClick={() =>
-                                this.toggleYesNoButton(true)
-                            }
-                        />
-                        <ToggleButton
-                            className='button_yesno'
-                            title='No'
-                            active={
-                                hasSurgicalHistory !== null &&
-                                !hasSurgicalHistory
-                            }
-                            onToggleButtonClick={() =>
-                                this.toggleYesNoButton(false)
-                            }
-                        />
+                    <div
+                        className={`${style.surgicalHistory__item} flex-wrap align-center justify-between`}
+                    >
+                        <p>Have you had any surgeries?</p>
+                        <aside>
+                            <YesAndNo
+                                yesButtonActive={hasSurgicalHistory || false}
+                                handleYesButtonClick={() =>
+                                    this.toggleYesNoButton(true)
+                                }
+                                noButtonActive={
+                                    hasSurgicalHistory !== null &&
+                                    !hasSurgicalHistory
+                                }
+                                handleNoButtonClick={() =>
+                                    this.toggleYesNoButton(false)
+                                }
+                            />
+                        </aside>
                     </div>
                 )}
-                {nums.length && (hasSurgicalHistory || !patientView)
-                    ? content
-                    : ''}
-                {!this.props.isPreview &&
+                {nums.length !== 0 &&
                     (hasSurgicalHistory || !patientView) &&
-                    this.props.responseType != ResponseTypes.PSH_POP && (
-                        <div className='add-row-item' onClick={this.addRow}>
-                            <Image src={Add} />
-                            <AddRowButton name='surgical history' />
-                        </div>
-                    )}
+                    content}
+
+                {nums.length === 0 && (hasSurgicalHistory || !patientView) && (
+                    <AddRowButton
+                        onClick={this.addRow}
+                        name='Surgical History'
+                    />
+                )}
             </div>
         );
     }
@@ -512,7 +459,6 @@ export type Procedure = {
 }[];
 
 type OwnState = {
-    windowWidth: number;
     proceduresOptions: OptionMapping;
     active: Set<string>;
     isInvalidYear: Set<unknown>;
@@ -528,8 +474,6 @@ interface SurgicalHistoryProps {
 
 interface ContentProps {
     isPreview: boolean;
-
-    mobile: boolean;
     responseChoice?: string[];
     responseType?: ResponseTypes;
     node?: string;

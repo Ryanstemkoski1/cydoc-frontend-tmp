@@ -31,8 +31,8 @@
 }
 
 .ui.button.hpi-ph-button-selected {
-    background-color: #373b67;
-    color: white;
+    background-color: #373b67 !important;
+    color: white !important;
     border-radius: 20px;
     box-shadow: 0 0 0 1px rgb(34 36 38 / 15%) inset;
 }

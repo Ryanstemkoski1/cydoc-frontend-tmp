@@ -1,49 +1,46 @@
-import React, { Component } from 'react';
-import {
-    Form,
-    Input,
-    Table,
-    TextAreaProps,
-    InputOnChangeData,
-    DropdownProps,
-    Image,
-} from 'semantic-ui-react';
-import AddRowButton from 'components/tools/AddRowButton';
+import { OptionMapping } from '_processOptions';
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import allergens from 'constants/allergens';
 import allergicReactions from 'constants/allergicReactions';
-import AllergiesTableBodyRow from './AllergiesTableBodyRow';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-    toggleHasAllergies,
-    updateIncitingAgent,
-    updateReaction,
-    updateComments,
     addAllergy,
     deleteAllergy,
+    toggleHasAllergies,
+    updateComments,
     updateId,
+    updateIncitingAgent,
+    updateReaction,
 } from 'redux/actions/allergiesActions';
+import { CurrentNoteState } from 'redux/reducers';
 import {
     AllergiesElements,
     AllergiesItem,
 } from 'redux/reducers/allergiesReducer';
-import { CurrentNoteState } from 'redux/reducers';
 import {
     selectAllergies,
     selectHasAllergiesState,
 } from 'redux/selectors/allergiesSelectors';
-import './table.css';
-import { OptionMapping } from '_processOptions';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import {
+    DropdownProps,
+    Form,
+    Input,
+    InputOnChangeData,
+    Table,
+    TextAreaProps,
+} from 'semantic-ui-react';
 import './AllergiesContent.css';
-import Add from '../../../../assets/add.svg';
+import AllergiesTableBodyRow from './AllergiesTableBodyRow';
+import './table.css';
 
 //Component that manages the layout for the allergies page
 class AllergiesContent extends Component<Props, OwnState> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            windowWidth: 0,
             active: new Set(),
             allergensOptions: allergens,
             allergicReactionsOptions: allergicReactions,
@@ -52,24 +49,7 @@ class AllergiesContent extends Component<Props, OwnState> {
         this.handleTableBodyChange = this.handleTableBodyChange.bind(this);
         this.makeAccordionPanels = this.makeAccordionPanels.bind(this);
         this.makeHeader = this.makeHeader.bind(this);
-        this.updateDimensions = this.updateDimensions.bind(this);
         this.toggleYesNoButton = this.toggleYesNoButton.bind(this);
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-
-        this.setState({ windowWidth });
     }
 
     addRow() {
@@ -276,21 +256,11 @@ class AllergiesContent extends Component<Props, OwnState> {
 
         const content = (
             <div className='allergies-section'>
-                {/* {this.state.windowWidth <
-                PATIENT_HISTORY_ALLERGIES_MOBILE_BP ? (
-                    <Accordion
-                        panels={this.makeAccordionPanels(nums, values)}
-                        exclusive={false}
-                        fluid
-                        styled
-                    />
-                ) : ( */}
                 <Table celled className='table-display'>
                     <Table.Header content={this.makeHeader()} />
                     {/* eslint-disable-next-line react/no-children-prop */}
                     <Table.Body children={this.makeTableBodyRows(nums)} />
                 </Table>
-                {/* )} */}
             </div>
         );
 
@@ -298,10 +268,7 @@ class AllergiesContent extends Component<Props, OwnState> {
             <>
                 {content}
                 {!this.props.isPreview && (
-                    <div className='add-row-item' onClick={this.addRow}>
-                        <Image src={Add} />
-                        <AddRowButton name='allergy' />
-                    </div>
+                    <AddRowButton name='allergy' onClick={this.addRow} />
                 )}
             </>
         );
@@ -334,17 +301,15 @@ interface AllergiesProps {
 
 interface ContentProps {
     isPreview: boolean;
-    mobile: boolean;
 }
 
 interface OwnState {
-    windowWidth: number;
     active: Set<string>;
     allergensOptions: OptionMapping;
     allergicReactionsOptions: OptionMapping;
 }
 
-type Props = AllergiesProps & ContentProps & DispatchProps;
+type Props = AllergiesProps & DispatchProps & ContentProps;
 
 const mapStateToProps = (state: CurrentNoteState): AllergiesProps => {
     return {

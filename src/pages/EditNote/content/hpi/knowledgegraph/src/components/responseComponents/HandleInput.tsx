@@ -1,15 +1,13 @@
-import React from 'react';
-import { Form, TextArea } from 'semantic-ui-react';
-import '../../css/HandleInput.css';
+import Textarea from 'components/Input/Textarea';
 import { HpiStateProps } from 'constants/hpiEnums';
-import { CurrentNoteState } from 'redux/reducers';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
     handleInputChange,
     HandleInputChangeAction,
 } from 'redux/actions/hpiActions';
-import { connect } from 'react-redux';
+import { CurrentNoteState } from 'redux/reducers';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import '../../css/HandleInput.css';
 
 interface HandleInputProps {
     node: string;
@@ -19,16 +17,16 @@ class HandleInput extends React.Component<Props> {
     render() {
         const { hpi, node, handleInputChange } = this.props;
         return (
-            <Form>
-                <TextArea
+            <form>
+                <Textarea
                     className='handle-input'
                     id='handle-input'
-                    onChange={(_e, data) =>
+                    onChange={(_e: any, data: any) =>
                         handleInputChange(node, data.value as string)
                     }
                     value={hpi.nodes[node].response as string}
                 />
-            </Form>
+            </form>
         );
     }
 }

@@ -7,9 +7,15 @@
 .input-column .survey-chips {
     margin-top: 0;
 }
-@media (max-width: 767px){
-    .ui.grid>[class*="eight wide"].input-column.column.qa-div {
+.ui.segment.additional {
+    padding: 3rem 4rem;
+}
+@media (max-width: 767px) {
+    .ui.grid > [class*='eight wide'].input-column.column.qa-div {
         width: 100% !important;
+    }
+    .ui.segment.additional {
+        padding: 2rem 1rem;
     }
 }
 

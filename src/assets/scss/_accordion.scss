@@ -1,0 +1,35 @@
+@import '../../assets/scss/variables.scss';
+.accordion-ui {
+    border-bottom: 1px solid $color-border;
+    &:first-of-type {
+        border-top: 1px solid $color-border;
+    }
+    .title {
+        border-left: 0;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 700;
+        user-select: none;
+        position: relative;
+        padding: 5px 20px 5px 0 !important;
+        color: $color-primary !important;
+        &::after {
+            right: 0;
+            top: 16px;
+            content: '';
+            position: absolute;
+            border: 6px solid transparent;
+            border-top-color: $color-primary;
+        }
+        &.active {
+            &::after {
+                top: 8px;
+                transform: rotate(180deg);
+            }
+        }
+    }
+    .content {
+        line-height: 1.4;
+        padding: 0 0 10px !important;
+    }
+}

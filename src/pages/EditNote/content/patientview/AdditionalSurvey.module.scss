@@ -1,0 +1,14 @@
+@import '../../../../assets/scss/variables.scss';
+.additionalSurvey {
+    &__row {
+        margin: 0 -15px;
+    }
+    &__col {
+        width: 50%;
+        padding: 0 15px;
+        margin-bottom: 20px;
+        @include max-screen($mobile) {
+            width: 100%;
+        }
+    }
+}

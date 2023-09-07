@@ -2,6 +2,9 @@
     width: 100vw;
     padding-left: 2rem;
 }
+.family-hx-note-item.bottom-space {
+    margin-bottom: 10px;
+}
 
 .family-member-header {
     display: inline;
@@ -82,6 +85,9 @@
 .social-history-content .ui.divider {
     margin-bottom: 25px;
 }
+.social-history-content .family-hx-note-item .ui.divider {
+    display: block;
+}
 
 #alcohol-header,
 #drugs-header {
@@ -93,18 +99,21 @@
     margin-left: 5px;
     font-style: italic;
 }
-
+.recreational-dropdown {
+    max-width: 250px;
+}
 @media (max-width: 767px) {
+    .recreational-dropdown {
+        max-width: 100%;
+        padding-bottom: 10px;
+    }
     .ui.form.family-hx-note-item.family-medical + .hpi-ph-button {
         align-self: flex-start;
         margin-top: 2px;
     }
     .ui.form.family-hx-note-item {
-        padding-left: 1rem;
-        padding-right: 1rem;
-    }
-    .ui.form.family-hx-note-item.family-medical {
-        width: calc(100% - 50px);
+        padding-left: 0;
+        padding-right: 0;
     }
     .family-hx-note-item .inline.fields.condition-header .switch-button {
         margin-top: 3px;
@@ -199,6 +208,9 @@
     .btn-wrapper button {
         margin-bottom: 5px !important;
     }
+    .social-history-content .family-hx-note-item .btn-wrapper {
+        width: 100%;
+    }
 }
 
 .living-toggle-row {
@@ -261,10 +273,12 @@
 @media (max-width: 767px) {
     .family-hisory-block-mobile {
         margin-bottom: 20px;
-    } 
-    .family-hisory-block-mobile .ui[class*="vertically divided"].grid>.row:before {
+    }
+    .family-hisory-block-mobile
+        .ui[class*='vertically divided'].grid
+        > .row:before {
         width: 100% !important;
-    }    
+    }
     .family-hisory-block-mobile .action-btn {
         padding: 15px 0 !important;
         margin: 0 15px 0;
@@ -284,7 +298,7 @@
     .family-hisory-note-mobile:last-child {
         margin-bottom: 0 !important;
     }
-    .family-hisory-note-mobile .ui.search.dropdown>.text {
+    .family-hisory-note-mobile .ui.search.dropdown > .text {
         overflow: visible;
     }
     .family-hisory-note-mobile .ui.grid {
@@ -306,7 +320,8 @@ button {
     cursor: pointer;
 }
 
-.yes-button, .no-button {
+.yes-button,
+.no-button {
     width: 40px;
     height: 34px;
     outline: none;

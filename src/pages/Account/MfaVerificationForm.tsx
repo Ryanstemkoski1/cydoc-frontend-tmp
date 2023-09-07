@@ -1,16 +1,16 @@
-import React from 'react';
-import { Field, Formik, FormikHelpers } from 'formik';
 import { TextField } from '@mui/material';
+import { Field, Formik, FormikHelpers } from 'formik';
+import React from 'react';
 
 import './Account.css';
 
-import { Button } from 'semantic-ui-react';
-import * as Yup from 'yup';
-import useAuth from 'hooks/useAuth';
 import { Box, Stack } from '@mui/system';
 import { ErrorText } from 'components/Atoms/ErrorText';
 import LogoHeader from 'components/Atoms/LogoHeader';
 import { SubmitOnEnter } from 'components/Atoms/SubmitOnEnter';
+import useAuth from 'hooks/useAuth';
+import { Button } from 'semantic-ui-react';
+import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
     code: Yup.string()
@@ -66,7 +66,7 @@ export default function MfaVerificationForm() {
                     <Field
                         name='code'
                         required
-                        ref={focusInputField}
+                        // ref={focusInputField}
                         autoFocus
                         label='SMS Code'
                         id='code'

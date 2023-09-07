@@ -1,58 +1,35 @@
+import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
+import exampleSchema from 'constants/PhysicalExam/exampleSchema.json';
+import { PhysicalExamSchemaItem } from 'constants/PhysicalExam/physicalExamSchema';
 import React from 'react';
+import { connect } from 'react-redux';
+import { updateVitals } from 'redux/actions/physicalExamActions';
+import { CurrentNoteState } from 'redux/reducers';
+import { Vitals, VitalsFields } from 'redux/reducers/physicalExamReducer';
+import { selectVitals } from 'redux/selectors/physicalExamSelectors';
+import { currentNoteStore } from 'redux/store';
 import {
     Accordion,
     Form,
     Grid,
     Header,
-    Icon,
     Input,
-    Button,
     InputOnChangeData,
 } from 'semantic-ui-react';
-import PhysicalExamGroup from './PhysicalExamGroup';
-import exampleSchema from 'constants/PhysicalExam/exampleSchema.json';
-import { PHYSICAL_EXAM_MOBILE_BP } from 'constants/breakpoints.js';
-import './PhysicalExam.css';
-import { updateVitals } from 'redux/actions/physicalExamActions';
-import { connect } from 'react-redux';
-import { selectVitals } from 'redux/selectors/physicalExamSelectors';
-import { Vitals, VitalsFields } from 'redux/reducers/physicalExamReducer';
-import { PhysicalExamSchemaItem } from 'constants/PhysicalExam/physicalExamSchema';
-import { CurrentNoteState } from 'redux/reducers';
 import ButtonGroupTemparature from './InputSelectableTemparature';
-import { currentNoteStore } from 'redux/store';
+import './PhysicalExam.css';
+import PhysicalExamGroup from './PhysicalExamGroup';
 
 //Component that manages content for the Physical Exam tab
 class PhysicalExamContent extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
             weightKg: 0,
             heightM: 0,
             bmi: 0,
             headCircumference: 0,
         };
-        this.updateDimensions = this.updateDimensions.bind(this);
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-        const windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
     }
 
     handleChange = (
@@ -148,7 +125,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
 
     renderPanels = (groups: PhysicalExamSchemaItem[] | ExampleSchema[]) => {
         const itemGroups = groups as PhysicalExamSchemaItem[];
-        const isMobileView = this.state.windowWidth <= PHYSICAL_EXAM_MOBILE_BP;
+
         const panels = [
             {
                 key: 'Vitals',
@@ -185,7 +162,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <Form.Field inline={isMobileView}>
+                                    <Form.Field inline={false}>
                                         <label>
                                             <Header
                                                 as='h5'
@@ -200,7 +177,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <Form.Field inline={isMobileView}>
+                                    <Form.Field inline={false}>
                                         <label>
                                             <Header as='h5' content='RR' />
                                         </label>
@@ -212,7 +189,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <Form.Field inline={isMobileView}>
+                                    <Form.Field inline={false}>
                                         <label>
                                             <Header
                                                 as='h5'
@@ -237,7 +214,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                 </Grid.Column>
 
                                 <Grid.Column>
-                                    <Form.Field inline={isMobileView}>
+                                    <Form.Field inline={false}>
                                         <label>
                                             <Header
                                                 as='h5'
@@ -253,7 +230,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                 </Grid.Column>
                                 <Grid.Column>{''}</Grid.Column>
                                 <Grid.Column>
-                                    <Form.Field inline={isMobileView}>
+                                    <Form.Field inline={false}>
                                         <label>
                                             <Header as='h5' content='Weight' />
                                         </label>
@@ -265,7 +242,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <Form.Field inline={isMobileView}>
+                                    <Form.Field inline={false}>
                                         <label>
                                             <Header
                                                 as='h5'
@@ -284,7 +261,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                     </Form.Field>
                                 </Grid.Column>
                                 <Grid.Column>
-                                    <Form.Field inline={isMobileView}>
+                                    <Form.Field inline={false}>
                                         <label>
                                             <Header as='h5' content='BMI' />
                                         </label>
@@ -297,7 +274,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                 </Grid.Column>
                                 {this.isPediatric() ? (
                                     <Grid.Column>
-                                        <Form.Field inline={isMobileView}>
+                                        <Form.Field inline={false}>
                                             <label>
                                                 <Header
                                                     as='h5'
@@ -320,42 +297,6 @@ class PhysicalExamContent extends React.Component<Props, State> {
                 },
             },
         ];
-        const mobileScrollMappings: { [key: string]: any } = {
-            '1': 40,
-            '2': 65,
-            '3': 90,
-            '4': 110,
-            '5': 135,
-            '6': 160,
-            '7': 185,
-            '8': 205,
-            '9': 725,
-            '10': 250,
-            '11': 275,
-            '12': 300,
-            '13': 725,
-            '14': 725,
-            '15': 725,
-            '16': 400,
-        };
-        const mobileOpened: { [key: string]: boolean } = {
-            '1': false,
-            '2': false,
-            '3': false,
-            '4': false,
-            '5': false,
-            '6': false,
-            '7': false,
-            '8': false,
-            '9': false,
-            '10': false,
-            '11': false,
-            '12': false,
-            '13': false,
-            '14': false,
-            '15': false,
-            '16': false,
-        };
 
         for (let i = 1; i < itemGroups.length + 1; i++) {
             panels.push({
@@ -365,25 +306,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                     content: itemGroups[i - 1].name,
                     icon: 'dropdown',
                     onClick: () => {
-                        if (isMobileView && !mobileOpened[i.toString()]) {
-                            for (let j = 1; j < 17; j++) {
-                                if (
-                                    mobileOpened[j.toString()] == true &&
-                                    j != i
-                                ) {
-                                    mobileOpened[j.toString()] = false;
-                                }
-                            }
-                            setTimeout(() => {
-                                window.scrollTo(
-                                    0,
-                                    mobileScrollMappings[i.toString()]
-                                );
-                            }, 10);
-                            mobileOpened[i.toString()] = true;
-                        } else {
-                            mobileOpened[i.toString()] = false;
-                        }
+                        void 0;
                     },
                 },
                 content: {
@@ -409,44 +332,11 @@ class PhysicalExamContent extends React.Component<Props, State> {
                     fluid
                     panels={this.renderPanels(exampleSchema.sections)}
                 />
-
-                <Button
-                    icon
-                    floated='left'
-                    onClick={this.props.previousFormClick}
-                    className='small-physical-previous-button'
-                >
-                    <Icon name='arrow left' />
-                </Button>
-                <Button
-                    icon
-                    labelPosition='left'
-                    floated='left'
-                    onClick={this.props.previousFormClick}
-                    className='physical-previous-button'
-                >
-                    Prev
-                    <Icon name='arrow left' />
-                </Button>
-
-                <Button
-                    icon
-                    floated='right'
-                    onClick={this.props.nextFormClick}
-                    className='small-physical-next-button'
-                >
-                    <Icon name='arrow right' />
-                </Button>
-                <Button
-                    icon
-                    labelPosition='right'
-                    floated='right'
-                    onClick={this.props.nextFormClick}
-                    className='physical-next-button'
-                >
-                    Next
-                    <Icon name='arrow right' />
-                </Button>
+                <br />
+                <NavigationButton
+                    previousClick={this.props.previousFormClick}
+                    nextClick={this.props.nextFormClick}
+                />
             </>
         );
     }
@@ -484,8 +374,6 @@ interface DispatchProps {
 }
 
 interface State {
-    windowWidth: number;
-    windowHeight: number;
     weightKg: number;
     heightM: number;
     bmi: number;

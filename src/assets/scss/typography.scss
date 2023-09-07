@@ -1,0 +1,29 @@
+h1,
+h2,
+h3,
+h4{
+    font-weight: 700;
+    line-height: 1.5;
+    font-family: $font-family-primary;
+}
+h1 {
+    font-size: $font-size-h1;
+    @include max-screen($mobile){
+        font-size: 20px;
+    }
+}
+h2{
+    font-size: $font-size-h2;
+    @include max-screen($mobile){
+        font-size: 18px;
+    }
+}
+h3{
+    font-size: $font-size-h3;
+    @include max-screen($mobile){
+        font-size: 16px;
+    }
+}
+h4{
+    font-size: $font-size-h4;
+}

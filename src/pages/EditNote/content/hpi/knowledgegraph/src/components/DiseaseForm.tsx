@@ -1,14 +1,15 @@
-import React from 'react';
-import '../css/App.css';
-import '../../HPI.css';
-import { Loader } from 'semantic-ui-react';
+import Loader from 'components/tools/Loader/Loader';
 import { HpiStateProps } from 'constants/hpiEnums';
+import React from 'react';
 import { connect } from 'react-redux';
 import { CurrentNoteState } from 'redux/reducers';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import CreateResponse from './CreateResponse';
 import { nodesToDisplayInOrder } from 'redux/selectors/displayedNodesSelectors';
+import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import '../../HPI.css';
 import { HpiHeadersProps } from '../../HPIContent';
+import '../css/App.css';
+import CreateResponse from './CreateResponse';
+import style from './DiseaseForm.module.scss';
 
 //The order goes DiseaseForm -> CreateResponse -> ButtonTag
 
@@ -33,11 +34,9 @@ export class DiseaseForm extends React.Component<Props> {
 
     traverseChildNodes(): JSX.Element[] {
         return this.props.nodesToDisplayInOrder.map((node) => (
-            <CreateResponse
-                key={node}
-                node={node}
-                category={this.props.category}
-            />
+            <div className={style.diseaseForm} key={node}>
+                <CreateResponse node={node} category={this.props.category} />
+            </div>
         ));
     }
 
@@ -45,9 +44,9 @@ export class DiseaseForm extends React.Component<Props> {
         const { hpi, category, hpiHeaders } = this.props;
         return Object.values(hpiHeaders.parentNodes[category])[0] in
             hpi.graph ? (
-            <div>{this.traverseChildNodes()} </div>
+            this.traverseChildNodes()
         ) : (
-            <Loader active> </Loader>
+            <Loader />
         );
     }
 }

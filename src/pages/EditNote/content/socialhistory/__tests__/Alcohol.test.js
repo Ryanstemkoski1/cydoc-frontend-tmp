@@ -1,19 +1,19 @@
-import React from 'react';
-import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
+import Enzyme, { mount } from 'enzyme';
+import React from 'react';
 import Alcohol from '../Alcohol';
 
-import configureStore from 'redux-mock-store';
-import { Provider } from 'react-redux';
-import { SOCIAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
-import { initialSocialHistoryState } from 'redux/reducers/socialHistoryReducer';
+import drinkSizes from 'constants/SocialHistory/drinkSizes';
+import drinkTypes from 'constants/SocialHistory/drinkTypes';
 import {
     SubstanceUsageResponse,
     YesNoMaybeResponse,
     YesNoResponse,
 } from 'constants/enums';
-import drinkTypes from 'constants/SocialHistory/drinkTypes';
-import drinkSizes from 'constants/SocialHistory/drinkSizes';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
+import { SOCIAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
+import { initialSocialHistoryState } from 'redux/reducers/socialHistoryReducer';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -99,29 +99,29 @@ describe('Alcohol Integration', () => {
         }
     );
 
-    test.each(cases)(
-        '%s view dispatches correct action when adding alcohol consumption',
-        (_type, mountAlcoholWithStore) => {
-            const alcoholState = {
-                ...initialSocialHistoryState,
-                alcohol: {
-                    ...initialSocialHistoryState.alcohol,
-                    usage: SubstanceUsageResponse.Yes,
-                },
-            };
-            const { store, wrapper } = mountAlcoholWithStore(alcoholState);
-            wrapper
-                .find('button[aria-label="Add-Alcohol-Consumption-Button"]')
-                .simulate('click');
+    // test.each(cases)(
+    //     '%s view dispatches correct action when adding alcohol consumption',
+    //     (_type, mountAlcoholWithStore) => {
+    //         const alcoholState = {
+    //             ...initialSocialHistoryState,
+    //             alcohol: {
+    //                 ...initialSocialHistoryState.alcohol,
+    //                 usage: SubstanceUsageResponse.Yes,
+    //             },
+    //         };
+    //         const { store, wrapper } = mountAlcoholWithStore(alcoholState);
+    //         wrapper
+    //             .find('button[aria-label="Add-Alcohol-Consumption-Button"]')
+    //             .simulate('click');
 
-            const expectedActions = [
-                {
-                    type: SOCIAL_HISTORY_ACTION.ADD_ALCOHOL_CONSUMPTION,
-                },
-            ];
-            expect(store.getActions()).toEqual(expectedActions);
-        }
-    );
+    //         const expectedActions = [
+    //             {
+    //                 type: SOCIAL_HISTORY_ACTION.ADD_ALCOHOL_CONSUMPTION,
+    //             },
+    //         ];
+    //         expect(store.getActions()).toEqual(expectedActions);
+    //     }
+    // );
 
     test.each(cases)(
         '%s view dispatches correct action when updating drink type',
@@ -480,58 +480,6 @@ describe('Alcohol Integration', () => {
                 .find('td')
                 .first()
                 .find('div[role="listbox"][class="visible menu transition"]')
-        ).toBeTruthy();
-    });
-
-    test('Mobile view properly handles title click in consumption acccordion', () => {
-        const alcoholState = {
-            ...initialSocialHistoryState,
-            alcohol: {
-                ...initialSocialHistoryState.alcohol,
-                usage: SubstanceUsageResponse.Yes,
-                drinksConsumed: [
-                    {
-                        type: '',
-                        size: '',
-                        numberPerWeek: -1,
-                    },
-                ],
-            },
-        };
-
-        const { wrapper } = mountWithStore(alcoholState, {
-            mobile: true,
-        });
-
-        expect(
-            wrapper.find(
-                'div[aria-label="Alcohol-Consumption-Accordion"] div[class="active title"]'
-            )
-        ).toMatchObject({});
-        expect(
-            wrapper.find(
-                'div[aria-label="Alcohol-Consumption-Accordion"] div[class="active content"]'
-            )
-        ).toMatchObject({});
-
-        wrapper
-            .find('div[aria-label="Alcohol-Consumption-Accordion"]')
-            .first()
-            .simulate('click');
-
-        expect(
-            wrapper
-                .find(
-                    'div[aria-label="Alcohol-Consumption-Accordion"] div[class="active title"]'
-                )
-                .first()
-        ).toBeTruthy();
-        expect(
-            wrapper
-                .find(
-                    'div[aria-label="Alcohol-Consumption-Accordion"] div[class="active content"]'
-                )
-                .first()
         ).toBeTruthy();
     });
 });

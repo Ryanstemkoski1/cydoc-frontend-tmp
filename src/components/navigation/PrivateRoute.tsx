@@ -1,6 +1,6 @@
-import React from 'react';
-import { Route, Redirect, RouteProps } from 'react-router-dom';
 import useAuth from 'hooks/useAuth';
+import React from 'react';
+import { Redirect, Route, RouteProps } from 'react-router-dom';
 
 export interface PrivateRouteProps extends RouteProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

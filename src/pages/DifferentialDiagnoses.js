@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Accordion, Icon } from 'semantic-ui-react';
+import { Accordion } from 'semantic-ui-react';
 import './DifferentialDiagnoses.css';
 
 const DifferentialDiagnoses = ({ description = [] }) => {
@@ -11,16 +11,7 @@ const DifferentialDiagnoses = ({ description = [] }) => {
         let result = [];
         for (let i = 0; i < arr.length; i++) {
             if (i % 2 === 0) {
-                result.push(
-                    <span
-                        style={{
-                            fontWeight: 'bold',
-                            color: 'rgba(7, 126, 157, 255)',
-                        }}
-                    >
-                        {arr[i]}
-                    </span>
-                );
+                result.push(<strong>{arr[i]}</strong>);
             } else {
                 result.push(<span>{arr[i]}</span>);
             }
@@ -29,29 +20,17 @@ const DifferentialDiagnoses = ({ description = [] }) => {
     };
 
     return (
-        <Accordion>
-            <div
-                className='differentialDiagnoses'
-                style={{
-                    color: 'rgba(7,126,157,255)',
-                    textAlign: 'start',
-                }}
+        <Accordion className='accordion-ui'>
+            <Accordion.Title
+                active={activeIndex === 1}
+                onClick={handleClick}
+                index={0}
             >
-                <br></br>
-                <Accordion.Title
-                    active={activeIndex === 1}
-                    onClick={handleClick}
-                    index={0}
-                    className='no-outline borderless'
-                    style={{ fontWeight: 'bold', color: 'rgba(7,126,157,255)' }}
-                >
-                    <Icon name='dropdown' />
-                    {'Differential Diagnosis  '}
-                </Accordion.Title>
-                <Accordion.Content active={activeIndex === 1}>
-                    {renderTextFromDesc(description)}
-                </Accordion.Content>
-            </div>
+                Differential Diagnosis
+            </Accordion.Title>
+            <Accordion.Content active={activeIndex === 1}>
+                {renderTextFromDesc(description)}
+            </Accordion.Content>
         </Accordion>
     );
 };

@@ -56,3 +56,8 @@ export const rosClient = axios.create({
         'https://3euj91pn42.execute-api.us-east-1.amazonaws.com/dev/ros-data/get',
     headers: { 'Content-Type': 'application/json' },
 });
+
+export const stagingClient = axios.create({
+    baseURL: 'https://ldxpvwxff1.execute-api.us-east-2.amazonaws.com/Prod/',
+    headers: { 'Content-Type': 'application/json' },
+});

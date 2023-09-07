@@ -1,20 +1,23 @@
-import React from 'react';
-import { Button, Input } from 'semantic-ui-react';
-import '../../css/listText.css';
-import { CurrentNoteState } from 'redux/reducers';
+import Input from 'components/Input/Input';
+import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
+import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
 import { HpiStateProps } from 'constants/hpiEnums';
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
-    listTextHandleChange,
-    removeListInput,
-    addListInput,
+    AddListInputAction,
     ListTextHandleChangeAction,
     RemoveListInputAction,
-    AddListInputAction,
+    addListInput,
+    listTextHandleChange,
+    removeListInput,
 } from 'redux/actions/hpiActions';
+import { CurrentNoteState } from 'redux/reducers';
 import { isListTextDictionary } from 'redux/reducers/hpiReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import '../../css/listText.css';
+import style from './ListText.module.scss';
 
 interface ListTextProps {
     node: string;
@@ -34,21 +37,27 @@ class ListText extends React.Component<Props> {
         if (listInputValues && isListTextDictionary(listInputValues)) {
             listInputsArray = Object.entries(listInputValues).map(
                 ([id, input]) => (
-                    <div key={id}>
-                        <Input
-                            id={'list-text-input'}
-                            value={input}
-                            onChange={(_e, data): ListTextHandleChangeAction =>
-                                listTextHandleChange(id, node, data.value)
-                            }
-                        />
-                        <Button
-                            tabIndex='-1'
-                            circular
-                            icon='minus'
-                            className='hpi-ph-button'
-                            condition='-'
-                            title='-'
+                    <div
+                        className={`${style.listText} flex-wrap align-center justify-between`}
+                        key={id}
+                    >
+                        <div className={`${style.listText__input}`}>
+                            <Input
+                                id={'list-text-input'}
+                                value={input}
+                                onChange={(
+                                    e: any
+                                ): ListTextHandleChangeAction =>
+                                    listTextHandleChange(
+                                        id,
+                                        node,
+                                        e.target.value
+                                    )
+                                }
+                            />
+                        </div>
+
+                        <RemoveButton
                             onClick={(): RemoveListInputAction =>
                                 removeListInput(id, node)
                             }
@@ -60,15 +69,10 @@ class ListText extends React.Component<Props> {
 
         return (
             <div>
-                {' '}
                 {listInputsArray}
-                <Button
-                    circular
-                    icon='plus'
-                    condition='+'
-                    title='+'
+
+                <AddRowButton
                     onClick={(): AddListInputAction => addListInput(node)}
-                    className='hpi-ph-button'
                 />
             </div>
         );

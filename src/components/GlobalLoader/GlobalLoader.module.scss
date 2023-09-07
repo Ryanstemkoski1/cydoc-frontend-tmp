@@ -1,0 +1,32 @@
+@import '../../assets/scss/variables.scss';
+
+.globalLoader {
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 100%;
+    position: fixed;
+    background-color: rgba($color-black, 0.5);
+
+    span {
+        width: 40px;
+        height: 40px;
+        display: block;
+        border-radius: 50%;
+        border: 5px solid $color-white;
+        animation: spin 2s linear infinite;
+        border-top-color: rgba($color-primary, 0.5);
+        border-bottom-color: rgba($color-primary, 0.5);
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}

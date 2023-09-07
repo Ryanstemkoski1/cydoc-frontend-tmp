@@ -55,7 +55,7 @@
         },
         "6": {
             "uid": "6",
-            "text": "Please select the most important conditions or symptoms that you would like to discuss today, up to a maximum of 3. FAVORITES",
+            "text": "Please select the most important conditions or symptoms that you would like to discuss today, up to a maximum of 3.",
             "responseType": "SELECTONE",
             "category": "",
             "doctorView": ""

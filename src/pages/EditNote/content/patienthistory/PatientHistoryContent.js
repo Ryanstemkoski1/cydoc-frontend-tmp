@@ -1,33 +1,29 @@
-import React, { Component } from 'react';
-import { Button, Segment, Icon } from 'semantic-ui-react';
+import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import constants from 'constants/constants';
-import MedicalHistoryContent from '../medicalhistory/MedicalHistoryContent';
-import SurgicalHistoryContent from '../surgicalhistory/SurgicalHistoryContent';
-import MedicationsContent from '../medications/MedicationsContent';
-import AllergiesContent from '../allergies/AllergiesContent';
-import SocialHistoryContent from '../socialhistory/SocialHistoryContent';
-import FamilyHistoryContent from '../familyhistory/FamilyHistoryContent';
+import React, { Component } from 'react';
+import { Segment } from 'semantic-ui-react';
 import Tab from '../../../../components/tools/Tab';
+import AllergiesContent from '../allergies/AllergiesContent';
+import FamilyHistoryContent from '../familyhistory/FamilyHistoryContent';
+import MedicalHistoryContent from '../medicalhistory/MedicalHistoryContent';
+import MedicationsContent from '../medications/MedicationsContent';
+import SocialHistoryContent from '../socialhistory/SocialHistoryContent';
+import SurgicalHistoryContent from '../surgicalhistory/SurgicalHistoryContent';
 import './PatientHistory.css';
 
 export default class PatientHistoryContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
             headerHeight: 0,
             activeTabName: this.props.activePMH, // Default open pane is Medical History
             activeIndex: this.props.pmhIndex,
         };
-        this.updateDimensions = this.updateDimensions.bind(this);
         this.handleItemClick = this.handleItemClick.bind(this);
         this.setMenuPosition = this.setMenuPosition.bind(this);
     }
 
     componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
         //this.updateIndex();
         // Using timeout to ensure that tab/dropdown menu and any relevant headers are rendered before setting
         setTimeout(() => {
@@ -36,21 +32,14 @@ export default class PatientHistoryContent extends Component {
         }, 0);
     }
 
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        let windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-        let windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
+    updateDimensions = () => {
         let headerHeight =
             document.getElementById('stickyHeader')?.offsetHeight ?? 0;
 
-        this.setState({ windowWidth, windowHeight, headerHeight });
+        this.setState({ headerHeight });
         this.setMenuPosition();
         this.props.setStickyHeaders();
-    }
+    };
 
     setMenuPosition() {
         const fixedMenu = document.getElementById('patient-history-menu');
@@ -75,6 +64,7 @@ export default class PatientHistoryContent extends Component {
     };
 
     render() {
+        const activeTabName = this.state.activeTabName;
         const activeIndex = this.state.activeIndex;
 
         const tabDict = {
@@ -105,127 +95,74 @@ export default class PatientHistoryContent extends Component {
         const buttons = Object.keys(tabDict).map((_name, index) => {
             return (
                 <>
-                    <Button
-                        icon
-                        labelPosition='left'
-                        floated='left'
-                        className='patient-previous-button'
-                        activeTabName={
-                            index == 0
-                                ? undefined
-                                : Object.keys(tabDict)[index - 1]
-                        }
-                        onClick={
-                            index == 0
-                                ? this.props.previousFormClick
-                                : this.handleTabChange
-                        }
-                        value={index == 0 ? undefined : index - 1}
-                    >
-                        Prev
-                        <Icon name='arrow left' />
-                    </Button>
-                    <Button
-                        icon
-                        floated='left'
-                        className='small-patient-previous-button'
-                        activeTabName={
-                            index == 0
-                                ? undefined
-                                : Object.keys(tabDict)[index - 1]
-                        }
-                        onClick={
-                            index == 0
-                                ? this.props.previousFormClick
-                                : this.handleTabChange
-                        }
-                        value={index == 0 ? undefined : index - 1}
-                    >
-                        <Icon name='arrow left' />
-                    </Button>
-
-                    <Button
-                        icon
-                        labelPosition='right'
-                        floated='right'
-                        activeTabName={
+                    <NavigationButton
+                        previousClick={(e) => {
+                            index === 0
+                                ? this.props.previousFormClick(e)
+                                : this.handleTabChange(e, {
+                                      activeTabName:
+                                          Object.keys(tabDict)[index - 1],
+                                      value: index - 1,
+                                  });
+                        }}
+                        nextClick={(e) => {
                             index == Object.keys(tabDict).length - 1
-                                ? undefined
-                                : Object.keys(tabDict)[index + 1]
-                        }
-                        value={
-                            index == Object.keys(tabDict).length - 1
-                                ? undefined
-                                : index + 1
-                        }
-                        onClick={
-                            index == Object.keys(tabDict).length - 1
-                                ? this.props.nextFormClick
-                                : this.handleTabChange
-                        }
-                        className='patient-next-button'
-                    >
-                        Next
-                        <Icon name='arrow right' />
-                    </Button>
-                    <Button
-                        icon
-                        floated='right'
-                        activeTabName={
-                            index == Object.keys(tabDict).length - 1
-                                ? undefined
-                                : Object.keys(tabDict)[index + 1]
-                        }
-                        value={
-                            index == Object.keys(tabDict).length - 1
-                                ? undefined
-                                : index + 1
-                        }
-                        onClick={
-                            index == Object.keys(tabDict).length - 1
-                                ? this.props.nextFormClick
-                                : this.handleTabChange
-                        }
-                        className='small-patient-next-button'
-                    >
-                        <Icon name='arrow right' />
-                    </Button>
+                                ? this.props.nextFormClick(e)
+                                : this.handleTabChange(e, {
+                                      activeTabName:
+                                          Object.keys(tabDict)[index + 1],
+                                      value: index + 1,
+                                  });
+                        }}
+                    />
                 </>
             );
         });
 
         // panes for desktop view
-        const panes = Object.keys(tabDict).map((name) => {
+        const panes = Object.keys(tabDict).map((name, index) => {
             return {
                 menuItem: name,
                 render: () => (
-                    <Tab.Pane className='white-card'>{tabDict[name]}</Tab.Pane>
+                    <Tab.Pane className='white-card'>
+                        {tabDict[name]}
+                        {buttons[index]}
+                    </Tab.Pane>
                 ),
             };
         });
 
-        const tabToDisplay = this.props.onTabClick(
-            this.state.activeTabName,
-            this.state.windowWidth
-        );
+        const tabToDisplay = this.props.onTabClick(this.state.activeTabName);
         return (
-            <div className='patent-history-content'>
-                <Tab
-                    id='tab-panes'
-                    panes={panes}
-                    activeIndex={activeIndex}
-                    onTabChange={(e, data) => {
-                        this.setState({
-                            activeTabName:
-                                constants.PMH_TAB_NAMES[data.activeIndex],
-                            activeIndex: data.activeIndex,
-                        });
-                        this.props.handlePMHTabChange(e, data);
-                    }}
-                />
-                {buttons[activeIndex]}
-                <Segment>{tabToDisplay}</Segment>
-            </div>
+            <>
+                {
+                    <>
+                        <Tab
+                            menu={{
+                                pointing: true,
+                                id: 'patient-history-menu',
+                            }}
+                            id='tab-panes'
+                            panes={panes}
+                            activeTabName={activeTabName}
+                            activeIndex={activeIndex}
+                            index={activeIndex}
+                            onTabChange={(e, data) => {
+                                this.setState({
+                                    activeTabName:
+                                        constants.PMH_TAB_NAMES[
+                                            data.activeIndex
+                                        ],
+                                    activeIndex: data.activeIndex,
+                                });
+                                this.props.handlePMHTabChange(e, data);
+                            }}
+                        />
+                        <Segment>{tabToDisplay}</Segment>
+                        {buttons[activeIndex]}
+                    </>
+                }
+            </>
         );
     }
 }

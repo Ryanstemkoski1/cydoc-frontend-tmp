@@ -1,4 +1,5 @@
 import axios from 'axios';
+import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { YesNoResponse } from 'constants/enums';
 import { GraphData, ResponseTypes } from 'constants/hpiEnums';
 import React from 'react';
@@ -41,11 +42,9 @@ import {
 } from 'redux/selectors/userViewSelectors';
 import { currentNoteStore } from 'redux/store';
 import {
-    Button,
     Container,
     Form,
     Grid,
-    Icon,
     Message,
     Search,
     Segment,
@@ -60,12 +59,12 @@ import ChiefComplaintsButton, {
     PatientViewProps,
 } from '../hpi/knowledgegraph/src/components/ChiefComplaintsButton';
 import DetailsPage from './AdditionalSurvey';
+import './InitialSurvey.css';
 import InputTextOrDateResponse from './InputTextOrDateResponse';
 import SurveyYesNoResponse from './SurveyYesNoResponse';
 import UserInfoForm from './UserInfoForm';
 import initialQuestions from './constants/initialQuestions.json';
 import patientViewHeaders from './constants/patientViewHeaders.json';
-import './InitialSurvey.css';
 
 interface InitialSurveyState {
     activeItem: number;
@@ -558,80 +557,38 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                     ) : (
                         ''
                     )}
-                    <Segment>
-                        <Grid>{initialSurvey}</Grid>
+                    <Segment className='additional'>
+                        <Grid>
+                            <div className='sixteen wide column'>
+                                {initialSurvey}
+                            </div>
+                        </Grid>
                     </Segment>
                 </Container>
-                {[1, 2].includes(
+                {/* {[1, 2].includes(
                     this.props.additionalSurvey.initialSurveyState
                 ) && this.state.activeItem === 0 ? (
-                    <div>
-                        {' '}
-                        <Button
-                            icon
-                            labelPosition='left'
-                            floated='left'
-                            className='hpi-previous-button'
-                            onClick={this.onPrevClick}
-                        >
-                            Previous
-                            <Icon name='arrow left' />
-                        </Button>
-                        <Button
-                            icon
-                            floated='left'
-                            className='hpi-small-previous-button'
-                            onClick={this.onPrevClick}
-                        >
-                            <Icon name='arrow left' />
-                        </Button>{' '}
-                    </div>
+                    <NavigationButton previousClick={this.onPrevClick} />
                 ) : (
                     ''
                 )}
                 {this.state.activeItem > 0 ? (
-                    <div>
-                        {' '}
-                        <Button
-                            icon
-                            labelPosition='left'
-                            floated='left'
-                            className='hpi-previous-button'
-                            onClick={this.onPrevClick}
-                        >
-                            Prev
-                            <Icon name='arrow left' />
-                        </Button>
-                        <Button
-                            icon
-                            floated='left'
-                            className='hpi-small-previous-button'
-                            onClick={this.onPrevClick}
-                        >
-                            <Icon name='arrow left' className='big' />
-                        </Button>{' '}
-                    </div>
+                    <NavigationButton previousClick={this.onPrevClick} />
                 ) : (
                     ''
-                )}
-                <Button
-                    icon
-                    labelPosition='right'
-                    floated='right'
-                    className='hpi-next-button'
-                    onClick={this.onNextClick}
-                >
-                    Next
-                    <Icon name='arrow right' />
-                </Button>
-                <Button
-                    icon
-                    floated='right'
-                    className='hpi-small-next-button'
-                    onClick={this.onNextClick}
-                >
-                    <Icon name='arrow right' className='big' />
-                </Button>
+                )} */}
+                <NavigationButton
+                    previousClick={
+                        ([1, 2].includes(
+                            this.props.additionalSurvey.initialSurveyState
+                        ) &&
+                            this.state.activeItem === 0) ||
+                        this.state.activeItem > 0
+                            ? this.onPrevClick
+                            : null
+                    }
+                    nextClick={this.onNextClick}
+                />
             </div>
         );
     }

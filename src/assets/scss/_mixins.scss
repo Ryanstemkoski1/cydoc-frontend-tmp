@@ -1,0 +1,18 @@
+@mixin max-screen($screenSize) {
+    @media only screen and (max-width: $screenSize) {
+        @content;
+    }
+}
+
+@mixin min-screen($screenSize) {
+    @media only screen and (min-width: ($screenSize + 1)) {
+        @content;
+    }
+}
+
+@mixin background-image($img, $ext, $pos, $repeat: no-repeat, $size: auto) {
+    background-image: url(#{$imgPath}#{$img}.#{$ext});
+    background-size: $size;
+    background-position: $pos;
+    background-repeat: $repeat;
+}

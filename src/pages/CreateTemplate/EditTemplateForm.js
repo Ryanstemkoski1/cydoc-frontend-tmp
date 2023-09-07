@@ -1,26 +1,26 @@
+import { graphClient } from 'constants/api.js';
+import diseaseCodes from 'constants/diseaseCodes';
+import { questionTypes } from 'constants/questionTypes';
 import React, { Component, createRef } from 'react';
+import Nestable from 'react-nestable';
 import {
     Button,
-    Form,
-    Header,
-    Segment,
-    Input,
-    Grid,
-    Dropdown,
-    Icon,
     Dimmer,
+    Dropdown,
+    Form,
+    Grid,
+    Header,
+    Icon,
+    Input,
     Loader,
     Message,
+    Segment,
 } from 'semantic-ui-react';
 import HPITemplateContext from '../../contexts/HPITemplateContext';
 import './TemplateForm.css';
 import TemplateQuestion from './TemplateQuestion';
-import { graphClient } from 'constants/api.js';
-import diseaseCodes from 'constants/diseaseCodes';
-import Nestable from 'react-nestable';
-import { createNodeId, updateParent, NAN_QUESTION_TEXT } from './util';
 import ProTips from './modules/ProTips';
-import { questionTypes } from 'constants/questionTypes';
+import { NAN_QUESTION_TEXT, createNodeId, updateParent } from './util';
 
 const MAX_NUM_QUESTIONS = 50;
 const INIT_NUM_QUESTIONS = 6;
@@ -76,8 +76,6 @@ class EditTemplateForm extends Component {
             }));
             this.context.onTemplateChange('parentNodes', parentNodes);
         } catch (e) {
-            // eslint-disable-next-line no-console
-            console.log(e);
         } finally {
             this.setState({ fetching: false });
         }
