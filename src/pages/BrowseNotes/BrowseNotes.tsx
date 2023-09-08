@@ -13,6 +13,10 @@ import RefreshIcon from '../../assets/images/refresh.png';
 import RightArrow from '../../assets/images/right-arrow.svg';
 import style from './BrowseNotes.module.scss';
 
+export function formatFullName(firstName = '', middleName = '', lastName = '') {
+    return `${lastName}, ${firstName} ${middleName}`;
+}
+
 const months = [
     'January',
     'February',
@@ -65,6 +69,7 @@ export interface AppointmentUser {
     id: string;
     firstName: string;
     lastName: string;
+    middleName: string | null;
     dob: Date;
     clinicianId: number | null;
     appointmentDate: Date;
@@ -104,7 +109,7 @@ const BrowseNotes = () => {
 
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedAppointment, setSelectedAppointment] =
-        useState<AppointmentUser | null>(null);
+        useState<AppointmentUser>();
     const loadingStatus = useSelector(
         (state: CurrentNoteState) => state.loadingStatus
     );
@@ -172,9 +177,11 @@ const BrowseNotes = () => {
                                                         openModal(user)
                                                     }
                                                 >
-                                                    {user.lastName +
-                                                        ', ' +
-                                                        user.firstName}
+                                                    {formatFullName(
+                                                        user?.firstName,
+                                                        user?.middleName ?? '',
+                                                        user?.lastName
+                                                    )}
                                                 </span>
                                             </td>
                                             <td>
@@ -243,12 +250,14 @@ const BrowseNotes = () => {
                     </div>
                 </div>
             </div>
-            <Modal
-                key={selectedAppointment?.id}
-                showModal={showModal}
-                setShowModal={setShowModal}
-                selectedAppointment={selectedAppointment}
-            />
+            {selectedAppointment && (
+                <Modal
+                    key={selectedAppointment.id}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    selectedAppointment={selectedAppointment}
+                />
+            )}
         </div>
     );
 };

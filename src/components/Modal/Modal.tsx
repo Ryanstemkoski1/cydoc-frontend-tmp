@@ -1,5 +1,4 @@
-import Loader from 'components/tools/Loader/Loader';
-import { AppointmentUser } from 'pages/BrowseNotes/BrowseNotes';
+import { AppointmentUser, formatFullName } from 'pages/BrowseNotes/BrowseNotes';
 import { ParseAndRenderHpiNote } from 'pages/EditNote/content/generatenote/notesections/HPINote';
 import { default as React, useEffect, useRef } from 'react';
 import style from './Modal.module.scss';
@@ -7,7 +6,7 @@ import style from './Modal.module.scss';
 export interface ModalProps {
     showModal: boolean;
     setShowModal: any;
-    selectedAppointment: AppointmentUser | null;
+    selectedAppointment: AppointmentUser;
 }
 
 const Modal = ({
@@ -41,8 +40,9 @@ const Modal = ({
         };
     }, [showModal]);
 
-    const fullName =
-        selectedAppointment?.lastName + ', ' + selectedAppointment?.firstName;
+    const { firstName, middleName, lastName, clinicianLastName, hpiText } =
+        selectedAppointment;
+
     return (
         <div
             onClick={handleClickOutsideModal}
@@ -52,8 +52,11 @@ const Modal = ({
         >
             <div className={style.modal__inner} ref={modalRef}>
                 <div className={style.modal__header}>
-                    <h3>{selectedAppointment && fullName}</h3>
+                    <h3>
+                        {formatFullName(firstName, middleName ?? '', lastName)}
+                    </h3>
                 </div>
+
                 <div className={style.modal__innerContent}>
                     <div className='flex align-center justify-between'>
                         <h4>History of Present Illness/Subjective</h4>
@@ -64,20 +67,19 @@ const Modal = ({
                             Copy HPI
                         </button>
                     </div>
+                    {clinicianLastName && (
+                        <div>
+                            <p>
+                                Last name of the clinician seeing:{' '}
+                                <strong>{clinicianLastName}</strong>
+                            </p>
+                        </div>
+                    )}
                     <div
                         className={`${style.modal__scroll} scrollbar`}
                         id='copy-notes'
                     >
-                        {selectedAppointment ? (
-                            <ParseAndRenderHpiNote
-                                hpiText={
-                                    selectedAppointment.hpiText ||
-                                    JSON.stringify([])
-                                }
-                            />
-                        ) : (
-                            <Loader />
-                        )}
+                        <ParseAndRenderHpiNote hpiText={hpiText} />
                     </div>
                 </div>
             </div>

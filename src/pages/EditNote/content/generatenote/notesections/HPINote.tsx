@@ -4,7 +4,13 @@ import { capitalizeFirstLetter } from '../generateHpiText';
 import styles from './HPINote.module.scss';
 
 export function ParseAndRenderHpiNote({ hpiText = '' }: { hpiText: string }) {
-    const parsedHPIText = JSON.parse(hpiText) as HPIText[] | string;
+    let parsedHPIText: HPIText[] | string = '';
+    try {
+        parsedHPIText = JSON.parse(hpiText) as HPIText[] | string;
+    } catch (err) {
+        parsedHPIText = hpiText;
+    }
+
     return <HpiNote text={parsedHPIText} bulletNoteView={false} />;
 }
 
