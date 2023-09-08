@@ -8,6 +8,7 @@
     top: 0;
     left: 0;
     padding: 20px;
+    word-wrap: break-word;
     background-color: rgba($color-black, 0.5);
     overflow-y: auto;
     &.modalClose {
