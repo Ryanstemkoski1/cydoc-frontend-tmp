@@ -103,9 +103,6 @@ async function fetchHPIAppointments(
 const BrowseNotes = () => {
     const [date, setDate] = useState(new Date());
     const [users, setUsers] = useState<AppointmentUser[]>([]);
-    const [unreportedUsers, setUnreportedUsers] = useState<AppointmentUser[]>(
-        []
-    );
     const { user } = useUser();
     const dispatch = useDispatch();
 
@@ -140,18 +137,19 @@ const BrowseNotes = () => {
             return;
         }
         try {
-            fetchHPIAppointments(date, user, (users: AppointmentUser[]) => {
-                const unreportedUsers: AppointmentUser[] = users.filter(
-                    (currentUser) => currentUser.clinicianId !== Number(user.id)
-                );
-                const reportedUsers: AppointmentUser[] = users.filter(
-                    (currentUser) => currentUser.clinicianId === Number(user.id)
-                );
-                setUsers(reportedUsers);
-                setUnreportedUsers(unreportedUsers);
-                dispatch(setLoadingStatus(false));
-            });
-        } catch (_error: any) {
+            fetchHPIAppointments(
+                date,
+                user,
+                (users: AppointmentUser[]) => {
+                    setUsers(users);
+                    dispatch(setLoadingStatus(false));
+                },
+                () => {
+                    setUsers([]);
+                    dispatch(setLoadingStatus(false));
+                }
+            );
+        } catch (err) {
             dispatch(setLoadingStatus(false));
         }
     };
@@ -219,7 +217,7 @@ const BrowseNotes = () => {
                     </a>
                 </div>
 
-                <div className={` ${style.notesBlock__content} flex-wrap `}>
+                <div className={` ${style.notesBlock__content} `}>
                     <div className={style.notesBlock__contentInner}>
                         <div className='flex align-center justify-between'>
                             <h4>Clinician</h4>
@@ -239,16 +237,7 @@ const BrowseNotes = () => {
 
                         {renderUsers(users)}
                     </div>
-                    <div className={style.notesBlock__contentInner}>
-                        <h4 className={`${style.clinical} flex align-center`}>
-                            {' '}
-                            Clinician: Unreported
-                        </h4>
-                        {renderUsers(unreportedUsers)}
-                    </div>
-                    <div
-                        className={`${style.notesBlock__reload} flex justify-end`}
-                    >
+                    <div className={`${style.notesBlock__reload}`}>
                         <button onClick={loadPatientHistory}>
                             <picture>
                                 <img src={RefreshIcon} alt='Refresh' />
