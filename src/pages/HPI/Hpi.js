@@ -17,12 +17,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, useHistory, useParams } from 'react-router';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
 import { selectChiefComplaint } from 'redux/actions/chiefComplaintsActions';
-import { setClinicianDetail } from 'redux/actions/clinicianDetailActions';
 import { saveHpiHeader } from 'redux/actions/hpiHeadersActions';
-import {
-    initialSurveyAddDateOrPlace,
-    processSurveyGraph,
-} from 'redux/actions/userViewActions';
+import { processSurveyGraph } from 'redux/actions/userViewActions';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
 import {
@@ -82,29 +78,28 @@ const HPI = () => {
     useEffect(() => {
         if (view === ViewType.DOCTOR) return;
 
-        const [clinicianId, institutionId] = [
+        const [clinician_id, institution_id] = [
             query.get(HPIPatientQueryParams.CLINICIAN_ID),
             query.get(HPIPatientQueryParams.INSTITUTION_ID),
         ];
 
-        if (!clinicianId || !institutionId) {
-            history.replace(`/${ProductType.HPI}/${ViewType.PATIENT}`);
+        if (!institution_id) {
+            history.replace('/');
             return;
         }
 
         setIsLoading(true);
 
+        let url = `/institution/member?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
+
+        if (clinician_id) {
+            url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
+        }
+
         stagingClient
-            .get(`/institution/${institutionId}/${clinicianId}/member`)
-            .then((res) => {
-                dispatch(setClinicianDetail(res.data.detail));
-                // setting the userSurveyState.node[9] value to clinician's last name.
-                dispatch(
-                    initialSurveyAddDateOrPlace(9, res.data.detail.lastName)
-                );
-            })
+            .get(url)
             .catch((_error) => {
-                history.replace(`/${ProductType.HPI}/${ViewType.PATIENT}`);
+                history.replace('/');
             })
             .finally(() => {
                 setIsLoading(false);

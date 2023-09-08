@@ -74,6 +74,7 @@ interface InitialSurveyState {
     showDescriptionBox: boolean;
     tempLegalFirstName: string;
     tempLegalLastName: string;
+    tempLegalMiddleName: string;
     tempSocialSecurityNumber: string;
     tempDateOfBirth: string;
     message: string;
@@ -94,6 +95,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             showDescriptionBox: false,
             tempLegalFirstName: '',
             tempLegalLastName: '',
+            tempLegalMiddleName: '',
             tempSocialSecurityNumber: '',
             tempDateOfBirth: '',
             message: '',
@@ -188,8 +190,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             if (
                 this.state.tempLegalFirstName.trim() === '' ||
                 this.state.tempLegalLastName.trim() == '' ||
-                this.state.tempDateOfBirth.trim() === '' ||
-                this.state.tempSocialSecurityNumber.trim() == ''
+                this.state.tempDateOfBirth.trim() === ''
             ) {
                 this.setState({
                     error: true,
@@ -198,7 +199,10 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                 return;
             }
 
-            if (this.state.tempSocialSecurityNumber.length !== 4) {
+            if (
+                this.state.tempSocialSecurityNumber.trim() &&
+                this.state.tempSocialSecurityNumber.length !== 4
+            ) {
                 this.setState({
                     error: true,
                     message:
@@ -210,6 +214,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             this.props.updateAdditionalSurveyDetails(
                 this.state.tempLegalFirstName,
                 this.state.tempLegalLastName,
+                this.state.tempLegalMiddleName,
                 this.state.tempSocialSecurityNumber,
                 this.state.tempDateOfBirth,
                 1
@@ -225,6 +230,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             this.props.updateAdditionalSurveyDetails(
                 this.props.additionalSurvey.legalFirstName,
                 this.props.additionalSurvey.legalLastName,
+                this.props.additionalSurvey.legalMiddleName,
                 this.props.additionalSurvey.socialSecurityNumber,
                 this.props.additionalSurvey.dateOfBirth,
                 2
@@ -284,18 +290,21 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     setTempAdditionalDetails = (
         tempLegalFirstName: string,
         tempLegalLastName: string,
+        tempLegalMiddleName: string,
         tempSocialSecurityNumber: string,
         tempDateOfBirth: string
     ) => {
         this.setState({
             tempLegalFirstName: tempLegalFirstName.trim(),
             tempLegalLastName: tempLegalLastName.trim(),
+            tempLegalMiddleName: tempLegalMiddleName.trim(),
             tempSocialSecurityNumber: tempSocialSecurityNumber.trim(),
             tempDateOfBirth: tempDateOfBirth,
         });
         this.props.updateAdditionalSurveyDetails(
             tempLegalFirstName.trim(),
             tempLegalLastName.trim(),
+            tempLegalMiddleName.trim(),
             tempSocialSecurityNumber.trim(),
             tempDateOfBirth,
             0
@@ -519,6 +528,9 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                           legalLastName={
                               this.props.additionalSurvey.legalLastName
                           }
+                          legalMiddleName={
+                              this.props.additionalSurvey.legalMiddleName
+                          }
                           socialSecurityNumber={
                               this.props.additionalSurvey.socialSecurityNumber
                           }
@@ -633,6 +645,7 @@ interface DispatchProps {
     updateAdditionalSurveyDetails: (
         legalFirstName: string,
         legalLastName: string,
+        legalMiddleName: string,
         socialSecurityNumber: string,
         dateOfBirth: string,
         initialSurveyState: number

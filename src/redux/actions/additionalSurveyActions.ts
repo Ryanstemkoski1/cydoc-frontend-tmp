@@ -6,6 +6,7 @@ export interface UpdateAdditionalSurveyAction {
     payload: {
         legalFirstName: string;
         legalLastName: string;
+        legalMiddleName: string;
         socialSecurityNumber: string;
         dateOfBirth: string;
         initialSurveyState: number;
@@ -35,6 +36,7 @@ export interface ValidateUserInfo {
 export function updateAdditionalSurveyDetails(
     legalFirstName: string,
     legalLastName: string,
+    legalMiddleName: string,
     socialSecurityNumber: string,
     dateOfBirth: string,
     initialSurveyState: number
@@ -44,6 +46,7 @@ export function updateAdditionalSurveyDetails(
         payload: {
             legalFirstName,
             legalLastName,
+            legalMiddleName,
             socialSecurityNumber,
             dateOfBirth,
             initialSurveyState,

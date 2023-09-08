@@ -1,3 +1,5 @@
+import { DbUser } from '@cydoc-ai/types';
+import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import Input from 'components/Input/Input';
 import Modal from 'components/Modal/Modal';
 import { stagingClient } from 'constants/api';
@@ -60,25 +62,36 @@ function formatDateOfBirth(date: string | Date): string {
 }
 
 export interface AppointmentUser {
-    id: number;
+    id: string;
     firstName: string;
     lastName: string;
-    dateOfBirth: Date;
+    dob: Date;
     clinicianId: number | null;
+    appointmentDate: Date;
+    clinicianLastName: string | null;
+    hpiText: string;
+    ssnLastFourDigit: string | null;
+    institutionId: number | null;
 }
 
 async function fetchHPIAppointments(
     date: Date,
-    clinicianId: string,
+    user: DbUser,
     stateUpdaterFunc: (users: AppointmentUser[]) => void,
     onError?: (error: any) => void
 ) {
+    const { institutionId: institution_id, id: clinician_id } = user;
     try {
         let url = `/appointments?appointment_date=${formatDateOfBirth(date)}`;
 
-        if (clinicianId !== null) {
-            url += `&clinician_id=${clinicianId}`;
+        if (institution_id) {
+            url += `&${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
         }
+
+        if (clinician_id) {
+            url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
+        }
+
         const response = await stagingClient.get(url);
         const fetchDetails = response.data.data as AppointmentUser[];
         stateUpdaterFunc(fetchDetails);
@@ -127,7 +140,7 @@ const BrowseNotes = () => {
             return;
         }
         try {
-            fetchHPIAppointments(date, user.id, (users: AppointmentUser[]) => {
+            fetchHPIAppointments(date, user, (users: AppointmentUser[]) => {
                 const unreportedUsers: AppointmentUser[] = users.filter(
                     (currentUser) => currentUser.clinicianId !== Number(user.id)
                 );
@@ -171,9 +184,7 @@ const BrowseNotes = () => {
                                                 </span>
                                             </td>
                                             <td>
-                                                {formatDateOfBirth(
-                                                    user.dateOfBirth
-                                                )}
+                                                {formatDateOfBirth(user.dob)}
                                             </td>
                                         </tr>
                                     );

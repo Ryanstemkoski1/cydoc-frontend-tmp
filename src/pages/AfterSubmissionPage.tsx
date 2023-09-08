@@ -7,13 +7,17 @@ import style from './AfterSubmissionPage.module.scss';
 function AfterSubmissionPage() {
     const query = useQuery();
 
-    const clinicianId = query.get(HPIPatientQueryParams.CLINICIAN_ID);
-    const institutionId = query.get(HPIPatientQueryParams.INSTITUTION_ID);
+    const clinician_id = query.get(HPIPatientQueryParams.CLINICIAN_ID);
+    const institution_id = query.get(HPIPatientQueryParams.INSTITUTION_ID);
 
-    let resetButtonURL = '/hpi/patient';
+    if (!institution_id) {
+        window.location.replace('/');
+    }
 
-    if (clinicianId !== null && institutionId !== null) {
-        resetButtonURL = `${resetButtonURL}?${HPIPatientQueryParams.INSTITUTION_ID}=${institutionId}&${HPIPatientQueryParams.CLINICIAN_ID}=${clinicianId}`;
+    let resetButtonURL = `/hpi/patient?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
+
+    if (clinician_id) {
+        resetButtonURL += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
     }
 
     return (

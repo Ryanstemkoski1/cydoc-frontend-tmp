@@ -12,6 +12,7 @@ import DetailsPage from '../../EditNote/content/patientview/AdditionalSurvey';
 interface InitialSurveyState {
     tempLegalFirstName: string;
     tempLegalLastName: string;
+    tempLegalMiddleName: string;
     tempSocialSecurityNumber: string;
     tempDateOfBirth: string;
 }
@@ -27,6 +28,7 @@ class InitialSurveyHPI extends React.Component<Props, InitialSurveyState> {
         this.state = {
             tempLegalFirstName: '',
             tempLegalLastName: '',
+            tempLegalMiddleName: '',
             tempSocialSecurityNumber: '',
             tempDateOfBirth: '',
         };
@@ -45,8 +47,7 @@ class InitialSurveyHPI extends React.Component<Props, InitialSurveyState> {
         if (
             this.state.tempLegalFirstName.trim() === '' ||
             this.state.tempLegalLastName.trim() == '' ||
-            this.state.tempDateOfBirth.trim() === '' ||
-            this.state.tempSocialSecurityNumber.trim() == ''
+            this.state.tempDateOfBirth.trim() === ''
         ) {
             this.props.setErrorMessage(
                 'Please fill in all details to continue'
@@ -54,7 +55,10 @@ class InitialSurveyHPI extends React.Component<Props, InitialSurveyState> {
             return;
         }
 
-        if (this.state.tempSocialSecurityNumber.length !== 4) {
+        if (
+            this.state.tempSocialSecurityNumber.trim() &&
+            this.state.tempSocialSecurityNumber.length !== 4
+        ) {
             this.props.setErrorMessage(
                 'Social security number should consist of 4 numbers'
             );
@@ -64,6 +68,7 @@ class InitialSurveyHPI extends React.Component<Props, InitialSurveyState> {
         this.props.updateAdditionalSurveyDetails(
             this.state.tempLegalFirstName,
             this.state.tempLegalLastName,
+            this.state.tempLegalMiddleName,
             this.state.tempSocialSecurityNumber,
             this.state.tempDateOfBirth,
             0
@@ -75,18 +80,21 @@ class InitialSurveyHPI extends React.Component<Props, InitialSurveyState> {
     setTempAdditionalDetails = (
         tempLegalFirstName: string,
         tempLegalLastName: string,
+        tempLegalMiddleName: string,
         tempSocialSecurityNumber: string,
         tempDateOfBirth: string
     ) => {
         this.setState({
             tempLegalFirstName: tempLegalFirstName.trim(),
             tempLegalLastName: tempLegalLastName.trim(),
+            tempLegalMiddleName: tempLegalMiddleName.trim(),
             tempSocialSecurityNumber: tempSocialSecurityNumber.trim(),
             tempDateOfBirth: tempDateOfBirth,
         });
         this.props.updateAdditionalSurveyDetails(
             tempLegalFirstName.trim(),
             tempLegalLastName.trim(),
+            tempLegalMiddleName.trim(),
             tempSocialSecurityNumber.trim(),
             tempDateOfBirth,
             0
@@ -100,6 +108,9 @@ class InitialSurveyHPI extends React.Component<Props, InitialSurveyState> {
                     key={0}
                     legalFirstName={this.props.additionalSurvey.legalFirstName}
                     legalLastName={this.props.additionalSurvey.legalLastName}
+                    legalMiddleName={
+                        this.props.additionalSurvey.legalMiddleName
+                    }
                     socialSecurityNumber={
                         this.props.additionalSurvey.socialSecurityNumber
                     }
@@ -127,6 +138,7 @@ interface DispatchProps {
     updateAdditionalSurveyDetails: (
         legalFirstName: string,
         legalLastName: string,
+        legalMiddleName: string,
         socialSecurityNumber: string,
         dateOfBirth: string,
         initialSurveyState: number

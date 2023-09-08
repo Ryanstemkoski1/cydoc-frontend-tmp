@@ -15,7 +15,7 @@ import { selectPlanConditions } from 'redux/selectors/planSelectors';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 import { currentNoteStore } from 'redux/store';
 import { Search, Segment } from 'semantic-ui-react';
-import getHPIText from 'utils/getHPIText';
+import getHPIFormData from 'utils/getHPIFormData';
 import { CHIEF_COMPLAINTS } from '../../../redux/actions/actionTypes';
 import { hpiHeaders } from '../../EditNote/content/hpi/knowledgegraph/src/API';
 import BodySystemDropdown from '../../EditNote/content/hpi/knowledgegraph/src/components/BodySystemDropdown';
@@ -76,46 +76,28 @@ class HPIContent extends React.Component {
     };
 
     handleSubmit = () => {
-        const rootState = currentNoteStore.getState();
+        const query = new URLSearchParams(this.props.location.search);
 
-        const first_name = rootState.additionalSurvey.legalFirstName;
-        const last_name = rootState.additionalSurvey.legalLastName;
-        const appointment_date =
-            rootState.userView.userSurvey.nodes[8].response;
-        const date_of_birth = rootState.additionalSurvey.dateOfBirth;
-        const last_4_ssn = rootState.additionalSurvey.socialSecurityNumber;
-        const hpi_text = getHPIText();
-        const clinician_id = rootState.clinicianDetail.id;
+        const clinician_id =
+            query.get(HPIPatientQueryParams.CLINICIAN_ID) ?? '';
+        const institution_id =
+            query.get(HPIPatientQueryParams.INSTITUTION_ID) ?? '';
 
         const { setNotificationMessage, setNotificationType } =
             this.props.notification;
         this.setState({ loading: true });
+
         stagingClient
             .post('/appointment', {
-                first_name,
-                last_name,
-                appointment_date,
-                date_of_birth,
-                last_4_ssn,
-                hpi_text: JSON.stringify(hpi_text),
+                ...getHPIFormData(),
                 clinician_id,
+                institution_id,
             })
-            .then((res) => {
-                if (res.status !== 200) throw new Error();
+            .then(() => {
+                let url = `/submission-successful?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
 
-                const query = new URLSearchParams(this.props.location.search);
-
-                const clinicianId = query.get(
-                    HPIPatientQueryParams.CLINICIAN_ID
-                );
-                const institutionId = query.get(
-                    HPIPatientQueryParams.INSTITUTION_ID
-                );
-
-                let url = '/submission-successful';
-
-                if (clinicianId !== null && institutionId !== null) {
-                    url = `${url}?${HPIPatientQueryParams.INSTITUTION_ID}=${institutionId}&${HPIPatientQueryParams.CLINICIAN_ID}=${clinicianId}`;
+                if (clinician_id) {
+                    url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
                 }
 
                 window.location.href = url;
