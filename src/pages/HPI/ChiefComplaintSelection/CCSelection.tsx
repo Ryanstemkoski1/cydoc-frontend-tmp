@@ -388,6 +388,7 @@ const CCSelection = (props: Props) => {
                 institution_id,
             })
             .then(() => {
+                localStorage.setItem('HPI_FORM_SUBMITTED', '1');
                 let url = `/submission-successful?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
 
                 if (clinician_id) {

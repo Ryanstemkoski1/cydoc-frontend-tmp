@@ -1,6 +1,6 @@
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import useQuery from 'hooks/useQuery';
-import React from 'react';
+import React, { useEffect } from 'react';
 import CheckWhite from '../assets/images/check-white.svg';
 import style from './AfterSubmissionPage.module.scss';
 
@@ -10,15 +10,19 @@ function AfterSubmissionPage() {
     const clinician_id = query.get(HPIPatientQueryParams.CLINICIAN_ID);
     const institution_id = query.get(HPIPatientQueryParams.INSTITUTION_ID);
 
-    if (!institution_id) {
-        window.location.replace('/');
-    }
-
     let resetButtonURL = `/hpi/patient?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
 
     if (clinician_id) {
         resetButtonURL += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
     }
+
+    useEffect(() => {
+        if (!institution_id || !localStorage.getItem('HPI_FORM_SUBMITTED')) {
+            window.location.replace('/');
+        }
+
+        localStorage.removeItem('HPI_FORM_SUBMITTED');
+    }, []);
 
     return (
         <>
