@@ -39,16 +39,15 @@ function QRCodePage() {
     const [link, setLink] = useState<string>('');
 
     const fetchQRCodeLink = useCallback(async () => {
-        const clinician_id = user?.id;
         const institution_id = user?.institutionId;
 
-        if (!clinician_id || !institution_id) {
+        if (!institution_id) {
             return;
         }
 
         try {
             const response = await stagingClient.get(
-                `/hpi-qr?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`
+                `/hpi-qr?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`
             );
 
             const link = response.data.link as string | null;

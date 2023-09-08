@@ -80,16 +80,12 @@ async function fetchHPIAppointments(
     stateUpdaterFunc: (users: AppointmentUser[]) => void,
     onError?: (error: any) => void
 ) {
-    const { institutionId: institution_id, id: clinician_id } = user;
+    const { institutionId: institution_id } = user;
     try {
         let url = `/appointments?appointment_date=${formatDateOfBirth(date)}`;
 
         if (institution_id) {
             url += `&${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
-        }
-
-        if (clinician_id) {
-            url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
         }
 
         const response = await stagingClient.get(url);
