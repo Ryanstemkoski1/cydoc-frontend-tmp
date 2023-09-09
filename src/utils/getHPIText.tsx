@@ -173,7 +173,6 @@ export const extractNode = (
     node: GraphNode
 ): [string, string, string] => {
     /* eslint-disable no-case-declarations, no-fallthrough */
-
     if (
         (node?.responseType === ResponseTypes.YES_NO &&
             node?.response == YesNoResponse.Yes) ||
@@ -507,7 +506,7 @@ function removePhrases(text: string, phrases: string[]): string {
     let modifiedText = text;
     phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
     phrases.forEach((phrase) => {
-        modifiedText = modifiedText.replace(new RegExp(phrase, 'g'), ''); // Removing each phrase globally
+        modifiedText = modifiedText.replace(new RegExp(`\\b${phrase}\\b`, 'g'), '');
     });
     return modifiedText.trim();
 }
