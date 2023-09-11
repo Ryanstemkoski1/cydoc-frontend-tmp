@@ -506,7 +506,10 @@ function removePhrases(text: string, phrases: string[]): string {
     let modifiedText = text;
     phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
     phrases.forEach((phrase) => {
-        modifiedText = modifiedText.replace(new RegExp(`\\b${phrase}\\b`, 'g'), '');
+        modifiedText = modifiedText.replace(
+            new RegExp(`\\b${phrase}\\b`, 'g'),
+            ''
+        );
     });
     return modifiedText.trim();
 }
