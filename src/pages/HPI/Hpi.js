@@ -60,6 +60,10 @@ const HPI = () => {
             ),
         [reduxState.chiefComplaints]
     );
+    const [clinician_id, institution_id] = [
+        query.get(HPIPatientQueryParams.CLINICIAN_ID),
+        query.get(HPIPatientQueryParams.INSTITUTION_ID),
+    ];
 
     useEffect(() => {
         if (
@@ -73,29 +77,24 @@ const HPI = () => {
             const data = hpiHeaders;
             data.then((res) => dispatch(saveHpiHeader(res.data)));
         }
+
+        return () => {
+            dispatch(updateActiveItem('CC'));
+        };
     }, []);
 
     useEffect(() => {
         if (view === ViewType.DOCTOR) return;
-
-        const [clinician_id, institution_id] = [
-            query.get(HPIPatientQueryParams.CLINICIAN_ID),
-            query.get(HPIPatientQueryParams.INSTITUTION_ID),
-        ];
-
         if (!institution_id) {
             history.replace('/');
             return;
         }
 
         setIsLoading(true);
-
         let url = `/institution/member?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
-
         if (clinician_id) {
             url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
         }
-
         stagingClient
             .get(url)
             .catch((_error) => {
@@ -123,7 +122,7 @@ const HPI = () => {
     }, [view]);
 
     useEffect(() => {
-        if (view !== ViewType.PATIENT) return undefined;
+        if (view !== ViewType.PATIENT) return;
 
         const steps = ['InitialSurvey', 'PreHPI'];
         if (
