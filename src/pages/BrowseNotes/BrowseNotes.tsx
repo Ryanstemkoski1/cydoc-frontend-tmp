@@ -1,6 +1,5 @@
 import { DbUser } from '@cydoc-ai/types';
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
-import Input from 'components/Input/Input';
 import Modal from 'components/Modal/Modal';
 import { stagingClient } from 'constants/api';
 import useUser from 'hooks/useUser';
@@ -12,6 +11,10 @@ import LeftArrow from '../../assets/images/left-arrow.svg';
 import RefreshIcon from '../../assets/images/refresh.png';
 import RightArrow from '../../assets/images/right-arrow.svg';
 import style from './BrowseNotes.module.scss';
+
+export function formatFullName(firstName = '', middleName = '', lastName = '') {
+    return `${lastName}, ${firstName} ${middleName}`;
+}
 
 const months = [
     'January',
@@ -65,6 +68,7 @@ export interface AppointmentUser {
     id: string;
     firstName: string;
     lastName: string;
+    middleName: string | null;
     dob: Date;
     clinicianId: number | null;
     appointmentDate: Date;
@@ -80,16 +84,12 @@ async function fetchHPIAppointments(
     stateUpdaterFunc: (users: AppointmentUser[]) => void,
     onError?: (error: any) => void
 ) {
-    const { institutionId: institution_id, id: clinician_id } = user;
+    const { institutionId: institution_id } = user;
     try {
         let url = `/appointments?appointment_date=${formatDateOfBirth(date)}`;
 
         if (institution_id) {
             url += `&${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
-        }
-
-        if (clinician_id) {
-            url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
         }
 
         const response = await stagingClient.get(url);
@@ -108,7 +108,7 @@ const BrowseNotes = () => {
 
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedAppointment, setSelectedAppointment] =
-        useState<AppointmentUser | null>(null);
+        useState<AppointmentUser>();
     const loadingStatus = useSelector(
         (state: CurrentNoteState) => state.loadingStatus
     );
@@ -176,9 +176,11 @@ const BrowseNotes = () => {
                                                         openModal(user)
                                                     }
                                                 >
-                                                    {user.lastName +
-                                                        ', ' +
-                                                        user.firstName}
+                                                    {formatFullName(
+                                                        user?.firstName,
+                                                        user?.middleName ?? '',
+                                                        user?.lastName
+                                                    )}
                                                 </span>
                                             </td>
                                             <td>
@@ -219,22 +221,6 @@ const BrowseNotes = () => {
 
                 <div className={` ${style.notesBlock__content} `}>
                     <div className={style.notesBlock__contentInner}>
-                        <div className='flex align-center justify-between'>
-                            <h4>Clinician</h4>
-                            <div className={style.notesBlock__dropdown}>
-                                <Input
-                                    value={
-                                        user
-                                            ? user!.lastName +
-                                              ', ' +
-                                              user!.firstName
-                                            : ''
-                                    }
-                                    disabled
-                                />
-                            </div>
-                        </div>
-
                         {renderUsers(users)}
                     </div>
                     <div className={`${style.notesBlock__reload}`}>
@@ -247,12 +233,14 @@ const BrowseNotes = () => {
                     </div>
                 </div>
             </div>
-            <Modal
-                key={selectedAppointment?.id}
-                showModal={showModal}
-                setShowModal={setShowModal}
-                selectedAppointment={selectedAppointment}
-            />
+            {selectedAppointment && (
+                <Modal
+                    key={selectedAppointment.id}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    selectedAppointment={selectedAppointment}
+                />
+            )}
         </div>
     );
 };

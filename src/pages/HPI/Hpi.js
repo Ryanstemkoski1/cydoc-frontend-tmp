@@ -84,7 +84,10 @@ const HPI = () => {
     }, []);
 
     useEffect(() => {
-        if (view === ViewType.DOCTOR) return;
+        if (view === ViewType.DOCTOR) {
+            history.replace('/hpi/doctor');
+            return;
+        }
         if (!institution_id) {
             history.replace('/');
             return;

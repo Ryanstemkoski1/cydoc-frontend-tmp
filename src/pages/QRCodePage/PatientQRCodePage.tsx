@@ -1,17 +1,15 @@
-import useClinicianFullName from 'hooks/useClinicianFullName';
+import useUser from 'hooks/useUser';
 import React from 'react';
+import PrintTemplate from 'react-print';
 import Logo from '../../assets/images/logo.svg';
 import style from '../../assets/scss/qrcode-print.module.scss';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import PrintTemplate from 'react-print';
 
 interface Props {
     children: React.JSX.Element[] | React.JSX.Element;
 }
 
 function PatientQRCodePage({ children }: Props) {
-    const clinicianFullName = useClinicianFullName();
+    const { user } = useUser();
 
     return (
         <div
@@ -20,7 +18,7 @@ function PatientQRCodePage({ children }: Props) {
             <PrintTemplate>
                 <div className={`${style.patientQR}`}>
                     <h2>
-                        <span>{clinicianFullName}</span>
+                        <span>{user?.institutionName ?? ''}</span>
                         has partnered with
                     </h2>
 

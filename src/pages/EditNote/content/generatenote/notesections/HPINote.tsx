@@ -4,8 +4,14 @@ import { capitalizeFirstLetter } from '../generateHpiText';
 import styles from './HPINote.module.scss';
 
 export function ParseAndRenderHpiNote({ hpiText = '' }: { hpiText: string }) {
-    const parsedHPIText = JSON.parse(hpiText) as HPIText[] | string;
-    return <HpiNote text={parsedHPIText} bulletNoteView={false} />;
+    let parsedHPIText: HPIText[] | string = '';
+    try {
+        parsedHPIText = JSON.parse(hpiText) as HPIText[] | string;
+    } catch (err) {
+        parsedHPIText = hpiText;
+    }
+
+    return <HpiNote text={parsedHPIText} bulletNoteView={true} />;
 }
 
 const HpiNote = ({
@@ -43,9 +49,13 @@ const HpiNote = ({
               return (
                   <li key={item.title} className={styles.listItem}>
                       <b>{item.title}</b>
-                      {item.text.split('. ').map((sentence, index) => (
-                          <li key={index}>{capitalizeFirstLetter(sentence)}</li>
-                      ))}
+                      <ul className={styles.noBullets}>
+                          {item.text.split('. ').map((sentence, index) => (
+                              <li key={index}>
+                                  {capitalizeFirstLetter(sentence)}
+                              </li>
+                          ))}
+                      </ul>
 
                       {item.miscNote &&
                           item.miscNote.split('. ').map((sentence, index) => (
