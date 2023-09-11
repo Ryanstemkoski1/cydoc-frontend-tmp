@@ -58,7 +58,11 @@ const AdditionalSurvey = ({
     return (
         <div className={style.additionalSurvey}>
             <form className={`${style.additionalSurvey__row} flex-wrap`}>
-                <div className={style.additionalSurvey__col}>
+                <div
+                    className={`${style.additionalSurvey__col} ${
+                        isHPIPage && style.additionalSurvey__four
+                    }`}
+                >
                     <Input
                         label='Legal First Name'
                         required={true}
@@ -69,20 +73,11 @@ const AdditionalSurvey = ({
                         onChange={handleChange}
                     />
                 </div>
-                <div className={style.additionalSurvey__col}>
-                    <Input
-                        required={true}
-                        aria-label='last-Name'
-                        label='Legal Last Name'
-                        name='legalLastName'
-                        placeholder='Legal Last Name'
-                        defaultValue={additionalDetails.legalLastName}
-                        onChange={handleChange}
-                    />
-                </div>
 
                 {isHPIPage && (
-                    <div className={style.additionalSurvey__col}>
+                    <div
+                        className={`${style.additionalSurvey__col} ${style.additionalSurvey__four}`}
+                    >
                         <Input
                             aria-label='middle-Name'
                             label='Legal Middle Name'
@@ -94,17 +89,22 @@ const AdditionalSurvey = ({
                     </div>
                 )}
 
-                <div className={style.additionalSurvey__col}>
+                <div
+                    className={`${style.additionalSurvey__col} ${
+                        isHPIPage && style.additionalSurvey__four
+                    }`}
+                >
                     <Input
-                        label='Last 4 SSN'
-                        name='socialSecurityNumber'
-                        placeholder='Last 4 SSN'
-                        minLength={4}
-                        maxLength={4}
-                        defaultValue={additionalDetails.socialSecurityNumber}
+                        required={true}
+                        aria-label='last-Name'
+                        label='Legal Last Name'
+                        name='legalLastName'
+                        placeholder='Legal Last Name'
+                        defaultValue={additionalDetails.legalLastName}
                         onChange={handleChange}
                     />
                 </div>
+
                 <div className={style.additionalSurvey__col}>
                     <Input
                         required={true}
@@ -114,6 +114,17 @@ const AdditionalSurvey = ({
                         placeholder='mm/dd/yyyy'
                         max={new Date().toJSON().slice(0, 10)}
                         defaultValue={additionalDetails.dateOfBirth}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className={style.additionalSurvey__col}>
+                    <Input
+                        label='Last 4 SSN'
+                        name='socialSecurityNumber'
+                        placeholder='Last 4 SSN'
+                        minLength={4}
+                        maxLength={4}
+                        defaultValue={additionalDetails.socialSecurityNumber}
                         onChange={handleChange}
                     />
                 </div>
