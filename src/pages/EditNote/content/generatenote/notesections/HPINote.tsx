@@ -11,7 +11,7 @@ export function ParseAndRenderHpiNote({ hpiText = '' }: { hpiText: string }) {
         parsedHPIText = hpiText;
     }
 
-    return <HpiNote text={parsedHPIText} bulletNoteView={false} />;
+    return <HpiNote text={parsedHPIText} bulletNoteView={true} />;
 }
 
 const HpiNote = ({
@@ -49,9 +49,13 @@ const HpiNote = ({
               return (
                   <li key={item.title} className={styles.listItem}>
                       <b>{item.title}</b>
-                      {item.text.split('. ').map((sentence, index) => (
-                          <li key={index}>{capitalizeFirstLetter(sentence)}</li>
-                      ))}
+                      <ul className={styles.noBullets}>
+                          {item.text.split('. ').map((sentence, index) => (
+                              <li key={index}>
+                                  {capitalizeFirstLetter(sentence)}
+                              </li>
+                          ))}
+                      </ul>
 
                       {item.miscNote &&
                           item.miscNote.split('. ').map((sentence, index) => (

@@ -26,7 +26,7 @@ export default function getHPIFormData() {
         clinician_last_name: sanitizeString(
             (rootState?.userView?.userSurvey?.nodes['9']?.response ??
                 '') as string
-        ),
+        ).trim(),
         appointment_date:
             rootState?.userView?.userSurvey?.nodes[8]?.response ?? '',
     };

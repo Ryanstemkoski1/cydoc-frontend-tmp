@@ -1,6 +1,5 @@
 import { DbUser } from '@cydoc-ai/types';
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
-import Input from 'components/Input/Input';
 import Modal from 'components/Modal/Modal';
 import { stagingClient } from 'constants/api';
 import useUser from 'hooks/useUser';
@@ -222,22 +221,6 @@ const BrowseNotes = () => {
 
                 <div className={` ${style.notesBlock__content} `}>
                     <div className={style.notesBlock__contentInner}>
-                        <div className='flex align-center justify-between'>
-                            <h4>Clinician</h4>
-                            <div className={style.notesBlock__dropdown}>
-                                <Input
-                                    value={
-                                        user
-                                            ? user!.lastName +
-                                              ', ' +
-                                              user!.firstName
-                                            : ''
-                                    }
-                                    disabled
-                                />
-                            </div>
-                        </div>
-
                         {renderUsers(users)}
                     </div>
                     <div className={`${style.notesBlock__reload}`}>

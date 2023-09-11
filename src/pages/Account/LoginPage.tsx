@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
 
-import './Account.css';
+import { CenteredPaper } from 'components/Atoms/CenteredPaper';
 import useAuth from 'hooks/useAuth';
-import MfaVerificationForm from './MfaVerificationForm';
 import { useHistory } from 'react-router-dom';
+import './Account.css';
 import FirstLoginForm from './FirstLoginForm';
 import LoginForm from './LoginForm';
-import { CenteredPaper } from 'components/Atoms/CenteredPaper';
+import MfaVerificationForm from './MfaVerificationForm';
 
 const LoginPage = () => {
     const { loginCorrect, isSignedIn, passwordResetRequired } = useAuth();
     const history = useHistory();
 
     useEffect(() => {
-        loginCorrect && isSignedIn && history.push('/');
+        loginCorrect && isSignedIn && history.push('/hpi/doctor');
     });
 
     if (passwordResetRequired) {

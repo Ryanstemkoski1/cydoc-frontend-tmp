@@ -40,8 +40,7 @@ const Modal = ({
         };
     }, [showModal]);
 
-    const { firstName, middleName, lastName, clinicianLastName, hpiText } =
-        selectedAppointment;
+    const { firstName, middleName, lastName, hpiText } = selectedAppointment;
 
     return (
         <div
@@ -67,14 +66,6 @@ const Modal = ({
                             Copy HPI
                         </button>
                     </div>
-                    {clinicianLastName && (
-                        <div>
-                            <p>
-                                Last name of the clinician seeing:{' '}
-                                <strong>{clinicianLastName}</strong>
-                            </p>
-                        </div>
-                    )}
                     <div
                         className={`${style.modal__scroll} scrollbar`}
                         id='copy-notes'
