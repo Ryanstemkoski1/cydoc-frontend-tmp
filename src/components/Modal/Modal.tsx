@@ -1,8 +1,7 @@
 import Loader from 'components/tools/Loader/Loader';
-import { stagingClient } from 'constants/api';
 import { AppointmentUser } from 'pages/BrowseNotes/BrowseNotes';
 import { ParseAndRenderHpiNote } from 'pages/EditNote/content/generatenote/notesections/HPINote';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { default as React, useEffect, useRef } from 'react';
 import style from './Modal.module.scss';
 
 export interface ModalProps {
@@ -11,31 +10,12 @@ export interface ModalProps {
     selectedAppointment: AppointmentUser | null;
 }
 
-interface HPIAppointmentDetails extends AppointmentUser {
-    appointmentDate: Date;
-    hpiText: string;
-}
-
 const Modal = ({
     showModal,
     setShowModal,
     selectedAppointment,
 }: ModalProps) => {
     const modalRef = useRef<any>();
-    const [hpiAppointMentDetails, setHpiAppointmentDetails] =
-        useState<HPIAppointmentDetails | null>(null);
-
-    const fetchHPIAppointmentsDetails = useCallback(async () => {
-        const response = await stagingClient.get(
-            `/appointment/${selectedAppointment?.id}`
-        );
-        setHpiAppointmentDetails(response.data.data);
-    }, []);
-
-    useEffect(() => {
-        if (!selectedAppointment?.id) return;
-        fetchHPIAppointmentsDetails();
-    }, [selectedAppointment]);
 
     const handleClickOutsideModal = (event: any) => {
         if (!modalRef.current?.contains(event.target)) {
@@ -88,9 +68,12 @@ const Modal = ({
                         className={`${style.modal__scroll} scrollbar`}
                         id='copy-notes'
                     >
-                        {hpiAppointMentDetails ? (
+                        {selectedAppointment ? (
                             <ParseAndRenderHpiNote
-                                hpiText={hpiAppointMentDetails.hpiText}
+                                hpiText={
+                                    selectedAppointment.hpiText ||
+                                    JSON.stringify([])
+                                }
                             />
                         ) : (
                             <Loader />

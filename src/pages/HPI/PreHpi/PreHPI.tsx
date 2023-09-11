@@ -17,7 +17,6 @@ import patientViewHeaders from 'pages/EditNote/content/patientview/constants/pat
 import React from 'react';
 import { connect } from 'react-redux';
 import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
-import { updateActiveItem } from 'redux/actions/activeItemActions';
 import {
     GoBackToAdditionalSurvey,
     UpdateAdditionalSurveyAction,
@@ -40,7 +39,6 @@ import {
 } from 'redux/actions/userViewActions';
 import { CurrentNoteState } from 'redux/reducers';
 import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
-import { initialClinicianDetailType } from 'redux/reducers/clinicianDetailReducer';
 import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
 import { isSelectOneResponse } from 'redux/reducers/hpiReducer';
 import {
@@ -119,12 +117,8 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
     };
 
     renderSwitch = (id: string) => {
-        const {
-                userSurveyState,
-                patientView,
-                initialSurveySearch,
-                clinicianDetail,
-            } = this.props,
+        const { userSurveyState, patientView, initialSurveySearch } =
+                this.props,
             currEntry = userSurveyState.nodes[id],
             { bodySystems, parentNodes } = this.props.hpiHeaders;
         // map through all complaints on the HPI and create search resuls
@@ -227,7 +221,6 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
                         required={false}
                         placeholder={'Last Name'}
                         name={'lastNameOfClinic'}
-                        disabled={clinicianDetail.id !== null}
                     />
                 );
             }
@@ -303,26 +296,19 @@ export interface AdditionalSurveyProps {
     additionalSurvey: additionalSurvey;
 }
 
-export interface ClinicianDetailProps {
-    clinicianDetail: initialClinicianDetailType;
-}
-
 const mapStateToProps = (
     state: CurrentNoteState
 ): initialSurveyProps &
     HpiHeadersProps &
     ChiefComplaintsProps &
     ActiveItemProps &
-    AdditionalSurveyProps &
-    ClinicianDetailProps => {
+    AdditionalSurveyProps => {
     return {
         userSurveyState: selectInitialPatientSurvey(state),
         hpiHeaders: state.hpiHeaders,
         activeItem: selectActiveItem(state),
-        // patientView: selectPatientViewState(state),
         chiefComplaints: state.chiefComplaints,
         additionalSurvey: state.additionalSurvey,
-        clinicianDetail: state.clinicianDetail,
     };
 };
 
@@ -341,6 +327,7 @@ interface DispatchProps {
     updateAdditionalSurveyDetails: (
         legalFirstName: string,
         legalLastName: string,
+        legalMiddleName: string,
         socialSecurityNumber: string,
         dateOfBirth: string,
         initialSurveyState: number
@@ -355,9 +342,7 @@ type Props = HpiHeadersProps &
     HpiHeadersProps &
     PatientViewProps &
     ChiefComplaintsProps &
-    AdditionalSurveyProps & {
-        updateActiveItem: any;
-    } & ClinicianDetailProps;
+    AdditionalSurveyProps;
 
 const mapDispatchToProps = {
     processSurveyGraph,
@@ -366,7 +351,6 @@ const mapDispatchToProps = {
     initialSurveySearch,
     updateAdditionalSurveyDetails,
     resetAdditionalSurveyPage,
-    updateActiveItem,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PreHPI);

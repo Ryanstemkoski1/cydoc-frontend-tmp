@@ -55,7 +55,7 @@ import {
 } from 'redux/reducers/userViewReducer';
 import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
 import { currentNoteStore } from 'redux/store';
-import getHPIText from 'utils/getHPIText';
+import getHPIFormData from 'utils/getHPIFormData';
 import style from './CCSelection.module.scss';
 
 interface InitialSurveyComponentProps {
@@ -80,7 +80,10 @@ const CCSelection = (props: Props) => {
         saveHpiHeader,
     } = props;
     const { setNotificationMessage, setNotificationType } = notification;
-    const nodeTenResponse = userSurveyState.nodes['10'].response;
+    const nodeTenResponse = (
+        (userSurveyState.nodes['10'].response ?? '') as string
+    ).trim();
+
     const query = useQuery();
 
     const [searchVal, setSearchVal] = useState('');
@@ -361,11 +364,7 @@ const CCSelection = (props: Props) => {
             return;
         }
 
-        if (
-            showNodeTen &&
-            selectedCC.length === 0 &&
-            !((nodeTenResponse || '') as string).trim()
-        ) {
+        if (showNodeTen && selectedCC.length === 0 && !nodeTenResponse) {
             setShowRequiredFieldValidation({
                 status: true,
                 forUID: '10',
@@ -373,16 +372,10 @@ const CCSelection = (props: Props) => {
             return;
         }
 
-        const rootState = currentNoteStore.getState();
-
-        const first_name = rootState.additionalSurvey.legalFirstName;
-        const last_name = rootState.additionalSurvey.legalLastName;
-        const appointment_date =
-            rootState.userView.userSurvey.nodes[8].response;
-        const date_of_birth = rootState.additionalSurvey.dateOfBirth;
-        const last_4_ssn = rootState.additionalSurvey.socialSecurityNumber;
-        const hpi_text = getHPIText();
-        const clinician_id = rootState.clinicianDetail.id;
+        const clinician_id =
+            query.get(HPIPatientQueryParams.CLINICIAN_ID) ?? '';
+        const institution_id =
+            query.get(HPIPatientQueryParams.INSTITUTION_ID) ?? '';
 
         const { setNotificationMessage, setNotificationType } =
             props.notification;
@@ -390,29 +383,15 @@ const CCSelection = (props: Props) => {
         setLoading(true);
         stagingClient
             .post('/appointment', {
-                first_name,
-                last_name,
-                appointment_date,
-                date_of_birth,
-                last_4_ssn,
-                hpi_text: JSON.stringify(hpi_text),
+                ...getHPIFormData(),
                 clinician_id,
+                institution_id,
             })
-            .then((res) => {
-                if (res.status !== 200) throw new Error();
+            .then(() => {
+                let url = `/submission-successful?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
 
-                const clinicianId = query.get(
-                    HPIPatientQueryParams.CLINICIAN_ID
-                );
-
-                const institutionId = query.get(
-                    HPIPatientQueryParams.INSTITUTION_ID
-                );
-
-                let url = '/submission-successful';
-
-                if (clinicianId !== null && institutionId !== null) {
-                    url = `${url}?${HPIPatientQueryParams.INSTITUTION_ID}=${institutionId}&${HPIPatientQueryParams.CLINICIAN_ID}=${clinicianId}`;
+                if (clinician_id) {
+                    url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
                 }
 
                 window.location.href = url;
@@ -505,6 +484,7 @@ interface DispatchProps {
     updateAdditionalSurveyDetails: (
         legalFirstName: string,
         legalLastName: string,
+        legalMiddleName: string,
         socialSecurityNumber: string,
         dateOfBirth: string,
         initialSurveyState: number
