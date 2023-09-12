@@ -1,25 +1,34 @@
-import { getFromApi } from './api';
 import { ApiResponse, GetMembersResponse, Institution } from '@cydoc-ai/types';
 import invariant from 'tiny-invariant';
+import { postToApi } from './api';
+import { CognitoUser } from 'auth/cognito';
 
 export const getInstitutionMembers = (
-    institutionId: string
+    institutionId: string,
+    cognitoUser: CognitoUser | null
 ): Promise<GetMembersResponse> => {
     invariant(institutionId, '[getInstitutionMembers] missing institutionId');
 
-    return getFromApi<GetMembersResponse>(
+    return postToApi<GetMembersResponse>(
         `/institution/${institutionId}/members`,
-        'getInstitutionMembers'
+        'getInstitutionMembers',
+        null,
+        cognitoUser,
+        false
     );
 };
 
 export const getInstitution = (
-    institutionId: string
+    institutionId: string,
+    cognitoUser: CognitoUser | null
 ): Promise<Institution | ApiResponse> => {
     invariant(institutionId, '[getInstitution] missing institutionId');
 
-    return getFromApi<Institution>(
+    return postToApi<Institution>(
         `/institution/${institutionId}`,
-        'getInstitution'
+        'getInstitution',
+        null,
+        cognitoUser,
+        false
     );
 };

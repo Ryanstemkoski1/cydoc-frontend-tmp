@@ -2,17 +2,10 @@ import { breadcrumb, log } from './logging';
 import { ApiPostBody, ApiResponse, ApiResponseBase } from '@cydoc-ai/types';
 import { API_URL, PUBLIC_API_URL } from './environment';
 import { stringFromError } from './error-utils';
+import { CognitoUser } from 'auth/cognito';
 
 const JSON_POST_HEADER: RequestInit = {
     method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    mode: 'cors',
-};
-
-const JSON_GET_HEADER: RequestInit = {
-    method: 'GET',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -30,10 +23,12 @@ const JSON_GET_HEADER: RequestInit = {
 export async function postToApi<T>(
     path: string,
     description: string,
-    body: ApiPostBody,
+    body: ApiPostBody | null,
+    cognitoUser: CognitoUser | null,
     publicEndpoint = false
 ): Promise<T | ApiResponse> {
-    // TODO: if users is logged in, pull in authentication token
+    const idToken = cognitoUser?.signInUserSession?.getIdToken();
+    console.log(`user`, cognitoUser);
 
     const url = `${publicEndpoint ? PUBLIC_API_URL : API_URL}${path}`;
     let response;
@@ -43,8 +38,8 @@ export async function postToApi<T>(
         response = await fetch(url, {
             ...JSON_POST_HEADER,
             body: JSON.stringify({
-                // idToken, // TODO: insert token so API can auth the user
-                ...body,
+                ...(body || {}),
+                idToken,
             }),
         });
 
@@ -67,55 +62,6 @@ export async function postToApi<T>(
             path,
             description,
             body,
-            response,
-        });
-
-        return {
-            errorMessage:
-                'Unexpected error occurred, check your internet connection',
-        };
-    }
-}
-/**
- * gets data from API
- * @param path url to POST to
- * @param description note for logging & debugging
- * @param T generic type of return object
- * @returns instance of "T" generic object on success
- */
-export async function getFromApi<T>(
-    path: string,
-    description: string
-): Promise<T | ApiResponse> {
-    // TODO: if users is logged in, pull in authentication token
-
-    const url = `${API_URL}${path}`;
-    let response;
-    breadcrumb(`getting: ${JSON.stringify(path)}`, 'API', { url, path });
-
-    try {
-        response = await fetch(url, {
-            ...JSON_GET_HEADER,
-        });
-
-        const handledResponse = await handleResponse<T>(response);
-
-        breadcrumb(
-            `getFromApi${response.status} ${description} Response`,
-            'API',
-            {
-                handledResponse,
-                responseStatus: response.status,
-                responseOk: response.ok,
-                responseStatusText: response.statusText,
-            }
-        );
-
-        return handledResponse;
-    } catch (e) {
-        log(`[getFromApi] ${description}: ${stringFromError(e)}`, {
-            path,
-            description,
             response,
         });
 

@@ -4,10 +4,11 @@ import {
     UpdateUserBody,
     UpdateUserResponse,
 } from '@cydoc-ai/types';
-import { getFromApi, postToApi } from './api';
+import { postToApi } from './api';
 import invariant from 'tiny-invariant';
 import { log } from './logging';
 import { ClinicianSignUpData } from 'types/signUp';
+import { CognitoUser } from 'auth/cognito';
 
 export const formatPhoneNumber = (phoneNumber: string): string =>
     phoneNumber
@@ -15,14 +16,17 @@ export const formatPhoneNumber = (phoneNumber: string): string =>
         .replace(/-|\(|\)/gi, '')
         .replace(' ', '');
 
-export async function createDbUser({
-    email,
-    firstName,
-    institutionName,
-    lastName,
-    phoneNumber,
-    role,
-}: ClinicianSignUpData) {
+export async function createDbUser(
+    {
+        email,
+        firstName,
+        institutionName,
+        lastName,
+        phoneNumber,
+        role,
+    }: ClinicianSignUpData,
+    cognitoUser: CognitoUser | null
+) {
     const body: CreateUserBody = {
         email,
         firstName,
@@ -33,24 +37,40 @@ export async function createDbUser({
         isInvite: false,
     };
 
-    return postToApi<UpdateUserResponse>('/user', 'createUser', body);
+    return postToApi<UpdateUserResponse>(
+        '/user',
+        'createUser',
+        body,
+        cognitoUser
+    );
 }
-export async function updateDbUser(body: UpdateUserBody) {
+export async function updateDbUser(
+    body: UpdateUserBody,
+    cognitoUser: CognitoUser | null
+) {
     body.phoneNumber = formatPhoneNumber(body.phoneNumber);
 
     return postToApi<UpdateUserResponse>(
         `/user/${body.email}`,
         'updateDbUser',
-        body
+        body,
+        cognitoUser
     );
 }
 
-export const getDbUser = async (email: string): Promise<DbUser> => {
+export const getDbUser = async (cognitoUser: CognitoUser): Promise<DbUser> => {
+    const email =
+        cognitoUser?.attributes?.email ||
+        cognitoUser?.challengeParam?.userAttributes?.email ||
+        '';
     invariant(email, 'missing email');
 
-    const response = await getFromApi<UpdateUserResponse>(
+    const response = await postToApi<UpdateUserResponse>(
         `/user/${email}`,
-        'getDbUser'
+        'getDbUser',
+        null,
+        cognitoUser,
+        false
     );
 
     if (response?.errorMessage) {
@@ -64,7 +84,10 @@ export const getDbUser = async (email: string): Promise<DbUser> => {
     }
 };
 
-export const removeUser = async (user: DbUser) => {
+export const removeUser = async (
+    user: DbUser,
+    cognitoUser: CognitoUser | null
+) => {
     invariant(user, '[removeUser] missing id');
 
     log(`User deletion requested`, user);

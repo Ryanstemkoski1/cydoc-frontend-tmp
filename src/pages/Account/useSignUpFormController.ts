@@ -42,6 +42,7 @@ const validationSchema = Yup.object<SignUpFormData>({
 
 export const useSignUpFormController = (initialValues: SignUpFormData) => {
     const { signUp } = useAuth();
+    const { cognitoUser } = useAuth();
     const history = useHistory();
 
     const form = useFormik({
@@ -65,7 +66,7 @@ export const useSignUpFormController = (initialValues: SignUpFormData) => {
                     errorMessage?: string;
                 } = signUpResult; // carry over errors
                 if (signUpResult?.user) {
-                    result = await createDbUser(newUserInfo);
+                    result = await createDbUser(newUserInfo, cognitoUser);
                 }
 
                 if (result?.errorMessage?.length) {

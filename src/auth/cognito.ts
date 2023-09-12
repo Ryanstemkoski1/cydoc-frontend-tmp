@@ -1,4 +1,7 @@
-import { CognitoUser as PartialCognitoUser } from 'amazon-cognito-identity-js';
+import {
+    CognitoUserSession,
+    CognitoUser as PartialCognitoUser,
+} from 'amazon-cognito-identity-js';
 import { Auth, Amplify } from 'aws-amplify';
 import {
     COGNITO_CLIENT_ID,
@@ -47,6 +50,7 @@ export interface CognitoUser extends PartialCognitoUser {
         phone_number_verified: boolean;
         sub: string; // cognito user guid
     };
+    signInUserSession: CognitoUserSession;
     challengeParam?: { userAttributes?: { email: string } };
 }
 

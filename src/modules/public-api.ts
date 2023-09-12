@@ -14,6 +14,7 @@ export async function inviteUser(
                         '/user',
                         'createUser',
                         body,
+                        null,
                         true
                     );
                     if (result?.errorMessage) {

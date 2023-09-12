@@ -16,7 +16,6 @@ import { DbUser } from '@cydoc-ai/types';
 import { updateDbUser } from 'modules/user-api';
 import { stringFromError } from 'modules/error-utils';
 import { log } from 'modules/logging';
-import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const INITIAL_VALUES: EditUserInfo = {
@@ -69,6 +68,7 @@ const validationSchema = Yup.object<EditUserInfo>(UserInfoFormSpec);
 
 const EditProfile = () => {
     const { user, loading } = useUser();
+    const { cognitoUser } = useAuth();
     const initialValues = {
         ...INITIAL_VALUES,
         ...user,
@@ -94,12 +94,15 @@ const EditProfile = () => {
                         setSubmitting(true);
 
                         // TODO: update phone number in cognito pool
-                        const { errorMessage } = await updateDbUser({
-                            email,
-                            firstName,
-                            lastName,
-                            phoneNumber,
-                        });
+                        const { errorMessage } = await updateDbUser(
+                            {
+                                email,
+                                firstName,
+                                lastName,
+                                phoneNumber,
+                            },
+                            cognitoUser
+                        );
 
                         if (errorMessage?.length) {
                             throw new Error(errorMessage);

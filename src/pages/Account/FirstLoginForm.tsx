@@ -98,12 +98,15 @@ const FirstLoginForm = () => {
                             phoneNumber
                         );
                         const { errorMessage: dbErrorMessage } =
-                            await updateDbUser({
-                                email,
-                                firstName,
-                                lastName,
-                                phoneNumber,
-                            });
+                            await updateDbUser(
+                                {
+                                    email,
+                                    firstName,
+                                    lastName,
+                                    phoneNumber,
+                                },
+                                cognitoUser
+                            );
                         if (errorMessage?.length || dbErrorMessage) {
                             throw new Error(errorMessage || dbErrorMessage);
                         } else {

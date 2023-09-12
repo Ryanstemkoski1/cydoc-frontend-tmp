@@ -14,18 +14,20 @@ import InviteClinicianModal from './InviteClinicianModal';
 import { removeUser } from '../../modules/user-api';
 import { Box, Stack } from '@mui/system';
 import { Grid } from '@mui/material';
+import useAuth from 'hooks/useAuth';
 
 // manager dashboard view to view/add/remove doctor accounts
 const ManagerDashboard = () => {
     const [members, setMembers] = useState<DbUser[] | null>(null);
     const [editingUser, setEditingUser] = useState<DbUser | null>(null);
     const { user } = useUser();
+    const { cognitoUser } = useAuth();
     const [isInviteUserOpen, setIsInviteUserOpen] = useState(false);
 
     const fetchMembers = useCallback(
         () =>
             user?.institutionId &&
-            getInstitutionMembers(user?.institutionId).then(
+            getInstitutionMembers(user?.institutionId, cognitoUser).then(
                 ({ members, errorMessage }) => {
                     if (errorMessage?.length) {
                         log(`[getInstitutionMembers] errror: ${errorMessage}`, {
@@ -78,9 +80,11 @@ const ManagerDashboard = () => {
                         const result = window.confirm(confirmMessage);
                         if (result) {
                             if ('id' in rowData) {
-                                removeUser(rowData);
+                                removeUser(rowData, cognitoUser);
                             } else {
-                                rowData.map((user) => removeUser(user));
+                                rowData.map((user) =>
+                                    removeUser(user, cognitoUser)
+                                );
                             }
                         }
                     },
