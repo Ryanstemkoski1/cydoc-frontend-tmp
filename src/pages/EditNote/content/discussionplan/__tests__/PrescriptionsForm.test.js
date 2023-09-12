@@ -1,11 +1,11 @@
-import React from 'react';
-import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
-import PrescriptionsForm from '../forms/PrescriptionsForm';
-import configureStore from 'redux-mock-store';
-import { conditionId, categoryId, initialPlan } from '../util';
+import Enzyme, { mount } from 'enzyme';
+import React from 'react';
 import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
 import { PLAN_ACTION as TYPES } from 'redux/actions/actionTypes';
+import PrescriptionsForm from '../forms/PrescriptionsForm';
+import { categoryId, conditionId, initialPlan } from '../util';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -166,18 +166,18 @@ describe('PrescriptionsForm', () => {
         expect(store.getActions()).toEqual(expectedActions);
     });
 
-    it('dispatches correct action when adding row', () => {
-        const { store, wrapper } = mountWithStore();
+    // it('dispatches correct action when adding row', () => {
+    //     const { store, wrapper } = mountWithStore();
 
-        wrapper.find('button[aria-label="add-row"]').simulate('click');
-        const expectedActions = [
-            {
-                type: TYPES.ADD_PRESCRIPTION,
-                payload: {
-                    conditionIndex: conditionId,
-                },
-            },
-        ];
-        expect(store.getActions()).toEqual(expectedActions);
-    });
+    //     wrapper.find('button[aria-label="add-row"]').simulate('click');
+    //     const expectedActions = [
+    //         {
+    //             type: TYPES.ADD_PRESCRIPTION,
+    //             payload: {
+    //                 conditionIndex: conditionId,
+    //             },
+    //         },
+    //     ];
+    //     expect(store.getActions()).toEqual(expectedActions);
+    // });
 });

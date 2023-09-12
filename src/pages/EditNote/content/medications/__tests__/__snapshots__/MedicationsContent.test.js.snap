@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Medications Integration Desktop view matches snapshot 1`] = `"<div><div class=\\"ui two column grid\\"></div><div class=\\"medicationsContent-wrap\\"></div><div class=\\"add-row-item\\"><img src=\\"add.svg\\" class=\\"ui image\\"><div class=\\"add-row\\"><button aria-label=\\"Add-Medication-Row-Button\\" class=\\"ui circular icon button hpi-ph-button\\"><i aria-hidden=\\"true\\" class=\\"plus icon\\"></i></button>Add medication</div></div></div>"`;
+exports[`Medications Integration Desktop view matches snapshot 1`] = `"<div><button class=\\"addButton\\" aria-label=\\"add-row\\"><img src=\\"add.svg\\" alt=\\"Add\\"><span>Add Medication</span></button></div>"`;
 
-exports[`Medications Integration Mobile view matches snapshot 1`] = `"<div><div class=\\"ui two column grid\\"></div><div class=\\"medicationsContent-wrap\\"></div><div class=\\"add-row-item\\"><img src=\\"add.svg\\" class=\\"ui image\\"><div class=\\"add-row\\"><button aria-label=\\"Add-Medication-Row-Button\\" class=\\"ui circular icon button hpi-ph-button\\"><i aria-hidden=\\"true\\" class=\\"plus icon\\"></i></button>Add medication</div></div></div>"`;
+exports[`Medications Integration Mobile view matches snapshot 1`] = `"<div><button class=\\"addButton\\" aria-label=\\"add-row\\"><img src=\\"add.svg\\" alt=\\"Add\\"><span>Add Medication</span></button></div>"`;

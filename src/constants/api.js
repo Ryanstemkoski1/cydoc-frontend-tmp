@@ -1,10 +1,5 @@
 import axios from 'axios';
 
-// Instantiate an axios client
-export const client = axios.create({
-    baseURL: 'https://cydocbackend.herokuapp.com',
-});
-
 function getGraphClientURL() {
     let graphClientURL;
     if (location.hostname == 'www.cydoc.ai') {
@@ -59,5 +54,10 @@ export const stripeClient = axios.create({
 export const rosClient = axios.create({
     baseURL:
         'https://3euj91pn42.execute-api.us-east-1.amazonaws.com/dev/ros-data/get',
+    headers: { 'Content-Type': 'application/json' },
+});
+
+export const stagingClient = axios.create({
+    baseURL: 'https://ldxpvwxff1.execute-api.us-east-2.amazonaws.com/Prod/',
     headers: { 'Content-Type': 'application/json' },
 });

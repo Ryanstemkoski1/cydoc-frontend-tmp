@@ -9,7 +9,6 @@ let failed = false;
 const indexPath = 'src/index.tsx';
 const contextsPath = 'src/contexts';
 const constantsPath = 'src/constants';
-const testsPath = 'src/tests';
 const componentsPath = 'src/components';
 const pagesPath = 'src/pages';
 const reduxPath = 'src/redux';
@@ -59,7 +58,6 @@ function runLint(path, args = []) {
 runLint(indexPath);
 runLint(contextsPath);
 runLint(constantsPath, ['--ignore-pattern', 'src/constants/drug_types.js']);
-runLint(testsPath);
 runLint(componentsPath);
 runLint(pagesPath);
 runLint(reduxPath);

@@ -87,6 +87,7 @@ Object {
     "condition": Object {
       "differentialDiagnoses": Object {
         "category": Object {
+          "code": "",
           "comments": "",
           "diagnosis": "foo",
         },

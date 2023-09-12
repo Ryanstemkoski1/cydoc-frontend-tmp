@@ -1,29 +1,29 @@
-import ToggleButton from 'components/tools/ToggleButton';
+import axios from 'axios';
+import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from 'constants/enums';
+import { GraphData } from 'constants/hpiEnums';
 import React from 'react';
+import { connect } from 'react-redux';
+import {
+    selectChiefComplaint,
+    SelectChiefComplaintAction,
+} from 'redux/actions/chiefComplaintsActions';
+import {
+    processKnowledgeGraph,
+    ProcessKnowledgeGraphAction,
+} from 'redux/actions/hpiActions';
 import {
     initialSurveyYesNo,
     InitialSurveyYesNoAction,
 } from 'redux/actions/userViewActions';
 import { CurrentNoteState } from 'redux/reducers';
-import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
-import { connect } from 'react-redux';
-import { YesNoResponse } from 'constants/enums';
 import { userSurveyState } from 'redux/reducers/userViewReducer';
-import {
-    selectChiefComplaint,
-    SelectChiefComplaintAction,
-} from 'redux/actions/chiefComplaintsActions';
 import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
+import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
 import {
     ChiefComplaintsProps,
     HpiHeadersProps,
 } from '../hpi/knowledgegraph/HPIContent';
-import axios from 'axios';
-import { GraphData } from 'constants/hpiEnums';
-import {
-    processKnowledgeGraph,
-    ProcessKnowledgeGraphAction,
-} from 'redux/actions/hpiActions';
 
 interface SurveyYesNoResponseProps {
     id: string;
@@ -65,27 +65,21 @@ class SurveyYesNoResponse extends React.Component<Props> {
     render() {
         const { userSurveyState, id, initialSurveyYesNo } = this.props;
         return (
-            <div className='qa-button'>
-                <ToggleButton
-                    className='button_yesno'
-                    active={
+            <div>
+                <YesAndNo
+                    yesButtonActive={
                         userSurveyState.nodes[id].response == YesNoResponse.Yes
                     }
-                    title='Yes'
-                    onToggleButtonClick={() => {
+                    handleYesButtonClick={() => {
                         this.addChiefComplaint(YesNoResponse.Yes);
                         initialSurveyYesNo(id, YesNoResponse.Yes);
                         const category = userSurveyState.nodes[id].category;
                         if (category.length) this.getData(category);
                     }}
-                />
-                <ToggleButton
-                    className='button_yesno'
-                    active={
+                    noButtonActive={
                         userSurveyState.nodes[id].response == YesNoResponse.No
                     }
-                    title='No'
-                    onToggleButtonClick={() => {
+                    handleNoButtonClick={() => {
                         this.addChiefComplaint(YesNoResponse.No);
                         initialSurveyYesNo(id, YesNoResponse.No);
                     }}

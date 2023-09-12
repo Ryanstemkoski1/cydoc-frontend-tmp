@@ -2,36 +2,36 @@
  * @fileoverview Components that utilizes [main: string], when, comments fields
  * in the discussion and plan page
  */
-import React from 'react';
-import { connect } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import {
-    selectPlanCondition,
-    PlanProceduresAndServicesFlat,
-    PlanReferralsFlat,
-} from 'redux/selectors/planSelectors';
-import {
-    addProcedureOrService,
-    updateProcedureOrService,
-    updateProcedureOrServiceComments,
-    updateProcedureOrServiceWhen,
-    addReferral,
-    updateReferralDepartment,
-    updateReferralComments,
-    updateReferralWhen,
-} from 'redux/actions/planActions';
-import {
-    CategoryFormProps,
-    CategoryFormOwnProps,
-    CategoryFormComponent,
-    BaseCategoryForm,
-} from './BaseCategoryForm';
-import { PlanAction, ConditionCategoryKey } from '../util';
-import { Grid, TextArea } from 'semantic-ui-react';
+import { OptionMapping } from '_processOptions';
 import Dropdown from 'components/tools/OptimizedDropdown';
 import { WhenResponse } from 'constants/enums';
 import _ from 'lodash';
-import UpdateDimensions from './UpdateDimensions';
+import React from 'react';
+import { connect } from 'react-redux';
+import {
+    addProcedureOrService,
+    addReferral,
+    updateProcedureOrService,
+    updateProcedureOrServiceComments,
+    updateProcedureOrServiceWhen,
+    updateReferralComments,
+    updateReferralDepartment,
+    updateReferralWhen,
+} from 'redux/actions/planActions';
+import { CurrentNoteState } from 'redux/reducers';
+import {
+    PlanProceduresAndServicesFlat,
+    PlanReferralsFlat,
+    selectPlanCondition,
+} from 'redux/selectors/planSelectors';
+import { Grid, TextArea } from 'semantic-ui-react';
+import { ConditionCategoryKey, PlanAction } from '../util';
+import {
+    BaseCategoryForm,
+    CategoryFormComponent,
+    CategoryFormOwnProps,
+    CategoryFormProps,
+} from './BaseCategoryForm';
 import './DiscussionPlanForms.css';
 import './planSections.css';
 
@@ -120,14 +120,11 @@ export const MainWhenCommentsForm = <
 >(
     props: MainWhenCommentsFormProps<T>
 ) => {
-    const { mobile, categoryData, categoryProps, formatAction, ...actions } =
-        props;
-    const { width } = UpdateDimensions();
+    const { categoryData, categoryProps, formatAction, ...actions } = props;
 
     const gridHeaders = () => (
         <Grid.Row>
             <Grid.Column>
-                {' '}
                 {_.upperFirst(categoryProps.mainValueName as string)}{' '}
             </Grid.Column>
             <Grid.Column> When </Grid.Column>
@@ -137,7 +134,6 @@ export const MainWhenCommentsForm = <
 
     const mobileTitle: CategoryFormComponent<T> = (row, options, onAddItem) => (
         <div className='container' id='main-when-mobile-title'>
-            {width < 800 ? <label>{categoryProps.mainValueName}</label> : <></>}
             <div className='container' id='main-when-mobile-title-inner' />
             <Dropdown
                 fluid
@@ -145,10 +141,10 @@ export const MainWhenCommentsForm = <
                 selection
                 allowAdditions
                 clearable
-                transparent={mobile}
+                transparent={false}
                 optiontype='main'
                 uuid={row.id}
-                options={options?.main || {}}
+                options={(options?.main as OptionMapping) || {}}
                 onChange={formatAction(actions.mainOnChange)}
                 onAddItem={onAddItem}
                 value={categoryProps.getMainValue(row)}
@@ -161,13 +157,6 @@ export const MainWhenCommentsForm = <
 
     const whenInput: CategoryFormComponent<T> = (row, options, onAddItem) => (
         <>
-            {width < 800 ? (
-                <div className='container'>
-                    <label>When</label>
-                </div>
-            ) : (
-                <></>
-            )}
             <div className='container' id='main-when-mobile-title-inner' />
             <div id='near-width'>
                 <Dropdown
@@ -176,10 +165,10 @@ export const MainWhenCommentsForm = <
                     selection
                     allowAdditions
                     clearable
-                    transparent={mobile}
+                    transparent={false}
                     optiontype='when'
                     uuid={row.id}
-                    options={options?.when || {}}
+                    options={(options?.when as OptionMapping) || {}}
                     onChange={formatAction(actions.whenOnChange)}
                     onAddItem={onAddItem}
                     value={row.when}
@@ -212,47 +201,17 @@ export const MainWhenCommentsForm = <
         </React.Fragment>
     );
 
-    const mobileContent: CategoryFormComponent<T> = (
-        row,
-        options,
-        onAddItem
-    ) => (
-        <>
-            {whenInput(row, options, onAddItem)}
-            <div className='container' id='main-when-mobile-content' />
-            <label>Comments</label>
-            <div className='container' id='main-when-mobile-title-inner' />
-            <div className='ui form' id='near-width'>
-                <TextArea
-                    fluid
-                    type='text'
-                    transparent
-                    uuid={row.id}
-                    value={row.comments}
-                    onChange={formatAction(actions.commentsOnChange)}
-                    placeholder='comments'
-                    aria-label={`${
-                        categoryProps.mainValueName as string
-                    }-Comment`}
-                    className='expanded-input'
-                />
-            </div>
-        </>
-    );
-
     return (
         <BaseCategoryForm
-            mobile={mobile}
             category={categoryProps.category}
             categoryData={categoryData}
             numColumns={3}
             addRowLabel={categoryProps.addRowLabel}
-            addRow={formatAction(actions.addRow)}
+            // addRow={formatAction(actions.addRow)}
+            addRow={() => actions.addRow(actions.conditionId)}
             components={{
                 gridColumn,
                 gridHeaders,
-                mobileTitle,
-                mobileContent,
             }}
         />
     );

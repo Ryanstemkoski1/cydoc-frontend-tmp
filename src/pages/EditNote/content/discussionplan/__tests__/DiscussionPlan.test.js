@@ -1,6 +1,7 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
+import { act } from 'react-dom/test-utils';
 import DiscussionPlan from '../DiscussionPlan';
 import DiscussionPlanMenu from '../DiscussionPlanMenu';
 import DiscussionPlanSurvey from '../DiscussionPlanSurvey';
@@ -25,24 +26,53 @@ const mountWithStore = (discussionPlan = initialPlan) => {
 
 describe('DiscussionPlan Integration', () => {
     it('renders without crashing', () => {
-        const wrapper = mountWithStore();
+        let wrapper;
+
+        act(() => {
+            wrapper = mountWithStore();
+        });
         expect(wrapper).toBeTruthy();
     });
 
-    it('matches snapshot', () => {
-        const wrapper = mountWithStore();
+    it('matches snapshot', async () => {
+        let wrapper;
+
+        act(() => {
+            wrapper = mountWithStore();
+        });
+
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0)); // Wait for async operations
+            wrapper.update();
+        });
+
         expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should render 4 form sections if length of conditions is greater than 0', () => {
-        const sections = mountWithStore().find(BaseCategoryForm);
+    it('should render 4 form sections if length of conditions is greater than 0', async () => {
+        let wrapper;
+
+        act(() => {
+            wrapper = mountWithStore();
+        });
+
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0)); // Wait for async operations
+            wrapper.update();
+        });
+
+        const sections = wrapper.find(BaseCategoryForm);
         expect(sections).toHaveLength(4);
     });
 
     it('should not render form sections if length of conditions is 0', () => {
-        const wrapper = mountWithStore({
-            conditions: {},
-            survey: initialPlan.survey,
+        let wrapper;
+
+        act(() => {
+            wrapper = mountWithStore({
+                conditions: {},
+                survey: initialPlan.survey,
+            });
         });
 
         const sections = wrapper.find(BaseCategoryForm);
@@ -53,7 +83,7 @@ describe('DiscussionPlan Integration', () => {
         expect(wrapper.find(DiscussionPlanSurvey)).toBeTruthy();
     });
 
-    it('initializes conditionId to first condition on first render', () => {
+    it('initializes conditionId to first condition on first render', async () => {
         const plan = {
             ...initialPlan,
             conditions: {
@@ -61,7 +91,17 @@ describe('DiscussionPlan Integration', () => {
                 foo: { ...initialPlan.conditions[conditionId] },
             },
         };
-        const wrapper = mountWithStore(plan);
+        let wrapper;
+
+        act(() => {
+            wrapper = mountWithStore(plan);
+        });
+
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0)); // Wait for async operations
+            wrapper.update();
+        });
+
         expect(
             wrapper.find(DifferentialDiagnosisForm).prop('conditionId')
         ).toEqual(conditionId);
@@ -70,15 +110,26 @@ describe('DiscussionPlan Integration', () => {
 
     it('updates conditionId and index when tab is clicked', async () => {
         const id = 'foo';
-        const wrapper = mountWithStore({
-            ...initialPlan,
-            conditions: {
-                ...initialPlan.conditions,
-                [id]: { ...initialPlan.conditions[conditionId] },
-            },
+        let wrapper;
+
+        act(() => {
+            wrapper = mountWithStore({
+                ...initialPlan,
+                conditions: {
+                    ...initialPlan.conditions,
+                    [id]: { ...initialPlan.conditions[conditionId] },
+                },
+            });
         });
+
+        await act(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 0)); // Wait for async operations
+            wrapper.update();
+        });
+
         wrapper.find(`a[uuid="${id}"]`).simulate('click');
-        wrapper.update();
+
+        // Make assertions outside of act
         expect(
             wrapper.find(DifferentialDiagnosisForm).prop('conditionId')
         ).toEqual(id);

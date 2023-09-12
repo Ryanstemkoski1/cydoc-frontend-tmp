@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import NavMenu from '../../components/navigation/NavMenu';
 import { withRouter } from 'react-router-dom';
 import { Button, Header, Segment, Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
@@ -27,9 +26,6 @@ const TemplateTitlePage = (props) => {
 
     return (
         <>
-            <div className='nav-menu-container'>
-                <NavMenu />
-            </div>
             <Segment className='template-title container'>
                 <Header
                     as='h2'

@@ -1,25 +1,26 @@
+import Dropdown from 'components/tools/RecursiveDropdown';
 import React from 'react';
-import Dropdown from 'components/tools/OptimizedDropdown';
-import { Grid, TextArea } from 'semantic-ui-react';
-import { PlanAction } from '../util';
 import { connect } from 'react-redux';
+import {
+    addDifferentialDiagnosis,
+    updateDifferentialDiagnosis,
+    updateDifferentialDiagnosisComments,
+} from 'redux/actions/planActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
     PlanDiagnosisFlat,
     selectPlanCondition,
 } from 'redux/selectors/planSelectors';
+import { Grid, TextArea } from 'semantic-ui-react';
+import { PlanAction } from '../util';
 import {
-    addDifferentialDiagnosis,
-    updateDifferentialDiagnosisComments,
-    updateDifferentialDiagnosis,
-} from 'redux/actions/planActions';
-import {
-    CategoryFormProps,
+    BaseCategoryForm,
     CategoryFormComponent,
     CategoryFormOwnProps,
-    BaseCategoryForm,
+    CategoryFormProps,
 } from './BaseCategoryForm';
-import UpdateDimensions from './UpdateDimensions';
+// import UpdateDimensions from './UpdateDimensions';
+import { DiagnosesOptionMapping } from '_processOptions';
 import './DiscussionPlanForms.css';
 import './planSections.css';
 
@@ -35,8 +36,7 @@ const DifferentialDiagnosesForm = (
     props: CategoryFormProps<PlanDiagnosisFlat> &
         DifferentialDiagnosesDispatchProps
 ) => {
-    const { mobile, categoryData, formatAction, ...actions } = props;
-    const { width } = UpdateDimensions();
+    const { categoryData, formatAction, conditionId, ...actions } = props;
 
     const gridHeaders = () => (
         <Grid.Row>
@@ -45,56 +45,27 @@ const DifferentialDiagnosesForm = (
         </Grid.Row>
     );
 
-    const mainInput: ComponentFunction = (row, options, onAddItem) => (
+    const mainInput: ComponentFunction = (row, options) => (
         <>
             <Dropdown
                 fluid
                 search
                 selection
                 clearable
-                allowAdditions
-                transparent={mobile}
+                loading={options && Object.keys(options.main).length == 0}
+                disabled={options && Object.keys(options.main).length == 0}
+                transparent={false}
                 value={row.diagnosis}
-                options={options?.main || {}}
+                code={row.code}
+                options={(options?.main as DiagnosesOptionMapping) || {}}
                 uuid={row.id}
                 onChange={formatAction(actions.updateDifferentialDiagnosis)}
-                onAddItem={onAddItem}
                 optiontype='main'
                 aria-label='Diagnosis-Dropdown'
                 placeholder='diagnosis'
                 className='main-input'
             />
             <div className='container' id='main-input-div' />
-        </>
-    );
-
-    const mobileTitle: ComponentFunction = (row, options, onAddItem) => (
-        <div className='mobile-title'>
-            <label>Diagnosis</label>
-            <div className='container' id='container-div' />
-            {mainInput(row, options, onAddItem)}
-        </div>
-    );
-
-    const mobileContent: ComponentFunction = (row) => (
-        <>
-            <label>Comments</label>
-            <div className='container' id='container-div' />
-            <div className='ui form' id='mobile-content-form'>
-                <TextArea
-                    fluid
-                    value={row.comments}
-                    uuid={row.id}
-                    type='text'
-                    transparent={mobile}
-                    onChange={formatAction(
-                        actions.updateDifferentialDiagnosisComments
-                    )}
-                    aria-label='Diagnosis-Comment'
-                    placeholder='e.g. this diagnosis is more likely because...'
-                    className='expanded-input'
-                />
-            </div>
         </>
     );
 
@@ -117,22 +88,19 @@ const DifferentialDiagnosesForm = (
                         />
                     </div>
                 </Grid.Column>
-                {/* <Grid.Column width={10}>{mobileContent(row)}</Grid.Column> */}
             </React.Fragment>
         );
     };
 
     return (
         <BaseCategoryForm<PlanDiagnosisFlat>
-            mobile={mobile}
             numColumns={2}
             addRowLabel='diagnosis'
             category='differentialDiagnoses'
             categoryData={categoryData}
-            addRow={formatAction(actions.addDifferentialDiagnosis)}
+            addRow={() => actions.addDifferentialDiagnosis(conditionId)}
+            // addRow={formatAction(actions.addDifferentialDiagnosis)}
             components={{
-                mobileTitle,
-                mobileContent,
                 gridColumn,
                 gridHeaders,
                 /* eslint-disable-next-line */

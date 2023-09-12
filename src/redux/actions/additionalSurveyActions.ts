@@ -6,9 +6,17 @@ export interface UpdateAdditionalSurveyAction {
     payload: {
         legalFirstName: string;
         legalLastName: string;
+        legalMiddleName: string;
         socialSecurityNumber: string;
         dateOfBirth: string;
         initialSurveyState: number;
+    };
+}
+
+export interface UpdateChiefComplaintsDescription {
+    type: UPDATE_ADDITIONAL_DETAILS.UPDATE_CC_DESCRIPTION;
+    payload: {
+        complaintsDescription: string;
     };
 }
 
@@ -28,6 +36,7 @@ export interface ValidateUserInfo {
 export function updateAdditionalSurveyDetails(
     legalFirstName: string,
     legalLastName: string,
+    legalMiddleName: string,
     socialSecurityNumber: string,
     dateOfBirth: string,
     initialSurveyState: number
@@ -37,10 +46,20 @@ export function updateAdditionalSurveyDetails(
         payload: {
             legalFirstName,
             legalLastName,
+            legalMiddleName,
             socialSecurityNumber,
             dateOfBirth,
             initialSurveyState,
         },
+    };
+}
+
+export function updateChiefComplaintsDescription(
+    complaintsDescription: string
+): UpdateChiefComplaintsDescription {
+    return {
+        type: UPDATE_ADDITIONAL_DETAILS.UPDATE_CC_DESCRIPTION,
+        payload: { complaintsDescription },
     };
 }
 

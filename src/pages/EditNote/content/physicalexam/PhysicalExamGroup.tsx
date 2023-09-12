@@ -1,45 +1,24 @@
-import React, { Component, Fragment } from 'react';
-import { Grid, Form, TextAreaProps, ButtonProps } from 'semantic-ui-react';
-import PhysicalExamRow from './PhysicalExamRow';
-import { PHYSICAL_EXAM_MOBILE_BP } from 'constants/breakpoints.js';
+import { PhysicalExamSchemaRow } from 'constants/PhysicalExam/physicalExamSchema';
+import { LRButtonState } from 'constants/enums';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
     toggleFinding,
     toggleLeftRightFinding,
     updateComments,
 } from 'redux/actions/physicalExamActions';
-import { connect } from 'react-redux';
-import { selectSection } from 'redux/selectors/physicalExamSelectors';
-import { PhysicalExamSchemaRow } from 'constants/PhysicalExam/physicalExamSchema';
-import { LRButtonState } from 'constants/enums';
-import { PhysicalExamSection } from 'redux/reducers/physicalExamReducer';
 import { CurrentNoteState } from 'redux/reducers';
+import { PhysicalExamSection } from 'redux/reducers/physicalExamReducer';
+import { selectSection } from 'redux/selectors/physicalExamSelectors';
+import { ButtonProps, Form, Grid, TextAreaProps } from 'semantic-ui-react';
 import './PhysicalExamGroup.css';
+import PhysicalExamRow from './PhysicalExamRow';
 
 //Sub-Component that represents the individual categories for the Review of Systems section of the note
-class PhysicalExamGroup extends Component<Props, State> {
+class PhysicalExamGroup extends Component<Props> {
     constructor(props: Props) {
         super(props);
-        this.state = {
-            windowWidth: 0,
-        };
         this.handleToggle = this.handleToggle.bind(this);
-        this.updateDimensions = this.updateDimensions.bind(this);
-    }
-
-    componentDidMount() {
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-
-        this.setState({ windowWidth });
     }
 
     handleToggle = (
@@ -128,7 +107,6 @@ class PhysicalExamGroup extends Component<Props, State> {
     };
 
     render() {
-        const windowWidth = this.state.windowWidth;
         const { physicalExamSection } = this.props;
         const { comments } = physicalExamSection;
         const rowComponents = this.generateRows(
@@ -149,12 +127,7 @@ class PhysicalExamGroup extends Component<Props, State> {
         );
         return (
             <Form>
-                {windowWidth !== 0 && windowWidth < PHYSICAL_EXAM_MOBILE_BP ? (
-                    <>
-                        {rowComponents}
-                        {commentComponent}
-                    </>
-                ) : (
+                {
                     <Grid columns='equal'>
                         <Grid.Row>
                             <Grid.Column>{rowComponents}</Grid.Column>
@@ -163,7 +136,7 @@ class PhysicalExamGroup extends Component<Props, State> {
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
-                )}
+                }
             </Form>
         );
     }
@@ -186,10 +159,6 @@ interface DispatchProps {
 }
 
 type Props = GroupProps & DispatchProps;
-
-interface State {
-    windowWidth: number;
-}
 
 const mapStatetoProps = (state: CurrentNoteState, props: GroupProps) => {
     return {

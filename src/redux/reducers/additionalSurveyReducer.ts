@@ -2,6 +2,7 @@ import { UPDATE_ADDITIONAL_DETAILS } from 'redux/actions/actionTypes';
 import {
     GoBackToAdditionalSurvey,
     UpdateAdditionalSurveyAction,
+    UpdateChiefComplaintsDescription,
     UpdateUserInfo,
     ValidateUserInfo,
 } from 'redux/actions/additionalSurveyActions';
@@ -9,11 +10,13 @@ import {
 export interface additionalSurvey {
     legalFirstName: string;
     legalLastName: string;
+    legalMiddleName: string;
     dateOfBirth: string;
     socialSecurityNumber: string;
     initialSurveyState: number;
     userInfo: UserInfo;
     isUserInfoValid: boolean;
+    complaintsDescription: string;
 }
 
 export interface UserInfo {
@@ -50,6 +53,7 @@ export interface UserInfo {
 export const initialAdditionalSurveyData: additionalSurvey = {
     legalFirstName: '',
     legalLastName: '',
+    legalMiddleName: '',
     dateOfBirth: '',
     socialSecurityNumber: '',
     initialSurveyState: 0,
@@ -84,12 +88,14 @@ export const initialAdditionalSurveyData: additionalSurvey = {
         title: '',
     },
     isUserInfoValid: true,
+    complaintsDescription: '',
 };
 
 export function additionalSurveyReducer(
     state = initialAdditionalSurveyData,
     action:
         | UpdateAdditionalSurveyAction
+        | UpdateChiefComplaintsDescription
         | GoBackToAdditionalSurvey
         | UpdateUserInfo
         | ValidateUserInfo
@@ -98,9 +104,13 @@ export function additionalSurveyReducer(
         case UPDATE_ADDITIONAL_DETAILS.UPDATE_ADDITIONAL_DETAILS:
             state.legalFirstName = action.payload?.legalFirstName;
             state.legalLastName = action.payload?.legalLastName;
+            state.legalMiddleName = action.payload?.legalMiddleName;
             state.socialSecurityNumber = action?.payload.socialSecurityNumber;
             state.dateOfBirth = action.payload?.dateOfBirth;
             state.initialSurveyState = action?.payload?.initialSurveyState;
+            return state;
+        case UPDATE_ADDITIONAL_DETAILS.UPDATE_CC_DESCRIPTION:
+            state.complaintsDescription = action.payload?.complaintsDescription;
             return state;
         case UPDATE_ADDITIONAL_DETAILS.GO_BACK:
             state.initialSurveyState = state.initialSurveyState - 1;

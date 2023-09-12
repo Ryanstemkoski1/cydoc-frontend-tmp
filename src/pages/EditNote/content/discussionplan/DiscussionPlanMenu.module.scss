@@ -1,0 +1,33 @@
+@import '../../../../assets/scss/variables.scss';
+.navMenu {
+    :global {
+        .dropdown.ui {
+            border: 0 !important;
+            height: 0 !important;
+            padding: 0 !important;
+            margin-bottom: 12px;
+            input[type='text'] {
+                height: auto !important;
+                padding: 0 !important;
+            }
+        }
+    }
+    &__single {
+        flex-direction: row !important;
+        :global {
+            .item {
+                max-width: 200px;
+            }
+            .delete-btn-wrapper {
+                align-self: center;
+                margin-bottom: 8px !important;
+            }
+            #add-condition {
+                @include max-screen($mobile) {
+                    width: 100px !important;
+                    margin-right: auto;
+                }
+            }
+        }
+    }
+}

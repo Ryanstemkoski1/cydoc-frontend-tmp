@@ -1,41 +1,32 @@
-import {
-    Dropdown,
-    Grid,
-    Form,
-    Button,
-    Header,
-    Divider,
-    ButtonProps,
-    InputProps,
-    TextAreaProps,
-    Image,
-} from 'semantic-ui-react';
-import React, { Component, Fragment } from 'react';
+import Textarea from 'components/Input/Textarea';
+import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
+import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from 'constants/enums';
+import { FamilyOption, familyOptions } from 'constants/familyHistoryRelations';
 import HPIContext from 'contexts/HPIContext.js';
-import { familyOptions, FamilyOption } from 'constants/familyHistoryRelations';
-import ToggleButton from 'components/tools/ToggleButton';
-import './FamilyHistory.css';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-    updateMember,
+    deleteFamilyMember,
     toggleCauseOfDeathOption,
     toggleLivingOption,
     updateComments,
-    deleteFamilyMember,
+    updateMember,
 } from 'redux/actions/familyHistoryActions';
-import {
-    selectFamilyHistoryState,
-    selectFamilyHistoryMember,
-} from 'redux/selectors/familyHistorySelectors';
-import { YesNoResponse } from 'constants/enums';
-import {
-    FamilyHistoryState,
-    FamilyHistoryMember,
-} from 'redux/reducers/familyHistoryReducer';
 import { CurrentNoteState } from 'redux/reducers';
+import {
+    FamilyHistoryMember,
+    FamilyHistoryState,
+} from 'redux/reducers/familyHistoryReducer';
+import {
+    selectFamilyHistoryMember,
+    selectFamilyHistoryState,
+} from 'redux/selectors/familyHistorySelectors';
+import { ButtonProps, Dropdown as DropDownSemantic } from 'semantic-ui-react';
 import '../hpi/knowledgegraph/src/css/Button.css';
-import Delete from '../../../../assets/delete.svg';
-class FamilyHistoryDropdown extends Component<Props> {
+import './FamilyHistory.css';
+import style from './FamilyHistoryDropdown.module.scss';
+class FamilyHistoryDropdownV2 extends Component<Props> {
     static contextType = HPIContext;
 
     constructor(props: Props) {
@@ -47,8 +38,15 @@ class FamilyHistoryDropdown extends Component<Props> {
         this.handleLivingToggle = this.handleLivingToggle.bind(this);
     }
 
+    // handleChange(event: React.SyntheticEvent<HTMLElement, Event>) {
+    //     /* eslint-disable-next-line */
+    //     const { index, family_index } = this.props;
+    //     const value = (event.target as HTMLInputElement)
+    //         .textContent as FamilyOption;
+    //     this.props.updateMember(index, family_index, value);
+    // }
+
     handleChange(event: React.SyntheticEvent<HTMLElement, Event>) {
-        /* eslint-disable-next-line */
         const { index, family_index } = this.props;
         const value = (event.target as HTMLInputElement)
             .textContent as FamilyOption;
@@ -83,20 +81,15 @@ class FamilyHistoryDropdown extends Component<Props> {
         );
     }
 
-    handleCommentsChange(
-        event: React.FormEvent,
-        data: InputProps | TextAreaProps
-    ) {
+    handleCommentsChange(value: string) {
         /* eslint-disable-next-line */
         const { index, family_index } = this.props;
-        this.props.updateComments(index, family_index, data.value);
+        this.props.updateComments(index, family_index, value);
     }
 
     render() {
         const {
-            mobile,
             condition,
-            handleDelete,
             index,
             /* eslint-disable-next-line */
             family_index,
@@ -104,274 +97,144 @@ class FamilyHistoryDropdown extends Component<Props> {
         const { member, causeOfDeath, living, comments } =
             this.props.familyHistoryMember;
 
-        return mobile ? (
-            <div className='dropdown-component-container family-hisory-block-mobile'>
-                <Grid className='family-history-dp'>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <Grid.Row width={14}>
-                                <Grid.Column width={6}>
-                                    <Header.Subheader className='family-history-header-mobile'>
-                                        Family Member with {condition}
-                                    </Header.Subheader>
-                                    <Dropdown
-                                        value={member}
-                                        search
-                                        selection
-                                        fluid
-                                        options={familyOptions}
-                                        onChange={this.handleChange}
-                                        className='dropdown-inline-mobile'
-                                        aria-label='family-dropdown'
-                                    />
-                                </Grid.Column>
-                            </Grid.Row>
-                            <Grid.Row columns={2}>
-                                <Grid.Column width={4}>
-                                    <div className='option-block'>
-                                        <Header.Subheader className='family-history-header-mobile'>
-                                            Cause of Death?
-                                        </Header.Subheader>
-                                        <div className='family-history-toggle switch-button is-large'>
-                                            <ToggleButton
-                                                active={
-                                                    causeOfDeath ===
-                                                    YesNoResponse.Yes
-                                                }
-                                                condition={condition}
-                                                title='Yes'
-                                                onToggleButtonClick={
-                                                    this
-                                                        .handleCauseOfDeathToggle
-                                                }
-                                                className='fam-hist-buttons'
-                                            />
-                                            <ToggleButton
-                                                active={
-                                                    causeOfDeath ===
-                                                    YesNoResponse.No
-                                                }
-                                                condition={condition}
-                                                title='No'
-                                                onToggleButtonClick={
-                                                    this
-                                                        .handleCauseOfDeathToggle
-                                                }
-                                                className='fam-hist-buttons'
-                                            />
-                                        </div>
-                                    </div>
-                                </Grid.Column>
-                                {/* <Grid.Column mobile={1} /> */}
-                                <Grid.Column width={4}>
-                                    {causeOfDeath === YesNoResponse.Yes ||
-                                    causeOfDeath === YesNoResponse.None ? (
-                                        ''
-                                    ) : (
-                                        <Fragment>
-                                            <div className='option-block'>
-                                                <Header.Subheader className='family-history-header-mobile'>
-                                                    Living?
-                                                </Header.Subheader>
-                                                <div className='family-history-toggle switch-button is-large'>
-                                                    <ToggleButton
-                                                        active={
-                                                            living ===
-                                                            YesNoResponse.Yes
-                                                                ? true
-                                                                : false
-                                                        }
-                                                        condition={condition}
-                                                        title='Yes'
-                                                        onToggleButtonClick={
-                                                            this
-                                                                .handleLivingToggle
-                                                        }
-                                                        className='fam-hist-buttons'
-                                                    />
-                                                    <ToggleButton
-                                                        active={
-                                                            living ===
-                                                            YesNoResponse.No
-                                                                ? true
-                                                                : false
-                                                        }
-                                                        condition={condition}
-                                                        title='No'
-                                                        onToggleButtonClick={
-                                                            this
-                                                                .handleLivingToggle
-                                                        }
-                                                        className='fam-hist-buttons'
-                                                    />
-                                                </div>
-                                            </div>
-                                        </Fragment>
-                                    )}
-                                </Grid.Column>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Header.Subheader className='family-history-header-mobile'>
-                                    Comments
-                                </Header.Subheader>
-                                <Form.TextArea
-                                    className='text-area comments-box-mobile'
-                                    condition={condition}
-                                    value={comments}
-                                    placeholder='Comments'
-                                    onChange={this.handleCommentsChange}
-                                    rows={3}
-                                />
-                            </Grid.Row>
-                            <Grid.Row
-                                width={4}
-                                className='action-btn delete-family-member-row-mobile'
-                            >
-                                <div className='action-btn-inner'>
-                                    <Button
-                                        circular
-                                        icon='close'
-                                        size='mini'
-                                        onClick={() =>
-                                            this.props.handleDelete(
-                                                index,
-                                                family_index
-                                            )
-                                        }
-                                        aria-label='delete-family-member'
-                                        className='hpi-ph-button'
-                                    />
-                                    delete family member
-                                </div>
-                                <aside
-                                    onClick={() =>
-                                        this.props.handleDelete(
-                                            index,
-                                            family_index
-                                        )
-                                    }
-                                >
-                                    <Image src={Delete} />
-                                    <span>Remove</span>
-                                </aside>
-                            </Grid.Row>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </div>
-        ) : (
-            <div className='dropdown-component-container'>
-                <Grid>
-                    <Grid.Row>
-                        <Grid.Column width={1}>
-                            <Button
-                                circular
-                                icon='close'
-                                size='mini'
-                                onClick={() =>
-                                    this.props.handleDelete(index, family_index)
-                                }
-                                aria-label='delete-button'
-                                className='hpi-ph-button'
-                            />
-                        </Grid.Column>
-                        <Grid.Column width={3}>
-                            <Dropdown
+        return (
+            <>
+                <tr>
+                    <td>
+                        <strong>Family Member</strong>
+                        <div className={style.familyHistoryBlock__dropdown}>
+                            <DropDownSemantic
                                 value={member}
                                 search
                                 selection
                                 fluid
-                                options={familyOptions}
+                                options={familyOptions.filter(
+                                    (item) => item.text !== ''
+                                )}
                                 onChange={this.handleChange}
-                                className='dropdown-inline'
                             />
-                        </Grid.Column>
+                        </div>
+                    </td>
 
-                        <Grid.Column width={3}>
-                            <ToggleButton
-                                active={
+                    <td>
+                        <div className='flex align-center justify-between'>
+                            <strong>Cause of Death</strong>
+                            <YesAndNo
+                                yesButtonActive={
                                     causeOfDeath === YesNoResponse.Yes
                                         ? true
                                         : false
                                 }
-                                condition={condition}
-                                title='Yes'
-                                onToggleButtonClick={
+                                yesButtonCondition={condition}
+                                handleYesButtonClick={
                                     this.handleCauseOfDeathToggle
                                 }
-                                className='fam-hist-buttons'
-                            />
-                            <ToggleButton
-                                active={
+                                noButtonActive={
                                     causeOfDeath === YesNoResponse.No
                                         ? true
                                         : false
                                 }
-                                condition={condition}
-                                title='No'
-                                onToggleButtonClick={
+                                noButtonCondition={condition}
+                                handleNoButtonClick={
                                     this.handleCauseOfDeathToggle
                                 }
-                                className='fam-hist-buttons'
                             />
-                        </Grid.Column>
+                        </div>
 
-                        <Grid.Column width={9}>
-                            <Form>
-                                <Form.TextArea
-                                    rows={1}
-                                    condition={condition}
-                                    value={comments}
-                                    onChange={this.handleCommentsChange}
-                                    placeholder='Comments'
-                                />
-                            </Form>
-                        </Grid.Column>
-                    </Grid.Row>
-                    {causeOfDeath === YesNoResponse.Yes ||
-                    causeOfDeath === YesNoResponse.None ? (
-                        ''
-                    ) : (
-                        <Grid.Row className='living-toggle-row'>
-                            <Grid.Column width={4} />
-
-                            <Grid.Column width={3}>
-                                <Grid.Column width={2}>
-                                    <Header.Subheader className='living-toggle-title'>
-                                        Living?
-                                    </Header.Subheader>
-                                </Grid.Column>
-                                <ToggleButton
-                                    active={
+                        {causeOfDeath === YesNoResponse.Yes ||
+                        causeOfDeath === YesNoResponse.None ? (
+                            ''
+                        ) : (
+                            <div
+                                className={`${style.familyHistoryBlock__living} flex align-center justify-between`}
+                            >
+                                Living?
+                                <YesAndNo
+                                    yesButtonActive={
                                         living === YesNoResponse.Yes
                                             ? true
                                             : false
                                     }
-                                    condition={condition}
-                                    title='Yes'
-                                    onToggleButtonClick={
+                                    yesButtonCondition={condition}
+                                    yesButtonClasses='fam-hist-buttons'
+                                    handleYesButtonClick={
                                         this.handleLivingToggle
                                     }
-                                    className='fam-hist-buttons'
-                                />
-                                <ToggleButton
-                                    active={
+                                    noButtonActive={
                                         living === YesNoResponse.No
                                             ? true
                                             : false
                                     }
-                                    condition={condition}
-                                    title='No'
-                                    onToggleButtonClick={
+                                    noButtonCondition={condition}
+                                    handleNoButtonClick={
                                         this.handleLivingToggle
                                     }
-                                    className='fam-hist-buttons'
+                                    noButtonClasses='fam-hist-buttons'
                                 />
-                            </Grid.Column>
-                        </Grid.Row>
-                    )}
-                </Grid>
-            </div>
+                            </div>
+                        )}
+                    </td>
+
+                    <td>
+                        <strong>Comment</strong>
+                        <form>
+                            <Textarea
+                                mobileHeight={true}
+                                condition={condition}
+                                value={comments}
+                                onChange={(e: any) =>
+                                    this.handleCommentsChange(e.target.value)
+                                }
+                                placeholder='Comments'
+                            />
+                        </form>
+                    </td>
+
+                    <td>
+                        <RemoveButton
+                            onClick={() =>
+                                this.props.handleDelete(index, family_index)
+                            }
+                        />
+                    </td>
+                </tr>
+
+                {causeOfDeath === YesNoResponse.Yes ||
+                causeOfDeath === YesNoResponse.None ? (
+                    ''
+                ) : (
+                    <>
+                        <tr className={style.familyHistoryBlock__row}>
+                            <td>Living?</td>
+                            <td colSpan={2}>
+                                <YesAndNo
+                                    yesButtonActive={
+                                        living === YesNoResponse.Yes
+                                            ? true
+                                            : false
+                                    }
+                                    yesButtonCondition={condition}
+                                    yesButtonClasses='fam-hist-buttons'
+                                    handleYesButtonClick={
+                                        this.handleLivingToggle
+                                    }
+                                    noButtonActive={
+                                        living === YesNoResponse.No
+                                            ? true
+                                            : false
+                                    }
+                                    noButtonCondition={condition}
+                                    handleNoButtonClick={
+                                        this.handleLivingToggle
+                                    }
+                                    noButtonClasses='fam-hist-buttons'
+                                />
+                            </td>
+                            <td></td>
+                        </tr>
+                    </>
+                )}
+            </>
         );
     }
 }
@@ -411,7 +274,6 @@ interface DispatchProps {
 interface DropdownProps {
     index: string;
     family_index: string;
-    mobile: boolean;
     condition: string;
     /* eslint-disable-next-line */
     handleDelete: (index: string, family_index: string) => void;
@@ -444,4 +306,4 @@ const mapDispatchToProps = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(FamilyHistoryDropdown);
+)(FamilyHistoryDropdownV2);

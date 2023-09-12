@@ -1,0 +1,12 @@
+@import '../../../../assets/scss/variables.scss';
+.symptomsBlock {
+    &__all {
+        border-color: darken($color-gray, 20%) !important;
+        background-color: $color-gray !important;
+        &.active {
+            color: $color-white !important;
+            border-color: $color-primary !important;
+            background-color: $color-primary !important;
+        }
+    }
+}

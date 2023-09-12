@@ -1,0 +1,16 @@
+@import '../../../../assets/scss/variables.scss';
+.medicalHistory {
+    &__condition {
+        p {
+            width: calc(100% - 50px);
+            margin-bottom: 0;
+        }
+        span {
+            display: none;
+        }
+        button {
+            margin-top: 12px;
+            align-self: flex-start;
+        }
+    }
+}

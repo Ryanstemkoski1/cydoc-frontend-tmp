@@ -13,7 +13,7 @@
         "2": [],
         "3": [],
         "4": [],
-        "5": ["6", "7"],
+        "5": ["6", "7", "10"],
         "6": [],
         "7": []
     },
@@ -55,7 +55,7 @@
         },
         "6": {
             "uid": "6",
-            "text": "Please select the most important conditions or symptoms that you would like to discuss today, up to a maximum of 3. FAVORITES",
+            "text": "Please select the most important conditions or symptoms that you would like to discuss today, up to a maximum of 3.",
             "responseType": "SELECTONE",
             "category": "",
             "doctorView": ""
@@ -78,6 +78,13 @@
             "uid": "9",
             "text": "What is the last name of the clinician you are seeing today? (optional)",
             "responseType": "SHORT-TEXT",
+            "category": "",
+            "doctorView": ""
+        },
+        "10": {
+            "uid": "10",
+            "text": "If you could not find your condition or symptom, please describe it here in a few words:",
+            "responseType": "LONG_TEXT",
             "category": "",
             "doctorView": ""
         }

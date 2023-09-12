@@ -1,28 +1,29 @@
-import React from 'react';
-import { Grid, TextArea } from 'semantic-ui-react';
+import { OptionMapping } from '_processOptions';
 import Dropdown from 'components/tools/OptimizedDropdown';
-import { PlanAction } from '../util';
+import React from 'react';
 import { connect } from 'react-redux';
+import {
+    addPrescription,
+    updatePrescriptionComments,
+    updatePrescriptionDose,
+    updatePrescriptionSignature,
+    updatePrescriptionType,
+} from 'redux/actions/planActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
     PlanPrescriptionFlat,
     selectPlanCondition,
 } from 'redux/selectors/planSelectors';
+import { Grid, TextArea } from 'semantic-ui-react';
+import { PlanAction } from '../util';
 import {
-    addPrescription,
-    updatePrescriptionComments,
-    updatePrescriptionDose,
-    updatePrescriptionType,
-    updatePrescriptionSignature,
-} from 'redux/actions/planActions';
-import {
-    CategoryFormProps,
+    BaseCategoryForm,
     CategoryFormComponent,
     CategoryFormOwnProps,
-    BaseCategoryForm,
+    CategoryFormProps,
 } from './BaseCategoryForm';
-import UpdateDimensions from './UpdateDimensions';
 import './DiscussionPlanForms.css';
+import UpdateDimensions from './UpdateDimensions';
 import './planSections.css';
 
 interface PrescriptionsDispatchProps {
@@ -38,7 +39,7 @@ type ComponentFunction = CategoryFormComponent<PlanPrescriptionFlat>;
 const PrescriptionsForm = (
     props: CategoryFormProps<PlanPrescriptionFlat> & PrescriptionsDispatchProps
 ) => {
-    const { mobile, categoryData, formatAction, ...actions } = props;
+    const { categoryData, formatAction, ...actions } = props;
     UpdateDimensions();
 
     const gridHeaders = () => (
@@ -58,10 +59,10 @@ const PrescriptionsForm = (
                 allowAdditions
                 clearable
                 optiontype='main'
-                transparent={mobile}
+                transparent={false}
                 uuid={row.id}
                 value={row.type}
-                options={options?.main || {}}
+                options={(options?.main as OptionMapping) || {}}
                 onChange={formatAction(actions.updatePrescriptionType)}
                 onAddItem={onAddItem}
                 aria-label='Prescription-Dropdown'
@@ -73,15 +74,13 @@ const PrescriptionsForm = (
             <div className='container' id='prescriptions-container2' />
             <div className='ui form'>
                 <TextArea
-                    fluid
                     type='text'
-                    transparent={mobile}
                     uuid={row.id}
                     value={row.dose}
                     onChange={formatAction(actions.updatePrescriptionDose)}
                     aria-label='Prescription-Amount'
                     placeholder='e.g. 81 mg tablet'
-                    className={`recipe-amount ${!mobile && 'lg'}`}
+                    className={`recipe-amount lg`}
                 />
             </div>
         </div>
@@ -119,62 +118,17 @@ const PrescriptionsForm = (
         </React.Fragment>
     );
 
-    const mobileTitle: ComponentFunction = (row, options, onAddItem) => (
-        <div className='mobile-title'>
-            <label> Rx </label>
-            {mainInput(row, options, onAddItem)}
-        </div>
-    );
-
-    const mobileContent: ComponentFunction = (row) => (
-        <>
-            <label className='prescriptions-label'> Signature (Sig) </label>
-            <div className='container' id='prescriptions-container1' />
-            <div className='ui form' id='prescriptions-ui-form'>
-                <TextArea
-                    fluid
-                    transparent
-                    type='text'
-                    uuid={row.id}
-                    value={row.signature}
-                    onChange={formatAction(actions.updatePrescriptionSignature)}
-                    placeholder='e.g. 1 tablet every 8 hours'
-                    aria-label='Prescription-Signature'
-                    className='expanded-input'
-                />
-            </div>
-            <div className='container' id='prescriptions-container2' />
-            <label className='prescriptions-label'> Comments </label>
-            <div className='container' id='prescriptions-container1' />
-            <div className='ui form' id='prescriptions-ui-form'>
-                <TextArea
-                    fluid
-                    transparent
-                    type='text'
-                    uuid={row.id}
-                    value={row.comments}
-                    onChange={formatAction(actions.updatePrescriptionComments)}
-                    placeholder='e.g. take with food'
-                    aria-label='Prescription-Comment'
-                    className='expanded-input'
-                />
-            </div>
-        </>
-    );
-
     return (
         <BaseCategoryForm<PlanPrescriptionFlat>
-            mobile={mobile}
             category='prescriptions'
             categoryData={categoryData}
             numColumns={3}
             addRowLabel='prescription'
-            addRow={formatAction(actions.addPrescription)}
+            // addRow={formatAction(actions.addPrescription)}
+            addRow={() => actions.addPrescription(actions.conditionId)}
             components={{
                 gridColumn,
                 gridHeaders,
-                mobileTitle,
-                mobileContent,
             }}
         />
     );

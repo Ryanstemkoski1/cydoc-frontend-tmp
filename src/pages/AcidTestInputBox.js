@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input } from 'semantic-ui-react';
+import Input from 'components/Input/Input';
 
 const AcidTestInputBox = ({ callback, label1, subscript, onKeyPress }) => {
     const [value, setValue] = useState('');
@@ -8,20 +8,9 @@ const AcidTestInputBox = ({ callback, label1, subscript, onKeyPress }) => {
         callback(e.target.value);
     };
     return (
-        <div
-            className='label-set'
-            style={{
-                marginBottom: '15px',
-                display: 'flex',
-                flexDirection: 'column',
-            }}
-        >
-            <div
-                className='label'
-                style={{ color: 'teal', fontWeight: 'bold' }}
-            >
-                {label1}
-            </div>
+        <>
+            <label>{label1}</label>
+
             <Input
                 type='number'
                 step='.1'
@@ -32,7 +21,7 @@ const AcidTestInputBox = ({ callback, label1, subscript, onKeyPress }) => {
                 onKeyPress={onKeyPress}
             />
             <div className='normal-range'>{subscript}</div>
-        </div>
+        </>
     );
 };
 

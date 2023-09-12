@@ -1,0 +1,23 @@
+@import '../../../assets/scss/variables.scss';
+.notification {
+    font-size: 14px;
+    padding: 10px 15px;
+    color: $color-error;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid $color-error;
+    background-color: $color-error-light;
+    img {
+        width: 18px;
+        align-self: start;
+    }
+    p {
+        padding-left: 10px;
+        width: calc(100% - 18px);
+    }
+    &.isSuccess {
+        color: $color-primary;
+        border-color: $color-primary;
+        background-color: $color-light;
+    }
+}

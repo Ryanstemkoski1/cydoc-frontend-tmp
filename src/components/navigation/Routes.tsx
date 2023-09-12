@@ -1,88 +1,150 @@
+import Footer from 'components/Footer/Footer';
+import GlobalLoader from 'components/GlobalLoader/GlobalLoader';
 import Policy from 'constants/Documents/policy';
 import Terms_and_conditions from 'constants/Documents/terms_and_conditions';
+import useAuth from 'hooks/useAuth';
+import { EditPayment } from 'pages/Account/EditPayment';
 import EditProfile from 'pages/Account/EditProfile';
-import ForgotPasswordEmail from 'pages/Account/ForgotPasswordEmail';
-import Login from 'pages/Account/Login';
+import ForgotPasswordPage from 'pages/Account/ForgotPassword';
+import LoginPage from 'pages/Account/LoginPage';
 import ProfileSecurity from 'pages/Account/ProfileSecurity';
 import AcidTest from 'pages/AcidTest';
+import AfterSubmissionPage from 'pages/AfterSubmissionPage';
 import CreateGraph from 'pages/CreateTemplate/CreateGraph';
 import EditGraph from 'pages/CreateTemplate/EditGraph';
 import EditTemplate from 'pages/CreateTemplate/EditTemplate';
 import EditNote from 'pages/EditNote/EditNote';
 import GenerateInpatientPlan from 'pages/GenerateInpatientPlan/GenerateInpatientPlan';
+import HPI from 'pages/HPI/Hpi';
 import Home from 'pages/Home/Home';
 import LandingPage from 'pages/LandingPage/LandingPage';
 import LandingPagePublic from 'pages/LandingPage/LandingPagePublic';
 import ManagerDashboard from 'pages/ManagerDashboard/ManagerDashboard';
+import NotAuthorized from 'pages/NotAuthorized';
+import QRCodePage from 'pages/QRCodePage/QRCodePage';
+import SignUp from 'pages/SignUp';
+import ViewProduct from 'pages/ViewProduct/ViewProduct';
 import React from 'react';
-import { Route } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Redirect, Route, Switch, useLocation } from 'react-router';
+import { CurrentNoteState } from 'redux/reducers';
+import { ManagerRoute } from './ManagerRoute';
+import NavMenu from './NavMenu';
 import { PrivateRoute } from './PrivateRoute';
 
 const Routes = (props: { children?: JSX.Element | null }) => {
+    const isHomePage = useLocation().pathname === '/';
+    const loadingStatus = useSelector(
+        (state: CurrentNoteState) => state.loadingStatus
+    );
+    const { authLoading } = useAuth();
+
     return (
-        <BrowserRouter>
-            <Route exact path='/' component={Home} />
-            <Route exact path='/login' component={Login} />
-            <Route
-                exact
-                path='/forgotpasswordemail'
-                component={ForgotPasswordEmail}
-            />
-            <PrivateRoute exact path='/editnote' component={EditNote} />
-            <PrivateRoute
-                exact
-                path='/secretdashboard'
-                component={LandingPage}
-            />
-            <PrivateRoute
-                exact
-                path='/dashboard'
-                component={LandingPagePublic}
-            />
-            <PrivateRoute
-                exact
-                path='/generateinpatientplan'
-                component={GenerateInpatientPlan}
-            />
-            <PrivateRoute exact path='/acid-test' component={AcidTest} />
-            <PrivateRoute exact path='/templates/new' component={CreateGraph} />
-            <PrivateRoute exact path='/templates/old' component={EditGraph} />
-            <PrivateRoute
-                exact
-                path='/templates/edit'
-                component={EditTemplate}
-            />
-            <PrivateRoute exact path='/editprofile' component={EditProfile} />
-            <PrivateRoute
-                exact
-                path='/profilesecurity'
-                component={ProfileSecurity}
-            />
-            <PrivateRoute
-                exact
-                path='/managerdashboard'
-                component={ManagerDashboard}
-            />
-            <Route exact path='/privacypolicy' component={Policy} />
-            <Route
-                exact
-                path='/termsandconditions'
-                component={Terms_and_conditions}
-            />
-            <div className='footer-copyright'>
-                Copyright © 2023 Cydoc Corporation. All rights reserved. Patent
-                pending. &emsp;•&emsp;
-                <a href='/privacypolicy' style={{ color: '#147A9B' }}>
-                    Privacy Policy
-                </a>
-                &emsp; • &emsp;
-                <a href='/termsandconditions' style={{ color: '#147A9B' }}>
-                    Terms and Conditions
-                </a>
+        <div className='layout'>
+            {(authLoading || loadingStatus) && <GlobalLoader />}
+            <NavMenu attached={'top'} displayNoteName={true} />{' '}
+            <div className='layout__content'>
+                <Switch>
+                    <Route exact path='/' component={Home} />
+                    <Route exact path='/sign-up' component={SignUp} />
+                    <Route exact path='/login' component={LoginPage} />
+                    <Route
+                        exact
+                        path='/not-authorized'
+                        component={NotAuthorized}
+                    />
+                    <Route
+                        exact
+                        path='/forgot-password'
+                        component={ForgotPasswordPage}
+                    />
+                    <PrivateRoute exact path='/editnote' component={EditNote} />
+                    <PrivateRoute exact path='/qrcode' component={QRCodePage} />
+                    <Route exact path='/hpi/:view' component={HPI} />
+                    <Route
+                        exact
+                        path='/hpi/'
+                        component={(props: any) => (
+                            <Redirect to='/hpi/patient' {...props} />
+                        )}
+                    />
+                    <PrivateRoute
+                        exact
+                        path='/secretdashboard'
+                        component={LandingPage}
+                    />
+                    <PrivateRoute
+                        exact
+                        path='/dashboard'
+                        component={LandingPagePublic}
+                    />
+                    <PrivateRoute
+                        exact
+                        path='/generateinpatientplan'
+                        component={GenerateInpatientPlan}
+                    />
+                    <PrivateRoute
+                        exact
+                        path='/acid-test'
+                        component={AcidTest}
+                    />
+                    <PrivateRoute
+                        exact
+                        path='/templates/new'
+                        component={CreateGraph}
+                    />
+                    <PrivateRoute
+                        exact
+                        path='/templates/old'
+                        component={EditGraph}
+                    />
+                    <PrivateRoute
+                        exact
+                        path='/templates/edit'
+                        component={EditTemplate}
+                    />
+                    <PrivateRoute
+                        exact
+                        path='/editprofile'
+                        component={EditProfile}
+                    />
+                    <PrivateRoute
+                        exact
+                        path='/profilesecurity'
+                        component={ProfileSecurity}
+                    />
+                    <PrivateRoute
+                        exact
+                        path='/account/edit-payment'
+                        component={EditPayment}
+                    />
+                    <ManagerRoute
+                        exact
+                        path='/manager-dashboard'
+                        component={ManagerDashboard}
+                    />
+                    <Route exact path='/view/product' component={ViewProduct} />
+                    <Route exact path='/privacypolicy' component={Policy} />
+                    <Route
+                        exact
+                        path='/termsandconditions'
+                        component={Terms_and_conditions}
+                    />
+                    <Route
+                        exact
+                        path={'/submission-successful'}
+                        component={AfterSubmissionPage}
+                    />
+                    <Route
+                        exact
+                        path='*'
+                        component={() => <Redirect to='/' />}
+                    />
+                </Switch>
             </div>
+            {!isHomePage && <Footer />}
             {props.children}
-        </BrowserRouter>
+        </div>
     );
 };
 export default Routes;

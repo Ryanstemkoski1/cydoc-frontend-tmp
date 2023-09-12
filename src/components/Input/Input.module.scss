@@ -1,0 +1,114 @@
+@import '../../assets/scss/variables.scss';
+.input {
+    width: 100%;
+    position: relative;
+    label {
+        font-size: 14px;
+        span {
+            color: $color-error;
+        }
+    }
+    textarea,
+    input {
+        width: 100%;
+        height: 45px;
+        outline: none;
+        outline: none;
+        font-size: 14px;
+        appearance: none;
+        padding: 5px 15px;
+        border-radius: 8px;
+        color: $color-black;
+        border: 1px solid $color-border;
+        &::placeholder {
+            color: rgba($color-black, 0.5);
+        }
+        &:focus {
+            border-color: $color-primary;
+        }
+    }
+    textarea {
+        height: 80px;
+        resize: none;
+        padding: 8px 15px;
+    }
+    &__search {
+        position: relative;
+        input {
+            padding-right: 35px;
+        }
+        img {
+            top: 50%;
+            width: 15px;
+            right: 15px;
+            position: absolute;
+            transform: translateY(-50%);
+        }
+    }
+    &__suggestion {
+        left: 0;
+        z-index: 1;
+        top: 100%;
+        width: 100%;
+        overflow-y: auto;
+        max-height: 280px;
+        position: absolute;
+        border-radius: 8px;
+        background-color: $color-white;
+        border: 1px solid rgba($color-black, 0.05);
+        box-shadow: 0 2px 5px rgba($color-black, 0.1);
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: rgba($color-black, 0.2);
+        }
+        a {
+            display: block;
+            font-size: 14px;
+            padding: 10px 15px;
+            user-select: none;
+            color: $color-black;
+            border-bottom: 1px solid rgba($color-black, 0.05);
+            &:hover {
+                color: $color-primary;
+            }
+        }
+        span {
+            padding: 10px;
+            display: block;
+            font-size: 14px;
+            text-align: center;
+        }
+    }
+    &.inputSimple {
+        input {
+            padding: 0;
+            border-color: transparent;
+            &:focus {
+                padding: 5px 15px;
+                border-color: $color-border;
+            }
+        }
+    }
+    &.inputDropdown {
+        input {
+            padding-right: 40px;
+            @include background-image(
+                angle-down,
+                svg,
+                calc(100% - 15px),
+                no-repeat,
+                12px
+            );
+        }
+    }
+    &.inputMobile {
+        textarea {
+            @include min-screen($mobile) {
+                height: 45px;
+                padding: 13px 15px;
+            }
+        }
+    }
+}

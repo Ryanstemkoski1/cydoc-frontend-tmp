@@ -98,9 +98,31 @@ export function initialSurveyAddDateOrPlace(
     };
 }
 
+export interface InitialSurveyAddTextActions {
+    type: USER_VIEW_ACTION.INITIAL_SURVEY_ADD_TEXT;
+    payload: {
+        uid: string;
+        response: string;
+    };
+}
+
+export function initialSurveyAddText(
+    uid: string,
+    input: string
+): InitialSurveyAddTextActions {
+    return {
+        type: USER_VIEW_ACTION.INITIAL_SURVEY_ADD_TEXT,
+        payload: {
+            uid,
+            response: input,
+        },
+    };
+}
+
 export type userViewActionTypes =
     | UserViewAction
     | ProcessSurveyGraphAction
     | InitialSurveyYesNoAction
     | InitialSurveySearchAction
-    | InitialSurveyAddDateOrPlaceActions;
+    | InitialSurveyAddDateOrPlaceActions
+    | InitialSurveyAddTextActions;

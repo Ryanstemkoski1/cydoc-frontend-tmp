@@ -1,0 +1,44 @@
+@import '../../../../assets/scss/variables.scss';
+.reviewOfSystems {
+    &__caption {
+        text-align: center;
+        margin-bottom: 20px !important;
+        padding-bottom: 10px !important;
+        border-bottom: 1px solid rgba($color-primary, 0.5) !important;
+    }
+    &__item {
+        padding: 20px 0;
+        border-bottom: 1px solid $color-border;
+        @include max-screen($mobile) {
+            justify-content: space-between;
+        }
+        &:last-of-type {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+        p {
+            margin: 0;
+            text-align: center;
+            padding: 0 10px;
+            width: calc(100% - 120px);
+            @include max-screen($mobile) {
+                width: calc(100% - 130px);
+            }
+        }
+        > div {
+            &:nth-child(1) {
+                button[title='Yes'] {
+                    display: none;
+                }
+                button[title='No'] {
+                    margin-left: 0;
+                }
+            }
+            &:nth-child(3) {
+                button[title='No'] {
+                    display: none;
+                }
+            }
+        }
+    }
+}

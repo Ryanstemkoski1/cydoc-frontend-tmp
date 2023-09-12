@@ -1,15 +1,14 @@
-import React from 'react';
-import { CurrentNoteState } from 'redux/reducers';
+import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
 import { HpiStateProps } from 'constants/hpiEnums';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
     singleMultipleChoiceHandleClick,
     SingleMultipleChoiceHandleClickAction,
 } from 'redux/actions/hpiActions';
+import { CurrentNoteState } from 'redux/reducers';
 import { isSelectOneResponse } from 'redux/reducers/hpiReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import ToggleButton from 'components/tools/ToggleButton';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 
 interface MultipleChoiceProps {
     node: string;

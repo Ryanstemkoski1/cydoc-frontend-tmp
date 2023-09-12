@@ -2,21 +2,20 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
 import {
-    Icon,
-    Accordion,
-    Form,
-    TextArea,
-    AccordionTitleProps,
-} from 'semantic-ui-react';
-import {
-    setNotesChiefComplaint,
     SetNotesChiefComplaintAction,
+    setNotesChiefComplaint,
 } from 'redux/actions/chiefComplaintsActions';
-import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 import { CurrentNoteState } from 'redux/reducers';
-import { PatientViewProps } from './ChiefComplaintsButton';
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import {
+    Accordion,
+    AccordionTitleProps,
+    Form,
+    Icon,
+    TextArea,
+} from 'semantic-ui-react';
 import { ChiefComplaintsProps } from '../../HPIContent';
-import { FAMILY_HISTORY_MOBILE_BP } from 'constants/breakpoints.js';
+import { PatientViewProps } from './ChiefComplaintsButton';
 
 const MiscBox = (props: Props) => {
     const {
@@ -26,8 +25,6 @@ const MiscBox = (props: Props) => {
         setNotesChiefComplaint,
         step,
     } = props;
-    const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
-    const mobile = windowWidth < FAMILY_HISTORY_MOBILE_BP;
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const miscNotesClick = (
         _e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -41,7 +38,7 @@ const MiscBox = (props: Props) => {
     };
     return (
         <>
-            {!patientView && !mobile && (
+            {!patientView && (
                 <Accordion
                     className={
                         activeIndex !== 0

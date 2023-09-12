@@ -10,7 +10,7 @@ import {
     WindowedMenuList,
 } from 'react-windowed-select';
 import Select, { createFilter, components } from 'react-select';
-import './OptimizedDropdown.css';
+import './OptimizedDropdown.scss';
 import { DropdownOption, OptionMapping } from '_processOptions';
 
 type OnAddItem = (
@@ -187,8 +187,8 @@ const OptimizedDropdown = (props: {
 
     return (
         <Dropdown
-            classNamePrefix='dropdown'
-            className={`opt-dropdown ${otherProps.className} ${
+            classNamePrefix='custom-dropdown'
+            className={`custom-dropdown ${otherProps.className} ${
                 fluid && 'fluid'
             } ${transparent && 'transparent'}`}
             components={{

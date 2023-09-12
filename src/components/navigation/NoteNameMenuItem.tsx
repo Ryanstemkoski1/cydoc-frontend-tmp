@@ -1,13 +1,13 @@
 import React from 'react';
-import { Menu, Input, InputOnChangeData } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import {
+    UpdateNoteTitleAction,
+    updateNoteTitle,
+} from 'redux/actions/currentNoteActions';
 import { CurrentNoteState } from 'redux/reducers';
 import { initialNoteTitle } from 'redux/reducers/currentNoteReducer';
-import {
-    updateNoteTitle,
-    UpdateNoteTitleAction,
-} from 'redux/actions/currentNoteActions';
 import { selectNoteTitle } from 'redux/selectors/currentNoteSelectors';
+import { Input, InputOnChangeData, Menu } from 'semantic-ui-react';
 import './NoteNameMenuItem.css';
 
 interface StateProps {
@@ -23,7 +23,7 @@ interface DispatchProps {
     updateNoteTitle: (title: string) => UpdateNoteTitleAction;
 }
 
-type NoteNameMenuItemProps = StateProps & DispatchProps & NavProps;
+type NoteNameMenuItemProps = StateProps & DispatchProps;
 type FormChangeHandler = (
     e: React.ChangeEvent,
     data: InputOnChangeData

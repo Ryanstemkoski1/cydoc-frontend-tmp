@@ -158,10 +158,14 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
                             'RR: ' + this.props.physicalExam.vitals.RR + ' BPM'
                         );
                     } else if (vital == 'temperature') {
+                        const currUnit =
+                            this.props.physicalExam.vitals.tempUnit === 0
+                                ? '°C'
+                                : '°F';
                         vitals.push(
                             'Temperature: ' +
                                 this.props.physicalExam.vitals.temperature +
-                                '°C'
+                                currUnit
                         );
                     } else if (vital == 'oxygenSaturation') {
                         vitals.push(

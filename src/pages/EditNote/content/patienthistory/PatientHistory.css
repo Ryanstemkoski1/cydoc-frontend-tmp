@@ -55,7 +55,7 @@
 }
 
 .year-validation-error::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 100%;
     left: 25%;
@@ -80,7 +80,7 @@
 }
 
 .year-validation-mobile-error::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 100%;
     left: 25%;
@@ -152,6 +152,7 @@
     bottom: 15px;
     opacity: 0.8;
     margin: 0;
+    z-index: 1;
     background: #006b87;
     color: white;
 }
@@ -195,23 +196,29 @@
 }
 
 @media screen and (max-width: 767px) {
-  .patent-history-content .ui.divider {
-    display: none;
-  }
-  .patent-history-content {
-    padding: 0 16px;
-  }
-  .patent-history-content .family-hisory-note-mobile {
+    .patent-history-content .ui.divider {
+        display: none;
+    }
+    .patent-history-content {
+        padding: 0 16px;
+    }
+    .patent-history-content .family-hisory-note-mobile {
         margin-bottom: 20px !important;
-  }
-  .ui.icon.button.small-patient-previous-button,
+    }
+    .ui.icon.button.small-patient-previous-button,
     .ui.icon.button.small-patient-next-button {
         padding: 0;
         width: 38px;
         height: 38px;
     }
     .ui.icon.button.small-patient-previous-button i,
-    .ui.icon.button.small-patient-next-button i{
+    .ui.icon.button.small-patient-next-button i {
         font-size: 15px !important;
+    }
+    .ui.segment.ui-mobile div:empty {
+        display: none;
+    }
+    .ui.segment.ui-mobile .ui.input {
+        width: 100%;
     }
 }

@@ -1,0 +1,3 @@
+//npm.pkg.github.com/:_authToken=YOUR_AUTH_TOKEN ## EG. ghp_qwertyqwertyqwerty
+@cydoc-ai:registry=https://npm.pkg.github.com
+registry=https://registry.npmjs.org

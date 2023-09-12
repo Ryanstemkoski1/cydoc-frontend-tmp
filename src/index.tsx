@@ -1,18 +1,26 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { CookiesProvider } from 'react-cookie';
-import './semantic/dist/semantic.min.css';
-import { HPIStore } from './contexts/HPIContext';
-import { AuthStore } from './contexts/AuthContext';
-import { NotesStore } from './contexts/NotesContext';
-import { HPITemplateStore } from './contexts/HPITemplateContext';
-import './index.css';
-import { Provider } from 'react-redux';
-import { currentNoteStore } from './redux/store';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { isLivemode } from './auth/livemode';
 import Routes from 'components/navigation/Routes';
+import { AuthProvider } from 'providers/AuthProvider';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { initializeSentry } from '../src/modules/logging';
+import './semantic/dist/semantic.min.css';
+
+import React from 'react';
+import { CookiesProvider } from 'react-cookie';
+import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { isLivemode } from './auth/livemode';
+import { HPIStore } from './contexts/HPIContext';
+import { HPITemplateStore } from './contexts/HPITemplateContext';
+import { NotesStore } from './contexts/NotesContext';
+import './index.scss';
+import { currentNoteStore } from './redux/store';
+import './semantic/dist/semantic.min.css';
+
+initializeSentry();
 
 const container = document.getElementById('root');
 // react's container is never null
@@ -32,19 +40,25 @@ const stripePromise = loadStripe(getStripePublishableKey());
 function App() {
     return (
         <CookiesProvider>
-            <AuthStore>
+            <AuthProvider>
                 <NotesStore>
                     <HPIStore>
                         <HPITemplateStore>
                             <Elements stripe={stripePromise}>
                                 <Provider store={currentNoteStore}>
-                                    <Routes />
+                                    <ToastContainer
+                                        theme='colored'
+                                        position='bottom-right'
+                                    />
+                                    <Router>
+                                        <Routes />
+                                    </Router>
                                 </Provider>
                             </Elements>
                         </HPITemplateStore>
                     </HPIStore>
                 </NotesStore>
-            </AuthStore>
+            </AuthProvider>
         </CookiesProvider>
     );
 }

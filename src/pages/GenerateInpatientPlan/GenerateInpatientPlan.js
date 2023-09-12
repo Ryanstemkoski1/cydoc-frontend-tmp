@@ -1,15 +1,14 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import {
-    Input,
-    Grid,
-    Container,
-    Segment,
-    Header,
     Button,
+    Container,
+    Grid,
+    Header,
+    Input,
+    Segment,
 } from 'semantic-ui-react';
 
-import ToggleButton from 'components/tools/ToggleButton';
-import NavMenu from 'components/navigation/NavMenu';
+import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
 import {
     initialConditionsState,
     initialValuesState,
@@ -17,8 +16,6 @@ import {
 import './GenerateInpatientPlan.css';
 
 const GenerateInpatientPlan = () => {
-    const [isSmallBreakpoint, setIsSmallBreakpoint] = useState(false);
-
     // State for the Y/N infection toggle buttons
     const [isYesInfectionPressed, setIsYesInfectionPressed] = useState(false);
     const [isNoInfectionPressed, setIsNoInfectionPressed] = useState(false);
@@ -28,24 +25,6 @@ const GenerateInpatientPlan = () => {
 
     // Tracks which conditions the patient has
     const [conditions, setConditions] = useState(initialConditionsState);
-
-    /************************************************************************
-     * Screen resize logic
-     ************************************************************************/
-    const handleResize = () => {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-        const isSmallBreakpoint = windowWidth < 1610;
-        setIsSmallBreakpoint(isSmallBreakpoint);
-    };
-
-    useEffect(() => {
-        window.addEventListener('resize', handleResize);
-        // Call handler right away so state is updated with initial window size
-        handleResize();
-        // Remove event listener on cleanup
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     /*************************************************************************
      * This section of code contains all the check functions for each condition
@@ -504,7 +483,7 @@ const GenerateInpatientPlan = () => {
     }
 
     const vitalsSubGrid = (
-        <Grid columns={5} className={`${isSmallBreakpoint ? 'stack' : ''}`}>
+        <Grid columns={5}>
             <div className='label-set'>
                 <div className='label'>Temp</div>
                 <Input
@@ -695,17 +674,7 @@ const GenerateInpatientPlan = () => {
      * breakpoint versus a single column structure at the small breakpoint,
      * there are different HTML structures for each breakpoint.
      */
-    const BMPSubGrid = isSmallBreakpoint ? (
-        <Grid columns={5} className='stack'>
-            {Na}
-            {Cl}
-            {BUN}
-            {K}
-            {HCO3}
-            {Cr}
-            {Glucose}
-        </Grid>
-    ) : (
+    const BMPSubGrid = (
         <Grid columns={5} stackable>
             <div>
                 {Na}
@@ -727,7 +696,7 @@ const GenerateInpatientPlan = () => {
     );
 
     const CBCSubGrid = (
-        <Grid columns={5} className={`${isSmallBreakpoint ? 'stack' : ''}`}>
+        <Grid columns={5}>
             <div className='label-set'>
                 <div className='label'>Hgb</div>
                 <div className='input-with-label-below'>
@@ -780,7 +749,7 @@ const GenerateInpatientPlan = () => {
     );
 
     const otherSubGrid = (
-        <Grid columns={5} className={`${isSmallBreakpoint ? 'stack' : ''}`}>
+        <Grid columns={5}>
             <div className='label-set'>
                 <div className='label'>pH</div>
                 <div className='input-with-label-below'>
@@ -864,11 +833,10 @@ const GenerateInpatientPlan = () => {
      ************************************************************************/
     return (
         <Fragment>
-            <NavMenu className='landing-page-nav-menu' />
             <Container className='active-tab-container large-width'>
                 <Segment>
                     <Grid columns={2} divided relaxed stackable>
-                        <Grid.Column width={`${isSmallBreakpoint ? 8 : 11}`}>
+                        <Grid.Column width={11}>
                             <Grid.Row centered>
                                 <Header as='h2' textAlign='center'>
                                     Laboratory Data
@@ -898,7 +866,7 @@ const GenerateInpatientPlan = () => {
                             {submitButton}
                             {clearButton}
                         </Grid.Column>
-                        <Grid.Column width={`${isSmallBreakpoint ? 8 : 5}`}>
+                        <Grid.Column width={5}>
                             <Grid.Row centered>
                                 <Header as='h2' textAlign='center'>
                                     Plan Outline

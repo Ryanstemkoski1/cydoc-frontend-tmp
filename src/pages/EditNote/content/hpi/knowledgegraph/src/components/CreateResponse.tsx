@@ -1,43 +1,41 @@
-import React from 'react';
-import '../css/Button.css';
-import './CreateResponse.css';
-import MultipleChoice from './responseComponents/MultipleChoice';
-import ReviewOfSystemsCategory from '../../../../reviewofsystems/ReviewOfSystemsCategory';
-import YesNo from './responseComponents/YesNo';
-import HandleInput from './responseComponents/HandleInput';
-import HandleNumericInput from './responseComponents/HandleNumericInput';
-import TimeInput from './responseComponents/TimeInput';
-import BodyLocation from './responseComponents/BodyLocation';
-import FamilyHistoryContent from '../../../../familyhistory/FamilyHistoryContent';
-import MedicalHistoryContent from '../../../../medicalhistory/MedicalHistoryContent';
-import MedicationsContent from '../../../../medications/MedicationsContent';
-import SurgicalHistoryContent from '../../../../surgicalhistory/SurgicalHistoryContent';
-import { PATIENT_HISTORY_MOBILE_BP } from 'constants/breakpoints';
-import ListText from './responseComponents/ListText';
-import { ResponseTypes, HpiStateProps } from 'constants/hpiEnums';
+import diseaseSynonyms from 'constants/diseaseSynonyms';
 import { YesNoResponse } from 'constants/enums';
-import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
+import { HpiStateProps, ResponseTypes } from 'constants/hpiEnums';
+import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
-    addFhPopOptions,
     AddFhPopOptionsAction,
+    addFhPopOptions,
 } from 'redux/actions/familyHistoryActions';
 import {
-    blankQuestionChange,
     BlankQuestionChangeAction,
+    blankQuestionChange,
 } from 'redux/actions/hpiActions';
 import { CurrentNoteState } from 'redux/reducers';
-import { connect } from 'react-redux';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import ScaleInput from './responseComponents/ScaleInput';
-import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
-import diseaseSynonyms from 'constants/diseaseSynonyms';
-import LaboratoryTest from './responseComponents/LaboratoryTest';
 import {
     isLabTestDictionary,
     isSelectOneResponse,
 } from 'redux/reducers/hpiReducer';
-import Masonry from 'react-masonry-css';
+import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
+import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import FamilyHistoryContent from '../../../../familyhistory/FamilyHistoryContent';
+import MedicalHistoryContent from '../../../../medicalhistory/MedicalHistoryContent';
+import MedicationsContent from '../../../../medications/MedicationsContent';
+import ReviewOfSystemsCategory from '../../../../reviewofsystems/ReviewOfSystemsCategory';
+import SurgicalHistoryContent from '../../../../surgicalhistory/SurgicalHistoryContent';
+import '../css/Button.css';
+import style from './CreateResponse.module.scss';
+import BodyLocation from './responseComponents/BodyLocation';
+import HandleInput from './responseComponents/HandleInput';
+import HandleNumericInput from './responseComponents/HandleNumericInput';
+import LaboratoryTest from './responseComponents/LaboratoryTest';
+import ListText from './responseComponents/ListText';
+import MultipleChoice from './responseComponents/MultipleChoice';
+import ScaleInput from './responseComponents/ScaleInput';
+import TimeInput from './responseComponents/TimeInput';
 import YearInput from './responseComponents/YearInput';
+import YesNo from './responseComponents/YesNo';
 
 interface CreateResponseProps {
     node: string;
@@ -45,8 +43,6 @@ interface CreateResponseProps {
 }
 
 interface CreateResponseState {
-    windowWidth: number;
-    windowHeight: number;
     startDate: Date;
     scale: number;
     input: string;
@@ -58,33 +54,16 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
             startDate: new Date(),
             scale: 0,
             input: '',
             question: '',
             responseChoice: [],
         };
-        this.updateDimensions = this.updateDimensions.bind(this);
     }
 
     componentDidMount() {
-        this.updateDimensions();
         this.cleanQuestionText();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-        const windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
     }
 
     cleanQuestionText = () => {
@@ -140,16 +119,14 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
     };
 
     renderSwitch = () => {
-        const { windowWidth } = this.state,
-            { node, hpi } = this.props,
+        const { node, hpi } = this.props,
             { responseType } = hpi.nodes[node],
             blankTypes = [
                 ResponseTypes.FH_BLANK,
                 ResponseTypes.MEDS_BLANK,
                 ResponseTypes.PMH_BLANK,
                 ResponseTypes.PSH_BLANK,
-            ],
-            collapseTabs = windowWidth < PATIENT_HISTORY_MOBILE_BP;
+            ];
 
         const responseChoice = this.state.responseChoice;
         const synonymTypes = [
@@ -188,9 +165,17 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 return <ListText key={node} node={node} />;
 
             case ResponseTypes.SELECTONE:
-                return responseChoice.map((item: string) => (
-                    <MultipleChoice key={item} name={item} node={node} />
-                ));
+                return (
+                    <div className={`${style.response__wrap} flex-wrap`}>
+                        {responseChoice.map((item: string) => (
+                            <MultipleChoice
+                                key={item}
+                                name={item}
+                                node={node}
+                            />
+                        ))}
+                    </div>
+                );
 
             case ResponseTypes.SELECTMANY: {
                 const existingResponse = this.props.hpi.nodes[node].response;
@@ -208,19 +193,13 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     });
                 }
                 return (
-                    <Masonry
-                        breakpointCols={1}
-                        columnClassName='ros-column'
-                        className='ros-container'
-                    >
-                        <ReviewOfSystemsCategory
-                            key={''}
-                            category={''}
-                            selectManyState={formattedResponseChoice}
-                            selectManyOptions={responseChoice}
-                            node={node}
-                        />
-                    </Masonry>
+                    <ReviewOfSystemsCategory
+                        key={''}
+                        category={''}
+                        selectManyState={formattedResponseChoice}
+                        selectManyOptions={responseChoice}
+                        node={node}
+                    />
                 );
             }
 
@@ -241,7 +220,6 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     <MedicationsContent
                         key={node}
                         isPreview={false}
-                        mobile={collapseTabs}
                         values={choices}
                         responseType={responseType}
                         node={node}
@@ -268,7 +246,6 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         isPreview={false}
                         responseChoice={choices}
                         responseType={responseType}
-                        mobile={collapseTabs}
                         currentYear={-1}
                         node={node}
                         hide={false}
@@ -280,7 +257,6 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         key={node}
                         isPreview={false}
                         responseType={responseType}
-                        mobile={collapseTabs}
                         currentYear={-1}
                         node={node}
                         hide={true}
@@ -294,7 +270,6 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         key={node}
                         isPreview={false}
                         responseType={responseType}
-                        mobile={collapseTabs}
                         node={node}
                         hide={true}
                     />
@@ -310,28 +285,25 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
     };
 
     render() {
-        const textStyle = {
-            fontSize: '1.2rem',
-            color: 'black',
-        };
-        const marginBottom = {
-            marginBottom: 48,
-        };
+        const { node, hpi } = this.props;
+        const isYesNoResponseType = [
+            ResponseTypes.NO_YES,
+            ResponseTypes.YES_NO,
+        ].includes(hpi.nodes[node].responseType);
         return (
-            <div className='qa-div' style={marginBottom}>
-                <div>
-                    {' '}
-                    {this.state.question.trim() == 'NAME' ? (
-                        ''
-                    ) : (
-                        <span style={textStyle}>
-                            {this.state.question.trim()}
-                        </span>
-                    )}{' '}
-                    <div className='buttons-group qa-button space-top remove-shadow createResponse'>
-                        {this.renderSwitch()}
-                    </div>{' '}
-                </div>
+            <div
+                className={`${style.response} ${
+                    isYesNoResponseType
+                        ? `${style.response__grid} isYesNo flex-wrap align-center`
+                        : ''
+                }`}
+            >
+                {this.state.question.trim() == 'NAME' ? (
+                    ''
+                ) : (
+                    <h5>{this.state.question.trim()}</h5>
+                )}
+                <aside>{this.renderSwitch()}</aside>
             </div>
         );
     }

@@ -139,10 +139,6 @@
     border-bottom: 1px solid white;
 }
 
-.input.transparent:hover {
-    border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-}
-
 .ui.dropdown:not(.button) > .default.text {
     color: #d4d4d5;
 }

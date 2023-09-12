@@ -1,51 +1,44 @@
+import axios from 'axios';
+import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
+import { graphClientURL } from 'constants/api.js';
+import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
+import { GraphData } from 'constants/hpiEnums';
 import React from 'react';
-import { Button, Segment, Icon, Search } from 'semantic-ui-react';
 import Masonry from 'react-masonry-css';
-import './src/css/App.css';
-import BodySystemDropdown from './src/components/BodySystemDropdown';
-import DiseaseForm from './src/components/DiseaseForm';
-import { hpiHeaders } from './src/API';
-import './HPI.css';
-import {
-    ROS_LARGE_BP,
-    ROS_MED_BP,
-    ROS_SMALL_BP,
-    DISEASE_TABS_SMALL_BP,
-    DISEASE_TABS_MED_BP,
-} from 'constants/breakpoints';
-import { CurrentNoteState } from 'redux/reducers';
 import { connect } from 'react-redux';
-import ChiefComplaintsButton, {
-    PatientViewProps,
-} from './src/components/ChiefComplaintsButton';
-import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
 import {
-    setNotesChiefComplaint,
     SetNotesChiefComplaintAction,
+    setNotesChiefComplaint,
 } from 'redux/actions/chiefComplaintsActions';
-import { CHIEF_COMPLAINTS } from '../../../../../redux/actions/actionTypes';
-import { currentNoteStore } from 'redux/store';
+import {
+    ProcessKnowledgeGraphAction,
+    processKnowledgeGraph,
+} from 'redux/actions/hpiActions';
+import {
+    SaveHpiHeaderAction,
+    saveHpiHeader,
+} from 'redux/actions/hpiHeadersActions';
+import { CurrentNoteState } from 'redux/reducers';
+import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
+import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
 import {
     PlanConditionsFlat,
     selectPlanConditions,
 } from 'redux/selectors/planSelectors';
-import ToggleButton from 'components/tools/ToggleButton';
-import axios from 'axios';
-import { GraphData } from 'constants/hpiEnums';
-import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
-import {
-    processKnowledgeGraph,
-    ProcessKnowledgeGraphAction,
-} from 'redux/actions/hpiActions';
-import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
-import {
-    saveHpiHeader,
-    SaveHpiHeaderAction,
-} from 'redux/actions/hpiHeadersActions';
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
-import { graphClientURL } from 'constants/api.js';
-import MiscBox from './src/components/MiscBox';
+import { currentNoteStore } from 'redux/store';
+import { Search, Segment } from 'semantic-ui-react';
 import Tab from '../../../../../components/tools/Tab';
+import { CHIEF_COMPLAINTS } from '../../../../../redux/actions/actionTypes';
+import './HPI.css';
+import { hpiHeaders } from './src/API';
+import BodySystemDropdown from './src/components/BodySystemDropdown';
+import ChiefComplaintsButton, {
+    PatientViewProps,
+} from './src/components/ChiefComplaintsButton';
+import DiseaseForm from './src/components/DiseaseForm';
+import MiscBox from './src/components/MiscBox';
+import './src/css/App.css';
 
 interface HPIContentProps {
     step: number;
@@ -56,8 +49,6 @@ interface HPIContentProps {
 }
 
 interface HPIContentState {
-    windowWidth: number;
-    windowHeight: number;
     searchVal: string;
     activeIndex: number;
 }
@@ -66,12 +57,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            windowWidth: 0,
-            windowHeight: 0,
             searchVal: '',
             activeIndex: 0, //misc notes box active
         };
-        this.updateDimensions = this.updateDimensions.bind(this);
         // this.handleItemClick = this.handleItemClick.bind(this);
     }
 
@@ -87,21 +75,6 @@ class HPIContent extends React.Component<Props, HPIContentState> {
             const data = hpiHeaders;
             data.then((res) => this.props.saveHpiHeader(res.data));
         }
-        this.updateDimensions();
-        window.addEventListener('resize', this.updateDimensions);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimensions);
-    }
-
-    updateDimensions() {
-        const windowWidth =
-            typeof window !== 'undefined' ? window.innerWidth : 0;
-        const windowHeight =
-            typeof window !== 'undefined' ? window.innerHeight : 0;
-
-        this.setState({ windowWidth, windowHeight });
     }
 
     getData = async (complaint: string) => {
@@ -117,38 +90,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
 
     back = (e: any) => this.props.back(e);
 
-    // setStickyHeaders() {
-    //     const stickyHeaders = document.getElementsByClassName('sticky-header');
-    //     const patientHistoryMenu = document.getElementById(
-    //         'patient-history-menu'
-    //     );
-    //     if (
-    //         stickyHeaders != null &&
-    //         stickyHeaders.length != 0 &&
-    //         patientHistoryMenu != null
-    //     ) {
-    //         for (let i = 0; i < stickyHeaders.length; i++) {
-    //             stickyHeaders[i].style.top = `${
-    //                 parseInt(patientHistoryMenu.style.top) +
-    //                 patientHistoryMenu.offsetHeight
-    //             }px`;
-    //         }
-    //     }
-    // }
-    // miscNotesClick = (
-    //     _e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    //     titleProps: AccordionTitleProps
-    // ) => {
-    //     const { activeIndex } = this.state;
-    //     const newIndex =
-    //         activeIndex === titleProps.index
-    //             ? -1
-    //             : (titleProps.index as number);
-    //     this.setState({ activeIndex: newIndex });
-    // };
-
     render() {
-        const { windowWidth } = this.state;
         const { chiefComplaints, hpiHeaders } = this.props;
         const { bodySystems, parentNodes } = hpiHeaders;
 
@@ -224,20 +166,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
         const positiveLength: number = positiveDiseases.length;
 
         // window/screen responsiveness
-        let numColumns = 1;
-        if (windowWidth > ROS_LARGE_BP) {
-            numColumns = 4;
-        } else if (windowWidth > ROS_MED_BP) {
-            numColumns = 3;
-        } else if (windowWidth > ROS_SMALL_BP) {
-            numColumns = 2;
-        }
-
-        const collapseTabs =
-            Object.keys(chiefComplaints).length >= 10 ||
-            (Object.keys(chiefComplaints).length >= 5 &&
-                windowWidth < DISEASE_TABS_MED_BP) ||
-            windowWidth < DISEASE_TABS_SMALL_BP;
+        const numColumns = 4;
 
         const panes = Object.keys(chiefComplaints).map((name) => ({
             menuItem: name,
@@ -252,14 +181,15 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                     <>
                         <Segment className='margin-bottom-for-notes'>
                             {positiveLength > 0 ? (
-                                positiveDiseases
+                                <div className='notes-btn-wrap flex-wrap'>
+                                    {positiveDiseases}
+                                </div>
                             ) : (
                                 <div className='positive-diseases-placeholder' />
                             )}
                             <Search
                                 size='large'
                                 placeholder='Type in a condition...'
-                                noResultsMessage
                                 className='hpi-search-bar'
                                 minCharacters={2}
                                 onSearchChange={(event) => {
@@ -278,6 +208,9 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                 {diseaseComponents}
                             </Masonry>
                         </Segment>
+                        <>
+                            <NavigationButton nextClick={this.continue} />
+                        </>
                     </>
                 );
             default:
@@ -311,42 +244,10 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                                     prevStep={this.back}
                                 />
                             </Segment>
-                            <Button
-                                icon
-                                floated='left'
-                                onClick={this.back}
-                                className='hpi-small-previous-button'
-                            >
-                                <Icon name='arrow left' className='big' />
-                            </Button>
-                            <Button
-                                icon
-                                labelPosition='left'
-                                floated='left'
-                                onClick={this.back}
-                                className='hpi-previous-button'
-                            >
-                                Prev
-                                <Icon name='arrow left' />
-                            </Button>
-                            <Button
-                                icon
-                                floated='right'
-                                onClick={this.continue}
-                                className='hpi-small-next-button'
-                            >
-                                <Icon name='arrow right' />
-                            </Button>
-                            <Button
-                                icon
-                                labelPosition='right'
-                                floated='right'
-                                onClick={this.continue}
-                                className='hpi-next-button'
-                            >
-                                Next
-                                <Icon name='arrow right' />
-                            </Button>
+                            <NavigationButton
+                                previousClick={this.back}
+                                nextClick={this.continue}
+                            />
                         </div>
                     );
                 }

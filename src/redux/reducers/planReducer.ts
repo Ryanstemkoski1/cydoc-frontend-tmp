@@ -35,6 +35,7 @@ export interface PlanCondition {
 export interface PlanDiagnosis {
     comments: string;
     diagnosis: string;
+    code: string;
 }
 
 export interface PlanPrescription {
@@ -64,6 +65,7 @@ export const initialPlanState: PlanState = {
                 [v4()]: {
                     comments: '',
                     diagnosis: '',
+                    code: '',
                 },
             },
             prescriptions: {
@@ -113,6 +115,7 @@ export function planReducer(
                             [v4()]: {
                                 comments: '',
                                 diagnosis: '',
+                                code: '',
                             },
                         },
                         prescriptions: {
@@ -177,6 +180,7 @@ export function planReducer(
                             [v4()]: {
                                 comments: '',
                                 diagnosis: '',
+                                code: '',
                             },
                         },
                     },
@@ -208,6 +212,14 @@ export function planReducer(
         case PLAN_ACTION.UPDATE_DIFFERENTIAL_DIAGNOSIS: {
             const { conditionIndex, diagnosisIndex, newDiagnosis } =
                 action.payload;
+            // newDiagnosis can either be a string or object
+            // old code system (used in MedicationsPanel) only sends string, icd-10 system sends object
+            const diagnosis =
+                typeof newDiagnosis == 'string'
+                    ? newDiagnosis
+                    : newDiagnosis.diagnosis;
+            const code =
+                typeof newDiagnosis == 'string' ? '' : newDiagnosis.code;
             return {
                 ...state,
                 conditions: {
@@ -220,7 +232,8 @@ export function planReducer(
                             [diagnosisIndex]: {
                                 ...state.conditions[conditionIndex]
                                     .differentialDiagnoses[diagnosisIndex],
-                                diagnosis: newDiagnosis,
+                                diagnosis: diagnosis,
+                                code: code,
                             },
                         },
                     },

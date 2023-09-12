@@ -95,14 +95,14 @@ interface UpdateDifferentialDiagnosisAction {
     payload: {
         conditionIndex: string;
         diagnosisIndex: string;
-        newDiagnosis: string;
+        newDiagnosis: string | { diagnosis: string; code: string };
     };
 }
 
 export function updateDifferentialDiagnosis(
     conditionIndex: string,
     diagnosisIndex: string,
-    newDiagnosis: string
+    newDiagnosis: string | { diagnosis: string; code: string }
 ): UpdateDifferentialDiagnosisAction {
     return {
         type: PLAN_ACTION.UPDATE_DIFFERENTIAL_DIAGNOSIS,

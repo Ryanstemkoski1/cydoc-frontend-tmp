@@ -1,12 +1,13 @@
-import React from 'react';
-import { Input } from 'semantic-ui-react';
-import { CurrentNoteState } from 'redux/reducers';
+import Input from 'components/Input/Input';
+import ToolTip from 'components/tools/ToolTip/Tooltip';
 import { HpiStateProps, NumberInput } from 'constants/hpiEnums';
-import {
-    handleYearInputChange,
-    HandleYearInputChangeAction,
-} from 'redux/actions/hpiActions';
+import React from 'react';
 import { connect } from 'react-redux';
+import {
+    HandleYearInputChangeAction,
+    handleYearInputChange,
+} from 'redux/actions/hpiActions';
+import { CurrentNoteState } from 'redux/reducers';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 
 interface YearInputProps {
@@ -64,7 +65,10 @@ class YearInput extends React.Component<Props, OwnState> {
         const values = hpi.nodes[node];
         const question = values.text;
         return (
-            <div style={{ width: 'fit-content', position: 'relative' }}>
+            <ToolTip
+                messageContent={`Please enter a year between 1900 and ${this.state.currentYear}`}
+                messageShow={!this.state.valid && this.state.year !== undefined}
+            >
                 <Input
                     key={question}
                     id={'year-input'}
@@ -77,18 +81,12 @@ class YearInput extends React.Component<Props, OwnState> {
                             ? this.state.year
                             : undefined
                     }
-                    onChange={(_e, data) =>
-                        this.handleInputChange(parseInt(data.value))
+                    onChange={(e: any) =>
+                        this.handleInputChange(parseInt(e.target.value))
                     }
-                >
-                    <input onBlur={this.handleInputBlur} />
-                </Input>
-                {!this.state.valid && this.state.year !== undefined && (
-                    <p className='year-validation-mobile-error'>
-                        {`Please enter a year between 1900 and ${this.state.currentYear}`}
-                    </p>
-                )}
-            </div>
+                    onBlur={this.handleInputBlur}
+                ></Input>
+            </ToolTip>
         );
     }
 }

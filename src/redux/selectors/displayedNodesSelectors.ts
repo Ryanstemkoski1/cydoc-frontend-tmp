@@ -85,10 +85,7 @@ export function firstOrderNodes(state: CurrentNoteState) {
                 .reduce((prevVal, node) => {
                     let currNodes = prevVal;
                     const i = currNodes.findIndex((n) => n == node);
-                    if (
-                        ['GENERAL', 'PAIN'].includes(nodes[node].category) ||
-                        nodes[node].text == 'nan'
-                    )
+                    if (nodes[node].text == 'nan')
                         currNodes = [
                             ...currNodes.slice(0, i + 1),
                             ...graph[node],

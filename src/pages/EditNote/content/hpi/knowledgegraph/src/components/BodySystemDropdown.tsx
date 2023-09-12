@@ -1,25 +1,24 @@
+import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import '../css/Button.css';
-import ChiefComplaintsButton from './ChiefComplaintsButton';
 import '../../HPI.css';
-import { NOTE_PAGE_MOBILE_BP } from 'constants/breakpoints';
-import brain from '../icons/brain.svg';
-import psychiatry from '../icons/psychiatry.svg';
-import heent from '../icons/heent.svg';
-import respiratory from '../icons/respiratory.svg';
-import heart from '../icons/heart.svg';
-import genmed from '../icons/genmed.svg';
-import intestines from '../icons/intestines.svg';
-import immunology from '../icons/immunology.svg';
-import dermatologic from '../icons/dermatologic.svg';
-import kidneys from '../icons/kidneys.svg';
-import endocrine from '../icons/endocrine.svg';
-import pediatrics from '../icons/pediatrics.svg';
-import musculoskeletal from '../icons/musculoskeletal.svg';
-import star from '../icons/star.svg';
+import '../css/Button.css';
 import blooddrop from '../icons/blooddrop.svg';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import brain from '../icons/brain.svg';
+import dermatologic from '../icons/dermatologic.svg';
+import endocrine from '../icons/endocrine.svg';
+import genmed from '../icons/genmed.svg';
+import heart from '../icons/heart.svg';
+import heent from '../icons/heent.svg';
+import immunology from '../icons/immunology.svg';
+import intestines from '../icons/intestines.svg';
+import kidneys from '../icons/kidneys.svg';
+import musculoskeletal from '../icons/musculoskeletal.svg';
+import pediatrics from '../icons/pediatrics.svg';
+import psychiatry from '../icons/psychiatry.svg';
+import respiratory from '../icons/respiratory.svg';
+import star from '../icons/star.svg';
+import ChiefComplaintsButton from './ChiefComplaintsButton';
 
 interface BodySystemDropdownProps {
     diseasesList: string[];
@@ -68,11 +67,8 @@ class BodySystemDropdown extends React.Component<
         //if the BodySystem is Cardiovascular/Hematologic -> abbreviate to Cards/Heme
         //if the BodySystem is Neurologic/Psychiatric -> abbreviate to Neuro/Psych
 
-        const isMobile = window.innerWidth < NOTE_PAGE_MOBILE_BP;
-
         //Setting default render style to computer but changing to mobile if needed
-        let styleToRender = 'hpi-disease-button';
-        if (isMobile) styleToRender = 'mobile-hpi-disease-button';
+        const styleToRender = 'hpi-disease-button';
 
         return (
             <div>
@@ -88,9 +84,7 @@ class BodySystemDropdown extends React.Component<
                     <div className='hpi-disease-button-content-outer'>
                         <div className='hpi-disease-button-content-icon'>
                             <img
-                                className={
-                                    isMobile ? 'mobile-hpi-icons' : 'hpi-icons'
-                                }
+                                className={'hpi-icons'}
                                 src={imgToRender[name]}
                             />
                         </div>

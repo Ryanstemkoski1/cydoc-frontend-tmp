@@ -1,85 +1,74 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { Component } from 'react';
-import {
-    TextArea,
-    Table,
-    Input,
-    TextAreaProps,
-    DropdownProps,
-    InputOnChangeData,
-    Button,
-} from 'semantic-ui-react';
+import { OptionMapping } from '_processOptions';
+import Dropdown from 'components/Input/Dropdown';
+import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
+import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from 'constants/enums';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {
-    updateProcedure,
-    toggleOption,
-    updateYear,
-    updateComments,
     deleteProcedure,
+    toggleOption,
+    updateComments,
+    updateProcedure,
+    updateYear,
 } from 'redux/actions/surgicalHistoryActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
     SurgicalHistoryElements,
     SurgicalHistoryItem,
 } from 'redux/reducers/surgicalHistoryReducer';
-import Dropdown from 'components/tools/OptimizedDropdown';
-import './SurgicalHistoryTableBodyRow.css';
 import { selectSurgicalHistoryItem } from 'redux/selectors/surgicalHistorySelectors';
-import { OptionMapping } from '_processOptions';
-import ToggleButton from 'components/tools/ToggleButton';
-import { YesNoResponse } from 'constants/enums';
+import {
+    DropdownProps,
+    InputOnChangeData,
+    TextArea,
+    TextAreaProps,
+} from 'semantic-ui-react';
+import './SurgicalHistoryTableBodyRow.css';
 
-//Controlled component for a row in a TableContent component
-export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            invalidYear: false,
-        };
-        this.onYearChange = this.onYearChange.bind(this);
-    }
+const SurgicalHistoryTableBodyRowNew = (props: Props) => {
+    const [invalidYear, setInvalidYear] = useState(false);
 
-    onYearChange = (e: React.FocusEvent) => {
+    const onYearChange = (e: React.FocusEvent) => {
         const target = e.target as HTMLTextAreaElement;
         const startYear = parseInt(target.value);
-        this.setState({
-            invalidYear:
-                target.value !== '' &&
+        setInvalidYear(
+            target.value !== '' &&
                 (isNaN(startYear) ||
                     startYear < 1900 ||
-                    startYear > new Date(Date.now()).getFullYear()),
-        });
+                    startYear > new Date(Date.now()).getFullYear())
+        );
     };
 
-    handleYearChange = (
+    const handleYearChange = (
         event: React.FormEvent<HTMLTextAreaElement>,
         data: TextAreaProps
     ) => {
-        this.props.onTableBodyChange(event, data);
-        this.props.updateYear(data.rowIndex, parseInt(data.value as string));
+        props.onTableBodyChange(event, data);
+        props.updateYear(data.rowIndex, parseInt(data.value as string));
     };
 
-    handleProcedureChange = (
+    const handleProcedureChange = (
         event: React.SyntheticEvent | null,
         data: DropdownProps
     ) => {
-        this.props.onTableBodyChange(event, data);
-        this.props.updateProcedure(data.rowIndex, data.value as string);
+        // props.onTableBodyChange(event, data);
+        props.updateProcedure(data.rowIndex, data.value as string);
     };
 
-    handleCommentsChange = (
+    const handleCommentsChange = (
         event: React.FormEvent<HTMLTextAreaElement>,
         data: TextAreaProps
     ) => {
-        this.props.onTableBodyChange(event, data);
-        this.props.updateComments(data.rowIndex, data.value as string);
+        props.onTableBodyChange(event, data);
+        props.updateComments(data.rowIndex, data.value as string);
     };
 
-    getCell(field: string) {
-        const { rowIndex, onAddItem, proceduresOptions, isPreview } =
-            this.props;
+    const getCell = (field: string) => {
+        const { rowIndex, proceduresOptions, isPreview } = props;
         const { procedure, hasHadSurgery, year, comments } =
-            this.props.surgicalHistoryItem! || {};
+            props.surgicalHistoryItem! || {};
 
         if (isPreview) {
             return (
@@ -92,74 +81,60 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
 
         switch (field) {
             case 'procedure': {
-                cell = this.props.pop ? (
+                cell = props.pop ? (
                     <> {procedure} </>
                 ) : (
-                    <Input
-                        fluid
-                        transparent
-                        className='content-input-computer content-dropdown'
-                    >
-                        <div id='procedure-div'>
-                            <Dropdown
-                                fluid
-                                search
-                                selection
-                                clearable
-                                allowAdditions
-                                options={proceduresOptions}
-                                optiontype='proceduresOptions'
-                                type={field}
-                                onChange={this.handleProcedureChange}
-                                rowIndex={rowIndex}
-                                value={procedure}
-                                onAddItem={onAddItem}
-                                aria-label='Surgical-Dropdown'
-                                className='table-row-text'
-                            />
-                        </div>
-                    </Input>
+                    <Dropdown
+                        items={Object.values(proceduresOptions).map(
+                            (item) => item.value
+                        )}
+                        canEnterNewValue={true}
+                        onChange={(value) =>
+                            handleProcedureChange(null, {
+                                rowIndex: rowIndex,
+                                value: value,
+                            })
+                        }
+                        value={procedure}
+                        key={procedure}
+                    />
                 );
                 break;
             }
             case 'hasHadSurgery': {
                 cell = (
                     <>
-                        <ToggleButton
-                            active={
+                        <YesAndNo
+                            yesButtonActive={
                                 isPreview
                                     ? false
                                     : hasHadSurgery == YesNoResponse.Yes
                             }
-                            condition={procedure}
-                            title='Yes'
-                            onToggleButtonClick={
+                            yesButtonCondition={procedure}
+                            handleYesButtonClick={
                                 isPreview
                                     ? () => {
                                           return undefined;
                                       }
                                     : () =>
-                                          this.props.toggleOption(
+                                          props.toggleOption(
                                               rowIndex.toString(),
                                               YesNoResponse.Yes
                                           )
                             }
-                        />
-                        <ToggleButton
-                            active={
+                            noButtonActive={
                                 isPreview
                                     ? false
                                     : hasHadSurgery == YesNoResponse.No
                             }
-                            condition={procedure}
-                            title='No'
-                            onToggleButtonClick={
+                            noButtonCondition={procedure}
+                            handleNoButtonClick={
                                 isPreview
                                     ? () => {
                                           return undefined;
                                       }
                                     : () =>
-                                          this.props.toggleOption(
+                                          props.toggleOption(
                                               rowIndex.toString(),
                                               YesNoResponse.No
                                           )
@@ -178,15 +153,15 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
                             <TextArea
                                 rows={3}
                                 type={field}
-                                onChange={this.handleYearChange}
-                                onBlur={this.onYearChange}
+                                onChange={handleYearChange}
+                                onBlur={onYearChange}
                                 rowIndex={rowIndex}
                                 defaultValue={yearString}
                                 className='table-row-text'
                                 placeHolder='e.g. 2020'
                                 id='row'
                             />
-                            {this.state.invalidYear && (
+                            {invalidYear && (
                                 <p className='year-validation-error'>
                                     Please enter a year between 1900 and{' '}
                                     {new Date(Date.now()).getFullYear()}
@@ -204,7 +179,7 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
                         <TextArea
                             rows={3}
                             type={field}
-                            onChange={this.handleCommentsChange}
+                            onChange={handleCommentsChange}
                             rowIndex={rowIndex}
                             value={comments}
                             className='table-row-text'
@@ -218,65 +193,37 @@ export class SurgicalHistoryTableBodyRow extends Component<Props, OwnState> {
         }
 
         return cell;
-    }
+    };
 
-    render() {
-        //returns a Table.Row with a cell for each item in tableBodyPlaceholders
-        const { fields, hide } = this.props;
+    //returns a Table.Row with a cell for each item in tableBodyPlaceholders
+    const { fields, hide } = props;
 
-        const tableRows = hide
-            ? fields.map((field: string, index: number) => {
-                  const textAlign =
-                      field == 'hasHadSurgery' ? 'center' : 'left';
-                  if (field !== 'procedure') {
-                      return null;
-                  }
-                  return (
-                      <Table.Cell
-                          key={index}
-                          id='table-rows'
-                          textAlign={textAlign}
-                      >
-                          {this.getCell(field)}
-                      </Table.Cell>
-                  );
-              })
-            : fields.map((field: string, index: number) => {
-                  const textAlign =
-                      field == 'hasHadSurgery' ? 'center' : 'left';
-                  return (
-                      <Table.Cell
-                          key={index}
-                          id='table-rows'
-                          textAlign={textAlign}
-                      >
-                          {this.getCell(field)}
-                      </Table.Cell>
-                  );
-              });
+    const tableRows = hide
+        ? fields.map((field: string, index: number) => {
+              const textAlign = field == 'hasHadSurgery' ? 'center' : 'left';
+              if (field !== 'procedure') {
+                  return null;
+              }
+              return <td key={index}>{getCell(field)}</td>;
+          })
+        : fields.map((field: string, index: number) => {
+              const textAlign = field == 'hasHadSurgery' ? 'center' : 'left';
+              return <td key={index}>{getCell(field)}</td>;
+          });
 
-        return (
-            <Table.Row>
-                {tableRows}
-                <td>
-                    <Button
-                        circular
-                        icon='close'
-                        onClick={() => {
-                            this.props.deleteRow(this.props.rowIndex as string);
-                        }}
-                        aria-label='delete-surgery'
-                        className='hpi-ph-button delete-surgery'
-                    />
-                </td>
-            </Table.Row>
-        );
-    }
-}
-
-interface OwnState {
-    invalidYear: boolean;
-}
+    return (
+        <tr>
+            {tableRows}
+            <td>
+                <RemoveButton
+                    onClick={() => {
+                        props.deleteRow(props.rowIndex as string);
+                    }}
+                />
+            </td>
+        </tr>
+    );
+};
 
 interface SurgicalHistoryProps {
     surgicalHistoryItem: SurgicalHistoryItem;
@@ -284,7 +231,6 @@ interface SurgicalHistoryProps {
 
 interface RowProps {
     isPreview: boolean;
-    mobile: boolean;
     currentYear: number;
     rowIndex: keyof SurgicalHistoryElements;
     proceduresOptions: OptionMapping;
@@ -330,6 +276,7 @@ const mapStateToProps = (
         ),
     };
 };
+
 const mapDispatchToProps = {
     updateProcedure,
     toggleOption,
@@ -341,4 +288,4 @@ const mapDispatchToProps = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SurgicalHistoryTableBodyRow);
+)(SurgicalHistoryTableBodyRowNew);

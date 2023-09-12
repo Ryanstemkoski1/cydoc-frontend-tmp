@@ -1,0 +1,16 @@
+@import '../../../assets/scss/variables.scss';
+.addButton {
+    outline: none;
+    margin-top: 15px;
+    align-items: center;
+    display: inline-flex;
+    font-family: $font-family-primary;
+    img {
+        width: 28px;
+        margin-right: 5px;
+    }
+    span {
+        padding-top: 2px;
+        color: $color-black;
+    }
+}
