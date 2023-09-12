@@ -18,6 +18,19 @@
 
 7. Install [Redux dev tools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd/related?hl=en) for Chrome. This extension is invaluable for viewing and analyzing Redux state.
 
+## Amplify
+
+We use amplify to provision auth (cognito), messaging templates (SNS) & auth related hooks
+
+You'll want a production (us-east-1) and a staging (us-east-2) profile in your aws cli config
+
+Be sure to switch to the correct environment before pushing any changes:
+`amplify env checkout dev` or `amplify env checkout production`
+
+deploy with: `amplify push`
+verify changes before deploy with `amplify status`
+
+check out the docs for more info
 ## Potential Setup Issues
 
 When attempting step 5, an issue may be encountered, particularly when using an M1 MacBook:
