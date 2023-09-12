@@ -47,7 +47,7 @@ const ManagerDashboard = () => {
                     }
                 }
             ),
-        [user?.institutionId]
+        [cognitoUser, user?.institutionId]
     );
 
     useEffect(() => {
@@ -91,7 +91,7 @@ const ManagerDashboard = () => {
                 };
             },
         ],
-        []
+        [cognitoUser]
     );
 
     return (
