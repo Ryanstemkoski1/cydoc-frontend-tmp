@@ -22,7 +22,8 @@ const API_URL_STAGING =
     'https://ldxpvwxff1.execute-api.us-east-2.amazonaws.com/Prod';
 const PUBLIC_API_URL_STAGING =
     'https://sn067pu0f0.execute-api.us-east-2.amazonaws.com/Prod';
-const PUBLIC_API_URL_PRODUCTION = 'https://e2oe9sez9f.execute-api.us-east-1.amazonaws.com/Prod';
+const PUBLIC_API_URL_PRODUCTION =
+    'https://e2oe9sez9f.execute-api.us-east-1.amazonaws.com/Prod';
 
 const REGION_STAGING = 'us-east-2';
 const REGION_PRODUCTION = 'us-east-1';
