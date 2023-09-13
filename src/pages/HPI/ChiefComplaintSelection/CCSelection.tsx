@@ -6,7 +6,7 @@ import TextArea from 'components/Input/Textarea';
 import { ActiveItemProps } from 'components/navigation/NavMenu';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { NotificationTypeEnum } from 'components/tools/Notification/Notification';
-import { stagingClient } from 'constants/api';
+import { apiClient } from 'constants/api';
 import { GraphData, ResponseTypes } from 'constants/hpiEnums';
 import useQuery from 'hooks/useQuery';
 import {
@@ -381,7 +381,7 @@ const CCSelection = (props: Props) => {
             props.notification;
 
         setLoading(true);
-        stagingClient
+        apiClient
             .post('/appointment', {
                 ...getHPIFormData(),
                 clinician_id,

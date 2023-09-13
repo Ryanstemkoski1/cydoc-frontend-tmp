@@ -1,7 +1,7 @@
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import axios from 'axios';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { graphClientURL, stagingClient } from 'constants/api.js';
+import { graphClientURL, apiClient } from 'constants/api.js';
 import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import React from 'react';
 import Masonry from 'react-masonry-css';
@@ -87,7 +87,7 @@ class HPIContent extends React.Component {
             this.props.notification;
         this.setState({ loading: true });
 
-        stagingClient
+        apiClient
             .post('/appointment', {
                 ...getHPIFormData(),
                 clinician_id,
