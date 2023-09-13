@@ -1,5 +1,5 @@
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
-import { stagingClient } from 'constants/api';
+import { apiClient } from 'constants/api';
 import useUser from 'hooks/useUser';
 import React, { useCallback, useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
@@ -46,7 +46,7 @@ function QRCodePage() {
         }
 
         try {
-            const response = await stagingClient.get(
+            const response = await apiClient.get(
                 `/hpi-qr?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`
             );
 

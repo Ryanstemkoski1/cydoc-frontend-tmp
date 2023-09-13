@@ -1,7 +1,7 @@
 import { DbUser } from '@cydoc-ai/types';
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import Modal from 'components/Modal/Modal';
-import { stagingClient } from 'constants/api';
+import { apiClient } from 'constants/api';
 import useUser from 'hooks/useUser';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -92,7 +92,7 @@ async function fetchHPIAppointments(
             url += `&${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
         }
 
-        const response = await stagingClient.get(url);
+        const response = await apiClient.get(url);
         const fetchDetails = response.data.data as AppointmentUser[];
         stateUpdaterFunc(fetchDetails);
     } catch (_error: any) {

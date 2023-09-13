@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from '../modules/environment';
 
 function getGraphClientURL() {
     let graphClientURL;
@@ -57,7 +58,7 @@ export const rosClient = axios.create({
     headers: { 'Content-Type': 'application/json' },
 });
 
-export const stagingClient = axios.create({
-    baseURL: 'https://ldxpvwxff1.execute-api.us-east-2.amazonaws.com/Prod/',
+export const apiClient = axios.create({
+    baseURL: `${API_URL}/`,
     headers: { 'Content-Type': 'application/json' },
 });

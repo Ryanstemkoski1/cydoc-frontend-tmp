@@ -6,7 +6,7 @@ import Stepper from 'components/Stepper/Stepper';
 import Notification, {
     NotificationTypeEnum,
 } from 'components/tools/Notification/Notification';
-import { stagingClient } from 'constants/api';
+import { apiClient } from 'constants/api';
 import { YesNoResponse } from 'constants/enums';
 import useAuth from 'hooks/useAuth';
 import useQuery from 'hooks/useQuery';
@@ -98,7 +98,7 @@ const HPI = () => {
         if (clinician_id) {
             url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
         }
-        stagingClient
+        apiClient
             .get(url)
             .catch((_error) => {
                 history.replace('/');
