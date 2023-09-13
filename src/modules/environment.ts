@@ -1,4 +1,4 @@
-export const __DEV__ = process.env.PRODUCTION_OR_DEV !== 'production';
+export const __DEV__ = process.env.REACT_APP_PRODUCTION_OR_DEV !== 'production';
 
 export const APP_ENV = __DEV__ ? 'staging' : 'production';
 
@@ -14,14 +14,14 @@ console.log(`starting app with env:`, {
 const COGNITO_CLIENT_ID_STAGING = '2810pgegm2hdrvoa30lq8hdfg6';
 const COGNITO_POOL_ID_STAGING = 'us-east-2_2LCj8DXUD';
 
-const COGNITO_CLIENT_ID_PRODUCTION = '3tk8ho17961r1aj22lv3rdjs7s';
-const COGNITO_POOL_ID_PRODUCTION = 'us-east-1_UNZcGRQX2';
+const COGNITO_CLIENT_ID_PRODUCTION = '4d4mqmlcjbc8267fv70b26ggad';
+const COGNITO_POOL_ID_PRODUCTION = 'us-east-2_2LCj8DXUD';
 const API_URL_PRODUCTION =
     'https://53mpt60q66.execute-api.us-east-1.amazonaws.com/Prod';
 const API_URL_STAGING =
     'https://ldxpvwxff1.execute-api.us-east-2.amazonaws.com/Prod';
 const PUBLIC_API_URL_STAGING =
-    'https://sn067pu0f0.execute-api.us-east-2.amazonaws.com/Prod';
+    'https://e2oe9sez9f.execute-api.us-east-1.amazonaws.com/Prod';
 const PUBLIC_API_URL_PRODUCTION = ''; // TODO: get public API url
 
 const REGION_STAGING = 'us-east-2';
