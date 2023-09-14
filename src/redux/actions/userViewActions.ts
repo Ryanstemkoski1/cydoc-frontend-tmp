@@ -1,4 +1,5 @@
 import { YesNoResponse } from 'constants/enums';
+import { SelectOneInput } from 'constants/hpiEnums';
 import { initialQuestionsState } from 'redux/reducers/userViewReducer';
 import { USER_VIEW_ACTION } from './actionTypes';
 
@@ -102,13 +103,13 @@ export interface InitialSurveyAddTextActions {
     type: USER_VIEW_ACTION.INITIAL_SURVEY_ADD_TEXT;
     payload: {
         uid: string;
-        response: string;
+        response: string | SelectOneInput;
     };
 }
 
 export function initialSurveyAddText(
     uid: string,
-    input: string
+    input: string | SelectOneInput
 ): InitialSurveyAddTextActions {
     return {
         type: USER_VIEW_ACTION.INITIAL_SURVEY_ADD_TEXT,

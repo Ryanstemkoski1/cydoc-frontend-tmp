@@ -3,7 +3,6 @@ export const favChiefComplaints = [
     'Diabetes',
     'Urinary Symptoms/UTI',
     'Upper Respiratory Infection',
-    'Depression',
     'Insomnia',
     'Hyperlipidemia',
     'Opiate Use',
