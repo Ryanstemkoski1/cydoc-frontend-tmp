@@ -55,6 +55,7 @@
         "ignore-semantic-changes": "chmod +x ./ignore-semantic-changes.sh && ./ignore-semantic-changes.sh",
         "start": "npm run build-semantic && react-scripts start",
         "build": "npm run build-semantic && react-scripts build",
+        "build:prod": "npm run build-semantic && GENERATE_SOURCEMAP=false react-scripts build",
         "prettify": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
         "test": "react-scripts test --watchAll=false --verbose --maxWorkers 1",
         "test-ci": "react-scripts test --watchAll=false --verbose --silent",
