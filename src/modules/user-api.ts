@@ -4,7 +4,7 @@ import {
     UpdateUserBody,
     UpdateUserResponse,
 } from '@cydoc-ai/types';
-import { postToApi } from './api';
+import { getFromApi, postToApi } from './api';
 import invariant from 'tiny-invariant';
 import { log } from './logging';
 import { ClinicianSignUpData } from 'types/signUp';
@@ -65,12 +65,10 @@ export const getDbUser = async (cognitoUser: CognitoUser): Promise<DbUser> => {
         '';
     invariant(email, 'missing email');
 
-    const response = await postToApi<UpdateUserResponse>(
+    const response = await getFromApi<UpdateUserResponse>(
         `/user/${email}`,
         'getDbUser',
-        null,
-        cognitoUser,
-        false
+        cognitoUser
     );
 
     if (response?.errorMessage) {

@@ -2,9 +2,11 @@ import { UpdateUserResponse, InviteUserBody } from '@cydoc-ai/types';
 import { postToApi } from './api';
 import { toast } from 'react-toastify';
 import { stringFromError } from './error-utils';
+import { CognitoUser } from 'auth/cognito';
 
 export async function inviteUser(
-    body: InviteUserBody
+    body: InviteUserBody,
+    cognitoUser: CognitoUser | null
 ): Promise<UpdateUserResponse> {
     return new Promise((resolve) =>
         toast
@@ -14,7 +16,7 @@ export async function inviteUser(
                         '/user',
                         'createUser',
                         body,
-                        null,
+                        cognitoUser,
                         true
                     );
                     if (result?.errorMessage) {

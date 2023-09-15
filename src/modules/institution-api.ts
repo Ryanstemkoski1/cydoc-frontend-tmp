@@ -1,6 +1,6 @@
 import { ApiResponse, GetMembersResponse, Institution } from '@cydoc-ai/types';
 import invariant from 'tiny-invariant';
-import { postToApi } from './api';
+import { getFromApi } from './api';
 import { CognitoUser } from 'auth/cognito';
 
 export const getInstitutionMembers = (
@@ -9,12 +9,10 @@ export const getInstitutionMembers = (
 ): Promise<GetMembersResponse> => {
     invariant(institutionId, '[getInstitutionMembers] missing institutionId');
 
-    return postToApi<GetMembersResponse>(
+    return getFromApi<GetMembersResponse>(
         `/institution/${institutionId}/members`,
         'getInstitutionMembers',
-        null,
-        cognitoUser,
-        false
+        cognitoUser
     );
 };
 
@@ -24,11 +22,9 @@ export const getInstitution = (
 ): Promise<Institution | ApiResponse> => {
     invariant(institutionId, '[getInstitution] missing institutionId');
 
-    return postToApi<Institution>(
+    return getFromApi<Institution>(
         `/institution/${institutionId}`,
         'getInstitution',
-        null,
-        cognitoUser,
-        false
+        cognitoUser
     );
 };

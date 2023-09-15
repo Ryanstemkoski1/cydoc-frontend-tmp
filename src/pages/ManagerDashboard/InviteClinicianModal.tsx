@@ -11,6 +11,7 @@ import { DbUser } from '@cydoc-ai/types';
 import { inviteUser } from '../../modules/public-api';
 import useUser from 'hooks/useUser';
 import invariant from 'tiny-invariant';
+import useAuth from 'hooks/useAuth';
 
 interface Props {
     isOpen: boolean;
@@ -48,6 +49,7 @@ export interface NewClinicianSchema {
 
 const InviteClinicianModal = ({ isOpen, onClose }: Props) => {
     const { user } = useUser();
+    const { cognitoUser } = useAuth();
 
     return (
         <Modal
@@ -71,14 +73,17 @@ const InviteClinicianModal = ({ isOpen, onClose }: Props) => {
                 ) => {
                     setErrors({});
                     invariant(user?.institutionId, 'user missing institution');
-                    const result = await inviteUser({
-                        email,
-                        firstName,
-                        lastName,
-                        role,
-                        institutionId: user?.institutionId,
-                        isInvite: true,
-                    });
+                    const result = await inviteUser(
+                        {
+                            email,
+                            firstName,
+                            lastName,
+                            role,
+                            institutionId: user?.institutionId,
+                            isInvite: true,
+                        },
+                        cognitoUser
+                    );
                     setSubmitting(false);
 
                     if (result?.errorMessage) {

@@ -4,13 +4,17 @@ import { API_URL, PUBLIC_API_URL } from './environment';
 import { stringFromError } from './error-utils';
 import { CognitoUser } from 'auth/cognito';
 
-const JSON_POST_HEADER: RequestInit = {
-    method: 'POST',
+const JSON_HEADER: (
+    token: string | undefined,
+    method: 'POST' | 'GET'
+) => RequestInit = (token, method): RequestInit => ({
+    method,
     headers: {
         'Content-Type': 'application/json',
+        Authorization: token || '',
     },
     mode: 'cors',
-};
+});
 
 /**
  * sends data to API
@@ -23,11 +27,13 @@ const JSON_POST_HEADER: RequestInit = {
 export async function postToApi<T>(
     path: string,
     description: string,
-    body: ApiPostBody | null,
+    body: ApiPostBody,
     cognitoUser: CognitoUser | null,
     publicEndpoint = false
 ): Promise<T | ApiResponse> {
-    const idToken = cognitoUser?.signInUserSession?.getIdToken();
+    const token = cognitoUser?.signInUserSession
+        ?.getAccessToken()
+        ?.getJwtToken();
     console.log(`user`, cognitoUser);
 
     const url = `${publicEndpoint ? PUBLIC_API_URL : API_URL}${path}`;
@@ -36,10 +42,9 @@ export async function postToApi<T>(
 
     try {
         response = await fetch(url, {
-            ...JSON_POST_HEADER,
+            ...JSON_HEADER(token, 'POST'),
             body: JSON.stringify({
                 ...(body || {}),
-                idToken,
             }),
         });
 
@@ -62,6 +67,59 @@ export async function postToApi<T>(
             path,
             description,
             body,
+            response,
+        });
+
+        return {
+            errorMessage:
+                'Unexpected error occurred, check your internet connection',
+        };
+    }
+}
+
+/**
+ * gets data from API
+ * @param path url to POST to
+ * @param description note for logging & debugging
+ * @param T generic type of return object
+ * @returns instance of "T" generic object on success
+ */
+export async function getFromApi<T>(
+    path: string,
+    description: string,
+    cognitoUser: CognitoUser | null
+): Promise<T | ApiResponse> {
+    const token = cognitoUser?.signInUserSession
+        ?.getAccessToken()
+        ?.getJwtToken();
+
+    const url = `${API_URL}${path}`;
+    let response;
+    breadcrumb(`getting: ${JSON.stringify(path)}`, 'API', { url, path });
+
+    try {
+        response = await fetch(url, {
+            ...JSON_HEADER(token, 'GET'),
+        });
+
+        const handledResponse = await handleResponse<T>(response);
+
+        breadcrumb(
+            `getFromApi${response.status} ${description} Response`,
+            'API',
+            {
+                handledResponse,
+                responseStatus: response.status,
+                responseOk: response.ok,
+                responseStatusText: response.statusText,
+            }
+        );
+
+        return handledResponse;
+    } catch (e) {
+        log(`[getFromApi] ${description}: ${stringFromError(e)}`, {
+            path,
+            description,
             response,
         });
 
