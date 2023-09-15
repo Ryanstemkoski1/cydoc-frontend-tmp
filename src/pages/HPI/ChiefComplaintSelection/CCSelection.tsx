@@ -9,6 +9,7 @@ import { NotificationTypeEnum } from 'components/tools/Notification/Notification
 import { apiClient } from 'constants/api';
 import { GraphData, ResponseTypes } from 'constants/hpiEnums';
 import useQuery from 'hooks/useQuery';
+import useSelectedChiefComplaints from 'hooks/useSelectedChiefComplaints';
 import {
     ChiefComplaintsProps,
     HpiHeadersProps,
@@ -96,13 +97,7 @@ const CCSelection = (props: Props) => {
         });
     const [showNodeTen, setShowNodeTen] = useState(Boolean(nodeTenResponse));
 
-    const selectedCC = useMemo(
-        () =>
-            Object.keys(chiefComplaints).filter(
-                (item) => item !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM
-            ),
-        [chiefComplaints]
-    );
+    const selectedCC = useSelectedChiefComplaints();
     const showSubmitButton = useMemo(
         () => showNodeTen && Object.keys(chiefComplaints).length === 0,
         [chiefComplaints, showNodeTen]
@@ -155,16 +150,24 @@ const CCSelection = (props: Props) => {
     }
 
     function onNextClick(e: any) {
-        if (selectedCC.length === 0 && !showNodeTen) {
+        if (!selectedCC.length && !showNodeTen) {
             setShowNodeTen(true);
-        } else if (selectedCC.length === 0 && showNodeTen && !nodeTenResponse) {
+            return;
+        }
+
+        if (!selectedCC.length && showNodeTen && !nodeTenResponse) {
             setShowRequiredFieldValidation({
                 status: true,
                 forUID: '10',
             });
-        } else {
-            props.continue(e);
+            return;
         }
+
+        if (selectedCC.length && nodeTenResponse) {
+            props.initialSurveyAddText('10', '');
+        }
+
+        props.continue(e);
     }
 
     async function getData(complaint: string) {
@@ -210,7 +213,9 @@ const CCSelection = (props: Props) => {
                     if (
                         complaint !== 'HIDDEN' &&
                         toCompare.includes(searchVal.toLowerCase()) &&
-                        title !== 'Annual Physical Exam'
+                        title !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM &&
+                        title !==
+                            ChiefComplaintsEnum.ANNUAL_GYN_EXAM_WELL_WOMAN_VISIT
                     ) {
                         const temp = {
                             title: title,
@@ -334,7 +339,7 @@ const CCSelection = (props: Props) => {
                 return (
                     <div className={style.diseaseSelections__textarea}>
                         <TextArea
-                            maxlength='200'
+                            maxLength='200'
                             key={id}
                             value={(currEntry?.response as string) || ''}
                             placeholder={

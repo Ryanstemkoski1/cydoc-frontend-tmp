@@ -1,6 +1,7 @@
 import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import { ProductType, ViewType } from 'assets/enums/route.enums';
+import { Institution, InstitutionType } from 'classes/institution.class';
 import CommonLayout from 'components/CommonLayout/CommonLayout';
 import Stepper from 'components/Stepper/Stepper';
 import Notification, {
@@ -10,15 +11,19 @@ import { apiClient } from 'constants/api';
 import { YesNoResponse } from 'constants/enums';
 import useAuth from 'hooks/useAuth';
 import useQuery from 'hooks/useQuery';
+import useSelectedChiefComplaints from 'hooks/useSelectedChiefComplaints';
 import { hpiHeaders } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
-import initialQuestions from 'pages/EditNote/content/patientview//constants/initialQuestions.json';
-import React, { useEffect, useMemo, useState } from 'react';
+import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions.json';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, useHistory, useParams } from 'react-router';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
 import { selectChiefComplaint } from 'redux/actions/chiefComplaintsActions';
 import { saveHpiHeader } from 'redux/actions/hpiHeadersActions';
-import { processSurveyGraph } from 'redux/actions/userViewActions';
+import {
+    initialSurveyAddText,
+    processSurveyGraph,
+} from 'redux/actions/userViewActions';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
 import {
@@ -53,26 +58,14 @@ const HPI = () => {
     const { isSignedIn, authLoading } = useAuth();
     let { view } = useParams();
     const history = useHistory();
-    const selectedChiefComplaints = useMemo(
-        () =>
-            Object.keys(reduxState.chiefComplaints).filter(
-                (item) => item !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM
-            ),
-        [reduxState.chiefComplaints]
-    );
+    const selectedChiefComplaints = useSelectedChiefComplaints();
     const [clinician_id, institution_id] = [
         query.get(HPIPatientQueryParams.CLINICIAN_ID),
         query.get(HPIPatientQueryParams.INSTITUTION_ID),
     ];
+    const [institution, setInstitution] = useState();
 
     useEffect(() => {
-        if (
-            !Object.keys(reduxState.userSurveyState.graph).length &&
-            !Object.keys(reduxState.userSurveyState.nodes).length &&
-            !Object.keys(reduxState.userSurveyState.order).length
-        )
-            dispatch(processSurveyGraph(initialQuestions));
-
         if (hpiHeaders) {
             const data = hpiHeaders;
             data.then((res) => dispatch(saveHpiHeader(res.data)));
@@ -84,10 +77,38 @@ const HPI = () => {
     }, []);
 
     useEffect(() => {
-        if (view === ViewType.DOCTOR) {
-            history.replace('/hpi/doctor');
-            return;
+        changeFavComplaintsBasedOnInstitute();
+    }, [institution]);
+
+    function changeFavComplaintsBasedOnInstitute() {
+        const { graph, nodes, order } = reduxState.userSurveyState;
+
+        if (!institution) {
+            if (
+                !Object.keys(graph).length &&
+                !Object.keys(nodes).length &&
+                !Object.keys(order).length
+            ) {
+                dispatch(processSurveyGraph(initialQuestions));
+            }
+        } else {
+            if (institution.type === InstitutionType.GYN) {
+                initialQuestions.nodes['2'].category = 'ANNUAL_GYN_EXAM';
+                initialQuestions.nodes['2'].doctorView =
+                    ChiefComplaintsEnum.ANNUAL_GYN_EXAM_WELL_WOMAN_VISIT;
+
+                dispatch(processSurveyGraph(initialQuestions));
+            }
+            const favChiefComplaintsObj = {};
+            institution.favComplaints.forEach((item) => {
+                favChiefComplaintsObj[item] = false;
+            });
+            dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
         }
+    }
+
+    useEffect(() => {
+        if (view === ViewType.DOCTOR) return;
         if (!institution_id) {
             history.replace('/');
             return;
@@ -100,6 +121,9 @@ const HPI = () => {
         }
         apiClient
             .get(url)
+            .then((res) => {
+                setInstitution(new Institution({ ...res.data.detail }));
+            })
             .catch((_error) => {
                 history.replace('/');
             })
@@ -163,7 +187,9 @@ const HPI = () => {
 
         if (
             (selectedChiefComplaints.includes(name) ||
-                name === ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM) &&
+                name === ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM ||
+                name ===
+                    ChiefComplaintsEnum.ANNUAL_GYN_EXAM_WELL_WOMAN_VISIT) &&
             (reduxState.userSurveyState.nodes['3'].response ===
                 YesNoResponse.Yes ||
                 reduxState.userSurveyState.nodes['4'].response ===
@@ -182,21 +208,10 @@ const HPI = () => {
             setNotificationMessage('');
         }
 
-        const {
-            legalFirstName,
-            legalLastName,
-            dateOfBirth,
-            socialSecurityNumber,
-        } = reduxState.additionalSurvey;
+        const { legalFirstName, legalLastName, dateOfBirth } =
+            reduxState.additionalSurvey;
 
-        if (
-            !(
-                legalFirstName &&
-                legalLastName &&
-                dateOfBirth &&
-                socialSecurityNumber
-            )
-        ) {
+        if (!(legalFirstName && legalLastName && dateOfBirth)) {
             setNotificationMessage('Please fill in all details to continue');
             return;
         }
