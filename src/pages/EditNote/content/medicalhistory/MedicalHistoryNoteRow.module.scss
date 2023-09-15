@@ -1,16 +1,32 @@
 @import '../../../../assets/scss/variables.scss';
 .medicalHistory {
     &__condition {
+        @include max-screen($mobile) {
+            justify-content: space-between;
+        }
         p {
-            width: calc(100% - 50px);
+            width: 44%;
             margin-bottom: 0;
+            padding-right: 20px;
+            @include max-screen($desktop) {
+                width: 47%;
+            }
+            @include max-screen($mobile) {
+                width: 100%;
+                padding-right: 10px;
+            }
         }
         span {
             display: none;
         }
-        button {
-            margin-top: 12px;
-            align-self: flex-start;
+        p+aside {
+            >button {
+                width: 20px;
+                margin-left: 20px !important;
+                @include max-screen($mobile) {
+                    margin-left: 10px !important;
+                }
+            }
         }
     }
 }

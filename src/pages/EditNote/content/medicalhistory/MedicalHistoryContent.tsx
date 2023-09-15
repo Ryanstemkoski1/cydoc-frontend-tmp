@@ -233,7 +233,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                 col: 3,
             },
         ];
-        if (!this.props.hide) {
+        if (this.props.hide === undefined) {
             header.push(
                 {
                     title: '',
@@ -262,8 +262,19 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                 }
             );
         }
+
+        if (this.props.hide === false) {
+            header.push({
+                title: '',
+                col: 9,
+            });
+        }
         return (
-            <div className={style.historyTable}>
+            <div
+                className={`${style.historyTable} ${
+                    this.props.hide === false && style.historyCondition
+                }`}
+            >
                 <div className={`${style.historyTable__scroll} scrollbar`}>
                     <GridContent
                         header_titles={header}
@@ -322,6 +333,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                         currentYear={this.props.currentYear}
                         deleteRow={this.deleteRow}
                         hide={this.props.hide}
+                        dontShowOptions={this.props.hide === false}
                         conditionInput={
                             <ConditionInput
                                 key={index}
