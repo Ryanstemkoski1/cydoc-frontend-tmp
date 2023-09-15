@@ -22,7 +22,6 @@ export const favComplaintsBasedOnInstituteType = {
         'Pre-Conception Counseling',
         'Pregnancy Genetic Counseling',
         'Prenatal Care',
-        'Sexual History',
         'Vaginal Dryness',
     ],
     [InstitutionType.DEFAULT]: favChiefComplaints,
