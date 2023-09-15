@@ -503,16 +503,16 @@ export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
 
 // Function to remove specified phrases
 function removePhrases(text: string, phrases: string[]): string {
-    let modifiedText = text;
+    let modifiedText = ' ' + text + ' '; // Padding with spaces
     phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
     phrases.forEach((phrase) => {
-        modifiedText = modifiedText.replace(
-            new RegExp(`\\b${phrase}\\b`, 'g'),
-            ''
-        );
+      modifiedText = modifiedText.replace(
+        new RegExp(`\\b${phrase}\\b`, 'g'),
+        ''
+      );
     });
-    return modifiedText.trim();
-}
+    return modifiedText.trim(); // Remove the added spaces
+  }
 
 export interface HPIText {
     title: string;
