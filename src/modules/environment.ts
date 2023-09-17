@@ -11,8 +11,8 @@ console.log(`starting app with env:`, {
     production: isProduction(),
 });
 
-const COGNITO_CLIENT_ID_STAGING = '2810pgegm2hdrvoa30lq8hdfg6';
-const COGNITO_POOL_ID_STAGING = 'us-east-2_2LCj8DXUD';
+const COGNITO_CLIENT_ID_STAGING = 'tct6d2fffeh72a41231ltuhpj';
+const COGNITO_POOL_ID_STAGING = 'us-east-2_XPvTG6mkl';
 
 const COGNITO_CLIENT_ID_PRODUCTION = '4d4mqmlcjbc8267fv70b26ggad';
 const COGNITO_POOL_ID_PRODUCTION = 'us-east-1_mCoemdVnn';
