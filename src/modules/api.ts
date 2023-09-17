@@ -33,7 +33,6 @@ export async function postToApi<T>(
     const token = cognitoUser?.signInUserSession
         ?.getAccessToken()
         ?.getJwtToken();
-    console.log(`user`, cognitoUser);
 
     const url = `${API_URL}${path}`;
 
