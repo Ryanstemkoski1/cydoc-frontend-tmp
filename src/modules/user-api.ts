@@ -1,6 +1,7 @@
 import {
     CreateUserBody,
     DbUser,
+    InviteUserBody,
     UpdateUserBody,
     UpdateUserResponse,
 } from '@cydoc-ai/types';
@@ -9,6 +10,8 @@ import invariant from 'tiny-invariant';
 import { log } from './logging';
 import { ClinicianSignUpData } from 'types/signUp';
 import { CognitoUser } from 'auth/cognito';
+import { toast } from 'react-toastify';
+import { stringFromError } from './error-utils';
 
 export const formatPhoneNumber = (phoneNumber: string): string =>
     phoneNumber
@@ -16,7 +19,7 @@ export const formatPhoneNumber = (phoneNumber: string): string =>
         .replace(/-|\(|\)/gi, '')
         .replace(' ', '');
 
-export async function createDbUser(
+export async function createManagerAndInstitution(
     {
         email,
         firstName,
@@ -39,11 +42,12 @@ export async function createDbUser(
 
     return postToApi<UpdateUserResponse>(
         '/user',
-        'createUser',
+        'createManagerAndInstitution',
         body,
         cognitoUser
     );
 }
+
 export async function updateDbUser(
     body: UpdateUserBody,
     cognitoUser: CognitoUser | null
@@ -55,6 +59,37 @@ export async function updateDbUser(
         'updateDbUser',
         body,
         cognitoUser
+    );
+}
+
+export async function inviteClinician(
+    body: InviteUserBody,
+    cognitoUser: CognitoUser | null
+): Promise<UpdateUserResponse> {
+    return new Promise((resolve) =>
+        toast
+            .promise(
+                async () => {
+                    const result = await postToApi<UpdateUserResponse>(
+                        '/user',
+                        'inviteClinician',
+                        body,
+                        cognitoUser
+                    );
+                    if (result?.errorMessage) {
+                        throw new Error(result.errorMessage);
+                    } else {
+                        return resolve(result);
+                    }
+                },
+                {
+                    error: 'Error inviting user',
+                    pending: `Inviting new user...`,
+                    success: 'User invited!',
+                }
+            )
+            // format response so UI knows what error to display
+            .catch((e) => resolve({ errorMessage: stringFromError(e) }))
     );
 }
 

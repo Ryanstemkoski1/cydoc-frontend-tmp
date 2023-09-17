@@ -1,6 +1,6 @@
 import { breadcrumb, log } from './logging';
 import { ApiPostBody, ApiResponse, ApiResponseBase } from '@cydoc-ai/types';
-import { API_URL, PUBLIC_API_URL } from './environment';
+import { API_URL } from './environment';
 import { stringFromError } from './error-utils';
 import { CognitoUser } from 'auth/cognito';
 
@@ -28,17 +28,21 @@ export async function postToApi<T>(
     path: string,
     description: string,
     body: ApiPostBody,
-    cognitoUser: CognitoUser | null,
-    publicEndpoint = false
+    cognitoUser: CognitoUser | null
 ): Promise<T | ApiResponse> {
     const token = cognitoUser?.signInUserSession
         ?.getAccessToken()
         ?.getJwtToken();
     console.log(`user`, cognitoUser);
 
-    const url = `${publicEndpoint ? PUBLIC_API_URL : API_URL}${path}`;
+    const url = `${API_URL}${path}`;
+
     let response;
-    breadcrumb(`posting: ${JSON.stringify(path)}`, 'API', { url, path, body });
+    breadcrumb(`posting: ${JSON.stringify(path)}`, 'API', {
+        url,
+        path,
+        body,
+    });
 
     try {
         response = await fetch(url, {
