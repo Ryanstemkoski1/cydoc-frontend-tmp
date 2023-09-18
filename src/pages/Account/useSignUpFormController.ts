@@ -79,8 +79,8 @@ export const useSignUpFormController = (initialValues: SignUpFormData) => {
                     // Expected error, display to GUI
                     setErrors({ submitError: result.errorMessage });
                 } else if (result && (result as UpdateUserResponse)?.user?.id) {
-                    // User created successfully, let them into the app
-                    history.push('/');
+                    // User created successfully, take them to MFA page
+                    history.push('/login');
                 } else {
                     // Unexpected error occurred
                     breadcrumb(`Invalid user creation response`, 'sign up', {

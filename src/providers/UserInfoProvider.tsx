@@ -33,6 +33,7 @@ export const UserInfoProvider: React.FC<
     const updateUserInfo = useCallback(async () => {
         try {
             if (
+                cognitoUser?.username ||
                 cognitoUser?.attributes?.email ||
                 cognitoUser?.challengeParam?.userAttributes?.email
             ) {

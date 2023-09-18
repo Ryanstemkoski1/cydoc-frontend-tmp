@@ -11,6 +11,7 @@ import { SubmitOnEnter } from 'components/Atoms/SubmitOnEnter';
 import useAuth from 'hooks/useAuth';
 import { Button } from 'semantic-ui-react';
 import * as Yup from 'yup';
+import useUser from 'hooks/useUser';
 
 const validationSchema = Yup.object({
     code: Yup.string()
@@ -25,6 +26,7 @@ interface VerifyCodeSchema {
 
 export default function MfaVerificationForm() {
     const { verifyMfaCode, authLoading, signOut } = useAuth();
+    const { updateUserInfo } = useUser();
 
     const onSubmit = async (
         { code }: VerifyCodeSchema,
@@ -37,6 +39,9 @@ export default function MfaVerificationForm() {
 
         if (errorMessage?.length) {
             setErrors({ code: errorMessage });
+        } else {
+            // refresh local user info from server after update
+            updateUserInfo();
         }
 
         // successful logins should be handled by the hook/routes logic
