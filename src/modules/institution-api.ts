@@ -28,3 +28,20 @@ export const getInstitution = (
         cognitoUser
     );
 };
+
+export const getHpiQrCode = async (
+    institutionId: string,
+    cognitoUser: CognitoUser | null
+): Promise<string> => {
+    invariant(institutionId, '[getInstitution] missing institutionId');
+
+    const response = await getFromApi<{ data: { link: string | null } }>(
+        `/institution/${institutionId}/hpi-qr`,
+        'getInstitution',
+        cognitoUser
+    );
+
+    // TODO: add christine's endpoints to shared types library
+    // @ts-expect-error we need to add christine's endpoint types to shared lib
+    return response?.data?.link;
+};

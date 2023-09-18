@@ -1,9 +1,6 @@
-import { DbUser } from '@cydoc-ai/types';
-import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import Modal from 'components/Modal/Modal';
-import { apiClient } from 'constants/api';
 import useUser from 'hooks/useUser';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoadingStatus } from 'redux/actions/loadingStatusActions';
 import { CurrentNoteState } from 'redux/reducers';
@@ -11,6 +8,8 @@ import LeftArrow from '../../assets/images/left-arrow.svg';
 import RefreshIcon from '../../assets/images/refresh.png';
 import RightArrow from '../../assets/images/right-arrow.svg';
 import style from './BrowseNotes.module.scss';
+import { getAppointment } from 'modules/appointment-api';
+import useAuth from 'hooks/useAuth';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${lastName}, ${firstName} ${middleName}`;
@@ -78,32 +77,11 @@ export interface AppointmentUser {
     institutionId: number | null;
 }
 
-async function fetchHPIAppointments(
-    date: Date,
-    user: DbUser,
-    stateUpdaterFunc: (users: AppointmentUser[]) => void,
-    onError?: (error: any) => void
-) {
-    const { institutionId: institution_id } = user;
-    try {
-        let url = `/appointments?appointment_date=${formatDateOfBirth(date)}`;
-
-        if (institution_id) {
-            url += `&${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
-        }
-
-        const response = await apiClient.get(url);
-        const fetchDetails = response.data.data as AppointmentUser[];
-        stateUpdaterFunc(fetchDetails);
-    } catch (_error: any) {
-        onError?.(_error);
-    }
-}
-
 const BrowseNotes = () => {
     const [date, setDate] = useState(new Date());
     const [users, setUsers] = useState<AppointmentUser[]>([]);
     const { user } = useUser();
+    const { cognitoUser } = useAuth();
     const dispatch = useDispatch();
 
     const [showModal, setShowModal] = useState<boolean>(false);
@@ -126,33 +104,29 @@ const BrowseNotes = () => {
         setDate(new Date(date.getTime() + 86400000));
     };
 
-    useEffect(() => {
-        loadPatientHistory();
-    }, [user, date]);
-
-    const loadPatientHistory = () => {
+    const loadPatientHistory = useCallback(async () => {
         dispatch(setLoadingStatus(true));
         if (!user) {
             dispatch(setLoadingStatus(false));
             return;
         }
         try {
-            fetchHPIAppointments(
-                date,
-                user,
-                (users: AppointmentUser[]) => {
-                    setUsers(users);
-                    dispatch(setLoadingStatus(false));
-                },
-                () => {
-                    setUsers([]);
-                    dispatch(setLoadingStatus(false));
-                }
+            const users = await getAppointment(
+                formatDateOfBirth(date),
+                user?.institutionId,
+                cognitoUser
             );
+            setUsers(users);
+            dispatch(setLoadingStatus(false));
         } catch (err) {
+            setUsers([]);
             dispatch(setLoadingStatus(false));
         }
-    };
+    }, [cognitoUser, date, dispatch, user]);
+
+    useEffect(() => {
+        loadPatientHistory();
+    }, [loadPatientHistory]);
 
     function renderUsers(users: AppointmentUser[]) {
         return (

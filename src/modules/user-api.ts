@@ -41,7 +41,7 @@ export async function createManagerAndInstitution(
     };
 
     return postToApi<UpdateUserResponse>(
-        '/user',
+        '/user/create',
         'createManagerAndInstitution',
         body,
         cognitoUser
@@ -66,12 +66,13 @@ export async function inviteClinician(
     body: InviteUserBody,
     cognitoUser: CognitoUser | null
 ): Promise<UpdateUserResponse> {
+    const institutionId = body.institutionId || 'invalid-institution';
     return new Promise((resolve) =>
         toast
             .promise(
                 async () => {
                     const result = await postToApi<UpdateUserResponse>(
-                        '/user',
+                        `/institution/${institutionId}/user/invite`,
                         'inviteClinician',
                         body,
                         cognitoUser
