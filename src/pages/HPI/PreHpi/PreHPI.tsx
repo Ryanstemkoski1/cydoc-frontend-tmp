@@ -10,7 +10,7 @@ import {
 import ChiefComplaintsButton, {
     PatientViewProps,
 } from 'pages/EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
-import initialQuestions from 'pages/EditNote/content/patientview//constants/initialQuestions.json';
+import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
 import InputTextOrDateResponse from 'pages/EditNote/content/patientview/InputTextOrDateResponse';
 import SurveyYesNoResponse from 'pages/EditNote/content/patientview/SurveyYesNoResponse';
 import patientViewHeaders from 'pages/EditNote/content/patientview/constants/patientViewHeaders.json';
@@ -42,7 +42,7 @@ import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
 import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
 import { isSelectOneResponse } from 'redux/reducers/hpiReducer';
 import {
-    initialQuestionsState,
+    InitialQuestionsState,
     isChiefComplaintsResponse,
     userSurveyState,
 } from 'redux/reducers/userViewReducer';
@@ -245,7 +245,7 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
         const { userSurveyState } = this.props,
             nodes = patientViewHeaders.parentNodes,
             nodeKey = Object.values(Object.entries(nodes)[0][1])[0],
-            questions = initialQuestions as initialQuestionsState;
+            questions = initialQuestions as InitialQuestionsState;
         const initialSurvey =
             nodeKey in questions.nodes
                 ? questions.graph[nodeKey].map((key) => {
@@ -314,7 +314,7 @@ const mapStateToProps = (
 
 interface DispatchProps {
     processSurveyGraph: (
-        graph: initialQuestionsState
+        graph: InitialQuestionsState
     ) => ProcessSurveyGraphAction;
     saveHpiHeader: (data: HpiHeadersState) => SaveHpiHeaderAction;
     processKnowledgeGraph: (
