@@ -50,6 +50,7 @@ export interface CognitoUser extends PartialCognitoUser {
         phone_number_verified: boolean;
         sub: string; // cognito user guid
     };
+    username?: string; // email
     signInUserSession: CognitoUserSession;
     challengeParam?: { userAttributes?: { email: string } };
 }
@@ -78,7 +79,7 @@ export const sendResetPasswordCode = async (
     });
 };
 
-export const confirmCode = async (
+export const forgotPasswordConfirmCode = async (
     email: string,
     code: string,
     password: string
