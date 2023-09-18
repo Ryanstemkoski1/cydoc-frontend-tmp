@@ -3,6 +3,11 @@ import { getFromApi } from './api';
 import { CognitoUser } from 'auth/cognito';
 import { AppointmentUser } from 'pages/BrowseNotes/BrowseNotes';
 
+// TODO: add christine's endpoints to shared types library
+interface GetAppointmentResponse {
+    data: AppointmentUser[];
+}
+
 export const getAppointment = async (
     date: string,
     institutionId: string,
@@ -10,13 +15,11 @@ export const getAppointment = async (
 ) => {
     invariant(institutionId, '[getInstitution] missing institutionId');
 
-    const response = await getFromApi<{ data: { data: AppointmentUser[] } }>(
+    const response = (await getFromApi<GetAppointmentResponse>(
         `/institution/${institutionId}/appointments?appointment_date=${date}`,
         'getInstitution',
         cognitoUser
-    );
+    )) as GetAppointmentResponse;
 
-    // TODO: add christine's endpoints to shared types library
-    // @ts-expect-error we need to add christine's endpoint types to shared lib
-    return response?.data?.data as AppointmentUser[];
+    return (response?.data || []) as AppointmentUser[];
 };
