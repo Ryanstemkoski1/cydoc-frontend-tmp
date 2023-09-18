@@ -98,7 +98,6 @@ export const getDbUser = async (cognitoUser: CognitoUser): Promise<DbUser> => {
     const email =
         cognitoUser?.attributes?.email ||
         cognitoUser?.challengeParam?.userAttributes?.email ||
-        cognitoUser?.username ||
         '';
     invariant(email, 'missing email');
 

@@ -33,9 +33,9 @@ export const UserInfoProvider: React.FC<
     const updateUserInfo = useCallback(async () => {
         try {
             if (
-                cognitoUser?.username ||
                 cognitoUser?.attributes?.email ||
-                cognitoUser?.challengeParam?.userAttributes?.email
+                cognitoUser?.challengeParam?.userAttributes?.email ||
+                cognitoUser?.username
             ) {
                 const user = await getDbUser(cognitoUser);
                 setUser(user || undefined);
