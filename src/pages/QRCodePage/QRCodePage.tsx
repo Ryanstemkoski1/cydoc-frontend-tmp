@@ -19,7 +19,6 @@ function printDocument() {
 }
 
 function QRCodePage() {
-    const { cognitoUser } = useAuth();
     const [showQRCodePage, setShowQRCodePage] = useState<QRCodeType>('');
     const { user } = useUser();
 
@@ -37,22 +36,10 @@ function QRCodePage() {
 
     const [link, setLink] = useState<string>('');
 
-    const fetchQRCodeLink = useCallback(async () => {
-        const institutionId = user?.institutionId;
-
-        if (!institutionId) {
-            return;
-        }
-
-        try {
-            const link = await getHpiQrCode(institutionId, cognitoUser);
-
-            if (link) setLink(link);
-        } catch (_error: any) {}
-    }, [cognitoUser, user?.institutionId]);
-
     useEffect(() => {
-        fetchQRCodeLink();
+        setLink(
+            `${window.location.origin}/hpi/patient?institution_id=${user?.institutionId}&clinician_id=${user?.id}`
+        );
     }, [user]);
 
     const qrCode = <QRCode value={link} />;
