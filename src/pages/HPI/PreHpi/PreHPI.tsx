@@ -103,17 +103,19 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
                     chiefComplaint +
                     '/4'
             ),
-            { data } = response,
-            { graph, nodes, edges } = data as GraphData,
-            parentNode = parentNodes[complaint][chiefComplaint];
+            { data } = response;
+
         this.props.processKnowledgeGraph(data);
-        const childNodes = graph[parentNode]
-            .map((edge: number) => [
-                edges[edge.toString()].toQuestionOrder.toString(),
-                edges[edge.toString()].to,
-            ])
-            .sort((tup1, tup2) => parseInt(tup1[0]) - parseInt(tup2[0]))
-            .map(([, /* _questionOrder, */ medId]) => medId);
+        // This code wasn't being used so I commented it out...
+        // { graph, /* nodes, */ edges } = data as GraphData,
+        // parentNode = parentNodes[complaint][chiefComplaint];
+        // const childNodes = graph[parentNode]
+        //     .map((edge: number) => [
+        //         edges[edge.toString()].toQuestionOrder.toString(),
+        //         edges[edge.toString()].to,
+        //     ])
+        //     .sort((tup1, tup2) => parseInt(tup1[0]) - parseInt(tup2[0]))
+        //     .map(([, /* _questionOrder, */ medId]) => medId);
     };
 
     renderSwitch = (id: string) => {

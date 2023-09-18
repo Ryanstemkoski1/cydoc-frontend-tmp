@@ -5,7 +5,7 @@ import { graphClientURL, apiClient } from 'constants/api.js';
 import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import React from 'react';
 import Masonry from 'react-masonry-css';
-import { connect } from 'react-redux';
+import { ConnectedProps, connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { setNotesChiefComplaint } from 'redux/actions/chiefComplaintsActions';
 import { processKnowledgeGraph } from 'redux/actions/hpiActions';
@@ -21,9 +21,30 @@ import { hpiHeaders } from '../../EditNote/content/hpi/knowledgegraph/src/API';
 import BodySystemDropdown from '../../EditNote/content/hpi/knowledgegraph/src/components/BodySystemDropdown';
 import ChiefComplaintsButton from '../../EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
 import DiseaseForm from '../../EditNote/content/hpi/knowledgegraph/src/components/DiseaseForm';
+import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
 
-class HPIContent extends React.Component {
-    constructor(props) {
+interface Props {
+    activeItem: string;
+    hpiHeaders: HpiHeadersState;
+    saveHpiHeader: (data: any) => void;
+    chiefComplaints: any;
+    processKnowledgeGraph: (data: any) => void;
+    notification: {
+        setNotificationMessage: (message: string) => void;
+        setNotificationType: (type: string) => void;
+    };
+    step: number;
+    continue: (e?: any) => void;
+    back: (e?: any) => void;
+    location: { search: string; pathname: any; state: any; hash: any };
+}
+interface State {
+    searchVal: string;
+    activeIndex: number;
+    loading: boolean;
+}
+class HPIContent extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             searchVal: '',
@@ -37,8 +58,8 @@ class HPIContent extends React.Component {
         // organizes parent nodes by their category code (medical condition) and body system
         if (
             !(
-                Object.keys(this.props.hpiHeaders.bodySystems).length &&
-                Object.keys(this.props.hpiHeaders.parentNodes).length
+                Object.keys(this.props.hpiHeaders.bodySystems || {}).length &&
+                Object.keys(this.props.hpiHeaders.parentNodes || {}).length
             )
         ) {
             const data = hpiHeaders;
@@ -46,7 +67,7 @@ class HPIContent extends React.Component {
         }
     }
 
-    getData = async (complaint) => {
+    getData = async (complaint: string) => {
         const { parentNodes } = this.props.hpiHeaders;
         const chiefComplaint = Object.keys(parentNodes[complaint])[0];
         const response = await axios.get(
@@ -147,13 +168,13 @@ class HPIContent extends React.Component {
         // Creates list of category buttons clicked by the user (categories/diseases for which they are positive)
         // Loops through the HPI context storing which categories user clicked in the front page
         // (categories/diseases for which they are positive)
-        const positiveDiseases = Object.keys(chiefComplaints).map((disease) => (
-            <ChiefComplaintsButton key={disease} name={disease} />
-        ));
+        const positiveDiseases = Object.keys(chiefComplaints || {}).map(
+            (disease) => <ChiefComplaintsButton key={disease} name={disease} />
+        );
 
         // map through all complaints on the HPI and create search resuls
         const getRes = () => {
-            const filterResults = [];
+            const filterResults: any[] = [];
             Object.entries(bodySystems).forEach((grouping) => {
                 grouping[1].forEach((complaint) => {
                     const toCompare = complaint.toString().toLowerCase();
@@ -186,7 +207,7 @@ class HPIContent extends React.Component {
         const positiveLength = positiveDiseases.length;
 
         // window/screen responsiveness
-        let numColumns = 4;
+        const numColumns = 4;
 
         const shouldShowNextButton = this.shouldShowNextButton();
 
@@ -209,8 +230,12 @@ class HPIContent extends React.Component {
                                 className='hpi-search-bar'
                                 minCharacters={2}
                                 onSearchChange={(event) => {
-                                    const target = event.target;
-                                    this.setState({ searchVal: target.value });
+                                    const target = event.target as {
+                                        value?: string;
+                                    };
+                                    this.setState({
+                                        searchVal: target?.value || '',
+                                    });
                                 }}
                                 value={this.state.searchVal}
                                 results={getRes()}
@@ -228,8 +253,8 @@ class HPIContent extends React.Component {
             default:
                 // if API data is loaded, render the DiseaseForm
                 if (
-                    Object.keys(bodySystems).length &&
-                    Object.keys(parentNodes).length
+                    Object.keys(bodySystems || {}).length &&
+                    Object.keys(parentNodes || {}).length
                 ) {
                     return (
                         <>
@@ -267,7 +292,7 @@ class HPIContent extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: any) => {
     return {
         chiefComplaints: state.chiefComplaints,
         planConditions: selectPlanConditions(state),
@@ -284,5 +309,16 @@ const mapDispatchToProps = {
 };
 
 export default withRouter(
+    // @ts-expect-error we need to create a unified redux state type
     connect(mapStateToProps, mapDispatchToProps)(HPIContent)
 );
+
+// const connector = connect(mapStateToProps, mapDispatchToProps);
+
+// type PropsFromRedux = ConnectedProps<typeof connector>;
+
+// // export default connector<typeof SimpleErrorBoundary>(SimpleErrorBoundary);
+
+// export default withRouter(
+//     connector(mapStateToProps, mapDispatchToProps)(HPIContent)
+// );
