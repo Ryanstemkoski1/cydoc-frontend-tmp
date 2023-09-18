@@ -17,15 +17,14 @@ export const getInstitutionMembers = (
 };
 
 export const getInstitution = (
-    institutionId: string,
-    cognitoUser: CognitoUser | null
+    institutionId: string
 ): Promise<Institution | ApiResponse> => {
     invariant(institutionId, '[getInstitution] missing institutionId');
 
     return getFromApi<Institution>(
         `/institution/${institutionId}`,
         'getInstitution',
-        cognitoUser
+        null // no authentication on get institution
     );
 };
 
