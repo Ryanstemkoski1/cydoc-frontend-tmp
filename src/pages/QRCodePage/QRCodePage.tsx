@@ -38,7 +38,7 @@ function QRCodePage() {
 
     useEffect(() => {
         setLink(
-            `${window.location.origin}/hpi/patient?institution_id=${user?.institutionId}&clinician_id=${user?.id}`
+            `${window.location.origin}/hpi/patient?institution_id=${user?.institutionId}`
         );
     }, [user]);
 
