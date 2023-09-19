@@ -258,17 +258,18 @@ class HPIContent extends React.Component<Props, State> {
                 ) {
                     return (
                         <>
-                            <DiseaseForm
-                                key={
-                                    Object.keys(
-                                        parentNodes[this.props.activeItem]
-                                    )[0]
-                                }
-                                category={this.props.activeItem}
-                                nextStep={this.continue}
-                                prevStep={this.back}
-                            />
-
+                            {this.props.activeItem in parentNodes && (
+                                <DiseaseForm
+                                    key={
+                                        Object.keys(
+                                            parentNodes[this.props.activeItem]
+                                        )[0]
+                                    }
+                                    category={this.props.activeItem}
+                                    nextStep={this.continue}
+                                    prevStep={this.back}
+                                />
+                            )}
                             <NavigationButton
                                 previousClick={this.back}
                                 nextClick={

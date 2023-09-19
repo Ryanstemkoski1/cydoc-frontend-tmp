@@ -113,9 +113,9 @@ const HPI = () => {
             });
 
             // TODO: call this differently or remove it
-            // dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
+            dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
         }
-    }, [dispatch, institution, reduxState.userSurveyState]);
+    }, [dispatch, institution]);
 
     useEffect(() => {
         if (view === ViewType.DOCTOR) return;
@@ -127,11 +127,12 @@ const HPI = () => {
         const fetchInstitution = async () => {
             setIsLoading(true);
             try {
-                const validatedInstitution = await getInstitution(
+                const validatedInstitution = (await getInstitution(
                     institutionId
-                );
+                )) as { detail: Institution };
+
                 if (!(validatedInstitution as ApiResponse).errorMessage) {
-                    const { id, name } = validatedInstitution as Institution;
+                    const { id, name } = validatedInstitution.detail;
                     setInstitution(new InstitutionClass({ id, name }));
                 }
             } catch (e) {
@@ -196,15 +197,10 @@ const HPI = () => {
 
     const canWeMoveToChiefComplaintPages = useCallback(
         (name: string) => {
-            let questionTenResponse =
-                reduxState?.userSurveyState?.nodes?.['10']?.response ||
-                '' ||
-                '';
-
-            questionTenResponse =
-                typeof questionTenResponse.trim === 'function'
-                    ? questionTenResponse.trim()
-                    : questionTenResponse;
+            const questionTenResponse = (
+                (reduxState?.userSurveyState?.nodes?.['10']?.response ||
+                    '') as string
+            ).trim();
 
             if (
                 (selectedChiefComplaints.includes(name) ||
@@ -223,9 +219,7 @@ const HPI = () => {
 
             return true;
         },
-        [
-            // reduxState.userSurveyState.nodes, selectedChiefComplaints
-        ]
+        [reduxState.userSurveyState.nodes, selectedChiefComplaints]
     );
 
     function onTabChange(name: string) {
