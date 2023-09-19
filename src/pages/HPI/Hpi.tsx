@@ -71,10 +71,8 @@ const HPI = () => {
     const { view } = useParams<{ view: any }>();
     const history = useHistory();
     const selectedChiefComplaints = useSelectedChiefComplaints();
-    const [clinicianId, institutionId] = [
-        query.get(HPIPatientQueryParams.CLINICIAN_ID),
-        query.get(HPIPatientQueryParams.INSTITUTION_ID),
-    ];
+    const institutionId = query.get(HPIPatientQueryParams.INSTITUTION_ID);
+
     const [institution, setInstitution] = useState<InstitutionClass | null>(
         null
     );
@@ -129,7 +127,6 @@ const HPI = () => {
         const fetchInstitution = async () => {
             setIsLoading(true);
             try {
-                invariant(clinicianId);
                 const validatedInstitution = await getInstitution(
                     institutionId
                 );
@@ -146,7 +143,7 @@ const HPI = () => {
         };
 
         fetchInstitution();
-    }, [clinicianId, history, institutionId, query, view]);
+    }, [history, institutionId, query, view]);
 
     const [patientViewTabs, setPatientViewTabs] = useState([
         'InitialSurvey',
