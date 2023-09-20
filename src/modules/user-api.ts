@@ -1,6 +1,7 @@
 import {
     CreateUserBody,
     DbUser,
+    InviteUserBody,
     UpdateUserBody,
     UpdateUserResponse,
 } from '@cydoc-ai/types';
@@ -8,6 +9,9 @@ import { getFromApi, postToApi } from './api';
 import invariant from 'tiny-invariant';
 import { log } from './logging';
 import { ClinicianSignUpData } from 'types/signUp';
+import { CognitoUser } from 'auth/cognito';
+import { toast } from 'react-toastify';
+import { stringFromError } from './error-utils';
 
 export const formatPhoneNumber = (phoneNumber: string): string =>
     phoneNumber
@@ -15,14 +19,17 @@ export const formatPhoneNumber = (phoneNumber: string): string =>
         .replace(/-|\(|\)/gi, '')
         .replace(' ', '');
 
-export async function createDbUser({
-    email,
-    firstName,
-    institutionName,
-    lastName,
-    phoneNumber,
-    role,
-}: ClinicianSignUpData) {
+export async function createManagerAndInstitution(
+    {
+        email,
+        firstName,
+        institutionName,
+        lastName,
+        phoneNumber,
+        role,
+    }: ClinicianSignUpData,
+    cognitoUser: CognitoUser | null
+) {
     const body: CreateUserBody = {
         email,
         firstName,
@@ -33,24 +40,71 @@ export async function createDbUser({
         isInvite: false,
     };
 
-    return postToApi<UpdateUserResponse>('/user', 'createUser', body);
+    return postToApi<UpdateUserResponse>(
+        '/user/create',
+        'createManagerAndInstitution',
+        body,
+        cognitoUser
+    );
 }
-export async function updateDbUser(body: UpdateUserBody) {
+
+export async function updateDbUser(
+    body: UpdateUserBody,
+    cognitoUser: CognitoUser | null
+) {
     body.phoneNumber = formatPhoneNumber(body.phoneNumber);
 
     return postToApi<UpdateUserResponse>(
         `/user/${body.email}`,
         'updateDbUser',
-        body
+        body,
+        cognitoUser
     );
 }
 
-export const getDbUser = async (email: string): Promise<DbUser> => {
+export async function inviteClinician(
+    body: InviteUserBody,
+    cognitoUser: CognitoUser | null
+): Promise<UpdateUserResponse> {
+    const institutionId = body.institutionId || 'invalid-institution';
+    return new Promise((resolve) =>
+        toast
+            .promise(
+                async () => {
+                    const result = await postToApi<UpdateUserResponse>(
+                        `/institution/${institutionId}/user/invite`,
+                        'inviteClinician',
+                        body,
+                        cognitoUser
+                    );
+                    if (result?.errorMessage) {
+                        throw new Error(result.errorMessage);
+                    } else {
+                        return resolve(result);
+                    }
+                },
+                {
+                    error: 'Error inviting user',
+                    pending: `Inviting new user...`,
+                    success: 'User invited!',
+                }
+            )
+            // format response so UI knows what error to display
+            .catch((e) => resolve({ errorMessage: stringFromError(e) }))
+    );
+}
+
+export const getDbUser = async (cognitoUser: CognitoUser): Promise<DbUser> => {
+    const email =
+        cognitoUser?.attributes?.email ||
+        cognitoUser?.challengeParam?.userAttributes?.email ||
+        '';
     invariant(email, 'missing email');
 
     const response = await getFromApi<UpdateUserResponse>(
         `/user/${email}`,
-        'getDbUser'
+        'getDbUser',
+        cognitoUser
     );
 
     if (response?.errorMessage) {
@@ -64,7 +118,10 @@ export const getDbUser = async (email: string): Promise<DbUser> => {
     }
 };
 
-export const removeUser = async (user: DbUser) => {
+export const removeUser = async (
+    user: DbUser,
+    cognitoUser: CognitoUser | null
+) => {
     invariant(user, '[removeUser] missing id');
 
     log(`User deletion requested`, user);
