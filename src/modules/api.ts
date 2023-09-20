@@ -1,23 +1,20 @@
 import { breadcrumb, log } from './logging';
 import { ApiPostBody, ApiResponse, ApiResponseBase } from '@cydoc-ai/types';
-import { API_URL, PUBLIC_API_URL } from './environment';
+import { API_URL } from './environment';
 import { stringFromError } from './error-utils';
+import { CognitoUser } from 'auth/cognito';
 
-const JSON_POST_HEADER: RequestInit = {
-    method: 'POST',
+const JSON_HEADER: (
+    token: string | undefined,
+    method: 'POST' | 'GET'
+) => RequestInit = (token, method): RequestInit => ({
+    method,
     headers: {
         'Content-Type': 'application/json',
+        Authorization: token || '',
     },
     mode: 'cors',
-};
-
-const JSON_GET_HEADER: RequestInit = {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    mode: 'cors',
-};
+});
 
 /**
  * sends data to API
@@ -31,20 +28,26 @@ export async function postToApi<T>(
     path: string,
     description: string,
     body: ApiPostBody,
-    publicEndpoint = false
+    cognitoUser: CognitoUser | null
 ): Promise<T | ApiResponse> {
-    // TODO: if users is logged in, pull in authentication token
+    const token = cognitoUser?.signInUserSession
+        ?.getAccessToken()
+        ?.getJwtToken();
 
-    const url = `${publicEndpoint ? PUBLIC_API_URL : API_URL}${path}`;
+    const url = `${API_URL}${path}`;
+
     let response;
-    breadcrumb(`posting: ${JSON.stringify(path)}`, 'API', { url, path, body });
+    breadcrumb(`posting: ${JSON.stringify(path)}`, 'API', {
+        url,
+        path,
+        body,
+    });
 
     try {
         response = await fetch(url, {
-            ...JSON_POST_HEADER,
+            ...JSON_HEADER(token, 'POST'),
             body: JSON.stringify({
-                // idToken, // TODO: insert token so API can auth the user
-                ...body,
+                ...(body || {}),
             }),
         });
 
@@ -76,6 +79,7 @@ export async function postToApi<T>(
         };
     }
 }
+
 /**
  * gets data from API
  * @param path url to POST to
@@ -85,9 +89,12 @@ export async function postToApi<T>(
  */
 export async function getFromApi<T>(
     path: string,
-    description: string
+    description: string,
+    cognitoUser: CognitoUser | null
 ): Promise<T | ApiResponse> {
-    // TODO: if users is logged in, pull in authentication token
+    const token = cognitoUser?.signInUserSession
+        ?.getAccessToken()
+        ?.getJwtToken();
 
     const url = `${API_URL}${path}`;
     let response;
@@ -95,7 +102,7 @@ export async function getFromApi<T>(
 
     try {
         response = await fetch(url, {
-            ...JSON_GET_HEADER,
+            ...JSON_HEADER(token, 'GET'),
         });
 
         const handledResponse = await handleResponse<T>(response);

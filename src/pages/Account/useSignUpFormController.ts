@@ -2,7 +2,10 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import invariant from 'tiny-invariant';
 import { SignUpFormData } from './SignUpForm';
-import { createDbUser, formatPhoneNumber } from '../../modules/user-api';
+import {
+    createManagerAndInstitution,
+    formatPhoneNumber,
+} from '../../modules/user-api';
 import { useHistory } from 'react-router-dom';
 import { breadcrumb, log } from '../../modules/logging';
 import useAuth from 'hooks/useAuth';
@@ -42,6 +45,7 @@ const validationSchema = Yup.object<SignUpFormData>({
 
 export const useSignUpFormController = (initialValues: SignUpFormData) => {
     const { signUp } = useAuth();
+    const { cognitoUser } = useAuth();
     const history = useHistory();
 
     const form = useFormik({
@@ -65,15 +69,18 @@ export const useSignUpFormController = (initialValues: SignUpFormData) => {
                     errorMessage?: string;
                 } = signUpResult; // carry over errors
                 if (signUpResult?.user) {
-                    result = await createDbUser(newUserInfo);
+                    result = await createManagerAndInstitution(
+                        newUserInfo,
+                        cognitoUser
+                    );
                 }
 
                 if (result?.errorMessage?.length) {
                     // Expected error, display to GUI
                     setErrors({ submitError: result.errorMessage });
                 } else if (result && (result as UpdateUserResponse)?.user?.id) {
-                    // User created successfully, let them into the app
-                    history.push('/');
+                    // User created successfully, take them to MFA page
+                    history.push('/login');
                 } else {
                     // Unexpected error occurred
                     breadcrumb(`Invalid user creation response`, 'sign up', {

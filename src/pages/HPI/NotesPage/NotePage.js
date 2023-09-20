@@ -10,7 +10,7 @@ import {
 } from 'redux/selectors/userViewSelectors';
 import { Button, Icon } from 'semantic-ui-react';
 import GenerateNote from '../../EditNote/content/generatenote/GenerateNote';
-import initialQuestions from '../../EditNote/content/patientview/constants/initialQuestions.json';
+import initialQuestions from '../../EditNote/content/patientview/constants/initialQuestions';
 import HPIContent from '../HpiContent/HPIContent';
 import InitialSurvey from '../InitialSurvey/InitialSurvey';
 //Component that manages the content displayed based on the activeItem prop
