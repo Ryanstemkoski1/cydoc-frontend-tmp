@@ -12,6 +12,7 @@ import useAuth from 'hooks/useAuth';
 import { Button } from 'semantic-ui-react';
 import * as Yup from 'yup';
 import useUser from 'hooks/useUser';
+import { CognitoUser } from 'auth/cognito';
 
 const validationSchema = Yup.object({
     code: Yup.string()
@@ -24,7 +25,11 @@ interface VerifyCodeSchema {
     code: string;
 }
 
-export default function MfaVerificationForm() {
+interface Props {
+    onSuccess?: (user: CognitoUser | undefined) => void;
+}
+
+export default function MfaVerificationForm({ onSuccess }: Props) {
     const { verifyMfaCode, authLoading, signOut } = useAuth();
     const { updateUserInfo } = useUser();
 
@@ -35,11 +40,15 @@ export default function MfaVerificationForm() {
         setSubmitting(true);
         setErrors({}); // blow out old errors before re-submitting
 
-        const { errorMessage } = await verifyMfaCode(code);
+        const { errorMessage, user } = await verifyMfaCode(code);
 
         if (errorMessage?.length) {
             setErrors({ code: errorMessage });
         } else {
+            if (onSuccess) {
+                onSuccess(user);
+            }
+
             // refresh local user info from server after update
             updateUserInfo();
         }
