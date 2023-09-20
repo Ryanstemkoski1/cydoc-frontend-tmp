@@ -32,7 +32,7 @@ import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
 import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
 import { isSelectOneResponse } from 'redux/reducers/hpiReducer';
 import {
-    initialQuestionsState,
+    InitialQuestionsState,
     isChiefComplaintsResponse,
     userSurveyState,
 } from 'redux/reducers/userViewReducer';
@@ -63,7 +63,7 @@ import './InitialSurvey.css';
 import InputTextOrDateResponse from './InputTextOrDateResponse';
 import SurveyYesNoResponse from './SurveyYesNoResponse';
 import UserInfoForm from './UserInfoForm';
-import initialQuestions from './constants/initialQuestions.json';
+import initialQuestions from './constants/initialQuestions';
 import patientViewHeaders from './constants/patientViewHeaders.json';
 
 interface InitialSurveyState {
@@ -127,7 +127,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             !Object.keys(userSurveyState.nodes).length &&
             !Object.keys(userSurveyState.order).length
         )
-            processSurveyGraph(initialQuestions as initialQuestionsState);
+            processSurveyGraph(initialQuestions as InitialQuestionsState);
         else {
             this.setState({
                 activeItem: Object.keys(userSurveyState.nodes).every(
@@ -483,7 +483,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
             { userSurveyState } = this.props,
             nodes = patientViewHeaders.parentNodes,
             nodeKey = Object.values(Object.entries(nodes)[activeItem][1])[0],
-            questions = initialQuestions as initialQuestionsState;
+            questions = initialQuestions as InitialQuestionsState;
         let initialSurvey =
             nodeKey in questions.nodes
                 ? questions.graph[nodeKey].map((key) => {
@@ -632,7 +632,7 @@ const mapStateToProps = (
 
 interface DispatchProps {
     processSurveyGraph: (
-        graph: initialQuestionsState
+        graph: InitialQuestionsState
     ) => ProcessSurveyGraphAction;
     saveHpiHeader: (data: HpiHeadersState) => SaveHpiHeaderAction;
     processKnowledgeGraph: (

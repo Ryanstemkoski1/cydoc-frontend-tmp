@@ -1,6 +1,6 @@
 import { YesNoResponse } from 'constants/enums';
 import { SelectOneInput } from 'constants/hpiEnums';
-import { initialQuestionsState } from 'redux/reducers/userViewReducer';
+import { InitialQuestionsState } from 'redux/reducers/userViewReducer';
 import { USER_VIEW_ACTION } from './actionTypes';
 
 export interface UserViewAction {
@@ -21,12 +21,12 @@ export function changeUserView(userView: string): UserViewAction {
 export interface ProcessSurveyGraphAction {
     type: USER_VIEW_ACTION.PROCESS_SURVEY_GRAPH;
     payload: {
-        graph: initialQuestionsState;
+        graph: InitialQuestionsState;
     };
 }
 
 export function processSurveyGraph(
-    graph: initialQuestionsState
+    graph: InitialQuestionsState
 ): ProcessSurveyGraphAction {
     return {
         type: USER_VIEW_ACTION.PROCESS_SURVEY_GRAPH,

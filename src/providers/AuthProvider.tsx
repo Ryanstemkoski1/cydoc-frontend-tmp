@@ -19,7 +19,7 @@ import {
     NOT_FOUND,
     USER_EXISTS,
 } from 'auth/cognito';
-import { Auth } from 'aws-amplify';
+import { Auth as AmplifyAuth } from 'aws-amplify';
 import { useHistory } from 'react-router-dom';
 import { stringFromError } from '../modules/error-utils';
 import { breadcrumb, log, updateLoggedUser } from '../modules/logging';
@@ -130,56 +130,6 @@ export const AuthProvider: React.FC<
         restoreUserSession();
     }, [cognitoUser, signOut]);
 
-    const signUp: AuthContextValues['signUp'] = useCallback(
-        async (email: string, password: string, phoneNumber: string) => {
-            try {
-                setAuthLoading(true);
-                const result = await CognitoAuth.signUp({
-                    username: email,
-                    password,
-                    attributes: {
-                        email, // optional
-                        phone_number: phoneNumber, // optional - E.164 number convention
-                        // other custom attributes
-                    },
-                    autoSignIn: {
-                        // optional - enables auto sign in after user is confirmed
-                        enabled: true,
-                    },
-                });
-                const user = result.user as CognitoUser;
-
-                // console.log(`amplify user signed up:`, user);
-
-                // all user into app when first signing up
-                updateLoggedUser({
-                    email,
-                });
-                setCognitoUser(user);
-                setLoginCorrect(true);
-                setIsSignedIn(true);
-
-                return { user };
-            } catch (e) {
-                const error = e as unknown as AmplifyError;
-                log('error signing up:', error);
-                if (error?.code === USER_EXISTS) {
-                    alert(`Account already exists, please login`);
-                    history?.push('/login');
-                    return {
-                        errorMessage: `Account already exists, please login`,
-                    };
-                }
-            } finally {
-                setAuthLoading(false);
-            }
-            return {
-                errorMessage:
-                    'Unknown error occurred, refresh, check your network & login',
-            };
-        },
-        [history]
-    );
     const signIn: AuthContextValues['signIn'] = useCallback(
         async (email: string, password: string) => {
             try {
@@ -227,6 +177,70 @@ export const AuthProvider: React.FC<
             };
         },
         []
+    );
+
+    const signUp: AuthContextValues['signUp'] = useCallback(
+        async (email: string, password: string, phoneNumber: string) => {
+            try {
+                setAuthLoading(true);
+                const result = await AmplifyAuth.signUp({
+                    username: email,
+                    password,
+                    attributes: {
+                        email, // optional
+                        phone_number: phoneNumber, // optional - E.164 number convention
+                        // other custom attributes
+                    },
+                    autoSignIn: {
+                        // optional - enables auto sign in after user is confirmed
+                        enabled: true,
+                    },
+                });
+                const user = result.user as CognitoUser;
+
+                // console.log(`amplify user signed up:`, user);
+
+                // all user into app when first signing up
+                updateLoggedUser({
+                    email,
+                });
+                setCognitoUser(user);
+                setLoginCorrect(true);
+
+                // user has been created but local cognito session is not valid until we MFA
+                // cognito will send an un-usable SMS code on signup, we should ignore
+                // request a valid one below with sign-in
+                await waitForCode();
+
+                const { user: userWithSession, errorMessage } = await signIn(
+                    email,
+                    password
+                );
+
+                if (errorMessage) {
+                    log(`signUp->signIn error: ${errorMessage}`, user);
+                }
+
+                return { user: userWithSession };
+            } catch (e) {
+                const error = e as unknown as AmplifyError;
+                log('error signing up:', error);
+                if (error?.code === USER_EXISTS) {
+                    alert(`Account already exists, please login`);
+                    history?.push('/login');
+                    return {
+                        errorMessage: `Account already exists, please login`,
+                    };
+                }
+            } finally {
+                setAuthLoading(false);
+            }
+            return {
+                errorMessage:
+                    'Unknown error occurred, refresh, check your network & login',
+            };
+        },
+        [history, signIn]
     );
 
     const verifyMfaCode = useCallback(
@@ -279,13 +293,14 @@ export const AuthProvider: React.FC<
                 invariant(cognitoUser, 'missing signed in user');
 
                 // completeNewPasswordChallenge
-                const updatePasswordResult = (await Auth.completeNewPassword(
-                    cognitoUser,
-                    password,
-                    {
-                        phone_number: formatPhoneNumber(phoneNumber),
-                    }
-                )) as CognitoUser;
+                const updatePasswordResult =
+                    (await AmplifyAuth.completeNewPassword(
+                        cognitoUser,
+                        password,
+                        {
+                            phone_number: formatPhoneNumber(phoneNumber),
+                        }
+                    )) as CognitoUser;
 
                 setCognitoUser(updatePasswordResult);
                 setLoginCorrect(true);
@@ -342,3 +357,5 @@ export const useAuthInfoContext = () => {
 
     return ctx;
 };
+
+const waitForCode = () => new Promise((resolve) => setTimeout(resolve, 2500));

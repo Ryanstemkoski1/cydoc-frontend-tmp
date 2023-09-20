@@ -60,7 +60,7 @@ export function NextBackButtonGroup({
                 onClick: onNextClick,
             };
         }
-    }, [accountAlreadyExists, onLastStep, onNextClick, submitForm]);
+    }, [accountAlreadyExists, history, onLastStep, onNextClick, submitForm]);
 
     return (
         <Box>

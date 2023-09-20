@@ -5,7 +5,7 @@ import { Button } from 'semantic-ui-react';
 import * as Yup from 'yup';
 import { FirstLoginFormSpec } from './FirstLoginForm';
 import { Stack } from '@mui/system';
-import { confirmCode } from 'auth/cognito';
+import { forgotPasswordConfirmCode } from 'auth/cognito';
 import { stringFromError } from '../../modules/error-utils';
 import { log } from '../../modules/logging';
 import { ErrorText } from 'components/Atoms/ErrorText';
@@ -117,11 +117,8 @@ export default function ForgotPasswordCodeForm({
             // }
 
             try {
-                const { success, errorMessage } = await confirmCode(
-                    email,
-                    code,
-                    newPassword
-                );
+                const { success, errorMessage } =
+                    await forgotPasswordConfirmCode(email, code, newPassword);
                 if (errorMessage) {
                     setErrors({
                         submitError: errorMessage,

@@ -6,7 +6,7 @@ import { userViewActionTypes } from 'redux/actions/userViewActions';
 import { ChiefComplaintsState } from './chiefComplaintsReducer';
 
 // Eventually replace with hpiState interface ??
-export interface initialQuestionsState {
+export interface InitialQuestionsState {
     order: {
         [order_id: string]: string;
     };

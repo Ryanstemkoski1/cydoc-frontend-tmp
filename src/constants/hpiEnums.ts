@@ -116,6 +116,7 @@ export enum ResponseTypes {
     LFT = 'LFT',
     SEARCH = 'SEARCH',
     YEAR = 'YEAR',
+    NULL = '',
 }
 
 export interface ExpectedResponseInterface {
