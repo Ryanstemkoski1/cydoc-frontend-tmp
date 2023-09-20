@@ -1,15 +1,14 @@
-import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
-import { apiClient } from 'constants/api';
 import useUser from 'hooks/useUser';
 import React, { useCallback, useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
-import { useDispatch } from 'react-redux';
 import QRIcon1 from '../../assets/images/qr-code-icon1.svg';
 import QRIcon2 from '../../assets/images/qr-code-icon2.svg';
 import QRIcon3 from '../../assets/images/qr-code-icon3.svg';
 import PatientQRCodePage from './PatientQRCodePage';
 import style from './QRCodePage.module.scss';
 import StaffQRCodePage from './StaffQRCodePage';
+import useAuth from 'hooks/useAuth';
+import { getHpiQrCode } from 'modules/institution-api';
 
 type QRCodeType = 'patient' | 'staff' | '';
 
@@ -20,7 +19,6 @@ function printDocument() {
 }
 
 function QRCodePage() {
-    const dispatch = useDispatch();
     const [showQRCodePage, setShowQRCodePage] = useState<QRCodeType>('');
     const { user } = useUser();
 
@@ -38,26 +36,10 @@ function QRCodePage() {
 
     const [link, setLink] = useState<string>('');
 
-    const fetchQRCodeLink = useCallback(async () => {
-        const institution_id = user?.institutionId;
-
-        if (!institution_id) {
-            return;
-        }
-
-        try {
-            const response = await apiClient.get(
-                `/hpi-qr?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`
-            );
-
-            const link = response.data.link as string | null;
-
-            if (link) setLink(link);
-        } catch (_error: any) {}
-    }, [user]);
-
     useEffect(() => {
-        fetchQRCodeLink();
+        setLink(
+            `${window.location.origin}/hpi/patient?institution_id=${user?.institutionId}`
+        );
     }, [user]);
 
     const qrCode = <QRCode value={link} />;

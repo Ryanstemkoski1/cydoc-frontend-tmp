@@ -11,19 +11,15 @@ console.log(`starting app with env:`, {
     production: isProduction(),
 });
 
-const COGNITO_CLIENT_ID_STAGING = '2810pgegm2hdrvoa30lq8hdfg6';
-const COGNITO_POOL_ID_STAGING = 'us-east-2_2LCj8DXUD';
+const COGNITO_CLIENT_ID_STAGING = 'tct6d2fffeh72a41231ltuhpj';
+const COGNITO_POOL_ID_STAGING = 'us-east-2_XPvTG6mkl';
 
 const COGNITO_CLIENT_ID_PRODUCTION = '4d4mqmlcjbc8267fv70b26ggad';
 const COGNITO_POOL_ID_PRODUCTION = 'us-east-1_mCoemdVnn';
 const API_URL_PRODUCTION =
     'https://53mpt60q66.execute-api.us-east-1.amazonaws.com/Prod';
 const API_URL_STAGING =
-    'https://ldxpvwxff1.execute-api.us-east-2.amazonaws.com/Prod';
-const PUBLIC_API_URL_STAGING =
-    'https://sn067pu0f0.execute-api.us-east-2.amazonaws.com/Prod';
-const PUBLIC_API_URL_PRODUCTION =
-    'https://e2oe9sez9f.execute-api.us-east-1.amazonaws.com/Prod';
+    'https://kek00l9lrg.execute-api.us-east-2.amazonaws.com/Prod';
 
 const REGION_STAGING = 'us-east-2';
 const REGION_PRODUCTION = 'us-east-1';
@@ -31,7 +27,6 @@ const REGION_PRODUCTION = 'us-east-1';
 export let COGNITO_CLIENT_ID = COGNITO_CLIENT_ID_STAGING;
 export let COGNITO_POOL_ID = COGNITO_POOL_ID_STAGING;
 export let API_URL = API_URL_STAGING;
-export let PUBLIC_API_URL = PUBLIC_API_URL_STAGING;
 export let REGION = REGION_STAGING;
 
 if (isProduction()) {
@@ -39,5 +34,4 @@ if (isProduction()) {
     COGNITO_POOL_ID = COGNITO_POOL_ID_PRODUCTION;
     API_URL = API_URL_PRODUCTION;
     REGION = REGION_PRODUCTION;
-    PUBLIC_API_URL = PUBLIC_API_URL_PRODUCTION;
 }

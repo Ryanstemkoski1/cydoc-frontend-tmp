@@ -263,7 +263,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             {!authLoading &&
                 (isSignedIn ? (
                     <MenuButton
-                        label={user?.firstName ?? ''}
+                        label={user?.firstName ?? 'menu'}
                         items={loggedInMenuButtonItems}
                     />
                 ) : (

@@ -1,24 +1,31 @@
 import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import { ProductType, ViewType } from 'assets/enums/route.enums';
+import {
+    Institution as InstitutionClass,
+    InstitutionType,
+} from 'classes/institution.class';
 import CommonLayout from 'components/CommonLayout/CommonLayout';
 import Stepper from 'components/Stepper/Stepper';
 import Notification, {
     NotificationTypeEnum,
 } from 'components/tools/Notification/Notification';
-import { apiClient } from 'constants/api';
 import { YesNoResponse } from 'constants/enums';
 import useAuth from 'hooks/useAuth';
 import useQuery from 'hooks/useQuery';
+import useSelectedChiefComplaints from 'hooks/useSelectedChiefComplaints';
 import { hpiHeaders } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
-import initialQuestions from 'pages/EditNote/content/patientview//constants/initialQuestions.json';
-import React, { useEffect, useMemo, useState } from 'react';
+import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, useHistory, useParams } from 'react-router';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
 import { selectChiefComplaint } from 'redux/actions/chiefComplaintsActions';
 import { saveHpiHeader } from 'redux/actions/hpiHeadersActions';
-import { processSurveyGraph } from 'redux/actions/userViewActions';
+import {
+    initialSurveyAddText,
+    processSurveyGraph,
+} from 'redux/actions/userViewActions';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
 import {
@@ -32,6 +39,10 @@ import style from './HPI.module.scss';
 import InitialSurveyHPI from './InitialSurvey/InitialSurvey';
 import NewNotePage from './NotesPage/NotePage';
 import PreHPI from './PreHpi/PreHPI';
+import { getInstitution } from 'modules/institution-api';
+import { log } from 'modules/logging';
+import invariant from 'tiny-invariant';
+import { ApiResponse, Institution } from '@cydoc-ai/types';
 
 const HPI = () => {
     const dispatch = useDispatch();
@@ -39,8 +50,14 @@ const HPI = () => {
     const [notificationType, setNotificationType] = useState(
         NotificationTypeEnum.ERROR
     );
-    const [title, SetTitle] = useState('');
-    const reduxState = useSelector((state) => ({
+    const [screenForPatient, setScreenForPatient] = useState<{
+        title: string;
+        component: React.JSX.Element | null;
+    }>({
+        title: '',
+        component: null,
+    });
+    const reduxState = useSelector((state: any) => ({
         _id: selectNoteId(state),
         patientView: selectPatientViewState(state),
         userSurveyState: selectInitialPatientSurvey(state),
@@ -51,28 +68,16 @@ const HPI = () => {
     const query = useQuery();
     const [isLoading, setIsLoading] = useState(false);
     const { isSignedIn, authLoading } = useAuth();
-    let { view } = useParams();
+    const { view } = useParams<{ view: any }>();
     const history = useHistory();
-    const selectedChiefComplaints = useMemo(
-        () =>
-            Object.keys(reduxState.chiefComplaints).filter(
-                (item) => item !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM
-            ),
-        [reduxState.chiefComplaints]
+    const selectedChiefComplaints = useSelectedChiefComplaints();
+    const institutionId = query.get(HPIPatientQueryParams.INSTITUTION_ID);
+
+    const [institution, setInstitution] = useState<InstitutionClass | null>(
+        null
     );
-    const [clinician_id, institution_id] = [
-        query.get(HPIPatientQueryParams.CLINICIAN_ID),
-        query.get(HPIPatientQueryParams.INSTITUTION_ID),
-    ];
 
     useEffect(() => {
-        if (
-            !Object.keys(reduxState.userSurveyState.graph).length &&
-            !Object.keys(reduxState.userSurveyState.nodes).length &&
-            !Object.keys(reduxState.userSurveyState.order).length
-        )
-            dispatch(processSurveyGraph(initialQuestions));
-
         if (hpiHeaders) {
             const data = hpiHeaders;
             data.then((res) => dispatch(saveHpiHeader(res.data)));
@@ -81,32 +86,65 @@ const HPI = () => {
         return () => {
             dispatch(updateActiveItem('CC'));
         };
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
-        if (view === ViewType.DOCTOR) {
-            history.replace('/hpi/doctor');
-            return;
+        const { graph, nodes, order } = reduxState.userSurveyState;
+
+        if (!institution) {
+            if (
+                !Object.keys(graph).length &&
+                !Object.keys(nodes).length &&
+                !Object.keys(order).length
+            ) {
+                dispatch(processSurveyGraph(initialQuestions));
+            }
+        } else {
+            if (institution.type === InstitutionType.GYN) {
+                initialQuestions.nodes['2'].category = 'ANNUAL_GYN_EXAM';
+                initialQuestions.nodes['2'].doctorView =
+                    ChiefComplaintsEnum.ANNUAL_GYN_EXAM_WELL_WOMAN_VISIT;
+
+                dispatch(processSurveyGraph(initialQuestions));
+            }
+            const favChiefComplaintsObj: { [item: string]: any } = {};
+            institution.favComplaints.forEach((item) => {
+                favChiefComplaintsObj[item] = false;
+            });
+
+            // TODO: call this differently or remove it
+            dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
         }
-        if (!institution_id) {
+    }, [dispatch, institution]);
+
+    useEffect(() => {
+        if (view === ViewType.DOCTOR) return;
+        if (!institutionId) {
             history.replace('/');
             return;
         }
 
-        setIsLoading(true);
-        let url = `/institution/member?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
-        if (clinician_id) {
-            url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
-        }
-        apiClient
-            .get(url)
-            .catch((_error) => {
+        const fetchInstitution = async () => {
+            setIsLoading(true);
+            try {
+                const validatedInstitution = (await getInstitution(
+                    institutionId
+                )) as { detail: Institution };
+
+                if (!(validatedInstitution as ApiResponse).errorMessage) {
+                    const { id, name } = validatedInstitution.detail;
+                    setInstitution(new InstitutionClass({ id, name }));
+                }
+            } catch (e) {
+                log(`HPI error fetching institution`);
                 history.replace('/');
-            })
-            .finally(() => {
+            } finally {
                 setIsLoading(false);
-            });
-    }, [query, view]);
+            }
+        };
+
+        fetchInstitution();
+    }, [history, institutionId, query, view]);
 
     const [patientViewTabs, setPatientViewTabs] = useState([
         'InitialSurvey',
@@ -122,7 +160,7 @@ const HPI = () => {
         setTimeout(() => {
             window.scrollTo(0, 0);
         }, 0);
-    }, [view]);
+    }, [dispatch, view]);
 
     useEffect(() => {
         if (view !== ViewType.PATIENT) return;
@@ -142,61 +180,57 @@ const HPI = () => {
         }
         steps.push(...Object.keys(reduxState.chiefComplaints));
         setPatientViewTabs(steps);
-    }, [view, reduxState.chiefComplaints, reduxState.userSurveyState]);
+    }, [
+        view,
+        reduxState.chiefComplaints,
+        reduxState.userSurveyState,
+        selectedChiefComplaints,
+        dispatch,
+    ]);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
             setNotificationMessage('');
         }, 3000);
         return () => clearTimeout(timeout);
-    }, [notificationMessage]);
+    }, []);
 
-    useEffect(() => {
-        const { title } = screenForPatient();
-        SetTitle(title);
-    }, [reduxState.activeItem]);
+    const canWeMoveToChiefComplaintPages = useCallback(
+        (name: string) => {
+            const questionTenResponse = (
+                (reduxState?.userSurveyState?.nodes?.['10']?.response ||
+                    '') as string
+            ).trim();
 
-    function canWeMoveToChiefComplaintPages(name) {
-        const questionTenResponse = (
-            reduxState.userSurveyState.nodes['10'].response || ''
-        ).trim();
+            if (
+                (selectedChiefComplaints.includes(name) ||
+                    name === ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM ||
+                    name ===
+                        ChiefComplaintsEnum.ANNUAL_GYN_EXAM_WELL_WOMAN_VISIT) &&
+                (reduxState.userSurveyState.nodes['3'].response ===
+                    YesNoResponse.Yes ||
+                    reduxState.userSurveyState.nodes['4'].response ===
+                        YesNoResponse.Yes) &&
+                selectedChiefComplaints.length === 0 &&
+                !questionTenResponse
+            ) {
+                return false;
+            }
 
-        if (
-            (selectedChiefComplaints.includes(name) ||
-                name === ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM) &&
-            (reduxState.userSurveyState.nodes['3'].response ===
-                YesNoResponse.Yes ||
-                reduxState.userSurveyState.nodes['4'].response ===
-                    YesNoResponse.Yes) &&
-            selectedChiefComplaints.length === 0 &&
-            !questionTenResponse
-        ) {
-            return false;
-        }
+            return true;
+        },
+        [reduxState.userSurveyState.nodes, selectedChiefComplaints]
+    );
 
-        return true;
-    }
-
-    function onTabChange(name) {
+    function onTabChange(name: string) {
         if (notificationMessage) {
             setNotificationMessage('');
         }
 
-        const {
-            legalFirstName,
-            legalLastName,
-            dateOfBirth,
-            socialSecurityNumber,
-        } = reduxState.additionalSurvey;
+        const { legalFirstName, legalLastName, dateOfBirth } =
+            reduxState.additionalSurvey;
 
-        if (
-            !(
-                legalFirstName &&
-                legalLastName &&
-                dateOfBirth &&
-                socialSecurityNumber
-            )
-        ) {
+        if (!(legalFirstName && legalLastName && dateOfBirth)) {
             setNotificationMessage('Please fill in all details to continue');
             return;
         }
@@ -208,7 +242,7 @@ const HPI = () => {
     }
 
     // brings users to the next form when clicked
-    const onNextClick = () => {
+    const onNextClick = useCallback(() => {
         // do nothing
         if (!reduxState.patientView) return;
 
@@ -226,10 +260,17 @@ const HPI = () => {
             dispatch(updateActiveItem(nextTab));
             window.scrollTo(0, 0);
         }
-    };
+    }, [
+        canWeMoveToChiefComplaintPages,
+        dispatch,
+        notificationMessage,
+        patientViewTabs,
+        reduxState.activeItem,
+        reduxState.patientView,
+    ]);
 
     // brings users to the previous form when clicked
-    const onPreviousClick = () => {
+    const onPreviousClick = useCallback(() => {
         // do nothing
         if (!reduxState.patientView) return;
 
@@ -245,7 +286,74 @@ const HPI = () => {
 
         dispatch(updateActiveItem(nextTab));
         window.scrollTo(0, 0);
-    };
+    }, [
+        dispatch,
+        notificationMessage,
+        patientViewTabs,
+        reduxState.activeItem,
+        reduxState.patientView,
+    ]);
+
+    useEffect(() => {
+        switch (reduxState.activeItem) {
+            case 'InitialSurvey': {
+                return setScreenForPatient({
+                    component: (
+                        <InitialSurveyHPI
+                            continue={onNextClick}
+                            setErrorMessage={setNotificationMessage}
+                        />
+                    ),
+                    title: 'Please enter the details below',
+                });
+            }
+            case 'PreHPI': {
+                return setScreenForPatient({
+                    component: (
+                        <PreHPI
+                            continue={onNextClick}
+                            onPreviousClick={onPreviousClick}
+                            setErrorMessage={setNotificationMessage}
+                            patientView={false} // TODO: is this correct? seems like it would be patient view
+                        />
+                    ),
+                    title: 'Help Cydoc personalize your questionnaire',
+                });
+            }
+            case 'CCSelection': {
+                return setScreenForPatient({
+                    component: (
+                        <CCSelection
+                            continue={onNextClick}
+                            onPreviousClick={onPreviousClick}
+                            notification={{
+                                setNotificationMessage,
+                                setNotificationType,
+                            }}
+                            activeItem=''
+                            patientView={false} // TODO: is this correct? seems like it would be patient view
+                        />
+                    ),
+                    title: `Please select the top 3 conditions or symptoms you'd like to discuss`,
+                });
+            }
+            default: {
+                return setScreenForPatient({
+                    component: (
+                        <NewNotePage
+                            onNextClick={onNextClick}
+                            onPreviousClick={onPreviousClick}
+                            notification={{
+                                setNotificationMessage,
+                                setNotificationType,
+                            }}
+                        />
+                    ),
+                    title: reduxState.activeItem,
+                });
+            }
+        }
+    }, [onNextClick, onPreviousClick, reduxState.activeItem]);
 
     // invalid view entered, redirect to hpi - patient view
     if ([ViewType.DOCTOR, ViewType.PATIENT].includes(view) === false) {
@@ -260,64 +368,6 @@ const HPI = () => {
         return <Loader active />;
     }
 
-    function screenForPatient() {
-        switch (reduxState.activeItem) {
-            case 'InitialSurvey': {
-                return {
-                    component: (
-                        <InitialSurveyHPI
-                            continue={onNextClick}
-                            setErrorMessage={setNotificationMessage}
-                        />
-                    ),
-                    title: 'Please enter the details below',
-                };
-            }
-            case 'PreHPI': {
-                return {
-                    component: (
-                        <PreHPI
-                            continue={onNextClick}
-                            onPreviousClick={onPreviousClick}
-                            setErrorMessage={setNotificationMessage}
-                        />
-                    ),
-                    title: 'Help Cydoc personalize your questionnaire',
-                };
-            }
-            case 'CCSelection': {
-                return {
-                    component: (
-                        <CCSelection
-                            continue={onNextClick}
-                            onPreviousClick={onPreviousClick}
-                            notification={{
-                                setNotificationMessage,
-                                setNotificationType,
-                            }}
-                        />
-                    ),
-                    title: `Please select the top 3 conditions or symptoms you'd like to discuss`,
-                };
-            }
-            default: {
-                return {
-                    component: (
-                        <NewNotePage
-                            onNextClick={onNextClick}
-                            onPreviousClick={onPreviousClick}
-                            notification={{
-                                setNotificationMessage,
-                                setNotificationType,
-                            }}
-                        />
-                    ),
-                    title: reduxState.activeItem,
-                };
-            }
-        }
-    }
-
     return (
         <>
             <div className={style.editNote}>
@@ -328,15 +378,14 @@ const HPI = () => {
                                 tabs={patientViewTabs}
                                 onTabChange={onTabChange}
                             />
-                            <CommonLayout title={title}>
+                            <CommonLayout title={screenForPatient.title}>
                                 {notificationMessage && (
                                     <Notification
                                         message={notificationMessage}
                                         type={notificationType}
                                     />
                                 )}
-                                {/* TODO: NEED TO REFACTOR */}
-                                {screenForPatient().component}
+                                {screenForPatient.component}
                                 {/* <QRCode showDownloadButton={true} /> */}
                             </CommonLayout>
                         </>

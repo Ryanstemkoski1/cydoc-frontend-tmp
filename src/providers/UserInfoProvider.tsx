@@ -34,13 +34,10 @@ export const UserInfoProvider: React.FC<
         try {
             if (
                 cognitoUser?.attributes?.email ||
-                cognitoUser?.challengeParam?.userAttributes?.email
+                cognitoUser?.challengeParam?.userAttributes?.email ||
+                cognitoUser?.username
             ) {
-                const user = await getDbUser(
-                    cognitoUser?.attributes?.email ||
-                        cognitoUser?.challengeParam?.userAttributes?.email ||
-                        ''
-                );
+                const user = await getDbUser(cognitoUser);
                 setUser(user || undefined);
             } else {
                 // reset user state on signOut
@@ -49,10 +46,7 @@ export const UserInfoProvider: React.FC<
         } finally {
             setLoading(false);
         }
-    }, [
-        cognitoUser?.attributes?.email,
-        cognitoUser?.challengeParam?.userAttributes?.email,
-    ]);
+    }, [cognitoUser]);
 
     useEffect(() => {
         updateUserInfo();

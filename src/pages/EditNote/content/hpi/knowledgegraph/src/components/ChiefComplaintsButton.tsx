@@ -1,24 +1,24 @@
+import axios from 'axios';
+import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
+import { graphClientURL } from 'constants/api.js';
+import { GraphData } from 'constants/hpiEnums';
+import { getSelectedChiefCompliants } from 'hooks/useSelectedChiefComplaints';
 import React from 'react';
-import './BodySystemDropdown';
+import { connect } from 'react-redux';
 import {
     selectChiefComplaint,
     SelectChiefComplaintAction,
 } from 'redux/actions/chiefComplaintsActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { connect } from 'react-redux';
-import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
-import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
-import { ChiefComplaintsProps, HpiHeadersProps } from '../../HPIContent';
-import { GraphData } from 'constants/hpiEnums';
 import {
     processKnowledgeGraph,
     ProcessKnowledgeGraphAction,
 } from 'redux/actions/hpiActions';
-import axios from 'axios';
-import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
-import { graphClientURL } from 'constants/api.js';
+import { CurrentNoteState } from 'redux/reducers';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
-import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
+import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
+import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import { ChiefComplaintsProps, HpiHeadersProps } from '../../HPIContent';
+import './BodySystemDropdown';
 interface ChiefComplaintsButtonProps {
     name: string;
 }
@@ -50,12 +50,8 @@ class ChiefComplaintsButton extends React.Component<Props> {
                         : name
                 }
                 onToggleButtonClick={(e: any) => {
-                    const selectedChiefComplaints = Object.keys(
-                        chiefComplaints
-                    ).filter(
-                        (item) =>
-                            item !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM
-                    );
+                    const selectedChiefComplaints =
+                        getSelectedChiefCompliants(chiefComplaints);
 
                     if (
                         activeItem === 'CCSelection' &&
