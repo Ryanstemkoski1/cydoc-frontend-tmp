@@ -14,7 +14,7 @@ console.log(`starting app with env:`, {
 const COGNITO_CLIENT_ID_STAGING = 'tct6d2fffeh72a41231ltuhpj';
 const COGNITO_POOL_ID_STAGING = 'us-east-2_XPvTG6mkl';
 
-const COGNITO_CLIENT_ID_PRODUCTION = '4d4mqmlcjbc8267fv70b26ggad';
+const COGNITO_CLIENT_ID_PRODUCTION = '7rinpvk08cr0vpivppgqbjlip0';
 const COGNITO_POOL_ID_PRODUCTION = 'us-east-1_mCoemdVnn';
 const API_URL_PRODUCTION =
     'https://53mpt60q66.execute-api.us-east-1.amazonaws.com/Prod';
