@@ -212,10 +212,7 @@ const CCSelection = (props: Props) => {
                         toCompare = title.toString().toLowerCase();
                     if (
                         complaint !== 'HIDDEN' &&
-                        toCompare.includes(searchVal.toLowerCase()) &&
-                        title !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM &&
-                        title !==
-                            ChiefComplaintsEnum.ANNUAL_GYN_EXAM_WELL_WOMAN_VISIT
+                        toCompare.includes(searchVal.toLowerCase())
                     ) {
                         const temp = {
                             title: title,
@@ -260,6 +257,7 @@ const CCSelection = (props: Props) => {
             case ResponseTypes.SELECTONE:
                 return isSelectOneResponse(currEntry.response) ? (
                     <div
+                        id='pinnedChiefComplaints'
                         className={`${style.diseaseSelections__wrap} flex-wrap`}
                     >
                         {Object.keys(currEntry.response).map((condition) => (

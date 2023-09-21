@@ -51,6 +51,7 @@ import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
 import { currentNoteStore } from 'redux/store';
 import { Search } from 'semantic-ui-react';
 import style from './PreHPI.module.scss';
+import { NotificationTypeEnum } from 'components/tools/Notification/Notification';
 
 interface InitialSurveyState {
     error: boolean;
@@ -61,7 +62,10 @@ interface InitialSurveyState {
 interface InitialSurveyComponentProps {
     continue: (e: any) => void;
     onPreviousClick: () => void;
-    setErrorMessage: (message: string) => void;
+    notification: {
+        setNotificationMessage: (message: string) => void;
+        setNotificationType: (type: NotificationTypeEnum) => void;
+    };
 }
 
 class PreHPI extends React.Component<Props, InitialSurveyState> {
@@ -82,14 +86,15 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
     };
 
     onNextClick = (e: any) => {
-        if (this.isAtLeaseOneInputYesOnPage() === false) {
-            return this.props.setErrorMessage(
-                'Please answer Yes to at least one question to proceed.'
-            );
-        } else if (!this.props.userSurveyState.nodes['8'].response) {
-            return this.props.setErrorMessage(
+        const { setNotificationType, setNotificationMessage } =
+            this.props.notification;
+
+        if (!this.props.userSurveyState.nodes['8'].response) {
+            setNotificationType(NotificationTypeEnum.ERROR);
+            setNotificationMessage(
                 'Please confirm the date of your appointment.'
             );
+            return;
         }
 
         this.continue(e);
@@ -231,18 +236,6 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
         }
     };
 
-    isAtLeaseOneInputYesOnPage() {
-        const selected =
-            this.props.userSurveyState.nodes['2'].response ===
-                YesNoResponse.Yes ||
-            this.props.userSurveyState.nodes['3'].response ===
-                YesNoResponse.Yes ||
-            this.props.userSurveyState.nodes['4'].response ===
-                YesNoResponse.Yes;
-
-        return selected;
-    }
-
     render() {
         const { userSurveyState } = this.props,
             nodes = patientViewHeaders.parentNodes,
@@ -251,21 +244,14 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
         const initialSurvey =
             nodeKey in questions.nodes
                 ? questions.graph[nodeKey].map((key) => {
-                      // for uid - 8, 9 we need to specify custom classes so that questions can align 2 column wise.
-                      const uid = (userSurveyState?.nodes?.[key] as any)?.uid;
                       return (
                           <div
-                              className={`${style.preHpi__item} ${
-                                  ['8', '9'].includes(uid)
-                                      ? style.preHpi__itemCol
-                                      : ''
-                              } flex-wrap align-center justify-between`}
+                              className={`${style.preHpi__item} ${style.preHpi__itemCol} flex-wrap align-center justify-between`}
                               key={questions.nodes[key].text}
                           >
                               <p>{questions.nodes[key].text}</p>
                               <aside>
-                                  {Object.keys(this.props.userSurveyState.nodes)
-                                      .length
+                                  {Object.keys(userSurveyState.nodes).length
                                       ? this.renderSwitch(key)
                                       : ''}
                               </aside>

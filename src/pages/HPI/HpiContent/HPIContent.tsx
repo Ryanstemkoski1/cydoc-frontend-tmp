@@ -2,7 +2,7 @@ import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import axios from 'axios';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { graphClientURL, apiClient } from 'constants/api.js';
-import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
+import { favChiefComplaints } from 'classes/institution.class';
 import React from 'react';
 import Masonry from 'react-masonry-css';
 import { ConnectedProps, connect } from 'react-redux';

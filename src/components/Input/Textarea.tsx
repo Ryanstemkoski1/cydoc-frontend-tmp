@@ -16,10 +16,9 @@ const TextArea = ({
                 onChange={(e) => {
                     onChange(e, { value: e.target.value });
                 }}
+                value={value}
                 {...inputProps}
-            >
-                {value}
-            </textarea>
+            />
         </div>
     );
 };

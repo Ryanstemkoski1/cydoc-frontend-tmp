@@ -31,6 +31,8 @@ import { CurrentNoteState } from 'redux/reducers';
 import { ManagerRoute } from './ManagerRoute';
 import NavMenu from './NavMenu';
 import { PrivateRoute } from './PrivateRoute';
+import BrowseNotes from 'pages/BrowseNotes/BrowseNotes';
+import { ProductType, ViewType } from 'assets/enums/route.enums';
 
 const Routes = (props: { children?: JSX.Element | null }) => {
     const isHomePage = useLocation().pathname === '/';
@@ -60,13 +62,15 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                     />
                     <PrivateRoute exact path='/editnote' component={EditNote} />
                     <PrivateRoute exact path='/qrcode' component={QRCodePage} />
-                    <Route exact path='/hpi/:view' component={HPI} />
+                    <PrivateRoute
+                        exact
+                        path={`/${ProductType.HPI}/${ViewType.DOCTOR}`}
+                        component={BrowseNotes}
+                    />
                     <Route
                         exact
-                        path='/hpi/'
-                        component={(props: any) => (
-                            <Redirect to='/hpi/patient' {...props} />
-                        )}
+                        path={`/${ProductType.HPI}/${ViewType.PATIENT}`}
+                        component={HPI}
                     />
                     <PrivateRoute
                         exact
