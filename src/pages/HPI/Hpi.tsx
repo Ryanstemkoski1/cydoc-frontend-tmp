@@ -18,7 +18,7 @@ import { hpiHeaders } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
 import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
 import { selectChiefComplaint } from 'redux/actions/chiefComplaintsActions';
 import { saveHpiHeader } from 'redux/actions/hpiHeadersActions';
@@ -357,11 +357,13 @@ const HPI = () => {
 
     // invalid view entered, redirect to hpi - patient view
     if ([ViewType.DOCTOR, ViewType.PATIENT].includes(view) === false) {
-        return <Redirect to={`/${ProductType.HPI}/${ViewType.PATIENT}`} />;
+        history.replace(`/${ProductType.HPI}/${ViewType.PATIENT}`);
+        return null;
     }
 
     if (view === ViewType.DOCTOR && !(isSignedIn || authLoading)) {
-        return <Redirect to='/login' />;
+        history.replace('/login');
+        return null;
     }
 
     if (isLoading && view === ViewType.PATIENT) {
