@@ -15,7 +15,6 @@ import EditGraph from 'pages/CreateTemplate/EditGraph';
 import EditTemplate from 'pages/CreateTemplate/EditTemplate';
 import EditNote from 'pages/EditNote/EditNote';
 import GenerateInpatientPlan from 'pages/GenerateInpatientPlan/GenerateInpatientPlan';
-import HPI from 'pages/HPI/Hpi';
 import Home from 'pages/Home/Home';
 import LandingPage from 'pages/LandingPage/LandingPage';
 import LandingPagePublic from 'pages/LandingPage/LandingPagePublic';
@@ -24,7 +23,7 @@ import NotAuthorized from 'pages/NotAuthorized';
 import QRCodePage from 'pages/QRCodePage/QRCodePage';
 import SignUp from 'pages/SignUp';
 import ViewProduct from 'pages/ViewProduct/ViewProduct';
-import React from 'react';
+import React, { Suspense, lazy, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router';
 import { CurrentNoteState } from 'redux/reducers';
@@ -34,12 +33,22 @@ import { PrivateRoute } from './PrivateRoute';
 import BrowseNotes from 'pages/BrowseNotes/BrowseNotes';
 import { ProductType, ViewType } from 'assets/enums/route.enums';
 
+const HPILazyLoad = lazy(() => import('pages/HPI/Hpi'));
+
 const Routes = (props: { children?: JSX.Element | null }) => {
     const isHomePage = useLocation().pathname === '/';
     const loadingStatus = useSelector(
         (state: CurrentNoteState) => state.loadingStatus
     );
     const { authLoading } = useAuth();
+
+    const HPI = useCallback(() => {
+        return (
+            <Suspense fallback={<GlobalLoader />}>
+                <HPILazyLoad />
+            </Suspense>
+        );
+    }, []);
 
     return (
         <div className='layout'>
