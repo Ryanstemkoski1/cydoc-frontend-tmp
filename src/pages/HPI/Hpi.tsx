@@ -18,11 +18,7 @@ import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/know
 import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-<<<<<<< HEAD
 import { useHistory } from 'react-router';
-=======
-import { useHistory, useParams } from 'react-router';
->>>>>>> dev
 import { updateActiveItem } from 'redux/actions/activeItemActions';
 import { saveHpiHeader } from 'redux/actions/hpiHeadersActions';
 import { setLoadingStatus } from 'redux/actions/loadingStatusActions';
