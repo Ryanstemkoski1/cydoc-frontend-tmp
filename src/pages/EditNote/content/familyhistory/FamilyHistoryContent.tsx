@@ -119,6 +119,7 @@ class FamilyHistoryContent extends Component<Props, State> {
             popResponse,
             node,
             familyHistory,
+            hide = false,
         } = this.props;
         const standardFamilyHistory =
             this.standardizeFamilyHistory(familyHistory);
@@ -179,6 +180,7 @@ class FamilyHistoryContent extends Component<Props, State> {
                         index={''}
                         pop={false}
                         deleteRow={this.deleteRow}
+                        hide={hide}
                     />
                 );
             } else {
@@ -201,6 +203,7 @@ class FamilyHistoryContent extends Component<Props, State> {
                         index={condition}
                         pop={true}
                         deleteRow={this.deleteRow}
+                        hide={hide}
                     />
                 );
             }
@@ -232,6 +235,7 @@ interface ContentProps {
     responseChoice?: string[];
     responseType?: ResponseTypes;
     node?: string;
+    hide?: boolean;
 }
 
 interface DispatchProps {

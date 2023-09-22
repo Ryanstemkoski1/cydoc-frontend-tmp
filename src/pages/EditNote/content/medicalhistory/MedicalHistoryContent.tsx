@@ -1,7 +1,6 @@
 import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
 import ConditionInput from 'components/tools/ConditionInput/ConditionInput';
 import GridContent from 'components/tools/GridContent/GridContent';
-import constants from 'constants/constants.json';
 import diseaseSynonyms from 'constants/diseaseSynonyms';
 import { YesNoResponse } from 'constants/enums';
 import { ResponseTypes } from 'constants/hpiEnums';
@@ -191,20 +190,14 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
         const standardMedicalHistory = this.standardizeMedicalHistory(
             this.props.medicalHistory
         );
-        const standardConditions = constants.CONDITIONS.map((condition) =>
-            this.standardizeMedicalName(condition)
-        );
         let listValues =
             Object.keys(standardMedicalHistory).filter(
                 (key) =>
-                    standardConditions.includes(
-                        standardMedicalHistory[key].condition
-                    ) ||
                     this.state.currConditions.includes(key) ||
                     this.props.showNo ||
                     standardMedicalHistory[key].hasBeenAfflicted ==
                         YesNoResponse.Yes
-            ) || constants.CONDITIONS;
+            ) || [];
         // The second OR statement gets the list of Conditions in the "Medical History" context
         if (responseType == ResponseTypes.PMH_POP && responseChoice && node) {
             listValues = responseChoice.map((condition) => {
@@ -233,7 +226,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                 col: 3,
             },
         ];
-        if (!this.props.hide) {
+        if (this.props.hide === undefined) {
             header.push(
                 {
                     title: '',
@@ -262,8 +255,19 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                 }
             );
         }
+
+        if (this.props.hide === false) {
+            header.push({
+                title: '',
+                col: 9,
+            });
+        }
         return (
-            <div className={style.historyTable}>
+            <div
+                className={`${style.historyTable} ${
+                    this.props.hide === false && style.historyCondition
+                }`}
+            >
                 <div className={`${style.historyTable__scroll} scrollbar`}>
                     <GridContent
                         header_titles={header}
@@ -322,6 +326,7 @@ class MedicalHistoryContent extends React.Component<Props, OwnState> {
                         currentYear={this.props.currentYear}
                         deleteRow={this.deleteRow}
                         hide={this.props.hide}
+                        dontShowOptions={this.props.hide === false}
                         conditionInput={
                             <ConditionInput
                                 key={index}

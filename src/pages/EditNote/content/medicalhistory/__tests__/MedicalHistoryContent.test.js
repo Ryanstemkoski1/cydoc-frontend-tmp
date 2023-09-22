@@ -9,6 +9,7 @@ import MedicalHistoryContent from '../MedicalHistoryContent.tsx';
 // import GridContent from 'components/tools/GridContent';
 import ConditionInput from 'components/tools/ConditionInput/ConditionInput';
 // import MedicalHistoryNoteItem from '../MedicalHistoryNoteItem';
+import { YesNoMaybeResponse } from 'constants/enums';
 import MedicalHistoryNoteRow from '../MedicalHistoryNoteRow';
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -17,7 +18,7 @@ const mockStore = configureStore([]);
 const initialState = {
     ['foo']: {
         condition: 'Type II Diabetes',
-        hasBeenAfflicted: '',
+        hasBeenAfflicted: YesNoMaybeResponse.Yes,
         startYear: -1,
         hasConditionResolved: '',
         endYear: -1,
@@ -25,7 +26,7 @@ const initialState = {
     },
     ['bar']: {
         condition: 'Myocardial Infarction',
-        hasBeenAfflicted: '',
+        hasBeenAfflicted: YesNoMaybeResponse.Yes,
         startYear: -1,
         hasConditionResolved: '',
         endYear: -1,

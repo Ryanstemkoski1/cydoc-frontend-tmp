@@ -236,6 +236,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         responseChoice={choices}
                         responseType={responseType}
                         node={node}
+                        hide={true}
                     />
                 );
 
