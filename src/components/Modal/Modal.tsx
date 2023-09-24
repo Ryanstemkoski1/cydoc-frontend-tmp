@@ -1,19 +1,12 @@
-import Loader from 'components/tools/Loader/Loader';
-import { stagingClient } from 'constants/api';
-import { AppointmentUser } from 'pages/BrowseNotes/BrowseNotes';
+import { AppointmentUser, formatFullName } from 'pages/BrowseNotes/BrowseNotes';
 import { ParseAndRenderHpiNote } from 'pages/EditNote/content/generatenote/notesections/HPINote';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { default as React, useEffect, useRef } from 'react';
 import style from './Modal.module.scss';
 
 export interface ModalProps {
     showModal: boolean;
     setShowModal: any;
-    selectedAppointment: AppointmentUser | null;
-}
-
-interface HPIAppointmentDetails extends AppointmentUser {
-    appointmentDate: Date;
-    hpiText: string;
+    selectedAppointment: AppointmentUser;
 }
 
 const Modal = ({
@@ -22,20 +15,6 @@ const Modal = ({
     selectedAppointment,
 }: ModalProps) => {
     const modalRef = useRef<any>();
-    const [hpiAppointMentDetails, setHpiAppointmentDetails] =
-        useState<HPIAppointmentDetails | null>(null);
-
-    const fetchHPIAppointmentsDetails = useCallback(async () => {
-        const response = await stagingClient.get(
-            `/appointment/${selectedAppointment?.id}`
-        );
-        setHpiAppointmentDetails(response.data.data);
-    }, []);
-
-    useEffect(() => {
-        if (!selectedAppointment?.id) return;
-        fetchHPIAppointmentsDetails();
-    }, [selectedAppointment]);
 
     const handleClickOutsideModal = (event: any) => {
         if (!modalRef.current?.contains(event.target)) {
@@ -61,8 +40,8 @@ const Modal = ({
         };
     }, [showModal]);
 
-    const fullName =
-        selectedAppointment?.lastName + ', ' + selectedAppointment?.firstName;
+    const { firstName, middleName, lastName, hpiText } = selectedAppointment;
+
     return (
         <div
             onClick={handleClickOutsideModal}
@@ -72,8 +51,11 @@ const Modal = ({
         >
             <div className={style.modal__inner} ref={modalRef}>
                 <div className={style.modal__header}>
-                    <h3>{selectedAppointment && fullName}</h3>
+                    <h3>
+                        {formatFullName(firstName, middleName ?? '', lastName)}
+                    </h3>
                 </div>
+
                 <div className={style.modal__innerContent}>
                     <div className='flex align-center justify-between'>
                         <h4>History of Present Illness/Subjective</h4>
@@ -88,13 +70,7 @@ const Modal = ({
                         className={`${style.modal__scroll} scrollbar`}
                         id='copy-notes'
                     >
-                        {hpiAppointMentDetails ? (
-                            <ParseAndRenderHpiNote
-                                hpiText={hpiAppointMentDetails.hpiText}
-                            />
-                        ) : (
-                            <Loader />
-                        )}
+                        <ParseAndRenderHpiNote hpiText={hpiText} />
                     </div>
                 </div>
             </div>

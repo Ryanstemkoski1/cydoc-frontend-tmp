@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, FormikHelpers } from 'formik';
 import './Account.css';
 import * as Yup from 'yup';
@@ -21,6 +21,7 @@ import { EditUserInfo, UserInfoFormSpec } from './EditProfile';
 import { toast } from 'react-toastify';
 import { SubmitOnEnter } from 'components/Atoms/SubmitOnEnter';
 import MfaVerificationForm from './MfaVerificationForm';
+import { DbUser, UpdateUserBody } from '@cydoc-ai/types';
 
 export interface FistLoginFormData extends EditUserInfo {
     newPassword: string;
@@ -75,6 +76,10 @@ const FirstLoginForm = () => {
         useState(false);
     const initialValues = { ...INITIAL_VALUES, ...user };
 
+    // We need to verify MFA before we can save the new user info to the DB
+    // save it here for now and send to DB when we get the new valid auth token
+    const [newUserInfo, setNewUserInfo] = useState<UpdateUserBody | null>(null);
+
     const onSubmit = async (
         { firstName, lastName, phoneNumber, newPassword }: FistLoginFormData,
         { setErrors, setSubmitting }: FormikHelpers<FistLoginFormData>
@@ -92,29 +97,23 @@ const FirstLoginForm = () => {
 
                         setErrors({});
                         setSubmitting(true);
+                        setNewUserInfo({
+                            firstName,
+                            lastName,
+                            phoneNumber,
+                            email,
+                        });
 
                         const { errorMessage } = await completeFirstLoginUpdate(
                             newPassword,
                             phoneNumber
                         );
-                        const { errorMessage: dbErrorMessage } =
-                            await updateDbUser({
-                                email,
-                                firstName,
-                                lastName,
-                                phoneNumber,
-                            });
-                        if (errorMessage?.length || dbErrorMessage) {
-                            throw new Error(errorMessage || dbErrorMessage);
-                        } else {
-                            console.log(`user info updated successfully`, {
-                                errorMessage,
-                                dbErrorMessage,
-                            });
-
-                            // Show the MFA screen immediately so the user can use the code they just received to login with the existing session
-                            setLoginSuccessfulShowMfaForm(true);
+                        if (errorMessage?.length) {
+                            throw new Error(errorMessage);
                         }
+
+                        // Show the MFA screen immediately so the user can use the code they just received to login with the existing session
+                        setLoginSuccessfulShowMfaForm(true);
                     } finally {
                         setSubmitting(false);
                     }
@@ -139,9 +138,31 @@ const FirstLoginForm = () => {
             });
 
     if (loginSuccessfulShowMfaForm) {
-        <CenteredPaper>
-            return <MfaVerificationForm />;
-        </CenteredPaper>;
+        return (
+            <CenteredPaper>
+                <MfaVerificationForm
+                    onSuccess={async (cognitoUser) => {
+                        if (newUserInfo) {
+                            const { errorMessage } = await updateDbUser(
+                                newUserInfo,
+                                cognitoUser || null
+                            );
+                            if (errorMessage?.length) {
+                                throw new Error(errorMessage);
+                            } else {
+                                console.log(`user info updated successfully`, {
+                                    errorMessage,
+                                });
+                            }
+                        } else {
+                            log(`[FirstLoginForm] state race condition`, {
+                                newUserInfo,
+                            });
+                        }
+                    }}
+                />
+            </CenteredPaper>
+        );
     }
 
     return (

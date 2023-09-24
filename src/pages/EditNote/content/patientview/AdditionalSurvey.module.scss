@@ -11,4 +11,9 @@
             width: 100%;
         }
     }
+    &__four {
+        @include min-screen($mobile) {
+            width: 33.3%;
+        }
+    }
 }

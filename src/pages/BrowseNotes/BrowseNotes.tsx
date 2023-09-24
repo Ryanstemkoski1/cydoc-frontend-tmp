@@ -1,8 +1,6 @@
-import Input from 'components/Input/Input';
 import Modal from 'components/Modal/Modal';
-import { stagingClient } from 'constants/api';
 import useUser from 'hooks/useUser';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoadingStatus } from 'redux/actions/loadingStatusActions';
 import { CurrentNoteState } from 'redux/reducers';
@@ -10,6 +8,12 @@ import LeftArrow from '../../assets/images/left-arrow.svg';
 import RefreshIcon from '../../assets/images/refresh.png';
 import RightArrow from '../../assets/images/right-arrow.svg';
 import style from './BrowseNotes.module.scss';
+import { getAppointment } from 'modules/appointment-api';
+import useAuth from 'hooks/useAuth';
+
+export function formatFullName(firstName = '', middleName = '', lastName = '') {
+    return `${lastName}, ${firstName} ${middleName}`;
+}
 
 const months = [
     'January',
@@ -60,45 +64,29 @@ function formatDateOfBirth(date: string | Date): string {
 }
 
 export interface AppointmentUser {
-    id: number;
+    id: string;
     firstName: string;
     lastName: string;
-    dateOfBirth: Date;
+    middleName: string | null;
+    dob: Date;
     clinicianId: number | null;
-}
-
-async function fetchHPIAppointments(
-    date: Date,
-    clinicianId: string,
-    stateUpdaterFunc: (users: AppointmentUser[]) => void,
-    onError?: (error: any) => void
-) {
-    try {
-        let url = `/appointments?appointment_date=${formatDateOfBirth(date)}`;
-
-        if (clinicianId !== null) {
-            url += `&clinician_id=${clinicianId}`;
-        }
-        const response = await stagingClient.get(url);
-        const fetchDetails = response.data.data as AppointmentUser[];
-        stateUpdaterFunc(fetchDetails);
-    } catch (_error: any) {
-        onError?.(_error);
-    }
+    appointmentDate: Date;
+    clinicianLastName: string | null;
+    hpiText: string;
+    ssnLastFourDigit: string | null;
+    institutionId: number | null;
 }
 
 const BrowseNotes = () => {
     const [date, setDate] = useState(new Date());
     const [users, setUsers] = useState<AppointmentUser[]>([]);
-    const [unreportedUsers, setUnreportedUsers] = useState<AppointmentUser[]>(
-        []
-    );
     const { user } = useUser();
+    const { cognitoUser } = useAuth();
     const dispatch = useDispatch();
 
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedAppointment, setSelectedAppointment] =
-        useState<AppointmentUser | null>(null);
+        useState<AppointmentUser>();
     const loadingStatus = useSelector(
         (state: CurrentNoteState) => state.loadingStatus
     );
@@ -116,32 +104,29 @@ const BrowseNotes = () => {
         setDate(new Date(date.getTime() + 86400000));
     };
 
-    useEffect(() => {
-        loadPatientHistory();
-    }, [user, date]);
-
-    const loadPatientHistory = () => {
+    const loadPatientHistory = useCallback(async () => {
         dispatch(setLoadingStatus(true));
         if (!user) {
             dispatch(setLoadingStatus(false));
             return;
         }
         try {
-            fetchHPIAppointments(date, user.id, (users: AppointmentUser[]) => {
-                const unreportedUsers: AppointmentUser[] = users.filter(
-                    (currentUser) => currentUser.clinicianId !== Number(user.id)
-                );
-                const reportedUsers: AppointmentUser[] = users.filter(
-                    (currentUser) => currentUser.clinicianId === Number(user.id)
-                );
-                setUsers(reportedUsers);
-                setUnreportedUsers(unreportedUsers);
-                dispatch(setLoadingStatus(false));
-            });
-        } catch (_error: any) {
+            const users = await getAppointment(
+                formatDateOfBirth(date),
+                user?.institutionId,
+                cognitoUser
+            );
+            setUsers(users);
+            dispatch(setLoadingStatus(false));
+        } catch (err) {
+            setUsers([]);
             dispatch(setLoadingStatus(false));
         }
-    };
+    }, [cognitoUser, date, dispatch, user]);
+
+    useEffect(() => {
+        loadPatientHistory();
+    }, [loadPatientHistory]);
 
     function renderUsers(users: AppointmentUser[]) {
         return (
@@ -165,15 +150,15 @@ const BrowseNotes = () => {
                                                         openModal(user)
                                                     }
                                                 >
-                                                    {user.lastName +
-                                                        ', ' +
-                                                        user.firstName}
+                                                    {formatFullName(
+                                                        user?.firstName,
+                                                        user?.middleName ?? '',
+                                                        user?.lastName
+                                                    )}
                                                 </span>
                                             </td>
                                             <td>
-                                                {formatDateOfBirth(
-                                                    user.dateOfBirth
-                                                )}
+                                                {formatDateOfBirth(user.dob)}
                                             </td>
                                         </tr>
                                     );
@@ -208,36 +193,11 @@ const BrowseNotes = () => {
                     </a>
                 </div>
 
-                <div className={` ${style.notesBlock__content} flex-wrap `}>
+                <div className={` ${style.notesBlock__content} `}>
                     <div className={style.notesBlock__contentInner}>
-                        <div className='flex align-center justify-between'>
-                            <h4>Clinician</h4>
-                            <div className={style.notesBlock__dropdown}>
-                                <Input
-                                    value={
-                                        user
-                                            ? user!.lastName +
-                                              ', ' +
-                                              user!.firstName
-                                            : ''
-                                    }
-                                    disabled
-                                />
-                            </div>
-                        </div>
-
                         {renderUsers(users)}
                     </div>
-                    <div className={style.notesBlock__contentInner}>
-                        <h4 className={`${style.clinical} flex align-center`}>
-                            {' '}
-                            Clinician: Unreported
-                        </h4>
-                        {renderUsers(unreportedUsers)}
-                    </div>
-                    <div
-                        className={`${style.notesBlock__reload} flex justify-end`}
-                    >
+                    <div className={`${style.notesBlock__reload}`}>
                         <button onClick={loadPatientHistory}>
                             <picture>
                                 <img src={RefreshIcon} alt='Refresh' />
@@ -247,12 +207,14 @@ const BrowseNotes = () => {
                     </div>
                 </div>
             </div>
-            <Modal
-                key={selectedAppointment?.id}
-                showModal={showModal}
-                setShowModal={setShowModal}
-                selectedAppointment={selectedAppointment}
-            />
+            {selectedAppointment && (
+                <Modal
+                    key={selectedAppointment.id}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    selectedAppointment={selectedAppointment}
+                />
+            )}
         </div>
     );
 };

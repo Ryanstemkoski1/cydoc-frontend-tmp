@@ -10,6 +10,7 @@ import {
 export interface additionalSurvey {
     legalFirstName: string;
     legalLastName: string;
+    legalMiddleName: string;
     dateOfBirth: string;
     socialSecurityNumber: string;
     initialSurveyState: number;
@@ -52,6 +53,7 @@ export interface UserInfo {
 export const initialAdditionalSurveyData: additionalSurvey = {
     legalFirstName: '',
     legalLastName: '',
+    legalMiddleName: '',
     dateOfBirth: '',
     socialSecurityNumber: '',
     initialSurveyState: 0,
@@ -102,6 +104,7 @@ export function additionalSurveyReducer(
         case UPDATE_ADDITIONAL_DETAILS.UPDATE_ADDITIONAL_DETAILS:
             state.legalFirstName = action.payload?.legalFirstName;
             state.legalLastName = action.payload?.legalLastName;
+            state.legalMiddleName = action.payload?.legalMiddleName;
             state.socialSecurityNumber = action?.payload.socialSecurityNumber;
             state.dateOfBirth = action.payload?.dateOfBirth;
             state.initialSurveyState = action?.payload?.initialSurveyState;

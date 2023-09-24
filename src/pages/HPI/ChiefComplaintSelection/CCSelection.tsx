@@ -6,9 +6,10 @@ import TextArea from 'components/Input/Textarea';
 import { ActiveItemProps } from 'components/navigation/NavMenu';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { NotificationTypeEnum } from 'components/tools/Notification/Notification';
-import { stagingClient } from 'constants/api';
+import { apiClient } from 'constants/api';
 import { GraphData, ResponseTypes } from 'constants/hpiEnums';
 import useQuery from 'hooks/useQuery';
+import useSelectedChiefComplaints from 'hooks/useSelectedChiefComplaints';
 import {
     ChiefComplaintsProps,
     HpiHeadersProps,
@@ -17,7 +18,7 @@ import { hpiHeaders as hpiHeadersApiClient } from 'pages/EditNote/content/hpi/kn
 import ChiefComplaintsButton, {
     PatientViewProps,
 } from 'pages/EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
-import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions.json';
+import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
 import patientViewHeaders from 'pages/EditNote/content/patientview/constants/patientViewHeaders.json';
 import React, { useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
@@ -49,13 +50,13 @@ import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
 import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
 import { isSelectOneResponse } from 'redux/reducers/hpiReducer';
 import {
-    initialQuestionsState,
+    InitialQuestionsState,
     isChiefComplaintsResponse,
     userSurveyState,
 } from 'redux/reducers/userViewReducer';
 import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
 import { currentNoteStore } from 'redux/store';
-import getHPIText from 'utils/getHPIText';
+import getHPIFormData from 'utils/getHPIFormData';
 import style from './CCSelection.module.scss';
 
 interface InitialSurveyComponentProps {
@@ -80,7 +81,10 @@ const CCSelection = (props: Props) => {
         saveHpiHeader,
     } = props;
     const { setNotificationMessage, setNotificationType } = notification;
-    const nodeTenResponse = userSurveyState.nodes['10'].response;
+    const nodeTenResponse = (
+        (userSurveyState.nodes['10'].response ?? '') as string
+    ).trim();
+
     const query = useQuery();
 
     const [searchVal, setSearchVal] = useState('');
@@ -93,13 +97,7 @@ const CCSelection = (props: Props) => {
         });
     const [showNodeTen, setShowNodeTen] = useState(Boolean(nodeTenResponse));
 
-    const selectedCC = useMemo(
-        () =>
-            Object.keys(chiefComplaints).filter(
-                (item) => item !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM
-            ),
-        [chiefComplaints]
-    );
+    const selectedCC = useSelectedChiefComplaints();
     const showSubmitButton = useMemo(
         () => showNodeTen && Object.keys(chiefComplaints).length === 0,
         [chiefComplaints, showNodeTen]
@@ -107,7 +105,7 @@ const CCSelection = (props: Props) => {
 
     const nodes = patientViewHeaders.parentNodes;
     const nodeKey = Object.values(Object.entries(nodes)[1][1])[0];
-    const questions = initialQuestions as initialQuestionsState;
+    const questions = initialQuestions as InitialQuestionsState;
     const userSurveyStateNodes = Object.keys(userSurveyState.nodes);
     const content =
         nodeKey in questions.nodes &&
@@ -152,16 +150,24 @@ const CCSelection = (props: Props) => {
     }
 
     function onNextClick(e: any) {
-        if (selectedCC.length === 0 && !showNodeTen) {
+        if (!selectedCC.length && !showNodeTen) {
             setShowNodeTen(true);
-        } else if (selectedCC.length === 0 && showNodeTen && !nodeTenResponse) {
+            return;
+        }
+
+        if (!selectedCC.length && showNodeTen && !nodeTenResponse) {
             setShowRequiredFieldValidation({
                 status: true,
                 forUID: '10',
             });
-        } else {
-            props.continue(e);
+            return;
         }
+
+        if (selectedCC.length && nodeTenResponse) {
+            props.initialSurveyAddText('10', '');
+        }
+
+        props.continue(e);
     }
 
     async function getData(complaint: string) {
@@ -207,7 +213,9 @@ const CCSelection = (props: Props) => {
                     if (
                         complaint !== 'HIDDEN' &&
                         toCompare.includes(searchVal.toLowerCase()) &&
-                        title !== 'Annual Physical Exam'
+                        title !== ChiefComplaintsEnum.ANNUAL_PHYSICAL_EXAM &&
+                        title !==
+                            ChiefComplaintsEnum.ANNUAL_GYN_EXAM_WELL_WOMAN_VISIT
                     ) {
                         const temp = {
                             title: title,
@@ -331,7 +339,7 @@ const CCSelection = (props: Props) => {
                 return (
                     <div className={style.diseaseSelections__textarea}>
                         <TextArea
-                            maxlength='200'
+                            maxLength='200'
                             key={id}
                             value={(currEntry?.response as string) || ''}
                             placeholder={
@@ -361,11 +369,7 @@ const CCSelection = (props: Props) => {
             return;
         }
 
-        if (
-            showNodeTen &&
-            selectedCC.length === 0 &&
-            !((nodeTenResponse || '') as string).trim()
-        ) {
+        if (showNodeTen && selectedCC.length === 0 && !nodeTenResponse) {
             setShowRequiredFieldValidation({
                 status: true,
                 forUID: '10',
@@ -373,46 +377,27 @@ const CCSelection = (props: Props) => {
             return;
         }
 
-        const rootState = currentNoteStore.getState();
-
-        const first_name = rootState.additionalSurvey.legalFirstName;
-        const last_name = rootState.additionalSurvey.legalLastName;
-        const appointment_date =
-            rootState.userView.userSurvey.nodes[8].response;
-        const date_of_birth = rootState.additionalSurvey.dateOfBirth;
-        const last_4_ssn = rootState.additionalSurvey.socialSecurityNumber;
-        const hpi_text = getHPIText();
-        const clinician_id = rootState.clinicianDetail.id;
+        const clinician_id =
+            query.get(HPIPatientQueryParams.CLINICIAN_ID) ?? '';
+        const institution_id =
+            query.get(HPIPatientQueryParams.INSTITUTION_ID) ?? '';
 
         const { setNotificationMessage, setNotificationType } =
             props.notification;
 
         setLoading(true);
-        stagingClient
+        apiClient
             .post('/appointment', {
-                first_name,
-                last_name,
-                appointment_date,
-                date_of_birth,
-                last_4_ssn,
-                hpi_text: JSON.stringify(hpi_text),
+                ...getHPIFormData(),
                 clinician_id,
+                institution_id,
             })
-            .then((res) => {
-                if (res.status !== 200) throw new Error();
+            .then(() => {
+                localStorage.setItem('HPI_FORM_SUBMITTED', '1');
+                let url = `/submission-successful?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
 
-                const clinicianId = query.get(
-                    HPIPatientQueryParams.CLINICIAN_ID
-                );
-
-                const institutionId = query.get(
-                    HPIPatientQueryParams.INSTITUTION_ID
-                );
-
-                let url = '/submission-successful';
-
-                if (clinicianId !== null && institutionId !== null) {
-                    url = `${url}?${HPIPatientQueryParams.INSTITUTION_ID}=${institutionId}&${HPIPatientQueryParams.CLINICIAN_ID}=${clinicianId}`;
+                if (clinician_id) {
+                    url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
                 }
 
                 window.location.href = url;
@@ -440,7 +425,7 @@ const CCSelection = (props: Props) => {
             !Object.keys(userSurveyState.nodes).length &&
             !Object.keys(userSurveyState.order).length
         )
-            processSurveyGraph(initialQuestions as initialQuestionsState);
+            processSurveyGraph(initialQuestions as InitialQuestionsState);
 
         if (hpiHeaders) {
             const data = hpiHeadersApiClient;
@@ -492,7 +477,7 @@ const mapStateToProps = (
 
 interface DispatchProps {
     processSurveyGraph: (
-        graph: initialQuestionsState
+        graph: InitialQuestionsState
     ) => ProcessSurveyGraphAction;
     saveHpiHeader: (data: HpiHeadersState) => SaveHpiHeaderAction;
     processKnowledgeGraph: (
@@ -505,6 +490,7 @@ interface DispatchProps {
     updateAdditionalSurveyDetails: (
         legalFirstName: string,
         legalLastName: string,
+        legalMiddleName: string,
         socialSecurityNumber: string,
         dateOfBirth: string,
         initialSurveyState: number

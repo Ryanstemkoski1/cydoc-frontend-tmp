@@ -4,6 +4,7 @@ import { Button, Menu } from 'semantic-ui-react';
 import Logo from '../../assets/cydoc-logo.svg';
 import NoteNameMenuItem from './NoteNameMenuItem';
 /* eslint-disable no-console */
+import { ProductType, ViewType } from 'assets/enums/route.enums';
 import MenuButton, { MenuItem } from 'components/Header/MenuButton';
 import { YesNoResponse } from 'constants/enums';
 import useAuth from 'hooks/useAuth';
@@ -24,10 +25,9 @@ import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
-import DashboardIcon from '../../assets/images/dashboard.png';
 import Setting from '../../assets/images/edit.svg';
-import Home from '../../assets/images/home.svg';
 import Logout from '../../assets/images/logout.svg';
+import Notes from '../../assets/images/notes.svg';
 import QrCode from '../../assets/images/qr-code.svg';
 import Security from '../../assets/images/security.svg';
 import Users from '../../assets/images/users.svg';
@@ -75,18 +75,20 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     const userCurrentlyLoggingIn = loginCorrect && !isSignedIn;
 
     // Logged In Menu Items
-    let loggedInMenuButtonItems: MenuItem[] = [
+    const loggedInMenuButtonItems: MenuItem[] = [
+        {
+            to: `/${ProductType.HPI}/${ViewType.DOCTOR}`,
+            label: 'Notes',
+            icon: Notes,
+            active: window.location.href.includes(
+                `${ProductType.HPI}/${ViewType.DOCTOR}`
+            ),
+        },
         {
             to: '/qrcode',
             label: 'Clinic QR Code',
             icon: QrCode,
             active: window.location.href.includes('qrcode'),
-        },
-        {
-            to: '/dashboard',
-            label: 'Dashboard',
-            icon: DashboardIcon,
-            active: window.location.href.includes('dashboard'),
         },
         {
             to: '/editprofile',
@@ -111,27 +113,12 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     ];
 
     if (isManager) {
-        loggedInMenuButtonItems = [
-            {
-                to: '/manager-dashboard',
-                label: 'Manage Users',
-                icon: Users,
-                active: window.location.href.includes('manager-dashboard'),
-            },
-            ...loggedInMenuButtonItems,
-        ];
-    }
-
-    if (!isHomePage) {
-        loggedInMenuButtonItems = [
-            {
-                to: '/',
-                label: 'Home',
-                icon: Home,
-                active: false,
-            },
-            ...loggedInMenuButtonItems,
-        ];
+        loggedInMenuButtonItems.splice(1, 0, {
+            to: '/manager-dashboard',
+            label: 'Manage Users',
+            icon: Users,
+            active: window.location.href.includes('manager-dashboard'),
+        });
     }
 
     // Default Menu Items
@@ -276,7 +263,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             {!authLoading &&
                 (isSignedIn ? (
                     <MenuButton
-                        label={user?.firstName ?? ''}
+                        label={user?.firstName ?? 'menu'}
                         items={loggedInMenuButtonItems}
                     />
                 ) : (

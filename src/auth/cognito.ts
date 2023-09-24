@@ -1,4 +1,7 @@
-import { CognitoUser as PartialCognitoUser } from 'amazon-cognito-identity-js';
+import {
+    CognitoUserSession,
+    CognitoUser as PartialCognitoUser,
+} from 'amazon-cognito-identity-js';
 import { Auth, Amplify } from 'aws-amplify';
 import {
     COGNITO_CLIENT_ID,
@@ -47,6 +50,8 @@ export interface CognitoUser extends PartialCognitoUser {
         phone_number_verified: boolean;
         sub: string; // cognito user guid
     };
+    username?: string; // email
+    signInUserSession: CognitoUserSession;
     challengeParam?: { userAttributes?: { email: string } };
 }
 
@@ -74,7 +79,7 @@ export const sendResetPasswordCode = async (
     });
 };
 
-export const confirmCode = async (
+export const forgotPasswordConfirmCode = async (
     email: string,
     code: string,
     password: string

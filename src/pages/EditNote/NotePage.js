@@ -21,7 +21,7 @@ import MedicationsContent from './content/medications/MedicationsContent';
 import './content/patienthistory/PatientHistory.css';
 import PatientHistoryContent from './content/patienthistory/PatientHistoryContent';
 import InitialSurvey from './content/patientview/InitialSurvey';
-import initialQuestions from './content/patientview/constants/initialQuestions.json';
+import initialQuestions from './content/patientview/constants/initialQuestions';
 import PhysicalExamContent from './content/physicalexam/PhysicalExamContent';
 import ReviewOfSystemsContent from './content/reviewofsystems/ReviewOfSystemsContent';
 import SocialHistoryContent from './content/socialhistory/SocialHistoryContent';

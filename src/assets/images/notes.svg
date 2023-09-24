@@ -1,0 +1,3 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="800" viewBox="0 0 640 800">
+  <path id="notes" d="M320-240H640v-80H320Zm0-160H640v-80H320ZM240-80q-33,0-56.5-23.5T160-160V-800q0-33,23.5-56.5T240-880H560L800-640v480q0,33-23.5,56.5T720-80ZM520-600V-800H240v640H720V-600ZM240-800v0Z" transform="translate(-160 880)"/>
+</svg>
