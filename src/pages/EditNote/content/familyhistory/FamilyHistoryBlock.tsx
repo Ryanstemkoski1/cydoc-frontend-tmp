@@ -25,7 +25,7 @@ import {
     selectFamilyHistoryState,
 } from 'redux/selectors/familyHistorySelectors';
 import { Grid, Header } from 'semantic-ui-react';
-import DeleleIcon from '../../../../assets/images/delete.svg';
+import DeleteIcon from '../../../../assets/images/delete.svg';
 import '../hpi/knowledgegraph/src/css/Button.css';
 import '../reviewofsystems/ReviewOfSystems.css';
 import './FamilyHistory.css';
@@ -56,7 +56,7 @@ class FamilyHistoryBlock extends Component<Props> {
     }
 
     render() {
-        const { conditionInp, index, isPreview } = this.props;
+        const { conditionInp, index, isPreview, hide = false } = this.props;
         const { condition, hasAfflictedFamilyMember, familyMembers } =
             this.props.familyHistoryItem;
         // array of dropdowns displayed on Family History Family Member column
@@ -148,11 +148,11 @@ class FamilyHistoryBlock extends Component<Props> {
                                 this.props.deleteRow(this.props.index);
                             }}
                         >
-                            <img src={DeleleIcon} alt='Remove' />
+                            {!hide && <img src={DeleteIcon} alt='Remove' />}
                         </div>
                     </div>
                 </div>
-                {yesActive && (
+                {yesActive && !hide && (
                     <>
                         <GridContent
                             header_titles={familyBlockHeaders}
@@ -180,6 +180,7 @@ interface BlockProps {
     pop: boolean;
     node?: string;
     deleteRow: (index: string) => void;
+    hide?: boolean;
 }
 
 interface DispatchProps {
