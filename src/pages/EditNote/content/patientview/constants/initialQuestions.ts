@@ -12,7 +12,7 @@ const initialQuestions: InitialQuestionsState = {
         '7': '7',
     },
     graph: {
-        '1': ['2', '3', '4', '8', '9'],
+        '1': ['8', '9'],
         '2': [],
         '3': [],
         '4': [],

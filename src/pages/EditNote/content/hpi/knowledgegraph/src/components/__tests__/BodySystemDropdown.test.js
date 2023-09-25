@@ -2,7 +2,7 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
 import BodySystemDropdown from '../BodySystemDropdown';
-import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
+import { favChiefComplaints } from 'classes/institution.class';
 import star from '../../icons/star.svg';
 // import ChiefComplaintsButton from '../ChiefComplaintsButton';
 
