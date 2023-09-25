@@ -69,12 +69,12 @@ export interface AppointmentUser {
     lastName: string;
     middleName: string | null;
     dob: Date;
-    clinicianId: number | null;
+    clinicianId: number | string | null; // TODO: Need to remove type number after we deploy the UUID change
     appointmentDate: Date;
     clinicianLastName: string | null;
     hpiText: string;
     ssnLastFourDigit: string | null;
-    institutionId: number | null;
+    institutionId: number | string | null; // TODO: Need to remove type number after we deploy the UUID change
 }
 
 const BrowseNotes = () => {

@@ -134,6 +134,9 @@ const HPI = () => {
                 if (!(validatedInstitution as ApiResponse).errorMessage) {
                     const { id, name } = validatedInstitution.detail;
                     setInstitution(new InstitutionClass({ id, name }));
+                } else {
+                    log(`HPI error fetching institution`);
+                    history.replace('/');
                 }
             } catch (e) {
                 log(`HPI error fetching institution`);
