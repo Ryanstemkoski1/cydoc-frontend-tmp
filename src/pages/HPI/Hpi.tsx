@@ -29,6 +29,7 @@ import {
 import { CurrentNoteState } from 'redux/reducers';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
+import { isResponseValid } from 'utils/getHPIFormData';
 import CCSelection from './ChiefComplaintSelection/CCSelection';
 import style from './HPI.module.scss';
 import InitialSurveyHPI from './InitialSurvey/InitialSurvey';
@@ -127,16 +128,6 @@ const HPI = () => {
                 return;
             }
 
-            const nodeTenResponse = (
-                (userSurveyState?.nodes?.['10']?.response ?? '') as string
-            ).trim();
-
-            if (
-                getSelectedChiefCompliants(chiefComplaints).length &&
-                nodeTenResponse
-            )
-                dispatch(initialSurveyAddText('10', ''));
-
             dispatch(updateActiveItem(name));
             window.scrollTo(0, 0);
         },
@@ -164,6 +155,18 @@ const HPI = () => {
     const onNextClick = useCallback(() => {
         if (notificationMessage) setNotificationMessage('');
 
+        if (
+            activeItem === 'CCSelection' &&
+            !isResponseValid(userSurveyState.nodes['7'].response) &&
+            !Object.keys(chiefComplaints).length
+        ) {
+            setNotificationMessage(
+                'You must select or describe at least one visit reason to proceed.'
+            );
+            setNotificationType(NotificationTypeEnum.ERROR);
+            return;
+        }
+
         const tabs = currentTabs;
         const length = tabs.length;
         const nextTabIndex = tabs.indexOf(activeItem) + 1;
@@ -173,7 +176,7 @@ const HPI = () => {
 
         dispatch(updateActiveItem(nextTab));
         window.scrollTo(0, 0);
-    }, [currentTabs, activeItem, notificationMessage]);
+    }, [currentTabs, activeItem, notificationMessage, userSurveyState]);
 
     /* EFFECTS */
     useEffect(() => {
@@ -285,21 +288,19 @@ const HPI = () => {
     }, [chiefComplaints]);
 
     useEffect(() => {
-        setTimeout(() => {
-            window.scrollTo(0, 0);
-        }, 0);
+        window.scrollTo(0, 0);
     }, [activeItem]);
 
     useEffect(() => {
-        let timeoutId: any;
         if (notificationMessage) {
-            timeoutId = setTimeout(() => {
+            window.scrollTo(0, 0);
+            const timeoutId = setTimeout(() => {
                 setNotificationMessage('');
             }, 3000);
+            return () => {
+                clearTimeout(timeoutId);
+            };
         }
-        return () => {
-            clearTimeout(timeoutId);
-        };
     }, [notificationMessage]);
 
     useEffect(() => {

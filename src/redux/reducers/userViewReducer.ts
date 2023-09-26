@@ -1,8 +1,13 @@
-import { YesNoResponse } from 'constants/enums';
 import { favChiefComplaints } from 'classes/institution.class';
-import { ResponseTypes, SelectOneInput } from 'constants/hpiEnums';
+import { YesNoResponse } from 'constants/enums';
+import {
+    ListTextInput,
+    ResponseTypes,
+    SelectOneInput,
+} from 'constants/hpiEnums';
 import { USER_VIEW_ACTION } from 'redux/actions/actionTypes';
 import { userViewActionTypes } from 'redux/actions/userViewActions';
+import { v4 } from 'uuid';
 import { ChiefComplaintsState } from './chiefComplaintsReducer';
 
 // Eventually replace with hpiState interface ??
@@ -43,7 +48,7 @@ export interface userSurveyState {
                 | SelectOneInput
                 | string
                 | ChiefComplaintsState
-                | string;
+                | ListTextInput;
         };
     };
 }
@@ -239,6 +244,67 @@ export function userViewReducer(
                         [uid]: {
                             ...state.userSurvey.nodes[uid],
                             response: response,
+                        },
+                    },
+                },
+            };
+        }
+
+        case USER_VIEW_ACTION.INITIAL_SURVEY_ADD_LIST_INPUT: {
+            const { id } = action.payload;
+            const response = (state?.userSurvey?.nodes[id]?.response ??
+                {}) as ListTextInput;
+            return {
+                ...state,
+                userSurvey: {
+                    ...state.userSurvey,
+                    nodes: {
+                        ...state.userSurvey.nodes,
+                        [id]: {
+                            ...state.userSurvey.nodes[id],
+                            response: { ...response, [v4()]: '' },
+                        },
+                    },
+                },
+            };
+        }
+
+        case USER_VIEW_ACTION.INITIAL_SURVEY_LIST_TEXT_HANDLE_CHANGE: {
+            const { key, id, textInput } = action.payload;
+            const response = (state?.userSurvey?.nodes[id]?.response ??
+                {}) as ListTextInput;
+            return {
+                ...state,
+                userSurvey: {
+                    ...state.userSurvey,
+                    nodes: {
+                        ...state.userSurvey.nodes,
+                        [id]: {
+                            ...state.userSurvey.nodes[id],
+                            response: { ...response, [key]: textInput },
+                        },
+                    },
+                },
+            };
+        }
+
+        case USER_VIEW_ACTION.INITIAL_SURVEY_REMOVE_LIST_INPUT: {
+            const { key, id } = action.payload;
+
+            const response = state.userSurvey.nodes[id]
+                .response as ListTextInput;
+
+            delete response[key];
+
+            return {
+                ...state,
+                userSurvey: {
+                    ...state.userSurvey,
+                    nodes: {
+                        ...state.userSurvey.nodes,
+                        [id]: {
+                            ...state.userSurvey.nodes[id],
+                            response,
                         },
                     },
                 },

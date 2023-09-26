@@ -31,3 +31,16 @@ export default function getHPIFormData() {
             rootState?.userView?.userSurvey?.nodes[8]?.response ?? '',
     };
 }
+
+/**
+ * Check if Form has any value
+ * @param {string | ChiefComplaintsState | SelectOneInput | ListTextInput} response={}
+ * @returns boolean
+ */
+export function isResponseValid(response = {}): boolean {
+    const responseValues = Object.values(response) as string[];
+    return (
+        responseValues.length !== 0 &&
+        responseValues.some((listItem) => listItem.trim())
+    );
+}
