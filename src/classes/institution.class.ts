@@ -1,4 +1,16 @@
-import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
+export const favChiefComplaints = [
+    'Annual Physical Exam',
+    'Hypertension',
+    'Diabetes',
+    'Urinary Symptoms/UTI',
+    'Upper Respiratory Infection',
+    'PHQ-9 for Depression',
+    'Insomnia',
+    'Hyperlipidemia',
+    'Opiate Use',
+    'Genital Symptoms/STI',
+    'ADHD',
+];
 
 export enum InstitutionType {
     GYN = 'Gyn',
@@ -7,6 +19,7 @@ export enum InstitutionType {
 
 export const favComplaintsBasedOnInstituteType = {
     [InstitutionType.GYN]: [
+        'Annual Gyn Exam/Well Woman Visit',
         'Birth Control Consultation',
         'Breast Concerns (Breast Pain, Breast Lump, and/or Nipple Discharge)',
         'Changes in Vaginal Discharge',

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { graphClientURL } from 'constants/api.js';
-import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
 import { GraphData } from 'constants/hpiEnums';
 import React from 'react';
 import Masonry from 'react-masonry-css';
@@ -39,6 +38,7 @@ import ChiefComplaintsButton, {
 import DiseaseForm from './src/components/DiseaseForm';
 import MiscBox from './src/components/MiscBox';
 import './src/css/App.css';
+import { favChiefComplaints } from 'classes/institution.class';
 
 interface HPIContentProps {
     step: number;

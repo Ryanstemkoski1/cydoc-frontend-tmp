@@ -1,5 +1,5 @@
 import { YesNoResponse } from 'constants/enums';
-import { favChiefComplaints } from 'constants/favoriteChiefComplaints';
+import { favChiefComplaints } from 'classes/institution.class';
 import { ResponseTypes, SelectOneInput } from 'constants/hpiEnums';
 import { USER_VIEW_ACTION } from 'redux/actions/actionTypes';
 import { userViewActionTypes } from 'redux/actions/userViewActions';
