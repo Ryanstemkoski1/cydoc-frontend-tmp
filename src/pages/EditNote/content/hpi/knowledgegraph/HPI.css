@@ -310,8 +310,13 @@
         height: 38px;
     }
     .ui.icon.button.hpi-small-previous-button i,
-    .ui.icon.button.hpi-small-next-button i{
+    .ui.icon.button.hpi-small-next-button i {
         font-size: 15px !important;
+    }
+}
+@media screen and (max-width: 767px) {
+    .hpi-content .isAddButton button {
+        margin-bottom: 0;
     }
 }
 @media screen and (max-width: 700px) {

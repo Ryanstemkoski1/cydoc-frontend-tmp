@@ -7,4 +7,9 @@
     span {
         display: none;
     }
+    &__addButton button {
+        @include max-screen($mobile) {
+            margin: 0 0 25px;
+        }
+    }
 }

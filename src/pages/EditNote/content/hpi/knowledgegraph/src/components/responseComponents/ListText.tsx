@@ -1,38 +1,30 @@
 import Input from 'components/Input/Input';
 import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
 import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
-import { HpiStateProps } from 'constants/hpiEnums';
 import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
 import React from 'react';
-import { connect } from 'react-redux';
-import {
-    AddListInputAction,
-    ListTextHandleChangeAction,
-    RemoveListInputAction,
-    addListInput,
-    listTextHandleChange,
-    removeListInput,
-} from 'redux/actions/hpiActions';
-import { CurrentNoteState } from 'redux/reducers';
 import { isListTextDictionary } from 'redux/reducers/hpiReducer';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import '../../css/listText.css';
 import style from './ListText.module.scss';
 
 interface ListTextProps {
-    node: string;
+    nodeId: string;
+    onChangeListItem: (...args: any[]) => void;
+    onAddListItem: (...args: any[]) => void;
+    onRemoveListItem: (...args: any[]) => void;
+    response: any;
 }
 
-class ListText extends React.Component<Props> {
+class ListText extends React.Component<ListTextProps> {
     render() {
         const {
-            node,
-            hpi,
-            listTextHandleChange,
-            addListInput,
-            removeListInput,
+            nodeId,
+            onChangeListItem,
+            onAddListItem,
+            onRemoveListItem,
+            response,
         } = this.props;
-        const listInputValues = hpi.nodes[node].response;
+        const listInputValues = response;
         let listInputsArray: JSX.Element[] = [];
         if (listInputValues && isListTextDictionary(listInputValues)) {
             listInputsArray = Object.entries(listInputValues).map(
@@ -45,22 +37,14 @@ class ListText extends React.Component<Props> {
                             <Input
                                 id={'list-text-input'}
                                 value={input}
-                                onChange={(
-                                    e: any
-                                ): ListTextHandleChangeAction =>
-                                    listTextHandleChange(
-                                        id,
-                                        node,
-                                        e.target.value
-                                    )
+                                onChange={(e: any) =>
+                                    onChangeListItem(id, nodeId, e.target.value)
                                 }
                             />
                         </div>
 
                         <RemoveButton
-                            onClick={(): RemoveListInputAction =>
-                                removeListInput(id, node)
-                            }
+                            onClick={() => onRemoveListItem(id, nodeId)}
                         />
                     </div>
                 )
@@ -68,37 +52,12 @@ class ListText extends React.Component<Props> {
         }
 
         return (
-            <div>
+            <div className={`${style.listText__addButton} isAddButton`}>
                 {listInputsArray}
-
-                <AddRowButton
-                    onClick={(): AddListInputAction => addListInput(node)}
-                />
+                <AddRowButton onClick={() => onAddListItem(nodeId)} />
             </div>
         );
     }
 }
 
-interface DispatchProps {
-    listTextHandleChange: (
-        uuid: string,
-        medId: string,
-        textInput: string
-    ) => ListTextHandleChangeAction;
-    removeListInput: (uuid: string, medId: string) => RemoveListInputAction;
-    addListInput: (medId: string) => AddListInputAction;
-}
-
-const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
-    hpi: selectHpiState(state),
-});
-
-type Props = HpiStateProps & DispatchProps & ListTextProps;
-
-const mapDispatchToProps = {
-    listTextHandleChange,
-    removeListInput,
-    addListInput,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ListText);
+export default ListText;
