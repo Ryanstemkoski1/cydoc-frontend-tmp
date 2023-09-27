@@ -1,7 +1,6 @@
 import useUser from 'hooks/useUser';
 import React from 'react';
 import PrintTemplate from 'react-print';
-import Logo from '../../assets/images/logo.svg';
 import style from '../../assets/scss/qrcode-print.module.scss';
 
 interface Props {
@@ -17,23 +16,22 @@ function PatientQRCodePage({ children }: Props) {
         >
             <PrintTemplate>
                 <div className={`${style.patientQR}`}>
+                    <p>Please scan this QR code now to</p>
                     <h2>
-                        <span>{user?.institutionName ?? ''}</span>
-                        has partnered with
+                        complete your mandatory pre-appointment questionnaire
+                        for
                     </h2>
+                    <h1>
+                        <span>{user?.institutionName ?? ''}</span>
+                    </h1>
 
-                    <img
-                        className={style.patientQR__logo}
-                        src={Logo}
-                        alt='Cydoc'
-                    />
-
-                    <h2>to streamline your visit.</h2>
-                    <p>
-                        To complete your check-in using Cydoc&lsquo;s Medical AI
-                        Assistant, <br /> please scan this QR code now:
-                    </p>
                     <div className={style.patientQR__image}>{children}</div>
+                    <div className={style.patientQR__info}>
+                        <p>
+                            This required questionnaire takes only 3 minutes to
+                            complete and helps streamline your appointment.
+                        </p>
+                    </div>
                 </div>
             </PrintTemplate>
         </div>
