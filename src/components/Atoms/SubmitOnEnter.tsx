@@ -5,7 +5,6 @@ export function SubmitOnEnter() {
     const { submitForm } = useFormikContext();
     useEffect(() => {
         const listener = (event: KeyboardEvent) => {
-            console.log('Enter key was pressed. Run your function.');
             if (event.code === 'Enter' || event.code === 'NumpadEnter') {
                 event.preventDefault();
                 submitForm();
