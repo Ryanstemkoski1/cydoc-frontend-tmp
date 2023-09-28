@@ -1,18 +1,16 @@
 import axios from 'axios';
 import { ActiveItemProps } from 'components/navigation/NavMenu';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { YesNoResponse } from 'constants/enums';
+import { NotificationTypeEnum } from 'components/tools/Notification/Notification';
 import { GraphData, ResponseTypes } from 'constants/hpiEnums';
 import {
     ChiefComplaintsProps,
     HpiHeadersProps,
 } from 'pages/EditNote/content/hpi/knowledgegraph/HPIContent';
-import ChiefComplaintsButton, {
-    PatientViewProps,
-} from 'pages/EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
-import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
+import ChiefComplaintsButton from 'pages/EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
 import InputTextOrDateResponse from 'pages/EditNote/content/patientview/InputTextOrDateResponse';
 import SurveyYesNoResponse from 'pages/EditNote/content/patientview/SurveyYesNoResponse';
+import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
 import patientViewHeaders from 'pages/EditNote/content/patientview/constants/patientViewHeaders.json';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -51,7 +49,6 @@ import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
 import { currentNoteStore } from 'redux/store';
 import { Search } from 'semantic-ui-react';
 import style from './PreHPI.module.scss';
-import { NotificationTypeEnum } from 'components/tools/Notification/Notification';
 
 interface InitialSurveyState {
     error: boolean;
@@ -124,8 +121,7 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
     };
 
     renderSwitch = (id: string) => {
-        const { userSurveyState, patientView, initialSurveySearch } =
-                this.props,
+        const { userSurveyState, initialSurveySearch } = this.props,
             currEntry = userSurveyState.nodes[id],
             { bodySystems, parentNodes } = this.props.hpiHeaders;
         // map through all complaints on the HPI and create search resuls
@@ -134,7 +130,6 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
             Object.entries(bodySystems).forEach((grouping) => {
                 grouping[1].forEach((complaint) => {
                     const displayPatientView =
-                            patientView &&
                             parentNodes[complaint].patientView !== 'HIDDEN',
                         title = displayPatientView
                             ? parentNodes[complaint].patientView
@@ -328,7 +323,6 @@ type Props = HpiHeadersProps &
     initialSurveyProps &
     DispatchProps &
     HpiHeadersProps &
-    PatientViewProps &
     ChiefComplaintsProps &
     AdditionalSurveyProps;
 

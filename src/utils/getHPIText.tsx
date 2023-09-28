@@ -519,6 +519,17 @@ export interface HPIText {
     miscNote: string;
 }
 
+export function getListTextResponseAsSingleString(response = {}): string {
+    return Object.values(response)
+        .map((item) => (item as string).trim().replace(/[.]/g, ''))
+        .filter((item: string) => item)
+        .reverse()
+        .reduce(
+            (accumulator, currentValue) => currentValue + '. ' + accumulator,
+            ''
+        );
+}
+
 function getInitialSurveyResponses(state: userSurveyState): HPIText[] {
     const responses: HPIText[] = [];
 
@@ -532,15 +543,9 @@ function getInitialSurveyResponses(state: userSurveyState): HPIText[] {
 
         switch (value.responseType) {
             case ResponseTypes.LIST_TEXT: {
-                currentNodeResponse = Object.values(value.response)
-                    .map((item: string) => item.trim().replace(/[.]/g, ''))
-                    .filter((item: string) => item)
-                    .reverse()
-                    .reduce(
-                        (accumulator, currentValue) =>
-                            currentValue + '. ' + accumulator,
-                        ''
-                    );
+                currentNodeResponse = getListTextResponseAsSingleString(
+                    value.response
+                );
                 break;
             }
             case ResponseTypes.LONG_TEXT:
@@ -554,7 +559,7 @@ function getInitialSurveyResponses(state: userSurveyState): HPIText[] {
 
         if (currentNodeResponse) {
             responses.push({
-                title: value.text,
+                title: nodeId === '7' ? `Patient's concerns` : value.text,
                 text: currentNodeResponse,
                 miscNote: '',
             });

@@ -155,9 +155,11 @@ const HPI = () => {
     const onNextClick = useCallback(() => {
         if (notificationMessage) setNotificationMessage('');
 
+        const node7Response = userSurveyState.nodes['7'].response ?? {};
+
         if (
             activeItem === 'CCSelection' &&
-            !isResponseValid(userSurveyState.nodes['7'].response) &&
+            !isResponseValid(node7Response) &&
             !Object.keys(chiefComplaints).length
         ) {
             setNotificationMessage(
@@ -175,8 +177,13 @@ const HPI = () => {
         const nextTab = tabs[nextTabIndex];
 
         dispatch(updateActiveItem(nextTab));
-        window.scrollTo(0, 0);
-    }, [currentTabs, activeItem, notificationMessage, userSurveyState]);
+    }, [
+        currentTabs,
+        activeItem,
+        notificationMessage,
+        userSurveyState,
+        chiefComplaints,
+    ]);
 
     /* EFFECTS */
     useEffect(() => {
@@ -202,7 +209,6 @@ const HPI = () => {
                                 setNotificationMessage,
                                 setNotificationType,
                             }}
-                            patientView={false} // TODO: is this correct? seems like it would be patient view
                         />
                     ),
                     title: 'Help Cydoc personalize your questionnaire',
@@ -218,8 +224,6 @@ const HPI = () => {
                                 setNotificationMessage,
                                 setNotificationType,
                             }}
-                            activeItem=''
-                            patientView={false} // TODO: is this correct? seems like it would be patient view
                         />
                     ),
                     title: `Please select the top 3 conditions or symptoms you'd like to discuss`,
@@ -237,7 +241,10 @@ const HPI = () => {
                             }}
                         />
                     ),
-                    title: activeItem,
+                    title:
+                        activeItem in hpiHeaders.parentNodes
+                            ? hpiHeaders.parentNodes[activeItem].patientView
+                            : activeItem,
                 });
             }
         }

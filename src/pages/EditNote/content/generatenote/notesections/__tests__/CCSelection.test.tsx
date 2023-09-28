@@ -19,6 +19,10 @@ import {
     initialSurveyAddText,
     processSurveyGraph,
 } from 'redux/actions/userViewActions';
+import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
+import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
+import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
+import { userSurveyState } from 'redux/reducers/userViewReducer';
 import { createCurrentNoteStore } from 'redux/store';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -39,14 +43,16 @@ const renderChiefComplaintSelectionPage = (state: any) => {
         <Provider store={mockStore(state)}>
             <Router>
                 <CCSelection
-                    activeItem={''}
                     continue={() => {}}
                     onPreviousClick={() => {}}
                     notification={{
                         setNotificationMessage: () => {},
                         setNotificationType: () => {},
                     }}
-                    patientView={false}
+                    hpiHeaders={{} as HpiHeadersState}
+                    userSurveyState={{} as userSurveyState}
+                    chiefComplaints={{} as ChiefComplaintsState}
+                    additionalSurvey={{} as additionalSurvey}
                 />
             </Router>
         </Provider>

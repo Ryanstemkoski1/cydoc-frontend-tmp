@@ -1,5 +1,4 @@
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
-import { ActiveItemProps } from 'components/navigation/NavMenu';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { NotificationTypeEnum } from 'components/tools/Notification/Notification';
 import { apiClient } from 'constants/api';
@@ -11,20 +10,19 @@ import {
     HpiHeadersProps,
 } from 'pages/EditNote/content/hpi/knowledgegraph/HPIContent';
 import { hpiHeaders as hpiHeadersApiClient } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
-import ChiefComplaintsButton, {
-    PatientViewProps,
-} from 'pages/EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
+import ChiefComplaintsButton from 'pages/EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
 import ListText from 'pages/EditNote/content/hpi/knowledgegraph/src/components/responseComponents/ListText';
 import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
 import patientViewHeaders from 'pages/EditNote/content/patientview/constants/patientViewHeaders.json';
-import React, { useEffect, useMemo, useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import {
     GoBackToAdditionalSurvey,
     UpdateAdditionalSurveyAction,
     resetAdditionalSurveyPage,
     updateAdditionalSurveyDetails,
 } from 'redux/actions/additionalSurveyActions';
+import { selectChiefComplaint } from 'redux/actions/chiefComplaintsActions';
 import {
     ProcessKnowledgeGraphAction,
     processKnowledgeGraph,
@@ -57,6 +55,9 @@ import {
 } from 'redux/reducers/userViewReducer';
 import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
 import getHPIFormData, { isResponseValid } from 'utils/getHPIFormData';
+import { getListTextResponseAsSingleString } from 'utils/getHPIText';
+import { getQuestionnairesFromText } from 'utils/getQuestionnairesFromText';
+import { loadQuestionnairesData } from 'utils/loadKnowledgeGraphData';
 import style from './CCSelection.module.scss';
 
 interface InitialSurveyComponentProps {
@@ -68,6 +69,13 @@ interface InitialSurveyComponentProps {
             React.SetStateAction<NotificationTypeEnum>
         >;
     };
+}
+
+function createLowerCaseKeyNameToActualKeyNameMap(object = {}) {
+    return Object.keys(object).reduce((accumulator, key) => {
+        accumulator.set(key.toLowerCase(), key);
+        return accumulator;
+    }, new Map<string, string>([]));
 }
 
 const CCSelection = (props: Props) => {
@@ -82,21 +90,16 @@ const CCSelection = (props: Props) => {
     } = props;
     const { setNotificationMessage, setNotificationType } = notification;
     const query = useQuery();
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
 
     const selectedCC = useSelectedChiefComplaints();
-
-    const disableSubmitButton = useMemo(
-        () =>
-            isResponseValid(userSurveyState.nodes['7'].response) &&
-            Object.keys(chiefComplaints).length === 0,
-        [chiefComplaints, userSurveyState.nodes]
-    );
 
     const nodes = patientViewHeaders.parentNodes;
     const nodeKey = Object.values(Object.entries(nodes)[1][1])[0];
     const questions = initialQuestions as InitialQuestionsState;
     const userSurveyStateNodes = Object.keys(userSurveyState.nodes);
+    const continueRef = useRef<(e: any) => void | undefined>();
     const content =
         nodeKey in questions.nodes &&
         questions.graph[nodeKey].map((key) => {
@@ -122,8 +125,102 @@ const CCSelection = (props: Props) => {
         return props.onPreviousClick();
     }
 
-    function onNextClick(e: any) {
-        props.continue(e);
+    /**
+     * Remove Questionnaires
+     * @param {string[]} pinnedChiefComplaints
+     * @returns {string[]} updatedSelectedChiefComplaints
+     */
+    function removeQuestionniares(pinnedChiefComplaints: string[]): string[] {
+        const chiefComplaintsToRemove = selectedCC.filter(
+            (questionnaire) => !pinnedChiefComplaints.includes(questionnaire)
+        );
+
+        chiefComplaintsToRemove.forEach((questionnaire) =>
+            dispatch(selectChiefComplaint(questionnaire))
+        );
+
+        // updated selected chief complaints after removal.
+        return selectedCC.filter(
+            (item) => !chiefComplaintsToRemove.includes(item)
+        );
+    }
+
+    /**
+     * @param {string} text
+     * @param {string[]} pinnedChiefComplaints
+     * @returns {string[]} newQuestionnaires
+     */
+    function getNewQuestionnaires(
+        text: string,
+        pinnedChiefComplaints: string[]
+    ): string[] {
+        const lowerCaseKeyNameToActualKeyNameMap =
+            createLowerCaseKeyNameToActualKeyNameMap(hpiHeaders.parentNodes);
+
+        return getQuestionnairesFromText(text)
+            .filter(
+                (item) =>
+                    !(
+                        pinnedChiefComplaints.includes(item) &&
+                        selectedCC.includes(item)
+                    )
+            )
+            .map((item) =>
+                lowerCaseKeyNameToActualKeyNameMap.get(item.toLowerCase())
+            ) as string[];
+    }
+
+    /**
+     * Get Questionnaires to Load
+     * @param {string[]} newQuestionnaires
+     * @returns {string[]} questionnairesToLoad
+     */
+    function getQuestionnairesToLoad(newQuestionnaires: string[]): string[] {
+        return newQuestionnaires
+            .filter((questionnaire) => !selectedCC.includes(questionnaire))
+            .map((item) => Object.keys(hpiHeaders.parentNodes[item])[0]);
+    }
+
+    async function onNextClick(e: any) {
+        const pinnedChiefComplaints = Object.keys(
+            userSurveyState.nodes['6'].response ?? {}
+        );
+
+        const node7Response = userSurveyState.nodes['7'].response ?? {};
+        const node7ResponseAsText =
+            getListTextResponseAsSingleString(node7Response);
+
+        const newQuestionnaires = getNewQuestionnaires(
+            node7ResponseAsText,
+            pinnedChiefComplaints
+        );
+
+        const updatedSelectedChiefCompliants = removeQuestionniares(
+            pinnedChiefComplaints
+        );
+
+        if (
+            !newQuestionnaires.length &&
+            !updatedSelectedChiefCompliants.length &&
+            isResponseValid(node7Response)
+        ) {
+            handleSubmit();
+            return;
+        }
+
+        const questionnairesToLoad = getQuestionnairesToLoad(newQuestionnaires);
+
+        setLoading(true);
+        const values = await loadQuestionnairesData(questionnairesToLoad);
+        setLoading(false);
+
+        // Dispatching actions
+        values.forEach((data) => dispatch(processKnowledgeGraph(data)));
+        newQuestionnaires.forEach((questionnaire) =>
+            dispatch(selectChiefComplaint(questionnaire))
+        );
+
+        setTimeout(() => continueRef!.current!(e), 0);
     }
 
     function renderSwitch(id: string) {
@@ -221,6 +318,10 @@ const CCSelection = (props: Props) => {
     /* ----- EFFECTS ----- */
 
     useEffect(() => {
+        continueRef.current = props.continue;
+    }, [props.continue]);
+
+    useEffect(() => {
         if (
             !Object.keys(userSurveyState.graph).length &&
             !Object.keys(userSurveyState.nodes).length &&
@@ -240,8 +341,8 @@ const CCSelection = (props: Props) => {
             <NavigationButton
                 previousClick={onPrevClick}
                 loading={loading}
-                nextClick={disableSubmitButton ? handleSubmit : onNextClick}
-                secondButtonLabel={disableSubmitButton ? 'Submit' : 'Next'}
+                nextClick={onNextClick}
+                secondButtonLabel={'Next'}
             />
         </div>
     );
@@ -311,10 +412,8 @@ type Props = HpiHeadersProps &
     initialSurveyProps &
     DispatchProps &
     HpiHeadersProps &
-    PatientViewProps &
     ChiefComplaintsProps &
-    AdditionalSurveyProps &
-    ActiveItemProps;
+    AdditionalSurveyProps;
 
 const mapDispatchToProps = {
     processSurveyGraph,
