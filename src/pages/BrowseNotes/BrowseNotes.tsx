@@ -1,5 +1,7 @@
 import Modal from 'components/Modal/Modal';
+import useAuth from 'hooks/useAuth';
 import useUser from 'hooks/useUser';
+import { getAppointment } from 'modules/appointment-api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoadingStatus } from 'redux/actions/loadingStatusActions';
@@ -8,8 +10,6 @@ import LeftArrow from '../../assets/images/left-arrow.svg';
 import RefreshIcon from '../../assets/images/refresh.png';
 import RightArrow from '../../assets/images/right-arrow.svg';
 import style from './BrowseNotes.module.scss';
-import { getAppointment } from 'modules/appointment-api';
-import useAuth from 'hooks/useAuth';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${lastName}, ${firstName} ${middleName}`;
@@ -69,12 +69,12 @@ export interface AppointmentUser {
     lastName: string;
     middleName: string | null;
     dob: Date;
-    clinicianId: number | string | null; // TODO: Need to remove type number after we deploy the UUID change
+    clinicianId: string | null;
     appointmentDate: Date;
     clinicianLastName: string | null;
     hpiText: string;
     ssnLastFourDigit: string | null;
-    institutionId: number | string | null; // TODO: Need to remove type number after we deploy the UUID change
+    institutionId: string | null;
 }
 
 const BrowseNotes = () => {

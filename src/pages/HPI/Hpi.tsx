@@ -1,6 +1,7 @@
 import { ApiResponse, Institution } from '@cydoc-ai/types';
 import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
+import axios from 'axios';
 import {
     Institution as InstitutionClass,
     InstitutionType,
@@ -10,6 +11,7 @@ import Stepper from 'components/Stepper/Stepper';
 import Notification, {
     NotificationTypeEnum,
 } from 'components/tools/Notification/Notification';
+import { graphClientURL } from 'constants/api';
 import useQuery from 'hooks/useQuery';
 import { getSelectedChiefCompliants } from 'hooks/useSelectedChiefComplaints';
 import { getInstitution } from 'modules/institution-api';
@@ -20,6 +22,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
+import { selectChiefComplaint } from 'redux/actions/chiefComplaintsActions';
+import { processKnowledgeGraph } from 'redux/actions/hpiActions';
 import { saveHpiHeader } from 'redux/actions/hpiHeadersActions';
 import { setLoadingStatus } from 'redux/actions/loadingStatusActions';
 import {
@@ -55,6 +59,8 @@ const HPI = () => {
     const [institution, setInstitution] = useState<InstitutionClass | null>(
         null
     );
+    const [skipCC, setSkipCC] = useState(false);
+
     const {
         userSurveyState,
         activeItem,
@@ -84,6 +90,14 @@ const HPI = () => {
                 dispatch(processSurveyGraph(initialQuestions));
             }
         } else {
+            //TODO: PATCH FOR signature perinatal
+            if (
+                (institution?.name || '')
+                    .toLowerCase()
+                    .includes('signature perinatal')
+            ) {
+                setSkipCC(true);
+            }
             if (institution.type === InstitutionType.GYN) {
                 initialQuestions.nodes['2'].category = 'ANNUAL_GYN_EXAM';
                 initialQuestions.nodes['2'].doctorView =
@@ -276,13 +290,37 @@ const HPI = () => {
     }, [history, institutionId, query]);
 
     useEffect(() => {
+        if (skipCC) return;
+
         setCurrentTabs([
             'InitialSurvey',
             'PreHPI',
             'CCSelection',
             ...getSelectedChiefCompliants(chiefComplaints),
         ]);
-    }, [chiefComplaints]);
+    }, [chiefComplaints, skipCC]);
+
+    useEffect(() => {
+        if (skipCC) {
+            dispatch(
+                selectChiefComplaint('Signature Perinatal Center Questionnaire')
+            );
+            setCurrentTabs([
+                'InitialSurvey',
+                'PreHPI',
+                'Signature Perinatal Center Questionnaire',
+            ]);
+
+            loadCCData();
+        }
+    }, [skipCC]);
+
+    const loadCCData = async () => {
+        const response = await axios.get(
+            graphClientURL + '/graph/category/' + 'SIGPERI_ROOT' + '/4'
+        );
+        dispatch(processKnowledgeGraph(response.data));
+    };
 
     useEffect(() => {
         setTimeout(() => {
