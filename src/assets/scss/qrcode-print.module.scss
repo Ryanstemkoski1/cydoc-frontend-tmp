@@ -46,6 +46,41 @@
                 font-size: 16px;
             }
         }
+        &.isAlterNative {
+            p {
+                font-size: 16px;
+                margin-bottom: 30px;
+                text-transform: uppercase;
+            }
+            h2 {
+                font-size: 24px;
+                font-weight: 400;
+                margin-bottom: 30px;
+            }
+            h1 {
+                font-size: 36px;
+                font-weight: 400;
+                margin-bottom: 40px;
+            }
+            .patientQR__image {
+                margin: 40px auto 20px;
+            }
+            .patientQR__info {
+                font-size: 16px;
+                line-height: 20px;
+                max-width: 500px;
+                margin-bottom: 40px;
+            }
+            .patientQR__powerd {
+                strong {
+                    font-size: 16px;
+                    font-weight: 400;
+                }
+            }
+            .patientQR__logo {
+                width: 80px;
+            }
+        }
     }
     :global {
         .layout,
