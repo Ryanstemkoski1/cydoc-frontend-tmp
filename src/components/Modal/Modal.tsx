@@ -1,6 +1,7 @@
 import { AppointmentUser, formatFullName } from 'pages/BrowseNotes/BrowseNotes';
 import { ParseAndRenderHpiNote } from 'pages/EditNote/content/generatenote/notesections/HPINote';
 import { default as React, useEffect, useRef } from 'react';
+import { toast } from 'react-toastify';
 import style from './Modal.module.scss';
 
 export interface ModalProps {
@@ -28,6 +29,14 @@ const Modal = ({
             navigator.clipboard.writeText(
                 (note as HTMLHeadingElement)?.innerText || ''
             );
+            toast.success('Copied to Clipboard!', {
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: true,
+                pauseOnHover: false,
+                closeOnClick: true,
+                theme: 'light',
+            });
         }
     };
 

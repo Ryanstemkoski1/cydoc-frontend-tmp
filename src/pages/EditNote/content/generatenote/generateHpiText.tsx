@@ -1,6 +1,6 @@
 import { PART_OF_SPEECH_CORRECTION_MAP } from 'constants/hpiTextGenerationMapping';
 import { PatientPronouns } from 'constants/patientInformation';
-import { MEDICAL_TERM_TRANSLATOR, ABBREVIFY } from 'constants/word-mappings';
+import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from 'constants/word-mappings';
 import { combineHpiString } from './combineSentences';
 /**
  * keys: ints for the question order
@@ -24,6 +24,57 @@ interface PatientDisplayName {
     objPronoun: string;
     posPronoun: string;
 }
+
+const RACES = [
+    'American',
+    'Indian',
+    'Alaska',
+    'Native',
+    'Asian',
+    'Black',
+    'African',
+    'Hawaiian',
+    'Pacific',
+    'Islander',
+    'White',
+];
+const ETINICITY = ['Hispanic', 'Latino'];
+// https://capitalizemytitle.com/abbreviations-for-months/
+const MONTHS = [
+    'January',
+    'Jan',
+    'February',
+    'Feb',
+    'March',
+    'Mar',
+    'April',
+    'Apr',
+    'May',
+    'June',
+    'Jun',
+    'July',
+    'Jul',
+    'August',
+    'Aug',
+    'September',
+    'Sep',
+    'Sept',
+    'October',
+    'Oct',
+    'November',
+    'Nov',
+    'December',
+    'Dec',
+];
+
+const selectivelyUppercase = (str: string): string => {
+    [...RACES, ...ETINICITY, ...MONTHS].forEach((item) => {
+        if (str.match(new RegExp('(^|[^a-zA-Z])' + item, 'ig'))) {
+            str = str.replace(new RegExp(item, 'ig'), ' ' + item);
+        }
+    });
+    return str;
+};
 
 const END_OF_SENTENCE_PUNC = '.!?';
 // selectively Lowercases anything except for multiple capitalized letters in a row
@@ -60,6 +111,10 @@ export const fullClean = (sentence: string): string => {
 
     // remove capitalized letters selectively
     sentence = selectivelyLowercase(sentence);
+
+    // capitalized letters selectively
+    sentence = selectivelyUppercase(sentence);
+
     // decimal measurements of lesion)
     return sentence.replace(/\.\s?$/, '').trim();
 };
