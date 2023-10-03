@@ -120,10 +120,76 @@ export function initialSurveyAddText(
     };
 }
 
+export interface InitialSurveyAddListInputAction {
+    type: USER_VIEW_ACTION.INITIAL_SURVEY_ADD_LIST_INPUT;
+    payload: {
+        id: string;
+    };
+}
+
+export function initialSurveyAddListInput(
+    id: string
+): InitialSurveyAddListInputAction {
+    return {
+        type: USER_VIEW_ACTION.INITIAL_SURVEY_ADD_LIST_INPUT,
+        payload: {
+            id,
+        },
+    };
+}
+
+export interface InitialSurveyListTextHandleChangeAction {
+    type: USER_VIEW_ACTION.INITIAL_SURVEY_LIST_TEXT_HANDLE_CHANGE;
+    payload: {
+        key: string;
+        id: string;
+        textInput: string;
+    };
+}
+
+export function initialSurveyListTextHandleChange(
+    key: string,
+    id: string,
+    textInput: string
+): InitialSurveyListTextHandleChangeAction {
+    return {
+        type: USER_VIEW_ACTION.INITIAL_SURVEY_LIST_TEXT_HANDLE_CHANGE,
+        payload: {
+            key,
+            id,
+            textInput,
+        },
+    };
+}
+
+export interface InitialSurveyRemoveListInputAction {
+    type: USER_VIEW_ACTION.INITIAL_SURVEY_REMOVE_LIST_INPUT;
+    payload: {
+        key: string;
+        id: string;
+    };
+}
+
+export function initialSurveyRemoveListInput(
+    key: string,
+    id: string
+): InitialSurveyRemoveListInputAction {
+    return {
+        type: USER_VIEW_ACTION.INITIAL_SURVEY_REMOVE_LIST_INPUT,
+        payload: {
+            key,
+            id,
+        },
+    };
+}
+
 export type userViewActionTypes =
     | UserViewAction
     | ProcessSurveyGraphAction
     | InitialSurveyYesNoAction
     | InitialSurveySearchAction
     | InitialSurveyAddDateOrPlaceActions
-    | InitialSurveyAddTextActions;
+    | InitialSurveyAddTextActions
+    | InitialSurveyAddListInputAction
+    | InitialSurveyListTextHandleChangeAction
+    | InitialSurveyRemoveListInputAction;

@@ -9,8 +9,14 @@ import {
     addFhPopOptions,
 } from 'redux/actions/familyHistoryActions';
 import {
+    AddListInputAction,
     BlankQuestionChangeAction,
+    ListTextHandleChangeAction,
+    RemoveListInputAction,
+    addListInput,
     blankQuestionChange,
+    listTextHandleChange,
+    removeListInput,
 } from 'redux/actions/hpiActions';
 import { CurrentNoteState } from 'redux/reducers';
 import {
@@ -119,7 +125,13 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
     };
 
     renderSwitch = () => {
-        const { node, hpi } = this.props,
+        const {
+                node,
+                hpi,
+                addListInput,
+                listTextHandleChange,
+                removeListInput,
+            } = this.props,
             { responseType } = hpi.nodes[node],
             blankTypes = [
                 ResponseTypes.FH_BLANK,
@@ -162,7 +174,16 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 return <TimeInput key={node} node={node} />;
 
             case ResponseTypes.LIST_TEXT:
-                return <ListText key={node} node={node} />;
+                return (
+                    <ListText
+                        key={node}
+                        nodeId={node}
+                        onAddListItem={addListInput}
+                        onChangeListItem={listTextHandleChange}
+                        onRemoveListItem={removeListInput}
+                        response={hpi.nodes[node].response}
+                    />
+                );
 
             case ResponseTypes.SELECTONE:
                 return (
@@ -318,6 +339,13 @@ interface DispatchProps {
         medId: string,
         conditionId: string
     ) => BlankQuestionChangeAction;
+    listTextHandleChange: (
+        uuid: string,
+        medId: string,
+        textInput: string
+    ) => ListTextHandleChangeAction;
+    removeListInput: (uuid: string, medId: string) => RemoveListInputAction;
+    addListInput: (medId: string) => AddListInputAction;
 }
 
 const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
@@ -329,6 +357,9 @@ type Props = HpiStateProps & DispatchProps & CreateResponseProps;
 const mapDispatchToProps = {
     addFhPopOptions,
     blankQuestionChange,
+    addListInput,
+    listTextHandleChange,
+    removeListInput,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateResponse);

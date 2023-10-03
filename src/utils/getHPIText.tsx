@@ -21,6 +21,7 @@ import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
 import { MedicationsState } from 'redux/reducers/medicationsReducer';
 import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
 import { SurgicalHistoryElements } from 'redux/reducers/surgicalHistoryReducer';
+import { userSurveyState } from 'redux/reducers/userViewReducer';
 import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
 import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
@@ -173,6 +174,7 @@ export const extractNode = (
     node: GraphNode
 ): [string, string, string] => {
     /* eslint-disable no-case-declarations, no-fallthrough */
+
     if (
         (node?.responseType === ResponseTypes.YES_NO &&
             node?.response == YesNoResponse.Yes) ||
@@ -503,21 +505,66 @@ export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
 
 // Function to remove specified phrases
 function removePhrases(text: string, phrases: string[]): string {
-    let modifiedText = ' ' + text + ' '; // Padding with spaces
+    let modifiedText = text;
     phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
     phrases.forEach((phrase) => {
-        modifiedText = modifiedText.replace(
-            new RegExp(`\\b${phrase}\\b`, 'g'),
-            ''
-        );
+        modifiedText = modifiedText.replace(new RegExp(phrase, 'g'), ''); // Removing each phrase globally
     });
-    return modifiedText.trim(); // Remove the added spaces
+    return modifiedText.trim();
 }
 
 export interface HPIText {
     title: string;
     text: string;
     miscNote: string;
+}
+
+function getInitialSurveyResponses(state: userSurveyState): HPIText[] {
+    const responses: HPIText[] = [];
+
+    Object.entries(state.nodes).forEach(([nodeId, value]) => {
+        // skipping clinician last name field
+        if (nodeId === '9') return;
+
+        if (!value?.response) return;
+
+        let currentNodeResponse = '';
+
+        switch (value.responseType) {
+            case ResponseTypes.LIST_TEXT: {
+                currentNodeResponse = Object.values(value.response)
+                    .map((item: string) => item.trim().replace(/[.]/g, ''))
+                    .filter((item: string) => item)
+                    .reverse()
+                    .reduce(
+                        (accumulator, currentValue) =>
+                            '"' + currentValue + '"' + '. ' + accumulator,
+                        ''
+                    );
+                break;
+            }
+            case ResponseTypes.LONG_TEXT:
+            case ResponseTypes.SHORT_TEXT: {
+                currentNodeResponse = (value.response as string).trim();
+                break;
+            }
+            default: {
+            }
+        }
+
+        if (currentNodeResponse) {
+            responses.push({
+                title:
+                    value.responseType === ResponseTypes.LIST_TEXT
+                        ? 'Patient describes their concerns as'
+                        : value.text,
+                text: currentNodeResponse,
+                miscNote: '',
+            });
+        }
+    });
+
+    return responses;
 }
 
 function getHPIText(bulletNoteView = false) {
@@ -548,20 +595,18 @@ function getHPIText(bulletNoteView = false) {
     while later ones are removed.
     */
 
-    const { response } = state.userSurvey.nodes['10'];
+    const initialSurveyResponse = getInitialSurveyResponses(state.userSurvey);
+
+    const hpiTextResult: HPIText[] = [];
 
     const formattedHpis = extractHpi(state);
 
-    const node10HPIText = {
-        title: 'Patient describes their condition or symptom as follows:',
-        text: response || '',
-        miscText: '',
-    };
+    if (!Object.keys(formattedHpis).length) {
+        if (!initialSurveyResponse.length) {
+            return 'No history of present illness reported.';
+        }
 
-    if (Object.keys(formattedHpis).length === 0) {
-        return (response as string)?.trim()
-            ? [node10HPIText]
-            : 'No history of present illness reported.';
+        return initialSurveyResponse;
     }
 
     const initialPara = Object.keys(formattedHpis).map((key) => {
@@ -613,7 +658,6 @@ function getHPIText(bulletNoteView = false) {
     });
 
     const miscText = [];
-    const actualNote = [];
     /**
      * Utilizes the miscNotes' information from redux state and
      * pushes it into title and miscText array
@@ -624,16 +668,14 @@ function getHPIText(bulletNoteView = false) {
     }
     //Creates actual note array with objects that contains title, text, miscText
     for (let i = 0; i < finalPara.length; i++) {
-        actualNote[i] = {
+        hpiTextResult[i] = {
             title: title[i],
             text: finalPara[i],
             miscNote: miscText[i],
         };
     }
 
-    if (((response as string) || '')?.trim()) actualNote.push(node10HPIText);
-
-    return actualNote;
+    return [...hpiTextResult, ...initialSurveyResponse];
 }
 
 export default getHPIText;
