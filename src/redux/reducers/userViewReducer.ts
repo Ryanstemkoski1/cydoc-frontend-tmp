@@ -98,7 +98,11 @@ export function userViewReducer(
                 },
                 // default initial response
                 responseDict: {
-                    [id: string]: YesNoResponse | SelectOneInput | string;
+                    [id: string]:
+                        | YesNoResponse
+                        | SelectOneInput
+                        | string
+                        | ListTextInput;
                 } = {
                     [ResponseTypes.YES_NO]: YesNoResponse.None,
                     [ResponseTypes.SELECTONE]: {},
@@ -132,6 +136,13 @@ export function userViewReducer(
                         response = newRes;
                         text = text.slice(0, favorites);
                     }
+                }
+                if (v.responseType == ResponseTypes.LIST_TEXT) {
+                    response = {
+                        [v4()]: '',
+                        [v4()]: '',
+                        [v4()]: '',
+                    };
                 }
                 newState.userSurvey.nodes[node] = {
                     ...newState.userSurvey.nodes[node],

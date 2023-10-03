@@ -3,6 +3,11 @@
     margin: 20px 0;
     &__input {
         width: calc(100% - 50px);
+        &+button {
+            @include max-screen($mobile) {
+                margin-bottom: 0 !important;
+            }
+        }
     }
     span {
         display: none;

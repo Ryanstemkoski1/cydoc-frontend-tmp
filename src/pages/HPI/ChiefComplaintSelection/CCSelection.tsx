@@ -169,14 +169,16 @@ const CCSelection = (props: Props) => {
                 );
             case ResponseTypes.LIST_TEXT:
                 return (
-                    <ListText
-                        key={id}
-                        nodeId={id}
-                        response={currEntry.response}
-                        onAddListItem={initialSurveyAddListInput}
-                        onChangeListItem={initialSurveyListTextHandleChange}
-                        onRemoveListItem={initialSurveyRemoveListInput}
-                    />
+                    <div className={style.diseaseSelections__listWrap}>
+                        <ListText
+                            key={id}
+                            nodeId={id}
+                            response={currEntry.response}
+                            onAddListItem={initialSurveyAddListInput}
+                            onChangeListItem={initialSurveyListTextHandleChange}
+                            onRemoveListItem={initialSurveyRemoveListInput}
+                        />
+                    </div>
                 );
             default:
                 return;
