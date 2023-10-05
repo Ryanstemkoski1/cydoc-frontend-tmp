@@ -34,8 +34,7 @@ export const UserInfoProvider: React.FC<
         try {
             if (
                 cognitoUser?.attributes?.email ||
-                cognitoUser?.challengeParam?.userAttributes?.email ||
-                cognitoUser?.username
+                cognitoUser?.challengeParam?.userAttributes?.email
             ) {
                 const user = await getDbUser(cognitoUser);
                 setUser(user || undefined);
