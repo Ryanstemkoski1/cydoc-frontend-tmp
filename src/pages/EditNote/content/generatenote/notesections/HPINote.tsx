@@ -14,6 +14,66 @@ export function ParseAndRenderHpiNote({ hpiText = '' }: { hpiText: string }) {
     return <HpiNote text={parsedHPIText} bulletNoteView={true} />;
 }
 
+function processSentence(sentence: string) {
+    const addHeading = (str: string) => (
+        <>
+            <br />
+            <b>
+                {str
+                    .trim()
+                    .toLowerCase()
+                    .split(' ')
+                    .map((word) => capitalizeFirstLetter(word))
+                    .join(' ')}
+            </b>
+            <br />
+        </>
+    );
+    const addNormalText = (str: string) => <>{str}</>;
+
+    let normalText = '';
+    let headingText = '';
+    const jsx: JSX.Element[] = [];
+
+    for (const char of sentence) {
+        if (char === ':' && headingText.trim().length > 7) {
+            jsx.push(addHeading(headingText));
+            headingText = '';
+            continue;
+        }
+
+        if (char === ' ') {
+            if (headingText.length > 0) headingText += ' ';
+            else normalText += ' ';
+            continue;
+        }
+
+        if ((char.match(/[A-Z]/g) ?? []).length) {
+            headingText += char;
+            jsx.push(addNormalText(normalText));
+            normalText = '';
+        } else {
+            normalText += char;
+            if (headingText.trim().length >= 7) {
+                jsx.push(addHeading(headingText));
+            } else {
+                jsx.push(addNormalText(headingText));
+            }
+            headingText = '';
+        }
+    }
+
+    jsx.push(addNormalText(normalText));
+
+    if (headingText.trim().length >= 7) {
+        jsx.push(addHeading(headingText));
+    } else {
+        jsx.push(addNormalText(headingText));
+    }
+
+    return jsx;
+}
+
 const HpiNote = ({
     text,
     bulletNoteView = false,
@@ -52,7 +112,9 @@ const HpiNote = ({
                       <ul className={styles.noBullets}>
                           {item.text.split('. ').map((sentence, index) => (
                               <li key={index}>
-                                  {capitalizeFirstLetter(sentence)}
+                                  {processSentence(
+                                      capitalizeFirstLetter(sentence)
+                                  )}
                               </li>
                           ))}
                       </ul>

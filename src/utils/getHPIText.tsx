@@ -174,7 +174,6 @@ export const extractNode = (
     node: GraphNode
 ): [string, string, string] => {
     /* eslint-disable no-case-declarations, no-fallthrough */
-
     if (
         (node?.responseType === ResponseTypes.YES_NO &&
             node?.response == YesNoResponse.Yes) ||
@@ -505,12 +504,15 @@ export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
 
 // Function to remove specified phrases
 function removePhrases(text: string, phrases: string[]): string {
-    let modifiedText = text;
+    let modifiedText = ' ' + text + ' '; // Padding with spaces
     phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
     phrases.forEach((phrase) => {
-        modifiedText = modifiedText.replace(new RegExp(phrase, 'g'), ''); // Removing each phrase globally
+        modifiedText = modifiedText.replace(
+            new RegExp(`\\b${phrase}\\b`, 'g'),
+            ''
+        );
     });
-    return modifiedText.trim();
+    return modifiedText.trim(); // Remove the added spaces
 }
 
 export interface HPIText {
@@ -525,7 +527,8 @@ export function getListTextResponseAsSingleString(response = {}): string {
         .filter((item: string) => item)
         .reverse()
         .reduce(
-            (accumulator, currentValue) => currentValue + '. ' + accumulator,
+            (accumulator, currentValue) =>
+                '"' + currentValue + '"' + '. ' + accumulator,
             ''
         );
 }
@@ -559,7 +562,10 @@ function getInitialSurveyResponses(state: userSurveyState): HPIText[] {
 
         if (currentNodeResponse) {
             responses.push({
-                title: nodeId === '7' ? `Patient's concerns` : value.text,
+                title:
+                    value.responseType === ResponseTypes.LIST_TEXT
+                        ? 'Patient describes their concerns as'
+                        : value.text,
                 text: currentNodeResponse,
                 miscNote: '',
             });

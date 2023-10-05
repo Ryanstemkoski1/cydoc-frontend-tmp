@@ -1,14 +1,14 @@
 import useUser from 'hooks/useUser';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
+import { toast } from 'react-toastify';
 import QRIcon1 from '../../assets/images/qr-code-icon1.svg';
 import QRIcon2 from '../../assets/images/qr-code-icon2.svg';
 import QRIcon3 from '../../assets/images/qr-code-icon3.svg';
+import QRIcon4 from '../../assets/images/qr-code-icon4.svg';
 import PatientQRCodePage from './PatientQRCodePage';
 import style from './QRCodePage.module.scss';
 import StaffQRCodePage from './StaffQRCodePage';
-import useAuth from 'hooks/useAuth';
-import { getHpiQrCode } from 'modules/institution-api';
 
 type QRCodeType = 'patient' | 'staff' | '';
 
@@ -32,6 +32,19 @@ function QRCodePage() {
         if (!user) return;
         setShowQRCodePage('staff');
         printDocument();
+    };
+
+    const handleCopyLinkButtonClick = () => {
+        if (!user) return;
+        navigator.clipboard.writeText(link);
+        toast.success('Copied to Clipboard!', {
+            position: 'top-right',
+            autoClose: 2000,
+            hideProgressBar: true,
+            pauseOnHover: false,
+            closeOnClick: true,
+            theme: 'light',
+        });
     };
 
     const [link, setLink] = useState<string>('');
@@ -142,6 +155,38 @@ function QRCodePage() {
                                             onClick={handleStaffPrint}
                                         >
                                             Print Now
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className={style.QRCodePage__item}>
+                                    <div className={style.QRCodePage__card}>
+                                        <picture>
+                                            <img src={QRIcon4} alt='icon4' />
+                                        </picture>
+
+                                        <a
+                                            target='_blank'
+                                            rel='noreferrer'
+                                            className={style.QRCodePage__link}
+                                            href={link}
+                                        >
+                                            {link}
+                                        </a>
+
+                                        <p>
+                                            This link is unique to your clinic.
+                                            Anyone who clicks on this link can
+                                            submit a Cydoc form. Share this link
+                                            with your patients on your clinic
+                                            website, within existing patient
+                                            reminder text messages, or via an
+                                            email.
+                                        </p>
+                                        <button
+                                            className='button sm'
+                                            onClick={handleCopyLinkButtonClick}
+                                        >
+                                            Copy Link
                                         </button>
                                     </div>
                                 </div>
