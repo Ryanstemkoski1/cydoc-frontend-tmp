@@ -174,7 +174,6 @@ export const extractNode = (
     node: GraphNode
 ): [string, string, string] => {
     /* eslint-disable no-case-declarations, no-fallthrough */
-
     if (
         (node?.responseType === ResponseTypes.YES_NO &&
             node?.response == YesNoResponse.Yes) ||
@@ -505,18 +504,33 @@ export const extractHpi = (state: HPINoteProps): { [key: string]: HPI } => {
 
 // Function to remove specified phrases
 function removePhrases(text: string, phrases: string[]): string {
-    let modifiedText = text;
+    let modifiedText = ' ' + text + ' '; // Padding with spaces
     phrases.sort((a, b) => b.length - a.length); // Sorting phrases by length, longest first
     phrases.forEach((phrase) => {
-        modifiedText = modifiedText.replace(new RegExp(phrase, 'g'), ''); // Removing each phrase globally
+        modifiedText = modifiedText.replace(
+            new RegExp(`\\b${phrase}\\b`, 'g'),
+            ''
+        );
     });
-    return modifiedText.trim();
+    return modifiedText.trim(); // Remove the added spaces
 }
 
 export interface HPIText {
     title: string;
     text: string;
     miscNote: string;
+}
+
+export function getListTextResponseAsSingleString(response = {}): string {
+    return Object.values(response)
+        .map((item) => (item as string).trim().replace(/[.]/g, ''))
+        .filter((item: string) => item)
+        .reverse()
+        .reduce(
+            (accumulator, currentValue) =>
+                '"' + currentValue + '"' + '. ' + accumulator,
+            ''
+        );
 }
 
 function getInitialSurveyResponses(state: userSurveyState): HPIText[] {
@@ -532,15 +546,9 @@ function getInitialSurveyResponses(state: userSurveyState): HPIText[] {
 
         switch (value.responseType) {
             case ResponseTypes.LIST_TEXT: {
-                currentNodeResponse = Object.values(value.response)
-                    .map((item: string) => item.trim().replace(/[.]/g, ''))
-                    .filter((item: string) => item)
-                    .reverse()
-                    .reduce(
-                        (accumulator, currentValue) =>
-                            '"' + currentValue + '"' + '. ' + accumulator,
-                        ''
-                    );
+                currentNodeResponse = getListTextResponseAsSingleString(
+                    value.response
+                );
                 break;
             }
             case ResponseTypes.LONG_TEXT:
