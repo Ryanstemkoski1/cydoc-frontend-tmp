@@ -62,6 +62,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     const location = useLocation();
     const history = useHistory();
     const isHomePage = location?.pathname === '/';
+    const isEditNotePage = location?.pathname.includes('editnote');
     const { signOut, loginCorrect, isSignedIn, authLoading } = useAuth();
     const { user, isManager } = useUser();
     const isCurrentOurRoute = useMemo(
@@ -217,48 +218,41 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                 to='/'
             >
                 <img src={Logo} alt='Cydoc' />
-                {(!(isSignedIn && history.location.pathname.length) ||
-                    isCurrentOurRoute ||
-                    isHomePage) && <span>Cydoc</span>}
+                {!isEditNotePage && <span>Cydoc</span>}
             </Link>
 
-            {displayNoteName &&
-                doctorView &&
-                !isHomePage &&
-                !isCurrentOurRoute && (
-                    <div className={style.header__note}>
-                        <NoteNameMenuItem />
-                    </div>
-                )}
+            {displayNoteName && doctorView && isEditNotePage && (
+                <div className={style.header__note}>
+                    <NoteNameMenuItem />
+                </div>
+            )}
 
-            {isSignedIn &&
-                history.location.pathname.length > 1 &&
-                !isCurrentOurRoute && (
-                    <div className={`${style.header__view} flex align-center`}>
-                        <button
-                            onClick={() => {
-                                changeUserView('Patient View');
-                                if (!checkPatientView()) updateActiveItem('CC');
-                            }}
-                            className={`button sm pill gray ${
-                                patientView ? 'active' : ''
-                            }`}
-                        >
-                            Patient <span>View</span>
-                        </button>
-                        <strong className='flex align-center justify-center'>
-                            or
-                        </strong>
-                        <button
-                            onClick={() => changeUserView('Doctor View')}
-                            className={`button sm pill gray ${
-                                !patientView ? 'active' : ''
-                            }`}
-                        >
-                            Doctor <span>View</span>
-                        </button>
-                    </div>
-                )}
+            {isSignedIn && isEditNotePage && (
+                <div className={`${style.header__view} flex align-center`}>
+                    <button
+                        onClick={() => {
+                            changeUserView('Patient View');
+                            if (!checkPatientView()) updateActiveItem('CC');
+                        }}
+                        className={`button sm pill gray ${
+                            patientView ? 'active' : ''
+                        }`}
+                    >
+                        Patient <span>View</span>
+                    </button>
+                    <strong className='flex align-center justify-center'>
+                        or
+                    </strong>
+                    <button
+                        onClick={() => changeUserView('Doctor View')}
+                        className={`button sm pill gray ${
+                            !patientView ? 'active' : ''
+                        }`}
+                    >
+                        Doctor <span>View</span>
+                    </button>
+                </div>
+            )}
 
             {!authLoading &&
                 (isSignedIn ? (
