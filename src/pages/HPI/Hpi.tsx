@@ -393,8 +393,8 @@ const HPI = () => {
                 modalVisible={showCCModal}
                 title={
                     <h3>
-                        We found the following conditions or symptoms matching your
-                        concerns.
+                        We found the following conditions or symptoms matching
+                        your concerns.
                     </h3>
                 }
                 footerNode={
