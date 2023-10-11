@@ -47,13 +47,20 @@ describe('utils tests', () => {
                 knowledgeGraphResponse.data.parentNodes
             ).map((item) => item.toLowerCase());
 
-            const result = knowledgegraphQuestionnaires.every((questionnaire) =>
-                mappedQuestionnaires.includes(questionnaire)
-            );
+            const notFoundItems: string[] = [];
+            let result: boolean = true;
+
+            knowledgegraphQuestionnaires.forEach((chiefComplaint) => {
+                if (!mappedQuestionnaires.includes(chiefComplaint)) {
+                    notFoundItems.push(chiefComplaint);
+                    result = false;
+                }
+            });
 
             if (!result) {
                 console.warn(
-                    `Not all Knowledge Graph's Questionnaires are present in Local Questionnaire Mapping`
+                    `Not all Knowledge Graph's Questionnaires are present in Local Questionnaire Mapping`,
+                    notFoundItems
                 );
             }
             expect(true).toBeTruthy();

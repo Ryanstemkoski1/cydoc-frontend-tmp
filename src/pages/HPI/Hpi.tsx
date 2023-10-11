@@ -7,13 +7,15 @@ import {
     InstitutionType,
 } from 'classes/institution.class';
 import CommonLayout from 'components/CommonLayout/CommonLayout';
+import CustomModal from 'components/CustomModal/CustomModal';
 import Stepper from 'components/Stepper/Stepper';
 import Notification, {
     NotificationTypeEnum,
 } from 'components/tools/Notification/Notification';
+import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
 import { graphClientURL } from 'constants/api';
 import useQuery from 'hooks/useQuery';
-import { getSelectedChiefCompliants } from 'hooks/useSelectedChiefComplaints';
+import useSelectedChiefComplaints from 'hooks/useSelectedChiefComplaints';
 import { getInstitution } from 'modules/institution-api';
 import { log } from 'modules/logging';
 import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
@@ -61,21 +63,22 @@ const HPI = () => {
         null
     );
     const [skipCC, setSkipCC] = useState(false);
+    const { userSurveyState, activeItem, additionalSurvey, hpiHeaders } =
+        useSelector((state: CurrentNoteState) => ({
+            userSurveyState: selectInitialPatientSurvey(state),
+            activeItem: selectActiveItem(state),
+            additionalSurvey: state.additionalSurvey,
+            hpiHeaders: state.hpiHeaders,
+        }));
+    const [currentTabs, setCurrentTabs] = useState<string[]>([
+        'InitialSurvey',
+        'PreHPI',
+        'CCSelection',
+    ]);
+    const [showCCModal, setShowCCModal] = useState(false);
+    const selectedChiefComplaints = useSelectedChiefComplaints();
+    const [newSelectedCC, setNewSelectedCC] = useState<string[]>([]);
 
-    const {
-        userSurveyState,
-        activeItem,
-        additionalSurvey,
-        chiefComplaints,
-        hpiHeaders,
-    } = useSelector((state: CurrentNoteState) => ({
-        userSurveyState: selectInitialPatientSurvey(state),
-        activeItem: selectActiveItem(state),
-        additionalSurvey: state.additionalSurvey,
-        chiefComplaints: state.chiefComplaints,
-        hpiHeaders: state.hpiHeaders,
-    }));
-    const [currentTabs, setCurrentTabs] = useState<string[]>([]);
     const institutionId = query.get(HPIPatientQueryParams.INSTITUTION_ID);
 
     /* FUNCTIONS */
@@ -145,12 +148,7 @@ const HPI = () => {
             dispatch(updateActiveItem(name));
             window.scrollTo(0, 0);
         },
-        [
-            notificationMessage,
-            chiefComplaints,
-            userSurveyState,
-            additionalSurvey,
-        ]
+        [notificationMessage, userSurveyState, additionalSurvey]
     );
 
     const onPreviousClick = useCallback(() => {
@@ -167,37 +165,61 @@ const HPI = () => {
     }, [currentTabs, activeItem, notificationMessage]);
 
     const onNextClick = useCallback(() => {
+        setShowCCModal(false);
+        setNewSelectedCC([]);
+
         if (notificationMessage) setNotificationMessage('');
+
+        let newCurrentTabs = currentTabs;
 
         const node7Response = userSurveyState.nodes['7'].response ?? {};
 
-        if (
-            activeItem === 'CCSelection' &&
-            !isResponseValid(node7Response) &&
-            !Object.keys(chiefComplaints).length
-        ) {
-            setNotificationMessage(
-                'You must select or describe at least one visit reason to proceed.'
-            );
-            setNotificationType(NotificationTypeEnum.ERROR);
-            return;
+        if (activeItem === 'CCSelection') {
+            if (
+                !selectedChiefComplaints.length &&
+                !isResponseValid(node7Response)
+            ) {
+                setNotificationMessage(
+                    'You must select or describe at least one visit reason to proceed.'
+                );
+                setNotificationType(NotificationTypeEnum.ERROR);
+            }
+
+            if (selectedChiefComplaints.length > 3) {
+                setNewSelectedCC([...selectedChiefComplaints]);
+                setShowCCModal(true);
+                return;
+            }
+
+            newCurrentTabs = [
+                'InitialSurvey',
+                'PreHPI',
+                'CCSelection',
+                ...selectedChiefComplaints,
+            ];
+            setCurrentTabs(newCurrentTabs);
         }
 
-        const tabs = currentTabs;
-        const length = tabs.length;
-        const nextTabIndex = tabs.indexOf(activeItem) + 1;
-        if (length === nextTabIndex) return;
-
-        const nextTab = tabs[nextTabIndex];
-
+        const nextTabIndex = newCurrentTabs.indexOf(activeItem) + 1;
+        if (newCurrentTabs.length === nextTabIndex) {
+            return;
+        }
+        const nextTab = newCurrentTabs[nextTabIndex];
         dispatch(updateActiveItem(nextTab));
     }, [
-        currentTabs,
         activeItem,
         notificationMessage,
         userSurveyState,
-        chiefComplaints,
+        selectedChiefComplaints,
+        currentTabs,
     ]);
+
+    const loadCCData = async () => {
+        const response = await axios.get(
+            graphClientURL + '/graph/category/' + 'SIGPERI_ROOT' + '/4'
+        );
+        dispatch(processKnowledgeGraph(response.data));
+    };
 
     /* EFFECTS */
     useEffect(() => {
@@ -300,17 +322,6 @@ const HPI = () => {
     }, [history, institutionId, query]);
 
     useEffect(() => {
-        if (skipCC) return;
-
-        setCurrentTabs([
-            'InitialSurvey',
-            'PreHPI',
-            'CCSelection',
-            ...getSelectedChiefCompliants(chiefComplaints),
-        ]);
-    }, [chiefComplaints, skipCC]);
-
-    useEffect(() => {
         if (skipCC) {
             dispatch(
                 selectChiefComplaint('Signature Perinatal Center Questionnaire')
@@ -325,15 +336,11 @@ const HPI = () => {
         }
     }, [skipCC]);
 
-    const loadCCData = async () => {
-        const response = await axios.get(
-            graphClientURL + '/graph/category/' + 'SIGPERI_ROOT' + '/4'
-        );
-        dispatch(processKnowledgeGraph(response.data));
-    };
-
     useEffect(() => {
         window.scrollTo(0, 0);
+        if (activeItem === 'CCSelection') {
+            setCurrentTabs(['InitialSurvey', 'PreHPI', 'CCSelection']);
+        }
     }, [activeItem]);
 
     useEffect(() => {
@@ -361,21 +368,82 @@ const HPI = () => {
         };
     }, []);
 
+    const selectedChiefComplaintsOverflowBy =
+        selectedChiefComplaints.length - 3;
+
     return (
-        <div className={style.editNote}>
-            <div className='centering'>
-                <Stepper tabs={currentTabs} onTabChange={onTabChange} />
-                <CommonLayout title={screenForPatient.title}>
-                    {notificationMessage && (
-                        <Notification
-                            message={notificationMessage}
-                            type={notificationType}
-                        />
-                    )}
-                    {screenForPatient.component}
-                </CommonLayout>
+        <>
+            <div className={style.editNote}>
+                <div className='centering'>
+                    <Stepper tabs={currentTabs} onTabChange={onTabChange} />
+                    <CommonLayout title={screenForPatient.title}>
+                        {notificationMessage && (
+                            <Notification
+                                message={notificationMessage}
+                                type={notificationType}
+                            />
+                        )}
+                        {screenForPatient.component}
+                    </CommonLayout>
+                </div>
             </div>
-        </div>
+
+            <CustomModal
+                onClose={() => setShowCCModal(false)}
+                modalVisible={showCCModal}
+                title={
+                    <h3>
+                        We found following conditions or symptoms matching your
+                        concerns.
+                    </h3>
+                }
+                footerNode={
+                    <button
+                        className='button'
+                        disabled={
+                            selectedChiefComplaints.length > 3 ||
+                            selectedChiefComplaints.length === 0
+                        }
+                        onClick={onNextClick}
+                    >
+                        Continue
+                    </button>
+                }
+            >
+                <>
+                    {selectedChiefComplaintsOverflowBy > 0 && (
+                        <h4>
+                            Deselect any {selectedChiefComplaintsOverflowBy}{' '}
+                            {`${
+                                selectedChiefComplaintsOverflowBy > 1
+                                    ? 'conditions or symptoms'
+                                    : 'condition or symptom'
+                            }`}{' '}
+                            from below to proceed.
+                        </h4>
+                    )}
+                    <div className={`${style.editNote__btnWrap} flex-wrap`}>
+                        {newSelectedCC.map((item) => (
+                            <ToggleButton
+                                key={item}
+                                className='tag_text btn-space'
+                                active={selectedChiefComplaints.includes(item)}
+                                condition={item}
+                                title={
+                                    item in hpiHeaders.parentNodes
+                                        ? hpiHeaders.parentNodes[item]
+                                              .patientView
+                                        : item
+                                }
+                                onToggleButtonClick={(e: any) => {
+                                    dispatch(selectChiefComplaint(item));
+                                }}
+                            />
+                        ))}
+                    </div>
+                </>
+            </CustomModal>
+        </>
     );
 };
 
