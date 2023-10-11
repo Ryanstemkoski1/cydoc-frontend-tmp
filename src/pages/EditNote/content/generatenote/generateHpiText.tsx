@@ -77,25 +77,22 @@ const selectivelyUppercase = (str: string): string => {
 };
 
 const END_OF_SENTENCE_PUNC = '.!?';
-// selectively Lowercases anything except for multiple capitalized letters in a row
+const PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN = [
+    ...PART_OF_SPEECH_CORRECTION_MAP.keys(),
+];
 const selectivelyLowercase = (str: string): string => {
-    return str
-        .split(' ')
-        .map((word) => {
-            if (
-                ['ANSWER', 'NOTANSWER', 'ANSWER.', 'NOTANSWER.'].includes(word)
-            ) {
-                return word.toLowerCase();
-            } else {
-                const uppercaseCount = Array.from(word).reduce(
-                    (count, char) =>
-                        count + (char === char.toUpperCase() ? 1 : 0),
-                    0
-                );
-                return uppercaseCount > 1 ? word : word.toLowerCase();
-            }
-        })
-        .join(' ');
+    [
+        'ANSWER',
+        'NOTANSWER',
+        'ANSWER.',
+        'NOTANSWER.',
+        ...PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN,
+    ].forEach((item) => {
+        const regEx = new RegExp(item, 'ig');
+        str = str.replace(regEx, item.toLowerCase());
+    });
+
+    return str;
 };
 /**
  * Removes whitespace from beginning and end of a sentence. Lowercases.
@@ -109,7 +106,6 @@ export const fullClean = (sentence: string): string => {
     // condense multiple whitespace into single space
     sentence = sentence.split(/\s+/).join(' ');
 
-    // remove capitalized letters selectively
     sentence = selectivelyLowercase(sentence);
 
     // capitalized letters selectively
