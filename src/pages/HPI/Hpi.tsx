@@ -20,7 +20,13 @@ import { getInstitution } from 'modules/institution-api';
 import { log } from 'modules/logging';
 import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
 import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
@@ -77,9 +83,16 @@ const HPI = () => {
     ]);
     const [showCCModal, setShowCCModal] = useState(false);
     const selectedChiefComplaints = useSelectedChiefComplaints();
-    const [newSelectedCC, setNewSelectedCC] = useState<string[]>([]);
+    const [chiefComplaintsForModal, setChiefComplaintsForModal] = useState<
+        { chiefComplaint: string; isSelected: boolean }[]
+    >([]);
+    const selectedChiefComplaintsForModal = useMemo(
+        () => chiefComplaintsForModal.filter((item) => item.isSelected),
+        [chiefComplaintsForModal]
+    );
 
     const institutionId = query.get(HPIPatientQueryParams.INSTITUTION_ID);
+    const onNextClickRef = useRef<() => void>();
 
     /* FUNCTIONS */
     const changeFavComplaintsBasedOnInstitute = useCallback(() => {
@@ -166,7 +179,7 @@ const HPI = () => {
 
     const onNextClick = useCallback(() => {
         setShowCCModal(false);
-        setNewSelectedCC([]);
+        setChiefComplaintsForModal([]);
 
         if (notificationMessage) setNotificationMessage('');
 
@@ -186,7 +199,14 @@ const HPI = () => {
             }
 
             if (selectedChiefComplaints.length > 3) {
-                setNewSelectedCC([...selectedChiefComplaints]);
+                const chiefComplaintsForModal = selectedChiefComplaints.map(
+                    (chiefComplaint) => ({
+                        chiefComplaint: chiefComplaint,
+                        isSelected: false,
+                    })
+                );
+
+                setChiefComplaintsForModal(chiefComplaintsForModal);
                 setShowCCModal(true);
                 return;
             }
@@ -211,8 +231,22 @@ const HPI = () => {
         notificationMessage,
         userSurveyState,
         selectedChiefComplaints,
+        chiefComplaintsForModal,
         currentTabs,
     ]);
+
+    const handleContinueForCCModal = () => {
+        const unSelectedCCForCCModal = chiefComplaintsForModal.filter(
+            (CC) => CC.isSelected === false
+        );
+
+        // Remove Chief Complaints for Redux State
+        unSelectedCCForCCModal.forEach((CC) => {
+            dispatch(selectChiefComplaint(CC.chiefComplaint));
+        });
+
+        setTimeout(() => onNextClickRef!.current!(), 0);
+    };
 
     const loadCCData = async () => {
         const response = await axios.get(
@@ -356,6 +390,10 @@ const HPI = () => {
     }, [notificationMessage]);
 
     useEffect(() => {
+        onNextClickRef.current = onNextClick;
+    }, [onNextClick]);
+
+    useEffect(() => {
         dispatch(updateActiveItem('InitialSurvey'));
 
         if (hpiHeaders) {
@@ -367,9 +405,6 @@ const HPI = () => {
             dispatch(updateActiveItem('CC'));
         };
     }, []);
-
-    const selectedChiefComplaintsOverflowBy =
-        selectedChiefComplaints.length - 3;
 
     return (
         <>
@@ -393,53 +428,59 @@ const HPI = () => {
                 modalVisible={showCCModal}
                 title={
                     <h3>
-                        We found the following conditions or symptoms matching
-                        your concerns.
+                        We found following conditions or symptoms matching your
+                        concerns.
                     </h3>
                 }
                 footerNode={
                     <button
                         className='button'
                         disabled={
-                            selectedChiefComplaints.length > 3 ||
-                            selectedChiefComplaints.length === 0
+                            selectedChiefComplaintsForModal.length > 3 ||
+                            selectedChiefComplaintsForModal.length === 0
                         }
-                        onClick={onNextClick}
+                        onClick={handleContinueForCCModal}
                     >
                         Continue
                     </button>
                 }
             >
                 <>
-                    {selectedChiefComplaintsOverflowBy > 0 && (
-                        <h4>
-                            Deselect any {selectedChiefComplaintsOverflowBy}{' '}
-                            {`${
-                                selectedChiefComplaintsOverflowBy > 1
-                                    ? 'conditions or symptoms'
-                                    : 'condition or symptom'
-                            }`}{' '}
-                            from below to proceed.
-                        </h4>
-                    )}
+                    <h4>
+                        Please select the top 3 conditions or symptoms that are
+                        most important to you.
+                    </h4>
+
                     <div className={`${style.editNote__btnWrap} flex-wrap`}>
-                        {newSelectedCC.map((item) => (
-                            <ToggleButton
-                                key={item}
-                                className='tag_text btn-space'
-                                active={selectedChiefComplaints.includes(item)}
-                                condition={item}
-                                title={
-                                    item in hpiHeaders.parentNodes
-                                        ? hpiHeaders.parentNodes[item]
-                                              .patientView
-                                        : item
-                                }
-                                onToggleButtonClick={(e: any) => {
-                                    dispatch(selectChiefComplaint(item));
-                                }}
-                            />
-                        ))}
+                        {chiefComplaintsForModal.map(
+                            ({ chiefComplaint, isSelected }, index) => (
+                                <ToggleButton
+                                    key={chiefComplaint}
+                                    className='tag_text btn-space'
+                                    active={isSelected}
+                                    condition={chiefComplaint}
+                                    title={
+                                        chiefComplaint in hpiHeaders.parentNodes
+                                            ? hpiHeaders.parentNodes[
+                                                  chiefComplaint
+                                              ].patientView
+                                            : chiefComplaint
+                                    }
+                                    onToggleButtonClick={() => {
+                                        const newChiefCompliants = [
+                                            ...chiefComplaintsForModal,
+                                        ];
+                                        newChiefCompliants[index].isSelected =
+                                            !newChiefCompliants[index]
+                                                .isSelected;
+
+                                        setChiefComplaintsForModal(
+                                            newChiefCompliants
+                                        );
+                                    }}
+                                />
+                            )
+                        )}
                     </div>
                 </>
             </CustomModal>
