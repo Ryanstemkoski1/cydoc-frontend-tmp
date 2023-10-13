@@ -1,29 +1,32 @@
 import axios from 'axios';
 import { graphClientURL } from 'constants/api';
 
-// TODO - use this function on files where we fetch data from knowledge graph api for particular questionnaire
+// TODO - use this function on files where we fetch data from knowledge graph api for particular chiefcomplaint
 /**
- * Load data for passed questionnaire name from knowledge graph api
- * @param questionnaire as string
+ * Load data for passed chiefcomplaint name from knowledge graph api
+ * @param chiefcomplaint as string
  * @returns response payload
  */
-export const getQuestionnaireData = async (questionnaire: string) => {
+export const getChiefComplaintData = async (chiefcomplaint: string) => {
+    if (!chiefcomplaint) {
+        return;
+    }
     const response = await axios.get(
-        graphClientURL + '/graph/category/' + questionnaire + '/4'
+        graphClientURL + '/graph/category/' + chiefcomplaint + '/4'
     );
     return response.data;
 };
 
 /**
- * Load all questionnaires data from Knowledge Graph api
- * @param questionnaires
- * @returns responses payload for all questionnaires
+ * Load all chiefcomplaints data from Knowledge Graph api
+ * @param chiefcomplaints
+ * @returns responses payload for all chiefcomplaints
  */
-export async function loadQuestionnairesData(questionnaires: string[]) {
+export async function loadChiefComplaintsData(chiefcomplaints: string[]) {
     const dataLoadingPromises: Promise<any>[] = [];
 
-    questionnaires.forEach((questionnaire) =>
-        dataLoadingPromises.push(getQuestionnaireData(questionnaire))
+    chiefcomplaints.forEach((chiefcomplaint) =>
+        dataLoadingPromises.push(getChiefComplaintData(chiefcomplaint))
     );
 
     const values = await Promise.all([...dataLoadingPromises]);
