@@ -3,6 +3,7 @@ import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
 import { graphClientURL } from 'constants/api.js';
 import { GraphData } from 'constants/hpiEnums';
 import { getSelectedChiefCompliants } from 'hooks/useSelectedChiefComplaints';
+import { initialSurveyProps } from 'pages/HPI/ChiefComplaintSelection/CCSelection';
 import React from 'react';
 import { connect } from 'react-redux';
 import {
@@ -16,7 +17,10 @@ import {
 import { CurrentNoteState } from 'redux/reducers';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
-import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import {
+    selectInitialPatientSurvey,
+    selectPatientViewState,
+} from 'redux/selectors/userViewSelectors';
 import { ChiefComplaintsProps, HpiHeadersProps } from '../../HPIContent';
 import './BodySystemDropdown';
 interface ChiefComplaintsButtonProps {
@@ -25,6 +29,9 @@ interface ChiefComplaintsButtonProps {
 
 class ChiefComplaintsButton extends React.Component<Props> {
     getData = async (chiefComplaint: string) => {
+        if (!chiefComplaint) {
+            return;
+        }
         const response = await axios.get(
             graphClientURL + '/graph/category/' + chiefComplaint + '/4'
         );
@@ -38,6 +45,7 @@ class ChiefComplaintsButton extends React.Component<Props> {
             hpiHeaders,
             patientView,
             activeItem,
+            userSurveyState,
         } = this.props;
         return (
             <ToggleButton
@@ -50,19 +58,26 @@ class ChiefComplaintsButton extends React.Component<Props> {
                         : name
                 }
                 onToggleButtonClick={(e: any) => {
-                    const selectedChiefComplaints =
-                        getSelectedChiefCompliants(chiefComplaints);
+                    const pinnedChiefComplaints = Object.keys(
+                        userSurveyState.nodes['6'].response ?? {}
+                    );
+                    const pinnedSelectedChiefComplaints =
+                        getSelectedChiefCompliants(chiefComplaints).filter(
+                            (item) => pinnedChiefComplaints.includes(item)
+                        );
 
                     if (
                         activeItem === 'CCSelection' &&
-                        !selectedChiefComplaints.includes(name) &&
-                        selectedChiefComplaints.length === 3
+                        !pinnedSelectedChiefComplaints.includes(name) &&
+                        pinnedSelectedChiefComplaints.length >= 3
                     ) {
                         return;
                     }
 
                     selectChiefComplaint(name);
-                    this.getData(Object.keys(hpiHeaders.parentNodes[name])[0]);
+                    this.getData(
+                        Object.keys(hpiHeaders?.parentNodes?.[name])?.[0]
+                    );
                 }}
             />
         );
@@ -87,6 +102,7 @@ interface ActiveItemProps {
 const mapStateToProps = (
     state: CurrentNoteState
 ): ChiefComplaintsProps &
+    initialSurveyProps &
     HpiHeadersProps &
     PatientViewProps &
     ActiveItemProps => ({
@@ -94,9 +110,11 @@ const mapStateToProps = (
     hpiHeaders: state.hpiHeaders,
     patientView: selectPatientViewState(state),
     activeItem: selectActiveItem(state),
+    userSurveyState: selectInitialPatientSurvey(state),
 });
 
 type Props = DispatchProps &
+    initialSurveyProps &
     ChiefComplaintsButtonProps &
     ChiefComplaintsProps &
     HpiHeadersProps &

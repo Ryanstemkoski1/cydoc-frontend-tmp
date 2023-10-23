@@ -4,7 +4,10 @@ import { NotificationTypeEnum } from 'components/tools/Notification/Notification
 import { apiClient } from 'constants/api';
 import { GraphData, ResponseTypes } from 'constants/hpiEnums';
 import useQuery from 'hooks/useQuery';
-import useSelectedChiefComplaints from 'hooks/useSelectedChiefComplaints';
+import {
+    useListTextChiefComplaints,
+    useSelectedPinnedChiefComplaints,
+} from 'hooks/useSelectedChiefComplaints';
 import {
     ChiefComplaintsProps,
     HpiHeadersProps,
@@ -57,7 +60,7 @@ import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
 import getHPIFormData, { isResponseValid } from 'utils/getHPIFormData';
 import { getListTextResponseAsSingleString } from 'utils/getHPIText';
 import { getQuestionnairesFromText } from 'utils/getQuestionnairesFromText';
-import { loadQuestionnairesData } from 'utils/loadKnowledgeGraphData';
+import { loadChiefComplaintsData } from 'utils/loadKnowledgeGraphData';
 import style from './CCSelection.module.scss';
 
 interface InitialSurveyComponentProps {
@@ -81,7 +84,6 @@ function createLowerCaseKeyNameToActualKeyNameMap(object = {}) {
 const CCSelection = (props: Props) => {
     const {
         userSurveyState,
-        chiefComplaints,
         processKnowledgeGraph,
         notification,
         hpiHeaders,
@@ -93,7 +95,8 @@ const CCSelection = (props: Props) => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
 
-    const selectedCC = useSelectedChiefComplaints();
+    const selectedPinnedCC = useSelectedPinnedChiefComplaints();
+    const listTextChiefComplaints = useListTextChiefComplaints();
 
     const nodes = patientViewHeaders.parentNodes;
     const nodeKey = Object.values(Object.entries(nodes)[1][1])[0];
@@ -115,7 +118,7 @@ const CCSelection = (props: Props) => {
 
     function canWeAddNewCC(complaint: string): boolean {
         // if user trying to unselect or length is < 3
-        if (selectedCC.includes(complaint) || selectedCC.length < 3)
+        if (selectedPinnedCC.includes(complaint) || selectedPinnedCC.length < 3)
             return true;
 
         return false;
@@ -126,97 +129,67 @@ const CCSelection = (props: Props) => {
     }
 
     /**
-     * Remove Questionnaires
-     * @param {string[]} pinnedChiefComplaints
-     * @returns {string[]} updatedSelectedChiefComplaints
-     */
-    function removeQuestionniares(pinnedChiefComplaints: string[]): string[] {
-        const chiefComplaintsToRemove = selectedCC.filter(
-            (questionnaire) => !pinnedChiefComplaints.includes(questionnaire)
-        );
-
-        chiefComplaintsToRemove.forEach((questionnaire) =>
-            dispatch(selectChiefComplaint(questionnaire))
-        );
-
-        // updated selected chief complaints after removal.
-        return selectedCC.filter(
-            (item) => !chiefComplaintsToRemove.includes(item)
-        );
-    }
-
-    /**
      * @param {string} text
-     * @param {string[]} pinnedChiefComplaints
-     * @returns {string[]} newQuestionnaires
+     * @returns {string[]} chiefComplaintsFromListText
      */
-    function getNewQuestionnaires(
-        text: string,
-        pinnedChiefComplaints: string[]
-    ): string[] {
+    function getChiefComplaintsFromListText(text: string): string[] {
         const lowerCaseKeyNameToActualKeyNameMap =
             createLowerCaseKeyNameToActualKeyNameMap(hpiHeaders.parentNodes);
 
-        return getQuestionnairesFromText(text)
-            .filter(
-                (item) =>
-                    !(
-                        pinnedChiefComplaints.includes(item) &&
-                        selectedCC.includes(item)
-                    )
+        return Array.from(
+            new Set(
+                getQuestionnairesFromText(text)
+                    .filter((item) => !selectedPinnedCC.includes(item))
+                    .map((item) =>
+                        lowerCaseKeyNameToActualKeyNameMap.get(
+                            item.toLowerCase()
+                        )
+                    ) as string[]
             )
-            .map((item) =>
-                lowerCaseKeyNameToActualKeyNameMap.get(item.toLowerCase())
-            ) as string[];
+        );
     }
 
     /**
-     * Get Questionnaires to Load
-     * @param {string[]} newQuestionnaires
-     * @returns {string[]} questionnairesToLoad
+     * Get Chief Complaints to Load
+     * @param {string[]} chiefComplaints
+     * @returns {string[]} chiefCompliantsToLoad
      */
-    function getQuestionnairesToLoad(newQuestionnaires: string[]): string[] {
-        return newQuestionnaires
-            .filter((questionnaire) => !selectedCC.includes(questionnaire))
-            .map((item) => Object.keys(hpiHeaders.parentNodes[item])[0]);
+    function getChiefCompliantsToLoad(chiefComplaints: string[]): string[] {
+        return chiefComplaints.map(
+            (item) => Object.keys(hpiHeaders?.parentNodes?.[item])?.[0] ?? ''
+        );
     }
 
     async function onNextClick(e: any) {
-        const pinnedChiefComplaints = Object.keys(
-            userSurveyState.nodes['6'].response ?? {}
+        listTextChiefComplaints.forEach((questionnaire) =>
+            dispatch(selectChiefComplaint(questionnaire))
         );
 
         const node7Response = userSurveyState.nodes['7'].response ?? {};
         const node7ResponseAsText =
             getListTextResponseAsSingleString(node7Response);
 
-        const newQuestionnaires = getNewQuestionnaires(
-            node7ResponseAsText,
-            pinnedChiefComplaints
-        );
-
-        const updatedSelectedChiefCompliants = removeQuestionniares(
-            pinnedChiefComplaints
+        const chiefComplaintsFromListText =
+            getChiefComplaintsFromListText(node7ResponseAsText);
+        const chiefCompliantsToLoad = getChiefCompliantsToLoad(
+            chiefComplaintsFromListText
         );
 
         if (
-            !newQuestionnaires.length &&
-            !updatedSelectedChiefCompliants.length &&
+            !selectedPinnedCC.length &&
+            !chiefComplaintsFromListText.length &&
             isResponseValid(node7Response)
         ) {
             handleSubmit();
             return;
         }
 
-        const questionnairesToLoad = getQuestionnairesToLoad(newQuestionnaires);
-
         setLoading(true);
-        const values = await loadQuestionnairesData(questionnairesToLoad);
+        const values = await loadChiefComplaintsData(chiefCompliantsToLoad);
         setLoading(false);
 
-        // Dispatching actions
         values.forEach((data) => dispatch(processKnowledgeGraph(data)));
-        newQuestionnaires.forEach((questionnaire) =>
+        chiefComplaintsFromListText.forEach((questionnaire) =>
             dispatch(selectChiefComplaint(questionnaire))
         );
 
