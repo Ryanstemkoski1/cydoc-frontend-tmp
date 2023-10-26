@@ -75,6 +75,13 @@ class ChiefComplaintsButton extends React.Component<Props> {
                     }
 
                     selectChiefComplaint(name);
+
+                    if (!(name in hpiHeaders?.parentNodes)) {
+                        console.error(
+                            `Chief Complaint named '${name}' is not present in the Knowledge Graph API response, SYSTEM MIGHT FAIL DUE TO THIS`
+                        );
+                    }
+
                     this.getData(
                         Object.keys(hpiHeaders?.parentNodes?.[name])?.[0]
                     );

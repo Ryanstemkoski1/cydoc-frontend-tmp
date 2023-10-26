@@ -193,7 +193,7 @@ const CCSelection = (props: Props) => {
             dispatch(selectChiefComplaint(questionnaire))
         );
 
-        setTimeout(() => continueRef!.current!(e), 0);
+        setTimeout(() => continueRef!.current!(chiefComplaintsFromListText), 0);
     }
 
     function renderSwitch(id: string) {
