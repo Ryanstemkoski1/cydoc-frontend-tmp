@@ -93,7 +93,7 @@
     }
     &.inputDropdown {
         input {
-            padding-right: 40px;
+            padding-right: 30px;
             @include background-image(
                 angle-down,
                 svg,
@@ -111,4 +111,16 @@
             }
         }
     }
+}
+
+.day {
+    flex: 1.25;
+}
+
+.month {
+    flex: 2;
+}
+
+.year {
+    flex: 1.5;
 }
