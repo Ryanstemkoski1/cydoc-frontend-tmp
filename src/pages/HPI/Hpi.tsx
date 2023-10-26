@@ -92,7 +92,8 @@ const HPI = () => {
     );
 
     const institutionId = query.get(HPIPatientQueryParams.INSTITUTION_ID);
-    const onNextClickRef = useRef<() => void>();
+    const onNextClickRef =
+        useRef<(chiefComplaintsFromListText: string[]) => void>();
 
     /* FUNCTIONS */
     const changeFavComplaintsBasedOnInstitute = useCallback(() => {
@@ -177,63 +178,72 @@ const HPI = () => {
         window.scrollTo(0, 0);
     }, [currentTabs, activeItem, notificationMessage]);
 
-    const onNextClick = useCallback(() => {
-        setShowCCModal(false);
-        setChiefComplaintsForModal([]);
+    const onNextClick = useCallback(
+        (chiefComplaintsFromListText: string[]) => {
+            setShowCCModal(false);
+            setChiefComplaintsForModal([]);
 
-        if (notificationMessage) setNotificationMessage('');
+            if (notificationMessage) setNotificationMessage('');
 
-        let newCurrentTabs = currentTabs;
+            let newCurrentTabs = currentTabs;
 
-        const node7Response = userSurveyState.nodes['7'].response ?? {};
+            const node7Response = userSurveyState.nodes['7'].response ?? {};
 
-        if (activeItem === 'CCSelection') {
-            if (
-                !selectedChiefComplaints.length &&
-                !isResponseValid(node7Response)
-            ) {
-                setNotificationMessage(
-                    'You must select or describe at least one visit reason to proceed.'
-                );
-                setNotificationType(NotificationTypeEnum.ERROR);
+            if (activeItem === 'CCSelection') {
+                if (
+                    !selectedChiefComplaints.length &&
+                    !isResponseValid(node7Response)
+                ) {
+                    setNotificationMessage(
+                        'You must select or describe at least one visit reason to proceed.'
+                    );
+                    setNotificationType(NotificationTypeEnum.ERROR);
+                }
+
+                const newSelectedChiefComplaints = [
+                    ...new Set([
+                        ...selectedChiefComplaints,
+                        ...chiefComplaintsFromListText,
+                    ]),
+                ];
+
+                if (newSelectedChiefComplaints.length > 3) {
+                    const chiefComplaintsForModal =
+                        newSelectedChiefComplaints.map((chiefComplaint) => ({
+                            chiefComplaint: chiefComplaint,
+                            isSelected: false,
+                        }));
+
+                    setChiefComplaintsForModal(chiefComplaintsForModal);
+                    setShowCCModal(true);
+                    return;
+                }
+
+                newCurrentTabs = [
+                    'InitialSurvey',
+                    'PreHPI',
+                    'CCSelection',
+                    ...newSelectedChiefComplaints,
+                ];
+                setCurrentTabs(newCurrentTabs);
             }
 
-            if (selectedChiefComplaints.length > 3) {
-                const chiefComplaintsForModal = selectedChiefComplaints.map(
-                    (chiefComplaint) => ({
-                        chiefComplaint: chiefComplaint,
-                        isSelected: false,
-                    })
-                );
-
-                setChiefComplaintsForModal(chiefComplaintsForModal);
-                setShowCCModal(true);
+            const nextTabIndex = newCurrentTabs.indexOf(activeItem) + 1;
+            if (newCurrentTabs.length === nextTabIndex) {
                 return;
             }
-
-            newCurrentTabs = [
-                'InitialSurvey',
-                'PreHPI',
-                'CCSelection',
-                ...selectedChiefComplaints,
-            ];
-            setCurrentTabs(newCurrentTabs);
-        }
-
-        const nextTabIndex = newCurrentTabs.indexOf(activeItem) + 1;
-        if (newCurrentTabs.length === nextTabIndex) {
-            return;
-        }
-        const nextTab = newCurrentTabs[nextTabIndex];
-        dispatch(updateActiveItem(nextTab));
-    }, [
-        activeItem,
-        notificationMessage,
-        userSurveyState,
-        selectedChiefComplaints,
-        chiefComplaintsForModal,
-        currentTabs,
-    ]);
+            const nextTab = newCurrentTabs[nextTabIndex];
+            dispatch(updateActiveItem(nextTab));
+        },
+        [
+            activeItem,
+            notificationMessage,
+            userSurveyState,
+            selectedChiefComplaints,
+            chiefComplaintsForModal,
+            currentTabs,
+        ]
+    );
 
     const handleContinueForCCModal = () => {
         const unSelectedCCForCCModal = chiefComplaintsForModal.filter(
@@ -245,7 +255,7 @@ const HPI = () => {
             dispatch(selectChiefComplaint(CC.chiefComplaint));
         });
 
-        setTimeout(() => onNextClickRef!.current!(), 0);
+        setTimeout(() => onNextClickRef!.current!([]), 0);
     };
 
     const loadCCData = async () => {
