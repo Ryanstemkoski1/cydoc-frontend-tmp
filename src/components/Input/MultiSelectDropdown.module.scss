@@ -1,0 +1,44 @@
+@import '../../assets/scss/variables.scss';
+
+.selected {
+    &__wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-bottom: 15px;
+    }
+
+    &__chip {
+        padding: 5px 15px !important;
+        margin: 0 !important;
+        display: inline-flex;
+        align-items: center;
+
+        &:hover {
+            cursor: default;
+            background-color: $color-primary !important;
+        }
+
+        span {
+            width: 15px;
+            height: 15px;
+            font-size: 8px;
+            cursor: pointer;
+            margin: 0 -5px 0 10px;
+            border-radius: 50%;
+            align-items: center;
+            display: inline-flex;
+            justify-content: center;
+            transition: 0.3s ease-in-out;
+            background-color: rgba($color-white, 0.2);
+
+            &:hover {
+                background-color: rgba($color-white, 0.3);
+            }
+        }
+
+        img {
+            width: 10px;
+        }
+    }
+}

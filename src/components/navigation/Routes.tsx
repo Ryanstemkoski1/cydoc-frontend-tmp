@@ -14,6 +14,7 @@ import CreateGraph from 'pages/CreateTemplate/CreateGraph';
 import EditGraph from 'pages/CreateTemplate/EditGraph';
 import EditTemplate from 'pages/CreateTemplate/EditTemplate';
 import EditNote from 'pages/EditNote/EditNote';
+import FormPreferencesPage from 'pages/FormPreferences/FormPreferencesPage';
 import GenerateInpatientPlan from 'pages/GenerateInpatientPlan/GenerateInpatientPlan';
 import Home from 'pages/Home/Home';
 import LandingPage from 'pages/LandingPage/LandingPage';
@@ -135,6 +136,11 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                         exact
                         path='/manager-dashboard'
                         component={ManagerDashboard}
+                    />
+                    <ManagerRoute
+                        exact
+                        path='/form-preferences'
+                        component={FormPreferencesPage}
                     />
                     <Route exact path='/view/product' component={ViewProduct} />
                     <Route exact path='/privacypolicy' component={Policy} />

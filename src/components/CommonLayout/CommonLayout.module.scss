@@ -26,4 +26,9 @@
             padding: 20px 15px;
         }
     }
+    &.commonLayoutAlt {
+        .commonLayout__content {
+            border-radius: 10px;
+        }
+    }
 }

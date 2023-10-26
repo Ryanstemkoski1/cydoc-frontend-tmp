@@ -3,6 +3,7 @@ import { ApiPostBody, ApiResponse, ApiResponseBase } from '@cydoc-ai/types';
 import { API_URL } from './environment';
 import { stringFromError } from './error-utils';
 import { CognitoUser } from 'auth/cognito';
+import { InstitutionConfig } from './institution-api';
 
 const JSON_HEADER: (
     token: string | undefined,
@@ -27,7 +28,12 @@ const JSON_HEADER: (
 export async function postToApi<T>(
     path: string,
     description: string,
-    body: ApiPostBody,
+    body:
+        | ApiPostBody
+        | Pick<
+              InstitutionConfig,
+              'showDefaultForm' | 'diseaseForm' | 'showChiefComplaints'
+          >,
     cognitoUser: CognitoUser | null
 ): Promise<T | ApiResponse> {
     const token = cognitoUser?.signInUserSession

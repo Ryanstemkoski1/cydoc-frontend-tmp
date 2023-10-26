@@ -12,7 +12,7 @@ export default function Stepper({
 }) {
     const activeItem = useSelector(selectActiveItem);
     return (
-        <div className={`${style.stepper} flex justify-between`}>
+        <div className={`${style.stepper} scrollbar flex justify-between`}>
             {tabs.map((tab, index) => {
                 return (
                     <div className={style.stepper__item} key={index}>

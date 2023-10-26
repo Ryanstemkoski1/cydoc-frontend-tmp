@@ -72,6 +72,7 @@ interface InitialSurveyComponentProps {
             React.SetStateAction<NotificationTypeEnum>
         >;
     };
+    defaultInstitutionChiefComplaints: string[];
 }
 
 function createLowerCaseKeyNameToActualKeyNameMap(object = {}) {
@@ -89,6 +90,7 @@ const CCSelection = (props: Props) => {
         hpiHeaders,
         processSurveyGraph,
         saveHpiHeader,
+        defaultInstitutionChiefComplaints,
     } = props;
     const { setNotificationMessage, setNotificationType } = notification;
     const query = useQuery();
@@ -178,20 +180,22 @@ const CCSelection = (props: Props) => {
         if (
             !selectedPinnedCC.length &&
             !chiefComplaintsFromListText.length &&
+            !defaultInstitutionChiefComplaints.length &&
             isResponseValid(node7Response)
         ) {
             handleSubmit();
             return;
         }
 
+        chiefComplaintsFromListText.forEach((questionnaire) =>
+            dispatch(selectChiefComplaint(questionnaire))
+        );
+
         setLoading(true);
         const values = await loadChiefComplaintsData(chiefCompliantsToLoad);
         setLoading(false);
 
         values.forEach((data) => dispatch(processKnowledgeGraph(data)));
-        chiefComplaintsFromListText.forEach((questionnaire) =>
-            dispatch(selectChiefComplaint(questionnaire))
-        );
 
         setTimeout(() => continueRef!.current!(e), 0);
     }
