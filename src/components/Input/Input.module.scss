@@ -19,6 +19,7 @@
         padding: 5px 15px;
         border-radius: 8px;
         color: $color-black;
+        background-color: $color-white;
         border: 1px solid $color-border;
         &::placeholder {
             color: rgba($color-black, 0.5);
@@ -31,6 +32,24 @@
         height: 80px;
         resize: none;
         padding: 8px 15px;
+    }
+    &__wrap {
+        position: relative;
+    }
+    &__icon {
+        top: 2px;
+        right: 3px;
+        height: 41px;
+        display: flex;
+        position: absolute;
+        align-items: center;
+        padding: 0 13px 0 5px;
+        pointer-events: none;
+        background-color: $color-white;
+        img {
+            width: 16px;
+            opacity: 0.5;
+        }
     }
     &__search {
         position: relative;
@@ -94,13 +113,11 @@
     &.inputDropdown {
         input {
             padding-right: 40px;
-            @include background-image(
-                angle-down,
+            @include background-image(angle-down,
                 svg,
                 calc(100% - 15px),
                 no-repeat,
-                12px
-            );
+                12px);
         }
     }
     &.inputMobile {
