@@ -1,5 +1,6 @@
 import React from 'react';
 import style from './Input.module.scss';
+import CalendarIcon from '../../assets/images/calendar.svg';
 
 const Input = ({
     label,
@@ -20,7 +21,14 @@ const Input = ({
                     <span>{required ? '*' : ''}</span>
                 </label>
             )}
-            <input {...inputProps} />
+            <div className={style.input__wrap}>
+                <input {...inputProps} />
+                {inputProps?.type == 'date' && (
+                    <div className={style.input__icon}>
+                        <img src={CalendarIcon} alt='Calendar' />{' '}
+                    </div>
+                )}
+            </div>
             {children}
         </div>
     );
