@@ -1,6 +1,4 @@
 import Input from 'components/Input/Input';
-import MobileDatePicker from 'components/Input/MobileDatePicker';
-import { withDimensionsHook } from 'hooks/useDimensions';
 import React from 'react';
 import { connect } from 'react-redux';
 import {
@@ -19,7 +17,6 @@ interface InputTextOrDateResponseProps {
     placeholder: string;
     name: string;
     disabled?: boolean;
-    dimensions: { windowWidth: number; windowHeight: number };
 }
 
 class InputTextOrDateResponse extends React.Component<Props> {
@@ -37,22 +34,7 @@ class InputTextOrDateResponse extends React.Component<Props> {
             name,
             initialSurveyAddDateOrPlace,
             disabled = false,
-            dimensions,
         } = this.props;
-
-        const isMobile = dimensions.windowWidth < 768;
-
-        if (isMobile && type === 'date') {
-            return (
-                <MobileDatePicker
-                    value={defaultValue}
-                    handleChange={(value) => {
-                        initialSurveyAddDateOrPlace(id, value);
-                    }}
-                    disabled={disabled}
-                />
-            );
-        }
 
         return (
             <Input
@@ -93,6 +75,7 @@ const mapDispatchToProps = {
     initialSurveyAddDateOrPlace,
 };
 
-export default withDimensionsHook(
-    connect(mapStateToProps, mapDispatchToProps)(InputTextOrDateResponse)
-);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(InputTextOrDateResponse);

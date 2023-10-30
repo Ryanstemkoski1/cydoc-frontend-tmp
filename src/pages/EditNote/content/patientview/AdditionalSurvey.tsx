@@ -114,7 +114,6 @@ const AdditionalSurvey = ({
                             <label>Date of Birth</label>
                             <MobileDatePicker
                                 value={additionalDetails.dateOfBirth}
-                                maxDate={new Date()}
                                 handleChange={(value) => {
                                     setAdditionalDetails({
                                         ...additionalDetails,

@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import Input from './Input';
 import style from './MobileDatePicker.module.scss';
 import Select from './Select';
 
@@ -39,8 +40,6 @@ const MobileDatePicker = ({
     const [day, setDay] = useState(value ? dateValue.getDate() : 0);
     const [year, setYear] = useState(value ? dateValue.getFullYear() : 0);
 
-    const [maxDay, setMaxDay] = useState(31);
-
     useEffect(() => {
         let newMaxDay = 31;
 
@@ -49,8 +48,6 @@ const MobileDatePicker = ({
         } else if (month === 2) {
             newMaxDay = isLeapYear(year) ? 29 : 28;
         }
-
-        setMaxDay(newMaxDay);
 
         if (day > newMaxDay) {
             setDay(0);
@@ -79,30 +76,8 @@ const MobileDatePicker = ({
         handleChange(`${year}-${newMonth}-${newDay}`);
     }, [day, month, year]);
 
-    const days = useMemo(
-        () => new Array(maxDay).fill(null).map((_, index) => String(index + 1)),
-        [maxDay]
-    );
-
-    const years = useMemo(
-        () =>
-            new Array(200)
-                .fill(null)
-                .map((_, index) => String(new Date().getFullYear() - index)),
-        []
-    );
-
     return (
         <div className={`${style.datePicker} flex`}>
-            <Select
-                name='day'
-                disabled={disabled}
-                items={days}
-                value={day ? String(day) : ''}
-                onChange={(selectedDay) => setDay(parseInt(selectedDay))}
-                placeholder='Day'
-            />
-
             <Select
                 name='month'
                 disabled={disabled}
@@ -118,13 +93,68 @@ const MobileDatePicker = ({
                 placeholder='Month'
             />
 
-            <Select
-                name='year'
-                disabled={disabled}
-                items={years}
+            <Input
+                type='number'
+                inputMode='numeric'
+                pattern='[0-9]*'
+                value={day ? String(day) : ''}
+                placeholder='Day'
+                className='day'
+                onPaste={(e: any) => {
+                    e.preventDefault();
+                    return;
+                }}
+                onKeyPress={(e: any) => {
+                    const charCode =
+                        typeof e.which == 'undefined' ? e.keyCode : e.which;
+                    const charStr = String.fromCharCode(charCode);
+
+                    if (!charStr.match(/^[0-9]+$/)) e.preventDefault();
+                }}
+                onChange={(e: any) => {
+                    const newValue = parseInt(e.currentTarget.value);
+
+                    if (isNaN(newValue)) {
+                        setDay(0);
+                        return;
+                    }
+
+                    if (newValue > 0 && newValue < 9999) {
+                        setDay(newValue);
+                    }
+                }}
+            />
+
+            <Input
+                type='number'
+                inputMode='numeric'
+                pattern='[0-9]*'
                 value={year ? String(year) : ''}
-                onChange={(selectedYear) => setYear(parseInt(selectedYear))}
+                className='year'
                 placeholder='Year'
+                onPaste={(e: any) => {
+                    e.preventDefault();
+                    return;
+                }}
+                onKeyPress={(e: any) => {
+                    const charCode =
+                        typeof e.which == 'undefined' ? e.keyCode : e.which;
+                    const charStr = String.fromCharCode(charCode);
+
+                    if (!charStr.match(/^[0-9]+$/)) e.preventDefault();
+                }}
+                onChange={(e: any) => {
+                    const newValue = parseInt(e.currentTarget.value);
+
+                    if (isNaN(newValue)) {
+                        setYear(0);
+                        return;
+                    }
+
+                    if (newValue > 0 && newValue < 9999) {
+                        setYear(newValue);
+                    }
+                }}
             />
         </div>
     );

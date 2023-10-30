@@ -138,31 +138,50 @@ const HPI = () => {
                 setNotificationMessage('');
             }
 
-            const { legalFirstName, legalLastName, dateOfBirth } =
-                additionalSurvey;
-            const appointmentDate = (
-                (userSurveyState?.nodes?.['8']?.response ?? '') as string
-            ).trim();
+            const currentActiveItemIndex = currentTabs.findIndex(
+                (item) => item === activeItem
+            );
 
-            if (!(legalFirstName && legalLastName && dateOfBirth)) {
-                setNotificationMessage(
-                    'Please fill in all details to continue'
-                );
-                return;
-            }
+            const nextActiveItemIndex = currentTabs.findIndex(
+                (item) => item === name
+            );
 
-            if (!appointmentDate) {
-                setNotificationType(NotificationTypeEnum.ERROR);
-                setNotificationMessage(
-                    'Please confirm the date of your appointment.'
-                );
-                return;
+            if (currentActiveItemIndex < nextActiveItemIndex) {
+                const { legalFirstName, legalLastName, dateOfBirth } =
+                    additionalSurvey;
+
+                const appointmentDate = (
+                    (userSurveyState?.nodes?.['8']?.response ?? '') as string
+                ).trim();
+
+                if (!(legalFirstName && legalLastName && dateOfBirth)) {
+                    setNotificationMessage(
+                        'Please fill in all details to continue'
+                    );
+                    return;
+                }
+
+                if (!appointmentDate) {
+                    if (name !== 'PreHPI') {
+                        setNotificationType(NotificationTypeEnum.ERROR);
+                        setNotificationMessage(
+                            'Please confirm the date of your appointment.'
+                        );
+                    }
+                    dispatch(updateActiveItem('PreHPI'));
+                    return;
+                }
             }
 
             dispatch(updateActiveItem(name));
-            window.scrollTo(0, 0);
         },
-        [notificationMessage, userSurveyState, additionalSurvey]
+        [
+            notificationMessage,
+            userSurveyState,
+            additionalSurvey,
+            currentTabs,
+            activeItem,
+        ]
     );
 
     const onPreviousClick = useCallback(() => {
@@ -175,7 +194,6 @@ const HPI = () => {
         const nextTab = tabs[nextTabIndex];
 
         dispatch(updateActiveItem(nextTab));
-        window.scrollTo(0, 0);
     }, [currentTabs, activeItem, notificationMessage]);
 
     const onNextClick = useCallback(

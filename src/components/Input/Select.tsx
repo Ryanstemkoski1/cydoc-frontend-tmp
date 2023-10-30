@@ -46,7 +46,6 @@ function Select({
                     onChange={() => setShowDropdown(true)}
                     onClick={() => {
                         setShowDropdown(true);
-                        onChange('');
                     }}
                     placeholder={placeholder}
                     value={value}
