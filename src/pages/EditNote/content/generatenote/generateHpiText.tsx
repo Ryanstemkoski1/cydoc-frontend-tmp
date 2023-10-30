@@ -31,7 +31,6 @@ const RACES = [
     'Alaska',
     'Native',
     'Asian',
-    'Black',
     'African',
     'Hawaiian',
     'Pacific',
