@@ -42,24 +42,24 @@ const weekDays = [
 
 function formatDate(date: Date): string {
     return (
-        weekDays[date.getDay()] +
+        weekDays[date.getUTCDay()] +
         ', ' +
-        months[date.getMonth()] +
+        months[date.getUTCMonth()] +
         ' ' +
-        date.getDate() +
+        date.getUTCDate() +
         ', ' +
-        date.getFullYear()
+        date.getUTCFullYear()
     );
 }
 
 function formatDateOfBirth(date: string | Date): string {
     const inDateFormat = new Date(date);
     return (
-        (inDateFormat.getMonth() + 1).toString() +
+        (inDateFormat.getUTCMonth() + 1).toString() +
         '/' +
-        inDateFormat.getDate().toString() +
+        inDateFormat.getUTCDate().toString() +
         '/' +
-        inDateFormat.getFullYear().toString()
+        inDateFormat.getUTCFullYear().toString()
     );
 }
 

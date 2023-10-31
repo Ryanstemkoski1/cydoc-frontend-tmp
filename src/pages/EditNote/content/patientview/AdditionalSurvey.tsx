@@ -1,5 +1,7 @@
 import { ProductType } from 'assets/enums/route.enums';
 import Input from 'components/Input/Input';
+import MobileDatePicker from 'components/Input/MobileDatePicker';
+import useDimensions from 'hooks/useDimensions';
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router';
 import style from './AdditionalSurvey.module.scss';
@@ -36,6 +38,7 @@ const AdditionalSurvey = ({
     });
 
     const isHPIPage = useLocation().pathname.includes(ProductType.HPI);
+    const isMobile = useDimensions().windowWidth < 768;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -106,16 +109,31 @@ const AdditionalSurvey = ({
                 </div>
 
                 <div className={style.additionalSurvey__col}>
-                    <Input
-                        required={true}
-                        type='date'
-                        label='Date of Birth'
-                        name='dateOfBirth'
-                        placeholder='mm/dd/yyyy'
-                        max={new Date().toJSON().slice(0, 10)}
-                        defaultValue={additionalDetails.dateOfBirth}
-                        onChange={handleChange}
-                    />
+                    {isMobile ? (
+                        <>
+                            <label>Date of Birth</label>
+                            <MobileDatePicker
+                                value={additionalDetails.dateOfBirth}
+                                handleChange={(value) => {
+                                    setAdditionalDetails({
+                                        ...additionalDetails,
+                                        dateOfBirth: value,
+                                    });
+                                }}
+                            />
+                        </>
+                    ) : (
+                        <Input
+                            required={true}
+                            type='date'
+                            label='Date of Birth'
+                            name='dateOfBirth'
+                            placeholder='mm/dd/yyyy'
+                            max={new Date().toJSON().slice(0, 10)}
+                            defaultValue={additionalDetails.dateOfBirth}
+                            onChange={handleChange}
+                        />
+                    )}
                 </div>
                 <div className={style.additionalSurvey__col}>
                     <Input
