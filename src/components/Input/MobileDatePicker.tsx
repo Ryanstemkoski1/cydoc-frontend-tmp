@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Input from './Input';
 import style from './MobileDatePicker.module.scss';
 import Select from './Select';
 
-const month_names = [
+const MONTH_NAMES = [
     'January',
     'February',
     'March',
@@ -19,7 +19,6 @@ const month_names = [
 ];
 
 interface DatePickerProps {
-    maxDate?: Date;
     value?: string;
     handleChange: (value: string) => void;
     disabled?: boolean;
@@ -28,68 +27,76 @@ interface DatePickerProps {
 const isLeapYear = (year: number) =>
     year !== 0 && ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0);
 
+function handleKeyPress(e: React.KeyboardEvent<HTMLElement>) {
+    const charCode = typeof e.which == 'undefined' ? e.keyCode : e.which;
+    const charStr = String.fromCharCode(charCode);
+
+    if (!charStr.match(/^[0-9]+$/)) e.preventDefault();
+}
+
+function handlePaste(e: React.ClipboardEvent<HTMLElement>) {
+    e.preventDefault();
+    return;
+}
+
+function validateDate(
+    day: number | string,
+    monthIndex: number | string,
+    year: number | string
+) {
+    day = Number(day);
+    monthIndex = Number(monthIndex);
+    year = Number(year);
+
+    let maxDaysAllowed = 31;
+
+    if (monthIndex === 2) {
+        maxDaysAllowed = isLeapYear(year) ? 29 : 28;
+    } else {
+        maxDaysAllowed = [4, 6, 9, 11].includes(monthIndex) ? 30 : 31;
+    }
+
+    if (day > maxDaysAllowed) {
+        day = 0;
+    }
+
+    return {
+        newDay: String(day).padStart(2, '0'),
+        newMonthIndex: String(monthIndex).padStart(2, '0'),
+        newYear: String(year).padStart(4, '0'),
+    };
+}
+
 const MobileDatePicker = ({
-    maxDate,
     value = '',
     handleChange,
     disabled = false,
 }: DatePickerProps) => {
-    const dateValue = new Date(value);
+    const dateValue = value.split('-');
 
-    const [month, setMonth] = useState(value ? dateValue.getMonth() + 1 : 0);
-    const [day, setDay] = useState(value ? dateValue.getDate() : 0);
-    const [year, setYear] = useState(value ? dateValue.getFullYear() : 0);
-
-    useEffect(() => {
-        let newMaxDay = 31;
-
-        if (month !== 2) {
-            newMaxDay = [4, 6, 9, 11].includes(month) ? 30 : 31;
-        } else if (month === 2) {
-            newMaxDay = isLeapYear(year) ? 29 : 28;
-        }
-
-        if (day > newMaxDay) {
-            setDay(0);
-            return;
-        }
-
-        if (!day || !month || !year) {
-            handleChange('');
-            return;
-        }
-
-        const newDay = String(day).padStart(2, '0');
-        const newMonth = String(month).padStart(2, '0');
-
-        const newDate = new Date(year, month - 1, day);
-
-        if (maxDate && newDate > maxDate) {
-            setDay(0);
-            setMonth(0);
-            setYear(0);
-
-            handleChange('');
-            return;
-        }
-
-        handleChange(`${year}-${newMonth}-${newDay}`);
-    }, [day, month, year]);
+    const year = Number(dateValue[0] ?? '');
+    const monthIndex = Number(dateValue[1] ?? '');
+    const day = Number(dateValue[2] ?? '');
 
     return (
         <div className={`${style.datePicker} flex`}>
             <Select
                 name='month'
                 disabled={disabled}
-                items={month_names}
-                value={month ? month_names[month - 1] : ''}
-                onChange={(selectedMonth) =>
-                    setMonth(
-                        month_names.findIndex(
-                            (month) => selectedMonth === month
-                        ) + 1
-                    )
-                }
+                items={MONTH_NAMES}
+                value={monthIndex ? MONTH_NAMES[monthIndex - 1] : ''}
+                onChange={(value) => {
+                    const index =
+                        MONTH_NAMES.findIndex((month) => value === month) + 1;
+
+                    const { newDay, newMonthIndex, newYear } = validateDate(
+                        day,
+                        index,
+                        year
+                    );
+
+                    handleChange(`${newYear}-${newMonthIndex}-${newDay}`);
+                }}
                 placeholder='Month'
             />
 
@@ -97,31 +104,19 @@ const MobileDatePicker = ({
                 type='number'
                 inputMode='numeric'
                 pattern='[0-9]*'
-                value={day ? String(day) : ''}
+                value={day || ''}
                 placeholder='Day'
                 className='day'
-                onPaste={(e: any) => {
-                    e.preventDefault();
-                    return;
-                }}
-                onKeyPress={(e: any) => {
-                    const charCode =
-                        typeof e.which == 'undefined' ? e.keyCode : e.which;
-                    const charStr = String.fromCharCode(charCode);
+                onPaste={handlePaste}
+                onKeyPress={handleKeyPress}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const { newDay, newMonthIndex, newYear } = validateDate(
+                        e.currentTarget.value,
+                        monthIndex,
+                        year
+                    );
 
-                    if (!charStr.match(/^[0-9]+$/)) e.preventDefault();
-                }}
-                onChange={(e: any) => {
-                    const newValue = parseInt(e.currentTarget.value);
-
-                    if (isNaN(newValue)) {
-                        setDay(0);
-                        return;
-                    }
-
-                    if (newValue > 0 && newValue < 9999) {
-                        setDay(newValue);
-                    }
+                    handleChange(`${newYear}-${newMonthIndex}-${newDay}`);
                 }}
             />
 
@@ -129,30 +124,20 @@ const MobileDatePicker = ({
                 type='number'
                 inputMode='numeric'
                 pattern='[0-9]*'
-                value={year ? String(year) : ''}
+                value={year || ''}
                 className='year'
                 placeholder='Year'
-                onPaste={(e: any) => {
-                    e.preventDefault();
-                    return;
-                }}
-                onKeyPress={(e: any) => {
-                    const charCode =
-                        typeof e.which == 'undefined' ? e.keyCode : e.which;
-                    const charStr = String.fromCharCode(charCode);
+                onPaste={handlePaste}
+                onKeyPress={handleKeyPress}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const { newDay, newMonthIndex, newYear } = validateDate(
+                        day,
+                        monthIndex,
+                        e.currentTarget.value
+                    );
 
-                    if (!charStr.match(/^[0-9]+$/)) e.preventDefault();
-                }}
-                onChange={(e: any) => {
-                    const newValue = parseInt(e.currentTarget.value);
-
-                    if (isNaN(newValue)) {
-                        setYear(0);
-                        return;
-                    }
-
-                    if (newValue > 0 && newValue < 9999) {
-                        setYear(newValue);
+                    if (Number(newYear) < 10000) {
+                        handleChange(`${newYear}-${newMonthIndex}-${newDay}`);
                     }
                 }}
             />
