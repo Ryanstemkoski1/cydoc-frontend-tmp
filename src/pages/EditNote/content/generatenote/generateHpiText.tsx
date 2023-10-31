@@ -25,18 +25,6 @@ interface PatientDisplayName {
     posPronoun: string;
 }
 
-const RACES = [
-    'American',
-    'Indian',
-    'Alaska',
-    'Native',
-    'Asian',
-    'African',
-    'Hawaiian',
-    'Pacific',
-    'Islander',
-    'White',
-];
 const ETINICITY = ['Hispanic', 'Latino'];
 // https://capitalizemytitle.com/abbreviations-for-months/
 const MONTHS = [
@@ -67,7 +55,7 @@ const MONTHS = [
 ];
 
 const selectivelyUppercase = (str: string): string => {
-    [...RACES, ...ETINICITY, ...MONTHS].forEach((item) => {
+    [...ETINICITY, ...MONTHS].forEach((item) => {
         if (str.match(new RegExp('(^|[^a-zA-Z])' + item, 'ig'))) {
             str = str.replace(new RegExp(item, 'ig'), ' ' + item);
         }
