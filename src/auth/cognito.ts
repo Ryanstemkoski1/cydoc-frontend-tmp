@@ -177,3 +177,18 @@ export const updatePassword = async (
                 resolve({ success: false, errorMessage: stringFromError(e) })
             )
     );
+
+export const getAuthToken = async (
+    cognitoUser: CognitoUser | null
+): Promise<string | undefined> =>
+    new Promise((resolve) => {
+        if (!cognitoUser) return undefined;
+        else
+            cognitoUser.getSession(
+                (error: Error | null, session: CognitoUserSession | null) => {
+                    if (error || !session) return undefined;
+
+                    resolve(session.getAccessToken().getJwtToken());
+                }
+            );
+    });
