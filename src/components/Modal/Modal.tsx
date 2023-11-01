@@ -1,12 +1,12 @@
 import { AppointmentUser, formatFullName } from 'pages/BrowseNotes/BrowseNotes';
 import { ParseAndRenderHpiNote } from 'pages/EditNote/content/generatenote/notesections/HPINote';
-import { default as React, useEffect, useRef } from 'react';
+import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import style from './Modal.module.scss';
 
 export interface ModalProps {
     showModal: boolean;
-    setShowModal: any;
+    setShowModal: (value: boolean) => void;
     selectedAppointment: AppointmentUser;
 }
 
@@ -15,10 +15,10 @@ const Modal = ({
     setShowModal,
     selectedAppointment,
 }: ModalProps) => {
-    const modalRef = useRef<any>();
+    const modalRef = useRef<HTMLDivElement>(null);
 
-    const handleClickOutsideModal = (event: any) => {
-        if (!modalRef.current?.contains(event.target)) {
+    const handleClickOutsideModal = (event: MouseEvent<HTMLDivElement>) => {
+        if (!modalRef.current?.contains(event.target as HTMLDivElement)) {
             setShowModal(false);
         }
     };
@@ -72,7 +72,7 @@ const Modal = ({
                             className='button pill secondary'
                             onClick={copyNote}
                         >
-                            Copy HPI
+                            Copy Note
                         </button>
                     </div>
                     <div
