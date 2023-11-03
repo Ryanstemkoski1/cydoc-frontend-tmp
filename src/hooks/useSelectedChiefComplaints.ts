@@ -13,20 +13,21 @@ export function useSelectedPinnedChiefComplaints() {
     const userSurveyState = useSelector(
         (state: CurrentNoteState) => state.userView.userSurvey
     );
-
-    const pinnedChiefComplaints = Object.keys(
-        userSurveyState.nodes['6'].response ?? {}
+    const chiefComplaints = useSelector(
+        (state: CurrentNoteState) => state.chiefComplaints
     );
 
-    const selectedChiefComplaints = useSelectedChiefComplaints();
+    return useMemo(() => {
+        const pinnedChiefComplaints = Object.keys(
+            userSurveyState?.nodes?.['6']?.response ?? {}
+        );
 
-    return useMemo(
-        () =>
-            selectedChiefComplaints.filter((el) =>
-                pinnedChiefComplaints.includes(el)
-            ),
-        [pinnedChiefComplaints, selectedChiefComplaints]
-    );
+        const selectedChiefComplaints = Object.keys(chiefComplaints);
+
+        return selectedChiefComplaints.filter((el) =>
+            pinnedChiefComplaints.includes(el)
+        );
+    }, [userSurveyState, chiefComplaints]);
 }
 
 export function useListTextChiefComplaints() {
@@ -34,30 +35,27 @@ export function useListTextChiefComplaints() {
         (state: CurrentNoteState) => state.userView.userSurvey
     );
 
-    const pinnedChiefComplaints = Object.keys(
-        userSurveyState.nodes['6'].response ?? {}
+    const chiefComplaints = useSelector(
+        (state: CurrentNoteState) => state.chiefComplaints
     );
 
-    const selectedChiefComplaints = useSelectedChiefComplaints();
+    return useMemo(() => {
+        const pinnedChiefComplaints = Object.keys(
+            userSurveyState?.nodes?.['6']?.response ?? {}
+        );
+        const selectedChiefComplaints = Object.keys(chiefComplaints);
 
-    return useMemo(
-        () =>
-            selectedChiefComplaints.filter(
-                (item) => !pinnedChiefComplaints.includes(item)
-            ),
-        [pinnedChiefComplaints, selectedChiefComplaints]
-    );
+        return selectedChiefComplaints.filter(
+            (item) => !pinnedChiefComplaints.includes(item)
+        );
+    }, [userSurveyState, chiefComplaints]);
 }
 
 function useSelectedChiefComplaints() {
     const chiefComplaints = useSelector(
         (state: CurrentNoteState) => state.chiefComplaints
     );
-
-    return useMemo(
-        () => getSelectedChiefCompliants(chiefComplaints),
-        [chiefComplaints]
-    );
+    return useMemo(() => Object.keys(chiefComplaints), [chiefComplaints]);
 }
 
 export default useSelectedChiefComplaints;

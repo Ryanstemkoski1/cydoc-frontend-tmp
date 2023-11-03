@@ -3,7 +3,7 @@ import { ApiPostBody, ApiResponse, ApiResponseBase } from '@cydoc-ai/types';
 import { API_URL } from './environment';
 import { stringFromError } from './error-utils';
 import { CognitoUser } from 'auth/cognito';
-import { InstitutionConfig } from './institution-api';
+import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 
 const JSON_HEADER: (
     token: string | undefined,

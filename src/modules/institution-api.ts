@@ -1,4 +1,6 @@
 import { ApiResponse, GetMembersResponse, Institution } from '@cydoc-ai/types';
+import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
+import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 import { CognitoUser } from 'auth/cognito';
 import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
 import invariant from 'tiny-invariant';
@@ -28,21 +30,6 @@ export const getInstitution = (
         null // no authentication on get institution
     );
 };
-
-export interface InstitutionConfig {
-    id: number;
-    institutionId: string;
-    showChiefComplaints: boolean;
-    showDefaultForm: boolean;
-    diseaseForm: DiseaseForm[];
-}
-
-export interface DiseaseForm {
-    id: string;
-    diseaseKey: string;
-    diseaseName: string;
-    isDeleted: boolean;
-}
 
 export async function validateDiseaseForm(
     config: InstitutionConfig

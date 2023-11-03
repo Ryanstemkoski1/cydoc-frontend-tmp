@@ -1,4 +1,6 @@
 import { ApiResponse } from '@cydoc-ai/types';
+import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
+import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 import ButtonLoader from 'components/ButtonLoader/ButtonLoader';
 import CommonLayout from 'components/CommonLayout/CommonLayout';
 import MultiSelectDropdown from 'components/Input/MultiSelectDropdown';
@@ -10,8 +12,6 @@ import { MAX_LIMIT_TO_ADD_DEFAULT_FORMS } from 'constants/FormPreferencesConstan
 import useAuth from 'hooks/useAuth';
 import useUser from 'hooks/useUser';
 import {
-    DiseaseForm,
-    InstitutionConfig,
     InstitutionConfigResponse,
     getInstitutionConfig,
     updateInstitutionConfig,
@@ -29,21 +29,6 @@ const defaultInstitutionConfig: InstitutionConfig = {
     institutionId: '-1',
     showDefaultForm: false,
     showChiefComplaints: false,
-};
-
-const fetchInstitutionConfig = async (
-    institutionId: string
-): Promise<InstitutionConfig> => {
-    let result = defaultInstitutionConfig;
-    try {
-        const response = await getInstitutionConfig(institutionId);
-
-        if (!(response as ApiResponse).errorMessage) {
-            result = (response as InstitutionConfigResponse).config;
-        }
-    } catch (error: any) {}
-
-    return result;
 };
 
 const FormPreferencesPage = () => {
@@ -84,7 +69,7 @@ const FormPreferencesPage = () => {
 
     /* functions */
     const updateInstitutionConfigState = useCallback(
-        (key: string, value: any) => {
+        (key: string, value: boolean | number | string | DiseaseForm[]) => {
             setInstitutionConfig({ ...institutionConfig, [key]: value });
         },
         [institutionConfig]
@@ -106,59 +91,85 @@ const FormPreferencesPage = () => {
 
         setAllDiseaseForms(diseaseForms);
         dispatch(setLoadingStatus(false));
-    }, []);
+    }, [dispatch]);
 
-    const loadInstitutionConfig = useCallback(async (institutionId: string) => {
-        dispatch(setLoadingStatus(true));
-        try {
-            const institutionConfig = await fetchInstitutionConfig(
-                institutionId
-            );
-            setInstitutionConfig(institutionConfig);
-        } catch (error: any) {
-        } finally {
-            dispatch(setLoadingStatus(false));
-        }
-    }, []);
+    const loadInstitutionConfig = useCallback(
+        async (institutionId: string) => {
+            dispatch(setLoadingStatus(true));
+            try {
+                const response = await getInstitutionConfig(institutionId);
+
+                if ((response as ApiResponse).errorMessage) {
+                    return;
+                }
+                const newInstitutionConfig = (
+                    response as InstitutionConfigResponse
+                ).config;
+                setInstitutionConfig(newInstitutionConfig);
+            } finally {
+                dispatch(setLoadingStatus(false));
+            }
+        },
+        [dispatch]
+    );
 
     const handleSubmit = async () => {
         if (!user) return null;
         try {
             setLoading(true);
-            const { showDefaultForm, diseaseForm } = institutionConfig;
+
+            const { showDefaultForm, diseaseForm, institutionId } =
+                institutionConfig;
             let newDiseaseForm = diseaseForm;
+            let response: InstitutionConfigResponse | ApiResponse = {};
 
             if (!showDefaultForm && diseaseForm.length) {
                 newDiseaseForm = JSON.parse(JSON.stringify(diseaseForm));
                 newDiseaseForm.forEach((form) => (form.isDeleted = true));
             }
 
-            const result = await updateInstitutionConfig(
-                {
-                    ...institutionConfig,
-                    diseaseForm: newDiseaseForm,
-                },
+            response = await getInstitutionConfig(institutionId);
+            if ((response as ApiResponse).errorMessage) {
+                throw new Error();
+            }
+
+            const institutionConfigOnServer = (
+                response as InstitutionConfigResponse
+            ).config;
+
+            for (const form of institutionConfigOnServer.diseaseForm) {
+                if (newDiseaseForm.find((item) => item.id === form.id)) {
+                    continue;
+                }
+                form.isDeleted = true;
+                newDiseaseForm.push(form);
+            }
+
+            const updatedInstitutionConfig = {
+                ...institutionConfig,
+                diseaseForm: newDiseaseForm,
+            };
+
+            response = await updateInstitutionConfig(
+                updatedInstitutionConfig,
                 cognitoUser
             );
 
-            if (!(result as ApiResponse).errorMessage) {
-                const updatedConfig = (result as InstitutionConfigResponse)
-                    .config;
-                setInstitutionConfig(updatedConfig);
-
-                toast.success('Updated Successfully', {
-                    position: 'top-right',
-                    autoClose: 2000,
-                    hideProgressBar: true,
-                    pauseOnHover: false,
-                });
-            } else {
-                throw new Error(
-                    'Failed to save institution configuration. Try refreshing the page'
-                );
+            if ((response as ApiResponse).errorMessage) {
+                throw new Error();
             }
-        } catch (error: any) {
-            console.error(error.message);
+
+            setInstitutionConfig(
+                (response as InstitutionConfigResponse).config
+            );
+
+            toast.success('Updated Successfully', {
+                position: 'top-right',
+                autoClose: 2000,
+                hideProgressBar: true,
+                pauseOnHover: false,
+            });
+        } catch (error: unknown) {
             toast.error('Failed', {
                 position: 'top-right',
                 autoClose: 2000,
@@ -187,18 +198,19 @@ const FormPreferencesPage = () => {
     const handleOnSelected = (name: string) => {
         const selectedDiseaseForm = allDiseaseForms.find(
             (item) => item.diseaseName === name
-        );
+        ) as DiseaseForm;
 
         const newDiseaseForm = [...diseaseForm, selectedDiseaseForm];
 
         if (
-            newDiseaseForm.filter((item) => !item!.isDeleted).length >
+            newDiseaseForm.filter((item) => !item.isDeleted).length >
             MAX_LIMIT_TO_ADD_DEFAULT_FORMS
         ) {
             setNotificationMessage(
                 `Can't add more than ${MAX_LIMIT_TO_ADD_DEFAULT_FORMS} default forms`
             );
             setNotificationType(NotificationTypeEnum.ERROR);
+            window.scrollTo(0, 0);
             return;
         }
 
@@ -207,24 +219,25 @@ const FormPreferencesPage = () => {
 
     /* effects */
     useEffect(() => {
-        if (notificationMessage) {
-            const timeoutId = setTimeout(() => {
-                setNotificationMessage('');
-            }, 3000);
-            return () => {
-                clearTimeout(timeoutId);
-            };
-        }
+        if (!notificationMessage) return;
+
+        const timeoutId = setTimeout(() => {
+            setNotificationMessage('');
+        }, 3000);
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
     }, [notificationMessage]);
 
     useEffect(() => {
         if (!user) return;
         loadInstitutionConfig(user.institutionId);
-    }, [user]);
+    }, [loadInstitutionConfig, user]);
 
     useEffect(() => {
         loadAllDiseaseForms();
-    }, []);
+    }, [loadAllDiseaseForms]);
 
     return (
         <div className={style.formPreferences}>

@@ -4,10 +4,7 @@ import { NotificationTypeEnum } from 'components/tools/Notification/Notification
 import { apiClient } from 'constants/api';
 import { GraphData, ResponseTypes } from 'constants/hpiEnums';
 import useQuery from 'hooks/useQuery';
-import {
-    useListTextChiefComplaints,
-    useSelectedPinnedChiefComplaints,
-} from 'hooks/useSelectedChiefComplaints';
+import { useSelectedPinnedChiefComplaints } from 'hooks/useSelectedChiefComplaints';
 import {
     ChiefComplaintsProps,
     HpiHeadersProps,
@@ -17,7 +14,7 @@ import ChiefComplaintsButton from 'pages/EditNote/content/hpi/knowledgegraph/src
 import ListText from 'pages/EditNote/content/hpi/knowledgegraph/src/components/responseComponents/ListText';
 import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
 import patientViewHeaders from 'pages/EditNote/content/patientview/constants/patientViewHeaders.json';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import {
     GoBackToAdditionalSurvey,
@@ -25,7 +22,6 @@ import {
     resetAdditionalSurveyPage,
     updateAdditionalSurveyDetails,
 } from 'redux/actions/additionalSurveyActions';
-import { selectChiefComplaint } from 'redux/actions/chiefComplaintsActions';
 import {
     ProcessKnowledgeGraphAction,
     processKnowledgeGraph,
@@ -64,7 +60,7 @@ import { loadChiefComplaintsData } from 'utils/loadKnowledgeGraphData';
 import style from './CCSelection.module.scss';
 
 interface InitialSurveyComponentProps {
-    continue: (e: any) => void;
+    continue: (newUserSelectedCC: string[]) => void;
     onPreviousClick: () => void;
     notification: {
         setNotificationMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -88,8 +84,7 @@ const CCSelection = (props: Props) => {
         processKnowledgeGraph,
         notification,
         hpiHeaders,
-        processSurveyGraph,
-        saveHpiHeader,
+
         defaultInstitutionChiefComplaints,
     } = props;
     const { setNotificationMessage, setNotificationType } = notification;
@@ -98,13 +93,11 @@ const CCSelection = (props: Props) => {
     const [loading, setLoading] = useState(false);
 
     const selectedPinnedCC = useSelectedPinnedChiefComplaints();
-    const listTextChiefComplaints = useListTextChiefComplaints();
 
     const nodes = patientViewHeaders.parentNodes;
     const nodeKey = Object.values(Object.entries(nodes)[1][1])[0];
     const questions = initialQuestions as InitialQuestionsState;
     const userSurveyStateNodes = Object.keys(userSurveyState.nodes);
-    const continueRef = useRef<(e: any) => void | undefined>();
     const content =
         nodeKey in questions.nodes &&
         questions.graph[nodeKey].map((key) => {
@@ -162,11 +155,7 @@ const CCSelection = (props: Props) => {
         );
     }
 
-    async function onNextClick(e: any) {
-        listTextChiefComplaints.forEach((questionnaire) =>
-            dispatch(selectChiefComplaint(questionnaire))
-        );
-
+    async function onNextClick() {
         const node7Response = userSurveyState.nodes['7'].response ?? {};
         const node7ResponseAsText =
             getListTextResponseAsSingleString(node7Response);
@@ -187,17 +176,13 @@ const CCSelection = (props: Props) => {
             return;
         }
 
-        chiefComplaintsFromListText.forEach((questionnaire) =>
-            dispatch(selectChiefComplaint(questionnaire))
-        );
-
         setLoading(true);
         const values = await loadChiefComplaintsData(chiefCompliantsToLoad);
         setLoading(false);
 
         values.forEach((data) => dispatch(processKnowledgeGraph(data)));
 
-        setTimeout(() => continueRef!.current!(chiefComplaintsFromListText), 0);
+        props.continue([...selectedPinnedCC, ...chiefComplaintsFromListText]);
     }
 
     function renderSwitch(id: string) {
@@ -285,7 +270,7 @@ const CCSelection = (props: Props) => {
 
                 window.location.href = url;
             })
-            .catch((_error) => {
+            .catch(() => {
                 setNotificationMessage('Failed to submit your questionnaire');
                 setNotificationType(NotificationTypeEnum.ERROR);
             })
@@ -294,25 +279,26 @@ const CCSelection = (props: Props) => {
             });
     }
 
-    /* ----- EFFECTS ----- */
-
     useEffect(() => {
-        continueRef.current = props.continue;
-    }, [props.continue]);
+        const { graph, nodes, order } = userSurveyState;
+        const { bodySystems, parentNodes } = hpiHeaders;
 
-    useEffect(() => {
         if (
-            !Object.keys(userSurveyState.graph).length &&
-            !Object.keys(userSurveyState.nodes).length &&
-            !Object.keys(userSurveyState.order).length
-        )
+            !Object.keys(graph).length &&
+            !Object.keys(nodes).length &&
+            !Object.keys(order).length
+        ) {
             processSurveyGraph(initialQuestions as InitialQuestionsState);
+        }
 
-        if (hpiHeaders) {
+        if (
+            !Object.keys(parentNodes).length &&
+            !Object.keys(bodySystems).length
+        ) {
             const data = hpiHeadersApiClient;
             data.then((res) => saveHpiHeader(res.data));
         }
-    }, []);
+    }, [hpiHeaders, userSurveyState]);
 
     return (
         <div className={style.diseaseSelections}>
