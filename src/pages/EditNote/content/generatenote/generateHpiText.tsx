@@ -93,6 +93,7 @@ export const fullClean = (sentence: string): string => {
     // condense multiple whitespace into single space
     sentence = sentence.split(/\s+/).join(' ');
 
+    // remove capitalized letters selectively
     sentence = selectivelyLowercase(sentence);
 
     // capitalized letters selectively
@@ -328,9 +329,9 @@ export const createHPI = (
     pronouns: PatientPronouns
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
+    hpiString = fillNameAndPronouns(hpiString, patientInfo);
     hpiString = partOfSpeechCorrection(hpiString);
     hpiString = combineHpiString(hpiString, 3);
-    hpiString = fillNameAndPronouns(hpiString, patientInfo);
     hpiString = fillMedicalTerms(hpiString);
     hpiString = conjugateThirdPerson(hpiString);
     hpiString = abbreviate(hpiString);
