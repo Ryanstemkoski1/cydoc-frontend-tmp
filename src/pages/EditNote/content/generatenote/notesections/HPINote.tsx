@@ -15,21 +15,25 @@ export function ParseAndRenderHpiNote({ hpiText = '' }: { hpiText: string }) {
 }
 
 function processSentence(sentence: string) {
-    const addHeading = (str: string) => (
-        <>
-            <br />
-            <b>
-                {str
-                    .trim()
-                    .toLowerCase()
-                    .split(' ')
-                    .map((word) => capitalizeFirstLetter(word))
-                    .join(' ')}
-            </b>
-            <br />
-        </>
+    let id = 1;
+    const addHeading = (str: string) => {
+        str = str
+            .trim()
+            .toLowerCase()
+            .split(' ')
+            .map((word) => capitalizeFirstLetter(word))
+            .join(' ');
+        return (
+            <React.Fragment key={str + id++}>
+                <br />
+                <b>{str}</b>
+                <br />
+            </React.Fragment>
+        );
+    };
+    const addNormalText = (str: string) => (
+        <React.Fragment key={str + id++}>{str}</React.Fragment>
     );
-    const addNormalText = (str: string) => <>{str}</>;
 
     let normalText = '';
     let headingText = '';

@@ -1,4 +1,5 @@
 import { ApiResponse, Institution } from '@cydoc-ai/types';
+import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
 import {
@@ -15,7 +16,6 @@ import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
 import useQuery from 'hooks/useQuery';
 import useSelectedChiefComplaints from 'hooks/useSelectedChiefComplaints';
 import {
-    InstitutionConfig,
     InstitutionConfigResponse,
     getInstitution,
     getInstitutionConfig,
@@ -24,13 +24,7 @@ import {
 import { log } from 'modules/logging';
 import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
 import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
@@ -94,13 +88,6 @@ const HPI = () => {
         return institutionConfig.diseaseForm.map((item) => item.diseaseName);
     }, [institutionConfig]);
 
-    const selectedCC = useSelectedChiefComplaints();
-    const selectedCCExceptInstitutionDefault = useMemo(() => {
-        return selectedCC.filter(
-            (item) => !institutionDefaultCC.includes(item)
-        );
-    }, [institutionDefaultCC, selectedCC]);
-
     const [showCCModal, setShowCCModal] = useState(false);
     const selectedChiefComplaints = useSelectedChiefComplaints();
     const [chiefComplaintsForModal, setChiefComplaintsForModal] = useState<
@@ -112,7 +99,6 @@ const HPI = () => {
     );
 
     const institutionId = query.get(HPIPatientQueryParams.INSTITUTION_ID);
-    const onNextClickRef = useRef<() => void>();
 
     /* FUNCTIONS */
     const resetCurrentTabs = useCallback(() => {
@@ -126,42 +112,43 @@ const HPI = () => {
             newCurrentTabs.push('CCSelection');
         } else if (showDefaultForm) {
             newCurrentTabs.push(...institutionDefaultCC);
-            // Add institution default CC
-            institutionDefaultCC.forEach((item) => {
-                if (!selectedCC.includes(item)) {
-                    dispatch(selectChiefComplaint(item));
-                }
-            });
         }
 
         return newCurrentTabs;
-    }, [institutionConfig, institutionDefaultCC, selectedCC]);
+    }, [institutionConfig, institutionDefaultCC]);
 
     const changeFavComplaintsBasedOnInstitute = useCallback(() => {
         const { graph, nodes, order } = userSurveyState;
 
-        if (!institution) {
-            if (
-                !Object.keys(graph).length &&
-                !Object.keys(nodes).length &&
-                !Object.keys(order).length
-            ) {
-                dispatch(processSurveyGraph(initialQuestions));
-            }
-        } else {
-            if (institution.type === InstitutionType.GYN) {
+        if (
+            !institution ||
+            Object.keys(graph).length ||
+            Object.keys(nodes).length ||
+            Object.keys(order).length
+        ) {
+            return;
+        }
+
+        switch (institution.type) {
+            case InstitutionType.GYN: {
                 initialQuestions.nodes['2'].category = 'ANNUAL_GYN_EXAM';
                 initialQuestions.nodes['2'].doctorView =
                     ChiefComplaintsEnum.ANNUAL_GYN_EXAM_WELL_WOMAN_VISIT;
 
                 dispatch(processSurveyGraph(initialQuestions));
-            }
-            const favChiefComplaintsObj: { [item: string]: any } = {};
-            institution.favComplaints.forEach((item) => {
-                favChiefComplaintsObj[item] = false;
-            });
 
-            dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
+                const favChiefComplaintsObj: { [item: string]: boolean } = {};
+                institution.favComplaints.forEach((item) => {
+                    favChiefComplaintsObj[item] = false;
+                });
+
+                dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
+                break;
+            }
+            default: {
+                dispatch(processSurveyGraph(initialQuestions));
+                break;
+            }
         }
     }, [dispatch, institution, userSurveyState]);
 
@@ -171,30 +158,51 @@ const HPI = () => {
                 setNotificationMessage('');
             }
 
-            const { legalFirstName, legalLastName, dateOfBirth } =
-                additionalSurvey;
-            const appointmentDate = (
-                (userSurveyState?.nodes?.['8']?.response ?? '') as string
-            ).trim();
+            const currentActiveItemIndex = currentTabs.findIndex(
+                (item) => item === activeItem
+            );
 
-            if (!(legalFirstName && legalLastName && dateOfBirth)) {
-                setNotificationMessage(
-                    'Please fill in all details to continue'
-                );
-                return;
-            }
+            const nextActiveItemIndex = currentTabs.findIndex(
+                (item) => item === name
+            );
 
-            if (!appointmentDate) {
-                setNotificationType(NotificationTypeEnum.ERROR);
-                setNotificationMessage(
-                    'Please confirm the date of your appointment.'
-                );
-                return;
+            if (currentActiveItemIndex < nextActiveItemIndex) {
+                const { legalFirstName, legalLastName, dateOfBirth } =
+                    additionalSurvey;
+
+                const appointmentDate = (
+                    (userSurveyState?.nodes?.['8']?.response ?? '') as string
+                ).trim();
+
+                if (!(legalFirstName && legalLastName && dateOfBirth)) {
+                    setNotificationMessage(
+                        'Please fill in all details to continue'
+                    );
+                    return;
+                }
+
+                if (!appointmentDate) {
+                    if (name !== 'PreHPI') {
+                        setNotificationType(NotificationTypeEnum.ERROR);
+                        setNotificationMessage(
+                            'Please confirm the date of your appointment.'
+                        );
+                    }
+                    dispatch(updateActiveItem('PreHPI'));
+                    return;
+                }
             }
 
             dispatch(updateActiveItem(name));
         },
-        [notificationMessage, userSurveyState, additionalSurvey]
+        [
+            notificationMessage,
+            currentTabs,
+            dispatch,
+            activeItem,
+            additionalSurvey,
+            userSurveyState?.nodes,
+        ]
     );
 
     const onPreviousClick = useCallback(() => {
@@ -208,87 +216,96 @@ const HPI = () => {
 
         dispatch(updateActiveItem(nextTab));
         window.scrollTo(0, 0);
-    }, [currentTabs, activeItem, notificationMessage]);
+    }, [currentTabs, activeItem, notificationMessage, dispatch]);
 
-    const onNextClick = useCallback(() => {
-        setShowCCModal(false);
-        setChiefComplaintsForModal([]);
+    const onNextClick = useCallback(
+        (newUserSelectedCC: string[]) => {
+            setShowCCModal(false);
+            setChiefComplaintsForModal([]);
 
-        if (notificationMessage) setNotificationMessage('');
+            if (notificationMessage) setNotificationMessage('');
 
-        let newCurrentTabs = currentTabs;
+            let newCurrentTabs = currentTabs;
 
-        const node7Response = userSurveyState.nodes['7'].response ?? {};
+            const node7Response = userSurveyState.nodes['7'].response ?? {};
 
-        if (activeItem === 'CCSelection') {
-            if (!selectedCC.length && !isResponseValid(node7Response)) {
-                setNotificationMessage(
-                    'You must select or describe at least one visit reason to proceed.'
-                );
-                setNotificationType(NotificationTypeEnum.ERROR);
-                return;
-            }
+            if (activeItem === 'CCSelection') {
+                if (
+                    !newUserSelectedCC.length &&
+                    !isResponseValid(node7Response)
+                ) {
+                    setNotificationMessage(
+                        'You must select or describe at least one visit reason to proceed.'
+                    );
+                    setNotificationType(NotificationTypeEnum.ERROR);
+                    return;
+                }
 
-            if (selectedCCExceptInstitutionDefault.length > 3) {
-                const chiefComplaintsForModal =
-                    selectedCCExceptInstitutionDefault.map(
-                        (chiefComplaint) => ({
-                            chiefComplaint: chiefComplaint,
-                            isSelected: false,
-                        })
+                const selectedCCExceptInstitutionDefault =
+                    newUserSelectedCC.filter(
+                        (item) => !institutionDefaultCC.includes(item)
                     );
 
-                setChiefComplaintsForModal(chiefComplaintsForModal);
-                setShowCCModal(true);
-                return;
+                if (selectedCCExceptInstitutionDefault.length > 3) {
+                    const chiefComplaintsForModal =
+                        selectedCCExceptInstitutionDefault.map(
+                            (chiefComplaint) => ({
+                                chiefComplaint: chiefComplaint,
+                                isSelected: false,
+                            })
+                        );
+
+                    setChiefComplaintsForModal(chiefComplaintsForModal);
+                    setShowCCModal(true);
+                    return;
+                }
+
+                const newSelectedChiefComplaints = Array.from(
+                    new Set([...newUserSelectedCC, ...institutionDefaultCC])
+                );
+
+                newCurrentTabs = [
+                    ...resetCurrentTabs(),
+                    ...newSelectedChiefComplaints,
+                ];
+
+                // remove current selected Chief Complaints
+                selectedChiefComplaints.forEach((item) => {
+                    dispatch(selectChiefComplaint(item));
+                });
+
+                // add new selected Chief Complaints
+                newSelectedChiefComplaints.forEach((item) => {
+                    dispatch(selectChiefComplaint(item));
+                });
+
+                setCurrentTabs(newCurrentTabs);
             }
 
-            newCurrentTabs = [
-                ...resetCurrentTabs(),
-                ...selectedCC,
-                ...institutionDefaultCC,
-            ];
-
-            newCurrentTabs = Array.from(new Set(newCurrentTabs));
-
-            // Add institution default CC
-            institutionDefaultCC.forEach((item) => {
-                if (!selectedCC.includes(item)) {
-                    dispatch(selectChiefComplaint(item));
-                }
-            });
-
-            setCurrentTabs(newCurrentTabs);
-        }
-
-        const nextTabIndex = newCurrentTabs.indexOf(activeItem) + 1;
-        if (newCurrentTabs.length === nextTabIndex) {
-            return;
-        }
-        const nextTab = newCurrentTabs[nextTabIndex];
-        dispatch(updateActiveItem(nextTab));
-    }, [
-        activeItem,
-        notificationMessage,
-        userSurveyState,
-        selectedCCExceptInstitutionDefault,
-        currentTabs,
-        resetCurrentTabs,
-        selectedCC,
-        institutionDefaultCC,
-    ]);
+            const nextTabIndex = newCurrentTabs.indexOf(activeItem) + 1;
+            if (newCurrentTabs.length === nextTabIndex) {
+                return;
+            }
+            const nextTab = newCurrentTabs[nextTabIndex];
+            dispatch(updateActiveItem(nextTab));
+        },
+        [
+            notificationMessage,
+            currentTabs,
+            userSurveyState.nodes,
+            activeItem,
+            dispatch,
+            institutionDefaultCC,
+            resetCurrentTabs,
+            selectedChiefComplaints,
+        ]
+    );
 
     const handleContinueForCCModal = () => {
-        const unSelectedCCForCCModal = chiefComplaintsForModal.filter(
-            (CC) => CC.isSelected === false
-        );
-
-        // Remove Chief Complaints for Redux State
-        unSelectedCCForCCModal.forEach((CC) => {
-            dispatch(selectChiefComplaint(CC.chiefComplaint));
-        });
-
-        setTimeout(() => onNextClickRef!.current!(), 0);
+        const selectedCC = chiefComplaintsForModal
+            .filter((item) => item.isSelected === true)
+            .map((item) => item.chiefComplaint);
+        onNextClick(selectedCC);
     };
 
     /* EFFECTS */
@@ -357,11 +374,17 @@ const HPI = () => {
                 });
             }
         }
-    }, [onNextClick, onPreviousClick, activeItem, institutionDefaultCC]);
+    }, [
+        onNextClick,
+        onPreviousClick,
+        activeItem,
+        institutionDefaultCC,
+        hpiHeaders?.parentNodes,
+    ]);
 
     useEffect(() => {
         changeFavComplaintsBasedOnInstitute();
-    }, [institution]);
+    }, [changeFavComplaintsBasedOnInstitute]);
 
     useEffect(() => {
         if (!institutionId) {
@@ -415,20 +438,14 @@ const HPI = () => {
         };
 
         fetchInstitution();
-    }, [history, institutionId, query]);
+    }, [history, institutionId, query, dispatch]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
         if (activeItem === 'CCSelection') {
             setCurrentTabs(['InitialSurvey', 'PreHPI', 'CCSelection']);
-            // Remove institution default CC
-            institutionDefaultCC.forEach((item) => {
-                if (selectedCC.includes(item)) {
-                    dispatch(selectChiefComplaint(item));
-                }
-            });
         }
-    }, [activeItem]);
+    }, [activeItem, dispatch]);
 
     useEffect(() => {
         if (notificationMessage) {
@@ -443,13 +460,10 @@ const HPI = () => {
     }, [notificationMessage]);
 
     useEffect(() => {
-        onNextClickRef.current = onNextClick;
-    }, [onNextClick]);
-
-    useEffect(() => {
         if (!institutionConfig) return;
 
-        const { diseaseForm } = institutionConfig;
+        const { diseaseForm, showChiefComplaints, showDefaultForm } =
+            institutionConfig;
 
         const diseaseFormKeys = diseaseForm.map((form) => form.diseaseKey);
 
@@ -458,20 +472,30 @@ const HPI = () => {
         });
 
         setCurrentTabs(resetCurrentTabs());
-    }, [institutionConfig]);
+
+        if (showChiefComplaints || !showDefaultForm) return;
+
+        institutionDefaultCC.forEach((item) => {
+            dispatch(selectChiefComplaint(item));
+        });
+    }, [dispatch, institutionConfig, institutionDefaultCC, resetCurrentTabs]);
 
     useEffect(() => {
-        dispatch(updateActiveItem('InitialSurvey'));
-
-        if (hpiHeaders) {
+        if (
+            !Object.keys(hpiHeaders.parentNodes).length &&
+            !Object.keys(hpiHeaders.bodySystems).length
+        ) {
             const data = knowledgeGraphAPI;
             data.then((res) => dispatch(saveHpiHeader(res.data)));
         }
+    }, [dispatch, hpiHeaders]);
 
+    useEffect(() => {
+        dispatch(updateActiveItem('InitialSurvey'));
         return () => {
             dispatch(updateActiveItem('CC'));
         };
-    }, []);
+    }, [dispatch]);
 
     return (
         <>

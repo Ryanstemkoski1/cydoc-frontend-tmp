@@ -44,6 +44,13 @@ class InitialSurveyHPI extends React.Component<Props, InitialSurveyState> {
             return;
         }
 
+        if (new Date(this.state.tempDateOfBirth).getFullYear() < 1900) {
+            this.props.setErrorMessage(
+                `Please enter a valid date of birth between 1990 and ${new Date().getFullYear()}.`
+            );
+            return;
+        }
+
         if (
             this.state.tempLegalFirstName.trim() === '' ||
             this.state.tempLegalLastName.trim() == '' ||
