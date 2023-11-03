@@ -147,16 +147,50 @@ const HPI = () => {
             );
 
             if (currentActiveItemIndex < nextActiveItemIndex) {
-                const { legalFirstName, legalLastName, dateOfBirth } =
+                const { legalFirstName, legalLastName, socialSecurityNumber } =
                     additionalSurvey;
+
+                const dateOfBirth = new Date(additionalSurvey.dateOfBirth);
 
                 const appointmentDate = (
                     (userSurveyState?.nodes?.['8']?.response ?? '') as string
                 ).trim();
 
-                if (!(legalFirstName && legalLastName && dateOfBirth)) {
+                if (
+                    legalFirstName.trim() === '' ||
+                    legalLastName.trim() === '' ||
+                    dateOfBirth.toString() === 'Invalid Date'
+                ) {
+                    setNotificationType(NotificationTypeEnum.ERROR);
                     setNotificationMessage(
                         'Please fill in all details to continue'
+                    );
+                    return;
+                }
+
+                if (new Date() < dateOfBirth) {
+                    setNotificationType(NotificationTypeEnum.ERROR);
+                    setNotificationMessage(
+                        'Date of birth should be before current date'
+                    );
+                    return;
+                }
+
+                if (dateOfBirth.getFullYear() < 1900) {
+                    setNotificationType(NotificationTypeEnum.ERROR);
+                    setNotificationMessage(
+                        `Please enter a valid date of birth between 1990 and ${new Date().getFullYear()}.`
+                    );
+                    return;
+                }
+
+                if (
+                    socialSecurityNumber.trim() &&
+                    socialSecurityNumber.trim().length !== 4
+                ) {
+                    setNotificationType(NotificationTypeEnum.ERROR);
+                    setNotificationMessage(
+                        'Social security number should consist of 4 numbers'
                     );
                     return;
                 }

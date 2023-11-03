@@ -1,7 +1,6 @@
 import { ProductType } from 'assets/enums/route.enums';
 import Input from 'components/Input/Input';
 import MobileDatePicker from 'components/Input/MobileDatePicker';
-import useDimensions from 'hooks/useDimensions';
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router';
 import style from './AdditionalSurvey.module.scss';
@@ -38,7 +37,10 @@ const AdditionalSurvey = ({
     });
 
     const isHPIPage = useLocation().pathname.includes(ProductType.HPI);
-    const isMobile = useDimensions().windowWidth < 768;
+    const isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+        );
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

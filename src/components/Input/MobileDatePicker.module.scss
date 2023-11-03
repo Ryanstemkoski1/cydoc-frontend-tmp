@@ -1,3 +1,14 @@
 .datePicker {
     gap: 0 10px;
+    >div {
+        &:nth-child(1) {
+            width: 40%;
+        }
+        &:nth-child(2) {
+            width: calc(30% - 20px);
+        }
+        &:nth-child(3) {
+            width: 30%;
+        }
+    }
 }

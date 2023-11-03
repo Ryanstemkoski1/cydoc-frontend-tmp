@@ -6,6 +6,7 @@ export interface CustomModalProps {
     headerShow?: boolean;
     children: any;
     footerNode?: any;
+    scrollDisable?: boolean;
     maxWidth?: string;
     modalVisible: boolean;
     onClose: () => void;
@@ -16,6 +17,7 @@ const CustomModal = ({
     headerShow = true,
     children,
     footerNode,
+    scrollDisable = true,
     maxWidth = '700px',
     modalVisible = false,
     onClose,
@@ -45,7 +47,13 @@ const CustomModal = ({
                     </header>
                 )}
 
-                <div className={style.customModal__inner}>{children}</div>
+                <div
+                    className={`${style.customModal__inner} ${
+                        !scrollDisable && style.scrollDisable
+                    }`}
+                >
+                    {children}
+                </div>
 
                 {footerNode && (
                     <footer
