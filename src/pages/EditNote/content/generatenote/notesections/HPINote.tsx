@@ -75,9 +75,7 @@ function processSentence(sentence: string) {
         jsx.push(addNormalText(headingText));
     }
 
-    return jsx.map((el, index) => {
-        return <React.Fragment key={index}>{el}</React.Fragment>;
-    });
+    return jsx;
 }
 
 const HpiNote = ({
