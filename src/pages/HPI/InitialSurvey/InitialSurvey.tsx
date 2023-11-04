@@ -18,7 +18,7 @@ interface InitialSurveyState {
 }
 
 interface InitialSurveyComponentProps {
-    continue: (e: any) => void;
+    continue: (newSelectedCC: string[]) => void;
     setErrorMessage: (message: string) => void;
 }
 
@@ -34,30 +34,32 @@ class InitialSurveyHPI extends React.Component<Props, InitialSurveyState> {
         };
     }
 
-    continue = (e: any) => this.props.continue(e);
+    continue = () => this.props.continue([]);
 
-    onNextClick = (e: any) => {
-        if (new Date() < new Date(this.state.tempDateOfBirth)) {
+    onNextClick = () => {
+        const dateOfBirth = new Date(this.state.tempDateOfBirth);
+
+        if (
+            this.state.tempLegalFirstName.trim() === '' ||
+            this.state.tempLegalLastName.trim() === '' ||
+            dateOfBirth.toString() === 'Invalid Date'
+        ) {
+            this.props.setErrorMessage(
+                'Please fill in all details to continue'
+            );
+            return;
+        }
+
+        if (new Date() < dateOfBirth) {
             this.props.setErrorMessage(
                 'Date of birth should be before current date'
             );
             return;
         }
 
-        if (new Date(this.state.tempDateOfBirth).getFullYear() < 1900) {
+        if (dateOfBirth.getFullYear() < 1900) {
             this.props.setErrorMessage(
                 `Please enter a valid date of birth between 1990 and ${new Date().getFullYear()}.`
-            );
-            return;
-        }
-
-        if (
-            this.state.tempLegalFirstName.trim() === '' ||
-            this.state.tempLegalLastName.trim() == '' ||
-            this.state.tempDateOfBirth.trim() === ''
-        ) {
-            this.props.setErrorMessage(
-                'Please fill in all details to continue'
             );
             return;
         }
@@ -80,7 +82,7 @@ class InitialSurveyHPI extends React.Component<Props, InitialSurveyState> {
             this.state.tempDateOfBirth,
             0
         );
-        this.continue(e);
+        this.continue();
         return;
     };
 
