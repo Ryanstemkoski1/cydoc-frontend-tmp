@@ -179,7 +179,7 @@ const HPI = () => {
                 if (dateOfBirth.getFullYear() < 1900) {
                     setNotificationType(NotificationTypeEnum.ERROR);
                     setNotificationMessage(
-                        `Please enter a valid date of birth between 1990 and ${new Date().getFullYear()}.`
+                        `Please enter a valid date of birth between 1900 and ${new Date().getFullYear()}.`
                     );
                     return;
                 }
