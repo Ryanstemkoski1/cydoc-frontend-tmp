@@ -25,19 +25,6 @@ interface PatientDisplayName {
     posPronoun: string;
 }
 
-const RACES = [
-    'American',
-    'Indian',
-    'Alaska',
-    'Native',
-    'Asian',
-    'Black',
-    'African',
-    'Hawaiian',
-    'Pacific',
-    'Islander',
-    'White',
-];
 const ETINICITY = ['Hispanic', 'Latino'];
 // https://capitalizemytitle.com/abbreviations-for-months/
 const MONTHS = [
@@ -68,7 +55,7 @@ const MONTHS = [
 ];
 
 const selectivelyUppercase = (str: string): string => {
-    [...RACES, ...ETINICITY, ...MONTHS].forEach((item) => {
+    [...ETINICITY, ...MONTHS].forEach((item) => {
         if (str.match(new RegExp('(^|[^a-zA-Z])' + item, 'ig'))) {
             str = str.replace(new RegExp(item, 'ig'), ' ' + item);
         }
@@ -77,25 +64,22 @@ const selectivelyUppercase = (str: string): string => {
 };
 
 const END_OF_SENTENCE_PUNC = '.!?';
-// selectively Lowercases anything except for multiple capitalized letters in a row
+const PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN = [
+    ...PART_OF_SPEECH_CORRECTION_MAP.keys(),
+];
 const selectivelyLowercase = (str: string): string => {
-    return str
-        .split(' ')
-        .map((word) => {
-            if (
-                ['ANSWER', 'NOTANSWER', 'ANSWER.', 'NOTANSWER.'].includes(word)
-            ) {
-                return word.toLowerCase();
-            } else {
-                const uppercaseCount = Array.from(word).reduce(
-                    (count, char) =>
-                        count + (char === char.toUpperCase() ? 1 : 0),
-                    0
-                );
-                return uppercaseCount > 1 ? word : word.toLowerCase();
-            }
-        })
-        .join(' ');
+    [
+        'ANSWER',
+        'NOTANSWER',
+        'ANSWER.',
+        'NOTANSWER.',
+        ...PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN,
+    ].forEach((item) => {
+        const regEx = new RegExp(item, 'ig');
+        str = str.replace(regEx, item.toLowerCase());
+    });
+
+    return str;
 };
 /**
  * Removes whitespace from beginning and end of a sentence. Lowercases.
@@ -345,9 +329,9 @@ export const createHPI = (
     pronouns: PatientPronouns
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
+    hpiString = fillNameAndPronouns(hpiString, patientInfo);
     hpiString = partOfSpeechCorrection(hpiString);
     hpiString = combineHpiString(hpiString, 3);
-    hpiString = fillNameAndPronouns(hpiString, patientInfo);
     hpiString = fillMedicalTerms(hpiString);
     hpiString = conjugateThirdPerson(hpiString);
     hpiString = abbreviate(hpiString);
