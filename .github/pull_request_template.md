@@ -12,6 +12,12 @@ If this PR addresses any spreadsheet tasks, list the task numbers here.
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (WARNING: this PR will cause existing functionality to not work as expected!)
 
+### Related changes
+
+- [ ] Requires corresponding updates to cydoc-ai/types
+- [ ] Requires corresponding updates to cydoc-ai/aws-backend
+- [ ] Requires corresponding updates to cydoc-ai/cydoc_graph
+
 # Purpose
 
 The 'why': please include a more detailed description of why this pull request
