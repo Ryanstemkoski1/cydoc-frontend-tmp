@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 export function SubmitOnEnter() {
     const { submitForm } = useFormikContext();

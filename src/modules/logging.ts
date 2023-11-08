@@ -44,6 +44,7 @@ export function initializeSentry() {
     // set package version as a tag
     Sentry.setTag('version', pkgInfo.version);
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function log(message: string, data?: any) {
     if (data) {
         breadcrumb(message, 'auto-breadcrumb', data);
@@ -76,6 +77,7 @@ export function setSentryUser(user: DbUser | null) {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function breadcrumb(message: string, category: string, crumb?: any) {
     if (SENTRY_ENABLED) {
         Sentry.addBreadcrumb({

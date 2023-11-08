@@ -29,9 +29,9 @@ import { UserInfoProvider } from './UserInfoProvider';
 export interface AuthContextValues {
     cognitoUser: CognitoUser | null;
     authLoading: boolean;
-    loginCorrect: boolean;
+    loginCorrect: boolean; // username/password correct, still need MFA confirmation
     passwordResetRequired: boolean;
-    isSignedIn: boolean;
+    isSignedIn: boolean; // MFA confirmed
     signIn: (
         email: string,
         password: string

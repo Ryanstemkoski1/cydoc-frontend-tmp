@@ -4,12 +4,10 @@ import { getDbUser } from '../modules/user-api';
 import React, {
     PropsWithChildren,
     useCallback,
-    useContext,
     useEffect,
     useMemo,
     useState,
 } from 'react';
-import invariant from 'tiny-invariant';
 import { DbUser } from '@cydoc-ai/types';
 
 export interface UserInfoProviderContextValues {
@@ -31,20 +29,20 @@ export const UserInfoProvider: React.FC<
     const isManager = useMemo(() => user?.role === 'manager', [user]);
 
     const updateUserInfo = useCallback(async () => {
-        try {
-            setLoading(true);
-            if (
-                cognitoUser?.attributes?.email ||
-                cognitoUser?.challengeParam?.userAttributes?.email
-            ) {
+        if (
+            cognitoUser?.attributes?.email ||
+            cognitoUser?.challengeParam?.userAttributes?.email
+        ) {
+            try {
+                setLoading(true);
                 const user = await getDbUser(cognitoUser);
                 setUser(user || undefined);
-            } else {
-                // reset user state on signOut
-                setUser(undefined);
+            } finally {
+                setLoading(false);
             }
-        } finally {
-            setLoading(false);
+        } else {
+            // reset user state on signOut
+            setUser(undefined);
         }
     }, [cognitoUser]);
 
@@ -66,12 +64,4 @@ export const UserInfoProvider: React.FC<
             {children}
         </UserInfoProviderContext.Provider>
     );
-};
-
-export const useUserInfoContext = () => {
-    const ctx = useContext(UserInfoProviderContext);
-
-    invariant(ctx, 'useUserInfoContext called outside of UserInfo Context');
-
-    return ctx;
 };

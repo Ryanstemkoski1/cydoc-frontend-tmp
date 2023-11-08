@@ -19,7 +19,7 @@ import { UserRole } from '@cydoc-ai/types';
 
 // NOTE: this page needs to be updated to use the new auth password editing logic
 const ProfileSecurity = () => {
-    const { user, isManager } = useUser();
+    const { user } = useUser();
     const role = user?.role;
     const history = useHistory();
 
@@ -91,11 +91,8 @@ const ProfileSecurity = () => {
 
     const passwordErrorMessages = () => {
         const errMsgs = [];
-        const passwordErrs = passwordErrors(
-            isManager ? UserRole.MANAGER : UserRole.CLINICIAN
-        );
-        for (const untyped in passwordErrs) {
-            const err = untyped as keyof typeof passwordErrs; // set types for key
+        for (const untyped in passwordErrors) {
+            const err = untyped as keyof typeof passwordErrors; // set types for key
             if (passwordReqs[err]) {
                 errMsgs.push(
                     <Card.Content
@@ -103,7 +100,7 @@ const ProfileSecurity = () => {
                         className={passwordMeetsReqs ? 'req-met' : ''}
                     >
                         <Icon name='check' size='small' />
-                        {passwordErrs?.[err]}
+                        {passwordErrors?.[err]}
                     </Card.Content>
                 );
             } else {
@@ -113,7 +110,7 @@ const ProfileSecurity = () => {
                         className={!passwordMeetsReqs ? 'req-not-met' : ''}
                     >
                         <Icon name='times' size='small' />
-                        {passwordErrs?.[err]}
+                        {passwordErrors?.[err]}
                     </Card.Content>
                 );
             }

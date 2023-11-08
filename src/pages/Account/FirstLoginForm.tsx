@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Formik, FormikHelpers } from 'formik';
 import './Account.css';
 import * as Yup from 'yup';
@@ -13,7 +13,6 @@ import { passwordIsValid } from 'constants/passwordErrors';
 import { updateDbUser } from '../../modules/user-api';
 import { stringFromError } from '../../modules/error-utils';
 import { log } from '../../modules/logging';
-import { useHistory } from 'react-router-dom';
 import useUser from 'hooks/useUser';
 import { CenteredPaper } from '../../components/Atoms/CenteredPaper';
 import FormErrors from 'components/Molecules/FormErrors';
@@ -21,7 +20,7 @@ import { EditUserInfo, UserInfoFormSpec } from './EditProfile';
 import { toast } from 'react-toastify';
 import { SubmitOnEnter } from 'components/Atoms/SubmitOnEnter';
 import MfaVerificationForm from './MfaVerificationForm';
-import { DbUser, UpdateUserBody } from '@cydoc-ai/types';
+import { UpdateUserBody } from '@cydoc-ai/types';
 
 export interface FistLoginFormData extends EditUserInfo {
     newPassword: string;
@@ -149,10 +148,10 @@ const FirstLoginForm = () => {
                             );
                             if (errorMessage?.length) {
                                 throw new Error(errorMessage);
-                            } else {
-                                console.log(`user info updated successfully`, {
-                                    errorMessage,
-                                });
+                                // } else {
+                                //     console.log(`user info updated successfully`, {
+                                //         errorMessage,
+                                //     });
                             }
                         } else {
                             log(`[FirstLoginForm] state race condition`, {

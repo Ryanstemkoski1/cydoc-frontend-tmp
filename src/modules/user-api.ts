@@ -61,6 +61,41 @@ export async function updateDbUser(
         cognitoUser
     );
 }
+export async function managerUpdateUser(
+    user: DbUser,
+    institutionId: string,
+    cognitoUser: CognitoUser | null
+) {
+    return toast
+        .promise(
+            async () => {
+                const { errorMessage } = await postToApi<UpdateUserResponse>(
+                    `/institution/${institutionId}/user/${user.id}`,
+                    'updateUserRole',
+                    user,
+                    cognitoUser
+                );
+
+                if (errorMessage?.length) {
+                    throw new Error(errorMessage);
+                }
+                return;
+            },
+            {
+                error: 'Error updating user',
+                pending: `Updating user...`,
+                success: 'User updated!',
+            }
+        )
+        .catch((e) => {
+            log(`[updateUserRole] ${stringFromError(e)}`, {
+                user,
+                e,
+                institutionId,
+                cognitoUser,
+            });
+        });
+}
 
 export async function inviteClinician(
     body: InviteUserBody,

@@ -1,4 +1,3 @@
-import { SignUpFormData } from 'pages/Account/SignUpForm';
 import { minDoctorPassword } from './accountRequirements';
 
 export interface PasswordErrorInfos {
@@ -10,21 +9,13 @@ export interface PasswordErrorInfos {
 }
 export type PasswordErrorTypes = keyof PasswordErrorInfos;
 
-export const passwordErrors = (
-    role: SignUpFormData['role'] | 'healthcare manager'
-) => {
-    return {
-        containsNumber: 'Must contain at least one number.',
-        containsUpper: 'Must contain at least one uppercase character.',
-        containsLower: 'Must contain at least one lowercase character.',
-        containsSpecial:
-            'Must contain at least one of the following special characters: = + - ^ $ * . [ ] { } ( ) ? " ! @ # % & / \\ , > < \' : ; | _ ~ `',
-        passesMinLength: `Must be at least ${
-            role === 'manager' || role === 'healthcare manager'
-                ? '25'
-                : minDoctorPassword
-        } characters.`,
-    };
+export const passwordErrors = {
+    containsNumber: 'Must contain at least one number.',
+    containsUpper: 'Must contain at least one uppercase character.',
+    containsLower: 'Must contain at least one lowercase character.',
+    containsSpecial:
+        'Must contain at least one of the following special characters: = + - ^ $ * . [ ] { } ( ) ? " ! @ # % & / \\ , > < \' : ; | _ ~ `',
+    passesMinLength: `Must be at least 8 characters.`,
 };
 
 export const passwordIsValid = (password: string) =>

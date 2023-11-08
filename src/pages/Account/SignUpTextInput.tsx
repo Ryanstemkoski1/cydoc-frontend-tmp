@@ -43,7 +43,7 @@ function SignUpTextInput({
                     {...(type === 'password'
                         ? { autoComplete: 'new-password' }
                         : null)}
-                    onChange={(e: any) => {
+                    onChange={(e: { target: { value: string } }) => {
                         const newValue = e.target.value || '';
                         // const newValue = format(targetValue);
                         // const isTextOnly = !isNumber && !isCurrency;
