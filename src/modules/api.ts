@@ -2,7 +2,7 @@ import { breadcrumb, log } from './logging';
 import { ApiPostBody, ApiResponse, ApiResponseBase } from '@cydoc-ai/types';
 import { API_URL } from './environment';
 import { stringFromError } from './error-utils';
-import { CognitoUser } from 'auth/cognito';
+import { CognitoUser, getAuthToken } from 'auth/cognito';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 
 const JSON_HEADER: (
@@ -36,9 +36,7 @@ export async function postToApi<T>(
           >,
     cognitoUser: CognitoUser | null
 ): Promise<T | ApiResponse> {
-    const token = cognitoUser?.signInUserSession
-        ?.getAccessToken()
-        ?.getJwtToken();
+    const token = await getAuthToken(cognitoUser);
 
     const url = `${API_URL}${path}`;
 
