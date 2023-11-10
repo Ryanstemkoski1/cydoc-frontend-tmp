@@ -114,11 +114,12 @@ const HpiNote = ({
                   <li key={item.title} className={styles.listItem}>
                       <b>{item.title}</b>
                       <ul className={styles.noBullets}>
-                          {item.text.split('. ').map((sentence, index) => (
+                          {item.text.split('. ').map((sentence, index, arr) => (
                               <li key={index}>
                                   {processSentence(
                                       capitalizeFirstLetter(sentence)
                                   )}
+                                  {index < arr.length - 1 && '.'}
                               </li>
                           ))}
                       </ul>

@@ -74,15 +74,15 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
 
         case ResponseTypes.LIST_TEXT: {
             return Object?.entries(node?.response as ListTextInput).every(
-                ([_key, value]) => value === ''
+                ([, value]) => value === ''
             );
         }
 
         case ResponseTypes.BODYLOCATION:
             return Object?.entries(node.response as BodyLocationType).every(
-                ([_key, value]) => {
+                ([, value]) => {
                     if (typeof value === 'boolean') return !value;
-                    else return Object?.entries(value).every(([_k, v]) => !v);
+                    else return Object?.entries(value).every(([, v]) => !v);
                 }
             );
 
@@ -243,7 +243,7 @@ export const extractNode = (
                     (acc: string[], [key, value]) => {
                         if (
                             (typeof value === 'boolean' && value) ||
-                            Object?.entries(value)?.some(([_k, v]) => v)
+                            Object?.entries(value)?.some(([, v]) => v)
                         )
                             acc.push(key);
                         return acc;
@@ -523,7 +523,7 @@ export interface HPIText {
 
 export function getListTextResponseAsSingleString(response = {}): string {
     return Object.values(response)
-        .map((item) => (item as string).trim().replace(/[.]/g, ''))
+        .map((item) => (item as string).trim().replace(/[.]\s/, 'g'))
         .filter((item: string) => item)
         .reverse()
         .reduce(
@@ -620,7 +620,9 @@ function getHPIText(bulletNoteView = false) {
     const initialPara = Object.keys(formattedHpis).map((key) => {
         const formattedHpi = formattedHpis[key];
         // TODO: use actual patient info to populate fields
-        return new Set(createInitialHPI(formattedHpi).split('. '));
+        return new Set(
+            createInitialHPI(formattedHpi).split('. ').filter(Boolean)
+        );
     });
     for (let i = 0; i < initialPara.length - 1; i++) {
         for (let j = i + 1; j < initialPara.length; j++) {
@@ -649,14 +651,14 @@ function getHPIText(bulletNoteView = false) {
 
     // After the finalPara array is constructed, perform the removal operation.
     const phrasesToRemove = [
-        'The patient has been',
-        'The patient has',
-        'The patient is',
-        'The patients',
-        'The patient',
-        'He',
-        'She',
-        'They',
+        'The patient has been ',
+        'The patient has ',
+        'The patient is ',
+        'The patients ',
+        'The patient ',
+        'He ',
+        'She ',
+        'They ',
     ];
 
     finalPara.forEach((paragraph, i) => {
