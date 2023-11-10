@@ -3,12 +3,14 @@ import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 import ButtonLoader from 'components/ButtonLoader/ButtonLoader';
 import CommonLayout from 'components/CommonLayout/CommonLayout';
+import InfoTooltip from 'components/InfoTooltip/InfoTooltip';
 import MultiSelectDropdown from 'components/Input/MultiSelectDropdown';
 import Notification, {
     NotificationTypeEnum,
 } from 'components/tools/Notification/Notification';
 import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import { MAX_LIMIT_TO_ADD_DEFAULT_FORMS } from 'constants/FormPreferencesConstant';
+import ToastOptions from 'constants/ToastOptions';
 import useAuth from 'hooks/useAuth';
 import useUser from 'hooks/useUser';
 import {
@@ -76,42 +78,50 @@ const FormPreferencesPage = () => {
     );
 
     const loadAllDiseaseForms = useCallback(async () => {
-        dispatch(setLoadingStatus(true));
+        try {
+            const response = await knowledgeGraphAPI;
+            const diseaseForms = Object.entries(response.data.parentNodes).map(
+                ([key, value]) =>
+                    ({
+                        id: '',
+                        diseaseKey: Object.keys(value as object)?.[0],
+                        diseaseName: key,
+                        isDeleted: false,
+                    } as DiseaseForm)
+            );
 
-        const response = await knowledgeGraphAPI;
-        const diseaseForms = Object.entries(response.data.parentNodes).map(
-            ([key, value]) =>
-                ({
-                    id: '',
-                    diseaseKey: Object.keys(value as object)?.[0],
-                    diseaseName: key,
-                    isDeleted: false,
-                } as DiseaseForm)
-        );
+            setAllDiseaseForms(diseaseForms);
+        } catch (error: unknown) {
+            toast.error('Something went wrong.', ToastOptions.error);
+        }
+    }, []);
 
-        setAllDiseaseForms(diseaseForms);
-        dispatch(setLoadingStatus(false));
-    }, [dispatch]);
+    const loadInstitutionConfig = useCallback(async (institutionId: string) => {
+        const response = await getInstitutionConfig(institutionId);
 
-    const loadInstitutionConfig = useCallback(
-        async (institutionId: string) => {
+        if ((response as ApiResponse).errorMessage) {
+            toast.error('Something went wrong.', ToastOptions.error);
+            return;
+        }
+        const newInstitutionConfig = (response as InstitutionConfigResponse)
+            .config;
+        setInstitutionConfig(newInstitutionConfig);
+    }, []);
+
+    const onMount = useCallback(async () => {
+        if (!user) return;
+        try {
             dispatch(setLoadingStatus(true));
-            try {
-                const response = await getInstitutionConfig(institutionId);
-
-                if ((response as ApiResponse).errorMessage) {
-                    return;
-                }
-                const newInstitutionConfig = (
-                    response as InstitutionConfigResponse
-                ).config;
-                setInstitutionConfig(newInstitutionConfig);
-            } finally {
-                dispatch(setLoadingStatus(false));
-            }
-        },
-        [dispatch]
-    );
+            await Promise.all([
+                loadInstitutionConfig(user.institutionId),
+                loadAllDiseaseForms(),
+            ]);
+        } catch (error: unknown) {
+            toast.error('Something went wrong.', ToastOptions.error);
+        } finally {
+            dispatch(setLoadingStatus(false));
+        }
+    }, [loadAllDiseaseForms, loadInstitutionConfig, dispatch, user]);
 
     const handleSubmit = async () => {
         if (!user) return null;
@@ -163,19 +173,9 @@ const FormPreferencesPage = () => {
                 (response as InstitutionConfigResponse).config
             );
 
-            toast.success('Updated Successfully', {
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: true,
-                pauseOnHover: false,
-            });
+            toast.success('Updated Successfully', ToastOptions.success);
         } catch (error: unknown) {
-            toast.error('Failed', {
-                position: 'top-right',
-                autoClose: 2000,
-                hideProgressBar: true,
-                pauseOnHover: false,
-            });
+            toast.error('Failed', ToastOptions.error);
         } finally {
             setLoading(false);
         }
@@ -231,13 +231,8 @@ const FormPreferencesPage = () => {
     }, [notificationMessage]);
 
     useEffect(() => {
-        if (!user) return;
-        loadInstitutionConfig(user.institutionId);
-    }, [loadInstitutionConfig, user]);
-
-    useEffect(() => {
-        loadAllDiseaseForms();
-    }, [loadAllDiseaseForms]);
+        onMount();
+    }, [onMount]);
 
     return (
         <div className={style.formPreferences}>
@@ -250,7 +245,21 @@ const FormPreferencesPage = () => {
                 )}
 
                 <div className={style.formPreferences__item}>
-                    <label htmlFor='showDefaultForm'>Show default forms</label>
+                    <label htmlFor='showDefaultForm'>
+                        Show default forms
+                        <InfoTooltip mobilePositionY={'bottom'}>
+                            <p>
+                                When &ldquo;Show default forms&rdquo; is
+                                &ldquo;Yes,&rdquo; then every patient in your
+                                practice will be shown form(s) that you specify.
+                                For example, if Cydoc has created a custom form
+                                for your practice, you may choose
+                                &ldquo;Yes&rdquo; here in order to specify that
+                                you want all your patients to be shown your
+                                practice&apos;s custom form.
+                            </p>
+                        </InfoTooltip>
+                    </label>
                     <YesAndNo
                         yesButtonActive={showDefaultForm}
                         noButtonActive={!showDefaultForm}
@@ -271,11 +280,21 @@ const FormPreferencesPage = () => {
 
                 {showDefaultForm && (
                     <div className={style.formPreferences__item}>
-                        <label>Default form names:</label>
+                        <label>
+                            Default form names:
+                            <InfoTooltip>
+                                <p>
+                                    Select the default forms you would like to
+                                    show to every patient. The default forms
+                                    will be shown to patients in the order that
+                                    they are selected.
+                                </p>
+                            </InfoTooltip>
+                        </label>
                         <MultiSelectDropdown
-                            dropdownItems={dropdownItems.map(
-                                (item) => item.diseaseName
-                            )}
+                            dropdownItems={dropdownItems
+                                .map((item) => item.diseaseName)
+                                .sort()}
                             selectedDropdownItems={nonDeletedDiseaseForm.map(
                                 (item) => item.diseaseName
                             )}
@@ -287,8 +306,19 @@ const FormPreferencesPage = () => {
 
                 <div className={style.formPreferences__item}>
                     <label htmlFor='showChiefComplaints'>
-                        Let patients choose chief complaints
+                        Enable HPI/Subjective section generation
+                        <InfoTooltip mobilePositionX={-80}>
+                            <p>
+                                When &ldquo;Enable HPI/Subjective section
+                                generation&rdquo; is &ldquo;Yes&rdquo;, then
+                                Cydoc will automatically interview each patient
+                                using medical reasoning to generate an
+                                HPI/Subjective section based on that
+                                patient&apos;s unique chief complaints.
+                            </p>
+                        </InfoTooltip>
                     </label>
+
                     <YesAndNo
                         yesButtonActive={showChiefComplaints}
                         noButtonActive={!showChiefComplaints}

@@ -3,7 +3,8 @@
     &__item {
         margin-bottom: 20px;
         label {
-            display: block;
+            display: flex;
+            align-items: center;
             margin-bottom: 10px;
         }
     }

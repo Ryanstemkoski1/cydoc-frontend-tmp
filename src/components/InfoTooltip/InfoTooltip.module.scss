@@ -1,0 +1,69 @@
+@import '../../assets/scss/variables.scss';
+.infoTooltip {
+    margin-left: 5px;
+    position: relative;
+    display: inline-block;
+    &__holder {
+        cursor: pointer;
+        user-select: none;
+        img {
+            width: 20px;
+        }
+    }
+    &__content {
+        left: 50%;
+        opacity: 0;
+        bottom: calc(100% + 5px);
+        z-index: 999;
+        width: 250px;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.4;
+        text-align: left;
+        padding: 10px 15px;
+        visibility: hidden;
+        position: absolute;
+        border-radius: $radius;
+        transform: translateX(-50%);
+        transition: 0.3s ease-in-out;
+        background-color: $color-white;
+        box-shadow: 0 0 15px rgba($color-black, 0.1);
+        @include min-screen($tablet) {
+            margin: 0 !important;
+        }
+        .isArrow {
+            top: 100%;
+            right: 50%;
+            font-size: 0;
+            display: inline;
+            position: absolute;
+            transform: translateX(50%);
+            border: 10px solid transparent;
+            border-top-color: $color-white;
+            @include min-screen($tablet) {
+                margin: 0 !important;
+            }
+        }
+        p {
+            margin: 0;
+        }
+        &.isBottom {
+            @include max-screen($mobile) {
+                bottom: auto;
+                top: calc(100% + 5px);
+                .isArrow {
+                    top: auto;
+                    bottom: 100%;
+                    border-top-color: transparent;
+                    border-bottom-color: $color-white;
+                }
+            }
+        }
+    }
+    &:hover {
+        .infoTooltip__content {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+}
