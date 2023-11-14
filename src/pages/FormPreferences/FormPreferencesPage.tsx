@@ -20,9 +20,7 @@ import {
 } from 'modules/institution-api';
 import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { setLoadingStatus } from 'redux/actions/loadingStatusActions';
 import style from './FormPreferencesPage.module.scss';
 
 const defaultInstitutionConfig: InstitutionConfig = {
@@ -36,13 +34,13 @@ const defaultInstitutionConfig: InstitutionConfig = {
 const FormPreferencesPage = () => {
     const { user } = useUser();
     const { cognitoUser } = useAuth();
-    const dispatch = useDispatch();
 
     /* states */
     const [institutionConfig, setInstitutionConfig] =
         useState<InstitutionConfig>(defaultInstitutionConfig);
     const [allDiseaseForms, setAllDiseaseForms] = useState<DiseaseForm[]>([]);
     const [loading, setLoading] = useState(false);
+    const [loadingData, setLoadingData] = useState(true);
     const [notificationMessage, setNotificationMessage] = useState('');
     const [notificationType, setNotificationType] = useState(
         NotificationTypeEnum.ERROR
@@ -111,7 +109,7 @@ const FormPreferencesPage = () => {
     const onMount = useCallback(async () => {
         if (!user) return;
         try {
-            dispatch(setLoadingStatus(true));
+            setLoadingData(true);
             await Promise.all([
                 loadInstitutionConfig(user.institutionId),
                 loadAllDiseaseForms(),
@@ -119,9 +117,9 @@ const FormPreferencesPage = () => {
         } catch (error: unknown) {
             toast.error('Something went wrong.', ToastOptions.error);
         } finally {
-            dispatch(setLoadingStatus(false));
+            setLoadingData(false);
         }
-    }, [loadAllDiseaseForms, loadInstitutionConfig, dispatch, user]);
+    }, [loadAllDiseaseForms, loadInstitutionConfig, user]);
 
     const handleSubmit = async () => {
         if (!user) return null;
@@ -234,6 +232,23 @@ const FormPreferencesPage = () => {
         onMount();
     }, [onMount]);
 
+    useEffect(() => {
+        if (
+            loadingData === false &&
+            showDefaultForm == false &&
+            showChiefComplaints == false
+        ) {
+            setNotificationMessage(
+                `You must select "Yes" for at least one option`
+            );
+        }
+    }, [
+        showDefaultForm,
+        showChiefComplaints,
+        setNotificationMessage,
+        loadingData,
+    ]);
+
     return (
         <div className={style.formPreferences}>
             <CommonLayout title='Please select your questionnaire preferences'>
@@ -243,112 +258,121 @@ const FormPreferencesPage = () => {
                         type={notificationType}
                     />
                 )}
+                {loadingData ? (
+                    <div className='ui active centered inline loader' />
+                ) : (
+                    <>
+                        <div className={style.formPreferences__item}>
+                            <label htmlFor='showDefaultForm'>
+                                Show default forms
+                                <InfoTooltip mobilePositionY={'bottom'}>
+                                    <p>
+                                        When &ldquo;Show default forms&rdquo; is
+                                        &ldquo;Yes,&rdquo; then every patient in
+                                        your practice will be shown form(s) that
+                                        you specify. For example, if Cydoc has
+                                        created a custom form for your practice,
+                                        you may choose &ldquo;Yes&rdquo; here in
+                                        order to specify that you want all your
+                                        patients to be shown your
+                                        practice&apos;s custom form.
+                                    </p>
+                                </InfoTooltip>
+                            </label>
+                            <YesAndNo
+                                yesButtonActive={showDefaultForm}
+                                noButtonActive={!showDefaultForm}
+                                handleYesButtonClick={() =>
+                                    updateInstitutionConfigState(
+                                        'showDefaultForm',
+                                        true
+                                    )
+                                }
+                                handleNoButtonClick={() =>
+                                    updateInstitutionConfigState(
+                                        'showDefaultForm',
+                                        false
+                                    )
+                                }
+                            />
+                        </div>
 
-                <div className={style.formPreferences__item}>
-                    <label htmlFor='showDefaultForm'>
-                        Show default forms
-                        <InfoTooltip mobilePositionY={'bottom'}>
-                            <p>
-                                When &ldquo;Show default forms&rdquo; is
-                                &ldquo;Yes,&rdquo; then every patient in your
-                                practice will be shown form(s) that you specify.
-                                For example, if Cydoc has created a custom form
-                                for your practice, you may choose
-                                &ldquo;Yes&rdquo; here in order to specify that
-                                you want all your patients to be shown your
-                                practice&apos;s custom form.
-                            </p>
-                        </InfoTooltip>
-                    </label>
-                    <YesAndNo
-                        yesButtonActive={showDefaultForm}
-                        noButtonActive={!showDefaultForm}
-                        handleYesButtonClick={() =>
-                            updateInstitutionConfigState(
-                                'showDefaultForm',
-                                true
-                            )
-                        }
-                        handleNoButtonClick={() =>
-                            updateInstitutionConfigState(
-                                'showDefaultForm',
-                                false
-                            )
-                        }
-                    />
-                </div>
+                        {showDefaultForm && (
+                            <div className={style.formPreferences__item}>
+                                <label>
+                                    Default form names:
+                                    <InfoTooltip>
+                                        <p>
+                                            Select the default forms you would
+                                            like to show to every patient. The
+                                            default forms will be shown to
+                                            patients in the order that they are
+                                            selected.
+                                        </p>
+                                    </InfoTooltip>
+                                </label>
+                                <MultiSelectDropdown
+                                    dropdownItems={dropdownItems
+                                        .map((item) => item.diseaseName)
+                                        .sort()}
+                                    selectedDropdownItems={nonDeletedDiseaseForm.map(
+                                        (item) => item.diseaseName
+                                    )}
+                                    onRemove={handleOnRemove}
+                                    onSelected={handleOnSelected}
+                                />
+                            </div>
+                        )}
 
-                {showDefaultForm && (
-                    <div className={style.formPreferences__item}>
-                        <label>
-                            Default form names:
-                            <InfoTooltip>
-                                <p>
-                                    Select the default forms you would like to
-                                    show to every patient. The default forms
-                                    will be shown to patients in the order that
-                                    they are selected.
-                                </p>
-                            </InfoTooltip>
-                        </label>
-                        <MultiSelectDropdown
-                            dropdownItems={dropdownItems
-                                .map((item) => item.diseaseName)
-                                .sort()}
-                            selectedDropdownItems={nonDeletedDiseaseForm.map(
-                                (item) => item.diseaseName
-                            )}
-                            onRemove={handleOnRemove}
-                            onSelected={handleOnSelected}
-                        />
-                    </div>
+                        <div className={style.formPreferences__item}>
+                            <label htmlFor='showChiefComplaints'>
+                                Enable HPI/Subjective section generation
+                                <InfoTooltip mobilePositionX={-80}>
+                                    <p>
+                                        When &ldquo;Enable HPI/Subjective
+                                        section generation&rdquo; is
+                                        &ldquo;Yes&rdquo;, then Cydoc will
+                                        automatically interview each patient
+                                        using medical reasoning to generate an
+                                        HPI/Subjective section based on that
+                                        patient&apos;s unique chief complaints.
+                                    </p>
+                                </InfoTooltip>
+                            </label>
+
+                            <YesAndNo
+                                yesButtonActive={showChiefComplaints}
+                                noButtonActive={!showChiefComplaints}
+                                handleYesButtonClick={() =>
+                                    updateInstitutionConfigState(
+                                        'showChiefComplaints',
+                                        true
+                                    )
+                                }
+                                handleNoButtonClick={() =>
+                                    updateInstitutionConfigState(
+                                        'showChiefComplaints',
+                                        false
+                                    )
+                                }
+                            />
+                        </div>
+                        <button
+                            type='submit'
+                            className='button'
+                            onClick={handleSubmit}
+                            disabled={
+                                (!showChiefComplaints && !showDefaultForm) ||
+                                (showDefaultForm &&
+                                    !nonDeletedDiseaseForm.length) ||
+                                loading
+                            }
+                        >
+                            Update Preferences
+                            {loading && <ButtonLoader />}
+                        </button>
+                    </>
                 )}
-
-                <div className={style.formPreferences__item}>
-                    <label htmlFor='showChiefComplaints'>
-                        Enable HPI/Subjective section generation
-                        <InfoTooltip mobilePositionX={-80}>
-                            <p>
-                                When &ldquo;Enable HPI/Subjective section
-                                generation&rdquo; is &ldquo;Yes&rdquo;, then
-                                Cydoc will automatically interview each patient
-                                using medical reasoning to generate an
-                                HPI/Subjective section based on that
-                                patient&apos;s unique chief complaints.
-                            </p>
-                        </InfoTooltip>
-                    </label>
-
-                    <YesAndNo
-                        yesButtonActive={showChiefComplaints}
-                        noButtonActive={!showChiefComplaints}
-                        handleYesButtonClick={() =>
-                            updateInstitutionConfigState(
-                                'showChiefComplaints',
-                                true
-                            )
-                        }
-                        handleNoButtonClick={() =>
-                            updateInstitutionConfigState(
-                                'showChiefComplaints',
-                                false
-                            )
-                        }
-                    />
-                </div>
-                <button
-                    type='submit'
-                    className='button'
-                    onClick={handleSubmit}
-                    disabled={
-                        (!showChiefComplaints && !showDefaultForm) ||
-                        (showDefaultForm && !nonDeletedDiseaseForm.length) ||
-                        loading
-                    }
-                >
-                    Update Preferences
-                    {loading && <ButtonLoader />}
-                </button>
             </CommonLayout>
         </div>
     );
