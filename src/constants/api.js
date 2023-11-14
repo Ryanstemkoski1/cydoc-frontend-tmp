@@ -6,7 +6,11 @@ function getGraphClientURL() {
     if (location.hostname == 'www.cydoc.ai') {
         graphClientURL = 'https://cydocgraph.herokuapp.com';
     } else if (location.hostname == 'www.cyai.site') {
-        graphClientURL = 'https://cydocgraphdev.herokuapp.com';
+        // graphClientURL = 'https://cydocgraphdev.herokuapp.com';
+        // TEMPORARILY use the production graph backend for the dev frontend deployment
+        // because the dev graph backend has package version updates deployed
+        // which are broken/not working as expected and need to be debugged.
+        graphClientURL = 'https://cydocgraph.herokuapp.com';
     } else if (location.hostname == 'localhost') {
         graphClientURL = 'https://cydocgraph.herokuapp.com';
     } else {
