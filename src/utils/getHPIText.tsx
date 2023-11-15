@@ -656,6 +656,7 @@ function getHPIText(bulletNoteView = false) {
         'The patient is ',
         'The patients ',
         'The patient ',
+        "The patient's ",
         'He ',
         'She ',
         'They ',
