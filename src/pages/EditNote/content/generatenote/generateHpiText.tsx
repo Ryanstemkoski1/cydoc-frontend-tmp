@@ -1,7 +1,6 @@
 import { PART_OF_SPEECH_CORRECTION_MAP } from 'constants/hpiTextGenerationMapping';
 import { PatientPronouns } from 'constants/patientInformation';
 import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from 'constants/word-mappings';
-import { combineHpiString } from './combineSentences';
 /**
  * keys: ints for the question order
  * value: list of length 2 in which the first element is the fill in the blank
@@ -71,12 +70,12 @@ const selectivelyLowercase = (str: string): string => {
     [
         'ANSWER',
         'NOTANSWER',
-        'ANSWER.',
-        'NOTANSWER.',
+        'ANSWER\\.',
+        'NOTANSWER\\.',
         ...PART_OF_SPEECH_CORRECTION_MAP_FIRST_COLUMN,
     ].forEach((item) => {
         const regEx = new RegExp(item, 'ig');
-        str = str.replace(regEx, item.toLowerCase());
+        str = str.replace(regEx, item.toLowerCase().replace(/[\\]/g, ''));
     });
 
     return str;
@@ -88,7 +87,7 @@ const selectivelyLowercase = (str: string): string => {
  */
 export const fullClean = (sentence: string): string => {
     // remove punctuations except hyphens, parentheses and single apostrophes
-    sentence = sentence.replace(/[^\w\s'.,:/()-]/g, '');
+    sentence = sentence.replace(/[^\w\s'.,:/@()-]/g, '');
 
     // condense multiple whitespace into single space
     sentence = sentence.split(/\s+/).join(' ');
@@ -331,7 +330,7 @@ export const createHPI = (
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
     hpiString = fillNameAndPronouns(hpiString, patientInfo);
     hpiString = partOfSpeechCorrection(hpiString);
-    hpiString = combineHpiString(hpiString, 3);
+    // hpiString = combineHpiString(hpiString, 3);
     hpiString = fillMedicalTerms(hpiString);
     hpiString = conjugateThirdPerson(hpiString);
     hpiString = abbreviate(hpiString);
