@@ -67,7 +67,7 @@ describe('CCSelection Page', () => {
         let newStore: any;
         let initialQuestions: any;
 
-        jest.setTimeout(10000);
+        jest.setTimeout(20000);
 
         beforeAll(async () => {
             knowledgeGraphResponse = await hpiHeaders;

@@ -14,6 +14,7 @@ import CreateGraph from 'pages/CreateTemplate/CreateGraph';
 import EditGraph from 'pages/CreateTemplate/EditGraph';
 import EditTemplate from 'pages/CreateTemplate/EditTemplate';
 import EditNote from 'pages/EditNote/EditNote';
+import FormPreferencesPage from 'pages/FormPreferences/FormPreferencesPage';
 import GenerateInpatientPlan from 'pages/GenerateInpatientPlan/GenerateInpatientPlan';
 import Home from 'pages/Home/Home';
 import LandingPage from 'pages/LandingPage/LandingPage';
@@ -32,6 +33,7 @@ import NavMenu from './NavMenu';
 import { PrivateRoute } from './PrivateRoute';
 import BrowseNotes from 'pages/BrowseNotes/BrowseNotes';
 import { ProductType, ViewType } from 'assets/enums/route.enums';
+import useUser from 'hooks/useUser';
 
 const HPILazyLoad = lazy(() => import('pages/HPI/Hpi'));
 
@@ -41,6 +43,7 @@ const Routes = (props: { children?: JSX.Element | null }) => {
         (state: CurrentNoteState) => state.loadingStatus
     );
     const { authLoading } = useAuth();
+    const { loading: userLoading } = useUser();
 
     const HPI = useCallback(() => {
         return (
@@ -52,7 +55,7 @@ const Routes = (props: { children?: JSX.Element | null }) => {
 
     return (
         <div className='layout'>
-            {(authLoading || loadingStatus) && <GlobalLoader />}
+            {(authLoading || loadingStatus || userLoading) && <GlobalLoader />}
             <NavMenu attached={'top'} displayNoteName={true} />{' '}
             <div className='layout__content'>
                 <Switch>
@@ -135,6 +138,11 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                         exact
                         path='/manager-dashboard'
                         component={ManagerDashboard}
+                    />
+                    <ManagerRoute
+                        exact
+                        path='/form-preferences'
+                        component={FormPreferencesPage}
                     />
                     <Route exact path='/view/product' component={ViewProduct} />
                     <Route exact path='/privacypolicy' component={Policy} />

@@ -30,8 +30,13 @@
 
     &:hover {
         &:not([data-hover='false']) {
+
             background-color: darken($color-primary, 5%);
         }
+    }
+    &[data-hover='false'] {
+        white-space: normal;
+        text-align: left;
     }
 
     &.secondary {

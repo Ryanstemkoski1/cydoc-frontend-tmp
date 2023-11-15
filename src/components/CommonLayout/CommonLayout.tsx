@@ -1,13 +1,17 @@
 import React from 'react';
 import style from './CommonLayout.module.scss';
 interface CommonLayoutProps {
-    title: string;
+    title?: string;
     children: any;
 }
 const CommonLayout = ({ title = '', children }: CommonLayoutProps) => {
     return (
         <div className='centering'>
-            <div className={style.commonLayout}>
+            <div
+                className={`${style.commonLayout} ${
+                    !title ? style.commonLayoutAlt : ''
+                }`}
+            >
                 {title && (
                     <div className={style.commonLayout__header}>{title}</div>
                 )}

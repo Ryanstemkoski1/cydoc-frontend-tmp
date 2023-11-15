@@ -7,6 +7,7 @@ import SignUpSteps from './SignUpSteps';
 import { useSignUpFormController } from './useSignUpFormController';
 import { NextBackButtonGroup } from './NextBackButtonGroup';
 import { ClinicianSignUpData } from 'types/signUp';
+import { UserRole } from '@cydoc-ai/types';
 
 export interface SignUpFormData extends ClinicianSignUpData {
     isPrivacyChecked: boolean;
@@ -16,7 +17,7 @@ export interface SignUpFormData extends ClinicianSignUpData {
 const initialValues: SignUpFormData = {
     isTermsChecked: false,
     isPrivacyChecked: false,
-    role: 'manager',
+    role: UserRole.MANAGER,
     email: '',
     confirmEmail: '',
     institutionName: '',

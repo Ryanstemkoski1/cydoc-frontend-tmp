@@ -25,6 +25,7 @@ import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
+import Assignment from '../../assets/images/assignment.svg';
 import Setting from '../../assets/images/edit.svg';
 import Logout from '../../assets/images/logout.svg';
 import Notes from '../../assets/images/notes.svg';
@@ -47,6 +48,7 @@ const OurCreatedRoutes = [
     'qrcode',
     '/view/product',
     'submission-successful',
+    'form-preferences',
 ];
 
 // Navigation Bar component that will go at the top of most pages
@@ -114,12 +116,22 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     ];
 
     if (isManager) {
-        loggedInMenuButtonItems.splice(1, 0, {
-            to: '/manager-dashboard',
-            label: 'Manage Users',
-            icon: Users,
-            active: window.location.href.includes('manager-dashboard'),
-        });
+        loggedInMenuButtonItems.splice(
+            1,
+            0,
+            {
+                to: '/manager-dashboard',
+                label: 'Manage Users',
+                icon: Users,
+                active: window.location.href.includes('manager-dashboard'),
+            },
+            {
+                to: '/form-preferences',
+                label: 'Form Preferences',
+                icon: Assignment,
+                active: window.location.href.includes('form-preferences'),
+            }
+        );
     }
 
     // Default Menu Items

@@ -1,0 +1,11 @@
+.formPreferences {
+    padding: 30px 0;
+    &__item {
+        margin-bottom: 20px;
+        label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    }
+}

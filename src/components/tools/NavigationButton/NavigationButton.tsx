@@ -1,6 +1,6 @@
+import ButtonLoader from 'components/ButtonLoader/ButtonLoader';
 import React from 'react';
 import style from './NavigationButton.module.scss';
-import ButtonLoader from 'components/ButtonLoader/ButtonLoader';
 
 interface NavigationButtonProps {
     previousClick?: any;

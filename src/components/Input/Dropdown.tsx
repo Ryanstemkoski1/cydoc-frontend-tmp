@@ -7,6 +7,7 @@ interface Props {
     onChange: (value: string) => void;
     canEnterNewValue?: boolean;
     value?: any;
+    resetValueAfterClick?: boolean;
 }
 
 function getfilteredItems(
@@ -14,7 +15,11 @@ function getfilteredItems(
     value: string,
     canEnterNewValue: boolean
 ) {
-    let filteredItems = items.filter((item) => item.includes(value));
+    value = value.toLowerCase();
+
+    let filteredItems = items.filter((item) =>
+        item.toLowerCase().includes(value)
+    );
 
     filteredItems =
         canEnterNewValue && value ? [value, ...filteredItems] : filteredItems;
@@ -26,6 +31,7 @@ function Dropdown({
     placeholder = '',
     onChange,
     canEnterNewValue = false,
+    resetValueAfterClick = false,
     value: defaultValue = '',
 }: Props) {
     const [showDropdown, setShowDropdown] = useState(false);
@@ -80,7 +86,11 @@ function Dropdown({
                             onClick={() => {
                                 onChange(item);
                                 setShowDropdown(false);
-                                setValue(item);
+                                if (resetValueAfterClick) {
+                                    setValue('');
+                                } else {
+                                    setValue(item);
+                                }
                             }}
                         >
                             {item}

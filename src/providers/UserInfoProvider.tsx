@@ -32,6 +32,7 @@ export const UserInfoProvider: React.FC<
 
     const updateUserInfo = useCallback(async () => {
         try {
+            setLoading(true);
             if (
                 cognitoUser?.attributes?.email ||
                 cognitoUser?.challengeParam?.userAttributes?.email

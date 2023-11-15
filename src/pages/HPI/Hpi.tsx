@@ -1,7 +1,7 @@
 import { ApiResponse, Institution } from '@cydoc-ai/types';
+import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
 import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
-import axios from 'axios';
 import {
     Institution as InstitutionClass,
     InstitutionType,
@@ -13,20 +13,18 @@ import Notification, {
     NotificationTypeEnum,
 } from 'components/tools/Notification/Notification';
 import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
-import { graphClientURL } from 'constants/api';
 import useQuery from 'hooks/useQuery';
 import useSelectedChiefComplaints from 'hooks/useSelectedChiefComplaints';
-import { getInstitution } from 'modules/institution-api';
+import {
+    InstitutionConfigResponse,
+    getInstitution,
+    getInstitutionConfig,
+    validateDiseaseForm,
+} from 'modules/institution-api';
 import { log } from 'modules/logging';
 import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
 import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { updateActiveItem } from 'redux/actions/activeItemActions';
@@ -42,11 +40,17 @@ import { CurrentNoteState } from 'redux/reducers';
 import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
 import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
 import { isResponseValid } from 'utils/getHPIFormData';
+import { loadChiefComplaintsData } from 'utils/loadKnowledgeGraphData';
 import CCSelection from './ChiefComplaintSelection/CCSelection';
 import style from './HPI.module.scss';
 import InitialSurveyHPI from './InitialSurvey/InitialSurvey';
 import NewNotePage from './NotesPage/NotePage';
 import PreHPI from './PreHpi/PreHPI';
+
+interface ScreenForPatientType {
+    title: string;
+    component: React.JSX.Element | null;
+}
 
 const HPI = () => {
     const dispatch = useDispatch();
@@ -58,17 +62,12 @@ const HPI = () => {
     const [notificationType, setNotificationType] = useState(
         NotificationTypeEnum.ERROR
     );
-    const [screenForPatient, setScreenForPatient] = useState<{
-        title: string;
-        component: React.JSX.Element | null;
-    }>({
-        title: '',
-        component: null,
-    });
-    const [institution, setInstitution] = useState<InstitutionClass | null>(
-        null
-    );
-    const [skipCC, setSkipCC] = useState(false);
+    const [screenForPatient, setScreenForPatient] =
+        useState<ScreenForPatientType>({
+            title: '',
+            component: null,
+        });
+    const [institution, setInstitution] = useState<InstitutionClass>();
     const { userSurveyState, activeItem, additionalSurvey, hpiHeaders } =
         useSelector((state: CurrentNoteState) => ({
             userSurveyState: selectInitialPatientSurvey(state),
@@ -81,6 +80,14 @@ const HPI = () => {
         'PreHPI',
         'CCSelection',
     ]);
+    const [institutionConfig, setInstitutionConfig] =
+        useState<InstitutionConfig>();
+
+    const institutionDefaultCC = useMemo((): string[] => {
+        if (!institutionConfig) return [];
+        return institutionConfig.diseaseForm.map((item) => item.diseaseName);
+    }, [institutionConfig]);
+
     const [showCCModal, setShowCCModal] = useState(false);
     const selectedChiefComplaints = useSelectedChiefComplaints();
     const [chiefComplaintsForModal, setChiefComplaintsForModal] = useState<
@@ -92,43 +99,56 @@ const HPI = () => {
     );
 
     const institutionId = query.get(HPIPatientQueryParams.INSTITUTION_ID);
-    const onNextClickRef =
-        useRef<(chiefComplaintsFromListText: string[]) => void>();
 
     /* FUNCTIONS */
+    const resetCurrentTabs = useCallback(() => {
+        if (!institutionConfig) return [];
+
+        const { showChiefComplaints, showDefaultForm } = institutionConfig;
+
+        const newCurrentTabs = ['InitialSurvey', 'PreHPI'];
+
+        if (showChiefComplaints) {
+            newCurrentTabs.push('CCSelection');
+        } else if (showDefaultForm) {
+            newCurrentTabs.push(...institutionDefaultCC);
+        }
+
+        return newCurrentTabs;
+    }, [institutionConfig, institutionDefaultCC]);
+
     const changeFavComplaintsBasedOnInstitute = useCallback(() => {
         const { graph, nodes, order } = userSurveyState;
 
-        if (!institution) {
-            if (
-                !Object.keys(graph).length &&
-                !Object.keys(nodes).length &&
-                !Object.keys(order).length
-            ) {
-                dispatch(processSurveyGraph(initialQuestions));
-            }
-        } else {
-            //TODO: PATCH FOR signature perinatal
-            if (
-                (institution?.name || '')
-                    .toLowerCase()
-                    .includes('signature perinatal')
-            ) {
-                setSkipCC(true);
-            }
-            if (institution.type === InstitutionType.GYN) {
+        if (
+            !institution ||
+            Object.keys(graph).length ||
+            Object.keys(nodes).length ||
+            Object.keys(order).length
+        ) {
+            return;
+        }
+
+        switch (institution.type) {
+            case InstitutionType.GYN: {
                 initialQuestions.nodes['2'].category = 'ANNUAL_GYN_EXAM';
                 initialQuestions.nodes['2'].doctorView =
                     ChiefComplaintsEnum.ANNUAL_GYN_EXAM_WELL_WOMAN_VISIT;
 
                 dispatch(processSurveyGraph(initialQuestions));
-            }
-            const favChiefComplaintsObj: { [item: string]: any } = {};
-            institution.favComplaints.forEach((item) => {
-                favChiefComplaintsObj[item] = false;
-            });
 
-            dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
+                const favChiefComplaintsObj: { [item: string]: boolean } = {};
+                institution.favComplaints.forEach((item) => {
+                    favChiefComplaintsObj[item] = false;
+                });
+
+                dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
+                break;
+            }
+            default: {
+                dispatch(processSurveyGraph(initialQuestions));
+                break;
+            }
         }
     }, [dispatch, institution, userSurveyState]);
 
@@ -211,10 +231,11 @@ const HPI = () => {
         },
         [
             notificationMessage,
-            userSurveyState,
-            additionalSurvey,
             currentTabs,
+            dispatch,
             activeItem,
+            additionalSurvey,
+            userSurveyState?.nodes,
         ]
     );
 
@@ -228,10 +249,11 @@ const HPI = () => {
         const nextTab = tabs[nextTabIndex];
 
         dispatch(updateActiveItem(nextTab));
-    }, [currentTabs, activeItem, notificationMessage]);
+        window.scrollTo(0, 0);
+    }, [currentTabs, activeItem, notificationMessage, dispatch]);
 
     const onNextClick = useCallback(
-        (chiefComplaintsFromListText: string[]) => {
+        (newUserSelectedCC: string[]) => {
             setShowCCModal(false);
             setChiefComplaintsForModal([]);
 
@@ -243,40 +265,54 @@ const HPI = () => {
 
             if (activeItem === 'CCSelection') {
                 if (
-                    !selectedChiefComplaints.length &&
+                    !newUserSelectedCC.length &&
                     !isResponseValid(node7Response)
                 ) {
                     setNotificationMessage(
                         'You must select or describe at least one visit reason to proceed.'
                     );
                     setNotificationType(NotificationTypeEnum.ERROR);
+                    return;
                 }
 
-                const newSelectedChiefComplaints = [
-                    ...new Set([
-                        ...selectedChiefComplaints,
-                        ...chiefComplaintsFromListText,
-                    ]),
-                ];
+                const selectedCCExceptInstitutionDefault =
+                    newUserSelectedCC.filter(
+                        (item) => !institutionDefaultCC.includes(item)
+                    );
 
-                if (newSelectedChiefComplaints.length > 3) {
+                if (selectedCCExceptInstitutionDefault.length > 3) {
                     const chiefComplaintsForModal =
-                        newSelectedChiefComplaints.map((chiefComplaint) => ({
-                            chiefComplaint: chiefComplaint,
-                            isSelected: false,
-                        }));
+                        selectedCCExceptInstitutionDefault.map(
+                            (chiefComplaint) => ({
+                                chiefComplaint: chiefComplaint,
+                                isSelected: false,
+                            })
+                        );
 
                     setChiefComplaintsForModal(chiefComplaintsForModal);
                     setShowCCModal(true);
                     return;
                 }
 
+                const newSelectedChiefComplaints = Array.from(
+                    new Set([...newUserSelectedCC, ...institutionDefaultCC])
+                );
+
                 newCurrentTabs = [
-                    'InitialSurvey',
-                    'PreHPI',
-                    'CCSelection',
+                    ...resetCurrentTabs(),
                     ...newSelectedChiefComplaints,
                 ];
+
+                // remove current selected Chief Complaints
+                selectedChiefComplaints.forEach((item) => {
+                    dispatch(selectChiefComplaint(item));
+                });
+
+                // add new selected Chief Complaints
+                newSelectedChiefComplaints.forEach((item) => {
+                    dispatch(selectChiefComplaint(item));
+                });
+
                 setCurrentTabs(newCurrentTabs);
             }
 
@@ -288,33 +324,22 @@ const HPI = () => {
             dispatch(updateActiveItem(nextTab));
         },
         [
-            activeItem,
             notificationMessage,
-            userSurveyState,
-            selectedChiefComplaints,
-            chiefComplaintsForModal,
             currentTabs,
+            userSurveyState.nodes,
+            activeItem,
+            dispatch,
+            institutionDefaultCC,
+            resetCurrentTabs,
+            selectedChiefComplaints,
         ]
     );
 
     const handleContinueForCCModal = () => {
-        const unSelectedCCForCCModal = chiefComplaintsForModal.filter(
-            (CC) => CC.isSelected === false
-        );
-
-        // Remove Chief Complaints for Redux State
-        unSelectedCCForCCModal.forEach((CC) => {
-            dispatch(selectChiefComplaint(CC.chiefComplaint));
-        });
-
-        setTimeout(() => onNextClickRef!.current!([]), 0);
-    };
-
-    const loadCCData = async () => {
-        const response = await axios.get(
-            graphClientURL + '/graph/category/' + 'SIGPERI_ROOT' + '/4'
-        );
-        dispatch(processKnowledgeGraph(response.data));
+        const selectedCC = chiefComplaintsForModal
+            .filter((item) => item.isSelected === true)
+            .map((item) => item.chiefComplaint);
+        onNextClick(selectedCC);
     };
 
     /* EFFECTS */
@@ -356,6 +381,9 @@ const HPI = () => {
                                 setNotificationMessage,
                                 setNotificationType,
                             }}
+                            defaultInstitutionChiefComplaints={
+                                institutionDefaultCC
+                            }
                         />
                     ),
                     title: `Please select the top 3 conditions or symptoms you'd like to discuss`,
@@ -380,11 +408,17 @@ const HPI = () => {
                 });
             }
         }
-    }, [onNextClick, onPreviousClick, activeItem]);
+    }, [
+        onNextClick,
+        onPreviousClick,
+        activeItem,
+        institutionDefaultCC,
+        hpiHeaders?.parentNodes,
+    ]);
 
     useEffect(() => {
         changeFavComplaintsBasedOnInstitute();
-    }, [institution]);
+    }, [changeFavComplaintsBasedOnInstitute]);
 
     useEffect(() => {
         if (!institutionId) {
@@ -398,12 +432,35 @@ const HPI = () => {
                 const validatedInstitution = (await getInstitution(
                     institutionId
                 )) as { detail: Institution };
+                const getInstitutionConfigResponse = await getInstitutionConfig(
+                    institutionId
+                );
 
                 if (!(validatedInstitution as ApiResponse).errorMessage) {
                     const { id, name } = validatedInstitution.detail;
                     setInstitution(new InstitutionClass({ id, name }));
                 } else {
                     log(`HPI error fetching institution`);
+                    history.replace('/');
+                }
+
+                if (
+                    !(getInstitutionConfigResponse as ApiResponse).errorMessage
+                ) {
+                    const result = (
+                        getInstitutionConfigResponse as InstitutionConfigResponse
+                    ).config;
+
+                    const validationDiseaseFormResult =
+                        await validateDiseaseForm(result);
+
+                    if (!validationDiseaseFormResult) {
+                        throw new Error('DiseaseForm validation failed');
+                    }
+
+                    setInstitutionConfig(result);
+                } else {
+                    log(`HPI error fetching institution preferences`);
                     history.replace('/');
                 }
             } catch (e) {
@@ -415,29 +472,14 @@ const HPI = () => {
         };
 
         fetchInstitution();
-    }, [history, institutionId, query]);
-
-    useEffect(() => {
-        if (skipCC) {
-            dispatch(
-                selectChiefComplaint('Signature Perinatal Center Questionnaire')
-            );
-            setCurrentTabs([
-                'InitialSurvey',
-                'PreHPI',
-                'Signature Perinatal Center Questionnaire',
-            ]);
-
-            loadCCData();
-        }
-    }, [skipCC]);
+    }, [history, institutionId, query, dispatch]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
         if (activeItem === 'CCSelection') {
             setCurrentTabs(['InitialSurvey', 'PreHPI', 'CCSelection']);
         }
-    }, [activeItem]);
+    }, [activeItem, dispatch]);
 
     useEffect(() => {
         if (notificationMessage) {
@@ -452,21 +494,42 @@ const HPI = () => {
     }, [notificationMessage]);
 
     useEffect(() => {
-        onNextClickRef.current = onNextClick;
-    }, [onNextClick]);
+        if (!institutionConfig) return;
+
+        const { diseaseForm, showChiefComplaints, showDefaultForm } =
+            institutionConfig;
+
+        const diseaseFormKeys = diseaseForm.map((form) => form.diseaseKey);
+
+        loadChiefComplaintsData(diseaseFormKeys).then((values) => {
+            values.forEach((data) => dispatch(processKnowledgeGraph(data)));
+        });
+
+        setCurrentTabs(resetCurrentTabs());
+
+        if (showChiefComplaints || !showDefaultForm) return;
+
+        institutionDefaultCC.forEach((item) => {
+            dispatch(selectChiefComplaint(item));
+        });
+    }, [dispatch, institutionConfig, institutionDefaultCC, resetCurrentTabs]);
 
     useEffect(() => {
-        dispatch(updateActiveItem('InitialSurvey'));
-
-        if (hpiHeaders) {
+        if (
+            !Object.keys(hpiHeaders.parentNodes).length &&
+            !Object.keys(hpiHeaders.bodySystems).length
+        ) {
             const data = knowledgeGraphAPI;
             data.then((res) => dispatch(saveHpiHeader(res.data)));
         }
+    }, [dispatch, hpiHeaders]);
 
+    useEffect(() => {
+        dispatch(updateActiveItem('InitialSurvey'));
         return () => {
             dispatch(updateActiveItem('CC'));
         };
-    }, []);
+    }, [dispatch]);
 
     return (
         <>
