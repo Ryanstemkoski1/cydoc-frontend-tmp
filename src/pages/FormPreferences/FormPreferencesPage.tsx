@@ -42,9 +42,7 @@ const FormPreferencesPage = () => {
     const [loading, setLoading] = useState(false);
     const [loadingData, setLoadingData] = useState(true);
     const [notificationMessage, setNotificationMessage] = useState('');
-    const [notificationType, setNotificationType] = useState(
-        NotificationTypeEnum.ERROR
-    );
+    const [errorMessage, setErrorMessage] = useState('');
     const dropdownItems = useMemo(() => {
         if (!institutionConfig || !allDiseaseForms) return [];
         const diseaseForm = institutionConfig.diseaseForm.filter(
@@ -207,7 +205,6 @@ const FormPreferencesPage = () => {
             setNotificationMessage(
                 `Can't add more than ${MAX_LIMIT_TO_ADD_DEFAULT_FORMS} default forms`
             );
-            setNotificationType(NotificationTypeEnum.ERROR);
             window.scrollTo(0, 0);
             return;
         }
@@ -238,9 +235,9 @@ const FormPreferencesPage = () => {
             showDefaultForm == false &&
             showChiefComplaints == false
         ) {
-            setNotificationMessage(
-                `You must select "Yes" for at least one option`
-            );
+            setErrorMessage(`You must select "Yes" for at least one option`);
+        } else {
+            setErrorMessage('');
         }
     }, [
         showDefaultForm,
@@ -252,10 +249,10 @@ const FormPreferencesPage = () => {
     return (
         <div className={style.formPreferences}>
             <CommonLayout title='Please select your questionnaire preferences'>
-                {notificationMessage && (
+                {(errorMessage || notificationMessage) && (
                     <Notification
-                        message={notificationMessage}
-                        type={notificationType}
+                        message={errorMessage || notificationMessage}
+                        type={NotificationTypeEnum.ERROR}
                     />
                 )}
                 {loadingData ? (
