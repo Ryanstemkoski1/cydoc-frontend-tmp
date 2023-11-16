@@ -17,9 +17,13 @@ export function EditBilling() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (cognitoUser && user?.institutionId) {
-            getStripeSetupUrl(user?.institutionId, cognitoUser)
-                .then((stripeIntentResponse) => {
+        const fetchUrl = async () => {
+            if (cognitoUser && user?.institutionId) {
+                try {
+                    const stripeIntentResponse = await getStripeSetupUrl(
+                        user?.institutionId,
+                        cognitoUser
+                    );
                     if (stripeIntentResponse.errorMessage) {
                         setError(
                             'Error setting up billing, try refreshing the page'
@@ -36,8 +40,7 @@ export function EditBilling() {
                         });
                         throw new Error(`unexpected error`);
                     }
-                })
-                .catch((e) => {
+                } catch (e) {
                     setError(
                         'Error setting up billing, try refreshing the page'
                     );
@@ -45,18 +48,41 @@ export function EditBilling() {
                         `[getStripeSetupUrl] React error: ${stringFromError(
                             e
                         )}`,
-                        { user, cognitoUser, error, loading }
+                        {
+                            user,
+                            cognitoUser,
+                            error,
+                            loading,
+                        }
                     );
-                })
-                .finally(() => setLoading(false));
-        }
+                }
+                setLoading(false);
+            }
+        };
+        fetchUrl();
     }, [cognitoUser, error, loading, user, user?.institutionId]);
 
-    return loading ? (
-        <div style={{ textAlign: 'center', padding: '5rem' }}>
-            <CircularProgress />
-        </div>
-    ) : (
+    if (loading) {
+        return (
+            <div style={{ textAlign: 'center', padding: '5rem' }}>
+                <CircularProgress />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <>
+                <Typography mt={'1rem'} id='signup-modal-text'>
+                    Error connecting with payment provider, try logging out and
+                    back in
+                </Typography>
+                <ErrorText message={error} />
+            </>
+        );
+    }
+
+    return (
         <>
             <Typography mt={'1rem'} id='signup-modal-text'>
                 Redirecting you to our payment provider to setup payment.
@@ -70,7 +96,6 @@ export function EditBilling() {
                 {`If you don't get redirected, click: `}
                 <a href={paymentLink}>here</a>
             </Typography>
-            <ErrorText message={error} />
         </>
     );
 }

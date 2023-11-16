@@ -1,5 +1,5 @@
 import useAuth from 'hooks/useAuth';
-import { updateLoggedUser } from '../modules/logging';
+import { log, updateLoggedUser } from '../modules/logging';
 import { getDbUser } from '../modules/user-api';
 import React, {
     PropsWithChildren,
@@ -29,21 +29,22 @@ export const UserInfoProvider: React.FC<
     const isManager = useMemo(() => user?.role === 'manager', [user]);
 
     const updateUserInfo = useCallback(async () => {
-        if (
-            cognitoUser?.attributes?.email ||
-            cognitoUser?.challengeParam?.userAttributes?.email
-        ) {
-            try {
+        try {
+            if (
+                cognitoUser?.attributes?.email ||
+                cognitoUser?.challengeParam?.userAttributes?.email
+            ) {
                 setLoading(true);
                 const user = await getDbUser(cognitoUser);
                 setUser(user || undefined);
-            } finally {
-                setLoading(false);
+            } else {
+                // reset user state on signOut
+                setUser(undefined);
             }
-        } else {
-            // reset user state on signOut
-            setUser(undefined);
+        } catch (e) {
+            log(`[UserInfoProvider] uncaught error fetching user`);
         }
+        setLoading(false);
     }, [cognitoUser]);
 
     useEffect(() => {
