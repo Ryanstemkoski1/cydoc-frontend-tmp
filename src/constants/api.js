@@ -3,18 +3,16 @@ import { API_URL } from '../modules/environment';
 
 function getGraphClientURL() {
     let graphClientURL;
+    let graphClientURLProd = 'https://newcydocgraph-3bf6786f6497.herokuapp.com';
+    let graphClientURLDev = 'https://newcydocgraphdev-bb581ae89e66.herokuapp.com';
     if (location.hostname == 'www.cydoc.ai') {
-        graphClientURL = 'https://cydocgraph.herokuapp.com';
+        graphClientURL = graphClientURLProd;
     } else if (location.hostname == 'www.cyai.site') {
-        // graphClientURL = 'https://cydocgraphdev.herokuapp.com';
-        // TEMPORARILY use the production graph backend for the dev frontend deployment
-        // because the dev graph backend has package version updates deployed
-        // which are broken/not working as expected and need to be debugged.
-        graphClientURL = 'https://cydocgraph.herokuapp.com';
+        graphClientURL = graphClientURLDev;
     } else if (location.hostname == 'localhost') {
-        graphClientURL = 'https://cydocgraph.herokuapp.com';
+        graphClientURL = graphClientURLProd;
     } else {
-        graphClientURL = 'https://cydocgraph.herokuapp.com';
+        graphClientURL = graphClientURLProd;
     }
     return graphClientURL;
 }
