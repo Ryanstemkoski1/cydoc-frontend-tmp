@@ -1,3 +1,9 @@
+import {
+    HpiResponseType,
+    ResponseTypes,
+    SelectManyInput,
+    SelectOneInput,
+} from 'constants/hpiEnums';
 import { currentNoteStore } from 'redux/store';
 import getHPIText from './getHPIText';
 
@@ -43,4 +49,20 @@ export function isResponseValid(response = {}): boolean {
         responseValues.length !== 0 &&
         responseValues.some((listItem) => listItem.trim())
     );
+}
+
+export function isHPIResponseValid(
+    response: HpiResponseType,
+    responseType: ResponseTypes
+): boolean {
+    switch (responseType) {
+        case ResponseTypes.SELECTMANY:
+        case ResponseTypes.SELECTONE: {
+            const newResponse = response as SelectManyInput | SelectOneInput;
+            return Object.keys(newResponse).some((key) => newResponse[key]);
+        }
+        default: {
+            return false;
+        }
+    }
 }

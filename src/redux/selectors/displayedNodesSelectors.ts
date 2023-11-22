@@ -1,7 +1,13 @@
 import { displayedNodesCutOff } from 'constants/displayedNodesCutOff';
 import { YesNoResponse } from 'constants/enums';
-import { ResponseTypes } from 'constants/hpiEnums';
+import {
+    ResponseTypes,
+    SelectManyInput,
+    SelectOneInput,
+} from 'constants/hpiEnums';
 import { CurrentNoteState } from 'redux/reducers';
+import { isHPIResponseValid } from 'utils/getHPIFormData';
+import { getNodeConditions } from 'utils/getHPIText';
 
 function traverseNodes(
     currNodes: string[],
@@ -16,15 +22,53 @@ function traverseNodes(
         const currNode = stack.pop();
         if (!currNode) continue;
         if (nodes[currNode].text != 'nan') nodesArr = [...nodesArr, currNode];
+
+        let childNodes = graph[currNode]
+            .slice(0, cutOff - (totalNodes.length - currNodes.length))
+            .reverse();
+
+        const isValidResponseResult = isHPIResponseValid(
+            nodes[currNode].response,
+            nodes[currNode].responseType
+        );
+
+        if (
+            [ResponseTypes.SELECTMANY, ResponseTypes.SELECTONE].includes(
+                nodes[currNode].responseType
+            ) &&
+            isValidResponseResult
+        ) {
+            const childNodesToDisplay: string[] = [];
+            const response = nodes[currNode].response as
+                | SelectManyInput
+                | SelectOneInput;
+            const validNodeResponse = Object.keys(response).filter(
+                (key) => response[key]
+            );
+
+            for (const childNode of childNodes) {
+                const conditions = getNodeConditions(nodes[childNode]);
+                if (
+                    conditions.some((item) => validNodeResponse.includes(item))
+                ) {
+                    childNodesToDisplay.push(childNode);
+                }
+            }
+
+            childNodes = childNodesToDisplay;
+        }
+
         const childEdges =
             (totalNodes.length - currNodes.length < cutOff &&
                 nodes[currNode].responseType == ResponseTypes.YES_NO &&
                 nodes[currNode].response == YesNoResponse.Yes) ||
             (nodes[currNode].responseType == ResponseTypes.NO_YES &&
-                nodes[currNode].response == YesNoResponse.No)
-                ? graph[currNode]
-                      .slice(0, cutOff - (totalNodes.length - currNodes.length))
-                      .reverse()
+                nodes[currNode].response == YesNoResponse.No) ||
+            (nodes[currNode].responseType == ResponseTypes.SELECTMANY &&
+                isValidResponseResult) ||
+            (nodes[currNode].responseType == ResponseTypes.SELECTONE &&
+                isValidResponseResult)
+                ? childNodes
                 : [];
         stack = [...stack, ...childEdges];
         totalNodes = [...totalNodes, ...childEdges];
