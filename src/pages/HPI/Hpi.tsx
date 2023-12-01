@@ -47,6 +47,11 @@ import InitialSurveyHPI from './InitialSurvey/InitialSurvey';
 import NewNotePage from './NotesPage/NotePage';
 import PreHPI from './PreHpi/PreHPI';
 
+export interface OnNextClickParams {
+    allSelectedChiefComplaints?: string[];
+    listTextChiefComplaints?: string[];
+}
+
 interface ScreenForPatientType {
     title: string;
     component: React.JSX.Element | null;
@@ -253,7 +258,11 @@ const HPI = () => {
     }, [currentTabs, activeItem, notificationMessage, dispatch]);
 
     const onNextClick = useCallback(
-        (newUserSelectedCC: string[]) => {
+        (args?: OnNextClickParams) => {
+            const allSelectedChiefComplaints =
+                args?.allSelectedChiefComplaints || [];
+            const listTextChiefComplaints = args?.listTextChiefComplaints || [];
+
             setShowCCModal(false);
             setChiefComplaintsForModal([]);
 
@@ -265,7 +274,7 @@ const HPI = () => {
 
             if (activeItem === 'CCSelection') {
                 if (
-                    !newUserSelectedCC.length &&
+                    !allSelectedChiefComplaints.length &&
                     !isResponseValid(node7Response)
                 ) {
                     setNotificationMessage(
@@ -276,11 +285,16 @@ const HPI = () => {
                 }
 
                 const selectedCCExceptInstitutionDefault =
-                    newUserSelectedCC.filter(
+                    allSelectedChiefComplaints.filter(
                         (item) => !institutionDefaultCC.includes(item)
                     );
 
-                if (selectedCCExceptInstitutionDefault.length > 3) {
+                const listTextChiefComplaintsExceptInstitutionDefault =
+                    listTextChiefComplaints.filter(
+                        (item) => !institutionDefaultCC.includes(item)
+                    );
+
+                if (listTextChiefComplaintsExceptInstitutionDefault.length) {
                     const chiefComplaintsForModal =
                         selectedCCExceptInstitutionDefault.map(
                             (chiefComplaint) => ({
@@ -295,7 +309,10 @@ const HPI = () => {
                 }
 
                 const newSelectedChiefComplaints = Array.from(
-                    new Set([...newUserSelectedCC, ...institutionDefaultCC])
+                    new Set([
+                        ...allSelectedChiefComplaints,
+                        ...institutionDefaultCC,
+                    ])
                 );
 
                 newCurrentTabs = [
@@ -312,8 +329,6 @@ const HPI = () => {
                 newSelectedChiefComplaints.forEach((item) => {
                     dispatch(selectChiefComplaint(item));
                 });
-
-                setCurrentTabs(newCurrentTabs);
             }
 
             const nextTabIndex = newCurrentTabs.indexOf(activeItem) + 1;
@@ -339,7 +354,10 @@ const HPI = () => {
         const selectedCC = chiefComplaintsForModal
             .filter((item) => item.isSelected === true)
             .map((item) => item.chiefComplaint);
-        onNextClick(selectedCC);
+        onNextClick({
+            allSelectedChiefComplaints: selectedCC,
+            listTextChiefComplaints: [],
+        });
     };
 
     /* EFFECTS */
@@ -476,10 +494,18 @@ const HPI = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        if (activeItem === 'CCSelection') {
-            setCurrentTabs(['InitialSurvey', 'PreHPI', 'CCSelection']);
-        }
     }, [activeItem, dispatch]);
+
+    useEffect(() => {
+        let newCurrentTabs = [
+            ...resetCurrentTabs(),
+            ...selectedChiefComplaints,
+        ];
+
+        newCurrentTabs = Array.from(new Set(newCurrentTabs));
+
+        setCurrentTabs(newCurrentTabs);
+    }, [resetCurrentTabs, selectedChiefComplaints]);
 
     useEffect(() => {
         if (notificationMessage) {
@@ -531,13 +557,24 @@ const HPI = () => {
         };
     }, [dispatch]);
 
+    const showMainNotificationMessage = useMemo(() => {
+        if (!notificationMessage) return false;
+        if (activeItem !== 'CCSelection') return true;
+        if (!selectedChiefComplaintsForModal.length) return true;
+        return false;
+    }, [
+        activeItem,
+        notificationMessage,
+        selectedChiefComplaintsForModal.length,
+    ]);
+
     return (
         <>
             <div className={style.editNote}>
                 <div className='centering'>
                     <Stepper tabs={currentTabs} onTabChange={onTabChange} />
                     <CommonLayout title={screenForPatient.title}>
-                        {notificationMessage && (
+                        {showMainNotificationMessage && (
                             <Notification
                                 message={notificationMessage}
                                 type={notificationType}
@@ -549,6 +586,7 @@ const HPI = () => {
             </div>
 
             <CustomModal
+                maxWidth='720px'
                 onClose={() => setShowCCModal(false)}
                 modalVisible={showCCModal}
                 title={
@@ -571,6 +609,12 @@ const HPI = () => {
                 }
             >
                 <>
+                    {notificationMessage && (
+                        <Notification
+                            message={notificationMessage}
+                            type={notificationType}
+                        />
+                    )}
                     <h4>
                         Please select the top 3 conditions or symptoms that are
                         most important to you.
@@ -595,6 +639,21 @@ const HPI = () => {
                                         const newChiefCompliants = [
                                             ...chiefComplaintsForModal,
                                         ];
+
+                                        if (
+                                            !newChiefCompliants[index]
+                                                .isSelected &&
+                                            selectedChiefComplaintsForModal.length ===
+                                                3
+                                        ) {
+                                            setNotificationMessage(
+                                                'The maximum of 3 has been reached. Please un-select an existing option before adding a new one.'
+                                            );
+                                            setNotificationType(
+                                                NotificationTypeEnum.ERROR
+                                            );
+                                            return;
+                                        }
                                         newChiefCompliants[index].isSelected =
                                             !newChiefCompliants[index]
                                                 .isSelected;

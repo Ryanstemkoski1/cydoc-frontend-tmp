@@ -57,10 +57,11 @@ import getHPIFormData, { isResponseValid } from 'utils/getHPIFormData';
 import { getListTextResponseAsSingleString } from 'utils/getHPIText';
 import { getQuestionnairesFromText } from 'utils/getQuestionnairesFromText';
 import { loadChiefComplaintsData } from 'utils/loadKnowledgeGraphData';
+import { OnNextClickParams } from '../Hpi';
 import style from './CCSelection.module.scss';
 
 interface InitialSurveyComponentProps {
-    continue: (newUserSelectedCC: string[]) => void;
+    continue: (args?: OnNextClickParams) => void;
     onPreviousClick: () => void;
     notification: {
         setNotificationMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -182,7 +183,13 @@ const CCSelection = (props: Props) => {
 
         values.forEach((data) => dispatch(processKnowledgeGraph(data)));
 
-        props.continue([...selectedPinnedCC, ...chiefComplaintsFromListText]);
+        props.continue({
+            allSelectedChiefComplaints: [
+                ...selectedPinnedCC,
+                ...chiefComplaintsFromListText,
+            ],
+            listTextChiefComplaints: chiefComplaintsFromListText,
+        });
     }
 
     function renderSwitch(id: string) {
