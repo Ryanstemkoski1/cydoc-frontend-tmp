@@ -4,7 +4,7 @@ import { useSubscription } from 'hooks/useSubscription';
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 
-const PAYMENT_SETUP = 'You already have payment setup, thanks!';
+const PAYMENT_SETUP = 'You already have payment set up. Thank you!';
 const NO_PAYMENT_SETUP = 'You need to add payment';
 interface Props {
     onEditPayment: () => void;
