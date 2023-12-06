@@ -3,7 +3,6 @@ import GlobalLoader from 'components/GlobalLoader/GlobalLoader';
 import Policy from 'constants/Documents/policy';
 import Terms_and_conditions from 'constants/Documents/terms_and_conditions';
 import useAuth from 'hooks/useAuth';
-import { EditPayment } from 'pages/Account/EditPayment';
 import EditProfile from 'pages/Account/EditProfile';
 import ForgotPasswordPage from 'pages/Account/ForgotPassword';
 import LoginPage from 'pages/Account/LoginPage';
@@ -33,6 +32,10 @@ import NavMenu from './NavMenu';
 import { PrivateRoute } from './PrivateRoute';
 import BrowseNotes from 'pages/BrowseNotes/BrowseNotes';
 import { ProductType, ViewType } from 'assets/enums/route.enums';
+import { SubscriptionPage } from 'pages/Subscription/SubscriptionPage';
+import { SubscriptionCancel } from 'pages/Subscription/CancelSubscription';
+import { SubscriptionBanner } from 'components/Molecules/SubscriptionBanner';
+import { SubscriptionModal } from 'components/Molecules/SubscriptionModal';
 import useUser from 'hooks/useUser';
 
 const HPILazyLoad = lazy(() => import('pages/HPI/Hpi'));
@@ -56,6 +59,8 @@ const Routes = (props: { children?: JSX.Element | null }) => {
     return (
         <div className='layout'>
             {(authLoading || loadingStatus || userLoading) && <GlobalLoader />}
+            <SubscriptionBanner />
+            <SubscriptionModal />
             <NavMenu attached={'top'} displayNoteName={true} />{' '}
             <div className='layout__content'>
                 <Switch>
@@ -129,11 +134,6 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                         path='/profilesecurity'
                         component={ProfileSecurity}
                     />
-                    <PrivateRoute
-                        exact
-                        path='/account/edit-payment'
-                        component={EditPayment}
-                    />
                     <ManagerRoute
                         exact
                         path='/manager-dashboard'
@@ -143,6 +143,16 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                         exact
                         path='/form-preferences'
                         component={FormPreferencesPage}
+                    />
+                    <ManagerRoute
+                        exact
+                        path='/subscription'
+                        component={SubscriptionPage}
+                    />
+                    <ManagerRoute
+                        exact
+                        path='/subscription/cancel'
+                        component={SubscriptionCancel}
                     />
                     <Route exact path='/view/product' component={ViewProduct} />
                     <Route exact path='/privacypolicy' component={Policy} />

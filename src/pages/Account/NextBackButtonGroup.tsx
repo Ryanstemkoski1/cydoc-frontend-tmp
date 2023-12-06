@@ -94,7 +94,7 @@ export function NextBackButtonGroup({
                         },
                     }}
                 >
-                    {steps.map((label, index) => (
+                    {steps.map((label) => (
                         <Step color='teal' key={label}>
                             <StepLabel>{label}</StepLabel>
                         </Step>

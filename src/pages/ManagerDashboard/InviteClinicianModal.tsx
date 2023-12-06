@@ -7,7 +7,7 @@ import { Formik } from 'formik';
 import ModalHeader from 'components/Atoms/ModalHeader';
 import { Button, Modal } from 'semantic-ui-react';
 import { ErrorText } from 'components/Atoms/ErrorText';
-import { DbUser, UserRole } from '@cydoc-ai/types';
+import { UserRole } from '@cydoc-ai/types';
 import useUser from 'hooks/useUser';
 import invariant from 'tiny-invariant';
 import useAuth from 'hooks/useAuth';
@@ -43,7 +43,7 @@ export interface NewClinicianSchema {
     confirmEmail: string;
     firstName: string;
     lastName: string;
-    role: DbUser['role'];
+    role: UserRole;
     submitError?: string;
 }
 

@@ -1,15 +1,13 @@
 import useAuth from 'hooks/useAuth';
-import { updateLoggedUser } from '../modules/logging';
+import { log, updateLoggedUser } from '../modules/logging';
 import { getDbUser } from '../modules/user-api';
 import React, {
     PropsWithChildren,
     useCallback,
-    useContext,
     useEffect,
     useMemo,
     useState,
 } from 'react';
-import invariant from 'tiny-invariant';
 import { DbUser } from '@cydoc-ai/types';
 
 export interface UserInfoProviderContextValues {
@@ -32,20 +30,21 @@ export const UserInfoProvider: React.FC<
 
     const updateUserInfo = useCallback(async () => {
         try {
-            setLoading(true);
             if (
                 cognitoUser?.attributes?.email ||
                 cognitoUser?.challengeParam?.userAttributes?.email
             ) {
+                setLoading(true);
                 const user = await getDbUser(cognitoUser);
                 setUser(user || undefined);
             } else {
                 // reset user state on signOut
                 setUser(undefined);
             }
-        } finally {
-            setLoading(false);
+        } catch (e) {
+            log(`[UserInfoProvider] uncaught error fetching user`);
         }
+        setLoading(false);
     }, [cognitoUser]);
 
     useEffect(() => {
@@ -66,12 +65,4 @@ export const UserInfoProvider: React.FC<
             {children}
         </UserInfoProviderContext.Provider>
     );
-};
-
-export const useUserInfoContext = () => {
-    const ctx = useContext(UserInfoProviderContext);
-
-    invariant(ctx, 'useUserInfoContext called outside of UserInfo Context');
-
-    return ctx;
 };

@@ -13,7 +13,6 @@ export interface SignUpFormData extends ClinicianSignUpData {
     isPrivacyChecked: boolean;
     isTermsChecked: boolean;
 }
-// TODO: pull from session
 const initialValues: SignUpFormData = {
     isTermsChecked: false,
     isPrivacyChecked: false,
@@ -39,10 +38,6 @@ export default function SignUpForm({ modalOpen, closeModal }: Props) {
 
     const { form } = useSignUpFormController(initialValues);
 
-    const phoneNumberRegex = new RegExp(
-        '^[+]?[(]?[0-9]{3}[)]?[" "][-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$'
-    );
-
     // onPrevClick decrements the page by 1 unless we are already at page 0
     const onPrevClick = () => {
         const prevPage = wizardPage < 1 ? 0 : wizardPage - 1;
@@ -52,18 +47,12 @@ export default function SignUpForm({ modalOpen, closeModal }: Props) {
         setWizardPage(prevPage);
     };
 
-    // const handleConfirmNewPasswordChange = (e, { value }) => {
-    //     setConfirmNewPassword(value);
-    //     // set this to remove error styling on confirmNewPassword input
-    //     setPasswordsMatch(true);
+    // const handleFormatPhoneForSubmit = (phoneNumber: string) => {
+    //     phoneNumber = phoneNumber.replace('(', '');
+    //     phoneNumber = phoneNumber.replace(/-|\(|\)/gi, '');
+    //     phoneNumber = phoneNumber.replace(' ', '');
+    //     return phoneNumber;
     // };
-
-    const handleFormatPhoneForSubmit = (phoneNumber: string) => {
-        phoneNumber = phoneNumber.replace('(', '');
-        phoneNumber = phoneNumber.replace(/-|\(|\)/gi, '');
-        phoneNumber = phoneNumber.replace(' ', '');
-        return phoneNumber;
-    };
 
     // TODO: make sure phone is formatted before submission
     //     userInfo.phoneNumber = handleFormatPhoneForSubmit(phoneNumber);

@@ -48,6 +48,7 @@ const OurCreatedRoutes = [
     'qrcode',
     '/view/product',
     'submission-successful',
+    '/subscription',
     'form-preferences',
 ];
 
@@ -99,7 +100,6 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             icon: Setting,
             active: window.location.href.includes('editprofile'),
         },
-
         {
             to: '/profilesecurity',
             label: 'Profile Security',
@@ -130,6 +130,12 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                 label: 'Form Preferences',
                 icon: Assignment,
                 active: window.location.href.includes('form-preferences'),
+            },
+            {
+                to: '/subscription',
+                label: 'Subscription',
+                icon: Security,
+                active: window.location.href.includes('subscription'),
             }
         );
     }

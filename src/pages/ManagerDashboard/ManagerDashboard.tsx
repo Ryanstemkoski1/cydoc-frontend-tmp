@@ -15,6 +15,7 @@ import { removeUser } from '../../modules/user-api';
 import { Box, Stack } from '@mui/system';
 import { Grid } from '@mui/material';
 import useAuth from 'hooks/useAuth';
+import UserRoleSelector from 'components/Molecules/UserRoleSelector';
 
 // manager dashboard view to view/add/remove doctor accounts
 const ManagerDashboard = () => {
@@ -50,14 +51,20 @@ const ManagerDashboard = () => {
         [cognitoUser, user?.institutionId]
     );
 
+    const columns = useMemo(
+        () => getColumns(editingUser, fetchMembers),
+        [editingUser, fetchMembers]
+    );
+
     useEffect(() => {
         fetchMembers();
     }, [fetchMembers, user?.institutionId, isInviteUserOpen]);
 
     const actions = useMemo(
         () => [
-            (/* _rowData: UserRow */) => ({
+            (rowData: DbUser) => ({
                 icon: Edit,
+                disabled: rowData.id === editingUser?.id,
                 tooltip: 'Edit User Info',
                 onClick: (event: any, rowData: DbUser | DbUser[]) => {
                     if ('id' in rowData) {
@@ -91,7 +98,7 @@ const ManagerDashboard = () => {
                 };
             },
         ],
-        [cognitoUser]
+        [cognitoUser, editingUser?.id]
     );
 
     return (
@@ -99,7 +106,7 @@ const ManagerDashboard = () => {
             <Container className='manager-dashboard-container'>
                 <MaterialTable
                     actions={actions}
-                    columns={COLUMNS}
+                    columns={columns}
                     data={members || []}
                     localization={{
                         toolbar: {
@@ -165,21 +172,23 @@ const ManagerDashboard = () => {
 
 export default ManagerDashboard;
 
-const COLUMNS: Column<DbUser>[] = [
+const getColumns: (
+    editingUser: DbUser | null,
+    fetchMembers: () => void
+) => Column<DbUser>[] = (editingUser, fetchMembers) => [
     { title: 'First Name', field: 'firstName' },
     { title: 'Last Name', field: 'lastName' },
     { title: 'Email', field: 'email' },
     {
         title: 'Role',
         field: 'role',
-        render: ({ role }) => {
-            if (role === 'manager') return 'manager';
-            else if (role === 'clinician') return 'clinician or staff';
-            else {
-                log(`[ManagerDashboard] unrecognized role: ${role}`);
-                return 'none';
-            }
-        },
+        render: (user) => (
+            <UserRoleSelector
+                user={user}
+                isEditing={!!editingUser && editingUser.id === user.id}
+                refetchUserData={fetchMembers}
+            />
+        ),
     },
 
     { field: 'id', filtering: false, hidden: true, title: 'ID' },

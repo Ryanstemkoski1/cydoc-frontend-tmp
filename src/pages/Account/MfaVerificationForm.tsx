@@ -57,15 +57,6 @@ export default function MfaVerificationForm({ onSuccess }: Props) {
         setSubmitting(false);
     };
 
-    const focusInputField = (input: unknown) => {
-        if (input) {
-            setTimeout(() => {
-                // @ts-expect-error focus exists on this ref type
-                input?.focus();
-            }, 100);
-        }
-    };
-
     return (
         <Formik<VerifyCodeSchema>
             initialValues={{

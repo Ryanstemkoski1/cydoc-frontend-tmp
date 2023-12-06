@@ -4,7 +4,6 @@ import {
     getPasswordErrors,
     havePasswordError,
     passwordErrors,
-    passwordIsValid,
 } from 'constants/passwordErrors';
 import { useField } from 'formik';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -51,13 +50,15 @@ export function PasswordErrorMessages() {
 
     const passwordErrorMessages = useMemo(() => {
         const errMsgs: SemanticShorthandItem<MessageItemProps>[] = [];
-        const passwordErrs = passwordErrors(role);
-        for (const err in passwordErrs) {
+
+        for (const err in passwordErrors) {
             if (!passwordReqs[err as PasswordErrorTypes]) {
                 errMsgs.push(
                     <Message.Item
                         key={err}
-                        content={passwordErrs[err as keyof typeof passwordErrs]}
+                        content={
+                            passwordErrors[err as keyof typeof passwordErrors]
+                        }
                     />
                 );
             }
