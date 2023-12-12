@@ -6,6 +6,7 @@ import {
     ListTextInput,
     NodeInterface,
     ResponseTypes,
+    SelectManyInput,
     SelectOneInput,
     TimeInput,
 } from 'constants/hpiEnums';
@@ -31,6 +32,7 @@ import { selectPatientInformationState } from 'redux/selectors/patientInformatio
 import { selectSurgicalHistoryProcedures } from 'redux/selectors/surgicalHistorySelectors';
 import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
 import { currentNoteStore } from 'redux/store';
+import { isHPIResponseValid } from './getHPIFormData';
 
 interface HPINoteProps {
     hpi: HpiState;
@@ -435,22 +437,75 @@ export const extractNode = (
     return [node.blankTemplate, answer, negRes];
 };
 
+export function getNodeConditions(node: ReduxNodeInterface) {
+    const matches = node.text.match(/ONLYIF\[.*]\s/); // get "ONLYIF[**] " part from text;
+
+    if (!matches) return [];
+
+    const conditions = matches[0]
+        ?.match(/\[.*\]\s/)?.[0] // get "[**] " part from text
+        ?.replace(/(\[)|(\])/g, '') // replace "[" or "]" with ""
+        ?.split(',')
+        ?.map((sentence: string) => sentence.trim()) as string[];
+
+    return conditions;
+}
+
 /*
     Checks if a given node has children nodes that should not be displayed
-    (i.e. in the case if the user clicks "NO" to a YES/NO question or "YES"
-    to a NO/YES question)
+    (i.e. in the case if the user clicks "NO" to a YES/NO question, "YES"
+    to a NO/YES question or there is NO selected option for SELECTONE and SELECTMANY question)
 */
 export const checkParent = (
     node: ReduxNodeInterface,
     state: HPINoteProps
 ): string[] => {
     const medId = node.medID;
-    return (node.responseType == ResponseTypes.YES_NO &&
-        node.response == YesNoResponse.No) ||
-        (node.responseType == ResponseTypes.NO_YES &&
-            node.response == YesNoResponse.Yes)
-        ? state.hpi.graph[medId]
-        : [];
+    const { response, responseType } = node;
+    const childNodes = state.hpi.graph[medId];
+    let childNodesToHide: string[] = [];
+
+    switch (responseType) {
+        case ResponseTypes.YES_NO: {
+            childNodesToHide = response == YesNoResponse.No ? childNodes : [];
+            break;
+        }
+        case ResponseTypes.NO_YES: {
+            childNodesToHide = response == YesNoResponse.Yes ? childNodes : [];
+            break;
+        }
+        case ResponseTypes.SELECTMANY:
+        case ResponseTypes.SELECTONE: {
+            if (!isHPIResponseValid(response, responseType)) {
+                childNodesToHide = childNodes;
+                break;
+            }
+
+            const nodeResponse = response as SelectManyInput | SelectOneInput;
+            const validNodeResponse = Object.keys(nodeResponse).filter(
+                (key) => nodeResponse[key]
+            );
+
+            for (const childNodeId of childNodes) {
+                const conditions = getNodeConditions(
+                    state.hpi.nodes[childNodeId]
+                );
+                if (
+                    conditions.some((item) => !validNodeResponse.includes(item))
+                ) {
+                    childNodesToHide.push(childNodeId);
+                }
+            }
+
+            break;
+        }
+        default: {
+            childNodesToHide = [];
+            break;
+        }
+    }
+
+    return childNodesToHide;
 };
 
 /**

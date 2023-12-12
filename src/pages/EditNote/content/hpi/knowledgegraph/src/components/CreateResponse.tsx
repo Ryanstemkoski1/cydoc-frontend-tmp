@@ -87,7 +87,9 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         const { response, responseType } = hpi.nodes[node];
         const text = hpi.nodes[node].text
             .replace('SYMPTOM', category.toLowerCase())
-            .replace('DISEASE', category.toLowerCase());
+            .replace('DISEASE', category.toLowerCase())
+            .replace(/ONLYIF\[.*]\s/, '') // remove "ONLYIF[**] " part from text
+            .trim();
         if (
             [
                 ResponseTypes.LABORATORY_TEST,
