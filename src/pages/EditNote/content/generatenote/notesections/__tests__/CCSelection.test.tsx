@@ -19,10 +19,6 @@ import {
     initialSurveyAddText,
     processSurveyGraph,
 } from 'redux/actions/userViewActions';
-import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
-import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
-import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
-import { userSurveyState } from 'redux/reducers/userViewReducer';
 import { createCurrentNoteStore } from 'redux/store';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -49,10 +45,7 @@ const renderChiefComplaintSelectionPage = (state: any) => {
                         setNotificationMessage: () => {},
                         setNotificationType: () => {},
                     }}
-                    hpiHeaders={{} as HpiHeadersState}
-                    userSurveyState={{} as userSurveyState}
-                    chiefComplaints={{} as ChiefComplaintsState}
-                    additionalSurvey={{} as additionalSurvey}
+                    defaultInstitutionChiefComplaints={[]}
                 />
             </Router>
         </Provider>
@@ -92,6 +85,36 @@ describe('CCSelection Page', () => {
 
             const favComplaints =
                 favComplaintsBasedOnInstituteType[InstitutionType.GYN];
+            const favChiefComplaintsObj: { [key: string]: boolean } = {};
+            favComplaints.forEach(
+                (item) => (favChiefComplaintsObj[item] = false)
+            );
+            dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
+
+            const document = renderChiefComplaintSelectionPage(getState());
+
+            const pinnedChiefComplaints = document
+                .find('#pinnedChiefComplaints button')
+                .map((button) =>
+                    button.getDOMNode().getAttribute('condition')
+                ) as string[];
+
+            const result = isPinnedChiefComplaintsSyncWithKnowledgeGraph(
+                pinnedChiefComplaints,
+                Object.keys(knowledgeGraphResponse.data.parentNodes)
+            );
+
+            expect(result).toBe(true);
+        });
+
+        it('Endocrinology Institution', () => {
+            const { getState, dispatch } = newStore;
+
+            dispatch(processSurveyGraph(initialQuestions));
+            dispatch(saveHpiHeader(knowledgeGraphResponse.data));
+
+            const favComplaints =
+                favComplaintsBasedOnInstituteType[InstitutionType.ENDO];
             const favChiefComplaintsObj: { [key: string]: boolean } = {};
             favComplaints.forEach(
                 (item) => (favChiefComplaintsObj[item] = false)

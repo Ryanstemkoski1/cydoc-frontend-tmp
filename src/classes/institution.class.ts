@@ -14,6 +14,7 @@ export const favChiefComplaints = [
 
 export enum InstitutionType {
     GYN = 'Gyn',
+    ENDO = 'Endocrinology',
     DEFAULT = 'Default',
 }
 
@@ -37,6 +38,15 @@ export const favComplaintsBasedOnInstituteType = {
         'Prenatal Care',
         'Vaginal Dryness',
     ],
+    [InstitutionType.ENDO]: [
+        'Diabetes',
+        'Hyperlipidemia',
+        'Hypertension',
+        'Hypothyroidism',
+        'Hyperthyroidism',
+        'Weight Gain or Loss',
+        'Fatigue',
+    ],
     [InstitutionType.DEFAULT]: favChiefComplaints,
 };
 
@@ -56,6 +66,7 @@ const InstitutionTypeMapping = {
         'baby',
         'infant',
     ],
+    [InstitutionType.ENDO]: ['endocrin', 'draelos metabolic'],
     [InstitutionType.DEFAULT]: [],
 };
 
