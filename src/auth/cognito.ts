@@ -182,13 +182,15 @@ export const getAuthToken = async (
     cognitoUser: CognitoUser | null
 ): Promise<string | undefined> =>
     new Promise((resolve) => {
-        if (!cognitoUser) return undefined;
+        if (!cognitoUser) resolve(undefined);
         else
             cognitoUser.getSession(
                 (error: Error | null, session: CognitoUserSession | null) => {
-                    if (error || !session) return undefined;
-
-                    resolve(session.getAccessToken().getJwtToken());
+                    if (error || !session) {
+                        resolve(undefined);
+                    } else {
+                        resolve(session.getAccessToken().getJwtToken());
+                    }
                 }
             );
     });

@@ -71,7 +71,7 @@ export const useSignUpFormController = (initialValues: SignUpFormData) => {
                 if (signUpResult?.user) {
                     result = await createManagerAndInstitution(
                         newUserInfo,
-                        cognitoUser
+                        null // user creation endpoint doesn't require auth token
                     );
                 }
 
