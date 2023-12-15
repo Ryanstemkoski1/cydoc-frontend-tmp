@@ -145,6 +145,17 @@ const HPI = () => {
                 dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
                 break;
             }
+            case InstitutionType.ENDO: {
+                dispatch(processSurveyGraph(initialQuestions));
+
+                const favChiefComplaintsObj: { [item: string]: boolean } = {};
+                institution.favComplaints.forEach((item) => {
+                    favChiefComplaintsObj[item] = false;
+                });
+
+                dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
+                break;
+            }
             default: {
                 dispatch(processSurveyGraph(initialQuestions));
                 break;

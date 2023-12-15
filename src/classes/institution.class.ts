@@ -14,6 +14,7 @@ export const favChiefComplaints = [
 
 export enum InstitutionType {
     GYN = 'Gyn',
+    ENDO = 'Endocrinology',
     DEFAULT = 'Default',
 }
 
@@ -37,6 +38,19 @@ export const favComplaintsBasedOnInstituteType = {
         'Prenatal Care',
         'Vaginal Dryness',
     ],
+    [InstitutionType.ENDO]: [
+        'New Patient Visit for Diabetes',
+        'Follow Up Visit for Diabetes',
+        'New Patient Visit for Low Thyroid Hormone (Hypothyroidism)',
+        'Follow Up Visit for Low Thyroid Hormone (Hypothyroidism)',
+        'New Patient Visit for High Thyroid Hormone (Hyperthyroidism)',
+        'Follow Up Visit for High Thyroid Hormone (Hyperthyroidism)',
+        'New Patient Visit for Low Testosterone',
+        'Follow Up Visit for Low Testosterone',
+        'New Patient Visit for Thyroid Nodule or Thyroid Cancer',
+        'Follow Up Visit for Thyroid Nodule(s)',
+        'Fatigue',
+    ],
     [InstitutionType.DEFAULT]: favChiefComplaints,
 };
 
@@ -56,6 +70,7 @@ const InstitutionTypeMapping = {
         'baby',
         'infant',
     ],
+    [InstitutionType.ENDO]: ['endocrin', 'draelos metabolic'],
     [InstitutionType.DEFAULT]: [],
 };
 
