@@ -15,6 +15,7 @@ export const favChiefComplaints = [
 export enum InstitutionType {
     GYN = 'Gyn',
     ENDO = 'Endocrinology',
+    KAVIRA_HEALTH = 'KaviraHealth',
     DEFAULT = 'Default',
 }
 
@@ -51,6 +52,9 @@ export const favComplaintsBasedOnInstituteType = {
         'Follow Up Visit for Thyroid Nodule(s)',
         'Fatigue',
     ],
+    [InstitutionType.KAVIRA_HEALTH]: favChiefComplaints.filter(
+        (item) => item !== 'Genital Symptoms/STI' && item !== 'Opiate Use'
+    ),
     [InstitutionType.DEFAULT]: favChiefComplaints,
 };
 
@@ -70,6 +74,7 @@ const InstitutionTypeMapping = {
         'baby',
         'infant',
     ],
+    [InstitutionType.KAVIRA_HEALTH]: ['kavira health'],
     [InstitutionType.ENDO]: ['endocrin', 'draelos metabolic'],
     [InstitutionType.DEFAULT]: [],
 };

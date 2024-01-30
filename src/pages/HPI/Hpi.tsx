@@ -145,7 +145,8 @@ const HPI = () => {
                 dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
                 break;
             }
-            case InstitutionType.ENDO: {
+            case InstitutionType.ENDO:
+            case InstitutionType.KAVIRA_HEALTH: {
                 dispatch(processSurveyGraph(initialQuestions));
 
                 const favChiefComplaintsObj: { [item: string]: boolean } = {};
