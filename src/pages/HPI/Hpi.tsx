@@ -572,10 +572,7 @@ const HPI = () => {
                 footerNode={
                     <button
                         className='button'
-                        disabled={
-                            selectedChiefComplaintsForModal.length > 3 ||
-                            selectedChiefComplaintsForModal.length === 0
-                        }
+                        disabled={selectedChiefComplaintsForModal.length === 0}
                         onClick={handleContinueForCCModal}
                     >
                         Continue
@@ -604,6 +601,14 @@ const HPI = () => {
                                             : chiefComplaint
                                     }
                                     onToggleButtonClick={() => {
+                                        if (
+                                            !chiefComplaintsForModal[index]
+                                                .isSelected &&
+                                            selectedChiefComplaintsForModal.length ===
+                                                3
+                                        ) {
+                                            return;
+                                        }
                                         const newChiefCompliants = [
                                             ...chiefComplaintsForModal,
                                         ];
