@@ -625,7 +625,7 @@ const HPI = () => {
                         />
                     )}
                     <h4>
-                        Please select the top 3 conditions or symptoms that are
+                        Please select up to 3 conditions or symptoms that are
                         most important to you.
                     </h4>
 
