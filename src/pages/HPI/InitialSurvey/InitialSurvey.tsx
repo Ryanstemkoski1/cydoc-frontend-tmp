@@ -8,6 +8,7 @@ import {
 import { CurrentNoteState } from 'redux/reducers';
 import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
 import DetailsPage from '../../EditNote/content/patientview/AdditionalSurvey';
+import { OnNextClickParams } from '../Hpi';
 
 interface InitialSurveyState {
     tempLegalFirstName: string;
@@ -18,7 +19,7 @@ interface InitialSurveyState {
 }
 
 interface InitialSurveyComponentProps {
-    continue: (newSelectedCC: string[]) => void;
+    continue: (args?: OnNextClickParams) => void;
     setErrorMessage: (message: string) => void;
 }
 
@@ -34,7 +35,7 @@ class InitialSurveyHPI extends React.Component<Props, InitialSurveyState> {
         };
     }
 
-    continue = () => this.props.continue([]);
+    continue = () => this.props.continue();
 
     onNextClick = () => {
         const dateOfBirth = new Date(this.state.tempDateOfBirth);
