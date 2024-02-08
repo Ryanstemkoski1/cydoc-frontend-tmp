@@ -66,6 +66,10 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     const history = useHistory();
     const isHomePage = location?.pathname === '/';
     const isEditNotePage = location?.pathname.includes('editnote');
+    const isHPIPatientView =
+        location?.pathname === `/${ProductType.HPI}/${ViewType.PATIENT}` ||
+        location?.pathname === '/submission-successful';
+
     const { signOut, loginCorrect, isSignedIn, authLoading } = useAuth();
     const { user, isManager } = useUser();
     const isCurrentOurRoute = useMemo(
@@ -166,19 +170,24 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     const defaultMenuItems = (
         // email/password correct but waiting on MFA? allow users to logOut
         <Menu.Item>
-            {userCurrentlyLoggingIn ? logOutButton : loginButton}
-            <Button
-                icon='plus'
-                content='Sign Up'
-                size='small'
-                onClick={() => {
-                    if (userCurrentlyLoggingIn) {
-                        // if the user tries to signUp while waiting for MFA, sign them out
-                        signOut();
-                    }
-                    history.push('/sign-up');
-                }}
-            />
+            {userCurrentlyLoggingIn
+                ? logOutButton
+                : !isHPIPatientView && loginButton}
+
+            {!isHPIPatientView && (
+                <Button
+                    icon='plus'
+                    content='Sign Up'
+                    size='small'
+                    onClick={() => {
+                        if (userCurrentlyLoggingIn) {
+                            // if the user tries to signUp while waiting for MFA, sign them out
+                            signOut();
+                        }
+                        history.push('/sign-up');
+                    }}
+                />
+            )}
         </Menu.Item>
     );
 
