@@ -47,6 +47,8 @@ const SearchTermsToQuestionnaireMapping = new Map<string[], string>([
     [['hit', 'head'], 'Concussion/TBI'],
     [['confusion'], 'Confusion'],
     [['congenital', 'heart', 'disease'], 'Congenital Heart Disease'],
+    [[' eye '], 'Conjunctivitis'],
+    [[' eye '], 'Eye Pain'],
     [['eye', 'infection'], 'Conjunctivitis'],
     [['pink', 'eye'], 'Conjunctivitis'],
     [['red', 'eye'], 'Conjunctivitis'],
