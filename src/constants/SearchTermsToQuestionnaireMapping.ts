@@ -75,6 +75,7 @@ const SearchTermsToQuestionnaireMapping = new Map<string[], string>([
     [['leg', 'swell'], 'Suspected DVT'],
     [['trouble', 'swallow'], 'Difficulty Swallowing'],
     [['difficult', 'swallow'], 'Difficulty Swallowing'],
+    [[' ear '], 'Ear Pain'],
     [['ear', 'pain'], 'Ear Pain'],
     [['ear', 'ach'], 'Ear Pain'],
     [['ear', 'infection'], 'Ear Pain'],
