@@ -645,14 +645,6 @@ const HPI = () => {
                                             : chiefComplaint
                                     }
                                     onToggleButtonClick={() => {
-                                        if (
-                                            !chiefComplaintsForModal[index]
-                                                .isSelected &&
-                                            selectedChiefComplaintsForModal.length ===
-                                                3
-                                        ) {
-                                            return;
-                                        }
                                         const newChiefCompliants = [
                                             ...chiefComplaintsForModal,
                                         ];
