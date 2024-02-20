@@ -28,13 +28,11 @@ const Modal = ({
         const note = document.getElementById('copy-notes');
         if (note) {
             if (isParagraphFormat) {
-                console.log(formattedObjectContent);
                 navigator.clipboard.writeText(formattedObjectContent);
             } else {
                 navigator.clipboard.writeText(
                     (note as HTMLHeadingElement)?.innerText || ''
                 );
-                console.log((note as HTMLHeadingElement).innerText);
             }
             toast.success('Copied to Clipboard!', {
                 position: 'top-right',
@@ -47,7 +45,6 @@ const Modal = ({
         }
     };
 
-    // Enable user to copy notes into paragraph format
     const toggleFormat = () => {
         setIsParagraphFormat(!isParagraphFormat);
     };
@@ -64,16 +61,13 @@ const Modal = ({
     const { firstName, middleName, lastName, hpiText } = selectedAppointment;
     const [isParagraphFormat, setIsParagraphFormat] = React.useState(false);
 
-    /** Testing to Generate the note in paragraph format */
-    const [copiedNote, setCopiedNote] = React.useState(JSON.parse(hpiText));
-
-    // console.log(copiedNote);
+    /** Generate the note in paragraph format */
+    const [copiedNote] = React.useState(JSON.parse(hpiText));
 
     // Convert object list values to paragraph strings
     let formattedObjectContent = '';
     for (const index in copiedNote) {
         if (Object.hasOwnProperty.call(copiedNote, index)) {
-            // console.log(copiedNote[index]);
             formattedObjectContent +=
                 copiedNote[index].title +
                 '\n' +
@@ -123,11 +117,10 @@ const Modal = ({
                         className={`${style.modal__scroll} scrollbar`}
                         id='copy-notes'
                     >
-                        {!isParagraphFormat ? (
-                            <ParseAndRenderHpiNote hpiText={hpiText} />
-                        ) : (
-                            <div>hello</div>
-                        )}
+                        <ParseAndRenderHpiNote
+                            hpiText={hpiText}
+                            bulletNoteView={!isParagraphFormat}
+                        />
                     </div>
                 </div>
             </div>
