@@ -3,6 +3,7 @@ import { ParseAndRenderHpiNote } from 'pages/EditNote/content/generatenote/notes
 import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import style from './Modal.module.scss';
+import { FormGroup, FormControlLabel, Switch } from '@mui/material';
 
 export interface ModalProps {
     showModal: boolean;
@@ -26,9 +27,15 @@ const Modal = ({
     const copyNote = () => {
         const note = document.getElementById('copy-notes');
         if (note) {
-            navigator.clipboard.writeText(
-                (note as HTMLHeadingElement)?.innerText || ''
-            );
+            if (isParagraphFormat) {
+                console.log(formattedObjectContent);
+                navigator.clipboard.writeText(formattedObjectContent);
+            } else {
+                navigator.clipboard.writeText(
+                    (note as HTMLHeadingElement)?.innerText || ''
+                );
+                console.log((note as HTMLHeadingElement).innerText);
+            }
             toast.success('Copied to Clipboard!', {
                 position: 'top-right',
                 autoClose: 2000,
@@ -38,6 +45,11 @@ const Modal = ({
                 theme: 'light',
             });
         }
+    };
+
+    // Enable user to copy notes into paragraph format
+    const toggleFormat = () => {
+        setIsParagraphFormat(!isParagraphFormat);
     };
 
     useEffect(() => {
@@ -50,6 +62,25 @@ const Modal = ({
     }, [showModal]);
 
     const { firstName, middleName, lastName, hpiText } = selectedAppointment;
+    const [isParagraphFormat, setIsParagraphFormat] = React.useState(false);
+
+    /** Testing to Generate the note in paragraph format */
+    const [copiedNote, setCopiedNote] = React.useState(JSON.parse(hpiText));
+
+    // console.log(copiedNote);
+
+    // Convert object list values to paragraph strings
+    let formattedObjectContent = '';
+    for (const index in copiedNote) {
+        if (Object.hasOwnProperty.call(copiedNote, index)) {
+            // console.log(copiedNote[index]);
+            formattedObjectContent +=
+                copiedNote[index].title +
+                '\n' +
+                copiedNote[index].text +
+                '\n\n';
+        }
+    }
 
     return (
         <div
@@ -64,22 +95,39 @@ const Modal = ({
                         {formatFullName(firstName, middleName ?? '', lastName)}
                     </h3>
                 </div>
-
                 <div className={style.modal__innerContent}>
                     <div className='flex align-center justify-between'>
                         <h4>History of Present Illness/Subjective</h4>
-                        <button
-                            className='button pill secondary'
-                            onClick={copyNote}
-                        >
-                            Copy Note
-                        </button>
+                        <div>
+                            <button
+                                className='button pill secondary'
+                                onClick={copyNote}
+                            >
+                                Copy Note
+                            </button>
+                            <FormGroup>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            checked={isParagraphFormat}
+                                            onChange={toggleFormat}
+                                            name='paragraph format'
+                                        />
+                                    }
+                                    label='Paragraph'
+                                />
+                            </FormGroup>
+                        </div>
                     </div>
                     <div
                         className={`${style.modal__scroll} scrollbar`}
                         id='copy-notes'
                     >
-                        <ParseAndRenderHpiNote hpiText={hpiText} />
+                        {!isParagraphFormat ? (
+                            <ParseAndRenderHpiNote hpiText={hpiText} />
+                        ) : (
+                            <div>hello</div>
+                        )}
                     </div>
                 </div>
             </div>
