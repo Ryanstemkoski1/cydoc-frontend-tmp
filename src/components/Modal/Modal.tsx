@@ -3,7 +3,7 @@ import { ParseAndRenderHpiNote } from 'pages/EditNote/content/generatenote/notes
 import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import style from './Modal.module.scss';
-import { FormGroup, FormControlLabel, Switch } from '@mui/material';
+import { Switch } from '@mui/material';
 
 export interface ModalProps {
     showModal: boolean;
@@ -99,18 +99,14 @@ const Modal = ({
                             >
                                 Copy Note
                             </button>
-                            <FormGroup>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            checked={isParagraphFormat}
-                                            onChange={toggleFormat}
-                                            name='paragraph format'
-                                        />
-                                    }
-                                    label='Paragraph'
+                            <label className='flex align-center justify-between'>
+                                <Switch
+                                    checked={isParagraphFormat}
+                                    onChange={toggleFormat}
+                                    name='paragraph format'
                                 />
-                            </FormGroup>
+                                <span>Pargaraph</span>
+                            </label>
                         </div>
                     </div>
                     <div
