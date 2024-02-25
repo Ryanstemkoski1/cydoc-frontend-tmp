@@ -52,9 +52,25 @@ export const favComplaintsBasedOnInstituteType = {
         'Follow Up Visit for Thyroid Nodule(s)',
         'Fatigue',
     ],
-    [InstitutionType.KAVIRA_HEALTH]: favChiefComplaints.filter(
-        (item) => item !== 'Genital Symptoms/STI' && item !== 'Opiate Use'
-    ),
+    [InstitutionType.KAVIRA_HEALTH]: [
+        'URI Symptoms (Kavira Health)',
+        'Earache',
+        'Conjunctivitis',
+        'Annual Physical Exam',
+        'Hypertension',
+        'Diabetes',
+        'Hyperlipidemia',
+        'Hypothyroidism',
+        'Hyperthyroidism',
+        'Weight Concerns',
+        'Urinary Symptoms/UTI (Kavira Health)',
+        'PHQ-9 for Depression',
+        'Anxiety',
+        'Abdominal Pain',
+        'Rash',
+        'Headache',
+        'Joint or Muscle Pain',
+    ],
     [InstitutionType.DEFAULT]: favChiefComplaints,
 };
 
