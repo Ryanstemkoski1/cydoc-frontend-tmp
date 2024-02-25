@@ -208,7 +208,7 @@ const SearchTermsToQuestionnaireMapping = new Map<string[], string>([
     [['vomit'], 'Vomiting'],
     [['barf'], 'Vomiting'],
     [['throw', 'up'], 'Vomiting'],
-    [['weight'], 'Weight Gain or Loss'],
+    [['weight'], 'Weight Concerns'],
     [['wheez'], 'Wheezing'],
     [['wrist', 'hurt'], 'Wrist Pain'],
     [['wrist', 'ach'], 'Wrist Pain'],
