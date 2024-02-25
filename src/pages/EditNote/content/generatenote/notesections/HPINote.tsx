@@ -5,10 +5,10 @@ import styles from './HPINote.module.scss';
 
 export function ParseAndRenderHpiNote({
     hpiText = '',
-    bulletNoteView = true,
+    isParagraphFormat = false,
 }: {
     hpiText: string;
-    bulletNoteView: boolean;
+    isParagraphFormat: boolean;
 }) {
     let parsedHPIText: HPIText[] | string = '';
     try {
@@ -17,7 +17,21 @@ export function ParseAndRenderHpiNote({
         parsedHPIText = hpiText;
     }
 
-    return <HpiNote text={parsedHPIText} bulletNoteView={bulletNoteView} />;
+    if (isParagraphFormat) {
+        const generatedParagraph = (parsedHPIText as HPIText[]).map((item) => {
+            return (
+                <div key={item.title} style={{ marginBottom: '10px' }}>
+                    <b>{item.title}</b>
+                    <br />
+                    <span>{item.text}</span>
+                    <br />
+                </div>
+            );
+        });
+        return <>{generatedParagraph}</>;
+    } else {
+        return <HpiNote text={parsedHPIText} bulletNoteView={true} />;
+    }
 }
 
 function processSentence(sentence: string) {

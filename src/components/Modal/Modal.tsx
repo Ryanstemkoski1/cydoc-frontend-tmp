@@ -17,6 +17,7 @@ const Modal = ({
     selectedAppointment,
 }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
+    const [isParagraphFormat, setIsParagraphFormat] = React.useState(false);
 
     const handleClickOutsideModal = (event: MouseEvent<HTMLDivElement>) => {
         if (!modalRef.current?.contains(event.target as HTMLDivElement)) {
@@ -27,13 +28,9 @@ const Modal = ({
     const copyNote = () => {
         const note = document.getElementById('copy-notes');
         if (note) {
-            if (isParagraphFormat) {
-                navigator.clipboard.writeText(formattedObjectContent);
-            } else {
-                navigator.clipboard.writeText(
-                    (note as HTMLHeadingElement)?.innerText || ''
-                );
-            }
+            navigator.clipboard.writeText(
+                (note as HTMLHeadingElement)?.innerText || ''
+            );
             toast.success('Copied to Clipboard!', {
                 position: 'top-right',
                 autoClose: 2000,
@@ -59,22 +56,6 @@ const Modal = ({
     }, [showModal]);
 
     const { firstName, middleName, lastName, hpiText } = selectedAppointment;
-    const [isParagraphFormat, setIsParagraphFormat] = React.useState(false);
-
-    /** Generate the note in paragraph format */
-    const [copiedNote] = React.useState(JSON.parse(hpiText));
-
-    // Convert object list values to paragraph strings
-    let formattedObjectContent = '';
-    for (const index in copiedNote) {
-        if (Object.hasOwnProperty.call(copiedNote, index)) {
-            formattedObjectContent +=
-                copiedNote[index].title +
-                '\n' +
-                copiedNote[index].text +
-                '\n\n';
-        }
-    }
 
     return (
         <div
@@ -115,7 +96,7 @@ const Modal = ({
                     >
                         <ParseAndRenderHpiNote
                             hpiText={hpiText}
-                            bulletNoteView={!isParagraphFormat}
+                            isParagraphFormat={isParagraphFormat}
                         />
                     </div>
                 </div>
