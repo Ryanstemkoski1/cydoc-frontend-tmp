@@ -3,6 +3,7 @@ import { ParseAndRenderHpiNote } from 'pages/EditNote/content/generatenote/notes
 import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import style from './Modal.module.scss';
+import { Switch } from '@mui/material';
 
 export interface ModalProps {
     showModal: boolean;
@@ -16,6 +17,7 @@ const Modal = ({
     selectedAppointment,
 }: ModalProps) => {
     const modalRef = useRef<HTMLDivElement>(null);
+    const [isParagraphFormat, setIsParagraphFormat] = React.useState(false);
 
     const handleClickOutsideModal = (event: MouseEvent<HTMLDivElement>) => {
         if (!modalRef.current?.contains(event.target as HTMLDivElement)) {
@@ -38,6 +40,10 @@ const Modal = ({
                 theme: 'light',
             });
         }
+    };
+
+    const toggleFormat = () => {
+        setIsParagraphFormat(!isParagraphFormat);
     };
 
     useEffect(() => {
@@ -64,22 +70,34 @@ const Modal = ({
                         {formatFullName(firstName, middleName ?? '', lastName)}
                     </h3>
                 </div>
-
                 <div className={style.modal__innerContent}>
                     <div className='flex align-center justify-between'>
                         <h4>History of Present Illness/Subjective</h4>
-                        <button
-                            className='button pill secondary'
-                            onClick={copyNote}
-                        >
-                            Copy Note
-                        </button>
+                        <div>
+                            <button
+                                className='button pill secondary'
+                                onClick={copyNote}
+                            >
+                                Copy Note
+                            </button>
+                            <label className='flex align-center justify-between'>
+                                <Switch
+                                    checked={isParagraphFormat}
+                                    onChange={toggleFormat}
+                                    name='paragraph format'
+                                />
+                                <span>Pargaraph</span>
+                            </label>
+                        </div>
                     </div>
                     <div
                         className={`${style.modal__scroll} scrollbar`}
                         id='copy-notes'
                     >
-                        <ParseAndRenderHpiNote hpiText={hpiText} />
+                        <ParseAndRenderHpiNote
+                            hpiText={hpiText}
+                            isParagraphFormat={isParagraphFormat}
+                        />
                     </div>
                 </div>
             </div>
