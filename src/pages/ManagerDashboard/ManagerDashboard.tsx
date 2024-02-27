@@ -83,7 +83,7 @@ const ManagerDashboard = () => {
                     disabled, // only resend invites to users who haven't already signed in and confirmed
                     tooltip: disabled
                         ? 'User already accepted invite'
-                        : 'Edit User Info',
+                        : 'Resend invite password',
                     onClick: (event: any, rowData: DbUser | DbUser[]) => {
                         if ('id' in rowData) {
                             resendClinicianInvite(
