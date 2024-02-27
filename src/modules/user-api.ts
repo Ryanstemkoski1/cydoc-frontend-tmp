@@ -128,6 +128,37 @@ export async function inviteClinician(
             .catch((e) => resolve({ errorMessage: stringFromError(e) }))
     );
 }
+export async function resendClinicianInvite(
+    email: string,
+    institutionId: string,
+    cognitoUser: CognitoUser | null
+): Promise<UpdateUserResponse> {
+    return new Promise((resolve) =>
+        toast
+            .promise(
+                async () => {
+                    const result = await postToApi<UpdateUserResponse>(
+                        `/institution/${institutionId}/user/${email}/re-invite`,
+                        'inviteClinician',
+                        // @ts-expect-error no need to send a body for this POST request
+                        {},
+                        cognitoUser
+                    );
+                    if (result?.errorMessage) {
+                        throw new Error(result.errorMessage);
+                    } else {
+                        return resolve(result);
+                    }
+                },
+                {
+                    error: 'Error resending invite',
+                    pending: `Resending invite...`,
+                    success: 'Invite re-sent!',
+                }
+            )
+            .catch((e) => resolve({ errorMessage: stringFromError(e) }))
+    );
+}
 
 export const getDbUser = async (cognitoUser: CognitoUser): Promise<DbUser> => {
     const email =
