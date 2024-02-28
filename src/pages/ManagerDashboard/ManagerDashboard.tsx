@@ -9,9 +9,10 @@ import MaterialTable, {
     materialTableHeight,
 } from 'components/Molecules/MaterialTable';
 import { Delete, Edit } from '@mui/icons-material';
+import ReplayIcon from '@mui/icons-material/Replay';
 import { Column, Options } from '@material-table/core';
 import InviteClinicianModal from './InviteClinicianModal';
-import { removeUser } from '../../modules/user-api';
+import { removeUser, resendClinicianInvite } from '../../modules/user-api';
 import { Box, Stack } from '@mui/system';
 import { Grid } from '@mui/material';
 import useAuth from 'hooks/useAuth';
@@ -74,6 +75,33 @@ const ManagerDashboard = () => {
                     }
                 },
             }),
+            (rowData: DbUser) => {
+                const disabled = !!rowData.phoneNumber?.length;
+                // if (!rowData.phoneNumber?.length) {
+                return {
+                    icon: ReplayIcon,
+                    disabled, // only resend invites to users who haven't already signed in and confirmed
+                    tooltip: disabled
+                        ? 'User already accepted invite'
+                        : 'Resend invite password',
+                    onClick: (event: any, rowData: DbUser | DbUser[]) => {
+                        if ('id' in rowData) {
+                            resendClinicianInvite(
+                                rowData.email,
+                                rowData.institutionId,
+                                cognitoUser
+                            );
+                        } else {
+                            resendClinicianInvite(
+                                rowData[0].email,
+                                rowData[0].institutionId,
+                                cognitoUser
+                            );
+                        }
+                    },
+                };
+                // } else return;
+            },
             (/* rowData: UserRow */) => {
                 return {
                     icon: () => <Delete />,
@@ -192,7 +220,7 @@ const getColumns: (
     },
 
     { field: 'id', filtering: false, hidden: true, title: 'ID' },
-    { title: 'Phone', field: 'phone' },
+    { title: 'Phone', field: 'phoneNumber' },
 ];
 
 const TABLE_OPTIONS: Options<DbUser> = {
