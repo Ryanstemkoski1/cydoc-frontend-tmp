@@ -84,12 +84,12 @@ class InputTextOrDateResponse extends React.Component<
                     </Button>
                     <Input
                         defaultValue={defaultValue}
-                        value={this.state.value} 
+                        value={this.state.value}
                         required={required}
                         type={type}
                         placeholder={placeholder}
                         name={name}
-                        onChange={this.handleOnChange} 
+                        onChange={this.handleOnChange}
                         disabled={disabled}
                     />
                 </div>
