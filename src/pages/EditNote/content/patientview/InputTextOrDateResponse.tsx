@@ -8,6 +8,7 @@ import {
 import { CurrentNoteState } from 'redux/reducers';
 import { userSurveyState } from 'redux/reducers/userViewReducer';
 import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
+import Button from '@mui/material/Button';
 
 interface InputTextOrDateResponseProps {
     id: string;
@@ -19,10 +20,35 @@ interface InputTextOrDateResponseProps {
     disabled?: boolean;
 }
 
-class InputTextOrDateResponse extends React.Component<Props> {
+// Define the state interface for the component
+interface InputTextOrDateResponseState {
+    value: string; // Define the value property
+}
+
+class InputTextOrDateResponse extends React.Component<
+    Props,
+    InputTextOrDateResponseState
+> {
     constructor(props: Props) {
         super(props);
+        this.state = {
+            value: props.defaultValue || '', // Initialize state with defaultValue
+        };
     }
+
+    handleTodayClick = () => {
+        const todayDate = new Date().toISOString().split('T')[0];
+        const { id, initialSurveyAddDateOrPlace } = this.props;
+        initialSurveyAddDateOrPlace(id, todayDate);
+        this.setState({ value: todayDate });
+    };
+
+    handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, initialSurveyAddDateOrPlace } = this.props;
+        const { value } = e.target;
+        this.setState({ value });
+        initialSurveyAddDateOrPlace(id, value);
+    };
 
     render() {
         const {
@@ -36,6 +62,39 @@ class InputTextOrDateResponse extends React.Component<Props> {
             disabled = false,
         } = this.props;
 
+        if (name === 'dateOfAppointment') {
+            return (
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                    }}
+                >
+                    <Button
+                        variant='contained'
+                        style={{
+                            backgroundColor: 'grey',
+                            marginRight: '10px',
+                            fontSize: '15px',
+                            textTransform: 'none',
+                        }}
+                        onClick={this.handleTodayClick}
+                    >
+                        Today
+                    </Button>
+                    <Input
+                        defaultValue={defaultValue}
+                        value={this.state.value} 
+                        required={required}
+                        type={type}
+                        placeholder={placeholder}
+                        name={name}
+                        onChange={this.handleOnChange} 
+                        disabled={disabled}
+                    />
+                </div>
+            );
+        }
         return (
             <Input
                 defaultValue={defaultValue}
