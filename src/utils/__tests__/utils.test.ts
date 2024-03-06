@@ -26,11 +26,14 @@ describe('utils tests', () => {
                 knowledgeGraphResponse.data.parentNodes
             ).map((item) => item.toLowerCase());
 
-            const result = mappedQuestionnaires.every((questionnaire) =>
-                knowledgegraphQuestionnaires.includes(questionnaire)
-            );
-
-            expect(result).toBeTruthy();
+            const notFoundItems: string[] = [];
+            mappedQuestionnaires.forEach((questionnaire) => {
+                if (knowledgegraphQuestionnaires.includes(questionnaire)) {
+                    return;
+                }
+                notFoundItems.push(questionnaire);
+            });
+            expect(notFoundItems).toHaveLength(0);
         });
 
         it('Every KnowledgeGraph Questionnaire should be atleast present in Mapped Questionnaires', () => {
