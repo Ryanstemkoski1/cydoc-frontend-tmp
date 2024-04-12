@@ -86,7 +86,7 @@ const Modal = ({
                                     onChange={toggleFormat}
                                     name='paragraph format'
                                 />
-                                <span>Pargaraph</span>
+                                <span>Paragraph</span>
                             </label>
                         </div>
                     </div>
