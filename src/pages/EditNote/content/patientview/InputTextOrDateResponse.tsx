@@ -70,18 +70,15 @@ class InputTextOrDateResponse extends React.Component<
                         justifyContent: 'space-between',
                     }}
                 >
-                    <Button
-                        variant='contained'
+                    <button
+                        className='button'
                         style={{
-                            backgroundColor: 'grey',
                             marginRight: '10px',
-                            fontSize: '15px',
-                            textTransform: 'none',
                         }}
                         onClick={this.handleTodayClick}
                     >
                         Today
-                    </Button>
+                    </button>
                     <Input
                         defaultValue={defaultValue}
                         value={this.state.value}
