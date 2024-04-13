@@ -8,7 +8,6 @@ import {
 import { CurrentNoteState } from 'redux/reducers';
 import { userSurveyState } from 'redux/reducers/userViewReducer';
 import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
-import Button from '@mui/material/Button';
 
 interface InputTextOrDateResponseProps {
     id: string;
