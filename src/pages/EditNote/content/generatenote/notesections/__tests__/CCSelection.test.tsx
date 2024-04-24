@@ -7,7 +7,7 @@ import {
     favComplaintsBasedOnInstituteType,
 } from 'classes/institution.class';
 import Enzyme, { mount } from 'enzyme';
-import { hpiHeaders } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
+import { hpiHeaders } from 'pages/EditNote/content/hpi/knowledgegraph/API';
 import initialQuestionsOriginal from 'pages/EditNote/content/patientview/constants/initialQuestions';
 import CCSelection from 'pages/HPI/ChiefComplaintSelection/CCSelection';
 import React from 'react';

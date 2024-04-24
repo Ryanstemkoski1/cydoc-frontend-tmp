@@ -23,7 +23,7 @@ import {
     selectFamilyHistoryState,
 } from 'redux/selectors/familyHistorySelectors';
 import { ButtonProps, Dropdown as DropDownSemantic } from 'semantic-ui-react';
-import '../hpi/knowledgegraph/src/css/Button.css';
+import '../hpi/knowledgegraph/css/Button.css';
 import './FamilyHistory.css';
 import style from './FamilyHistoryDropdown.module.scss';
 class FamilyHistoryDropdownV2 extends Component<Props> {

@@ -22,7 +22,7 @@ import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
 import { Table } from 'semantic-ui-react';
 import { v4 } from 'uuid';
-import '../hpi/knowledgegraph/src/css/Button.css';
+import '../hpi/knowledgegraph/css/Button.css';
 import './Medications.css';
 import style from './MedicationsContent.module.scss';
 import MedicationsPanel from './MedicationsPanel';

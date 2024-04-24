@@ -54,10 +54,10 @@ import {
     ChiefComplaintsProps,
     HpiHeadersProps,
 } from '../hpi/knowledgegraph/HPIContent';
-import { hpiHeaders } from '../hpi/knowledgegraph/src/API';
+import { hpiHeaders } from '../hpi/knowledgegraph/API';
 import ChiefComplaintsButton, {
     PatientViewProps,
-} from '../hpi/knowledgegraph/src/components/ChiefComplaintsButton';
+} from '../hpi/knowledgegraph/components/ChiefComplaintsButton';
 import DetailsPage from './AdditionalSurvey';
 import './InitialSurvey.css';
 import InputTextOrDateResponse from './InputTextOrDateResponse';

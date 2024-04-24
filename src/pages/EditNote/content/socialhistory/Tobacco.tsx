@@ -20,7 +20,7 @@ import { selectTobaccoState } from 'redux/selectors/socialHistorySelectors';
 import { Divider, Dropdown, Form, Grid, Input } from 'semantic-ui-react';
 import HistoryButtons from '../../../../components/tools/ThreeButton/ThreeButtons';
 import '../familyhistory/FamilyHistory.css';
-import '../hpi/knowledgegraph/src/css/Button.css';
+import '../hpi/knowledgegraph/css/Button.css';
 
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;

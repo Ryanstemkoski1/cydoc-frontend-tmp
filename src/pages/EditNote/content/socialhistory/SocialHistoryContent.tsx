@@ -10,7 +10,7 @@ import {
 import { CurrentNoteState } from 'redux/reducers';
 import { selectSecondaryFieldsState } from 'redux/selectors/socialHistorySelectors';
 import { Form, Grid, TextArea } from 'semantic-ui-react';
-import '../hpi/knowledgegraph/src/css/Button.css';
+import '../hpi/knowledgegraph/css/Button.css';
 import Alcohol from './Alcohol';
 import RecreationalDrugs from './RecreationalDrugs';
 import Tobacco from './Tobacco';

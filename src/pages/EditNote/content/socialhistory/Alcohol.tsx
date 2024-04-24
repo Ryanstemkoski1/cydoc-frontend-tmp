@@ -37,7 +37,7 @@ import {
     TextArea,
 } from 'semantic-ui-react';
 import '../familyhistory/FamilyHistory.css';
-import '../hpi/knowledgegraph/src/css/Button.css';
+import '../hpi/knowledgegraph/css/Button.css';
 
 /* eslint-disable-next-line */
 type ReduxProps = ConnectedProps<typeof connector>;

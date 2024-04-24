@@ -21,7 +21,7 @@ import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
-import { ChiefComplaintsProps, HpiHeadersProps } from '../../HPIContent';
+import { ChiefComplaintsProps, HpiHeadersProps } from '../HPIContent';
 import './BodySystemDropdown';
 interface ChiefComplaintsButtonProps {
     name: string;

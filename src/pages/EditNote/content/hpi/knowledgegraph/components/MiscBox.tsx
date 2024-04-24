@@ -14,7 +14,7 @@ import {
     Icon,
     TextArea,
 } from 'semantic-ui-react';
-import { ChiefComplaintsProps } from '../../HPIContent';
+import { ChiefComplaintsProps } from '../HPIContent';
 import { PatientViewProps } from './ChiefComplaintsButton';
 
 const MiscBox = (props: Props) => {

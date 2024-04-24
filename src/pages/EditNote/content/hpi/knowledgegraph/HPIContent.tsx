@@ -30,14 +30,14 @@ import { Search, Segment } from 'semantic-ui-react';
 import Tab from '../../../../../components/tools/Tab';
 import { CHIEF_COMPLAINTS } from '../../../../../redux/actions/actionTypes';
 import './HPI.css';
-import { hpiHeaders } from './src/API';
-import BodySystemDropdown from './src/components/BodySystemDropdown';
+import { hpiHeaders } from './API';
+import BodySystemDropdown from './components/BodySystemDropdown';
 import ChiefComplaintsButton, {
     PatientViewProps,
-} from './src/components/ChiefComplaintsButton';
-import DiseaseForm from './src/components/DiseaseForm';
-import MiscBox from './src/components/MiscBox';
-import './src/css/App.css';
+} from './components/ChiefComplaintsButton';
+import DiseaseForm from './components/DiseaseForm';
+import MiscBox from './components/MiscBox';
+import './css/App.css';
 import { favChiefComplaints } from 'classes/institution.class';
 
 interface HPIContentProps {

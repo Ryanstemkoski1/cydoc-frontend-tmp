@@ -1,7 +1,7 @@
 import Input from 'components/Input/Input';
 import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
 import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import 'pages/EditNote/content/hpi/knowledgegraph/css/Button.css';
 import React from 'react';
 import { isListTextDictionary } from 'redux/reducers/hpiReducer';
 import '../../css/listText.css';

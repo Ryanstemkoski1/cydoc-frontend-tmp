@@ -8,7 +8,7 @@ import { selectReviewOfSystemsCategories } from 'redux/selectors/reviewOfSystems
 import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
 import { Header, Segment } from 'semantic-ui-react';
 import constants from '../../../../constants/review-of-systems-constants.json';
-import { PatientViewProps } from '../hpi/knowledgegraph/src/components/ChiefComplaintsButton';
+import { PatientViewProps } from '../hpi/knowledgegraph/components/ChiefComplaintsButton';
 import './ReviewOfSystems.css';
 import ReviewOfSystemsCategory from './ReviewOfSystemsCategory';
 

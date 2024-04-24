@@ -1,23 +1,8 @@
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import 'pages/EditNote/content/hpi/knowledgegraph/css/Button.css';
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import '../../HPI.css';
+import '../HPI.css';
 import '../css/Button.css';
-import blooddrop from '../icons/blooddrop.svg';
-import brain from '../icons/brain.svg';
-import dermatologic from '../icons/dermatologic.svg';
-import endocrine from '../icons/endocrine.svg';
-import genmed from '../icons/genmed.svg';
-import heart from '../icons/heart.svg';
-import heent from '../icons/heent.svg';
-import immunology from '../icons/immunology.svg';
-import intestines from '../icons/intestines.svg';
-import kidneys from '../icons/kidneys.svg';
-import musculoskeletal from '../icons/musculoskeletal.svg';
-import pediatrics from '../icons/pediatrics.svg';
-import psychiatry from '../icons/psychiatry.svg';
-import respiratory from '../icons/respiratory.svg';
-import star from '../icons/star.svg';
 import ChiefComplaintsButton from './ChiefComplaintsButton';
 
 interface BodySystemDropdownProps {
@@ -30,21 +15,21 @@ interface BodySystemDropdownState {
 }
 
 const imgToRender: { [key: string]: any } = {
-    Neurology: brain,
-    Psychiatry: psychiatry,
-    'Ophtho/ENT': heent,
-    Pulmonology: respiratory,
-    Cardiology: heart,
-    'General Medicine': genmed,
-    Gastroenterology: intestines,
-    Rheumatology: immunology,
-    Dermatology: dermatologic,
-    'Ob/Gyn': kidneys,
-    Endocrinology: endocrine,
-    Pediatrics: pediatrics,
-    Orthopedics: musculoskeletal,
-    Favorites: star,
-    'Heme/Onc': blooddrop,
+    Neurology: '/images/brain.svg',
+    Psychiatry: '/images/psychiatry.svg',
+    'Ophtho/ENT': '/images/heent.svg',
+    Pulmonology: '/images/respiratory.svg',
+    Cardiology: '/images/heart.svg',
+    'General Medicine': '/images/genmed.svg',
+    Gastroenterology: '/images/intestines.svg',
+    Rheumatology: '/images/immunology.svg',
+    Dermatology: '/images/dermatologic.svg',
+    'Ob/Gyn': '/images/kidneys.svg',
+    Endocrinology: '/images/endocrine.svg',
+    Pediatrics: '/images/pediatrics.svg',
+    Orthopedics: '/images/musculoskeletal.svg',
+    Favorites: '/images/star.svg',
+    'Heme/Onc': '/images/blooddrop.svg',
 };
 
 class BodySystemDropdown extends React.Component<

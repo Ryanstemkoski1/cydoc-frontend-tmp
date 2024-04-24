@@ -17,10 +17,10 @@ import { currentNoteStore } from 'redux/store';
 import { Search, Segment } from 'semantic-ui-react';
 import getHPIFormData from 'utils/getHPIFormData';
 import { CHIEF_COMPLAINTS } from '../../../redux/actions/actionTypes';
-import { hpiHeaders } from '../../EditNote/content/hpi/knowledgegraph/src/API';
-import BodySystemDropdown from '../../EditNote/content/hpi/knowledgegraph/src/components/BodySystemDropdown';
-import ChiefComplaintsButton from '../../EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
-import DiseaseForm from '../../EditNote/content/hpi/knowledgegraph/src/components/DiseaseForm';
+import { hpiHeaders } from '../../EditNote/content/hpi/knowledgegraph/API';
+import BodySystemDropdown from '../../EditNote/content/hpi/knowledgegraph/components/BodySystemDropdown';
+import ChiefComplaintsButton from '../../EditNote/content/hpi/knowledgegraph/components/ChiefComplaintsButton';
+import DiseaseForm from '../../EditNote/content/hpi/knowledgegraph/components/DiseaseForm';
 import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
 
 interface Props {

@@ -24,7 +24,7 @@ import {
 } from 'redux/selectors/medicalHistorySelector';
 import { ButtonProps, Form, TextAreaProps } from 'semantic-ui-react';
 import '../familyhistory/FamilyHistory.css';
-import '../hpi/knowledgegraph/src/css/Button.css';
+import '../hpi/knowledgegraph/css/Button.css';
 import style from './MedicalHistoryNoteRow.module.scss';
 
 //Component for a row the Medical History GridContent

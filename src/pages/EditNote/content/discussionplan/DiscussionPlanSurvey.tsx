@@ -10,7 +10,7 @@ import {
 } from 'redux/actions/planActions';
 import { selectPlanSurvey } from 'redux/selectors/planSelectors';
 import { YesNoUncertainResponse } from 'constants/enums';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import 'pages/EditNote/content/hpi/knowledgegraph/css/Button.css';
 
 const GRID_QUESTION_WIDTH = 7;
 

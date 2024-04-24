@@ -9,9 +9,9 @@ import {
     ChiefComplaintsProps,
     HpiHeadersProps,
 } from 'pages/EditNote/content/hpi/knowledgegraph/HPIContent';
-import { hpiHeaders as hpiHeadersApiClient } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
-import ChiefComplaintsButton from 'pages/EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
-import ListText from 'pages/EditNote/content/hpi/knowledgegraph/src/components/responseComponents/ListText';
+import { hpiHeaders as hpiHeadersApiClient } from 'pages/EditNote/content/hpi/knowledgegraph/API';
+import ChiefComplaintsButton from 'pages/EditNote/content/hpi/knowledgegraph/components/ChiefComplaintsButton';
+import ListText from 'pages/EditNote/content/hpi/knowledgegraph/components/responseComponents/ListText';
 import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
 import patientViewHeaders from 'pages/EditNote/content/patientview/constants/patientViewHeaders.json';
 import React, { useEffect, useState } from 'react';

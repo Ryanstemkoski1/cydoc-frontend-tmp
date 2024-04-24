@@ -25,11 +25,11 @@ import {
 } from 'redux/reducers/hpiReducer';
 import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import FamilyHistoryContent from '../../../../familyhistory/FamilyHistoryContent';
-import MedicalHistoryContent from '../../../../medicalhistory/MedicalHistoryContent';
-import MedicationsContent from '../../../../medications/MedicationsContent';
-import ReviewOfSystemsCategory from '../../../../reviewofsystems/ReviewOfSystemsCategory';
-import SurgicalHistoryContent from '../../../../surgicalhistory/SurgicalHistoryContent';
+import FamilyHistoryContent from '../../../familyhistory/FamilyHistoryContent';
+import MedicalHistoryContent from '../../../medicalhistory/MedicalHistoryContent';
+import MedicationsContent from '../../../medications/MedicationsContent';
+import ReviewOfSystemsCategory from '../../../reviewofsystems/ReviewOfSystemsCategory';
+import SurgicalHistoryContent from '../../../surgicalhistory/SurgicalHistoryContent';
 import '../css/Button.css';
 import style from './CreateResponse.module.scss';
 import BodyLocation from './responseComponents/BodyLocation';

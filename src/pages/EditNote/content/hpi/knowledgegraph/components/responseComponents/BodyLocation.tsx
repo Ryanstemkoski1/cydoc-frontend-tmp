@@ -19,7 +19,7 @@ import { LRButtonState } from 'constants/enums';
 import { selectHpiState } from 'redux/selectors/hpiSelectors';
 import LRButton from 'components/tools/LRButtonRedux';
 import { isBodyLocationLRItem } from 'redux/reducers/hpiReducer';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import 'pages/EditNote/content/hpi/knowledgegraph/css/Button.css';
 
 export const bodyLocationDefaultState = () => {
     const sectionState: {

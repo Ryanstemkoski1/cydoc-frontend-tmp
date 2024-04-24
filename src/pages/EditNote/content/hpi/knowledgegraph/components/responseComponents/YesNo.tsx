@@ -1,7 +1,7 @@
 import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from 'constants/enums';
 import { HpiStateProps } from 'constants/hpiEnums';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import 'pages/EditNote/content/hpi/knowledgegraph/css/Button.css';
 import React from 'react';
 import { connect } from 'react-redux';
 import {

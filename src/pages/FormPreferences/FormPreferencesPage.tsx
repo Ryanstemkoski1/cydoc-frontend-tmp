@@ -18,7 +18,7 @@ import {
     getInstitutionConfig,
     updateInstitutionConfig,
 } from 'modules/institution-api';
-import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
+import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/knowledgegraph/API';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import style from './FormPreferencesPage.module.scss';

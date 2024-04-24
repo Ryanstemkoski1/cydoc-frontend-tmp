@@ -1,6 +1,6 @@
 import Input from 'components/Input/Input';
 import { HpiStateProps } from 'constants/hpiEnums';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import 'pages/EditNote/content/hpi/knowledgegraph/css/Button.css';
 import React from 'react';
 import { connect } from 'react-redux';
 import {
