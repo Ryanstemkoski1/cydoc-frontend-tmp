@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import SearchIcon from '../../assets/images/search.svg';
 import style from './Input.module.scss';
 interface Props {
     items: { title: string; onClick: (event?: any) => void }[];
@@ -46,7 +45,7 @@ function Search({
                         placeholder={placeholder}
                         value={value}
                     />
-                    <img src={SearchIcon} alt='Search' />
+                    <img src={'/images/search.svg'} alt='Search' />
                 </div>
 
                 {items && value.length > minCharacter && showDropdown && (

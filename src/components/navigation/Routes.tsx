@@ -16,8 +16,6 @@ import EditNote from 'pages/EditNote/EditNote';
 import FormPreferencesPage from 'pages/FormPreferences/FormPreferencesPage';
 import GenerateInpatientPlan from 'pages/GenerateInpatientPlan/GenerateInpatientPlan';
 import Home from 'pages/Home/Home';
-import LandingPage from 'pages/LandingPage/LandingPage';
-import LandingPagePublic from 'pages/LandingPage/LandingPagePublic';
 import ManagerDashboard from 'pages/ManagerDashboard/ManagerDashboard';
 import NotAuthorized from 'pages/NotAuthorized';
 import QRCodePage from 'pages/QRCodePage/QRCodePage';
@@ -31,7 +29,7 @@ import { ManagerRoute } from './ManagerRoute';
 import NavMenu from './NavMenu';
 import { PrivateRoute } from './PrivateRoute';
 import BrowseNotes from 'pages/BrowseNotes/BrowseNotes';
-import { ProductType, ViewType } from 'assets/enums/route.enums';
+import { ProductType, ViewType } from 'constants/enums/route.enums';
 import { SubscriptionPage } from 'pages/Subscription/SubscriptionPage';
 import { SubscriptionCancel } from 'pages/Subscription/CancelSubscription';
 import { SubscriptionBanner } from 'components/Molecules/SubscriptionBanner';
@@ -89,26 +87,12 @@ const Routes = (props: { children?: JSX.Element | null }) => {
                         path={`/${ProductType.HPI}/${ViewType.PATIENT}`}
                         component={HPI}
                     />
-                    <PrivateRoute
-                        exact
-                        path='/secretdashboard'
-                        component={LandingPage}
-                    />
-                    <PrivateRoute
-                        exact
-                        path='/dashboard'
-                        component={LandingPagePublic}
-                    />
-                    <PrivateRoute
+                    <Route
                         exact
                         path='/generateinpatientplan'
                         component={GenerateInpatientPlan}
                     />
-                    <PrivateRoute
-                        exact
-                        path='/acid-test'
-                        component={AcidTest}
-                    />
+                    <Route exact path='/acid-test' component={AcidTest} />
                     <PrivateRoute
                         exact
                         path='/templates/new'

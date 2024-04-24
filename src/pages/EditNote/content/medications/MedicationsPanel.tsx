@@ -29,7 +29,6 @@ import {
     TextArea,
     TextAreaProps,
 } from 'semantic-ui-react';
-import Delete from '../../../../assets/delete.svg';
 import './Medications.css';
 import { DropdownType } from './MedicationsContent';
 import style from './MedicationsPanel.module.scss';
@@ -575,7 +574,7 @@ class MedicationsPanel extends Component<Props, State> {
                                 this.props.deleteRow(e, this.props.medIndex);
                             }}
                         >
-                            <img src={Delete} alt='Remove' />
+                            <img src={'/images/delete.svg'} alt='Remove' />
                         </button>
                     </div>
                 ) : (

@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react';
-import { Button, Grid, Header, Image, Segment } from 'semantic-ui-react';
+import { Button, Grid, Header,  Segment } from 'semantic-ui-react';
 import { HOME_MED_BP } from 'constants/breakpoints.js';
 import { homeContent } from 'constants/homeContent';
 import './Home.css';
 import { useState } from 'react';
 import SignUpForm from 'pages/Account/SignUpForm';
+import Image from 'next/image';
+
 const previewPlan =
     'https://cydoc-static-files.s3.amazonaws.com/about-plan.png';
 const previewROS = 'https://cydoc-static-files.s3.amazonaws.com/about-ROS.png';
@@ -55,14 +57,14 @@ export const MeetCydocSection = (props: Props) => {
                     <div className='preview-image-container'>
                         <Image
                             src={previewROS}
-                            alt='cydoc preview page'
-                            verticalAlign='bottom'
+                            alt='cydoc review of service'
+                            // verticalAlign='bottom'
                             className='preview-image-small ros-small'
                         />
                         <Image
                             src={previewPlan}
-                            alt='cydoc preview page'
-                            verticalAlign='bottom'
+                            alt='cydoc preview plan'
+                            // verticalAlign='bottom'
                             className='preview-image-small plan-small'
                         />
                     </div>
@@ -76,13 +78,13 @@ export const MeetCydocSection = (props: Props) => {
                         <Image
                             src={previewROS}
                             alt='cydoc preview page'
-                            verticalAlign='bottom'
+                            // verticalAlign='bottom'
                             className='preview-image ros'
                         />
                         <Image
                             src={previewPlan}
                             alt='cydoc preview page'
-                            verticalAlign='bottom'
+                            // verticalAlign='bottom'
                             className='preview-image plan'
                         />
                     </Grid.Column>

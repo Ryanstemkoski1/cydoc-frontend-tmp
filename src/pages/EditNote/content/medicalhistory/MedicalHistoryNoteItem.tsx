@@ -23,11 +23,11 @@ import {
     ButtonProps,
     Form,
     Grid,
-    Image,
     TextAreaProps,
 } from 'semantic-ui-react';
-import Delete from '../../../../assets/delete.svg';
 import '../familyhistory/FamilyHistory.css';
+import Image from 'next/image';
+
 //Component for a row the Medical History GridContent
 class MedicalHistoryNoteItem extends Component<Props> {
     findIndex = (event: FindIndex, data: TextAreaProps) => {
@@ -308,7 +308,7 @@ class MedicalHistoryNoteItem extends Component<Props> {
                             this.props.deleteRow(this.props.index);
                         }}
                     >
-                        <Image src={Delete} />
+                        <Image alt='Delete' src={'/images/delete.svg'} width={50}/>
                         <span>Remove</span>
                     </aside>
                 </div>

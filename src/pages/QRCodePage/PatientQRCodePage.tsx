@@ -2,7 +2,7 @@ import useUser from 'hooks/useUser';
 import React from 'react';
 import PrintTemplate from 'react-print';
 import style from '../../assets/scss/qrcode-print.module.scss';
-import Logo from '../../assets/images/logo.svg';
+
 interface Props {
     children: React.JSX.Element[] | React.JSX.Element;
 }
@@ -36,7 +36,7 @@ function PatientQRCodePage({ children }: Props) {
                         <strong>Powered by </strong>
                         <img
                             className={style.patientQR__logo}
-                            src={Logo}
+                            src={'/images/logo.svg'}
                             alt='Cydoc'
                         />
                     </div>

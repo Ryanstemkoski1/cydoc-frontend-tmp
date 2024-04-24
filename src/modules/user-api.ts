@@ -190,7 +190,7 @@ export const removeUser = async (
 ) => {
     invariant(user, '[removeUser] missing id');
 
-    log(`User deletion requested`, user);
+    log(`User deletion requested for ${user.email} (${user.role})`, user);
 
     if (user.role === 'manager') {
         alert(

@@ -1,15 +1,14 @@
 import React, { useEffect, useMemo } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { Button, Menu } from 'semantic-ui-react';
-import Logo from '../../assets/cydoc-logo.svg';
 import NoteNameMenuItem from './NoteNameMenuItem';
 /* eslint-disable no-console */
-import { ProductType, ViewType } from 'assets/enums/route.enums';
+import { ProductType, ViewType } from 'constants/enums/route.enums';
 import MenuButton, { MenuItem } from 'components/Header/MenuButton';
 import { YesNoResponse } from 'constants/enums';
 import useAuth from 'hooks/useAuth';
 import useUser from 'hooks/useUser';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import 'pages/EditNote/content/hpi/knowledgegraph/css/Button.css';
 import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
 import { connect } from 'react-redux';
 import {
@@ -25,13 +24,6 @@ import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from 'redux/selectors/userViewSelectors';
-import Assignment from '../../assets/images/assignment.svg';
-import Setting from '../../assets/images/edit.svg';
-import Logout from '../../assets/images/logout.svg';
-import Notes from '../../assets/images/notes.svg';
-import QrCode from '../../assets/images/qr-code.svg';
-import Security from '../../assets/images/security.svg';
-import Users from '../../assets/images/users.svg';
 import constants from '../../constants/constants.json';
 import style from './NavMenu.module.scss';
 
@@ -87,7 +79,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         {
             to: `/${ProductType.HPI}/${ViewType.DOCTOR}`,
             label: 'Notes',
-            icon: Notes,
+            icon: '/images/notes.svg',
             active: window.location.href.includes(
                 `${ProductType.HPI}/${ViewType.DOCTOR}`
             ),
@@ -95,25 +87,25 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         {
             to: '/qrcode',
             label: 'Clinic QR Code',
-            icon: QrCode,
+            icon: '/images/qr-code.svg',
             active: window.location.href.includes('qrcode'),
         },
         {
             to: '/editprofile',
             label: 'Edit Profile',
-            icon: Setting,
+            icon: '/images/edit.svg',
             active: window.location.href.includes('editprofile'),
         },
         {
             to: '/profilesecurity',
             label: 'Profile Security',
-            icon: Security,
+            icon: '/images/security.svg',
             active: window.location.href.includes('profilesecurity'),
         },
         {
             to: '/',
             label: 'Log Out',
-            icon: Logout,
+            icon: '/images/logout.svg',
             onClick: signOut,
             active: false,
         },
@@ -126,19 +118,19 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             {
                 to: '/manager-dashboard',
                 label: 'Manage Users',
-                icon: Users,
+                icon: '/images/users.svg',
                 active: window.location.href.includes('manager-dashboard'),
             },
             {
                 to: '/form-preferences',
                 label: 'Form Preferences',
-                icon: Assignment,
+                icon: '/images/assignment.svg',
                 active: window.location.href.includes('form-preferences'),
             },
             {
                 to: '/subscription',
                 label: 'Subscription',
-                icon: Security,
+                icon: '/images/security.svg',
                 active: window.location.href.includes('subscription'),
             }
         );
@@ -244,7 +236,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                 } flex align-center`}
                 to='/'
             >
-                <img src={Logo} alt='Cydoc' />
+                <img width={50} src={'/images/cydoc-logo.svg'} alt='Cydoc' />
                 {!isEditNotePage && <span>Cydoc</span>}
             </Link>
 

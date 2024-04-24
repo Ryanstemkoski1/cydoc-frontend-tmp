@@ -1,5 +1,4 @@
 import React from 'react';
-import Logo from '../../assets/images/logo.svg';
 import style from '../../assets/scss/qrcode-print.module.scss';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -20,7 +19,7 @@ function StaffQRCodePage({ children }: Props) {
 
                     <img
                         className={style.patientQR__logo}
-                        src={Logo}
+                        src={'/images/logo.svg'} 
                         alt='Cydoc'
                     />
 

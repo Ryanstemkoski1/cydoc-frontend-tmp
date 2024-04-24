@@ -2,10 +2,6 @@ import useUser from 'hooks/useUser';
 import React, { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { toast } from 'react-toastify';
-import QRIcon1 from '../../assets/images/qr-code-icon1.svg';
-import QRIcon2 from '../../assets/images/qr-code-icon2.svg';
-import QRIcon3 from '../../assets/images/qr-code-icon3.svg';
-import QRIcon4 from '../../assets/images/qr-code-icon4.svg';
 import PatientQRCodePage from './PatientQRCodePage';
 import style from './QRCodePage.module.scss';
 import StaffQRCodePage from './StaffQRCodePage';
@@ -95,7 +91,7 @@ function QRCodePage() {
                                 <div className={style.QRCodePage__item}>
                                     <div className={style.QRCodePage__card}>
                                         <picture>
-                                            <img src={QRIcon1} alt='icon1' />
+                                            <img src={'/images/qr-code-icon1.svg'} alt='icon1' />
                                         </picture>
 
                                         <p>
@@ -118,7 +114,7 @@ function QRCodePage() {
                                 <div className={style.QRCodePage__item}>
                                     <div className={style.QRCodePage__card}>
                                         <picture>
-                                            <img src={QRIcon2} alt='icon2' />
+                                            <img src={'/images/qr-code-icon2.svg'} alt='icon2' />
                                         </picture>
 
                                         <p>
@@ -139,7 +135,7 @@ function QRCodePage() {
                                 <div className={style.QRCodePage__item}>
                                     <div className={style.QRCodePage__card}>
                                         <picture>
-                                            <img src={QRIcon3} alt='icon3' />
+                                            <img src={'/images/qr-code-icon3.svg'} alt='icon3' />
                                         </picture>
 
                                         <p>
@@ -161,7 +157,7 @@ function QRCodePage() {
                                 <div className={style.QRCodePage__item}>
                                     <div className={style.QRCodePage__card}>
                                         <picture>
-                                            <img src={QRIcon4} alt='icon4' />
+                                            <img src={'/images/qr-code-icon4.svg'} alt='icon4' />
                                         </picture>
 
                                         <a

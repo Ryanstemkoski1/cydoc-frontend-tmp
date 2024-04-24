@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
-import ArrowDown from '../../assets/images/arrow-down.svg';
 import style from './MenuButton.module.scss';
 
 export interface MenuItem {
@@ -55,7 +54,7 @@ function MenuButton({ label, icon, to, items }: Props) {
                 >
                     <span>{label}</span>
                     {!!items && Boolean(label) && (
-                        <img src={ArrowDown} alt='arrow down' />
+                        <img src={'/images/arrow-down.svg'} alt='arrow down' />
                     )}
                 </a>
             </div>

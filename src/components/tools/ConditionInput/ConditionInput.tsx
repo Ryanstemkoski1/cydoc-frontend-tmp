@@ -10,7 +10,6 @@ import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
 import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
 import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
 import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
-import InfoIcon from '../../../assets/images/info.svg';
 import style from './ConditionInput.module.scss';
 
 class ConditionInput extends React.Component<Props, OwnState> {
@@ -82,7 +81,7 @@ class ConditionInput extends React.Component<Props, OwnState> {
                 )}
                 {this.state.isRepeat && (
                     <div className={style.conditionBlock__error}>
-                        <img src={InfoIcon} alt='I' />
+                        <img src={'/images/info.svg'} alt='I' />
                         Condition already included
                     </div>
                 )}

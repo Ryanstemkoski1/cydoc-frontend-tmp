@@ -43,11 +43,10 @@ import SurgicalHistoryNote from './notesections/SurgicalHistoryNote';
 
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { PatientPronouns } from 'constants/patientInformation';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
+import 'pages/EditNote/content/hpi/knowledgegraph/css/Button.css';
 import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
 import { PhysicalExamState } from 'redux/reducers/physicalExamReducer';
 import getHPIText, { HPIText } from 'utils/getHPIText';
-import BottomArrow from '../../../../assets/angle-down.svg';
 import './GenerateNote.css';
 import PatientInfo from './PatientInfo';
 
@@ -281,7 +280,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 >
                     <h3 onClick={() => setIsExpanded(!isExpanded)}>
                         <img
-                            src={BottomArrow}
+                            src={'/images/angle-down.svg'}
                             alt='bottom'
                             style={{
                                 transform: isExpanded ? '' : 'rotate(-90deg)',
@@ -306,7 +305,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
                 <div className='title'>
                     <h3 onClick={() => setIsNoteExpanded(!isNoteExpanded)}>
                         <img
-                            src={BottomArrow}
+                            src={'/images/angle-down.svg'}
                             alt='bottom'
                             style={{
                                 transform: isNoteExpanded

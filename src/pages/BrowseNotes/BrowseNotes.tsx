@@ -6,9 +6,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoadingStatus } from 'redux/actions/loadingStatusActions';
 import { CurrentNoteState } from 'redux/reducers';
-import LeftArrow from '../../assets/images/left-arrow.svg';
-import RefreshIcon from '../../assets/images/refresh.png';
-import RightArrow from '../../assets/images/right-arrow.svg';
 import style from './BrowseNotes.module.scss';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
@@ -182,14 +179,14 @@ const BrowseNotes = () => {
                         className='flex align-center justify-center'
                         onClick={goBack}
                     >
-                        <img src={LeftArrow} alt='Left arrow' />
+                        <img src={'/images/left-arrow.svg'} alt='Left arrow' />
                     </a>
                     <span>{formatDate(date)}</span>
                     <a
                         className='flex align-center justify-center'
                         onClick={goForward}
                     >
-                        <img src={RightArrow} alt='Right arrow' />
+                        <img src={'/images/right-arrow.svg'} alt='Right arrow' />
                     </a>
                 </div>
 
@@ -200,7 +197,7 @@ const BrowseNotes = () => {
                     <div className={`${style.notesBlock__reload}`}>
                         <button onClick={loadPatientHistory}>
                             <picture>
-                                <img src={RefreshIcon} alt='Refresh' />
+                                <img src={'/images/refresh.png'} alt='Refresh' />
                             </picture>
                             Check for new questionnaires
                         </button>

@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Add from '../../../assets/add.svg';
 import style from './AddRowButton.module.scss';
 
 //Functional component for the add row option in notes
@@ -12,7 +11,7 @@ export default function AddRowButton(props) {
             onClick={onClick}
             aria-label='add-row'
         >
-            <img src={Add} alt='Add' />
+            <img src={'/images/add.svg'} alt='Add' />
             <span>Add {name}</span>
         </button>
     );

@@ -1,7 +1,7 @@
 import { ApiResponse, Institution } from '@cydoc-ai/types';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
-import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
-import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
+import { ChiefComplaintsEnum } from 'constants/enums/chiefComplaints.enums';
+import { HPIPatientQueryParams } from 'constants/enums/hpi.patient.enums';
 import {
     Institution as InstitutionClass,
     InstitutionType,
@@ -22,7 +22,7 @@ import {
     validateDiseaseForm,
 } from 'modules/institution-api';
 import { log } from 'modules/logging';
-import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
+import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/knowledgegraph/API';
 import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

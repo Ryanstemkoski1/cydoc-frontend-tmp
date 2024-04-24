@@ -4,11 +4,7 @@
         "es6": true,
         "node": true
     },
-    "extends": [
-        "plugin:react/recommended",
-        "plugin:jest/recommended",
-        "prettier"
-    ],
+    "extends": ["next/core-web-vitals", "plugin:jest/recommended", "prettier"],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"

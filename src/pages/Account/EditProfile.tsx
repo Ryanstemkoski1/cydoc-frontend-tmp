@@ -251,7 +251,7 @@ const DeleteModal = ({
 
     const deleteSelf = useCallback(async () => {
         // TODO: implement user & institution deletion logic
-        log(`User requested deletion`, { user });
+        log(`User requested deleting themselves ${user?.email} (${user?.role})`, { user });
         signOut();
     }, [signOut, user]);
 

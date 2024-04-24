@@ -11,8 +11,8 @@
         "watch-semantic": "npm run ignore-semantic-changes && cd src/semantic && npm run build-semantic && gulp watch",
         "ignore-semantic-changes": "chmod +x ./ignore-semantic-changes.sh && ./ignore-semantic-changes.sh",
         "prettify": "prettier --write \"./**/*.{js,jsx,ts,tsx,json}\"",
-        "test": "react-scripts test --watchAll=false --verbose --maxWorkers 1",
-        "test-ci": "react-scripts test --watchAll=false --verbose --silent",
+        "test": "jest --watchAll=false --verbose --maxWorkers 1",
+        "test-ci": "jest --watchAll=false --verbose --silent",
         "lint": "node lint.js"
     },
     "dependencies": {
@@ -51,7 +51,6 @@
         "react-qr-code": "^2.0.12",
         "react-router": "^5.0.1",
         "react-router-dom": "^5.3.4",
-        "react-scripts": "^5.0.0",
         "react-smooth-render": "^1.0.0",
         "react-svg-to-image": "^3.0.0",
         "react-to-print": "^2.14.13",

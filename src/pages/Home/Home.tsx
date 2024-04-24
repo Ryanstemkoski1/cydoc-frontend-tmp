@@ -1,6 +1,4 @@
 import React from 'react';
-import BannerMobile from '../../assets/images/banner-mobile.png';
-import Banner from '../../assets/images/banner.png';
 import style from './Home.module.scss';
 
 const Home = () => {
@@ -18,12 +16,12 @@ const Home = () => {
                     <div className={style.home__bottom}>
                         <img
                             className={style.isMobile}
-                            src={BannerMobile}
+                            src={'/images/banner-mobile.png'}
                             alt='Banner'
                         />
                         <img
                             className={style.isDesktop}
-                            src={Banner}
+                            src={'/images/banner.png'}
                             alt='Banner'
                         />
                     </div>

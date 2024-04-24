@@ -7,7 +7,7 @@ import {
     ChiefComplaintsProps,
     HpiHeadersProps,
 } from 'pages/EditNote/content/hpi/knowledgegraph/HPIContent';
-import ChiefComplaintsButton from 'pages/EditNote/content/hpi/knowledgegraph/src/components/ChiefComplaintsButton';
+import ChiefComplaintsButton from 'pages/EditNote/content/hpi/knowledgegraph/components/ChiefComplaintsButton';
 import InputTextOrDateResponse from 'pages/EditNote/content/patientview/InputTextOrDateResponse';
 import SurveyYesNoResponse from 'pages/EditNote/content/patientview/SurveyYesNoResponse';
 import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';

@@ -1,10 +1,6 @@
-import { ProductType, ViewType } from 'assets/enums/route.enums';
+import { ProductType, ViewType } from 'constants/enums/route.enums';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import DoctorIcon from '../../assets/images/doctor.svg';
-import MedicalIcon from '../../assets/images/medical-app.svg';
-import MedicalRecordIcon from '../../assets/images/medical-record.svg';
-import PatientIcon from '../../assets/images/patient.svg';
 import style from './ViewProduct.module.scss';
 
 export default function ViewProduct() {
@@ -39,7 +35,7 @@ export default function ViewProduct() {
                                 }}
                             >
                                 <span className='flex align-center justify-center'>
-                                    <img src={PatientIcon} />
+                                    <img src={'/images/patient.svg'} />
                                 </span>
                                 Patient View
                             </a>
@@ -53,7 +49,7 @@ export default function ViewProduct() {
                                 }}
                             >
                                 <span className='flex align-center justify-center'>
-                                    <img src={DoctorIcon} />
+                                    <img src={'/images/doctor.svg'} />
                                 </span>
                                 Doctor View
                             </a>
@@ -76,7 +72,7 @@ export default function ViewProduct() {
                                 }}
                             >
                                 <span className='flex align-center justify-center'>
-                                    <img src={MedicalIcon} />
+                                    <img src={'/images/medical-app.svg'} />
                                 </span>
                                 EHR
                             </a>
@@ -91,7 +87,7 @@ export default function ViewProduct() {
                                 }}
                             >
                                 <span className='flex align-center justify-center'>
-                                    <img src={MedicalRecordIcon} />
+                                    <img src={'/images/medical-record.svg'} />
                                 </span>
                                 HPI
                             </a>

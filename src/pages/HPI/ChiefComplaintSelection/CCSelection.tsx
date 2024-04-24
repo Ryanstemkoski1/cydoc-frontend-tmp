@@ -1,4 +1,4 @@
-import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
+import { HPIPatientQueryParams } from 'constants/enums/hpi.patient.enums';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { NotificationTypeEnum } from 'components/tools/Notification/Notification';
 import { apiClient } from 'constants/api';

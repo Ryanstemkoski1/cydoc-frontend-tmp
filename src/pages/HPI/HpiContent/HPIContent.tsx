@@ -1,4 +1,4 @@
-import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
+import { HPIPatientQueryParams } from 'constants/enums/hpi.patient.enums';
 import axios from 'axios';
 import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
 import { graphClientURL, apiClient } from 'constants/api.js';

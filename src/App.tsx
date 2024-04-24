@@ -2,8 +2,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { Stripe, loadStripe } from '@stripe/stripe-js';
 import Routes from 'components/navigation/Routes';
 import { AuthProvider } from 'providers/AuthProvider';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import ToastProvider from 'providers/ToastProvider';
 import { initializeSentry } from './modules/logging';
 import './semantic/dist/semantic.min.css';
 
@@ -42,13 +41,11 @@ export function App() {
                             <HPITemplateStore>
                                 <Elements stripe={stripePromise}>
                                     <Provider store={currentNoteStore}>
-                                        <ToastContainer
-                                            theme='colored'
-                                            position='bottom-right'
-                                        />
-                                        <Router>
-                                            <Routes />
-                                        </Router>
+                                        <ToastProvider>
+                                            <Router>
+                                                <Routes />
+                                            </Router>
+                                        </ToastProvider>
                                     </Provider>
                                 </Elements>
                             </HPITemplateStore>

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Adapter from '@cfaester/enzyme-adapter-react-18';
-import { ChiefComplaintsEnum } from 'assets/enums/chiefComplaints.enums';
+import { ChiefComplaintsEnum } from 'constants/enums/chiefComplaints.enums';
 import { AxiosResponse } from 'axios';
 import {
     InstitutionType,

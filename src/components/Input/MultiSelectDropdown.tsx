@@ -1,5 +1,4 @@
 import React from 'react';
-import CloseIcon from '../../assets/images/close-white.svg';
 import Dropdown from './Dropdown';
 import style from './MultiSelectDropdown.module.scss';
 interface MultiSelectDropdownProps {
@@ -21,7 +20,7 @@ const MultiSelectDropdown = (props: MultiSelectDropdownProps) => {
             >
                 {item}
                 <span onClick={() => onRemove(item)}>
-                    <img src={CloseIcon} alt='x' />
+                    <img src={'/images/close-white.svg'} alt='x' />
                 </span>
             </div>
         );

@@ -1,7 +1,6 @@
-import { HPIPatientQueryParams } from 'assets/enums/hpi.patient.enums';
+import { HPIPatientQueryParams } from 'constants/enums/hpi.patient.enums';
 import useQuery from 'hooks/useQuery';
 import React, { useEffect } from 'react';
-import CheckWhite from '../assets/images/check-white.svg';
 import style from './AfterSubmissionPage.module.scss';
 
 function AfterSubmissionPage() {
@@ -32,7 +31,7 @@ function AfterSubmissionPage() {
                 >
                     <div className={style.successBlock__box}>
                         <picture className='flex align-center justify-center'>
-                            <img src={CheckWhite} alt='Check' />
+                            <img src={'/images/check-white.svg'} alt='Check' />
                         </picture>
                         <h5>Success!</h5>
                         <p>

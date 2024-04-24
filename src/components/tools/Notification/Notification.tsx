@@ -1,6 +1,4 @@
 import React from 'react';
-import AlertIconSuccess from '../../../assets/images/check-circle.svg';
-import AlertIcon from '../../../assets/images/alert.svg';
 import style from './Notification.module.scss';
 interface NotificationProps {
     message: string;
@@ -22,7 +20,7 @@ const Notification = ({ message = '', type = 'error' }: NotificationProps) => {
             }`}
         >
             <img
-                src={type == 'error' ? AlertIcon : AlertIconSuccess}
+                src={type == 'error' ? '/images/alert.svg' : '/images/check-circle.svg'}
                 alt='Info'
             />
             <p>{message}</p>

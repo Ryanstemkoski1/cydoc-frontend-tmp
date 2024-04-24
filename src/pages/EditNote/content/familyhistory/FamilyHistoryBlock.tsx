@@ -25,8 +25,7 @@ import {
     selectFamilyHistoryState,
 } from 'redux/selectors/familyHistorySelectors';
 import { Grid, Header } from 'semantic-ui-react';
-import DeleteIcon from '../../../../assets/images/delete.svg';
-import '../hpi/knowledgegraph/src/css/Button.css';
+import '../hpi/knowledgegraph/css/Button.css';
 import '../reviewofsystems/ReviewOfSystems.css';
 import './FamilyHistory.css';
 import style from './FamilyHistoryBlock.module.scss';
@@ -148,7 +147,7 @@ class FamilyHistoryBlock extends Component<Props> {
                                 this.props.deleteRow(this.props.index);
                             }}
                         >
-                            {!hide && <img src={DeleteIcon} alt='Remove' />}
+                            {!hide && <img src={'/images/delete.svg'} alt='Remove' />}
                         </div>
                     </div>
                 </div>
