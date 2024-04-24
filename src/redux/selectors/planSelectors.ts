@@ -47,12 +47,12 @@ export function selectPlanSurvey(state: CurrentNoteState): PlanSurvey {
 
 export const flattenConditionCategory = ([id, values]: [
     string,
-    PlanCategory
+    PlanCategory,
 ]) => ({ ...values, id });
 
 export const flattenCondition = ([id, conditionValue]: [
     string,
-    PlanCondition
+    PlanCondition,
 ]) => ({
     ...conditionValue,
     id,

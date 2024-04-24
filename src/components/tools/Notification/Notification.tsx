@@ -20,7 +20,11 @@ const Notification = ({ message = '', type = 'error' }: NotificationProps) => {
             }`}
         >
             <img
-                src={type == 'error' ? '/images/alert.svg' : '/images/check-circle.svg'}
+                src={
+                    type == 'error'
+                        ? '/images/alert.svg'
+                        : '/images/check-circle.svg'
+                }
                 alt='Info'
             />
             <p>{message}</p>

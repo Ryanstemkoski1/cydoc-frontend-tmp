@@ -15,8 +15,8 @@
         typeof window != 'undefined' && window.Math == Math
             ? window
             : typeof self != 'undefined' && self.Math == Math
-            ? self
-            : Function('return this')();
+              ? self
+              : Function('return this')();
 
     $.fn.shape = function (parameters) {
         var $allModules = $(this),
@@ -219,20 +219,20 @@
                             $nextSide = nextIndex
                                 ? $clone.find(selector.side).eq(nextIndex)
                                 : $activeSide.next(selector.side).length > 0
-                                ? $activeSide.next(selector.side)
-                                : $clone.find(selector.side).first(),
+                                  ? $activeSide.next(selector.side)
+                                  : $clone.find(selector.side).first(),
                             newWidth =
                                 settings.width == 'next'
                                     ? $nextSide.outerWidth(true)
                                     : settings.width == 'initial'
-                                    ? $module.width()
-                                    : settings.width,
+                                      ? $module.width()
+                                      : settings.width,
                             newHeight =
                                 settings.height == 'next'
                                     ? $nextSide.outerHeight(true)
                                     : settings.height == 'initial'
-                                    ? $module.height()
-                                    : settings.height;
+                                      ? $module.height()
+                                      : settings.height;
                         $activeSide.removeClass(className.active);
                         $nextSide.addClass(className.active);
                         $clone.insertAfter($module);

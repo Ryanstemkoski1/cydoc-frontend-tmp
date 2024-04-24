@@ -15,8 +15,8 @@
         typeof window != 'undefined' && window.Math == Math
             ? window
             : typeof self != 'undefined' && self.Math == Math
-            ? self
-            : Function('return this')();
+              ? self
+              : Function('return this')();
     $.api = $.fn.api = function (parameters) {
         var // use window context if none specified
             $allModules = $.isFunction(this) ? $(window) : $(this),
@@ -253,8 +253,10 @@
                                 ajaxSettings.method
                             );
                             module.send.request();
-                            module.timer = setTimeout(function () {},
-                            settings.throttle);
+                            module.timer = setTimeout(
+                                function () {},
+                                settings.throttle
+                            );
                         } else {
                             module.debug(
                                 'Throttling request',
@@ -425,13 +427,15 @@
                                                 urlData[variable] !== undefined
                                                     ? urlData[variable]
                                                     : $module.data(variable) !==
-                                                      undefined
-                                                    ? $module.data(variable)
-                                                    : $context.data(
-                                                          variable
-                                                      ) !== undefined
-                                                    ? $context.data(variable)
-                                                    : urlData[variable];
+                                                        undefined
+                                                      ? $module.data(variable)
+                                                      : $context.data(
+                                                              variable
+                                                          ) !== undefined
+                                                        ? $context.data(
+                                                              variable
+                                                          )
+                                                        : urlData[variable];
                                         // remove value
                                         if (value === undefined) {
                                             module.error(
@@ -487,13 +491,15 @@
                                                 urlData[variable] !== undefined
                                                     ? urlData[variable]
                                                     : $module.data(variable) !==
-                                                      undefined
-                                                    ? $module.data(variable)
-                                                    : $context.data(
-                                                          variable
-                                                      ) !== undefined
-                                                    ? $context.data(variable)
-                                                    : urlData[variable];
+                                                        undefined
+                                                      ? $module.data(variable)
+                                                      : $context.data(
+                                                              variable
+                                                          ) !== undefined
+                                                        ? $context.data(
+                                                              variable
+                                                          )
+                                                        : urlData[variable];
                                         // optional replacement
                                         if (value !== undefined) {
                                             module.verbose(
@@ -940,8 +946,8 @@
                             response.error !== undefined
                             ? response.error // use json error message
                             : settings.error[status] !== undefined // use server error message
-                            ? settings.error[status]
-                            : httpMessage;
+                              ? settings.error[status]
+                              : httpMessage;
                     },
                     request: function () {
                         return module.request || false;
@@ -1041,8 +1047,8 @@
                                 return element.oninput !== undefined
                                     ? 'input'
                                     : element.onpropertychange !== undefined
-                                    ? 'propertychange'
-                                    : 'keyup';
+                                      ? 'propertychange'
+                                      : 'keyup';
                             } else if ($module.is('form')) {
                                 return 'submit';
                             } else {

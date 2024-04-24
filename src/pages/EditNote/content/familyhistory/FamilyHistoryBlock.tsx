@@ -147,7 +147,9 @@ class FamilyHistoryBlock extends Component<Props> {
                                 this.props.deleteRow(this.props.index);
                             }}
                         >
-                            {!hide && <img src={'/images/delete.svg'} alt='Remove' />}
+                            {!hide && (
+                                <img src={'/images/delete.svg'} alt='Remove' />
+                            )}
                         </div>
                     </div>
                 </div>

@@ -462,9 +462,8 @@ const HPI = () => {
                 const validatedInstitution = (await getInstitution(
                     institutionId
                 )) as { detail: Institution };
-                const getInstitutionConfigResponse = await getInstitutionConfig(
-                    institutionId
-                );
+                const getInstitutionConfigResponse =
+                    await getInstitutionConfig(institutionId);
 
                 if (!(validatedInstitution as ApiResponse).errorMessage) {
                     const { id, name } = validatedInstitution.detail;

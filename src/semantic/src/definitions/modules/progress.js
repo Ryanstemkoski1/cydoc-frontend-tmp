@@ -15,15 +15,15 @@
         typeof window != 'undefined' && window.Math == Math
             ? window
             : typeof self != 'undefined' && self.Math == Math
-            ? self
-            : Function('return this')();
+              ? self
+              : Function('return this')();
 
     var global =
         typeof window != 'undefined' && window.Math == Math
             ? window
             : typeof self != 'undefined' && self.Math == Math
-            ? self
-            : Function('return this')();
+              ? self
+              : Function('return this')();
     $.fn.progress = function (parameters) {
         var $allModules = $(this),
             moduleSelector = $allModules.selector || '',
@@ -466,8 +466,8 @@
                                     module.value > 100
                                         ? 100
                                         : module.value < 0
-                                        ? 0
-                                        : module.value;
+                                          ? 0
+                                          : module.value;
                             }
                         }
                         module.set.barWidth(percent);

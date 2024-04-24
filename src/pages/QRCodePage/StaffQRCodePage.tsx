@@ -19,7 +19,7 @@ function StaffQRCodePage({ children }: Props) {
 
                     <img
                         className={style.patientQR__logo}
-                        src={'/images/logo.svg'} 
+                        src={'/images/logo.svg'}
                         alt='Cydoc'
                     />
 

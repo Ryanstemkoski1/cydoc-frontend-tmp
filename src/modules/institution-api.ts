@@ -42,7 +42,7 @@ export async function validateDiseaseForm(
             ({
                 diseaseKey: Object.keys(value as object)?.[0],
                 diseaseName: key,
-            } as DiseaseForm)
+            }) as DiseaseForm
     );
 
     const { diseaseForm } = config;

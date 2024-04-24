@@ -116,7 +116,7 @@ type MainWhenCommentsFormProps<T> = MainWhenCommentsDispatchProps &
  * Base component for forms with {[main: string], when, comments} fields
  */
 export const MainWhenCommentsForm = <
-    T extends { id: string; when: WhenResponse; comments: string }
+    T extends { id: string; when: WhenResponse; comments: string },
 >(
     props: MainWhenCommentsFormProps<T>
 ) => {

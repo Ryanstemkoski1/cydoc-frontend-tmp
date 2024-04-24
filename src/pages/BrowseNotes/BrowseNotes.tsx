@@ -186,7 +186,10 @@ const BrowseNotes = () => {
                         className='flex align-center justify-center'
                         onClick={goForward}
                     >
-                        <img src={'/images/right-arrow.svg'} alt='Right arrow' />
+                        <img
+                            src={'/images/right-arrow.svg'}
+                            alt='Right arrow'
+                        />
                     </a>
                 </div>
 
@@ -197,7 +200,10 @@ const BrowseNotes = () => {
                     <div className={`${style.notesBlock__reload}`}>
                         <button onClick={loadPatientHistory}>
                             <picture>
-                                <img src={'/images/refresh.png'} alt='Refresh' />
+                                <img
+                                    src={'/images/refresh.png'}
+                                    alt='Refresh'
+                                />
                             </picture>
                             Check for new questionnaires
                         </button>

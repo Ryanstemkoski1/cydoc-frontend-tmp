@@ -101,12 +101,12 @@ export class SocialHistoryNote extends Component<Props> {
         socialHistorySection.interestedInQuitting === YesNoMaybeResponse.Yes
             ? (str = ' Patient is interested in quitting.')
             : socialHistorySection.interestedInQuitting ===
-              YesNoMaybeResponse.Maybe
-            ? (str = ' Patient is maybe interested in quitting.')
-            : socialHistorySection.interestedInQuitting ===
-              YesNoMaybeResponse.No
-            ? (str = ' Patient is not interested in quitting.')
-            : (str = '');
+                YesNoMaybeResponse.Maybe
+              ? (str = ' Patient is maybe interested in quitting.')
+              : socialHistorySection.interestedInQuitting ===
+                  YesNoMaybeResponse.No
+                ? (str = ' Patient is not interested in quitting.')
+                : (str = '');
         return str;
     };
 

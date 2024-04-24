@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Header } from 'semantic-ui-react';
-import Image from 'next/image'
+import Image from 'next/image';
 
 interface Props {
     title: string;

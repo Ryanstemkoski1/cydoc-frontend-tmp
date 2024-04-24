@@ -15,8 +15,8 @@
         typeof window != 'undefined' && window.Math == Math
             ? window
             : typeof self != 'undefined' && self.Math == Math
-            ? self
-            : Function('return this')();
+              ? self
+              : Function('return this')();
 
     $.fn.form = function (parameters) {
         var $allModules = $(this),
@@ -436,9 +436,9 @@
                             undefined
                             ? 'input'
                             : document.createElement('input')
-                                  .onpropertychange !== undefined
-                            ? 'propertychange'
-                            : 'keyup';
+                                    .onpropertychange !== undefined
+                              ? 'propertychange'
+                              : 'keyup';
                     },
                     fieldsFromShorthand: function (fields) {
                         var fullFields = {};

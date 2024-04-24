@@ -83,7 +83,7 @@ const FormPreferencesPage = () => {
                         diseaseKey: Object.keys(value as object)?.[0],
                         diseaseName: key,
                         isDeleted: false,
-                    } as DiseaseForm)
+                    }) as DiseaseForm
             );
 
             setAllDiseaseForms(diseaseForms);

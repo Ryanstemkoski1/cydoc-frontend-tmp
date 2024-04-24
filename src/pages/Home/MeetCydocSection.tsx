@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Button, Grid, Header,  Segment } from 'semantic-ui-react';
+import { Button, Grid, Header, Segment } from 'semantic-ui-react';
 import { HOME_MED_BP } from 'constants/breakpoints.js';
 import { homeContent } from 'constants/homeContent';
 import './Home.css';

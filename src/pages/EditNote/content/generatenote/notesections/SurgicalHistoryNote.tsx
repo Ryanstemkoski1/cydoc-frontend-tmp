@@ -44,26 +44,27 @@ export class SurgicalHistoryNote extends Component<SurgicalHistoryProps> {
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>
-                        {Object.values(surgicalHistory).map((surgical, index) =>
-                            surgical.procedure !== '' ? (
-                                <Table.Row key={index}>
-                                    <Table.Cell>
-                                        {this.trimSurgicalProcedure(
-                                            surgical.procedure
-                                        )}
-                                    </Table.Cell>
-                                    <Table.Cell>
-                                        {surgical.year !== -1
-                                            ? surgical.year
-                                            : null}
-                                    </Table.Cell>
-                                    <Table.Cell>
-                                        {surgical.comments
-                                            ? surgical.comments
-                                            : null}
-                                    </Table.Cell>
-                                </Table.Row>
-                            ) : null
+                        {Object.values(surgicalHistory).map(
+                            (surgical, index) =>
+                                surgical.procedure !== '' ? (
+                                    <Table.Row key={index}>
+                                        <Table.Cell>
+                                            {this.trimSurgicalProcedure(
+                                                surgical.procedure
+                                            )}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {surgical.year !== -1
+                                                ? surgical.year
+                                                : null}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {surgical.comments
+                                                ? surgical.comments
+                                                : null}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ) : null
                         )}
                     </Table.Body>
                 </Table>

@@ -15,8 +15,8 @@
         typeof window != 'undefined' && window.Math == Math
             ? window
             : typeof self != 'undefined' && self.Math == Math
-            ? self
-            : Function('return this')();
+              ? self
+              : Function('return this')();
 
     $.fn.popup = function (parameters) {
         var $allModules = $(this),
@@ -124,8 +124,8 @@
                         $offsetParent = settings.inline
                             ? module.get.offsetParent($target)
                             : module.has.popup()
-                            ? module.get.offsetParent($popup)
-                            : $body;
+                              ? module.get.offsetParent($popup)
+                              : $body;
                     }
                     if (
                         $offsetParent.is('html') &&

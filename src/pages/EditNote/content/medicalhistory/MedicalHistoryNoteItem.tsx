@@ -308,7 +308,11 @@ class MedicalHistoryNoteItem extends Component<Props> {
                             this.props.deleteRow(this.props.index);
                         }}
                     >
-                        <Image alt='Delete' src={'/images/delete.svg'} width={50}/>
+                        <Image
+                            alt='Delete'
+                            src={'/images/delete.svg'}
+                            width={50}
+                        />
                         <span>Remove</span>
                     </aside>
                 </div>

@@ -541,8 +541,8 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                       />,
                   ]
                 : this.props.additionalSurvey.initialSurveyState === 1
-                ? [<UserInfoForm key={1} />]
-                : initialSurvey;
+                  ? [<UserInfoForm key={1} />]
+                  : initialSurvey;
 
         return (
             <div>
@@ -558,12 +558,12 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                                           .initialSurveyState === 0
                                         ? this.state.message
                                         : selected
-                                        ? 'Please confirm the date of your appointment.'
-                                        : 'Please answer Yes to at least one question to proceed.'
+                                          ? 'Please confirm the date of your appointment.'
+                                          : 'Please answer Yes to at least one question to proceed.'
                                     : this.counter().reduce((a, v) => a + v) ==
-                                      0
-                                    ? 'Please select at least one condition or symptom. Otherwise, describe it in the box below.'
-                                    : 'The maximum of 3 has been reached. Please un-select an existing option before adding a new one.'}
+                                        0
+                                      ? 'Please select at least one condition or symptom. Otherwise, describe it in the box below.'
+                                      : 'The maximum of 3 has been reached. Please un-select an existing option before adding a new one.'}
                             </Message.Header>
                         </Message>
                     ) : (

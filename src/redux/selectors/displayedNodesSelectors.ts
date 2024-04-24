@@ -85,7 +85,7 @@ export function nodesToDisplayInOrder(
             {
                 [chiefComplaint: string]: string[];
             },
-            string[]
+            string[],
         ];
     if (totalNodes.length < displayedNodesCutOff) {
         let nodesArr = totalNodes, // for the count

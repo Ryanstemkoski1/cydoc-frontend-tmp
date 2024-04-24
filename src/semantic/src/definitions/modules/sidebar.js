@@ -15,8 +15,8 @@
         typeof window != 'undefined' && window.Math == Math
             ? window
             : typeof self != 'undefined' && self.Math == Math
-            ? self
-            : Function('return this')();
+              ? self
+              : Function('return this')();
 
     $.fn.sidebar = function (parameters) {
         var $allModules = $(this),
@@ -724,8 +724,8 @@
                                 ? settings.defaultTransition.mobile[direction]
                                 : settings.mobileTransition
                             : settings.transition == 'auto'
-                            ? settings.defaultTransition.computer[direction]
-                            : settings.transition;
+                              ? settings.defaultTransition.computer[direction]
+                              : settings.transition;
                         module.verbose('Determined transition', transition);
                         return transition;
                     },

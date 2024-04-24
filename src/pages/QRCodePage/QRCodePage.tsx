@@ -63,8 +63,8 @@ function QRCodePage() {
                         </div>
                         <div className={style.QRCodePage__content}>
                             <p>
-                                Cydoc&lsquo;s Smart Patient Intake Form© uses AI
-                                to interview a patient before a visit and
+                                Cydoc&lsquo;s Smart Patient Intake Form© uses
+                                AI to interview a patient before a visit and
                                 generate a medical note. Cydoc enables
                                 streamlined visits and less time spent on
                                 documentation.
@@ -91,7 +91,12 @@ function QRCodePage() {
                                 <div className={style.QRCodePage__item}>
                                     <div className={style.QRCodePage__card}>
                                         <picture>
-                                            <img src={'/images/qr-code-icon1.svg'} alt='icon1' />
+                                            <img
+                                                src={
+                                                    '/images/qr-code-icon1.svg'
+                                                }
+                                                alt='icon1'
+                                            />
                                         </picture>
 
                                         <p>
@@ -114,7 +119,12 @@ function QRCodePage() {
                                 <div className={style.QRCodePage__item}>
                                     <div className={style.QRCodePage__card}>
                                         <picture>
-                                            <img src={'/images/qr-code-icon2.svg'} alt='icon2' />
+                                            <img
+                                                src={
+                                                    '/images/qr-code-icon2.svg'
+                                                }
+                                                alt='icon2'
+                                            />
                                         </picture>
 
                                         <p>
@@ -135,7 +145,12 @@ function QRCodePage() {
                                 <div className={style.QRCodePage__item}>
                                     <div className={style.QRCodePage__card}>
                                         <picture>
-                                            <img src={'/images/qr-code-icon3.svg'} alt='icon3' />
+                                            <img
+                                                src={
+                                                    '/images/qr-code-icon3.svg'
+                                                }
+                                                alt='icon3'
+                                            />
                                         </picture>
 
                                         <p>
@@ -157,7 +172,12 @@ function QRCodePage() {
                                 <div className={style.QRCodePage__item}>
                                     <div className={style.QRCodePage__card}>
                                         <picture>
-                                            <img src={'/images/qr-code-icon4.svg'} alt='icon4' />
+                                            <img
+                                                src={
+                                                    '/images/qr-code-icon4.svg'
+                                                }
+                                                alt='icon4'
+                                            />
                                         </picture>
 
                                         <a
