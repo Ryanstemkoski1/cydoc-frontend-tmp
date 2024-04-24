@@ -3,8 +3,12 @@ import { API_URL } from '../modules/environment';
 
 function getGraphClientURL() {
     let graphClientURL;
+    console.warn(
+        `FIXME: getGraphClientURL() is returning a hardcoded value. This should be fixed to return the correct URL based on the environment.`
+    );
     let graphURLProd = 'https://newcydocgraph-3bf6786f6497.herokuapp.com';
     let graphURLDev = 'https://newcydocgraphdev-bb581ae89e66.herokuapp.com';
+    return graphURLDev;
     if (location.hostname == 'www.cydoc.ai') {
         graphClientURL = graphURLProd;
     } else if (location.hostname == 'www.cyai.site') {
