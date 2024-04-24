@@ -1,4 +1,6 @@
-export const __DEV__ = process.env.REACT_APP_PRODUCTION_OR_DEV !== 'production';
+// FIXME: link up to AWS region & ENV config
+export const __DEV__ =
+    process.env.NEXT_PUBLIC_PRODUCTION_OR_DEV !== 'production';
 
 export const APP_ENV = __DEV__ ? 'staging' : 'production';
 
