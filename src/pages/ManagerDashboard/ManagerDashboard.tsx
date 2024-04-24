@@ -6,7 +6,7 @@ import { getInstitutionMembers } from '../../modules/institution-api';
 import useUser from 'hooks/useUser';
 import { log } from '../../modules/logging';
 import MaterialTable, {
-    materialTableHeight,
+    useMaterialTableHeight,
 } from 'components/Molecules/MaterialTable';
 import { Delete, Edit } from '@mui/icons-material';
 import ReplayIcon from '@mui/icons-material/Replay';
@@ -129,6 +129,16 @@ const ManagerDashboard = () => {
         [cognitoUser, editingUser?.id]
     );
 
+    const materialTableHeight = useMaterialTableHeight();
+
+    const tableOptions: Options<DbUser> = useMemo(() => {
+        return {
+            actionsColumnIndex: -1,
+            maxBodyHeight: `${materialTableHeight + 3}vh`,
+            minBodyHeight: `${materialTableHeight + 3}vh`,
+        };
+    }, []);
+
     return (
         <>
             <Container className='manager-dashboard-container'>
@@ -145,7 +155,7 @@ const ManagerDashboard = () => {
                         },
                     }}
                     loading={!members}
-                    options={TABLE_OPTIONS}
+                    options={tableOptions}
                     onRowClick={(e, rowData) => {
                         // eslint-disable-next-line no-console
                         console.log(`row selected:`, rowData);
@@ -222,9 +232,3 @@ const getColumns: (
     { field: 'id', filtering: false, hidden: true, title: 'ID' },
     { title: 'Phone', field: 'phoneNumber' },
 ];
-
-const TABLE_OPTIONS: Options<DbUser> = {
-    actionsColumnIndex: -1,
-    maxBodyHeight: `${materialTableHeight + 3}vh`,
-    minBodyHeight: `${materialTableHeight + 3}vh`,
-};

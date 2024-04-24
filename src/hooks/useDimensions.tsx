@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useState } from 'react';
 
 function useDimensions() {
@@ -25,8 +26,8 @@ function useDimensions() {
     return { windowWidth, windowHeight };
 }
 
-function withDimensionsHook(Component) {
-    return function WrappedComponent(props) {
+function withDimensionsHook(Component: React.ComponentType<any>) {
+    return function WrappedComponent(props: any) {
         const dimensions = useDimensions();
         return <Component {...props} dimensions={dimensions} />;
     };
