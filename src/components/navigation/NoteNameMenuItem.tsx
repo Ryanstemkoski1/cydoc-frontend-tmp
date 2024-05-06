@@ -15,10 +15,6 @@ interface StateProps {
     title: string;
 }
 
-interface NavProps {
-    mobile: boolean;
-}
-
 interface DispatchProps {
     updateNoteTitle: (title: string) => UpdateNoteTitleAction;
 }

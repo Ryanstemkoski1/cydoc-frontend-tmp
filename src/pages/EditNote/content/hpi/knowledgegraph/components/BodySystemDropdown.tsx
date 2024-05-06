@@ -14,7 +14,7 @@ interface BodySystemDropdownState {
     selected: boolean;
 }
 
-const imgToRender: { [key: string]: any } = {
+const imgToRender: { [key: string]: string } = {
     Neurology: '/images/brain.svg',
     Psychiatry: '/images/psychiatry.svg',
     'Ophtho/ENT': '/images/heent.svg',

@@ -57,7 +57,7 @@ class ChiefComplaintsButton extends React.Component<Props> {
                         ? hpiHeaders.parentNodes[name].patientView
                         : name
                 }
-                onToggleButtonClick={(e: any) => {
+                onToggleButtonClick={() => {
                     const pinnedChiefComplaints = Object.keys(
                         userSurveyState.nodes['6'].response ?? {}
                     );

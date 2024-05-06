@@ -9,7 +9,12 @@ export default function LogoHeader({ title }: Props) {
     return (
         <>
             <Container textAlign='center'>
-                <Image width={50} src={'/images/cydoc-logo.svg'} alt='logo' />
+                <Image
+                    height={50}
+                    width={50}
+                    src={'/images/cydoc-logo.svg'}
+                    alt='logo'
+                />
                 <Header as='h1' className='logo-text' content='Cydoc' />
             </Container>
             <Container

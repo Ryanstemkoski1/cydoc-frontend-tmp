@@ -35,7 +35,10 @@ export default function ViewProduct() {
                                 }}
                             >
                                 <span className='flex align-center justify-center'>
-                                    <img src={'/images/patient.svg'} />
+                                    <img
+                                        alt='patient'
+                                        src={'/images/patient.svg'}
+                                    />
                                 </span>
                                 Patient View
                             </a>
@@ -49,7 +52,10 @@ export default function ViewProduct() {
                                 }}
                             >
                                 <span className='flex align-center justify-center'>
-                                    <img src={'/images/doctor.svg'} />
+                                    <img
+                                        alt='doctor'
+                                        src={'/images/doctor.svg'}
+                                    />
                                 </span>
                                 Doctor View
                             </a>
@@ -72,7 +78,10 @@ export default function ViewProduct() {
                                 }}
                             >
                                 <span className='flex align-center justify-center'>
-                                    <img src={'/images/medical-app.svg'} />
+                                    <img
+                                        alt='medical app'
+                                        src={'/images/medical-app.svg'}
+                                    />
                                 </span>
                                 EHR
                             </a>
@@ -87,7 +96,10 @@ export default function ViewProduct() {
                                 }}
                             >
                                 <span className='flex align-center justify-center'>
-                                    <img src={'/images/medical-record.svg'} />
+                                    <img
+                                        alt='medical record'
+                                        src={'/images/medical-record.svg'}
+                                    />
                                 </span>
                                 HPI
                             </a>

@@ -312,24 +312,25 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     };
 
     getData = async (complaint: string) => {
-        const { parentNodes } = this.props.hpiHeaders,
-            chiefComplaint = Object.keys(parentNodes[complaint])[0],
-            response = await axios.get(
-                'https://cydocgraph.herokuapp.com/graph/category/' +
-                    chiefComplaint +
-                    '/4'
-            ),
-            { data } = response,
-            { graph, nodes, edges } = data as GraphData,
-            parentNode = parentNodes[complaint][chiefComplaint];
+        const { parentNodes } = this.props.hpiHeaders;
+        const chiefComplaint = Object.keys(parentNodes[complaint])[0];
+        const response = await axios.get(
+            'https://cydocgraph.herokuapp.com/graph/category/' +
+                chiefComplaint +
+                '/4'
+        );
+
+        const { data } = response;
         this.props.processKnowledgeGraph(data);
-        const childNodes = graph[parentNode]
-            .map((edge: number) => [
-                edges[edge.toString()].toQuestionOrder.toString(),
-                edges[edge.toString()].to,
-            ])
-            .sort((tup1, tup2) => parseInt(tup1[0]) - parseInt(tup2[0]))
-            .map(([, /* _questionOrder, */ medId]) => medId);
+        // const { graph, nodes, edges } = data as GraphData;
+        // const parentNode = parentNodes[complaint][chiefComplaint];
+        // const childNodes = graph[parentNode]
+        //     .map((edge: number) => [
+        //         edges[edge.toString()].toQuestionOrder.toString(),
+        //         edges[edge.toString()].to,
+        //     ])
+        //     .sort((tup1, tup2) => parseInt(tup1[0]) - parseInt(tup2[0]))
+        //     .map(([, /* _questionOrder, */ medId]) => medId);
     };
 
     renderSwitch = (id: string) => {

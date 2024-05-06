@@ -1,7 +1,6 @@
 import { YesNoResponse } from 'constants/enums';
 import { MEDICATIONS_ACTION } from '../actions/actionTypes';
 import { MedicationsActionTypes } from '../actions/medicationsActions';
-import { v4 } from 'uuid';
 
 export interface MedicationsState {
     [index: string]: MedicationsItem;

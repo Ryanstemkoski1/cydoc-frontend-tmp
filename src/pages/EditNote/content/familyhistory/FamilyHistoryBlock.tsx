@@ -24,7 +24,6 @@ import {
     selectFamilyHistoryConditions,
     selectFamilyHistoryState,
 } from 'redux/selectors/familyHistorySelectors';
-import { Grid, Header } from 'semantic-ui-react';
 import '../hpi/knowledgegraph/css/Button.css';
 import '../reviewofsystems/ReviewOfSystems.css';
 import './FamilyHistory.css';
@@ -61,7 +60,7 @@ class FamilyHistoryBlock extends Component<Props> {
         // array of dropdowns displayed on Family History Family Member column
         // variable range that changes when the user clicks the + (add member) button
         // we want there to be at least one dropdown
-        let dropdownList = [];
+        let dropdownList: React.JSX.Element[] = [];
         const familyIndexes = Object.keys(familyMembers);
         dropdownList = familyIndexes.map((familyIndex, listIndex, array) => (
             <FamilyHistoryDropdown
@@ -77,24 +76,24 @@ class FamilyHistoryBlock extends Component<Props> {
                 }
             />
         ));
-        const newContentHeader = (
-            <Grid columns={3}>
-                <Grid.Row>
-                    <Grid.Column width={1}></Grid.Column>
-                    <Grid.Column width={3}>
-                        <Header.Subheader className='family-member-header'>
-                            Family Member
-                        </Header.Subheader>
-                    </Grid.Column>
-                    <Grid.Column width={3}>
-                        <Header.Subheader>Cause of Death</Header.Subheader>
-                    </Grid.Column>
-                    <Grid.Column width={9}>
-                        <Header.Subheader>Comments</Header.Subheader>
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
-        );
+        // const newContentHeader = (
+        //     <Grid columns={3}>
+        //         <Grid.Row>
+        //             <Grid.Column width={1}></Grid.Column>
+        //             <Grid.Column width={3}>
+        //                 <Header.Subheader className='family-member-header'>
+        //                     Family Member
+        //                 </Header.Subheader>
+        //             </Grid.Column>
+        //             <Grid.Column width={3}>
+        //                 <Header.Subheader>Cause of Death</Header.Subheader>
+        //             </Grid.Column>
+        //             <Grid.Column width={9}>
+        //                 <Header.Subheader>Comments</Header.Subheader>
+        //             </Grid.Column>
+        //         </Grid.Row>
+        //     </Grid>
+        // );
         let handleToggle = this.handleToggleButtonClick;
         let yesActive = hasAfflictedFamilyMember === YesNoResponse.Yes;
         let noActive = hasAfflictedFamilyMember === YesNoResponse.No;

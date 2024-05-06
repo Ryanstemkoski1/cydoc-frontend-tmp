@@ -1,15 +1,14 @@
 @import '../../assets/scss/variables.scss';
 .home {
-    padding: 80px 0 0;
     text-align: center;
     flex-direction: column;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 70px);
     @include max-screen($tablet) {
         padding-top: 60px;
     }
     @include max-screen($mobile) {
         padding-top: 50px;
-        height: calc(100vh - 65px);
+        height: calc(100vh - 70px);
     }
     &__title {
         line-height: 1;

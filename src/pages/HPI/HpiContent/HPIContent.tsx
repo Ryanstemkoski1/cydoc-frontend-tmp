@@ -5,7 +5,7 @@ import { graphClientURL, apiClient } from 'constants/api.js';
 import { favChiefComplaints } from 'classes/institution.class';
 import React from 'react';
 import Masonry from 'react-masonry-css';
-import { ConnectedProps, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { setNotesChiefComplaint } from 'redux/actions/chiefComplaintsActions';
 import { processKnowledgeGraph } from 'redux/actions/hpiActions';

@@ -1,12 +1,9 @@
 import React, { useMemo, useEffect, useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import {
-    ActionMeta,
     GroupBase,
-    MultiValue,
     OptionsOrGroups,
     PropsValue,
-    SingleValue,
     WindowedMenuList,
 } from 'react-windowed-select';
 import Select, { createFilter, components } from 'react-select';

@@ -322,7 +322,11 @@ class Alcohol extends React.Component<Props, State> {
 
     makeAccordionPanels(drinksConsumed: AlcoholConsumption[]) {
         const values = this.props.alcohol;
-        const panels = [];
+        const panels: {
+            key: number;
+            title: { content: React.JSX.Element };
+            content: { content: React.JSX.Element };
+        }[] = [];
         const consumedDrinkTypes: string[] = [];
 
         for (let i = 0; i < drinksConsumed.length; i++) {

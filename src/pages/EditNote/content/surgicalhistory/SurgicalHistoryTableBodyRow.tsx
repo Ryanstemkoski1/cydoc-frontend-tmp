@@ -200,14 +200,14 @@ const SurgicalHistoryTableBodyRowNew = (props: Props) => {
 
     const tableRows = hide
         ? fields.map((field: string, index: number) => {
-              const textAlign = field == 'hasHadSurgery' ? 'center' : 'left';
+              //   const textAlign = field == 'hasHadSurgery' ? 'center' : 'left';
               if (field !== 'procedure') {
                   return null;
               }
               return <td key={index}>{getCell(field)}</td>;
           })
         : fields.map((field: string, index: number) => {
-              const textAlign = field == 'hasHadSurgery' ? 'center' : 'left';
+              //   const textAlign = field == 'hasHadSurgery' ? 'center' : 'left';
               return <td key={index}>{getCell(field)}</td>;
           });
 

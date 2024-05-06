@@ -116,12 +116,11 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
     };
 
     breakWord = (category: string): string | undefined => {
-        let header = '';
         const slash = '/';
         if (category.includes(slash)) {
-            return (header = category.split('/').join(' / '));
+            return category.split('/').join(' / ');
         } else {
-            return (header = category);
+            return category;
         }
     };
 

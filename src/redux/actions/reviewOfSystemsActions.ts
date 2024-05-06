@@ -1,6 +1,5 @@
 import { YesNoResponse } from 'constants/enums';
 import { ROS_ACTION } from './actionTypes';
-import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
 
 export interface ToggleROSOptionAction {
     type: ROS_ACTION.TOGGLE_OPTION;

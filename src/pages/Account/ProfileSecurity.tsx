@@ -15,7 +15,6 @@ import { passwordRequirements } from 'auth/passwordReqs';
 import useUser from 'hooks/useUser';
 import { updatePassword } from 'auth/cognito';
 import { useHistory } from 'react-router-dom';
-import { UserRole } from '@cydoc-ai/types';
 
 // NOTE: this page needs to be updated to use the new auth password editing logic
 const ProfileSecurity = () => {
@@ -90,7 +89,7 @@ const ProfileSecurity = () => {
     };
 
     const passwordErrorMessages = () => {
-        const errMsgs = [];
+        const errMsgs: React.JSX.Element[] = [];
         for (const untyped in passwordErrors) {
             const err = untyped as keyof typeof passwordErrors; // set types for key
             if (passwordReqs[err]) {

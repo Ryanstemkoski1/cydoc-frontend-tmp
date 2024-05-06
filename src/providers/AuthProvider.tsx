@@ -109,7 +109,7 @@ export const AuthProvider: React.FC<
                             setLoginCorrect(true);
                             setIsSignedIn(true);
                         })
-                        .catch((err) => {
+                        .catch(() => {
                             signOut();
                             breadcrumb(
                                 `unable to restore session, user logged out`,
@@ -305,9 +305,9 @@ export const AuthProvider: React.FC<
                 setCognitoUser(updatePasswordResult);
                 setLoginCorrect(true);
 
-                console.log(`password challenge completed`, {
-                    updatePasswordResult,
-                });
+                // console.log(`password challenge completed`, {
+                //     updatePasswordResult,
+                // });
 
                 return {
                     user: updatePasswordResult,

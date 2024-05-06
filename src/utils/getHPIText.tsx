@@ -686,14 +686,14 @@ function getHPIText(bulletNoteView = false) {
             initialPara[j] = new Set([...setB].filter((x) => !setA.has(x)));
         }
     }
-    const title = [];
+    const title: string[] = [];
     const finalPara = initialPara.reduce((acc: string[], hpiStringSet, i) => {
         if (hpiStringSet.size) {
             title.push(Object.keys(formattedHpis)[i]);
             return [
                 ...acc,
                 createHPI(
-                    [...hpiStringSet].join('. '),
+                    Array.from(hpiStringSet).join('. '),
                     state.patientInformation.patientName,
                     state.patientInformation.pronouns
                 ),

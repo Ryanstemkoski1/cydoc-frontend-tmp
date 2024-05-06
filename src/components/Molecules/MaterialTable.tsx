@@ -16,7 +16,10 @@ interface Props<T extends object> extends MaterialTableProps<T> {
 export const useMaterialTableHeight = () => {
     const { windowHeight } = useDimensions();
 
-    return ((windowHeight - 280) / windowHeight) * 100;
+    return useMemo(
+        () => ((windowHeight - 280) / windowHeight) * 100,
+        [windowHeight]
+    );
 };
 
 export default function MaterialTable<T extends object>({

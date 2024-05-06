@@ -53,7 +53,7 @@ function Search({
                         {items.map((item) => (
                             <a
                                 key={item.title}
-                                onClick={(e) => {
+                                onClick={() => {
                                     item.onClick();
                                     setShowDropdown(false);
                                 }}

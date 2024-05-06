@@ -118,13 +118,13 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
     const { patientName, pronouns } = patientInformationState;
 
     // Opening and closing modal with patient information
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = (): void => setIsModalOpen(true);
-    const closeModal = (): void => setIsModalOpen(false);
-    const savePatientInfo = () => {
-        updatePatientInformation(patientName, pronouns);
-        closeModal();
-    };
+    // const [isModalOpen, setIsModalOpen] = useState(false);
+    // const openModal = (): void => setIsModalOpen(true);
+    // const closeModal = (): void => setIsModalOpen(false);
+    // const savePatientInfo = () => {
+    //     updatePatientInformation(patientName, pronouns);
+    //     closeModal();
+    // };
     const [isBulletNoteView, setIsBulletNoteView] = useState(true);
     const [isRichText, setIsRichText] = useState(false);
 
@@ -143,6 +143,7 @@ const GenerateNote: React.FunctionComponent<Props> = (props: Props) => {
     useEffect(() => {
         prefillName();
         prefillPronouns();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const prefillPronouns = () => {

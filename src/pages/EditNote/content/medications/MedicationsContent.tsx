@@ -125,8 +125,8 @@ export class MedicationsContent extends Component<Props, State> {
             isNote = false,
         } = this.props;
 
-        const panels = [],
-            medsEntries = Object.entries(medications);
+        const panels: React.JSX.Element[] = [];
+        const medsEntries = Object.entries(medications);
 
         if (isPreview) {
             if (values != null) {

@@ -332,7 +332,11 @@ class RecreationalDrugs extends React.Component<Props, State> {
 
     makeAccordionPanels(drugsUsed: DrugUsage[]) {
         const values = this.props.recreationalDrugs;
-        const panels = [];
+        const panels: {
+            key: number;
+            title: { content: React.JSX.Element };
+            content: { content: React.JSX.Element };
+        }[] = [];
         const usedDrugNames: string[] = [];
 
         for (let i = 0; i < drugsUsed.length; i++) {

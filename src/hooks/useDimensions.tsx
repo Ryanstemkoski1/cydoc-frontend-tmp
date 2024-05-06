@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 function useDimensions() {
     const [{ windowHeight, windowWidth }, setDimensions] = useState({
@@ -23,7 +23,10 @@ function useDimensions() {
         return () => window.removeEventListener('resize', updateDimensions);
     }, []);
 
-    return { windowWidth, windowHeight };
+    return useMemo(
+        () => ({ windowWidth, windowHeight }),
+        [windowHeight, windowWidth]
+    );
 }
 
 function withDimensionsHook(Component: React.ComponentType<any>) {

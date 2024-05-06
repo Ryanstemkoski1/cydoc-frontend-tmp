@@ -236,7 +236,12 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                 } flex align-center`}
                 to='/'
             >
-                <img width={50} src={'/images/cydoc-logo.svg'} alt='Cydoc' />
+                <img
+                    height={50}
+                    width={50}
+                    src={'/images/cydoc-logo.svg'}
+                    alt='Cydoc'
+                />
                 {!isEditNotePage && <span>Cydoc</span>}
             </Link>
 

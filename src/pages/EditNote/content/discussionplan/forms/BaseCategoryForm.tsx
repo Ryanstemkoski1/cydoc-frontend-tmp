@@ -74,6 +74,8 @@ const TYPE_TO_OPTION: {
 /**
  * Component for all categories of the discussion and plan section of the note
  */
+const expanded = false;
+
 export const BaseCategoryForm = <T extends { id: string }>(
     props: BaseCategoryFormProps<T>
 ) => {
@@ -86,8 +88,7 @@ export const BaseCategoryForm = <T extends { id: string }>(
         addRow,
     } = props;
 
-    const [expanded, setExpanded] = useState<boolean>(false);
-    const [activeRows, setActiveRows] = useState(new Set());
+    // const [activeRows, setActiveRows] = useState(new Set());
     const [options, setOptions] = useState<Options | DiagnosesOptions>({
         main: TYPE_TO_OPTION[category] || {},
     });
