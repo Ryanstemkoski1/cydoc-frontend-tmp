@@ -4,7 +4,7 @@ import { YesNoResponse } from 'constants/enums';
 import { GraphData, ResponseTypes } from 'constants/hpiEnums';
 import React from 'react';
 import { connect } from 'react-redux';
-import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
+import { CHIEF_COMPLAINTS } from '@redux/actions/actionTypes';
 import {
     GoBackToAdditionalSurvey,
     UpdateAdditionalSurveyAction,
@@ -12,35 +12,35 @@ import {
     resetAdditionalSurveyPage,
     updateAdditionalSurveyDetails,
     updateChiefComplaintsDescription,
-} from 'redux/actions/additionalSurveyActions';
+} from '@redux/actions/additionalSurveyActions';
 import {
     ProcessKnowledgeGraphAction,
     processKnowledgeGraph,
-} from 'redux/actions/hpiActions';
+} from '@redux/actions/hpiActions';
 import {
     SaveHpiHeaderAction,
     saveHpiHeader,
-} from 'redux/actions/hpiHeadersActions';
+} from '@redux/actions/hpiHeadersActions';
 import {
     InitialSurveySearchAction,
     ProcessSurveyGraphAction,
     initialSurveySearch,
     processSurveyGraph,
-} from 'redux/actions/userViewActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
-import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
-import { isSelectOneResponse } from 'redux/reducers/hpiReducer';
+} from '@redux/actions/userViewActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { additionalSurvey } from '@redux/reducers/additionalSurveyReducer';
+import { HpiHeadersState } from '@redux/reducers/hpiHeadersReducer';
+import { isSelectOneResponse } from '@redux/reducers/hpiReducer';
 import {
     InitialQuestionsState,
     isChiefComplaintsResponse,
     userSurveyState,
-} from 'redux/reducers/userViewReducer';
+} from '@redux/reducers/userViewReducer';
 import {
     selectInitialPatientSurvey,
     selectPatientViewState,
-} from 'redux/selectors/userViewSelectors';
-import { currentNoteStore } from 'redux/store';
+} from '@redux/selectors/userViewSelectors';
+import { currentNoteStore } from '@redux/store';
 import {
     Container,
     Form,

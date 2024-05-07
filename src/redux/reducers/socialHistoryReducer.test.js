@@ -2,7 +2,7 @@ import {
     socialHistoryReducer,
     initialSocialHistoryState,
 } from './socialHistoryReducer';
-import { SOCIAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
+import { SOCIAL_HISTORY_ACTION } from '@redux/actions/actionTypes';
 import {
     SubstanceUsageResponse,
     YesNoMaybeResponse,

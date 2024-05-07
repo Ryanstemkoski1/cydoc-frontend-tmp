@@ -6,9 +6,9 @@ import {
     updateEmployment,
     updateExercise,
     updateLivingSituation,
-} from 'redux/actions/socialHistoryActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectSecondaryFieldsState } from 'redux/selectors/socialHistorySelectors';
+} from '@redux/actions/socialHistoryActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectSecondaryFieldsState } from '@redux/selectors/socialHistorySelectors';
 import { Form, Grid, TextArea } from 'semantic-ui-react';
 import '../hpi/knowledgegraph/css/Button.css';
 import Alcohol from './Alcohol';

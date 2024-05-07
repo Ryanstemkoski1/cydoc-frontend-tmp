@@ -2,15 +2,15 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
 import PhysicalExamNote from '../PhysicalExamNote';
-import { initialAbdomenWidgetState } from 'redux/reducers/widgetReducers/abdomenWidgetReducer';
-import { initialLungsWidgetState } from 'redux/reducers/widgetReducers/lungsWidgetReducer';
-import { PulseLocation } from 'redux/reducers/widgetReducers/pulsesWidgetReducer';
-//import { ReflexLocation } from 'redux/reducers/widgetReducers/reflexesWidgetReducer';
+import { initialAbdomenWidgetState } from '@redux/reducers/widgetReducers/abdomenWidgetReducer';
+import { initialLungsWidgetState } from '@redux/reducers/widgetReducers/lungsWidgetReducer';
+import { PulseLocation } from '@redux/reducers/widgetReducers/pulsesWidgetReducer';
+//import { ReflexLocation } from '@redux/reducers/widgetReducers/reflexesWidgetReducer';
 import {
     Phase,
     MurmurLocation,
     MurmurPitch,
-} from 'redux/reducers/widgetReducers/murmurswidgetReducer';
+} from '@redux/reducers/widgetReducers/murmurswidgetReducer';
 import { LeftRight } from 'constants/enums';
 
 Enzyme.configure({ adapter: new Adapter() });

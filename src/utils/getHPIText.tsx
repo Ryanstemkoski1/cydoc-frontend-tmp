@@ -15,23 +15,23 @@ import {
     createHPI,
     createInitialHPI,
 } from 'pages/EditNote/content/generatenote/generateHpiText';
-import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
-import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
-import { HpiState } from 'redux/reducers/hpiReducer';
-import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
-import { MedicationsState } from 'redux/reducers/medicationsReducer';
-import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
-import { SurgicalHistoryElements } from 'redux/reducers/surgicalHistoryReducer';
-import { userSurveyState } from 'redux/reducers/userViewReducer';
-import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
-import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
-import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
-import { selectPatientInformationState } from 'redux/selectors/patientInformationSelector';
-import { selectSurgicalHistoryProcedures } from 'redux/selectors/surgicalHistorySelectors';
-import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
-import { currentNoteStore } from 'redux/store';
+import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
+import { FamilyHistoryState } from '@redux/reducers/familyHistoryReducer';
+import { HpiState } from '@redux/reducers/hpiReducer';
+import { MedicalHistoryState } from '@redux/reducers/medicalHistoryReducer';
+import { MedicationsState } from '@redux/reducers/medicationsReducer';
+import { PatientInformationState } from '@redux/reducers/patientInformationReducer';
+import { SurgicalHistoryElements } from '@redux/reducers/surgicalHistoryReducer';
+import { userSurveyState } from '@redux/reducers/userViewReducer';
+import { selectChiefComplaintsState } from '@redux/selectors/chiefComplaintsSelectors';
+import { selectFamilyHistoryState } from '@redux/selectors/familyHistorySelectors';
+import { selectHpiState } from '@redux/selectors/hpiSelectors';
+import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelector';
+import { selectMedicationsState } from '@redux/selectors/medicationsSelectors';
+import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
+import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistorySelectors';
+import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
+import { currentNoteStore } from '@redux/store';
 import { isHPIResponseValid } from './getHPIFormData';
 
 interface HPINoteProps {

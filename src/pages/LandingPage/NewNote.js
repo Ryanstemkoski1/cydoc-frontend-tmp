@@ -16,7 +16,7 @@ import { Redirect } from 'react-router';
 import './LandingPage.css';
 import Form from 'semantic-ui-react/dist/commonjs/collections/Form';
 import { connect } from 'react-redux';
-import { loadNote } from 'redux/actions/currentNoteActions';
+import { loadNote } from '@redux/actions/currentNoteActions';
 
 class NewNoteSegment extends Component {
     static contextType = NotesContext;

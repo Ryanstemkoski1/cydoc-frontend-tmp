@@ -14,12 +14,12 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
-import { saveHpiHeader } from 'redux/actions/hpiHeadersActions';
+import { saveHpiHeader } from '@redux/actions/hpiHeadersActions';
 import {
     initialSurveyAddText,
     processSurveyGraph,
-} from 'redux/actions/userViewActions';
-import { createCurrentNoteStore } from 'redux/store';
+} from '@redux/actions/userViewActions';
+import { makeStore } from '@redux/store';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -52,8 +52,6 @@ const renderChiefComplaintSelectionPage = (state: any) => {
     );
 };
 
-const createNewStore = () => createCurrentNoteStore();
-
 describe('CCSelection Page', () => {
     describe('Pinned Chief Complaints should be in sync with Knowledge Graph', () => {
         let knowledgeGraphResponse: AxiosResponse<any>;
@@ -67,7 +65,7 @@ describe('CCSelection Page', () => {
         });
 
         beforeEach(() => {
-            newStore = createNewStore();
+            newStore = makeStore();
             initialQuestions = JSON.parse(
                 JSON.stringify(initialQuestionsOriginal)
             );

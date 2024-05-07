@@ -8,12 +8,12 @@ import {
     toggleRadiationTo,
     toggleAdditionalFeatures,
     toggleCrescendoDecrescendo,
-} from 'redux/actions/widgetActions/murmursWidgetActions';
+} from '@redux/actions/widgetActions/murmursWidgetActions';
 import {
     selectMurmursWidgetItem,
     selectMurmursWidgetSpecificInfo,
-} from 'redux/selectors/widgetSelectors/murmursWidgetSelectors';
-import { CurrentNoteState } from 'redux/reducers';
+} from '@redux/selectors/widgetSelectors/murmursWidgetSelectors';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     DiastolicMurmur,
     MurmurAdditionalFeature,
@@ -21,7 +21,7 @@ import {
     MurmurRadiation,
     Phase,
     SystolicMurmur,
-} from 'redux/reducers/widgetReducers/murmurswidgetReducer';
+} from '@redux/reducers/widgetReducers/murmurswidgetReducer';
 import _ from 'lodash';
 import './css/HeartMurmurs.css';
 import '../PhysicalExam.css';

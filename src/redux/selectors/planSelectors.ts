@@ -1,4 +1,4 @@
-import { CurrentNoteState } from 'redux/reducers';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     PlanDiagnosis,
     PlanPrescription,
@@ -7,7 +7,7 @@ import {
     PlanSurvey,
     PlanState,
     initialPlanState,
-} from 'redux/reducers/planReducer';
+} from '@redux/reducers/planReducer';
 import { PlanCondition } from '../reducers/planReducer';
 
 export type PlanDiagnosisFlat = PlanDiagnosis & { id: string };

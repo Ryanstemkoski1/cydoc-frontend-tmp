@@ -2,10 +2,10 @@ import React from 'react';
 import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import { initialPhysicalExamState } from 'redux/reducers/physicalExamReducer';
+import { initialPhysicalExamState } from '@redux/reducers/physicalExamReducer';
 import PulsesWidget from './PulsesWidget';
-import { createCurrentNoteStore } from 'redux/store';
-import { PULSES_WIDGET_ACTION } from 'redux/actions/actionTypes';
+import { makeStore } from '@redux/store';
+import { PULSES_WIDGET_ACTION } from '@redux/actions/actionTypes';
 import PulsesWidgetItem from './PulsesWidgetItem';
 
 const mockStore = configureStore([]);
@@ -41,7 +41,7 @@ const mountWithMockStore = (
 
 const mountWithRealStore = ({ ...props } = {}) => {
     return mount(
-        <Provider store={createCurrentNoteStore()}>
+        <Provider store={makeStore()}>
             <PulsesWidget {...props} />
         </Provider>
     );

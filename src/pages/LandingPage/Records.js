@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Redirect } from 'react-router';
 import { Segment, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { deleteNote } from 'redux/actions/currentNoteActions';
+import { deleteNote } from '@redux/actions/currentNoteActions';
 
 import NotesContext from 'contexts/NotesContext';
 import './LandingPage.css';

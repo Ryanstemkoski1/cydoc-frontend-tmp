@@ -2,7 +2,7 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
 import SocialHistoryNote from '../SocialHistoryNote';
-import { initialSocialHistoryState } from 'redux/reducers/socialHistoryReducer';
+import { initialSocialHistoryState } from '@redux/reducers/socialHistoryReducer';
 import { YesNoMaybeResponse, SubstanceUsageResponse } from 'constants/enums';
 import _ from 'lodash';
 

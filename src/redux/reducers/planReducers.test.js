@@ -1,5 +1,5 @@
 import { planReducer, initialPlanState } from './planReducer';
-import { PLAN_ACTION } from 'redux/actions/actionTypes';
+import { PLAN_ACTION } from '@redux/actions/actionTypes';
 import { WhenResponse, YesNoUncertainResponse } from 'constants/enums';
 import {
     initialPlan,

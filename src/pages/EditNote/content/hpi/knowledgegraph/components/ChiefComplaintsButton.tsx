@@ -9,18 +9,18 @@ import { connect } from 'react-redux';
 import {
     selectChiefComplaint,
     SelectChiefComplaintAction,
-} from 'redux/actions/chiefComplaintsActions';
+} from '@redux/actions/chiefComplaintsActions';
 import {
     processKnowledgeGraph,
     ProcessKnowledgeGraphAction,
-} from 'redux/actions/hpiActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
-import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
+} from '@redux/actions/hpiActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
+import { selectChiefComplaintsState } from '@redux/selectors/chiefComplaintsSelectors';
 import {
     selectInitialPatientSurvey,
     selectPatientViewState,
-} from 'redux/selectors/userViewSelectors';
+} from '@redux/selectors/userViewSelectors';
 import { ChiefComplaintsProps, HpiHeadersProps } from '../HPIContent';
 import './BodySystemDropdown';
 interface ChiefComplaintsButtonProps {

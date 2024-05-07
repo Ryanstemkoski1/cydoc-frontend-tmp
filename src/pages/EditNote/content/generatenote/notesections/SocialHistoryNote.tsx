@@ -4,7 +4,7 @@ import {
     YesNoResponse,
 } from 'constants/enums';
 import React, { Component } from 'react';
-import { SocialHistoryState } from 'redux/reducers/socialHistoryReducer';
+import { SocialHistoryState } from '@redux/reducers/socialHistoryReducer';
 import { Table } from 'semantic-ui-react';
 
 interface SocialHistoryProps {

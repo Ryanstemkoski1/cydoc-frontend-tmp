@@ -7,18 +7,18 @@ import {
     options,
     BodyLocationType,
 } from 'constants/hpiEnums';
-import { CurrentNoteState } from 'redux/reducers';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     bodyLocationHandleToggle,
     BodyLocationHandleToggleAction,
     BodyLocationResponseAction,
     bodyLocationResponse,
-} from 'redux/actions/hpiActions';
+} from '@redux/actions/hpiActions';
 import { connect } from 'react-redux';
 import { LRButtonState } from 'constants/enums';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
+import { selectHpiState } from '@redux/selectors/hpiSelectors';
 import LRButton from 'components/tools/LRButtonRedux';
-import { isBodyLocationLRItem } from 'redux/reducers/hpiReducer';
+import { isBodyLocationLRItem } from '@redux/reducers/hpiReducer';
 import 'pages/EditNote/content/hpi/knowledgegraph/css/Button.css';
 
 export const bodyLocationDefaultState = () => {

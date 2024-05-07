@@ -25,10 +25,10 @@ import {
     updateRecreationalDrugUsedModesOfDelivery,
     updateRecreationalDrugUsedName,
     updateRecreationalDrugUsedPerWeek,
-} from 'redux/actions/socialHistoryActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { DrugUsage } from 'redux/reducers/socialHistoryReducer';
-import { selectRecreationalDrugsState } from 'redux/selectors/socialHistorySelectors';
+} from '@redux/actions/socialHistoryActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { DrugUsage } from '@redux/reducers/socialHistoryReducer';
+import { selectRecreationalDrugsState } from '@redux/selectors/socialHistorySelectors';
 import {
     Button,
     Divider,

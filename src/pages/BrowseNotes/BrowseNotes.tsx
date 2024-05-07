@@ -4,8 +4,8 @@ import useUser from 'hooks/useUser';
 import { getAppointment } from 'modules/appointment-api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoadingStatus } from 'redux/actions/loadingStatusActions';
-import { CurrentNoteState } from 'redux/reducers';
+import { setLoadingStatus } from '@redux/actions/loadingStatusActions';
+import { CurrentNoteState } from '@redux/reducers';
 import style from './BrowseNotes.module.scss';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {

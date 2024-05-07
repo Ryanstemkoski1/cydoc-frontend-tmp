@@ -4,12 +4,12 @@ import Dropdown from 'components/tools/OptimizedDropdown';
 import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     AllergiesElements,
     AllergiesItem,
-} from 'redux/reducers/allergiesReducer';
-import { selectAllergiesItem } from 'redux/selectors/allergiesSelectors';
+} from '@redux/reducers/allergiesReducer';
+import { selectAllergiesItem } from '@redux/selectors/allergiesSelectors';
 import { Table, TextArea, TextAreaProps } from 'semantic-ui-react';
 import './table.css';
 

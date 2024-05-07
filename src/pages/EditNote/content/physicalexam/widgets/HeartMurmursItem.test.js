@@ -2,12 +2,12 @@ import React from 'react';
 import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import { initialPhysicalExamState } from 'redux/reducers/physicalExamReducer';
-import { createCurrentNoteStore } from 'redux/store';
-import { MURMURS_WIDGET_ACTION } from 'redux/actions/actionTypes';
+import { initialPhysicalExamState } from '@redux/reducers/physicalExamReducer';
+import { makeStore } from '@redux/store';
+import { MURMURS_WIDGET_ACTION } from '@redux/actions/actionTypes';
 import HeartMurmursItem from './HeartMurmursItem';
 import HeartMurmurs from './HeartMurmurs';
-import { deleteNote } from 'redux/actions/currentNoteActions';
+import { deleteNote } from '@redux/actions/currentNoteActions';
 import SpecificMurmurs from './SpecificMurmurs';
 
 const mockStore = configureStore([]);
@@ -55,7 +55,7 @@ const mountWithMockStore = (
 };
 
 const mountWithRealStore = () => {
-    const store = createCurrentNoteStore();
+    const store = makeStore();
     return {
         store,
         wrapper: mount(

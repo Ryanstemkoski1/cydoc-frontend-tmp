@@ -6,10 +6,10 @@ import {
     updateIntensity,
     updateLocation,
     updateSide,
-} from 'redux/actions/widgetActions/pulsesWidgetActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { PulseLocation } from 'redux/reducers/widgetReducers/pulsesWidgetReducer';
-import { selectPulsesWidgetItem } from 'redux/selectors/widgetSelectors/pulsesWidgetSelectors';
+} from '@redux/actions/widgetActions/pulsesWidgetActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { PulseLocation } from '@redux/reducers/widgetReducers/pulsesWidgetReducer';
+import { selectPulsesWidgetItem } from '@redux/selectors/widgetSelectors/pulsesWidgetSelectors';
 import { Button, Table } from 'semantic-ui-react';
 import '../PhysicalExam.css';
 

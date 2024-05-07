@@ -1,5 +1,5 @@
-import { CurrentNoteState } from 'redux/reducers';
-import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
+import { CurrentNoteState } from '@redux/reducers';
+import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
 
 export function selectChiefComplaintsState(
     state: CurrentNoteState

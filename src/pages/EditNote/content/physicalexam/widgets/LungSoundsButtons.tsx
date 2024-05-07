@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { Button, ButtonProps, Popup } from 'semantic-ui-react';
 import { connect, ConnectedProps } from 'react-redux';
 import '../PhysicalExam.css';
-import { CurrentNoteState } from 'redux/reducers';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     LungsWidgetSection,
     LungsWidgetState,
-} from 'redux/reducers/widgetReducers/lungsWidgetReducer';
-import { selectLungsWidgetSection } from 'redux/selectors/widgetSelectors/lungsWidgetSelectors';
-import { toggleLungsWidgetSection } from 'redux/actions/widgetActions/lungsWidgetActions';
+} from '@redux/reducers/widgetReducers/lungsWidgetReducer';
+import { selectLungsWidgetSection } from '@redux/selectors/widgetSelectors/lungsWidgetSelectors';
+import { toggleLungsWidgetSection } from '@redux/actions/widgetActions/lungsWidgetActions';
 import _ from 'lodash';
 
 const defaultOptions: (keyof LungsWidgetSection)[] = [

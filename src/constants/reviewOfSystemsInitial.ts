@@ -1,4 +1,4 @@
-import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
+import { ReviewOfSystemsState } from '@redux/reducers/reviewOfSystemsReducer';
 import { YesNoResponse } from 'constants/enums';
 
 export const initialReviewOfSystemsState: ReviewOfSystemsState = {

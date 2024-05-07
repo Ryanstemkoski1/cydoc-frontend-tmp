@@ -4,7 +4,7 @@ import {
     SelectManyInput,
     SelectOneInput,
 } from 'constants/hpiEnums';
-import { currentNoteStore } from 'redux/store';
+import { currentNoteStore } from '@redux/store';
 import getHPIText from './getHPIText';
 
 function sanitizeString(str: string) {

@@ -27,18 +27,18 @@ import initialQuestions from 'pages/EditNote/content/patientview/constants/initi
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { updateActiveItem } from 'redux/actions/activeItemActions';
-import { selectChiefComplaint } from 'redux/actions/chiefComplaintsActions';
-import { processKnowledgeGraph } from 'redux/actions/hpiActions';
-import { saveHpiHeader } from 'redux/actions/hpiHeadersActions';
-import { setLoadingStatus } from 'redux/actions/loadingStatusActions';
+import { updateActiveItem } from '@redux/actions/activeItemActions';
+import { selectChiefComplaint } from '@redux/actions/chiefComplaintsActions';
+import { processKnowledgeGraph } from '@redux/actions/hpiActions';
+import { saveHpiHeader } from '@redux/actions/hpiHeadersActions';
+import { setLoadingStatus } from '@redux/actions/loadingStatusActions';
 import {
     initialSurveyAddText,
     processSurveyGraph,
-} from 'redux/actions/userViewActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
-import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
+} from '@redux/actions/userViewActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
+import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
 import { isResponseValid } from 'utils/getHPIFormData';
 import { loadChiefComplaintsData } from 'utils/loadKnowledgeGraphData';
 import CCSelection from './ChiefComplaintSelection/CCSelection';

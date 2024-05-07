@@ -12,18 +12,18 @@ import {
     toggleLivingOption,
     updateComments,
     updateMember,
-} from 'redux/actions/familyHistoryActions';
-import { CurrentNoteState } from 'redux/reducers';
+} from '@redux/actions/familyHistoryActions';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     FamilyHistoryCondition,
     FamilyHistoryState,
-} from 'redux/reducers/familyHistoryReducer';
+} from '@redux/reducers/familyHistoryReducer';
 import {
     FamilyHistoryConditionFlat,
     selectFamilyHistoryCondition,
     selectFamilyHistoryConditions,
     selectFamilyHistoryState,
-} from 'redux/selectors/familyHistorySelectors';
+} from '@redux/selectors/familyHistorySelectors';
 import '../hpi/knowledgegraph/css/Button.css';
 import '../reviewofsystems/ReviewOfSystems.css';
 import './FamilyHistory.css';

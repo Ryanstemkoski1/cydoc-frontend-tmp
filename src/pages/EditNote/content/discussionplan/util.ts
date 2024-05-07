@@ -3,8 +3,8 @@
  * discussion and plan page.
  */
 
-import { PlanCondition } from 'redux/reducers/planReducer';
-import { PlanActionTypes } from 'redux/actions/planActions';
+import { PlanCondition } from '@redux/reducers/planReducer';
+import { PlanActionTypes } from '@redux/actions/planActions';
 import { WhenResponse, YesNoUncertainResponse } from 'constants/enums';
 
 export interface DropdownOptions {

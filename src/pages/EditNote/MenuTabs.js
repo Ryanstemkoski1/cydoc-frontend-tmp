@@ -4,8 +4,8 @@ import HPIContext from 'contexts/HPIContext.js';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
-import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
+import { selectPatientViewState } from '@redux/selectors/userViewSelectors';
 import './MenuTabs.css';
 
 //Component for the tabs that toggle the different sections of the Create Note editor

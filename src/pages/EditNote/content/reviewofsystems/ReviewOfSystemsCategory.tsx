@@ -5,17 +5,17 @@ import { connect } from 'react-redux';
 import {
     selectManyHandleClick,
     SelectManyHandleClickAction,
-} from 'redux/actions/hpiActions';
+} from '@redux/actions/hpiActions';
 import {
     toggleROSOption,
     ToggleROSOptionAction,
-} from 'redux/actions/reviewOfSystemsActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
+} from '@redux/actions/reviewOfSystemsActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { ReviewOfSystemsState } from '@redux/reducers/reviewOfSystemsReducer';
 import {
     selectReviewOfSystemsOptions,
     selectReviewOfSystemsState,
-} from 'redux/selectors/reviewOfSystemsSelectors';
+} from '@redux/selectors/reviewOfSystemsSelectors';
 import { Header } from 'semantic-ui-react';
 import AllNegativeButton from './AllNegativeButton.js';
 import './ReviewOfSystems.css';

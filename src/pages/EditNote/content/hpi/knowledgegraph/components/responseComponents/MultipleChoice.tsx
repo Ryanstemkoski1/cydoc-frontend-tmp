@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import {
     singleMultipleChoiceHandleClick,
     SingleMultipleChoiceHandleClickAction,
-} from 'redux/actions/hpiActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { isSelectOneResponse } from 'redux/reducers/hpiReducer';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
+} from '@redux/actions/hpiActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { isSelectOneResponse } from '@redux/reducers/hpiReducer';
+import { selectHpiState } from '@redux/selectors/hpiSelectors';
 
 interface MultipleChoiceProps {
     node: string;

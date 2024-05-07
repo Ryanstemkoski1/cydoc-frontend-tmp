@@ -8,9 +8,9 @@ import {
     ScaleHandleValueAction,
     scaleHandleClear,
     scaleHandleValue,
-} from 'redux/actions/hpiActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
+} from '@redux/actions/hpiActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectHpiState } from '@redux/selectors/hpiSelectors';
 import style from './ScaleInput.module.scss';
 /*
 TODO:

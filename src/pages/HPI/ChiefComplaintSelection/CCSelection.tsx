@@ -21,15 +21,15 @@ import {
     UpdateAdditionalSurveyAction,
     resetAdditionalSurveyPage,
     updateAdditionalSurveyDetails,
-} from 'redux/actions/additionalSurveyActions';
+} from '@redux/actions/additionalSurveyActions';
 import {
     ProcessKnowledgeGraphAction,
     processKnowledgeGraph,
-} from 'redux/actions/hpiActions';
+} from '@redux/actions/hpiActions';
 import {
     SaveHpiHeaderAction,
     saveHpiHeader,
-} from 'redux/actions/hpiHeadersActions';
+} from '@redux/actions/hpiHeadersActions';
 import {
     InitialSurveyAddListInputAction,
     InitialSurveyAddTextActions,
@@ -43,16 +43,16 @@ import {
     initialSurveyRemoveListInput,
     initialSurveySearch,
     processSurveyGraph,
-} from 'redux/actions/userViewActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
-import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
-import { isSelectOneResponse } from 'redux/reducers/hpiReducer';
+} from '@redux/actions/userViewActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { additionalSurvey } from '@redux/reducers/additionalSurveyReducer';
+import { HpiHeadersState } from '@redux/reducers/hpiHeadersReducer';
+import { isSelectOneResponse } from '@redux/reducers/hpiReducer';
 import {
     InitialQuestionsState,
     userSurveyState,
-} from 'redux/reducers/userViewReducer';
-import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
+} from '@redux/reducers/userViewReducer';
+import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
 import getHPIFormData, { isResponseValid } from 'utils/getHPIFormData';
 import { getListTextResponseAsSingleString } from 'utils/getHPIText';
 import { getQuestionnairesFromText } from 'utils/getQuestionnairesFromText';

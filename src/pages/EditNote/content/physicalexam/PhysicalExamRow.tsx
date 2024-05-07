@@ -15,20 +15,20 @@ import ReflexesWidget from './widgets/ReflexesWidget';
 import HeartMurmurs from './widgets/HeartMurmurs';
 import './PhysicalExam.css';
 import { connect } from 'react-redux';
-import { selectSection } from 'redux/selectors/physicalExamSelectors';
+import { selectSection } from '@redux/selectors/physicalExamSelectors';
 import {
     removeFinding,
     toggleFinding,
     toggleLeftRightFinding,
     toggleChooseBooleanValue,
-} from 'redux/actions/physicalExamActions';
+} from '@redux/actions/physicalExamActions';
 import { LRButtonState } from 'constants/enums';
-import { PhysicalExamSection } from 'redux/reducers/physicalExamReducer';
+import { PhysicalExamSection } from '@redux/reducers/physicalExamReducer';
 import {
     PhysicalExamSchemaRow,
     WidgetType,
 } from 'constants/PhysicalExam/physicalExamSchema';
-import { CurrentNoteState } from 'redux/reducers';
+import { CurrentNoteState } from '@redux/reducers';
 import './PhysicalExamRow.css';
 
 class PhysicalExamRow extends React.Component<Props, State> {

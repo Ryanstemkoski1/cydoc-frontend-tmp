@@ -1,5 +1,5 @@
-import { MURMURS_WIDGET_ACTION } from 'redux/actions/actionTypes';
-import { MurmursWidgetActionTypes } from 'redux/actions/widgetActions/murmursWidgetActions';
+import { MURMURS_WIDGET_ACTION } from '@redux/actions/actionTypes';
+import { MurmursWidgetActionTypes } from '@redux/actions/widgetActions/murmursWidgetActions';
 import { v4 } from 'uuid';
 
 export interface MurmursWidgetState {

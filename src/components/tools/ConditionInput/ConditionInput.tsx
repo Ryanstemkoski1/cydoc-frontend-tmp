@@ -3,13 +3,13 @@ import { standardizeDiseaseNamesOnBlur } from 'constants/standardizeDiseaseNames
 import { SeenCondition } from 'pages/EditNote/content/medicalhistory/MedicalHistoryContent';
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateCondition } from 'redux/actions/familyHistoryActions';
-import { updateConditionName } from 'redux/actions/medicalHistoryActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
-import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
-import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
-import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
+import { updateCondition } from '@redux/actions/familyHistoryActions';
+import { updateConditionName } from '@redux/actions/medicalHistoryActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { FamilyHistoryState } from '@redux/reducers/familyHistoryReducer';
+import { MedicalHistoryState } from '@redux/reducers/medicalHistoryReducer';
+import { selectFamilyHistoryState } from '@redux/selectors/familyHistorySelectors';
+import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelector';
 import style from './ConditionInput.module.scss';
 
 class ConditionInput extends React.Component<Props, OwnState> {

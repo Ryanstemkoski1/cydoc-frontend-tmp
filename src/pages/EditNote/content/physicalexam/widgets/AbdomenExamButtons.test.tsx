@@ -3,10 +3,10 @@ import { mount, ReactWrapper } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import AbdomenExamButtons from './AbdomenExamButtons';
-import { initialPhysicalExamState } from 'redux/reducers/physicalExamReducer';
-import { AbdomenWidgetState } from 'redux/reducers/widgetReducers/abdomenWidgetReducer';
-import { ABDOMEN_WIDGET_ACTION } from 'redux/actions/actionTypes';
-import { currentNoteStore } from 'redux/store';
+import { initialPhysicalExamState } from '@redux/reducers/physicalExamReducer';
+import { AbdomenWidgetState } from '@redux/reducers/widgetReducers/abdomenWidgetReducer';
+import { ABDOMEN_WIDGET_ACTION } from '@redux/actions/actionTypes';
+import { currentNoteStore } from '@redux/store';
 
 const section = 'rightUpperQuadrant';
 const field = 'tenderness';

@@ -6,10 +6,10 @@ import {
     toggleFinding,
     toggleLeftRightFinding,
     updateComments,
-} from 'redux/actions/physicalExamActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { PhysicalExamSection } from 'redux/reducers/physicalExamReducer';
-import { selectSection } from 'redux/selectors/physicalExamSelectors';
+} from '@redux/actions/physicalExamActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { PhysicalExamSection } from '@redux/reducers/physicalExamReducer';
+import { selectSection } from '@redux/selectors/physicalExamSelectors';
 import { ButtonProps, Form, Grid, TextAreaProps } from 'semantic-ui-react';
 import './PhysicalExamGroup.css';
 import PhysicalExamRow from './PhysicalExamRow';

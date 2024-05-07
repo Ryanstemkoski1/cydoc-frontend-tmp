@@ -3,7 +3,7 @@ import Enzyme, { mount } from 'enzyme';
 import React from 'react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
-import { MEDICAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
+import { MEDICAL_HISTORY_ACTION } from '@redux/actions/actionTypes';
 import MedicalHistoryContent from '../MedicalHistoryContent.tsx';
 // import AddRowButton from 'components/tools/AddRowButton';
 // import GridContent from 'components/tools/GridContent';

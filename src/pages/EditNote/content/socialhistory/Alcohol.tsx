@@ -22,10 +22,10 @@ import {
     updateAlcoholQuitYear,
     updateAlcoholTriedToQuit,
     updateAlcoholUsage,
-} from 'redux/actions/socialHistoryActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { AlcoholConsumption } from 'redux/reducers/socialHistoryReducer';
-import { selectAlcoholState } from 'redux/selectors/socialHistorySelectors';
+} from '@redux/actions/socialHistoryActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { AlcoholConsumption } from '@redux/reducers/socialHistoryReducer';
+import { selectAlcoholState } from '@redux/selectors/socialHistorySelectors';
 import {
     Button,
     Divider,

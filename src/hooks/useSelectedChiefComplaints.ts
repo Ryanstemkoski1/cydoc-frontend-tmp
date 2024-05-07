@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
+import { CurrentNoteState } from '@redux/reducers';
+import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
 
 export function getSelectedChiefCompliants(
     currentChiefCompliants: ChiefComplaintsState

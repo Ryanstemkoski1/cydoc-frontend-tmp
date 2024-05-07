@@ -8,12 +8,12 @@ import {
     updatePrescriptionDose,
     updatePrescriptionSignature,
     updatePrescriptionType,
-} from 'redux/actions/planActions';
-import { CurrentNoteState } from 'redux/reducers';
+} from '@redux/actions/planActions';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     PlanPrescriptionFlat,
     selectPlanCondition,
-} from 'redux/selectors/planSelectors';
+} from '@redux/selectors/planSelectors';
 import { Grid, TextArea } from 'semantic-ui-react';
 import { PlanAction } from '../util';
 import {

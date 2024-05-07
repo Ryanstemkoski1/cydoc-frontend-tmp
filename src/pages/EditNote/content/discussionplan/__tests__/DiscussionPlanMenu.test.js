@@ -6,7 +6,7 @@ import DiscussionPlanDeleteCard from '../DiscussionPlanDeleteCard';
 import configureStore from 'redux-mock-store';
 import { initialPlan, conditionId } from '../util';
 import { Provider } from 'react-redux';
-import { PLAN_ACTION as TYPES } from 'redux/actions/actionTypes';
+import { PLAN_ACTION as TYPES } from '@redux/actions/actionTypes';
 
 Enzyme.configure({ adapter: new Adapter() });
 

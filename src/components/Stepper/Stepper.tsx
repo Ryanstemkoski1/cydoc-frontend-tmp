@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
+import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import style from './Stepper.module.scss';
 
 export default function Stepper({

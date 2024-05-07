@@ -9,10 +9,10 @@ import {
     HandleTimeOptionChangeAction,
     handleTimeInputChange,
     handleTimeOptionChange,
-} from 'redux/actions/hpiActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { isTimeInputDictionary } from 'redux/reducers/hpiReducer';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
+} from '@redux/actions/hpiActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { isTimeInputDictionary } from '@redux/reducers/hpiReducer';
+import { selectHpiState } from '@redux/selectors/hpiSelectors';
 import '../../css/TimeInput.css';
 import style from './TimeInput.module.scss';
 

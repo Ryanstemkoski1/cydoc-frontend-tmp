@@ -7,7 +7,7 @@ import {
     MurmurRadiation,
     Phase,
     SystolicMurmur,
-} from 'redux/reducers/widgetReducers/murmurswidgetReducer';
+} from '@redux/reducers/widgetReducers/murmurswidgetReducer';
 import { MURMURS_WIDGET_ACTION } from '../actionTypes';
 
 export interface AddMurmursWidgetItemAction {

@@ -13,17 +13,17 @@ import {
     updateId,
     updateIncitingAgent,
     updateReaction,
-} from 'redux/actions/allergiesActions';
-import { CurrentNoteState } from 'redux/reducers';
+} from '@redux/actions/allergiesActions';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     AllergiesElements,
     AllergiesItem,
-} from 'redux/reducers/allergiesReducer';
+} from '@redux/reducers/allergiesReducer';
 import {
     selectAllergies,
     selectHasAllergiesState,
-} from 'redux/selectors/allergiesSelectors';
-import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+} from '@redux/selectors/allergiesSelectors';
+import { selectPatientViewState } from '@redux/selectors/userViewSelectors';
 import {
     DropdownProps,
     Form,

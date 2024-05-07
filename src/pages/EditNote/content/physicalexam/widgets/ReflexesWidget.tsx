@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
 import '../PhysicalExam.css';
-import { selectReflexesWidgetState } from 'redux/selectors/widgetSelectors/reflexesWidgetSelectors';
+import { selectReflexesWidgetState } from '@redux/selectors/widgetSelectors/reflexesWidgetSelectors';
 import ReflexesWidgetItem from './ReflexesWidgetItem';
 import { connect, ConnectedProps } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import { addReflexesWidgetItem } from 'redux/actions/widgetActions/reflexesWidgetActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { addReflexesWidgetItem } from '@redux/actions/widgetActions/reflexesWidgetActions';
 
 class ReflexesWidget extends Component<PropsFromRedux> {
     render() {

@@ -3,11 +3,11 @@ import exampleSchema from 'constants/PhysicalExam/exampleSchema.json';
 import { PhysicalExamSchemaItem } from 'constants/PhysicalExam/physicalExamSchema';
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateVitals } from 'redux/actions/physicalExamActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { Vitals, VitalsFields } from 'redux/reducers/physicalExamReducer';
-import { selectVitals } from 'redux/selectors/physicalExamSelectors';
-import { currentNoteStore } from 'redux/store';
+import { updateVitals } from '@redux/actions/physicalExamActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { Vitals, VitalsFields } from '@redux/reducers/physicalExamReducer';
+import { selectVitals } from '@redux/selectors/physicalExamSelectors';
+import { currentNoteStore } from '@redux/store';
 import {
     Accordion,
     Form,

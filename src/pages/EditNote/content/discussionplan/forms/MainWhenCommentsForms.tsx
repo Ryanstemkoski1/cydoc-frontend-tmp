@@ -17,13 +17,13 @@ import {
     updateReferralComments,
     updateReferralDepartment,
     updateReferralWhen,
-} from 'redux/actions/planActions';
-import { CurrentNoteState } from 'redux/reducers';
+} from '@redux/actions/planActions';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     PlanProceduresAndServicesFlat,
     PlanReferralsFlat,
     selectPlanCondition,
-} from 'redux/selectors/planSelectors';
+} from '@redux/selectors/planSelectors';
 import { Grid, TextArea } from 'semantic-ui-react';
 import { ConditionCategoryKey, PlanAction } from '../util';
 import {

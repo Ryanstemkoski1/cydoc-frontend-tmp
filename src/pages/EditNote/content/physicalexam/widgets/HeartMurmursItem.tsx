@@ -6,7 +6,7 @@ import {
     MurmurPitch,
     Phase,
     MurmurQuality,
-} from 'redux/reducers/widgetReducers/murmurswidgetReducer';
+} from '@redux/reducers/widgetReducers/murmurswidgetReducer';
 import {
     deleteMurmursWidgetItem,
     toggleCrescendoDecrescendo,
@@ -16,10 +16,10 @@ import {
     updateIntensity,
     updatePhase,
     updatePitch,
-} from 'redux/actions/widgetActions/murmursWidgetActions';
+} from '@redux/actions/widgetActions/murmursWidgetActions';
 import { connect, ConnectedProps } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectMurmursWidgetItem } from 'redux/selectors/widgetSelectors/murmursWidgetSelectors';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectMurmursWidgetItem } from '@redux/selectors/widgetSelectors/murmursWidgetSelectors';
 import SpecificMurmurs from './SpecificMurmurs';
 import './css/HeartMurmurs.css';
 

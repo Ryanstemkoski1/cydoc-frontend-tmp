@@ -1,6 +1,6 @@
 import { YesNoResponse } from 'constants/enums';
 import React, { Component } from 'react';
-import { SurgicalHistoryState } from 'redux/reducers/surgicalHistoryReducer';
+import { SurgicalHistoryState } from '@redux/reducers/surgicalHistoryReducer';
 import { Table } from 'semantic-ui-react';
 
 interface SurgicalHistoryProps {

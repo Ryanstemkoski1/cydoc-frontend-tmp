@@ -16,7 +16,7 @@ import {
 import { Redirect } from 'react-router';
 import './LandingPage.css';
 import { connect } from 'react-redux';
-import { loadNote, deleteNote } from 'redux/actions/currentNoteActions';
+import { loadNote, deleteNote } from '@redux/actions/currentNoteActions';
 
 class OpenRecentSegment extends Component {
     static contextType = NotesContext;

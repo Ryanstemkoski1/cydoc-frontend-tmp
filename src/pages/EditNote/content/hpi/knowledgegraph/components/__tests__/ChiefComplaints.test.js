@@ -2,13 +2,13 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { Provider } from 'react-redux';
-import { createCurrentNoteStore } from 'redux/store';
+import { makeStore } from '@redux/store';
 import ChiefComplaintsButton from '../ChiefComplaintsButton';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 const connectRealStore = () => {
-    const store = createCurrentNoteStore();
+    const store = makeStore();
     const chiefComplaint = 'Abdominal Pain';
     return {
         store,

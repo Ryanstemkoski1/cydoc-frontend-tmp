@@ -6,10 +6,10 @@ import {
     updateIntensity,
     updateLocation,
     updateSide,
-} from 'redux/actions/widgetActions/reflexesWidgetActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { ReflexLocation } from 'redux/reducers/widgetReducers/reflexesWidgetReducer';
-import { selectReflexesWidgetItem } from 'redux/selectors/widgetSelectors/reflexesWidgetSelectors';
+} from '@redux/actions/widgetActions/reflexesWidgetActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { ReflexLocation } from '@redux/reducers/widgetReducers/reflexesWidgetReducer';
+import { selectReflexesWidgetItem } from '@redux/selectors/widgetSelectors/reflexesWidgetSelectors';
 import { Button, Table } from 'semantic-ui-react';
 import '../PhysicalExam.css';
 

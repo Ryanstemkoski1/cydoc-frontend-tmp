@@ -1,11 +1,11 @@
 import React, { ChangeEvent, MouseEvent, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
-import { addCondition, updateConditionName } from 'redux/actions/planActions';
-import { CurrentNoteState } from 'redux/reducers';
+import { addCondition, updateConditionName } from '@redux/actions/planActions';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     PlanConditionsFlat,
     selectPlanConditions,
-} from 'redux/selectors/planSelectors';
+} from '@redux/selectors/planSelectors';
 import {
     Dropdown,
     Icon,

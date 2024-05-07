@@ -8,9 +8,9 @@ import {
     LabTestInputChangeAction,
     labTestHandleClick,
     labTestInputChange,
-} from 'redux/actions/hpiActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
+} from '@redux/actions/hpiActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectHpiState } from '@redux/selectors/hpiSelectors';
 import '../../css/TimeInput.css';
 
 interface LabTestInputProps {

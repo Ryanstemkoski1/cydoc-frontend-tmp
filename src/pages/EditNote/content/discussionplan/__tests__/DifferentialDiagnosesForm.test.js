@@ -6,7 +6,7 @@ import DifferentialDiagnosesForm from '../forms/DifferentialDiagnosesForm';
 import configureStore from 'redux-mock-store';
 import { conditionId, categoryId, initialPlan } from '../util';
 import { Provider } from 'react-redux';
-import { PLAN_ACTION as TYPES } from 'redux/actions/actionTypes';
+import { PLAN_ACTION as TYPES } from '@redux/actions/actionTypes';
 
 Enzyme.configure({ adapter: new Adapter() });
 

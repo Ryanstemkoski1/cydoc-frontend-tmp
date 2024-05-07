@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
-import { addMurmursWidgetItem } from 'redux/actions/widgetActions/murmursWidgetActions';
+import { addMurmursWidgetItem } from '@redux/actions/widgetActions/murmursWidgetActions';
 import '../PhysicalExam.css';
-import { selectMurmursWidgetState } from 'redux/selectors/widgetSelectors/murmursWidgetSelectors';
+import { selectMurmursWidgetState } from '@redux/selectors/widgetSelectors/murmursWidgetSelectors';
 import { connect, ConnectedProps } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
+import { CurrentNoteState } from '@redux/reducers';
 import HeartMurmursItem from './HeartMurmursItem';
 import './css/HeartMurmurs.css';
 

@@ -5,9 +5,9 @@ import {
     ValidateUserInfo,
     updateUserInfo,
     validateUserInfo,
-} from 'redux/actions/additionalSurveyActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { UserInfo } from 'redux/reducers/additionalSurveyReducer';
+} from '@redux/actions/additionalSurveyActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { UserInfo } from '@redux/reducers/additionalSurveyReducer';
 import {
     CheckboxProps,
     Dropdown,

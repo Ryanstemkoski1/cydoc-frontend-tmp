@@ -1,6 +1,6 @@
 import { PhysicalExamSchema } from 'constants/PhysicalExam/physicalExamSchema';
-import { PhysicalExamActionTypes } from 'redux/actions/physicalExamActions';
-import { WidgetActionTypes } from 'redux/actions/widgetActions';
+import { PhysicalExamActionTypes } from '@redux/actions/physicalExamActions';
+import { WidgetActionTypes } from '@redux/actions/widgetActions';
 import { PHYSICAL_EXAM_ACTION } from '../actions/actionTypes';
 import { widgetReducer, WidgetsState } from './widgetReducers';
 import schema from '../../constants/PhysicalExam/exampleSchema.json';

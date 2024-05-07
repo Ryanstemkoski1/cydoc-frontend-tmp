@@ -6,7 +6,7 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
-import { ALLERGIES_ACTION } from 'redux/actions/actionTypes';
+import { ALLERGIES_ACTION } from '@redux/actions/actionTypes';
 import AllergiesContent from '../AllergiesContent.tsx';
 import AllergiesTableBodyRow from '../AllergiesTableBodyRow';
 

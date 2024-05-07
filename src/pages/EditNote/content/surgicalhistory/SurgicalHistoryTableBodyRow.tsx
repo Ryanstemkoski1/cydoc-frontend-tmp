@@ -12,13 +12,13 @@ import {
     updateComments,
     updateProcedure,
     updateYear,
-} from 'redux/actions/surgicalHistoryActions';
-import { CurrentNoteState } from 'redux/reducers';
+} from '@redux/actions/surgicalHistoryActions';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     SurgicalHistoryElements,
     SurgicalHistoryItem,
-} from 'redux/reducers/surgicalHistoryReducer';
-import { selectSurgicalHistoryItem } from 'redux/selectors/surgicalHistorySelectors';
+} from '@redux/reducers/surgicalHistoryReducer';
+import { selectSurgicalHistoryItem } from '@redux/selectors/surgicalHistorySelectors';
 import {
     DropdownProps,
     InputOnChangeData,

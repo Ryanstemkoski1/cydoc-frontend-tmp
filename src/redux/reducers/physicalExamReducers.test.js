@@ -2,7 +2,7 @@ import {
     physicalExamReducer,
     initialPhysicalExamState,
 } from './physicalExamReducer';
-import { PHYSICAL_EXAM_ACTION } from 'redux/actions/actionTypes';
+import { PHYSICAL_EXAM_ACTION } from '@redux/actions/actionTypes';
 import { initialLungsWidgetState } from './widgetReducers/lungsWidgetReducer';
 import { initialAbdomenWidgetState } from './widgetReducers/abdomenWidgetReducer';
 

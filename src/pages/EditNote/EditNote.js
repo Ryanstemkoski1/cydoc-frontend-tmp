@@ -1,19 +1,19 @@
 import constants from 'constants/constants';
 import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
-import { selectNoteId } from 'redux/selectors/currentNoteSelectors';
+import { selectNoteId } from '@redux/selectors/currentNoteSelectors';
 import { Message } from 'semantic-ui-react';
 import MenuTabs from './MenuTabs';
 import NotePage from './NotePage';
 
 import { YesNoResponse } from 'constants/enums';
 import { withRouter } from 'react-router-dom';
-import { updateActiveItem } from 'redux/actions/activeItemActions';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
+import { updateActiveItem } from '@redux/actions/activeItemActions';
+import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import {
     selectInitialPatientSurvey,
     selectPatientViewState,
-} from 'redux/selectors/userViewSelectors';
+} from '@redux/selectors/userViewSelectors';
 import './EditNote.css';
 import './NotePage.css';
 // Component that manages the active state of the create note editor

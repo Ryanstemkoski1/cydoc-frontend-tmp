@@ -11,15 +11,15 @@ import { connect, ConnectedProps } from 'react-redux';
 import {
     blankQuestionChange,
     medsPopYesNoToggle,
-} from 'redux/actions/hpiActions';
+} from '@redux/actions/hpiActions';
 import {
     addMedsPopOption,
     deleteMedication,
     updateCurrentlyTaking,
-} from 'redux/actions/medicationsActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
-import { selectMedicationsState } from 'redux/selectors/medicationsSelectors';
+} from '@redux/actions/medicationsActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectHpiState } from '@redux/selectors/hpiSelectors';
+import { selectMedicationsState } from '@redux/selectors/medicationsSelectors';
 import { Table } from 'semantic-ui-react';
 import { v4 } from 'uuid';
 import '../hpi/knowledgegraph/css/Button.css';

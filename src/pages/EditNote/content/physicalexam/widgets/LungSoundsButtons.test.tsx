@@ -3,11 +3,11 @@ import { mount, ReactWrapper } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import LungSoundsButtons from './LungSoundsButtons';
-import { initialPhysicalExamState } from 'redux/reducers/physicalExamReducer';
-import { LungsWidgetState } from 'redux/reducers/widgetReducers/lungsWidgetReducer';
-import { LUNGS_WIDGET_ACTION } from 'redux/actions/actionTypes';
+import { initialPhysicalExamState } from '@redux/reducers/physicalExamReducer';
+import { LungsWidgetState } from '@redux/reducers/widgetReducers/lungsWidgetReducer';
+import { LUNGS_WIDGET_ACTION } from '@redux/actions/actionTypes';
 import { Button, Popup } from 'semantic-ui-react';
-import { currentNoteStore } from 'redux/store';
+import { currentNoteStore } from '@redux/store';
 import { act } from 'react-dom/test-utils';
 
 const section = 'leftLowerLobe';

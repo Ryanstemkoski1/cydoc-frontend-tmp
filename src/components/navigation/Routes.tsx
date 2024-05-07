@@ -24,7 +24,7 @@ import ViewProduct from 'pages/ViewProduct/ViewProduct';
 import React, { Suspense, lazy, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router';
-import { CurrentNoteState } from 'redux/reducers';
+import { CurrentNoteState } from '@redux/reducers';
 import { ManagerRoute } from './ManagerRoute';
 import NavMenu from './NavMenu';
 import { PrivateRoute } from './PrivateRoute';

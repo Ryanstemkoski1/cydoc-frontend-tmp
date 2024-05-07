@@ -5,7 +5,7 @@ import {
     SelectManyInput,
     SelectOneInput,
 } from 'constants/hpiEnums';
-import { CurrentNoteState } from 'redux/reducers';
+import { CurrentNoteState } from '@redux/reducers';
 import { isHPIResponseValid } from 'utils/getHPIFormData';
 import { getNodeConditions } from 'utils/getHPIText';
 

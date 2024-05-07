@@ -6,7 +6,7 @@ import Enzyme, { mount } from 'enzyme';
 import React from 'react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
-import { FAMILY_HISTORY_ACTION } from 'redux/actions/actionTypes';
+import { FAMILY_HISTORY_ACTION } from '@redux/actions/actionTypes';
 import FamilyHistoryBlock from '../FamilyHistoryBlock';
 import FamilyHistoryContent from '../FamilyHistoryContent';
 import FamilyHistoryDropdown from '../FamilyHistoryDropdown';

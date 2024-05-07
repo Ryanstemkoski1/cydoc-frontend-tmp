@@ -2,13 +2,13 @@ import React from 'react';
 import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import { initialPhysicalExamState } from 'redux/reducers/physicalExamReducer';
-import { createCurrentNoteStore } from 'redux/store';
-import { REFLEXES_WIDGET_ACTION } from 'redux/actions/actionTypes';
+import { initialPhysicalExamState } from '@redux/reducers/physicalExamReducer';
+import { makeStore } from '@redux/store';
+import { REFLEXES_WIDGET_ACTION } from '@redux/actions/actionTypes';
 import ReflexesWidgetItem from './ReflexesWidgetItem';
 import { LeftRight } from 'constants/enums';
-import { selectReflexesWidgetState } from 'redux/selectors/widgetSelectors/reflexesWidgetSelectors';
-import { addReflexesWidgetItem } from 'redux/actions/widgetActions/reflexesWidgetActions';
+import { selectReflexesWidgetState } from '@redux/selectors/widgetSelectors/reflexesWidgetSelectors';
+import { addReflexesWidgetItem } from '@redux/actions/widgetActions/reflexesWidgetActions';
 
 const fakeId = 'yasa';
 const location = 'biceps';
@@ -48,7 +48,7 @@ const mountWithMockStore = (
 };
 
 const mountWithRealStore = ({ ...props } = {}) => {
-    const store = createCurrentNoteStore();
+    const store = makeStore();
     store.dispatch(addReflexesWidgetItem());
     const id = Object.keys(selectReflexesWidgetState(store.getState()))[0];
     return mount(

@@ -1,5 +1,5 @@
 import { YesNoMaybeResponse, YesNoResponse } from './enums';
-import { HpiState } from 'redux/reducers/hpiReducer';
+import { HpiState } from '@redux/reducers/hpiReducer';
 
 export enum BodyLocationOptions {
     HEAD = 'Head',

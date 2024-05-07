@@ -5,8 +5,8 @@ import {
     ResponseTypes,
     SelectOneInput,
 } from 'constants/hpiEnums';
-import { USER_VIEW_ACTION } from 'redux/actions/actionTypes';
-import { userViewActionTypes } from 'redux/actions/userViewActions';
+import { USER_VIEW_ACTION } from '@redux/actions/actionTypes';
+import { userViewActionTypes } from '@redux/actions/userViewActions';
 import { v4 } from 'uuid';
 import { ChiefComplaintsState } from './chiefComplaintsReducer';
 

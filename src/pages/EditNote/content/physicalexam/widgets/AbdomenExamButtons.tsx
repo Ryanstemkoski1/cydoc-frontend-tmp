@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { Button, ButtonProps } from 'semantic-ui-react';
 import { connect, ConnectedProps } from 'react-redux';
 import '../PhysicalExam.css';
-import { CurrentNoteState } from 'redux/reducers';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     AbdomenWidgetSection,
     AbdomenWidgetState,
-} from 'redux/reducers/widgetReducers/abdomenWidgetReducer';
-import { toggleAbdomenWidgetSection } from 'redux/actions/widgetActions/abdomenWidgetActions';
-import { selectAbdomenWidgetSection } from 'redux/selectors/widgetSelectors/abdomenWidgetSelectors';
+} from '@redux/reducers/widgetReducers/abdomenWidgetReducer';
+import { toggleAbdomenWidgetSection } from '@redux/actions/widgetActions/abdomenWidgetActions';
+import { selectAbdomenWidgetSection } from '@redux/selectors/widgetSelectors/abdomenWidgetSelectors';
 
 const options: (keyof AbdomenWidgetSection)[] = [
     'tenderness',

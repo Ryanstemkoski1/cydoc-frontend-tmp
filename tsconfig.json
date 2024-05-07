@@ -15,6 +15,15 @@
         "jsx": "preserve",
         "baseUrl": "src",
         "incremental": true,
+        "paths": {
+            "@components/*": ["components/*"],
+            "@constants/*": ["constants/*"],
+            "@contexts/*": ["contexts/*"],
+            "@modules/*": ["modules/*"],
+            "@pages/*": ["pages/*"],
+            "@providers/*": ["providers/*"],
+            "@redux/*": ["redux/*"]
+        },
         "plugins": [
             {
                 "name": "next"

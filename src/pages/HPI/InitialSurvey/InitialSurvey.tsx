@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import {
     UpdateAdditionalSurveyAction,
     updateAdditionalSurveyDetails,
-} from 'redux/actions/additionalSurveyActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
+} from '@redux/actions/additionalSurveyActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { additionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 import DetailsPage from '../../EditNote/content/patientview/AdditionalSurvey';
 import { OnNextClickParams } from '../Hpi';
 

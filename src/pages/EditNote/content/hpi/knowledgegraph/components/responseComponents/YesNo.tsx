@@ -7,9 +7,9 @@ import { connect } from 'react-redux';
 import {
     yesNoToggleOption,
     YesNoToggleOptionAction,
-} from 'redux/actions/hpiActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
+} from '@redux/actions/hpiActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectHpiState } from '@redux/selectors/hpiSelectors';
 
 interface YesNoProps {
     node: string;

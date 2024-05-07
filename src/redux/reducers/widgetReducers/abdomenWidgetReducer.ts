@@ -1,5 +1,5 @@
-import { ABDOMEN_WIDGET_ACTION } from 'redux/actions/actionTypes';
-import { AbdomenWidgetActionTypes } from 'redux/actions/widgetActions/abdomenWidgetActions';
+import { ABDOMEN_WIDGET_ACTION } from '@redux/actions/actionTypes';
+import { AbdomenWidgetActionTypes } from '@redux/actions/widgetActions/abdomenWidgetActions';
 
 export interface AbdomenWidgetState {
     rightUpperQuadrant: AbdomenWidgetSection;

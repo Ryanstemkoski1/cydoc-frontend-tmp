@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { deleteCondition } from 'redux/actions/planActions';
+import { deleteCondition } from '@redux/actions/planActions';
 import { Button, Icon, Modal } from 'semantic-ui-react';
 
 interface DispatchProps {

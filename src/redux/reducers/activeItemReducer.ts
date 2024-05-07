@@ -1,5 +1,5 @@
-import { ACTIVE_ITEM_ACTION } from 'redux/actions/actionTypes';
-import { activeItemActionTypes } from 'redux/actions/activeItemActions';
+import { ACTIVE_ITEM_ACTION } from '@redux/actions/actionTypes';
+import { activeItemActionTypes } from '@redux/actions/activeItemActions';
 
 export const initialActiveItemState = { activeItem: 'CC' };
 

@@ -14,9 +14,9 @@ import {
     updateTobaccoQuitYear,
     updateTobaccoTriedToQuit,
     updateTobaccoUsage,
-} from 'redux/actions/socialHistoryActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectTobaccoState } from 'redux/selectors/socialHistorySelectors';
+} from '@redux/actions/socialHistoryActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectTobaccoState } from '@redux/selectors/socialHistorySelectors';
 import { Divider, Dropdown, Form, Grid, Input } from 'semantic-ui-react';
 import HistoryButtons from '../../../../components/tools/ThreeButton/ThreeButtons';
 import '../familyhistory/FamilyHistory.css';

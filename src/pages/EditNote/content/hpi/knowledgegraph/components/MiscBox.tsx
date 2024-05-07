@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import {
     SetNotesChiefComplaintAction,
     setNotesChiefComplaint,
-} from 'redux/actions/chiefComplaintsActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+} from '@redux/actions/chiefComplaintsActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectPatientViewState } from '@redux/selectors/userViewSelectors';
 import {
     Accordion,
     AccordionTitleProps,

@@ -1,4 +1,4 @@
-import { ROS_ACTION } from 'redux/actions/actionTypes';
+import { ROS_ACTION } from '@redux/actions/actionTypes';
 import { reviewOfSystemsReducer } from './reviewOfSystemsReducer';
 import { initialReviewOfSystemsState } from 'constants/reviewOfSystemsInitial';
 import { YesNoResponse } from 'constants/enums';

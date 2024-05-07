@@ -20,19 +20,19 @@ import {
     updateComments,
     updateCondition,
     updateMember,
-} from 'redux/actions/familyHistoryActions';
+} from '@redux/actions/familyHistoryActions';
 import {
     BlankQuestionChangeAction,
     PopResponseAction,
     blankQuestionChange,
     popResponse,
-} from 'redux/actions/hpiActions';
-import { CurrentNoteState } from 'redux/reducers';
+} from '@redux/actions/hpiActions';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     FamilyHistoryCondition,
     FamilyHistoryState,
-} from 'redux/reducers/familyHistoryReducer';
-import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
+} from '@redux/reducers/familyHistoryReducer';
+import { selectFamilyHistoryState } from '@redux/selectors/familyHistorySelectors';
 import { v4 } from 'uuid';
 import { adjustValue } from '../medicalhistory/util';
 import FamilyHistoryBlock from './FamilyHistoryBlock';

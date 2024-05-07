@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AllergiesState } from 'redux/reducers/allergiesReducer';
+import { AllergiesState } from '@redux/reducers/allergiesReducer';
 import { Table } from 'semantic-ui-react';
 
 interface AllergiesProps {

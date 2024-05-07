@@ -12,16 +12,16 @@ import {
     toggleLivingOption,
     updateComments,
     updateMember,
-} from 'redux/actions/familyHistoryActions';
-import { CurrentNoteState } from 'redux/reducers';
+} from '@redux/actions/familyHistoryActions';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     FamilyHistoryMember,
     FamilyHistoryState,
-} from 'redux/reducers/familyHistoryReducer';
+} from '@redux/reducers/familyHistoryReducer';
 import {
     selectFamilyHistoryMember,
     selectFamilyHistoryState,
-} from 'redux/selectors/familyHistorySelectors';
+} from '@redux/selectors/familyHistorySelectors';
 import { ButtonProps, Dropdown as DropDownSemantic } from 'semantic-ui-react';
 import '../hpi/knowledgegraph/css/Button.css';
 import './FamilyHistory.css';

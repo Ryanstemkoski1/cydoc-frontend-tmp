@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import {
     AddFhPopOptionsAction,
     addFhPopOptions,
-} from 'redux/actions/familyHistoryActions';
+} from '@redux/actions/familyHistoryActions';
 import {
     AddListInputAction,
     BlankQuestionChangeAction,
@@ -17,14 +17,14 @@ import {
     blankQuestionChange,
     listTextHandleChange,
     removeListInput,
-} from 'redux/actions/hpiActions';
-import { CurrentNoteState } from 'redux/reducers';
+} from '@redux/actions/hpiActions';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     isLabTestDictionary,
     isSelectOneResponse,
-} from 'redux/reducers/hpiReducer';
-import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
+} from '@redux/reducers/hpiReducer';
+import { ReviewOfSystemsState } from '@redux/reducers/reviewOfSystemsReducer';
+import { selectHpiState } from '@redux/selectors/hpiSelectors';
 import FamilyHistoryContent from '../../../familyhistory/FamilyHistoryContent';
 import MedicalHistoryContent from '../../../medicalhistory/MedicalHistoryContent';
 import MedicationsContent from '../../../medications/MedicationsContent';

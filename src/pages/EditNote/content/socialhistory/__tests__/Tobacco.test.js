@@ -7,8 +7,8 @@ import tobaccoProducts from 'constants/SocialHistory/tobaccoProducts';
 import { SubstanceUsageResponse } from 'constants/enums';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
-import { SOCIAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
-import { initialSocialHistoryState } from 'redux/reducers/socialHistoryReducer';
+import { SOCIAL_HISTORY_ACTION } from '@redux/actions/actionTypes';
+import { initialSocialHistoryState } from '@redux/reducers/socialHistoryReducer';
 
 Enzyme.configure({ adapter: new Adapter() });
 

@@ -7,19 +7,19 @@ import { connect } from 'react-redux';
 import {
     selectChiefComplaint,
     SelectChiefComplaintAction,
-} from 'redux/actions/chiefComplaintsActions';
+} from '@redux/actions/chiefComplaintsActions';
 import {
     processKnowledgeGraph,
     ProcessKnowledgeGraphAction,
-} from 'redux/actions/hpiActions';
+} from '@redux/actions/hpiActions';
 import {
     initialSurveyYesNo,
     InitialSurveyYesNoAction,
-} from 'redux/actions/userViewActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { userSurveyState } from 'redux/reducers/userViewReducer';
-import { selectChiefComplaintsState } from 'redux/selectors/chiefComplaintsSelectors';
-import { selectInitialPatientSurvey } from 'redux/selectors/userViewSelectors';
+} from '@redux/actions/userViewActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { userSurveyState } from '@redux/reducers/userViewReducer';
+import { selectChiefComplaintsState } from '@redux/selectors/chiefComplaintsSelectors';
+import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
 import {
     ChiefComplaintsProps,
     HpiHeadersProps,

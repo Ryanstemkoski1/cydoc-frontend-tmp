@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateActiveItem } from 'redux/actions/activeItemActions';
-import { processSurveyGraph } from 'redux/actions/userViewActions';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
+import { updateActiveItem } from '@redux/actions/activeItemActions';
+import { processSurveyGraph } from '@redux/actions/userViewActions';
+import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import {
     selectInitialPatientSurvey,
     selectPatientViewState,
-} from 'redux/selectors/userViewSelectors';
+} from '@redux/selectors/userViewSelectors';
 import initialQuestions from '../../EditNote/content/patientview/constants/initialQuestions';
 import HPIContent from '../HpiContent/HPIContent';
 //Component that manages the content displayed based on the activeItem prop

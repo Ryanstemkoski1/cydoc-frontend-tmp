@@ -1,5 +1,5 @@
-import { PULSES_WIDGET_ACTION } from 'redux/actions/actionTypes';
-import { PulsesWidgetActionTypes } from 'redux/actions/widgetActions/pulsesWidgetActions';
+import { PULSES_WIDGET_ACTION } from '@redux/actions/actionTypes';
+import { PulsesWidgetActionTypes } from '@redux/actions/widgetActions/pulsesWidgetActions';
 import { LeftRight } from 'constants/enums';
 import { v4 } from 'uuid';
 

@@ -7,9 +7,9 @@ import SurgicalHistoryContent from '../SurgicalHistoryContent.tsx';
 // import SurgicalHistoryTableBodyRow from '../SurgicalHistoryTableBodyRow';
 // import AddRowButton from 'components/tools/AddRowButton';
 // import { Button, Accordion } from 'semantic-ui-react';
-// import { SURGICAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
-// import { currentNoteStore } from 'redux/store';
-// import { deleteNote } from 'redux/actions/currentNoteActions';
+// import { SURGICAL_HISTORY_ACTION } from '@redux/actions/actionTypes';
+// import { currentNoteStore } from '@redux/store';
+// import { deleteNote } from '@redux/actions/currentNoteActions';
 
 Enzyme.configure({ adapter: new Adapter() });
 

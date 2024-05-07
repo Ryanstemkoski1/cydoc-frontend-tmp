@@ -2,13 +2,13 @@ import React from 'react';
 import { mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-import { initialPhysicalExamState } from 'redux/reducers/physicalExamReducer';
-import { createCurrentNoteStore } from 'redux/store';
-import { PULSES_WIDGET_ACTION } from 'redux/actions/actionTypes';
+import { initialPhysicalExamState } from '@redux/reducers/physicalExamReducer';
+import { makeStore } from '@redux/store';
+import { PULSES_WIDGET_ACTION } from '@redux/actions/actionTypes';
 import PulsesWidgetItem from './PulsesWidgetItem';
 import { LeftRight } from 'constants/enums';
-import { selectPulsesWidgetState } from 'redux/selectors/widgetSelectors/pulsesWidgetSelectors';
-import { addPulsesWidgetItem } from 'redux/actions/widgetActions/pulsesWidgetActions';
+import { selectPulsesWidgetState } from '@redux/selectors/widgetSelectors/pulsesWidgetSelectors';
+import { addPulsesWidgetItem } from '@redux/actions/widgetActions/pulsesWidgetActions';
 
 const fakeId = 'yasa';
 const location = 'brachial';
@@ -48,7 +48,7 @@ const mountWithMockStore = (
 };
 
 const mountWithRealStore = ({ ...props } = {}) => {
-    const store = createCurrentNoteStore();
+    const store = makeStore();
     store.dispatch(addPulsesWidgetItem());
     const id = Object.keys(selectPulsesWidgetState(store.getState()))[0];
     return mount(

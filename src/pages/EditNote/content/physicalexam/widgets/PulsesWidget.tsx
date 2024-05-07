@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
 import '../PhysicalExam.css';
-import { selectPulsesWidgetState } from 'redux/selectors/widgetSelectors/pulsesWidgetSelectors';
+import { selectPulsesWidgetState } from '@redux/selectors/widgetSelectors/pulsesWidgetSelectors';
 import PulsesWidgetItem from './PulsesWidgetItem';
 import { connect, ConnectedProps } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import { addPulsesWidgetItem } from 'redux/actions/widgetActions/pulsesWidgetActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { addPulsesWidgetItem } from '@redux/actions/widgetActions/pulsesWidgetActions';
 
 class PulsesWidget extends Component<PropsFromRedux> {
     render() {

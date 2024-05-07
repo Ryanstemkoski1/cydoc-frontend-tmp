@@ -1,4 +1,4 @@
-import { UserInfo } from 'redux/reducers/additionalSurveyReducer';
+import { UserInfo } from '@redux/reducers/additionalSurveyReducer';
 import { UPDATE_ADDITIONAL_DETAILS } from './actionTypes';
 
 export interface UpdateAdditionalSurveyAction {

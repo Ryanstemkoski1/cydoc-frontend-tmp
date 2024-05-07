@@ -1,5 +1,5 @@
 import { chiefComplaintsActionTypes } from '../actions/chiefComplaintsActions';
-import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
+import { CHIEF_COMPLAINTS } from '@redux/actions/actionTypes';
 
 export type ChiefComplaintsState = {
     [disease: string]: string | number | undefined;

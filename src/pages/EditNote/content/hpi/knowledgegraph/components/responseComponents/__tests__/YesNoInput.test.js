@@ -3,13 +3,13 @@ import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { Provider } from 'react-redux';
 // import YesNo from '../YesNo';
-import { createCurrentNoteStore } from 'redux/store';
+import { makeStore } from '@redux/store';
 // import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 const connectRealStore = () => {
-    const store = createCurrentNoteStore();
+    const store = makeStore();
     // const node = {
     //     ...testNode,
     //     responseType: 'YES-NO',

@@ -1,7 +1,7 @@
 import {
     AbdomenWidgetSection,
     AbdomenWidgetState,
-} from 'redux/reducers/widgetReducers/abdomenWidgetReducer';
+} from '@redux/reducers/widgetReducers/abdomenWidgetReducer';
 import { ABDOMEN_WIDGET_ACTION } from '../actionTypes';
 
 export interface ToggleAbdomenWidgetSectionAction {

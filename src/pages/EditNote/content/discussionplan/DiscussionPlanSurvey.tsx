@@ -1,14 +1,14 @@
 import React, { ChangeEvent } from 'react';
 import { Header, Segment, Grid, Label, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { CurrentNoteState } from 'redux/reducers';
-import { PlanSurvey } from 'redux/reducers/planReducer';
+import { CurrentNoteState } from '@redux/reducers';
+import { PlanSurvey } from '@redux/reducers/planReducer';
 import {
     updateAdmitToHospital,
     updateSickness,
     updateEmergency,
-} from 'redux/actions/planActions';
-import { selectPlanSurvey } from 'redux/selectors/planSelectors';
+} from '@redux/actions/planActions';
+import { selectPlanSurvey } from '@redux/selectors/planSelectors';
 import { YesNoUncertainResponse } from 'constants/enums';
 import 'pages/EditNote/content/hpi/knowledgegraph/css/Button.css';
 

@@ -5,7 +5,7 @@ import MedicationsContent from '../MedicationsContent';
 
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
-// import { MEDICATIONS_ACTION } from 'redux/actions/actionTypes';
+// import { MEDICATIONS_ACTION } from '@redux/actions/actionTypes';
 import { YesNoResponse } from 'constants/enums';
 
 Enzyme.configure({ adapter: new Adapter() });

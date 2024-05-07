@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { PlanCondition, PlanState } from 'redux/reducers/planReducer';
+import { PlanCondition, PlanState } from '@redux/reducers/planReducer';
 
 interface PlanProps {
     planState: PlanState;

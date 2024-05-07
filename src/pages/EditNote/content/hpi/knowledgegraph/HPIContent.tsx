@@ -8,24 +8,24 @@ import { connect } from 'react-redux';
 import {
     SetNotesChiefComplaintAction,
     setNotesChiefComplaint,
-} from 'redux/actions/chiefComplaintsActions';
+} from '@redux/actions/chiefComplaintsActions';
 import {
     ProcessKnowledgeGraphAction,
     processKnowledgeGraph,
-} from 'redux/actions/hpiActions';
+} from '@redux/actions/hpiActions';
 import {
     SaveHpiHeaderAction,
     saveHpiHeader,
-} from 'redux/actions/hpiHeadersActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { ChiefComplaintsState } from 'redux/reducers/chiefComplaintsReducer';
-import { HpiHeadersState } from 'redux/reducers/hpiHeadersReducer';
+} from '@redux/actions/hpiHeadersActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
+import { HpiHeadersState } from '@redux/reducers/hpiHeadersReducer';
 import {
     PlanConditionsFlat,
     selectPlanConditions,
-} from 'redux/selectors/planSelectors';
-import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
-import { currentNoteStore } from 'redux/store';
+} from '@redux/selectors/planSelectors';
+import { selectPatientViewState } from '@redux/selectors/userViewSelectors';
+import { currentNoteStore } from '@redux/store';
 import { Search, Segment } from 'semantic-ui-react';
 import Tab from '../../../../../components/tools/Tab';
 import { CHIEF_COMPLAINTS } from '../../../../../redux/actions/actionTypes';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
+import { additionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 import './GenerateNote.css';
 
 interface PatentInfoProps {

@@ -1,11 +1,11 @@
-import { UPDATE_ADDITIONAL_DETAILS } from 'redux/actions/actionTypes';
+import { UPDATE_ADDITIONAL_DETAILS } from '@redux/actions/actionTypes';
 import {
     GoBackToAdditionalSurvey,
     UpdateAdditionalSurveyAction,
     UpdateChiefComplaintsDescription,
     UpdateUserInfo,
     ValidateUserInfo,
-} from 'redux/actions/additionalSurveyActions';
+} from '@redux/actions/additionalSurveyActions';
 
 export interface additionalSurvey {
     legalFirstName: string;

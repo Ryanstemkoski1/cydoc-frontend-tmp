@@ -1,4 +1,4 @@
-import { LoadingStatusActionTypes } from 'redux/actions/loadingStatusActions';
+import { LoadingStatusActionTypes } from '@redux/actions/loadingStatusActions';
 import { LOADING_STATUS } from '../actions/actionTypes';
 
 export const initialLoadingStatus = false;

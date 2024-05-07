@@ -3,18 +3,18 @@ import {
     VitalsFields,
     PhysicalExamSectionState,
     PhysicalExamState,
-} from 'redux/reducers/physicalExamReducer';
+} from '@redux/reducers/physicalExamReducer';
 import { Table } from 'semantic-ui-react';
-import { WidgetsState } from 'redux/reducers/widgetReducers';
+import { WidgetsState } from '@redux/reducers/widgetReducers';
 import {
     MurmurRadiation,
     MurmurAdditionalFeature,
     Phase,
-} from 'redux/reducers/widgetReducers/murmurswidgetReducer';
-import { PulsesWidgetItemState } from 'redux/reducers/widgetReducers/pulsesWidgetReducer';
-import { ReflexesWidgetItemState } from 'redux/reducers/widgetReducers/reflexesWidgetReducer';
+} from '@redux/reducers/widgetReducers/murmurswidgetReducer';
+import { PulsesWidgetItemState } from '@redux/reducers/widgetReducers/pulsesWidgetReducer';
+import { ReflexesWidgetItemState } from '@redux/reducers/widgetReducers/reflexesWidgetReducer';
 import { LeftRight } from 'constants/enums';
-import { currentNoteStore } from 'redux/store';
+import { currentNoteStore } from '@redux/store';
 
 interface PhysicalExamProps {
     isRich: boolean;

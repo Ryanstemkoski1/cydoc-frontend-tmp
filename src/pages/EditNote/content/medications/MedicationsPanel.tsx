@@ -15,13 +15,13 @@ import {
     updateSchedule,
     updateSideEffects,
     updateStartYear,
-} from 'redux/actions/medicationsActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { MedicationsItem } from 'redux/reducers/medicationsReducer';
+} from '@redux/actions/medicationsActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { MedicationsItem } from '@redux/reducers/medicationsReducer';
 import {
     selectMedicationsEntries,
     selectMedicationsState,
-} from 'redux/selectors/medicationsSelectors';
+} from '@redux/selectors/medicationsSelectors';
 import {
     Accordion,
     Input,

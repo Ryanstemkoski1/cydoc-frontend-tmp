@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ReviewOfSystemsState } from 'redux/reducers/reviewOfSystemsReducer';
+import { ReviewOfSystemsState } from '@redux/reducers/reviewOfSystemsReducer';
 import { YesNoResponse } from 'constants/enums';
 import { Table } from 'semantic-ui-react';
 

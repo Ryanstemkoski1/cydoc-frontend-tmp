@@ -2,13 +2,13 @@ import NavigationButton from 'components/tools/NavigationButton/NavigationButton
 import constants from 'constants/constants';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updateActiveItem } from 'redux/actions/activeItemActions';
-import { processSurveyGraph } from 'redux/actions/userViewActions';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
+import { updateActiveItem } from '@redux/actions/activeItemActions';
+import { processSurveyGraph } from '@redux/actions/userViewActions';
+import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import {
     selectInitialPatientSurvey,
     selectPatientViewState,
-} from 'redux/selectors/userViewSelectors';
+} from '@redux/selectors/userViewSelectors';
 import { Container } from 'semantic-ui-react';
 import './NotePage.css';
 import AllergiesContent from './content/allergies/AllergiesContent';

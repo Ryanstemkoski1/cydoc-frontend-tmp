@@ -12,16 +12,16 @@ import {
     updateConditionResolved,
     updateEndYear,
     updateStartYear,
-} from 'redux/actions/medicalHistoryActions';
-import { CurrentNoteState } from 'redux/reducers';
+} from '@redux/actions/medicalHistoryActions';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     MedicalHistoryItem,
     MedicalHistoryState,
-} from 'redux/reducers/medicalHistoryReducer';
+} from '@redux/reducers/medicalHistoryReducer';
 import {
     selectMedicalHistoryItem,
     selectMedicalHistoryState,
-} from 'redux/selectors/medicalHistorySelector';
+} from '@redux/selectors/medicalHistorySelector';
 import { ButtonProps, Form, TextAreaProps } from 'semantic-ui-react';
 import '../familyhistory/FamilyHistory.css';
 import '../hpi/knowledgegraph/css/Button.css';

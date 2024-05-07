@@ -12,7 +12,7 @@ import {
     PopResponseAction,
     blankQuestionChange,
     popResponse,
-} from 'redux/actions/hpiActions';
+} from '@redux/actions/hpiActions';
 import {
     AddPmhPopOptionsAction,
     addPmhPopOptions,
@@ -22,13 +22,13 @@ import {
     updateConditionResolved,
     updateEndYear,
     updateStartYear,
-} from 'redux/actions/medicalHistoryActions';
-import { CurrentNoteState } from 'redux/reducers';
+} from '@redux/actions/medicalHistoryActions';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     MedicalHistoryItem,
     MedicalHistoryState,
-} from 'redux/reducers/medicalHistoryReducer';
-import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
+} from '@redux/reducers/medicalHistoryReducer';
+import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelector';
 import { ButtonProps, TextAreaProps } from 'semantic-ui-react';
 import { v4 } from 'uuid';
 import style from './MedicalHistoryContent.module.scss';

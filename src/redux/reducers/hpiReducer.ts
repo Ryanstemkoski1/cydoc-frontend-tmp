@@ -1,4 +1,4 @@
-import { HpiActionTypes } from 'redux/actions/hpiActions';
+import { HpiActionTypes } from '@redux/actions/hpiActions';
 import { CHIEF_COMPLAINTS, HPI_ACTION } from '../actions/actionTypes';
 import { YesNoResponse } from '../../constants/enums';
 import {

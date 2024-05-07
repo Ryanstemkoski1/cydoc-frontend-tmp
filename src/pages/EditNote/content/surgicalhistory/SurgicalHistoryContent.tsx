@@ -11,16 +11,16 @@ import {
     updateComments,
     updateProcedure,
     updateYear,
-} from 'redux/actions/surgicalHistoryActions';
-import { CurrentNoteState } from 'redux/reducers';
+} from '@redux/actions/surgicalHistoryActions';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     SurgicalHistoryElements,
     SurgicalHistoryItem,
-} from 'redux/reducers/surgicalHistoryReducer';
+} from '@redux/reducers/surgicalHistoryReducer';
 import {
     selectHasSurgicalHistoryState,
     selectSurgicalHistoryProcedures,
-} from 'redux/selectors/surgicalHistorySelectors';
+} from '@redux/selectors/surgicalHistorySelectors';
 import {
     DropdownProps,
     InputOnChangeData,
@@ -39,8 +39,8 @@ import {
     PopResponseAction,
     blankQuestionChange,
     popResponse,
-} from 'redux/actions/hpiActions';
-import { selectPatientViewState } from 'redux/selectors/userViewSelectors';
+} from '@redux/actions/hpiActions';
+import { selectPatientViewState } from '@redux/selectors/userViewSelectors';
 import { v4 } from 'uuid';
 import style from './SurgicalHistoryContent.module.scss';
 

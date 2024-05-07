@@ -1,6 +1,6 @@
 import { YesNoResponse } from 'constants/enums';
 import React, { Component } from 'react';
-import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
+import { FamilyHistoryState } from '@redux/reducers/familyHistoryReducer';
 import { Table } from 'semantic-ui-react';
 
 interface FamilyHistoryProps {

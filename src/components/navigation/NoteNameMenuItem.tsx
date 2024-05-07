@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import {
     UpdateNoteTitleAction,
     updateNoteTitle,
-} from 'redux/actions/currentNoteActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { initialNoteTitle } from 'redux/reducers/currentNoteReducer';
-import { selectNoteTitle } from 'redux/selectors/currentNoteSelectors';
+} from '@redux/actions/currentNoteActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { initialNoteTitle } from '@redux/reducers/currentNoteReducer';
+import { selectNoteTitle } from '@redux/selectors/currentNoteSelectors';
 import { Input, InputOnChangeData, Menu } from 'semantic-ui-react';
 import './NoteNameMenuItem.css';
 

@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import {
     HandleYearInputChangeAction,
     handleYearInputChange,
-} from 'redux/actions/hpiActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { selectHpiState } from 'redux/selectors/hpiSelectors';
+} from '@redux/actions/hpiActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectHpiState } from '@redux/selectors/hpiSelectors';
 
 interface YearInputProps {
     node: string;

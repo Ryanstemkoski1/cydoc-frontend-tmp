@@ -14,16 +14,16 @@ import { connect } from 'react-redux';
 import {
     UpdateActiveItemAction,
     updateActiveItem,
-} from 'redux/actions/activeItemActions';
-import { UserViewAction, changeUserView } from 'redux/actions/userViewActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
+} from '@redux/actions/activeItemActions';
+import { UserViewAction, changeUserView } from '@redux/actions/userViewActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { additionalSurvey } from '@redux/reducers/additionalSurveyReducer';
+import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import {
     selectDoctorViewState,
     selectInitialPatientSurvey,
     selectPatientViewState,
-} from 'redux/selectors/userViewSelectors';
+} from '@redux/selectors/userViewSelectors';
 import constants from '../../constants/constants.json';
 import style from './NavMenu.module.scss';
 

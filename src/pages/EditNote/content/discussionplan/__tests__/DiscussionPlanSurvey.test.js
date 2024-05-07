@@ -5,7 +5,7 @@ import DiscussionPlanSurvey from '../DiscussionPlanSurvey';
 import configureStore from 'redux-mock-store';
 import { initialPlan } from '../util';
 import { Provider } from 'react-redux';
-import { PLAN_ACTION as TYPES } from 'redux/actions/actionTypes';
+import { PLAN_ACTION as TYPES } from '@redux/actions/actionTypes';
 import { YesNoUncertainResponse } from 'constants/enums';
 
 Enzyme.configure({ adapter: new Adapter() });

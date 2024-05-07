@@ -1,5 +1,5 @@
-import { SOCIAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
-import { SocialHistoryActionTypes } from 'redux/actions/socialHistoryActions';
+import { SOCIAL_HISTORY_ACTION } from '@redux/actions/actionTypes';
+import { SocialHistoryActionTypes } from '@redux/actions/socialHistoryActions';
 import {
     YesNoResponse,
     YesNoMaybeResponse,
