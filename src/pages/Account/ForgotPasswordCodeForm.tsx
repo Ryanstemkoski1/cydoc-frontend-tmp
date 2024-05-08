@@ -6,8 +6,8 @@ import * as Yup from 'yup';
 import { FirstLoginFormSpec } from './FirstLoginForm';
 import { Stack } from '@mui/system';
 import { forgotPasswordConfirmCode } from 'auth/cognito';
-import { stringFromError } from '../../modules/error-utils';
-import { log } from '../../modules/logging';
+import { stringFromError } from '@modules/error-utils';
+import { log } from '@modules/logging';
 import { ErrorText } from 'components/Atoms/ErrorText';
 
 const { newPassword, confirmNewPassword } = FirstLoginFormSpec;

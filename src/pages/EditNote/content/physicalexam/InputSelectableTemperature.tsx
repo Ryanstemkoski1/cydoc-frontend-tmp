@@ -26,23 +26,24 @@ interface Props {
     handleTempUnitChange: (val: string) => void;
 }
 
-const InputSelectableTemparature = (props: Props) => {
+const celsiusToFahrenheit = (newVal: string) => {
+    return Number(newVal) * 1.8 + 32;
+};
+const fahrenheitToCelsius = (newVal: string) => {
+    return (Number(newVal) - 32) * 0.5556;
+};
+
+const InputSelectableTemperature = (props: Props) => {
     const [currentUnit, setCurrentUnit] = useState<number>(props.tempUnit);
-    const [currentTemparature, setCurrentTemparature] = useState<string>(
+    const [currentTemperature, setCurrentTemperature] = useState<string>(
         props.temperature.toString()
     );
-    const celciusToForeignheight = (newVal: string) => {
-        return Number(newVal) * 1.8 + 32;
-    };
-    const foreignheightToCelcius = (newVal: string) => {
-        return (Number(newVal) - 32) * 0.5556;
-    };
     const handleChangeInput = (
         e: React.ChangeEvent<HTMLInputElement>,
         data: InputOnChangeData
     ) => {
         const newVal = data.value;
-        setCurrentTemparature(newVal);
+        setCurrentTemperature(newVal);
         if (currentUnit === 0) {
             props.handleTempChange(newVal + '');
             props.handleTempUnitChange('0');
@@ -51,6 +52,7 @@ const InputSelectableTemparature = (props: Props) => {
             props.handleTempUnitChange('1');
         }
     };
+
     const toggleUnit = (
         e: SyntheticEvent<HTMLElement, Event>,
         data: DropdownProps
@@ -59,13 +61,13 @@ const InputSelectableTemparature = (props: Props) => {
         if (currentUnit !== convertedData) {
             setCurrentUnit(convertedData as number);
             if (data.value === '°C') {
-                const val = foreignheightToCelcius(currentTemparature);
-                setCurrentTemparature(+val.toFixed(1) + '');
+                const val = fahrenheitToCelsius(currentTemperature);
+                setCurrentTemperature(+val.toFixed(1) + '');
                 props.handleTempChange(+val.toFixed(1) + '');
                 props.handleTempUnitChange('0');
             } else {
-                const val = celciusToForeignheight(currentTemparature);
-                setCurrentTemparature(+val.toFixed(1) + '');
+                const val = celsiusToFahrenheit(currentTemperature);
+                setCurrentTemperature(+val.toFixed(1) + '');
                 props.handleTempChange(+val.toFixed(1) + '');
                 props.handleTempUnitChange('1');
             }
@@ -86,12 +88,12 @@ const InputSelectableTemparature = (props: Props) => {
             placeholder='0'
             type='number'
             style={styledInput}
-            className='selectable-temparature'
+            className='selectable-temperature'
             onChange={handleChangeInput}
             name='temperature'
-            value={currentTemparature}
+            value={currentTemperature}
         />
     );
 };
 
-export default InputSelectableTemparature;
+export default InputSelectableTemperature;

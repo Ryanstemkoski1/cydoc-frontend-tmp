@@ -13,7 +13,7 @@ import {
 } from 'semantic-ui-react';
 import LRButton from 'components/tools/LRButtonRedux';
 import SelectAllButton from '../SelectAllButton';
-import { currentNoteStore } from '@redux/store';
+import { makeStore } from '@redux/store';
 import { deleteNote } from '@redux/actions/currentNoteActions';
 import PhysicalExamRow from '../PhysicalExamRow';
 // import _ from 'lodash';
@@ -37,7 +37,7 @@ const connectStore = (state = initialState, props) => {
 };
 
 const connectRealStore = (initialState, props) => {
-    const store = currentNoteStore;
+    const store = makeStore();
     return {
         store,
         wrapper: mount(

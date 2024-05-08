@@ -1,17 +1,17 @@
 import { ProductType, ViewType } from 'constants/enums/route.enums';
 import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+import { useRouter } from 'next/navigation';
 import style from './ViewProduct.module.scss';
 
 export default function ViewProduct() {
     const [product, setProduct] = useState(ProductType.EHR);
     const [view, setView] = useState(ViewType.DOCTOR);
 
-    const history = useHistory();
+    const router = useRouter();
 
     const navigateTo = () => {
         const path = `/${product}/${view}`;
-        history.push(path);
+        router.push(path);
     };
 
     return (

@@ -1,8 +1,8 @@
 // export default function UpgradeSubscriptionButton () {
 
 import { Button, SxProps, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import React from 'react';
-import { useHistory } from 'react-router';
 
 export default function UpgradeSubscriptionButton({
     backgroundColor,
@@ -11,7 +11,7 @@ export default function UpgradeSubscriptionButton({
     backgroundColor: string;
     style?: SxProps;
 }) {
-    const history = useHistory();
+    const router = useRouter();
     return (
         <Button
             variant='outlined'
@@ -24,7 +24,7 @@ export default function UpgradeSubscriptionButton({
                 py: 0.25,
                 ...style,
             }}
-            onClick={() => history.push('/subscription')}
+            onClick={() => router.push('/subscription')}
         >
             <Typography lineHeight='1.5em' variant='caption' color='white'>
                 ADD PAYMENT

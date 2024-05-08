@@ -1,3 +1,5 @@
+'use client';
+
 import React, { memo, useMemo, useState } from 'react';
 import { Box, Button, Modal, Typography } from '@mui/material';
 import { useSubscription } from 'hooks/useSubscription';

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useRouter } from 'next/navigation';
 import style from './MenuButton.module.scss';
 
 export interface MenuItem {
@@ -18,7 +18,7 @@ interface Props {
 }
 
 function MenuButton({ label, icon, to, items }: Props) {
-    const history = useHistory();
+    const router = useRouter();
     const [showMenuItems, setShowMenuItems] = useState(false);
 
     const menuItemRef = useRef<HTMLDivElement>(null);
@@ -42,7 +42,7 @@ function MenuButton({ label, icon, to, items }: Props) {
             <div
                 className={`${style.profile__user} flex align-center`}
                 onClick={() => {
-                    if (to) return history.push(to);
+                    if (to) return router.push(to);
                     setShowMenuItems(!showMenuItems);
                 }}
             >
@@ -73,7 +73,7 @@ function MenuButton({ label, icon, to, items }: Props) {
                             key={item.label}
                             onClick={() => {
                                 if (item.onClick) item.onClick();
-                                if (item.to) history.push(item.to);
+                                if (item.to) router.push(item.to);
                                 setShowMenuItems(false);
                             }}
                         >

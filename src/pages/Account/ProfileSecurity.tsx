@@ -14,13 +14,13 @@ import './Account.css';
 import { passwordRequirements } from 'auth/passwordReqs';
 import useUser from 'hooks/useUser';
 import { updatePassword } from 'auth/cognito';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 // NOTE: this page needs to be updated to use the new auth password editing logic
 const ProfileSecurity = () => {
     const { user } = useUser();
     const role = user?.role;
-    const history = useHistory();
+    const router = useRouter();
 
     const [curPassword, setCurPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -83,7 +83,7 @@ const ProfileSecurity = () => {
         );
 
         if (changePasswordResponse?.success) {
-            history.push('/');
+            router.push('/');
         }
         return;
     };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Policy from '../../constants/Documents/policy';
+import Policy from '@constants/Documents/policy';
 import { TermsOrPolicyStep } from './TermsOrPolicyStep';
 
 export function PrivacyPolicyStep() {

@@ -5,13 +5,13 @@ import useAuth from 'hooks/useAuth';
 import useUser from 'hooks/useUser';
 import { log } from 'modules/logging';
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Button } from 'semantic-ui-react';
 
 export function SubscriptionCancel() {
     const { user } = useUser();
     const { cognitoUser } = useAuth();
-    const history = useHistory();
+    const router = useRouter();
 
     useEffect(() => {
         if (user && cognitoUser)
@@ -49,7 +49,7 @@ export function SubscriptionCancel() {
                         content='Okay!'
                         size='small'
                         style={{ marginLeft: '1rem' }}
-                        onClick={() => history.push('/subscription')}
+                        onClick={() => router.push('/subscription')}
                     />
                 </Box>
             </Box>

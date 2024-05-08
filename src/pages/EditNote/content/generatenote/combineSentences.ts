@@ -9,7 +9,7 @@ to each string that is next to eachother.
 
 function removeDoubleWords(str: string) {
     const words = str.split(' ');
-    const newWords = [];
+    const newWords: string[] = [];
 
     for (let i = 0; i < words.length; i++) {
         if (words[i] !== words[i + 1]) {

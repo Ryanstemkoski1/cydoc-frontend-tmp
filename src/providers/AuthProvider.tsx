@@ -22,10 +22,10 @@ import {
     USER_EXISTS,
 } from 'auth/cognito';
 import { Auth as AmplifyAuth } from 'aws-amplify';
-import { useHistory } from 'react-router-dom';
-import { stringFromError } from '../modules/error-utils';
-import { breadcrumb, log, updateLoggedUser } from '../modules/logging';
-import { formatPhoneNumber } from '../modules/user-api';
+import { useRouter } from 'next/navigation';
+import { stringFromError } from '@modules/error-utils';
+import { breadcrumb, log, updateLoggedUser } from '@modules/logging';
+import { formatPhoneNumber } from '@modules/user-api';
 import { UserInfoProvider } from './UserInfoProvider';
 
 export interface AuthContextValues {
@@ -64,7 +64,7 @@ export const AuthProvider: React.FC<
     const [authLoading, setAuthLoading] = useState(true);
     const passwordResetRequired =
         cognitoUser?.challengeName === NEW_PASSWORD_REQUIRED;
-    const history = useHistory();
+    const router = useRouter();
 
     const [isSignedIn, setIsSignedIn] = useState(false);
     // TODO: parse ^^status^^ from cognitoUser when it changes (see below)
@@ -229,7 +229,7 @@ export const AuthProvider: React.FC<
                 log('error signing up:', error);
                 if (error?.code === USER_EXISTS) {
                     alert(`Account already exists, please login`);
-                    history?.push('/login');
+                    router.push('/login');
                     return {
                         errorMessage: `Account already exists, please login`,
                     };
@@ -242,7 +242,7 @@ export const AuthProvider: React.FC<
                     'Unknown error occurred, refresh, check your network & login',
             };
         },
-        [history, signIn]
+        [router, signIn]
     );
 
     const verifyMfaCode = useCallback(
@@ -259,7 +259,7 @@ export const AuthProvider: React.FC<
 
                 setIsSignedIn(!!confirmedUser); // MFA has been completed
                 setCognitoUser(confirmedUser);
-                history?.push('/');
+                router.push('/');
 
                 return { user: confirmedUser, errorMessage: undefined };
             } catch (e) {
@@ -286,7 +286,7 @@ export const AuthProvider: React.FC<
                     'Unknown error occurred, refresh, check your network & login',
             };
         },
-        [history, signOut, cognitoUser]
+        [router, signOut, cognitoUser]
     );
 
     const completeFirstLoginUpdate: AuthContextValues['completeFirstLoginUpdate'] =

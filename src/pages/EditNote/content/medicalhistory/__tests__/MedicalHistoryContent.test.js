@@ -414,7 +414,7 @@ describe('MedicalHistoryContent', () => {
 
     // test('disease name is standardized with lowercase', () => {
     //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
+    //         <Provider store={makeStore}>
     //             <MedicalHistoryContent />
     //         </Provider>
     //     );
@@ -428,12 +428,12 @@ describe('MedicalHistoryContent', () => {
     //     expect(
     //         wrapper.find('input[placeholder="Condition"]').first().props().value
     //     ).toEqual('bar');
-    //     currentNoteStore.dispatch(deleteNote());
+    //     makeStore.dispatch(deleteNote());
     // });
 
     // test('acronyms are not made lowercase', () => {
     //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
+    //         <Provider store={makeStore}>
     //             <MedicalHistoryContent />
     //         </Provider>
     //     );
@@ -447,12 +447,12 @@ describe('MedicalHistoryContent', () => {
     //     expect(
     //         wrapper.find('input[placeholder="Condition"]').first().props().value
     //     ).toEqual('BAR');
-    //     currentNoteStore.dispatch(deleteNote());
+    //     makeStore.dispatch(deleteNote());
     // });
 
     // test('acronyms are not made lowercase when more than one word is present', () => {
     //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
+    //         <Provider store={makeStore}>
     //             <MedicalHistoryContent />
     //         </Provider>
     //     );
@@ -466,12 +466,12 @@ describe('MedicalHistoryContent', () => {
     //     expect(
     //         wrapper.find('input[placeholder="Condition"]').first().props().value
     //     ).toEqual('BAR bar');
-    //     currentNoteStore.dispatch(deleteNote());
+    //     makeStore.dispatch(deleteNote());
     // });
 
     // test('roman numerals', () => {
     //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
+    //         <Provider store={makeStore}>
     //             <MedicalHistoryContent />
     //         </Provider>
     //     );
@@ -485,12 +485,12 @@ describe('MedicalHistoryContent', () => {
     //     expect(
     //         wrapper.find('input[placeholder="Condition"]').first().props().value
     //     ).toEqual('bar 2 foo');
-    //     currentNoteStore.dispatch(deleteNote());
+    //     makeStore.dispatch(deleteNote());
     // });
 
     // test('roman numerals at end of word not changed until after blur', () => {
     //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
+    //         <Provider store={makeStore}>
     //             <MedicalHistoryContent />
     //         </Provider>
     //     );
@@ -508,13 +508,13 @@ describe('MedicalHistoryContent', () => {
     //     expect(
     //         wrapper.find('input[placeholder="Condition"]').first().props().value
     //     ).toEqual('bar 2');
-    //     currentNoteStore.dispatch(deleteNote());
+    //     makeStore.dispatch(deleteNote());
     // });
 
     // // TODO: Fix below tests
     // test('desktop year validation', () => {
     //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
+    //         <Provider store={makeStore}>
     //             <MedicalHistoryContent />
     //         </Provider>
     //     );
@@ -531,7 +531,7 @@ describe('MedicalHistoryContent', () => {
     //         wrapper.find('textarea[placeholder="Onset"]').prop('value')
     //     ).toEqual('0');
     //     expect(wrapper.find('.year-validation-mobile-error')).toHaveLength(1);
-    //     currentNoteStore.dispatch(deleteNote());
+    //     makeStore.dispatch(deleteNote());
     // })
 
     // test('mobile year validation', () => {
@@ -539,7 +539,7 @@ describe('MedicalHistoryContent', () => {
     //         mobile: true,
     //     };
     //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
+    //         <Provider store={makeStore}>
     //             <MedicalHistoryContent {...props} />
     //         </Provider>
     //     );

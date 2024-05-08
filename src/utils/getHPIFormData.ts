@@ -4,7 +4,7 @@ import {
     SelectManyInput,
     SelectOneInput,
 } from 'constants/hpiEnums';
-import { currentNoteStore } from '@redux/store';
+import { makeStore } from '@redux/store';
 import getHPIText from './getHPIText';
 
 function sanitizeString(str: string) {
@@ -12,7 +12,7 @@ function sanitizeString(str: string) {
 }
 
 export default function getHPIFormData() {
-    const rootState = currentNoteStore.getState();
+    const rootState = makeStore.getState();
 
     const {
         legalFirstName: first_name = '',

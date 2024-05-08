@@ -5,9 +5,9 @@ import { SignUpFormData } from './SignUpForm';
 import {
     createManagerAndInstitution,
     formatPhoneNumber,
-} from '../../modules/user-api';
-import { useHistory } from 'react-router-dom';
-import { breadcrumb, log } from '../../modules/logging';
+} from '@modules/user-api';
+import { useRouter } from 'next/navigation';
+import { breadcrumb, log } from '@modules/logging';
 import useAuth from 'hooks/useAuth';
 import { FirstLoginFormSpec } from './FirstLoginForm';
 import { DbUser, UpdateUserResponse } from '@cydoc-ai/types';
@@ -45,7 +45,7 @@ const validationSchema = Yup.object<SignUpFormData>({
 
 export const useSignUpFormController = (initialValues: SignUpFormData) => {
     const { signUp } = useAuth();
-    const history = useHistory();
+    const router = useRouter();
 
     const form = useFormik({
         enableReinitialize: true,
@@ -79,7 +79,7 @@ export const useSignUpFormController = (initialValues: SignUpFormData) => {
                     setErrors({ submitError: result.errorMessage });
                 } else if (result && (result as UpdateUserResponse)?.user?.id) {
                     // User created successfully, take them to MFA page
-                    history.push('/login');
+                    router.push('/login');
                 } else {
                     // Unexpected error occurred
                     breadcrumb(`Invalid user creation response`, 'sign up', {

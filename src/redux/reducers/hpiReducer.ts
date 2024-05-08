@@ -1,6 +1,6 @@
 import { HpiActionTypes } from '@redux/actions/hpiActions';
 import { CHIEF_COMPLAINTS, HPI_ACTION } from '../actions/actionTypes';
-import { YesNoResponse } from '../../constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import {
     HpiResponseType,
     ResponseTypes,
@@ -15,7 +15,7 @@ import {
     NodeInterface,
     OrderInterface,
     SelectOneInput,
-} from '../../constants/hpiEnums';
+} from '@constants/hpiEnums';
 import { v4 } from 'uuid';
 
 export interface HpiState {

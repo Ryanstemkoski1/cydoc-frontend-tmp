@@ -18,7 +18,7 @@ import {
 import { CurrentNoteState } from '@redux/reducers';
 import { selectTobaccoState } from '@redux/selectors/socialHistorySelectors';
 import { Divider, Dropdown, Form, Grid, Input } from 'semantic-ui-react';
-import HistoryButtons from '../../../../components/tools/ThreeButton/ThreeButtons';
+import HistoryButtons from '@components/tools/ThreeButton/ThreeButtons';
 import '../familyhistory/FamilyHistory.css';
 import '../hpi/knowledgegraph/css/Button.css';
 

@@ -3,7 +3,7 @@ import { PhysicalExamActionTypes } from '@redux/actions/physicalExamActions';
 import { WidgetActionTypes } from '@redux/actions/widgetActions';
 import { PHYSICAL_EXAM_ACTION } from '../actions/actionTypes';
 import { widgetReducer, WidgetsState } from './widgetReducers';
-import schema from '../../constants/PhysicalExam/exampleSchema.json';
+import schema from '@constants/PhysicalExam/exampleSchema.json';
 import { LRButtonState } from 'constants/enums';
 import { initialLungsWidgetState } from './widgetReducers/lungsWidgetReducer';
 import { initialAbdomenWidgetState } from './widgetReducers/abdomenWidgetReducer';

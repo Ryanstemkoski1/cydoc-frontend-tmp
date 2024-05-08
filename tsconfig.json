@@ -16,13 +16,16 @@
         "baseUrl": "src",
         "incremental": true,
         "paths": {
+            "@assets/*": ["assets/*"],
             "@components/*": ["components/*"],
             "@constants/*": ["constants/*"],
             "@contexts/*": ["contexts/*"],
+            "@hooks/*": ["hooks/*"],
             "@modules/*": ["modules/*"],
             "@pages/*": ["pages/*"],
             "@providers/*": ["providers/*"],
-            "@redux/*": ["redux/*"]
+            "@redux/*": ["redux/*"],
+            "@utils/*": ["utils/*"]
         },
         "plugins": [
             {

@@ -6,6 +6,7 @@ import {
     UpdateUserInfo,
     ValidateUserInfo,
 } from '@redux/actions/additionalSurveyActions';
+import { RootState } from '@redux/store';
 
 export interface additionalSurvey {
     legalFirstName: string;
@@ -125,3 +126,6 @@ export function additionalSurveyReducer(
             return state;
     }
 }
+
+export const selectAdditionalSurvey = (state: RootState) =>
+    state.additionalSurvey;

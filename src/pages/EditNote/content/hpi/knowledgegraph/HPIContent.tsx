@@ -25,10 +25,10 @@ import {
     selectPlanConditions,
 } from '@redux/selectors/planSelectors';
 import { selectPatientViewState } from '@redux/selectors/userViewSelectors';
-import { currentNoteStore } from '@redux/store';
+import { makeStore } from '@redux/store';
 import { Search, Segment } from 'semantic-ui-react';
-import Tab from '../../../../../components/tools/Tab';
-import { CHIEF_COMPLAINTS } from '../../../../../redux/actions/actionTypes';
+import Tab from '@components/tools/Tab';
+import { CHIEF_COMPLAINTS } from '@redux/actions/actionTypes';
 import './HPI.css';
 import { hpiHeaders } from './API';
 import BodySystemDropdown from './components/BodySystemDropdown';
@@ -144,7 +144,7 @@ class HPIContent extends React.Component<Props, HPIContentState> {
                         const temp = {
                             title: complaint,
                             onClick: () => {
-                                currentNoteStore.dispatch({
+                                makeStore.dispatch({
                                     type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
                                     payload: {
                                         disease: complaint,

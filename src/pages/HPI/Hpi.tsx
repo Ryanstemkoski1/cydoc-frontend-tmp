@@ -26,7 +26,7 @@ import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/know
 import initialQuestions from 'pages/EditNote/content/patientview/constants/initialQuestions';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useRouter } from 'next/navigation';
 import { updateActiveItem } from '@redux/actions/activeItemActions';
 import { selectChiefComplaint } from '@redux/actions/chiefComplaintsActions';
 import { processKnowledgeGraph } from '@redux/actions/hpiActions';
@@ -60,7 +60,7 @@ interface ScreenForPatientType {
 const HPI = () => {
     const dispatch = useDispatch();
     const query = useQuery();
-    const history = useHistory();
+    const router = useRouter();
 
     /* STATES */
     const [notificationMessage, setNotificationMessage] = useState('');
@@ -452,7 +452,7 @@ const HPI = () => {
 
     useEffect(() => {
         if (!institutionId) {
-            history.replace('/');
+            router.replace('/');
             return;
         }
 
@@ -470,7 +470,7 @@ const HPI = () => {
                     setInstitution(new InstitutionClass({ id, name }));
                 } else {
                     log(`HPI error fetching institution`);
-                    history.replace('/');
+                    router.replace('/');
                 }
 
                 if (
@@ -490,18 +490,18 @@ const HPI = () => {
                     setInstitutionConfig(result);
                 } else {
                     log(`HPI error fetching institution preferences`);
-                    history.replace('/');
+                    router.replace('/');
                 }
             } catch (e) {
                 log(`HPI error fetching institution`);
-                history.replace('/');
+                router.replace('/');
             } finally {
                 dispatch(setLoadingStatus(false));
             }
         };
 
         fetchInstitution();
-    }, [history, institutionId, query, dispatch]);
+    }, [router, institutionId, query, dispatch]);
 
     useEffect(() => {
         window.scrollTo(0, 0);

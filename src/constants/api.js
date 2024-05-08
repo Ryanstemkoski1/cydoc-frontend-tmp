@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from '../modules/environment';
+import { API_URL } from '@modules/environment';
 
 function getGraphClientURL() {
     let graphClientURL;

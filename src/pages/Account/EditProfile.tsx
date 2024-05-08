@@ -10,7 +10,7 @@ import ModalHeader from 'components/Atoms/ModalHeader';
 import SignUpTextInput from './SignUpTextInput';
 import { PasswordErrorMessages } from './PasswordErrorMessage';
 import { Grid } from '@mui/material';
-import FormErrors from '../../components/Molecules/FormErrors';
+import FormErrors from '@components/Molecules/FormErrors';
 import invariant from 'tiny-invariant';
 import { DbUser } from '@cydoc-ai/types';
 import { updateDbUser } from 'modules/user-api';

@@ -9,7 +9,7 @@ import { useFormikContext } from 'formik';
 import { PRIVACY_STEP } from './SignUpSteps';
 import { ErrorText } from 'components/Atoms/ErrorText';
 import { SignUpFormData } from './SignUpForm';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 const steps = ['User info', 'Institution', 'Terms', 'Privacy'];
 
@@ -28,7 +28,7 @@ export function NextBackButtonGroup({
     const enableNext = useEnableNext(step);
     const { isSubmitting, submitForm, errors } =
         useFormikContext<SignUpFormData>();
-    const history = useHistory();
+    const router = useRouter();
 
     const onLastStep = step === PRIVACY_STEP;
     const accountAlreadyExists = useMemo(
@@ -45,7 +45,7 @@ export function NextBackButtonGroup({
             if (accountAlreadyExists) {
                 return {
                     content: 'Login',
-                    onClick: () => history.push('/Login'),
+                    onClick: () => router.push('/Login'),
                 };
             } else {
                 return {

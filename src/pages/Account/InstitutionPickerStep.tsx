@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Account.css';
 import { Stack } from '@mui/system';
-import ModalHeader from '../../components/Atoms/ModalHeader';
+import ModalHeader from '@components/Atoms/ModalHeader';
 import SignUpTextInput from './SignUpTextInput';
 
 export function InstitutionPickerStep() {

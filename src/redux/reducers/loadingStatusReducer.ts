@@ -1,5 +1,6 @@
 import { LoadingStatusActionTypes } from '@redux/actions/loadingStatusActions';
 import { LOADING_STATUS } from '../actions/actionTypes';
+import { CurrentNoteState } from '.';
 
 export const initialLoadingStatus = false;
 
@@ -16,3 +17,6 @@ export function loadingStatusReducer(
             return state;
     }
 }
+
+export const selectLoadingStatus = (state: CurrentNoteState) =>
+    state.loadingStatus;

@@ -24,7 +24,7 @@ import ViewProduct from 'pages/ViewProduct/ViewProduct';
 import React, { Suspense, lazy, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, Switch, useLocation } from 'react-router';
-import { CurrentNoteState } from '@redux/reducers';
+import { selectLoadingStatus } from '@redux/reducers/loadingStatusReducer';
 import { ManagerRoute } from './ManagerRoute';
 import NavMenu from './NavMenu';
 import { PrivateRoute } from './PrivateRoute';
@@ -40,9 +40,7 @@ const HPILazyLoad = lazy(() => import('pages/HPI/Hpi'));
 
 const Routes = (props: { children?: JSX.Element | null }) => {
     const isHomePage = useLocation().pathname === '/';
-    const loadingStatus = useSelector(
-        (state: CurrentNoteState) => state.loadingStatus
-    );
+    const loadingStatus = useSelector(selectLoadingStatus);
     const { authLoading } = useAuth();
     const { loading: userLoading } = useUser();
 

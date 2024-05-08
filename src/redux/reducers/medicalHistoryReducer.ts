@@ -1,6 +1,6 @@
 import { MEDICAL_HISTORY_ACTION } from '../actions/actionTypes';
 import { MedicalHistoryActionTypes } from '../actions/medicalHistoryActions';
-import { YesNoResponse } from '../../constants/enums';
+import { YesNoResponse } from '@constants/enums';
 
 export interface MedicalHistoryState {
     [index: string]: MedicalHistoryItem;

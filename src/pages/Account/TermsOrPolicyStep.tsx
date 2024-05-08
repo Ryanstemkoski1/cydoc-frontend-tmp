@@ -4,7 +4,7 @@ import './Account.css';
 import { Checkbox, Divider, FormControlLabel } from '@mui/material';
 import { Field, useField } from 'formik';
 import { SignUpFormData } from './SignUpForm';
-import ModalHeader from '../../components/Atoms/ModalHeader';
+import ModalHeader from '@components/Atoms/ModalHeader';
 import { Box } from '@mui/system';
 
 interface Props {

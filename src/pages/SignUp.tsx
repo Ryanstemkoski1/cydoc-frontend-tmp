@@ -1,9 +1,9 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import SignUpForm from './Account/SignUpForm';
 
 export default function SignUp() {
-    const history = useHistory();
+    const router = useRouter();
 
-    return <SignUpForm modalOpen closeModal={history.goBack} />;
+    return <SignUpForm modalOpen closeModal={router.back} />;
 }

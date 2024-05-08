@@ -1,6 +1,6 @@
 import { FAMILY_HISTORY_ACTION } from '../actions/actionTypes';
 import { FamilyHistoryActionTypes } from '../actions/familyHistoryActions';
-import { YesNoResponse } from '../../constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import { v4 } from 'uuid';
 import { FamilyOption } from 'constants/familyHistoryRelations';
 

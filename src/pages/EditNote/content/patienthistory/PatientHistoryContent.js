@@ -2,7 +2,7 @@ import NavigationButton from 'components/tools/NavigationButton/NavigationButton
 import constants from 'constants/constants';
 import React, { Component } from 'react';
 import { Segment } from 'semantic-ui-react';
-import Tab from '../../../../components/tools/Tab';
+import Tab from '@components/tools/Tab';
 import AllergiesContent from '../allergies/AllergiesContent';
 import FamilyHistoryContent from '../familyhistory/FamilyHistoryContent';
 import MedicalHistoryContent from '../medicalhistory/MedicalHistoryContent';

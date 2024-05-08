@@ -31,7 +31,7 @@ import { selectMedicationsState } from '@redux/selectors/medicationsSelectors';
 import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
 import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistorySelectors';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
-import { currentNoteStore } from '@redux/store';
+import { makeStore } from '@redux/store';
 import { isHPIResponseValid } from './getHPIFormData';
 
 interface HPINoteProps {
@@ -631,7 +631,7 @@ function getInitialSurveyResponses(state: userSurveyState): HPIText[] {
 }
 
 function getHPIText(bulletNoteView = false) {
-    const rootState = currentNoteStore.getState();
+    const rootState = makeStore.getState();
 
     const state = {
         hpi: selectHpiState(rootState),

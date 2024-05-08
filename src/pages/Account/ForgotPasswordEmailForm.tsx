@@ -10,7 +10,7 @@ import { ErrorText } from 'components/Atoms/ErrorText';
 import { TextField } from '@mui/material';
 import { sendResetPasswordCode } from 'auth/cognito';
 import { Box } from '@mui/system';
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 const validationSchema = Yup.object({
     email: Yup.string()
@@ -30,7 +30,7 @@ interface Props {
 }
 
 const ForgotPasswordEmailForm = ({ onSuccessfulSubmission }: Props) => {
-    const history = useHistory();
+    const router = useRouter();
     // const onSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(
     const onSubmit = useCallback(
         async (
@@ -84,7 +84,7 @@ const ForgotPasswordEmailForm = ({ onSuccessfulSubmission }: Props) => {
                                 color='teal'
                                 content='Cancel'
                                 type='button'
-                                onClick={() => history.push('/login')}
+                                onClick={() => router.push('/login')}
                             />
                             <Button
                                 color='teal'

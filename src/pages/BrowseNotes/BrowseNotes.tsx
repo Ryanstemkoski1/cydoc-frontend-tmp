@@ -5,7 +5,7 @@ import { getAppointment } from 'modules/appointment-api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoadingStatus } from '@redux/actions/loadingStatusActions';
-import { CurrentNoteState } from '@redux/reducers';
+import { selectLoadingStatus } from '@redux/reducers/loadingStatusReducer';
 import style from './BrowseNotes.module.scss';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
@@ -84,9 +84,7 @@ const BrowseNotes = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedAppointment, setSelectedAppointment] =
         useState<AppointmentUser>();
-    const loadingStatus = useSelector(
-        (state: CurrentNoteState) => state.loadingStatus
-    );
+    const loadingStatus = useSelector(selectLoadingStatus);
 
     const openModal = (user: AppointmentUser) => {
         setSelectedAppointment(user);

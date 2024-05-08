@@ -2,12 +2,11 @@ import NavigationButton from 'components/tools/NavigationButton/NavigationButton
 import exampleSchema from 'constants/PhysicalExam/exampleSchema.json';
 import { PhysicalExamSchemaItem } from 'constants/PhysicalExam/physicalExamSchema';
 import React from 'react';
-import { connect } from 'react-redux';
+import { ConnectedProps, connect } from 'react-redux';
 import { updateVitals } from '@redux/actions/physicalExamActions';
 import { CurrentNoteState } from '@redux/reducers';
-import { Vitals, VitalsFields } from '@redux/reducers/physicalExamReducer';
+import { VitalsFields } from '@redux/reducers/physicalExamReducer';
 import { selectVitals } from '@redux/selectors/physicalExamSelectors';
-import { currentNoteStore } from '@redux/store';
 import {
     Accordion,
     Form,
@@ -15,10 +14,27 @@ import {
     Header,
     Input,
     InputOnChangeData,
+    InputProps,
 } from 'semantic-ui-react';
-import ButtonGroupTemparature from './InputSelectableTemparature';
+import ButtonGroupTemperature from './InputSelectableTemperature';
 import './PhysicalExam.css';
 import PhysicalExamGroup from './PhysicalExamGroup';
+import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
+
+interface State {
+    weightKg: number;
+    heightM: number;
+    bmi: number;
+    headCircumference: number;
+}
+interface OwnProps {
+    nextFormClick: () => void;
+    previousFormClick: () => void;
+}
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = ReduxProps & OwnProps;
 
 //Component that manages content for the Physical Exam tab
 class PhysicalExamContent extends React.Component<Props, State> {
@@ -78,21 +94,20 @@ class PhysicalExamContent extends React.Component<Props, State> {
 
     isPediatric() {
         if (
-            currentNoteStore.getState().additionalSurvey.dateOfBirth ===
-                undefined ||
-            currentNoteStore.getState().additionalSurvey.dateOfBirth === null ||
-            currentNoteStore.getState().additionalSurvey.dateOfBirth === ''
+            this.props.additionalSurvey.dateOfBirth === undefined ||
+            this.props.additionalSurvey.dateOfBirth === null ||
+            this.props.additionalSurvey.dateOfBirth === ''
         ) {
             return +false;
         }
 
         const patientAge = this.calculateAgeInYears(
-            currentNoteStore.getState().additionalSurvey.dateOfBirth
+            this.props.additionalSurvey.dateOfBirth
         );
         return +(patientAge <= 2);
     }
 
-    handleChangeTemparature = (val: string) => {
+    handleChangeTemperature = (val: string) => {
         const num = +val;
         this.props.updateVitals('temperature', +num.toFixed(1));
     };
@@ -105,7 +120,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
     generateNumericInput = (
         name: VitalsFields,
         label: string | null,
-        labelPosition: any
+        labelPosition: InputProps['labelPosition']
     ) => {
         const { vitals } = this.props;
         vitals[name] = vitals[name] == 0 ? null! : vitals[name];
@@ -184,7 +199,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                         {this.generateNumericInput(
                                             'RR',
                                             null,
-                                            null
+                                            undefined
                                         )}
                                     </Form.Field>
                                 </Grid.Column>
@@ -196,7 +211,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                                 content='Temperature'
                                             />
                                         </label>
-                                        <ButtonGroupTemparature
+                                        <ButtonGroupTemperature
                                             temperature={
                                                 this.props.vitals.temperature
                                             }
@@ -204,7 +219,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                                 this.props.vitals.tempUnit
                                             }
                                             handleTempChange={
-                                                this.handleChangeTemparature
+                                                this.handleChangeTemperature
                                             }
                                             handleTempUnitChange={
                                                 this.handleChangeTemperatureUnit
@@ -224,7 +239,7 @@ class PhysicalExamContent extends React.Component<Props, State> {
                                         {this.generateNumericInput(
                                             'oxygenSaturation',
                                             null,
-                                            null
+                                            undefined
                                         )}
                                     </Form.Field>
                                 </Grid.Column>
@@ -362,37 +377,14 @@ interface ExampleSchema {
           }
     )[];
 }
-
-interface ContentProps {
-    nextFormClick: () => void;
-    previousFormClick: () => void;
-}
-
-interface DispatchProps {
-    updateVitals: (vitalsField: VitalsFields, newValue: number) => void;
-    vitals: Vitals;
-}
-
-interface State {
-    weightKg: number;
-    heightM: number;
-    bmi: number;
-    headCircumference: number;
-}
-
-type Props = DispatchProps & ContentProps;
-
-const mapStatetoProps = (state: CurrentNoteState) => {
+const mapStateToProps = (state: CurrentNoteState) => {
     return {
+        additionalSurvey: selectAdditionalSurvey(state),
         vitals: selectVitals(state),
     };
 };
 
-const mapDispatchToProps = {
-    updateVitals,
-};
+const mapDispatchToProps = { updateVitals };
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
-export default connect(
-    mapStatetoProps,
-    mapDispatchToProps
-)(PhysicalExamContent);
+export default connector(PhysicalExamContent);

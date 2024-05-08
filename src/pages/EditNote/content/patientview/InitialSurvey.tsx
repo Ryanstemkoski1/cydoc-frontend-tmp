@@ -40,7 +40,7 @@ import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from '@redux/selectors/userViewSelectors';
-import { currentNoteStore } from '@redux/store';
+import { makeStore } from '@redux/store';
 import {
     Container,
     Form,
@@ -364,7 +364,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
                         const temp = {
                             title: title,
                             onClick: () => {
-                                currentNoteStore.dispatch({
+                                makeStore.dispatch({
                                     type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
                                     payload: {
                                         disease: complaint,

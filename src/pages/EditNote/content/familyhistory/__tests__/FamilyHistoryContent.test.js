@@ -366,7 +366,7 @@ describe('FamilyHistoryContent', () => {
     // // TODO: Fix below tests
     // test('disease name is standardized with lowercase', () => {
     //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
+    //         <Provider store={makeStore}>
     //             <FamilyHistoryContent />
     //         </Provider>
     //     );
@@ -380,12 +380,12 @@ describe('FamilyHistoryContent', () => {
     //     expect(
     //         wrapper.find('input[placeholder="Condition"]').first().props().value
     //     ).toEqual('bar');
-    //     currentNoteStore.dispatch(deleteNote());
+    //     makeStore.dispatch(deleteNote());
     // });
 
     // test('acronyms are not made lowercase', () => {
     //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
+    //         <Provider store={makeStore}>
     //             <FamilyHistoryContent />
     //         </Provider>
     //     );
@@ -399,12 +399,12 @@ describe('FamilyHistoryContent', () => {
     //     expect(
     //         wrapper.find('input[placeholder="Condition"]').first().props().value
     //     ).toEqual('BAR');
-    //     currentNoteStore.dispatch(deleteNote());
+    //     makeStore.dispatch(deleteNote());
     // });
 
     // test('acronyms are not made lowercase when more than one word is present', () => {
     //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
+    //         <Provider store={makeStore}>
     //             <FamilyHistoryContent />
     //         </Provider>
     //     );
@@ -418,12 +418,12 @@ describe('FamilyHistoryContent', () => {
     //     expect(
     //         wrapper.find('input[placeholder="Condition"]').first().props().value
     //     ).toEqual('BAR bar');
-    //     currentNoteStore.dispatch(deleteNote());
+    //     makeStore.dispatch(deleteNote());
     // });
 
     // test('roman numerals', () => {
     //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
+    //         <Provider store={makeStore}>
     //             <FamilyHistoryContent />
     //         </Provider>
     //     );
@@ -437,12 +437,12 @@ describe('FamilyHistoryContent', () => {
     //     expect(
     //         wrapper.find('input[placeholder="Condition"]').first().props().value
     //     ).toEqual('bar 2 foo');
-    //     currentNoteStore.dispatch(deleteNote());
+    //     makeStore.dispatch(deleteNote());
     // });
 
     // test('roman numerals at end of word not changed until after blur', () => {
     //     const wrapper = mount(
-    //         <Provider store={currentNoteStore}>
+    //         <Provider store={makeStore}>
     //             <FamilyHistoryContent />
     //         </Provider>
     //     );
@@ -460,6 +460,6 @@ describe('FamilyHistoryContent', () => {
     //     expect(
     //         wrapper.find('input[placeholder="Condition"]').first().props().value
     //     ).toEqual('bar 2');
-    //     currentNoteStore.dispatch(deleteNote());
+    //     makeStore.dispatch(deleteNote());
     // });
 });

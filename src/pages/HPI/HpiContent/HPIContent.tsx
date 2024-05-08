@@ -13,10 +13,10 @@ import { saveHpiHeader } from '@redux/actions/hpiHeadersActions';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import { selectPlanConditions } from '@redux/selectors/planSelectors';
 import { selectPatientViewState } from '@redux/selectors/userViewSelectors';
-import { currentNoteStore } from '@redux/store';
+import { makeStore } from '@redux/store';
 import { Search, Segment } from 'semantic-ui-react';
 import getHPIFormData from 'utils/getHPIFormData';
-import { CHIEF_COMPLAINTS } from '../../../redux/actions/actionTypes';
+import { CHIEF_COMPLAINTS } from '@redux/actions/actionTypes';
 import { hpiHeaders } from '../../EditNote/content/hpi/knowledgegraph/API';
 import BodySystemDropdown from '../../EditNote/content/hpi/knowledgegraph/components/BodySystemDropdown';
 import ChiefComplaintsButton from '../../EditNote/content/hpi/knowledgegraph/components/ChiefComplaintsButton';
@@ -185,7 +185,7 @@ class HPIContent extends React.Component<Props, State> {
                         const temp = {
                             title: complaint,
                             onClick: () => {
-                                currentNoteStore.dispatch({
+                                makeStore.dispatch({
                                     type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
                                     payload: {
                                         disease: complaint,

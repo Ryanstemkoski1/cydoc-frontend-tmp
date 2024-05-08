@@ -46,7 +46,7 @@ import {
 } from '@redux/reducers/userViewReducer';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
-import { currentNoteStore } from '@redux/store';
+import { makeStore } from '@redux/store';
 import { Search } from 'semantic-ui-react';
 import style from './PreHPI.module.scss';
 
@@ -142,7 +142,7 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
                         const temp = {
                             title: title,
                             onClick: () => {
-                                currentNoteStore.dispatch({
+                                makeStore.dispatch({
                                     type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
                                     payload: {
                                         disease: complaint,

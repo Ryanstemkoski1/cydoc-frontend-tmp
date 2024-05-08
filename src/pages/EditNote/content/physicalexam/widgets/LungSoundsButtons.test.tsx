@@ -7,7 +7,7 @@ import { initialPhysicalExamState } from '@redux/reducers/physicalExamReducer';
 import { LungsWidgetState } from '@redux/reducers/widgetReducers/lungsWidgetReducer';
 import { LUNGS_WIDGET_ACTION } from '@redux/actions/actionTypes';
 import { Button, Popup } from 'semantic-ui-react';
-import { currentNoteStore } from '@redux/store';
+import { makeStore } from '@redux/store';
 import { act } from 'react-dom/test-utils';
 
 const section = 'leftLowerLobe';
@@ -38,7 +38,7 @@ const mountWithRealStore = (
     { ...props } = {}
 ) => {
     return mount(
-        <Provider store={currentNoteStore}>
+        <Provider store={makeStore()}>
             <LungSoundsButtons lungLobe={lungLobe} {...props} />
         </Provider>
     );

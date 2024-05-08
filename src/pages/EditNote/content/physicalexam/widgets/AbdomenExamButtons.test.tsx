@@ -6,7 +6,7 @@ import AbdomenExamButtons from './AbdomenExamButtons';
 import { initialPhysicalExamState } from '@redux/reducers/physicalExamReducer';
 import { AbdomenWidgetState } from '@redux/reducers/widgetReducers/abdomenWidgetReducer';
 import { ABDOMEN_WIDGET_ACTION } from '@redux/actions/actionTypes';
-import { currentNoteStore } from '@redux/store';
+import { makeStore } from '@redux/store';
 
 const section = 'rightUpperQuadrant';
 const field = 'tenderness';
@@ -38,7 +38,7 @@ const mountWithRealStore = (
     { ...props } = {}
 ) => {
     return mount(
-        <Provider store={currentNoteStore}>
+        <Provider store={makeStore()}>
             <AbdomenExamButtons abdomenQuadrant={abdomenQuadrant} {...props} />
         </Provider>
     );

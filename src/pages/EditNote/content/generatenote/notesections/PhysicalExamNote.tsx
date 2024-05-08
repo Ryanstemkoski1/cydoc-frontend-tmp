@@ -14,15 +14,21 @@ import {
 import { PulsesWidgetItemState } from '@redux/reducers/widgetReducers/pulsesWidgetReducer';
 import { ReflexesWidgetItemState } from '@redux/reducers/widgetReducers/reflexesWidgetReducer';
 import { LeftRight } from 'constants/enums';
-import { currentNoteStore } from '@redux/store';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
+import { ConnectedProps, connect } from 'react-redux';
 
-interface PhysicalExamProps {
+interface OwnProps {
     isRich: boolean;
     physicalExam: PhysicalExamState;
     physicalExamSections?: PhysicalExamSectionState;
 }
 
-export class PhysicalExamNote extends Component<PhysicalExamProps> {
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = ReduxProps & OwnProps;
+
+export class PhysicalExamNote extends Component<Props> {
     widgets: {
         [index: string]: string[];
     } = {
@@ -95,16 +101,15 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
 
     isPediatric() {
         if (
-            currentNoteStore.getState().additionalSurvey.dateOfBirth ===
-                undefined ||
-            currentNoteStore.getState().additionalSurvey.dateOfBirth === null ||
-            currentNoteStore.getState().additionalSurvey.dateOfBirth === ''
+            this.props.additionalSurvey.dateOfBirth === undefined ||
+            this.props.additionalSurvey.dateOfBirth === null ||
+            this.props.additionalSurvey.dateOfBirth === ''
         ) {
             return +false;
         }
 
         const patientAge = this.calculateAgeInYears(
-            currentNoteStore.getState().additionalSurvey.dateOfBirth
+            this.props.additionalSurvey.dateOfBirth
         );
         return +(patientAge <= 2);
     }
@@ -307,7 +312,7 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
                 } = {};
                 let lobe: keyof WidgetsState['lungs'];
                 for (lobe in physicalWidgets[widget]) {
-                    const lobeInfo: any = physicalWidgets[widget][lobe];
+                    const lobeInfo = physicalWidgets[widget][lobe];
                     let finding: keyof typeof lobeInfo;
                     for (finding in lobeInfo) {
                         if (lobeInfo[finding]) {
@@ -402,7 +407,7 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
                             expandedCrescDecresc = 'decrescendo';
                         }
 
-                        const specificMurmurRadiation = [];
+                        const specificMurmurRadiation: string[] = [];
                         let specificMurmurAdditionalFeatures = '';
                         let specificMurmurTime = '';
 
@@ -703,4 +708,10 @@ export class PhysicalExamNote extends Component<PhysicalExamProps> {
     }
 }
 
-export default PhysicalExamNote;
+const mapStateToProps = (state: CurrentNoteState) => ({
+    additionalSurvey: selectAdditionalSurvey(state),
+});
+
+const connector = connect(mapStateToProps);
+
+export default connector(PhysicalExamNote);

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box } from '@mui/system';
 import { Paper, Typography } from '@mui/material';
-import { log } from '../modules/logging';
+import { log } from '@modules/logging';
 import useUser from 'hooks/useUser';
 import useAuth from 'hooks/useAuth';
 

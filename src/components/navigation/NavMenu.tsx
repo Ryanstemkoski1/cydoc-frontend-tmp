@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Button, Menu } from 'semantic-ui-react';
 import NoteNameMenuItem from './NoteNameMenuItem';
 /* eslint-disable no-console */
@@ -24,8 +24,9 @@ import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from '@redux/selectors/userViewSelectors';
-import constants from '../../constants/constants.json';
+import constants from '@constants/constants.json';
 import style from './NavMenu.module.scss';
+import { useRouter } from 'next/navigation';
 
 interface ConnectedNavMenuProps {
     className?: string;
@@ -55,7 +56,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     } = props;
 
     const location = useLocation();
-    const history = useHistory();
+    const router = useRouter();
     const isHomePage = location?.pathname === '/';
     const isEditNotePage = location?.pathname.includes('editnote');
     const isHPIPatientView =
@@ -176,7 +177,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                             // if the user tries to signUp while waiting for MFA, sign them out
                             signOut();
                         }
-                        history.push('/sign-up');
+                        router.push('/sign-up');
                     }}
                 />
             )}

@@ -3,13 +3,13 @@ import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { Provider } from 'react-redux';
 // import LabTestInput from '../LaboratoryTest';
-import { currentNoteStore } from '@redux/store';
+import { makeStore } from '@redux/store';
 // import { ExpectedResponseDict } from 'constants/hpiEnums';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 const connectRealStore = () => {
-    const store = currentNoteStore;
+    const store = makeStore();
     // const node = {
     //     uid: 'uid',
     //     medID: 'node',

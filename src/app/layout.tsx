@@ -14,6 +14,10 @@ import '../index.scss';
 import { NotesStore } from '@contexts/NotesContext';
 import { SubscriptionProvider } from 'providers/SubscriptionProvider';
 import StoreProvider from '@providers/StoreProvider';
+import { SubscriptionBanner } from '@components/Molecules/SubscriptionBanner';
+import { SubscriptionModal } from '@components/Molecules/SubscriptionModal';
+import NavMenu from '@components/navigation/NavMenu';
+import GlobalLoader from '@components/GlobalLoader/GlobalLoader';
 // import { STRIPE_KEY } from 'modules/environment';
 
 initializeSentry();
@@ -25,38 +29,47 @@ export const metadata: Metadata = {
     description: 'Cydoc',
 };
 
-export default function RootLayout({
-    children,
-}: {
+interface Props {
     children: React.ReactNode;
-}) {
+}
+
+export default function RootLayout({ children }: Props) {
     return (
-        <AuthProvider>
-            <SubscriptionProvider>
-                <NotesStore>
-                    {/* <HPIStore> */}
-                    {/* <Elements stripe={stripePromise}> */}
-                    <StoreProvider>
-                        <ToastProvider>
-                            {/* <Router> */}
-                            <html lang='en'>
-                                <head>
-                                    <meta
-                                        name='theme-color'
-                                        content='#eaf3f5'
-                                    />
-                                </head>
-                                <body>
-                                    <div id='root'>{children}</div>
-                                </body>
-                            </html>
-                            {/* </Router> */}
-                        </ToastProvider>
-                    </StoreProvider>
-                    {/* </Elements> */}
-                    {/* </HPIStore> */}
-                </NotesStore>
-            </SubscriptionProvider>
-        </AuthProvider>
+        <html lang='en'>
+            <head>
+                <meta name='theme-color' content='#eaf3f5' />
+            </head>
+            <body>
+                <main id='root'>
+                    <AuthProvider>
+                        <SubscriptionProvider>
+                            <NotesStore>
+                                {/* <HPIStore> */}
+                                {/* <Elements stripe={stripePromise}> */}
+                                <StoreProvider>
+                                    <ToastProvider>
+                                        {/* <Router> */}
+
+                                        <div className='layout'>
+                                            <GlobalLoader />
+                                            <SubscriptionBanner />
+                                            <SubscriptionModal />
+                                            <NavMenu
+                                                attached={'top'}
+                                                displayNoteName={true}
+                                            />
+                                            {children}
+                                            {/* </Router> */}
+                                        </div>
+                                    </ToastProvider>
+                                </StoreProvider>
+                                {/* </Elements> */}
+                                {/* </HPIStore> */}
+                            </NotesStore>
+                        </SubscriptionProvider>
+                    </AuthProvider>
+                </main>
+            </body>
+        </html>
     );
 }

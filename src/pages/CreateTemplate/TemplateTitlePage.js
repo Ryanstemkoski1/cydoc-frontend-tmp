@@ -21,7 +21,7 @@ const TemplateTitlePage = (props) => {
 
     const editGraph = () => {
         otherProps.onSubmit(title);
-        history.push('/templates/edit');
+        router.push('/templates/edit');
     };
 
     return (

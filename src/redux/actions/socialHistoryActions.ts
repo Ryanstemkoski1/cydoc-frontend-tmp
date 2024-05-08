@@ -3,7 +3,7 @@ import {
     YesNoResponse,
     SubstanceUsageResponse,
     YesNoMaybeResponse,
-} from '../../constants/enums';
+} from '@constants/enums';
 import { DrinkSize } from 'constants/SocialHistory/drinkSizes';
 import { DrinkType } from 'constants/SocialHistory/drinkTypes';
 import { DrugName } from 'constants/SocialHistory/drugNames';
