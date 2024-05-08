@@ -7,7 +7,7 @@ import { initialSurveyProps } from 'pages/HPI/ChiefComplaintSelection/CCSelectio
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    selectChiefComplaint,
+    setChiefComplaint,
     SelectChiefComplaintAction,
 } from '@redux/actions/chiefComplaintsActions';
 import {
@@ -39,7 +39,7 @@ class ChiefComplaintsButton extends React.Component<Props> {
     };
     render() {
         const {
-            selectChiefComplaint,
+            setChiefComplaint,
             name,
             chiefComplaints,
             hpiHeaders,
@@ -74,7 +74,7 @@ class ChiefComplaintsButton extends React.Component<Props> {
                         return;
                     }
 
-                    selectChiefComplaint(name);
+                    setChiefComplaint(name);
 
                     if (!(name in hpiHeaders?.parentNodes)) {
                         console.error(
@@ -92,7 +92,7 @@ class ChiefComplaintsButton extends React.Component<Props> {
 }
 
 interface DispatchProps {
-    selectChiefComplaint: (disease: string) => SelectChiefComplaintAction;
+    setChiefComplaint: (disease: string) => SelectChiefComplaintAction;
     processKnowledgeGraph: (
         graphData: GraphData
     ) => ProcessKnowledgeGraphAction;
@@ -129,7 +129,7 @@ type Props = DispatchProps &
     ActiveItemProps;
 
 const mapDispatchToProps = {
-    selectChiefComplaint,
+    setChiefComplaint,
     processKnowledgeGraph,
 };
 

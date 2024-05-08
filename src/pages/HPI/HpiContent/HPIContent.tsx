@@ -6,7 +6,6 @@ import { favChiefComplaints } from 'classes/institution.class';
 import React from 'react';
 import Masonry from 'react-masonry-css';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
 import { setNotesChiefComplaint } from '@redux/actions/chiefComplaintsActions';
 import { processKnowledgeGraph } from '@redux/actions/hpiActions';
 import { saveHpiHeader } from '@redux/actions/hpiHeadersActions';
@@ -22,6 +21,7 @@ import BodySystemDropdown from '../../EditNote/content/hpi/knowledgegraph/compon
 import ChiefComplaintsButton from '../../EditNote/content/hpi/knowledgegraph/components/ChiefComplaintsButton';
 import DiseaseForm from '../../EditNote/content/hpi/knowledgegraph/components/DiseaseForm';
 import { HpiHeadersState } from '@redux/reducers/hpiHeadersReducer';
+import { CurrentNoteState } from '@redux/reducers';
 
 interface Props {
     activeItem: string;
@@ -38,11 +38,13 @@ interface Props {
     back: (e?: any) => void;
     location: { search: string; pathname: any; state: any; hash: any };
 }
+
 interface State {
     searchVal: string;
     activeIndex: number;
     loading: boolean;
 }
+
 class HPIContent extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
@@ -293,7 +295,7 @@ class HPIContent extends React.Component<Props, State> {
     }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: CurrentNoteState) => {
     return {
         chiefComplaints: state.chiefComplaints,
         planConditions: selectPlanConditions(state),
@@ -309,17 +311,6 @@ const mapDispatchToProps = {
     saveHpiHeader,
 };
 
-export default withRouter(
-    // @ts-expect-error we need to create a unified redux state type
-    connect(mapStateToProps, mapDispatchToProps)(HPIContent)
-);
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
-// const connector = connect(mapStateToProps, mapDispatchToProps);
-
-// type PropsFromRedux = ConnectedProps<typeof connector>;
-
-// // export default connector<typeof SimpleErrorBoundary>(SimpleErrorBoundary);
-
-// export default withRouter(
-//     connector(mapStateToProps, mapDispatchToProps)(HPIContent)
-// );
+export default connector(HPIContent);

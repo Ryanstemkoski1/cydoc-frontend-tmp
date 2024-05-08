@@ -1,3 +1,4 @@
+'use client';
 import { ProductType, ViewType } from 'constants/enums/route.enums';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';

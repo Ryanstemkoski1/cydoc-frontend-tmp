@@ -5,7 +5,7 @@ import { TextField } from '@mui/material';
 import './Account.css';
 
 import { Button } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import './Account.css';
 import * as Yup from 'yup';
 import useAuth from 'hooks/useAuth';
@@ -94,9 +94,9 @@ const LoginForm = () => {
                             justifyContent='space-between'
                         >
                             <Link
-                                style={{ color: '#007db3' }}
-                                to='/forgot-password'
+                                href='/forgot-password'
                                 className='forgot-password-button'
+                                style={{ color: '#007db3' }}
                             >
                                 Forgot Password?
                             </Link>

@@ -7,7 +7,7 @@ import {
 } from 'constants/passwordErrors';
 import { useField } from 'formik';
 import React, { useEffect, useMemo, useState } from 'react';
-import { SignUpFormData } from './SignUpForm';
+import { SignUpFormData } from './SignUp';
 import {
     Container,
     Icon,

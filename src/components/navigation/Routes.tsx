@@ -23,7 +23,7 @@ import SignUp from 'pages/SignUp';
 import ViewProduct from 'pages/ViewProduct/ViewProduct';
 import React, { Suspense, lazy, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { Redirect, Route, Switch, useLocation } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router';
 import { selectLoadingStatus } from '@redux/reducers/loadingStatusReducer';
 import { ManagerRoute } from './ManagerRoute';
 import NavMenu from './NavMenu';
@@ -35,11 +35,13 @@ import { SubscriptionCancel } from 'pages/Subscription/CancelSubscription';
 import { SubscriptionBanner } from 'components/Molecules/SubscriptionBanner';
 import { SubscriptionModal } from 'components/Molecules/SubscriptionModal';
 import useUser from 'hooks/useUser';
+import { usePathname } from 'next/navigation';
 
 const HPILazyLoad = lazy(() => import('pages/HPI/Hpi'));
 
 const Routes = (props: { children?: JSX.Element | null }) => {
-    const isHomePage = useLocation().pathname === '/';
+    const pathname = usePathname();
+    const isHomePage = pathname === '/';
     const loadingStatus = useSelector(selectLoadingStatus);
     const { authLoading } = useAuth();
     const { loading: userLoading } = useUser();

@@ -104,9 +104,9 @@ export const parseQuestionText = (responseType, text, answerInfo, category) => {
         responseType.endsWith('POP') ||
         responseType === 'nan'
     ) {
-        let click = text.search('CLICK');
-        let selectStart = text.search('\\[');
-        let selectEnd = text.search('\\]');
+        const click = text.search('CLICK');
+        const selectStart = text.search('\\[');
+        const selectEnd = text.search('\\]');
         let choices;
         if (click > -1) {
             // options are indicated by CLICK[...]

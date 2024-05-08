@@ -14,7 +14,6 @@ import {
     ButtonGroup,
 } from 'semantic-ui-react';
 import { Redirect } from 'react-router';
-import './LandingPage.css';
 import { connect } from 'react-redux';
 import { loadNote, deleteNote } from '@redux/actions/currentNoteActions';
 

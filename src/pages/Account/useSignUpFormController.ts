@@ -1,7 +1,9 @@
+'use client';
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import invariant from 'tiny-invariant';
-import { SignUpFormData } from './SignUpForm';
+import { SignUpFormData } from './SignUp';
 import {
     createManagerAndInstitution,
     formatPhoneNumber,

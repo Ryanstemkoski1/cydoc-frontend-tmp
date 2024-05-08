@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useMemo } from 'react';
 
 import './Account.css';
@@ -8,7 +10,7 @@ import { Divider, Step, StepLabel, Stepper } from '@mui/material';
 import { useFormikContext } from 'formik';
 import { PRIVACY_STEP } from './SignUpSteps';
 import { ErrorText } from 'components/Atoms/ErrorText';
-import { SignUpFormData } from './SignUpForm';
+import { SignUpFormData } from './SignUp';
 import { useRouter } from 'next/navigation';
 
 const steps = ['User info', 'Institution', 'Terms', 'Privacy'];

@@ -25,7 +25,7 @@ function capitalizeFirstLetter(string: string) {
     return trimmedString.charAt(0).toUpperCase() + trimmedString.slice(1);
 }
 
-function removeItem(array: any, item: any) {
+function removeItem(array: any[], item: any) {
     let i = array.length;
 
     while (i--) {

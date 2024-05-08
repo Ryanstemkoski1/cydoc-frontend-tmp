@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { deleteNote } from '@redux/actions/currentNoteActions';
 
 import NotesContext from 'contexts/NotesContext';
-import './LandingPage.css';
 
 class ConnectedRecords extends Component {
     static contextType = NotesContext;

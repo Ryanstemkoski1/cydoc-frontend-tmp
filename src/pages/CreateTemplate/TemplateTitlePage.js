@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { Button, Header, Segment, Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import './TemplateForm.css';
 
 // Base component for template titles
 const TemplateTitlePage = (props) => {
-    let [title, setTitle] = useState('');
+    const [title, setTitle] = useState('');
+    const router = useRouter();
     const {
-        history,
         label,
         header,
         inputComponent,
@@ -67,4 +67,4 @@ TemplateTitlePage.propTypes = {
     errorMessage: PropTypes.string,
 };
 
-export default withRouter(TemplateTitlePage);
+export default TemplateTitlePage;

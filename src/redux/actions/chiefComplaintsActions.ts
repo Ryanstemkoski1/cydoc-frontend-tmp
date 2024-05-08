@@ -8,9 +8,7 @@ export interface SelectChiefComplaintAction extends UnknownAction {
     };
 }
 
-export function selectChiefComplaint(
-    disease: string
-): SelectChiefComplaintAction {
+export function setChiefComplaint(disease: string): SelectChiefComplaintAction {
     return {
         type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
         payload: {

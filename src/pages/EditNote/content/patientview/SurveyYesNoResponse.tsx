@@ -5,7 +5,7 @@ import { GraphData } from 'constants/hpiEnums';
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    selectChiefComplaint,
+    setChiefComplaint,
     SelectChiefComplaintAction,
 } from '@redux/actions/chiefComplaintsActions';
 import {
@@ -44,7 +44,7 @@ class SurveyYesNoResponse extends React.Component<Props> {
     };
 
     addChiefComplaint(action: YesNoResponse) {
-        const { userSurveyState, id, hpiHeaders, selectChiefComplaint } =
+        const { userSurveyState, id, hpiHeaders, setChiefComplaint } =
                 this.props,
             category = userSurveyState.nodes[id].category,
             prevVal = userSurveyState.nodes[id].response;
@@ -57,7 +57,7 @@ class SurveyYesNoResponse extends React.Component<Props> {
                 !(prevVal == YesNoResponse.No && action == YesNoResponse.No) &&
                 !(prevVal == YesNoResponse.None && action == YesNoResponse.No)
             ) {
-                selectChiefComplaint(key);
+                setChiefComplaint(key);
             }
         }
     }
@@ -108,7 +108,7 @@ interface DispatchProps {
         uid: string,
         response: YesNoResponse
     ) => InitialSurveyYesNoAction;
-    selectChiefComplaint: (disease: string) => SelectChiefComplaintAction;
+    setChiefComplaint: (disease: string) => SelectChiefComplaintAction;
     processKnowledgeGraph: (
         graphData: GraphData
     ) => ProcessKnowledgeGraphAction;
@@ -122,11 +122,10 @@ type Props = initialSurveyProps &
 
 const mapDispatchToProps = {
     initialSurveyYesNo,
-    selectChiefComplaint,
+    setChiefComplaint,
     processKnowledgeGraph,
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(SurveyYesNoResponse);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(SurveyYesNoResponse);

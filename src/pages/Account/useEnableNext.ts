@@ -1,7 +1,7 @@
 import { useFormikContext } from 'formik';
 import { log } from '@modules/logging';
 import { useCallback, useMemo } from 'react';
-import { SignUpFormData } from './SignUpForm';
+import { SignUpFormData } from './SignUp';
 import {
     INSTITUTION_STEP,
     PRIVACY_STEP,

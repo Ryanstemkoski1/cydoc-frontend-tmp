@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import './Account.css';
 import { Modal } from 'semantic-ui-react';
@@ -8,6 +9,7 @@ import { useSignUpFormController } from './useSignUpFormController';
 import { NextBackButtonGroup } from './NextBackButtonGroup';
 import { ClinicianSignUpData } from 'types/signUp';
 import { UserRole } from '@cydoc-ai/types';
+import { useRouter } from 'next/navigation';
 
 export interface SignUpFormData extends ClinicianSignUpData {
     isPrivacyChecked: boolean;
@@ -28,13 +30,10 @@ const initialValues: SignUpFormData = {
     phoneNumber: '+1',
 };
 
-interface Props {
-    closeModal: () => void;
-    modalOpen: boolean;
-}
-export default function SignUpForm({ modalOpen, closeModal }: Props) {
+export default function SignUpForm() {
     const [wizardPage, setWizardPage] = useState(0);
     const onNextClick = () => setWizardPage(wizardPage + 1);
+    const router = useRouter();
 
     const { form } = useSignUpFormController(initialValues);
 
@@ -81,18 +80,18 @@ export default function SignUpForm({ modalOpen, closeModal }: Props) {
                 <Modal
                     dimmer='inverted'
                     size='small'
-                    onClose={closeModal}
-                    open={modalOpen}
+                    onClose={router.back}
+                    open={true}
                 >
                     <SignUpSteps
                         step={wizardPage}
                         goToNextStep={onNextClick}
-                        closeModal={closeModal}
+                        closeModal={router.back}
                         goToPrevStep={onPrevClick}
                     />
                     <NextBackButtonGroup
                         step={wizardPage}
-                        onClose={closeModal}
+                        onClose={router.back}
                         onPrevClick={onPrevClick}
                         onNextClick={onNextClick}
                     />

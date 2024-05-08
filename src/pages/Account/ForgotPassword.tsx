@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import './Account.css';
 import ForgotPasswordEmailForm from './ForgotPasswordEmailForm';
 import ForgotPasswordCodeForm from './ForgotPasswordCodeForm';
@@ -51,8 +51,8 @@ function SuccessMessage() {
                 Password updated!
             </Typography>
             <Link
+                href='/login'
                 style={{ color: '#007db3' }}
-                to='/login'
                 className='forgot-password-button'
             >
                 Back to Login Page

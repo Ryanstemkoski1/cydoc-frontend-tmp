@@ -6,8 +6,8 @@ import style from './AfterSubmissionPage.module.scss';
 function AfterSubmissionPage() {
     const query = useQuery();
 
-    const clinician_id = query.get(HPIPatientQueryParams.CLINICIAN_ID);
-    const institution_id = query.get(HPIPatientQueryParams.INSTITUTION_ID);
+    const clinician_id = query?.get(HPIPatientQueryParams.CLINICIAN_ID);
+    const institution_id = query?.get(HPIPatientQueryParams.INSTITUTION_ID);
 
     let resetButtonURL = `/hpi/patient?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
 

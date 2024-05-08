@@ -4,7 +4,6 @@ import React, {
     PropsWithChildren,
     createContext,
     useCallback,
-    useContext,
     useEffect,
     useMemo,
     useState,
@@ -350,14 +349,6 @@ export const AuthProvider: React.FC<
             <UserInfoProvider>{children}</UserInfoProvider>
         </AuthProviderContext.Provider>
     );
-};
-
-export const useAuthInfoContext = () => {
-    const ctx = useContext(AuthProviderContext);
-
-    invariant(ctx, 'authInfoContext called outside of UserInfo Context');
-
-    return ctx;
 };
 
 const waitForCode = () => new Promise((resolve) => setTimeout(resolve, 2500));

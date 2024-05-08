@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useCallback } from 'react';
 import { Field, Formik, FormikHelpers } from 'formik';
 

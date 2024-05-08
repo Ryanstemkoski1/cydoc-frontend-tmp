@@ -1,3 +1,5 @@
+'use client';
+
 import { ApiResponse, Institution } from '@cydoc-ai/types';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 import { ChiefComplaintsEnum } from 'constants/enums/chiefComplaints.enums';
@@ -28,7 +30,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { updateActiveItem } from '@redux/actions/activeItemActions';
-import { selectChiefComplaint } from '@redux/actions/chiefComplaintsActions';
+import { setChiefComplaint } from '@redux/actions/chiefComplaintsActions';
 import { processKnowledgeGraph } from '@redux/actions/hpiActions';
 import { saveHpiHeader } from '@redux/actions/hpiHeadersActions';
 import { setLoadingStatus } from '@redux/actions/loadingStatusActions';
@@ -103,7 +105,7 @@ const HPI = () => {
         [chiefComplaintsForModal]
     );
 
-    const institutionId = query.get(HPIPatientQueryParams.INSTITUTION_ID);
+    const institutionId = query?.get(HPIPatientQueryParams.INSTITUTION_ID);
 
     /* FUNCTIONS */
     const resetCurrentTabs = useCallback(() => {
@@ -334,12 +336,12 @@ const HPI = () => {
 
                 // remove current selected Chief Complaints
                 selectedChiefComplaints.forEach((item) => {
-                    dispatch(selectChiefComplaint(item));
+                    dispatch(setChiefComplaint(item));
                 });
 
                 // add new selected Chief Complaints
                 newSelectedChiefComplaints.forEach((item) => {
-                    dispatch(selectChiefComplaint(item));
+                    dispatch(setChiefComplaint(item));
                 });
             }
 
@@ -547,7 +549,7 @@ const HPI = () => {
         if (showChiefComplaints || !showDefaultForm) return;
 
         institutionDefaultCC.forEach((item) => {
-            dispatch(selectChiefComplaint(item));
+            dispatch(setChiefComplaint(item));
         });
     }, [dispatch, institutionConfig, institutionDefaultCC, resetCurrentTabs]);
 

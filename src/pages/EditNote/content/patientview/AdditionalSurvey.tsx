@@ -2,7 +2,7 @@ import { ProductType } from 'constants/enums/route.enums';
 import Input from 'components/Input/Input';
 import MobileDatePicker from 'components/Input/MobileDatePicker';
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router';
+import { usePathname } from 'next/navigation';
 import style from './AdditionalSurvey.module.scss';
 
 export interface AdditionalSurveyProps {
@@ -36,7 +36,7 @@ const AdditionalSurvey = ({
         dateOfBirth: dateOfBirth,
     });
 
-    const isHPIPage = useLocation().pathname.includes(ProductType.HPI);
+    const isHPIPage = usePathname()?.includes(ProductType.HPI);
     const isMobile =
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
             navigator.userAgent

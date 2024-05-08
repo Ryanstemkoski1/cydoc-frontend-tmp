@@ -1,10 +1,11 @@
+'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import style from './MenuButton.module.scss';
 
 export interface MenuItem {
     label: string;
-    to: string;
+    href: string;
     icon: string;
     active: boolean;
     onClick?: () => void;
@@ -13,11 +14,11 @@ export interface MenuItem {
 interface Props {
     label: string;
     icon?: string;
-    to?: string;
+    href?: string;
     items?: MenuItem[] | null;
 }
 
-function MenuButton({ label, icon, to, items }: Props) {
+function MenuButton({ label, icon, href, items }: Props) {
     const router = useRouter();
     const [showMenuItems, setShowMenuItems] = useState(false);
 
@@ -42,7 +43,7 @@ function MenuButton({ label, icon, to, items }: Props) {
             <div
                 className={`${style.profile__user} flex align-center`}
                 onClick={() => {
-                    if (to) return router.push(to);
+                    if (href) return router.push(href);
                     setShowMenuItems(!showMenuItems);
                 }}
             >
@@ -73,7 +74,7 @@ function MenuButton({ label, icon, to, items }: Props) {
                             key={item.label}
                             onClick={() => {
                                 if (item.onClick) item.onClick();
-                                if (item.to) router.push(item.to);
+                                if (item.href) router.push(item.href);
                                 setShowMenuItems(false);
                             }}
                         >

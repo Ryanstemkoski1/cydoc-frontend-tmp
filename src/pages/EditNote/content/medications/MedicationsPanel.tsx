@@ -47,7 +47,7 @@ interface OwnProps {
     isNote?: boolean;
     dimensions?: any;
 }
-/* eslint-disable-next-line */
+
 type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = ReduxProps & OwnProps;

@@ -4,13 +4,13 @@ import HPITemplateContext from '../../contexts/HPITemplateContext';
 import { getAnswerInfo, parseQuestionText, parsePlaceholder } from './util';
 import { Dropdown } from 'semantic-ui-react';
 import { graphClient } from 'constants/api';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 // Component for first step of editing existing HPI template
 const EditGraph = () => {
-    let [errorMessage, setErrorMessage] = useState('');
-    let [isFetching, setIsFetching] = useState(false);
-    let [isDisabled, setIsDisabled] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isFetching, setIsFetching] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
     const { doctorID, createdTemplates, updateTemplate, setCreatedTemplates } =
         useContext(HPITemplateContext);
 
@@ -116,7 +116,7 @@ const EditGraph = () => {
     const redirectElement = (
         <span className='template-redirect'>
             Can’t find a template?{' '}
-            <Link to='/templates/new'>Create a new one here.</Link>
+            <Link href='/templates/new'>Create a new one here.</Link>
         </span>
     );
 

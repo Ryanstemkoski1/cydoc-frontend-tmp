@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import TemplateTitlePage from './TemplateTitlePage';
 import HPITemplateContext from '../../contexts/HPITemplateContext';
 import { getNewTemplate } from './util';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 import { Input } from 'semantic-ui-react';
 
@@ -24,7 +24,7 @@ const CreateGraph = () => {
     const redirectElement = (
         <span className='template-redirect'>
             Already have a template?{' '}
-            <Link to='/templates/old'>Edit it here.</Link>
+            <Link href='/templates/old'>Edit it here.</Link>
         </span>
     );
 

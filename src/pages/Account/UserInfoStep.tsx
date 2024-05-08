@@ -6,7 +6,7 @@ import { Grid } from '@mui/material';
 import SignUpTextInput from './SignUpTextInput';
 import { PasswordErrorMessages } from './PasswordErrorMessage';
 import { useFormikContext } from 'formik';
-import { SignUpFormData } from './SignUpForm';
+import { SignUpFormData } from './SignUp';
 
 export function UserInfoStep() {
     const { values, validateField } = useFormikContext<SignUpFormData>();

@@ -2,7 +2,7 @@ import React, { memo, useMemo } from 'react';
 import { FastField, useField, useFormikContext } from 'formik';
 import { TextField, TextFieldProps } from '@mui/material';
 import InputMask from 'react-input-mask';
-import { SignUpFormData } from './SignUpForm';
+import { SignUpFormData } from './SignUp';
 
 interface Props {
     fieldName: keyof SignUpFormData;

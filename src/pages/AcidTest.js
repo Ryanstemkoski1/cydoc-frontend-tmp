@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useCallback, useState } from 'react';
 import { Accordion } from 'semantic-ui-react';
 import runAnalysis from './AcidBase/acidBaseCalculator';

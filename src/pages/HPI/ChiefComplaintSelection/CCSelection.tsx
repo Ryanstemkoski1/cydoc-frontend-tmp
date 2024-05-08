@@ -253,9 +253,9 @@ const CCSelection = (props: Props) => {
 
     function handleSubmit() {
         const clinician_id =
-            query.get(HPIPatientQueryParams.CLINICIAN_ID) ?? '';
+            query?.get(HPIPatientQueryParams.CLINICIAN_ID) ?? '';
         const institution_id =
-            query.get(HPIPatientQueryParams.INSTITUTION_ID) ?? '';
+            query?.get(HPIPatientQueryParams.INSTITUTION_ID) ?? '';
 
         const { setNotificationMessage, setNotificationType } =
             props.notification;

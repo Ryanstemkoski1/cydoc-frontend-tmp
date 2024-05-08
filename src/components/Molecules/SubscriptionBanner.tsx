@@ -1,3 +1,4 @@
+'use client';
 import React, { memo } from 'react';
 import { Stack, Typography } from '@mui/material';
 import { useSubscription } from 'hooks/useSubscription';

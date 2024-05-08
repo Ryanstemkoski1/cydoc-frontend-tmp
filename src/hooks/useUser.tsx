@@ -2,7 +2,7 @@ import { UserInfoProviderContext } from 'providers/UserInfoProvider';
 import { useContext } from 'react';
 import invariant from 'tiny-invariant';
 
-export default () => {
+const useUser = () => {
     const ctx = useContext(UserInfoProviderContext);
 
     invariant(
@@ -12,3 +12,5 @@ export default () => {
 
     return ctx;
 };
+
+export default useUser;

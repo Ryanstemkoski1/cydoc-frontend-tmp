@@ -1,5 +1,4 @@
-// export default function UpgradeSubscriptionButton () {
-
+'use client';
 import { Button, SxProps, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import React from 'react';

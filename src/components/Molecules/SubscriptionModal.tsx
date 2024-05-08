@@ -4,7 +4,7 @@ import React, { memo, useMemo, useState } from 'react';
 import { Box, Button, Modal, Typography } from '@mui/material';
 import { useSubscription } from 'hooks/useSubscription';
 import UpgradeSubscriptionButton from './UpgradeSubscriptionButton';
-import { useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 
 export const SubscriptionModal = memo(() => {
     const { isTrialExpired, isSubscribed, loading, isPaymentSetup } =
@@ -13,8 +13,8 @@ export const SubscriptionModal = memo(() => {
         () => (isTrialExpired ? '#FA5B2E' : '#FFBE25'),
         [isTrialExpired]
     );
-    const location = useLocation();
-    const viewingSubscription = location.pathname.includes('subscription');
+    const pathname = usePathname();
+    const viewingSubscription = pathname?.includes('subscription');
     const [isBannerDismissed, setIsBannerDismissed] = useState(false);
     const style = useMemo(() => makeStyles(backgroundColor), [backgroundColor]);
 
