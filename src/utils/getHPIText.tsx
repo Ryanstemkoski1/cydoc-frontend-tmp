@@ -14,7 +14,7 @@ import {
     HPI,
     createHPI,
     createInitialHPI,
-} from 'pages/EditNote/content/generatenote/generateHpiText';
+} from 'screens/EditNote/content/generatenote/generateHpiText';
 import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
 import { FamilyHistoryState } from '@redux/reducers/familyHistoryReducer';
 import { HpiState } from '@redux/reducers/hpiReducer';
@@ -22,16 +22,7 @@ import { MedicalHistoryState } from '@redux/reducers/medicalHistoryReducer';
 import { MedicationsState } from '@redux/reducers/medicationsReducer';
 import { PatientInformationState } from '@redux/reducers/patientInformationReducer';
 import { SurgicalHistoryElements } from '@redux/reducers/surgicalHistoryReducer';
-import { userSurveyState } from '@redux/reducers/userViewReducer';
-import { selectChiefComplaintsState } from '@redux/selectors/chiefComplaintsSelectors';
-import { selectFamilyHistoryState } from '@redux/selectors/familyHistorySelectors';
-import { selectHpiState } from '@redux/selectors/hpiSelectors';
-import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelector';
-import { selectMedicationsState } from '@redux/selectors/medicationsSelectors';
-import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
-import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistorySelectors';
-import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
-import { makeStore } from '@redux/store';
+import { UserSurveyState } from '@redux/reducers/userViewReducer';
 import { isHPIResponseValid } from './getHPIFormData';
 
 interface HPINoteProps {
@@ -588,7 +579,7 @@ export function getListTextResponseAsSingleString(response = {}): string {
         );
 }
 
-function getInitialSurveyResponses(state: userSurveyState): HPIText[] {
+function getInitialSurveyResponses(state: UserSurveyState): HPIText[] {
     const responses: HPIText[] = [];
 
     Object.entries(state.nodes).forEach(([nodeId, value]) => {
@@ -630,19 +621,18 @@ function getInitialSurveyResponses(state: userSurveyState): HPIText[] {
     return responses;
 }
 
-function getHPIText(bulletNoteView = false) {
-    const rootState = makeStore.getState();
+export interface HPIReduxValues {
+    hpi: HpiState;
+    familyHistory: FamilyHistoryState;
+    medications: MedicationsState;
+    surgicalHistory: SurgicalHistoryElements;
+    medicalHistory: MedicalHistoryState;
+    patientInformation: PatientInformationState;
+    chiefComplaints: ChiefComplaintsState;
+    userSurvey: UserSurveyState;
+}
 
-    const state = {
-        hpi: selectHpiState(rootState),
-        familyHistory: selectFamilyHistoryState(rootState),
-        medications: selectMedicationsState(rootState),
-        surgicalHistory: selectSurgicalHistoryProcedures(rootState),
-        medicalHistory: selectMedicalHistoryState(rootState),
-        patientInformation: selectPatientInformationState(rootState),
-        chiefComplaints: selectChiefComplaintsState(rootState),
-        userSurvey: selectInitialPatientSurvey(rootState),
-    };
+function getHPIText(bulletNoteView = false, state: HPIReduxValues) {
     /*
     formattedHpis is a dictionary in which each key is the chief complaint
     and the value is an array of template sentences.
@@ -723,7 +713,7 @@ function getHPIText(bulletNoteView = false) {
             : paragraph;
     });
 
-    const miscText = [];
+    const miscText: string[] = [];
     /**
      * Utilizes the miscNotes' information from redux state and
      * pushes it into title and miscText array

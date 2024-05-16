@@ -5,7 +5,7 @@ import {
     initialPlan,
     conditionId,
     categoryId,
-} from 'pages/EditNote/content/discussionplan/util';
+} from 'screens/EditNote/content/discussionplan/util';
 
 describe('plan reducers', () => {
     describe('general condition reducers', () => {

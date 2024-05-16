@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 // import { loadStripe } from '@stripe/stripe-js';
 import { AuthProvider } from 'providers/AuthProvider';
 import ToastProvider from 'providers/ToastProvider';
-import { initializeSentry } from '@modules/logging';
+// import { initializeSentry } from '@modules/logging';
 import '../semantic/dist/semantic.min.css';
 import '../index.scss';
 
@@ -18,9 +18,10 @@ import { SubscriptionBanner } from '@components/Molecules/SubscriptionBanner';
 import { SubscriptionModal } from '@components/Molecules/SubscriptionModal';
 import NavMenu from '@components/navigation/NavMenu';
 import GlobalLoader from '@components/GlobalLoader/GlobalLoader';
+import Footer from '@components/Footer/Footer';
 // import { STRIPE_KEY } from 'modules/environment';
 
-initializeSentry();
+// initializeSentry();
 
 // const stripePromise = loadStripe(STRIPE_KEY);
 
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: Props) {
                                                 displayNoteName={true}
                                             />
                                             {children}
+                                            <Footer />
                                             {/* </Router> */}
                                         </div>
                                     </ToastProvider>

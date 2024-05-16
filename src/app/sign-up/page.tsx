@@ -1,7 +1,4 @@
-import SignUp from '@pages/Account/SignUp';
-
-export function generateStaticParams() {
-    return [{ slug: [''] }];
-}
+'use client';
+import SignUp from '@screens/Account/SignUp';
 
 export default SignUp;

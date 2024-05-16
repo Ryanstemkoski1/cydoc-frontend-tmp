@@ -9,8 +9,8 @@ import MenuButton, { MenuItem } from 'components/Header/MenuButton';
 import { YesNoResponse } from 'constants/enums';
 import useAuth from 'hooks/useAuth';
 import useUser from 'hooks/useUser';
-import 'pages/EditNote/content/hpi/knowledgegraph/css/Button.css';
-import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
+import 'screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
+import { InitialSurveyProps } from 'screens/EditNote/content/patientview/InitialSurvey';
 import { connect } from 'react-redux';
 import {
     UpdateActiveItemAction,
@@ -18,7 +18,7 @@ import {
 } from '@redux/actions/activeItemActions';
 import { UserViewAction, changeUserView } from '@redux/actions/userViewActions';
 import { CurrentNoteState } from '@redux/reducers';
-import { additionalSurvey } from '@redux/reducers/additionalSurveyReducer';
+import { AdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import {
     selectDoctorViewState,
@@ -308,7 +308,7 @@ export interface userViewProps {
     doctorView: boolean;
 }
 export interface AdditionalSurveyProps {
-    additionalSurvey: additionalSurvey;
+    additionalSurvey: AdditionalSurvey;
 }
 
 export interface ActiveItemProps {
@@ -318,7 +318,7 @@ export interface ActiveItemProps {
 const mapStateToProps = (
     state: CurrentNoteState
 ): userViewProps &
-    initialSurveyProps &
+    InitialSurveyProps &
     AdditionalSurveyProps &
     ActiveItemProps => {
     return {
@@ -333,7 +333,7 @@ const mapStateToProps = (
 type Props = ConnectedNavMenuProps &
     userViewProps &
     DispatchProps &
-    initialSurveyProps &
+    InitialSurveyProps &
     AdditionalSurveyProps &
     ActiveItemProps;
 

@@ -1,7 +1,3 @@
-import Home from '@pages/Home/Home';
-
-export function generateStaticParams() {
-    return [{ slug: [''] }];
-}
+import Home from '@screens/Home/Home';
 
 export default Home;

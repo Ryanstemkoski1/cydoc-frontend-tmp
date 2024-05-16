@@ -29,7 +29,7 @@ export interface InitialQuestionsState {
     };
 }
 
-export interface userSurveyState {
+export interface UserSurveyState {
     order: {
         [order_id: string]: string;
     };
@@ -56,7 +56,7 @@ export interface userSurveyState {
 export interface UserViewState {
     patientView: boolean;
     doctorView: boolean;
-    userSurvey: userSurveyState;
+    userSurvey: UserSurveyState;
 }
 
 export const initialUserViewState: UserViewState = {
@@ -94,7 +94,7 @@ export function userViewReducer(
             const { graph } = action.payload,
                 newState = {
                     ...state,
-                    userSurvey: graph as userSurveyState,
+                    userSurvey: graph as UserSurveyState,
                 },
                 // default initial response
                 responseDict: {
@@ -178,7 +178,8 @@ export function userViewReducer(
                 currRes = state.userSurvey.nodes[uid].response;
             if (isChiefComplaintsResponse(currRes)) {
                 if (chiefComplaint in currRes) {
-                    const { [chiefComplaint]: x, ...res } = currRes;
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    const { [chiefComplaint]: _deleted, ...res } = currRes;
                     return {
                         ...state,
                         userSurvey: {

@@ -24,6 +24,7 @@ export function medicalHistoryReducer(
     switch (action.type) {
         case MEDICAL_HISTORY_ACTION.DELETE_CONDITION: {
             const { conditionIndex } = action.payload;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { [conditionIndex]: deleted, ...newState } = state;
             return newState;
         }

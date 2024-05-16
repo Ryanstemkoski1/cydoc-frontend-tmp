@@ -45,7 +45,7 @@ export default function MaterialTable<T extends object>({
             thirdSortClick: false,
             ...(options || {}),
         }),
-        [onSelectionChange, options]
+        [materialTableHeight, onSelectionChange, options]
     );
 
     return (

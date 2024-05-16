@@ -1,5 +1,5 @@
 import { CurrentNoteState } from '@redux/reducers';
-import { userSurveyState } from '@redux/reducers/userViewReducer';
+import { UserSurveyState } from '@redux/reducers/userViewReducer';
 
 export function selectPatientViewState(state: CurrentNoteState): boolean {
     return state.userView.patientView;
@@ -11,6 +11,6 @@ export function selectDoctorViewState(state: CurrentNoteState): boolean {
 
 export function selectInitialPatientSurvey(
     state: CurrentNoteState
-): userSurveyState {
+): UserSurveyState {
     return state.userView.userSurvey;
 }

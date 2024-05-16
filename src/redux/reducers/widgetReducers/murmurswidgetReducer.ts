@@ -241,6 +241,7 @@ export function murmursWidgetReducer(
                 }
             } else {
                 const {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     specificMurmurInfo: _deleted,
                     ...newMurmursWidgetItem
                 } = state[id];

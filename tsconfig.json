@@ -22,9 +22,9 @@
             "@contexts/*": ["contexts/*"],
             "@hooks/*": ["hooks/*"],
             "@modules/*": ["modules/*"],
-            "@pages/*": ["pages/*"],
             "@providers/*": ["providers/*"],
             "@redux/*": ["redux/*"],
+            "@screens/*": ["screens/*"],
             "@utils/*": ["utils/*"]
         },
         "plugins": [
@@ -34,12 +34,14 @@
         ],
         "strictNullChecks": true
     },
-    "include": [
-        "next-env.d.ts",
-        "**/*.ts",
-        "**/*.tsx",
-        ".next/types/**/*.ts",
-        "./dist/types/**/*.ts"
-    ],
-    "exclude": ["node_modules"]
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+    "exclude": [
+        "node_modules",
+        "**/*.test.js",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/__tests__/**",
+        "**/dist/**",
+        "**/.next/**"
+    ]
 }

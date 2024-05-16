@@ -429,6 +429,7 @@ export function hpiReducer(
                 state.nodes[medId].responseType === ResponseTypes.LIST_TEXT &&
                 isListTextDictionary(response)
             ) {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const { [uuid]: string, ...res } = response;
                 return updateResponse(medId, res, state);
             } else throw new Error('Not a list text response');

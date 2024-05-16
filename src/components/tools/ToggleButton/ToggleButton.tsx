@@ -1,4 +1,4 @@
-import 'pages/EditNote/content/hpi/knowledgegraph/css/Button.css';
+import 'screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
 import PropTypes from 'prop-types';
 import React from 'react';
 

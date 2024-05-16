@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 function useDimensions() {
     const [{ windowHeight, windowWidth }, setDimensions] = useState({
@@ -7,12 +7,12 @@ function useDimensions() {
         windowWidth: 0,
     });
 
-    function updateDimensions() {
+    const updateDimensions = useCallback(() => {
         setDimensions({
             windowWidth: window.innerWidth,
             windowHeight: window.innerHeight,
         });
-    }
+    }, []);
 
     useEffect(() => {
         // do nothing if we are not running in browser environment.
@@ -21,7 +21,7 @@ function useDimensions() {
         updateDimensions();
         window.addEventListener('resize', updateDimensions);
         return () => window.removeEventListener('resize', updateDimensions);
-    }, []);
+    }, [updateDimensions]);
 
     return useMemo(
         () => ({ windowWidth, windowHeight }),

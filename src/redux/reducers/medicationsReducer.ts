@@ -121,6 +121,7 @@ export function medicationsReducer(
         }
         case MEDICATIONS_ACTION.DELETE_MEDICATION: {
             const { index } = action.payload;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { [index]: deleted, ...newState } = state;
             return newState;
         }

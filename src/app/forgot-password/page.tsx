@@ -1,3 +1,5 @@
-import ForgotPasswordPage from '@pages/Account/ForgotPassword';
+'use client';
+
+import ForgotPasswordPage from '@screens/Account/ForgotPassword';
 
 export default ForgotPasswordPage;

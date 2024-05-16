@@ -5,7 +5,7 @@ import {
 // import {
 //     initialPlan,
 //     conditionId,
-// } from 'pages/EditNote/content/discussionplan/util';
+// } from 'screens/EditNote/content/discussionplan/util';
 // import { initialPlanState } from '../../reducers/planReducer';
 
 describe('plan selectors', () => {

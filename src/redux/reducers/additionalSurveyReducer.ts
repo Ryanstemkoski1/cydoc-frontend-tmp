@@ -8,7 +8,7 @@ import {
 } from '@redux/actions/additionalSurveyActions';
 import { RootState } from '@redux/store';
 
-export interface additionalSurvey {
+export interface AdditionalSurvey {
     legalFirstName: string;
     legalLastName: string;
     legalMiddleName: string;
@@ -51,7 +51,7 @@ export interface UserInfo {
     title: string;
 }
 
-export const initialAdditionalSurveyData: additionalSurvey = {
+export const initialAdditionalSurveyData: AdditionalSurvey = {
     legalFirstName: '',
     legalLastName: '',
     legalMiddleName: '',

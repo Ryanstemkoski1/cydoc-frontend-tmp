@@ -1,7 +1,5 @@
-import LoginPage from '@pages/Account/LoginPage';
+'use client';
 
-export function generateStaticParams() {
-    return [{ slug: [''] }];
-}
+import LoginPage from '@screens/Account/LoginPage';
 
 export default LoginPage;

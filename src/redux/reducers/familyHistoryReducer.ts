@@ -88,6 +88,7 @@ export function familyHistoryReducer(
                 };
             } else {
                 const {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     [familyMemberIndex]: deleted,
                     ...newFamilyHistoryMembers
                 } = state[conditionIndex].familyMembers;
@@ -228,6 +229,7 @@ export function familyHistoryReducer(
 
         case FAMILY_HISTORY_ACTION.DELETE_CONDITION: {
             const { conditionIndex } = action.payload;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { [conditionIndex]: deleted, ...newState } = state;
             return newState;
         }

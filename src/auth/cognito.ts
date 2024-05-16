@@ -17,6 +17,7 @@ Amplify.configure({
         userPoolWebClientId: COGNITO_CLIENT_ID,
         userPoolId: COGNITO_POOL_ID,
     },
+    ssr: true,
 });
 
 export const USER_EXISTS = 'UsernameExistsException';

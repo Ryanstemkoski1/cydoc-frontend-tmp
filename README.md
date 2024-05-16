@@ -31,6 +31,7 @@ deploy with: `amplify push`
 verify changes before deploy with `amplify status`
 
 check out the docs for more info
+
 ## Potential Setup Issues
 
 When attempting step 5, an issue may be encountered, particularly when using an M1 MacBook:
@@ -53,7 +54,7 @@ Before submitting a PR, `npm run lint` should output the following:
 -   😄 No linting errors found for tests
 -   😄 No linting errors found for src/components
 -   😄 No linting errors found for src/constants
--   😄 No linting errors found for src/pages
+-   😄 No linting errors found for src/screens
 -   😄 No linting errors found for src/auth
 
 # Hiding Semantic css build changes
@@ -63,6 +64,7 @@ Currently running a build creates uncommitted changes in the semantic build dire
 ```
 npm run "ignore-semantic-changes
 ```
+
 It is run automatically when semantic is built or the dev server is started (`npm start`)
 
 # Bash problems on windows

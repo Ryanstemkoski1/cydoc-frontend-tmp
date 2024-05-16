@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 import { CurrentNoteState } from '@redux/reducers';
 import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
 
-export function getSelectedChiefCompliants(
-    currentChiefCompliants: ChiefComplaintsState
+export function getSelectedChiefComplaints(
+    currentChiefComplaints: ChiefComplaintsState
 ) {
-    return Object.keys(currentChiefCompliants);
+    return Object.keys(currentChiefComplaints);
 }
 
 export function useSelectedPinnedChiefComplaints() {

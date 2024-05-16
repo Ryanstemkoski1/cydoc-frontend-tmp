@@ -2,7 +2,7 @@ import { ApiResponse, GetMembersResponse, Institution } from '@cydoc-ai/types';
 import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
 import { CognitoUser } from 'auth/cognito';
-import { hpiHeaders as knowledgeGraphAPI } from 'pages/EditNote/content/hpi/knowledgegraph/API';
+import { hpiHeaders as knowledgeGraphAPI } from 'screens/EditNote/content/hpi/knowledgegraph/API';
 import invariant from 'tiny-invariant';
 import { getFromApi, postToApi } from './api';
 

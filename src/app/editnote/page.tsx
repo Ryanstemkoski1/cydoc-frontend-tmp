@@ -1,14 +1,25 @@
-import { HPIStore } from '@contexts/HPIContext';
-import EditNote from '@pages/EditNote/EditNote';
+'use client';
 
-export function generateStaticParams() {
-    return [{ slug: [''] }];
-}
+// import { HPIStore } from '@contexts/HPIContext';
+// import EditNote from '@screens/EditNote/EditNote';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+
+const HPIProvider = dynamic(() => import('@contexts/HPIProvider'), {
+    ssr: false,
+});
+
+const EditNote = dynamic(() => import('@screens/EditNote/EditNote'), {
+    ssr: false,
+});
 
 export default function EditNotePage() {
     return (
-        <HPIStore>
-            <EditNote />
-        </HPIStore>
+        // You could have a loading skeleton as the `fallback` too
+        <Suspense>
+            <HPIProvider>
+                <EditNote />
+            </HPIProvider>
+        </Suspense>
     );
 }
