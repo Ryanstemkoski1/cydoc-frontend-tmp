@@ -5,7 +5,7 @@
     "license": "UNLICENSED",
     "scripts": {
         "dev": "next dev",
-        "build": "next build",
+        "build": "next build && next export",
         "start": "npx serve@latest dist",
         "build-semantic": "npm run ignore-semantic-changes && cd src/semantic && gulp build-css build-assets",
         "watch-semantic": "npm run ignore-semantic-changes && cd src/semantic && npm run build-semantic && gulp watch",
