@@ -1,26 +1,42 @@
 'use client';
 
-import constants from 'constants/constants';
+import constants from 'constants/constants.json';
 import React, { Component, createRef } from 'react';
-import { connect } from 'react-redux';
+import { ConnectedProps, connect } from 'react-redux';
 import { selectNoteId } from '@redux/selectors/currentNoteSelectors';
 import { Message } from 'semantic-ui-react';
 import MenuTabs from './MenuTabs';
 import NotePage from './NotePage';
+import { RootState } from '@redux/store';
+import { withRouter } from 'next/router';
+import { WithRouterProps } from 'next/dist/client/with-router';
 
 import { YesNoResponse } from 'constants/enums';
-import { withRouter } from 'react-router-dom';
 import { updateActiveItem } from '@redux/actions/activeItemActions';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
+import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from '@redux/selectors/userViewSelectors';
 import './EditNote.css';
 import './NotePage.css';
+
+interface OwnProps extends WithRouterProps {}
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = OwnProps & ReduxProps;
+
+interface State {
+    activeTabIndex: number;
+    message: string;
+}
+
 // Component that manages the active state of the create note editor
 // and defines the layout of the editor
-class EditNote extends Component {
+
+class EditNote extends Component<Props, State> {
     constructor(props) {
         super(props);
         this.onTabChange = this.onTabChange.bind(this);
@@ -32,7 +48,7 @@ class EditNote extends Component {
         };
     }
 
-    timeoutRef = createRef();
+    timeoutRef = createRef<NodeJS.Timeout | null>();
     componentDidMount() {
         // Setting view to top of the page upon loading a note
         setTimeout(() => {
@@ -78,6 +94,7 @@ class EditNote extends Component {
     }
 
     onTabChange(name) {
+        // @ts-expect-error TODO: fix this, add Typescript types
         clearTimeout(this.timeoutRef?.current);
         this.setState({ message: '' });
         if (
@@ -90,17 +107,18 @@ class EditNote extends Component {
                     ? 'Please complete all mandatory questions in section 1 before proceeding.'
                     : 'Please answer Yes to at least one question to proceed.',
             });
+            // @ts-expect-error TODO: fix this, add Typescript types
             this.timeoutRef.current = setTimeout(() => {
                 this.setState({ message: '' });
             }, 3000);
             return;
         }
-        let activeItem = name;
-        let activeTabIndex = constants.TAB_NAMES.indexOf(name);
+        const activeItem = name;
+        const activeTabIndex = constants.TAB_NAMES.indexOf(name);
         this.props.updateActiveItem(name);
-        this.setState({ activeItem, activeTabIndex });
+        this.setState({ activeTabIndex });
         window.scrollTo(0, 0);
-        this.props.history.push({
+        this.props.router.push({
             hash: '#' + encodeURI(name),
         });
     }
@@ -138,9 +156,13 @@ class EditNote extends Component {
         // }
 
         return (
-            <div ref={this.noteContent}>
+            <div
+                // @ts-expect-error TODO: fix this, add Typescript types
+                ref={this.noteContent}
+            >
                 {/* Top NavMenu and MenuTabs stay on top regardless of scroll*/}
                 <MenuTabs
+                    // @ts-expect-error TODO: fix this, add Typescript types
                     activeItem={this.props.activeItem}
                     onTabChange={this.onTabChange}
                     activeTabIndex={this.state.activeTabIndex}
@@ -165,15 +187,16 @@ class EditNote extends Component {
     }
 }
 
-export default withRouter(
-    connect(
-        (state) => ({
-            _id: selectNoteId(state),
-            patientView: selectPatientViewState(state),
-            userSurveyState: selectInitialPatientSurvey(state),
-            activeItem: selectActiveItem(state),
-            additionalSurvey: state.additionalSurvey,
-        }),
-        { updateActiveItem }
-    )(EditNote)
-);
+const mapStateToProps = (state: RootState) => ({
+    _id: selectNoteId(state),
+    patientView: selectPatientViewState(state),
+    userSurveyState: selectInitialPatientSurvey(state),
+    activeItem: selectActiveItem(state),
+    additionalSurvey: selectAdditionalSurvey(state),
+});
+
+const mapDispatchToProps = { updateActiveItem };
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(withRouter(EditNote));

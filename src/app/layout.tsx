@@ -9,7 +9,6 @@ import ToastProvider from 'providers/ToastProvider';
 import '../semantic/dist/semantic.min.css';
 import '../index.scss';
 
-// import { BrowserRouter as Router } from 'react-router-dom';
 // import { HPIStore } from '@contexts/HPIContext';
 import { NotesStore } from '@contexts/NotesContext';
 import { SubscriptionProvider } from 'providers/SubscriptionProvider';

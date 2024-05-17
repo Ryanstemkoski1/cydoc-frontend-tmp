@@ -1,7 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { initialNoteTitle } from '@redux/reducers/currentNoteReducer';
 import NoteNameMenuItem from '../NoteNameMenuItem';
 import configureStore from 'redux-mock-store';
@@ -19,11 +18,11 @@ const connectStore = (Component, initStore = {}, props = {}) => {
     return {
         store,
         wrapper: mount(
-            <Router>
-                <Provider store={store}>
-                    <Component {...props} />
-                </Provider>
-            </Router>
+            // <Router>
+            <Provider store={store}>
+                <Component {...props} />
+            </Provider>
+            // </Router>
         ),
     };
 };

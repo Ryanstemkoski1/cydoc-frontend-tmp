@@ -3,7 +3,6 @@ import Enzyme, { mount } from 'enzyme';
 import { AuthProvider } from 'providers/AuthProvider';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 import NavMenu from '../NavMenu';
 import NoteNameMenuItem from '../NoteNameMenuItem';
@@ -28,13 +27,13 @@ const connectStore = (props, state = initialState) => {
     return {
         store,
         wrapper: mount(
-            <Router>
-                <Provider store={store}>
-                    <AuthProvider>
-                        <NavMenu {...props} />
-                    </AuthProvider>
-                </Provider>
-            </Router>
+            // <Router>
+            <Provider store={store}>
+                <AuthProvider>
+                    <NavMenu {...props} />
+                </AuthProvider>
+            </Provider>
+            // </Router>
         ),
     };
 };
