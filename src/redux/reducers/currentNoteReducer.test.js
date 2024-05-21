@@ -4,7 +4,7 @@ import {
     initialNoteId,
     initialNoteTitle,
 } from './currentNoteReducer';
-import { CURRENT_NOTE_ACTION } from '@redux/actions/actionTypes';
+import { CURRENT_NOTE_ACTION } from '../actions/actionTypes';
 
 describe('general note reducers', () => {
     it('returns the initial id', () => {

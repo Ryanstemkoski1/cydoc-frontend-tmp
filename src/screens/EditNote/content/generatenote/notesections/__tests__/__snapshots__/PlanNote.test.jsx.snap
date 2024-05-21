@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Plan Generate Note > matches snapshot 1`] = `"<div class="plan-note"><h4>foo</h4></div>"`;

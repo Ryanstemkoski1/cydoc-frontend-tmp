@@ -2,17 +2,17 @@ import {
     socialHistoryReducer,
     initialSocialHistoryState,
 } from './socialHistoryReducer';
-import { SOCIAL_HISTORY_ACTION } from '@redux/actions/actionTypes';
+import { SOCIAL_HISTORY_ACTION } from '../actions/actionTypes';
 import {
     SubstanceUsageResponse,
     YesNoMaybeResponse,
     YesNoResponse,
-} from 'constants/enums';
-import drinkTypes from 'constants/SocialHistory/drinkTypes';
-import drinkSizes from 'constants/SocialHistory/drinkSizes';
-import tobaccoProducts from 'constants/SocialHistory/tobaccoProducts';
-import drugNames from 'constants/SocialHistory/drugNames';
-import modesOfDelivery from 'constants/SocialHistory/modesOfDelivery';
+} from '../../constants/enums';
+import drinkTypes from '../../constants/SocialHistory/drinkTypes';
+import drinkSizes from '../../constants/SocialHistory/drinkSizes';
+import tobaccoProducts from '../../constants/SocialHistory/tobaccoProducts';
+import drugNames from '../../constants/SocialHistory/drugNames';
+import modesOfDelivery from '../../constants/SocialHistory/modesOfDelivery';
 
 describe('social history reducers', () => {
     it('returns the initial state', () => {

@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NavMenu > matches snapshot 1`] = `"<header class="_header_48dd51  flex align-center justify-between"><a class="_header__logo_48dd51 _isLinking_48dd51 flex align-center" href="/"><img height="50" width="50" src="/images/cydoc-logo.svg" alt="Cydoc"><span>Cydoc</span></a><div class="item"><button name="logOut" id="nav-menu__login-button" class="ui teal basic button">Log Out</button><button class="ui small button"><i aria-hidden="true" class="plus icon"></i>Sign Up</button></div></header>"`;

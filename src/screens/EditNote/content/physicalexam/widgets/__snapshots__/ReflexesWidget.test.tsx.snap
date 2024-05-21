@@ -1,4 +1,18 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ReflexesWidget > matches snapshot 1`] = `
+{
+  "store": {
+    "clearActions": [Function],
+    "dispatch": [Function],
+    "getActions": [Function],
+    "getState": [Function],
+    "replaceReducer": [Function],
+    "subscribe": [Function],
+  },
+  "wrapper": ReactWrapper {},
+}
+`;
 
 exports[`ReflexesWidget matches snapshot 1`] = `
 Object {

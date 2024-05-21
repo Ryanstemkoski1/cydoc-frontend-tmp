@@ -1,12 +1,12 @@
 // import Adapter from '@cfaester/enzyme-adapter-react-18';
 // import AddRowButton from 'components/tools/AddRowButton/AddRowButton.js';
-// import { PATIENT_HISTORY_ALLERGIES_MOBILE_BP } from 'constants/breakpoints';
+// import { PATIENT_HISTORY_ALLERGIES_MOBILE_BP } from '../../../../../constants/breakpoints';
 // import Enzyme, { mount } from 'enzyme';
 // import React from 'react';
 // import { act } from 'react-dom/test-utils';
 // import { Provider } from 'react-redux';
 // import configureStore from 'redux-mock-store';
-// import { ALLERGIES_ACTION } from '@redux/actions/actionTypes';
+// import { ALLERGIES_ACTION } from '../../../../../redux/actions/actionTypes';
 // import AllergiesContent from '../AllergiesContent.tsx';
 // import AllergiesTableBodyRow from '../AllergiesTableBodyRow';
 

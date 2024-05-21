@@ -1,5 +1,5 @@
 'use client';
-import { AuthProviderContext } from 'providers/AuthProvider';
+import { AuthProviderContext } from '../providers/AuthProvider';
 import { useContext } from 'react';
 import invariant from 'tiny-invariant';
 

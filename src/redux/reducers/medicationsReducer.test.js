@@ -2,8 +2,8 @@ import {
     medicationsReducer,
     initialMedicationsState,
 } from './medicationsReducer';
-import { MEDICATIONS_ACTION } from '@redux/actions/actionTypes';
-import { YesNoResponse } from 'constants/enums';
+import { MEDICATIONS_ACTION } from '../actions/actionTypes';
+import { YesNoResponse } from '../../constants/enums';
 
 const initialMedications = {
     uuid1: {

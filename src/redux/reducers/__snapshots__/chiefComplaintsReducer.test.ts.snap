@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`select chief complaint > returns state with chief complaint deselected 1`] = `{}`;
+
+exports[`select chief complaint > returns state with chief complaint newly selected 1`] = `
+{
+  "foo": "",
+}
+`;
+
+exports[`set notes chief complaints > returns state with misc notes 1`] = `
+{
+  "foo": "foo1",
+}
+`;

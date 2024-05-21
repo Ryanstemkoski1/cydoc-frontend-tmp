@@ -1,4 +1,58 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`reviewOfSystems reducer > toggles yes or no 1`] = `
+{
+  "Cardiovascular/Hematological": {
+    "Chest pain": "",
+    "Easy bleeding": "",
+    "Easy bruising": "",
+    "Palpitations": "",
+  },
+  "Dermatologic": {
+    "Skin changes": "",
+  },
+  "Eyes/Ears": {
+    "Hearing changes": "",
+    "Vision changes": "",
+  },
+  "Gastrointestinal": {
+    "Abdominal pain": "",
+    "Constipation": "",
+    "Diarrhea": "",
+    "Nausea": "",
+    "Vomiting": "",
+  },
+  "General": {
+    "Chills": "",
+    "Fatigue": "",
+    "Fever": "",
+    "Weight changes": "YES",
+  },
+  "Musculoskeletal": {
+    "Joint pain": "",
+    "Muscle pain": "",
+  },
+  "Neurological": {
+    "Dizziness": "",
+    "Headache": "",
+    "Loss of consciousness": "",
+    "Numbness": "",
+    "Tingling": "",
+  },
+  "Psychiatric": {
+    "Mood changes": "",
+  },
+  "Respiratory": {
+    "Cough": "",
+    "Shortness of breath": "",
+  },
+  "Urinary": {
+    "Dysuria": "",
+    "Hematuria": "",
+    "Urinary frequency": "",
+  },
+}
+`;
 
 exports[`reviewOfSystems reducer toggles yes or no 1`] = `
 Object {

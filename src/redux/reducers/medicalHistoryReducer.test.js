@@ -13,7 +13,7 @@ import {
     updateEndYear,
     updateStartYear,
 } from '../actions/medicalHistoryActions';
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '../../constants/enums';
 
 describe('medical history reducer', () => {
     let store;

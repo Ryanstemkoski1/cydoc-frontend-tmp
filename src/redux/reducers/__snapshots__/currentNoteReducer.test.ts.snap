@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`general note reducers > updates note id 1`] = `""`;
+
+exports[`general note reducers > updates note title 1`] = `"foo"`;

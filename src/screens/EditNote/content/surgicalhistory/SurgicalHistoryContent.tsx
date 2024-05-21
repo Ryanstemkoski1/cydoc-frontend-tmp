@@ -1,6 +1,6 @@
 import Input from 'components/Input/Input';
 import Dropdown from 'components/tools/OptimizedDropdown';
-import procedures from 'constants/procedures';
+import procedures from '../../../../constants/procedures';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {

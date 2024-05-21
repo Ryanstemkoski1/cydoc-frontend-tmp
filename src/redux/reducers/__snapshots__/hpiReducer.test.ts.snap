@@ -1,0 +1,1125 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`hpi reducers > handle user actions > handles blank widget questions > handles new blank response 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": [
+        "foo",
+      ],
+      "responseType": "FH-BLANK",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles body location toggle for LRButton 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "Ankle": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Chest": false,
+        "Ear": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Elbow": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Eye": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Finger": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Foot": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Groin": false,
+        "Hand": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Head": false,
+        "Hip": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Knee": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Arm": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Back": false,
+        "Lower Leg": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Mid Back": false,
+        "Mouth": false,
+        "Neck": false,
+        "Nose": false,
+        "Pelvis": false,
+        "Shoulder": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Stomach": false,
+        "Throat": false,
+        "Toe": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Arm": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Back": false,
+        "Upper Leg": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Wrist": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+      },
+      "responseType": "BODYLOCATION",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles body location toggle for regular button 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "Ankle": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Chest": false,
+        "Ear": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Elbow": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Eye": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Finger": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Foot": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Groin": false,
+        "Hand": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Head": false,
+        "Hip": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Knee": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Arm": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Back": false,
+        "Lower Leg": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Mid Back": false,
+        "Mouth": false,
+        "Neck": false,
+        "Nose": true,
+        "Pelvis": false,
+        "Shoulder": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Stomach": false,
+        "Throat": false,
+        "Toe": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Arm": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Back": false,
+        "Upper Leg": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Wrist": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+      },
+      "responseType": "BODYLOCATION",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles input change 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": "foo",
+      "responseType": "SHORT-TEXT",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles lab test input actions > handles unit option change 1`] = `
+{
+  "edges": {},
+  "graph": {
+    "foo1": [
+      "foo3",
+    ],
+    "foo2": [],
+    "foo3": [],
+    "medId": [
+      "foo2",
+      "foo1",
+    ],
+  },
+  "miscNotes": {},
+  "nodes": {
+    "foo1": {
+      "response": undefined,
+    },
+    "foo2": {
+      "response": undefined,
+    },
+    "foo3": {
+      "response": undefined,
+    },
+    "medId": {
+      "blankNo": "blankNo",
+      "blankTemplate": "blankTemplate",
+      "blankYes": "blankYes",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "doctorView": "DoctorView",
+      "medID": "medId",
+      "noteSection": "noteSection",
+      "patientView": "PatientView",
+      "response": {
+        "components": {
+          "vitamin B12 level": {
+            "unit": "picogram/milliliter",
+            "unitOptions": [
+              "picogram/milliliter",
+              "picomole/liter",
+              "nanogram/liter",
+            ],
+            "value": "5",
+          },
+        },
+        "name": "vitamin B12 level",
+        "snomed": "14598005",
+      },
+      "responseType": "LABORATORY-TEST",
+      "text": "NAME[vitamin B12 level] SNOMED[14598005] COMPONENTS_AND_UNITS[vitamin B12 level HASUNITS picogram/milliliter # picomole/liter # nanogram/liter]",
+      "uid": "uid",
+    },
+  },
+  "order": {
+    "medId": {
+      "1": "medId",
+      "2": "foo2",
+      "3": "foo1",
+      "4": "foo3",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles lab test input actions > handles value input change 1`] = `
+{
+  "edges": {},
+  "graph": {
+    "foo1": [
+      "foo3",
+    ],
+    "foo2": [],
+    "foo3": [],
+    "medId": [
+      "foo2",
+      "foo1",
+    ],
+  },
+  "miscNotes": {},
+  "nodes": {
+    "foo1": {
+      "response": undefined,
+    },
+    "foo2": {
+      "response": undefined,
+    },
+    "foo3": {
+      "response": undefined,
+    },
+    "medId": {
+      "blankNo": "blankNo",
+      "blankTemplate": "blankTemplate",
+      "blankYes": "blankYes",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "doctorView": "DoctorView",
+      "medID": "medId",
+      "noteSection": "noteSection",
+      "patientView": "PatientView",
+      "response": {
+        "components": {
+          "vitamin B12 level": {
+            "unit": "picogram/milliliter # picomole/liter # nanogram/liter",
+            "unitOptions": [
+              "picogram/milliliter",
+              "picomole/liter",
+              "nanogram/liter",
+            ],
+            "value": "5",
+          },
+        },
+        "name": "vitamin B12 level",
+        "snomed": "14598005",
+      },
+      "responseType": "LABORATORY-TEST",
+      "text": "NAME[vitamin B12 level] SNOMED[14598005] COMPONENTS_AND_UNITS[vitamin B12 level HASUNITS picogram/milliliter # picomole/liter # nanogram/liter]",
+      "uid": "uid",
+    },
+  },
+  "order": {
+    "medId": {
+      "1": "medId",
+      "2": "foo2",
+      "3": "foo1",
+      "4": "foo3",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles lab test input actions > returns node with lab test 1`] = `
+{
+  "edges": {},
+  "graph": {
+    "foo1": [
+      "foo3",
+    ],
+    "foo2": [],
+    "foo3": [],
+    "medId": [
+      "foo2",
+      "foo1",
+    ],
+  },
+  "miscNotes": {},
+  "nodes": {
+    "foo1": {
+      "response": undefined,
+    },
+    "foo2": {
+      "response": undefined,
+    },
+    "foo3": {
+      "response": undefined,
+    },
+    "medId": {
+      "blankNo": "blankNo",
+      "blankTemplate": "blankTemplate",
+      "blankYes": "blankYes",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "doctorView": "DoctorView",
+      "medID": "medId",
+      "noteSection": "noteSection",
+      "patientView": "PatientView",
+      "response": {
+        "components": {
+          "vitamin B12 level": {
+            "unit": "picogram/milliliter # picomole/liter # nanogram/liter",
+            "unitOptions": [
+              "picogram/milliliter",
+              "picomole/liter",
+              "nanogram/liter",
+            ],
+            "value": undefined,
+          },
+        },
+        "name": "vitamin B12 level",
+        "snomed": "14598005",
+      },
+      "responseType": "LABORATORY-TEST",
+      "text": "NAME[vitamin B12 level] SNOMED[14598005] COMPONENTS_AND_UNITS[vitamin B12 level HASUNITS picogram/milliliter # picomole/liter # nanogram/liter]",
+      "uid": "uid",
+    },
+  },
+  "order": {
+    "medId": {
+      "1": "medId",
+      "2": "foo2",
+      "3": "foo1",
+      "4": "foo3",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles list text actions > handles changing list text input 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "foo": "foo",
+      },
+      "responseType": "LIST-TEXT",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles list text actions > handles removing list text input 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+      },
+      "responseType": "LIST-TEXT",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles multiple choice click, but only one selectable 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "foo0": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles multiple choice click, but only one selectable 2`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "foo0": false,
+        "foo1": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles multiple choice click, but only one selectable 3`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "foo0": false,
+        "foo1": false,
+        "foo2": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles multiple choice click, but only one selectable 4`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles multiple choice click, but only one selectable 5`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": false,
+        "foo4": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles multiple choice click, but only one selectable 6`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": false,
+        "foo4": false,
+        "foo5": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles multiple choice click, but only one selectable 7`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": false,
+        "foo4": false,
+        "foo5": false,
+        "foo6": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles multiple choice click, but only one selectable 8`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": false,
+        "foo4": false,
+        "foo5": false,
+        "foo6": false,
+        "foo7": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles multiple choice click, but only one selectable 9`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": false,
+        "foo4": false,
+        "foo5": false,
+        "foo6": false,
+        "foo7": false,
+        "foo8": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles multiple choice click, but only one selectable 10`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "foo0": false,
+        "foo1": false,
+        "foo2": false,
+        "foo3": false,
+        "foo4": false,
+        "foo5": false,
+        "foo6": false,
+        "foo7": false,
+        "foo8": false,
+        "foo9": true,
+      },
+      "responseType": "SELECTONE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles numeric input change 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": 42,
+      "responseType": "NUMBER",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles pop response questions > handles new pop response 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": [
+        "foo1",
+        "foo2",
+      ],
+      "responseType": "FH-POP",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles scale input actions > handles scale handle clear 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": undefined,
+      "responseType": "SCALE1TO10",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles scale input actions > handles scale handle value 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": 3,
+      "responseType": "SCALE1TO10",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles time input actions > handles time input change 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "numInput": 42,
+        "timeOption": "minutes",
+      },
+      "responseType": "TIME3DAYS",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles time input actions > handles time option change 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "numInput": 0,
+        "timeOption": "days",
+      },
+      "responseType": "TIME3DAYS",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handle user actions > handles yes no actions > handles each toggle 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": "",
+      "responseType": "YES-NO",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > process knowledge graph > processes knowledge graph 1`] = `
+{
+  "edges": {},
+  "graph": {
+    "foo1": [
+      "foo3",
+    ],
+    "foo2": [],
+    "foo3": [],
+    "medId": [
+      "foo2",
+      "foo1",
+    ],
+  },
+  "miscNotes": {},
+  "nodes": {
+    "foo1": {
+      "response": undefined,
+    },
+    "foo2": {
+      "response": undefined,
+    },
+    "foo3": {
+      "response": undefined,
+    },
+    "medId": {
+      "blankNo": "blankNo",
+      "blankTemplate": "blankTemplate",
+      "blankYes": "blankYes",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "doctorView": "DoctorView",
+      "medID": "medId",
+      "noteSection": "noteSection",
+      "patientView": "PatientView",
+      "response": {
+        "Ankle": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Chest": false,
+        "Ear": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Elbow": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Eye": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Finger": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Foot": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Groin": false,
+        "Hand": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Head": false,
+        "Hip": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Knee": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Arm": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Lower Back": false,
+        "Lower Leg": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Mid Back": false,
+        "Mouth": false,
+        "Neck": false,
+        "Nose": false,
+        "Pelvis": false,
+        "Shoulder": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Stomach": false,
+        "Throat": false,
+        "Toe": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Arm": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Upper Back": false,
+        "Upper Leg": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+        "Wrist": {
+          "center": false,
+          "left": false,
+          "right": false,
+        },
+      },
+      "responseType": "BODYLOCATION",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+  "order": {
+    "medId": {
+      "1": "medId",
+      "2": "foo2",
+      "3": "foo1",
+      "4": "foo3",
+    },
+  },
+}
+`;
