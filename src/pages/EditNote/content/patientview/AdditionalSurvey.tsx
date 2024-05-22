@@ -137,7 +137,7 @@ const AdditionalSurvey = ({
                         />
                     )}
                 </div>
-                <div className={style.additionalSurvey__col}>
+                {/* <div className={style.additionalSurvey__col}>
                     <Input
                         label='Last 4 SSN'
                         name='socialSecurityNumber'
@@ -147,7 +147,7 @@ const AdditionalSurvey = ({
                         defaultValue={additionalDetails.socialSecurityNumber}
                         onChange={handleChange}
                     />
-                </div>
+                </div> */}
             </form>
         </div>
     );
