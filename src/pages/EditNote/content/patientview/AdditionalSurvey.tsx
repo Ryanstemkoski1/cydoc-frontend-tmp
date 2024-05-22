@@ -137,7 +137,8 @@ const AdditionalSurvey = ({
                         />
                     )}
                 </div>
-                {/* <div className={style.additionalSurvey__col}>
+                {/* Remove SSN field for now
+                <div className={style.additionalSurvey__col}>
                     <Input
                         label='Last 4 SSN'
                         name='socialSecurityNumber'
