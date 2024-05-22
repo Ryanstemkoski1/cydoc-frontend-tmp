@@ -2,7 +2,7 @@ import { FAMILY_HISTORY_ACTION } from '../actions/actionTypes';
 import { FamilyHistoryActionTypes } from '../actions/familyHistoryActions';
 import { YesNoResponse } from '@constants/enums';
 import { v4 } from 'uuid';
-import { FamilyOption } from 'constants/familyHistoryRelations';
+import { FamilyOption } from '@constants/familyHistoryRelations';
 
 export interface FamilyHistoryState {
     [index: string]: FamilyHistoryCondition;

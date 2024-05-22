@@ -1,7 +1,7 @@
-import diseaseSynonyms from 'constants/diseaseSynonyms';
-import { YesNoResponse } from 'constants/enums';
-import { HpiStateProps, ResponseTypes } from 'constants/hpiEnums';
-import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
+import diseaseSynonyms from '@constants/diseaseSynonyms';
+import { YesNoResponse } from '@constants/enums';
+import { HpiStateProps, ResponseTypes } from '@constants/hpiEnums';
+import { standardizeDiseaseNames } from '@constants/standardizeDiseaseNames';
 import React from 'react';
 import { connect } from 'react-redux';
 import {

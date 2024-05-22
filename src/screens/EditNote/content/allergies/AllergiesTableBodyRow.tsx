@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { OptionMapping } from '_processOptions';
-import Dropdown from 'components/tools/OptimizedDropdown';
-import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
+import { OptionMapping } from '../../../../_processOptions';
+import Dropdown from '@components/tools/OptimizedDropdown';
+import RemoveButton from '@components/tools/RemoveButton/RemoveButton';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { CurrentNoteState } from '@redux/reducers';

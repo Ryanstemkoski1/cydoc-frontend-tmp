@@ -4,13 +4,13 @@ import Link from 'next/link';
 import { Button, Menu } from 'semantic-ui-react';
 import NoteNameMenuItem from './NoteNameMenuItem';
 /* eslint-disable no-console */
-import { ProductType, ViewType } from 'constants/enums/route.enums';
-import MenuButton, { MenuItem } from 'components/Header/MenuButton';
-import { YesNoResponse } from 'constants/enums';
-import useAuth from 'hooks/useAuth';
-import useUser from 'hooks/useUser';
+import { ProductType, ViewType } from '@constants/enums/route.enums';
+import MenuButton, { MenuItem } from '@components/Header/MenuButton';
+import { YesNoResponse } from '@constants/enums';
+import useAuth from '@hooks/useAuth';
+import useUser from '@hooks/useUser';
 import 'screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
-import { InitialSurveyProps } from 'screens/EditNote/content/patientview/InitialSurvey';
+import { InitialSurveyProps } from '@screens/EditNote/content/patientview/InitialSurvey';
 import { connect } from 'react-redux';
 import {
     UpdateActiveItemAction,

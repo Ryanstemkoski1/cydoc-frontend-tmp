@@ -1,7 +1,7 @@
 import invariant from 'tiny-invariant';
 import { getFromApi } from './api';
 import { CognitoUser } from 'auth/cognito';
-import { AppointmentUser } from 'screens/BrowseNotes/BrowseNotes';
+import { AppointmentUser } from '@screens/BrowseNotes/BrowseNotes';
 
 // TODO: add christine's endpoints to shared types library
 interface GetAppointmentResponse {

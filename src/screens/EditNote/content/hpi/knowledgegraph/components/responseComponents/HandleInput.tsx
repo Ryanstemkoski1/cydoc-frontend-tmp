@@ -1,5 +1,5 @@
-import Textarea from 'components/Input/Textarea';
-import { HpiStateProps } from 'constants/hpiEnums';
+import Textarea from '@components/Input/Textarea';
+import { HpiStateProps } from '@constants/hpiEnums';
 import React from 'react';
 import { connect } from 'react-redux';
 import {

@@ -1,6 +1,6 @@
 'use client';
 
-import constants from 'constants/constants.json';
+import constants from '@constants/constants.json';
 import React, { Component, createRef } from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import { selectNoteId } from '@redux/selectors/currentNoteSelectors';
@@ -11,7 +11,7 @@ import { RootState } from '@redux/store';
 import { withRouter } from 'next/router';
 import { WithRouterProps } from 'next/dist/client/with-router';
 
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import { updateActiveItem } from '@redux/actions/activeItemActions';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';

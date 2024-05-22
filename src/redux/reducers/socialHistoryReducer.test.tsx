@@ -13,12 +13,17 @@ import drinkSizes from '../../constants/SocialHistory/drinkSizes';
 import tobaccoProducts from '../../constants/SocialHistory/tobaccoProducts';
 import drugNames from '../../constants/SocialHistory/drugNames';
 import modesOfDelivery from '../../constants/SocialHistory/modesOfDelivery';
+import { describe, expect, it } from 'vitest';
 
 describe('social history reducers', () => {
     it('returns the initial state', () => {
-        expect(socialHistoryReducer(undefined, {})).toEqual(
-            initialSocialHistoryState
-        );
+        expect(
+            socialHistoryReducer(
+                undefined,
+                // @ts-ignore
+                {}
+            )
+        ).toEqual(initialSocialHistoryState);
     });
     it('updates alcohol usage', () => {
         expect(
@@ -329,6 +334,7 @@ describe('social history reducers', () => {
                     type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_USED_MODES_OF_DELIVERY,
                     payload: {
                         index: 0,
+                        // FIXME: this does not match the Action types
                         newSize: modesOfDelivery[0].value,
                     },
                 }

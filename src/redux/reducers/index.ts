@@ -1,4 +1,4 @@
-import { initialReviewOfSystemsState } from 'constants/reviewOfSystemsInitial';
+import { initialReviewOfSystemsState } from '@constants/reviewOfSystemsInitial';
 import { combineReducers } from 'redux';
 import { AllActionTypes } from '../actions';
 import { CURRENT_NOTE_ACTION } from '../actions/actionTypes';

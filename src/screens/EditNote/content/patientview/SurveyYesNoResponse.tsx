@@ -1,6 +1,6 @@
 import axios from 'axios';
-import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
-import { YesNoResponse } from 'constants/enums';
+import YesAndNo from '@components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from '@constants/enums';
 import React from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import { setChiefComplaint } from '@redux/actions/chiefComplaintsActions';

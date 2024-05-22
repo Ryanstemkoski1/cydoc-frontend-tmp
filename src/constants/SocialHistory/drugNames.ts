@@ -1,4 +1,4 @@
-import { getOptionMapping } from '_processOptions';
+import { getOptionMapping } from '../../_processOptions';
 export const drugNames = [
     { key: 'Benzodiazepine', text: 'Benzodiazepine', value: 'Benzodiazepine' },
     { key: 'Ativan®', text: 'Ativan®', value: 'Ativan®' },

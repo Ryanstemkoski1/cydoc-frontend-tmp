@@ -5,7 +5,7 @@
 
 import { PlanCondition } from '@redux/reducers/planReducer';
 import { PlanActionTypes } from '@redux/actions/planActions';
-import { WhenResponse, YesNoUncertainResponse } from 'constants/enums';
+import { WhenResponse, YesNoUncertainResponse } from '@constants/enums';
 
 export interface DropdownOptions {
     value: string;

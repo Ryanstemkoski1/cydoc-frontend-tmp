@@ -1,17 +1,17 @@
 import axios from 'axios';
-import { ActiveItemProps } from 'components/navigation/NavMenu';
-import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { NotificationTypeEnum } from 'components/tools/Notification/Notification';
-import { ResponseTypes } from 'constants/hpiEnums';
+import { ActiveItemProps } from '@components/navigation/NavMenu';
+import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
+import { NotificationTypeEnum } from '@components/tools/Notification/Notification';
+import { ResponseTypes } from '@constants/hpiEnums';
 import {
     ChiefComplaintsProps,
     HpiHeadersProps,
-} from 'screens/EditNote/content/hpi/knowledgegraph/HPIContent';
-import ChiefComplaintsButton from 'screens/EditNote/content/hpi/knowledgegraph/components/ChiefComplaintsButton';
-import InputTextOrDateResponse from 'screens/EditNote/content/patientview/InputTextOrDateResponse';
-import SurveyYesNoResponse from 'screens/EditNote/content/patientview/SurveyYesNoResponse';
-import initialQuestions from 'screens/EditNote/content/patientview/constants/initialQuestions';
-import patientViewHeaders from 'screens/EditNote/content/patientview/constants/patientViewHeaders.json';
+} from '@screens/EditNote/content/hpi/knowledgegraph/HPIContent';
+import ChiefComplaintsButton from '@screens/EditNote/content/hpi/knowledgegraph/components/ChiefComplaintsButton';
+import InputTextOrDateResponse from '@screens/EditNote/content/patientview/InputTextOrDateResponse';
+import SurveyYesNoResponse from '@screens/EditNote/content/patientview/SurveyYesNoResponse';
+import initialQuestions from '@screens/EditNote/content/patientview/constants/initialQuestions';
+import patientViewHeaders from '@screens/EditNote/content/patientview/constants/patientViewHeaders.json';
 import React from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import {

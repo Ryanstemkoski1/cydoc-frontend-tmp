@@ -1,7 +1,7 @@
 'use client';
 
-import { HPIPatientQueryParams } from 'constants/enums/hpi.patient.enums';
-import useQuery from 'hooks/useQuery';
+import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
+import useQuery from '@hooks/useQuery';
 import React, { useEffect } from 'react';
 import style from './AfterSubmissionPage.module.scss';
 import { redirect } from 'next/navigation';

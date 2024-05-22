@@ -1,9 +1,9 @@
-import { HPIPatientQueryParams } from 'constants/enums/hpi.patient.enums';
+import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
 import axios from 'axios';
-import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { graphClientURL, apiClient } from 'constants/api.js';
+import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
+import { graphClientURL, apiClient } from '@constants/api.js';
 import { favChiefComplaints } from 'classes/institution.class';
-import React from 'react';
+import React, { useCallback } from 'react';
 import Masonry from 'react-masonry-css';
 import { ConnectedProps, connect } from 'react-redux';
 import {
@@ -15,12 +15,11 @@ import { saveHpiHeader } from '@redux/actions/hpiHeadersActions';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
 import { Search, Segment } from 'semantic-ui-react';
-import getHPIFormData from 'utils/getHPIFormData';
+import getHPIFormData from '@utils/getHPIFormData';
 import { hpiHeaders } from '../../EditNote/content/hpi/knowledgegraph/API';
 import BodySystemDropdown from '../../EditNote/content/hpi/knowledgegraph/components/BodySystemDropdown';
 import ChiefComplaintsButton from '../../EditNote/content/hpi/knowledgegraph/components/ChiefComplaintsButton';
 import DiseaseForm from '../../EditNote/content/hpi/knowledgegraph/components/DiseaseForm';
-import { HpiHeadersState } from '@redux/reducers/hpiHeadersReducer';
 import { CurrentNoteState } from '@redux/reducers';
 import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 import { selectFamilyHistoryState } from '@redux/selectors/familyHistorySelectors';
@@ -29,21 +28,20 @@ import { selectHpiState } from '@redux/selectors/hpiSelectors';
 import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelector';
 import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
 import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistorySelectors';
+import { NotificationTypeEnum } from '@components/tools/Notification/Notification';
+import useQuery from '@hooks/useQuery';
+import { ReadonlyURLSearchParams } from 'next/navigation';
 
 interface OwnProps {
-    activeItem: string;
-    hpiHeaders: HpiHeadersState;
-    saveHpiHeader: (data: any) => void;
-    chiefComplaints: any;
-    processKnowledgeGraph: (data: any) => void;
     notification: {
-        setNotificationMessage: (message: string) => void;
-        setNotificationType: (type: string) => void;
+        setNotificationMessage: React.Dispatch<React.SetStateAction<string>>;
+        setNotificationType: React.Dispatch<
+            React.SetStateAction<NotificationTypeEnum>
+        >;
     };
-    step: number;
+    step?: number; // does not appear to be passed in from parent component correctly
     continue: (e?: any) => void;
     back: (e?: any) => void;
-    location: { search: string; pathname: any; state: any; hash: any };
 }
 
 interface State {
@@ -89,10 +87,6 @@ class HPIContent extends React.Component<Props, State> {
         this.props.processKnowledgeGraph(response.data);
     };
 
-    continue = () => this.props.continue();
-
-    back = () => this.props.back();
-
     shouldShowNextButton = () => {
         const selectChiefComplaints = Object.keys(this.props.chiefComplaints);
         const currentActiveItem = this.props.activeItem;
@@ -109,9 +103,8 @@ class HPIContent extends React.Component<Props, State> {
         return result;
     };
 
-    handleSubmit = () => {
-        const query = new URLSearchParams(this.props.location.search);
-
+    onSubmit = (query: ReadonlyURLSearchParams) => {
+        // This is apparently deprecated, remove?
         const clinician_id =
             query.get(HPIPatientQueryParams.CLINICIAN_ID) ?? '';
         const institution_id =
@@ -148,11 +141,12 @@ class HPIContent extends React.Component<Props, State> {
                     url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
                 }
 
+                // Should use router?
                 window.location.href = url;
             })
             .catch((_error) => {
                 setNotificationMessage('Failed to submit your questionnaire');
-                setNotificationType('error');
+                setNotificationType(NotificationTypeEnum.ERROR);
             })
             .finally(() => {
                 this.setState({ loading: false });
@@ -287,21 +281,16 @@ class HPIContent extends React.Component<Props, State> {
                                         )[0]
                                     }
                                     category={this.props.activeItem}
-                                    nextStep={this.continue}
-                                    prevStep={this.back}
+                                    nextStep={this.props.continue}
+                                    prevStep={this.props.back}
                                 />
                             )}
-                            <NavigationButton
-                                previousClick={this.back}
-                                nextClick={
-                                    shouldShowNextButton
-                                        ? this.continue
-                                        : this.handleSubmit
-                                }
+                            <NextSubmitButton
                                 loading={this.state.loading}
-                                secondButtonLabel={
-                                    shouldShowNextButton ? 'Next' : 'Submit'
-                                }
+                                onBack={this.props.back}
+                                onContinue={this.props.continue}
+                                onSubmit={this.onSubmit}
+                                shouldShowNextButton={shouldShowNextButton}
                             />
                         </>
                     );
@@ -312,6 +301,41 @@ class HPIContent extends React.Component<Props, State> {
                 }
         }
     }
+}
+
+interface NextSubmitButtonProps {
+    loading: boolean;
+    onBack: () => void;
+    onContinue: () => void;
+    onSubmit: (query: ReadonlyURLSearchParams) => void;
+    shouldShowNextButton: boolean;
+}
+
+function NextSubmitButton({
+    loading,
+    onBack,
+    onContinue,
+    onSubmit,
+    shouldShowNextButton,
+}: NextSubmitButtonProps) {
+    const query = useQuery();
+
+    const nextClick = useCallback(() => {
+        if (shouldShowNextButton) {
+            onContinue();
+        } else {
+            onSubmit(query);
+        }
+    }, [onContinue, onSubmit, query, shouldShowNextButton]);
+
+    return (
+        <NavigationButton
+            previousClick={onBack}
+            nextClick={nextClick}
+            loading={loading}
+            secondButtonLabel={shouldShowNextButton ? 'Next' : 'Submit'}
+        />
+    );
 }
 
 const mapStateToProps = (state: CurrentNoteState) => {

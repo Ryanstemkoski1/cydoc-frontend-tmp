@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 import { HPI_ACTION, CHIEF_COMPLAINTS } from './actionTypes';
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import {
     TimeOption,
     NumberInput,
     BodyLocationOptions,
     BodyLocationLRItemType,
     GraphData,
-} from 'constants/hpiEnums';
+} from '@constants/hpiEnums';
 import { UnknownAction } from 'redux';
 
 export interface ProcessKnowledgeGraphAction extends UnknownAction {

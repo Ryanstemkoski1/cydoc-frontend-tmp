@@ -1,4 +1,4 @@
-import React from 'react';
+import { act } from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
@@ -8,7 +8,6 @@ import { LungsWidgetState } from '../../../../../redux/reducers/widgetReducers/l
 import { LUNGS_WIDGET_ACTION } from '../../../../../redux/actions/actionTypes';
 import { Button, Popup } from 'semantic-ui-react';
 import { makeStore } from '../../../../../redux/store';
-import { act } from 'react-dom/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const section = 'leftLowerLobe';

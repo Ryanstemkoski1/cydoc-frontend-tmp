@@ -1,5 +1,5 @@
 import React from 'react';
-import { HPIText } from 'utils/getHPIText';
+import { HPIText } from '@utils/getHPIText';
 import { capitalizeFirstLetter } from '../generateHpiText';
 import styles from './HPINote.module.scss';
 

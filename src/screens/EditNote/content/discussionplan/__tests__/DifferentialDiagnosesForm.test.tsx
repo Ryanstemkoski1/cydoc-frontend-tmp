@@ -1,14 +1,15 @@
-import React from 'react';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from '@cfaester/enzyme-adapter-react-18';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
+// import Enzyme, { mount } from 'enzyme';
+// import Adapter from '@cfaester/enzyme-adapter-react-18';
 import DifferentialDiagnosesForm from '../forms/DifferentialDiagnosesForm';
 import configureStore from 'redux-mock-store';
 import { conditionId, categoryId, initialPlan } from '../util';
 import { Provider } from 'react-redux';
 import { PLAN_ACTION as TYPES } from '../../../../../redux/actions/actionTypes';
+import { render } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
-Enzyme.configure({ adapter: new Adapter() });
+// Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -21,7 +22,7 @@ const mountWithStore = (
         conditionId,
         // Need to mock actual implementation as this function is responsible
         // for action dispatching
-        formatAction: jest.fn(
+        formatAction: vi.fn(
             (action) =>
                 (_, { uuid, value }) =>
                     action(conditionId, uuid, value)
@@ -30,7 +31,7 @@ const mountWithStore = (
     };
     return {
         store,
-        wrapper: mount(
+        wrapper: render(
             <Provider store={store}>
                 <DifferentialDiagnosesForm {...props} />
             </Provider>

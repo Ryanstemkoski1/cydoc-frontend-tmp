@@ -1,4 +1,4 @@
-import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
+import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
 import React from 'react';
 import { connect } from 'react-redux';
 import {

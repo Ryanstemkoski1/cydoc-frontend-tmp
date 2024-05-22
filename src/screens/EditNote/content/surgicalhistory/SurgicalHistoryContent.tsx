@@ -1,6 +1,6 @@
-import Input from 'components/Input/Input';
-import Dropdown from 'components/tools/OptimizedDropdown';
-import procedures from '../../../../constants/procedures';
+import Input from '@components/Input/Input';
+import Dropdown from '@components/tools/OptimizedDropdown';
+import procedures from '@constants/procedures';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
@@ -28,12 +28,12 @@ import {
 } from 'semantic-ui-react';
 import SurgicalHistoryTableBodyRow from './SurgicalHistoryTableBodyRow';
 
-import { OptionMapping } from '_processOptions';
-import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
-import GridContent from 'components/tools/GridContent/GridContent';
-import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
-import { YesNoResponse } from 'constants/enums';
-import { ResponseTypes } from 'constants/hpiEnums';
+import { OptionMapping } from '../../../../_processOptions';
+import AddRowButton from '@components/tools/AddRowButton/AddRowButton';
+import GridContent from '@components/tools/GridContent/GridContent';
+import YesAndNo from '@components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from '@constants/enums';
+import { ResponseTypes } from '@constants/hpiEnums';
 import {
     BlankQuestionChangeAction,
     PopResponseAction,

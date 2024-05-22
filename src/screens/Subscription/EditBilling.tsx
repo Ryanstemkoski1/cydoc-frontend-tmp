@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import { CircularProgress, Typography } from '@mui/material';
-import { ErrorText } from 'components/Atoms/ErrorText';
-import useAuth from 'hooks/useAuth';
-import useUser from 'hooks/useUser';
+import { ErrorText } from '@components/Atoms/ErrorText';
+import useAuth from '@hooks/useAuth';
+import useUser from '@hooks/useUser';
 import { getStripeSetupUrl } from 'modules/subscription-api';
 import { breadcrumb, log } from 'modules/logging';
 import { stringFromError } from 'modules/error-utils';

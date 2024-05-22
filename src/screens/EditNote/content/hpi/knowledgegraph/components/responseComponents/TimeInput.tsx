@@ -1,6 +1,6 @@
-import Input from 'components/Input/Input';
-import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
-import { HpiStateProps, NumberInput, TimeOption } from 'constants/hpiEnums';
+import Input from '@components/Input/Input';
+import ToggleButton from '@components/tools/ToggleButton/ToggleButton';
+import { HpiStateProps, NumberInput, TimeOption } from '@constants/hpiEnums';
 import 'screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
 import React from 'react';
 import { connect } from 'react-redux';

@@ -1,5 +1,5 @@
-import { OptionMapping } from '_processOptions';
-import Dropdown from 'components/tools/OptimizedDropdown';
+import { OptionMapping } from '../../../../../_processOptions';
+import Dropdown from '@components/tools/OptimizedDropdown';
 import React from 'react';
 import { connect } from 'react-redux';
 import {

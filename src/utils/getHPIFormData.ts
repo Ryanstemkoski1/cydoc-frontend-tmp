@@ -3,7 +3,7 @@ import {
     ResponseTypes,
     SelectManyInput,
     SelectOneInput,
-} from 'constants/hpiEnums';
+} from '@constants/hpiEnums';
 import getHPIText, { HPIReduxValues } from './getHPIText';
 import { UserSurveyState } from '@redux/reducers/userViewReducer';
 import { AdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';

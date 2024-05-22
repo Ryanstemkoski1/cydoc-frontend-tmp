@@ -1,5 +1,5 @@
 import React from 'react';
-import Terms_and_conditions from 'constants/Documents/terms_and_conditions';
+import Terms_and_conditions from '@constants/Documents/terms_and_conditions';
 import TermsOrPolicyStep from './TermsOrPolicyStep';
 
 export default function TermsStep() {

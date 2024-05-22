@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import MTable, { MaterialTableProps, Options } from '@material-table/core';
 
 import { TABLE_ICONS } from '../Atoms/MaterialTableIcons';
-import useDimensions from 'hooks/useDimensions';
+import useDimensions from '@hooks/useDimensions';
 
 export type ColumnSortInfo = { fieldName: string; direction: 'asc' | 'desc' };
 

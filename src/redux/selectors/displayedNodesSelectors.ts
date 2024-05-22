@@ -1,13 +1,13 @@
-import { displayedNodesCutOff } from 'constants/displayedNodesCutOff';
-import { YesNoResponse } from 'constants/enums';
+import { displayedNodesCutOff } from '@constants/displayedNodesCutOff';
+import { YesNoResponse } from '@constants/enums';
 import {
     ResponseTypes,
     SelectManyInput,
     SelectOneInput,
-} from 'constants/hpiEnums';
+} from '@constants/hpiEnums';
 import { CurrentNoteState } from '@redux/reducers';
-import { isHPIResponseValid } from 'utils/getHPIFormData';
-import { getNodeConditions } from 'utils/getHPIText';
+import { isHPIResponseValid } from '@utils/getHPIFormData';
+import { getNodeConditions } from '@utils/getHPIText';
 
 function traverseNodes(
     currNodes: string[],

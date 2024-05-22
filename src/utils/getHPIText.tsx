@@ -1,4 +1,4 @@
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import {
     BodyLocationType,
     HpiResponseType,
@@ -9,12 +9,12 @@ import {
     SelectManyInput,
     SelectOneInput,
     TimeInput,
-} from 'constants/hpiEnums';
+} from '@constants/hpiEnums';
 import {
     HPI,
     createHPI,
     createInitialHPI,
-} from 'screens/EditNote/content/generatenote/generateHpiText';
+} from '@screens/EditNote/content/generatenote/generateHpiText';
 import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
 import { FamilyHistoryState } from '@redux/reducers/familyHistoryReducer';
 import { HpiState } from '@redux/reducers/hpiReducer';

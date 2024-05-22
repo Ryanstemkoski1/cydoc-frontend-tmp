@@ -8,7 +8,7 @@ import './Account.css';
 import { Button } from 'semantic-ui-react';
 import './Account.css';
 import * as Yup from 'yup';
-import { ErrorText } from 'components/Atoms/ErrorText';
+import { ErrorText } from '@components/Atoms/ErrorText';
 import { TextField } from '@mui/material';
 import { sendResetPasswordCode } from 'auth/cognito';
 import { Box } from '@mui/system';

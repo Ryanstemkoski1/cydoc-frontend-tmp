@@ -2,9 +2,9 @@
  * @fileoverview Components that utilizes [main: string], when, comments fields
  * in the discussion and plan page
  */
-import { OptionMapping } from '_processOptions';
-import Dropdown from 'components/tools/OptimizedDropdown';
-import { WhenResponse } from 'constants/enums';
+import { OptionMapping } from '../../../../../_processOptions';
+import Dropdown from '@components/tools/OptimizedDropdown';
+import { WhenResponse } from '@constants/enums';
 import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';

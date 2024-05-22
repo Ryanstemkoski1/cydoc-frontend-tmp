@@ -1,5 +1,5 @@
-import Adapter from '@cfaester/enzyme-adapter-react-18';
-import Enzyme, { mount } from 'enzyme';
+// import Adapter from '@cfaester/enzyme-adapter-react-18';
+// import Enzyme, { mount } from 'enzyme';
 import React from 'react';
 import Alcohol from '../Alcohol';
 
@@ -11,11 +11,17 @@ import {
     YesNoResponse,
 } from '../../../../../constants/enums';
 import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-import { SOCIAL_HISTORY_ACTION } from '@redux/actions/actionTypes';
-import { initialSocialHistoryState } from '@redux/reducers/socialHistoryReducer';
+import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
+import { SOCIAL_HISTORY_ACTION } from '../../../../../redux/actions/actionTypes';
+import {
+    SocialHistoryState,
+    initialSocialHistoryState,
+} from '../../../../../redux/reducers/socialHistoryReducer';
+import { describe, expect, test } from 'vitest';
+import { RenderResult, queries, render } from '@testing-library/react';
+import { Action } from 'redux';
 
-Enzyme.configure({ adapter: new Adapter() });
+// Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -28,7 +34,7 @@ const mountWithStore = (
     });
     return {
         store,
-        wrapper: mount(
+        wrapper: render(
             <Provider store={store}>
                 <Alcohol {...props} />
             </Provider>
@@ -36,13 +42,19 @@ const mountWithStore = (
     };
 };
 
-const mountDesktop = (socialHistoryState) =>
+const mountDesktop = (socialHistoryState?: SocialHistoryState) =>
     mountWithStore(socialHistoryState, { mobile: false });
-const mountMobile = (socialHistoryState) =>
+const mountMobile = (socialHistoryState?: SocialHistoryState) =>
     mountWithStore(socialHistoryState, { mobile: true });
 
 describe('Alcohol Integration', () => {
-    let cases = [
+    let cases: [
+        string,
+        (socialHistoryState?: SocialHistoryState) => {
+            store: MockStoreEnhanced<unknown, {}>;
+            wrapper: any;
+        },
+    ][] = [
         ['Desktop', mountDesktop],
         ['Mobile', mountMobile],
     ];
@@ -306,7 +318,7 @@ describe('Alcohol Integration', () => {
             };
 
             const { store, wrapper } = mountAlcoholWithStore(alcoholState);
-            const expectedActions = [];
+            const expectedActions: (Action & { payload: any })[] = [];
 
             wrapper
                 .find(
@@ -361,7 +373,7 @@ describe('Alcohol Integration', () => {
             };
 
             const { store, wrapper } = mountAlcoholWithStore(alcoholState);
-            const expectedActions = [];
+            const expectedActions: (Action & { payload: any })[] = [];
 
             wrapper
                 .find(

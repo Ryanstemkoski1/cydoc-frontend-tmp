@@ -1,8 +1,8 @@
-import { OptionMapping } from '_processOptions';
-import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
-import Dropdown from 'components/tools/OptimizedDropdown';
-import allergens from 'constants/allergens';
-import allergicReactions from 'constants/allergicReactions';
+import { OptionMapping } from '../../../../_processOptions';
+import AddRowButton from '@components/tools/AddRowButton/AddRowButton';
+import Dropdown from '@components/tools/OptimizedDropdown';
+import allergens from '@constants/allergens';
+import allergicReactions from '@constants/allergicReactions';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {

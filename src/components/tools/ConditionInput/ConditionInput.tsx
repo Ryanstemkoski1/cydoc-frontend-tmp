@@ -1,6 +1,6 @@
-import Input from 'components/Input/Input';
-import { standardizeDiseaseNamesOnBlur } from 'constants/standardizeDiseaseNames';
-import { SeenCondition } from 'screens/EditNote/content/medicalhistory/MedicalHistoryContent';
+import Input from '@components/Input/Input';
+import { standardizeDiseaseNamesOnBlur } from '@constants/standardizeDiseaseNames';
+import { SeenCondition } from '@screens/EditNote/content/medicalhistory/MedicalHistoryContent';
 import React from 'react';
 import { connect } from 'react-redux';
 import { updateCondition } from '@redux/actions/familyHistoryActions';

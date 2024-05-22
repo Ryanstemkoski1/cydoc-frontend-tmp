@@ -5,13 +5,13 @@ import React from 'react';
 import './Account.css';
 
 import { Box, Stack } from '@mui/system';
-import { ErrorText } from 'components/Atoms/ErrorText';
-import LogoHeader from 'components/Atoms/LogoHeader';
-import { SubmitOnEnter } from 'components/Atoms/SubmitOnEnter';
-import useAuth from 'hooks/useAuth';
+import { ErrorText } from '@components/Atoms/ErrorText';
+import LogoHeader from '@components/Atoms/LogoHeader';
+import { SubmitOnEnter } from '@components/Atoms/SubmitOnEnter';
+import useAuth from '@hooks/useAuth';
 import { Button } from 'semantic-ui-react';
 import * as Yup from 'yup';
-import useUser from 'hooks/useUser';
+import useUser from '@hooks/useUser';
 import { CognitoUser } from 'auth/cognito';
 
 const validationSchema = Yup.object({

@@ -1,5 +1,5 @@
-import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
-import { HpiStateProps } from 'constants/hpiEnums';
+import ToggleButton from '@components/tools/ToggleButton/ToggleButton';
+import { HpiStateProps } from '@constants/hpiEnums';
 import React from 'react';
 import { connect } from 'react-redux';
 import {

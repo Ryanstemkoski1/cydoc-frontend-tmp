@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { OptionMapping } from '_processOptions';
-import Dropdown from 'components/Input/Dropdown';
-import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
-import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
-import { YesNoResponse } from 'constants/enums';
+import { OptionMapping } from '../../../../_processOptions';
+import Dropdown from '@components/Input/Dropdown';
+import RemoveButton from '@components/tools/RemoveButton/RemoveButton';
+import YesAndNo from '@components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from '@constants/enums';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {

@@ -6,8 +6,8 @@ import './Account.css';
 import ForgotPasswordEmailForm from './ForgotPasswordEmailForm';
 import ForgotPasswordCodeForm from './ForgotPasswordCodeForm';
 import { Stack, Typography } from '@mui/material';
-import { CenteredPaper } from 'components/Atoms/CenteredPaper';
-import LogoHeader from 'components/Atoms/LogoHeader';
+import { CenteredPaper } from '@components/Atoms/CenteredPaper';
+import LogoHeader from '@components/Atoms/LogoHeader';
 
 const ForgotPasswordPage = () => {
     const [codeSentEmail, setCodeSentEmail] = useState('');

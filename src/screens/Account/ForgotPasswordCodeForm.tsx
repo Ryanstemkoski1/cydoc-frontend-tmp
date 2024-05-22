@@ -8,7 +8,7 @@ import { Stack } from '@mui/system';
 import { forgotPasswordConfirmCode } from 'auth/cognito';
 import { stringFromError } from '@modules/error-utils';
 import { log } from '@modules/logging';
-import { ErrorText } from 'components/Atoms/ErrorText';
+import { ErrorText } from '@components/Atoms/ErrorText';
 
 const { newPassword, confirmNewPassword } = FirstLoginFormSpec;
 

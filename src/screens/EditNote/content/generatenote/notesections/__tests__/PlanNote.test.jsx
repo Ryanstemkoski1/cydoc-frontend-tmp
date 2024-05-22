@@ -5,7 +5,7 @@ import {
     initialPlan,
     conditionId,
     categoryId,
-} from '../../../../../../screens/EditNote/content/discussionplan/util';
+} from '../../../discussionplan/util';
 import PlanNote, { EMPTY_NOTE_TEXT } from '../PlanNote';
 
 Enzyme.configure({ adapter: new Adapter() });

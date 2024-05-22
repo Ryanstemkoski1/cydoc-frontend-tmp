@@ -1,14 +1,19 @@
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from '@cfaester/enzyme-adapter-react-18';
+// import Enzyme, { mount } from 'enzyme';
+// import Adapter from '@cfaester/enzyme-adapter-react-18';
+import { describe, expect, test } from 'vitest';
+import { render } from '@testing-library/react';
 import SocialHistoryContent from '../SocialHistoryContent';
 
-import configureStore from 'redux-mock-store';
+import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import { SOCIAL_HISTORY_ACTION } from '../../../../../redux/actions/actionTypes';
-import { initialSocialHistoryState } from '../../../../../redux/reducers/socialHistoryReducer';
+import {
+    SocialHistoryState,
+    initialSocialHistoryState,
+} from '../../../../../redux/reducers/socialHistoryReducer';
 
-Enzyme.configure({ adapter: new Adapter() });
+// Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -19,7 +24,7 @@ const mountWithStore = (
     const store = mockStore({ socialHistory: initialSocialHistory });
     return {
         store,
-        wrapper: mount(
+        wrapper: render(
             <Provider store={store}>
                 <SocialHistoryContent {...props} />
             </Provider>
@@ -33,7 +38,13 @@ const mountMobile = () =>
     mountWithStore(initialSocialHistoryState, { mobile: true });
 
 describe('Social History Integration', () => {
-    let cases = [
+    let cases: [
+        string,
+        (socialHistoryState?: SocialHistoryState) => {
+            store: MockStoreEnhanced<unknown, {}>;
+            wrapper: any;
+        },
+    ][] = [
         ['Desktop', mountDesktop],
         ['Mobile', mountMobile],
     ];

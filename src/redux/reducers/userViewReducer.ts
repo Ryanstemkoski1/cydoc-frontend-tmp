@@ -1,10 +1,10 @@
 import { favChiefComplaints } from 'classes/institution.class';
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import {
     ListTextInput,
     ResponseTypes,
     SelectOneInput,
-} from 'constants/hpiEnums';
+} from '@constants/hpiEnums';
 import { USER_VIEW_ACTION } from '@redux/actions/actionTypes';
 import { userViewActionTypes } from '@redux/actions/userViewActions';
 import { v4 } from 'uuid';

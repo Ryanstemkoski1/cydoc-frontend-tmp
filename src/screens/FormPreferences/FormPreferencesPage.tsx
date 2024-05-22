@@ -3,24 +3,24 @@
 import { ApiResponse } from '@cydoc-ai/types';
 import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
-import ButtonLoader from 'components/ButtonLoader/ButtonLoader';
-import CommonLayout from 'components/CommonLayout/CommonLayout';
-import InfoTooltip from 'components/InfoTooltip/InfoTooltip';
-import MultiSelectDropdown from 'components/Input/MultiSelectDropdown';
+import ButtonLoader from '@components/ButtonLoader/ButtonLoader';
+import CommonLayout from '@components/CommonLayout/CommonLayout';
+import InfoTooltip from '@components/InfoTooltip/InfoTooltip';
+import MultiSelectDropdown from '@components/Input/MultiSelectDropdown';
 import Notification, {
     NotificationTypeEnum,
-} from 'components/tools/Notification/Notification';
-import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
-import { MAX_LIMIT_TO_ADD_DEFAULT_FORMS } from 'constants/FormPreferencesConstant';
-import ToastOptions from 'constants/ToastOptions';
-import useAuth from 'hooks/useAuth';
-import useUser from 'hooks/useUser';
+} from '@components/tools/Notification/Notification';
+import YesAndNo from '@components/tools/YesAndNo/YesAndNo';
+import { MAX_LIMIT_TO_ADD_DEFAULT_FORMS } from '@constants/FormPreferencesConstant';
+import ToastOptions from '@constants/ToastOptions';
+import useAuth from '@hooks/useAuth';
+import useUser from '@hooks/useUser';
 import {
     InstitutionConfigResponse,
     getInstitutionConfig,
     updateInstitutionConfig,
 } from 'modules/institution-api';
-import { hpiHeaders as knowledgeGraphAPI } from 'screens/EditNote/content/hpi/knowledgegraph/API';
+import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import style from './FormPreferencesPage.module.scss';

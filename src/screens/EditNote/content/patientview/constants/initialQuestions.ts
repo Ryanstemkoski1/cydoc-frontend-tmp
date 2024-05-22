@@ -1,4 +1,4 @@
-import { ResponseTypes } from 'constants/hpiEnums';
+import { ResponseTypes } from '@constants/hpiEnums';
 import { InitialQuestionsState } from '@redux/reducers/userViewReducer';
 
 const initialQuestions: InitialQuestionsState = {

@@ -1,4 +1,4 @@
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import React, { Component } from 'react';
 import { MedicationsState } from '@redux/reducers/medicationsReducer';
 import { Table } from 'semantic-ui-react';

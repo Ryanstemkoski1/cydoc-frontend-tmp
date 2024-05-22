@@ -1,18 +1,19 @@
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from '@cfaester/enzyme-adapter-react-18';
+// import Enzyme, { mount } from 'enzyme';
+// import Adapter from '@cfaester/enzyme-adapter-react-18';
 import configureStore from 'redux-mock-store';
 import { Provider } from 'react-redux';
 import SurgicalHistoryContent from '../SurgicalHistoryContent';
-import { beforeEach, describe } from 'vitest';
+import { beforeEach, describe, test } from 'vitest';
+import { render } from '@testing-library/react';
 // import SurgicalHistoryTableBodyRow from '../SurgicalHistoryTableBodyRow';
-// import AddRowButton from 'components/tools/AddRowButton';
+// import AddRowButton from '@components/tools/AddRowButton';
 // import { Button, Accordion } from 'semantic-ui-react';
 // import { SURGICAL_HISTORY_ACTION } from '@redux/actions/actionTypes';
 // import { makeStore } from '@redux/store';
 // import { deleteNote } from '@redux/actions/currentNoteActions';
 
-Enzyme.configure({ adapter: new Adapter() });
+// Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -34,7 +35,7 @@ const initialStateUser = {
 const connectStore = (
     state = initialState,
     stateUser = initialStateUser,
-    props
+    props?: any
 ) => {
     const store = mockStore({
         surgicalHistory: state,
@@ -42,7 +43,7 @@ const connectStore = (
     });
     return {
         store,
-        wrapper: mount(
+        wrapper: render(
             <Provider store={store}>
                 <SurgicalHistoryContent {...props} />
             </Provider>

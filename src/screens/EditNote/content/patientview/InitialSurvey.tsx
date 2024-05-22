@@ -1,7 +1,7 @@
 import axios from 'axios';
-import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { YesNoResponse } from 'constants/enums';
-import { ResponseTypes } from 'constants/hpiEnums';
+import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
+import { YesNoResponse } from '@constants/enums';
+import { ResponseTypes } from '@constants/hpiEnums';
 import React from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import {

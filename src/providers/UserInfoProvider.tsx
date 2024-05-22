@@ -1,6 +1,6 @@
 'use client';
 
-import useAuth from 'hooks/useAuth';
+import useAuth from '@hooks/useAuth';
 import { log, updateLoggedUser } from '@modules/logging';
 import { getDbUser } from '@modules/user-api';
 import React, {

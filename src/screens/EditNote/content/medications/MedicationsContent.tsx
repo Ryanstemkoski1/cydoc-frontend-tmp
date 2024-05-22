@@ -1,11 +1,11 @@
-import { OptionMapping } from '_processOptions';
-import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
-import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
-import { YesNoResponse } from 'constants/enums';
-import { ResponseTypes } from 'constants/hpiEnums';
-import drugNames from 'constants/medications';
-import diseases from 'constants/oldDiagnoses';
-import sideEffects from 'constants/sideEffects';
+import { OptionMapping } from '../../../../_processOptions';
+import AddRowButton from '@components/tools/AddRowButton/AddRowButton';
+import YesAndNo from '@components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from '@constants/enums';
+import { ResponseTypes } from '@constants/hpiEnums';
+import drugNames from '@constants/medications';
+import diseases from '@constants/oldDiagnoses';
+import sideEffects from '@constants/sideEffects';
 import React, { Component } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import {

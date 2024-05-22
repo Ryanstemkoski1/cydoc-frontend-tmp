@@ -7,8 +7,8 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import ModalHeader from '@components/Atoms/ModalHeader';
 import { EditBilling } from './EditBilling';
 import { CurrentPaymentMethod } from './CurrentPaymentMethod';
-import { CenteredPaper } from 'components/Atoms/CenteredPaper';
-import { useSubscription } from 'hooks/useSubscription';
+import { CenteredPaper } from '@components/Atoms/CenteredPaper';
+import { useSubscription } from '@hooks/useSubscription';
 import { Grid, Typography } from '@mui/material';
 
 const ACTIVE_TRIAL_MESSAGE =

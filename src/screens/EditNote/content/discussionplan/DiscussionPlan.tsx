@@ -1,4 +1,4 @@
-import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
+import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
 import React, { useState } from 'react';
 import { Segment } from 'semantic-ui-react';
 import DiscussionPlanMenu from './DiscussionPlanMenu';

@@ -1,4 +1,4 @@
-import { PatientPronouns } from 'constants/patientInformation';
+import { PatientPronouns } from '@constants/patientInformation';
 import { PATIENT_INFORMATION_ACTION } from '@redux/actions/actionTypes';
 import { PatientInformationActionTypes } from '@redux/actions/patientInformationActions';
 

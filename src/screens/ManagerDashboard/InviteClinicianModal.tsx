@@ -1,16 +1,16 @@
 import React from 'react';
 import './ManagerDashboard.css';
 import { Box, Divider, Grid } from '@mui/material';
-import SignUpTextInput from 'screens/Account/SignUpTextInput';
+import SignUpTextInput from '@screens/Account/SignUpTextInput';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import ModalHeader from 'components/Atoms/ModalHeader';
+import ModalHeader from '@components/Atoms/ModalHeader';
 import { Button, Modal } from 'semantic-ui-react';
-import { ErrorText } from 'components/Atoms/ErrorText';
+import { ErrorText } from '@components/Atoms/ErrorText';
 import { UserRole } from '@cydoc-ai/types';
-import useUser from 'hooks/useUser';
+import useUser from '@hooks/useUser';
 import invariant from 'tiny-invariant';
-import useAuth from 'hooks/useAuth';
+import useAuth from '@hooks/useAuth';
 import { inviteClinician } from 'modules/user-api';
 
 interface Props {

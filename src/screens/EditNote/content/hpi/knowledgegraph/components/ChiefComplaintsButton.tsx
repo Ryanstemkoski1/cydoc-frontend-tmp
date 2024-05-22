@@ -1,8 +1,8 @@
 import axios from 'axios';
-import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
-import { graphClientURL } from 'constants/api.js';
-import { getSelectedChiefComplaints } from 'hooks/useSelectedChiefComplaints';
-import { InitialSurveyProps } from 'screens/HPI/ChiefComplaintSelection/CCSelection';
+import ToggleButton from '@components/tools/ToggleButton/ToggleButton';
+import { graphClientURL } from '@constants/api.js';
+import { getSelectedChiefComplaints } from '@hooks/useSelectedChiefComplaints';
+import { InitialSurveyProps } from '@screens/HPI/ChiefComplaintSelection/CCSelection';
 import React from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import { setChiefComplaint } from '@redux/actions/chiefComplaintsActions';

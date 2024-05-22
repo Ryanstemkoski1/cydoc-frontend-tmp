@@ -7,7 +7,7 @@ import {
     ButtonProps,
 } from 'semantic-ui-react';
 import SelectAllButton from './SelectAllButton';
-import LRButton from 'components/tools/LRButtonRedux';
+import LRButton from '@components/tools/LRButtonRedux';
 import LungSounds from './widgets/LungSounds';
 import AbdomenExam from './widgets/AbdomenExam';
 import PulsesWidget from './widgets/PulsesWidget';
@@ -22,12 +22,12 @@ import {
     toggleLeftRightFinding,
     toggleChooseBooleanValue,
 } from '@redux/actions/physicalExamActions';
-import { LRButtonState } from 'constants/enums';
+import { LRButtonState } from '@constants/enums';
 import { PhysicalExamSection } from '@redux/reducers/physicalExamReducer';
 import {
     PhysicalExamSchemaRow,
     WidgetType,
-} from 'constants/PhysicalExam/physicalExamSchema';
+} from '@constants/PhysicalExam/physicalExamSchema';
 import { CurrentNoteState } from '@redux/reducers';
 import './PhysicalExamRow.css';
 

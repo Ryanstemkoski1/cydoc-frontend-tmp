@@ -2,7 +2,7 @@ import {
     SubstanceUsageResponse,
     YesNoMaybeResponse,
     YesNoResponse,
-} from 'constants/enums';
+} from '@constants/enums';
 import React, { Component } from 'react';
 import { SocialHistoryState } from '@redux/reducers/socialHistoryReducer';
 import { Table } from 'semantic-ui-react';

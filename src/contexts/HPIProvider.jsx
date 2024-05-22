@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import NotesContext from './NotesContext';
-import { noteBody } from 'constants/noteBody.js';
+import { noteBody } from '@constants/noteBody.js';
 import Context from './HPIContext';
 
 export default class HPIProvider extends React.Component {

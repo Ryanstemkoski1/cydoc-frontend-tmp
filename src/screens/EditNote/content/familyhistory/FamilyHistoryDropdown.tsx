@@ -1,8 +1,8 @@
-import Textarea from 'components/Input/Textarea';
-import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
-import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
-import { YesNoResponse } from 'constants/enums';
-import { FamilyOption, familyOptions } from 'constants/familyHistoryRelations';
+import Textarea from '@components/Input/Textarea';
+import RemoveButton from '@components/tools/RemoveButton/RemoveButton';
+import YesAndNo from '@components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from '@constants/enums';
+import { FamilyOption, familyOptions } from '@constants/familyHistoryRelations';
 import HPIContext from 'contexts/HPIContext.js';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';

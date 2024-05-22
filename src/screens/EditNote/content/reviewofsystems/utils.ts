@@ -1,4 +1,4 @@
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 
 export const initialStore = {
     Eyes: {

@@ -1,4 +1,4 @@
-import Dropdown from 'components/tools/RecursiveDropdown';
+import Dropdown from '@components/tools/RecursiveDropdown';
 import React from 'react';
 import { connect } from 'react-redux';
 import {
@@ -19,7 +19,7 @@ import {
     CategoryFormOwnProps,
     CategoryFormProps,
 } from './BaseCategoryForm';
-import { DiagnosesOptionMapping } from '_processOptions';
+import { DiagnosesOptionMapping } from '../../../../../_processOptions';
 import './DiscussionPlanForms.css';
 import './planSections.css';
 

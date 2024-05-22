@@ -10,7 +10,7 @@ import {
 } from '@modules/user-api';
 import { useRouter } from 'next/navigation';
 import { breadcrumb, log } from '@modules/logging';
-import useAuth from 'hooks/useAuth';
+import useAuth from '@hooks/useAuth';
 import { FirstLoginFormSpec } from './FirstLoginForm';
 import { DbUser, UpdateUserResponse } from '@cydoc-ai/types';
 import { CognitoUser } from 'auth/cognito';

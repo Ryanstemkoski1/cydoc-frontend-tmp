@@ -1,4 +1,4 @@
-import { LRButtonState } from 'constants/enums';
+import { LRButtonState } from '@constants/enums';
 import { VitalsFields } from '@redux/reducers/physicalExamReducer';
 import { PHYSICAL_EXAM_ACTION } from './actionTypes';
 

@@ -1,5 +1,5 @@
-import Adapter from '@cfaester/enzyme-adapter-react-18';
-import Enzyme, { mount } from 'enzyme';
+// import Adapter from '@cfaester/enzyme-adapter-react-18';
+// import Enzyme, { mount } from 'enzyme';
 import React from 'react';
 import RecreationalDrugs from '../RecreationalDrugs';
 
@@ -10,10 +10,16 @@ import {
 } from '../../../../../constants/enums';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
-import { SOCIAL_HISTORY_ACTION } from '@redux/actions/actionTypes';
-import { initialSocialHistoryState } from '@redux/reducers/socialHistoryReducer';
+import { SOCIAL_HISTORY_ACTION } from '../../../../../redux/actions/actionTypes';
+import {
+    SocialHistoryState,
+    initialSocialHistoryState,
+} from '../../../../../redux/reducers/socialHistoryReducer';
+import { render, within } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
+import { Action } from 'redux';
 
-Enzyme.configure({ adapter: new Adapter() });
+// Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -26,7 +32,7 @@ const mountWithStore = (
     });
     return {
         store,
-        wrapper: mount(
+        wrapper: render(
             <Provider store={store}>
                 <RecreationalDrugs {...props} />
             </Provider>
@@ -34,21 +40,21 @@ const mountWithStore = (
     };
 };
 
-const mountDesktop = (socialHistoryState) =>
+const mountDesktop = (socialHistoryState?: SocialHistoryState) =>
     mountWithStore(socialHistoryState, { mobile: false });
-const mountMobile = (socialHistoryState) =>
+const mountMobile = (socialHistoryState?: SocialHistoryState) =>
     mountWithStore(socialHistoryState, { mobile: true });
 
 describe('Recreational Drugs Integration', () => {
-    let cases = [
+    let cases: [string, typeof mountDesktop][] = [
         ['Desktop', mountDesktop],
         ['Mobile', mountMobile],
     ];
 
     test.each(cases)(
         '%s view renders without crashing',
-        (_type, mountRecreationlDrugsWithStore) => {
-            const { wrapper } = mountRecreationlDrugsWithStore();
+        (_type, mountRecreationalDrugsWithStore) => {
+            const { wrapper } = mountRecreationalDrugsWithStore();
             expect(wrapper).toBeTruthy();
         }
     );
@@ -295,11 +301,12 @@ describe('Recreational Drugs Integration', () => {
                 recreationalDrugsState
             );
 
-            wrapper
-                .find('button[aria-label="remove"]')
-                .first()
-                .simulate('click');
-            wrapper.update();
+            wrapper.getByLabelText('remove').click();
+            // .find('button[aria-label="remove"]')
+            // .first()
+            // .simulate('click');
+
+            // wrapper.update();
 
             const expectedAction = {
                 type: SOCIAL_HISTORY_ACTION.DELETE_RECREATIONAL_DRUG_USED,
@@ -314,7 +321,7 @@ describe('Recreational Drugs Integration', () => {
 
     test.each(cases)(
         '%s view dispatches correct action when clicking "Are you interested in quitting?" buttons',
-        (_type, mountRecreationalDrugsWithStore) => {
+        async (_type, mountRecreationalDrugsWithStore) => {
             const recreationalDrugsState = {
                 ...initialSocialHistoryState,
                 recreationalDrugs: {
@@ -326,13 +333,17 @@ describe('Recreational Drugs Integration', () => {
             const { store, wrapper } = mountRecreationalDrugsWithStore(
                 recreationalDrugsState
             );
-            const expectedActions = [];
+            const expectedActions: (Action & { payload: any })[] = [];
 
-            wrapper
-                .find(
-                    '.interested-in-quitting-buttons button[condition="Recreational Drugs"][title="Yes"]'
-                )
-                .simulate('click');
+            // const allButtons = await wrapper.findAllByRole('button');
+
+            // within(allButtons).getByText('Yes', ).click();
+            wrapper.getByText('Yes').click();
+
+            // .find(
+            //     '.interested-in-quitting-buttons button[condition="Recreational Drugs"][title="Yes"]'
+            // )
+            // .simulate('click');
             expectedActions.push({
                 type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_INTERESTED_IN_QUITTING,
                 payload: {
@@ -341,11 +352,12 @@ describe('Recreational Drugs Integration', () => {
             });
             expect(store.getActions()).toEqual(expectedActions);
 
-            wrapper
-                .find(
-                    '.interested-in-quitting-buttons button[condition="Recreational Drugs"][title="Maybe"]'
-                )
-                .simulate('click');
+            wrapper.getByText('Maybe').click();
+            // wrapper
+            //     .find(
+            //         '.interested-in-quitting-buttons button[condition="Recreational Drugs"][title="Maybe"]'
+            //     )
+            //     .simulate('click');
             expectedActions.push({
                 type: SOCIAL_HISTORY_ACTION.UPDATE_RECREATIONAL_DRUG_INTERESTED_IN_QUITTING,
                 payload: {
@@ -383,7 +395,7 @@ describe('Recreational Drugs Integration', () => {
             const { store, wrapper } = mountRecreationalDrugsWithStore(
                 recreationalDrugsState
             );
-            const expectedActions = [];
+            const expectedActions: (Action & { payload: any })[] = [];
 
             wrapper
                 .find(

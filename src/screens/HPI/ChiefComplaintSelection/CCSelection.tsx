@@ -1,21 +1,21 @@
 'use client';
 
-import { HPIPatientQueryParams } from 'constants/enums/hpi.patient.enums';
-import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { NotificationTypeEnum } from 'components/tools/Notification/Notification';
-import { apiClient } from 'constants/api';
-import { ResponseTypes } from 'constants/hpiEnums';
-import useQuery from 'hooks/useQuery';
-import { useSelectedPinnedChiefComplaints } from 'hooks/useSelectedChiefComplaints';
+import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
+import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
+import { NotificationTypeEnum } from '@components/tools/Notification/Notification';
+import { apiClient } from '@constants/api';
+import { ResponseTypes } from '@constants/hpiEnums';
+import useQuery from '@hooks/useQuery';
+import { useSelectedPinnedChiefComplaints } from '@hooks/useSelectedChiefComplaints';
 import {
     ChiefComplaintsProps,
     HpiHeadersProps,
-} from 'screens/EditNote/content/hpi/knowledgegraph/HPIContent';
-import { hpiHeaders as hpiHeadersApiClient } from 'screens/EditNote/content/hpi/knowledgegraph/API';
-import ChiefComplaintsButton from 'screens/EditNote/content/hpi/knowledgegraph/components/ChiefComplaintsButton';
-import ListText from 'screens/EditNote/content/hpi/knowledgegraph/components/responseComponents/ListText';
-import initialQuestions from 'screens/EditNote/content/patientview/constants/initialQuestions';
-import patientViewHeaders from 'screens/EditNote/content/patientview/constants/patientViewHeaders.json';
+} from '@screens/EditNote/content/hpi/knowledgegraph/HPIContent';
+import { hpiHeaders as hpiHeadersApiClient } from '@screens/EditNote/content/hpi/knowledgegraph/API';
+import ChiefComplaintsButton from '@screens/EditNote/content/hpi/knowledgegraph/components/ChiefComplaintsButton';
+import ListText from '@screens/EditNote/content/hpi/knowledgegraph/components/responseComponents/ListText';
+import initialQuestions from '@screens/EditNote/content/patientview/constants/initialQuestions';
+import patientViewHeaders from '@screens/EditNote/content/patientview/constants/patientViewHeaders.json';
 import React, { useEffect, useState } from 'react';
 import { ConnectedProps, connect, useDispatch } from 'react-redux';
 import {
@@ -43,10 +43,10 @@ import {
     UserSurveyState,
 } from '@redux/reducers/userViewReducer';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
-import getHPIFormData, { isResponseValid } from 'utils/getHPIFormData';
-import { getListTextResponseAsSingleString } from 'utils/getHPIText';
-import { getQuestionnairesFromText } from 'utils/getQuestionnairesFromText';
-import { loadChiefComplaintsData } from 'utils/loadKnowledgeGraphData';
+import getHPIFormData, { isResponseValid } from '@utils/getHPIFormData';
+import { getListTextResponseAsSingleString } from '@utils/getHPIText';
+import { getQuestionnairesFromText } from '@utils/getQuestionnairesFromText';
+import { loadChiefComplaintsData } from '@utils/loadKnowledgeGraphData';
 import { OnNextClickParams } from '../Hpi';
 import style from './CCSelection.module.scss';
 import { selectFamilyHistoryState } from '@redux/selectors/familyHistorySelectors';

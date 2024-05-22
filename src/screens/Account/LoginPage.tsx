@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 
 import { CenteredPaper } from '@components/Atoms/CenteredPaper';
-import useAuth from 'hooks/useAuth';
+import useAuth from '@hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import './Account.css';
 import FirstLoginForm from './FirstLoginForm';

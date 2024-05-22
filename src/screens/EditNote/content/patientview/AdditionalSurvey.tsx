@@ -1,6 +1,6 @@
-import { ProductType } from 'constants/enums/route.enums';
-import Input from 'components/Input/Input';
-import MobileDatePicker from 'components/Input/MobileDatePicker';
+import { ProductType } from '@constants/enums/route.enums';
+import Input from '@components/Input/Input';
+import MobileDatePicker from '@components/Input/MobileDatePicker';
 import React, { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import style from './AdditionalSurvey.module.scss';

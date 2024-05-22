@@ -1,45 +1,53 @@
 'use client';
 
-import React from 'react';
+import React, { MutableRefObject } from 'react';
 import style from '../../assets/scss/qrcode-print.module.scss';
 // import PrintTemplate from 'react-print';
 
 interface Props {
     children: React.JSX.Element[] | React.JSX.Element;
+    ref: MutableRefObject<HTMLDivElement>;
 }
 
-function StaffQRCodePage({ children }: Props) {
-    return (
-        <div
-            className={`${style.patientQRMain} flex align-center justify-center`}
-        >
-            {/* FIXME: react-print not compatible with NextJS */}
-            {/* <PrintTemplate> */}
-            <div className={`${style.patientQR}`}>
-                <h2>Thank you for choosing</h2>
+const StaffQRCodePage = React.forwardRef<HTMLDivElement, Props>(
+    (props, ref) => {
+        const { children } = props;
 
-                <img
-                    className={style.patientQR__logo}
-                    src={'/images/logo.svg'}
-                    alt='Cydoc'
-                />
+        return (
+            <div
+                className={`${style.patientQRMain} flex align-center justify-center`}
+                ref={ref}
+            >
+                {/* FIXME: react-print not compatible with NextJS */}
+                {/* <PrintTemplate> */}
+                <div className={`${style.patientQR}`}>
+                    <h2>Thank you for choosing</h2>
 
-                <h2>
-                    to streamline your clinic&rsquo;s <br /> appointments with
-                    AI.{' '}
-                </h2>
+                    <img
+                        className={style.patientQR__logo}
+                        src={'/images/logo.svg'}
+                        alt='Cydoc'
+                    />
 
-                <p>
-                    To start a Cydoc Smart Patient Intake Form&copy;,
-                    <br /> scan this QR code with a clinic-owned tablet
-                    <br /> before handing the tablet to the patient.
-                </p>
+                    <h2>
+                        to streamline your clinic&rsquo;s <br /> appointments
+                        with AI.
+                    </h2>
 
-                <div className={style.patientQR__image}>{children}</div>
+                    <p>
+                        To start a Cydoc Smart Patient Intake Form&copy;,
+                        <br /> scan this QR code with a clinic-owned tablet
+                        <br /> before handing the tablet to the patient.
+                    </p>
+
+                    <div className={style.patientQR__image}>{children}</div>
+                </div>
+                {/* </PrintTemplate> */}
             </div>
-            {/* </PrintTemplate> */}
-        </div>
-    );
-}
+        );
+    }
+);
+
+StaffQRCodePage.displayName = 'StaffQRCodePage';
 
 export default StaffQRCodePage;

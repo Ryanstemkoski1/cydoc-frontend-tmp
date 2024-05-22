@@ -1,5 +1,5 @@
-import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
-import { YesNoResponse } from 'constants/enums';
+import YesAndNo from '@components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from '@constants/enums';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {

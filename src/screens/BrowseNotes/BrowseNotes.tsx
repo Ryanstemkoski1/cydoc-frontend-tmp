@@ -1,14 +1,15 @@
 'use client';
 
-import Modal from 'components/Modal/Modal';
-import useAuth from 'hooks/useAuth';
-import useUser from 'hooks/useUser';
+import Modal from '@components/Modal/Modal';
+import useAuth from '@hooks/useAuth';
+import useUser from '@hooks/useUser';
 import { getAppointment } from 'modules/appointment-api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoadingStatus } from '@redux/actions/loadingStatusActions';
 import { selectLoadingStatus } from '@redux/reducers/loadingStatusReducer';
 import style from './BrowseNotes.module.scss';
+import { Box } from '@mui/material';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${lastName}, ${firstName} ${middleName}`;
@@ -198,14 +199,29 @@ const BrowseNotes = () => {
                         {renderUsers(users)}
                     </div>
                     <div className={`${style.notesBlock__reload}`}>
-                        <button onClick={loadPatientHistory}>
-                            <picture>
+                        <button
+                            onClick={loadPatientHistory}
+                            style={{ borderStyle: 'none' }}
+                        >
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    paddingY: '.5em',
+                                }}
+                            >
                                 <img
-                                    src={'/images/refresh.png'}
                                     alt='Refresh'
+                                    height={14}
+                                    width={14}
+                                    style={{
+                                        marginRight: '10px',
+                                        marginLeft: '7px',
+                                    }}
+                                    src={'/images/refresh.png'}
                                 />
-                            </picture>
-                            Check for new questionnaires
+                                Check for new questionnaires
+                            </Box>
                         </button>
                     </div>
                 </div>

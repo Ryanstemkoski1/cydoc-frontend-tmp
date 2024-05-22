@@ -1,6 +1,6 @@
-import { PART_OF_SPEECH_CORRECTION_MAP } from 'constants/hpiTextGenerationMapping';
-import { PatientPronouns } from 'constants/patientInformation';
-import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from 'constants/word-mappings';
+import { PART_OF_SPEECH_CORRECTION_MAP } from '@constants/hpiTextGenerationMapping';
+import { PatientPronouns } from '@constants/patientInformation';
+import { ABBREVIFY, MEDICAL_TERM_TRANSLATOR } from '@constants/word-mappings';
 /**
  * keys: ints for the question order
  * value: list of length 2 in which the first element is the fill in the blank

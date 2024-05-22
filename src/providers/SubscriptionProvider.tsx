@@ -1,6 +1,6 @@
 'use client';
 
-import useAuth from 'hooks/useAuth';
+import useAuth from '@hooks/useAuth';
 import React, {
     PropsWithChildren,
     useCallback,
@@ -8,7 +8,7 @@ import React, {
     useMemo,
     useState,
 } from 'react';
-import useUser from 'hooks/useUser';
+import useUser from '@hooks/useUser';
 import { getSubscriptionInfo } from 'modules/subscription-api';
 import { SubscriptionInfo } from '@cydoc-ai/types';
 

@@ -9,9 +9,9 @@ import {
     Select,
     SelectChangeEvent,
 } from '@mui/material';
-import useAuth from 'hooks/useAuth';
-import { useSubscription } from 'hooks/useSubscription';
-import useUser from 'hooks/useUser';
+import useAuth from '@hooks/useAuth';
+import { useSubscription } from '@hooks/useSubscription';
+import useUser from '@hooks/useUser';
 import { managerUpdateUser } from 'modules/user-api';
 import React, { useMemo, useState } from 'react';
 import invariant from 'tiny-invariant';

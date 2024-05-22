@@ -1,11 +1,11 @@
-import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
-import ConditionInput from 'components/tools/ConditionInput/ConditionInput';
-import constants from 'constants/constants.json';
-import diseaseSynonyms from 'constants/diseaseSynonyms';
-import { YesNoResponse } from 'constants/enums';
-import { ResponseTypes } from 'constants/hpiEnums';
-import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
-import { medicalMapping } from 'constants/word-mappings';
+import AddRowButton from '@components/tools/AddRowButton/AddRowButton';
+import ConditionInput from '@components/tools/ConditionInput/ConditionInput';
+import constants from '@constants/constants.json';
+import diseaseSynonyms from '@constants/diseaseSynonyms';
+import { YesNoResponse } from '@constants/enums';
+import { ResponseTypes } from '@constants/hpiEnums';
+import { standardizeDiseaseNames } from '@constants/standardizeDiseaseNames';
+import { medicalMapping } from '@constants/word-mappings';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {

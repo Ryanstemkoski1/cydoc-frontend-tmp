@@ -1,5 +1,5 @@
-import { PhysicalExamSchemaRow } from 'constants/PhysicalExam/physicalExamSchema';
-import { LRButtonState } from 'constants/enums';
+import { PhysicalExamSchemaRow } from '@constants/PhysicalExam/physicalExamSchema';
+import { LRButtonState } from '@constants/enums';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {

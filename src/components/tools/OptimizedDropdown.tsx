@@ -8,7 +8,7 @@ import {
 } from 'react-windowed-select';
 import Select, { createFilter, components } from 'react-select';
 import './OptimizedDropdown.scss';
-import { DropdownOption, OptionMapping } from '_processOptions';
+import { DropdownOption, OptionMapping } from '../../_processOptions';
 
 type OnAddItem = (
     value1: React.SyntheticEvent | null,

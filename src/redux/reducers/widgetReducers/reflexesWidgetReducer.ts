@@ -1,7 +1,7 @@
 import { REFLEXES_WIDGET_ACTION } from '@redux/actions/actionTypes';
 import { ReflexesWidgetActionTypes } from '@redux/actions/widgetActions/reflexesWidgetActions';
 import { v4 } from 'uuid';
-import { LeftRight } from 'constants/enums';
+import { LeftRight } from '@constants/enums';
 
 export interface ReflexesWidgetState {
     [id: string]: ReflexesWidgetItemState;

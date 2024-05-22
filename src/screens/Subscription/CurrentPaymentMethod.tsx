@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useSubscription } from 'hooks/useSubscription';
+import { useSubscription } from '@hooks/useSubscription';
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 

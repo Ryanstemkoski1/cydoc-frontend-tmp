@@ -1,6 +1,6 @@
-import Input from 'components/Input/Input';
-import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
-import { HpiStateProps, LabTestType, TimeOption } from 'constants/hpiEnums';
+import Input from '@components/Input/Input';
+import ToggleButton from '@components/tools/ToggleButton/ToggleButton';
+import { HpiStateProps, LabTestType, TimeOption } from '@constants/hpiEnums';
 import React from 'react';
 import { connect } from 'react-redux';
 import {

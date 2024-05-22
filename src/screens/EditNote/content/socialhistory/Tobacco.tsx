@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import tobaccoProducts, {
     TobaccoProduct,
-} from 'constants/SocialHistory/tobaccoProducts';
-import { SubstanceUsageResponse, YesNoMaybeResponse } from 'constants/enums';
+} from '@constants/SocialHistory/tobaccoProducts';
+import { SubstanceUsageResponse, YesNoMaybeResponse } from '@constants/enums';
 import React from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import {
@@ -14,9 +14,9 @@ import {
     updateTobaccoQuitYear,
     updateTobaccoTriedToQuit,
     updateTobaccoUsage,
-} from '@redux/actions/socialHistoryActions';
-import { CurrentNoteState } from '@redux/reducers';
-import { selectTobaccoState } from '@redux/selectors/socialHistorySelectors';
+} from '../../../../redux/actions/socialHistoryActions';
+import { CurrentNoteState } from '../../../../redux/reducers';
+import { selectTobaccoState } from '../../../../redux/selectors/socialHistorySelectors';
 import { Divider, Dropdown, Form, Grid, Input } from 'semantic-ui-react';
 import HistoryButtons from '@components/tools/ThreeButton/ThreeButtons';
 import '../familyhistory/FamilyHistory.css';
@@ -121,6 +121,7 @@ class Tobacco extends React.Component<Props, State> {
                     <Form.Field className='table-year-input'>
                         Quit Year
                         <Input
+                            data-testid='tobacco-quit-year-input'
                             type='number'
                             field='Quit Year'
                             onBlur={this.onYearChange}
@@ -231,6 +232,7 @@ class Tobacco extends React.Component<Props, State> {
                             <Form.Field>
                                 Packs/Day
                                 <Input
+                                    data-testid='tobacco-packs-input'
                                     type='string'
                                     field='Packs/Day'
                                     condition='Tobacco'
@@ -266,6 +268,7 @@ class Tobacco extends React.Component<Props, State> {
                                 Number of Years
                                 {/* TODO: require numerical value, type=number might not work on all browsers? */}
                                 <Input
+                                    data-testid='tobacco-years-input'
                                     type='number'
                                     field='Number of Years'
                                     condition='Tobacco'
@@ -294,6 +297,7 @@ class Tobacco extends React.Component<Props, State> {
                         <Grid.Column>
                             Products Used
                             <Dropdown
+                                data-testid='tobacco-products-dropdown'
                                 placeholder='Products Used'
                                 fluid
                                 multiple
@@ -359,6 +363,7 @@ class Tobacco extends React.Component<Props, State> {
                             <Grid.Row>
                                 <div className='condition-name'>Comments</div>
                                 <Form.TextArea
+                                    data-testid='tobacco-comments-input'
                                     inline
                                     className='condition-header'
                                     field={'Comments'}

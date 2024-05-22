@@ -3,12 +3,12 @@
 import React, { useCallback, useState } from 'react';
 import { Segment, Container, Modal, Button } from 'semantic-ui-react';
 import './Account.css';
-import useUser from 'hooks/useUser';
-import useAuth from 'hooks/useAuth';
+import useUser from '@hooks/useUser';
+import useAuth from '@hooks/useAuth';
 import { Loader } from 'semantic-ui-react';
 import { Formik, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import ModalHeader from 'components/Atoms/ModalHeader';
+import ModalHeader from '@components/Atoms/ModalHeader';
 import SignUpTextInput from './SignUpTextInput';
 import PasswordErrorMessages from './PasswordErrorMessage';
 import { Grid } from '@mui/material';

@@ -1,7 +1,6 @@
-import React from 'react';
+import { act } from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
-import { act } from 'react-dom/test-utils';
 import DiscussionPlan from '../DiscussionPlan';
 import DiscussionPlanMenu from '../DiscussionPlanMenu';
 import DiscussionPlanSurvey from '../DiscussionPlanSurvey';

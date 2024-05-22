@@ -6,7 +6,7 @@ import {
     BodyLocationLRItemType,
     options,
     BodyLocationType,
-} from 'constants/hpiEnums';
+} from '@constants/hpiEnums';
 import { CurrentNoteState } from '@redux/reducers';
 import {
     bodyLocationHandleToggle,
@@ -15,9 +15,9 @@ import {
     bodyLocationResponse,
 } from '@redux/actions/hpiActions';
 import { connect } from 'react-redux';
-import { LRButtonState } from 'constants/enums';
+import { LRButtonState } from '@constants/enums';
 import { selectHpiState } from '@redux/selectors/hpiSelectors';
-import LRButton from 'components/tools/LRButtonRedux';
+import LRButton from '@components/tools/LRButtonRedux';
 import { isBodyLocationLRItem } from '@redux/reducers/hpiReducer';
 import 'screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
 

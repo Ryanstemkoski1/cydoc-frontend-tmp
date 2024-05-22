@@ -13,7 +13,7 @@ import {
 } from '@redux/reducers/widgetReducers/murmurswidgetReducer';
 import { PulsesWidgetItemState } from '@redux/reducers/widgetReducers/pulsesWidgetReducer';
 import { ReflexesWidgetItemState } from '@redux/reducers/widgetReducers/reflexesWidgetReducer';
-import { LeftRight } from 'constants/enums';
+import { LeftRight } from '@constants/enums';
 import { CurrentNoteState } from '@redux/reducers';
 import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 import { ConnectedProps, connect } from 'react-redux';

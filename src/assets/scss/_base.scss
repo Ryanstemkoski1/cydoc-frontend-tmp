@@ -52,6 +52,7 @@ img {
     &__content {
         flex: auto;
     }
+    & > div {flex: auto}
 }
 
 .scrollbar {

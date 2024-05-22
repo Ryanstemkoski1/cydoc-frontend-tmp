@@ -1,5 +1,5 @@
-import Input from 'components/Input/Input';
-import { HpiStateProps } from 'constants/hpiEnums';
+import Input from '@components/Input/Input';
+import { HpiStateProps } from '@constants/hpiEnums';
 import 'screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
 import React from 'react';
 import { connect } from 'react-redux';

@@ -1,9 +1,9 @@
 'use client';
 import React, { memo } from 'react';
 import { Stack, Typography } from '@mui/material';
-import { useSubscription } from 'hooks/useSubscription';
+import { useSubscription } from '@hooks/useSubscription';
 import UpgradeSubscriptionButton from './UpgradeSubscriptionButton';
-import useAuth from 'hooks/useAuth';
+import useAuth from '@hooks/useAuth';
 
 export const SubscriptionBanner = memo(() => {
     const { isSignedIn } = useAuth();
@@ -24,7 +24,7 @@ export const SubscriptionBanner = memo(() => {
             flexDirection='row'
             justifyContent='center'
             p={1.2}
-            sx={{ backgroundColor }}
+            sx={{ backgroundColor, maxHeight: '3rem' }}
         >
             <Typography color='white'>
                 {isTrialExpired

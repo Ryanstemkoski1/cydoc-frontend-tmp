@@ -1,5 +1,5 @@
-import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { withDimensionsHook } from 'hooks/useDimensions';
+import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
+import { withDimensionsHook } from '@hooks/useDimensions';
 import React, { Component } from 'react';
 import Masonry from 'react-masonry-css';
 import { connect } from 'react-redux';

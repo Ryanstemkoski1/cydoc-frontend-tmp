@@ -1,12 +1,13 @@
 'use client';
 
-import useUser from 'hooks/useUser';
-import React, { useEffect, useState } from 'react';
+import useUser from '@hooks/useUser';
+import React, { useEffect, useRef, useState } from 'react';
 import QRCode from 'react-qr-code';
 import { toast } from 'react-toastify';
 import PatientQRCodePage from './PatientQRCodePage';
 import style from './QRCodePage.module.scss';
 import StaffQRCodePage from './StaffQRCodePage';
+import { useReactToPrint } from 'react-to-print';
 
 type QRCodeType = 'patient' | 'staff' | '';
 
@@ -18,19 +19,17 @@ function printDocument() {
 
 function QRCodePage() {
     const [showQRCodePage, setShowQRCodePage] = useState<QRCodeType>('');
+    const patientRef = useRef(null);
+    const staffRef = useRef(null);
+
     const { user } = useUser();
 
-    const handlePatientPrint = () => {
-        if (!user) return;
-        setShowQRCodePage('patient');
-        printDocument();
-    };
-
-    const handleStaffPrint = () => {
-        if (!user) return;
-        setShowQRCodePage('staff');
-        printDocument();
-    };
+    const handlePatientPrint = useReactToPrint({
+        content: () => patientRef.current,
+    });
+    const handleStaffPrint = useReactToPrint({
+        content: () => staffRef.current,
+    });
 
     const handleCopyLinkButtonClick = () => {
         if (!user) return;
@@ -214,13 +213,13 @@ function QRCodePage() {
                 </div>
             </div>
 
-            <div id='print-mount' className={style.QRCodePage__printWrapper}>
-                {showQRCodePage === 'patient' && (
-                    <PatientQRCodePage>{qrCode}</PatientQRCodePage>
-                )}
-                {showQRCodePage === 'staff' && (
-                    <StaffQRCodePage>{qrCode}</StaffQRCodePage>
-                )}
+            <div
+                id='print-mount'
+                className={style.QRCodePage__printWrapper}
+                style={{ display: 'none' }}
+            >
+                <PatientQRCodePage ref={patientRef}>{qrCode}</PatientQRCodePage>
+                <StaffQRCodePage ref={staffRef}>{qrCode}</StaffQRCodePage>
             </div>
         </>
     );

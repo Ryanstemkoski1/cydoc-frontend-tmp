@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
-import HistoryButtons from 'components/tools/ThreeButton/ThreeButtons';
-import drinkSizes, { DrinkSize } from 'constants/SocialHistory/drinkSizes';
-import drinkTypes, { DrinkType } from 'constants/SocialHistory/drinkTypes';
+import AddRowButton from '@components/tools/AddRowButton/AddRowButton';
+import HistoryButtons from '@components/tools/ThreeButton/ThreeButtons';
+import drinkSizes, { DrinkSize } from '@constants/SocialHistory/drinkSizes';
+import drinkTypes, { DrinkType } from '@constants/SocialHistory/drinkTypes';
 import {
     SubstanceUsageResponse,
     YesNoMaybeResponse,
     YesNoResponse,
-} from 'constants/enums';
+} from '@constants/enums';
 import _ from 'lodash';
 import React from 'react';
 import { ConnectedProps, connect } from 'react-redux';

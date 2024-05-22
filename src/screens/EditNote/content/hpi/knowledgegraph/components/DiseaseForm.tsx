@@ -1,5 +1,5 @@
-import Loader from 'components/tools/Loader/Loader';
-import { HpiStateProps } from 'constants/hpiEnums';
+import Loader from '@components/tools/Loader/Loader';
+import { HpiStateProps } from '@constants/hpiEnums';
 import React from 'react';
 import { connect } from 'react-redux';
 import { CurrentNoteState } from '@redux/reducers';

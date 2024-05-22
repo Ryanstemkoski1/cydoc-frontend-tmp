@@ -1,10 +1,10 @@
-import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
-import ConditionInput from 'components/tools/ConditionInput/ConditionInput';
-import GridContent from 'components/tools/GridContent/GridContent';
-import diseaseSynonyms from 'constants/diseaseSynonyms';
-import { YesNoResponse } from 'constants/enums';
-import { ResponseTypes } from 'constants/hpiEnums';
-import { standardizeDiseaseNames } from 'constants/standardizeDiseaseNames';
+import AddRowButton from '@components/tools/AddRowButton/AddRowButton';
+import ConditionInput from '@components/tools/ConditionInput/ConditionInput';
+import GridContent from '@components/tools/GridContent/GridContent';
+import diseaseSynonyms from '@constants/diseaseSynonyms';
+import { YesNoResponse } from '@constants/enums';
+import { ResponseTypes } from '@constants/hpiEnums';
+import { standardizeDiseaseNames } from '@constants/standardizeDiseaseNames';
 import React from 'react';
 import { connect } from 'react-redux';
 import {

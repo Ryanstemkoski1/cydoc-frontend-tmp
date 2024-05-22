@@ -3,7 +3,7 @@ import {
     DropdownOption,
     OptionMapping,
     getDiagnosesOptionMapping,
-} from '_processOptions';
+} from '../../_processOptions';
 import React, { useMemo, useState } from 'react';
 import Select, { components, createFilter } from 'react-select';
 import {

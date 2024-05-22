@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { graphClientURL } from 'constants/api';
+import { graphClientURL } from '@constants/api';
 
 // TODO - use this function on files where we fetch data from knowledge graph api for particular chiefcomplaint
 /**

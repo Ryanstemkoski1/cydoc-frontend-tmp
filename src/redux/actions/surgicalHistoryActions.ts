@@ -1,4 +1,4 @@
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import { SURGICAL_HISTORY_ACTION } from './actionTypes';
 
 interface HasSurgicalHistoryAction {

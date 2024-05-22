@@ -1,6 +1,6 @@
-import Input from 'components/Input/Input';
-import ToolTip from 'components/tools/ToolTip/Tooltip';
-import { HpiStateProps, NumberInput } from 'constants/hpiEnums';
+import Input from '@components/Input/Input';
+import ToolTip from '@components/tools/ToolTip/Tooltip';
+import { HpiStateProps, NumberInput } from '@constants/hpiEnums';
 import React from 'react';
 import { connect } from 'react-redux';
 import {

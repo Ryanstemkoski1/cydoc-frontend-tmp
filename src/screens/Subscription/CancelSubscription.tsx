@@ -2,9 +2,9 @@
 
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { CenteredPaper } from 'components/Atoms/CenteredPaper';
-import useAuth from 'hooks/useAuth';
-import useUser from 'hooks/useUser';
+import { CenteredPaper } from '@components/Atoms/CenteredPaper';
+import useAuth from '@hooks/useAuth';
+import useUser from '@hooks/useUser';
 import { log } from 'modules/logging';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';

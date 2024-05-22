@@ -1,4 +1,4 @@
-import { LeftRight } from 'constants/enums';
+import { LeftRight } from '@constants/enums';
 import React, { Component } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import {

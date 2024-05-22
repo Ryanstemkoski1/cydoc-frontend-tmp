@@ -1,4 +1,4 @@
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import { ROS_ACTION } from './actionTypes';
 
 export interface ToggleROSOptionAction {

@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import AddRowButton from 'components/tools/AddRowButton/AddRowButton';
-import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
-import HistoryButtons from 'components/tools/ThreeButton/ThreeButtons';
-import { DrugName, drugNames } from 'constants/SocialHistory/drugNames';
+import AddRowButton from '@components/tools/AddRowButton/AddRowButton';
+import RemoveButton from '@components/tools/RemoveButton/RemoveButton';
+import HistoryButtons from '@components/tools/ThreeButton/ThreeButtons';
+import { DrugName, drugNames } from '@constants/SocialHistory/drugNames';
 import modesOfDelivery, {
     ModeOfDelivery,
-} from 'constants/SocialHistory/modesOfDelivery';
+} from '@constants/SocialHistory/modesOfDelivery';
 import {
     SubstanceUsageResponse,
     YesNoMaybeResponse,
     YesNoResponse,
-} from 'constants/enums';
+} from '@constants/enums';
 import _ from 'lodash';
 import React from 'react';
 import { ConnectedProps, connect } from 'react-redux';
@@ -25,10 +25,10 @@ import {
     updateRecreationalDrugUsedModesOfDelivery,
     updateRecreationalDrugUsedName,
     updateRecreationalDrugUsedPerWeek,
-} from '@redux/actions/socialHistoryActions';
-import { CurrentNoteState } from '@redux/reducers';
-import { DrugUsage } from '@redux/reducers/socialHistoryReducer';
-import { selectRecreationalDrugsState } from '@redux/selectors/socialHistorySelectors';
+} from '../../../../redux/actions/socialHistoryActions';
+import { CurrentNoteState } from '../../../../redux/reducers';
+import { DrugUsage } from '../../../../redux/reducers/socialHistoryReducer';
+import { selectRecreationalDrugsState } from '../../../../redux/selectors/socialHistorySelectors';
 import {
     Button,
     Divider,

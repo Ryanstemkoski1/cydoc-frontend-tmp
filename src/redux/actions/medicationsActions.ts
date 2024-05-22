@@ -1,4 +1,4 @@
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import { MEDICATIONS_ACTION } from './actionTypes';
 
 interface UpdateDrugNameAction {

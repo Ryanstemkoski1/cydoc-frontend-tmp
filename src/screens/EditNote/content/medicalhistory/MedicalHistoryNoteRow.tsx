@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import Input from 'components/Input/Input';
-import RemoveButton from 'components/tools/RemoveButton/RemoveButton';
-import ToolTip from 'components/tools/ToolTip/Tooltip';
-import YesAndNo from 'components/tools/YesAndNo/YesAndNo';
-import { YesNoResponse } from 'constants/enums';
+import Input from '@components/Input/Input';
+import RemoveButton from '@components/tools/RemoveButton/RemoveButton';
+import ToolTip from '@components/tools/ToolTip/Tooltip';
+import YesAndNo from '@components/tools/YesAndNo/YesAndNo';
+import { YesNoResponse } from '@constants/enums';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {

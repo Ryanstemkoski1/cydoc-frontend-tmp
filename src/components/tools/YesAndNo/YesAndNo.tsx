@@ -1,6 +1,7 @@
-import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
+import ToggleButton from '@components/tools/ToggleButton/ToggleButton';
 import React from 'react';
 import style from './YesAndNo.module.scss';
+
 export default function YesAndNo({
     containerClasses = '',
     yesButtonClasses = '',

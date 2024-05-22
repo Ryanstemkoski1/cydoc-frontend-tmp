@@ -2,21 +2,21 @@
 
 import { ApiResponse, Institution } from '@cydoc-ai/types';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
-import { ChiefComplaintsEnum } from 'constants/enums/chiefComplaints.enums';
-import { HPIPatientQueryParams } from 'constants/enums/hpi.patient.enums';
+import { ChiefComplaintsEnum } from '@constants/enums/chiefComplaints.enums';
+import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
 import {
     Institution as InstitutionClass,
     InstitutionType,
 } from 'classes/institution.class';
-import CommonLayout from 'components/CommonLayout/CommonLayout';
-import CustomModal from 'components/CustomModal/CustomModal';
-import Stepper from 'components/Stepper/Stepper';
+import CommonLayout from '@components/CommonLayout/CommonLayout';
+import CustomModal from '@components/CustomModal/CustomModal';
+import Stepper from '@components/Stepper/Stepper';
 import Notification, {
     NotificationTypeEnum,
-} from 'components/tools/Notification/Notification';
-import ToggleButton from 'components/tools/ToggleButton/ToggleButton';
-import useQuery from 'hooks/useQuery';
-import useSelectedChiefComplaints from 'hooks/useSelectedChiefComplaints';
+} from '@components/tools/Notification/Notification';
+import ToggleButton from '@components/tools/ToggleButton/ToggleButton';
+import useQuery from '@hooks/useQuery';
+import useSelectedChiefComplaints from '@hooks/useSelectedChiefComplaints';
 import {
     InstitutionConfigResponse,
     getInstitution,
@@ -24,8 +24,8 @@ import {
     validateDiseaseForm,
 } from 'modules/institution-api';
 import { log } from 'modules/logging';
-import { hpiHeaders as knowledgeGraphAPI } from 'screens/EditNote/content/hpi/knowledgegraph/API';
-import initialQuestions from 'screens/EditNote/content/patientview/constants/initialQuestions';
+import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
+import initialQuestions from '@screens/EditNote/content/patientview/constants/initialQuestions';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
@@ -41,8 +41,8 @@ import {
 import { CurrentNoteState } from '@redux/reducers';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
-import { isResponseValid } from 'utils/getHPIFormData';
-import { loadChiefComplaintsData } from 'utils/loadKnowledgeGraphData';
+import { isResponseValid } from '@utils/getHPIFormData';
+import { loadChiefComplaintsData } from '@utils/loadKnowledgeGraphData';
 import CCSelection from './ChiefComplaintSelection/CCSelection';
 import style from './HPI.module.scss';
 import InitialSurveyHPI from './InitialSurvey/InitialSurvey';

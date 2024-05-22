@@ -10,7 +10,7 @@ import {
 import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
 import { PatientInformationState } from '@redux/reducers/patientInformationReducer';
 
-import { PatientPronouns } from 'constants/patientInformation';
+import { PatientPronouns } from '@constants/patientInformation';
 import './IdentityForm.css';
 
 interface DispatchProps {

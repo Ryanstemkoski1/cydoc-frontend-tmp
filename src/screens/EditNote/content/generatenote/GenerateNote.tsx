@@ -47,10 +47,10 @@ import ReviewOfSystemsNote from './notesections/ReviewOfSystemsNote';
 import SocialHistoryNote from './notesections/SocialHistoryNote';
 import SurgicalHistoryNote from './notesections/SurgicalHistoryNote';
 
-import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import { PatientPronouns } from 'constants/patientInformation';
+import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
+import { PatientPronouns } from '@constants/patientInformation';
 import 'screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
-import getHPIText, { HPIText } from 'utils/getHPIText';
+import getHPIText, { HPIText } from '@utils/getHPIText';
 import './GenerateNote.css';
 import PatientInfo from './PatientInfo';
 

@@ -1,16 +1,26 @@
-import Adapter from '@cfaester/enzyme-adapter-react-18';
-import Enzyme, { mount } from 'enzyme';
+// import Adapter from '@cfaester/enzyme-adapter-react-18';
+// import Enzyme, { mount } from 'enzyme';
 import React from 'react';
 import Tobacco from '../Tobacco';
 
 import tobaccoProducts from '../../../../../constants/SocialHistory/tobaccoProducts';
 import { SubstanceUsageResponse } from '../../../../../constants/enums';
 import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-import { SOCIAL_HISTORY_ACTION } from '@redux/actions/actionTypes';
-import { initialSocialHistoryState } from '@redux/reducers/socialHistoryReducer';
+import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
+import { SOCIAL_HISTORY_ACTION } from '../../../../../redux/actions/actionTypes';
+import {
+    SocialHistoryState,
+    initialSocialHistoryState,
+} from '../../../../../redux/reducers/socialHistoryReducer';
+import { describe, expect, test } from 'vitest';
+import {
+    RenderResult,
+    fireEvent,
+    queries,
+    render,
+} from '@testing-library/react';
 
-Enzyme.configure({ adapter: new Adapter() });
+// Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -23,7 +33,7 @@ const mountWithStore = (
     });
     return {
         store,
-        wrapper: mount(
+        wrapper: render(
             <Provider store={store}>
                 <Tobacco {...props} />
             </Provider>
@@ -31,13 +41,19 @@ const mountWithStore = (
     };
 };
 
-const mountDesktop = (socialHistoryState) =>
+const mountDesktop = (socialHistoryState?: SocialHistoryState) =>
     mountWithStore(socialHistoryState, { mobile: false });
-const mountMobile = (socialHistoryState) =>
+const mountMobile = (socialHistoryState?: SocialHistoryState) =>
     mountWithStore(socialHistoryState, { mobile: true });
 
 describe('Tobacco Integration', () => {
-    let cases = [
+    let cases: [
+        string,
+        (socialHistoryState?: SocialHistoryState) => {
+            store: MockStoreEnhanced<unknown, {}>;
+            wrapper: RenderResult<typeof queries, HTMLElement, HTMLElement>;
+        },
+    ][] = [
         ['Desktop', mountDesktop],
         ['Mobile', mountMobile],
     ];
@@ -108,12 +124,9 @@ describe('Tobacco Integration', () => {
             const { store, wrapper } = mountTobaccoWithStore(tobaccoState);
             const value = 2;
 
-            wrapper
-                .find('div[field="Packs/Day"][condition="Tobacco"] input')
-                .first()
-                .simulate('change', {
-                    target: { value },
-                });
+            fireEvent.change(wrapper.getByTestId('tobacco-packs-input'), {
+                target: { value },
+            });
 
             const expectedActions = [
                 {
@@ -141,12 +154,9 @@ describe('Tobacco Integration', () => {
             const { store, wrapper } = mountTobaccoWithStore(tobaccoState);
             const value = 2;
 
-            wrapper
-                .find('div[field="Number of Years"][condition="Tobacco"] input')
-                .first()
-                .simulate('change', {
-                    target: { value },
-                });
+            fireEvent.change(wrapper.getByTestId('tobacco-years-input'), {
+                target: { value },
+            });
 
             const expectedActions = [
                 {
@@ -173,19 +183,26 @@ describe('Tobacco Integration', () => {
 
             const { store, wrapper } = mountTobaccoWithStore(tobaccoState);
 
-            wrapper
-                .find('[aria-label="Tobacco-Products-Used-Dropdown"] input')
-                .first()
-                .simulate('click');
+            fireEvent.click(wrapper.getByTestId('tobacco-products-dropdown'));
 
-            wrapper
-                .find(
-                    '[aria-label="Tobacco-Products-Used-Dropdown"] [role="option"]'
-                )
-                .first()
-                .simulate('click', {
-                    nativeEvent: { stopImmediatePropagation: () => {} },
-                });
+            // wrapper
+            //     .find('[aria-label="Tobacco-Products-Used-Dropdown"] input')
+            //     .first()
+            //     .simulate('click');
+
+            fireEvent.click(wrapper.getByRole('option'), {
+                bubbles: false,
+                cancelable: true,
+            });
+
+            // wrapper
+            //     .find(
+            //         '[aria-label="Tobacco-Products-Used-Dropdown"] [role="option"]'
+            //     )
+            //     .first()
+            //     .simulate('click', {
+            //         nativeEvent: { stopImmediatePropagation: () => {} },
+            //     });
 
             const expectedActions = [
                 {
@@ -310,11 +327,16 @@ describe('Tobacco Integration', () => {
             const { store, wrapper } = mountTobaccoWithStore(tobaccoState);
             const value = 'new comments';
 
-            wrapper
-                .find('textarea[field="Comments"][condition="Tobacco"]')
-                .simulate('change', {
-                    target: { value },
-                });
+            fireEvent.change(wrapper.getByTestId('tobacco-comments-input'), {
+                target: { value },
+            });
+
+            // wrapper
+            //     .find('textarea[field="Comments"][condition="Tobacco"]')
+            //     .simulate('change', {
+            //         target: { value },
+            //     });
+
             const expectedActions = [
                 {
                     type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_COMMENTS,
@@ -341,11 +363,15 @@ describe('Tobacco Integration', () => {
             const { store, wrapper } = mountTobaccoWithStore(tobaccoState);
             const value = 2020;
 
-            wrapper
-                .find('div[field="Quit Year"][condition="Tobacco"] input')
-                .simulate('change', {
-                    target: { value },
-                });
+            fireEvent.change(wrapper.getByTestId('tobacco-quit-year-input'), {
+                target: { value },
+            });
+
+            // wrapper
+            //     .find('div[field="Quit Year"][condition="Tobacco"] input')
+            //     .simulate('change', {
+            //         target: { value },
+            //     });
             const expectedActions = [
                 {
                     type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_QUIT_YEAR,

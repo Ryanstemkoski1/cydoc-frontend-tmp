@@ -1,6 +1,6 @@
-import NavigationButton from 'components/tools/NavigationButton/NavigationButton';
-import exampleSchema from 'constants/PhysicalExam/exampleSchema.json';
-import { PhysicalExamSchemaItem } from 'constants/PhysicalExam/physicalExamSchema';
+import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
+import exampleSchema from '@constants/PhysicalExam/exampleSchema.json';
+import { PhysicalExamSchemaItem } from '@constants/PhysicalExam/physicalExamSchema';
 import React from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import { updateVitals } from '@redux/actions/physicalExamActions';

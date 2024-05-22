@@ -1,5 +1,5 @@
-import { YesNoResponse } from 'constants/enums';
-import { SelectOneInput } from 'constants/hpiEnums';
+import { YesNoResponse } from '@constants/enums';
+import { SelectOneInput } from '@constants/hpiEnums';
 import { InitialQuestionsState } from '@redux/reducers/userViewReducer';
 import { USER_VIEW_ACTION } from './actionTypes';
 import { UnknownAction } from 'redux';

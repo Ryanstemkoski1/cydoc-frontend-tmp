@@ -1,4 +1,4 @@
-import { WhenResponse, YesNoUncertainResponse } from 'constants/enums';
+import { WhenResponse, YesNoUncertainResponse } from '@constants/enums';
 import { PLAN_ACTION } from '@redux/actions/actionTypes';
 import { PlanActionTypes } from '@redux/actions/planActions';
 import { v4 } from 'uuid';

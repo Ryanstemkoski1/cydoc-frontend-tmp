@@ -5,11 +5,11 @@ import { Button, Container } from 'semantic-ui-react';
 import './ManagerDashboard.css';
 import { DbUser } from '@cydoc-ai/types';
 import { getInstitutionMembers } from '@modules/institution-api';
-import useUser from 'hooks/useUser';
+import useUser from '@hooks/useUser';
 import { log } from '@modules/logging';
 import MaterialTable, {
     useMaterialTableHeight,
-} from 'components/Molecules/MaterialTable';
+} from '@components/Molecules/MaterialTable';
 import { Delete, Edit } from '@mui/icons-material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { Column, Options } from '@material-table/core';
@@ -17,8 +17,8 @@ import InviteClinicianModal from './InviteClinicianModal';
 import { removeUser, resendClinicianInvite } from '@modules/user-api';
 import { Box, Stack } from '@mui/system';
 import { Grid } from '@mui/material';
-import useAuth from 'hooks/useAuth';
-import UserRoleSelector from 'components/Molecules/UserRoleSelector';
+import useAuth from '@hooks/useAuth';
+import UserRoleSelector from '@components/Molecules/UserRoleSelector';
 
 // manager dashboard view to view/add/remove doctor accounts
 const ManagerDashboard = () => {
