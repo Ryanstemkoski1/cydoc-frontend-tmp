@@ -5,7 +5,7 @@
     "license": "UNLICENSED",
     "scripts": {
         "dev": "next dev",
-        "build": "next build",
+        "build": "SENTRY_PROJECT=$SENTRY_PROJECT next build",
         "start": "next start",
         "build-semantic": "npm run ignore-semantic-changes && cd src/semantic && gulp build-css build-assets",
         "watch-semantic": "npm run ignore-semantic-changes && cd src/semantic && npm run build-semantic && gulp watch",
