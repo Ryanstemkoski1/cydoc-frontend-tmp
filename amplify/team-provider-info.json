@@ -46,6 +46,12 @@
           "deploymentBucketName": "amplify-cydocamplify-production-134616-deployment",
           "s3Key": "amplify-builds/CydocAmplifyAuthPreSignup-512f4544534f44724963-build.zip"
         }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "dd740ozijrdby",
+          "type": "cicd"
+        }
       }
     }
   },

@@ -24,6 +24,8 @@ We use amplify to provision auth (cognito), messaging templates (SNS) & auth rel
 
 You'll want a production (us-east-1) and a staging (us-east-2) profile in your aws cli config
 
+run `amplify configure` to switch profiles & ensure you're in the right region
+
 Be sure to switch to the correct environment before pushing any changes:
 `amplify env checkout dev` or `amplify env checkout production`
 
