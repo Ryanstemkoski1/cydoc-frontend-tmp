@@ -1,15 +1,11 @@
 import Input from '@components/Input/Input';
 import React from 'react';
-import { connect } from 'react-redux';
-import {
-    InitialSurveyAddDateOrPlaceActions,
-    initialSurveyAddDateOrPlace,
-} from '@redux/actions/userViewActions';
+import { ConnectedProps, connect } from 'react-redux';
+import { initialSurveyAddDateOrPlace } from '@redux/actions/userViewActions';
 import { CurrentNoteState } from '@redux/reducers';
-import { UserSurveyState } from '@redux/reducers/userViewReducer';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
 
-interface InputTextOrDateResponseProps {
+interface OwnProps {
     id: string;
     type: 'date' | 'text';
     defaultValue: string;
@@ -23,6 +19,10 @@ interface InputTextOrDateResponseProps {
 interface InputTextOrDateResponseState {
     value: string; // Define the value property
 }
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = ReduxProps & OwnProps;
 
 class InputTextOrDateResponse extends React.Component<
     Props,
@@ -107,30 +107,16 @@ class InputTextOrDateResponse extends React.Component<
     }
 }
 
-export interface InitialSurveyProps {
-    userSurveyState: UserSurveyState;
-}
-
-const mapStateToProps = (state: CurrentNoteState): InitialSurveyProps => {
+const mapStateToProps = (state: CurrentNoteState) => {
     return {
         userSurveyState: selectInitialPatientSurvey(state),
     };
 };
 
-interface DispatchProps {
-    initialSurveyAddDateOrPlace: (
-        uid: string,
-        response: string
-    ) => InitialSurveyAddDateOrPlaceActions;
-}
-
-type Props = InputTextOrDateResponseProps & InitialSurveyProps & DispatchProps;
-
 const mapDispatchToProps = {
     initialSurveyAddDateOrPlace,
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(InputTextOrDateResponse);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(InputTextOrDateResponse);

@@ -6,7 +6,6 @@
     },
     "extends": [
         "next",
-        "plugin:jest/recommended",
         "prettier",
         "plugin:@typescript-eslint/recommended",
         "plugin:prettier/recommended"
@@ -17,9 +16,12 @@
     },
     "ignorePatterns": [
         "**/*.js",
+        "**/*.mjs",
         "**/*.test.js",
+        "**/*.test.jsx",
         "**/*.test.ts",
         "**/*.test.tsx",
+        "**/__mocks__/**",
         "dist",
         ".next",
         "node_modules"
@@ -33,13 +35,7 @@
         "sourceType": "module",
         "project": "./tsconfig.json"
     },
-    "plugins": [
-        "react",
-        "react-hooks",
-        "prettier",
-        "jest",
-        "@typescript-eslint"
-    ],
+    "plugins": ["react", "react-hooks", "prettier", "@typescript-eslint"],
     "rules": {
         "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
         "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies

@@ -45,7 +45,7 @@ describe('DiscussionPlan Integration', () => {
             wrapper.update();
         });
 
-        expect(wrapper.html()).toMatchSnapshot();
+        expect(wrapper).toMatchSnapshot();
     });
 
     it('should render 4 form sections if length of conditions is greater than 0', async () => {

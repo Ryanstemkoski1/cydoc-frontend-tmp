@@ -1,4 +1,4 @@
-'use client' 
+'use client';
 
 import React, { Fragment, useState } from 'react';
 import {
@@ -413,13 +413,13 @@ const GenerateInpatientPlan = () => {
                 title='No'
                 onToggleButtonClick={() => toggleInfectionButtons(false)}
                 className='no-button'
-            ></ToggleButton>
+            />
             <ToggleButton
                 active={isYesInfectionPressed}
                 condition={conditionName}
                 title='Yes'
                 onToggleButtonClick={() => toggleInfectionButtons(true)}
-            ></ToggleButton>
+            />
         </Grid.Row>
     );
 

@@ -1,25 +1,22 @@
 import { withSentryConfig } from '@sentry/nextjs';
 
-// /** @type {import('next').NextConfig} */
-// const nextConfig = {
-//     output: 'export', // Outputs a Single-Page Application (SPA).
-// };
-
 export default withSentryConfig(
-    // nextConfig,
     {
-        // For all available options, see:
-        // https://github.com/getsentry/sentry-webpack-plugin#options
-
-        // Suppresses source map uploading logs during build
-        silent: true,
-        org: 'cydoc-corporation',
-        project: 'cydoc-frontend',
+        /* nextConfig */
+        experimental: {
+            instrumentationHook: true,
+        },
     },
     {
         // For all available options, see:
         // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
+        // Suppresses source map uploading logs during build
+        silent: true,
+        org: 'cydoc-corporation',
+        project: 'cydoc-frontend',
+        // Pass the auth token
+        authToken: process.env.SENTRY_AUTH_TOKEN,
         // Upload a larger set of source maps for prettier stack traces (increases build time)
         widenClientFileUpload: true,
 

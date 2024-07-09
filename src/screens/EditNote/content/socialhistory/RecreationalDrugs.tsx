@@ -594,6 +594,7 @@ class RecreationalDrugs extends React.Component<Props, State> {
                                     className='condition-header'
                                     field={'Comments'}
                                     condition='Recreational Drugs'
+                                    role='textbox'
                                     value={values.comments}
                                     onChange={(_, { value }) => {
                                         this.props.updateRecreationalDrugComments(

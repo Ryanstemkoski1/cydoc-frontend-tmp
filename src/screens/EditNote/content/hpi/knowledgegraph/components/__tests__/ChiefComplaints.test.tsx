@@ -4,6 +4,7 @@ import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { Provider } from 'react-redux';
 import { makeStore } from '../../../../../../../redux/store';
 import ChiefComplaintsButton from '../ChiefComplaintsButton';
+import { describe, test } from 'vitest';
 
 Enzyme.configure({ adapter: new Adapter() });
 

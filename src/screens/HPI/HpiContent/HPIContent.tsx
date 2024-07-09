@@ -31,6 +31,7 @@ import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistor
 import { NotificationTypeEnum } from '@components/tools/Notification/Notification';
 import useQuery from '@hooks/useQuery';
 import { ReadonlyURLSearchParams } from 'next/navigation';
+import { log } from '@modules/logging';
 
 interface OwnProps {
     notification: {
@@ -134,7 +135,6 @@ class HPIContent extends React.Component<Props, State> {
                 institution_id,
             })
             .then(() => {
-                localStorage.setItem('HPI_FORM_SUBMITTED', '1');
                 let url = `/submission-successful?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
 
                 if (clinician_id) {
@@ -323,6 +323,11 @@ function NextSubmitButton({
     const nextClick = useCallback(() => {
         if (shouldShowNextButton) {
             onContinue();
+        } else if (query === null) {
+            log(`[HPI Content] submitting null query`, {
+                query,
+                location: window.location,
+            });
         } else {
             onSubmit(query);
         }

@@ -1,12 +1,7 @@
 import axios from 'axios';
-import { ActiveItemProps } from '@components/navigation/NavMenu';
 import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
 import { NotificationTypeEnum } from '@components/tools/Notification/Notification';
 import { ResponseTypes } from '@constants/hpiEnums';
-import {
-    ChiefComplaintsProps,
-    HpiHeadersProps,
-} from '@screens/EditNote/content/hpi/knowledgegraph/HPIContent';
 import ChiefComplaintsButton from '@screens/EditNote/content/hpi/knowledgegraph/components/ChiefComplaintsButton';
 import InputTextOrDateResponse from '@screens/EditNote/content/patientview/InputTextOrDateResponse';
 import SurveyYesNoResponse from '@screens/EditNote/content/patientview/SurveyYesNoResponse';
@@ -25,12 +20,10 @@ import {
     processSurveyGraph,
 } from '@redux/actions/userViewActions';
 import { CurrentNoteState } from '@redux/reducers';
-import { AdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 import { isSelectOneResponse } from '@redux/reducers/hpiReducer';
 import {
     InitialQuestionsState,
     isChiefComplaintsResponse,
-    UserSurveyState,
 } from '@redux/reducers/userViewReducer';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
@@ -38,13 +31,13 @@ import { Search } from 'semantic-ui-react';
 import style from './PreHPI.module.scss';
 import { setChiefComplaint } from '@redux/actions/chiefComplaintsActions';
 
-interface InitialSurveyState {
+interface State {
     error: boolean;
     searchVal: string;
     message: string;
 }
 
-interface InitialSurveyComponentProps {
+interface OwnProps {
     continue: (e: any) => void;
     onPreviousClick: () => void;
     notification: {
@@ -53,26 +46,11 @@ interface InitialSurveyComponentProps {
     };
 }
 
-export interface InitialSurveyProps {
-    userSurveyState: UserSurveyState;
-}
-
-export interface AdditionalSurveyProps {
-    additionalSurvey: AdditionalSurvey;
-}
-
-type OwnProps = HpiHeadersProps &
-    InitialSurveyComponentProps &
-    InitialSurveyProps &
-    HpiHeadersProps &
-    ChiefComplaintsProps &
-    AdditionalSurveyProps;
-
 type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = ReduxProps & OwnProps;
 
-class PreHPI extends React.Component<Props, InitialSurveyState> {
+class PreHPI extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -273,13 +251,7 @@ class PreHPI extends React.Component<Props, InitialSurveyState> {
     }
 }
 
-const mapStateToProps = (
-    state: CurrentNoteState
-): InitialSurveyProps &
-    HpiHeadersProps &
-    ChiefComplaintsProps &
-    ActiveItemProps &
-    AdditionalSurveyProps => {
+const mapStateToProps = (state: CurrentNoteState) => {
     return {
         userSurveyState: selectInitialPatientSurvey(state),
         hpiHeaders: state.hpiHeaders,

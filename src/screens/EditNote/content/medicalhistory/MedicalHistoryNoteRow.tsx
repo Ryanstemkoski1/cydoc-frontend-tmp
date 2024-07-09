@@ -5,7 +5,7 @@ import ToolTip from '@components/tools/ToolTip/Tooltip';
 import YesAndNo from '@components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from '@constants/enums';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import {
     toggleOption,
     updateComments,
@@ -14,10 +14,6 @@ import {
     updateStartYear,
 } from '@redux/actions/medicalHistoryActions';
 import { CurrentNoteState } from '@redux/reducers';
-import {
-    MedicalHistoryItem,
-    MedicalHistoryState,
-} from '@redux/reducers/medicalHistoryReducer';
 import {
     selectMedicalHistoryItem,
     selectMedicalHistoryState,
@@ -29,59 +25,45 @@ import style from './MedicalHistoryNoteRow.module.scss';
 
 //Component for a row the Medical History GridContent
 class MedicalHistoryNoteRow extends Component<Props> {
-    findIndex = (_event: FindIndex, data: TextAreaProps) => {
-        let index = '';
-        Object.keys(this.props.medicalHistory).forEach((idx: string) => {
-            if (
-                this.props.medicalHistory[idx]['condition'] === data.condition
-            ) {
-                index = idx;
-            }
-        });
-        return index;
-    };
-
     handleOnsetChange = (
         event: React.FormEvent<HTMLTextAreaElement>,
         data: TextAreaProps
     ) => {
-        const index = this.findIndex(event, data);
         const value = (event.target as HTMLTextAreaElement).value;
-        this.props.updateStartYear(index, parseInt(value));
+        this.props.updateStartYear(this.props.index, parseInt(value));
     };
 
     handleEndYearChange = (
         event: React.FormEvent<HTMLTextAreaElement>,
         data: TextAreaProps
     ) => {
-        const index = this.findIndex(event, data);
         const value = (event.target as HTMLTextAreaElement).value;
-        this.props.updateEndYear(index, parseInt(value));
+        this.props.updateEndYear(this.props.index, parseInt(value));
     };
 
     handleConditionToggleButtonClick = (
         event: React.MouseEvent,
         data: ButtonProps
     ) => {
-        const index = this.findIndex(event, data);
-        this.props.toggleOption(index, data.title.toUpperCase());
+        this.props.toggleOption(this.props.index, data.title.toUpperCase());
     };
 
     handleResolvedToggleButtonClick = (
         event: React.MouseEvent,
         data: ButtonProps
     ) => {
-        const index = this.findIndex(event, data);
-        this.props.updateConditionResolved(index, data.title.toUpperCase());
+        this.props.updateConditionResolved(
+            this.props.index,
+            data.title.toUpperCase()
+        );
     };
 
     handleCommentsChange = (
         event: React.FormEvent<HTMLTextAreaElement>,
         data: TextAreaProps
     ) => {
-        const index = this.findIndex(event, data);
         const value = (event.target as HTMLTextAreaElement).value;
-        this.props.updateComments(index, value);
+        this.props.updateComments(this.props.index, value);
     };
 
     render = () => {
@@ -302,39 +284,14 @@ class MedicalHistoryNoteRow extends Component<Props> {
     };
 }
 
-interface RowProps {
-    conditionInput: JSX.Element;
-    isPreview?: boolean;
-    currentYear: number;
-    index: keyof MedicalHistoryState;
-    hide?: boolean;
-    dontShowOptions?: boolean;
-}
+type ReduxProps = ConnectedProps<typeof connector>;
 
-interface MedicalHistoryProps {
-    medicalHistory: MedicalHistoryState;
-    medicalHistoryItem: MedicalHistoryItem;
-}
-
-interface DispatchProps {
-    toggleOption: (index: string, optionSelected: YesNoResponse) => void;
-    updateStartYear: (index: string, newStartYear: number) => void;
-    updateEndYear: (index: string, newEndYear: number) => void;
-    updateComments: (index: string, newComments: string) => void;
-    updateConditionResolved: (
-        index: string,
-        optionSelected: YesNoResponse
-    ) => void;
-}
+type Props = OwnProps & ReduxProps;
 
 type OwnProps = {
     index: string;
     deleteRow: (index: string) => void;
 };
-
-type FindIndex = React.MouseEvent | React.FormEvent<HTMLTextAreaElement>;
-
-type Props = MedicalHistoryProps & RowProps & OwnProps & DispatchProps;
 
 const mapDispatchToProps = {
     toggleOption,
@@ -344,17 +301,12 @@ const mapDispatchToProps = {
     updateConditionResolved,
 };
 
-const mapStateToProps = (
-    state: CurrentNoteState,
-    ownProps: OwnProps
-): MedicalHistoryProps => {
+const mapStateToProps = (state: CurrentNoteState, ownProps: OwnProps) => {
     return {
         medicalHistory: selectMedicalHistoryState(state),
         medicalHistoryItem: selectMedicalHistoryItem(state, ownProps.index),
     };
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(MedicalHistoryNoteRow);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export default connector(MedicalHistoryNoteRow);

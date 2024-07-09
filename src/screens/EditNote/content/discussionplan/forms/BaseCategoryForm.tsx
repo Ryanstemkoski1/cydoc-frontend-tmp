@@ -14,7 +14,7 @@ import medications from '@constants/medications';
 import procedures from '@constants/procedures';
 import registrationConstants from '@constants/registration-constants.json';
 import _ from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { MouseEventHandler, useEffect, useState } from 'react';
 import { Accordion, Grid, Header, Icon } from 'semantic-ui-react';
 import {
     ConditionCategoryKey,
@@ -57,7 +57,7 @@ interface BaseCategoryFormProps<T> {
         gridColumn: CategoryFormComponent<T>;
         gridHeaders: React.FC;
     };
-    addRow: EventHandler;
+    addRow: MouseEventHandler<HTMLButtonElement>;
 }
 
 const specialties = getOptionMapping(registrationConstants.specialties);

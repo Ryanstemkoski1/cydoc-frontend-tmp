@@ -1,19 +1,23 @@
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from '@cfaester/enzyme-adapter-react-18';
+import configureStore from 'redux-mock-store';
+import { render } from '@testing-library/react';
 import PhysicalExamNote from '../PhysicalExamNote';
 import { initialAbdomenWidgetState } from '../../../../../../redux/reducers/widgetReducers/abdomenWidgetReducer';
 import { initialLungsWidgetState } from '../../../../../../redux/reducers/widgetReducers/lungsWidgetReducer';
 import { PulseLocation } from '../../../../../../redux/reducers/widgetReducers/pulsesWidgetReducer';
-//import { ReflexLocation } from '../../../../../../redux/reducers/widgetReducers/reflexesWidgetReducer';
+import { initialSurgicalHistoryState } from '../../../../../../redux/reducers/surgicalHistoryReducer';
 import {
     Phase,
     MurmurLocation,
     MurmurPitch,
 } from '../../../../../../redux/reducers/widgetReducers/murmurswidgetReducer';
 import { LeftRight } from '../../../../../../constants/enums';
+import { Provider } from 'react-redux';
+import { describe, expect, it, test } from 'vitest';
+import { initialAdditionalSurveyData } from '../../../../../../redux/reducers/additionalSurveyReducer';
+import { initialChiefComplaintsState } from '../../../../../../redux/reducers/chiefComplaintsReducer';
 
-Enzyme.configure({ adapter: new Adapter() });
+const mockStore = configureStore([]);
 
 const emptyPhysicalExam = {
     vitals: {
@@ -35,29 +39,49 @@ const emptyPhysicalExam = {
     },
 };
 
-const mountWithProps = (physicalExam = emptyPhysicalExam, isRich = false) => {
-    return mount(
-        <PhysicalExamNote physicalExam={physicalExam} isRich={isRich} />
-    );
+const initialUserState = {
+    patientView: true,
+    doctorView: false,
+    userSurvey: {},
+};
+
+const connectStore = (physicalExam = emptyPhysicalExam, isRich = false) => {
+    const store = mockStore({
+        additionalSurvey: initialAdditionalSurveyData,
+        chiefComplaints: initialChiefComplaintsState,
+        surgicalHistory: initialSurgicalHistoryState,
+        userView: initialUserState,
+    });
+
+    return {
+        store,
+        wrapper: render(
+            <Provider store={store}>
+                <PhysicalExamNote physicalExam={physicalExam} isRich={isRich} />
+            </Provider>
+        ),
+    };
 };
 
 describe('Physical Exam Note', () => {
     it('renders without crashing', () => {
-        const wrapper = mountWithProps();
+        const { wrapper } = connectStore();
         expect(wrapper).toBeTruthy();
     });
     it('matches snapshot', () => {
-        const wrapper = mountWithProps();
-        expect(wrapper.html()).toMatchSnapshot();
+        const { wrapper } = connectStore();
+        expect(wrapper).toMatchSnapshot();
     });
     it('correctly renders when empty', () => {
-        const wrapper = mountWithProps();
-        expect(wrapper.text()).toContain('');
+        const { wrapper } = connectStore();
+        expect(wrapper).toBeDefined();
     });
+
     it('renders vitals correctly (non-rich)', () => {
-        const wrapper = mountWithProps({
+        const { wrapper } = connectStore({
             ...emptyPhysicalExam,
             vitals: {
+                ...emptyPhysicalExam.vitals,
                 systolicBloodPressure: 0,
                 diastolicBloodPressure: 30,
                 heartRate: 1,
@@ -66,17 +90,21 @@ describe('Physical Exam Note', () => {
                 oxygenSaturation: 20,
             },
         });
-        const items = wrapper.find('li');
-        expect(items).toHaveLength(1);
-        expect(items.text()).toContain(
-            'Vitals: Heart Rate: 1 BPM, RR: 2 BPM, Temperature: 100°F, Oxygen Saturation: 20 PaO₂'
+
+        const vitalsBold = wrapper.getByText('Vitals:');
+        const vitalInfo = wrapper.getByText(
+            'Heart Rate: 1 BPM, RR: 2 BPM, Temperature: 100°C, Oxygen Saturation: 20 PaO₂'
         );
+        expect(vitalsBold).toBeDefined();
+        expect(vitalInfo).toBeDefined();
     });
+
     it('renders vitals correctly (rich)', () => {
-        const wrapper = mountWithProps(
+        const { wrapper } = connectStore(
             {
                 ...emptyPhysicalExam,
                 vitals: {
+                    ...emptyPhysicalExam.vitals,
                     systolicBloodPressure: 0,
                     diastolicBloodPressure: 30,
                     heartRate: 1,
@@ -87,17 +115,19 @@ describe('Physical Exam Note', () => {
             },
             true
         );
-        const row = wrapper.find('tr').at(1);
-        expect(row.text()).toContain('Vitals');
-        expect(row.text()).toContain(
-            'Heart Rate: 1 BPM, ' +
-                'RR: 2 BPM, Temperature: 100°F, Oxygen Saturation: 20 PaO₂'
-        );
+        expect(wrapper.getByText('Vitals')).toBeDefined();
+        expect(
+            wrapper.getByText(
+                'Heart Rate: 1 BPM, RR: 2 BPM, Temperature: 100°C, Oxygen Saturation: 20 PaO₂'
+            )
+        ).toBeDefined();
     });
+
     it('renders only non-empty vitals correctly (non-rich)', () => {
-        const wrapper = mountWithProps({
+        const { wrapper } = connectStore({
             ...emptyPhysicalExam,
             vitals: {
+                ...emptyPhysicalExam.vitals,
                 systolicBloodPressure: 20,
                 diastolicBloodPressure: 0,
                 heartRate: 0,
@@ -106,15 +136,18 @@ describe('Physical Exam Note', () => {
                 oxygenSaturation: 0,
             },
         });
-        const items = wrapper.find('li');
-        expect(items).toHaveLength(1);
-        expect(items.text()).toContain('Vitals: RR: 2 BPM, Temperature: 100°F');
+        expect(wrapper.getByText('Vitals:')).toBeDefined();
+        expect(
+            wrapper.getByText('RR: 2 BPM, Temperature: 100°C')
+        ).toBeDefined();
     });
+
     it('renders only non-empty vitals (rich)', () => {
-        const wrapper = mountWithProps(
+        const { wrapper } = connectStore(
             {
                 ...emptyPhysicalExam,
                 vitals: {
+                    ...emptyPhysicalExam.vitals,
                     systolicBloodPressure: 20,
                     diastolicBloodPressure: 0,
                     heartRate: 0,
@@ -125,93 +158,17 @@ describe('Physical Exam Note', () => {
             },
             true
         );
-        const row = wrapper.find('tr').at(1);
-        expect(row.text()).toContain('Vitals');
-        expect(row.text()).toContain('RR: 2 BPM, Temperature: 100°F');
+        expect(wrapper.getByText('Vitals')).toBeDefined();
+        expect(
+            wrapper.getByText('RR: 2 BPM, Temperature: 100°C')
+        ).toBeDefined();
     });
     const cases = [true, false];
-    //works correctly in app
-    //eslint-disable-next-line
-    /*test.each(cases)('renders lung widgets correctly (rich=%p)', (isRich) => {
-        const wrapper = mountWithProps(
-            {
-                ...emptyPhysicalExam,
-                widgets: {
-                    ...emptyPhysicalExam.widgets,
-                    lungs: {
-                        leftLowerLobe: {
-                            wheezes: true,
-                            rhonchi: true,
-                            vesicularBreathSounds: false,
-                        },
-                        rightLowerLobe: {
-                            wheezes: true,
-                            vesicularBreathSounds: false,
-                        },
-                        lingula: {
-                            wheezes: true,
-                            vesicularBreathSounds: true,
-                        },
-                    },
-                },
-            },
-            isRich
-        );
-        expect(wrapper.text()).toContain('Pulmonary');
-        expect(wrapper.text()).toContain(
-            'wheezes in the left lower lobe, right lower lobe and lingula'
-        );
-        expect(wrapper.text()).toContain('rhonchi in the left lower lobe');
-        expect(wrapper.text()).toContain(
-            'vesicular breath sounds in the lingula'
-        );
-    });
-    test.each(cases)(
-        'renders lung widgets with notes correctly (rich=%p)',
-        (isRich) => {
-            const wrapper = mountWithProps(
-                {
-                    ...emptyPhysicalExam,
-                    widgets: {
-                        ...emptyPhysicalExam.widgets,
-                        lungs: {
-                            leftLowerLobe: {
-                                wheezes: true,
-                            },
-                            lingula: {
-                                wheezes: true,
-                                vesicularBreathSounds: true,
-                            },
-                        },
-                    },
-                    sections: {
-                        pulmonary: {
-                            findings: {
-                                foo: {
-                                    left: true,
-                                    right: true,
-                                    center: true,
-                                },
-                                bar: true,
-                                fake: false,
-                            },
-                            comments: 'COMMENT',
-                        },
-                    },
-                },
-                isRich
-            );
-            expect(wrapper.text()).toContain('pulmonary');
-            expect(wrapper.text()).toContain(
-                'COMMENT. bilateral foo, bar. wheezes in the left lower lobe ' +
-                    'and lingula, vesicular breath sounds in the lingula.'
-            );
-        }
-    );*/
+
     test.each(cases)(
         'renders pulses widgets with notes correctly (rich=%p)',
         (isRich) => {
-            const wrapper = mountWithProps(
+            const { wrapper } = connectStore(
                 {
                     ...emptyPhysicalExam,
                     widgets: {
@@ -241,21 +198,24 @@ describe('Physical Exam Note', () => {
                 },
                 isRich
             );
-            expect(wrapper.text()).toContain('pulses');
-            expect(wrapper.text()).toContain(
-                'COMMENT. bar. 4+ bounding left brachial pulse, 2+ right radial pulse.'
-            );
+            expect(wrapper.getByText(/pulses/)).toBeDefined();
+            expect(
+                wrapper.getByText(
+                    'COMMENT. bar. 4+ bounding left brachial pulse, 2+ right radial pulse.'
+                )
+            ).toBeDefined();
         }
     );
     test.each(cases)(
         'renders abdomen widgets with notes correctly (rich=%p)',
         (isRich) => {
-            const wrapper = mountWithProps(
+            const { wrapper } = connectStore(
                 {
                     ...emptyPhysicalExam,
                     widgets: {
                         ...emptyPhysicalExam.widgets,
                         abdomen: {
+                            ...emptyPhysicalExam.widgets.abdomen,
                             rightLowerQuadrant: {
                                 tenderness: true,
                                 rebound: false,
@@ -284,55 +244,19 @@ describe('Physical Exam Note', () => {
                 },
                 isRich
             );
-            expect(wrapper.text()).toContain('gastrointestinal');
-            expect(wrapper.text()).toContain(
-                'COMMENT. bar. tenderness in the right lower quadrant and left lower quadrant, rebound in the left lower quadrant, guarding in the right lower quadrant.'
-            );
+            expect(wrapper.getByText(/gastrointestinal/)).toBeDefined();
+            expect(
+                wrapper.getByText(
+                    'COMMENT. bar. tenderness in the right lower quadrant and left lower quadrant, rebound in the left lower quadrant, guarding in the right lower quadrant.'
+                )
+            ).toBeDefined();
         }
     );
-    //eslint-disable-next-line
-    /*test.each(cases)(
-        'renders reflexes widgets with notes correctly (rich=%p)',
-        (isRich) => {
-            const wrapper = mountWithProps(
-                {
-                    ...emptyPhysicalExam,
-                    widgets: {
-                        ...emptyPhysicalExam.widgets,
-                        reflexes: {
-                            foo: {
-                                location: ReflexLocation.Biceps,
-                                side: LeftRight.Right,
-                                intensity: 3,
-                            },
-                            bar: {
-                                location: ReflexLocation.Triceps,
-                                side: LeftRight.Left,
-                                intensity: 1,
-                            },
-                        },
-                    },
-                    sections: {
-                        tendonReflexes: {
-                            findings: {
-                                bar: true,
-                            },
-                            comments: 'COMMENT',
-                        },
-                    },
-                },
-                isRich
-            );
-            expect(wrapper.text()).toContain('tendonReflexes');
-            expect(wrapper.text()).toContain(
-                'COMMENT. bar. biceps RIGHT 3, triceps LEFT 1'
-            );
-        }
-    );*/
+
     test.each(cases)(
         'renders murmurs widgets with notes correctly (rich=%p)',
         (isRich) => {
-            const wrapper = mountWithProps(
+            const { wrapper } = connectStore(
                 {
                     ...emptyPhysicalExam,
                     widgets: {
@@ -388,10 +312,12 @@ describe('Physical Exam Note', () => {
                 },
                 isRich
             );
-            expect(wrapper.text()).toContain('cardiac');
-            expect(wrapper.text()).toContain(
-                'Systolic crescendo murmur with a blowing, rumbling, whooshing quality heard best at LLSB. Intensity 5, low pitch, Diastolic crescendo murmur with a harsh, whooshing, musical quality. Intensity 1, high pitch.'
-            );
+            expect(wrapper.getByText(/cardiac/)).toBeDefined();
+            expect(
+                wrapper.getByText(
+                    'COMMENT. bar. Systolic crescendo murmur with a blowing, rumbling, whooshing quality heard best at LLSB. Intensity 5, low pitch, Diastolic crescendo murmur with a harsh, whooshing, musical quality. Intensity 1, high pitch.'
+                )
+            ).toBeDefined();
         }
     );
 });

@@ -1,3 +1,4 @@
+@import './variables.scss';
 * {
     margin: 0;
     padding: 0;
@@ -10,7 +11,7 @@ body {
     min-height: 100%;
 }
 body {
-    color: $color-black;
+    color: $color-black !important;
     font-size: $font-size-base;
     line-height: $line-height-base;
     background-color: $color-light;

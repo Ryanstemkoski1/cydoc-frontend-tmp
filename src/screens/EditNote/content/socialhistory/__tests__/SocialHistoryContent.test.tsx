@@ -1,8 +1,6 @@
 import React from 'react';
-// import Enzyme, { mount } from 'enzyme';
-// import Adapter from '@cfaester/enzyme-adapter-react-18';
 import { describe, expect, test } from 'vitest';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import SocialHistoryContent from '../SocialHistoryContent';
 
 import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
@@ -12,8 +10,6 @@ import {
     SocialHistoryState,
     initialSocialHistoryState,
 } from '../../../../../redux/reducers/socialHistoryReducer';
-
-// Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -62,12 +58,15 @@ describe('Social History Integration', () => {
         (_type, mountSocialHistoryWithStore) => {
             const { store, wrapper } = mountSocialHistoryWithStore();
             const value = 'new living situation';
-            wrapper
-                .find('textarea[field="Living Situation"]')
-                .first()
-                .simulate('change', {
-                    target: { value },
-                });
+
+            const input = wrapper.container.querySelector(
+                'textarea[field="Living Situation"]'
+            ) as HTMLTextAreaElement;
+
+            fireEvent.change(input, {
+                target: { value },
+            });
+
             const expectedActions = [
                 {
                     type: SOCIAL_HISTORY_ACTION.UPDATE_LIVING_SITUATION,
@@ -85,12 +84,15 @@ describe('Social History Integration', () => {
         (_type, mountSocialHistoryWithStore) => {
             const { store, wrapper } = mountSocialHistoryWithStore();
             const value = 'new employment';
-            wrapper
-                .find('textarea[field="Employment"]')
-                .first()
-                .simulate('change', {
-                    target: { value },
-                });
+
+            const input = wrapper.container.querySelector(
+                'textarea[field="Employment"]'
+            ) as HTMLTextAreaElement;
+
+            fireEvent.change(input, {
+                target: { value },
+            });
+
             const expectedActions = [
                 {
                     type: SOCIAL_HISTORY_ACTION.UPDATE_EMPLOYMENT,
@@ -108,9 +110,15 @@ describe('Social History Integration', () => {
         (_type, mountSocialHistoryWithStore) => {
             const { store, wrapper } = mountSocialHistoryWithStore();
             const value = 'new diet';
-            wrapper.find('textarea[field="Diet"]').first().simulate('change', {
+
+            const input = wrapper.container.querySelector(
+                'textarea[field="Diet"]'
+            ) as HTMLTextAreaElement;
+
+            fireEvent.change(input, {
                 target: { value },
             });
+
             const expectedActions = [
                 {
                     type: SOCIAL_HISTORY_ACTION.UPDATE_DIET,
@@ -128,12 +136,15 @@ describe('Social History Integration', () => {
         (_type, mountSocialHistoryWithStore) => {
             const { store, wrapper } = mountSocialHistoryWithStore();
             const value = 'new exercise';
-            wrapper
-                .find('textarea[field="Exercise"]')
-                .first()
-                .simulate('change', {
-                    target: { value },
-                });
+
+            const input = wrapper.container.querySelector(
+                'textarea[field="Exercise"]'
+            ) as HTMLTextAreaElement;
+
+            fireEvent.change(input, {
+                target: { value },
+            });
+
             const expectedActions = [
                 {
                     type: SOCIAL_HISTORY_ACTION.UPDATE_EXERCISE,

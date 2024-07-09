@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import style from './CustomModal.module.scss';
 
-export interface CustomModalProps {
+interface CustomModalProps {
     title?: JSX.Element;
     headerShow?: boolean;
     children: any;

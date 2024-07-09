@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { OptionMapping } from '../../../../_processOptions';
 import Dropdown from '@components/tools/OptimizedDropdown';
 import RemoveButton from '@components/tools/RemoveButton/RemoveButton';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import { ConnectedProps, connect } from 'react-redux';
 import { CurrentNoteState } from '@redux/reducers';
 import {
     AllergiesElements,
@@ -12,6 +11,26 @@ import {
 import { selectAllergiesItem } from '@redux/selectors/allergiesSelectors';
 import { Table, TextArea, TextAreaProps } from 'semantic-ui-react';
 import './table.css';
+
+interface OwnProps {
+    fields: (keyof AllergiesItem)[];
+    onTableBodyChange: (
+        event:
+            | React.FormEvent<HTMLTextAreaElement>
+            | React.SyntheticEvent
+            | null,
+        data: TextAreaProps
+    ) => void;
+    rowIndex: keyof AllergiesElements;
+    allergensOptions: OptionMapping;
+    allergicReactionsOptions: OptionMapping;
+    onAddItem: (_e: any, data: { [key: string]: any }) => void;
+    deleteRow: (index: string) => void;
+}
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = OwnProps & ReduxProps;
 
 class AllergiesTableBodyRow extends Component<Props> {
     constructor(props: Props) {
@@ -128,36 +147,12 @@ class AllergiesTableBodyRow extends Component<Props> {
     }
 }
 
-interface AllergiesProps {
-    allergiesItem: AllergiesItem;
-}
-
-interface RowProps {
-    fields: (keyof AllergiesItem)[];
-    onTableBodyChange: (
-        event:
-            | React.FormEvent<HTMLTextAreaElement>
-            | React.SyntheticEvent
-            | null,
-        data: TextAreaProps
-    ) => void;
-    rowIndex: keyof AllergiesElements;
-    isPreview: boolean;
-    allergensOptions: OptionMapping;
-    allergicReactionsOptions: OptionMapping;
-    onAddItem: (_e: any, data: { [key: string]: any }) => void;
-    deleteRow: (index: string) => void;
-}
-
-type Props = AllergiesProps & RowProps;
-
-const mapStateToProps = (
-    state: CurrentNoteState,
-    rowProps: RowProps
-): AllergiesProps => {
+const mapStateToProps = (state: CurrentNoteState, rowProps: OwnProps) => {
     return {
         allergiesItem: selectAllergiesItem(state, rowProps.rowIndex),
     };
 };
 
-export default connect(mapStateToProps)(AllergiesTableBodyRow);
+const connector = connect(mapStateToProps);
+
+export default connector(AllergiesTableBodyRow);

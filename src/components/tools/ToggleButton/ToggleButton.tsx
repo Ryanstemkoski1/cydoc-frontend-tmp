@@ -1,5 +1,4 @@
 import '@screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 export interface ButtonProps<T = string> {
@@ -39,7 +38,7 @@ export default function ToggleButton<T = string>(props: ButtonProps<T>) {
 
     return (
         <button
-            data-testid={`toggle-button-${condition}`}
+            data-testid={`toggle-button-${condition}-${title}`}
             title={title}
             {...extraProps}
             onClick={(e) =>
@@ -54,15 +53,3 @@ export default function ToggleButton<T = string>(props: ButtonProps<T>) {
         </button>
     );
 }
-
-ToggleButton.propTypes = {
-    active: PropTypes.bool,
-    compact: PropTypes.bool,
-    condition: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    disabled: PropTypes.bool,
-    onToggleButtonClick: PropTypes.func.isRequired,
-    size: PropTypes.string,
-    title: PropTypes.string,
-    ariaLabel: PropTypes.string,
-    className: PropTypes.string,
-};

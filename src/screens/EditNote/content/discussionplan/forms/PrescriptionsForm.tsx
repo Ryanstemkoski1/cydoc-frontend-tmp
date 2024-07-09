@@ -1,7 +1,7 @@
 import { OptionMapping } from '../../../../../_processOptions';
 import Dropdown from '@components/tools/OptimizedDropdown';
 import React from 'react';
-import { connect } from 'react-redux';
+import { ConnectedProps, connect } from 'react-redux';
 import {
     addPrescription,
     updatePrescriptionComments,
@@ -15,7 +15,6 @@ import {
     selectPlanCondition,
 } from '@redux/selectors/planSelectors';
 import { Grid, TextArea } from 'semantic-ui-react';
-import { PlanAction } from '../util';
 import {
     BaseCategoryForm,
     CategoryFormComponent,
@@ -26,29 +25,25 @@ import './DiscussionPlanForms.css';
 import useUpdateDimensions from './useUpdateDimensions';
 import './planSections.css';
 
-interface PrescriptionsDispatchProps {
-    addPrescription: PlanAction;
-    updatePrescriptionComments: PlanAction;
-    updatePrescriptionDose: PlanAction;
-    updatePrescriptionType: PlanAction;
-    updatePrescriptionSignature: PlanAction;
-}
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = CategoryFormOwnProps &
+    CategoryFormProps<PlanPrescriptionFlat> &
+    PropsFromRedux;
 
 type ComponentFunction = CategoryFormComponent<PlanPrescriptionFlat>;
 
-const PrescriptionsForm = (
-    props: CategoryFormProps<PlanPrescriptionFlat> & PrescriptionsDispatchProps
-) => {
+const gridHeaders = () => (
+    <Grid.Row>
+        <Grid.Column> Rx </Grid.Column>
+        <Grid.Column> Signature (Sig) </Grid.Column>
+        <Grid.Column> Comments </Grid.Column>
+    </Grid.Row>
+);
+
+const PrescriptionsForm = (props: Props) => {
     const { categoryData, formatAction, ...actions } = props;
     useUpdateDimensions();
-
-    const gridHeaders = () => (
-        <Grid.Row>
-            <Grid.Column> Rx </Grid.Column>
-            <Grid.Column> Signature (Sig) </Grid.Column>
-            <Grid.Column> Comments </Grid.Column>
-        </Grid.Row>
-    );
 
     const mainInput: ComponentFunction = (row, options, onAddItem) => (
         <div className='container' id='prescriptions-main-input-container'>
@@ -134,7 +129,7 @@ const PrescriptionsForm = (
     );
 };
 
-export default connect(
+const connector = connect(
     (state: CurrentNoteState, ownProps: CategoryFormOwnProps) => ({
         categoryData: selectPlanCondition(state, ownProps.conditionId)
             .prescriptions,
@@ -146,4 +141,6 @@ export default connect(
         updatePrescriptionType,
         updatePrescriptionSignature,
     }
-)(PrescriptionsForm);
+);
+
+export default connector(PrescriptionsForm);

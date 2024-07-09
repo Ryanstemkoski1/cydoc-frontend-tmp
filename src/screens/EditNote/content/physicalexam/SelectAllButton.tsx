@@ -1,10 +1,14 @@
 import React, { Fragment } from 'react';
 import { Button } from 'semantic-ui-react';
 import './PhysicalExam.css';
-//import NumericInput from 'react-numeric-input';
+
+interface Props {
+    handleClick: (names: string[]) => void;
+    children: React.JSX.Element[];
+}
 
 //Component that triggers its handleClick function on all children when clicked
-export default class SelectAllButton extends React.Component {
+export default class SelectAllButton extends React.Component<Props> {
     render = () => {
         return (
             <Fragment>
@@ -12,7 +16,7 @@ export default class SelectAllButton extends React.Component {
                     toggle
                     content='∀'
                     active={React.Children.toArray(this.props.children).reduce(
-                        (a, b) => a && b.props.active,
+                        (a, b: React.JSX.Element) => a && b.props.active,
                         true
                     )}
                     onClick={() => {

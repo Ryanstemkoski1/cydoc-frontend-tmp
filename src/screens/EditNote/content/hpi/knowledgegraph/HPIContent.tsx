@@ -11,8 +11,6 @@ import {
 import { processKnowledgeGraph } from '@redux/actions/hpiActions';
 import { saveHpiHeader } from '@redux/actions/hpiHeadersActions';
 import { CurrentNoteState } from '@redux/reducers';
-import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
-import { HpiHeadersState } from '@redux/reducers/hpiHeadersReducer';
 import { selectPlanConditions } from '@redux/selectors/planSelectors';
 import { selectPatientViewState } from '@redux/selectors/userViewSelectors';
 import { Search, Segment } from 'semantic-ui-react';
@@ -20,15 +18,13 @@ import Tab from '@components/tools/Tab';
 import './HPI.css';
 import { hpiHeaders } from './API';
 import BodySystemDropdown from './components/BodySystemDropdown';
-import ChiefComplaintsButton, {
-    PatientViewProps,
-} from './components/ChiefComplaintsButton';
+import ChiefComplaintsButton from './components/ChiefComplaintsButton';
 import DiseaseForm from './components/DiseaseForm';
 import MiscBox from './components/MiscBox';
 import './css/App.css';
 import { favChiefComplaints } from 'classes/institution.class';
 
-interface HPIContentProps {
+interface OwnProps {
     step: number;
     continue: (e: any) => void;
     back: (e: any) => void;
@@ -40,19 +36,6 @@ interface HPIContentState {
     searchVal: string;
     activeIndex: number;
 }
-
-export interface ChiefComplaintsProps {
-    chiefComplaints: ChiefComplaintsState;
-}
-
-export interface HpiHeadersProps {
-    hpiHeaders: HpiHeadersState;
-}
-
-type OwnProps = ChiefComplaintsProps &
-    HpiHeadersProps &
-    HPIContentProps &
-    PatientViewProps;
 
 type ReduxProps = ConnectedProps<typeof connector>;
 

@@ -1,22 +1,24 @@
-/* eslint-disable no-console */
-import constants from 'constants/constants';
-import HPIContext from 'contexts/HPIContext.js';
-import PropTypes from 'prop-types';
+import constants from '@constants/constants.json';
 import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
+import { ConnectedProps, connect } from 'react-redux';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import { selectPatientViewState } from '@redux/selectors/userViewSelectors';
 import './MenuTabs.css';
 
-//Component for the tabs that toggle the different sections of the Create Note editor
-class ConnectedMenuTabs extends Component {
-    static contextType = HPIContext;
-    constructor(props, context) {
-        super(props, context);
-        this.state = {
-            textInput: 'Untitled',
-            isTitleFocused: false,
-        };
+interface OwnProps {
+    onTabChange: (name: string) => void;
+}
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = OwnProps & ReduxProps;
+
+interface State {}
+
+// Component for the tabs that toggle the different sections of the Create Note editor
+class ConnectedMenuTabs extends Component<Props, State> {
+    constructor(props) {
+        super(props);
         this.handleItemClick = this.handleItemClick.bind(this);
     }
 
@@ -29,6 +31,7 @@ class ConnectedMenuTabs extends Component {
         const tabs = patientView
             ? constants.PATIENT_VIEW_TAB_NAMES
             : constants.TAB_NAMES;
+
         const tabMenuItems = tabs.map((name, index) => ({
             name: patientView ? '' + (index + 1) : name,
             active: activeItem === name,
@@ -86,12 +89,12 @@ function DoctorViewMenu({ tabMenuItems }) {
 }
 
 const MenuTabs = ConnectedMenuTabs;
-export default connect((state) => ({
+
+const mapStateToProps = (state) => ({
     patientView: selectPatientViewState(state),
     activeItem: selectActiveItem(state),
-}))(MenuTabs);
+});
 
-ConnectedMenuTabs.propTypes = {
-    attached: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-    onTabChange: PropTypes.func,
-};
+const connector = connect(mapStateToProps);
+
+export default connector(MenuTabs);

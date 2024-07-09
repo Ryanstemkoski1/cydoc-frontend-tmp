@@ -173,7 +173,7 @@ describe('FamilyHistoryContent', () => {
         const store = mockStore({ familyHistory: initialState });
         const props = {
             seenConditions: {},
-            addSeenCondition: jest.fn,
+            addSeenCondition: vi.fn,
             isPreview: true,
             condition: 'Type II Diabetes',
             key: '0',
@@ -207,7 +207,7 @@ describe('FamilyHistoryContent', () => {
         const store = mockStore({ familyHistory: initialState });
         const props = {
             seenConditions: {},
-            addSeenCondition: jest.fn,
+            addSeenCondition: vi.fn,
             isPreview: false,
             condition: 'Type II Diabetes',
             key: '0',

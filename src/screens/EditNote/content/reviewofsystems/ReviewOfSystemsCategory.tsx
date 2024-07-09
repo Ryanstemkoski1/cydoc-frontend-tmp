@@ -1,15 +1,9 @@
 import YesAndNo from '@components/tools/YesAndNo/YesAndNo';
 import { YesNoResponse } from '@constants/enums';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import {
-    selectManyHandleClick,
-    SelectManyHandleClickAction,
-} from '@redux/actions/hpiActions';
-import {
-    toggleROSOption,
-    ToggleROSOptionAction,
-} from '@redux/actions/reviewOfSystemsActions';
+import { connect, ConnectedProps } from 'react-redux';
+import { selectManyHandleClick } from '@redux/actions/hpiActions';
+import { toggleROSOption } from '@redux/actions/reviewOfSystemsActions';
 import { CurrentNoteState } from '@redux/reducers';
 import { ReviewOfSystemsState } from '@redux/reducers/reviewOfSystemsReducer';
 import {
@@ -21,62 +15,21 @@ import AllNegativeButton from './AllNegativeButton.js';
 import './ReviewOfSystems.css';
 import style from './ReviewOfSystemsCategory.module.scss';
 
-interface CategoryProps {
-    key: string;
-    category: string;
-    selectManyState: ReviewOfSystemsState;
-    node: string;
-}
-
-interface StateProps {
-    ROSState: ReviewOfSystemsState;
-    ROSOptions: string[];
-}
-
 interface OwnProps {
     category: string;
+    key: string;
+    node: string;
     selectManyState: ReviewOfSystemsState;
     selectManyOptions: string[];
 }
 
-interface DispatchProps {
-    toggleROSOption: (
-        category: string,
-        option: string,
-        yesOrNo: YesNoResponse
-    ) => ToggleROSOptionAction;
-    selectManyHandleClick: (
-        medId: string,
-        option: string,
-        yesOrNo: YesNoResponse
-    ) => SelectManyHandleClickAction;
-}
+type ReduxProps = ConnectedProps<typeof connector>;
 
-interface OwnState {
+interface State {
     ROSState: ReviewOfSystemsState;
 }
 
-const mapStateToProps = (
-    state: CurrentNoteState,
-    ownProps: OwnProps
-): StateProps => ({
-    ROSState:
-        Object.keys(ownProps.selectManyState).length == 0
-            ? selectReviewOfSystemsState(state)
-            : ownProps.selectManyState,
-    ROSOptions:
-        Object.keys(ownProps.selectManyState).length == 0
-            ? selectReviewOfSystemsOptions(state, ownProps.category)
-            : ownProps.selectManyOptions,
-});
-
-const mapDispatchToProps = {
-    toggleROSOption: toggleROSOption,
-    selectManyHandleClick: selectManyHandleClick,
-};
-
-type Props = CategoryProps & DispatchProps & StateProps;
-type State = OwnState;
+type Props = ReduxProps & OwnProps;
 
 class ReviewOfSystemsCategory extends Component<Props, State> {
     constructor(props: Props) {
@@ -189,7 +142,22 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
     }
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ReviewOfSystemsCategory);
+const mapStateToProps = (state: CurrentNoteState, ownProps: OwnProps) => ({
+    ROSState:
+        Object.keys(ownProps.selectManyState).length == 0
+            ? selectReviewOfSystemsState(state)
+            : ownProps.selectManyState,
+    ROSOptions:
+        Object.keys(ownProps.selectManyState).length == 0
+            ? selectReviewOfSystemsOptions(state, ownProps.category)
+            : ownProps.selectManyOptions,
+});
+
+const mapDispatchToProps = {
+    toggleROSOption: toggleROSOption,
+    selectManyHandleClick: selectManyHandleClick,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(ReviewOfSystemsCategory);

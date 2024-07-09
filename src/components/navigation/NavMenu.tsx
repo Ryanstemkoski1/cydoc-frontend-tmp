@@ -1,24 +1,19 @@
 'use client';
+/* eslint-disable no-console */
 import React, { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { Button, Menu } from 'semantic-ui-react';
 import NoteNameMenuItem from './NoteNameMenuItem';
-/* eslint-disable no-console */
 import { ProductType, ViewType } from '@constants/enums/route.enums';
 import MenuButton, { MenuItem } from '@components/Header/MenuButton';
 import { YesNoResponse } from '@constants/enums';
 import useAuth from '@hooks/useAuth';
 import useUser from '@hooks/useUser';
 import 'screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
-import { InitialSurveyProps } from '@screens/EditNote/content/patientview/InitialSurvey';
-import { connect } from 'react-redux';
-import {
-    UpdateActiveItemAction,
-    updateActiveItem,
-} from '@redux/actions/activeItemActions';
-import { UserViewAction, changeUserView } from '@redux/actions/userViewActions';
+import { ConnectedProps, connect } from 'react-redux';
+import { updateActiveItem } from '@redux/actions/activeItemActions';
+import { changeUserView } from '@redux/actions/userViewActions';
 import { CurrentNoteState } from '@redux/reducers';
-import { AdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import {
     selectDoctorViewState,
@@ -29,13 +24,17 @@ import constants from '@constants/constants.json';
 import style from './NavMenu.module.scss';
 import { usePathname, useRouter } from 'next/navigation';
 
-interface ConnectedNavMenuProps {
+interface OwnProps {
     className?: string;
     // For whether to stack another menu above/below
     attached?: 'top' | 'bottom';
     // Whether to display or hide the note name
     displayNoteName?: boolean;
 }
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = ReduxProps & OwnProps;
 
 const OurCreatedRoutes = [
     'hpi',
@@ -293,34 +292,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     );
 };
 
-interface DispatchProps {
-    changeUserView: (userView: string) => UserViewAction;
-    updateActiveItem: (updatedItem: string) => UpdateActiveItemAction;
-}
-
-const mapDispatchToProps = {
-    changeUserView,
-    updateActiveItem,
-};
-
-export interface userViewProps {
-    patientView: boolean;
-    doctorView: boolean;
-}
-export interface AdditionalSurveyProps {
-    additionalSurvey: AdditionalSurvey;
-}
-
-export interface ActiveItemProps {
-    activeItem: string;
-}
-
-const mapStateToProps = (
-    state: CurrentNoteState
-): userViewProps &
-    InitialSurveyProps &
-    AdditionalSurveyProps &
-    ActiveItemProps => {
+const mapStateToProps = (state: CurrentNoteState) => {
     return {
         patientView: selectPatientViewState(state),
         doctorView: selectDoctorViewState(state),
@@ -330,12 +302,10 @@ const mapStateToProps = (
     };
 };
 
-type Props = ConnectedNavMenuProps &
-    userViewProps &
-    DispatchProps &
-    InitialSurveyProps &
-    AdditionalSurveyProps &
-    ActiveItemProps;
+const mapDispatchToProps = {
+    changeUserView,
+    updateActiveItem,
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

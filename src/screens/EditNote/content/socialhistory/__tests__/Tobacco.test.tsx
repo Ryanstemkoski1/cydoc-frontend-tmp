@@ -1,5 +1,3 @@
-// import Adapter from '@cfaester/enzyme-adapter-react-18';
-// import Enzyme, { mount } from 'enzyme';
 import React from 'react';
 import Tobacco from '../Tobacco';
 
@@ -19,8 +17,6 @@ import {
     queries,
     render,
 } from '@testing-library/react';
-
-// Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -66,50 +62,6 @@ describe('Tobacco Integration', () => {
         }
     );
 
-    // test.each(cases)(
-    //     '%s view dispatches correct action when clicking Usage buttons',
-    //     (_type, mountTobaccoWithStore) => {
-    //         const { store, wrapper } = mountTobaccoWithStore();
-    //         wrapper
-    //             .find('button[condition="Tobacco"][title="Yes"]')
-    //             .first()
-    //             .simulate('click');
-    //         let expectedActions = [
-    //             {
-    //                 type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_USAGE,
-    //                 payload: {
-    //                     newUsage: SubstanceUsageResponse.Yes,
-    //                 },
-    //             },
-    //         ];
-    //         expect(store.getActions()).toEqual(expectedActions);
-
-    //         wrapper
-    //             .find('button[condition="Tobacco"][title="In the Past"]')
-    //             .first()
-    //             .simulate('click');
-    //         expectedActions.push({
-    //             type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_USAGE,
-    //             payload: {
-    //                 newUsage: SubstanceUsageResponse.InThePast,
-    //             },
-    //         });
-    //         expect(store.getActions()).toEqual(expectedActions);
-
-    //         wrapper
-    //             .find('button[condition="Tobacco"][title="Never Used"]')
-    //             .first()
-    //             .simulate('click');
-    //         expectedActions.push({
-    //             type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_USAGE,
-    //             payload: {
-    //                 newUsage: SubstanceUsageResponse.NeverUsed,
-    //             },
-    //         });
-    //         expect(store.getActions()).toEqual(expectedActions);
-    //     }
-    // );
-
     test.each(cases)(
         '%s view dispatches correct action when updating number of packs per day',
         (_type, mountTobaccoWithStore) => {
@@ -122,9 +74,13 @@ describe('Tobacco Integration', () => {
             };
 
             const { store, wrapper } = mountTobaccoWithStore(tobaccoState);
-            const value = 2;
+            const value = '2';
 
-            fireEvent.change(wrapper.getByTestId('tobacco-packs-input'), {
+            const input = wrapper.container.querySelector(
+                'div[field="Packs/Day"][condition="Tobacco"] input'
+            ) as HTMLInputElement;
+
+            fireEvent.change(input, {
                 target: { value },
             });
 
@@ -154,7 +110,11 @@ describe('Tobacco Integration', () => {
             const { store, wrapper } = mountTobaccoWithStore(tobaccoState);
             const value = 2;
 
-            fireEvent.change(wrapper.getByTestId('tobacco-years-input'), {
+            const input = wrapper.container.querySelector(
+                'div[field="Number of Years"][condition="Tobacco"] input'
+            ) as HTMLInputElement;
+
+            fireEvent.change(input, {
                 target: { value },
             });
 
@@ -185,24 +145,17 @@ describe('Tobacco Integration', () => {
 
             fireEvent.click(wrapper.getByTestId('tobacco-products-dropdown'));
 
-            // wrapper
-            //     .find('[aria-label="Tobacco-Products-Used-Dropdown"] input')
-            //     .first()
-            //     .simulate('click');
+            (
+                wrapper.container.querySelector(
+                    '[aria-label="Tobacco-Products-Used-Dropdown"] input'
+                ) as HTMLInputElement
+            ).click();
 
-            fireEvent.click(wrapper.getByRole('option'), {
-                bubbles: false,
-                cancelable: true,
-            });
-
-            // wrapper
-            //     .find(
-            //         '[aria-label="Tobacco-Products-Used-Dropdown"] [role="option"]'
-            //     )
-            //     .first()
-            //     .simulate('click', {
-            //         nativeEvent: { stopImmediatePropagation: () => {} },
-            //     });
+            (
+                wrapper.container.querySelector(
+                    '[aria-label="Tobacco-Products-Used-Dropdown"] [role="option"]'
+                ) as HTMLInputElement
+            ).click();
 
             const expectedActions = [
                 {
@@ -215,103 +168,6 @@ describe('Tobacco Integration', () => {
             expect(store.getActions()).toEqual(expectedActions);
         }
     );
-
-    // test.each(cases)(
-    //     '%s view dispatches correct action when clicking "Are you interested in quitting?" buttons',
-    //     (_type, mountTobaccoWithStore) => {
-    //         const tobaccoState = {
-    //             ...initialSocialHistoryState,
-    //             tobacco: {
-    //                 ...initialSocialHistoryState.tobacco,
-    //                 usage: SubstanceUsageResponse.Yes,
-    //             },
-    //         };
-
-    //         const { store, wrapper } = mountTobaccoWithStore(tobaccoState);
-    //         const expectedActions = [];
-
-    //         wrapper
-    //             .find(
-    //                 '.interested-in-quitting-buttons button[condition="Tobacco"][title="Yes"]'
-    //             )
-    //             .simulate('click');
-    //         expectedActions.push({
-    //             type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_INTERESTED_IN_QUITTING,
-    //             payload: {
-    //                 newResponse: YesNoMaybeResponse.Yes,
-    //             },
-    //         });
-    //         expect(store.getActions()).toEqual(expectedActions);
-
-    //         wrapper
-    //             .find(
-    //                 '.interested-in-quitting-buttons button[condition="Tobacco"][title="Maybe"]'
-    //             )
-    //             .simulate('click');
-    //         expectedActions.push({
-    //             type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_INTERESTED_IN_QUITTING,
-    //             payload: {
-    //                 newResponse: YesNoMaybeResponse.Maybe,
-    //             },
-    //         });
-    //         expect(store.getActions()).toEqual(expectedActions);
-
-    //         wrapper
-    //             .find(
-    //                 '.interested-in-quitting-buttons button[condition="Tobacco"][title="No"]'
-    //             )
-    //             .simulate('click');
-    //         expectedActions.push({
-    //             type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_INTERESTED_IN_QUITTING,
-    //             payload: {
-    //                 newResponse: YesNoMaybeResponse.No,
-    //             },
-    //         });
-    //         expect(store.getActions()).toEqual(expectedActions);
-    //     }
-    // );
-
-    // test.each(cases)(
-    //     '%s view dispatches correct action when clicking "Have you tried to quit before?" buttons',
-    //     (_type, mountTobaccoWithStore) => {
-    //         const tobaccoState = {
-    //             ...initialSocialHistoryState,
-    //             tobacco: {
-    //                 ...initialSocialHistoryState.tobacco,
-    //                 usage: SubstanceUsageResponse.Yes,
-    //             },
-    //         };
-
-    //         const { store, wrapper } = mountTobaccoWithStore(tobaccoState);
-    //         const expectedActions = [];
-
-    //         wrapper
-    //             .find(
-    //                 '.tried-to-quit-buttons button[condition="Tobacco"][title="Yes"]'
-    //             )
-    //             .simulate('click');
-    //         expectedActions.push({
-    //             type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_TRIED_TO_QUIT,
-    //             payload: {
-    //                 newResponse: YesNoResponse.Yes,
-    //             },
-    //         });
-    //         expect(store.getActions()).toEqual(expectedActions);
-
-    //         wrapper
-    //             .find(
-    //                 '.tried-to-quit-buttons button[condition="Tobacco"][title="No"]'
-    //             )
-    //             .simulate('click');
-    //         expectedActions.push({
-    //             type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_TRIED_TO_QUIT,
-    //             payload: {
-    //                 newResponse: YesNoResponse.No,
-    //             },
-    //         });
-    //         expect(store.getActions()).toEqual(expectedActions);
-    //     }
-    // );
 
     test.each(cases)(
         '%s view dispatches correct action when updating tobacco comments',
@@ -327,15 +183,13 @@ describe('Tobacco Integration', () => {
             const { store, wrapper } = mountTobaccoWithStore(tobaccoState);
             const value = 'new comments';
 
-            fireEvent.change(wrapper.getByTestId('tobacco-comments-input'), {
+            const input = wrapper.container.querySelector(
+                'textarea[field="Comments"][condition="Tobacco"]'
+            ) as HTMLInputElement;
+
+            fireEvent.change(input, {
                 target: { value },
             });
-
-            // wrapper
-            //     .find('textarea[field="Comments"][condition="Tobacco"]')
-            //     .simulate('change', {
-            //         target: { value },
-            //     });
 
             const expectedActions = [
                 {
@@ -363,15 +217,14 @@ describe('Tobacco Integration', () => {
             const { store, wrapper } = mountTobaccoWithStore(tobaccoState);
             const value = 2020;
 
-            fireEvent.change(wrapper.getByTestId('tobacco-quit-year-input'), {
+            const input = wrapper.container.querySelector(
+                'div[field="Quit Year"][condition="Tobacco"] input'
+            ) as HTMLInputElement;
+
+            fireEvent.change(input, {
                 target: { value },
             });
 
-            // wrapper
-            //     .find('div[field="Quit Year"][condition="Tobacco"] input')
-            //     .simulate('change', {
-            //         target: { value },
-            //     });
             const expectedActions = [
                 {
                     type: SOCIAL_HISTORY_ACTION.UPDATE_TOBACCO_QUIT_YEAR,

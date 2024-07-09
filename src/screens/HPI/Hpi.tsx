@@ -38,7 +38,6 @@ import {
     initialSurveyAddText,
     processSurveyGraph,
 } from '@redux/actions/userViewActions';
-import { CurrentNoteState } from '@redux/reducers';
 import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
 import { isResponseValid } from '@utils/getHPIFormData';
@@ -48,6 +47,8 @@ import style from './HPI.module.scss';
 import InitialSurveyHPI from './InitialSurvey/InitialSurvey';
 import NewNotePage from './NotesPage/NotePage';
 import PreHPI from './PreHpi/PreHPI';
+import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
+import { selectHpiHeaders } from '@redux/reducers/hpiHeadersReducer';
 
 export interface OnNextClickParams {
     allSelectedChiefComplaints?: string[];
@@ -74,14 +75,13 @@ const HPI = () => {
             title: '',
             component: null,
         });
+
     const [institution, setInstitution] = useState<InstitutionClass>();
-    const { userSurveyState, activeItem, additionalSurvey, hpiHeaders } =
-        useSelector((state: CurrentNoteState) => ({
-            userSurveyState: selectInitialPatientSurvey(state),
-            activeItem: selectActiveItem(state),
-            additionalSurvey: state.additionalSurvey,
-            hpiHeaders: state.hpiHeaders,
-        }));
+    const userSurveyState = useSelector(selectInitialPatientSurvey);
+    const activeItem = useSelector(selectActiveItem);
+    const additionalSurvey = useSelector(selectAdditionalSurvey);
+    const hpiHeaders = useSelector(selectHpiHeaders);
+
     const [currentTabs, setCurrentTabs] = useState<string[]>([
         'InitialSurvey',
         'PreHPI',

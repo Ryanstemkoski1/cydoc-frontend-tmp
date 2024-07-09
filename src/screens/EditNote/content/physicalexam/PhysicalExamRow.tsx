@@ -98,7 +98,7 @@ class PhysicalExamRow extends React.Component<Props, State> {
         normalOrAbnormal,
         needsRightLeft,
     }: PhysicalExamSchemaRow) => {
-        let buttons;
+        let buttons: React.JSX.Element[];
         const { physicalExamSection, isDropdown } = this.props;
         if (needsRightLeft) {
             buttons = findings.map((finding: string, index: number) => {

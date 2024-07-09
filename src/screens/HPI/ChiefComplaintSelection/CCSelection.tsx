@@ -7,10 +7,6 @@ import { apiClient } from '@constants/api';
 import { ResponseTypes } from '@constants/hpiEnums';
 import useQuery from '@hooks/useQuery';
 import { useSelectedPinnedChiefComplaints } from '@hooks/useSelectedChiefComplaints';
-import {
-    ChiefComplaintsProps,
-    HpiHeadersProps,
-} from '@screens/EditNote/content/hpi/knowledgegraph/HPIContent';
 import { hpiHeaders as hpiHeadersApiClient } from '@screens/EditNote/content/hpi/knowledgegraph/API';
 import ChiefComplaintsButton from '@screens/EditNote/content/hpi/knowledgegraph/components/ChiefComplaintsButton';
 import ListText from '@screens/EditNote/content/hpi/knowledgegraph/components/responseComponents/ListText';
@@ -33,15 +29,9 @@ import {
     processSurveyGraph,
 } from '@redux/actions/userViewActions';
 import { CurrentNoteState } from '@redux/reducers';
-import {
-    AdditionalSurvey,
-    selectAdditionalSurvey,
-} from '@redux/reducers/additionalSurveyReducer';
+import { selectAdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 import { isSelectOneResponse } from '@redux/reducers/hpiReducer';
-import {
-    InitialQuestionsState,
-    UserSurveyState,
-} from '@redux/reducers/userViewReducer';
+import { InitialQuestionsState } from '@redux/reducers/userViewReducer';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
 import getHPIFormData, { isResponseValid } from '@utils/getHPIFormData';
 import { getListTextResponseAsSingleString } from '@utils/getHPIText';
@@ -55,8 +45,9 @@ import { selectSurgicalHistoryProcedures } from '@redux/selectors/surgicalHistor
 import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
 import { selectHpiState } from '@redux/selectors/hpiSelectors';
 import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelector';
+import { redirect } from 'next/navigation';
 
-interface InitialSurveyComponentProps {
+interface OwnProps {
     continue: (args?: OnNextClickParams) => void;
     onPreviousClick: () => void;
     notification: {
@@ -74,13 +65,6 @@ function createLowerCaseKeyNameToActualKeyNameMap(object = {}) {
         return accumulator;
     }, new Map<string, string>([]));
 }
-
-type OwnProps = HpiHeadersProps &
-    InitialSurveyComponentProps &
-    InitialSurveyProps &
-    HpiHeadersProps &
-    ChiefComplaintsProps &
-    AdditionalSurveyProps;
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -284,14 +268,13 @@ const CCSelection = (props: Props) => {
                 institution_id,
             })
             .then(() => {
-                localStorage.setItem('HPI_FORM_SUBMITTED', '1');
                 let url = `/submission-successful?${HPIPatientQueryParams.INSTITUTION_ID}=${institution_id}`;
 
                 if (clinician_id) {
                     url += `&${HPIPatientQueryParams.CLINICIAN_ID}=${clinician_id}`;
                 }
 
-                window.location.href = url;
+                redirect(url);
             })
             .catch(() => {
                 setNotificationMessage('Failed to submit your questionnaire');
@@ -335,14 +318,6 @@ const CCSelection = (props: Props) => {
         </div>
     );
 };
-
-export interface InitialSurveyProps {
-    userSurveyState: UserSurveyState;
-}
-
-export interface AdditionalSurveyProps {
-    additionalSurvey: AdditionalSurvey;
-}
 
 const mapStateToProps = (state: CurrentNoteState) => {
     return {

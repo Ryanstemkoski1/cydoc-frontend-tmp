@@ -66,9 +66,6 @@ export const AuthProvider: React.FC<
     const router = useRouter();
 
     const [isSignedIn, setIsSignedIn] = useState(false);
-    // TODO: parse ^^status^^ from cognitoUser when it changes (see below)
-    // Here's an async method: https://github.com/aws-amplify/amplify-js/issues/3640#issuecomment-1198905668
-    // const isSignedIn = useMemo(() => !!user?.challengeName?.length, [user]); // This key is not the correct way to determine this
 
     const signOut = useCallback(
         () => {
@@ -77,6 +74,7 @@ export const AuthProvider: React.FC<
                     setLoginCorrect(false);
                     setIsSignedIn(false);
                     setCognitoUser(null);
+                    router.push('/login');
                 })
                 .catch((reason) =>
                     log(`Sign out error: ${stringFromError(reason)}`, {

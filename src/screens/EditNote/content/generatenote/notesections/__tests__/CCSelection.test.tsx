@@ -8,15 +8,20 @@ import { hpiHeaders } from '../../../hpi/knowledgegraph/API.js';
 import initialQuestionsOriginal from '../../../patientview/constants/initialQuestions';
 import CCSelection from '../../../../../HPI/ChiefComplaintSelection/CCSelection';
 import React from 'react';
-// import configureStore from 'redux-mock-store';
+import configureStore from 'redux-mock-store';
 import { render } from '@testing-library/react';
 import { saveHpiHeader } from '../../../../../../redux/actions/hpiHeadersActions';
 import {
     initialSurveyAddText,
     processSurveyGraph,
 } from '../../../../../../redux/actions/userViewActions';
-import { makeStore } from '../../../../../../redux/store';
-import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { Provider } from 'react-redux';
+import { initialSurgicalHistoryState } from '../../../../../../redux/reducers/surgicalHistoryReducer.js';
+import { initialUserViewState } from '../../../../../../redux/reducers/userViewReducer.js';
+import { initialChiefComplaintsState } from '../../../../../../redux/reducers/chiefComplaintsReducer.js';
+import { initialAdditionalSurveyData } from '../../../../../../redux/reducers/additionalSurveyReducer.js';
+import { initialHpiHeadersState } from '../../../../../../redux/reducers/hpiHeadersReducer.js';
 
 const isPinnedChiefComplaintsSyncWithKnowledgeGraph = (
     pinnedChiefComplaints: string[],
@@ -27,137 +32,159 @@ const isPinnedChiefComplaintsSyncWithKnowledgeGraph = (
     );
 };
 
-// const mockStore = configureStore([]);
+const mockStore = configureStore([]);
 
-const renderChiefComplaintSelectionPage = (state: any) => {
-    return render(
-        <CCSelection
-            continue={() => {}}
-            onPreviousClick={() => {}}
-            notification={{
-                setNotificationMessage: () => {},
-                setNotificationType: () => {},
-            }}
-            defaultInstitutionChiefComplaints={[]}
-        />
-    );
+const renderChiefComplaintSelectionPage = (state?: any) => {
+    const store = mockStore({
+        additionalSurvey: initialAdditionalSurveyData,
+        chiefComplaints: initialChiefComplaintsState,
+        hpiHeaders: initialHpiHeadersState,
+        initialQuestions: initialQuestionsOriginal,
+        surgicalHistory: initialSurgicalHistoryState,
+        userView: initialUserViewState,
+    });
+
+    return {
+        store,
+        wrapper: render(
+            <Provider store={store}>
+                <CCSelection
+                    continue={() => {}}
+                    onPreviousClick={() => {}}
+                    notification={{
+                        setNotificationMessage: () => {},
+                        setNotificationType: () => {},
+                    }}
+                    defaultInstitutionChiefComplaints={[]}
+                />
+            </Provider>
+        ),
+    };
 };
 
-// describe('CCSelection Page', () => {
-//     describe('Pinned Chief Complaints should be in sync with Knowledge Graph', () => {
-//         let knowledgeGraphResponse: AxiosResponse<any>;
-//         let newStore: any;
-//         let initialQuestions: any;
+describe.todo('CCSelection Page', () => {
+    describe('Pinned Chief Complaints should be in sync with Knowledge Graph', () => {
+        let knowledgeGraphResponse: AxiosResponse<any>;
+        // let newStore: any;
+        let initialQuestions: any;
 
-//         // vi.setTimeout(20000);
+        beforeAll(async () => {
+            knowledgeGraphResponse = await hpiHeaders;
+        });
 
-//         beforeAll(async () => {
-//             knowledgeGraphResponse = await hpiHeaders;
-//         });
+        vi.waitFor(
+            () => {
+                console.log(
+                    `Waiting for hpiHeaders ${knowledgeGraphResponse.status}`
+                );
+                if (knowledgeGraphResponse.status !== 200)
+                    throw new Error('hpiHeaders not ready yet');
+                else {
+                    console.log('hpiHeaders ready');
+                }
+            },
+            { timeout: 10000 }
+        );
 
-//         beforeEach(() => {
-//             newStore = makeStore();
-//             initialQuestions = JSON.parse(
-//                 JSON.stringify(initialQuestionsOriginal)
-//             );
-//         });
+        beforeEach(() => {
+            initialQuestions = JSON.parse(
+                JSON.stringify(initialQuestionsOriginal)
+            );
+        });
 
-//         it('Ob-gyn Institution', async () => {
-//             const { getState, dispatch } = newStore;
+        it('Ob-gyn Institution', async () => {
+            const { store, wrapper } = renderChiefComplaintSelectionPage();
+            const { dispatch } = store;
 
-//             initialQuestions.nodes['2'].category = 'ANNUAL_GYN_EXAM';
-//             initialQuestions.nodes['2'].doctorView =
-//                 ChiefComplaintsEnum.ANNUAL_GYN_EXAM_WELL_WOMAN_VISIT;
+            initialQuestions.nodes['2'].category = 'ANNUAL_GYN_EXAM';
+            initialQuestions.nodes['2'].doctorView =
+                ChiefComplaintsEnum.ANNUAL_GYN_EXAM_WELL_WOMAN_VISIT;
 
-//             dispatch(processSurveyGraph(initialQuestions));
-//             dispatch(saveHpiHeader(knowledgeGraphResponse.data));
+            dispatch(processSurveyGraph(initialQuestions));
+            dispatch(saveHpiHeader(knowledgeGraphResponse.data));
 
-//             const favComplaints =
-//                 favComplaintsBasedOnInstituteType[InstitutionType.GYN];
-//             const favChiefComplaintsObj: { [key: string]: boolean } = {};
-//             favComplaints.forEach(
-//                 (item) => (favChiefComplaintsObj[item] = false)
-//             );
-//             dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
+            const favComplaints =
+                favComplaintsBasedOnInstituteType[InstitutionType.GYN];
+            const favChiefComplaintsObj: { [key: string]: boolean } = {};
+            favComplaints.forEach(
+                (item) => (favChiefComplaintsObj[item] = false)
+            );
+            dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
 
-//             const document = renderChiefComplaintSelectionPage(getState());
+            const conditionButtons = await wrapper.findAllByTestId(
+                (testId) => testId.startsWith('toggle-button-'),
+                {
+                    exact: false,
+                }
+            );
+            const pinnedChiefComplaints = conditionButtons.map(
+                ({ attributes }) => attributes.getNamedItem('condition')?.value
+            ) as string[];
 
-//             const conditionButtons = await document.findAllByTestId(
-//                 (testId) => testId.startsWith('toggle-button-'),
-//                 {
-//                     exact: false,
-//                 }
-//             );
-//             const pinnedChiefComplaints = conditionButtons.map(
-//                 ({ attributes }) => attributes.getNamedItem('condition')?.value
-//             ) as string[];
+            const result = isPinnedChiefComplaintsSyncWithKnowledgeGraph(
+                pinnedChiefComplaints,
+                Object.keys(knowledgeGraphResponse.data.parentNodes)
+            );
 
-//             const result = isPinnedChiefComplaintsSyncWithKnowledgeGraph(
-//                 pinnedChiefComplaints,
-//                 Object.keys(knowledgeGraphResponse.data.parentNodes)
-//             );
+            expect(result).toBe(true);
+        });
 
-//             expect(result).toBe(true);
-//         });
+        it('Endocrinology Institution', async () => {
+            const { store, wrapper } = renderChiefComplaintSelectionPage();
+            const { dispatch } = store;
 
-//         it('Endocrinology Institution', async () => {
-//             const { getState, dispatch } = newStore;
+            dispatch(processSurveyGraph(initialQuestions));
+            dispatch(saveHpiHeader(knowledgeGraphResponse.data));
 
-//             dispatch(processSurveyGraph(initialQuestions));
-//             dispatch(saveHpiHeader(knowledgeGraphResponse.data));
+            const favComplaints =
+                favComplaintsBasedOnInstituteType[InstitutionType.ENDO];
+            const favChiefComplaintsObj: { [key: string]: boolean } = {};
+            favComplaints.forEach(
+                (item) => (favChiefComplaintsObj[item] = false)
+            );
+            dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
 
-//             const favComplaints =
-//                 favComplaintsBasedOnInstituteType[InstitutionType.ENDO];
-//             const favChiefComplaintsObj: { [key: string]: boolean } = {};
-//             favComplaints.forEach(
-//                 (item) => (favChiefComplaintsObj[item] = false)
-//             );
-//             dispatch(initialSurveyAddText('6', favChiefComplaintsObj));
+            const conditionButtons = await wrapper.findAllByTestId(
+                (testId) => testId.startsWith('toggle-button-'),
+                {
+                    exact: false,
+                }
+            );
+            const pinnedChiefComplaints = conditionButtons.map(
+                ({ attributes }) => attributes.getNamedItem('condition')?.value
+            ) as string[];
 
-//             const document = renderChiefComplaintSelectionPage(getState());
+            const result = isPinnedChiefComplaintsSyncWithKnowledgeGraph(
+                pinnedChiefComplaints,
+                Object.keys(knowledgeGraphResponse.data.parentNodes)
+            );
 
-//             const conditionButtons = await document.findAllByTestId(
-//                 (testId) => testId.startsWith('toggle-button-'),
-//                 {
-//                     exact: false,
-//                 }
-//             );
-//             const pinnedChiefComplaints = conditionButtons.map(
-//                 ({ attributes }) => attributes.getNamedItem('condition')?.value
-//             ) as string[];
+            expect(result).toBe(true);
+        });
 
-//             const result = isPinnedChiefComplaintsSyncWithKnowledgeGraph(
-//                 pinnedChiefComplaints,
-//                 Object.keys(knowledgeGraphResponse.data.parentNodes)
-//             );
+        it('Family medicine Institution (Default)', async () => {
+            const { store, wrapper } = renderChiefComplaintSelectionPage();
+            const { dispatch } = store;
 
-//             expect(result).toBe(true);
-//         });
+            dispatch(processSurveyGraph(initialQuestions));
+            dispatch(saveHpiHeader(knowledgeGraphResponse.data));
 
-//         it('Family medicine Institution (Default)', async () => {
-//             const { getState, dispatch } = newStore;
+            const conditionButtons = await wrapper.findAllByTestId(
+                (testId) => testId.startsWith('toggle-button-'),
+                {
+                    exact: false,
+                }
+            );
+            const pinnedChiefComplaints = conditionButtons.map(
+                ({ attributes }) => attributes.getNamedItem('condition')?.value
+            ) as string[];
 
-//             dispatch(processSurveyGraph(initialQuestions));
-//             dispatch(saveHpiHeader(knowledgeGraphResponse.data));
+            const result = isPinnedChiefComplaintsSyncWithKnowledgeGraph(
+                pinnedChiefComplaints,
+                Object.keys(knowledgeGraphResponse.data.parentNodes)
+            );
 
-//             const document = renderChiefComplaintSelectionPage(getState());
-
-//             const conditionButtons = await document.findAllByTestId(
-//                 (testId) => testId.startsWith('toggle-button-'),
-//                 {
-//                     exact: false,
-//                 }
-//             );
-//             const pinnedChiefComplaints = conditionButtons.map(
-//                 ({ attributes }) => attributes.getNamedItem('condition')?.value
-//             ) as string[];
-
-//             const result = isPinnedChiefComplaintsSyncWithKnowledgeGraph(
-//                 pinnedChiefComplaints,
-//                 Object.keys(knowledgeGraphResponse.data.parentNodes)
-//             );
-
-//             expect(result).toBe(true);
-//         });
-//     });
-// });
+            expect(result).toBe(true);
+        });
+    });
+});

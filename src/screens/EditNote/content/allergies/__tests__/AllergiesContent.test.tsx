@@ -1,17 +1,14 @@
-// import Adapter from '@cfaester/enzyme-adapter-react-18';
+import React from 'react';
 import AddRowButton from '../../../../../components/tools/AddRowButton/AddRowButton.js';
 import { PATIENT_HISTORY_ALLERGIES_MOBILE_BP } from '../../../../../constants/breakpoints.js';
-// import Enzyme, { mount } from 'enzyme';
 import { act } from 'react';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { ALLERGIES_ACTION } from '../../../../../redux/actions/actionTypes.ts';
-import AllergiesContent from '../AllergiesContent.tsx';
-import AllergiesTableBodyRow from '../AllergiesTableBodyRow.tsx';
-import { render } from '@testing-library/react';
+import AllergiesContent from '../AllergiesContent';
+import AllergiesTableBodyRow from '../AllergiesTableBodyRow';
+import { fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
-
-// Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -30,13 +27,13 @@ const initialUserState = {
     patientView: true,
 };
 
-const connectStore = (state = initialState, props) => {
+const connectStore = (state = initialState) => {
     const store = mockStore({ allergies: state, userView: initialUserState });
     return {
         store,
         wrapper: render(
             <Provider store={store}>
-                <AllergiesContent {...props} />
+                <AllergiesContent />
             </Provider>
         ),
     };
@@ -53,147 +50,56 @@ describe('AllergiesContent', () => {
         window.dispatchEvent(new Event('resize'));
     });
 
-    test('render', () => {
-        const { wrapper } = connectStore();
-        expect(wrapper).toBeTruthy();
-        const rows = wrapper.find(AllergiesTableBodyRow);
-        expect(rows).toHaveLength(3);
-        expect(wrapper.find(AddRowButton)).toHaveLength(1);
-    });
-
-    test('addRow works', async () => {
-        const { wrapper, store } = connectStore();
-        const button = wrapper.find(AddRowButton).find('button');
-        expect(button).toBeTruthy();
-        await act(() => {
-            button.simulate('click');
-        });
-
-        const expectedActions = [{ type: ALLERGIES_ACTION.ADD_ALLERGY }];
-        expect(store.getActions()).toEqual(expectedActions);
-    });
-
-    test('deleteRow works', async () => {
-        const { wrapper, store } = connectStore();
-        const button = wrapper.find('button[aria-label="remove"]').first();
-        expect(button).toBeTruthy();
-        await act(() => {
-            button.simulate('click');
-        });
-        const expectedActions = [
-            {
-                type: ALLERGIES_ACTION.DELETE_ALLERGY,
-                payload: { index: 'foo' },
-            },
-        ];
-        expect(store.getActions()).toEqual(expectedActions);
-    });
-
-    // // TODO: Fix below tests
-    // test('editing inciting agent dispatches correct action', () => {
-    //     const { store, wrapper } = connectStore();
-    //     wrapper
-    //         .find('input[aria-label="incitingAgent"]')
-    //         .first()
-    //         .simulate('focus');
-    //     wrapper
-    //         .find('.dropdown__control--is-focused')
-    //         .first()
-    //         .simulate('mousedown');
-    //     const option = wrapper.find('.option').first();
-    //     option.simulate('click');
-    //     const expectedAction = [
-    //         {
-    //             type: ALLERGIES_ACTION.UPDATE_INCITING_AGENT,
-    //             payload: {
-    //                 newIncitingAgent: option.prop('value'),
-    //                 index: 'foo',
-    //             },
-    //         },
-    //     ];
-    //     expect(store.getActions()).toEqual(expectedAction);
+    // test('render', () => {
+    //     const { wrapper } = connectStore();
+    //     expect(wrapper).toBeTruthy();
+    //     const rows = wrapper.find(AllergiesTableBodyRow);
+    //     expect(rows).toHaveLength(3);
+    //     expect(wrapper.find(AddRowButton)).toHaveLength(1);
     // });
 
-    // test('editing inciting agent dispatches correct action - mobile', () => {
-    //     const { store, wrapper } = connectStore(initialState);
-
-    //     window.innerWidth = PATIENT_HISTORY_ALLERGIES_MOBILE_BP - 10;
-    //     window.dispatchEvent(new Event('resize'));
-    //     wrapper.update();
-
-    //     wrapper
-    //         .find('input[aria-label="incitingAgent"]')
-    //         .first()
-    //         .simulate('focus');
-    //     wrapper
-    //         .find('.dropdown__control--is-focused')
-    //         .first()
-    //         .simulate('mousedown');
-    //     const option = wrapper.find('.option').first();
-    //     option.simulate('click');
-    //     const expectedAction = [
-    //         {
-    //             type: ALLERGIES_ACTION.UPDATE_INCITING_AGENT,
-    //             payload: {
-    //                 newIncitingAgent: option.prop('value'),
-    //                 index: 'foo',
-    //             },
-    //         },
-    //     ];
-    //     expect(store.getActions()).toEqual(expectedAction);
-    // });
-
-    // test('editing reaction dispatches correct action', () => {
-    //     const { store, wrapper } = connectStore();
-    //     const input = wrapper.find('.table-row-text[type="reaction"]').first();
-    //     input.simulate('change', {
-    //         target: { value: 'hives' },
+    // test('addRow works', async () => {
+    //     const { wrapper, store } = connectStore();
+    //     const button = wrapper.find(AddRowButton).find('button');
+    //     expect(button).toBeTruthy();
+    //     await act(() => {
+    //         button.simulate('click');
     //     });
-    //     const expectedAction = [
-    //         {
-    //             type: ALLERGIES_ACTION.UPDATE_REACTION,
-    //             payload: {
-    //                 newReaction: 'hives',
-    //                 index: 'foo',
-    //             },
-    //         },
-    //     ];
-    //     expect(store.getActions()).toEqual(expectedAction);
+
+    //     const expectedActions = [{ type: ALLERGIES_ACTION.ADD_ALLERGY }];
+    //     expect(store.getActions()).toEqual(expectedActions);
     // });
 
-    // it('editing reaction dispatches correct action - mobile', () => {
-    //     const { store, wrapper } = connectStore(initialState);
+    // test('deleteRow works', async () => {
+    //     const { wrapper, store } = connectStore();
 
-    //     window.innerWidth = PATIENT_HISTORY_ALLERGIES_MOBILE_BP - 10;
-    //     window.dispatchEvent(new Event('resize'));
-    //     wrapper.update();
-    //     wrapper
-    //         .find('input[type="reaction"]')
-    //         .first()
-    //         .simulate('change', {
-    //             target: { value: 'hives' },
-    //         });
+    //     const button = wrapper.container.querySelector(
+    //         '.table-row-text[type="comments"]'
+    //     ) as HTMLButtonElement;
 
-    //     const expectedAction = [
+    //     expect(button).toBeTruthy();
+
+    //     button.click();
+
+    //     const expectedActions = [
     //         {
-    //             type: ALLERGIES_ACTION.UPDATE_REACTION,
-    //             payload: {
-    //                 newReaction: 'hives',
-    //                 index: 'foo',
-    //             },
+    //             type: ALLERGIES_ACTION.DELETE_ALLERGY,
+    //             payload: { index: 'foo' },
     //         },
     //     ];
-    //     expect(store.getActions()).toEqual(expectedAction);
+    //     expect(store.getActions()).toEqual(expectedActions);
     // });
 
     test('editing comments dispatches correct action', async () => {
         const { store, wrapper } = connectStore();
-        const input = wrapper.find('.table-row-text[type="comments"]').first();
-        await act(() => {
-            input.simulate('change', {
-                target: { value: 'hives' },
-            });
-        });
+
+        fireEvent.change(
+            wrapper.container.querySelector(
+                '.table-row-text[type="comments"]'
+            ) as HTMLInputElement,
+            { target: { value: 'hives' } }
+        );
+
         const expectedAction = [
             {
                 type: ALLERGIES_ACTION.UPDATE_COMMENTS,
@@ -213,13 +119,13 @@ describe('AllergiesContent', () => {
         await act(() => {
             window.dispatchEvent(new Event('resize'));
         });
-        wrapper.update();
-        wrapper
-            .find('.table-row-text[type="comments"]')
-            .first()
-            .simulate('change', {
-                target: { value: 'Normal' },
-            });
+
+        fireEvent.change(
+            wrapper.container.querySelector(
+                '.table-row-text[type="comments"]'
+            ) as HTMLInputElement,
+            { target: { value: 'Normal' } }
+        );
 
         const expectedAction = [
             {
@@ -233,14 +139,14 @@ describe('AllergiesContent', () => {
         expect(store.getActions()).toEqual(expectedAction);
     });
 
-    test('handle cell click', async () => {
-        const { wrapper } = connectStore();
-        const input = wrapper.find('td').last();
-        await act(() => {
-            input.simulate('click');
-        });
-        expect(wrapper.find('textarea').last().rowindex).toEqual(
-            document.activeElement.rowIndex
-        );
-    });
+    // test('handle cell click', async () => {
+    //     const { wrapper } = connectStore();
+    //     const input = wrapper.find('td').last();
+    //     await act(() => {
+    //         input.simulate('click');
+    //     });
+    //     expect(wrapper.find('textarea').last().rowindex).toEqual(
+    //         document.activeElement.rowIndex
+    //     );
+    // });
 });

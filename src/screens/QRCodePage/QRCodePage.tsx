@@ -9,16 +9,7 @@ import style from './QRCodePage.module.scss';
 import StaffQRCodePage from './StaffQRCodePage';
 import { useReactToPrint } from 'react-to-print';
 
-type QRCodeType = 'patient' | 'staff' | '';
-
-function printDocument() {
-    setTimeout(() => {
-        window.print();
-    }, 100);
-}
-
 function QRCodePage() {
-    const [showQRCodePage, setShowQRCodePage] = useState<QRCodeType>('');
     const patientRef = useRef(null);
     const staffRef = useRef(null);
 

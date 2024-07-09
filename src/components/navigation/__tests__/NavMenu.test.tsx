@@ -10,18 +10,6 @@ import NavMenu from '../NavMenu';
 import NoteNameMenuItem from '../NoteNameMenuItem';
 import { describe, expect, it, vi } from 'vitest';
 
-// vi.mock('../../../providers/AuthProvider', async (importOriginal) => {
-//     const mod =
-//         await importOriginal<
-//             typeof import('../../../providers/AuthProvider')
-//         >();
-//     return {
-//         ...mod,
-//         // replace some exports
-//         namedExport: vi.fn(),
-//     };
-// });
-
 Enzyme.configure({ adapter: new Adapter() });
 const mockStore = configureStore([]);
 

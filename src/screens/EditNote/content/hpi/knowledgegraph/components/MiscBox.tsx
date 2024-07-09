@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { ConnectedProps, connect } from 'react-redux';
 
-import {
-    SetNotesChiefComplaintAction,
-    setNotesChiefComplaint,
-} from '@redux/actions/chiefComplaintsActions';
+import { setNotesChiefComplaint } from '@redux/actions/chiefComplaintsActions';
 import { CurrentNoteState } from '@redux/reducers';
 import { selectPatientViewState } from '@redux/selectors/userViewSelectors';
 import {
@@ -14,8 +11,15 @@ import {
     Icon,
     TextArea,
 } from 'semantic-ui-react';
-import { ChiefComplaintsProps } from '../HPIContent';
-import { PatientViewProps } from './ChiefComplaintsButton';
+
+interface OwnProps {
+    activeThing: string;
+    step: number;
+}
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = ReduxProps & OwnProps;
 
 const MiscBox = (props: Props) => {
     const {
@@ -74,27 +78,17 @@ const MiscBox = (props: Props) => {
         </>
     );
 };
-const mapStateToProps = (
-    state: CurrentNoteState
-): ChiefComplaintsProps & PatientViewProps => {
+const mapStateToProps = (state: CurrentNoteState) => {
     return {
         chiefComplaints: state.chiefComplaints,
         patientView: selectPatientViewState(state),
     };
 };
+
 const mapDispatchToProps = {
     setNotesChiefComplaint,
 };
-interface DispatchProps {
-    setNotesChiefComplaint: (
-        disease: string,
-        notes: string | number | undefined
-    ) => SetNotesChiefComplaintAction;
-}
-interface IProps {
-    activeThing: string;
-    step: number;
-}
-type Props = ChiefComplaintsProps & PatientViewProps & DispatchProps & IProps;
 
-export default connect(mapStateToProps, mapDispatchToProps)(MiscBox);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(MiscBox);

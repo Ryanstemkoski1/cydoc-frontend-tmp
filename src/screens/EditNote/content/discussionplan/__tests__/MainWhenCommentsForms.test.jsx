@@ -25,7 +25,7 @@ const mountWithStore = (
         conditionId,
         // Need to mock actual implementation as this function is responsible
         // for action dispatching
-        formatAction: jest.fn(
+        formatAction: vi.fn(
             (action) =>
                 (_, { uuid, value }) =>
                     action(conditionId, uuid, value)

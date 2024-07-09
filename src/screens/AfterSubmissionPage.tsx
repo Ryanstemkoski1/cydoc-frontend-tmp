@@ -4,9 +4,10 @@ import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
 import useQuery from '@hooks/useQuery';
 import React, { useEffect } from 'react';
 import style from './AfterSubmissionPage.module.scss';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 export default function AfterSubmissionPage() {
+    const router = useRouter();
     const query = useQuery();
 
     const clinician_id = query?.get(HPIPatientQueryParams.CLINICIAN_ID);
@@ -19,40 +20,35 @@ export default function AfterSubmissionPage() {
     }
 
     useEffect(() => {
-        if (!institution_id || !localStorage.getItem('HPI_FORM_SUBMITTED')) {
+        if (!institution_id) {
             redirect('/');
         }
-
-        localStorage.removeItem('HPI_FORM_SUBMITTED');
     }, [institution_id]);
 
     return (
-        <>
-            <div className='centering'>
-                <div
-                    className={`${style.successBlock} flex-wrap align-center justify-center`}
-                >
-                    <div className={style.successBlock__box}>
-                        <picture className='flex align-center justify-center'>
-                            <img src={'/images/check-white.svg'} alt='Check' />
-                        </picture>
-                        <h5>Success!</h5>
-                        <p>
-                            Your questionnaire has successfully {'\n'} been
-                            submitted
-                        </p>
+        <div className='centering'>
+            <div
+                className={`${style.successBlock} flex-wrap align-center justify-center`}
+            >
+                <div className={style.successBlock__box}>
+                    <picture className='flex align-center justify-center'>
+                        <img src={'/images/check-white.svg'} alt='Check' />
+                    </picture>
+                    <h5>Success!</h5>
+                    <p>
+                        {`Your questionnaire has successfully`}
+                        <br />
+                        {`been submitted`}
+                    </p>
 
-                        <button
-                            className='button'
-                            onClick={() => {
-                                window.location.replace(resetButtonURL);
-                            }}
-                        >
-                            Reset the form
-                        </button>
-                    </div>
+                    <button
+                        className='button'
+                        onClick={() => router.replace(resetButtonURL)}
+                    >
+                        Reset the form
+                    </button>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

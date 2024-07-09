@@ -607,7 +607,7 @@ export class PhysicalExamNote extends Component<Props> {
                 return widgetKey in this.widgets &&
                     (this.components[key].active.length > 0 ||
                         this.widgets[widgetKey].length > 0) ? (
-                    <Table.Row>
+                    <Table.Row key={key}>
                         <Table.Cell singleLine>{key}</Table.Cell>
                         <Table.Cell>
                             {this.displayComments(
@@ -621,7 +621,7 @@ export class PhysicalExamNote extends Component<Props> {
                     </Table.Row>
                 ) : !(widgetKey in this.widgets) &&
                   this.components[key].active.length > 0 ? (
-                    <Table.Row>
+                    <Table.Row key={key}>
                         <Table.Cell singleLine>{key}</Table.Cell>
                         <Table.Cell>
                             {this.displayComments(
@@ -639,7 +639,7 @@ export class PhysicalExamNote extends Component<Props> {
                 return widgetKey in this.widgets &&
                     this.components[key].active.length > 0 &&
                     this.widgets[widgetKey].length > 0 ? (
-                    <li>
+                    <li key={key}>
                         <b>{key}: </b>
                         {this.displayComments(this.components[key].comments) +
                             this.components[key].active.join(', ') +
@@ -649,7 +649,7 @@ export class PhysicalExamNote extends Component<Props> {
                     </li>
                 ) : widgetKey in this.widgets &&
                   this.components[key].active.length > 0 ? (
-                    <li>
+                    <li key={key}>
                         <b>{key}: </b>
                         {this.displayComments(this.components[key].comments) +
                             this.components[key].active.join(', ') +
@@ -658,7 +658,7 @@ export class PhysicalExamNote extends Component<Props> {
                 ) : widgetKey in this.widgets &&
                   !(this.components[key].active.length > 0) &&
                   this.widgets[widgetKey].length > 0 ? (
-                    <li>
+                    <li key={key}>
                         <b>{key}: </b>
                         {this.displayComments(this.components[key].comments) +
                             this.widgets[widgetKey].join(', ') +
@@ -666,7 +666,7 @@ export class PhysicalExamNote extends Component<Props> {
                     </li>
                 ) : !(widgetKey in this.widgets) &&
                   this.components[key].active.length > 0 ? (
-                    <li>
+                    <li key={key}>
                         <b>{key}: </b>
                         {this.displayComments(this.components[key].comments) +
                             this.components[key].active.join(', ') +

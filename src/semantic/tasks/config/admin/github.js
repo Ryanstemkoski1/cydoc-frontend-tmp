@@ -26,6 +26,7 @@ github = new githubAPI({
     timeout: 5000,
 });
 
+// TODO(sentry): Could not automatically migrate - see https://github.com/getsentry/sentry-javascript/blob/develop/MIGRATION.md#deprecate-hub
 github.authenticate({
     type: 'oauth',
     token: oAuth.token,

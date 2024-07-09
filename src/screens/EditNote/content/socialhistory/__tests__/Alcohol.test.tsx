@@ -1,5 +1,3 @@
-// import Adapter from '@cfaester/enzyme-adapter-react-18';
-// import Enzyme, { mount } from 'enzyme';
 import React from 'react';
 import Alcohol from '../Alcohol';
 
@@ -18,10 +16,8 @@ import {
     initialSocialHistoryState,
 } from '../../../../../redux/reducers/socialHistoryReducer';
 import { describe, expect, test } from 'vitest';
-import { RenderResult, queries, render } from '@testing-library/react';
+import { fireEvent, render, within } from '@testing-library/react';
 import { Action } from 'redux';
-
-// Enzyme.configure({ adapter: new Adapter() });
 
 const mockStore = configureStore([]);
 
@@ -71,10 +67,9 @@ describe('Alcohol Integration', () => {
         '%s view dispatches correct action when clicking Usage buttons',
         (_type, mountAlcoholWithStore) => {
             const { store, wrapper } = mountAlcoholWithStore();
-            wrapper
-                .find('button[condition="Alcohol"][title="Yes"]')
-                .first()
-                .simulate('click');
+            wrapper.container
+                .querySelector('button[condition="Alcohol"][title="Yes"]')
+                .click();
             let expectedActions = [
                 {
                     type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_USAGE,
@@ -85,10 +80,11 @@ describe('Alcohol Integration', () => {
             ];
             expect(store.getActions()).toEqual(expectedActions);
 
-            wrapper
-                .find('button[condition="Alcohol"][title="In the Past"]')
-                .first()
-                .simulate('click');
+            wrapper.container
+                .querySelector(
+                    'button[condition="Alcohol"][title="In the Past"]'
+                )
+                .click();
             expectedActions.push({
                 type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_USAGE,
                 payload: {
@@ -97,10 +93,11 @@ describe('Alcohol Integration', () => {
             });
             expect(store.getActions()).toEqual(expectedActions);
 
-            wrapper
-                .find('button[condition="Alcohol"][title="Never Used"]')
-                .first()
-                .simulate('click');
+            wrapper.container
+                .querySelector(
+                    'button[condition="Alcohol"][title="Never Used"]'
+                )
+                .click();
             expectedActions.push({
                 type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_USAGE,
                 payload: {
@@ -110,30 +107,6 @@ describe('Alcohol Integration', () => {
             expect(store.getActions()).toEqual(expectedActions);
         }
     );
-
-    // test.each(cases)(
-    //     '%s view dispatches correct action when adding alcohol consumption',
-    //     (_type, mountAlcoholWithStore) => {
-    //         const alcoholState = {
-    //             ...initialSocialHistoryState,
-    //             alcohol: {
-    //                 ...initialSocialHistoryState.alcohol,
-    //                 usage: SubstanceUsageResponse.Yes,
-    //             },
-    //         };
-    //         const { store, wrapper } = mountAlcoholWithStore(alcoholState);
-    //         wrapper
-    //             .find('button[aria-label="Add-Alcohol-Consumption-Button"]')
-    //             .simulate('click');
-
-    //         const expectedActions = [
-    //             {
-    //                 type: SOCIAL_HISTORY_ACTION.ADD_ALCOHOL_CONSUMPTION,
-    //             },
-    //         ];
-    //         expect(store.getActions()).toEqual(expectedActions);
-    //     }
-    // );
 
     test.each(cases)(
         '%s view dispatches correct action when updating drink type',
@@ -155,17 +128,17 @@ describe('Alcohol Integration', () => {
 
             const { store, wrapper } = mountAlcoholWithStore(alcoholState);
 
-            wrapper
-                .find('[aria-label="Alcohol-Consumption-Type-Dropdown"] input')
-                .first()
-                .simulate('click');
+            wrapper.container
+                .querySelector(
+                    '[aria-label="Alcohol-Consumption-Type-Dropdown"] input'
+                )
+                .click();
 
-            wrapper
-                .find(
+            wrapper.container
+                .querySelector(
                     '[aria-label="Alcohol-Consumption-Type-Dropdown"] [role="option"]'
                 )
-                .first()
-                .simulate('click');
+                .click();
 
             const expectedActions = [
                 {
@@ -200,17 +173,17 @@ describe('Alcohol Integration', () => {
 
             const { store, wrapper } = mountAlcoholWithStore(alcoholState);
 
-            wrapper
-                .find('[aria-label="Alcohol-Consumption-Size-Dropdown"] input')
-                .first()
-                .simulate('click');
+            wrapper.container
+                .querySelector(
+                    '[aria-label="Alcohol-Consumption-Size-Dropdown"] input'
+                )
+                .click();
 
-            wrapper
-                .find(
+            wrapper.container
+                .querySelector(
                     '[aria-label="Alcohol-Consumption-Size-Dropdown"] [role="option"]'
                 )
-                .first()
-                .simulate('click');
+                .click();
 
             const expectedActions = [
                 {
@@ -224,49 +197,6 @@ describe('Alcohol Integration', () => {
             expect(store.getActions()).toEqual(expectedActions);
         }
     );
-
-    // // TODO: Fix below tests
-    // test.each(cases)(
-    //     '%s view dispatches correct action when updating number of drinks consumed per week',
-    //     (_type, mountAlcoholWithStore) => {
-    //         const alcoholState = {
-    //             ...initialSocialHistoryState,
-    //             alcohol: {
-    //                 ...initialSocialHistoryState.alcohol,
-    //                 usage: SubstanceUsageResponse.Yes,
-    //                 drinksConsumed: [
-    //                     {
-    //                         type: '',
-    //                         size: '',
-    //                         numberPerWeek: -1,
-    //                     },
-    //                 ],
-    //             },
-    //         };
-
-    //         const { store, wrapper } = mountAlcoholWithStore(alcoholState);
-    //         const value = 2;
-
-    //         wrapper
-    //             .find('[aria-label="Alcohol-Number-Per-Week-Input"] input')
-    //             .first()
-    //             .simulate('change', {
-    //                 target: { value },
-    //             });
-
-    //         const expectedActions = [
-    //             {
-    //                 type:
-    //                     SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_CONSUMPTION_NUMBER_PER_WEEK,
-    //                 payload: {
-    //                     index: 0,
-    //                     newNumberPerWeek: value,
-    //                 },
-    //             },
-    //         ];
-    //         expect(store.getActions()).toEqual(expectedActions);
-    //     }
-    // );
 
     test.each(cases)(
         '%s view dispatches correct action when deleting row from alcohol consumption table',
@@ -288,12 +218,9 @@ describe('Alcohol Integration', () => {
 
             const { store, wrapper } = mountAlcoholWithStore(alcoholState);
 
-            wrapper
-                .find('button[id="btn-hpi-type-delete"]')
-                .first()
-                .simulate('click');
-
-            wrapper.update();
+            wrapper.container
+                .querySelector('button[id="btn-hpi-type-delete"]')
+                .click();
 
             const expectedAction = {
                 type: SOCIAL_HISTORY_ACTION.DELETE_ALCOHOL_CONSUMPTION,
@@ -320,11 +247,11 @@ describe('Alcohol Integration', () => {
             const { store, wrapper } = mountAlcoholWithStore(alcoholState);
             const expectedActions: (Action & { payload: any })[] = [];
 
-            wrapper
-                .find(
+            wrapper.container
+                .querySelector(
                     '.interested-in-quitting-buttons button[condition="Alcohol"][title="Yes"]'
                 )
-                .simulate('click');
+                .click();
             expectedActions.push({
                 type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
                 payload: {
@@ -333,11 +260,11 @@ describe('Alcohol Integration', () => {
             });
             expect(store.getActions()).toEqual(expectedActions);
 
-            wrapper
-                .find(
+            wrapper.container
+                .querySelector(
                     '.interested-in-quitting-buttons button[condition="Alcohol"][title="Maybe"]'
                 )
-                .simulate('click');
+                .click();
             expectedActions.push({
                 type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
                 payload: {
@@ -346,11 +273,11 @@ describe('Alcohol Integration', () => {
             });
             expect(store.getActions()).toEqual(expectedActions);
 
-            wrapper
-                .find(
+            wrapper.container
+                .querySelector(
                     '.interested-in-quitting-buttons button[condition="Alcohol"][title="No"]'
                 )
-                .simulate('click');
+                .click();
             expectedActions.push({
                 type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_INTERESTED_IN_QUITTING,
                 payload: {
@@ -375,11 +302,11 @@ describe('Alcohol Integration', () => {
             const { store, wrapper } = mountAlcoholWithStore(alcoholState);
             const expectedActions: (Action & { payload: any })[] = [];
 
-            wrapper
-                .find(
+            wrapper.container
+                .querySelector(
                     '.tried-to-quit-buttons button[condition="Alcohol"][title="Yes"]'
                 )
-                .simulate('click');
+                .click();
             expectedActions.push({
                 type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_TRIED_TO_QUIT,
                 payload: {
@@ -388,11 +315,11 @@ describe('Alcohol Integration', () => {
             });
             expect(store.getActions()).toEqual(expectedActions);
 
-            wrapper
-                .find(
+            wrapper.container
+                .querySelector(
                     '.tried-to-quit-buttons button[condition="Alcohol"][title="No"]'
                 )
-                .simulate('click');
+                .click();
             expectedActions.push({
                 type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_TRIED_TO_QUIT,
                 payload: {
@@ -417,11 +344,14 @@ describe('Alcohol Integration', () => {
             const { store, wrapper } = mountAlcoholWithStore(alcoholState);
             const value = 'new comments';
 
-            wrapper
-                .find('textarea[field="Comments"][condition="Alcohol"]')
-                .simulate('change', {
+            fireEvent.change(
+                wrapper.container.querySelector(
+                    'textarea[field="Comments"][condition="Alcohol"]'
+                ),
+                {
                     target: { value },
-                });
+                }
+            );
             const expectedActions = [
                 {
                     type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_COMMENTS,
@@ -448,11 +378,14 @@ describe('Alcohol Integration', () => {
             const { store, wrapper } = mountAlcoholWithStore(alcoholState);
             const value = 2020;
 
-            wrapper
-                .find('div[field="Quit Year"][condition="Alcohol"] input')
-                .simulate('change', {
+            fireEvent.change(
+                wrapper.container.querySelector(
+                    'div[field="Quit Year"][condition="Alcohol"] input'
+                ),
+                {
                     target: { value },
-                });
+                }
+            );
             const expectedActions = [
                 {
                     type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_QUIT_YEAR,
@@ -485,13 +418,12 @@ describe('Alcohol Integration', () => {
             mobile: false,
         });
 
-        wrapper.find('td').first().simulate('click');
+        const cell = wrapper.container.querySelector(
+            'td'
+        ) as HTMLTableCellElement;
 
-        expect(
-            wrapper
-                .find('td')
-                .first()
-                .find('div[role="listbox"][class="visible menu transition"]')
-        ).toBeTruthy();
+        cell.click();
+
+        expect(within(cell).findByRole('listbox')).toBeTruthy();
     });
 });

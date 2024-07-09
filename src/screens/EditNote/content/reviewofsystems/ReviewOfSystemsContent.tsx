@@ -2,56 +2,38 @@ import NavigationButton from '@components/tools/NavigationButton/NavigationButto
 import { withDimensionsHook } from '@hooks/useDimensions';
 import React, { Component } from 'react';
 import Masonry from 'react-masonry-css';
-import { connect } from 'react-redux';
+import { ConnectedProps, connect } from 'react-redux';
 import { CurrentNoteState } from '@redux/reducers';
 import { selectReviewOfSystemsCategories } from '@redux/selectors/reviewOfSystemsSelectors';
 import { selectPatientViewState } from '@redux/selectors/userViewSelectors';
 import { Header, Segment } from 'semantic-ui-react';
 import constants from '../../../../constants/review-of-systems-constants.json';
-import { PatientViewProps } from '../hpi/knowledgegraph/components/ChiefComplaintsButton';
 import './ReviewOfSystems.css';
 import ReviewOfSystemsCategory from './ReviewOfSystemsCategory';
 
-interface ContentProps {
+interface OwnProps {
     nextFormClick: () => void;
     previousFormClick: () => void;
     setItem: (key: string, value: any) => void;
 }
 
-interface StateProps {
-    ROSCategories: string[];
-}
+type ReduxProps = ConnectedProps<typeof connector>;
 
-interface SectionProps {
-    [category: string]: string[];
-}
-
-type ROSContentProps = ContentProps &
-    SectionProps &
-    StateProps &
-    PatientViewProps & {
+type Props = OwnProps &
+    ReduxProps & {
         dimensions: {
             windowWidth: number;
             windowHeight: number;
         };
     };
 
-const mapStateToProps = (
-    state: CurrentNoteState
-): StateProps & PatientViewProps => ({
-    ROSCategories: selectReviewOfSystemsCategories(state),
-    patientView: selectPatientViewState(state),
-});
-
-class ReviewOfSystemsContent extends Component<ROSContentProps> {
+class ReviewOfSystemsContent extends Component<Props> {
     previousFormClick = () => {
         this.props.previousFormClick();
-        window.localStorage.this.setItem('activeIndex', 5);
-        window.localStorage.this.setItem('activeTabName', 'Family History');
     };
 
     render() {
-        const { nextFormClick, previousFormClick, patientView, dimensions } =
+        const { dimensions, nextFormClick, previousFormClick, patientView } =
             this.props;
 
         const { windowWidth } = dimensions;
@@ -109,6 +91,11 @@ class ReviewOfSystemsContent extends Component<ROSContentProps> {
     }
 }
 
-export default withDimensionsHook(
-    connect(mapStateToProps, null)(ReviewOfSystemsContent)
-);
+const mapStateToProps = (state: CurrentNoteState) => ({
+    ROSCategories: selectReviewOfSystemsCategories(state),
+    patientView: selectPatientViewState(state),
+});
+
+const connector = connect(mapStateToProps);
+
+export default withDimensionsHook(connector(ReviewOfSystemsContent));

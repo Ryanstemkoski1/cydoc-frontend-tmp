@@ -8,7 +8,7 @@
 
 2. Install nvm. Nvm is used to manage different versions of Node. Nvm for Windows can be found [here](https://github.com/coreybutler/nvm-windows/releases).
 
-3. Use nvm to install the appropriate version of Node by running **nvm install 16.18.0** in a terminal. Then run **nvm use 16.18.0**.
+3. Use nvm to install the appropriate version of Node by running **nvm install 18** in a terminal. Then run **nvm use 18**.
 
 4. Download the code to the directory you wish to use it from. We recommend "C:/src". One of the simplest ways to clone the codebase is to run **git clone https://github.com/cydoc-ai/cydoc_frontend.git**. You will be asked to set up authentication to GitHub as part of this process.
 
@@ -20,7 +20,7 @@
 
 ## Amplify
 
-We use amplify to provision auth (cognito), messaging templates (SNS) & auth related hooks
+We use amplify to run continuous deployment, provision auth (cognito), messaging templates (SNS) & auth related hooks
 
 You'll want a production (us-east-1) and a staging (us-east-2) profile in your aws cli config
 
@@ -76,40 +76,14 @@ If the `npm scripts` are not running correctly, it's likely your bash env is mes
 What do you see when you run `uname`?
 Relevant info: https://stackoverflow.com/questions/50998089/running-npm-script-on-windows-starting-with-a-period
 
-# DEPRECATED Testing with Jest and Enzyme
+# Testing with Vitest
 
-To get started with testing, in your terminal run these two commands:
-
-```
-npm install --save-dev jest
-npm install --save-dev enzyme jest-enzyme enzyme-adapter-react-16
-```
-
-In your test file (e.g. EditProfile.test.js), include these imports:
-
-```
-import React from 'react'
-import Enzyme from 'enzyme'
-import EnzymeAdapter from 'enzyme-adapter-react-16'
-import ComponentToBeTested from 'wherever/component/is/located'
-```
-
-Also in your test file, include this single line to set up the testing:
-
-```
-Enzyme.configure({ adapter: new EnzymeAdapter() })
-```
-
-When testing, it will also be common to have this import:
-
-```
-import Enzyme, { shallow } from 'enzyme'
-```
+**New tests should be written using `vitest` _without_ Jest or Enzyme**
 
 And this corresponding line of code within a test:
 
 ```
-const wrapper = shallow(<MyComponent />)
+const wrapper = render(<MyComponent />)
 ```
 
 (the method shallow renders the single component you are testing, it does not render child components -- to render child components it is common to use mount instead of shallow)
@@ -131,11 +105,5 @@ describe('here is a group of tests', () => {
 });
 ```
 
-To find documentation on testing with Enzyme, go to:
-[https://enzymejs.github.io/enzyme/](https://enzymejs.github.io/enzyme/)
-
-For more help check out the following resources:
-
--   The Udemy course [React Testing with Jest and Enzyme](https://www.udemy.com/course/react-testing-with-jest-and-enzyme/)
--   [Alicia Steiman's notes on this Udemy course](https://drive.google.com/file/d/1BB6xr8zONUKdINGIZk4Zt6rDz_Cfq0cD/view?usp=sharing)
--   [Alicia Steiman's front-end testing instruction video](https://drive.google.com/file/d/1_GTnP3PYZx-tipXoDZQG3Tau8vqFbpje/view?usp=sharing)
+To find documentation on testing with Vitest, go to:
+[https://vitest.dev/guide/](https://vitest.dev/guide/)

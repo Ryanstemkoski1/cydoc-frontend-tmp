@@ -4,7 +4,7 @@ import Dropdown from '@components/tools/OptimizedDropdown';
 import allergens from '@constants/allergens';
 import allergicReactions from '@constants/allergicReactions';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import { ConnectedProps, connect } from 'react-redux';
 import {
     addAllergy,
     deleteAllergy,
@@ -35,6 +35,20 @@ import {
 import './AllergiesContent.css';
 import AllergiesTableBodyRow from './AllergiesTableBodyRow';
 import './table.css';
+
+interface OwnProps {
+    isPreview?: boolean;
+}
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = OwnProps & ReduxProps;
+
+interface OwnState {
+    active: Set<string>;
+    allergensOptions: OptionMapping;
+    allergicReactionsOptions: OptionMapping;
+}
 
 //Component that manages the layout for the allergies page
 class AllergiesContent extends Component<Props, OwnState> {
@@ -132,7 +146,6 @@ class AllergiesContent extends Component<Props, OwnState> {
                 rowIndex={rowIndex as keyof AllergiesElements}
                 fields={cellField}
                 onTableBodyChange={this.handleTableBodyChange}
-                isPreview={this.props.isPreview}
                 allergensOptions={this.state.allergensOptions}
                 allergicReactionsOptions={this.state.allergicReactionsOptions}
                 onAddItem={this.onAddItem}
@@ -283,33 +296,11 @@ type Panel = {
     onTitleClick: (event: React.MouseEvent) => void;
 };
 
-interface DispatchProps {
-    updateIncitingAgent: (index: string, newIncitingAgent: string) => void;
-    updateReaction: (index: string, newReaction: string) => void;
-    updateComments: (index: string, newComment: string) => void;
-    updateId: (index: string, id: string) => void;
-    addAllergy: () => void;
-    deleteAllergy: (index: string) => void;
-    toggleHasAllergies: (state: boolean) => void;
-}
-
 interface AllergiesProps {
     hasAllergies: boolean | null;
     allergies: AllergiesElements;
     patientView: boolean;
 }
-
-interface ContentProps {
-    isPreview: boolean;
-}
-
-interface OwnState {
-    active: Set<string>;
-    allergensOptions: OptionMapping;
-    allergicReactionsOptions: OptionMapping;
-}
-
-type Props = AllergiesProps & DispatchProps & ContentProps;
 
 const mapStateToProps = (state: CurrentNoteState): AllergiesProps => {
     return {
@@ -329,4 +320,6 @@ const mapDispatchToProps = {
     deleteAllergy,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllergiesContent);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(AllergiesContent);

@@ -58,7 +58,7 @@ class NotePage extends Component<Props> {
             patientHistoryMenu != null
         ) {
             for (let i = 0; i < stickyHeaders.length; i++) {
-                // @ts-ignore - TS doesn't know about style properties?
+                // @ts-expect-error - TS doesn't know about style properties?
                 stickyHeaders[i].style.top = `${
                     parseInt(patientHistoryMenu.style.top) +
                     patientHistoryMenu.offsetHeight

@@ -16,12 +16,10 @@ import {
     processSurveyGraph,
 } from '@redux/actions/userViewActions';
 import { CurrentNoteState } from '@redux/reducers';
-import { AdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 import { isSelectOneResponse } from '@redux/reducers/hpiReducer';
 import {
     InitialQuestionsState,
     isChiefComplaintsResponse,
-    UserSurveyState,
 } from '@redux/reducers/userViewReducer';
 import {
     selectInitialPatientSurvey,
@@ -36,14 +34,8 @@ import {
     Segment,
     TextArea,
 } from 'semantic-ui-react';
-import {
-    ChiefComplaintsProps,
-    HpiHeadersProps,
-} from '../hpi/knowledgegraph/HPIContent';
 import { hpiHeaders } from '../hpi/knowledgegraph/API';
-import ChiefComplaintsButton, {
-    PatientViewProps,
-} from '../hpi/knowledgegraph/components/ChiefComplaintsButton';
+import ChiefComplaintsButton from '../hpi/knowledgegraph/components/ChiefComplaintsButton';
 import DetailsPage from './AdditionalSurvey';
 import './InitialSurvey.css';
 import InputTextOrDateResponse from './InputTextOrDateResponse';
@@ -53,7 +45,7 @@ import initialQuestions from './constants/initialQuestions';
 import patientViewHeaders from './constants/patientViewHeaders.json';
 import { setChiefComplaint } from '@redux/actions/chiefComplaintsActions';
 
-interface InitialSurveyState {
+interface State {
     activeItem: number;
     error: boolean;
     searchVal: string;
@@ -67,23 +59,15 @@ interface InitialSurveyState {
     message: string;
 }
 
-interface InitialSurveyComponentProps {
+interface OwnProps {
     continue: (e: any) => void;
 }
-
-type OwnProps = HpiHeadersProps &
-    InitialSurveyComponentProps &
-    InitialSurveyProps &
-    HpiHeadersProps &
-    PatientViewProps &
-    ChiefComplaintsProps &
-    AdditionalSurveyProps;
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = ReduxProps & OwnProps;
 
-class InitialSurvey extends React.Component<Props, InitialSurveyState> {
+class InitialSurvey extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -321,6 +305,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
 
         const { data } = response;
         this.props.processKnowledgeGraph(data);
+        // FIXME: These are the nodes and edges that are returned from the API, but they appear to be unused
         // const { graph, nodes, edges } = data as GraphData;
         // const parentNode = parentNodes[complaint][chiefComplaint];
         // const childNodes = graph[parentNode]
@@ -601,21 +586,7 @@ class InitialSurvey extends React.Component<Props, InitialSurveyState> {
     }
 }
 
-export interface InitialSurveyProps {
-    userSurveyState: UserSurveyState;
-}
-
-export interface AdditionalSurveyProps {
-    additionalSurvey: AdditionalSurvey;
-}
-
-const mapStateToProps = (
-    state: CurrentNoteState
-): InitialSurveyProps &
-    HpiHeadersProps &
-    PatientViewProps &
-    ChiefComplaintsProps &
-    AdditionalSurveyProps => {
+const mapStateToProps = (state: CurrentNoteState) => {
     return {
         userSurveyState: selectInitialPatientSurvey(state),
         hpiHeaders: state.hpiHeaders,

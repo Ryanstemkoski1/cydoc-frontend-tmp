@@ -103,6 +103,14 @@ export function medicalHistoryReducer(
             is saved with the new condition ID.
             */
             const { conditionIndex, conditionName } = action.payload;
+
+            // sometimes the condition is already present under a different id, don't create dupes
+            const existingKey = Object.keys(state).find(
+                (entry) => state[entry].condition == conditionName
+            );
+            if (existingKey) {
+                return state;
+            }
             return {
                 ...state,
                 [conditionIndex]: {

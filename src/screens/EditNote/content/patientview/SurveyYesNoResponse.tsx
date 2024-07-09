@@ -7,26 +7,12 @@ import { setChiefComplaint } from '@redux/actions/chiefComplaintsActions';
 import { processKnowledgeGraph } from '@redux/actions/hpiActions';
 import { initialSurveyYesNo } from '@redux/actions/userViewActions';
 import { CurrentNoteState } from '@redux/reducers';
-import { UserSurveyState } from '@redux/reducers/userViewReducer';
 import { selectChiefComplaintsState } from '@redux/selectors/chiefComplaintsSelectors';
 import { selectInitialPatientSurvey } from '@redux/selectors/userViewSelectors';
-import {
-    ChiefComplaintsProps,
-    HpiHeadersProps,
-} from '../hpi/knowledgegraph/HPIContent';
 
-interface SurveyYesNoResponseProps {
+interface OwnProps {
     id: string;
 }
-
-export interface InitialSurveyProps {
-    userSurveyState: UserSurveyState;
-}
-
-type OwnProps = InitialSurveyProps &
-    SurveyYesNoResponseProps &
-    ChiefComplaintsProps &
-    HpiHeadersProps;
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -92,9 +78,7 @@ class SurveyYesNoResponse extends React.Component<Props> {
     }
 }
 
-const mapStateToProps = (
-    state: CurrentNoteState
-): InitialSurveyProps & ChiefComplaintsProps & HpiHeadersProps => {
+const mapStateToProps = (state: CurrentNoteState) => {
     return {
         chiefComplaints: selectChiefComplaintsState(state),
         hpiHeaders: state.hpiHeaders,

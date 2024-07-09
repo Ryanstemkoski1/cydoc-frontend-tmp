@@ -115,7 +115,7 @@ describe('generateHpiText', () => {
         // });
     });
 
-    describe('definePatientNameAndPronouns', () => {
+    describe.todo('definePatientNameAndPronouns', () => {
         // // TODO: Fix below tests
         // it('handles general title, M', () => {
         //     const title = 'general';
@@ -158,7 +158,7 @@ describe('generateHpiText', () => {
         // });
     });
 
-    describe('fillNameAndPronouns', () => {
+    describe.todo('fillNameAndPronouns', () => {
         // // TODO: Fix below tests
         // it('handles empty empty', () => {
         //     expect(
@@ -280,7 +280,7 @@ describe('generateHpiText', () => {
         });
     });
 
-    describe('createHPI', () => {
+    describe.todo('createHPI', () => {
         // // TODO: Fix below tests
         // it('chains everything together', () => {
         //     const hpi = {

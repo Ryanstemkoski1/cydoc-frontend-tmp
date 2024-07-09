@@ -4,6 +4,7 @@ import MobileDatePicker from '@components/Input/MobileDatePicker';
 import React, { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import style from './AdditionalSurvey.module.scss';
+import useIsMobile from '@hooks/useIsMobile';
 
 export interface AdditionalSurveyProps {
     legalFirstName: string;
@@ -37,10 +38,7 @@ const AdditionalSurvey = ({
     });
 
     const isHPIPage = usePathname()?.includes(ProductType.HPI);
-    const isMobile =
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-            navigator.userAgent
-        );
+    const isMobile = useIsMobile();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

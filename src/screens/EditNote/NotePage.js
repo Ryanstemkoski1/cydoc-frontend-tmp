@@ -56,8 +56,9 @@ class NotePage extends Component {
             lastIndex == hpiTab ||
             this.props.activeItem == 'CC'
         ) {
-            this.nextFormClick();
+            this.props.onNextClick();
         } else hpiTab += 1;
+
         this.setState({
             activeHPI: Object.keys(this.props.chiefComplaints)[hpiTab],
         });
@@ -70,7 +71,7 @@ class NotePage extends Component {
             !Object.keys(this.props.chiefComplaints).length ||
             Object.keys(this.props.chiefComplaints)[0] == this.state.activeHPI
         )
-            this.previousFormClick();
+            this.props.onPreviousClick();
         else
             this.setState({
                 activeHPI: Object.keys(this.props.chiefComplaints)[
@@ -182,23 +183,15 @@ class NotePage extends Component {
         }
     }
 
-    nextFormClick = () => {
-        this.props.onNextClick();
-    };
-
-    previousFormClick = () => {
-        this.props.onPreviousClick();
-    };
-
     getTabToDisplay(activeItem) {
         //Instantiates and returns the correct content component based on the active tab
         //passes in the corresponding handler and values prop
-        let tabToDisplay;
-        const { patientView, chiefComplaints } = this.props,
-            defaultTab = <InitialSurvey continue={this.continueHPITab} />;
+        const { patientView, chiefComplaints } = this.props;
+        const defaultTab = <InitialSurvey continue={this.continueHPITab} />;
+
         switch (activeItem) {
             case 'CC':
-                tabToDisplay = patientView ? (
+                return patientView ? (
                     defaultTab
                 ) : (
                     <HPIContent
@@ -213,9 +206,8 @@ class NotePage extends Component {
                         onTabClick={this.setHPITab}
                     />
                 );
-                break;
             case 'HPI':
-                tabToDisplay = Object.keys(chiefComplaints).length ? (
+                return Object.keys(chiefComplaints).length ? (
                     <HPIContent
                         step={
                             this.state.activeHPI in chiefComplaints
@@ -248,12 +240,11 @@ class NotePage extends Component {
                         </div>
                     </>
                 );
-                break;
             case 'Patient History':
-                tabToDisplay = (
+                return (
                     <PatientHistoryContent
-                        nextFormClick={this.nextFormClick}
-                        previousFormClick={this.previousFormClick}
+                        nextFormClick={this.props.onNextClick}
+                        previousFormClick={this.props.onPreviousClick}
                         activePMH={this.state.activePMH}
                         pmhIndex={this.state.pmhTab}
                         onTabClick={this.onPMHTabClick}
@@ -261,44 +252,42 @@ class NotePage extends Component {
                         handlePMHTabChange={this.handlePMHTabChange}
                     />
                 );
-                break;
             case 'Physical Exam':
-                tabToDisplay = (
+                return (
                     <PhysicalExamContent
-                        nextFormClick={this.nextFormClick}
-                        previousFormClick={this.previousFormClick}
+                        nextFormClick={this.props.onNextClick}
+                        previousFormClick={this.props.onPreviousClick}
                     />
                 );
-                break;
             case 'Review of Systems':
-                tabToDisplay = (
+                return (
                     <ReviewOfSystemsContent
-                        nextFormClick={this.nextFormClick}
-                        previousFormClick={this.previousFormClick}
+                        nextFormClick={this.props.onNextClick}
+                        previousFormClick={this.props.onPreviousClick}
                     />
                 );
-                break;
             case 'Intake and Note':
-                tabToDisplay = patientView ? (
+                return patientView ? (
                     defaultTab
                 ) : (
-                    <GenerateNote previousFormClick={this.previousFormClick} />
+                    <GenerateNote
+                        previousFormClick={this.props.onPreviousClick}
+                    />
                 );
-                break;
             case 'Plan':
-                tabToDisplay = patientView ? (
+                return patientView ? (
                     defaultTab
                 ) : (
                     <DiscussionPlan
-                        nextFormClick={this.nextFormClick}
-                        previousFormClick={this.previousFormClick}
+                        nextFormClick={this.props.onNextClick}
+                        previousFormClick={this.props.onPreviousClick}
                     />
                 );
-                break;
+
             default:
-                tabToDisplay = (
+                return (
                     <HPIContent
-                        nextFormClick={this.nextFormClick}
+                        nextFormClick={this.props.onNextClick}
                         step={
                             this.state.activeHPI in this.props.chiefComplaints
                                 ? Object.keys(
@@ -314,9 +303,7 @@ class NotePage extends Component {
                         onTabClick={this.setHPITab}
                     />
                 );
-                break;
         }
-        return tabToDisplay;
     }
 
     render() {

@@ -2,7 +2,6 @@ import axios from 'axios';
 import ToggleButton from '@components/tools/ToggleButton/ToggleButton';
 import { graphClientURL } from '@constants/api.js';
 import { getSelectedChiefComplaints } from '@hooks/useSelectedChiefComplaints';
-import { InitialSurveyProps } from '@screens/HPI/ChiefComplaintSelection/CCSelection';
 import React from 'react';
 import { ConnectedProps, connect } from 'react-redux';
 import { setChiefComplaint } from '@redux/actions/chiefComplaintsActions';
@@ -14,25 +13,11 @@ import {
     selectInitialPatientSurvey,
     selectPatientViewState,
 } from '@redux/selectors/userViewSelectors';
-import { ChiefComplaintsProps, HpiHeadersProps } from '../HPIContent';
 import './BodySystemDropdown';
 
-interface ChiefComplaintsButtonProps {
+interface OwnProps {
     name: string;
 }
-export interface PatientViewProps {
-    patientView: boolean;
-}
-
-interface ActiveItemProps {
-    activeItem: string;
-}
-type OwnProps = InitialSurveyProps &
-    ChiefComplaintsButtonProps &
-    ChiefComplaintsProps &
-    HpiHeadersProps &
-    PatientViewProps &
-    ActiveItemProps;
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -102,13 +87,7 @@ class ChiefComplaintsButton extends React.Component<Props> {
     }
 }
 
-const mapStateToProps = (
-    state: CurrentNoteState
-): ChiefComplaintsProps &
-    InitialSurveyProps &
-    HpiHeadersProps &
-    PatientViewProps &
-    ActiveItemProps => ({
+const mapStateToProps = (state: CurrentNoteState) => ({
     chiefComplaints: selectChiefComplaintsState(state),
     hpiHeaders: state.hpiHeaders,
     patientView: selectPatientViewState(state),

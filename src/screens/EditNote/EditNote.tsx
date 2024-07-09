@@ -8,8 +8,6 @@ import { Message } from 'semantic-ui-react';
 import MenuTabs from './MenuTabs';
 import NotePage from './NotePage';
 import { RootState } from '@redux/store';
-import { withRouter } from 'next/router';
-import { WithRouterProps } from 'next/dist/client/with-router';
 
 import { YesNoResponse } from '@constants/enums';
 import { updateActiveItem } from '@redux/actions/activeItemActions';
@@ -21,6 +19,7 @@ import {
 } from '@redux/selectors/userViewSelectors';
 import './EditNote.css';
 import './NotePage.css';
+import withRouter, { WithRouterProps } from '@hooks/withRouter';
 
 interface OwnProps extends WithRouterProps {}
 
@@ -48,7 +47,11 @@ class EditNote extends Component<Props, State> {
         };
     }
 
-    timeoutRef = createRef<NodeJS.Timeout | null>();
+    // Reference for the Sticky navigation bars
+    noteContent = createRef<HTMLDivElement>();
+    // Reference for the timer for the error message
+    timeoutRef: NodeJS.Timeout | null = null;
+
     componentDidMount() {
         // Setting view to top of the page upon loading a note
         setTimeout(() => {
@@ -94,8 +97,7 @@ class EditNote extends Component<Props, State> {
     }
 
     onTabChange(name) {
-        // @ts-expect-error TODO: fix this, add Typescript types
-        clearTimeout(this.timeoutRef?.current);
+        if (this.timeoutRef) clearTimeout(this.timeoutRef);
         this.setState({ message: '' });
         if (
             this.props.patientView &&
@@ -107,19 +109,17 @@ class EditNote extends Component<Props, State> {
                     ? 'Please complete all mandatory questions in section 1 before proceeding.'
                     : 'Please answer Yes to at least one question to proceed.',
             });
-            // @ts-expect-error TODO: fix this, add Typescript types
-            this.timeoutRef.current = setTimeout(() => {
+            this.timeoutRef = setTimeout(() => {
                 this.setState({ message: '' });
             }, 3000);
             return;
         }
-        const activeItem = name;
         const activeTabIndex = constants.TAB_NAMES.indexOf(name);
         this.props.updateActiveItem(name);
         this.setState({ activeTabIndex });
         window.scrollTo(0, 0);
-        this.props.router.push({
-            hash: '#' + encodeURI(name),
+        this.props.router.push('#' + encodeURI(name), undefined, {
+            shallow: true,
         });
     }
 
@@ -145,29 +145,17 @@ class EditNote extends Component<Props, State> {
         window.scrollTo(0, 0);
     }
 
-    // Reference for the Sticky navigation bars
-    noteContent = createRef();
-
     render() {
-        // Redirects to LandingPage if there is no valid note in constext
+        // Redirects to LandingPage if there is no valid note in context
         // re-implement once we start saving notes again
         // if (this.props._id === '') {
         //     return <Redirect push to='/dashboard' />;
         // }
 
         return (
-            <div
-                // @ts-expect-error TODO: fix this, add Typescript types
-                ref={this.noteContent}
-            >
+            <div ref={this.noteContent}>
                 {/* Top NavMenu and MenuTabs stay on top regardless of scroll*/}
-                <MenuTabs
-                    // @ts-expect-error TODO: fix this, add Typescript types
-                    activeItem={this.props.activeItem}
-                    onTabChange={this.onTabChange}
-                    activeTabIndex={this.state.activeTabIndex}
-                    attached
-                />
+                <MenuTabs onTabChange={this.onTabChange} />
 
                 {this.props.patientView && this.state?.message && (
                     <Message
