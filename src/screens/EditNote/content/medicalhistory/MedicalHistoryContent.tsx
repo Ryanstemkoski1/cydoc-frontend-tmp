@@ -6,15 +6,9 @@ import { YesNoResponse } from '@constants/enums';
 import { ResponseTypes } from '@constants/hpiEnums';
 import { standardizeDiseaseNames } from '@constants/standardizeDiseaseNames';
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
+import { blankQuestionChange, popResponse } from '@redux/actions/hpiActions';
 import {
-    BlankQuestionChangeAction,
-    PopResponseAction,
-    blankQuestionChange,
-    popResponse,
-} from '@redux/actions/hpiActions';
-import {
-    AddPmhPopOptionsAction,
     addPmhPopOptions,
     deleteCondition,
     toggleOption,
@@ -359,7 +353,7 @@ export type SeenCondition = {
     [index: string]: string;
 };
 
-interface ContentProps {
+interface OwnProps {
     isPreview: boolean;
     currentYear: number;
     responseChoice?: string[];
@@ -369,38 +363,13 @@ interface ContentProps {
     showNo?: boolean;
 }
 
-interface MedicalHistoryProps {
-    medicalHistory: MedicalHistoryState;
-}
+type ReduxProps = ConnectedProps<typeof connector>;
 
-interface DispatchProps {
-    toggleOption: (index: string, optionSelected: YesNoResponse) => void;
-    updateStartYear: (index: string, newStartYear: number) => void;
-    updateEndYear: (index: string, newEndYear: number) => void;
-    updateComments: (index: string, newComments: string) => void;
-    updateConditionResolved: (
-        index: string,
-        optionSelected: YesNoResponse
-    ) => void;
-    addPmhPopOptions: (
-        conditionIndex: string,
-        conditionName: string
-    ) => AddPmhPopOptionsAction;
-    blankQuestionChange: (
-        medId: string,
-        conditionId: string
-    ) => BlankQuestionChangeAction;
-    popResponse: (medId: string, conditionIds: string[]) => PopResponseAction;
-    deleteCondition: (conditionIndex: string) => void;
-}
+type Props = OwnProps & ReduxProps;
 
-type Props = MedicalHistoryProps & DispatchProps & ContentProps;
-
-const mapStateToProps = (state: CurrentNoteState): MedicalHistoryProps => {
-    return {
-        medicalHistory: selectMedicalHistoryState(state),
-    };
-};
+const mapStateToProps = (state: CurrentNoteState) => ({
+    medicalHistory: selectMedicalHistoryState(state),
+});
 
 const mapDispatchToProps = {
     toggleOption,
@@ -414,7 +383,5 @@ const mapDispatchToProps = {
     deleteCondition,
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(MedicalHistoryContent);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export default connector(MedicalHistoryContent);

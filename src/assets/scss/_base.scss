@@ -12,15 +12,12 @@ body {
 }
 body {
     color: $color-black !important;
-    font-size: $font-size-base;
+    font-size: $font-size-base !important;;
     line-height: $line-height-base;
     background-color: $color-light;
     font-family: $font-family-primary;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    @include max-screen($mobile) {
-        font-size: 14px;
-    }
     &.isHidden {
         overflow: hidden;
     }

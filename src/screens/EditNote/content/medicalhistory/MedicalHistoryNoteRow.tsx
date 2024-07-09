@@ -288,10 +288,15 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 type Props = OwnProps & ReduxProps;
 
-type OwnProps = {
+interface OwnProps {
+    conditionInput: JSX.Element;
+    currentYear: number;
     index: string;
+    isPreview?: boolean;
     deleteRow: (index: string) => void;
-};
+    dontShowOptions?: boolean;
+    hide?: boolean;
+}
 
 const mapDispatchToProps = {
     toggleOption,

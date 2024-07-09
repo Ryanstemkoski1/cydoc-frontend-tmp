@@ -1,10 +1,7 @@
-import Adapter from '@cfaester/enzyme-adapter-react-18';
-import Enzyme, { mount } from 'enzyme';
 import React from 'react';
 import { BaseCategoryForm } from '../forms/BaseCategoryForm';
 import { describe, expect, it, vi } from 'vitest';
-
-Enzyme.configure({ adapter: new Adapter() });
+import { fireEvent, render } from '@testing-library/react';
 
 const mountWithProps = ({ ...props } = {}) => {
     props = {
@@ -19,7 +16,7 @@ const mountWithProps = ({ ...props } = {}) => {
         },
         ...props,
     };
-    return mount(<BaseCategoryForm {...props} />);
+    return render(<BaseCategoryForm {...props} />);
 };
 
 describe('BaseCategoryForm', () => {
@@ -30,7 +27,7 @@ describe('BaseCategoryForm', () => {
 
     it('matches snapshot', () => {
         const wrapper = mountWithProps();
-        expect(wrapper.html()).toMatchSnapshot();
+        expect(wrapper.container.innerHTML).toMatchSnapshot();
     });
 
     // it('calls only mobileContent and mobileTitle when in mobile view', () => {
@@ -102,14 +99,20 @@ describe('BaseCategoryForm', () => {
             mobile: false,
             category: 'prescriptions',
         });
-        expect(wrapper.find('.active.content')).toHaveLength(1);
-        wrapper.find('.title').first().simulate('click');
-        expect(wrapper.find('.active.content')).toHaveLength(1);
+        expect(
+            wrapper.container.querySelectorAll('.active.content')
+        ).toHaveLength(1);
+        (
+            wrapper.container.querySelector('.title') as HTMLButtonElement
+        ).click();
+        expect(
+            wrapper.container.querySelectorAll('.active.content')
+        ).toHaveLength(1);
     });
 
     it('converts category prop to header using start case', () => {
         const wrapper = mountWithProps({ category: 'differentialDiagnoses' });
-        const header = wrapper.find('.ui.attached.header');
-        expect(header.text()).toEqual('Differential Diagnoses');
+        const header = wrapper.container.querySelector('.ui.attached.header');
+        expect(header?.textContent).toEqual('Differential Diagnoses');
     });
 });
