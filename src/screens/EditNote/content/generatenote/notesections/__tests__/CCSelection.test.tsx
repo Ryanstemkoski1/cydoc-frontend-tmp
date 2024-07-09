@@ -4,7 +4,7 @@ import {
     InstitutionType,
     favComplaintsBasedOnInstituteType,
 } from '../../../../../../classes/institution.class';
-import { hpiHeaders } from '../../../hpi/knowledgegraph/API.js';
+import { hpiHeaders } from '../../../hpi/knowledgegraph/API';
 import initialQuestionsOriginal from '../../../patientview/constants/initialQuestions';
 import CCSelection from '../../../../../HPI/ChiefComplaintSelection/CCSelection';
 import React from 'react';

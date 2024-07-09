@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { API_URL, GRAPH_URL } from '../modules/environment';
+import { API_URL } from '../modules/environment';
 
-export const graphClientURL = GRAPH_URL;
+// TODO: remove "NEXT_PUBLIC" prefix
+// then move calls to graph into server side code with "use-server" directive
+export const graphClientURL = process.env.NEXT_PUBLIC_GRAPH_URL;
 
 export const graphClient = axios.create({
     baseURL: graphClientURL,

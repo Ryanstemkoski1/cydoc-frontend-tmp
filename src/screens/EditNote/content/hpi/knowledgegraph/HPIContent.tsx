@@ -1,6 +1,6 @@
 import axios from 'axios';
 import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
-import { graphClientURL } from '@constants/api.js';
+import { graphClientURL } from '@constants/api';
 import React from 'react';
 import Masonry from 'react-masonry-css';
 import { ConnectedProps, connect } from 'react-redux';

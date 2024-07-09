@@ -1,6 +1,6 @@
 import axios from 'axios';
 import ToggleButton from '@components/tools/ToggleButton/ToggleButton';
-import { graphClientURL } from '@constants/api.js';
+import { graphClientURL } from '@constants/api';
 import { getSelectedChiefComplaints } from '@hooks/useSelectedChiefComplaints';
 import React from 'react';
 import { ConnectedProps, connect } from 'react-redux';

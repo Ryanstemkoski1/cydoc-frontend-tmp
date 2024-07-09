@@ -1,7 +1,7 @@
 import { HPIPatientQueryParams } from '@constants/enums/hpi.patient.enums';
 import axios from 'axios';
 import NavigationButton from '@components/tools/NavigationButton/NavigationButton';
-import { graphClientURL, apiClient } from '@constants/api.js';
+import { graphClientURL, apiClient } from '@constants/api';
 import { favChiefComplaints } from 'classes/institution.class';
 import React, { useCallback } from 'react';
 import Masonry from 'react-masonry-css';

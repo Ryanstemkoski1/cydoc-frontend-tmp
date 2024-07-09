@@ -1,6 +1,6 @@
 'use client';
 
-import { graphClient } from 'constants/api.js';
+import { graphClient } from 'constants/api';
 import diseaseCodes from 'constants/diseaseCodes';
 import { questionTypes } from 'constants/questionTypes';
 import React, { Component, createRef } from 'react';
