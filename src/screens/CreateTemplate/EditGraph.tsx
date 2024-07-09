@@ -15,6 +15,8 @@ const EditGraph = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [isFetching, setIsFetching] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
+
+    // @ts-expect-error FIXME: this existing typescript code is not being used, fix it if we start using it
     const { doctorID, createdTemplates, updateTemplate, setCreatedTemplates } =
         useContext(HPITemplateContext);
 
