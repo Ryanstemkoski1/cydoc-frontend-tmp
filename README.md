@@ -41,6 +41,15 @@ When attempting step 5, an issue may be encountered, particularly when using an 
 
 In the event this occurs, follow the steps outlined in the video linked [here](https://www.youtube.com/watch?v=sZybySiuz6w) and re-attempt to install dependencies.
 
+## Routing and Security
+
+Authentication relies on amplify and can be accessed with the useAuth() hook
+Authorization relies on our SQL database and can be accessed with the useUser() hook
+
+when adding a new route, be sure to add the appropriate auth verification:
+- authentication with useSignInRequired()
+- manager authorization with useManagerRequired()
+
 # Before Submitting a PR
 
 Before committing changes, please run `npm run lint` to lint.

@@ -74,7 +74,6 @@ export const AuthProvider: React.FC<
                     setLoginCorrect(false);
                     setIsSignedIn(false);
                     setCognitoUser(null);
-                    router.push('/login');
                 })
                 .catch((reason) =>
                     log(`Sign out error: ${stringFromError(reason)}`, {

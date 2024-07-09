@@ -7,9 +7,11 @@ import { getAnswerInfo, parseQuestionText, parsePlaceholder } from './util';
 import { Dropdown } from 'semantic-ui-react';
 import { graphClient } from 'constants/api';
 import Link from 'next/link';
+import useSignInRequired from '@hooks/useSignInRequired';
 
 // Component for first step of editing existing HPI template
 const EditGraph = () => {
+    useSignInRequired(); // this route is private, sign in required
     const [errorMessage, setErrorMessage] = useState('');
     const [isFetching, setIsFetching] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);

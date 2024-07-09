@@ -8,8 +8,10 @@ import PatientQRCodePage from './PatientQRCodePage';
 import style from './QRCodePage.module.scss';
 import StaffQRCodePage from './StaffQRCodePage';
 import { useReactToPrint } from 'react-to-print';
+import useSignInRequired from '@hooks/useSignInRequired';
 
 function QRCodePage() {
+    useSignInRequired(); // this route is private, sign in required
     const patientRef = useRef(null);
     const staffRef = useRef(null);
 

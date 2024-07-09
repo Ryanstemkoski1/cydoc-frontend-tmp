@@ -7,9 +7,11 @@ import { getNewTemplate } from './util';
 import Link from 'next/link';
 
 import { Input } from 'semantic-ui-react';
+import useSignInRequired from '@hooks/useSignInRequired';
 
 // Component for first step of creating new HPI template
 const CreateGraph = () => {
+    useSignInRequired(); // this route is private, sign in required
     const { updateTemplate } = useContext(HPITemplateContext);
 
     const inputComponent = (props) => (

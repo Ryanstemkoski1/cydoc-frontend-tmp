@@ -10,6 +10,7 @@ import { setLoadingStatus } from '@redux/actions/loadingStatusActions';
 import { selectLoadingStatus } from '@redux/reducers/loadingStatusReducer';
 import style from './BrowseNotes.module.scss';
 import { Box } from '@mui/material';
+import useSignInRequired from '@hooks/useSignInRequired';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${lastName}, ${firstName} ${middleName}`;
@@ -78,6 +79,7 @@ export interface AppointmentUser {
 }
 
 const BrowseNotes = () => {
+    useSignInRequired(); // this route is private, sign in required
     const [date, setDate] = useState(new Date());
     const [users, setUsers] = useState<AppointmentUser[]>([]);
     const { user } = useUser();

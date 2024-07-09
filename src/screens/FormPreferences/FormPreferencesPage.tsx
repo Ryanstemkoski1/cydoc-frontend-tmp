@@ -24,6 +24,7 @@ import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/k
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import style from './FormPreferencesPage.module.scss';
+import useManagerRequired from '@hooks/useManagerRequired';
 
 const defaultInstitutionConfig: InstitutionConfig = {
     diseaseForm: [],
@@ -34,6 +35,7 @@ const defaultInstitutionConfig: InstitutionConfig = {
 };
 
 const FormPreferencesPage = () => {
+    useManagerRequired(); // this route is private, manager required
     const { user } = useUser();
     const { cognitoUser } = useAuth();
 

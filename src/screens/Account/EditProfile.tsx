@@ -19,6 +19,7 @@ import { updateDbUser } from 'modules/user-api';
 import { stringFromError } from 'modules/error-utils';
 import { log } from 'modules/logging';
 import { toast } from 'react-toastify';
+import useSignInRequired from '@hooks/useSignInRequired';
 
 const INITIAL_VALUES: EditUserInfo = {
     firstName: '',
@@ -69,6 +70,7 @@ export const UserInfoFormSpec = {
 const validationSchema = Yup.object<EditUserInfo>(UserInfoFormSpec);
 
 const EditProfile = () => {
+    useSignInRequired(); // this route is private, sign in required
     const { user, loading } = useUser();
     const { cognitoUser } = useAuth();
     const initialValues = {

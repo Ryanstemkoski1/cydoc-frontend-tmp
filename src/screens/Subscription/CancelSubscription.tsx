@@ -9,8 +9,10 @@ import { log } from 'modules/logging';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from 'semantic-ui-react';
+import useManagerRequired from '@hooks/useManagerRequired';
 
 export function SubscriptionCancel() {
+    useManagerRequired(); // this route is private, manager required
     const { user } = useUser();
     const { cognitoUser } = useAuth();
     const router = useRouter();

@@ -17,9 +17,11 @@ import useUser from '@hooks/useUser';
 import { updatePassword } from 'auth/cognito';
 import { useRouter } from 'next/navigation';
 import { CenteredPaper } from '@components/Atoms/CenteredPaper';
+import useSignInRequired from '@hooks/useSignInRequired';
 
 // NOTE: this page needs to be updated to use the new auth password editing logic
 const ProfileSecurity = () => {
+    useSignInRequired(); // this route is private, sign in required
     const { user } = useUser();
     const role = user?.role;
     const router = useRouter();

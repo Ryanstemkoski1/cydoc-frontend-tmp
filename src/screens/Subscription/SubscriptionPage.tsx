@@ -10,11 +10,13 @@ import { CurrentPaymentMethod } from './CurrentPaymentMethod';
 import { CenteredPaper } from '@components/Atoms/CenteredPaper';
 import { useSubscription } from '@hooks/useSubscription';
 import { Grid, Typography } from '@mui/material';
+import useManagerRequired from '@hooks/useManagerRequired';
 
 const ACTIVE_TRIAL_MESSAGE =
     'You have been given a 14 day free trial. Your card will not be billed until the 15th day. The subscription is $99/clinician/month. You may cancel anytime.';
 
 export function SubscriptionPage() {
+    useManagerRequired(); // this route is private, manager required
     const [showEditPayment, setShowEditPayment] = useState(false);
     const {
         loading,

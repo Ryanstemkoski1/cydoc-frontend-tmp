@@ -19,9 +19,11 @@ import { Box, Stack } from '@mui/system';
 import { Grid } from '@mui/material';
 import useAuth from '@hooks/useAuth';
 import UserRoleSelector from '@components/Molecules/UserRoleSelector';
+import useManagerRequired from '@hooks/useManagerRequired';
 
 // manager dashboard view to view/add/remove doctor accounts
 const ManagerDashboard = () => {
+    useManagerRequired(); // this route is private, manager required
     const [members, setMembers] = useState<DbUser[] | null>(null);
     const [editingUser, setEditingUser] = useState<DbUser | null>(null);
     const { user } = useUser();
