@@ -12,6 +12,7 @@ import useSignInRequired from '@hooks/useSignInRequired';
 // Component for first step of creating new HPI template
 const CreateGraph = () => {
     useSignInRequired(); // this route is private, sign in required
+    // @ts-expect-error FIXME: updateTemplate is not defined, not sure if we will ever use this code, fix it if you do...
     const { updateTemplate } = useContext(HPITemplateContext);
 
     const inputComponent = (props) => (
