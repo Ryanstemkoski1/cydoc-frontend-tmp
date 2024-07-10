@@ -130,6 +130,136 @@ describe('hpi reducers', () => {
             });
         });
     });
+    // test handle date input action
+    it('handles DATE input', () => {
+        let payload = { medId: medId };
+        let nextState = processedState;
+        nextState.nodes[medId].response = ExpectedResponseDict.DATE;
+        nextState.nodes[medId].responseType = 'DATE';
+        payload.input = '2024-07-10';
+        nextState = hpiReducer(nextState, {
+            type: HPI_ACTION.HANDLE_DATE_INPUT_CHANGE,
+            payload,
+        });
+        expect(nextState.nodes[medId].response).toEqual(payload.input);
+    });
+    // test handle other wirte-in option action
+    it('handles other write-in option (SELECTMANYDENS)', () => {
+        let payload = { medId: medId };
+        let nextState = processedState;
+        nextState.nodes[medId].response = ExpectedResponseDict.SELECTMANYDENSE;
+        nextState.nodes[medId].responseType = 'SELECTMANYDENSE';
+
+        const optionsToTest = ['other'];
+
+        // Toggle on the 'other' option
+        payload.name = optionsToTest[0];
+        nextState = hpiReducer(nextState, {
+            type: HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK,
+            payload,
+        });
+        expect(nextState.nodes[medId].response[payload.name]).toEqual(true);
+        expect(Object.keys(nextState.nodes[medId].response).length).toEqual(1);
+
+        // add other write-in option
+        let newResponse = nextState.nodes[medId].response;
+        newResponse['GERD'] = nextState.nodes[medId].response[optionsToTest[0]];
+        payload.newResponse = newResponse;
+        nextState = hpiReducer(nextState, {
+            type: HPI_ACTION.HANDLE_OTHER_OPTION_CHANGE,
+            payload,
+        });
+        expect(Object.keys(nextState.nodes[medId].response).length).toEqual(2);
+
+        // Toggle on the 'other' option again
+        payload.name = optionsToTest[0];
+        nextState = hpiReducer(nextState, {
+            type: HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK,
+            payload,
+        });
+        expect(nextState.nodes[medId].response[payload.name]).toEqual(false);
+
+        // call other write-in option
+        newResponse = nextState.nodes[medId].response;
+        newResponse['GERD'] = nextState.nodes[medId].response[optionsToTest[0]];
+        payload.newResponse = newResponse;
+        nextState = hpiReducer(nextState, {
+            type: HPI_ACTION.HANDLE_OTHER_OPTION_CHANGE,
+            payload,
+        });
+        expect(nextState.nodes[medId].response['GERD']).toEqual(false);
+    });
+    // test handle selectmanydense action
+    it('handles multiple choice click with multiple selectable (SELECTMANYDENS)', () => {
+        let payload = { medId: medId };
+        let nextState = processedState;
+        nextState.nodes[medId].response = ExpectedResponseDict.SELECTMANYDENSE;
+        nextState.nodes[medId].responseType = 'SELECTMANYDENSE';
+
+        const optionsToTest = [
+            'Hypertension',
+            'high cholesterol',
+            'diabetes',
+            'chronic pain',
+            'asthma',
+            'GERD',
+            'other',
+        ];
+        optionsToTest.forEach(option => {
+            payload.name = option;
+            nextState = hpiReducer(nextState, {
+                type: HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK,
+                payload,
+            });
+            expect(nextState.nodes[medId].response).toHaveProperty(
+                payload.name
+            );
+            expect(nextState.nodes[medId].response[payload.name]).toEqual(true);
+
+            nextState = hpiReducer(nextState, {
+                type: HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK,
+                payload,
+            });
+            expect(nextState.nodes[medId].response[payload.name]).toEqual(
+                false
+            );
+        });
+        let trueCount = 0;
+        Object.values(nextState.nodes[medId].response).forEach(value => {
+            if (value) trueCount++;
+        });
+        expect(trueCount).toBeLessThanOrEqual(optionsToTest.length);
+        expect(nextState).toMatchSnapshot();
+
+        // Toggle on the first option
+        payload.name = optionsToTest[0];
+        nextState = hpiReducer(nextState, {
+            type: HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK,
+            payload,
+        });
+        expect(nextState.nodes[medId].response[payload.name]).toEqual(true);
+
+        // Check the remaining options are still true
+        optionsToTest.slice(1).forEach(option => {
+            expect(nextState.nodes[medId].response[option]).toEqual(false);
+        });
+
+        // Toggle on the second option
+        payload.name = optionsToTest[1];
+        nextState = hpiReducer(nextState, {
+            type: HPI_ACTION.SINGLE_MULTIPLE_CHOICE_HANDLE_CLICK,
+            payload,
+        });
+        expect(nextState.nodes[medId].response[payload.name]).toEqual(true);
+
+        trueCount = 0;
+        Object.values(nextState.nodes[medId].response).forEach(value => {
+            if (value) trueCount++;
+        });
+        expect(trueCount).toEqual(2);
+
+        expect(nextState).toMatchSnapshot();
+    });
     describe('handle user actions', () => {
         let payload = {};
         let nextState = {};
