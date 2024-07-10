@@ -39,14 +39,16 @@ export const UserInfoProvider: React.FC<
                 setLoading(true);
                 const user = await getDbUser(cognitoUser);
                 setUser(user || undefined);
+                setLoading(false);
             } else {
-                // reset user state on signOut
+                // reset user state on signOut or user not logged in
                 setUser(undefined);
+                setLoading(true);
             }
         } catch (e) {
             log(`[UserInfoProvider] uncaught error fetching user`);
+            setLoading(false);
         }
-        setLoading(false);
     }, [cognitoUser]);
 
     useEffect(() => {

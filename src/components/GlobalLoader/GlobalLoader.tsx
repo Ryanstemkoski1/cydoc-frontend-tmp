@@ -8,11 +8,11 @@ import { useSelector } from 'react-redux';
 
 const GlobalLoader = () => {
     const loadingStatus = useSelector(selectLoadingStatus);
-    const { authLoading } = useAuth();
+    const { authLoading, isSignedIn } = useAuth();
     const { loading: userLoading } = useUser();
 
     return (
-        (authLoading || loadingStatus || userLoading) && (
+        (authLoading || loadingStatus || (isSignedIn && userLoading)) && (
             <div
                 className={`${style.globalLoader} flex align-center justify-center`}
             >
