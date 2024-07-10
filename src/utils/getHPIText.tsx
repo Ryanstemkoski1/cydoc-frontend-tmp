@@ -103,6 +103,7 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
         case ResponseTypes.RADIOLOGY:
             return node.response === '';
 
+        case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTONE: {
             const response = node?.response as SelectOneInput;
             return Object?.keys(response).every((key) => !response[key]);
@@ -276,6 +277,7 @@ export const extractNode = (
             );
             break;
 
+        case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTMANY:
         case ResponseTypes.SELECTONE:
             const clickBoxesRes = response as SelectOneInput;
@@ -469,6 +471,7 @@ export const checkParent = (
             childNodesToHide = response == YesNoResponse.Yes ? childNodes : [];
             break;
         }
+        case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTMANY:
         case ResponseTypes.SELECTONE: {
             if (!isHPIResponseValid(response, responseType)) {

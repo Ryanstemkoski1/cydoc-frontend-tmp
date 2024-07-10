@@ -369,6 +369,19 @@ export function hpiReducer(
                     },
                     state
                 );
+            } else if (
+                state.nodes[medId].responseType ==
+                    ResponseTypes.SELECTMANYDENSE &&
+                isSelectOneResponse(response)
+            ) {
+                return updateResponse(
+                    medId,
+                    {
+                        ...response,
+                        [name]: !response[name],
+                    },
+                    state
+                );
             } else throw new Error('Not a string array');
         }
 

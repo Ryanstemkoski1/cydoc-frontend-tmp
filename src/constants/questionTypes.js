@@ -5,6 +5,7 @@ export const questionTypes = {
     NO_YES: 'NO-YES',
     SELECTONE: 'SELECTONE',
     SELECTMANY: 'SELECTMANY',
+    SELECTMANYDENSE: 'SELECTMANYDENSE',
     SHORT_TEXT: 'SHORT-TEXT',
     PMH: 'PMH',
     TIME: 'TIME',
@@ -30,6 +31,7 @@ export const questionTypeMapping = {
         [questionTypes.SHORT_TEXT]: 'Short Text',
         [questionTypes.SELECTONE]: 'Single Selection',
         [questionTypes.SELECTMANY]: 'Multiple Selection',
+        [questionTypes.SELECTMANYDENSE]: 'Multiple Selection (Dense)',
         [questionTypes.LIST_TEXT]: 'List',
     },
     advanced: {

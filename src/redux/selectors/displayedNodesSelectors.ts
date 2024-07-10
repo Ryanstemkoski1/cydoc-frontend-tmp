@@ -33,9 +33,11 @@ function traverseNodes(
         );
 
         if (
-            [ResponseTypes.SELECTMANY, ResponseTypes.SELECTONE].includes(
-                nodes[currNode].responseType
-            ) &&
+            [
+                ResponseTypes.SELECTMANY,
+                ResponseTypes.SELECTONE,
+                ResponseTypes.SELECTMANYDENSE,
+            ].includes(nodes[currNode].responseType) &&
             isValidResponseResult
         ) {
             const childNodesToDisplay: string[] = [];
@@ -64,6 +66,8 @@ function traverseNodes(
                 nodes[currNode].response == YesNoResponse.Yes) ||
             (nodes[currNode].responseType == ResponseTypes.NO_YES &&
                 nodes[currNode].response == YesNoResponse.No) ||
+            (nodes[currNode].responseType == ResponseTypes.SELECTMANYDENSE &&
+                isValidResponseResult) ||
             (nodes[currNode].responseType == ResponseTypes.SELECTMANY &&
                 isValidResponseResult) ||
             (nodes[currNode].responseType == ResponseTypes.SELECTONE &&

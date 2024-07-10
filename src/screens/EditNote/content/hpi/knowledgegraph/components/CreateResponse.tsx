@@ -188,6 +188,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     />
                 );
 
+            case ResponseTypes.SELECTMANYDENSE:
             case ResponseTypes.SELECTONE:
                 return (
                     <div className={`${style.response__wrap} flex-wrap`}>

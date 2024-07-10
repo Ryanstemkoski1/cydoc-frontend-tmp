@@ -105,6 +105,7 @@ export enum ResponseTypes {
     PMH_BLANK = 'PMH-BLANK',
     SELECTONE = 'SELECTONE',
     SELECTMANY = 'SELECTMANY',
+    SELECTMANYDENSE = 'SELECTMANYDENSE',
     PSH_POP = 'PSH-POP',
     MEDS_BLANK = 'MEDS-BLANK',
     BODYLOCATION = 'BODYLOCATION',
@@ -127,6 +128,7 @@ export interface ExpectedResponseInterface {
     DATE: DateInput;
     MEDS_POP: SelectOneInput;
     SELECTMANY: SelectManyInput;
+    SELECTMANYDENSE: SelectOneInput;
     TIME3DAYS: TimeInput;
     LIST_TEXT: ListTextInput;
     SHORT_TEXT: string;
@@ -159,6 +161,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     SELECTONE: {},
     MEDS_POP: {},
     SELECTMANY: {},
+    SELECTMANYDENSE: {},
     TIME3DAYS: { numInput: undefined, timeOption: '' },
     LIST_TEXT: { 1: '', 2: '', 3: '' },
     SHORT_TEXT: '',
