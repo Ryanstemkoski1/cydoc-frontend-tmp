@@ -98,6 +98,18 @@ export function nodesToDisplayInOrder(
                         state,
                         displayedNodesCutOff - nodesArr.length
                     ).filter((node) => !nodesSoFar.includes(node));
+                /** Sort currNodesArr based on displayOrder if available.*/
+                currNodesArr.sort((a, b) => {
+                    const nodeA = hpi.nodes[a] as { displayOrder?: number };
+                    const nodeB = hpi.nodes[b] as { displayOrder?: number };
+                    if (
+                        nodeA?.displayOrder !== undefined &&
+                        nodeB?.displayOrder !== undefined
+                    ) {
+                        return nodeA.displayOrder - nodeB.displayOrder;
+                    }
+                    return 0; // If displayOrder is not defined, maintain order
+                });
                 if (chiefComplaint == currCat) return currNodesArr;
                 nodesArr = [
                     ...new Set([
