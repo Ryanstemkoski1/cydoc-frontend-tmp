@@ -699,6 +699,27 @@ export function hpiReducer(
             else throw new Error('Not a date input response');
         }
 
+        case HPI_ACTION.HANDLE_OTHER_OPTION_CHANGE: {
+            const { medId, newResponse } = action.payload;
+            const response = state.nodes[medId].response;
+            if (
+                [
+                    ResponseTypes.SELECTMANYDENSE,
+                    ResponseTypes.SELECTONE,
+                    ResponseTypes.SELECTMANY,
+                ].includes(state.nodes[medId].responseType) &&
+                isSelectOneResponse(response)
+            ) {
+                return updateResponse(
+                    medId,
+                    {
+                        ...newResponse,
+                    },
+                    state
+                );
+            } else throw new Error('Not a OTHER OPTION response');
+        }
+
         default:
             return state;
     }

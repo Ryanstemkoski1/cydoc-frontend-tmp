@@ -282,10 +282,13 @@ export const extractNode = (
         case ResponseTypes.SELECTONE:
             const clickBoxesRes = response as SelectOneInput;
             updatedRes = Object.keys(clickBoxesRes).filter(
-                (key) => clickBoxesRes[key]
+                (key) => clickBoxesRes[key] && key.toLowerCase() !== 'other'
             );
             updatedNeg = Object.keys(clickBoxesRes).filter(
-                (key) => !clickBoxesRes[key] && negAnswer
+                (key) =>
+                    !clickBoxesRes[key] &&
+                    negAnswer &&
+                    key.toLowerCase() !== 'other'
             );
 
             // If zero YESs are selected but any NOs are selected --> all selections are NO

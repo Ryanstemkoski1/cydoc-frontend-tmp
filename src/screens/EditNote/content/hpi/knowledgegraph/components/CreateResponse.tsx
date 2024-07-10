@@ -35,6 +35,7 @@ import style from './CreateResponse.module.scss';
 import BodyLocation from './responseComponents/BodyLocation';
 import HandleInput from './responseComponents/HandleInput';
 import HandleNumericInput from './responseComponents/HandleNumericInput';
+import HandleWriteInInput from './responseComponents/HandleWriteInInput';
 import LaboratoryTest from './responseComponents/LaboratoryTest';
 import ListText from './responseComponents/ListText';
 import MultipleChoice from './responseComponents/MultipleChoice';
@@ -192,13 +193,29 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             case ResponseTypes.SELECTONE:
                 return (
                     <div className={`${style.response__wrap} flex-wrap`}>
-                        {responseChoice.map((item: string) => (
-                            <MultipleChoice
-                                key={item}
-                                name={item}
-                                node={node}
-                            />
-                        ))}
+                        {responseChoice.map((item: string, index: number) => {
+                            const isOther = item.toLowerCase() === 'other';
+                            return (
+                                <div
+                                    key={`${item}-${index}`}
+                                    style={{
+                                        display: 'flex',
+                                        width: 'auto',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <MultipleChoice name={item} node={node} />
+                                    {isOther && (
+                                        <HandleWriteInInput
+                                            name={item}
+                                            node={node}
+                                            options={responseChoice}
+                                        />
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 );
 
