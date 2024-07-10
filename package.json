@@ -23,8 +23,6 @@
         "@mui/material": "^5.16.0",
         "@mui/system": "^5.16.0",
         "@sentry/nextjs": "^8.15.0",
-        "@stripe/react-stripe-js": "^2.7.3",
-        "@stripe/stripe-js": "^1.53.0",
         "amazon-cognito-identity-js": "^6.3.13",
         "aws-amplify": "^5.3.19",
         "axios": "~0.28.1",

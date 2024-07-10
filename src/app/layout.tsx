@@ -1,15 +1,11 @@
 import React from 'react';
 import type { Metadata } from 'next';
 
-// import { Elements } from '@stripe/react-stripe-js';
-// import { loadStripe } from '@stripe/stripe-js';
 import { AuthProvider } from 'providers/AuthProvider';
 import ToastProvider from 'providers/ToastProvider';
-// import { initializeSentry } from '@modules/logging';
 import '../semantic/dist/semantic.min.css';
 import '../index.scss';
 
-// import { HPIStore } from '@contexts/HPIContext';
 import { NotesStore } from '@contexts/NotesContext';
 import { SubscriptionProvider } from 'providers/SubscriptionProvider';
 import StoreProvider from '@providers/StoreProvider';
@@ -18,11 +14,6 @@ import { SubscriptionModal } from '@components/Molecules/SubscriptionModal';
 import NavMenu from '@components/navigation/NavMenu';
 import GlobalLoader from '@components/GlobalLoader/GlobalLoader';
 import Footer from '@components/Footer/Footer';
-// import { STRIPE_KEY } from 'modules/environment';
-
-// initializeSentry();
-
-// const stripePromise = loadStripe(STRIPE_KEY);
 
 export const metadata: Metadata = {
     title: 'Cydoc',
@@ -44,12 +35,8 @@ export default function RootLayout({ children }: Props) {
                     <AuthProvider>
                         <SubscriptionProvider>
                             <NotesStore>
-                                {/* <HPIStore> */}
-                                {/* <Elements stripe={stripePromise}> */}
                                 <StoreProvider>
                                     <ToastProvider>
-                                        {/* <Router> */}
-
                                         <div className='layout'>
                                             <GlobalLoader />
                                             <SubscriptionBanner />
@@ -60,12 +47,9 @@ export default function RootLayout({ children }: Props) {
                                             />
                                             {children}
                                             <Footer />
-                                            {/* </Router> */}
                                         </div>
                                     </ToastProvider>
                                 </StoreProvider>
-                                {/* </Elements> */}
-                                {/* </HPIStore> */}
                             </NotesStore>
                         </SubscriptionProvider>
                     </AuthProvider>
