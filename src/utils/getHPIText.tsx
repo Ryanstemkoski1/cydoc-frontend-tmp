@@ -61,6 +61,7 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
         case ResponseTypes.NO_YES:
             return node?.response === YesNoResponse.None;
 
+        case ResponseTypes.YEAR:
         case ResponseTypes.SCALE1TO10:
         case ResponseTypes.NUMBER:
             return node?.response === undefined;
@@ -97,6 +98,7 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
         }
 
         case ResponseTypes.SELECTMANY:
+        case ResponseTypes.DATE:
         case ResponseTypes.SHORT_TEXT:
         case ResponseTypes.RADIOLOGY:
             return node.response === '';
@@ -215,6 +217,7 @@ export const extractNode = (
         updatedRes,
         updatedNeg;
     switch (node.responseType) {
+        case ResponseTypes.YEAR:
         case ResponseTypes.NUMBER:
         case ResponseTypes.SCALE1TO10:
             answer = (response as number).toString();
@@ -225,6 +228,7 @@ export const extractNode = (
             answer = [timeRes?.numInput, timeRes?.timeOption].join(' ');
             break;
 
+        case ResponseTypes.DATE:
         case ResponseTypes.SHORT_TEXT:
         case ResponseTypes.RADIOLOGY:
             answer = response as string;
@@ -598,6 +602,8 @@ function getInitialSurveyResponses(state: UserSurveyState): HPIText[] {
                 break;
             }
             case ResponseTypes.LONG_TEXT:
+            case ResponseTypes.DATE:
+            case ResponseTypes.YEAR:
             case ResponseTypes.SHORT_TEXT: {
                 currentNodeResponse = (value.response as string).trim();
                 break;

@@ -8,7 +8,9 @@ export const questionTypes = {
     SHORT_TEXT: 'SHORT-TEXT',
     PMH: 'PMH',
     TIME: 'TIME',
+    YEAR: 'YEAR',
     NUMBER: 'NUMBER',
+    DATE: 'DATE',
     LIST_TEXT: 'LIST-TEXT',
     FH: 'FH',
     MEDS: 'MEDS',
@@ -20,6 +22,8 @@ export const questionTypeMapping = {
     basic: {
         [questionTypes.NUMBER]: 'Number',
         [questionTypes.TIME]: 'Age or Duration',
+        [questionTypes.DATE]: 'Date',
+        [questionTypes.YEAR]: 'Year',
         [questionTypes.BODY_LOCATION]: 'Body Location',
         [questionTypes.YES_NO]: 'Yes/No',
         [questionTypes.NO_YES]: 'No/Yes',

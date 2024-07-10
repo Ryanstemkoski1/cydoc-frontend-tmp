@@ -679,6 +679,13 @@ export function hpiReducer(
             } else throw new Error('Not a meds pop response');
         }
 
+        case HPI_ACTION.HANDLE_DATE_INPUT_CHANGE: {
+            const { medId, input } = action.payload;
+            if (state.nodes[medId].responseType === ResponseTypes.DATE)
+                return updateResponse(medId, input, state);
+            else throw new Error('Not a date input response');
+        }
+
         default:
             return state;
     }

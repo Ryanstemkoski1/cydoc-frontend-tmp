@@ -41,6 +41,7 @@ import MultipleChoice from './responseComponents/MultipleChoice';
 import ScaleInput from './responseComponents/ScaleInput';
 import TimeInput from './responseComponents/TimeInput';
 import YearInput from './responseComponents/YearInput';
+import HandleDateInput from './responseComponents/HandleDateInput';
 import YesNo from './responseComponents/YesNo';
 
 interface CreateResponseProps {
@@ -303,6 +304,20 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             case ResponseTypes.BMP:
             case ResponseTypes.LFT:
                 return <LaboratoryTest key={node} node={node} />;
+            case ResponseTypes.DATE: {
+                return (
+                    <HandleDateInput
+                        id={node}
+                        type={'date'}
+                        defaultValue={
+                            this.props.hpi.nodes[node].response as string
+                        }
+                        required={false}
+                        placeholder={'DD/MM/YYYY'}
+                        name={node}
+                    />
+                );
+            }
             default:
                 return;
         }

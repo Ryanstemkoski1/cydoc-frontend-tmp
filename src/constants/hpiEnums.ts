@@ -91,6 +91,7 @@ export function bodyLocationResponse(): BodyLocationType {
 
 export enum ResponseTypes {
     NUMBER = 'NUMBER',
+    DATE = 'DATE',
     LIST_TEXT = 'LIST-TEXT',
     PSH_BLANK = 'PSH-BLANK',
     PMH_POP = 'PMH-POP',
@@ -123,6 +124,7 @@ export interface ExpectedResponseInterface {
     YES_NO: YesNoInput;
     NO_YES: YesNoInput;
     SELECTONE: SelectOneInput;
+    DATE: DateInput;
     MEDS_POP: SelectOneInput;
     SELECTMANY: SelectManyInput;
     TIME3DAYS: TimeInput;
@@ -130,6 +132,7 @@ export interface ExpectedResponseInterface {
     SHORT_TEXT: string;
     LONG_TEXT: string;
     NUMBER: NumberInput;
+    YEAR: NumberInput;
     BODYLOCATION: BodyLocationType;
     FH_POP: string[];
     PMH_POP: string[];
@@ -152,6 +155,7 @@ export interface ExpectedResponseInterface {
 export const ExpectedResponseDict: ExpectedResponseInterface = {
     YES_NO: YesNoResponse.None,
     NO_YES: YesNoResponse.None,
+    DATE: '',
     SELECTONE: {},
     MEDS_POP: {},
     SELECTMANY: {},
@@ -160,6 +164,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     SHORT_TEXT: '',
     LONG_TEXT: '',
     NUMBER: undefined,
+    YEAR: undefined,
     BODYLOCATION: bodyLocationResponse(),
     FH_POP: [],
     PMH_POP: [],
@@ -262,6 +267,7 @@ export type LabTestType = {
     };
 };
 
+export type DateInput = string | undefined;
 export type SelectOneInput = { [name: string]: boolean };
 export type SelectManyInput = { [name: string]: YesNoResponse };
 export type ScaleInputType = number | undefined;
@@ -273,6 +279,7 @@ export type HpiResponseType =
     | string
     | boolean
     | NumberInput
+    | DateInput
     | ListTextInput
     | TimeInput
     | SelectOneInput
