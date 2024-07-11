@@ -12,6 +12,15 @@ jobs:
         steps:
             - name: Checkout repo
               uses: actions/checkout@v4
+            - name: create env file
+              run: |
+                touch .env
+                echo NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }} >> .env
+                echo NEXT_PUBLIC_APP_ENV=${{ env.NEXT_PUBLIC_APP_ENV }} >> .env
+                echo NEXT_PUBLIC_COGNITO_CLIENT_ID=${{ env.NEXT_PUBLIC_COGNITO_CLIENT_ID }} >> .env
+                echo NEXT_PUBLIC_COGNITO_POOL_ID=${{ env.NEXT_PUBLIC_COGNITO_POOL_ID }} >> .env
+                echo NEXT_PUBLIC_GRAPH_URL=${{ env.NEXT_PUBLIC_GRAPH_URL }} >> .env
+                echo NEXT_PUBLIC_REGION=${{ env.NEXT_PUBLIC_REGION }} >> .env
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
