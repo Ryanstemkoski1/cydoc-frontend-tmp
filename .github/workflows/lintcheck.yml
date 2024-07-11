@@ -30,6 +30,12 @@ jobs:
               env:
                   CI: false
                   NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+                  NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+                  NEXT_PUBLIC_APP_ENV: ${{ secrets.NEXT_PUBLIC_APP_ENV }}
+                  NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_COGNITO_CLIENT_ID }}
+                  NEXT_PUBLIC_COGNITO_POOL_ID: ${{ secrets.NEXT_PUBLIC_COGNITO_POOL_ID }}
+                  NEXT_PUBLIC_GRAPH_URL: ${{ secrets.NEXT_PUBLIC_GRAPH_URL }}
+                  NEXT_PUBLIC_REGION: ${{ secrets.NEXT_PUBLIC_REGION }}
                   NODE_OPTIONS: '--max_old_space_size=4096'
             - name: Run lint checks
               run: npm run lint
