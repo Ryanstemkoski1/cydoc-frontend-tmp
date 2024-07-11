@@ -42,6 +42,7 @@ import ScaleInput from './responseComponents/ScaleInput';
 import TimeInput from './responseComponents/TimeInput';
 import YearInput from './responseComponents/YearInput';
 import YesNo from './responseComponents/YesNo';
+import DSMDiagnosisPicker from '@screens/EditNote/content/dsmdiagnoses/DSMDiagnosisPicker';
 
 interface CreateResponseProps {
     node: string;
@@ -115,12 +116,12 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 responseChoice:
                     click != -1 || cleanText
                         ? text
-                              .slice(
-                                  select + 1,
-                                  endSelect != -1 ? endSelect : text.length
-                              )
-                              .split(',')
-                              .map((response) => response.trim())
+                            .slice(
+                                select + 1,
+                                endSelect != -1 ? endSelect : text.length
+                            )
+                            .split(',')
+                            .map((response) => response.trim())
                         : [],
             });
         }
@@ -128,12 +129,12 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
 
     renderSwitch = () => {
         const {
-                node,
-                hpi,
-                addListInput,
-                listTextHandleChange,
-                removeListInput,
-            } = this.props,
+            node,
+            hpi,
+            addListInput,
+            listTextHandleChange,
+            removeListInput,
+        } = this.props,
             { responseType } = hpi.nodes[node],
             blankTypes = [
                 ResponseTypes.FH_BLANK,
@@ -303,6 +304,10 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             case ResponseTypes.BMP:
             case ResponseTypes.LFT:
                 return <LaboratoryTest key={node} node={node} />;
+            case ResponseTypes.PSYCHDXPICKER:
+                return (
+                    <DSMDiagnosisPicker />
+                );
             default:
                 return;
         }
@@ -316,11 +321,10 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         ].includes(hpi.nodes[node].responseType);
         return (
             <div
-                className={`${style.response} ${
-                    isYesNoResponseType
+                className={`${style.response} ${isYesNoResponseType
                         ? `${style.response__grid} isYesNo flex-wrap align-center`
                         : ''
-                }`}
+                    }`}
             >
                 {this.state.question.trim() == 'NAME' ? (
                     ''

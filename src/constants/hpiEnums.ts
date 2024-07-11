@@ -117,6 +117,7 @@ export enum ResponseTypes {
     SEARCH = 'SEARCH',
     YEAR = 'YEAR',
     NULL = '',
+    PSYCHDXPICKER = 'PSYCHDXPICKER',
 }
 
 export interface ExpectedResponseInterface {
@@ -147,6 +148,7 @@ export interface ExpectedResponseInterface {
     SEARCH: {
         [CC: string]: string;
     };
+    PSYCHDXPICKER: string[];
 }
 
 export const ExpectedResponseDict: ExpectedResponseInterface = {
@@ -175,6 +177,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     BMP: { name: '', snomed: '', components: {} },
     LFT: { name: '', snomed: '', components: {} },
     SEARCH: {},
+    PSYCHDXPICKER: [],
 };
 
 export enum TimeOption {
