@@ -1,15 +1,16 @@
 /* eslint-disable no-console */
 import { HPI_ACTION, CHIEF_COMPLAINTS } from './actionTypes';
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import {
     TimeOption,
     NumberInput,
     BodyLocationOptions,
     BodyLocationLRItemType,
     GraphData,
-} from 'constants/hpiEnums';
+} from '@constants/hpiEnums';
+import { UnknownAction } from 'redux';
 
-export interface ProcessKnowledgeGraphAction {
+export interface ProcessKnowledgeGraphAction extends UnknownAction {
     type: HPI_ACTION.PROCESS_KNOWLEDGE_GRAPH;
     payload: {
         graphData: GraphData;
@@ -27,7 +28,7 @@ export function processKnowledgeGraph(
     };
 }
 
-export interface AddMiscNoteAction {
+export interface AddMiscNoteAction extends UnknownAction {
     type: CHIEF_COMPLAINTS.SET_NOTES_CHIEF_COMPLAINTS;
     payload: {
         disease: string;
@@ -45,7 +46,7 @@ export function addMiscNote(disease: string, notes: string): AddMiscNoteAction {
     };
 }
 
-export interface BodyLocationResponseAction {
+export interface BodyLocationResponseAction extends UnknownAction {
     type: HPI_ACTION.BODY_LOCATION_RESPONSE;
     payload: {
         medId: string;

@@ -15,8 +15,9 @@ import {
     updateCondition,
     updateMember,
 } from '../actions/familyHistoryActions';
-import { FamilyOption } from 'constants/familyHistoryRelations';
-import { YesNoResponse } from 'constants/enums';
+import { FamilyOption } from '../../constants/familyHistoryRelations';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { YesNoResponse } from '../../constants/enums';
 
 describe('family history reducer', () => {
     let store;

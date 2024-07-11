@@ -1,4 +1,4 @@
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import { CurrentNoteState } from '../reducers';
 import {
     FamilyHistoryState,

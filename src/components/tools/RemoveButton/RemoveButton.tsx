@@ -1,5 +1,4 @@
 import React from 'react';
-import Delete from '../../../assets/delete.svg';
 import style from './RemoveButton.module.scss';
 
 const RemoveButton = ({ onClick }: any) => {
@@ -9,7 +8,7 @@ const RemoveButton = ({ onClick }: any) => {
             onClick={onClick}
             aria-label='remove'
         >
-            <img src={Delete} alt='Remove' />
+            <img src={'/images/delete.svg'} alt='Remove' />
             <span>Remove</span>
         </button>
     );

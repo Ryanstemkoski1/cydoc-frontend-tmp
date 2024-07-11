@@ -1,0 +1,124 @@
+import { TextField } from '@mui/material';
+import { Field, Formik, FormikHelpers } from 'formik';
+import React from 'react';
+
+import './Account.css';
+
+import { Box, Stack } from '@mui/system';
+import { ErrorText } from '@components/Atoms/ErrorText';
+import LogoHeader from '@components/Atoms/LogoHeader';
+import { SubmitOnEnter } from '@components/Atoms/SubmitOnEnter';
+import useAuth from '@hooks/useAuth';
+import { Button } from 'semantic-ui-react';
+import * as Yup from 'yup';
+import useUser from '@hooks/useUser';
+import { CognitoUser } from 'auth/cognito';
+
+const validationSchema = Yup.object({
+    code: Yup.string()
+        .label('Code')
+        .required('Verification code is required')
+        .min(1),
+});
+
+interface VerifyCodeSchema {
+    code: string;
+}
+
+interface Props {
+    onSuccess?: (user: CognitoUser | undefined) => void;
+}
+
+export default function MfaVerificationForm({ onSuccess }: Props) {
+    const { verifyMfaCode, authLoading, signOut } = useAuth();
+    const { updateUserInfo } = useUser();
+
+    const onSubmit = async (
+        { code }: VerifyCodeSchema,
+        { setErrors, setSubmitting }: FormikHelpers<VerifyCodeSchema>
+    ) => {
+        setSubmitting(true);
+        setErrors({}); // blow out old errors before re-submitting
+
+        const { errorMessage, user } = await verifyMfaCode(code);
+
+        if (errorMessage?.length) {
+            setErrors({ code: errorMessage });
+        } else {
+            if (onSuccess) {
+                onSuccess(user);
+            }
+
+            // refresh local user info from server after update
+            updateUserInfo();
+        }
+
+        // successful logins should be handled by the hook/routes logic
+        setSubmitting(false);
+    };
+
+    return (
+        <Formik<VerifyCodeSchema>
+            initialValues={{
+                code: '',
+            }}
+            onSubmit={onSubmit}
+            validationSchema={validationSchema}
+        >
+            {({ errors, submitForm, values }) => (
+                <Stack alignItems='center'>
+                    <LogoHeader title='Enter SMS verification code' />
+                    <Field
+                        name='code'
+                        required
+                        // ref={focusInputField}
+                        autoFocus
+                        label='SMS Code'
+                        id='code'
+                        type='input'
+                        as={TextField}
+                        variant='outlined'
+                        style={{ width: '12rem', marginTop: '1rem' }}
+                    />
+                    <Box
+                        width='100%'
+                        justifyContent='space-between'
+                        marginTop='2rem'
+                        display='flex'
+                    >
+                        <Button
+                            size='small'
+                            content='Restart'
+                            style={buttonStyles}
+                            onClick={signOut}
+                        />
+                        <SubmitOnEnter />
+                        <Button
+                            color='teal'
+                            disabled={!values?.code?.length}
+                            loading={authLoading}
+                            size='small'
+                            type='submit'
+                            content='Submit'
+                            style={buttonStyles}
+                            onClick={submitForm}
+                        />
+                    </Box>
+                    {Object.keys(errors).map((errorKey) => (
+                        <ErrorText
+                            key={errorKey}
+                            message={`${
+                                errors?.[errorKey as keyof VerifyCodeSchema]
+                            }`}
+                        />
+                    ))}
+                </Stack>
+            )}
+        </Formik>
+    );
+}
+
+const buttonStyles = {
+    paddingLeft: '2rem',
+    paddingRight: '2rem',
+};

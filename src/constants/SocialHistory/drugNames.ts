@@ -1,4 +1,4 @@
-import { getOptionMapping } from '_processOptions';
+import { getOptionMapping } from '../../_processOptions';
 export const drugNames = [
     { key: 'Benzodiazepine', text: 'Benzodiazepine', value: 'Benzodiazepine' },
     { key: 'Ativan®', text: 'Ativan®', value: 'Ativan®' },
@@ -148,7 +148,6 @@ export enum DrugName {
     Heroin = 'Heroin',
     Cocaine = 'Cocaine',
     Marijuana = 'Marijuana',
-    /* eslint-disable-next-line */
     MDMA_Ecstasy = 'MDMA/Ecstasy',
     Methamphetamine = 'Methamphetamine',
     OtherIllicitDrug = 'Other illicit drug',
@@ -169,10 +168,8 @@ export enum DrugName {
     Oxymorphone = 'Oxymorphone',
     Propoxyphene = 'Propoxyphene',
     Tramadol = 'Tramadol',
-    /* eslint-disable-next-line */
     Dimenhydrinate__Dramamine = 'Dimenhydrinate (Dramamine®)',
     DXM = 'DXM (dextromethorphan)',
-    /* eslint-disable-next-line */
     Pseudoephedrine__Sudafed = 'Pseudoephedrine (Sudafed®)',
     Ambien = 'Ambien®',
     Lunesta = 'Lunesta®',

@@ -40,7 +40,7 @@ function Dropdown({
 
     const filteredItems = useMemo(
         () => getfilteredItems(items, value, canEnterNewValue),
-        [items, value, canEnterNewValue]
+        [canEnterNewValue, items, value]
     );
 
     function handleMouseDown(e: any) {

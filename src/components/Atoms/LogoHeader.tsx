@@ -1,6 +1,7 @@
 import React from 'react';
-import { Container, Image, Header } from 'semantic-ui-react';
-import Logo from '../../assets/cydoc-logo.svg';
+import { Container, Header } from 'semantic-ui-react';
+import Image from 'next/image';
+import { Stack } from '@mui/system';
 
 interface Props {
     title: string;
@@ -8,10 +9,20 @@ interface Props {
 export default function LogoHeader({ title }: Props) {
     return (
         <>
-            <Container textAlign='center'>
-                <Image size='tiny' href='/' src={Logo} alt='logo' />
+            <Stack
+                textAlign='center'
+                display='flex'
+                flexDirection='column'
+                alignItems='center'
+            >
+                <Image
+                    height={50}
+                    width={50}
+                    src={'/images/cydoc-logo.svg'}
+                    alt='logo'
+                />
                 <Header as='h1' className='logo-text' content='Cydoc' />
-            </Container>
+            </Stack>
             <Container
                 className='login-header'
                 color='black'

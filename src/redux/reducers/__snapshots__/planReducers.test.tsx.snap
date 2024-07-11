@@ -1,0 +1,849 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`plan reducers > differential diagnoses > deletes differential diagnoses 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {},
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > differential diagnoses > updates comments 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "foo",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > differential diagnoses > updates diagnosis 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "code": "",
+          "comments": "",
+          "diagnosis": "foo",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > general condition reducers > deletes initial condition 1`] = `
+{
+  "conditions": {},
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > general condition reducers > updates initial condition name 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "foo",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > prescriptions > deletes prescription 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {},
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > prescriptions > updates prescription comments 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "foo",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > prescriptions > updates prescription dose 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "foo",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > prescriptions > updates prescription signature 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "foo",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > prescriptions > updates prescription type 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "foo",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > procedure or service > deletes procedure or services 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {},
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > procedure or service > updates comments 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "foo",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > procedure or service > updates procedure 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "foo",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > procedure or service > updates when 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "THIS_MONTH",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > referrals > deletes referral 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {},
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > referrals > updates comments 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "foo",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > referrals > updates department 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "foo",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > referrals > updates when 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "THIS_MONTH",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > survey reducers > updates admit to hospital 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "YES",
+    "emergency": "",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > survey reducers > updates emergency 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "NO",
+    "sicknessLevel": 0,
+  },
+}
+`;
+
+exports[`plan reducers > survey reducers > updates sickness 1`] = `
+{
+  "conditions": {
+    "condition": {
+      "differentialDiagnoses": {
+        "category": {
+          "comments": "",
+          "diagnosis": "",
+        },
+      },
+      "name": "",
+      "prescriptions": {
+        "category": {
+          "comments": "",
+          "dose": "",
+          "signature": "",
+          "type": "",
+        },
+      },
+      "proceduresAndServices": {
+        "category": {
+          "comments": "",
+          "procedure": "",
+          "when": "",
+        },
+      },
+      "referrals": {
+        "category": {
+          "comments": "",
+          "department": "",
+          "when": "",
+        },
+      },
+    },
+  },
+  "survey": {
+    "admitToHospital": "",
+    "emergency": "",
+    "sicknessLevel": 5,
+  },
+}
+`;

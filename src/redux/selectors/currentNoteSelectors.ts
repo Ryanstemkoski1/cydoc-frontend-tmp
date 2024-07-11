@@ -1,4 +1,4 @@
-import { CurrentNoteState } from 'redux/reducers';
+import { CurrentNoteState } from '@redux/reducers';
 
 export function selectNoteId(state: CurrentNoteState): string | null {
     return state._id;

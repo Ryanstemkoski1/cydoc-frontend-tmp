@@ -1,3 +1,4 @@
+@import './variables.scss';
 * {
     margin: 0;
     padding: 0;
@@ -10,16 +11,13 @@ body {
     min-height: 100%;
 }
 body {
-    color: $color-black;
-    font-size: $font-size-base;
+    color: $color-black !important;
+    font-size: $font-size-base !important;;
     line-height: $line-height-base;
     background-color: $color-light;
     font-family: $font-family-primary;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    @include max-screen($mobile) {
-        font-size: 14px;
-    }
     &.isHidden {
         overflow: hidden;
     }
@@ -52,6 +50,7 @@ img {
     &__content {
         flex: auto;
     }
+    & > div {flex: auto}
 }
 
 .scrollbar {

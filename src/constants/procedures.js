@@ -1,4 +1,4 @@
-import { getOptionMapping } from '_processOptions';
+import { getOptionMapping } from '../_processOptions';
 
 const rawProcedures = {
     25241700: '24 hour electrocardiogram',

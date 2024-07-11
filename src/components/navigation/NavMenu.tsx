@@ -1,47 +1,40 @@
-import React, { useEffect, useMemo } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { Button, Menu } from 'semantic-ui-react';
-import Logo from '../../assets/cydoc-logo.svg';
-import NoteNameMenuItem from './NoteNameMenuItem';
+'use client';
 /* eslint-disable no-console */
-import { ProductType, ViewType } from 'assets/enums/route.enums';
-import MenuButton, { MenuItem } from 'components/Header/MenuButton';
-import { YesNoResponse } from 'constants/enums';
-import useAuth from 'hooks/useAuth';
-import useUser from 'hooks/useUser';
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
-import { initialSurveyProps } from 'pages/EditNote/content/patientview/InitialSurvey';
-import { connect } from 'react-redux';
-import {
-    UpdateActiveItemAction,
-    updateActiveItem,
-} from 'redux/actions/activeItemActions';
-import { UserViewAction, changeUserView } from 'redux/actions/userViewActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { additionalSurvey } from 'redux/reducers/additionalSurveyReducer';
-import { selectActiveItem } from 'redux/selectors/activeItemSelectors';
+import React, { useEffect, useMemo } from 'react';
+import Link from 'next/link';
+import { Button, Menu } from 'semantic-ui-react';
+import NoteNameMenuItem from './NoteNameMenuItem';
+import { ProductType, ViewType } from '@constants/enums/route.enums';
+import MenuButton, { MenuItem } from '@components/Header/MenuButton';
+import { YesNoResponse } from '@constants/enums';
+import useAuth from '@hooks/useAuth';
+import useUser from '@hooks/useUser';
+import 'screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
+import { ConnectedProps, connect } from 'react-redux';
+import { updateActiveItem } from '@redux/actions/activeItemActions';
+import { changeUserView } from '@redux/actions/userViewActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectActiveItem } from '@redux/selectors/activeItemSelectors';
 import {
     selectDoctorViewState,
     selectInitialPatientSurvey,
     selectPatientViewState,
-} from 'redux/selectors/userViewSelectors';
-import Assignment from '../../assets/images/assignment.svg';
-import Setting from '../../assets/images/edit.svg';
-import Logout from '../../assets/images/logout.svg';
-import Notes from '../../assets/images/notes.svg';
-import QrCode from '../../assets/images/qr-code.svg';
-import Security from '../../assets/images/security.svg';
-import Users from '../../assets/images/users.svg';
-import constants from '../../constants/constants.json';
+} from '@redux/selectors/userViewSelectors';
+import constants from '@constants/constants.json';
 import style from './NavMenu.module.scss';
+import { usePathname, useRouter } from 'next/navigation';
 
-interface ConnectedNavMenuProps {
+interface OwnProps {
     className?: string;
     // For whether to stack another menu above/below
     attached?: 'top' | 'bottom';
     // Whether to display or hide the note name
     displayNoteName?: boolean;
 }
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = ReduxProps & OwnProps;
 
 const OurCreatedRoutes = [
     'hpi',
@@ -62,22 +55,22 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
         updateActiveItem,
     } = props;
 
-    const location = useLocation();
-    const history = useHistory();
-    const isHomePage = location?.pathname === '/';
-    const isEditNotePage = location?.pathname.includes('editnote');
+    const pathname = usePathname();
+    const router = useRouter();
+    const isHomePage = pathname === '/';
+    const isEditNotePage = pathname?.includes('editnote');
     const isHPIPatientView =
-        location?.pathname === `/${ProductType.HPI}/${ViewType.PATIENT}` ||
-        location?.pathname === '/submission-successful';
+        pathname === `/${ProductType.HPI}/${ViewType.PATIENT}` ||
+        pathname === '/submission-successful';
 
     const { signOut, loginCorrect, isSignedIn, authLoading } = useAuth();
     const { user, isManager } = useUser();
     const isCurrentOurRoute = useMemo(
         () =>
             OurCreatedRoutes.some((item) =>
-                location.pathname.toLowerCase().includes(item)
+                pathname?.toLowerCase().includes(item)
             ),
-        [location.pathname]
+        [pathname]
     );
     // email/password correct but waiting on MFA? allow users to logOut
     const userCurrentlyLoggingIn = loginCorrect && !isSignedIn;
@@ -85,35 +78,35 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     // Logged In Menu Items
     const loggedInMenuButtonItems: MenuItem[] = [
         {
-            to: `/${ProductType.HPI}/${ViewType.DOCTOR}`,
+            href: `/${ProductType.HPI}/${ViewType.DOCTOR}`,
             label: 'Notes',
-            icon: Notes,
-            active: window.location.href.includes(
+            icon: '/images/notes.svg',
+            active: !!pathname?.includes(
                 `${ProductType.HPI}/${ViewType.DOCTOR}`
             ),
         },
         {
-            to: '/qrcode',
+            href: '/qrcode',
             label: 'Clinic QR Code',
-            icon: QrCode,
-            active: window.location.href.includes('qrcode'),
+            icon: '/images/qr-code.svg',
+            active: !!pathname?.includes('qrcode'),
         },
         {
-            to: '/editprofile',
+            href: '/editprofile',
             label: 'Edit Profile',
-            icon: Setting,
-            active: window.location.href.includes('editprofile'),
+            icon: '/images/edit.svg',
+            active: !!pathname?.includes('editprofile'),
         },
         {
-            to: '/profilesecurity',
+            href: '/profilesecurity',
             label: 'Profile Security',
-            icon: Security,
-            active: window.location.href.includes('profilesecurity'),
+            icon: '/images/security.svg',
+            active: !!pathname?.includes('profilesecurity'),
         },
         {
-            to: '/',
+            href: '/',
             label: 'Log Out',
-            icon: Logout,
+            icon: '/images/logout.svg',
             onClick: signOut,
             active: false,
         },
@@ -124,22 +117,22 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             1,
             0,
             {
-                to: '/manager-dashboard',
+                href: '/manager-dashboard',
                 label: 'Manage Users',
-                icon: Users,
-                active: window.location.href.includes('manager-dashboard'),
+                icon: '/images/users.svg',
+                active: !!pathname?.includes('manager-dashboard'),
             },
             {
-                to: '/form-preferences',
+                href: '/form-preferences',
                 label: 'Form Preferences',
-                icon: Assignment,
-                active: window.location.href.includes('form-preferences'),
+                icon: '/images/assignment.svg',
+                active: !!pathname?.includes('form-preferences'),
             },
             {
-                to: '/subscription',
+                href: '/subscription',
                 label: 'Subscription',
-                icon: Security,
-                active: window.location.href.includes('subscription'),
+                icon: '/images/security.svg',
+                active: !!pathname?.includes('subscription'),
             }
         );
     }
@@ -150,7 +143,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
             as={Link}
             color='teal'
             name='login'
-            to='/login'
+            href='/login'
             content='Login'
             id='nav-menu__login-button'
         />
@@ -184,7 +177,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                             // if the user tries to signUp while waiting for MFA, sign them out
                             signOut();
                         }
-                        history.push('/sign-up');
+                        router.push('/sign-up');
                     }}
                 />
             )}
@@ -242,9 +235,14 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
                 className={`${style.header__logo} ${
                     isHomePage ? '' : style.isLinking
                 } flex align-center`}
-                to='/'
+                href='/'
             >
-                <img src={Logo} alt='Cydoc' />
+                <img
+                    height={50}
+                    width={50}
+                    src={'/images/cydoc-logo.svg'}
+                    alt='Cydoc'
+                />
                 {!isEditNotePage && <span>Cydoc</span>}
             </Link>
 
@@ -294,34 +292,7 @@ const ConnectedNavMenu: React.FunctionComponent<Props> = (props: Props) => {
     );
 };
 
-interface DispatchProps {
-    changeUserView: (userView: string) => UserViewAction;
-    updateActiveItem: (updatedItem: string) => UpdateActiveItemAction;
-}
-
-const mapDispatchToProps = {
-    changeUserView,
-    updateActiveItem,
-};
-
-export interface userViewProps {
-    patientView: boolean;
-    doctorView: boolean;
-}
-export interface AdditionalSurveyProps {
-    additionalSurvey: additionalSurvey;
-}
-
-export interface ActiveItemProps {
-    activeItem: string;
-}
-
-const mapStateToProps = (
-    state: CurrentNoteState
-): userViewProps &
-    initialSurveyProps &
-    AdditionalSurveyProps &
-    ActiveItemProps => {
+const mapStateToProps = (state: CurrentNoteState) => {
     return {
         patientView: selectPatientViewState(state),
         doctorView: selectDoctorViewState(state),
@@ -331,11 +302,11 @@ const mapStateToProps = (
     };
 };
 
-type Props = ConnectedNavMenuProps &
-    userViewProps &
-    DispatchProps &
-    initialSurveyProps &
-    AdditionalSurveyProps &
-    ActiveItemProps;
+const mapDispatchToProps = {
+    changeUserView,
+    updateActiveItem,
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConnectedNavMenu);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(ConnectedNavMenu);

@@ -1,4 +1,4 @@
-import SearchTermsToQuestionnaireMapping from 'constants/SearchTermsToQuestionnaireMapping';
+import SearchTermsToQuestionnaireMapping from '@constants/SearchTermsToQuestionnaireMapping';
 
 export function getQuestionnairesFromText(text: string): string[] {
     text = text.toLowerCase();

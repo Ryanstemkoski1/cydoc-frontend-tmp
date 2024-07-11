@@ -1,4 +1,4 @@
-import CustomModal from 'components/CustomModal/CustomModal';
+import CustomModal from '@components/CustomModal/CustomModal';
 import React, { useEffect, useRef, useState } from 'react';
 import style from './Input.module.scss';
 import monthStyle from './Select.module.scss';

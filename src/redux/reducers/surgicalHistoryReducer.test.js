@@ -11,8 +11,8 @@ import {
     updateComments,
     updateProcedure,
     updateYear,
-} from 'redux/actions/surgicalHistoryActions';
-import { YesNoResponse } from 'constants/enums';
+} from '../actions/surgicalHistoryActions';
+import { YesNoResponse } from '../../constants/enums';
 
 describe('surgical history reducers', () => {
     let store;

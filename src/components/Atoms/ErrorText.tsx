@@ -11,7 +11,7 @@ export function ErrorText({ message }: Props) {
         return null;
     }
 
-    const messageList = [];
+    const messageList: string[] = [];
 
     if (typeof message == 'string') {
         messageList.push(message);

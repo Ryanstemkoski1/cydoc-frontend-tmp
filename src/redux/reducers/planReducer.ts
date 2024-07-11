@@ -1,6 +1,6 @@
-import { WhenResponse, YesNoUncertainResponse } from 'constants/enums';
-import { PLAN_ACTION } from 'redux/actions/actionTypes';
-import { PlanActionTypes } from 'redux/actions/planActions';
+import { WhenResponse, YesNoUncertainResponse } from '@constants/enums';
+import { PLAN_ACTION } from '@redux/actions/actionTypes';
+import { PlanActionTypes } from '@redux/actions/planActions';
 import { v4 } from 'uuid';
 
 export interface PlanState {
@@ -146,6 +146,7 @@ export function planReducer(
         }
         case PLAN_ACTION.DELETE_CONDITION: {
             const { conditionIndex } = action.payload;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { [conditionIndex]: deleted, ...newConditions } =
                 state.conditions;
             return {
@@ -242,6 +243,7 @@ export function planReducer(
         }
         case PLAN_ACTION.DELETE_DIFFERENTIAL_DIAGNOSIS: {
             const { conditionIndex, diagnosisIndex } = action.payload;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { [diagnosisIndex]: deleted, ...newDiagnoses } =
                 state.conditions[conditionIndex].differentialDiagnoses;
             return {
@@ -362,6 +364,7 @@ export function planReducer(
         }
         case PLAN_ACTION.DELETE_PRESCRIPTION: {
             const { conditionIndex, prescriptionIndex } = action.payload;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { [prescriptionIndex]: deleted, ...newPrescriptions } =
                 state.conditions[conditionIndex].prescriptions;
             return {
@@ -463,6 +466,7 @@ export function planReducer(
         }
         case PLAN_ACTION.DELETE_PROCEDURE_OR_SERVICE: {
             const { conditionIndex, procedureIndex } = action.payload;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { [procedureIndex]: deleted, ...newProcedures } =
                 state.conditions[conditionIndex].proceduresAndServices;
             return {
@@ -563,6 +567,7 @@ export function planReducer(
         }
         case PLAN_ACTION.DELETE_REFERRAL: {
             const { conditionIndex, referralIndex } = action.payload;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { [referralIndex]: deleted, ...newReferrals } =
                 state.conditions[conditionIndex].referrals;
             return {

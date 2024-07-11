@@ -1,15 +1,15 @@
-import { SOCIAL_HISTORY_ACTION } from 'redux/actions/actionTypes';
-import { SocialHistoryActionTypes } from 'redux/actions/socialHistoryActions';
+import { SOCIAL_HISTORY_ACTION } from '../actions/actionTypes';
+import { SocialHistoryActionTypes } from '../actions/socialHistoryActions';
 import {
     YesNoResponse,
     YesNoMaybeResponse,
     SubstanceUsageResponse,
-} from '../../constants/enums';
-import { DrinkSize } from 'constants/SocialHistory/drinkSizes';
-import { DrinkType } from 'constants/SocialHistory/drinkTypes';
-import { DrugName } from 'constants/SocialHistory/drugNames';
-import { ModeOfDelivery } from 'constants/SocialHistory/modesOfDelivery';
-import { TobaccoProduct } from 'constants/SocialHistory/tobaccoProducts';
+} from '@constants/enums';
+import { DrinkSize } from '@constants/SocialHistory/drinkSizes';
+import { DrinkType } from '@constants/SocialHistory/drinkTypes';
+import { DrugName } from '@constants/SocialHistory/drugNames';
+import { ModeOfDelivery } from '@constants/SocialHistory/modesOfDelivery';
+import { TobaccoProduct } from '@constants/SocialHistory/tobaccoProducts';
 
 export interface SocialHistoryState {
     alcohol: AlcoholState;

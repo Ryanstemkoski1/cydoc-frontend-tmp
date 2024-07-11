@@ -1,9 +1,9 @@
-import { CurrentNoteState } from 'redux/reducers';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     AlcoholState,
     TobaccoState,
     RecreationalDrugsState,
-} from 'redux/reducers/socialHistoryReducer';
+} from '@redux/reducers/socialHistoryReducer';
 
 export interface SocialHistorySecondaryFieldsState {
     livingSituation: string;

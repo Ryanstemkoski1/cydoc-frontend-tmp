@@ -1,5 +1,4 @@
-import 'pages/EditNote/content/hpi/knowledgegraph/src/css/Button.css';
-import PropTypes from 'prop-types';
+import '@screens/EditNote/content/hpi/knowledgegraph/css/Button.css';
 import React from 'react';
 
 export interface ButtonProps<T = string> {
@@ -14,6 +13,7 @@ export interface ButtonProps<T = string> {
     ariaLabel?: string;
     className?: string;
 }
+
 /**
  * functional component for a basic button that toggles to purple when active
  * @param props: Button Props
@@ -38,6 +38,7 @@ export default function ToggleButton<T = string>(props: ButtonProps<T>) {
 
     return (
         <button
+            data-testid={`toggle-button-${condition}-${title}`}
             title={title}
             {...extraProps}
             onClick={(e) =>
@@ -52,15 +53,3 @@ export default function ToggleButton<T = string>(props: ButtonProps<T>) {
         </button>
     );
 }
-
-ToggleButton.propTypes = {
-    active: PropTypes.bool,
-    compact: PropTypes.bool,
-    condition: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    disabled: PropTypes.bool,
-    onToggleButtonClick: PropTypes.func.isRequired,
-    size: PropTypes.string,
-    title: PropTypes.string,
-    ariaLabel: PropTypes.string,
-    className: PropTypes.string,
-};

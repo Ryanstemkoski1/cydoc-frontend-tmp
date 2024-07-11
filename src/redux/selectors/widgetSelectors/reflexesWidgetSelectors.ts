@@ -1,7 +1,7 @@
 import {
     ReflexesWidgetItemState,
     ReflexesWidgetState,
-} from 'redux/reducers/widgetReducers/reflexesWidgetReducer';
+} from '@redux/reducers/widgetReducers/reflexesWidgetReducer';
 import { CurrentNoteState } from '../../reducers';
 
 export function selectReflexesWidgetState(

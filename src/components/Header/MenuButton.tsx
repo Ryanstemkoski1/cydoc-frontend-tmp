@@ -1,11 +1,11 @@
+'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router';
-import ArrowDown from '../../assets/images/arrow-down.svg';
+import { useRouter } from 'next/navigation';
 import style from './MenuButton.module.scss';
 
 export interface MenuItem {
     label: string;
-    to: string;
+    href: string;
     icon: string;
     active: boolean;
     onClick?: () => void;
@@ -14,12 +14,12 @@ export interface MenuItem {
 interface Props {
     label: string;
     icon?: string;
-    to?: string;
+    href?: string;
     items?: MenuItem[] | null;
 }
 
-function MenuButton({ label, icon, to, items }: Props) {
-    const history = useHistory();
+function MenuButton({ label, icon, href, items }: Props) {
+    const router = useRouter();
     const [showMenuItems, setShowMenuItems] = useState(false);
 
     const menuItemRef = useRef<HTMLDivElement>(null);
@@ -43,7 +43,7 @@ function MenuButton({ label, icon, to, items }: Props) {
             <div
                 className={`${style.profile__user} flex align-center`}
                 onClick={() => {
-                    if (to) return history.push(to);
+                    if (href) return router.push(href);
                     setShowMenuItems(!showMenuItems);
                 }}
             >
@@ -55,7 +55,7 @@ function MenuButton({ label, icon, to, items }: Props) {
                 >
                     <span>{label}</span>
                     {!!items && Boolean(label) && (
-                        <img src={ArrowDown} alt='arrow down' />
+                        <img src={'/images/arrow-down.svg'} alt='arrow down' />
                     )}
                 </a>
             </div>
@@ -74,7 +74,7 @@ function MenuButton({ label, icon, to, items }: Props) {
                             key={item.label}
                             onClick={() => {
                                 if (item.onClick) item.onClick();
-                                if (item.to) history.push(item.to);
+                                if (item.href) router.push(item.href);
                                 setShowMenuItems(false);
                             }}
                         >

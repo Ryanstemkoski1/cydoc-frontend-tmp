@@ -1,0 +1,22 @@
+@import '../../../../../../../assets/scss/variables.scss';
+.symptomsHistory {
+    &__input {
+        width: 250px;
+        padding-right: 30px;
+        @include max-screen($mobile) {
+            width: 100%;
+            padding-right: 0;
+        }
+    }
+    &__timeGrid {
+        &:first-child {
+            margin-right: 5px;
+        }
+    }
+    &__timeItem {
+        padding: 10px 5px;
+        &:first-child {
+            padding-left: 0;
+        }
+    }
+}

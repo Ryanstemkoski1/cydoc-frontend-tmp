@@ -1,5 +1,5 @@
-import { MURMURS_WIDGET_ACTION } from 'redux/actions/actionTypes';
-import { MurmursWidgetActionTypes } from 'redux/actions/widgetActions/murmursWidgetActions';
+import { MURMURS_WIDGET_ACTION } from '@redux/actions/actionTypes';
+import { MurmursWidgetActionTypes } from '@redux/actions/widgetActions/murmursWidgetActions';
 import { v4 } from 'uuid';
 
 export interface MurmursWidgetState {
@@ -241,6 +241,7 @@ export function murmursWidgetReducer(
                 }
             } else {
                 const {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     specificMurmurInfo: _deleted,
                     ...newMurmursWidgetItem
                 } = state[id];

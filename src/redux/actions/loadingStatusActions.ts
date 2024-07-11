@@ -1,13 +1,14 @@
+import { UnknownAction } from 'redux';
 import { LOADING_STATUS } from './actionTypes';
 
-export interface SetLoadingStatus {
+export interface SetLoadingStatus extends UnknownAction {
     type: LOADING_STATUS.SET_LOADING_STATUS;
     payload: {
         value: boolean;
     };
 }
 
-export interface ToggleLoadingState {
+export interface ToggleLoadingState extends UnknownAction {
     type: LOADING_STATUS.TOGGLE_LOADING_STATUS;
 }
 

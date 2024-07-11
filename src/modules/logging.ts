@@ -1,17 +1,14 @@
-import * as Sentry from '@sentry/react';
+'use client';
+
+import * as Sentry from '@sentry/nextjs';
 
 import pkgInfo from '../../package.json';
 
-import { APP_ENV } from './environment';
 import { DbUser } from '@cydoc-ai/types';
 
 const SENTRY_ENABLED = process.env.NODE_ENV === 'production';
 
-// [[ uname == MING* ]] && echo "windows" || echo "unix"
-// [[ uname == Darw* ]] && echo "windows" || echo "unix"
-
-// if [[ uname == MING* ]]; then echo "windows"; else echo "unix"; fi
-// if [[ uname == Darw* ]]; then echo "windows"; else echo "unix"; fi
+let SENTRY_INITIALIZED = false;
 
 export const updateLoggedUser = (user: Partial<DbUser> | null) => {
     if (user) {
@@ -26,24 +23,35 @@ export const updateLoggedUser = (user: Partial<DbUser> | null) => {
 };
 
 // Initializes sentry error logging service
-export function initializeSentry() {
-    Sentry.init({
-        dsn: 'https://4d2b3dd2cd304864a3e69b5e7d3dab35@o4505208002576384.ingest.sentry.io/4505208111562752',
-        integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],
-        release: pkgInfo.version,
-        // release: process.env.VITE_SENTRY_RELEASE, // TODO: pull release from hash?
-        enabled: SENTRY_ENABLED,
-        environment: APP_ENV,
+// export function initializeSentry() {
+// Sentry.init({
+//     dsn: 'https://4d2b3dd2cd304864a3e69b5e7d3dab35@o4505208002576384.ingest.sentry.io/4505208111562752',
+//     integrations: [
+//         Sentry.browserTracingIntegration(),
+//         Sentry.replayIntegration({
+//             // Additional SDK configuration goes in here, for example:
+//             maskAllText: true,
+//             blockAllMedia: true,
+//         }),
+//     ],
+//     release: pkgInfo.version,
+//     // release: process.env.VITE_SENTRY_RELEASE, // TODO: pull release from hash?
+//     enabled: SENTRY_ENABLED,
+//     environment: APP_ENV,
 
-        // Set tracesSampleRate to 1.0 to capture 100%
-        // of transactions for performance monitoring.
-        // We recommend adjusting this value in production
-        tracesSampleRate: 0.1, // production can consume ~1k transactions/day (limit is 10k/month)
-    });
+//     // Set tracesSampleRate to 1.0 to capture 100%
+//     // of transactions for performance monitoring.
+//     // We recommend adjusting this value in production
+//     tracesSampleRate: 0.1, // production can consume ~1k transactions/day (limit is 10k/month)
+// });
 
+if (SENTRY_ENABLED && !SENTRY_INITIALIZED) {
     // set package version as a tag
     Sentry.setTag('version', pkgInfo.version);
+    SENTRY_INITIALIZED = true;
 }
+// }
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function log(message: string, data?: any) {
     if (data) {

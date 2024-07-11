@@ -1,15 +1,14 @@
+import { UnknownAction } from 'redux';
 import { CHIEF_COMPLAINTS } from './actionTypes';
 
-export interface SelectChiefComplaintAction {
+export interface SelectChiefComplaintAction extends UnknownAction {
     type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS;
     payload: {
         disease: string;
     };
 }
 
-export function selectChiefComplaint(
-    disease: string
-): SelectChiefComplaintAction {
+export function setChiefComplaint(disease: string): SelectChiefComplaintAction {
     return {
         type: CHIEF_COMPLAINTS.SELECT_CHIEF_COMPLAINTS,
         payload: {
@@ -18,7 +17,7 @@ export function selectChiefComplaint(
     };
 }
 
-export interface SetNotesChiefComplaintAction {
+export interface SetNotesChiefComplaintAction extends UnknownAction {
     type: CHIEF_COMPLAINTS.SET_NOTES_CHIEF_COMPLAINTS;
     payload: {
         disease: string;

@@ -1,6 +1,6 @@
 import { MEDICAL_HISTORY_ACTION } from '../actions/actionTypes';
 import { MedicalHistoryActionTypes } from '../actions/medicalHistoryActions';
-import { YesNoResponse } from '../../constants/enums';
+import { YesNoResponse } from '@constants/enums';
 
 export interface MedicalHistoryState {
     [index: string]: MedicalHistoryItem;
@@ -24,6 +24,7 @@ export function medicalHistoryReducer(
     switch (action.type) {
         case MEDICAL_HISTORY_ACTION.DELETE_CONDITION: {
             const { conditionIndex } = action.payload;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { [conditionIndex]: deleted, ...newState } = state;
             return newState;
         }
@@ -102,6 +103,14 @@ export function medicalHistoryReducer(
             is saved with the new condition ID.
             */
             const { conditionIndex, conditionName } = action.payload;
+
+            // sometimes the condition is already present under a different id, don't create dupes
+            const existingKey = Object.keys(state).find(
+                (entry) => state[entry].condition == conditionName
+            );
+            if (existingKey) {
+                return state;
+            }
             return {
                 ...state,
                 [conditionIndex]: {

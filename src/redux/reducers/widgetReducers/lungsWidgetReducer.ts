@@ -1,5 +1,5 @@
-import { LUNGS_WIDGET_ACTION } from 'redux/actions/actionTypes';
-import { LungsWidgetActionTypes } from 'redux/actions/widgetActions/lungsWidgetActions';
+import { LUNGS_WIDGET_ACTION } from '@redux/actions/actionTypes';
+import { LungsWidgetActionTypes } from '@redux/actions/widgetActions/lungsWidgetActions';
 
 export interface LungsWidgetState {
     leftUpperLobe: LungsWidgetSection;

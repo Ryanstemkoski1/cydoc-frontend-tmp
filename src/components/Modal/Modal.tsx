@@ -1,5 +1,8 @@
-import { AppointmentUser, formatFullName } from 'pages/BrowseNotes/BrowseNotes';
-import { ParseAndRenderHpiNote } from 'pages/EditNote/content/generatenote/notesections/HPINote';
+import {
+    AppointmentUser,
+    formatFullName,
+} from '@screens/BrowseNotes/BrowseNotes';
+import { ParseAndRenderHpiNote } from '@screens/EditNote/content/generatenote/notesections/HPINote';
 import { MouseEvent, default as React, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 import style from './Modal.module.scss';

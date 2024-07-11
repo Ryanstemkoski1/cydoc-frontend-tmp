@@ -1,5 +1,5 @@
-import { CurrentNoteState } from 'redux/reducers';
-import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
+import { CurrentNoteState } from '@redux/reducers';
+import { PatientInformationState } from '@redux/reducers/patientInformationReducer';
 
 export function selectPatientInformationState(
     state: CurrentNoteState

@@ -1,6 +1,7 @@
+import { UnknownAction } from 'redux';
 import { ACTIVE_ITEM_ACTION } from './actionTypes';
 
-export interface UpdateActiveItemAction {
+export interface UpdateActiveItemAction extends UnknownAction {
     type: ACTIVE_ITEM_ACTION.ACTIVE_ITEM;
     payload: {
         updatedItem: string;

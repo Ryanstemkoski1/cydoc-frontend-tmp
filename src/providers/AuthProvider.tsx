@@ -1,8 +1,9 @@
+'use client';
+
 import React, {
     PropsWithChildren,
     createContext,
     useCallback,
-    useContext,
     useEffect,
     useMemo,
     useState,
@@ -20,10 +21,10 @@ import {
     USER_EXISTS,
 } from 'auth/cognito';
 import { Auth as AmplifyAuth } from 'aws-amplify';
-import { useHistory } from 'react-router-dom';
-import { stringFromError } from '../modules/error-utils';
-import { breadcrumb, log, updateLoggedUser } from '../modules/logging';
-import { formatPhoneNumber } from '../modules/user-api';
+import { useRouter } from 'next/navigation';
+import { stringFromError } from '@modules/error-utils';
+import { breadcrumb, log, updateLoggedUser } from '@modules/logging';
+import { formatPhoneNumber } from '@modules/user-api';
 import { UserInfoProvider } from './UserInfoProvider';
 
 export interface AuthContextValues {
@@ -62,12 +63,9 @@ export const AuthProvider: React.FC<
     const [authLoading, setAuthLoading] = useState(true);
     const passwordResetRequired =
         cognitoUser?.challengeName === NEW_PASSWORD_REQUIRED;
-    const history = useHistory();
+    const router = useRouter();
 
     const [isSignedIn, setIsSignedIn] = useState(false);
-    // TODO: parse ^^status^^ from cognitoUser when it changes (see below)
-    // Here's an async method: https://github.com/aws-amplify/amplify-js/issues/3640#issuecomment-1198905668
-    // const isSignedIn = useMemo(() => !!user?.challengeName?.length, [user]); // This key is not the correct way to determine this
 
     const signOut = useCallback(
         () => {
@@ -109,7 +107,7 @@ export const AuthProvider: React.FC<
                             setLoginCorrect(true);
                             setIsSignedIn(true);
                         })
-                        .catch((err) => {
+                        .catch(() => {
                             signOut();
                             breadcrumb(
                                 `unable to restore session, user logged out`,
@@ -227,7 +225,7 @@ export const AuthProvider: React.FC<
                 log('error signing up:', error);
                 if (error?.code === USER_EXISTS) {
                     alert(`Account already exists, please login`);
-                    history?.push('/login');
+                    router.push('/login');
                     return {
                         errorMessage: `Account already exists, please login`,
                     };
@@ -240,7 +238,7 @@ export const AuthProvider: React.FC<
                     'Unknown error occurred, refresh, check your network & login',
             };
         },
-        [history, signIn]
+        [router, signIn]
     );
 
     const verifyMfaCode = useCallback(
@@ -257,7 +255,7 @@ export const AuthProvider: React.FC<
 
                 setIsSignedIn(!!confirmedUser); // MFA has been completed
                 setCognitoUser(confirmedUser);
-                history?.push('/');
+                router.push('/');
 
                 return { user: confirmedUser, errorMessage: undefined };
             } catch (e) {
@@ -284,7 +282,7 @@ export const AuthProvider: React.FC<
                     'Unknown error occurred, refresh, check your network & login',
             };
         },
-        [history, signOut, cognitoUser]
+        [router, signOut, cognitoUser]
     );
 
     const completeFirstLoginUpdate: AuthContextValues['completeFirstLoginUpdate'] =
@@ -305,9 +303,9 @@ export const AuthProvider: React.FC<
                 setCognitoUser(updatePasswordResult);
                 setLoginCorrect(true);
 
-                console.log(`password challenge completed`, {
-                    updatePasswordResult,
-                });
+                // console.log(`password challenge completed`, {
+                //     updatePasswordResult,
+                // });
 
                 return {
                     user: updatePasswordResult,
@@ -348,14 +346,6 @@ export const AuthProvider: React.FC<
             <UserInfoProvider>{children}</UserInfoProvider>
         </AuthProviderContext.Provider>
     );
-};
-
-export const useAuthInfoContext = () => {
-    const ctx = useContext(AuthProviderContext);
-
-    invariant(ctx, 'authInfoContext called outside of UserInfo Context');
-
-    return ctx;
 };
 
 const waitForCode = () => new Promise((resolve) => setTimeout(resolve, 2500));

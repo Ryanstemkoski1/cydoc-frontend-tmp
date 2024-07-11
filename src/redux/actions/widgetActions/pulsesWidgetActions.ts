@@ -1,5 +1,5 @@
-import { LeftRight } from 'constants/enums';
-import { PulseLocation } from 'redux/reducers/widgetReducers/pulsesWidgetReducer';
+import { LeftRight } from '@constants/enums';
+import { PulseLocation } from '@redux/reducers/widgetReducers/pulsesWidgetReducer';
 import { PULSES_WIDGET_ACTION } from '../actionTypes';
 
 export interface AddPulsesWidgetItemAction {

@@ -1,13 +1,13 @@
-import { displayedNodesCutOff } from 'constants/displayedNodesCutOff';
-import { YesNoResponse } from 'constants/enums';
+import { displayedNodesCutOff } from '@constants/displayedNodesCutOff';
+import { YesNoResponse } from '@constants/enums';
 import {
     ResponseTypes,
     SelectManyInput,
     SelectOneInput,
-} from 'constants/hpiEnums';
-import { CurrentNoteState } from 'redux/reducers';
-import { isHPIResponseValid } from 'utils/getHPIFormData';
-import { getNodeConditions } from 'utils/getHPIText';
+} from '@constants/hpiEnums';
+import { CurrentNoteState } from '@redux/reducers';
+import { isHPIResponseValid } from '@utils/getHPIFormData';
+import { getNodeConditions } from '@utils/getHPIText';
 
 function traverseNodes(
     currNodes: string[],
@@ -85,7 +85,7 @@ export function nodesToDisplayInOrder(
             {
                 [chiefComplaint: string]: string[];
             },
-            string[]
+            string[],
         ];
     if (totalNodes.length < displayedNodesCutOff) {
         let nodesArr = totalNodes, // for the count

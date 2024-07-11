@@ -1,9 +1,10 @@
-import { YesNoResponse } from 'constants/enums';
-import { SelectOneInput } from 'constants/hpiEnums';
-import { InitialQuestionsState } from 'redux/reducers/userViewReducer';
+import { YesNoResponse } from '@constants/enums';
+import { SelectOneInput } from '@constants/hpiEnums';
+import { InitialQuestionsState } from '@redux/reducers/userViewReducer';
 import { USER_VIEW_ACTION } from './actionTypes';
+import { UnknownAction } from 'redux';
 
-export interface UserViewAction {
+export interface UserViewAction extends UnknownAction {
     type: USER_VIEW_ACTION.USER_VIEW;
     payload: {
         userView: string;
@@ -18,7 +19,7 @@ export function changeUserView(userView: string): UserViewAction {
     };
 }
 
-export interface ProcessSurveyGraphAction {
+export interface ProcessSurveyGraphAction extends UnknownAction {
     type: USER_VIEW_ACTION.PROCESS_SURVEY_GRAPH;
     payload: {
         graph: InitialQuestionsState;
@@ -36,7 +37,7 @@ export function processSurveyGraph(
     };
 }
 
-export interface InitialSurveyYesNoAction {
+export interface InitialSurveyYesNoAction extends UnknownAction {
     type: USER_VIEW_ACTION.INITIAL_SURVEY_YES_NO;
     payload: {
         uid: string;
@@ -57,7 +58,7 @@ export function initialSurveyYesNo(
     };
 }
 
-export interface InitialSurveySearchAction {
+export interface InitialSurveySearchAction extends UnknownAction {
     type: USER_VIEW_ACTION.INITIAL_SURVEY_SEARCH;
     payload: {
         uid: string;
@@ -78,7 +79,7 @@ export function initialSurveySearch(
     };
 }
 
-export interface InitialSurveyAddDateOrPlaceActions {
+export interface InitialSurveyAddDateOrPlaceActions extends UnknownAction {
     type: USER_VIEW_ACTION.INITIAL_SURVEY_ADD_DATE_OR_PLACE;
     payload: {
         uid: string;
@@ -99,7 +100,7 @@ export function initialSurveyAddDateOrPlace(
     };
 }
 
-export interface InitialSurveyAddTextActions {
+export interface InitialSurveyAddTextActions extends UnknownAction {
     type: USER_VIEW_ACTION.INITIAL_SURVEY_ADD_TEXT;
     payload: {
         uid: string;
@@ -120,7 +121,7 @@ export function initialSurveyAddText(
     };
 }
 
-export interface InitialSurveyAddListInputAction {
+export interface InitialSurveyAddListInputAction extends UnknownAction {
     type: USER_VIEW_ACTION.INITIAL_SURVEY_ADD_LIST_INPUT;
     payload: {
         id: string;
@@ -138,7 +139,7 @@ export function initialSurveyAddListInput(
     };
 }
 
-export interface InitialSurveyListTextHandleChangeAction {
+export interface InitialSurveyListTextHandleChangeAction extends UnknownAction {
     type: USER_VIEW_ACTION.INITIAL_SURVEY_LIST_TEXT_HANDLE_CHANGE;
     payload: {
         key: string;
@@ -162,7 +163,7 @@ export function initialSurveyListTextHandleChange(
     };
 }
 
-export interface InitialSurveyRemoveListInputAction {
+export interface InitialSurveyRemoveListInputAction extends UnknownAction {
     type: USER_VIEW_ACTION.INITIAL_SURVEY_REMOVE_LIST_INPUT;
     payload: {
         key: string;

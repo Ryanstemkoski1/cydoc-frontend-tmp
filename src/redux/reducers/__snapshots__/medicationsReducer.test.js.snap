@@ -1,8 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`medications reducers creates new entry with given condition id 1`] = `
-Object {
-  "foo": Object {
+exports[`medications reducers > creates new entry with given condition id 1`] = `
+{
+  "foo": {
     "comments": "",
     "dose": "",
     "drugName": "foo",
@@ -10,10 +10,10 @@ Object {
     "isCurrentlyTaking": "",
     "reasonForTaking": "",
     "schedule": "",
-    "sideEffects": Array [],
+    "sideEffects": [],
     "startYear": -1,
   },
-  "uuid1": Object {
+  "uuid1": {
     "comments": "",
     "dose": "",
     "drugName": "",
@@ -21,17 +21,17 @@ Object {
     "isCurrentlyTaking": "",
     "reasonForTaking": "",
     "schedule": "",
-    "sideEffects": Array [],
+    "sideEffects": [],
     "startYear": -1,
   },
 }
 `;
 
-exports[`medications reducers deletes medication entry 1`] = `Object {}`;
+exports[`medications reducers > deletes medication entry 1`] = `{}`;
 
-exports[`medications reducers updates comments 1`] = `
-Object {
-  "uuid1": Object {
+exports[`medications reducers > updates comments 1`] = `
+{
+  "uuid1": {
     "comments": "newComments",
     "dose": "",
     "drugName": "",
@@ -39,15 +39,15 @@ Object {
     "isCurrentlyTaking": "",
     "reasonForTaking": "",
     "schedule": "",
-    "sideEffects": Array [],
+    "sideEffects": [],
     "startYear": -1,
   },
 }
 `;
 
-exports[`medications reducers updates currently taking 1`] = `
-Object {
-  "uuid1": Object {
+exports[`medications reducers > updates currently taking 1`] = `
+{
+  "uuid1": {
     "comments": "",
     "dose": "",
     "drugName": "",
@@ -55,15 +55,15 @@ Object {
     "isCurrentlyTaking": "NO",
     "reasonForTaking": "",
     "schedule": "",
-    "sideEffects": Array [],
+    "sideEffects": [],
     "startYear": -1,
   },
 }
 `;
 
-exports[`medications reducers updates dose 1`] = `
-Object {
-  "uuid1": Object {
+exports[`medications reducers > updates dose 1`] = `
+{
+  "uuid1": {
     "comments": "",
     "dose": "newDose",
     "drugName": "",
@@ -71,15 +71,15 @@ Object {
     "isCurrentlyTaking": "",
     "reasonForTaking": "",
     "schedule": "",
-    "sideEffects": Array [],
+    "sideEffects": [],
     "startYear": -1,
   },
 }
 `;
 
-exports[`medications reducers updates drug name 1`] = `
-Object {
-  "uuid1": Object {
+exports[`medications reducers > updates drug name 1`] = `
+{
+  "uuid1": {
     "comments": "",
     "dose": "",
     "drugName": "newDrugName",
@@ -87,15 +87,15 @@ Object {
     "isCurrentlyTaking": "",
     "reasonForTaking": "",
     "schedule": "",
-    "sideEffects": Array [],
+    "sideEffects": [],
     "startYear": -1,
   },
 }
 `;
 
-exports[`medications reducers updates end year 1`] = `
-Object {
-  "uuid1": Object {
+exports[`medications reducers > updates end year 1`] = `
+{
+  "uuid1": {
     "comments": "",
     "dose": "",
     "drugName": "",
@@ -103,15 +103,15 @@ Object {
     "isCurrentlyTaking": "",
     "reasonForTaking": "",
     "schedule": "",
-    "sideEffects": Array [],
+    "sideEffects": [],
     "startYear": -1,
   },
 }
 `;
 
-exports[`medications reducers updates reason for taking 1`] = `
-Object {
-  "uuid1": Object {
+exports[`medications reducers > updates reason for taking 1`] = `
+{
+  "uuid1": {
     "comments": "",
     "dose": "",
     "drugName": "",
@@ -119,15 +119,15 @@ Object {
     "isCurrentlyTaking": "",
     "reasonForTaking": "newReasonForTaking",
     "schedule": "",
-    "sideEffects": Array [],
+    "sideEffects": [],
     "startYear": -1,
   },
 }
 `;
 
-exports[`medications reducers updates schedule 1`] = `
-Object {
-  "uuid1": Object {
+exports[`medications reducers > updates schedule 1`] = `
+{
+  "uuid1": {
     "comments": "",
     "dose": "",
     "drugName": "",
@@ -135,15 +135,15 @@ Object {
     "isCurrentlyTaking": "",
     "reasonForTaking": "",
     "schedule": "newSchedule",
-    "sideEffects": Array [],
+    "sideEffects": [],
     "startYear": -1,
   },
 }
 `;
 
-exports[`medications reducers updates side effects 1`] = `
-Object {
-  "uuid1": Object {
+exports[`medications reducers > updates side effects 1`] = `
+{
+  "uuid1": {
     "comments": "",
     "dose": "",
     "drugName": "",
@@ -151,7 +151,7 @@ Object {
     "isCurrentlyTaking": "",
     "reasonForTaking": "",
     "schedule": "",
-    "sideEffects": Array [
+    "sideEffects": [
       "newSideEffect",
     ],
     "startYear": -1,
@@ -159,9 +159,9 @@ Object {
 }
 `;
 
-exports[`medications reducers updates start year 1`] = `
-Object {
-  "uuid1": Object {
+exports[`medications reducers > updates start year 1`] = `
+{
+  "uuid1": {
     "comments": "",
     "dose": "",
     "drugName": "",
@@ -169,7 +169,7 @@ Object {
     "isCurrentlyTaking": "",
     "reasonForTaking": "",
     "schedule": "",
-    "sideEffects": Array [],
+    "sideEffects": [],
     "startYear": 2019,
   },
 }

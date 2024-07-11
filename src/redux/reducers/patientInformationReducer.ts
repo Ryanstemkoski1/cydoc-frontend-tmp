@@ -1,6 +1,6 @@
-import { PatientPronouns } from 'constants/patientInformation';
-import { PATIENT_INFORMATION_ACTION } from 'redux/actions/actionTypes';
-import { PatientInformationActionTypes } from 'redux/actions/patientInformationActions';
+import { PatientPronouns } from '@constants/patientInformation';
+import { PATIENT_INFORMATION_ACTION } from '@redux/actions/actionTypes';
+import { PatientInformationActionTypes } from '@redux/actions/patientInformationActions';
 
 export interface PatientInformationState {
     patientName: string;

@@ -5,23 +5,37 @@
         "node": true
     },
     "extends": [
-        "plugin:react/recommended",
-        "plugin:jest/recommended",
-        "prettier"
+        "next",
+        "prettier",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly"
     },
-    "parser": "babel-eslint",
+    "ignorePatterns": [
+        "**/*.js",
+        "**/*.mjs",
+        "**/*.test.js",
+        "**/*.test.jsx",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/__mocks__/**",
+        "dist",
+        ".next",
+        "node_modules"
+    ],
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
         },
         "ecmaVersion": 2018,
-        "sourceType": "module"
+        "sourceType": "module",
+        "project": "./tsconfig.json"
     },
-    "plugins": ["react", "react-hooks", "prettier", "jest"],
+    "plugins": ["react", "react-hooks", "prettier", "@typescript-eslint"],
     "rules": {
         "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
         "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
@@ -38,60 +52,12 @@
             }
         ],
         "no-var": ["error"],
-        "no-console": ["error"],
+        "no-console": ["warn"],
         "react/prop-types": "off",
-        "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
-    },
-    "settings": {
-        "react": {
-            "version": "detect"
-        }
-    },
-    "overrides": [
-        {
-            "files": ["**/*.ts", "**/*.tsx"],
-            "env": {
-                "browser": true,
-                "es6": true,
-                "node": true
-            },
-            "extends": [
-                "plugin:@typescript-eslint/recommended",
-                "plugin:prettier/recommended"
-            ],
-            "globals": {
-                "Atomics": "readonly",
-                "SharedArrayBuffer": "readonly"
-            },
-            "parser": "@typescript-eslint/parser",
-            "parserOptions": {
-                "ecmaFeatures": { "jsx": true },
-                "ecmaVersion": 2018,
-                "sourceType": "module",
-                "project": "./tsconfig.json"
-            },
-            "plugins": ["react", "prettier", "jest", "@typescript-eslint"],
-            "rules": {
-                "prettier/prettier": [
-                    "error",
-                    {
-                        "tabWidth": 4,
-                        "semi": true,
-                        "singleQuote": true,
-                        "jsxSingleQuote": true,
-                        "bracketSpacing": true,
-                        "trailingComma": "es5"
-                    }
-                ],
-                "no-var": ["error"],
-                "no-console": ["warn"],
-                "react/prop-types": "off"
-            },
-            "settings": {
-                "react": {
-                    "version": "detect"
-                }
-            }
-        }
-    ]
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            { "argsIgnorePattern": "^_" }
+        ],
+        "@typescript-eslint/no-explicit-any": ["warn", {}]
+    }
 }

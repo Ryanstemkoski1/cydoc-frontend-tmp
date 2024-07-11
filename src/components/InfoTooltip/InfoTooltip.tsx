@@ -1,6 +1,5 @@
 import React from 'react';
 import style from './InfoTooltip.module.scss';
-import InfoIcon from '../../assets/images/info-green.svg';
 export interface InfoTooltipProps {
     children: React.JSX.Element[] | React.JSX.Element;
     mobilePositionX?: number;
@@ -15,7 +14,7 @@ const InfoTooltip = ({
     return (
         <div className={style.infoTooltip}>
             <div className={style.infoTooltip__holder}>
-                <img src={InfoIcon} alt='Info Icon' />
+                <img src={'/images/info-green.svg'} alt='Info Icon' />
             </div>
             {children && (
                 <div

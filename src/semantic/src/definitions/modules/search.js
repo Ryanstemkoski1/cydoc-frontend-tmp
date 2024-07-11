@@ -15,8 +15,8 @@
         typeof window != 'undefined' && window.Math == Math
             ? window
             : typeof self != 'undefined' && self.Math == Math
-            ? self
-            : Function('return this')();
+              ? self
+              : Function('return this')();
 
     $.fn.search = function (parameters) {
         var $allModules = $(this),
@@ -472,9 +472,9 @@
                                 prompt.oninput !== undefined
                                     ? 'input'
                                     : prompt !== undefined &&
-                                      prompt.onpropertychange !== undefined
-                                    ? 'propertychange'
-                                    : 'keyup';
+                                        prompt.onpropertychange !== undefined
+                                      ? 'propertychange'
+                                      : 'keyup';
                         return inputEvent;
                     },
                     value: function () {

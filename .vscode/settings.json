@@ -1,0 +1,6 @@
+{
+    "workbench.editor.customLabels.patterns": {
+        "**/**/page.tsx": "${dirname} screen"
+    },
+    "cSpell.words": ["testid"]
+}

@@ -1,9 +1,10 @@
 import { AxiosResponse } from 'axios';
-import SearchTermsToQuestionnaireMapping from 'constants/SearchTermsToQuestionnaireMapping';
-import { hpiHeaders } from 'pages/EditNote/content/hpi/knowledgegraph/src/API';
+import SearchTermsToQuestionnaireMapping from '../../constants/SearchTermsToQuestionnaireMapping';
+import { hpiHeaders } from '../../screens/EditNote/content/hpi/knowledgegraph/API';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 describe('utils tests', () => {
-    jest.setTimeout(10000);
+    // jest.setTimeout(10000);
 
     let knowledgeGraphResponse: AxiosResponse<any>;
 

@@ -1,5 +1,7 @@
+'use client';
+
 import React, { Component } from 'react';
-import { getNewTemplate } from '../pages/CreateTemplate/util';
+import { getNewTemplate } from '../screens/CreateTemplate/util';
 
 const HPITemplateContext = React.createContext({});
 

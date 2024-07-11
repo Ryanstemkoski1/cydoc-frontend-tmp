@@ -1,6 +1,5 @@
 import { MEDICAL_HISTORY_ACTION } from './actionTypes';
-import { YesNoResponse } from '../../constants/enums';
-import { string } from 'prop-types';
+import { YesNoResponse } from '@constants/enums';
 
 interface ToggleOptionAction {
     type: MEDICAL_HISTORY_ACTION.TOGGLE_OPTION;

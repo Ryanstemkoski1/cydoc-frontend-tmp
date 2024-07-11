@@ -3,12 +3,12 @@ import {
     YesNoResponse,
     SubstanceUsageResponse,
     YesNoMaybeResponse,
-} from '../../constants/enums';
-import { DrinkSize } from 'constants/SocialHistory/drinkSizes';
-import { DrinkType } from 'constants/SocialHistory/drinkTypes';
-import { DrugName } from 'constants/SocialHistory/drugNames';
-import { ModeOfDelivery } from 'constants/SocialHistory/modesOfDelivery';
-import { TobaccoProduct } from 'constants/SocialHistory/tobaccoProducts';
+} from '@constants/enums';
+import { DrinkSize } from '@constants/SocialHistory/drinkSizes';
+import { DrinkType } from '@constants/SocialHistory/drinkTypes';
+import { DrugName } from '@constants/SocialHistory/drugNames';
+import { ModeOfDelivery } from '@constants/SocialHistory/modesOfDelivery';
+import { TobaccoProduct } from '@constants/SocialHistory/tobaccoProducts';
 
 interface UpdateAlcoholUsageAction {
     type: SOCIAL_HISTORY_ACTION.UPDATE_ALCOHOL_USAGE;

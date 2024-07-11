@@ -15,8 +15,8 @@
         typeof window != 'undefined' && window.Math == Math
             ? window
             : typeof self != 'undefined' && self.Math == Math
-            ? self
-            : Function('return this')();
+              ? self
+              : Function('return this')();
 
     $.fn.dropdown = function (parameters) {
         var $allModules = $(this),
@@ -1988,8 +1988,8 @@
                                 ? values.length
                                 : 0
                             : module.get.value() !== ''
-                            ? 1
-                            : 0;
+                              ? 1
+                              : 0;
                         return count;
                     },
                     transition: function ($subMenu) {
@@ -2094,8 +2094,8 @@
                             return $choice.data(metadata.text) !== undefined
                                 ? $choice.data(metadata.text)
                                 : preserveHTML
-                                ? $.trim($choice.html())
-                                : $.trim($choice.text());
+                                  ? $.trim($choice.html())
+                                  : $.trim($choice.text());
                         }
                     },
                     choiceValue: function ($choice, choiceText) {
@@ -2107,8 +2107,8 @@
                         return $choice.data(metadata.value) !== undefined
                             ? String($choice.data(metadata.value))
                             : typeof choiceText === 'string'
-                            ? $.trim(choiceText.toLowerCase())
-                            : String(choiceText);
+                              ? $.trim(choiceText.toLowerCase())
+                              : String(choiceText);
                     },
                     inputEvent: function () {
                         var input = $search[0];
@@ -2116,8 +2116,8 @@
                             return input.oninput !== undefined
                                 ? 'input'
                                 : input.onpropertychange !== undefined
-                                ? 'propertychange'
-                                : 'keyup';
+                                  ? 'propertychange'
+                                  : 'keyup';
                         }
                         return false;
                     },
@@ -2202,8 +2202,8 @@
                             value !== undefined
                                 ? value
                                 : module.get.values() !== undefined
-                                ? module.get.values()
-                                : module.get.text();
+                                  ? module.get.values()
+                                  : module.get.text();
                         shouldSearch = isMultiple
                             ? value.length > 0
                             : value !== undefined && value !== null;
@@ -2496,8 +2496,8 @@
                     $nextSelectedItem = isWithinRange
                         ? $selectableItem.eq(elementIndex)
                         : direction == 'up'
-                        ? $selectableItem.first()
-                        : $selectableItem.last();
+                          ? $selectableItem.first()
+                          : $selectableItem.last();
                     if ($nextSelectedItem.length > 0) {
                         module.debug(
                             'Scrolling page',

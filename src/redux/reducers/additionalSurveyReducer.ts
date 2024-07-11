@@ -1,13 +1,14 @@
-import { UPDATE_ADDITIONAL_DETAILS } from 'redux/actions/actionTypes';
+import { UPDATE_ADDITIONAL_DETAILS } from '@redux/actions/actionTypes';
 import {
     GoBackToAdditionalSurvey,
     UpdateAdditionalSurveyAction,
     UpdateChiefComplaintsDescription,
     UpdateUserInfo,
     ValidateUserInfo,
-} from 'redux/actions/additionalSurveyActions';
+} from '@redux/actions/additionalSurveyActions';
+import { RootState } from '@redux/store';
 
-export interface additionalSurvey {
+export interface AdditionalSurvey {
     legalFirstName: string;
     legalLastName: string;
     legalMiddleName: string;
@@ -50,7 +51,7 @@ export interface UserInfo {
     title: string;
 }
 
-export const initialAdditionalSurveyData: additionalSurvey = {
+export const initialAdditionalSurveyData: AdditionalSurvey = {
     legalFirstName: '',
     legalLastName: '',
     legalMiddleName: '',
@@ -125,3 +126,6 @@ export function additionalSurveyReducer(
             return state;
     }
 }
+
+export const selectAdditionalSurvey = (state: RootState) =>
+    state.additionalSurvey;

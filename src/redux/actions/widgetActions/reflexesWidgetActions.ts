@@ -1,5 +1,5 @@
-import { LeftRight } from 'constants/enums';
-import { ReflexLocation } from 'redux/reducers/widgetReducers/reflexesWidgetReducer';
+import { LeftRight } from '@constants/enums';
+import { ReflexLocation } from '@redux/reducers/widgetReducers/reflexesWidgetReducer';
 import { REFLEXES_WIDGET_ACTION } from '../actionTypes';
 
 export interface AddReflexesWidgetItemAction {

@@ -1,7 +1,7 @@
 import {
     PulsesWidgetItemState,
     PulsesWidgetState,
-} from 'redux/reducers/widgetReducers/pulsesWidgetReducer';
+} from '@redux/reducers/widgetReducers/pulsesWidgetReducer';
 import { CurrentNoteState } from '../../reducers';
 
 export function selectPulsesWidgetState(

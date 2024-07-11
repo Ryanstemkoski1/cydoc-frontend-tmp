@@ -1,4 +1,9 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Next.js files
+.next
+out
+next-env.d.ts
+dist
+**/*.tsbuildinfo
 
 # dependencies
 /node_modules
@@ -20,7 +25,7 @@
 .env.test.local
 .env.production.local
 .idea/*
-.vscode
+
 
 npm-debug.log*
 
@@ -45,3 +50,6 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
+# Sentry Config File
+.sentryclirc

@@ -3,24 +3,27 @@ import {
     ResponseTypes,
     SelectManyInput,
     SelectOneInput,
-} from 'constants/hpiEnums';
-import { currentNoteStore } from 'redux/store';
-import getHPIText from './getHPIText';
+} from '@constants/hpiEnums';
+import getHPIText, { HPIReduxValues } from './getHPIText';
+import { UserSurveyState } from '@redux/reducers/userViewReducer';
+import { AdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 
 function sanitizeString(str: string) {
     return str.replace(/[`'"\(\)\[\]{}]/g, '');
 }
 
-export default function getHPIFormData() {
-    const rootState = currentNoteStore.getState();
-
+export default function getHPIFormData(
+    additionalSurvey: AdditionalSurvey,
+    userSurvey: UserSurveyState,
+    state: HPIReduxValues
+) {
     const {
         legalFirstName: first_name = '',
         legalMiddleName: middle_name = '',
         legalLastName: last_name = '',
         dateOfBirth: date_of_birth = '',
         socialSecurityNumber: last_4_ssn = '',
-    } = rootState?.additionalSurvey;
+    } = additionalSurvey;
 
     return {
         first_name: sanitizeString(first_name),
@@ -28,13 +31,11 @@ export default function getHPIFormData() {
         last_name: sanitizeString(last_name),
         date_of_birth,
         last_4_ssn,
-        hpi_text: JSON.stringify(getHPIText(true)),
+        hpi_text: JSON.stringify(getHPIText(true, state)),
         clinician_last_name: sanitizeString(
-            (rootState?.userView?.userSurvey?.nodes['9']?.response ??
-                '') as string
+            (userSurvey?.nodes['9']?.response ?? '') as string
         ).trim(),
-        appointment_date:
-            rootState?.userView?.userSurvey?.nodes[8]?.response ?? '',
+        appointment_date: userSurvey?.nodes[8]?.response ?? '',
     };
 }
 

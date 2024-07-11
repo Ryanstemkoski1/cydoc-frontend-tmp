@@ -186,11 +186,12 @@ export const getDbUser = async (cognitoUser: CognitoUser): Promise<DbUser> => {
 
 export const removeUser = async (
     user: DbUser,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     cognitoUser: CognitoUser | null
 ) => {
     invariant(user, '[removeUser] missing id');
 
-    log(`User deletion requested`, user);
+    log(`User deletion requested for ${user.email} (${user.role})`, user);
 
     if (user.role === 'manager') {
         alert(

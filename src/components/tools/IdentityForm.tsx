@@ -2,15 +2,15 @@ import React from 'react';
 import { Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-import { CurrentNoteState } from 'redux/reducers';
+import { CurrentNoteState } from '@redux/reducers';
 import {
     updatePatientPronouns,
     UpdatePatientPronounsAction,
-} from 'redux/actions/patientInformationActions';
-import { selectPatientInformationState } from 'redux/selectors/patientInformationSelector';
-import { PatientInformationState } from 'redux/reducers/patientInformationReducer';
+} from '@redux/actions/patientInformationActions';
+import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
+import { PatientInformationState } from '@redux/reducers/patientInformationReducer';
 
-import { PatientPronouns } from 'constants/patientInformation';
+import { PatientPronouns } from '@constants/patientInformation';
 import './IdentityForm.css';
 
 interface DispatchProps {

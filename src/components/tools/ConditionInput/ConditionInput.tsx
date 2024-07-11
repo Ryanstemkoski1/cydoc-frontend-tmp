@@ -1,17 +1,30 @@
-import Input from 'components/Input/Input';
-import { standardizeDiseaseNamesOnBlur } from 'constants/standardizeDiseaseNames';
-import { SeenCondition } from 'pages/EditNote/content/medicalhistory/MedicalHistoryContent';
+import Input from '@components/Input/Input';
+import { standardizeDiseaseNamesOnBlur } from '@constants/standardizeDiseaseNames';
+import { SeenCondition } from '@screens/EditNote/content/medicalhistory/MedicalHistoryContent';
 import React from 'react';
-import { connect } from 'react-redux';
-import { updateCondition } from 'redux/actions/familyHistoryActions';
-import { updateConditionName } from 'redux/actions/medicalHistoryActions';
-import { CurrentNoteState } from 'redux/reducers';
-import { FamilyHistoryState } from 'redux/reducers/familyHistoryReducer';
-import { MedicalHistoryState } from 'redux/reducers/medicalHistoryReducer';
-import { selectFamilyHistoryState } from 'redux/selectors/familyHistorySelectors';
-import { selectMedicalHistoryState } from 'redux/selectors/medicalHistorySelector';
-import InfoIcon from '../../../assets/images/info.svg';
+import { ConnectedProps, connect } from 'react-redux';
+import { updateCondition } from '@redux/actions/familyHistoryActions';
+import { updateConditionName } from '@redux/actions/medicalHistoryActions';
+import { CurrentNoteState } from '@redux/reducers';
+import { selectFamilyHistoryState } from '@redux/selectors/familyHistorySelectors';
+import { selectMedicalHistoryState } from '@redux/selectors/medicalHistorySelector';
 import style from './ConditionInput.module.scss';
+
+interface OwnProps {
+    key: number;
+    index: string;
+    category: string;
+    isPreview: boolean;
+    seenConditions: SeenCondition;
+    addSeenCondition: (value: string, index: string) => void;
+    condition: string;
+    standardizeName: (name: string) => string;
+    style?: React.CSSProperties;
+}
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+type Props = ReduxProps & OwnProps;
 
 class ConditionInput extends React.Component<Props, OwnState> {
     constructor(props: Props) {
@@ -82,7 +95,7 @@ class ConditionInput extends React.Component<Props, OwnState> {
                 )}
                 {this.state.isRepeat && (
                     <div className={style.conditionBlock__error}>
-                        <img src={InfoIcon} alt='I' />
+                        <img src={'/images/info.svg'} alt='I' />
                         Condition already included
                     </div>
                 )}
@@ -97,39 +110,6 @@ interface OwnState {
     isTitleFocused: boolean;
 }
 
-interface DispatchProps {
-    updateMedicalHistoryCondition: (index: string, newName: string) => void;
-    updateFamilyHistoryCondition: (
-        conditionIndex: string,
-        newCondition: string
-    ) => void;
-}
-
-interface MedicalHistoryProps {
-    medicalHistory: MedicalHistoryState;
-}
-
-interface FamilyHistoryProps {
-    familyHistory: FamilyHistoryState;
-}
-
-interface InputProps {
-    key: number;
-    index: string;
-    category: string;
-    isPreview: boolean;
-    seenConditions: SeenCondition;
-    addSeenCondition: (value: string, index: string) => void;
-    condition: string;
-    standardizeName: (name: string) => string;
-    style?: React.CSSProperties;
-}
-
-type Props = DispatchProps &
-    MedicalHistoryProps &
-    FamilyHistoryProps &
-    InputProps;
-
 const mapStateToProps = (state: CurrentNoteState) => {
     return {
         medicalHistory: selectMedicalHistoryState(state),
@@ -142,4 +122,6 @@ const mapDispatchToProps = {
     updateFamilyHistoryCondition: updateCondition,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConditionInput);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export default connector(ConditionInput);

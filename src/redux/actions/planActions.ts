@@ -1,4 +1,4 @@
-import { WhenResponse, YesNoUncertainResponse } from 'constants/enums';
+import { WhenResponse, YesNoUncertainResponse } from '@constants/enums';
 import { PLAN_ACTION } from './actionTypes';
 
 interface AddConditionAction {

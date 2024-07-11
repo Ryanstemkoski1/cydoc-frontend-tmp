@@ -1,5 +1,6 @@
-import { HPI_HEADER_ACTION } from 'redux/actions/actionTypes';
-import { HpiHeaderActionTypes } from 'redux/actions/hpiHeadersActions';
+import { HPI_HEADER_ACTION } from '@redux/actions/actionTypes';
+import { HpiHeaderActionTypes } from '@redux/actions/hpiHeadersActions';
+import { RootState } from '@redux/store';
 
 export interface HpiHeadersState {
     bodySystems: {
@@ -32,3 +33,5 @@ export function hpiHeadersReducer(
             return state;
     }
 }
+
+export const selectHpiHeaders = (state: RootState) => state.hpiHeaders;

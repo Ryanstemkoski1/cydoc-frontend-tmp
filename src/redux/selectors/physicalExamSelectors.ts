@@ -4,8 +4,8 @@ import {
     PhysicalExamSection,
     Vitals,
     Findings,
-} from 'redux/reducers/physicalExamReducer';
-import { CurrentNoteState } from 'redux/reducers/index';
+} from '@redux/reducers/physicalExamReducer';
+import { CurrentNoteState } from '@redux/reducers/index';
 
 export function selectPhysicalExamState(
     state: CurrentNoteState

@@ -1,9 +1,16 @@
+'use client';
+
 import React from 'react';
 import style from './Footer.module.scss';
 import pkgInfo from '../../../package.json';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 const Footer = () => {
-    return (
+    const pathname = usePathname();
+    const isHomePage = pathname === '/';
+
+    return isHomePage ? null : (
         <div className={style.footer}>
             <ul className='flex-wrap justify-center'>
                 <p
@@ -20,10 +27,10 @@ const Footer = () => {
                     Patent pending.
                 </li>
                 <li>
-                    <a href='/privacypolicy'>Privacy Policy</a>
+                    <Link href='/privacypolicy'>Privacy Policy</Link>
                 </li>
                 <li>
-                    <a href='/termsandconditions'>Terms and Conditions</a>
+                    <Link href='/termsandconditions'>Terms and Conditions</Link>
                 </li>
             </ul>
         </div>

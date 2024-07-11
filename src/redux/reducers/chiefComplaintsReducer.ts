@@ -1,5 +1,5 @@
 import { chiefComplaintsActionTypes } from '../actions/chiefComplaintsActions';
-import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
+import { CHIEF_COMPLAINTS } from '@redux/actions/actionTypes';
 
 export type ChiefComplaintsState = {
     [disease: string]: string | number | undefined;
@@ -23,7 +23,8 @@ export function chiefComplaintsReducer(
             */
             const { disease } = action.payload;
             if (disease in state) {
-                const { [disease]: notes, ...res } = state;
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { [disease]: _deleted, ...res } = state;
                 return res;
             } else
                 return {

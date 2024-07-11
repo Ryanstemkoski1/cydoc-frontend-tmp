@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import './LRButton.css';
-import 'pages/EditNote/content/physicalexam/PhysicalExam.css';
+import 'screens/EditNote/content/physicalexam/PhysicalExam.css';
 //import PropTypes from 'prop-types';
 
 //Component that manages content for the Physical Exam tab

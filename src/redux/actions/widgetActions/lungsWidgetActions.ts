@@ -1,7 +1,7 @@
 import {
     LungsWidgetSection,
     LungsWidgetState,
-} from 'redux/reducers/widgetReducers/lungsWidgetReducer';
+} from '@redux/reducers/widgetReducers/lungsWidgetReducer';
 import { LUNGS_WIDGET_ACTION } from '../actionTypes';
 
 export interface ToggleLungsWidgetSectionAction {

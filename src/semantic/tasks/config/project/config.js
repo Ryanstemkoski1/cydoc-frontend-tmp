@@ -141,12 +141,11 @@ module.exports = {
 
         // remove duplicates from component array
         if (config.components instanceof Array) {
-            config.components = config.components.filter(function (
-                component,
-                index
-            ) {
-                return config.components.indexOf(component) == index;
-            });
+            config.components = config.components.filter(
+                function (component, index) {
+                    return config.components.indexOf(component) == index;
+                }
+            );
         }
 
         // takes component object and creates file glob matching selected components

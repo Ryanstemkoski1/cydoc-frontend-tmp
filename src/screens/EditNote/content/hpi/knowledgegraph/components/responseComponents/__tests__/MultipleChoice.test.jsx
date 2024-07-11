@@ -1,0 +1,68 @@
+import React from 'react';
+import Enzyme, { mount } from 'enzyme';
+import Adapter from '@cfaester/enzyme-adapter-react-18';
+import { Provider } from 'react-redux';
+// import MultipleChoice from '../MultipleChoice';
+import { makeStore } from '../../../../../../../../redux/store';
+// import { ExpectedResponseDict, testEdges, testNode } from 'constants/hpiEnums';
+
+Enzyme.configure({ adapter: new Adapter() });
+
+const connectRealStore = () => {
+    const store = makeStore();
+    // const node = {
+    //     ...testNode,
+    //     responseType: 'SELECTONE',
+    //     response: ExpectedResponseDict.SELECTONE,
+    // };
+    // // TODO: Use processKnowledgeGraph as addNode was replaced
+    // store.dispatch(addNode('node', node, testEdges));
+    // const listNames = ['foo1', 'foo2', 'foo3'];
+    return {
+        store,
+        wrapper: mount(
+            <Provider store={store}>
+                {/* {listNames.map((name) => (
+                    <MultipleChoice key={name} name={name} node={'node'} />
+                ))} */}
+            </Provider>
+        ),
+    };
+};
+
+describe('MultipleChoice', () => {
+    const { wrapper } = connectRealStore();
+    // const numChoices = wrapper.find('button').length;
+
+    test('renders', () => expect(wrapper).toBeTruthy());
+
+    // // TODO: Fix below tests
+    // test('buttons are initialized correctly', () => {
+    //     expect(numChoices).toEqual(3);
+    //     for (let i = 0; i < numChoices; i++) {
+    //         expect(wrapper.find('button').at(i).prop('className')).toEqual(
+    //             expect.not.stringContaining('active')
+    //         );
+    //     }
+    // });
+
+    // test('clicked button to be made active', () => {
+    //     for (let i = 0; i < numChoices; i++) {
+    //         wrapper.find('button').at(i).simulate('click');
+    //         wrapper.update();
+    //         expect(wrapper.find('button').at(i).prop('className')).toEqual(
+    //             expect.stringContaining('active')
+    //         );
+    //     }
+    // });
+
+    // test('unclicked button to be made inactive', () => {
+    //     for (let i = 0; i < numChoices; i++) {
+    //         wrapper.find('button').at(i).simulate('click');
+    //         wrapper.update();
+    //         expect(wrapper.find('button').at(i).prop('className')).toEqual(
+    //             expect.not.stringContaining('active')
+    //         );
+    //     }
+    // });
+});

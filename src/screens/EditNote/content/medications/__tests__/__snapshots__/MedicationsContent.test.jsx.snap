@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Medications Integration > Desktop view matches snapshot 1`] = `"<div><button class="_addButton_5a11a8" aria-label="add-row"><img src="/images/add.svg" alt="Add"><span>Add Medication</span></button></div>"`;
+
+exports[`Medications Integration > Mobile view matches snapshot 1`] = `"<div><button class="_addButton_5a11a8" aria-label="add-row"><img src="/images/add.svg" alt="Add"><span>Add Medication</span></button></div>"`;

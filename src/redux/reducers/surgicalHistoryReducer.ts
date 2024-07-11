@@ -1,6 +1,6 @@
 import { SURGICAL_HISTORY_ACTION } from '../actions/actionTypes';
 import { SurgicalHistoryActionTypes } from '../actions/surgicalHistoryActions';
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 
 export interface SurgicalHistoryState {
     hasSurgicalHistory: boolean | null;

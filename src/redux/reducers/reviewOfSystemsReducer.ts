@@ -1,7 +1,7 @@
-import { YesNoResponse } from 'constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import { ROS_ACTION } from '../actions/actionTypes';
 import { ROSActionTypes } from '../actions/reviewOfSystemsActions';
-import { initialReviewOfSystemsState } from 'constants/reviewOfSystemsInitial';
+import { initialReviewOfSystemsState } from '@constants/reviewOfSystemsInitial';
 
 export interface ReviewOfSystemsState {
     [category: string]: {

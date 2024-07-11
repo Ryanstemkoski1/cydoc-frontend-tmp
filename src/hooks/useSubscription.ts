@@ -7,7 +7,7 @@ export const useSubscription = () => {
 
     invariant(
         ctx,
-        'SubscriptionProviderContext called outside of UserInfo Context'
+        'SubscriptionProviderContext called outside of SubscriptionProvider Context'
     );
 
     return ctx;

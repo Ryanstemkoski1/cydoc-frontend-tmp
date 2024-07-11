@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import MTable, { MaterialTableProps, Options } from '@material-table/core';
 
 import { TABLE_ICONS } from '../Atoms/MaterialTableIcons';
+import useDimensions from '@hooks/useDimensions';
 
 export type ColumnSortInfo = { fieldName: string; direction: 'asc' | 'desc' };
 
@@ -12,8 +13,14 @@ interface Props<T extends object> extends MaterialTableProps<T> {
     tableId?: string;
 }
 
-export const materialTableHeight =
-    ((window.innerHeight - 280) / window.innerHeight) * 100;
+export const useMaterialTableHeight = () => {
+    const { windowHeight } = useDimensions();
+
+    return useMemo(
+        () => ((windowHeight - 280) / windowHeight) * 100,
+        [windowHeight]
+    );
+};
 
 export default function MaterialTable<T extends object>({
     loading,
@@ -23,6 +30,8 @@ export default function MaterialTable<T extends object>({
     columns,
     ...rest
 }: Props<T>) {
+    const materialTableHeight = useMaterialTableHeight();
+
     const tableOptions = useMemo(
         (): Options<T> => ({
             columnsButton: true,
@@ -36,7 +45,7 @@ export default function MaterialTable<T extends object>({
             thirdSortClick: false,
             ...(options || {}),
         }),
-        [onSelectionChange, options]
+        [materialTableHeight, onSelectionChange, options]
     );
 
     return (

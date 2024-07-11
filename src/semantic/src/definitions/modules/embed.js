@@ -15,8 +15,8 @@
         typeof window != 'undefined' && window.Math == Math
             ? window
             : typeof self != 'undefined' && self.Math == Math
-            ? self
-            : Function('return this')();
+              ? self
+              : Function('return this')();
 
     $.fn.embed = function (parameters) {
         var $allModules = $(this),
@@ -197,15 +197,15 @@
                         return settings.icon
                             ? settings.icon
                             : $module.data(metadata.icon) !== undefined
-                            ? $module.data(metadata.icon)
-                            : module.determine.icon();
+                              ? $module.data(metadata.icon)
+                              : module.determine.icon();
                     },
                     source: function (url) {
                         return settings.source
                             ? settings.source
                             : $module.data(metadata.source) !== undefined
-                            ? $module.data(metadata.source)
-                            : module.determine.source();
+                              ? $module.data(metadata.source)
+                              : module.determine.source();
                     },
                     type: function () {
                         var source = module.get.source();
@@ -217,8 +217,8 @@
                         return settings.url
                             ? settings.url
                             : $module.data(metadata.url) !== undefined
-                            ? $module.data(metadata.url)
-                            : module.determine.url();
+                              ? $module.data(metadata.url)
+                              : module.determine.url();
                     },
                 },
 

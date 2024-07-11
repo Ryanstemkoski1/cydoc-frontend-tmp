@@ -1,24 +1,48 @@
 {
     "compilerOptions": {
-        "baseUrl": "src",
-        "target": "es6",
-        "lib": ["dom", "dom.iterable", "ES2019"],
+        "lib": ["dom", "dom.iterable", "esnext"],
         "allowJs": true,
         "skipLibCheck": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "strict": true,
+        "strict": false,
+        "target": "ES2015",
         "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "esModuleInterop": true,
         "module": "esnext",
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "noEmit": true,
-        "jsx": "react",
-        "noFallthroughCasesInSwitch": true
+        "jsx": "preserve",
+        "baseUrl": "src",
+        "incremental": true,
+        "paths": {
+            "@assets/*": ["assets/*"],
+            "@components/*": ["components/*"],
+            "@constants/*": ["constants/*"],
+            "@contexts/*": ["contexts/*"],
+            "@hooks/*": ["hooks/*"],
+            "@modules/*": ["modules/*"],
+            "@providers/*": ["providers/*"],
+            "@redux/*": ["redux/*"],
+            "@screens/*": ["screens/*"],
+            "@utils/*": ["utils/*"]
+        },
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
+        "strictNullChecks": true,
+        "types": ["vitest/globals"]
     },
-    "include": ["src"],
-    "paths": {
-        "crypto": ["node_modules/crypto-js"]
-    }
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+    "exclude": [
+        "node_modules",
+        "**/*.test.js",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/__tests__/**",
+        "**/dist/**",
+        "**/.next/**"
+    ]
 }

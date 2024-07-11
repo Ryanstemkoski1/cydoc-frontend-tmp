@@ -1,7 +1,7 @@
 import {
     MurmursWidgetItemState,
     MurmursWidgetState,
-} from 'redux/reducers/widgetReducers/murmurswidgetReducer';
+} from '@redux/reducers/widgetReducers/murmurswidgetReducer';
 import { CurrentNoteState } from '../../reducers';
 
 export function selectMurmursWidgetState(

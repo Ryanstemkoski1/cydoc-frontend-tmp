@@ -2,7 +2,8 @@ import {
     initialChiefComplaintsState,
     chiefComplaintsReducer,
 } from './chiefComplaintsReducer';
-import { CHIEF_COMPLAINTS } from 'redux/actions/actionTypes';
+import { CHIEF_COMPLAINTS } from '../actions/actionTypes';
+import { describe, expect, it } from 'vitest';
 
 describe('initial state', () => {
     it('returns the initial state', () => {

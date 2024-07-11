@@ -1,4 +1,4 @@
-import { SubstanceUsageResponse } from 'constants/enums';
+import { SubstanceUsageResponse } from '@constants/enums';
 import React from 'react';
 import ToggleButton from '../ToggleButton/ToggleButton';
 import './ThreeButtons.css';

@@ -1,6 +1,6 @@
-import { HpiActionTypes } from 'redux/actions/hpiActions';
+import { HpiActionTypes } from '@redux/actions/hpiActions';
 import { CHIEF_COMPLAINTS, HPI_ACTION } from '../actions/actionTypes';
-import { YesNoResponse } from '../../constants/enums';
+import { YesNoResponse } from '@constants/enums';
 import {
     HpiResponseType,
     ResponseTypes,
@@ -15,7 +15,7 @@ import {
     NodeInterface,
     OrderInterface,
     SelectOneInput,
-} from '../../constants/hpiEnums';
+} from '@constants/hpiEnums';
 import { v4 } from 'uuid';
 
 export interface HpiState {
@@ -429,6 +429,7 @@ export function hpiReducer(
                 state.nodes[medId].responseType === ResponseTypes.LIST_TEXT &&
                 isListTextDictionary(response)
             ) {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const { [uuid]: string, ...res } = response;
                 return updateResponse(medId, res, state);
             } else throw new Error('Not a list text response');
