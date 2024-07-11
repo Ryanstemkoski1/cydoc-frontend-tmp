@@ -14,9 +14,11 @@
 
 5. Navigate into cydoc_frontend and run **npm install** to install dependencies. You only need to re-run **npm install** if you update package versions or packages used by the project.
 
-6. Run **npm start** to start the project. This will start the project at [http://localhost:3000](http://localhost:3000) (or whichever port you are using). As you make edits to the code, the browser will automatically reload.
+6. get the `.env.local` file from Rachel or anther dev and place it in the top directory of the repo.
 
-7. Install [Redux dev tools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd/related?hl=en) for Chrome. This extension is invaluable for viewing and analyzing Redux state.
+7. Run **npm start** to start the project. This will start the project at [http://localhost:3000](http://localhost:3000) (or whichever port you are using). As you make edits to the code, the browser will automatically reload.
+
+8. Install [Redux dev tools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd/related?hl=en) for Chrome. This extension is invaluable for viewing and analyzing Redux state.
 
 ## Amplify
 

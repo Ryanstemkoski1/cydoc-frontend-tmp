@@ -8,7 +8,6 @@ export const COGNITO_CLIENT_ID =
     process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID || '';
 export const COGNITO_POOL_ID = process.env.NEXT_PUBLIC_COGNITO_POOL_ID || '';
 export const REGION = process.env.NEXT_PUBLIC_REGION || '';
-export const STRIPE_KEY = process.env.NEXT_PUBLIC_STRIPE_KEY || '';
 
 export const isProduction = () => APP_ENV === 'production';
 
@@ -21,5 +20,4 @@ console.log(`starting app with env:`, {
     COGNITO_POOL_ID,
     API_URL,
     REGION,
-    STRIPE_KEY,
 });
