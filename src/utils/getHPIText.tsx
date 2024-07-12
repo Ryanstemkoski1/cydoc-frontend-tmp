@@ -272,6 +272,10 @@ export const extractNode = (
             );
             break;
 
+        case ResponseTypes.PSYCHDXPICKER:
+            answer = joinLists(response as string[], 'and');
+            break;
+
         case ResponseTypes.SELECTMANY:
         case ResponseTypes.SELECTONE:
             const clickBoxesRes = response as SelectOneInput;

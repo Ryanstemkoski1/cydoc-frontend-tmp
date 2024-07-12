@@ -116,12 +116,12 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 responseChoice:
                     click != -1 || cleanText
                         ? text
-                            .slice(
-                                select + 1,
-                                endSelect != -1 ? endSelect : text.length
-                            )
-                            .split(',')
-                            .map((response) => response.trim())
+                              .slice(
+                                  select + 1,
+                                  endSelect != -1 ? endSelect : text.length
+                              )
+                              .split(',')
+                              .map((response) => response.trim())
                         : [],
             });
         }
@@ -129,12 +129,12 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
 
     renderSwitch = () => {
         const {
-            node,
-            hpi,
-            addListInput,
-            listTextHandleChange,
-            removeListInput,
-        } = this.props,
+                node,
+                hpi,
+                addListInput,
+                listTextHandleChange,
+                removeListInput,
+            } = this.props,
             { responseType } = hpi.nodes[node],
             blankTypes = [
                 ResponseTypes.FH_BLANK,
@@ -305,9 +305,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             case ResponseTypes.LFT:
                 return <LaboratoryTest key={node} node={node} />;
             case ResponseTypes.PSYCHDXPICKER:
-                return (
-                    <DSMDiagnosisPicker />
-                );
+                return <DSMDiagnosisPicker key={node} node={node} />;
             default:
                 return;
         }
@@ -321,10 +319,11 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         ].includes(hpi.nodes[node].responseType);
         return (
             <div
-                className={`${style.response} ${isYesNoResponseType
+                className={`${style.response} ${
+                    isYesNoResponseType
                         ? `${style.response__grid} isYesNo flex-wrap align-center`
                         : ''
-                    }`}
+                }`}
             >
                 {this.state.question.trim() == 'NAME' ? (
                     ''
