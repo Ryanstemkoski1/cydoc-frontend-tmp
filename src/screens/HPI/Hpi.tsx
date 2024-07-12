@@ -171,8 +171,15 @@ const HPI = () => {
         }
     }, [dispatch, institution, userSurveyState]);
 
+    // FIXME: this logic should be combined with the logic in the next button handler! it currently doesn't work the same
     const onTabChange = useCallback(
         (name: string) => {
+            // NOTE: disabling clicking the stepper for now
+            // logic for which steps to display is in multiple functions in Hpi.tsx
+            // this logic conflicts depending on if tabs are changed by clicking or by the next button
+            // re-enable stepper button clicking when this logic is consolidated in utils function
+            return;
+
             if (notificationMessage) {
                 setNotificationMessage('');
             }
@@ -271,6 +278,7 @@ const HPI = () => {
         window.scrollTo(0, 0);
     }, [currentTabs, activeItem, notificationMessage, dispatch]);
 
+    // FIXME: this logic should be combined with the logic in the stepper button handler! it currently doesn't work the same
     const onNextClick = useCallback(
         (args?: OnNextClickParams) => {
             const allSelectedChiefComplaints =
