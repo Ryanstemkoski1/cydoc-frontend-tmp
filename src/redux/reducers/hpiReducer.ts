@@ -387,7 +387,11 @@ export function hpiReducer(
         case HPI_ACTION.HANDLE_NUMERIC_INPUT_CHANGE: {
             // Updates numeric input response
             const { medId, input } = action.payload;
-            if (state.nodes[medId].responseType === ResponseTypes.NUMBER)
+            if (
+                [ResponseTypes.NUMBER, ResponseTypes.AGE].includes(
+                    state.nodes[medId].responseType
+                )
+            )
                 return updateResponse(medId, input, state);
             else throw new Error('Not a number input response');
         }

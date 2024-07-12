@@ -14,11 +14,13 @@ export const questionTypes = {
     MEDS: 'MEDS',
     BODY_LOCATION: 'BODYLOCATION',
     PSH: 'PSH',
+    AGE: 'AGE-YES-NO',
 };
 
 export const questionTypeMapping = {
     basic: {
         [questionTypes.NUMBER]: 'Number',
+        [questionTypes.AGE]: 'Age',
         [questionTypes.TIME]: 'Age or Duration',
         [questionTypes.BODY_LOCATION]: 'Body Location',
         [questionTypes.YES_NO]: 'Yes/No',

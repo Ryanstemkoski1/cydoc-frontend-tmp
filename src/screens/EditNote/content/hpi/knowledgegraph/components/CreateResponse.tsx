@@ -35,6 +35,7 @@ import style from './CreateResponse.module.scss';
 import BodyLocation from './responseComponents/BodyLocation';
 import HandleInput from './responseComponents/HandleInput';
 import HandleNumericInput from './responseComponents/HandleNumericInput';
+import HandleAgeInput from './responseComponents/HandleAgeInput';
 import LaboratoryTest from './responseComponents/LaboratoryTest';
 import ListText from './responseComponents/ListText';
 import MultipleChoice from './responseComponents/MultipleChoice';
@@ -228,6 +229,9 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
 
             case ResponseTypes.NUMBER:
                 return <HandleNumericInput key={node} node={node} />;
+
+            case ResponseTypes.AGE:
+                return <HandleAgeInput key={node} node={node} />;
 
             case ResponseTypes.YEAR:
                 return <YearInput key={node} node={node} />;

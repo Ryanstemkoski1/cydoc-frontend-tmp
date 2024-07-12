@@ -117,6 +117,7 @@ export enum ResponseTypes {
     SEARCH = 'SEARCH',
     YEAR = 'YEAR',
     NULL = '',
+    AGE = 'AGE-YES-NO',
 }
 
 export interface ExpectedResponseInterface {
@@ -130,6 +131,7 @@ export interface ExpectedResponseInterface {
     SHORT_TEXT: string;
     LONG_TEXT: string;
     NUMBER: NumberInput;
+    AGE: NumberInput;
     BODYLOCATION: BodyLocationType;
     FH_POP: string[];
     PMH_POP: string[];
@@ -160,6 +162,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     SHORT_TEXT: '',
     LONG_TEXT: '',
     NUMBER: undefined,
+    AGE: undefined,
     BODYLOCATION: bodyLocationResponse(),
     FH_POP: [],
     PMH_POP: [],
