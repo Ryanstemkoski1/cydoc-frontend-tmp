@@ -8,29 +8,38 @@ on:
 jobs:
     lint:
         runs-on: ubuntu-latest
+        environment: cydoc-site # This is the environment name for the secrets - https://github.com/cydoc-ai/cydoc_frontend/settings/secrets/actions
+        env:
+            CI: false
+            NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+            NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_APP_ENV: ${{ secrets.NEXT_PUBLIC_APP_ENV }}
+            NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_COGNITO_CLIENT_ID }}
+            NEXT_PUBLIC_COGNITO_POOL_ID: ${{ secrets.NEXT_PUBLIC_COGNITO_POOL_ID }}
+            NEXT_PUBLIC_GRAPH_URL: ${{ secrets.NEXT_PUBLIC_GRAPH_URL }}
+            NEXT_PUBLIC_REGION: ${{ secrets.NEXT_PUBLIC_REGION }}
+            NODE_OPTIONS: '--max_old_space_size=4096'
 
         steps:
             - name: Checkout repo
               uses: actions/checkout@v4
+            - name: print env
+              run: env
             - name: create env file
               run: |
-                touch .env
-                echo NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} >> .env
-                echo NEXT_PUBLIC_APP_ENV=${{ secrets.NEXT_PUBLIC_APP_ENV }} >> .env
-                echo NEXT_PUBLIC_COGNITO_CLIENT_ID=${{ secrets.NEXT_PUBLIC_COGNITO_CLIENT_ID }} >> .env
-                echo NEXT_PUBLIC_COGNITO_POOL_ID=${{ secrets.NEXT_PUBLIC_COGNITO_POOL_ID }} >> .env
-                echo NEXT_PUBLIC_GRAPH_URL=${{ secrets.NEXT_PUBLIC_GRAPH_URL }} >> .env
-                echo NEXT_PUBLIC_REGION=${{ secrets.NEXT_PUBLIC_REGION }} >> .env
+                  touch .env
+                  echo NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} >> .env
+                  echo NEXT_PUBLIC_APP_ENV=${{ secrets.NEXT_PUBLIC_APP_ENV }} >> .env
+                  echo NEXT_PUBLIC_COGNITO_CLIENT_ID=${{ secrets.NEXT_PUBLIC_COGNITO_CLIENT_ID }} >> .env
+                  echo NEXT_PUBLIC_COGNITO_POOL_ID=${{ secrets.NEXT_PUBLIC_COGNITO_POOL_ID }} >> .env
+                  echo NEXT_PUBLIC_GRAPH_URL=${{ secrets.NEXT_PUBLIC_GRAPH_URL }} >> .env
+                  echo NEXT_PUBLIC_REGION=${{ secrets.NEXT_PUBLIC_REGION }} >> .env
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
                   node-version: '20'
             - name: Build project
               run: echo $NPM_AUTH_TOKEN && npm ci && npm run build --if-present
-              env:
-                  CI: false
-                  NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-                  NODE_OPTIONS: '--max_old_space_size=4096'
             - name: Run lint checks
               run: npm run lint
             - name: Run unit tests
