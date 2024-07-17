@@ -79,9 +79,10 @@ class NotePage extends Component<Props> {
         return (
             <div>
                 <HPIContent
-                    // nextFormClick={this.nextFormClick}
                     continue={this.nextFormClick}
                     back={this.previousFormClick}
+                    // NOTE: looks to me like these functions are not used so I'm commenting them out...
+                    // nextFormClick={this.nextFormClick}
                     // activeTab={this.props.activeItem}
                     // onTabClick={(_, tabIndex) => {
                     //     this.props.onTabChange(

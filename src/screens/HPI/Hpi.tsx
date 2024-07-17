@@ -540,6 +540,7 @@ const HPI = () => {
         }
     }, [notificationMessage]);
 
+    // handle loading institution config
     useEffect(() => {
         if (!institutionConfig) return;
 
@@ -556,10 +557,27 @@ const HPI = () => {
 
         if (showChiefComplaints || !showDefaultForm) return;
 
+        // FIXME: this logic is not idempotent and it should be!
+        // here we're ensuring the default form is set locally in redux
+        // however, when this useEffect gets called twice, it will end up removing the default form
+        // this function: setChiefComplaint is the same for adding and removing items, causing bugs when called more than once...
+        // remove existing "default forms" chief complaints before updating with new ones
+        selectedChiefComplaints.forEach((item) => {
+            dispatch(setChiefComplaint(item));
+        });
+
         institutionDefaultCC.forEach((item) => {
             dispatch(setChiefComplaint(item));
         });
-    }, [dispatch, institutionConfig, institutionDefaultCC, resetCurrentTabs]);
+        // this effect changes selectedChiefComplaints, so don't add it to dependencies
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        dispatch,
+        institutionConfig,
+        institutionDefaultCC,
+        resetCurrentTabs,
+        // selectedChiefComplaints <-- do not add this here, causes infinite loop
+    ]);
 
     useEffect(() => {
         if (
