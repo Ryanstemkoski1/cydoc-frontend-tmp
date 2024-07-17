@@ -14,7 +14,7 @@ export const questionTypes = {
     MEDS: 'MEDS',
     BODY_LOCATION: 'BODYLOCATION',
     PSH: 'PSH',
-    AGE: 'AGE-YES-NO',
+    AGE: 'AGE',
 };
 
 export const questionTypeMapping = {

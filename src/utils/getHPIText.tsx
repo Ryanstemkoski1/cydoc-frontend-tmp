@@ -63,6 +63,7 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
 
         case ResponseTypes.SCALE1TO10:
         case ResponseTypes.NUMBER:
+        case ResponseTypes.AGE:
             return node?.response === undefined;
 
         case ResponseTypes.LIST_TEXT: {
@@ -216,6 +217,7 @@ export const extractNode = (
         updatedNeg;
     switch (node.responseType) {
         case ResponseTypes.NUMBER:
+        case ResponseTypes.AGE:
         case ResponseTypes.SCALE1TO10:
             answer = (response as number).toString();
             break;

@@ -8,58 +8,82 @@ import {
 } from '@redux/actions/hpiActions';
 import { CurrentNoteState } from '@redux/reducers';
 import { selectHpiState } from '@redux/selectors/hpiSelectors';
-// import { selectPatientInformationState } from '@redux/selectors/patientInformationSelector';
-// import { PatientInformationState } from '@redux/reducers/patientInformationReducer';
+import { AdditionalSurvey } from '@redux/reducers/additionalSurveyReducer';
 
 interface InputProps {
     node: string;
+    additionalSurveyState: AdditionalSurvey;
 }
 
-const HandleAgeInput: React.FC<Props> = ({ node }) => {
+const HandleAgeInput: React.FC<Props> = ({
+    hpi,
+    node,
+    additionalSurveyState,
+    handleNumericInputChange,
+}) => {
     const [age, setAge] = useState<number | null>(null);
     const [year, setYear] = useState<number | null>(null);
     const currentYear = new Date().getFullYear();
-    const minValidYear = 1900;
 
-    // console.log('checking patientInformationState', patientInformationState);
+    const calculateAge = (birthdayString: string) => {
+        const today = new Date();
+        const birthDate = new Date(birthdayString);
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDifference = today.getMonth() - birthDate.getMonth();
 
-    useEffect(() => {
+        // Check if the birthday hasn't occurred yet this year
         if (
-            year &&
-            !isNaN(year) &&
-            minValidYear <= year &&
-            year <= currentYear
+            monthDifference < 0 ||
+            (monthDifference === 0 && today.getDate() < birthDate.getDate())
         ) {
-            setAge(currentYear - year);
-        } else {
-            setAge(null);
+            age--;
         }
-    }, [year]);
+
+        return age;
+    };
 
     const handleAgeChange = (e) => {
         const value = parseInt(e.target.value);
         if (!isNaN(value) && value >= 0 && value <= 150) {
             setAge(value);
+            setYear(currentYear - value);
         } else {
             setAge(null);
         }
     };
 
     const handleYearChange = (e) => {
-        const value = e.target.value.trim(); // Trim to prevent leading spaces affecting validation
-        const currentYear = new Date().getFullYear();
-
-        // Check if input value is a valid number and does not start with '1'
+        const value = e.target.value.trim();
         if (
             value === '' ||
             (value.length === 4 && !isNaN(value) && value.charAt(0) !== '1') ||
-            '2'
+            ('2' && parseInt(value) > 0 && parseInt(value) <= currentYear)
         ) {
             setYear(parseInt(value));
+            const ageVal = currentYear - parseInt(value);
+            if (!isNaN(ageVal) && ageVal >= 0 && ageVal <= 150) {
+                setAge(ageVal);
+            }
         } else {
             setYear(null);
         }
     };
+
+    // Age field is auto-populated using the patient's birth date
+    useEffect(() => {
+        if (additionalSurveyState.dateOfBirth) {
+            const ageInfo = calculateAge(additionalSurveyState.dateOfBirth);
+            setAge(ageInfo);
+            setYear(currentYear - ageInfo);
+            handleNumericInputChange(node, ageInfo);
+        }
+    }, [additionalSurveyState.dateOfBirth]);
+
+    useEffect(() => {
+        handleNumericInputChange(node, age ? age : undefined);
+    }, [age]);
+
+    console.log('response', hpi.nodes[node].response);
 
     return (
         <Grid container spacing={2} sx={{ width: '80%' }}>
@@ -79,7 +103,9 @@ const HandleAgeInput: React.FC<Props> = ({ node }) => {
                         },
                     }}
                 />
-                <label style={{ marginLeft: '8px' }}>years old.</label>
+                <label style={{ marginLeft: '8px', whiteSpace: 'nowrap' }}>
+                    years old.
+                </label>
             </Grid>
             <Grid item xs={4}>
                 <TextField
@@ -106,8 +132,9 @@ interface DispatchProps {
     ) => HandleNumericInputChangeAction;
 }
 
-const mapStateToProps = (state: CurrentNoteState): HpiStateProps => ({
+const mapStateToProps = (state: CurrentNoteState) => ({
     hpi: selectHpiState(state),
+    additionalSurveyState: state.additionalSurvey,
 });
 
 type Props = HpiStateProps & DispatchProps & InputProps;

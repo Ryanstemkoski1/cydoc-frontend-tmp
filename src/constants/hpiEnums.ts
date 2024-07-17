@@ -117,7 +117,7 @@ export enum ResponseTypes {
     SEARCH = 'SEARCH',
     YEAR = 'YEAR',
     NULL = '',
-    AGE = 'AGE-YES-NO',
+    AGE = 'AGE',
 }
 
 export interface ExpectedResponseInterface {
