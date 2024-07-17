@@ -87,10 +87,15 @@ export function nodesToDisplayInOrder(
             },
             string[],
         ];
+    let loopCount = 0;
     if (totalNodes.length < displayedNodesCutOff) {
         let nodesArr = totalNodes, // for the count
             nodesSoFar: string[] = [];
-        while (nodesArr.length < displayedNodesCutOff) {
+        while (
+            nodesArr.length < displayedNodesCutOff &&
+            loopCount < displayedNodesCutOff
+        ) {
+            loopCount++;
             for (let i = 0; i < Object.keys(chiefComplaints).length; i++) {
                 const chiefComplaint = Object.keys(chiefComplaints)[i],
                     currNodesArr = traverseNodes(

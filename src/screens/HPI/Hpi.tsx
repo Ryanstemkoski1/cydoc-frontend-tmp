@@ -171,8 +171,15 @@ const HPI = () => {
         }
     }, [dispatch, institution, userSurveyState]);
 
+    // FIXME: this logic should be combined with the logic in the next button handler! it currently doesn't work the same
     const onTabChange = useCallback(
         (name: string) => {
+            // NOTE: disabling clicking the stepper for now
+            // logic for which steps to display is in multiple functions in Hpi.tsx
+            // this logic conflicts depending on if tabs are changed by clicking or by the next button
+            // re-enable stepper button clicking when this logic is consolidated in utils function
+            return;
+
             if (notificationMessage) {
                 setNotificationMessage('');
             }
@@ -271,6 +278,7 @@ const HPI = () => {
         window.scrollTo(0, 0);
     }, [currentTabs, activeItem, notificationMessage, dispatch]);
 
+    // FIXME: this logic should be combined with the logic in the stepper button handler! it currently doesn't work the same
     const onNextClick = useCallback(
         (args?: OnNextClickParams) => {
             const allSelectedChiefComplaints =
@@ -532,6 +540,7 @@ const HPI = () => {
         }
     }, [notificationMessage]);
 
+    // handle loading institution config
     useEffect(() => {
         if (!institutionConfig) return;
 
@@ -548,10 +557,27 @@ const HPI = () => {
 
         if (showChiefComplaints || !showDefaultForm) return;
 
+        // FIXME: this logic is not idempotent and it should be!
+        // here we're ensuring the default form is set locally in redux
+        // however, when this useEffect gets called twice, it will end up removing the default form
+        // this function: setChiefComplaint is the same for adding and removing items, causing bugs when called more than once...
+        // remove existing "default forms" chief complaints before updating with new ones
+        selectedChiefComplaints.forEach((item) => {
+            dispatch(setChiefComplaint(item));
+        });
+
         institutionDefaultCC.forEach((item) => {
             dispatch(setChiefComplaint(item));
         });
-    }, [dispatch, institutionConfig, institutionDefaultCC, resetCurrentTabs]);
+        // this effect changes selectedChiefComplaints, so don't add it to dependencies
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+        dispatch,
+        institutionConfig,
+        institutionDefaultCC,
+        resetCurrentTabs,
+        // selectedChiefComplaints <-- do not add this here, causes infinite loop
+    ]);
 
     useEffect(() => {
         if (
