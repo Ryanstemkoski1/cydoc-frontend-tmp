@@ -205,7 +205,15 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                                         alignItems: 'center',
                                     }}
                                 >
-                                    <MultipleChoice name={item} node={node} />
+                                    <MultipleChoice
+                                        name={
+                                            item === 'yes'
+                                                ? 'Yes'
+                                                : item === 'no'
+                                                    ? 'No'
+                                                    : item.toLowerCase()
+                                        }
+                                        node={node} />
                                     {isOther && (
                                         <HandleWriteInInput
                                             name={item}
@@ -354,6 +362,12 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         ? `${style.response__grid} isYesNo flex-wrap align-center`
                         : ''
                 }`}
+                style={{
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    gap: '10px',
+                }}
             >
                 {this.state.question.trim() == 'NAME' ? (
                     ''

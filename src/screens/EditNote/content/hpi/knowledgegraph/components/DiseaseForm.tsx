@@ -35,7 +35,7 @@ export class DiseaseForm extends React.Component<Props> {
     };
 
     traverseChildNodes(): JSX.Element[] {
-        return this.props.nodesToDisplayInOrder.map((node) => (
+        return this.props.nodesToDisplayInOrder?.map((node) => (
             <div className={style.diseaseForm} key={node}>
                 <CreateResponse node={node} category={this.props.category} />
             </div>
