@@ -61,6 +61,7 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
         case ResponseTypes.NO_YES:
             return node?.response === YesNoResponse.None;
 
+        case ResponseTypes.YEAR:
         case ResponseTypes.SCALE1TO10:
         case ResponseTypes.NUMBER:
             return node?.response === undefined;
@@ -97,10 +98,12 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
         }
 
         case ResponseTypes.SELECTMANY:
+        case ResponseTypes.DATE:
         case ResponseTypes.SHORT_TEXT:
         case ResponseTypes.RADIOLOGY:
             return node.response === '';
 
+        case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTONE: {
             const response = node?.response as SelectOneInput;
             return Object?.keys(response).every((key) => !response[key]);
@@ -215,6 +218,7 @@ export const extractNode = (
         updatedRes,
         updatedNeg;
     switch (node.responseType) {
+        case ResponseTypes.YEAR:
         case ResponseTypes.NUMBER:
         case ResponseTypes.SCALE1TO10:
             answer = (response as number).toString();
@@ -225,6 +229,7 @@ export const extractNode = (
             answer = [timeRes?.numInput, timeRes?.timeOption].join(' ');
             break;
 
+        case ResponseTypes.DATE:
         case ResponseTypes.SHORT_TEXT:
         case ResponseTypes.RADIOLOGY:
             answer = response as string;
@@ -272,14 +277,18 @@ export const extractNode = (
             );
             break;
 
+        case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTMANY:
         case ResponseTypes.SELECTONE:
             const clickBoxesRes = response as SelectOneInput;
             updatedRes = Object.keys(clickBoxesRes).filter(
-                (key) => clickBoxesRes[key]
+                (key) => clickBoxesRes[key] && key.toLowerCase() !== 'other'
             );
             updatedNeg = Object.keys(clickBoxesRes).filter(
-                (key) => !clickBoxesRes[key] && negAnswer
+                (key) =>
+                    !clickBoxesRes[key] &&
+                    negAnswer &&
+                    key.toLowerCase() !== 'other'
             );
 
             // If zero YESs are selected but any NOs are selected --> all selections are NO
@@ -465,6 +474,7 @@ export const checkParent = (
             childNodesToHide = response == YesNoResponse.Yes ? childNodes : [];
             break;
         }
+        case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTMANY:
         case ResponseTypes.SELECTONE: {
             if (!isHPIResponseValid(response, responseType)) {
@@ -598,6 +608,8 @@ function getInitialSurveyResponses(state: UserSurveyState): HPIText[] {
                 break;
             }
             case ResponseTypes.LONG_TEXT:
+            case ResponseTypes.DATE:
+            case ResponseTypes.YEAR:
             case ResponseTypes.SHORT_TEXT: {
                 currentNodeResponse = (value.response as string).trim();
                 break;

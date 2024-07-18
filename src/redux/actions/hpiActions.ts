@@ -4,6 +4,8 @@ import { YesNoResponse } from '@constants/enums';
 import {
     TimeOption,
     NumberInput,
+    SelectOneInput,
+    DateInput,
     BodyLocationOptions,
     BodyLocationLRItemType,
     GraphData,
@@ -479,6 +481,48 @@ export function medsPopYesNoToggle(
     };
 }
 
+export interface HandleDateInputChangeAction {
+    type: HPI_ACTION.HANDLE_DATE_INPUT_CHANGE;
+    payload: {
+        medId: string;
+        input: DateInput;
+    };
+}
+
+export function handleDateInputChange(
+    medId: string,
+    input: DateInput
+): HandleDateInputChangeAction {
+    return {
+        type: HPI_ACTION.HANDLE_DATE_INPUT_CHANGE,
+        payload: {
+            medId,
+            input,
+        },
+    };
+}
+
+export interface HandleOtherOptionChangeAction {
+    type: HPI_ACTION.HANDLE_OTHER_OPTION_CHANGE;
+    payload: {
+        medId: string;
+        newResponse: SelectOneInput;
+    };
+}
+
+export function handleOtherOptionChange(
+    medId: string,
+    newResponse: SelectOneInput
+): HandleOtherOptionChangeAction {
+    return {
+        type: HPI_ACTION.HANDLE_OTHER_OPTION_CHANGE,
+        payload: {
+            medId,
+            newResponse,
+        },
+    };
+}
+
 export type HpiActionTypes =
     | ProcessKnowledgeGraphAction
     | BodyLocationResponseAction
@@ -490,6 +534,8 @@ export type HpiActionTypes =
     | RemoveListInputAction
     | AddListInputAction
     | HandleNumericInputChangeAction
+    | HandleDateInputChangeAction
+    | HandleOtherOptionChangeAction
     | HandleTimeInputChangeAction
     | HandleYearInputChangeAction
     | HandleTimeOptionChangeAction

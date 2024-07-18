@@ -57,6 +57,7 @@ export function isHPIResponseValid(
     responseType: ResponseTypes
 ): boolean {
     switch (responseType) {
+        case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTMANY:
         case ResponseTypes.SELECTONE: {
             const newResponse = response as SelectManyInput | SelectOneInput;

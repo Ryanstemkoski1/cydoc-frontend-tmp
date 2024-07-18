@@ -33,9 +33,11 @@ function traverseNodes(
         );
 
         if (
-            [ResponseTypes.SELECTMANY, ResponseTypes.SELECTONE].includes(
-                nodes[currNode].responseType
-            ) &&
+            [
+                ResponseTypes.SELECTMANY,
+                ResponseTypes.SELECTONE,
+                ResponseTypes.SELECTMANYDENSE,
+            ].includes(nodes[currNode].responseType) &&
             isValidResponseResult
         ) {
             const childNodesToDisplay: string[] = [];
@@ -64,6 +66,8 @@ function traverseNodes(
                 nodes[currNode].response == YesNoResponse.Yes) ||
             (nodes[currNode].responseType == ResponseTypes.NO_YES &&
                 nodes[currNode].response == YesNoResponse.No) ||
+            (nodes[currNode].responseType == ResponseTypes.SELECTMANYDENSE &&
+                isValidResponseResult) ||
             (nodes[currNode].responseType == ResponseTypes.SELECTMANY &&
                 isValidResponseResult) ||
             (nodes[currNode].responseType == ResponseTypes.SELECTONE &&
@@ -103,6 +107,18 @@ export function nodesToDisplayInOrder(
                         state,
                         displayedNodesCutOff - nodesArr.length
                     ).filter((node) => !nodesSoFar.includes(node));
+                /** Sort currNodesArr based on displayOrder if available.*/
+                currNodesArr.sort((a, b) => {
+                    const nodeA = hpi.nodes[a] as { displayOrder?: number };
+                    const nodeB = hpi.nodes[b] as { displayOrder?: number };
+                    if (
+                        nodeA?.displayOrder !== undefined &&
+                        nodeB?.displayOrder !== undefined
+                    ) {
+                        return nodeA.displayOrder - nodeB.displayOrder;
+                    }
+                    return 0; // If displayOrder is not defined, maintain order
+                });
                 if (chiefComplaint == currCat) return currNodesArr;
                 nodesArr = [
                     ...new Set([
