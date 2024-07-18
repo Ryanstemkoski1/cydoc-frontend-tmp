@@ -193,7 +193,13 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         {responseChoice.map((item: string) => (
                             <MultipleChoice
                                 key={item}
-                                name={item}
+                                name={
+                                    item === 'yes'
+                                        ? 'Yes'
+                                        : item === 'no'
+                                          ? 'No'
+                                          : item.toLowerCase()
+                                }
                                 node={node}
                             />
                         ))}
@@ -321,6 +327,12 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         ? `${style.response__grid} isYesNo flex-wrap align-center`
                         : ''
                 }`}
+                style={{
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    gap: '10px',
+                }}
             >
                 {this.state.question.trim() == 'NAME' ? (
                     ''
