@@ -210,10 +210,11 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                                             item === 'yes'
                                                 ? 'Yes'
                                                 : item === 'no'
-                                                    ? 'No'
-                                                    : item.toLowerCase()
+                                                  ? 'No'
+                                                  : item.toLowerCase()
                                         }
-                                        node={node} />
+                                        node={node}
+                                    />
                                     {isOther && (
                                         <HandleWriteInInput
                                             name={item}
