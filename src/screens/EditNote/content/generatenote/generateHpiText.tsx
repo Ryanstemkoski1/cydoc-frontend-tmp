@@ -337,3 +337,39 @@ export const createHPI = (
     hpiString = capitalize(hpiString);
     return hpiString;
 };
+
+/**
+ * This function generates text specifically for Advanced Report Generation.
+ * It returns the text without altering the provided fillSentence value.
+ * Note: This function does not change any capitalization or punctuation.
+ *
+ * @returns {string} The original texts filled with original answers.
+ */
+export const createForAdvancedReport = (hpi: HPI): string => {
+    const sortedKeys: number[] = Object.keys(hpi).map((val) => parseInt(val));
+    sortedKeys.sort((lhs, rhs) => lhs - rhs);
+    let hpiString = '';
+    // let hpiStrs: string[] = [];
+    sortedKeys.forEach((key) => {
+        let [fillSentence, answer, negAnswer] = hpi[key] || hpi[key.toString()];
+        answer = fullClean(answer);
+        negAnswer = fullClean(negAnswer);
+        if (!answer.length)
+            fillSentence = removeSentence(fillSentence, 'ANSWER');
+        else if (answer === 'all no') {
+            fillSentence = fillSentence.substring(
+                fillSentence.indexOf('ANSWER') + 6
+            );
+        } else if (fillSentence.match(/ANSWER/)) {
+            fillSentence = fillSentence.replace(/ANSWER/, stringHasI(answer));
+        }
+        if (!negAnswer.length)
+            fillSentence = removeSentence(fillSentence, 'NOTANSWER');
+        else if (fillSentence.match(/NOTANSWER/)) {
+            fillSentence = fillSentence.replace(/NOTANSWER/, negAnswer);
+        }
+        // hpiStrs.push(fillSentence);
+        hpiString += fillSentence + ' ';
+    });
+    return hpiString;
+};

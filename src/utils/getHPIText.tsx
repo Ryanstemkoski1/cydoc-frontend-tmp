@@ -14,6 +14,7 @@ import {
     HPI,
     createHPI,
     createInitialHPI,
+    createForAdvancedReport,
 } from '@screens/EditNote/content/generatenote/generateHpiText';
 import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
 import { FamilyHistoryState } from '@redux/reducers/familyHistoryReducer';
@@ -742,6 +743,18 @@ function getHPIText(bulletNoteView = false, state: HPIReduxValues) {
             miscNote: miscText[i],
         };
     }
+
+    // TODO: hard code!! update result for hpi
+    const RCAFROM = 'Connell and Associates Adult Evaluation';
+    const value = createForAdvancedReport(formattedHpis[RCAFROM])
+        .replace(/\n+/g, ' ')
+        .replace(/\s{2,}/g, ' ');
+
+    hpiTextResult.forEach((item) => {
+        if (item.title === RCAFROM) {
+            item.text = value;
+        }
+    });
 
     return [...hpiTextResult, ...initialSurveyResponse];
 }

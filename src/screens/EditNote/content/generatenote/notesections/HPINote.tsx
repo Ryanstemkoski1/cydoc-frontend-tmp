@@ -136,14 +136,21 @@ const HpiNote = ({
                   <li key={item.title} className={styles.listItem}>
                       <b>{item.title}</b>
                       <ul className={styles.noBullets}>
-                          {item.text.split('. ').map((sentence, index, arr) => (
-                              <li key={index}>
-                                  {processSentence(
-                                      capitalizeFirstLetter(sentence)
-                                  )}
-                                  {index < arr.length - 1 && '.'}
-                              </li>
-                          ))}
+                          {item.title ===
+                          'Connell and Associates Adult Evaluation' ? (
+                              <span>{item.text}</span>
+                          ) : (
+                              item.text
+                                  .split('. ')
+                                  .map((sentence, index, arr) => (
+                                      <li key={index}>
+                                          {processSentence(
+                                              capitalizeFirstLetter(sentence)
+                                          )}
+                                          {index < arr.length - 1 && '.'}
+                                      </li>
+                                  ))
+                          )}
                       </ul>
 
                       {item.miscNote &&
