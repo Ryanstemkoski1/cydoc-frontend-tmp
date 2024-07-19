@@ -65,7 +65,7 @@ const SearchTermsToQuestionnaireMapping = new Map<string[], string>([
     [['dementia'], `Dementia/Alzheimer's Disease`],
     [['alzheimer'], `Dementia/Alzheimer's Disease`],
     [['depress'], 'PHQ-9 for Depression'],
-    [['demo', '123'], ['All Question Types Demo']],
+    [['demo', '123'], ['All Question Types Demo'],
     [['diabetes'], 'Diabetes'],
     [['diarrhea'], 'Diarrhea'],
     [['loose', 'stool'], 'Diarrhea'],
