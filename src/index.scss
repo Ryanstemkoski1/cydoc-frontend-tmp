@@ -37,3 +37,24 @@
 .ui.segment:hover {
     box-shadow: 0 10px 40px 5px RGBA(0, 128, 159, 0.2);
 }
+
+.main {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+
+    @media (min-width: 768px) {
+        flex: 1;
+    }
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+
+    @media (max-width: 768px) {
+        padding-left: 64px;
+    }
+}

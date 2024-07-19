@@ -1,0 +1,94 @@
+@import '../../assets/scss/variables.scss';
+
+.wrapper {
+    margin: 4px 8px;
+    padding: 5px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: rgba($color-light, 0.5);
+    }
+}
+
+.avatar {
+    font-size: $font-size-h4;
+    font-weight: $font-weight-bold;
+    line-height: 24px;
+    color: #057a9b;
+    border: 0.5px solid #d7e5e9;
+    background-color: $color-light;
+    cursor: pointer;
+}
+
+.userName {
+    font-family: $font-family-primary;
+    &__name {
+        font-size: $font-size-h4;
+        font-weight: $font-weight-semibold;
+        color: rgba($color-black, .87);
+        line-height: 16px;
+    }
+
+    &__role {
+        font-size: 14px;
+        line-height: 12px;
+        font-weight: $font-weight-normal;
+        color: rgba($color-black, .6);
+    }
+}
+
+.popoverWrapper {
+    > div + div {
+        border-radius: 8px;
+    }
+}
+
+.menuWrapper {
+    padding: 0;
+    overflow: hidden;
+
+    li {
+        border-radius: 8px;
+
+        > div {
+            padding: 8px 16px;
+            border-radius: 8px;
+
+            svg {
+                width: 24px;
+                height: 24px;
+                fill: #7f8485;
+            }
+
+            span {
+                font-family: $font-family-primary;
+                font-size: $font-size-base;
+                font-weight: $font-weight-normal;
+                line-height: 32px;
+            }
+
+            :hover {
+                background-color: transparent;
+            }
+        }
+
+        :hover {
+            background-color: rgba($color-light, 0.5);
+        }
+
+        :focus {
+            background-color: $color-light;
+
+            > div {
+                span {
+                    color: #057a9b;
+                }
+
+                svg {
+                    fill: #057a9b;
+                }
+            }
+        }
+    }
+}

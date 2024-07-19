@@ -11,9 +11,10 @@ import { SubscriptionProvider } from 'providers/SubscriptionProvider';
 import StoreProvider from '@providers/StoreProvider';
 import { SubscriptionBanner } from '@components/Molecules/SubscriptionBanner';
 import { SubscriptionModal } from '@components/Molecules/SubscriptionModal';
-import NavMenu from '@components/navigation/NavMenu';
 import GlobalLoader from '@components/GlobalLoader/GlobalLoader';
 import Footer from '@components/Footer/Footer';
+import DrawerMenu from '@components/DrawerMenu/DrawerMenu';
+import NavBlock from '@components/navigation/NavBlock/NavBlock';
 
 export const metadata: Metadata = {
     title: 'Cydoc',
@@ -41,12 +42,14 @@ export default function RootLayout({ children }: Props) {
                                             <GlobalLoader />
                                             <SubscriptionBanner />
                                             <SubscriptionModal />
-                                            <NavMenu
-                                                attached={'top'}
-                                                displayNoteName={true}
-                                            />
-                                            {children}
-                                            <Footer />
+                                            <div className='main'>
+                                                <DrawerMenu />
+                                                <div className='content'>
+                                                    <NavBlock />
+                                                    {children}
+                                                    <Footer />
+                                                </div>
+                                            </div>
                                         </div>
                                     </ToastProvider>
                                 </StoreProvider>
