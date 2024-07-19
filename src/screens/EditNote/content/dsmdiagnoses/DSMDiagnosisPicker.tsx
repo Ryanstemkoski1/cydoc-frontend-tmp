@@ -40,21 +40,18 @@ const DSMDiagnosisPicker: React.FC<Props> = ({ node, hpi, popResponse }) => {
         let selectedDiagnoses: string[] = [];
         if (primaryDiagnosis !== '') {
             selectedDiagnoses.push(primaryDiagnosis);
-
             if (secondaryDiagnosis !== '') {
                 selectedDiagnoses.push(secondaryDiagnosis);
-            }
-
-            if (additionalDiagnoses.length > 0) {
-                selectedDiagnoses = [
-                    ...selectedDiagnoses,
-                    ...additionalDiagnoses.filter(
-                        (diagnosis) => diagnosis !== ''
-                    ),
-                ];
+                if (additionalDiagnoses.length > 0) {
+                    selectedDiagnoses = [
+                        ...selectedDiagnoses,
+                        ...additionalDiagnoses.filter(
+                            (diagnosis) => diagnosis !== ''
+                        ),
+                    ];
+                }
             }
         }
-
         popResponse(node, selectedDiagnoses);
     }, [primaryDiagnosis, secondaryDiagnosis, additionalDiagnoses]);
 
