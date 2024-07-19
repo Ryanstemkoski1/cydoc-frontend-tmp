@@ -9,10 +9,19 @@
     }
 
     &__chip {
-        padding: 5px 15px !important;
+        padding: 6px !important;
         margin: 0 !important;
         display: inline-flex;
         align-items: center;
+
+        &__title {
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 18px;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0 8px 0 4px;
+        }
 
         &:hover {
             cursor: default;
@@ -20,17 +29,24 @@
         }
 
         span {
-            width: 15px;
-            height: 15px;
+            width: 20px;
+            height: 20px;
             font-size: 8px;
             cursor: pointer;
-            margin: 0 -5px 0 10px;
             border-radius: 50%;
             align-items: center;
             display: inline-flex;
             justify-content: center;
             transition: 0.3s ease-in-out;
-            background-color: rgba($color-white, 0.2);
+            background-color: #EAF3F5;
+
+            svg {
+                width: 18px;
+                height: 18px;
+                path {
+                    fill: #047A9B;
+                }
+            }
 
             &:hover {
                 background-color: rgba($color-white, 0.3);
