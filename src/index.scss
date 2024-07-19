@@ -53,6 +53,7 @@
     flex-direction: column;
     justify-content: space-between;
     flex: 1;
+    overflow-y: auto;
 
     @media (max-width: 768px) {
         padding-left: 64px;

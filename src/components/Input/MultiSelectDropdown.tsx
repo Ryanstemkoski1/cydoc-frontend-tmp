@@ -18,9 +18,19 @@ const MultiSelectDropdown = (props: MultiSelectDropdownProps) => {
                 className={`${style.selected__chip} button sm pill`}
                 key={item}
             >
-                {item}
+                <p className={style.selected__chip__title}>{item}</p>
                 <span onClick={() => onRemove(item)}>
-                    <img src={'/images/close-white.svg'} alt='x' />
+                    <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        height='24'
+                        viewBox='0 -960 960 960'
+                        width='24'
+                    >
+                        <path
+                            fill='#fff'
+                            d='m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z'
+                        />
+                    </svg>
                 </span>
             </div>
         );

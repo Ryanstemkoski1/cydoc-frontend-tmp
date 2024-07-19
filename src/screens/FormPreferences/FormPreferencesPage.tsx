@@ -1,29 +1,52 @@
 'use client';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import style from './FormPreferencesPage.module.scss';
 
+import { toast } from 'react-toastify';
+import { styled } from '@mui/material/styles';
 import { ApiResponse } from '@cydoc-ai/types';
 import { DiseaseForm } from '@cydoc-ai/types/dist/disease';
 import { InstitutionConfig } from '@cydoc-ai/types/dist/institutions';
-import ButtonLoader from '@components/ButtonLoader/ButtonLoader';
-import CommonLayout from '@components/CommonLayout/CommonLayout';
-import InfoTooltip from '@components/InfoTooltip/InfoTooltip';
-import MultiSelectDropdown from '@components/Input/MultiSelectDropdown';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+
 import Notification, {
     NotificationTypeEnum,
 } from '@components/tools/Notification/Notification';
-import YesAndNo from '@components/tools/YesAndNo/YesAndNo';
-import { MAX_LIMIT_TO_ADD_DEFAULT_FORMS } from '@constants/FormPreferencesConstant';
-import ToastOptions from '@constants/ToastOptions';
-import useAuth from '@hooks/useAuth';
-import useUser from '@hooks/useUser';
+
+import {
+    Box,
+    Button,
+    FormControlLabel,
+    FormGroup,
+    Radio,
+    RadioGroup,
+    Switch,
+    Typography,
+} from '@mui/material';
+
 import {
     InstitutionConfigResponse,
     getInstitutionConfig,
     updateInstitutionConfig,
 } from 'modules/institution-api';
+
+import {
+    CustomRadioLabelProps,
+    CustomSwitchProps,
+    DefaultFormSwitchLabels,
+    DefaultFormType,
+    MAX_LIMIT_TO_ADD_DEFAULT_FORMS,
+    ProductRadioLabels,
+    ProductType,
+} from '@constants/FormPreferencesConstant';
+
+import useAuth from '@hooks/useAuth';
+import useUser from '@hooks/useUser';
+import InfoIcon from '@mui/icons-material/Info';
+import ToastOptions from '@constants/ToastOptions';
+import ButtonLoader from '@components/ButtonLoader/ButtonLoader';
+import MultiSelectDropdown from '@components/Input/MultiSelectDropdown';
 import { hpiHeaders as knowledgeGraphAPI } from '@screens/EditNote/content/hpi/knowledgegraph/API';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { toast } from 'react-toastify';
-import style from './FormPreferencesPage.module.scss';
 import useManagerRequired from '@hooks/useManagerRequired';
 
 const defaultInstitutionConfig: InstitutionConfig = {
@@ -34,19 +57,81 @@ const defaultInstitutionConfig: InstitutionConfig = {
     showChiefComplaints: false,
 };
 
+const CustomRadioLabel = ({
+    labelProps,
+}: {
+    labelProps: CustomRadioLabelProps;
+}) => (
+    <Box className={style.productWrapper__labelContent}>
+        <Typography className={style.productWrapper__labelContent__title}>
+            {labelProps.title}
+        </Typography>
+        <Typography className={style.productWrapper__labelContent__detail}>
+            {labelProps.detail}
+        </Typography>
+    </Box>
+);
+
+const CustomSwitchLabel = ({
+    labelProps,
+}: {
+    labelProps: CustomSwitchProps;
+}) => {
+    const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+        <Tooltip
+            {...props}
+            classes={{ popper: className }}
+            className={style.tooltip}
+            arrow
+        />
+    ))(({ theme }) => ({
+        [`& .${tooltipClasses.tooltip}`]: {
+            padding: '8px',
+            color: 'rgba(0, 0, 0, .87)',
+            boxShadow: '0 0 4px 0px rgba(0, 0, 0, 0.2)',
+            backgroundColor: theme.palette.common.white,
+            fontSize: 10,
+            fontFamily: 'Nunito',
+            fontWeight: '500',
+            lineHeight: '14px',
+        },
+        [`& .${tooltipClasses.arrow}`]: {
+            color: 'white',
+            '&::before': {
+                boxShadow: '0 0 4px 0px rgba(0, 0, 0, 0.2)',
+            },
+        },
+    }));
+
+    return (
+        <Box className={style.productWrapper__switchLabel}>
+            <Typography className={style.productWrapper__switchLabel__title}>
+                {labelProps.label}
+            </Typography>
+            <LightTooltip title={labelProps.tooltipTitle} placement='top'>
+                <InfoIcon />
+            </LightTooltip>
+        </Box>
+    );
+};
+
 const FormPreferencesPage = () => {
     useManagerRequired(); // this route is private, manager required
     const { user } = useUser();
     const { cognitoUser } = useAuth();
 
     /* states */
-    const [institutionConfig, setInstitutionConfig] =
-        useState<InstitutionConfig>(defaultInstitutionConfig);
-    const [allDiseaseForms, setAllDiseaseForms] = useState<DiseaseForm[]>([]);
     const [loading, setLoading] = useState(false);
     const [loadingData, setLoadingData] = useState(true);
-    const [notificationMessage, setNotificationMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [notificationMessage, setNotificationMessage] = useState('');
+    const [allDiseaseForms, setAllDiseaseForms] = useState<DiseaseForm[]>([]);
+    const [productType, setProductType] = useState<string>(
+        ProductType.SMART_PATIENT_INTAKE_FORM
+    );
+    const [institutionConfig, setInstitutionConfig] =
+        useState<InstitutionConfig>(defaultInstitutionConfig);
+
     const dropdownItems = useMemo(() => {
         if (!institutionConfig || !allDiseaseForms) return [];
         const diseaseForm = institutionConfig.diseaseForm.filter(
@@ -64,6 +149,7 @@ const FormPreferencesPage = () => {
 
     const { diseaseForm, showChiefComplaints, showDefaultForm } =
         institutionConfig;
+
     const nonDeletedDiseaseForm = useMemo(
         () => institutionConfig.diseaseForm.filter((item) => !item.isDeleted),
         [institutionConfig]
@@ -216,6 +302,33 @@ const FormPreferencesPage = () => {
         updateInstitutionConfigState('diseaseForm', newDiseaseForm);
     };
 
+    const handleProductTypeChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setProductType(e.target.value);
+    };
+
+    const handleDefaultFormChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        switch (e.target.value) {
+            case DefaultFormType.SHOW_DEFAULT_FORMS:
+                updateInstitutionConfigState(
+                    'showDefaultForm',
+                    !showDefaultForm
+                );
+                break;
+            case DefaultFormType.ENABLE_HPI_SUBJECTIVE_SECTION_GENERATION:
+                updateInstitutionConfigState(
+                    'showChiefComplaints',
+                    !showChiefComplaints
+                );
+                break;
+            default:
+                return;
+        }
+    };
+
     /* effects */
     useEffect(() => {
         if (!notificationMessage) return;
@@ -251,131 +364,155 @@ const FormPreferencesPage = () => {
     ]);
 
     return (
-        <div className={style.formPreferences}>
-            <CommonLayout title='Please select your questionnaire preferences'>
-                {(errorMessage || notificationMessage) && (
-                    <Notification
-                        message={errorMessage || notificationMessage}
-                        type={NotificationTypeEnum.ERROR}
-                    />
-                )}
-                {loadingData ? (
-                    <div className='ui active centered inline loader' />
-                ) : (
-                    <>
-                        <div className={style.formPreferences__item}>
-                            <label htmlFor='showDefaultForm'>
-                                Show default forms
-                                <InfoTooltip mobilePositionY={'bottom'}>
-                                    <p>
-                                        When &ldquo;Show default forms&rdquo; is
-                                        &ldquo;Yes,&rdquo; then every patient in
-                                        your practice will be shown form(s) that
-                                        you specify. For example, if Cydoc has
-                                        created a custom form for your practice,
-                                        you may choose &ldquo;Yes&rdquo; here in
-                                        order to specify that you want all your
-                                        patients to be shown your
-                                        practice&apos;s custom form.
-                                    </p>
-                                </InfoTooltip>
-                            </label>
-                            <YesAndNo
-                                yesButtonActive={showDefaultForm}
-                                noButtonActive={!showDefaultForm}
-                                handleYesButtonClick={() =>
-                                    updateInstitutionConfigState(
-                                        'showDefaultForm',
-                                        true
-                                    )
-                                }
-                                handleNoButtonClick={() =>
-                                    updateInstitutionConfigState(
-                                        'showDefaultForm',
-                                        false
-                                    )
-                                }
-                            />
-                        </div>
+        <Box className={style.formPreferences}>
+            <Box className={style.formPreferences__head}>
+                <Typography component={'p'}>Select a product</Typography>
+            </Box>
+            {(errorMessage || notificationMessage) && (
+                <Notification
+                    message={errorMessage || notificationMessage}
+                    type={NotificationTypeEnum.ERROR}
+                />
+            )}
+            <Box className={style.formPreferences__content}>
+                <RadioGroup
+                    value={productType}
+                    onChange={handleProductTypeChange}
+                    sx={{ gap: 2 }}
+                >
+                    <Box className={style.productWrapper}>
+                        <FormControlLabel
+                            value={ProductType.SMART_PATIENT_INTAKE_FORM}
+                            control={<Radio />}
+                            label={
+                                <CustomRadioLabel
+                                    labelProps={
+                                        ProductRadioLabels[
+                                            ProductType
+                                                .SMART_PATIENT_INTAKE_FORM
+                                        ]
+                                    }
+                                />
+                            }
+                        />
 
-                        {showDefaultForm && (
-                            <div className={style.formPreferences__item}>
-                                <label>
-                                    Default form names:
-                                    <InfoTooltip>
-                                        <p>
+                        {productType ===
+                            ProductType.SMART_PATIENT_INTAKE_FORM && (
+                            <FormGroup
+                                className={style.productWrapper__switch}
+                                onChange={handleDefaultFormChange}
+                                sx={{ gap: 2 }}
+                            >
+                                <FormControlLabel
+                                    value={DefaultFormType.SHOW_DEFAULT_FORMS}
+                                    control={
+                                        <Switch checked={showDefaultForm} />
+                                    }
+                                    label={
+                                        <CustomSwitchLabel
+                                            labelProps={
+                                                DefaultFormSwitchLabels[
+                                                    DefaultFormType
+                                                        .SHOW_DEFAULT_FORMS
+                                                ]
+                                            }
+                                        />
+                                    }
+                                />
+
+                                {showDefaultForm && (
+                                    <Box
+                                        className={style.formPreferences__item}
+                                    >
+                                        <Typography
+                                            className={
+                                                style.formPreferences__item__label
+                                            }
+                                        >
+                                            Default form names:
+                                        </Typography>
+
+                                        <MultiSelectDropdown
+                                            dropdownItems={dropdownItems
+                                                .map((item) => item.diseaseName)
+                                                .sort()}
+                                            selectedDropdownItems={nonDeletedDiseaseForm.map(
+                                                (item) => item.diseaseName
+                                            )}
+                                            onRemove={handleOnRemove}
+                                            onSelected={handleOnSelected}
+                                        />
+
+                                        <Typography
+                                            className={
+                                                style.formPreferences__item__info
+                                            }
+                                        >
                                             Select the default forms you would
                                             like to show to every patient. The
                                             default forms will be shown to
                                             patients in the order that they are
                                             selected.
-                                        </p>
-                                    </InfoTooltip>
-                                </label>
-                                <MultiSelectDropdown
-                                    dropdownItems={dropdownItems
-                                        .map((item) => item.diseaseName)
-                                        .sort()}
-                                    selectedDropdownItems={nonDeletedDiseaseForm.map(
-                                        (item) => item.diseaseName
-                                    )}
-                                    onRemove={handleOnRemove}
-                                    onSelected={handleOnSelected}
+                                        </Typography>
+                                    </Box>
+                                )}
+
+                                <FormControlLabel
+                                    value={
+                                        DefaultFormType.ENABLE_HPI_SUBJECTIVE_SECTION_GENERATION
+                                    }
+                                    control={
+                                        <Switch checked={showChiefComplaints} />
+                                    }
+                                    label={
+                                        <CustomSwitchLabel
+                                            labelProps={
+                                                DefaultFormSwitchLabels[
+                                                    DefaultFormType
+                                                        .ENABLE_HPI_SUBJECTIVE_SECTION_GENERATION
+                                                ]
+                                            }
+                                        />
+                                    }
                                 />
-                            </div>
+                            </FormGroup>
                         )}
+                    </Box>
 
-                        <div className={style.formPreferences__item}>
-                            <label htmlFor='showChiefComplaints'>
-                                Enable HPI/Subjective section generation
-                                <InfoTooltip mobilePositionX={-80}>
-                                    <p>
-                                        When &ldquo;Enable HPI/Subjective
-                                        section generation&rdquo; is
-                                        &ldquo;Yes&rdquo;, then Cydoc will
-                                        automatically interview each patient
-                                        using medical reasoning to generate an
-                                        HPI/Subjective section based on that
-                                        patient&apos;s unique chief complaints.
-                                    </p>
-                                </InfoTooltip>
-                            </label>
-
-                            <YesAndNo
-                                yesButtonActive={showChiefComplaints}
-                                noButtonActive={!showChiefComplaints}
-                                handleYesButtonClick={() =>
-                                    updateInstitutionConfigState(
-                                        'showChiefComplaints',
-                                        true
-                                    )
-                                }
-                                handleNoButtonClick={() =>
-                                    updateInstitutionConfigState(
-                                        'showChiefComplaints',
-                                        false
-                                    )
-                                }
-                            />
-                        </div>
-                        <button
-                            type='submit'
-                            className='button'
-                            onClick={handleSubmit}
-                            disabled={
-                                (!showChiefComplaints && !showDefaultForm) ||
-                                (showDefaultForm &&
-                                    !nonDeletedDiseaseForm.length) ||
-                                loading
+                    <Box className={style.productWrapper}>
+                        <FormControlLabel
+                            value={ProductType.ADVANCED_REPORT_GENERATION}
+                            control={<Radio />}
+                            label={
+                                <CustomRadioLabel
+                                    labelProps={
+                                        ProductRadioLabels[
+                                            ProductType
+                                                .ADVANCED_REPORT_GENERATION
+                                        ]
+                                    }
+                                />
                             }
-                        >
-                            Update Preferences
-                            {loading && <ButtonLoader />}
-                        </button>
-                    </>
-                )}
-            </CommonLayout>
-        </div>
+                        />
+                    </Box>
+                </RadioGroup>
+
+                <Button
+                    sx={{ width: 'fit-content' }}
+                    type='submit'
+                    className='button'
+                    onClick={handleSubmit}
+                    disabled={
+                        (!showChiefComplaints && !showDefaultForm) ||
+                        (showDefaultForm && !nonDeletedDiseaseForm.length) ||
+                        loading
+                    }
+                >
+                    Update Preferences
+                    {loading && <ButtonLoader />}
+                </Button>
+            </Box>
+        </Box>
     );
 };
 

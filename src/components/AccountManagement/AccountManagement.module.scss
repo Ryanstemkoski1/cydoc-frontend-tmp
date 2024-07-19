@@ -23,11 +23,17 @@
 
 .userName {
     font-family: $font-family-primary;
+    max-width: 164px;
+
     &__name {
         font-size: $font-size-h4;
         font-weight: $font-weight-semibold;
         color: rgba($color-black, .87);
         line-height: 16px;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     &__role {
@@ -35,6 +41,10 @@
         line-height: 12px;
         font-weight: $font-weight-normal;
         color: rgba($color-black, .6);
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 
