@@ -371,5 +371,6 @@ export const createForAdvancedReport = (hpi: HPI): string => {
         // hpiStrs.push(fillSentence);
         hpiString += fillSentence + ' ';
     });
+    hpiString = partOfSpeechCorrection(hpiString); // grammar checking and fixing
     return hpiString;
 };
