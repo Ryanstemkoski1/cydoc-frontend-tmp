@@ -14,7 +14,8 @@ import {
     HPI,
     createHPI,
     createInitialHPI,
-    createForAdvancedReport,
+    createInitialAdvancedReport,
+    createAdvancedReport,
 } from '@screens/EditNote/content/generatenote/generateHpiText';
 import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
 import { FamilyHistoryState } from '@redux/reducers/familyHistoryReducer';
@@ -645,7 +646,11 @@ export interface HPIReduxValues {
     userSurvey: UserSurveyState;
 }
 
-function getHPIText(bulletNoteView = false, state: HPIReduxValues) {
+function getHPIText(
+    bulletNoteView = false,
+    state: HPIReduxValues,
+    isReportView = false
+) {
     /*
     formattedHpis is a dictionary in which each key is the chief complaint
     and the value is an array of template sentences.
@@ -678,9 +683,17 @@ function getHPIText(bulletNoteView = false, state: HPIReduxValues) {
     const initialPara = Object.keys(formattedHpis).map((key) => {
         const formattedHpi = formattedHpis[key];
         // TODO: use actual patient info to populate fields
-        return new Set(
-            createInitialHPI(formattedHpi).split('. ').filter(Boolean)
-        );
+        if (isReportView) {
+            return new Set(
+                createInitialAdvancedReport(formattedHpi)
+                    .split('. ')
+                    .filter(Boolean)
+            );
+        } else {
+            return new Set(
+                createInitialHPI(formattedHpi).split('. ').filter(Boolean)
+            );
+        }
     });
     for (let i = 0; i < initialPara.length - 1; i++) {
         for (let j = i + 1; j < initialPara.length; j++) {
@@ -693,14 +706,25 @@ function getHPIText(bulletNoteView = false, state: HPIReduxValues) {
     const finalPara = initialPara.reduce((acc: string[], hpiStringSet, i) => {
         if (hpiStringSet.size) {
             title.push(Object.keys(formattedHpis)[i]);
-            return [
-                ...acc,
-                createHPI(
-                    Array.from(hpiStringSet).join('. '),
-                    state.patientInformation.patientName,
-                    state.patientInformation.pronouns
-                ),
-            ];
+            if (isReportView) {
+                return [
+                    ...acc,
+                    createAdvancedReport(
+                        Array.from(hpiStringSet).join('. '),
+                        state.patientInformation.patientName,
+                        state.patientInformation.pronouns
+                    ),
+                ];
+            } else {
+                return [
+                    ...acc,
+                    createHPI(
+                        Array.from(hpiStringSet).join('. '),
+                        state.patientInformation.patientName,
+                        state.patientInformation.pronouns
+                    ),
+                ];
+            }
         }
         // don't include chief complaint if it was a subset of another CC
         // paragraph (i.e. set B is a subset of set A)
@@ -746,7 +770,7 @@ function getHPIText(bulletNoteView = false, state: HPIReduxValues) {
 
     // TODO: hard code!! update result for hpi
     const RCAFROM = 'Connell and Associates Adult Evaluation';
-    const value = createForAdvancedReport(formattedHpis[RCAFROM])
+    const value = createInitialAdvancedReport(formattedHpis[RCAFROM])
         .replace(/\n+/g, ' ')
         .replace(/\s{2,}/g, ' ');
 
