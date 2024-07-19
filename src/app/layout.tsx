@@ -1,6 +1,6 @@
-import React from 'react';
-import type { Metadata } from 'next';
+'use client';
 
+import React from 'react';
 import { AuthProvider } from 'providers/AuthProvider';
 import ToastProvider from 'providers/ToastProvider';
 import '../semantic/dist/semantic.min.css';
@@ -9,16 +9,7 @@ import '../index.scss';
 import { NotesStore } from '@contexts/NotesContext';
 import { SubscriptionProvider } from 'providers/SubscriptionProvider';
 import StoreProvider from '@providers/StoreProvider';
-import { SubscriptionBanner } from '@components/Molecules/SubscriptionBanner';
-import { SubscriptionModal } from '@components/Molecules/SubscriptionModal';
-import NavMenu from '@components/navigation/NavMenu';
-import GlobalLoader from '@components/GlobalLoader/GlobalLoader';
-import Footer from '@components/Footer/Footer';
-
-export const metadata: Metadata = {
-    title: 'Cydoc',
-    description: 'Cydoc',
-};
+import ContentProvider from '@providers/ContentProvider';
 
 interface Props {
     children: React.ReactNode;
@@ -37,17 +28,9 @@ export default function RootLayout({ children }: Props) {
                             <NotesStore>
                                 <StoreProvider>
                                     <ToastProvider>
-                                        <div className='layout'>
-                                            <GlobalLoader />
-                                            <SubscriptionBanner />
-                                            <SubscriptionModal />
-                                            <NavMenu
-                                                attached={'top'}
-                                                displayNoteName={true}
-                                            />
+                                        <ContentProvider>
                                             {children}
-                                            <Footer />
-                                        </div>
+                                        </ContentProvider>
                                     </ToastProvider>
                                 </StoreProvider>
                             </NotesStore>
