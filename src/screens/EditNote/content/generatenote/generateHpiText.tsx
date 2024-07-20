@@ -346,30 +346,39 @@ export const createHPI = (
  * @returns {string} The original texts filled with original answers.
  */
 export const createInitialAdvancedReport = (hpi: HPI): string => {
-    const sortedKeys: number[] = Object.keys(hpi).map((val) => parseInt(val));
-    sortedKeys.sort((lhs, rhs) => lhs - rhs);
-    let hpiString = '';
-    sortedKeys.forEach((key) => {
-        let [fillSentence, answer, negAnswer] = hpi[key] || hpi[key.toString()];
-        answer = fullClean(answer);
-        negAnswer = fullClean(negAnswer);
-        if (!answer.length)
-            fillSentence = removeSentence(fillSentence, 'ANSWER');
-        else if (answer === 'all no') {
-            fillSentence = fillSentence.substring(
-                fillSentence.indexOf('ANSWER') + 6
-            );
-        } else if (fillSentence.match(/ANSWER/)) {
-            fillSentence = fillSentence.replace(/ANSWER/, stringHasI(answer));
-        }
-        if (!negAnswer.length)
-            fillSentence = removeSentence(fillSentence, 'NOTANSWER');
-        else if (fillSentence.match(/NOTANSWER/)) {
-            fillSentence = fillSentence.replace(/NOTANSWER/, negAnswer);
-        }
-        hpiString += fillSentence + ' ';
-    });
-    return hpiString;
+    if (hpi && typeof hpi === 'object') {
+        const sortedKeys: number[] = Object.keys(hpi).map((val) =>
+            parseInt(val)
+        );
+        sortedKeys.sort((lhs, rhs) => lhs - rhs);
+        let hpiString = '';
+        sortedKeys.forEach((key) => {
+            let [fillSentence, answer, negAnswer] =
+                hpi[key] || hpi[key.toString()];
+            answer = fullClean(answer);
+            negAnswer = fullClean(negAnswer);
+            if (!answer.length)
+                fillSentence = removeSentence(fillSentence, 'ANSWER');
+            else if (answer === 'all no') {
+                fillSentence = fillSentence.substring(
+                    fillSentence.indexOf('ANSWER') + 6
+                );
+            } else if (fillSentence.match(/ANSWER/)) {
+                fillSentence = fillSentence.replace(
+                    /ANSWER/,
+                    stringHasI(answer)
+                );
+            }
+            if (!negAnswer.length)
+                fillSentence = removeSentence(fillSentence, 'NOTANSWER');
+            else if (fillSentence.match(/NOTANSWER/)) {
+                fillSentence = fillSentence.replace(/NOTANSWER/, negAnswer);
+            }
+            hpiString += fillSentence + ' ';
+        });
+        return hpiString.trim();
+    }
+    return '';
 };
 
 /**
