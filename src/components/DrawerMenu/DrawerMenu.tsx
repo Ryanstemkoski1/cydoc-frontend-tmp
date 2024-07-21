@@ -100,7 +100,7 @@ export default function DrawerMenu() {
 
     useEffect(() => {
         dispatch(
-            setProductDefinitionAction(ProductName.SMART_PATIENT_INTAKE_FORM)
+            setProductDefinitionAction(ProductName.ADVANCED_REPORT_GENERATION)
         );
     }, [dispatch]);
 
