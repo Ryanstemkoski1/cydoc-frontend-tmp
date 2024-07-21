@@ -47,9 +47,14 @@
     }
 
     &__title {
-        font-size: 24px;
-        font-weight: $font-weight-bold;
+        font-family: $font-family-secondary;
+        font-weight: $font-weight-semibold;
         color: $color-black;
+        font-size: 26px;
+
+        @include max-screen($mobile) {
+            font-size: 20px;
+        }
     }
 
     &__iconButton {
