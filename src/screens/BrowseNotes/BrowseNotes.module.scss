@@ -3,8 +3,6 @@
 .notesBlock {
     width: 100%;
     max-width: 900px;
-    margin: 0 auto;
-
     padding: 50px 0 20px;
 
     @include max-screen($tablet) {

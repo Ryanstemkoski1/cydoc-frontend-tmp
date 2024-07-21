@@ -30,7 +30,7 @@ export default function ContentProvider({ children }: Props) {
                     }}
                 >
                     <NavBlock />
-                    {children}
+                    <Box className='children'>{children}</Box>
                     <Footer />
                 </Box>
             </Box>

@@ -59,3 +59,10 @@
         padding-left: 64px;
     }
 }
+
+.children {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
