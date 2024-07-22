@@ -978,6 +978,66 @@ exports[`hpi reducers > handle user actions > handles yes no actions > handles e
 }
 `;
 
+exports[`hpi reducers > handles multiple choice click with multiple selectable (SELECTMANYDENS) 1`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "GERD": false,
+        "Hypertension": false,
+        "asthma": false,
+        "chronic pain": false,
+        "diabetes": false,
+        "high cholesterol": false,
+        "other": false,
+      },
+      "responseType": "SELECTMANYDENSE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
+exports[`hpi reducers > handles multiple choice click with multiple selectable (SELECTMANYDENS) 2`] = `
+{
+  "edges": {},
+  "graph": {},
+  "nodes": {
+    "medId": {
+      "DoctorView": "DoctorView",
+      "PatientView": "PatientView",
+      "bodySystem": "bodySystem",
+      "category": "category",
+      "doctorCreated": "doctorCreated",
+      "medID": "medID",
+      "noteSection": "noteSection",
+      "response": {
+        "GERD": false,
+        "Hypertension": true,
+        "asthma": false,
+        "chronic pain": false,
+        "diabetes": false,
+        "high cholesterol": true,
+        "other": false,
+      },
+      "responseType": "SELECTMANYDENSE",
+      "text": "text",
+      "uid": "uid",
+    },
+  },
+}
+`;
+
 exports[`hpi reducers > process knowledge graph > processes knowledge graph 1`] = `
 {
   "edges": {},

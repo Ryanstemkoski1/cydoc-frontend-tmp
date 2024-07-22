@@ -369,6 +369,19 @@ export function hpiReducer(
                     },
                     state
                 );
+            } else if (
+                state.nodes[medId].responseType ==
+                    ResponseTypes.SELECTMANYDENSE &&
+                isSelectOneResponse(response)
+            ) {
+                return updateResponse(
+                    medId,
+                    {
+                        ...response,
+                        [name]: !response[name],
+                    },
+                    state
+                );
             } else throw new Error('Not a string array');
         }
 
@@ -687,6 +700,34 @@ export function hpiReducer(
                     state
                 );
             } else throw new Error('Not a meds pop response');
+        }
+
+        case HPI_ACTION.HANDLE_DATE_INPUT_CHANGE: {
+            const { medId, input } = action.payload;
+            if (state.nodes[medId].responseType === ResponseTypes.DATE)
+                return updateResponse(medId, input, state);
+            else throw new Error('Not a date input response');
+        }
+
+        case HPI_ACTION.HANDLE_OTHER_OPTION_CHANGE: {
+            const { medId, newResponse } = action.payload;
+            const response = state.nodes[medId].response;
+            if (
+                [
+                    ResponseTypes.SELECTMANYDENSE,
+                    ResponseTypes.SELECTONE,
+                    ResponseTypes.SELECTMANY,
+                ].includes(state.nodes[medId].responseType) &&
+                isSelectOneResponse(response)
+            ) {
+                return updateResponse(
+                    medId,
+                    {
+                        ...newResponse,
+                    },
+                    state
+                );
+            } else throw new Error('Not a OTHER OPTION response');
         }
 
         default:

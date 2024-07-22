@@ -14,6 +14,7 @@ import { Header } from 'semantic-ui-react';
 import AllNegativeButton from './AllNegativeButton.js';
 import './ReviewOfSystems.css';
 import style from './ReviewOfSystemsCategory.module.scss';
+import HandleWriteInInput from '../hpi/knowledgegraph/components/responseComponents/HandleWriteInInput';
 
 interface OwnProps {
     category: string;
@@ -116,8 +117,16 @@ class ReviewOfSystemsCategory extends Component<Props, State> {
                                     this.handleChange(option, YesNoResponse.No);
                                 }}
                             />
-                            <p>{option.replace('Δ', 'Changes in')}</p>
-
+                            {option.toLowerCase() === 'other' &&
+                            ROSState[category][option] === YesNoResponse.Yes ? (
+                                <HandleWriteInInput
+                                    name={option}
+                                    node={this.props.node}
+                                    options={ROSOptions}
+                                />
+                            ) : (
+                                <p>{option.replace('Δ', 'Changes in')}</p>
+                            )}
                             <YesAndNo
                                 yesButtonActive={
                                     ROSState[category][option] ===

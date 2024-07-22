@@ -26,6 +26,7 @@ $font-size-base: 16px;
 $line-height-base: 1.8;
 $font-family-primary: 'Nunito', sans-serif;
 $font-family-secondary: 'Pompadour', sans-serif;
+$font-family-poppins: 'Poppins', sans-serif;
 $radius: 10px;
 
 // typography
@@ -34,6 +35,12 @@ $font-size-h2: 22px;
 $font-size-h3: 20px;
 $font-size-h4: 16px;
 
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
 // Breakpoints
 $small: 575px;
 $mobile: 767px;
@@ -41,7 +48,7 @@ $tablet: 991px;
 $desktop: 1199px;
 
 // image path
-$imgPath: '/assets/images/';
+$imgPath: '/images/';
 
 // mixins
 @import 'mixins';

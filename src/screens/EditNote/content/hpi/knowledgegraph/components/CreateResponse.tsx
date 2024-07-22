@@ -35,12 +35,14 @@ import style from './CreateResponse.module.scss';
 import BodyLocation from './responseComponents/BodyLocation';
 import HandleInput from './responseComponents/HandleInput';
 import HandleNumericInput from './responseComponents/HandleNumericInput';
+import HandleWriteInInput from './responseComponents/HandleWriteInInput';
 import LaboratoryTest from './responseComponents/LaboratoryTest';
 import ListText from './responseComponents/ListText';
 import MultipleChoice from './responseComponents/MultipleChoice';
 import ScaleInput from './responseComponents/ScaleInput';
 import TimeInput from './responseComponents/TimeInput';
 import YearInput from './responseComponents/YearInput';
+import HandleDateInput from './responseComponents/HandleDateInput';
 import YesNo from './responseComponents/YesNo';
 import DSMDiagnosisPicker from '@screens/EditNote/content/dsmdiagnoses/DSMDiagnosisPicker';
 
@@ -188,16 +190,42 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     />
                 );
 
+            case ResponseTypes.SELECTMANYDENSE:
             case ResponseTypes.SELECTONE:
                 return (
                     <div className={`${style.response__wrap} flex-wrap`}>
-                        {responseChoice.map((item: string) => (
-                            <MultipleChoice
-                                key={item}
-                                name={item}
-                                node={node}
-                            />
-                        ))}
+                        {responseChoice.map((item: string, index: number) => {
+                            const isOther = item.toLowerCase() === 'other';
+                            return (
+                                <div
+                                    key={`${item}-${index}`}
+                                    style={{
+                                        display: 'flex',
+                                        width: 'auto',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <MultipleChoice
+                                        name={
+                                            item === 'yes'
+                                                ? 'Yes'
+                                                : item === 'no'
+                                                  ? 'No'
+                                                  : item.toLowerCase()
+                                        }
+                                        node={node}
+                                    />
+                                    {isOther && (
+                                        <HandleWriteInInput
+                                            name={item}
+                                            node={node}
+                                            options={responseChoice}
+                                        />
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 );
 
@@ -306,6 +334,20 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 return <LaboratoryTest key={node} node={node} />;
             case ResponseTypes.PSYCHDXPICKER:
                 return <DSMDiagnosisPicker key={node} node={node} />;
+            case ResponseTypes.DATE: {
+                return (
+                    <HandleDateInput
+                        id={node}
+                        type={'date'}
+                        defaultValue={
+                            this.props.hpi.nodes[node].response as string
+                        }
+                        required={false}
+                        placeholder={'DD/MM/YYYY'}
+                        name={node}
+                    />
+                );
+            }
             default:
                 return;
         }
@@ -324,6 +366,12 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                         ? `${style.response__grid} isYesNo flex-wrap align-center`
                         : ''
                 }`}
+                style={{
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    gap: '10px',
+                }}
             >
                 {this.state.question.trim() == 'NAME' ? (
                     ''
