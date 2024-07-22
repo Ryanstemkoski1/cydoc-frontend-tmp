@@ -100,7 +100,7 @@ export default function DrawerMenu() {
 
     useEffect(() => {
         dispatch(
-            setProductDefinitionAction(ProductName.SMART_PATIENT_INTAKE_FORM)
+            setProductDefinitionAction(ProductName.ADVANCED_REPORT_GENERATION)
         );
     }, [dispatch]);
 
@@ -209,7 +209,9 @@ export default function DrawerMenu() {
                                         alt='Cydoc'
                                     />
                                     <Typography
-                                        className={style.headerWrapper__title}
+                                        className={
+                                            style.headerWrapper__logoBox__title
+                                        }
                                     >
                                         Cydoc
                                     </Typography>
@@ -224,7 +226,9 @@ export default function DrawerMenu() {
                         )}
                     </DrawerHeader>
 
-                    <Box className={open ? style.drawerBox : ''}>
+                    <Box
+                        className={open ? style.drawerBox : style.miniDrawerBox}
+                    >
                         <MenuItemList
                             menuTitle={MenuTitles.CLINICAL_WORKFLOW}
                             menuItems={clinicalWorkflowItems}

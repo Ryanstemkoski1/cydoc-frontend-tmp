@@ -60,8 +60,8 @@ export interface UserViewState {
 }
 
 export const initialUserViewState: UserViewState = {
-    patientView: true,
-    doctorView: false,
+    patientView: false,
+    doctorView: true,
     userSurvey: { order: {}, graph: {}, nodes: {} },
 };
 

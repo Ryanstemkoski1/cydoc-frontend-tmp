@@ -2,11 +2,10 @@
 
 .formPreferences {
     width: 900px;
-    margin: 30px auto;
     background-color: $color-white;
     border-radius: 10px;
-    overflow: hidden;
     box-shadow: 0px 3px 6px 0px #CBDFE3;
+    margin: 36px 0;
 
     &__item {
         display: flex;
