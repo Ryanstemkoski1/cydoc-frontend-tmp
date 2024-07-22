@@ -17,6 +17,7 @@ export const questionTypes = {
     MEDS: 'MEDS',
     BODY_LOCATION: 'BODYLOCATION',
     PSH: 'PSH',
+    PSYCHDXPICKER: 'PSYCHDXPICKER',
 };
 
 export const questionTypeMapping = {
@@ -39,5 +40,6 @@ export const questionTypeMapping = {
         [questionTypes.PMH]: 'Past Medical History',
         [questionTypes.MEDS]: 'Medications',
         [questionTypes.PSH]: 'Past Surgical History',
+        [questionTypes.PSYCHDXPICKER]: 'DSM-5 Diagnoses',
     },
 };
