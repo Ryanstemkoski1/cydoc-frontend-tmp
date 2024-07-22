@@ -83,9 +83,9 @@ const AccountManagement = ({
     );
 
     return !drawerOpen ? (
-        <Box>
+        <Box className={style.miniWrapper}>
             <Avatar
-                className={style.avatar}
+                className={style.miniAvatar}
                 sx={{ mx: 1.5 }}
                 component='button'
                 aria-describedby={popupId}
