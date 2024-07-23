@@ -590,7 +590,10 @@ export function hpiReducer(
             For POP type patient history questions, save the list of condition
             IDs corresponding to the keys in the corresponding patient history
             type state. These IDs can be used to reference the responses in the 
-            other state.  
+            other state. 
+            
+            For PSYCHDXPICKER type, the condition IDs corresponding the the keys
+            in the corresponding DSM-5 Diagnosis option. 
             */
             const { medId, conditionIds } = action.payload;
             const response = state.nodes[medId].response;
@@ -602,9 +605,16 @@ export function hpiReducer(
                 ].includes(state.nodes[medId].responseType) &&
                 isStringArray(response) &&
                 !response.length
-            )
+            ) {
                 return updateResponse(medId, conditionIds, state);
-            else return state;
+            } else if (
+                [ResponseTypes.PSYCHDXPICKER].includes(
+                    state.nodes[medId].responseType
+                ) &&
+                isStringArray(response)
+            ) {
+                return updateResponse(medId, conditionIds, state);
+            } else return state;
         }
         case HPI_ACTION.LAB_TEST_HANDLE_CLICK: {
             /*

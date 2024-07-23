@@ -44,12 +44,17 @@
         display: flex;
         align-items: center;
         gap: 12px;
-    }
 
-    &__title {
-        font-size: 24px;
-        font-weight: $font-weight-bold;
-        color: $color-black;
+        p {
+            font-family: $font-family-secondary;
+            font-weight: $font-weight-semibold;
+            color: $color-black;
+            font-size: 26px;
+
+            @include max-screen($mobile) {
+                font-size: 20px;
+            }
+        }
     }
 
     &__iconButton {
@@ -64,7 +69,7 @@
 }
 
 .menuItemWrapper {
-    &__title {
+    p {
         font-size: 14px;
         font-weight: $font-weight-bold;
         font-family: $font-family-primary;
@@ -126,53 +131,56 @@
     padding: 16px 8px 8px;
 }
 
-.miniMenu {
-    max-width: 64px;
-    padding: 0 12px;
+.miniDrawerBox {
+    .miniMenu {
+        max-width: 64px;
+        padding: 0 12px;
 
-    li {
-        margin-top: 10px;
-        > div {
-            padding: 8px;
-            border-radius: 8px;
+        li {
+            margin-top: 10px;
 
-            svg {
-                width: 24px;
-                height: 24px;
-                fill: #7f8485;
-            }
+            > div {
+                padding: 8px;
+                border-radius: 8px;
 
-            .MuiListItemIcon-root {
-                min-width: 24px;
+                svg {
+                    width: 24px;
+                    height: 24px;
+                    fill: #7f8485;
+                }
+
+                .MuiListItemIcon-root {
+                    min-width: 24px;
+                }
+
+                :hover {
+                    background-color: transparent;
+                }
             }
 
             :hover {
-                background-color: transparent;
+                border-radius: 8px;
+                background-color: rgba($color-light, 0.5);
             }
-        }
 
-        :hover {
-            border-radius: 8px;
-            background-color: rgba($color-light, 0.5);
-        }
+            :focus {
+                background-color: $color-light;
 
-        :focus {
-            background-color: $color-light;
+                > div {
+                    span {
+                        color: #057a9b;
+                    }
 
-            > div {
-                span {
-                    color: #057a9b;
-                }
-
-                svg {
-                    fill: #057a9b;
+                    svg {
+                        fill: #057a9b;
+                    }
                 }
             }
         }
     }
-}
 
-.drawerDivider {
-    max-width: 40px;
-    margin: 16px 12px;
+    .drawerDivider {
+        max-width: 40px;
+        margin: 16px 12px;
+    }
 }

@@ -44,6 +44,7 @@ import TimeInput from './responseComponents/TimeInput';
 import YearInput from './responseComponents/YearInput';
 import HandleDateInput from './responseComponents/HandleDateInput';
 import YesNo from './responseComponents/YesNo';
+import DSMDiagnosisPicker from '@screens/EditNote/content/dsmdiagnoses/DSMDiagnosisPicker';
 
 interface CreateResponseProps {
     node: string;
@@ -331,6 +332,8 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
             case ResponseTypes.BMP:
             case ResponseTypes.LFT:
                 return <LaboratoryTest key={node} node={node} />;
+            case ResponseTypes.PSYCHDXPICKER:
+                return <DSMDiagnosisPicker key={node} node={node} />;
             case ResponseTypes.DATE: {
                 return (
                     <HandleDateInput

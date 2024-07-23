@@ -279,6 +279,23 @@ export const extractNode = (
             );
             break;
 
+        case ResponseTypes.PSYCHDXPICKER:
+            const filteredResponse = (response as string[]).filter(
+                (item) => item.trim() !== ''
+            );
+            if (filteredResponse.length === 0) {
+                answer = '';
+            } else if (filteredResponse.length === 1) {
+                answer = filteredResponse[0];
+            } else if (filteredResponse.length === 2) {
+                answer = filteredResponse.join(' and ');
+            } else {
+                const allButLast = filteredResponse.slice(0, -1).join(', ');
+                const last = filteredResponse[filteredResponse.length - 1];
+                answer = `${allButLast}, and ${last}`;
+            }
+            break;
+
         case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTMANY:
         case ResponseTypes.SELECTONE:
@@ -767,19 +784,6 @@ function getHPIText(
             miscNote: miscText[i],
         };
     }
-
-    // TODO: hard code!! update result for hpi
-    const RCAFROM = 'Connell and Associates Adult Evaluation';
-    const value = createInitialAdvancedReport(formattedHpis[RCAFROM])
-        .replace(/\n+/g, ' ')
-        .replace(/\s{2,}/g, ' ');
-
-    hpiTextResult.forEach((item) => {
-        if (item.title === RCAFROM) {
-            item.text = value;
-        }
-    });
-
     return [...hpiTextResult, ...initialSurveyResponse];
 }
 

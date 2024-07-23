@@ -153,7 +153,7 @@ class EditNote extends Component<Props, State> {
         // }
 
         return (
-            <div ref={this.noteContent}>
+            <div ref={this.noteContent} className='doctor-view-wrapper'>
                 {/* Top NavMenu and MenuTabs stay on top regardless of scroll*/}
                 <MenuTabs onTabChange={this.onTabChange} />
 

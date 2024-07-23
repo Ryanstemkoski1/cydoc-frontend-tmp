@@ -1,50 +1,62 @@
 @import '../../assets/scss/variables.scss';
 
+.miniWrapper {
+    .miniAvatar {
+        font-size: $font-size-h4;
+        font-weight: $font-weight-bold;
+        line-height: 24px;
+        color: #057a9b;
+        border: 0.5px solid #d7e5e9;
+        background-color: $color-light;
+        cursor: pointer;
+    }
+}
+
 .wrapper {
     margin: 4px 8px;
     padding: 5px 8px;
     border-radius: 8px;
     cursor: pointer;
 
+    .avatar {
+        font-size: $font-size-h4;
+        font-weight: $font-weight-bold;
+        line-height: 24px;
+        color: #057a9b;
+        border: 0.5px solid #d7e5e9;
+        background-color: $color-light;
+        cursor: pointer;
+    }
+
+    .userName {
+        font-family: $font-family-primary;
+        max-width: 164px;
+
+        &__name {
+            font-size: $font-size-h4;
+            font-weight: $font-weight-semibold;
+            color: rgba($color-black, 0.87);
+            line-height: 16px;
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        &__role {
+            font-size: 14px;
+            line-height: 12px;
+            font-weight: $font-weight-normal;
+            color: rgba($color-black, 0.6);
+
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
     &:hover {
         background-color: rgba($color-light, 0.5);
-    }
-}
-
-.avatar {
-    font-size: $font-size-h4;
-    font-weight: $font-weight-bold;
-    line-height: 24px;
-    color: #057a9b;
-    border: 0.5px solid #d7e5e9;
-    background-color: $color-light;
-    cursor: pointer;
-}
-
-.userName {
-    font-family: $font-family-primary;
-    max-width: 164px;
-
-    &__name {
-        font-size: $font-size-h4;
-        font-weight: $font-weight-semibold;
-        color: rgba($color-black, .87);
-        line-height: 16px;
-
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    &__role {
-        font-size: 14px;
-        line-height: 12px;
-        font-weight: $font-weight-normal;
-        color: rgba($color-black, .6);
-
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
     }
 }
 
