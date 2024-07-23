@@ -253,3 +253,22 @@
         }
     }
 }
+
+.apptPopoverWrapper {
+    .menuWrapper {
+        padding: 0;
+
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        span {
+            font-family: $font-family-primary;
+            font-weight: $font-weight-normal;
+            font-size: 16px;
+            line-height: 24px;
+            color: $color-black;
+        }
+    }
+}

@@ -1,12 +1,25 @@
 import style from './AppointmentTemplates.module.scss';
 import { useState } from 'react';
-import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Modal,
+    Popover,
+    Typography,
+} from '@mui/material';
 import Link from 'next/link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import React from 'react';
 
 const tempData = [
     {
@@ -51,6 +64,19 @@ const tempData = [
 
 const AppointmentTemplatePage = () => {
     const [viewMoreOpen, setViewMoreOpen] = useState<number>(0);
+    const [openedPopover, setOpenedPopover] = useState<number>(0);
+    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+        null
+    );
+    const [popupPosition, setPopupPosition] = React.useState({
+        top: 0,
+        left: 0,
+    });
+
+    const popupOpen = Boolean(anchorEl);
+    const popupId = popupOpen
+        ? `edit-apptTemp-popover ${openedPopover}`
+        : undefined;
 
     const handleViewMoreOpen = (index: number) => {
         setViewMoreOpen(index);
@@ -58,6 +84,23 @@ const AppointmentTemplatePage = () => {
 
     const handleViewMoreClose = () => {
         setViewMoreOpen(0);
+    };
+
+    const handlePopupClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const elementRect = event.currentTarget.getBoundingClientRect();
+
+        const popupPosTemp = { top: 0, left: 0 };
+        popupPosTemp.top = elementRect.top - elementRect.height + 40;
+        popupPosTemp.left = elementRect.left + elementRect.width - 140;
+
+        setPopupPosition(popupPosTemp);
+        setOpenedPopover(Number(event.currentTarget.id));
+
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handlePopupClose = () => {
+        setAnchorEl(null);
     };
 
     const ViewMoreModal = () => (
@@ -119,15 +162,47 @@ const AppointmentTemplatePage = () => {
         </Modal>
     );
 
+    const PopoverBox = () => (
+        <Popover
+            id={popupId}
+            open={popupOpen}
+            anchorEl={anchorEl}
+            onClose={handlePopupClose}
+            anchorReference='anchorPosition'
+            anchorPosition={popupPosition}
+            className={style.apptPopoverWrapper}
+        >
+            <List className={style.menuWrapper}>
+                <ListItem disablePadding>
+                    <ListItemButton>
+                        <ListItemIcon sx={{ minWidth: '32px' }}>
+                            <BorderColorRoundedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Edit'} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton>
+                        <ListItemIcon sx={{ minWidth: '32px' }}>
+                            <DeleteRoundedIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={'Delete'} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+        </Popover>
+    );
+
     return (
         <Box className={style.apptTempWrapper}>
             {tempData.map((temp, index) => (
                 <Box key={index} className={style.apptTempCard}>
                     <Box className={style.apptTempCard__header}>
                         <Typography component='p'>{temp.header}</Typography>
-                        <IconButton>
+                        <IconButton onClick={handlePopupClick}>
                             <MoreVertIcon />
                         </IconButton>
+                        <PopoverBox />
                     </Box>
                     <Box className={style.apptTempCard__body}>
                         {temp.body.slice(0, 3).map((item, idx) => (
