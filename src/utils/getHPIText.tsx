@@ -510,7 +510,9 @@ export const checkParent = (
                     state.hpi.nodes[childNodeId]
                 );
                 if (
-                    conditions.some((item) => !validNodeResponse.includes(item))
+                    conditions.some((item) => {
+                        !validNodeResponse.includes(item);
+                    })
                 ) {
                     childNodesToHide.push(childNodeId);
                 }
