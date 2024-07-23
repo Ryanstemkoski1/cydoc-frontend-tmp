@@ -5,16 +5,20 @@ export const questionTypes = {
     NO_YES: 'NO-YES',
     SELECTONE: 'SELECTONE',
     SELECTMANY: 'SELECTMANY',
+    SELECTMANYDENSE: 'SELECTMANYDENSE',
     SHORT_TEXT: 'SHORT-TEXT',
     PMH: 'PMH',
     TIME: 'TIME',
+    YEAR: 'YEAR',
     NUMBER: 'NUMBER',
+    DATE: 'DATE',
     LIST_TEXT: 'LIST-TEXT',
     FH: 'FH',
     MEDS: 'MEDS',
     BODY_LOCATION: 'BODYLOCATION',
     PSH: 'PSH',
     AGE: 'AGE',
+    PSYCHDXPICKER: 'PSYCHDXPICKER',
 };
 
 export const questionTypeMapping = {
@@ -22,12 +26,15 @@ export const questionTypeMapping = {
         [questionTypes.NUMBER]: 'Number',
         [questionTypes.AGE]: 'Age',
         [questionTypes.TIME]: 'Age or Duration',
+        [questionTypes.DATE]: 'Date',
+        [questionTypes.YEAR]: 'Year',
         [questionTypes.BODY_LOCATION]: 'Body Location',
         [questionTypes.YES_NO]: 'Yes/No',
         [questionTypes.NO_YES]: 'No/Yes',
         [questionTypes.SHORT_TEXT]: 'Short Text',
         [questionTypes.SELECTONE]: 'Single Selection',
         [questionTypes.SELECTMANY]: 'Multiple Selection',
+        [questionTypes.SELECTMANYDENSE]: 'Multiple Selection (Dense)',
         [questionTypes.LIST_TEXT]: 'List',
     },
     advanced: {
@@ -35,5 +42,6 @@ export const questionTypeMapping = {
         [questionTypes.PMH]: 'Past Medical History',
         [questionTypes.MEDS]: 'Medications',
         [questionTypes.PSH]: 'Past Surgical History',
+        [questionTypes.PSYCHDXPICKER]: 'DSM-5 Diagnoses',
     },
 };

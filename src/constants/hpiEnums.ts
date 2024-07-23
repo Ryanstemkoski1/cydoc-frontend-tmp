@@ -91,6 +91,7 @@ export function bodyLocationResponse(): BodyLocationType {
 
 export enum ResponseTypes {
     NUMBER = 'NUMBER',
+    DATE = 'DATE',
     LIST_TEXT = 'LIST-TEXT',
     PSH_BLANK = 'PSH-BLANK',
     PMH_POP = 'PMH-POP',
@@ -104,6 +105,7 @@ export enum ResponseTypes {
     PMH_BLANK = 'PMH-BLANK',
     SELECTONE = 'SELECTONE',
     SELECTMANY = 'SELECTMANY',
+    SELECTMANYDENSE = 'SELECTMANYDENSE',
     PSH_POP = 'PSH-POP',
     MEDS_BLANK = 'MEDS-BLANK',
     BODYLOCATION = 'BODYLOCATION',
@@ -118,20 +120,24 @@ export enum ResponseTypes {
     YEAR = 'YEAR',
     NULL = '',
     AGE = 'AGE',
+    PSYCHDXPICKER = 'PSYCHDXPICKER',
 }
 
 export interface ExpectedResponseInterface {
     YES_NO: YesNoInput;
     NO_YES: YesNoInput;
     SELECTONE: SelectOneInput;
+    DATE: DateInput;
     MEDS_POP: SelectOneInput;
     SELECTMANY: SelectManyInput;
+    SELECTMANYDENSE: SelectOneInput;
     TIME3DAYS: TimeInput;
     LIST_TEXT: ListTextInput;
     SHORT_TEXT: string;
     LONG_TEXT: string;
     NUMBER: NumberInput;
     AGE: NumberInput;
+    YEAR: NumberInput;
     BODYLOCATION: BodyLocationType;
     FH_POP: string[];
     PMH_POP: string[];
@@ -149,20 +155,24 @@ export interface ExpectedResponseInterface {
     SEARCH: {
         [CC: string]: string;
     };
+    PSYCHDXPICKER: string[];
 }
 
 export const ExpectedResponseDict: ExpectedResponseInterface = {
     YES_NO: YesNoResponse.None,
     NO_YES: YesNoResponse.None,
+    DATE: '',
     SELECTONE: {},
     MEDS_POP: {},
     SELECTMANY: {},
+    SELECTMANYDENSE: {},
     TIME3DAYS: { numInput: undefined, timeOption: '' },
     LIST_TEXT: { 1: '', 2: '', 3: '' },
     SHORT_TEXT: '',
     LONG_TEXT: '',
     NUMBER: undefined,
     AGE: undefined,
+    YEAR: undefined,
     BODYLOCATION: bodyLocationResponse(),
     FH_POP: [],
     PMH_POP: [],
@@ -178,6 +188,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     BMP: { name: '', snomed: '', components: {} },
     LFT: { name: '', snomed: '', components: {} },
     SEARCH: {},
+    PSYCHDXPICKER: [],
 };
 
 export enum TimeOption {
@@ -265,6 +276,7 @@ export type LabTestType = {
     };
 };
 
+export type DateInput = string | undefined;
 export type SelectOneInput = { [name: string]: boolean };
 export type SelectManyInput = { [name: string]: YesNoResponse };
 export type ScaleInputType = number | undefined;
@@ -276,6 +288,7 @@ export type HpiResponseType =
     | string
     | boolean
     | NumberInput
+    | DateInput
     | ListTextInput
     | TimeInput
     | SelectOneInput

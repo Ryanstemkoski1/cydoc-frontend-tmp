@@ -1,11 +1,131 @@
+@import '../../assets/scss/variables.scss';
+
 .formPreferences {
-    padding: 30px 0;
+    width: 900px;
+    background-color: $color-white;
+    border-radius: 10px;
+    box-shadow: 0px 3px 6px 0px #CBDFE3;
+    margin: 36px 0;
+
     &__item {
-        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-left: 66px;
+        
+        &__label {
+            font-family: $font-family-primary;
+            font-size: $font-size-base;
+            font-weight: 400;
+            line-height: 22px;
+            color: rgba($color-black, 0.87);
+        }
+
+        &__info {
+            font-family: $font-family-primary;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 14px;
+            color: rgba($color-black, 0.6);
+        }
+    }
+
+    &__head {
+        padding: 20px 30px;
+        border-bottom: 1px solid #D7E5E9;
+
+        p {
+            font-family: $font-family-primary;
+            font-size: $font-size-h3;
+            font-weight: 600;
+            line-height: 28px;
+        }
+    }
+
+    &__content {
+        padding: 30px 20px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+}
+
+.productWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    padding: 16px;
+    border: 1px solid #D7E5E9;
+    border-radius: 8px;
+
+    label {
+        margin: 0;
+        width: 100%;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    &__labelContent {
+        display: flex;
+        flex-direction: column;
+        padding-top: 8px;
+
+        &__title {
+           font-family: $font-family-primary;
+           font-size: $font-size-base;
+           font-weight: 600;
+           line-height: 22px; 
+           color: $color-black;
+        }
+
+        &__detail {
+            font-family: $font-family-primary;
+            font-size: $font-size-base;
+            font-weight: 300;
+            line-height: 22px;
+            color: rgba($color-black, 0.6);
+        }
+    }
+
+    &__switch {
+        padding-left: 48px;
+
         label {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            gap: 8px;
+        }
+    }
+
+    &__switchLabel {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+
+        &__title {
+            font-family: $font-family-primary;
+            font-size: $font-size-base;
+            font-weight: 400;
+            line-height: 22px;
+            color: $color-black;
+        }
+    }
+}
+
+.tooltip {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+
+    path {
+        fill: #7F8485;
+    }
+
+    &:hover {
+        path {
+            fill: #147A9B;
         }
     }
 }

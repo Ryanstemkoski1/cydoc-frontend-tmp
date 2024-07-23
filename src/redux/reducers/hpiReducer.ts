@@ -369,6 +369,19 @@ export function hpiReducer(
                     },
                     state
                 );
+            } else if (
+                state.nodes[medId].responseType ==
+                    ResponseTypes.SELECTMANYDENSE &&
+                isSelectOneResponse(response)
+            ) {
+                return updateResponse(
+                    medId,
+                    {
+                        ...response,
+                        [name]: !response[name],
+                    },
+                    state
+                );
             } else throw new Error('Not a string array');
         }
 
@@ -581,7 +594,10 @@ export function hpiReducer(
             For POP type patient history questions, save the list of condition
             IDs corresponding to the keys in the corresponding patient history
             type state. These IDs can be used to reference the responses in the 
-            other state.  
+            other state. 
+            
+            For PSYCHDXPICKER type, the condition IDs corresponding the the keys
+            in the corresponding DSM-5 Diagnosis option. 
             */
             const { medId, conditionIds } = action.payload;
             const response = state.nodes[medId].response;
@@ -593,9 +609,16 @@ export function hpiReducer(
                 ].includes(state.nodes[medId].responseType) &&
                 isStringArray(response) &&
                 !response.length
-            )
+            ) {
                 return updateResponse(medId, conditionIds, state);
-            else return state;
+            } else if (
+                [ResponseTypes.PSYCHDXPICKER].includes(
+                    state.nodes[medId].responseType
+                ) &&
+                isStringArray(response)
+            ) {
+                return updateResponse(medId, conditionIds, state);
+            } else return state;
         }
         case HPI_ACTION.LAB_TEST_HANDLE_CLICK: {
             /*
@@ -681,6 +704,34 @@ export function hpiReducer(
                     state
                 );
             } else throw new Error('Not a meds pop response');
+        }
+
+        case HPI_ACTION.HANDLE_DATE_INPUT_CHANGE: {
+            const { medId, input } = action.payload;
+            if (state.nodes[medId].responseType === ResponseTypes.DATE)
+                return updateResponse(medId, input, state);
+            else throw new Error('Not a date input response');
+        }
+
+        case HPI_ACTION.HANDLE_OTHER_OPTION_CHANGE: {
+            const { medId, newResponse } = action.payload;
+            const response = state.nodes[medId].response;
+            if (
+                [
+                    ResponseTypes.SELECTMANYDENSE,
+                    ResponseTypes.SELECTONE,
+                    ResponseTypes.SELECTMANY,
+                ].includes(state.nodes[medId].responseType) &&
+                isSelectOneResponse(response)
+            ) {
+                return updateResponse(
+                    medId,
+                    {
+                        ...newResponse,
+                    },
+                    state
+                );
+            } else throw new Error('Not a OTHER OPTION response');
         }
 
         default:

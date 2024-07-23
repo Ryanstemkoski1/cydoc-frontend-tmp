@@ -56,6 +56,10 @@ import {
     surgicalHistoryReducer,
 } from './surgicalHistoryReducer';
 import { initialUserViewState, userViewReducer } from './userViewReducer';
+import {
+    initialProductDefinitionState,
+    productDefinitionReducer,
+} from './productDefinitionReducer';
 
 const currentNoteReducer = combineReducers({
     reviewOfSystems: reviewOfSystemsReducer,
@@ -76,6 +80,7 @@ const currentNoteReducer = combineReducers({
     userView: userViewReducer,
     activeItem: activeItemReducer,
     additionalSurvey: additionalSurveyReducer,
+    productDefinition: productDefinitionReducer,
     loadingStatus: loadingStatusReducer,
 });
 
@@ -100,6 +105,7 @@ export const initialState: CurrentNoteState = {
     userView: initialUserViewState,
     activeItem: initialActiveItemState,
     additionalSurvey: initialAdditionalSurveyData,
+    productDefinition: initialProductDefinitionState,
     loadingStatus: initialLoadingStatus,
 };
 
