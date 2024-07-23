@@ -83,8 +83,6 @@ const HandleAgeInput: React.FC<Props> = ({
         handleNumericInputChange(node, age ? age : undefined);
     }, [age]);
 
-    console.log('response', hpi.nodes[node].response);
-
     return (
         <Grid container spacing={2} sx={{ width: '80%' }}>
             <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center' }}>
