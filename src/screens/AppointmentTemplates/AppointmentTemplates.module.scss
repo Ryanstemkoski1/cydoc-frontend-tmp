@@ -144,3 +144,112 @@
         }
     }
 }
+
+.viewMoreModalWrapper {
+    background-color: $color-white;
+    flex: 1;
+    border-radius: 10px;
+    overflow: hidden;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 660px;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 30px;
+        border-bottom: 1px solid $color-border;
+
+        p {
+            font-family: $font-family-primary;
+            font-weight: $font-weight-semibold;
+            font-size: 20px;
+            line-height: 28px;
+            color: rgba($color-black, 0.87);
+        }
+
+        button {
+            border-radius: 4px;
+            padding: 2px;
+        }
+
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    &__body {
+        padding: 20px 20px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        &__item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+
+            &__title {
+                padding: 7px 10px;
+                border-radius: 100px;
+                background-color: $color-light;
+                min-width: 74px;
+                font-family: $font-family-primary;
+                font-weight: $font-weight-normal;
+                font-size: 13px;
+                line-height: 18px;
+                color: $color-green-dark;
+                text-align: center;
+            }
+
+            &__detail {
+                font-family: $font-family-primary;
+                font-weight: $font-weight-normal;
+                font-size: 16px;
+                line-height: 24px;
+                color: $color-black;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        &__viewMoreModalBtn {
+            padding-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            button {
+                padding: 6px 16px;
+                border: 1px solid $color-green-dark;
+                border-radius: 10px;
+
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                svg {
+                    width: 20px;
+                    height: 20px;
+
+                    fill: $color-green-dark;
+                }
+
+                span {
+                    font-family: $font-family-primary;
+                    font-weight: $font-weight-medium;
+                    font-size: 14px;
+                    line-height: 24px;
+                    color: $color-green-dark;
+                    text-transform: capitalize;
+                }
+            }
+        }
+    }
+}
