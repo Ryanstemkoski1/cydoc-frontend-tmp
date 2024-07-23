@@ -15,7 +15,6 @@ import {
     createHPI,
     createInitialHPI,
     createInitialAdvancedReport,
-    createAdvancedReport,
 } from '@screens/EditNote/content/generatenote/generateHpiText';
 import { ChiefComplaintsState } from '@redux/reducers/chiefComplaintsReducer';
 import { FamilyHistoryState } from '@redux/reducers/familyHistoryReducer';
@@ -723,25 +722,15 @@ function getHPIText(
     const finalPara = initialPara.reduce((acc: string[], hpiStringSet, i) => {
         if (hpiStringSet.size) {
             title.push(Object.keys(formattedHpis)[i]);
-            if (isReportView) {
-                return [
-                    ...acc,
-                    createAdvancedReport(
-                        Array.from(hpiStringSet).join('. '),
-                        state.patientInformation.patientName,
-                        state.patientInformation.pronouns
-                    ),
-                ];
-            } else {
-                return [
-                    ...acc,
-                    createHPI(
-                        Array.from(hpiStringSet).join('. '),
-                        state.patientInformation.patientName,
-                        state.patientInformation.pronouns
-                    ),
-                ];
-            }
+            return [
+                ...acc,
+                createHPI(
+                    Array.from(hpiStringSet).join('. '),
+                    state.patientInformation.patientName,
+                    state.patientInformation.pronouns,
+                    isReportView
+                ),
+            ];
         }
         // don't include chief complaint if it was a subset of another CC
         // paragraph (i.e. set B is a subset of set A)

@@ -325,16 +325,19 @@ export const createInitialHPI = (hpi: HPI): string => {
 export const createHPI = (
     hpiString: string,
     patientName: string,
-    pronouns: PatientPronouns
+    pronouns: PatientPronouns,
+    isReport?: boolean
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
     hpiString = fillNameAndPronouns(hpiString, patientInfo);
     hpiString = partOfSpeechCorrection(hpiString);
     // hpiString = combineHpiString(hpiString, 3);
-    hpiString = fillMedicalTerms(hpiString);
-    hpiString = conjugateThirdPerson(hpiString);
-    hpiString = abbreviate(hpiString);
-    hpiString = capitalize(hpiString);
+    if (!isReport) {
+        hpiString = fillMedicalTerms(hpiString);
+        hpiString = conjugateThirdPerson(hpiString);
+        hpiString = abbreviate(hpiString);
+        hpiString = capitalize(hpiString);
+    }
     return hpiString;
 };
 
@@ -379,21 +382,4 @@ export const createInitialAdvancedReport = (hpi: HPI): string => {
         return hpiString.trim();
     }
     return '';
-};
-
-/**
- * This function generates formatted text specifically for Advanced Report Generation.
- * TODO: It should be updated according to the requirements later.
- *
- * @returns {string} The original texts filled with original answers.
- */
-export const createAdvancedReport = (
-    hpiString: string,
-    patientName: string,
-    pronouns: PatientPronouns
-): string => {
-    const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
-    // hpiString = fillNameAndPronouns(hpiString, patientInfo);
-    hpiString = partOfSpeechCorrection(hpiString);
-    return hpiString;
 };

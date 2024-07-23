@@ -103,11 +103,11 @@ function processSentence(sentence: string) {
 const HpiNote = ({
     text,
     bulletNoteView = false,
-    isReport = false,
+    isReportView = false,
 }: {
     text: HPIText[] | string;
     bulletNoteView?: boolean;
-    isReport?: boolean; // A boolean flag to identify Advanced Report generation.
+    isReportView?: boolean; // A boolean flag to identify Advanced Report generation.
 }) => {
     if (typeof text === 'string') {
         return <p>{text}</p>;
@@ -192,7 +192,7 @@ const HpiNote = ({
           });
 
     // Display notes for advanced report product
-    if (isReport) {
+    if (isReportView) {
         return <ul className={styles.noBullets}>{notesForAdvancedReport}</ul>;
     }
 
