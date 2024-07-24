@@ -26,7 +26,7 @@ We use amplify to run continuous deployment, provision auth (cognito), messaging
 
 You'll want a production (us-east-1) and a staging (us-east-2) profile in your aws cli config
 
-run `amplify configure` to switch profiles & ensure you're in the right region
+run `amplify configure` to switch profiles & ensure you're in the right region, be careful with deploying amplify configs as it can break production
 
 Be sure to switch to the correct environment before pushing any changes:
 `amplify env checkout dev` or `amplify env checkout production`
