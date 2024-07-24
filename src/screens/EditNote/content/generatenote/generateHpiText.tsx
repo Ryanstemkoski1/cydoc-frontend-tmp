@@ -259,6 +259,124 @@ export const fillNameAndPronouns = (
     return newHpiString.join('. ') + '.';
 };
 
+/**
+ *
+ * TODO: Verify and consider replacing `fillNameAndPronouns` with this.
+ */
+export const fillNameAndPronounsTwo = (
+    hpiString: string,
+    patientInfo: PatientDisplayName
+): string => {
+    const { name, pronouns, objPronoun, posPronoun } = patientInfo;
+
+    console.log('patientInfo', patientInfo);
+
+    const reflexivePronouns = {
+        she: 'herself',
+        he: 'himself',
+        they: 'themselves',
+    };
+
+    // Function to handle case-sensitive replacement
+    const replaceWithCase = (str: string, find: string, replace: string) => {
+        const regex = new RegExp(`\\b${find}\\b`, 'gi');
+        return str.replace(regex, (match) => {
+            if (match === match.toUpperCase()) return replace.toUpperCase();
+            if (match === match.toLowerCase()) return replace.toLowerCase();
+            if (match[0] === match[0].toUpperCase())
+                return replace.charAt(0).toUpperCase() + replace.slice(1);
+            return replace;
+        });
+    };
+
+    // Replace "the patient's" or "their" with possessive pronoun.
+    hpiString = name.length
+        ? replaceWithCase(hpiString, "the patient's", `${name}'s`)
+        : hpiString;
+    hpiString = name.length
+        ? replaceWithCase(hpiString, 'their', posPronoun)
+        : hpiString;
+
+    let toggle = 1;
+
+    // Function to handle sentence padding
+    const sentenceHelper = (sentence: string): string => {
+        if (sentence[sentence.length - 1] === '.') {
+            sentence = sentence.slice(0, -1);
+        }
+        sentence = ' ' + sentence + ' ';
+        return sentence;
+    };
+
+    const replacePronouns = (sentence: string): string => {
+        // Handle the general replacements first
+        sentence = replaceWithCase(sentence, 'they', objPronoun);
+        sentence = replaceWithCase(sentence, 'their', posPronoun);
+        sentence = replaceWithCase(sentence, 'them', objPronoun);
+        sentence = replaceWithCase(
+            sentence,
+            'themselves',
+            reflexivePronouns[objPronoun.toLowerCase()]
+        );
+        sentence = replaceWithCase(
+            sentence,
+            'yourself',
+            reflexivePronouns[objPronoun.toLowerCase()]
+        );
+        sentence = replaceWithCase(sentence, 'your', posPronoun);
+        sentence = replaceWithCase(sentence, 'you', objPronoun);
+
+        // Handle specific pronoun cases
+        if (pronouns === PatientPronouns.She) {
+            sentence = replaceWithCase(sentence, 'he', 'she');
+            sentence = replaceWithCase(sentence, 'his', 'her');
+            sentence = replaceWithCase(sentence, 'him', 'her');
+            sentence = replaceWithCase(sentence, 'himself', 'herself');
+        } else if (pronouns === PatientPronouns.He) {
+            sentence = replaceWithCase(sentence, 'she', 'he');
+            sentence = replaceWithCase(sentence, 'her', 'his');
+            sentence = replaceWithCase(sentence, 'hers', 'his');
+            sentence = replaceWithCase(sentence, 'herself', 'himself');
+        } else if (pronouns === PatientPronouns.They) {
+            sentence = replaceWithCase(sentence, 'she', 'they');
+            sentence = replaceWithCase(sentence, 'her', 'their');
+            sentence = replaceWithCase(sentence, 'his', 'their');
+            sentence = replaceWithCase(sentence, 'him', 'them');
+            sentence = replaceWithCase(sentence, 'herself', 'themselves');
+            sentence = replaceWithCase(sentence, 'himself', 'themselves');
+        }
+        return sentence.trim();
+    };
+
+    const newHpiString = hpiString.split(/\.\s+/).map((sentence) => {
+        // Replace "the patient" with "she/he/they/name"
+        if (
+            sentence.includes('the patient') ||
+            sentence.includes('The patient')
+        ) {
+            if (name) {
+                const noun = toggle ? name : objPronoun;
+                sentence = replaceWithCase(sentence, 'the patient', noun);
+                sentence = replaceWithCase(sentence, 'The patient', noun);
+            } else {
+                sentence = toggle
+                    ? sentence
+                    : replaceWithCase(sentence, 'the patient', objPronoun);
+                sentence = toggle
+                    ? sentence
+                    : replaceWithCase(sentence, 'The patient', objPronoun);
+            }
+            toggle = (toggle + 1) % 2;
+        }
+
+        // Replace pronouns based on patient's pronouns
+        sentence = sentenceHelper(sentence);
+        sentence = replacePronouns(sentence);
+        return sentence;
+    });
+    return newHpiString.join('. ') + '.';
+};
+
 const partOfSpeechCorrection = (hpiString: string): string => {
     PART_OF_SPEECH_CORRECTION_MAP.forEach((value: string, key: string) => {
         const regEx = new RegExp(`${key}`, 'g');
@@ -329,7 +447,11 @@ export const createHPI = (
     isReport?: boolean
 ): string => {
     const patientInfo = definePatientNameAndPronouns(patientName, pronouns);
-    hpiString = fillNameAndPronouns(hpiString, patientInfo);
+    if (isReport) {
+        hpiString = fillNameAndPronounsTwo(hpiString, patientInfo);
+    } else {
+        hpiString = fillNameAndPronouns(hpiString, patientInfo);
+    }
     hpiString = partOfSpeechCorrection(hpiString);
     // hpiString = combineHpiString(hpiString, 3);
     if (!isReport) {
