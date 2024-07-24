@@ -1,25 +1,32 @@
 import style from './AppointmentTemplates.module.scss';
+import React from 'react';
 import { useState } from 'react';
 import {
     Box,
     Button,
+    FormControl,
     IconButton,
+    InputLabel,
     List,
     ListItem,
     ListItemButton,
     ListItemIcon,
     ListItemText,
+    MenuItem,
     Modal,
     Popover,
+    Select,
+    TextField,
     Typography,
 } from '@mui/material';
 import Link from 'next/link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import React from 'react';
+import DragIndicatorRoundedIcon from '@mui/icons-material/DragIndicatorRounded';
 
 const tempData = [
     {
@@ -65,6 +72,8 @@ const tempData = [
 const AppointmentTemplatePage = () => {
     const [viewMoreOpen, setViewMoreOpen] = useState<number>(0);
     const [openedPopover, setOpenedPopover] = useState<number>(0);
+    const [createNewOpen, setCreateNewOpen] = useState<boolean>(false);
+    const [selectedValue, setSelectedValue] = React.useState('');
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
         null
     );
@@ -84,6 +93,18 @@ const AppointmentTemplatePage = () => {
 
     const handleViewMoreClose = () => {
         setViewMoreOpen(0);
+    };
+
+    const handleCreateNewOpen = () => {
+        setCreateNewOpen(true);
+    };
+
+    const handleCreateNewClose = () => {
+        setCreateNewOpen(false);
+    };
+
+    const handleSelectChange = (event) => {
+        setSelectedValue(event.target.value);
     };
 
     const handlePopupClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -155,6 +176,124 @@ const AppointmentTemplatePage = () => {
                         <Button variant='outlined'>
                             <DeleteRoundedIcon />
                             <span>Delete</span>
+                        </Button>
+                    </Box>
+                </Box>
+            </Box>
+        </Modal>
+    );
+
+    const CreateNewModal = () => (
+        <Modal
+            open={createNewOpen}
+            onClose={handleCreateNewClose}
+            aria-labelledby='createNew-modal-title'
+            aria-describedby='createNew-modal-description'
+        >
+            <Box className={style.createNewModalWrapper}>
+                <Box className={style.createNewModalWrapper__header}>
+                    <Typography component='p'>
+                        Create an appointment template
+                    </Typography>
+                    <IconButton>
+                        <CloseRoundedIcon />
+                    </IconButton>
+                </Box>
+                <Box className={style.createNewModalWrapper__body}>
+                    <Box
+                        className={style.createNewModalWrapper__body__titleBox}
+                    >
+                        <Typography component='label' htmlFor='new-temp-title'>
+                            Template title
+                        </Typography>
+                        <TextField
+                            id='new-temp-title'
+                            label='Enter'
+                            variant='outlined'
+                        />
+                    </Box>
+                    <Box
+                        className={
+                            style.createNewModalWrapper__body__stepsWrapper
+                        }
+                    >
+                        <Box
+                            className={
+                                style.createNewModalWrapper__body__stepWrapper
+                            }
+                        >
+                            <Box
+                                className={
+                                    style.createNewModalWrapper__body__stepWrapper__stepBox
+                                }
+                            >
+                                <IconButton>
+                                    <DragIndicatorRoundedIcon />
+                                </IconButton>
+                                <Box>
+                                    <Typography
+                                        component='label'
+                                        htmlFor='demo-simple-select-label'
+                                    >
+                                        Who completes the task?
+                                    </Typography>
+                                    <FormControl
+                                        fullWidth
+                                        sx={{
+                                            bgcolor: 'white',
+                                        }}
+                                    >
+                                        <InputLabel id='demo-simple-select-label'>
+                                            Select
+                                        </InputLabel>
+                                        <Select
+                                            labelId='demo-simple-select-label'
+                                            id='demo-simple-select'
+                                            value={selectedValue}
+                                            label='Select'
+                                            onChange={handleSelectChange}
+                                            IconComponent={
+                                                KeyboardArrowDownRoundedIcon
+                                            }
+                                        >
+                                            <MenuItem value={10}>
+                                                Option 1
+                                            </MenuItem>
+                                            <MenuItem value={20}>
+                                                Option 2
+                                            </MenuItem>
+                                            <MenuItem value={30}>
+                                                Option 3
+                                            </MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </Box>
+                            <IconButton>
+                                <DeleteRoundedIcon />
+                            </IconButton>
+                        </Box>
+                        <Box
+                            className={
+                                style.createNewModalWrapper__body__addNewStep
+                            }
+                        >
+                            <span>+</span>
+                            <Typography component='p'>Add step</Typography>
+                        </Box>
+                    </Box>
+                    <Box className={style.createNewModalWrapper__btn}>
+                        <Button
+                            variant='contained'
+                            className={style.createNewModalWrapper__btn__create}
+                        >
+                            <span>Create template</span>
+                        </Button>
+                        <Button
+                            variant='contained'
+                            className={style.createNewModalWrapper__btn__save}
+                        >
+                            <span>Save</span>
                         </Button>
                     </Box>
                 </Box>
@@ -240,13 +379,14 @@ const AppointmentTemplatePage = () => {
                     </Box>
                 </Box>
             ))}
-            <Box className={style.newTemp}>
+            <Box className={style.newTemp} onClick={handleCreateNewOpen}>
                 <Box className={style.newBtn}>
                     <span>+</span>
                 </Box>
                 <Typography component='p'>Create a new template</Typography>
             </Box>
             <ViewMoreModal />
+            <CreateNewModal />
         </Box>
     );
 };
