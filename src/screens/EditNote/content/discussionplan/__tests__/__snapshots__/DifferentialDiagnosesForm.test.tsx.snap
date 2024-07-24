@@ -63,7 +63,7 @@ exports[`DifferentialDiagnosesForm > matches snapshot 1`] = `
                   class="dropdown__control dropdown__control--is-disabled css-16xfy0z-control"
                 >
                   <div
-                    class="dropdown__value-container css-1fdsijx-ValueContainer"
+                    class="dropdown__value-container css-hlgwow"
                   >
                     <div
                       class="dropdown__placeholder css-1jqq78o-placeholder"
@@ -72,7 +72,7 @@ exports[`DifferentialDiagnosesForm > matches snapshot 1`] = `
                       diagnosis
                     </div>
                     <div
-                      class="dropdown__input-container css-1h01tm3-Input"
+                      class="dropdown__input-container css-1mkvw8y"
                       data-value=""
                     >
                       <input
@@ -98,7 +98,7 @@ exports[`DifferentialDiagnosesForm > matches snapshot 1`] = `
                     </div>
                   </div>
                   <div
-                    class="dropdown__indicators css-1hb7zxy-IndicatorsContainer"
+                    class="dropdown__indicators css-1wy0on6"
                   >
                     <div
                       aria-hidden="true"
@@ -233,7 +233,7 @@ exports[`DifferentialDiagnosesForm > matches snapshot 1`] = `
                 class="dropdown__control dropdown__control--is-disabled css-16xfy0z-control"
               >
                 <div
-                  class="dropdown__value-container css-1fdsijx-ValueContainer"
+                  class="dropdown__value-container css-hlgwow"
                 >
                   <div
                     class="dropdown__placeholder css-1jqq78o-placeholder"
@@ -242,7 +242,7 @@ exports[`DifferentialDiagnosesForm > matches snapshot 1`] = `
                     diagnosis
                   </div>
                   <div
-                    class="dropdown__input-container css-1h01tm3-Input"
+                    class="dropdown__input-container css-1mkvw8y"
                     data-value=""
                   >
                     <input
@@ -268,7 +268,7 @@ exports[`DifferentialDiagnosesForm > matches snapshot 1`] = `
                   </div>
                 </div>
                 <div
-                  class="dropdown__indicators css-1hb7zxy-IndicatorsContainer"
+                  class="dropdown__indicators css-1wy0on6"
                 >
                   <div
                     aria-hidden="true"
