@@ -17,14 +17,14 @@ export const questionTypes = {
     MEDS: 'MEDS',
     BODY_LOCATION: 'BODYLOCATION',
     PSH: 'PSH',
-    AGE: 'AGE',
+    AGEATEVENT: 'AGEATEVENT',
     PSYCHDXPICKER: 'PSYCHDXPICKER',
 };
 
 export const questionTypeMapping = {
     basic: {
         [questionTypes.NUMBER]: 'Number',
-        [questionTypes.AGE]: 'Age',
+        [questionTypes.AGEATEVENT]: 'Age At Event',
         [questionTypes.TIME]: 'Age or Duration',
         [questionTypes.DATE]: 'Date',
         [questionTypes.YEAR]: 'Year',

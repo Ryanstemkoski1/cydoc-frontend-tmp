@@ -119,7 +119,7 @@ export enum ResponseTypes {
     SEARCH = 'SEARCH',
     YEAR = 'YEAR',
     NULL = '',
-    AGE = 'AGE',
+    AGEATEVENT = 'AGEATEVENT',
     PSYCHDXPICKER = 'PSYCHDXPICKER',
 }
 
@@ -136,7 +136,7 @@ export interface ExpectedResponseInterface {
     SHORT_TEXT: string;
     LONG_TEXT: string;
     NUMBER: NumberInput;
-    AGE: NumberInput;
+    AGEATEVENT: NumberInput;
     YEAR: NumberInput;
     BODYLOCATION: BodyLocationType;
     FH_POP: string[];
@@ -171,7 +171,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     SHORT_TEXT: '',
     LONG_TEXT: '',
     NUMBER: undefined,
-    AGE: undefined,
+    AGEATEVENT: undefined,
     YEAR: undefined,
     BODYLOCATION: bodyLocationResponse(),
     FH_POP: [],

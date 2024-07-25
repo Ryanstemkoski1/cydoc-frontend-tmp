@@ -401,7 +401,7 @@ export function hpiReducer(
             // Updates numeric input response
             const { medId, input } = action.payload;
             if (
-                [ResponseTypes.NUMBER, ResponseTypes.AGE].includes(
+                [ResponseTypes.NUMBER, ResponseTypes.AGEATEVENT].includes(
                     state.nodes[medId].responseType
                 )
             )

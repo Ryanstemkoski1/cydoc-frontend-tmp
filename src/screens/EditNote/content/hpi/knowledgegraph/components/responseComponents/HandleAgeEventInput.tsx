@@ -15,32 +15,21 @@ interface InputProps {
     additionalSurveyState: AdditionalSurvey;
 }
 
-const HandleAgeInput: React.FC<Props> = ({
+const HandleAgeEventInput: React.FC<Props> = ({
     hpi,
     node,
     additionalSurveyState,
     handleNumericInputChange,
 }) => {
-    const [age, setAge] = useState<number | null>(null);
-    const [year, setYear] = useState<number | null>(null);
+    const response = hpi.nodes[node].response;
     const currentYear = new Date().getFullYear();
-
-    const calculateAge = (birthdayString: string) => {
-        const today = new Date();
-        const birthDate = new Date(birthdayString);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDifference = today.getMonth() - birthDate.getMonth();
-
-        // Check if the birthday hasn't occurred yet this year
-        if (
-            monthDifference < 0 ||
-            (monthDifference === 0 && today.getDate() < birthDate.getDate())
-        ) {
-            age--;
-        }
-
-        return age;
-    };
+    const [age, setAge] = useState<number | null>(
+        response ? Number(response) : null
+    );
+    const [year, setYear] = useState<number | null>(
+        response ? currentYear - Number(response) : null
+    );
+    const [birthday, setBirthday] = useState<string | undefined>(undefined);
 
     const handleAgeChange = (e) => {
         const value = parseInt(e.target.value);
@@ -72,10 +61,13 @@ const HandleAgeInput: React.FC<Props> = ({
     // Age field is auto-populated using the patient's birth date
     useEffect(() => {
         if (additionalSurveyState.dateOfBirth) {
-            const ageInfo = calculateAge(additionalSurveyState.dateOfBirth);
-            setAge(ageInfo);
-            setYear(currentYear - ageInfo);
-            handleNumericInputChange(node, ageInfo);
+            const date = new Date(additionalSurveyState.dateOfBirth);
+            const options: Intl.DateTimeFormatOptions = {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+            };
+            setBirthday(date.toLocaleDateString('en-US', options));
         }
     }, [additionalSurveyState.dateOfBirth]);
 
@@ -84,8 +76,12 @@ const HandleAgeInput: React.FC<Props> = ({
     }, [age]);
 
     return (
-        <Grid container spacing={2} sx={{ width: '80%' }}>
-            <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center' }}>
+        <div>
+            <Grid
+                item
+                xs={6}
+                sx={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}
+            >
                 <TextField
                     size='small'
                     label='Age'
@@ -101,25 +97,42 @@ const HandleAgeInput: React.FC<Props> = ({
                         },
                     }}
                 />
-                <label style={{ marginLeft: '8px', whiteSpace: 'nowrap' }}>
-                    years old.
+                <label
+                    style={{
+                        marginLeft: '8px',
+                        whiteSpace: 'nowrap',
+                        marginRight: '8px',
+                    }}
+                >
+                    years old in
                 </label>
-            </Grid>
-            <Grid item xs={4}>
                 <TextField
                     size='small'
-                    label='Year'
+                    label='Event Year'
                     placeholder='YYYY'
                     value={year === null ? '' : year.toString()}
                     onChange={handleYearChange}
                     type='number'
                     inputProps={{
-                        maxLength: 4,
-                        style: { width: '8ch' },
+                        maxLength: 8,
+                        style: { width: '12ch' },
                     }}
                 />
             </Grid>
-        </Grid>
+            {birthday ? (
+                <Grid
+                    item
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        margin: '5px',
+                        color: 'green',
+                    }}
+                >
+                    <p>based on reported birthday {birthday}</p>
+                </Grid>
+            ) : null}
+        </div>
     );
 };
 
@@ -141,4 +154,7 @@ const mapDispatchToProps = {
     handleNumericInputChange,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HandleAgeInput);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(HandleAgeEventInput);
