@@ -16,6 +16,7 @@ import {
     Modal,
     Popover,
     Select,
+    SelectChangeEvent,
     TextField,
     Typography,
 } from '@mui/material';
@@ -27,6 +28,10 @@ import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownR
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import DragIndicatorRoundedIcon from '@mui/icons-material/DragIndicatorRounded';
+import {
+    TaskType,
+    WhoCompletes,
+} from '@constants/appointmentTemplatesConstants';
 
 const tempData = [
     {
@@ -72,8 +77,13 @@ const tempData = [
 const AppointmentTemplatePage = () => {
     const [viewMoreOpen, setViewMoreOpen] = useState<number>(0);
     const [openedPopover, setOpenedPopover] = useState<number>(0);
+    const [stepCount, setStepCount] = useState<number>(1);
     const [createNewOpen, setCreateNewOpen] = useState<boolean>(false);
-    const [selectedValue, setSelectedValue] = React.useState('');
+    const [selectedWhoCompletesValue, setSelectedWhoCompletesValue] =
+        React.useState<(string | null)[]>([]);
+    const [selectedTaskTypeValue, setSelectedTaskTypeValue] = React.useState<
+        (string | null)[]
+    >([]);
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
         null
     );
@@ -103,8 +113,41 @@ const AppointmentTemplatePage = () => {
         setCreateNewOpen(false);
     };
 
-    const handleSelectChange = (event) => {
-        setSelectedValue(event.target.value);
+    const handleWhoCompletesValue = (
+        event: SelectChangeEvent<string | null>,
+        index: number
+    ) => {
+        setSelectedWhoCompletesValue((prevState) => {
+            const newState = [...prevState];
+            newState[index] = event.target.value;
+            return newState;
+        });
+    };
+
+    const handleTaskTypeValue = (
+        event: SelectChangeEvent<string | null>,
+        idx: number
+    ) => {
+        const newValue = event.target.value;
+        setSelectedTaskTypeValue((prevValues) => {
+            const updatedValues = [...prevValues];
+            updatedValues[idx] = newValue;
+            return updatedValues;
+        });
+    };
+
+    const handleRemoveSteps = (idx: number) => {
+        if (stepCount === 1) {
+            return;
+        }
+        const whoCompletesTemp = [...selectedWhoCompletesValue];
+        const taskTypeTemp = [...selectedTaskTypeValue];
+        whoCompletesTemp.splice(idx, 1);
+        taskTypeTemp.splice(idx, 1);
+
+        setStepCount(stepCount - 1);
+        setSelectedWhoCompletesValue(whoCompletesTemp);
+        setSelectedTaskTypeValue(taskTypeTemp);
     };
 
     const handlePopupClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -183,6 +226,95 @@ const AppointmentTemplatePage = () => {
         </Modal>
     );
 
+    const AppointmentTempStep = ({ idx }: { idx: number }) => (
+        <Box className={style.createNewModalWrapper__body__stepWrapper}>
+            <Box
+                className={
+                    style.createNewModalWrapper__body__stepWrapper__stepBox
+                }
+            >
+                <IconButton>
+                    <DragIndicatorRoundedIcon />
+                </IconButton>
+                <Box>
+                    <Typography
+                        component='label'
+                        htmlFor={`demo-simple-select-label-${idx}`}
+                    >
+                        Who completes the task?
+                    </Typography>
+                    <FormControl
+                        fullWidth
+                        sx={{
+                            bgcolor: 'white',
+                        }}
+                    >
+                        <InputLabel id={`demo-simple-select-label-${idx}`}>
+                            Select
+                        </InputLabel>
+                        <Select
+                            labelId={`demo-simple-select-label-${idx}`}
+                            id={`demo-simple-select-${idx}`}
+                            value={selectedWhoCompletesValue[idx]}
+                            label='Select'
+                            onChange={(event) =>
+                                handleWhoCompletesValue(event, idx)
+                            }
+                            IconComponent={KeyboardArrowDownRoundedIcon}
+                            sx={{
+                                pl: 3,
+                            }}
+                        >
+                            {Object.values(WhoCompletes).map((item) => (
+                                <MenuItem value={item} key={item}>
+                                    {item}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <Typography
+                        component='label'
+                        htmlFor={`task-type-select-label-${idx}`}
+                    >
+                        Task type:
+                    </Typography>
+                    <FormControl
+                        fullWidth
+                        sx={{
+                            bgcolor: 'white',
+                        }}
+                    >
+                        <InputLabel id={`task-type-select-label-${idx}`}>
+                            Select specific form
+                        </InputLabel>
+                        <Select
+                            labelId={`task-type-select-label-${idx}`}
+                            id={`task-type-select-${idx}`}
+                            value={selectedTaskTypeValue[idx]}
+                            label='Select specific form'
+                            onChange={(event) =>
+                                handleTaskTypeValue(event, idx)
+                            }
+                            IconComponent={KeyboardArrowDownRoundedIcon}
+                            sx={{
+                                pl: 3,
+                            }}
+                        >
+                            {Object.values(TaskType).map((item) => (
+                                <MenuItem value={item} key={item}>
+                                    {item}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Box>
+            </Box>
+            <IconButton onClick={() => handleRemoveSteps(idx)}>
+                <DeleteRoundedIcon />
+            </IconButton>
+        </Box>
+    );
+
     const CreateNewModal = () => (
         <Modal
             open={createNewOpen}
@@ -217,66 +349,14 @@ const AppointmentTemplatePage = () => {
                             style.createNewModalWrapper__body__stepsWrapper
                         }
                     >
-                        <Box
-                            className={
-                                style.createNewModalWrapper__body__stepWrapper
-                            }
-                        >
-                            <Box
-                                className={
-                                    style.createNewModalWrapper__body__stepWrapper__stepBox
-                                }
-                            >
-                                <IconButton>
-                                    <DragIndicatorRoundedIcon />
-                                </IconButton>
-                                <Box>
-                                    <Typography
-                                        component='label'
-                                        htmlFor='demo-simple-select-label'
-                                    >
-                                        Who completes the task?
-                                    </Typography>
-                                    <FormControl
-                                        fullWidth
-                                        sx={{
-                                            bgcolor: 'white',
-                                        }}
-                                    >
-                                        <InputLabel id='demo-simple-select-label'>
-                                            Select
-                                        </InputLabel>
-                                        <Select
-                                            labelId='demo-simple-select-label'
-                                            id='demo-simple-select'
-                                            value={selectedValue}
-                                            label='Select'
-                                            onChange={handleSelectChange}
-                                            IconComponent={
-                                                KeyboardArrowDownRoundedIcon
-                                            }
-                                        >
-                                            <MenuItem value={10}>
-                                                Option 1
-                                            </MenuItem>
-                                            <MenuItem value={20}>
-                                                Option 2
-                                            </MenuItem>
-                                            <MenuItem value={30}>
-                                                Option 3
-                                            </MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-                            </Box>
-                            <IconButton>
-                                <DeleteRoundedIcon />
-                            </IconButton>
-                        </Box>
+                        {Array.from({ length: stepCount }).map((_, idx) => (
+                            <AppointmentTempStep key={idx} idx={idx} />
+                        ))}
                         <Box
                             className={
                                 style.createNewModalWrapper__body__addNewStep
                             }
+                            onClick={() => setStepCount(stepCount + 1)}
                         >
                             <span>+</span>
                             <Typography component='p'>Add step</Typography>
