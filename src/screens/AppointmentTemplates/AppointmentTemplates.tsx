@@ -80,10 +80,10 @@ const AppointmentTemplatePage = () => {
     const [stepCount, setStepCount] = useState<number>(1);
     const [createNewOpen, setCreateNewOpen] = useState<boolean>(false);
     const [selectedWhoCompletesValue, setSelectedWhoCompletesValue] =
-        React.useState<(string | null)[]>([]);
+        React.useState<(string | null)[]>(['']);
     const [selectedTaskTypeValue, setSelectedTaskTypeValue] = React.useState<
         (string | null)[]
-    >([]);
+    >(['']);
     const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
         null
     );
@@ -117,6 +117,15 @@ const AppointmentTemplatePage = () => {
         event: SelectChangeEvent<string | null>,
         index: number
     ) => {
+        if (event.target.value === WhoCompletes.Cydoc_ai) {
+            setSelectedTaskTypeValue((prevValues) => {
+                const updatedValues = [...prevValues];
+                updatedValues[index] =
+                    TaskType.Synthesize_All_forms_into_Report;
+                return updatedValues;
+            });
+        }
+
         setSelectedWhoCompletesValue((prevState) => {
             const newState = [...prevState];
             newState[index] = event.target.value;
@@ -255,7 +264,7 @@ const AppointmentTemplatePage = () => {
                         <Select
                             labelId={`demo-simple-select-label-${idx}`}
                             id={`demo-simple-select-${idx}`}
-                            value={selectedWhoCompletesValue[idx]}
+                            value={selectedWhoCompletesValue[idx] || ''}
                             label='Select'
                             onChange={(event) =>
                                 handleWhoCompletesValue(event, idx)
@@ -263,55 +272,85 @@ const AppointmentTemplatePage = () => {
                             IconComponent={KeyboardArrowDownRoundedIcon}
                             sx={{
                                 pl: 3,
+
+                                '& ul': {
+                                    padding: 0,
+                                },
                             }}
                         >
                             {Object.values(WhoCompletes).map((item) => (
-                                <MenuItem value={item} key={item}>
+                                <MenuItem
+                                    value={item}
+                                    key={item}
+                                    sx={{
+                                        padding: '12px 16px',
+                                    }}
+                                >
                                     {item}
                                 </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
-                    <Typography
-                        component='label'
-                        htmlFor={`task-type-select-label-${idx}`}
-                    >
-                        Task type:
-                    </Typography>
-                    <FormControl
-                        fullWidth
-                        sx={{
-                            bgcolor: 'white',
-                        }}
-                    >
-                        <InputLabel id={`task-type-select-label-${idx}`}>
-                            Select specific form
-                        </InputLabel>
-                        <Select
-                            labelId={`task-type-select-label-${idx}`}
-                            id={`task-type-select-${idx}`}
-                            value={selectedTaskTypeValue[idx]}
-                            label='Select specific form'
-                            onChange={(event) =>
-                                handleTaskTypeValue(event, idx)
-                            }
-                            IconComponent={KeyboardArrowDownRoundedIcon}
-                            sx={{
-                                pl: 3,
-                            }}
-                        >
-                            {Object.values(TaskType).map((item) => (
-                                <MenuItem value={item} key={item}>
-                                    {item}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    {selectedWhoCompletesValue[idx] && (
+                        <>
+                            <Typography
+                                component='label'
+                                htmlFor={`task-type-select-label-${idx}`}
+                                sx={{
+                                    color: '#000',
+                                }}
+                            >
+                                Task type:
+                                <span style={{ marginLeft: '10px' }}>
+                                    {selectedTaskTypeValue[idx] ||
+                                        TaskType.Smart_Form}
+                                </span>
+                            </Typography>
+                            {selectedWhoCompletesValue[idx] !==
+                                WhoCompletes.Cydoc_ai && (
+                                <FormControl
+                                    fullWidth
+                                    sx={{
+                                        bgcolor: 'white',
+                                    }}
+                                >
+                                    <InputLabel
+                                        id={`task-type-select-label-${idx}`}
+                                    >
+                                        Select specific form
+                                    </InputLabel>
+                                    <Select
+                                        labelId={`task-type-select-label-${idx}`}
+                                        id={`task-type-select-${idx}`}
+                                        value={selectedTaskTypeValue[idx] || ''}
+                                        label='Select specific form'
+                                        onChange={(event) =>
+                                            handleTaskTypeValue(event, idx)
+                                        }
+                                        IconComponent={
+                                            KeyboardArrowDownRoundedIcon
+                                        }
+                                        sx={{
+                                            pl: 3,
+                                        }}
+                                    >
+                                        {Object.values(TaskType).map((item) => (
+                                            <MenuItem value={item} key={item}>
+                                                {item}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            )}
+                        </>
+                    )}
                 </Box>
             </Box>
-            <IconButton onClick={() => handleRemoveSteps(idx)}>
-                <DeleteRoundedIcon />
-            </IconButton>
+            {stepCount > 1 && (
+                <IconButton onClick={() => handleRemoveSteps(idx)}>
+                    <DeleteRoundedIcon />
+                </IconButton>
+            )}
         </Box>
     );
 
@@ -327,7 +366,7 @@ const AppointmentTemplatePage = () => {
                     <Typography component='p'>
                         Create an appointment template
                     </Typography>
-                    <IconButton>
+                    <IconButton onClick={handleCreateNewClose}>
                         <CloseRoundedIcon />
                     </IconButton>
                 </Box>
