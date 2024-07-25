@@ -31,7 +31,7 @@ run `amplify configure` to switch profiles & ensure you're in the right region, 
 Be sure to switch to the correct environment before pushing any changes:
 `amplify env checkout dev` or `amplify env checkout production`
 
-deploy with: `amplify push`
+deploy amplify config with: `amplify push`
 verify changes before deploy with `amplify status`
 
 check out the docs for more info

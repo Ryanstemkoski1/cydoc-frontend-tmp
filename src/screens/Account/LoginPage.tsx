@@ -8,13 +8,20 @@ import './Account.css';
 import FirstLoginForm from './FirstLoginForm';
 import LoginForm from './LoginForm';
 import MfaVerificationForm from './MfaVerificationForm';
+import useUser from '@hooks/useUser';
 
 const LoginPage = () => {
     const { loginCorrect, isSignedIn, passwordResetRequired } = useAuth();
+    const { user, loading } = useUser();
     const router = useRouter();
 
     useEffect(() => {
-        loginCorrect && isSignedIn && router.push('/hpi/doctor');
+        loginCorrect && isSignedIn && user && router.push('/hpi/doctor');
+
+        // CORS configuration issues will prevent loading user profile even if user is logged in...
+        if (loginCorrect && isSignedIn && !loading) {
+            console.warn('CORS issue? login correct but no user', loginCorrect);
+        }
     });
 
     if (passwordResetRequired) {
