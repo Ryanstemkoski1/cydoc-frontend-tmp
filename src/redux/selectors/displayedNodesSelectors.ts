@@ -1,5 +1,9 @@
-import { displayedNodesCutOff } from '@constants/displayedNodesCutOff';
+import {
+    displayedNodesCutOff,
+    displayedNodesCutOffForAdvancedReport,
+} from '@constants/displayedNodesCutOff';
 import { YesNoResponse } from '@constants/enums';
+import { ProductType } from '@constants/FormPreferencesConstant';
 import {
     ResponseTypes,
     SelectManyInput,
@@ -84,7 +88,7 @@ export function nodesToDisplayInOrder(
     currCat: string,
     state: CurrentNoteState
 ): string[] {
-    const { chiefComplaints, hpi } = state,
+    const { chiefComplaints, hpi, productDefinition } = state,
         [firstOrderNodesMap, totalNodes] = firstOrderNodes(state) as [
             {
                 [chiefComplaint: string]: string[];
@@ -92,20 +96,26 @@ export function nodesToDisplayInOrder(
             string[],
         ];
     let loopCount = 0;
-    if (totalNodes.length < displayedNodesCutOff) {
+
+    const maxLimit =
+        productDefinition.definitions &&
+        productDefinition.definitions.productType !==
+            ProductType.ADVANCED_REPORT_GENERATION
+            ? displayedNodesCutOff
+            : displayedNodesCutOffForAdvancedReport;
+
+    // TODO: console.log('checking', maxLimit, productDefinition, state);
+    if (totalNodes.length < maxLimit) {
         let nodesArr = totalNodes, // for the count
             nodesSoFar: string[] = [];
-        while (
-            nodesArr.length < displayedNodesCutOff &&
-            loopCount < displayedNodesCutOff
-        ) {
+        while (nodesArr.length < maxLimit && loopCount < maxLimit) {
             loopCount++;
             for (let i = 0; i < Object.keys(chiefComplaints).length; i++) {
                 const chiefComplaint = Object.keys(chiefComplaints)[i],
                     currNodesArr = traverseNodes(
                         firstOrderNodesMap[chiefComplaint],
                         state,
-                        displayedNodesCutOff - nodesArr.length
+                        maxLimit - nodesArr.length
                     ).filter((node) => !nodesSoFar.includes(node));
                 /** Sort currNodesArr based on displayOrder if available.*/
                 currNodesArr.sort((a, b) => {
