@@ -9,8 +9,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setLoadingStatus } from '@redux/actions/loadingStatusActions';
 import { selectLoadingStatus } from '@redux/reducers/loadingStatusReducer';
 import style from './BrowseNotes.module.scss';
-import { Box } from '@mui/material';
+import { Box, List, ListItem, ListItemText, Typography } from '@mui/material';
 import useSignInRequired from '@hooks/useSignInRequired';
+import MobileDatePicker from '@components/Input/MobileDatePicker';
+import Input from '@components/Input/Input';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${lastName}, ${firstName} ${middleName}`;
@@ -80,7 +82,7 @@ export interface AppointmentUser {
 
 const BrowseNotes = () => {
     useSignInRequired(); // this route is private, sign in required
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState('');
     const [users, setUsers] = useState<AppointmentUser[]>([]);
     const { user } = useUser();
     const { cognitoUser } = useAuth();
@@ -90,6 +92,17 @@ const BrowseNotes = () => {
     const [selectedAppointment, setSelectedAppointment] =
         useState<AppointmentUser>();
     const loadingStatus = useSelector(selectLoadingStatus);
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+    useEffect(() => {
+        const initialDate = new Date().toISOString().slice(0, 10); // yyyy-mm-dd format
+        setDate(initialDate);
+    }, []);
+
+    const handleListItemClick = (index: number, user: any) => {
+        setSelectedIndex(index);
+        openModal(user);
+    };
 
     const openModal = (user: AppointmentUser) => {
         setSelectedAppointment(user);
@@ -97,11 +110,15 @@ const BrowseNotes = () => {
     };
 
     const goBack = () => {
-        setDate(new Date(date.getTime() - 86400000));
+        const currentDate = new Date(date);
+        currentDate.setDate(currentDate.getDate() - 1);
+        setDate(currentDate.toISOString().slice(0, 10));
     };
 
     const goForward = () => {
-        setDate(new Date(date.getTime() + 86400000));
+        const currentDate = new Date(date);
+        currentDate.setDate(currentDate.getDate() + 1);
+        setDate(currentDate.toISOString().slice(0, 10));
     };
 
     const loadPatientHistory = useCallback(async () => {
@@ -128,115 +145,139 @@ const BrowseNotes = () => {
         loadPatientHistory();
     }, [loadPatientHistory]);
 
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDate(e.target.value);
+    };
+
     function renderUsers(users: AppointmentUser[]) {
         return (
             <div className={`${style.notesBlock__tableWrapper}`}>
-                <table>
-                    <tbody>
-                        {!loadingStatus && users.length == 0 ? (
-                            <tr>
-                                <td colSpan={2} className={style.nodata}>
-                                    No users found
-                                </td>
-                            </tr>
-                        ) : (
-                            <>
-                                {users.map((user, index) => {
-                                    return (
-                                        <tr key={index}>
-                                            <td>
-                                                <span
-                                                    onClick={() =>
-                                                        openModal(user)
-                                                    }
-                                                >
-                                                    {formatFullName(
-                                                        user?.firstName,
-                                                        user?.middleName ?? '',
-                                                        user?.lastName
-                                                    )}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                {formatDateOfBirth(user.dob)}
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </>
-                        )}
-                    </tbody>
-                </table>
+                <List>
+                    {!loadingStatus && users.length === 0 ? (
+                        <ListItem>
+                            <ListItemText
+                                primary={
+                                    <Typography variant="body1" className={style.nodata}>
+                                        No users found
+                                    </Typography>
+                                }
+                            />
+                        </ListItem>
+                    ) : (
+                        users.map((user, index) => (
+                            <ListItem
+                                key={index}
+                                onClick={() => handleListItemClick(index, user)}
+                                style={{
+                                    backgroundColor: selectedIndex === index ? '#047A9B' : 'inherit',
+                                    border: '1px solid var(--Divider, #D7E5E9)',
+                                    borderRadius: '10px',
+                                    marginBottom: '5px',
+                                    padding: '12px 20px'
+                                }}
+                            >
+                                <div className={style.notesBlock__tableWrapper__itemWrapper}>
+                                    <div className={style.notesBlock__tableWrapper__left}>
+                                        <img src={'/images/patient.svg'} alt={`${index} patient image`} />
+                                        <p style={{ color: selectedIndex === index ? 'white' : 'black' }}>
+                                            {formatFullName(user?.firstName, user?.middleName ?? '', user?.lastName)}
+                                        </p>
+                                    </div>
+                                    <p
+                                        style={{ color: selectedIndex === index ? 'white' : '#00000099' }}
+                                        className={style.notesBlock__tableWrapper__right}>
+                                        {formatDateOfBirth(user.dob)}
+                                    </p>
+                                </div>
+                            </ListItem>
+                        ))
+                    )}
+                </List>
             </div>
         );
     }
 
     return (
-        <div className={style.notesBlock}>
-            <h1>Generated Notes</h1>
-            <div className={style.notesBlock__notesWrap}>
-                <div
-                    className={` ${style.notesBlock__header} flex align-center justify-between`}
-                >
-                    <a
-                        className='flex align-center justify-center'
-                        onClick={goBack}
+        <>
+            <div className={style.notesBlock}>
+                <div className={style.notesBlock__notesWrap}>
+                    <div
+                        className={` ${style.notesBlock__header} flex align-center justify-between`}
                     >
-                        <img src={'/images/left-arrow.svg'} alt='Left arrow' />
-                    </a>
-                    <span>{formatDate(date)}</span>
-                    <a
-                        className='flex align-center justify-center'
-                        onClick={goForward}
-                    >
-                        <img
-                            src={'/images/right-arrow.svg'}
-                            alt='Right arrow'
-                        />
-                    </a>
-                </div>
+                        <div className={style.notesBlock__header__dateWrapper}>
+                            <Input
+                                required={true}
+                                type='date'
+                                name='dateOfBirth'
+                                placeholder='mm/dd/yyyy'
+                                max={new Date().toJSON().slice(0, 10)}
+                                value={date}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <a className='flex align-center justify-center' onClick={goBack}>
+                            <img src={'/images/left-arrow.svg'} alt='Left arrow' />
+                        </a>
+                        <a className='flex align-center justify-center' onClick={goForward}>
+                            <img src={'/images/right-arrow.svg'} alt='Right arrow' />
+                        </a>
+                    </div>
 
-                <div className={` ${style.notesBlock__content} `}>
-                    <div className={style.notesBlock__contentInner}>
+                    <div className={` ${style.notesBlock__content} `}>
                         {renderUsers(users)}
                     </div>
-                    <div className={`${style.notesBlock__reload}`}>
-                        <button
-                            onClick={loadPatientHistory}
-                            style={{ borderStyle: 'none' }}
-                        >
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    paddingY: '.5em',
-                                }}
-                            >
-                                <img
-                                    alt='Refresh'
-                                    height={14}
-                                    width={14}
-                                    style={{
-                                        marginRight: '10px',
-                                        marginLeft: '7px',
-                                    }}
-                                    src={'/images/refresh.png'}
-                                />
-                                Check for new questionnaires
-                            </Box>
-                        </button>
-                    </div>
                 </div>
+                <div className={style.notesBlock__notesDescription}>
+                    descriptions
+                </div>
+                {selectedAppointment && (
+                    <Modal
+                        key={selectedAppointment.id}
+                        showModal={showModal}
+                        setShowModal={setShowModal}
+                        selectedAppointment={selectedAppointment}
+                    />
+                )}
+
             </div>
-            {selectedAppointment && (
-                <Modal
-                    key={selectedAppointment.id}
-                    showModal={showModal}
-                    setShowModal={setShowModal}
-                    selectedAppointment={selectedAppointment}
-                />
-            )}
-        </div>
+            <div className={`${style.checkReload}`}>
+                <button
+                    onClick={loadPatientHistory}
+                    style={{
+                        borderStyle: 'none',
+                        backgroundColor: 'transparent',
+                        cursor: 'pointer'
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            paddingY: '.5em',
+                            color: '#047A9B',
+                            fontSize: '16px',
+                            fontWeight: '500',
+                            lineHeight: '26px',
+                            letterSpacing: '0.46px',
+                            textAlign: 'left',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <img
+                            alt='Refresh'
+                            height={14}
+                            width={14}
+                            style={{
+                                marginRight: '10px',
+                                marginLeft: '7px',
+                            }}
+                            src={'/images/refresh.png'}
+                        />
+                        Check for new notes
+                    </Box>
+                </button>
+            </div >
+        </>
     );
 };
 
