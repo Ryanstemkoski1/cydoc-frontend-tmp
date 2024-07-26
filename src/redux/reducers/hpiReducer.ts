@@ -389,9 +389,11 @@ export function hpiReducer(
             // Updates text input response
             const { medId, textInput } = action.payload;
             if (
-                [ResponseTypes.SHORT_TEXT, ResponseTypes.RADIOLOGY].includes(
-                    state.nodes[medId].responseType
-                )
+                [
+                    ResponseTypes.SHORT_TEXT,
+                    ResponseTypes.RADIOLOGY,
+                    ResponseTypes.PRONOUN,
+                ].includes(state.nodes[medId].responseType)
             )
                 return updateResponse(medId, textInput, state);
             else throw new Error('Not a short text response');

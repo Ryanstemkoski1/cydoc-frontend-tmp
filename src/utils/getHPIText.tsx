@@ -100,6 +100,7 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
 
         case ResponseTypes.SELECTMANY:
         case ResponseTypes.DATE:
+        case ResponseTypes.PRONOUN:
         case ResponseTypes.SHORT_TEXT:
         case ResponseTypes.RADIOLOGY:
             return node.response === '';
@@ -231,6 +232,7 @@ export const extractNode = (
             break;
 
         case ResponseTypes.DATE:
+        case ResponseTypes.PRONOUN:
         case ResponseTypes.SHORT_TEXT:
         case ResponseTypes.RADIOLOGY:
             answer = response as string;
@@ -630,6 +632,7 @@ function getInitialSurveyResponses(state: UserSurveyState): HPIText[] {
             case ResponseTypes.LONG_TEXT:
             case ResponseTypes.DATE:
             case ResponseTypes.YEAR:
+            case ResponseTypes.PRONOUN:
             case ResponseTypes.SHORT_TEXT: {
                 currentNodeResponse = (value.response as string).trim();
                 break;
