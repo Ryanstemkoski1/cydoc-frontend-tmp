@@ -13,6 +13,7 @@ import { Box, List, ListItem, ListItemText, Typography } from '@mui/material';
 import useSignInRequired from '@hooks/useSignInRequired';
 import MobileDatePicker from '@components/Input/MobileDatePicker';
 import Input from '@components/Input/Input';
+import GeneratedNoteContent from '@components/GeneratedNoteContent/GeneratedNoteContent';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${lastName}, ${firstName} ${middleName}`;
@@ -99,9 +100,10 @@ const BrowseNotes = () => {
         setDate(initialDate);
     }, []);
 
-    const handleListItemClick = (index: number, user: any) => {
+    const handleListItemClick = (index: number, user: AppointmentUser) => {
         setSelectedIndex(index);
-        openModal(user);
+        // openModal(user);
+        setSelectedAppointment(user);
     };
 
     const openModal = (user: AppointmentUser) => {
@@ -152,6 +154,10 @@ const BrowseNotes = () => {
     function renderUsers(users: AppointmentUser[]) {
         return (
             <div className={`${style.notesBlock__tableWrapper}`}>
+                <div className={style.notesBlock__tableWrapper__addBtn}>
+                    <img src={'/images/add.svg'} alt='Add' />
+                    <p>Add patient</p>
+                </div>
                 <List>
                     {!loadingStatus && users.length === 0 ? (
                         <ListItem>
@@ -227,17 +233,19 @@ const BrowseNotes = () => {
                         {renderUsers(users)}
                     </div>
                 </div>
-                <div className={style.notesBlock__notesDescription}>
-                    descriptions
-                </div>
                 {selectedAppointment && (
+                    <div className={style.notesBlock__notesDescription}>
+                        <GeneratedNoteContent selectedAppointment={selectedAppointment} />
+                    </div>
+                )}
+                {/* {selectedAppointment && (
                     <Modal
                         key={selectedAppointment.id}
                         showModal={showModal}
                         setShowModal={setShowModal}
                         selectedAppointment={selectedAppointment}
                     />
-                )}
+                )} */}
 
             </div>
             <div className={`${style.checkReload}`}>

@@ -88,6 +88,31 @@
             text-align: center;
         }
 
+        &__addBtn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #EAF3F5;
+            border-radius: 10px;
+            cursor: pointer;
+            padding: 12px;
+
+            img {
+                width: 20px;
+            }
+
+            p {
+                color: #047A9B;
+                font-family: Nunito;
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 24px;
+                letter-spacing: 0.4px;
+                text-align: left;
+                margin-left: 5px;
+            }
+        }
+
         &__itemWrapper {
             display: flex;
             align-items: center;
