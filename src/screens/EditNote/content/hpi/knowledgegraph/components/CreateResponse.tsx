@@ -45,7 +45,6 @@ import YearInput from './responseComponents/YearInput';
 import HandleDateInput from './responseComponents/HandleDateInput';
 import YesNo from './responseComponents/YesNo';
 import DSMDiagnosisPicker from '@screens/EditNote/content/dsmdiagnoses/DSMDiagnosisPicker';
-import HandlePronounInput from './responseComponents/HandlePronounInput';
 
 interface CreateResponseProps {
     node: string;
@@ -119,12 +118,12 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                 responseChoice:
                     click != -1 || cleanText
                         ? text
-                            .slice(
-                                select + 1,
-                                endSelect != -1 ? endSelect : text.length
-                            )
-                            .split(',')
-                            .map((response) => response.trim())
+                              .slice(
+                                  select + 1,
+                                  endSelect != -1 ? endSelect : text.length
+                              )
+                              .split(',')
+                              .map((response) => response.trim())
                         : [],
             });
         }
@@ -132,12 +131,12 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
 
     renderSwitch = () => {
         const {
-            node,
-            hpi,
-            addListInput,
-            listTextHandleChange,
-            removeListInput,
-        } = this.props,
+                node,
+                hpi,
+                addListInput,
+                listTextHandleChange,
+                removeListInput,
+            } = this.props,
             { responseType } = hpi.nodes[node],
             blankTypes = [
                 ResponseTypes.FH_BLANK,
@@ -191,6 +190,7 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     />
                 );
 
+            case ResponseTypes.PRONOUN:
             case ResponseTypes.SELECTMANYDENSE:
             case ResponseTypes.SELECTONE:
                 return (
@@ -212,8 +212,8 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                                             item === 'yes'
                                                 ? 'Yes'
                                                 : item === 'no'
-                                                    ? 'No'
-                                                    : item.toLowerCase()
+                                                  ? 'No'
+                                                  : item.toLowerCase()
                                         }
                                         node={node}
                                     />
@@ -359,8 +359,6 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
                     />
                 );
             }
-            case ResponseTypes.PRONOUN:
-                return <HandlePronounInput node={node} />;
             default:
                 return;
         }
@@ -374,10 +372,11 @@ class CreateResponse extends React.Component<Props, CreateResponseState> {
         ].includes(hpi.nodes[node].responseType);
         return (
             <div
-                className={`${style.response} ${isYesNoResponseType
+                className={`${style.response} ${
+                    isYesNoResponseType
                         ? `${style.response__grid} isYesNo flex-wrap align-center`
                         : ''
-                    }`}
+                }`}
                 style={{
                     flexDirection: 'column',
                     alignItems: 'flex-start',

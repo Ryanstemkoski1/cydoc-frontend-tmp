@@ -353,7 +353,9 @@ export function hpiReducer(
             const { medId, name } = action.payload;
             const response = state.nodes[medId].response;
             if (
-                state.nodes[medId].responseType == ResponseTypes.SELECTONE &&
+                [ResponseTypes.SELECTONE, ResponseTypes.PRONOUN].includes(
+                    state.nodes[medId].responseType
+                ) &&
                 isSelectOneResponse(response)
             ) {
                 Object.keys(response).forEach((otherName) => {
@@ -389,11 +391,9 @@ export function hpiReducer(
             // Updates text input response
             const { medId, textInput } = action.payload;
             if (
-                [
-                    ResponseTypes.SHORT_TEXT,
-                    ResponseTypes.RADIOLOGY,
-                    ResponseTypes.PRONOUN,
-                ].includes(state.nodes[medId].responseType)
+                [ResponseTypes.SHORT_TEXT, ResponseTypes.RADIOLOGY].includes(
+                    state.nodes[medId].responseType
+                )
             )
                 return updateResponse(medId, textInput, state);
             else throw new Error('Not a short text response');

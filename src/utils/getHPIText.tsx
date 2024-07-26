@@ -100,12 +100,12 @@ export const isEmpty = (state: HPINoteProps, node: GraphNode): boolean => {
 
         case ResponseTypes.SELECTMANY:
         case ResponseTypes.DATE:
-        case ResponseTypes.PRONOUN:
         case ResponseTypes.SHORT_TEXT:
         case ResponseTypes.RADIOLOGY:
             return node.response === '';
 
         case ResponseTypes.SELECTMANYDENSE:
+        case ResponseTypes.PRONOUN:
         case ResponseTypes.SELECTONE: {
             const response = node?.response as SelectOneInput;
             return Object?.keys(response).every((key) => !response[key]);
@@ -232,7 +232,6 @@ export const extractNode = (
             break;
 
         case ResponseTypes.DATE:
-        case ResponseTypes.PRONOUN:
         case ResponseTypes.SHORT_TEXT:
         case ResponseTypes.RADIOLOGY:
             answer = response as string;
@@ -299,6 +298,7 @@ export const extractNode = (
 
         case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTMANY:
+        case ResponseTypes.PRONOUN:
         case ResponseTypes.SELECTONE:
             const clickBoxesRes = response as SelectOneInput;
             updatedRes = Object.keys(clickBoxesRes).filter(
@@ -496,6 +496,7 @@ export const checkParent = (
         }
         case ResponseTypes.SELECTMANYDENSE:
         case ResponseTypes.SELECTMANY:
+        case ResponseTypes.PRONOUN:
         case ResponseTypes.SELECTONE: {
             if (!isHPIResponseValid(response, responseType)) {
                 childNodesToHide = childNodes;
@@ -632,7 +633,6 @@ function getInitialSurveyResponses(state: UserSurveyState): HPIText[] {
             case ResponseTypes.LONG_TEXT:
             case ResponseTypes.DATE:
             case ResponseTypes.YEAR:
-            case ResponseTypes.PRONOUN:
             case ResponseTypes.SHORT_TEXT: {
                 currentNodeResponse = (value.response as string).trim();
                 break;

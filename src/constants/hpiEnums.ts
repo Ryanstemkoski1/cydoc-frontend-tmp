@@ -134,7 +134,7 @@ export interface ExpectedResponseInterface {
     TIME3DAYS: TimeInput;
     LIST_TEXT: ListTextInput;
     SHORT_TEXT: string;
-    PRONOUN: string;
+    PRONOUN: SelectManyInput;
     LONG_TEXT: string;
     NUMBER: NumberInput;
     YEAR: NumberInput;
@@ -169,7 +169,7 @@ export const ExpectedResponseDict: ExpectedResponseInterface = {
     TIME3DAYS: { numInput: undefined, timeOption: '' },
     LIST_TEXT: { 1: '', 2: '', 3: '' },
     SHORT_TEXT: '',
-    PRONOUN: '',
+    PRONOUN: {},
     LONG_TEXT: '',
     NUMBER: undefined,
     YEAR: undefined,
