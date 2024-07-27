@@ -14,6 +14,7 @@ import useSignInRequired from '@hooks/useSignInRequired';
 import MobileDatePicker from '@components/Input/MobileDatePicker';
 import Input from '@components/Input/Input';
 import GeneratedNoteContent from '@components/GeneratedNoteContent/GeneratedNoteContent';
+import CreatePatientModal from '@components/CreatePatientModal/CreatePatientModal';
 
 export function formatFullName(firstName = '', middleName = '', lastName = '') {
     return `${lastName}, ${firstName} ${middleName}`;
@@ -102,12 +103,11 @@ const BrowseNotes = () => {
 
     const handleListItemClick = (index: number, user: AppointmentUser) => {
         setSelectedIndex(index);
-        // openModal(user);
         setSelectedAppointment(user);
     };
 
-    const openModal = (user: AppointmentUser) => {
-        setSelectedAppointment(user);
+    const openModal = () => {
+        console.log('open modal');
         setShowModal(true);
     };
 
@@ -154,7 +154,7 @@ const BrowseNotes = () => {
     function renderUsers(users: AppointmentUser[]) {
         return (
             <div className={`${style.notesBlock__tableWrapper}`}>
-                <div className={style.notesBlock__tableWrapper__addBtn}>
+                <div className={style.notesBlock__tableWrapper__addBtn} onClick={openModal}>
                     <img src={'/images/add.svg'} alt='Add' />
                     <p>Add patient</p>
                 </div>
@@ -238,15 +238,6 @@ const BrowseNotes = () => {
                         <GeneratedNoteContent selectedAppointment={selectedAppointment} />
                     </div>
                 )}
-                {/* {selectedAppointment && (
-                    <Modal
-                        key={selectedAppointment.id}
-                        showModal={showModal}
-                        setShowModal={setShowModal}
-                        selectedAppointment={selectedAppointment}
-                    />
-                )} */}
-
             </div>
             <div className={`${style.checkReload}`}>
                 <button
@@ -285,6 +276,10 @@ const BrowseNotes = () => {
                     </Box>
                 </button>
             </div >
+            <CreatePatientModal
+                showModal={showModal}
+                setShowModal={setShowModal}
+            />
         </>
     );
 };

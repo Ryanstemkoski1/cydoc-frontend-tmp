@@ -12,7 +12,6 @@ interface GeneratedNoteContentProps {
     selectedAppointment: AppointmentUser;
 }
 const GeneratedNoteContent = (selectedAppointment: GeneratedNoteContentProps) => {
-    console.log(selectedAppointment);
     const { firstName, middleName, lastName, hpiText } = selectedAppointment.selectedAppointment;
     const data = {
         'Name': 'Sara K.',
@@ -78,7 +77,6 @@ const GeneratedNoteContent = (selectedAppointment: GeneratedNoteContentProps) =>
                 </div>
                 <div className={style.genNoteBody}>
                     {Object.keys(data).map((item, index) => {
-                        console.log(item);
                         return (
                             <div key={index} className={style.genNoteBody__Item}>
                                 <h3>{item ? `${item}:` : ''}</h3>
